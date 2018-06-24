@@ -1,0 +1,17 @@
+{
+  "InputFolder": "D:\\_d\\_PROJECTS\\MattPdf\\_test_files\\new",
+  "OutputFolder": "d:\\_d\\_projects\\mattpdf\\_test_files_output",
+  "SelectionBoxColor": "Red",
+  "BoundingBoxColor": "BlueViolet",
+  "StampColor": "Red",
+  "StampOpacity": 0.7,
+  "PdfPageImageResolution": 300,
+  "OrderedOutputFieldNames": [
+    "JOB#",
+    "PO#",
+    "INVOICE#",
+    "COST"
+  ],
+  "CoordinateDeviationMargin": 0.001,
+  "Image2PdfResolutionFactor": 0.24
+}
