@@ -102,7 +102,8 @@ namespace Cliver.InvoiceParser
             for (int x = 0; x < bw; x++)
                 for (int y = 0; y < bh; y++)
                     if (isHashMatch(imageData, x, y, brightnessMaxDifference, differentPixelMaxNumber))
-                        return new System.Drawing.PointF(x / Settings.General.PdfPageImageResolution, y / Settings.General.PdfPageImageResolution);
+                        //return new System.Drawing.PointF((float)x / Settings.General.Image2PdfResolutionRatio, (float)y / Settings.General.Image2PdfResolutionRatio);
+                        return new System.Drawing.PointF(x, y);
             return null;
         }
         bool isHashMatch(ImageData imageData, int x, int y, int brightnessMaxDifference, int differentPixelMaxNumber)
