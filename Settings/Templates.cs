@@ -121,7 +121,12 @@ namespace Cliver.InvoiceParser
                     Height = h;
                 }
 
-                public System.Drawing.RectangleF Convert()
+                public System.Drawing.Rectangle GetSystemRectangle()
+                {
+                    return new System.Drawing.Rectangle((int)Math.Round(X, 0), (int)Math.Round(Y, 0), (int)Math.Round(Width, 0), (int)Math.Round(Height, 0));
+                }
+
+                public System.Drawing.RectangleF GetSystemRectangleF()
                 {
                     return new System.Drawing.RectangleF(X, Y, Width, Height);
                 }

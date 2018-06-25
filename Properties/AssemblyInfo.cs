@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTitle("Invoice Parser")]
 [assembly: AssemblyDescription("Invoice Parser")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("CliverSoft.com")]
+[assembly: AssemblyCompany("CliverSoft")]
 [assembly: AssemblyProduct("Invoice Parser")]
 [assembly: AssemblyCopyright("developed by Sergey Stoyan, sergey.stoyan@gmail.com")]
 [assembly: AssemblyTrademark("")]

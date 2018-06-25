@@ -259,7 +259,8 @@ namespace Cliver.InvoiceParser
             {
                 System.Drawing.Bitmap b = base[page_i];
                 if (r != null)
-                    b = b.Clone(r.Convert(), System.Drawing.Imaging.PixelFormat.Undefined);
+                    b = b.Clone(r.GetSystemRectangle(), System.Drawing.Imaging.PixelFormat.Undefined);
+                    //b = ImageRoutines.GetCopy(b, r.GetSystem());
                 return b;
 
                 //switch (pages_rotation)
@@ -300,11 +301,12 @@ namespace Cliver.InvoiceParser
             if (pagesRotation != Settings.Template.PageRotations.NONE || autoDeskew)
             {
                 b = b.Clone(new System.Drawing.Rectangle(0, 0, b.Width, b.Height), System.Drawing.Imaging.PixelFormat.Undefined);
-                b = BitmapCollection.Convert(b, pagesRotation, autoDeskew);
+                //b = ImageRoutines.GetCopy(b);
+                b = BitmapCollection.GetProcessed(b, pagesRotation, autoDeskew);
             }
             return b;
         }
-        static public System.Drawing.Bitmap Convert(System.Drawing.Bitmap b, Settings.Template.PageRotations pages_rotation, bool autoDeskew)
+        static public System.Drawing.Bitmap GetProcessed(System.Drawing.Bitmap b, Settings.Template.PageRotations pages_rotation, bool autoDeskew)
         {
             switch (pages_rotation)
             {

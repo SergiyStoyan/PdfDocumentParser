@@ -6,28 +6,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "Abatix Corp.",
-          "Rectangle": {
-            "X": 63.0,
-            "Y": 72.0,
-            "Width": 53.0,
-            "Height": 9.0
-          },
-          "Ocr": true
-        },
-        {
-          "Text": "Page 1 o",
-          "Rectangle": {
-            "X": 514.0,
-            "Y": 68.0,
-            "Width": 49.0,
-            "Height": 12.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -190,18 +172,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "A Breaker Company,",
-          "Rectangle": {
-            "X": 17.0,
-            "Y": 35.0,
-            "Width": 107.0,
-            "Height": 20.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -364,28 +338,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "ARIZONA",
-          "Rectangle": {
-            "X": 78.0,
-            "Y": 53.0,
-            "Width": 55.0,
-            "Height": 16.0
-          },
-          "Ocr": true
-        },
-        {
-          "Text": "Page 1 o",
-          "Rectangle": {
-            "X": 547.0,
-            "Y": 24.0,
-            "Width": 47.0,
-            "Height": 17.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -530,38 +486,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "AHERN",
-          "Rectangle": {
-            "X": 30.0,
-            "Y": 35.0,
-            "Width": 47.0,
-            "Height": 13.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "Page: 1",
-          "Rectangle": {
-            "X": 517.0,
-            "Y": 7.0,
-            "Width": 68.0,
-            "Height": 18.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "SEND PAYMENTS",
-          "Rectangle": {
-            "X": 60.0,
-            "Y": 20.0,
-            "Width": 93.0,
-            "Height": 17.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -733,18 +661,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "Portable Storage",
-          "Rectangle": {
-            "X": 90.0,
-            "Y": 37.0,
-            "Width": 85.0,
-            "Height": 16.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -853,58 +773,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "Terms",
-          "Rectangle": {
-            "X": 391.0,
-            "Y": 212.0,
-            "Width": 94.0,
-            "Height": 17.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "Aging Date",
-          "Rectangle": {
-            "X": 487.0,
-            "Y": 212.0,
-            "Width": 88.0,
-            "Height": 17.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "Invoice#",
-          "Rectangle": {
-            "X": 498.0,
-            "Y": 72.0,
-            "Width": 77.0,
-            "Height": 21.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "Invoice",
-          "Rectangle": {
-            "X": 413.0,
-            "Y": 39.0,
-            "Width": 78.0,
-            "Height": 26.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "Customer #:",
-          "Rectangle": {
-            "X": 185.0,
-            "Y": 141.0,
-            "Width": 47.0,
-            "Height": 14.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -1085,28 +957,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "Bazzill",
-          "Rectangle": {
-            "X": 275.0,
-            "Y": 37.0,
-            "Width": 39.0,
-            "Height": 15.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "BILL TO",
-          "Rectangle": {
-            "X": 42.0,
-            "Y": 161.0,
-            "Width": 45.0,
-            "Height": 16.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -1278,28 +1132,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "BORDER STATES",
-          "Rectangle": {
-            "X": 63.0,
-            "Y": 24.0,
-            "Width": 104.0,
-            "Height": 20.0
-          },
-          "Ocr": true
-        },
-        {
-          "Text": "Page 1 o",
-          "Rectangle": {
-            "X": 454.0,
-            "Y": 19.0,
-            "Width": 42.0,
-            "Height": 17.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -1543,28 +1379,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "CEMEX",
-          "Rectangle": {
-            "X": 144.0,
-            "Y": 24.0,
-            "Width": 36.0,
-            "Height": 10.0
-          },
-          "Ocr": true
-        },
-        {
-          "Text": "PAGE 1 O",
-          "Rectangle": {
-            "X": 560.0,
-            "Y": 16.0,
-            "Width": 33.0,
-            "Height": 13.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -1673,28 +1491,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "Cerberus",
-          "Rectangle": {
-            "X": 216.0,
-            "Y": 72.0,
-            "Width": 42.0,
-            "Height": 11.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "Page 1 o",
-          "Rectangle": {
-            "X": 520.0,
-            "Y": 759.0,
-            "Width": 47.0,
-            "Height": 18.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -1884,18 +1684,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "Chandler",
-          "Rectangle": {
-            "X": 30.0,
-            "Y": 34.0,
-            "Width": 67.0,
-            "Height": 24.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -2004,28 +1796,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "C.E.S.",
-          "Rectangle": {
-            "X": 158.0,
-            "Y": 45.0,
-            "Width": 24.0,
-            "Height": 10.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "Page 1 o",
-          "Rectangle": {
-            "X": 533.0,
-            "Y": 760.0,
-            "Width": 41.0,
-            "Height": 17.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -2224,28 +1998,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "www.copperstate.com",
-          "Rectangle": {
-            "X": 70.0,
-            "Y": 122.0,
-            "Width": 79.0,
-            "Height": 10.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "Page 1 o",
-          "Rectangle": {
-            "X": 552.0,
-            "Y": 762.0,
-            "Width": 41.0,
-            "Height": 19.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -2426,28 +2182,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "CRESCENT",
-          "Rectangle": {
-            "X": 92.0,
-            "Y": 27.0,
-            "Width": 68.0,
-            "Height": 18.0
-          },
-          "Ocr": true
-        },
-        {
-          "Text": "1 o",
-          "Rectangle": {
-            "X": 547.0,
-            "Y": 88.0,
-            "Width": 21.0,
-            "Height": 14.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -2628,28 +2366,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "EDGES",
-          "Rectangle": {
-            "X": 60.0,
-            "Y": 63.0,
-            "Width": 42.0,
-            "Height": 15.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "1 of",
-          "Rectangle": {
-            "X": 562.0,
-            "Y": 116.0,
-            "Width": 21.0,
-            "Height": 16.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -2803,28 +2523,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "EOFF",
-          "Rectangle": {
-            "X": 142.0,
-            "Y": 62.0,
-            "Width": 26.0,
-            "Height": 14.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "Page 1 o",
-          "Rectangle": {
-            "X": 535.0,
-            "Y": 755.0,
-            "Width": 47.0,
-            "Height": 21.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -2969,28 +2671,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "www.fishertools.com",
-          "Rectangle": {
-            "X": 22.0,
-            "Y": 96.0,
-            "Width": 96.0,
-            "Height": 13.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "Page: 1",
-          "Rectangle": {
-            "X": 9.0,
-            "Y": 745.0,
-            "Width": 53.0,
-            "Height": 18.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -3126,28 +2810,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "Grayba",
-          "Rectangle": {
-            "X": 59.0,
-            "Y": 59.0,
-            "Width": 101.0,
-            "Height": 33.0
-          },
-          "Ocr": true
-        },
-        {
-          "Text": "Page 1 o",
-          "Rectangle": {
-            "X": 554.0,
-            "Y": 762.0,
-            "Width": 39.0,
-            "Height": 17.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -3292,28 +2958,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "06-0732334",
-          "Rectangle": {
-            "X": 477.0,
-            "Y": 87.0,
-            "Width": 68.0,
-            "Height": 12.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "Page 1(",
-          "Rectangle": {
-            "X": 510.0,
-            "Y": 264.0,
-            "Width": 53.0,
-            "Height": 19.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -3485,28 +3133,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "INDEPENDENT ELECTRIC SUPPLY INC",
-          "Rectangle": {
-            "X": 424.0,
-            "Y": 102.0,
-            "Width": 163.0,
-            "Height": 14.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "Page 1 o",
-          "Rectangle": {
-            "X": 534.0,
-            "Y": 763.0,
-            "Width": 48.0,
-            "Height": 16.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -3660,28 +3290,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "Hanson Aggregates",
-          "Rectangle": {
-            "X": 393.0,
-            "Y": 80.0,
-            "Width": 103.0,
-            "Height": 14.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "1",
-          "Rectangle": {
-            "X": 106.0,
-            "Y": 51.0,
-            "Width": 35.0,
-            "Height": 11.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -3871,28 +3483,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "LIGHTING",
-          "Rectangle": {
-            "X": 40.0,
-            "Y": 47.0,
-            "Width": 100.0,
-            "Height": 20.0
-          },
-          "Ocr": true
-        },
-        {
-          "Text": "Page 1/",
-          "Rectangle": {
-            "X": 510.0,
-            "Y": 92.0,
-            "Width": 63.0,
-            "Height": 13.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -4001,28 +3595,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "Midwest",
-          "Rectangle": {
-            "X": 197.0,
-            "Y": 46.0,
-            "Width": 64.0,
-            "Height": 21.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "Page 1",
-          "Rectangle": {
-            "X": 540.0,
-            "Y": 33.0,
-            "Width": 47.0,
-            "Height": 15.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -4212,28 +3788,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "Musco",
-          "Rectangle": {
-            "X": 142.0,
-            "Y": 5.0,
-            "Width": 41.0,
-            "Height": 16.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "SOLD TO:",
-          "Rectangle": {
-            "X": 7.0,
-            "Y": 130.0,
-            "Width": 61.0,
-            "Height": 16.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -4387,18 +3945,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "NEW WESTERN,",
-          "Rectangle": {
-            "X": 17.0,
-            "Y": 17.0,
-            "Width": 105.0,
-            "Height": 19.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -4561,28 +4111,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "priority1powerservices.com",
-          "Rectangle": {
-            "X": 85.0,
-            "Y": 128.0,
-            "Width": 119.0,
-            "Height": 15.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "1",
-          "Rectangle": {
-            "X": 563.0,
-            "Y": 282.0,
-            "Width": 24.0,
-            "Height": 17.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -4745,18 +4277,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "PORTABLE STORAGE",
-          "Rectangle": {
-            "X": 34.0,
-            "Y": 72.0,
-            "Width": 83.0,
-            "Height": 22.0
-          },
-          "Ocr": true
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -4910,28 +4434,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "Southwest Barricades",
-          "Rectangle": {
-            "X": 28.0,
-            "Y": 35.0,
-            "Width": 144.0,
-            "Height": 17.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "Page 1",
-          "Rectangle": {
-            "X": 529.0,
-            "Y": 738.0,
-            "Width": 51.0,
-            "Height": 15.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -5193,28 +4699,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "SUMMIT",
-          "Rectangle": {
-            "X": 459.0,
-            "Y": 17.0,
-            "Width": 124.0,
-            "Height": 23.0
-          },
-          "Ocr": true
-        },
-        {
-          "Text": "Page 1 o",
-          "Rectangle": {
-            "X": 520.0,
-            "Y": 754.0,
-            "Width": 57.0,
-            "Height": 20.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -5323,28 +4811,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "SUNSI'FITE",
-          "Rectangle": {
-            "X": 28.0,
-            "Y": 50.0,
-            "Width": 77.0,
-            "Height": 15.0
-          },
-          "Ocr": true
-        },
-        {
-          "Text": "PAGE: 1",
-          "Rectangle": {
-            "X": 521.0,
-            "Y": 237.0,
-            "Width": 62.0,
-            "Height": 14.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -5561,28 +5031,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "Brown Wholesale",
-          "Rectangle": {
-            "X": 82.0,
-            "Y": 30.0,
-            "Width": 100.0,
-            "Height": 13.0
-          },
-          "Ocr": true
-        },
-        {
-          "Text": "1 o",
-          "Rectangle": {
-            "X": 532.0,
-            "Y": 80.0,
-            "Width": 25.0,
-            "Height": 15.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -5754,28 +5206,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "HD Supply Construction",
-          "Rectangle": {
-            "X": 35.0,
-            "Y": 53.0,
-            "Width": 81.0,
-            "Height": 14.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "Page 1 o",
-          "Rectangle": {
-            "X": 548.0,
-            "Y": 754.0,
-            "Width": 42.0,
-            "Height": 12.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -5956,51 +5390,255 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "a-zequipment.com",
-          "Rectangle": {
-            "X": 318.0,
-            "Y": 56.0,
-            "Width": 108.0,
-            "Height": 12.0
-          },
-          "Ocr": true
-        },
-        {
-          "Text": "1",
-          "Rectangle": {
-            "X": 532.0,
-            "Y": 105.0,
-            "Width": 32.0,
-            "Height": 14.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
           "Rectangle": {
-            "X": 195.0,
-            "Y": 262.0,
-            "Width": 43.0,
-            "Height": 15.0
+            "X": 61.5999,
+            "Y": -4.175232,
+            "Width": 45.0,
+            "Height": 16.0
           },
           "Ocr": false,
-          "FloatingAnchor": null,
+          "FloatingAnchor": {
+            "Elements": [
+              {
+                "Text": "I",
+                "Rectangle": {
+                  "X": 146.4001,
+                  "Y": 265.175232,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "N",
+                "Rectangle": {
+                  "X": 152.4001,
+                  "Y": 265.175232,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "V",
+                "Rectangle": {
+                  "X": 158.400116,
+                  "Y": 265.175232,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "O",
+                "Rectangle": {
+                  "X": 164.400116,
+                  "Y": 265.175232,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "I",
+                "Rectangle": {
+                  "X": 170.400116,
+                  "Y": 265.175232,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "C",
+                "Rectangle": {
+                  "X": 176.400131,
+                  "Y": 265.175232,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "E",
+                "Rectangle": {
+                  "X": 182.400131,
+                  "Y": 265.175232,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "#",
+                "Rectangle": {
+                  "X": 194.400131,
+                  "Y": 265.175232,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": ":",
+                "Rectangle": {
+                  "X": 200.400131,
+                  "Y": 265.175232,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              }
+            ]
+          },
           "Regex": null
         },
         {
           "Name": "JOB#",
           "Rectangle": {
-            "X": 516.0,
-            "Y": 131.0,
-            "Width": 46.0,
-            "Height": 13.0
+            "X": 447.6,
+            "Y": -28.1752319,
+            "Width": 64.0,
+            "Height": 15.0
           },
           "Ocr": false,
-          "FloatingAnchor": null,
+          "FloatingAnchor": {
+            "Elements": [
+              {
+                "Text": "H",
+                "Rectangle": {
+                  "X": 74.4,
+                  "Y": 157.175232,
+                  "Width": 6.00000763,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "A",
+                "Rectangle": {
+                  "X": 80.40001,
+                  "Y": 157.175232,
+                  "Width": 6.00000763,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "W",
+                "Rectangle": {
+                  "X": 86.40001,
+                  "Y": 157.175232,
+                  "Width": 6.00000763,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "K",
+                "Rectangle": {
+                  "X": 92.40002,
+                  "Y": 157.175232,
+                  "Width": 6.00000763,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "E",
+                "Rectangle": {
+                  "X": 98.4000244,
+                  "Y": 157.175232,
+                  "Width": 6.00000763,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "Y",
+                "Rectangle": {
+                  "X": 104.400024,
+                  "Y": 157.175232,
+                  "Width": 6.00000763,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "E",
+                "Rectangle": {
+                  "X": 110.400024,
+                  "Y": 157.175232,
+                  "Width": 6.00000763,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "E",
+                "Rectangle": {
+                  "X": 122.400032,
+                  "Y": 157.175232,
+                  "Width": 6.00000763,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "L",
+                "Rectangle": {
+                  "X": 128.40004,
+                  "Y": 157.175232,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "E",
+                "Rectangle": {
+                  "X": 134.40004,
+                  "Y": 157.175232,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "C",
+                "Rectangle": {
+                  "X": 140.40004,
+                  "Y": 157.175232,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "T",
+                "Rectangle": {
+                  "X": 146.400055,
+                  "Y": 157.175232,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "R",
+                "Rectangle": {
+                  "X": 152.400055,
+                  "Y": 157.175232,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "I",
+                "Rectangle": {
+                  "X": 158.400055,
+                  "Y": 157.175232,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "C",
+                "Rectangle": {
+                  "X": 164.400055,
+                  "Y": 157.175232,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              }
+            ]
+          },
           "Regex": null
         },
         {
@@ -6122,7 +5760,7 @@
         }
       ],
       "Active": true,
-      "TestFile": "D:\\_d\\_PROJECTS\\MattPdf\\_test_files\\A to Z Single.PDF",
+      "TestFile": "D:\\_d\\_PROJECTS\\MattPdf\\_test_files\\new5\\R47753.PDF",
       "TestPictureScale": 1.5
     },
     {
@@ -6131,18 +5769,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": ".citylightsusa.",
-          "Rectangle": {
-            "X": 445.0,
-            "Y": 50.0,
-            "Width": 85.0,
-            "Height": 16.0
-          },
-          "Ocr": true
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -6287,28 +5917,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "ANIXTER",
-          "Rectangle": {
-            "X": 58.0,
-            "Y": 65.0,
-            "Width": 49.0,
-            "Height": 13.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "Page 1 o",
-          "Rectangle": {
-            "X": 535.0,
-            "Y": 756.0,
-            "Width": 46.0,
-            "Height": 16.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -6462,28 +6074,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "FIRST CUT SAWING AND BREAKING, INC.",
-          "Rectangle": {
-            "X": 6.0,
-            "Y": 63.0,
-            "Width": 202.0,
-            "Height": 16.0
-          },
-          "Ocr": true
-        },
-        {
-          "Text": "Page: 1",
-          "Rectangle": {
-            "X": 534.0,
-            "Y": 93.0,
-            "Width": 49.0,
-            "Height": 27.0
-          },
-          "Ocr": true
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -6544,28 +6138,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "ACME CONSTRUCTION",
-          "Rectangle": {
-            "X": 244.0,
-            "Y": 38.0,
-            "Width": 79.0,
-            "Height": 12.0
-          },
-          "Ocr": true
-        },
-        {
-          "Text": "l",
-          "Rectangle": {
-            "X": 558.0,
-            "Y": 127.0,
-            "Width": 25.0,
-            "Height": 19.0
-          },
-          "Ocr": true
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -6626,18 +6202,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "61 E\". 3\" a o : Er",
-          "Rectangle": {
-            "X": 216.0,
-            "Y": 550.0,
-            "Width": 22.0,
-            "Height": 79.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "INVOICE#",
@@ -6686,18 +6254,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "Solutions",
-          "Rectangle": {
-            "X": 161.0,
-            "Y": 122.0,
-            "Width": 35.0,
-            "Height": 18.0
-          },
-          "Ocr": true
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "JOB#",
@@ -6860,28 +6420,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "1 o",
-          "Rectangle": {
-            "X": 34.0,
-            "Y": 107.0,
-            "Width": 25.0,
-            "Height": 11.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "933 E. Remington Road",
-          "Rectangle": {
-            "X": 16.0,
-            "Y": 71.0,
-            "Width": 62.0,
-            "Height": 9.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "JOB#",
@@ -7089,28 +6631,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "www.apacherentals.com",
-          "Rectangle": {
-            "X": 105.0,
-            "Y": 90.0,
-            "Width": 106.0,
-            "Height": 9.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": null,
-          "Rectangle": {
-            "X": 540.0,
-            "Y": 14.0,
-            "Width": 42.0,
-            "Height": 16.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "JOB#",
@@ -7228,28 +6752,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "LURIE",
-          "Rectangle": {
-            "X": 57.0,
-            "Y": 49.0,
-            "Width": 66.0,
-            "Height": 22.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "Page 1",
-          "Rectangle": {
-            "X": 546.0,
-            "Y": 13.0,
-            "Width": 38.0,
-            "Height": 17.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "JOB#",
@@ -7403,38 +6909,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "www.grainger.com",
-          "Rectangle": {
-            "X": 23.0,
-            "Y": 66.0,
-            "Width": 83.0,
-            "Height": 12.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "PAGE 1",
-          "Rectangle": {
-            "X": 223.0,
-            "Y": 11.0,
-            "Width": 37.0,
-            "Height": 15.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "INVOICE NUMBER",
-          "Rectangle": {
-            "X": 308.0,
-            "Y": 53.0,
-            "Width": 81.0,
-            "Height": 11.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "JOB#",
@@ -7717,38 +7195,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "www.grainger.com",
-          "Rectangle": {
-            "X": 26.0,
-            "Y": 66.0,
-            "Width": 79.0,
-            "Height": 11.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "PAGE 1",
-          "Rectangle": {
-            "X": 224.0,
-            "Y": 8.0,
-            "Width": 40.0,
-            "Height": 18.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "ORIGINAL INVOICE",
-          "Rectangle": {
-            "X": 303.0,
-            "Y": 73.0,
-            "Width": 95.0,
-            "Height": 11.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "JOB#",
@@ -7902,28 +7352,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "CONSOLIDATED ELECTRICAL DISTRIBUTORS",
-          "Rectangle": {
-            "X": 56.0,
-            "Y": 71.0,
-            "Width": 196.0,
-            "Height": 12.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "Page 1",
-          "Rectangle": {
-            "X": 553.0,
-            "Y": 26.0,
-            "Width": 39.0,
-            "Height": 15.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "JOB#",
@@ -8068,28 +7500,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "Page: 1",
-          "Rectangle": {
-            "X": 517.0,
-            "Y": 13.0,
-            "Width": 77.0,
-            "Height": 18.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "602-470-1000",
-          "Rectangle": {
-            "X": 36.0,
-            "Y": 86.0,
-            "Width": 81.0,
-            "Height": 14.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "JOB#",
@@ -8225,28 +7639,10 @@
         "Pattern": "\\.pdf$",
         "Options": 1
       },
-      "InvoiceFirstPageRecognitionTextMarks": [
-        {
-          "Text": "Page 1",
-          "Rectangle": {
-            "X": 530.0,
-            "Y": 15.0,
-            "Width": 38.0,
-            "Height": 12.0
-          },
-          "Ocr": false
-        },
-        {
-          "Text": "FEDERAL ID: 06-0732334",
-          "Rectangle": {
-            "X": 417.0,
-            "Y": 104.0,
-            "Width": 119.0,
-            "Height": 12.0
-          },
-          "Ocr": false
-        }
-      ],
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
       "Fields": [
         {
           "Name": "JOB#",
@@ -8410,6 +7806,4016 @@
       ],
       "Active": true,
       "TestFile": "D:\\_d\\_PROJECTS\\MattPdf\\_test_files\\new2\\Invoice_4611723815.pdf",
+      "TestPictureScale": 1.3
+    },
+    {
+      "Name": "RDO",
+      "FileFilterRegex": {
+        "Pattern": "\\.pdf$",
+        "Options": 1
+      },
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
+      "Fields": [
+        {
+          "Name": "JOB#",
+          "Rectangle": {
+            "X": 343.0,
+            "Y": 258.0,
+            "Width": 58.0,
+            "Height": 20.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": null,
+          "Regex": null
+        },
+        {
+          "Name": "PO#",
+          "Rectangle": {
+            "X": 458.0,
+            "Y": 156.0,
+            "Width": 109.0,
+            "Height": 14.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": null,
+          "Regex": null
+        },
+        {
+          "Name": "INVOICE#",
+          "Rectangle": {
+            "X": 516.0,
+            "Y": 130.0,
+            "Width": 83.0,
+            "Height": 13.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": null,
+          "Regex": null
+        },
+        {
+          "Name": "COST",
+          "Rectangle": {
+            "X": 78.6000061,
+            "Y": -1.17520142,
+            "Width": 139.0,
+            "Height": 14.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": {
+            "Elements": [
+              {
+                "Text": "I",
+                "Rectangle": {
+                  "X": 332.4,
+                  "Y": 325.1752,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "N",
+                "Rectangle": {
+                  "X": 338.4,
+                  "Y": 325.1752,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "T",
+                "Rectangle": {
+                  "X": 344.4,
+                  "Y": 325.1752,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "E",
+                "Rectangle": {
+                  "X": 350.4,
+                  "Y": 325.1752,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "R",
+                "Rectangle": {
+                  "X": 356.400024,
+                  "Y": 325.1752,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "N",
+                "Rectangle": {
+                  "X": 362.400024,
+                  "Y": 325.1752,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "A",
+                "Rectangle": {
+                  "X": 368.400024,
+                  "Y": 325.1752,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "L",
+                "Rectangle": {
+                  "X": 374.400024,
+                  "Y": 325.1752,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "A",
+                "Rectangle": {
+                  "X": 386.400024,
+                  "Y": 325.1752,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "/",
+                "Rectangle": {
+                  "X": 392.400024,
+                  "Y": 325.1752,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": "R",
+                "Rectangle": {
+                  "X": 398.400024,
+                  "Y": 325.1752,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              },
+              {
+                "Text": ":",
+                "Rectangle": {
+                  "X": 404.400024,
+                  "Y": 325.1752,
+                  "Width": 6.0,
+                  "Height": 7.46478271
+                }
+              }
+            ]
+          },
+          "Regex": null
+        }
+      ],
+      "Active": true,
+      "TestFile": "D:\\_d\\_PROJECTS\\MattPdf\\_test_files\\new3\\R11486.PDF",
+      "TestPictureScale": 1.3
+    },
+    {
+      "Name": "Apex",
+      "FileFilterRegex": {
+        "Pattern": "\\.pdf$",
+        "Options": 1
+      },
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
+      "Fields": [
+        {
+          "Name": "JOB#",
+          "Rectangle": {
+            "X": 217.0,
+            "Y": 49.0,
+            "Width": 0.0,
+            "Height": 0.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": null,
+          "Regex": null
+        },
+        {
+          "Name": "PO#",
+          "Rectangle": {
+            "X": 500.0,
+            "Y": 284.0,
+            "Width": 74.0,
+            "Height": 22.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": null,
+          "Regex": null
+        },
+        {
+          "Name": "INVOICE#",
+          "Rectangle": {
+            "X": 503.0,
+            "Y": 90.0,
+            "Width": 71.0,
+            "Height": 21.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": null,
+          "Regex": null
+        },
+        {
+          "Name": "COST",
+          "Rectangle": {
+            "X": 116.0,
+            "Y": -3.16687,
+            "Width": 67.0,
+            "Height": 23.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": {
+            "Elements": [
+              {
+                "Text": "T",
+                "Rectangle": {
+                  "X": 390.0,
+                  "Y": 626.1669,
+                  "Width": 9.717163,
+                  "Height": 11.6331024
+                }
+              },
+              {
+                "Text": "o",
+                "Rectangle": {
+                  "X": 399.717163,
+                  "Y": 626.1669,
+                  "Width": 9.717163,
+                  "Height": 11.6331024
+                }
+              },
+              {
+                "Text": "t",
+                "Rectangle": {
+                  "X": 409.434357,
+                  "Y": 626.1669,
+                  "Width": 5.30462646,
+                  "Height": 11.6331024
+                }
+              },
+              {
+                "Text": "a",
+                "Rectangle": {
+                  "X": 414.738983,
+                  "Y": 626.1669,
+                  "Width": 8.856964,
+                  "Height": 11.6331024
+                }
+              },
+              {
+                "Text": "l",
+                "Rectangle": {
+                  "X": 423.500366,
+                  "Y": 626.1669,
+                  "Width": 4.412567,
+                  "Height": 11.6331024
+                }
+              }
+            ]
+          },
+          "Regex": null
+        }
+      ],
+      "Active": true,
+      "TestFile": "D:\\_d\\_PROJECTS\\MattPdf\\_test_files\\new4\\Inv_175_from_Apex_Metalworx_LLC_4152.pdf",
+      "TestPictureScale": 1.3
+    },
+    {
+      "Name": "CDL",
+      "FileFilterRegex": {
+        "Pattern": "\\.pdf$",
+        "Options": 1
+      },
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
+      "Fields": [
+        {
+          "Name": "JOB#",
+          "Rectangle": {
+            "X": 28.0,
+            "Y": 265.0,
+            "Width": 141.0,
+            "Height": 15.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": null,
+          "Regex": null
+        },
+        {
+          "Name": "PO#",
+          "Rectangle": {
+            "X": 172.0,
+            "Y": 264.0,
+            "Width": 206.0,
+            "Height": 19.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": null,
+          "Regex": null
+        },
+        {
+          "Name": "INVOICE#",
+          "Rectangle": {
+            "X": 480.0,
+            "Y": 46.0,
+            "Width": 104.0,
+            "Height": 24.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": null,
+          "Regex": null
+        },
+        {
+          "Name": "COST",
+          "Rectangle": {
+            "X": 111.72,
+            "Y": -12.9846191,
+            "Width": 126.0,
+            "Height": 30.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": {
+            "Elements": [
+              {
+                "Text": "T",
+                "Rectangle": {
+                  "X": 365.28,
+                  "Y": 688.9846,
+                  "Width": 6.582245,
+                  "Height": 7.97538757
+                }
+              },
+              {
+                "Text": "O",
+                "Rectangle": {
+                  "X": 371.761627,
+                  "Y": 688.9846,
+                  "Width": 8.381317,
+                  "Height": 7.97538757
+                }
+              },
+              {
+                "Text": "T",
+                "Rectangle": {
+                  "X": 380.341125,
+                  "Y": 688.9846,
+                  "Width": 6.582245,
+                  "Height": 7.97538757
+                }
+              },
+              {
+                "Text": "A",
+                "Rectangle": {
+                  "X": 386.822754,
+                  "Y": 688.9846,
+                  "Width": 7.778015,
+                  "Height": 7.97538757
+                }
+              },
+              {
+                "Text": "L",
+                "Rectangle": {
+                  "X": 393.967865,
+                  "Y": 688.9846,
+                  "Width": 6.582245,
+                  "Height": 7.97538757
+                }
+              },
+              {
+                "Text": " ",
+                "Rectangle": {
+                  "X": 400.4495,
+                  "Y": 688.9846,
+                  "Width": 2.994873,
+                  "Height": 7.97538757
+                }
+              },
+              {
+                "Text": "N",
+                "Rectangle": {
+                  "X": 404.048981,
+                  "Y": 688.9846,
+                  "Width": 7.778015,
+                  "Height": 7.97538757
+                }
+              },
+              {
+                "Text": "O",
+                "Rectangle": {
+                  "X": 411.180573,
+                  "Y": 688.9846,
+                  "Width": 8.381317,
+                  "Height": 7.97538757
+                }
+              },
+              {
+                "Text": "W",
+                "Rectangle": {
+                  "X": 419.818878,
+                  "Y": 688.9846,
+                  "Width": 10.1696167,
+                  "Height": 7.97538757
+                }
+              },
+              {
+                "Text": "D",
+                "Rectangle": {
+                  "X": 432.696442,
+                  "Y": 688.9846,
+                  "Width": 7.778015,
+                  "Height": 7.97538757
+                }
+              },
+              {
+                "Text": "U",
+                "Rectangle": {
+                  "X": 440.549164,
+                  "Y": 688.9846,
+                  "Width": 7.778015,
+                  "Height": 7.97538757
+                }
+              },
+              {
+                "Text": "E",
+                "Rectangle": {
+                  "X": 448.401917,
+                  "Y": 688.9846,
+                  "Width": 7.18551636,
+                  "Height": 7.97538757
+                }
+              },
+              {
+                "Text": ":",
+                "Rectangle": {
+                  "X": 455.66214,
+                  "Y": 688.9846,
+                  "Width": 3.58737183,
+                  "Height": 7.97538757
+                }
+              },
+              {
+                "Text": " ",
+                "Rectangle": {
+                  "X": 459.324219,
+                  "Y": 688.9846,
+                  "Width": 2.994873,
+                  "Height": 7.97538757
+                }
+              },
+              {
+                "Text": " ",
+                "Rectangle": {
+                  "X": 462.2065,
+                  "Y": 688.9846,
+                  "Width": 2.994873,
+                  "Height": 7.97538757
+                }
+              }
+            ]
+          },
+          "Regex": null
+        }
+      ],
+      "Active": true,
+      "TestFile": "D:\\_d\\_PROJECTS\\MattPdf\\_test_files\\new4\\Invoice # P-76004.PDF",
+      "TestPictureScale": 1.3
+    },
+    {
+      "Name": "Western Technologies",
+      "FileFilterRegex": {
+        "Pattern": "\\.pdf$",
+        "Options": 1
+      },
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
+      "Fields": [
+        {
+          "Name": "JOB#",
+          "Rectangle": {
+            "X": 507.0,
+            "Y": 80.0,
+            "Width": 72.0,
+            "Height": 16.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": null,
+          "Regex": null
+        },
+        {
+          "Name": "PO#",
+          "Rectangle": {
+            "X": 508.0,
+            "Y": 95.0,
+            "Width": 78.0,
+            "Height": 13.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": null,
+          "Regex": null
+        },
+        {
+          "Name": "INVOICE#",
+          "Rectangle": {
+            "X": 506.0,
+            "Y": 63.0,
+            "Width": 79.0,
+            "Height": 19.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": null,
+          "Regex": null
+        },
+        {
+          "Name": "COST",
+          "Rectangle": {
+            "X": 70.552,
+            "Y": -3.99072266,
+            "Width": 66.0,
+            "Height": 16.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": {
+            "Elements": [
+              {
+                "Text": "I",
+                "Rectangle": {
+                  "X": 452.448,
+                  "Y": 699.9907,
+                  "Width": 2.501709,
+                  "Height": 6.461281
+                }
+              },
+              {
+                "Text": "N",
+                "Rectangle": {
+                  "X": 454.9497,
+                  "Y": 699.9907,
+                  "Width": 6.497284,
+                  "Height": 6.461281
+                }
+              },
+              {
+                "Text": "V",
+                "Rectangle": {
+                  "X": 461.447,
+                  "Y": 699.9907,
+                  "Width": 6.00231934,
+                  "Height": 6.461281
+                }
+              },
+              {
+                "Text": "O",
+                "Rectangle": {
+                  "X": 467.449341,
+                  "Y": 699.9907,
+                  "Width": 7.0012207,
+                  "Height": 6.461281
+                }
+              },
+              {
+                "Text": "I",
+                "Rectangle": {
+                  "X": 474.450562,
+                  "Y": 699.9907,
+                  "Width": 2.501709,
+                  "Height": 6.461281
+                }
+              },
+              {
+                "Text": "C",
+                "Rectangle": {
+                  "X": 476.952271,
+                  "Y": 699.9907,
+                  "Width": 6.497284,
+                  "Height": 6.461281
+                }
+              },
+              {
+                "Text": "E",
+                "Rectangle": {
+                  "X": 483.449554,
+                  "Y": 699.9907,
+                  "Width": 6.00231934,
+                  "Height": 6.461281
+                }
+              },
+              {
+                "Text": " ",
+                "Rectangle": {
+                  "X": 489.451874,
+                  "Y": 699.9907,
+                  "Width": 2.501709,
+                  "Height": 6.461281
+                }
+              },
+              {
+                "Text": "T",
+                "Rectangle": {
+                  "X": 491.9536,
+                  "Y": 699.9907,
+                  "Width": 5.49838257,
+                  "Height": 6.461281
+                }
+              },
+              {
+                "Text": "O",
+                "Rectangle": {
+                  "X": 497.452,
+                  "Y": 699.9907,
+                  "Width": 7.0012207,
+                  "Height": 6.461281
+                }
+              },
+              {
+                "Text": "T",
+                "Rectangle": {
+                  "X": 504.453217,
+                  "Y": 699.9907,
+                  "Width": 5.49838257,
+                  "Height": 6.461281
+                }
+              },
+              {
+                "Text": "A",
+                "Rectangle": {
+                  "X": 509.9516,
+                  "Y": 699.9907,
+                  "Width": 6.49725342,
+                  "Height": 6.461281
+                }
+              },
+              {
+                "Text": "L",
+                "Rectangle": {
+                  "X": 516.448853,
+                  "Y": 699.9907,
+                  "Width": 5.498413,
+                  "Height": 6.461281
+                }
+              }
+            ]
+          },
+          "Regex": null
+        }
+      ],
+      "Active": true,
+      "TestFile": "D:\\_d\\_PROJECTS\\MattPdf\\_test_files\\new4\\Invoice 21680720.pdf",
+      "TestPictureScale": 1.3
+    },
+    {
+      "Name": "Loftin",
+      "FileFilterRegex": {
+        "Pattern": "\\.pdf$",
+        "Options": 1
+      },
+      "PagesRotation": 0,
+      "Position0Anchor": null,
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": null,
+      "Fields": [
+        {
+          "Name": "JOB#",
+          "Rectangle": {
+            "X": 35.0,
+            "Y": 272.0,
+            "Width": 90.0,
+            "Height": 18.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": null,
+          "Regex": null
+        },
+        {
+          "Name": "PO#",
+          "Rectangle": {
+            "X": 305.0,
+            "Y": 274.0,
+            "Width": 89.0,
+            "Height": 16.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": null,
+          "Regex": null
+        },
+        {
+          "Name": "INVOICE#",
+          "Rectangle": {
+            "X": 497.0,
+            "Y": 36.0,
+            "Width": 87.0,
+            "Height": 18.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": null,
+          "Regex": null
+        },
+        {
+          "Name": "COST",
+          "Rectangle": {
+            "X": 86.52173,
+            "Y": -7.89886475,
+            "Width": 66.0,
+            "Height": 23.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": {
+            "Elements": [
+              {
+                "Text": " ",
+                "Rectangle": {
+                  "X": 423.478271,
+                  "Y": 580.898865,
+                  "Width": 2.791565,
+                  "Height": 8.172867
+                }
+              },
+              {
+                "Text": "A",
+                "Rectangle": {
+                  "X": 426.400879,
+                  "Y": 580.898865,
+                  "Width": 7.276245,
+                  "Height": 8.172867
+                }
+              },
+              {
+                "Text": "m",
+                "Rectangle": {
+                  "X": 433.3546,
+                  "Y": 580.898865,
+                  "Width": 8.95922852,
+                  "Height": 8.172867
+                }
+              },
+              {
+                "Text": "o",
+                "Rectangle": {
+                  "X": 442.223145,
+                  "Y": 580.898865,
+                  "Width": 6.147522,
+                  "Height": 8.172867
+                }
+              },
+              {
+                "Text": "u",
+                "Rectangle": {
+                  "X": 448.471436,
+                  "Y": 580.898865,
+                  "Width": 6.147522,
+                  "Height": 8.172867
+                }
+              },
+              {
+                "Text": "n",
+                "Rectangle": {
+                  "X": 454.7197,
+                  "Y": 580.898865,
+                  "Width": 6.147522,
+                  "Height": 8.172867
+                }
+              },
+              {
+                "Text": "t",
+                "Rectangle": {
+                  "X": 460.867218,
+                  "Y": 580.898865,
+                  "Width": 3.35592651,
+                  "Height": 8.172867
+                }
+              },
+              {
+                "Text": " ",
+                "Rectangle": {
+                  "X": 464.293671,
+                  "Y": 580.898865,
+                  "Width": 2.791565,
+                  "Height": 8.172867
+                }
+              },
+              {
+                "Text": "D",
+                "Rectangle": {
+                  "X": 467.1155,
+                  "Y": 580.898865,
+                  "Width": 7.2762146,
+                  "Height": 8.172867
+                }
+              },
+              {
+                "Text": "u",
+                "Rectangle": {
+                  "X": 474.371582,
+                  "Y": 580.898865,
+                  "Width": 6.147522,
+                  "Height": 8.172867
+                }
+              },
+              {
+                "Text": "e",
+                "Rectangle": {
+                  "X": 480.619843,
+                  "Y": 580.898865,
+                  "Width": 5.603302,
+                  "Height": 8.172867
+                }
+              },
+              {
+                "Text": ":",
+                "Rectangle": {
+                  "X": 486.16272,
+                  "Y": 580.898865,
+                  "Width": 3.35592651,
+                  "Height": 8.172867
+                }
+              }
+            ]
+          },
+          "Regex": null
+        }
+      ],
+      "Active": true,
+      "TestFile": "D:\\_d\\_PROJECTS\\MattPdf\\_test_files\\S126186.pdf",
+      "TestPictureScale": 1.3
+    },
+    {
+      "Name": "gfd",
+      "FileFilterRegex": {
+        "Pattern": "\\.pdf$",
+        "Options": 1
+      },
+      "PagesRotation": 0,
+      "Position0Anchor": {
+        "Hash": [
+          [
+            253,
+            253,
+            253,
+            253,
+            253,
+            253,
+            253,
+            253,
+            253,
+            253,
+            253,
+            253,
+            253,
+            253,
+            253,
+            253,
+            234,
+            24,
+            0,
+            0,
+            0,
+            194,
+            253,
+            253,
+            253,
+            253,
+            253,
+            253,
+            253,
+            253,
+            253,
+            253,
+            253,
+            253,
+            253,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            157,
+            0,
+            0,
+            0,
+            0,
+            110,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            76,
+            0,
+            0,
+            0,
+            0,
+            34,
+            242,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            213,
+            6,
+            0,
+            0,
+            0,
+            0,
+            0,
+            158,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            109,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            82,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            242,
+            30,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            5,
+            209,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            182,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            121,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            66,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            35,
+            241,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            209,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            172,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            116,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            91,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            245,
+            34,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            10,
+            220,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            162,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            123,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            76,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            52,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            207,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            185,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            128,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            104,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            235,
+            23,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            13,
+            216,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            168,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            141,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            79,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            46,
+            250,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            231,
+            16,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            200,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            126,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            101,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            252,
+            39,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            10,
+            225,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            173,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            152,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            84,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            52,
+            254,
+            255,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            218,
+            13,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            202,
+            255,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            156,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            18,
+            13,
+            106,
+            255,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253,
+            53,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            19,
+            82,
+            139,
+            204,
+            236,
+            79,
+            230,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            189,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            38,
+            112,
+            192,
+            240,
+            255,
+            255,
+            255,
+            252,
+            22,
+            128,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            77,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            41,
+            82,
+            152,
+            216,
+            249,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253,
+            28,
+            46,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            217,
+            9,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            7,
+            46,
+            124,
+            167,
+            244,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            47,
+            0,
+            200,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            135,
+            0,
+            0,
+            0,
+            0,
+            0,
+            10,
+            57,
+            144,
+            207,
+            243,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            251,
+            39,
+            0,
+            97,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            71,
+            0,
+            6,
+            29,
+            120,
+            156,
+            223,
+            251,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            252,
+            41,
+            0,
+            21,
+            233,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            189,
+            0,
+            0,
+            135,
+            255,
+            254,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            222,
+            185,
+            130,
+            3,
+            0,
+            0,
+            154,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            110,
+            0,
+            0,
+            174,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            47,
+            0,
+            0,
+            0,
+            0,
+            0,
+            75,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            222,
+            19,
+            0,
+            0,
+            172,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253,
+            231,
+            195,
+            168,
+            130,
+            95,
+            249,
+            255,
+            255,
+            255,
+            255,
+            39,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            204,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            150,
+            0,
+            0,
+            0,
+            172,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            142,
+            54,
+            16,
+            4,
+            0,
+            0,
+            40,
+            254,
+            255,
+            255,
+            255,
+            255,
+            39,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            118,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            71,
+            0,
+            0,
+            0,
+            172,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            216,
+            199,
+            198,
+            179,
+            117,
+            77,
+            102,
+            255,
+            255,
+            255,
+            255,
+            255,
+            39,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            34,
+            145
+          ],
+          [
+            253,
+            255,
+            200,
+            0,
+            0,
+            0,
+            0,
+            169,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            252,
+            252,
+            255,
+            255,
+            255,
+            255,
+            255,
+            59,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            253,
+            255,
+            106,
+            0,
+            0,
+            0,
+            0,
+            157,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            245,
+            217,
+            149,
+            6,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            253,
+            255,
+            55,
+            0,
+            0,
+            0,
+            0,
+            45,
+            137,
+            189,
+            225,
+            252,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            254,
+            43,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            253,
+            152,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            6,
+            60,
+            114,
+            155,
+            213,
+            246,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            246,
+            32,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            253,
+            103,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            10,
+            69,
+            141,
+            196,
+            236,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            248,
+            35,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            206,
+            15,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            31,
+            91,
+            170,
+            205,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            252,
+            41,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            122,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            7,
+            45,
+            111,
+            168,
+            214,
+            252,
+            255,
+            255,
+            253,
+            42,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            33,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            11,
+            45,
+            97,
+            164,
+            203,
+            31,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            58,
+            22,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            18,
+            4,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            49,
+            255,
+            143,
+            36,
+            58,
+            42,
+            33,
+            43,
+            68,
+            59,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            82,
+            255,
+            255,
+            254,
+            254,
+            251,
+            253,
+            255,
+            255,
+            248,
+            34,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            81,
+            253,
+            190,
+            100,
+            124,
+            133,
+            100,
+            114,
+            118,
+            78,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "Width": 48,
+        "Height": 36
+      },
+      "AutoDeskew": false,
+      "InvoiceFirstPageRecognitionMarks": [
+        {
+          "Value": "a-zequipment.com",
+          "Rectangle": {
+            "X": 316.0,
+            "Y": 51.0,
+            "Width": 146.0,
+            "Height": 19.0
+          },
+          "ValueType": 1
+        }
+      ],
+      "Fields": [
+        {
+          "Name": "JOB#",
+          "Rectangle": {
+            "X": 245.0,
+            "Y": 510.0,
+            "Width": 190.0,
+            "Height": 12.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": null,
+          "Regex": null
+        },
+        {
+          "Name": "PO#",
+          "Rectangle": {
+            "X": 435.0,
+            "Y": 510.0,
+            "Width": 165.0,
+            "Height": 12.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": null,
+          "Regex": null
+        },
+        {
+          "Name": "INVOICE#",
+          "Rectangle": {
+            "X": 381.0,
+            "Y": 723.0,
+            "Width": 100.0,
+            "Height": 12.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": null,
+          "Regex": null
+        },
+        {
+          "Name": "COST",
+          "Rectangle": {
+            "X": 381.0,
+            "Y": 723.0,
+            "Width": 100.0,
+            "Height": 12.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": null,
+          "Regex": null
+        }
+      ],
+      "Active": true,
+      "TestFile": "D:\\_d\\_PROJECTS\\MattPdf\\_test_files\\new5\\R47752.PDF",
+      "TestPictureScale": 1.3
+    },
+    {
+      "Name": "t",
+      "FileFilterRegex": {
+        "Pattern": "\\.pdf$",
+        "Options": 1
+      },
+      "PagesRotation": 0,
+      "Position0Anchor": {
+        "Hash": [
+          [
+            253,
+            253,
+            253,
+            253,
+            253,
+            231,
+            19,
+            122,
+            253,
+            232,
+            229,
+            229,
+            229,
+            220,
+            245,
+            237,
+            253,
+            252,
+            228,
+            230,
+            229,
+            232,
+            225,
+            233,
+            229,
+            233,
+            247,
+            227,
+            227,
+            232,
+            218,
+            244,
+            253,
+            247,
+            241,
+            238
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            47,
+            124,
+            255,
+            52,
+            35,
+            46,
+            36,
+            34,
+            61,
+            63,
+            51,
+            53,
+            57,
+            56,
+            34,
+            34,
+            34,
+            32,
+            39,
+            62,
+            45,
+            30,
+            31,
+            36,
+            33,
+            59,
+            73,
+            66,
+            63,
+            60
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            246,
+            43,
+            122,
+            255,
+            86,
+            40,
+            47,
+            49,
+            50,
+            45,
+            45,
+            46,
+            45,
+            46,
+            47,
+            50,
+            49,
+            50,
+            50,
+            49,
+            47,
+            47,
+            64,
+            71,
+            47,
+            51,
+            46,
+            44,
+            46,
+            48,
+            46
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            52,
+            114,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            126,
+            97,
+            255,
+            101,
+            79,
+            144,
+            165,
+            160,
+            161,
+            160,
+            161,
+            161,
+            164,
+            140,
+            117,
+            157,
+            112,
+            152,
+            139,
+            141,
+            109,
+            149,
+            162,
+            161,
+            159,
+            160,
+            162,
+            151,
+            139,
+            163
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            134,
+            115,
+            255,
+            34,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            141,
+            95,
+            255,
+            249,
+            238,
+            242,
+            227,
+            238,
+            228,
+            239,
+            228,
+            235,
+            232,
+            231,
+            232,
+            234,
+            233,
+            230,
+            236,
+            233,
+            217,
+            216,
+            214,
+            214,
+            228,
+            213,
+            212,
+            212,
+            228,
+            204
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            148,
+            100,
+            255,
+            196,
+            177,
+            180,
+            183,
+            181,
+            182,
+            180,
+            182,
+            181,
+            178,
+            196,
+            189,
+            177,
+            198,
+            186,
+            179,
+            180,
+            180,
+            200,
+            206,
+            188,
+            211,
+            211,
+            204,
+            233,
+            241,
+            219
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            174,
+            57,
+            255,
+            86,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            1,
+            0,
+            3,
+            1,
+            0,
+            0,
+            0,
+            4,
+            6,
+            0,
+            6,
+            6,
+            3,
+            11,
+            12,
+            6
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            192,
+            38,
+            235,
+            213,
+            113,
+            118,
+            119,
+            119,
+            119,
+            119,
+            119,
+            119,
+            120,
+            118,
+            119,
+            121,
+            117,
+            119,
+            120,
+            120,
+            120,
+            118,
+            117,
+            120,
+            117,
+            117,
+            118,
+            114,
+            117,
+            115
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            222,
+            55,
+            191,
+            255,
+            251,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            235,
+            20,
+            207,
+            192,
+            7,
+            35,
+            35,
+            30,
+            33,
+            31,
+            29,
+            33,
+            34,
+            36,
+            40,
+            38,
+            38,
+            38,
+            38,
+            39,
+            33,
+            33,
+            35,
+            31,
+            29,
+            29,
+            28,
+            31,
+            37,
+            36
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            233,
+            10,
+            206,
+            203,
+            34,
+            73,
+            75,
+            106,
+            86,
+            95,
+            109,
+            79,
+            70,
+            58,
+            32,
+            43,
+            45,
+            43,
+            41,
+            38,
+            74,
+            72,
+            65,
+            93,
+            103,
+            105,
+            104,
+            87,
+            58,
+            41
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            238,
+            22,
+            193,
+            255,
+            223,
+            235,
+            226,
+            251,
+            238,
+            246,
+            236,
+            242,
+            250,
+            244,
+            232,
+            221,
+            207,
+            230,
+            230,
+            225,
+            239,
+            238,
+            238,
+            234,
+            254,
+            251,
+            251,
+            241,
+            233,
+            221
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            88,
+            179,
+            209,
+            35,
+            51,
+            41,
+            51,
+            46,
+            75,
+            50,
+            68,
+            29,
+            44,
+            71,
+            46,
+            23,
+            41,
+            63,
+            60,
+            57,
+            63,
+            48,
+            33,
+            71,
+            43,
+            61,
+            27,
+            58,
+            60
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            92,
+            150,
+            229,
+            58,
+            123,
+            137,
+            128,
+            101,
+            64,
+            119,
+            96,
+            96,
+            120,
+            106,
+            105,
+            108,
+            99,
+            64,
+            71,
+            59,
+            87,
+            109,
+            135,
+            155,
+            153,
+            79,
+            65,
+            82,
+            68
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            92,
+            127,
+            255,
+            250,
+            238,
+            211,
+            240,
+            250,
+            252,
+            242,
+            244,
+            253,
+            237,
+            250,
+            241,
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            248,
+            242,
+            245,
+            253,
+            250,
+            255,
+            242,
+            249
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            109,
+            132,
+            255,
+            98,
+            54,
+            42,
+            51,
+            51,
+            68,
+            57,
+            59,
+            86,
+            57,
+            72,
+            50,
+            80,
+            81,
+            84,
+            82,
+            87,
+            88,
+            75,
+            72,
+            64,
+            54,
+            76,
+            85,
+            61,
+            64
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            143,
+            142,
+            238,
+            80,
+            50,
+            91,
+            90,
+            78,
+            90,
+            84,
+            74,
+            69,
+            58,
+            50,
+            75,
+            66,
+            81,
+            64,
+            70,
+            44,
+            92,
+            90,
+            97,
+            97,
+            81,
+            67,
+            62,
+            56,
+            71
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            144,
+            48,
+            243,
+            255,
+            248,
+            255,
+            255,
+            253,
+            249,
+            255,
+            237,
+            247,
+            217,
+            246,
+            254,
+            236,
+            250,
+            251,
+            254,
+            220,
+            228,
+            252,
+            241,
+            246,
+            249,
+            228,
+            223,
+            210,
+            232
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            199,
+            53,
+            255,
+            101,
+            0,
+            3,
+            2,
+            3,
+            4,
+            2,
+            6,
+            4,
+            10,
+            5,
+            3,
+            6,
+            3,
+            4,
+            3,
+            9,
+            7,
+            2,
+            5,
+            4,
+            3,
+            7,
+            8,
+            11,
+            4
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            232,
+            62,
+            232,
+            189,
+            131,
+            151,
+            148,
+            148,
+            149,
+            148,
+            150,
+            153,
+            140,
+            145,
+            128,
+            135,
+            148,
+            127,
+            136,
+            152,
+            139,
+            149,
+            145,
+            147,
+            129,
+            145,
+            157,
+            153,
+            125
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            243,
+            67,
+            230,
+            210,
+            142,
+            179,
+            208,
+            202,
+            206,
+            207,
+            224,
+            201,
+            205,
+            209,
+            200,
+            216,
+            213,
+            178,
+            175,
+            171,
+            193,
+            211,
+            183,
+            232,
+            223,
+            198,
+            160,
+            175,
+            212
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            247,
+            62,
+            225,
+            152,
+            0,
+            2,
+            13,
+            40,
+            8,
+            10,
+            4,
+            0,
+            3,
+            7,
+            6,
+            4,
+            1,
+            5,
+            4,
+            2,
+            6,
+            2,
+            4,
+            4,
+            2,
+            2,
+            4,
+            3,
+            4
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            65,
+            198,
+            255,
+            217,
+            204,
+            208,
+            234,
+            207,
+            205,
+            208,
+            208,
+            209,
+            204,
+            208,
+            209,
+            208,
+            210,
+            208,
+            207,
+            208,
+            209,
+            210,
+            209,
+            210,
+            208,
+            209,
+            217,
+            206
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            253,
+            107,
+            220,
+            219,
+            150,
+            180,
+            177,
+            177,
+            171,
+            184,
+            171,
+            180,
+            170,
+            195,
+            179,
+            180,
+            181,
+            166,
+            170,
+            187,
+            169,
+            182,
+            180,
+            174,
+            180,
+            190,
+            185,
+            174,
+            192
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            65,
+            216,
+            194,
+            20,
+            25,
+            48,
+            31,
+            42,
+            40,
+            52,
+            60,
+            66,
+            49,
+            13,
+            19,
+            45,
+            30,
+            32,
+            18,
+            63,
+            30,
+            11,
+            46,
+            0,
+            20,
+            40,
+            31,
+            54
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            48,
+            147,
+            255,
+            210,
+            222,
+            243,
+            239,
+            229,
+            231,
+            252,
+            230,
+            240,
+            254,
+            245,
+            244,
+            253,
+            255,
+            240,
+            225,
+            251,
+            246,
+            253,
+            254,
+            254,
+            251,
+            250,
+            255,
+            244
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            53,
+            163,
+            247,
+            71,
+            75,
+            88,
+            69,
+            33,
+            41,
+            77,
+            58,
+            83,
+            103,
+            86,
+            82,
+            76,
+            98,
+            102,
+            103,
+            93,
+            98,
+            98,
+            95,
+            98,
+            98,
+            97,
+            100,
+            71
+          ],
+          [
+            253,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            67,
+            101,
+            255,
+            107,
+            48,
+            74,
+            74,
+            69,
+            52,
+            77,
+            61,
+            49,
+            48,
+            48,
+            77,
+            60,
+            48,
+            48,
+            55,
+            99,
+            47,
+            49,
+            50,
+            46,
+            72,
+            89,
+            63,
+            72
+          ],
+          [
+            253,
+            253,
+            253,
+            253,
+            253,
+            253,
+            253,
+            253,
+            87,
+            75,
+            253,
+            186,
+            159,
+            195,
+            215,
+            209,
+            208,
+            210,
+            208,
+            208,
+            208,
+            208,
+            210,
+            208,
+            208,
+            208,
+            208,
+            213,
+            208,
+            208,
+            208,
+            208,
+            209,
+            212,
+            208,
+            208
+          ]
+        ],
+        "Width": 31,
+        "Height": 36
+      },
+      "AutoDeskew": true,
+      "InvoiceFirstPageRecognitionMarks": [
+        {
+          "Value": "ENVOICE",
+          "Rectangle": {
+            "X": 424.0,
+            "Y": 33.0,
+            "Width": 55.0,
+            "Height": 19.0
+          },
+          "ValueType": 1
+        }
+      ],
+      "Fields": [
+        {
+          "Name": "JOB#",
+          "Rectangle": {
+            "X": 160.0,
+            "Y": 167.0,
+            "Width": 27.0,
+            "Height": 14.0
+          },
+          "Ocr": true,
+          "FloatingAnchor": null,
+          "Regex": null
+        },
+        {
+          "Name": "PO#",
+          "Rectangle": {
+            "X": 435.0,
+            "Y": 510.0,
+            "Width": 165.0,
+            "Height": 12.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": null,
+          "Regex": null
+        },
+        {
+          "Name": "INVOICE#",
+          "Rectangle": {
+            "X": 381.0,
+            "Y": 723.0,
+            "Width": 100.0,
+            "Height": 12.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": null,
+          "Regex": null
+        },
+        {
+          "Name": "COST",
+          "Rectangle": {
+            "X": 381.0,
+            "Y": 723.0,
+            "Width": 100.0,
+            "Height": 12.0
+          },
+          "Ocr": false,
+          "FloatingAnchor": null,
+          "Regex": null
+        }
+      ],
+      "Active": true,
+      "TestFile": "D:\\_d\\_PROJECTS\\MattPdf\\_test_files\\new4\\DOC.pdf",
       "TestPictureScale": 1.3
     }
   ]

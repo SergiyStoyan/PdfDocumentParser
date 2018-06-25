@@ -48,7 +48,7 @@ namespace Cliver.InvoiceParser
                 lastBitmap = b;
             }
             if (r != null)
-                b = b.Clone(r.Convert(), System.Drawing.Imaging.PixelFormat.Undefined);
+                b = b.Clone(r.GetSystemRectangle(), System.Drawing.Imaging.PixelFormat.Undefined);
             return b;
         }
         int lastPageI = -1;

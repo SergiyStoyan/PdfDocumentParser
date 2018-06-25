@@ -134,7 +134,7 @@ namespace Cliver.InvoiceParser
                 {
                     if (cSetPosition0Anchor.Checked)
                     {
-                        cSetPosition0Anchor.Checked = false;
+                        //cSetPosition0Anchor.Checked = false;
                         Settings.Template.RectangleF r_ = new Settings.Template.RectangleF(r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);
                         Bitmap b = pageBitmaps.Get(currentPage, r_);
                         position0Anchor = new ImageData(b);
@@ -328,6 +328,7 @@ namespace Cliver.InvoiceParser
 
                     if (fields.SelectedRows.Count > 0)
                     {
+                        cSetPosition0Anchor.Checked = false;
                         invoiceFirstPageRecognitionMarks.ClearSelection();
                         int i = fields.SelectedRows[0].Index;
                         string rs = (string)fields.Rows[i].Cells["Rectangle"].Value;
@@ -460,6 +461,7 @@ namespace Cliver.InvoiceParser
 
                     if (invoiceFirstPageRecognitionMarks.SelectedRows.Count > 0)
                     {
+                        cSetPosition0Anchor.Checked = false;
                         fields.ClearSelection();
                         int i = invoiceFirstPageRecognitionMarks.SelectedRows[0].Index;
 
@@ -814,9 +816,15 @@ namespace Cliver.InvoiceParser
                 {
                     point0 = (PointF)p_;
                     drawBox(Color.Orange, point0.X, point0.Y, position0Anchor.Width, position0Anchor.Height);
+                    lPosition0.Text = point0.ToString();
+                    position0AnchorRectangular.BackColor = SystemColors.Control;
                 }
                 else
+                {
                     point0 = new PointF(0, 0);
+                    lPosition0.Text = "not found";
+                    position0AnchorRectangular.BackColor = Color.Pink;
+                }
             }
         }
 
