@@ -267,8 +267,7 @@
             // 
             // cSetPosition0Anchor
             // 
-            this.cSetPosition0Anchor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cSetPosition0Anchor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cSetPosition0Anchor.Appearance = System.Windows.Forms.Appearance.Button;
             this.cSetPosition0Anchor.Location = new System.Drawing.Point(290, 54);
             this.cSetPosition0Anchor.Name = "cSetPosition0Anchor";
