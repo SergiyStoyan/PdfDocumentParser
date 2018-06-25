@@ -110,8 +110,8 @@ namespace Cliver.InvoiceParser
             }
             return hash;
         }
-        const float brightnessTolerance = 0.2f;
-        const float differentPixelNumberTolerance = 0.1f;
+        const float brightnessTolerance = 0.3f;
+        const float differentPixelNumberTolerance = 0.05f;
         public bool ImageIsSimilar(ImageData imageData, float brightnessTolerance = brightnessTolerance, float differentPixelNumberTolerance = differentPixelNumberTolerance)
         {
             return isHashMatch(imageData, 0, 0, (int)(brightnessTolerance * 255), (int)(Hash.Length * differentPixelNumberTolerance));
@@ -131,8 +131,6 @@ namespace Cliver.InvoiceParser
         }
         bool isHashMatch(ImageData imageData, int x, int y, int brightnessMaxDifference, int differentPixelMaxNumber)
         {
-            if (x == 20 && y == 60)
-                x = 20;
             int differentPixelNumber = 0;
             for (int i = 0; i < Width; i++)
                 for (int j = 0; j < Height; j++)
