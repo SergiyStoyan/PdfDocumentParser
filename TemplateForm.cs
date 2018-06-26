@@ -25,8 +25,17 @@ namespace Cliver.InvoiceParser
             Icon = AssemblyRoutines.GetAppIcon();
             Text = "Template Manager";
 
+            ValueType3.ValueType = typeof(Settings.Template.ValueTypes);
+            ValueType3.DataSource = Enum.GetValues(typeof(Settings.Template.ValueTypes));
+
             ValueType2.ValueType = typeof(Settings.Template.ValueTypes);
             ValueType2.DataSource = Enum.GetValues(typeof(Settings.Template.ValueTypes));
+
+            FloatingAnchorId2.ValueType = typeof(int);
+            FloatingAnchorId2.DataSource = null;
+
+            FloatingAnchorId.ValueType = typeof(int);
+            FloatingAnchorId.DataSource = null;
 
             invoiceFirstPageRecognitionMarks.CurrentCellDirtyStateChanged += delegate
             {
@@ -168,6 +177,143 @@ namespace Cliver.InvoiceParser
                         break;
                     default:
                         break;
+                }
+            };
+
+            floatingAnchors.RowsAdded += delegate (object sender, DataGridViewRowsAddedEventArgs e)
+            {
+            };
+
+            floatingAnchors.CellContentClick += delegate (object sender, DataGridViewCellEventArgs e)
+            {
+                switch (floatingAnchors.Columns[e.ColumnIndex].Name)
+                {
+                    case "ValueType3":
+                        floatingAnchors.EndEdit();
+                        break;
+                }
+            };
+
+            floatingAnchors.CellValueChanged += delegate (object sender, DataGridViewCellEventArgs e)
+            {
+                if (loadingTemplate)
+                    return;
+
+                switch (floatingAnchors.Columns[e.ColumnIndex].Name)
+                {
+                    case "Value3":
+                        break;
+                    case "ValueType3":
+                        floatingAnchors.Rows[e.RowIndex].Cells["Value3"].Value = null;
+                        break;
+                }
+            };
+
+            floatingAnchors.SelectionChanged += delegate (object sender, EventArgs e)
+            {
+                try
+                {
+                    if (loadingTemplate)
+                        return;
+
+                    if (floatingAnchors.SelectedRows.Count < 1)
+                        return;
+                    invoiceFirstPageRecognitionMarks.ClearSelection();
+                    fields.ClearSelection();
+                    var r = floatingAnchors.SelectedRows[0];
+
+                    if (r.IsNewRow)//hacky forcing commit a newly added row and display the blank row
+                    {
+                        floatingAnchors.Rows.Add();
+                        r.Selected = true;
+                        return;
+                    }
+                    var cs = r.Cells;
+                    Settings.Template.FloatingAnchor fa = getFloatingAnchor((int)cs["Id3"].Value);
+                    string t = extractValueAndDrawBox(fa, r, Convert.ToBoolean(cs["Ocr2"].Value) ? Settings.Template.ValueTypes.OcrText : Settings.Template.ValueTypes.PdfText);
+                    drawBox(Settings.General.SelectionBoxColor, r.X, r.Y, r.Width, r.Height, true);
+                }
+                catch (Exception ex)
+                {
+                    LogMessage.Error(ex);
+                }
+            };
+
+            invoiceFirstPageRecognitionMarks.RowsAdded += delegate (object sender, DataGridViewRowsAddedEventArgs e)
+            {
+            };
+
+            invoiceFirstPageRecognitionMarks.CellContentClick += delegate (object sender, DataGridViewCellEventArgs e)
+            {
+                switch (invoiceFirstPageRecognitionMarks.Columns[e.ColumnIndex].Name)
+                {
+                    case "ValueType2":
+                        invoiceFirstPageRecognitionMarks.EndEdit();
+                        break;
+                }
+            };
+
+            invoiceFirstPageRecognitionMarks.CellValueChanged += delegate (object sender, DataGridViewCellEventArgs e)
+            {
+                if (loadingTemplate)
+                    return;
+
+                switch (invoiceFirstPageRecognitionMarks.Columns[e.ColumnIndex].Name)
+                {
+                    case "Rectangle2":
+                    case "ValueType2":
+                        string rs = (string)invoiceFirstPageRecognitionMarks.Rows[e.RowIndex].Cells["Rectangle2"].Value;
+                        if (rs != null)
+                        {
+                            object o = invoiceFirstPageRecognitionMarks.Rows[e.RowIndex].Cells["ValueType2"].Value;
+                            if (o != null)
+                            {
+                                Settings.Template.RectangleF r = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>(rs);
+                                invoiceFirstPageRecognitionMarks.Rows[e.RowIndex].Cells["Value2"].Value = extractValueAndDrawBox(null, r, (Settings.Template.ValueTypes)o);
+                            }
+                        }
+                        break;
+                }
+            };
+
+            invoiceFirstPageRecognitionMarks.SelectionChanged += delegate (object sender, EventArgs e)
+            {
+                try
+                {
+                    if (loadingTemplate)
+                        return;
+
+                    if (invoiceFirstPageRecognitionMarks.SelectedRows.Count > 0)
+                    {
+                        floatingAnchors.ClearSelection();
+                        fields.ClearSelection();
+                        int i = invoiceFirstPageRecognitionMarks.SelectedRows[0].Index;
+
+                        if (invoiceFirstPageRecognitionMarks.Rows[i].IsNewRow)//hacky forcing commit a newly added row and display the blank row
+                        {
+                            invoiceFirstPageRecognitionMarks.Rows.Add();
+                            invoiceFirstPageRecognitionMarks.Rows[i].Selected = true;
+                            return;
+                        }
+                        var cs = invoiceFirstPageRecognitionMarks.Rows[i].Cells;
+                        string rs = (string)cs["Rectangle2"].Value;
+                        if (string.IsNullOrWhiteSpace(rs))
+                            return;
+
+                        Settings.Template.RectangleF r = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>(rs);
+
+                        Settings.Template.FloatingAnchor fa = null;
+                        int? fI = (int?)cs["FloatingAnchorId2"].Value;
+                        if (fI != null)
+                            fa = getFloatingAnchor((int)fI);
+
+                        invoiceFirstPageRecognitionMarks.Rows[i].Cells["Value2"].Value = extractValueAndDrawBox(fa, r, Convert.ToBoolean(cs["Ocr2"].Value) ? Settings.Template.ValueTypes.OcrText : Settings.Template.ValueTypes.PdfText);
+                        drawBox(Settings.General.SelectionBoxColor, r.X, r.Y, r.Width, r.Height, true);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogMessage.Error(ex);
                 }
             };
 
@@ -349,84 +495,6 @@ namespace Cliver.InvoiceParser
                     totalPageNumber = pdfReader.NumberOfPages;
                     lTotalPages.Text = " / " + totalPageNumber;
                     showPage(1);
-                }
-                catch (Exception ex)
-                {
-                    LogMessage.Error(ex);
-                }
-            };
-
-            invoiceFirstPageRecognitionMarks.RowsAdded += delegate (object sender, DataGridViewRowsAddedEventArgs e)
-            {
-            };
-
-            invoiceFirstPageRecognitionMarks.CellContentClick += delegate (object sender, DataGridViewCellEventArgs e)
-            {
-                switch (invoiceFirstPageRecognitionMarks.Columns[e.ColumnIndex].Name)
-                {
-                    case "ValueType2":
-                        invoiceFirstPageRecognitionMarks.EndEdit();
-                        break;
-                }
-            };
-
-            invoiceFirstPageRecognitionMarks.CellValueChanged += delegate (object sender, DataGridViewCellEventArgs e)
-            {
-                if (loadingTemplate)
-                    return;
-
-                switch (invoiceFirstPageRecognitionMarks.Columns[e.ColumnIndex].Name)
-                {
-                    case "Rectangle2":
-                    case "ValueType2":
-                        string rs = (string)invoiceFirstPageRecognitionMarks.Rows[e.RowIndex].Cells["Rectangle2"].Value;
-                        if (rs != null)
-                        {
-                            object o = invoiceFirstPageRecognitionMarks.Rows[e.RowIndex].Cells["ValueType2"].Value;
-                            if (o != null)
-                            {
-                                Settings.Template.RectangleF r = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>(rs);
-                                invoiceFirstPageRecognitionMarks.Rows[e.RowIndex].Cells["Value2"].Value = extractValueAndDrawBox(null, r, (Settings.Template.ValueTypes)o);
-                            }
-                        }
-                        break;
-                }
-            };
-
-            invoiceFirstPageRecognitionMarks.SelectionChanged += delegate (object sender, EventArgs e)
-            {
-                try
-                {
-                    if (loadingTemplate)
-                        return;
-
-                    if (invoiceFirstPageRecognitionMarks.SelectedRows.Count > 0)
-                    {
-                        floatingAnchors.ClearSelection();
-                        fields.ClearSelection();
-                        int i = invoiceFirstPageRecognitionMarks.SelectedRows[0].Index;
-
-                        if (invoiceFirstPageRecognitionMarks.Rows[i].IsNewRow)//hacky forcing commit a newly added row and display the blank row
-                        {
-                            invoiceFirstPageRecognitionMarks.Rows.Add();
-                            invoiceFirstPageRecognitionMarks.Rows[i].Selected = true;
-                            return;
-                        }
-                        var cs = invoiceFirstPageRecognitionMarks.Rows[i].Cells;
-                        string rs = (string)cs["Rectangle2"].Value;
-                        if (string.IsNullOrWhiteSpace(rs))
-                            return;
-
-                        Settings.Template.RectangleF r = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>(rs);
-
-                        Settings.Template.FloatingAnchor fa = null;
-                        int? fI = (int?)cs["FloatingAnchorId2"].Value;
-                        if (fI != null)
-                            fa = getFloatingAnchor((int)fI);
-
-                        invoiceFirstPageRecognitionMarks.Rows[i].Cells["Value2"].Value = extractValueAndDrawBox(fa, r, Convert.ToBoolean(cs["Ocr2"].Value) ? Settings.Template.ValueTypes.OcrText : Settings.Template.ValueTypes.PdfText);
-                        drawBox(Settings.General.SelectionBoxColor, r.X, r.Y, r.Width, r.Height, true);
-                    }
                 }
                 catch (Exception ex)
                 {

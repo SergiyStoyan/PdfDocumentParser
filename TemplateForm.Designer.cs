@@ -42,6 +42,9 @@
             this.cancel = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.floatingAnchors = new System.Windows.Forms.DataGridView();
+            this.Id3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ValueType3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Value3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label10 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.pageRotation = new System.Windows.Forms.ComboBox();
@@ -75,9 +78,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.testFile = new System.Windows.Forms.TextBox();
             this.bTestFile = new System.Windows.Forms.Button();
-            this.Id3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ValueType3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Value3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -267,6 +267,28 @@
             this.floatingAnchors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.floatingAnchors.Size = new System.Drawing.Size(335, 68);
             this.floatingAnchors.TabIndex = 50;
+            // 
+            // Id3
+            // 
+            this.Id3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Id3.HeaderText = "Id";
+            this.Id3.Name = "Id3";
+            this.Id3.ReadOnly = true;
+            this.Id3.Width = 41;
+            // 
+            // ValueType3
+            // 
+            this.ValueType3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.ValueType3.HeaderText = "Value Type";
+            this.ValueType3.Name = "ValueType3";
+            this.ValueType3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.ValueType3.Width = 67;
+            // 
+            // Value3
+            // 
+            this.Value3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Value3.HeaderText = "Value";
+            this.Value3.Name = "Value3";
             // 
             // label10
             // 
@@ -611,28 +633,6 @@
             this.bTestFile.Text = "...";
             this.bTestFile.UseVisualStyleBackColor = true;
             this.bTestFile.Click += new System.EventHandler(this.bTestFile_Click);
-            // 
-            // Id3
-            // 
-            this.Id3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Id3.HeaderText = "Id";
-            this.Id3.Name = "Id3";
-            this.Id3.ReadOnly = true;
-            this.Id3.Width = 41;
-            // 
-            // ValueType3
-            // 
-            this.ValueType3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.ValueType3.HeaderText = "Value Type";
-            this.ValueType3.Name = "ValueType3";
-            this.ValueType3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ValueType3.Width = 67;
-            // 
-            // Value3
-            // 
-            this.Value3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Value3.HeaderText = "Value";
-            this.Value3.Name = "Value3";
             // 
             // TemplateForm
             // 
