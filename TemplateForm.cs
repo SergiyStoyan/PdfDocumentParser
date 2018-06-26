@@ -51,10 +51,10 @@ namespace Cliver.InvoiceParser
                     scaledCurrentPageBitmap.Dispose();
                     scaledCurrentPageBitmap = null;
                 }
-                if (pageCollection != null)
+                if (pages != null)
                 {
-                    pageCollection.Dispose();
-                    pageCollection = null;
+                    pages.Dispose();
+                    pages = null;
                 }
             };
 
@@ -72,7 +72,7 @@ namespace Cliver.InvoiceParser
 
             picture.MouseDown += delegate (object sender, MouseEventArgs e)
             {
-                if (pageCollection == null)
+                if (pages == null)
                     return;
                 drawingSelectingBox = true;
                 p0 = new Point((int)(e.X / (float)pictureScale.Value), (int)(e.Y / (float)pictureScale.Value));
@@ -83,7 +83,7 @@ namespace Cliver.InvoiceParser
 
             picture.MouseMove += delegate (object sender, MouseEventArgs e)
             {
-                if (pageCollection == null)
+                if (pages == null)
                     return;
 
                 Point p = new Point((int)(e.X / (float)pictureScale.Value), (int)(e.Y / (float)pictureScale.Value));
@@ -121,7 +121,7 @@ namespace Cliver.InvoiceParser
 
             picture.MouseUp += delegate (object sender, MouseEventArgs e)
             {
-                if (pageCollection == null)
+                if (pages == null)
                     return;
 
                 if (!drawingSelectingBox)
@@ -129,14 +129,14 @@ namespace Cliver.InvoiceParser
                 drawingSelectingBox = false;
 
                 Settings.Template.RectangleF r = new Settings.Template.RectangleF(p1.X, p1.Y, p2.X - p1.X, p2.Y - p1.Y);
-                
-                    switch (mode)
-                    {
-                        case Modes.SetFloatingAnchor:
-                            {
-                                if (floatingAnchors.SelectedRows.Count < 1)
-                                    break;
-                                
+
+                switch (mode)
+                {
+                    case Modes.SetFloatingAnchor:
+                        {
+                            if (floatingAnchors.SelectedRows.Count < 1)
+                                break;
+
                             if (selectedBoxTexts == null/* || (ModifierKeys & Keys.Control) != Keys.Control*/)
                                 selectedBoxTexts = new List<Pdf.BoxText>();
                             RectangleF selectedR = new RectangleF(p1, new SizeF(p2.X - p1.X, p2.Y - p1.Y));
@@ -149,30 +149,30 @@ namespace Cliver.InvoiceParser
 
                             break;
                         case Modes.SetInvoiceFirstPageRecognitionTextMarks:
-                            {
-                                if (invoiceFirstPageRecognitionMarks.SelectedRows.Count < 1)
-                                    break;
-                                DataGridViewRow rr = invoiceFirstPageRecognitionMarks.SelectedRows[0];
-                                r.X -= point0.X;
-                                r.Y -= point0.Y;
-                                rr.Cells["Rectangle2"].Value = SerializationRoutines.Json.Serialize(r);
-                                invoiceFirstPageRecognitionMarks.EndEdit();
-                            }
-                            break;
-                        case Modes.SetFieldRectangle:
-                            {
-                                if (fields.SelectedRows.Count < 1)
-                                    break;
-                                fields.SelectedRows[0].Cells["FloatingAnchor"].Value = null;
-                                r.X -= point0.X;
-                                r.Y -= point0.Y;
-                                fields.SelectedRows[0].Cells["Rectangle"].Value = SerializationRoutines.Json.Serialize(r);
-                                fields.EndEdit();
-                            }
-                            break;
-                        default:
-                            break;
-                    }
+                        {
+                            if (invoiceFirstPageRecognitionMarks.SelectedRows.Count < 1)
+                                break;
+                            DataGridViewRow rr = invoiceFirstPageRecognitionMarks.SelectedRows[0];
+                            r.X -= point0.X;
+                            r.Y -= point0.Y;
+                            rr.Cells["Rectangle2"].Value = SerializationRoutines.Json.Serialize(r);
+                            invoiceFirstPageRecognitionMarks.EndEdit();
+                        }
+                        break;
+                    case Modes.SetFieldRectangle:
+                        {
+                            if (fields.SelectedRows.Count < 1)
+                                break;
+                            fields.SelectedRows[0].Cells["FloatingAnchor"].Value = null;
+                            r.X -= point0.X;
+                            r.Y -= point0.Y;
+                            fields.SelectedRows[0].Cells["Rectangle"].Value = SerializationRoutines.Json.Serialize(r);
+                            fields.EndEdit();
+                        }
+                        break;
+                    default:
+                        break;
+                }
             };
 
             fields.CellValueChanged += delegate (object sender, DataGridViewCellEventArgs e)
@@ -495,21 +495,21 @@ namespace Cliver.InvoiceParser
             };
         }
 
-        PageCollection pageCollection = null;
+        PageCollection pages = null;
 
         void reloadPageBitmaps()
         {
-            if (pageCollection == null)
+            if (pages == null)
                 return;
-            pageCollection.Clear();
+            pages.Clear();
             showPage(currentPage);
         }
 
         void setScaledImage()
         {
-            if (pageCollection == null)
+            if (pages == null)
                 return;
-            scaledCurrentPageBitmap = ImageRoutines.GetScaled(pageCollection[currentPage].BitmapPreparedForTemplate, (float)pictureScale.Value * Settings.General.Image2PdfResolutionRatio);
+            scaledCurrentPageBitmap = ImageRoutines.GetScaled(pages[currentPage].BitmapPreparedForTemplate, (float)pictureScale.Value * Settings.General.Image2PdfResolutionRatio);
             picture.Image = scaledCurrentPageBitmap;
         }
         Bitmap scaledCurrentPageBitmap;
@@ -525,13 +525,13 @@ namespace Cliver.InvoiceParser
         {
             try
             {
-                if (pageCollection == null)
+                if (pages == null)
                     return null;
 
                 float x = r.X, y = r.Y;
                 if (fa != null)
                 {
-                    List<RectangleF> rs = pageCollection[currentPage].FindFloatingAnchor(fa);
+                    List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
                     if (rs == null || rs.Count < 1)
                         return null;
                     drawBoxes(Settings.General.BoundingBoxColor, rs, renewImage);
@@ -541,7 +541,7 @@ namespace Cliver.InvoiceParser
                 }
 
                 drawBox(Settings.General.SelectionBoxColor, x, y, r.Width, r.Height, renewImage);
-                switch (valueType) 
+                switch (valueType)
                 {
                     case Settings.Template.ValueTypes.PdfText:
                         if (pdfReader != null)
@@ -620,19 +620,19 @@ namespace Cliver.InvoiceParser
                 return;
             Settings.Template.FloatingAnchor fa = new Settings.Template.FloatingAnchor();
             fa.Elements = new List<Settings.Template.FloatingAnchor.Element>();
-            fa.Elements.Add(new Settings.Template.FloatingAnchor.Element{
+            fa.Elements.Add(new Settings.Template.FloatingAnchor.Element {
                 ElementType = (Settings.Template.ValueTypes)r.Cells["ValueType3"].Value,
-                 SerializedElement = 
-                
+                SerializedElement =
+
 
 
 
 
                 selectedBoxTexts.Select(a => new Settings.Template.FloatingAnchor.Element
-            {
-                Rectangle = new Settings.Template.RectangleF(a.R.X, a.R.Y, a.R.Width, a.R.Height),
-                Text = a.Text
-            }).ToList();
+                {
+                    Rectangle = new Settings.Template.RectangleF(a.R.X, a.R.Y, a.R.Width, a.R.Height),
+                    Text = a.Text
+                }).ToList();
 
             Settings.Template.RectangleF fieldR = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>(rs);
             fieldR.X -= fa.Elements[0].Rectangle.X;
@@ -650,7 +650,7 @@ namespace Cliver.InvoiceParser
             floatingAnchors.EndEdit();
 
 
-        selectedBoxTexts = null;
+            selectedBoxTexts = null;
         }
         List<Pdf.BoxText> selectedBoxTexts;
 
@@ -664,14 +664,21 @@ namespace Cliver.InvoiceParser
                 name.Text = template.Name;
 
                 //imageResolution.Value = template.ImageResolution;
-
-                pageRotation.SelectedIndex = (int)template.PagesRotation;
-
-                position0Anchor = template.Position0Anchor;
-                if (position0Anchor != null)
-                    position0AnchorRectangular.Text = "{ " + position0Anchor.Width + " x " + position0Anchor.Height + " }";
-
+                
                 autoDeskew.Checked = template.AutoDeskew;
+
+                floatingAnchors.Rows.Clear();
+                if (template.FloatingAnchors != null)
+                {
+                    foreach (Settings.Template.FloatingAnchor f in template.FloatingAnchors.Values)
+                    {
+                        int i = floatingAnchors.Rows.Add();
+                        var cs = floatingAnchors.Rows[i].Cells;
+                        cs["Id3"].Value = f.Id;
+                        cs["ValueType3"].Value = f.ValueType;
+                        cs["Value3"].Value = f.Value;
+                    }
+                }
 
                 invoiceFirstPageRecognitionMarks.Rows.Clear();
                 if (template.InvoiceFirstPageRecognitionMarks != null)
@@ -683,6 +690,7 @@ namespace Cliver.InvoiceParser
                         cs["Rectangle2"].Value = SerializationRoutines.Json.Serialize(m.Rectangle);
                         cs["ValueType2"].Value = m.ValueType;
                         cs["Value2"].Value = m.Value;
+                        cs["FloatingAnchorId2"].Value = m.FloatingAnchorId;
                     }
                 }
 
@@ -695,13 +703,10 @@ namespace Cliver.InvoiceParser
                         var cs = fields.Rows[i].Cells;
                         cs["Name_"].Value = f.Name;
                         cs["Rectangle"].Value = SerializationRoutines.Json.Serialize(f.Rectangle);
-                        cs["Ocr"].Value = f.Ocr;
-                        if (f.FloatingAnchor != null)
-                            cs["FloatingAnchor"].Value = SerializationRoutines.Json.Serialize(f.FloatingAnchor);
+                        cs["Ocr"].Value = f.ValueType == Settings.Template.ValueTypes.PdfText ? false : true;
+                        cs["FloatingAnchorId"].Value = f.FloatingAnchorId;
                     }
                 }
-                //fields.Columns["Value"].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
-                //fields.Columns["Value"].AutoSizeMode = DataGridViewAutoSizeColumnMode.NotSet;
 
                 if (template.FileFilterRegex != null)
                     fileFilterRegex.Text = SerializationRoutines.Json.Serialize(template.FileFilterRegex);
@@ -749,8 +754,7 @@ namespace Cliver.InvoiceParser
                 setScaledImage();
                 enableNabigationButtons();
 
-                if(findPoint0())
-                    checkIfCurrentPageIsInvoiceFirstPage();
+                checkIfCurrentPageIsInvoiceFirstPage();
 
                 //if (invoiceFirstPageRecognitionMarks.SelectedRows.Count < 1)
                 //    catchFields();
@@ -797,41 +801,14 @@ namespace Cliver.InvoiceParser
         int currentPage;
         int totalPageNumber;
 
-        PointF point0 = new PointF(0, 0);
-        bool findPoint0()
-        {
-            if (position0Anchor == null)
-            {
-                point0 = new PointF();
-                return true;
-            }
-
-            PointF? p_ = position0Anchor.FindWithinImage(new ImageData(pageBitmaps.Get(currentPage)));
-            if (p_ != null)
-            {
-                point0 = (PointF)p_;
-                drawBox(Color.Orange, point0.X, point0.Y, position0Anchor.Width, position0Anchor.Height);
-                lPosition0.Text = point0.ToString();
-                position0AnchorRectangular.BackColor = SystemColors.Window;
-                return true;
-            }
-            else
-            {
-                point0 = new PointF(0, 0);
-                lPosition0.Text = "not found";
-                position0AnchorRectangular.BackColor = Color.Pink;
-                return false;
-            }
-        }   
-
         private void bTestFile_Click(object sender, EventArgs e)
         {
             OpenFileDialog d = new OpenFileDialog();
-            if(!string.IsNullOrWhiteSpace(template.TestFile))
+            if (!string.IsNullOrWhiteSpace(template.TestFile))
                 d.InitialDirectory = PathRoutines.GetDirFromPath(template.TestFile);
             else
                 if (!string.IsNullOrWhiteSpace(Settings.General.InputFolder))
-                    d.InitialDirectory = Settings.General.InputFolder;
+                d.InitialDirectory = Settings.General.InputFolder;
 
             d.Filter = "PDF|*.pdf|"
                 + "All files (*.*)|*.*";
@@ -854,33 +831,6 @@ namespace Cliver.InvoiceParser
         {
             bPrevPage.Enabled = currentPage > 1;
             bNextPage.Enabled = currentPage < totalPageNumber;
-        }
-
-        void catchFields()
-        {
-            try
-            {
-                bool renewImage = true;
-                foreach (DataGridViewRow row in fields.Rows)
-                {
-                    string rs = (string)row.Cells["Rectangle"].Value;
-                    if (rs == null)
-                        continue;
-                    Settings.Template.RectangleF r = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>(rs);
-                    Settings.Template.FloatingAnchor fa = null;
-                    string fas = (string)row.Cells["FloatingAnchor"].Value;
-                    if (!string.IsNullOrWhiteSpace(fas)) 
-                        fa = SerializationRoutines.Json.Deserialize<Settings.Template.FloatingAnchor>(fas);
-                    r.X += point0.X;
-                    r.Y += point0.Y;
-                    row.Cells["Value"].Value = exctractValueAndDrawBox(fa, r, Convert.ToBoolean(row.Cells["Ocr"].Value) ? Settings.Template.ValueTypes.OcrText : Settings.Template.ValueTypes.PdfText, renewImage);
-                    renewImage = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                LogMessage.Error(ex);
-            }
         }
 
         enum Modes
@@ -916,121 +866,130 @@ namespace Cliver.InvoiceParser
 
         bool? checkIfCurrentPageIsInvoiceFirstPage()
         {
-            if (invoiceFirstPageRecognitionMarks.Rows.Count < 2)
+            try
             {
-                lStatus.Text = "No condition of first page of invoice is specified!";
-                lStatus.BackColor = Color.LightYellow;
-                return null;
-            }
-
-            bool renewImage = true;
-            foreach (DataGridViewRow row in invoiceFirstPageRecognitionMarks.Rows)
-            {
-                string rs = (string)row.Cells["Rectangle2"].Value;
-                if (rs == null)
-                    continue;
-                Settings.Template.RectangleF r = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>(rs);
-                r.X += point0.X;
-                r.Y += point0.Y;
-                string t = FieldPreparation.Normalize((string)row.Cells["Value2"].Value);
-                Settings.Template.ValueTypes vt = (Settings.Template.ValueTypes)row.Cells["ValueType2"].Value;
-                string t2 = exctractValueAndDrawBox(null, r, vt, renewImage);
-                if (vt == Settings.Template.ValueTypes.ImageData)
+                if (invoiceFirstPageRecognitionMarks.Rows.Count < 2)
                 {
-                    ImageData id = ImageData.Deserialize(t);
-                    ImageData id2 = ImageData.Deserialize(t2);
-                    if(!id.ImageIsSimilar(id2))
-                    {
-                        lStatus.Text = "No match to first page of invoice!\r\nMark #" + row.Index + " not found.";
-                        lStatus.BackColor = Color.LightPink;
-                        return false;
-                    }
+                    lStatus.Text = "No condition of first page of invoice is specified!";
+                    lStatus.BackColor = Color.LightYellow;
+                    return null;
                 }
-                else if (t != t2)
+
+                Settings.Template t = getCurrentTemplate();
+                string error;
+                if(!pages[currentPage].IsInvoiceFirstPage(out error))
                 {
-                    //Message.Exclaim("No match to first page of invoice!\r\n'" + t2 + "'\r\n!=\r\n'" + t + "'");
-                    lStatus.Text = "No match to first page of invoice!\r\n'" + t2 + "'\r\n!=\r\n'" + t + "'";
+                    lStatus.Text = error;
                     lStatus.BackColor = Color.LightPink;
                     return false;
                 }
-                renewImage = false;
-            }
-            //Message.Inform("Success!\r\nMatch to first page of invoice.");
-            lStatus.Text = "The page matches first page of invoice.";
-            lStatus.BackColor = Color.LightGreen;
-            return true;
-        }
-
-        private void bTestFileFilterRegex_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string d = string.IsNullOrWhiteSpace(testFile.Text) ? Settings.General.InputFolder : PathRoutines.GetDirFromPath(testFile.Text);
-                FileFilterForm f = new FileFilterForm(d, SerializationRoutines.Json.Deserialize<Regex>(fileFilterRegex.Text));
-                f.ShowDialog();
+                lStatus.Text = "The page matches first page of invoice.";
+                lStatus.BackColor = Color.LightGreen;
+                return true;
             }
             catch (Exception ex)
             {
-                Message.Error(ex);
+                Message.Error2(ex);
             }
+            return false;
         }
 
-        private void bText_Click(object sender, EventArgs e)
-        {
-            TextForm tf = new TextForm(PdfTextExtractor.GetTextFromPage(pdfReader, currentPage));
-            tf.ShowDialog();
-        }
-
-        private void tCurrentPage_Leave(object sender, EventArgs e)
-        {
-            changeCurrentPage();
-        }
-
-        private void changeCurrentPage()
-        {
-            int i = 0;
-            if (int.TryParse(tCurrentPage.Text, out i))
+        private void bTestFileFilterRegex_Click(object sender, EventArgs e)
             {
-                if (i != currentPage)
-                    showPage(i);
+                try
+                {
+                    string d = string.IsNullOrWhiteSpace(testFile.Text) ? Settings.General.InputFolder : PathRoutines.GetDirFromPath(testFile.Text);
+                    FileFilterForm f = new FileFilterForm(d, SerializationRoutines.Json.Deserialize<Regex>(fileFilterRegex.Text));
+                    f.ShowDialog();
+                }
+                catch (Exception ex)
+                {
+                    Message.Error(ex);
+                }
             }
-            else
-            {
-                Message.Error("Page is not a number.");
-                tCurrentPage.Text = currentPage.ToString();
-            }
-        }
 
-        private void tCurrentPage_KeyDown(object sender, KeyEventArgs e)
-        {
-            if(e.KeyCode == Keys.Enter)
+            private void bText_Click(object sender, EventArgs e)
+            {
+                TextForm tf = new TextForm(PdfTextExtractor.GetTextFromPage(pdfReader, currentPage));
+                tf.ShowDialog();
+            }
+
+            private void tCurrentPage_Leave(object sender, EventArgs e)
+            {
                 changeCurrentPage();
-        }
+            }
 
-        private void cancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-            Close();
-        }
-
-        private void save_Click(object sender, EventArgs e)
-        {
-            try
+            private void changeCurrentPage()
             {
+                int i = 0;
+                if (int.TryParse(tCurrentPage.Text, out i))
+                {
+                    if (i != currentPage)
+                        showPage(i);
+                }
+                else
+                {
+                    Message.Error("Page is not a number.");
+                    tCurrentPage.Text = currentPage.ToString();
+                }
+            }
+
+            private void tCurrentPage_KeyDown(object sender, KeyEventArgs e)
+            {
+                if (e.KeyCode == Keys.Enter)
+                    changeCurrentPage();
+            }
+
+            private void cancel_Click(object sender, EventArgs e)
+            {
+                DialogResult = DialogResult.Cancel;
+                Close();
+            }
+
+            private void save_Click(object sender, EventArgs e)
+            {
+                try
+                {
+                    template = getCurrentTemplate();
+                    Settings.Templates.Save();
+
+                    DialogResult = DialogResult.OK;
+                    Close();
+                }
+                catch (Exception ex)
+                {
+                    Message.Error2(ex);
+                }
+            }
+            Settings.Template.PageRotations pagesRotation
+        {
+                get
+            {
+                    if (pageRotation.SelectedIndex <= 0)
+                        return 0;
+                    else
+                        return (Settings.Template.PageRotations)pageRotation.SelectedIndex;
+                }
+            }
+
+            Settings.Template getCurrentTemplate()
+            {
+                Settings.Template t = new Settings.Template();
+
                 if (string.IsNullOrWhiteSpace(name.Text))
                     throw new Exception("Name is empty!");
 
                 if (invoiceFirstPageRecognitionMarks.Rows.Count < 2)
                     throw new Exception("InvoiceFirstPageRecognitionMarks is empty!");
 
-                template.Name = name.Text;
-                
-                template.FloatingAnchors = new Dictionary<int, Settings.Template.FloatingAnchor>();
+                t.Name = name.Text;
+
+                t.FloatingAnchors = new Dictionary<int, Settings.Template.FloatingAnchor>();
                 foreach (DataGridViewRow r in floatingAnchors.Rows)
                     if (!string.IsNullOrWhiteSpace((string)r.Cells["Id3"].Value))
                     {
                         string fas = (string)r.Cells["FloatingAnchor"].Value;
-                        template.FloatingAnchors[(int)r.Cells["Id3"].Value] = new Settings.Template.FloatingAnchor
+                        t.FloatingAnchors[(int)r.Cells["Id3"].Value] = new Settings.Template.FloatingAnchor
                         {
                             Id = (int)r.Cells["Id3"].Value,
                             ValueType = (Settings.Template.ValueTypes)r.Cells["ValueType3"].Value,
@@ -1038,26 +997,26 @@ namespace Cliver.InvoiceParser
                         };
                     }
 
-                template.InvoiceFirstPageRecognitionMarks = new List<Settings.Template.Mark>();
+                t.InvoiceFirstPageRecognitionMarks = new List<Settings.Template.Mark>();
                 foreach (DataGridViewRow r in invoiceFirstPageRecognitionMarks.Rows)
                     if (!string.IsNullOrWhiteSpace((string)r.Cells["Rectangle2"].Value))
                     {
-                        template.InvoiceFirstPageRecognitionMarks.Add(
+                        t.InvoiceFirstPageRecognitionMarks.Add(
                             new Settings.Template.Mark
                             {
                                 Rectangle = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>((string)r.Cells["Rectangle2"].Value),
                                 ValueType = (Settings.Template.ValueTypes)r.Cells["ValueType2"].Value,
                                 Value = (string)r.Cells["Value2"].Value,
-                                FloatingAnchorId = r.Cells["FloatingAnchorId2"].Value==null?-1:(int)r.Cells["FloatingAnchorId2"].Value,
+                                FloatingAnchorId = r.Cells["FloatingAnchorId2"].Value == null ? -1 : (int)r.Cells["FloatingAnchorId2"].Value,
                             });
                     }
 
-                template.Fields = new List<Settings.Template.Field>();
+                t.Fields = new List<Settings.Template.Field>();
                 foreach (DataGridViewRow r in fields.Rows)
                     if (!string.IsNullOrWhiteSpace((string)r.Cells["Name_"].Value))
                     {
                         string fas = (string)r.Cells["FloatingAnchor"].Value;
-                        template.Fields.Add(new Settings.Template.Field
+                        t.Fields.Add(new Settings.Template.Field
                         {
                             Name = ((string)r.Cells["Name_"].Value).Trim(),
                             Rectangle = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>((string)r.Cells["Rectangle"].Value),
@@ -1070,37 +1029,18 @@ namespace Cliver.InvoiceParser
                 //    template.PageRotationRules = null;
                 //else
                 //    template.PageRotationRules = new List<Settings.Template.PageRotationRule> { new Settings.Template.PageRotationRule { Angle = pageRotation.SelectedIndex * 90 } };
-                template.PagesRotation = pagesRotation;
+                t.PagesRotation = pagesRotation;
 
-                template.AutoDeskew = autoDeskew.Checked;
+                t.AutoDeskew = autoDeskew.Checked;
 
-                template.TestFile = testFile.Text;
+                t.TestFile = testFile.Text;
 
-                //template.ImageResolution = (int)imageResolution.Value;
+                //t.ImageResolution = (int)imageResolution.Value;
 
-                template.TestPictureScale = pictureScale.Value;
+                t.TestPictureScale = pictureScale.Value;
 
-                template.FileFilterRegex = SerializationRoutines.Json.Deserialize<Regex>(fileFilterRegex.Text);
-
-                Settings.Templates.Save();
-
-                DialogResult = DialogResult.OK;
-                Close();
-            }
-            catch (Exception ex)
-            {
-                Message.Error2(ex);
-            }
-        }
-        Settings.Template.PageRotations pagesRotation
-        {
-            get
-            {
-                if (pageRotation.SelectedIndex <= 0)
-                    return 0;
-                else
-                    return (Settings.Template.PageRotations)pageRotation.SelectedIndex;
+                t.FileFilterRegex = SerializationRoutines.Json.Deserialize<Regex>(fileFilterRegex.Text);
+                return t;
             }
         }
     }
-}

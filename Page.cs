@@ -77,13 +77,16 @@ namespace Cliver.InvoiceParser
             {
                 if (_activeTemplate == value)
                     return;
-                _activeTemplate = value;
-                if (BitmapPreparedForTemplate != null)
+                if (_activeTemplate.PagesRotation != value.PagesRotation || _activeTemplate.AutoDeskew != value.AutoDeskew)
                 {
-                    BitmapPreparedForTemplate.Dispose();
-                    _bitmapPreparedForTemplate = null;
+                    if (BitmapPreparedForTemplate != null)
+                    {
+                        BitmapPreparedForTemplate.Dispose();
+                        _bitmapPreparedForTemplate = null;
+                    }
                 }
                 floatingAnchorIds2point0.Clear();
+                _activeTemplate = value;
             }
             get
             {
@@ -93,9 +96,9 @@ namespace Cliver.InvoiceParser
         Settings.Template _activeTemplate;
         Dictionary<int, System.Drawing.PointF?> floatingAnchorIds2point0 = new Dictionary<int, System.Drawing.PointF?>();
 
-        public System.Drawing.Bitmap GetRectangeFromBitmapPreparedForTemplate(Settings.Template.RectangleF r)
+        public System.Drawing.Bitmap GetRectangeFromBitmapPreparedForTemplate(float x, float y, float w, float h)
         {
-            return BitmapPreparedForTemplate.Clone(r.GetSystemRectangle(), System.Drawing.Imaging.PixelFormat.Undefined);
+            return BitmapPreparedForTemplate.Clone(new RectangleF(x, y, w, h), System.Drawing.Imaging.PixelFormat.Undefined);
         }
         public System.Drawing.Bitmap BitmapPreparedForTemplate
         {
@@ -307,6 +310,12 @@ namespace Cliver.InvoiceParser
 
         public bool IsInvoiceFirstPage()
         {
+            string error;
+            return IsInvoiceFirstPage(out error);
+        }
+
+        public bool IsInvoiceFirstPage(out string error)
+        {
             foreach (Settings.Template.Mark m in ActiveTemplate.InvoiceFirstPageRecognitionMarks)
             {
                 System.Drawing.PointF point0 = new System.Drawing.PointF(0, 0);
@@ -316,8 +325,11 @@ namespace Cliver.InvoiceParser
                     p0 = GetFloatingAnchorPoint0(m.FloatingAnchorId);
                     if (p0 != null)
                         point0 = (PointF)p0;
-                    //else
-                    //    Log.Main.Warning("");
+                    else
+                    {
+                        error = "FloatingAnchor[" + m.FloatingAnchorId + "] not found.";
+                        return false;
+                    }
                 }
                 Settings.Template.RectangleF r = new Settings.Template.RectangleF(m.Rectangle.X + point0.X, m.Rectangle.Height + point0.Y, m.Rectangle.Width, m.Rectangle.Height);
 
@@ -326,28 +338,42 @@ namespace Cliver.InvoiceParser
                     case Settings.Template.ValueTypes.PdfText:
                         {
                             //string t = pr.ExtractText(pageI, r.X, Height - r.Y - r.Height, r.Width, r.Height);
-                            string t = Pdf.GetTextByTopLeftCoordinates(charBoxLists, r.X, r.Y, r.Width, r.Height);
-                            return FieldPreparation.Normalize(m.Value) == FieldPreparation.Normalize(t);
+                            string t2 = Pdf.GetTextByTopLeftCoordinates(charBoxLists, r.X, r.Y, r.Width, r.Height);
+                            t2 = FieldPreparation.Normalize(t2);
+                            string t1 = FieldPreparation.Normalize(m.Value);
+                            if (t1 == t2)
+                                break;
+                                error = "InvoiceFirstPageRecognitionMark[" + ActiveTemplate.InvoiceFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
+                                return false;
                         }
                     case Settings.Template.ValueTypes.OcrText:
                         {
-                            string t = TesseractW.This.GetText(BitmapPreparedForTemplate, r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);
-                            return FieldPreparation.Normalize(m.Value) == FieldPreparation.Normalize(t);
+                            string t2 = TesseractW.This.GetText(BitmapPreparedForTemplate, r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);
+                            t2 = FieldPreparation.Normalize(t2);
+                            string t1 = FieldPreparation.Normalize(m.Value);
+                            if (t1 == t2)
+                                break;
+                            error = "InvoiceFirstPageRecognitionMark[" + ActiveTemplate.InvoiceFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
+                            return false;
                         }
                     case Settings.Template.ValueTypes.ImageData:
                         {
-                            System.Drawing.Bitmap b = GetRectangeFromBitmapPreparedForTemplate(r);
+                            System.Drawing.Bitmap b = GetRectangeFromBitmapPreparedForTemplate(r.X, r.Y, r.Width, r.Height);
                             ImageData id = ImageData.Deserialize(m.Value);
-                            return id.ImageIsSimilar(new ImageData(b));
+                            if (id.ImageIsSimilar(new ImageData(b)))
+                                break;
+                            error = "InvoiceFirstPageRecognitionMark[" + ActiveTemplate.InvoiceFirstPageRecognitionMarks.IndexOf(m) + "]: image is not similar.";
+                            return false;
                         }
                     default:
                         throw new Exception("Unknown option: " + m.ValueType);
                 }
             }
-            return false;
+            error = null;
+            return true;
         }
 
-        public string GetFieldText(Settings.Template.Field f)
+        public string GetFieldValue(Settings.Template.Field f)
         {
             string t = null;
 
@@ -373,7 +399,8 @@ namespace Cliver.InvoiceParser
                     t = TesseractW.This.GetText(BitmapPreparedForTemplate, r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);
                     break;
                 case Settings.Template.ValueTypes.ImageData:
-                    break;
+                    ImageData id = new ImageData(GetRectangeFromBitmapPreparedForTemplate(r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio));
+                    return id.GetAsString();
                 default:
                     throw new Exception("Unknown option: " + f.ValueType);
             }

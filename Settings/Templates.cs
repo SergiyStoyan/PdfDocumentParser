@@ -15,7 +15,7 @@ namespace Cliver.InvoiceParser
         public static readonly TemplatesSettings Templates;
 
         public class TemplatesSettings : Cliver.Settings
-        {            
+        {
             public List<Template> Templates = new List<Template>();//preserving order of matching: only the first match is to be applied
 
             internal const string InitialTemplate = @"{
@@ -70,7 +70,7 @@ namespace Cliver.InvoiceParser
             public override void Loaded()
             {
                 if (Templates.Count < 1)
-                    Templates.Add(SerializationRoutines.Json.Deserialize<Template>(InitialTemplate));                
+                    Templates.Add(SerializationRoutines.Json.Deserialize<Template>(InitialTemplate));
             }
 
             public override void Saving()
@@ -94,7 +94,7 @@ namespace Cliver.InvoiceParser
                 Clockwise180,
                 Clockwise270,
             }
-            
+
             public ImageData Position0Anchor;//when set, all the absolute cooordinates in the template are counted from this point
 
             public bool AutoDeskew = false;
@@ -171,29 +171,29 @@ namespace Cliver.InvoiceParser
             public partial class FloatingAnchor
             {
                 public int Id;
-                    public string Value;
-                    public ValueTypes ValueType = ValueTypes.PdfText;
-                    public object Get()
-                    {
-                        if (typedValue == null)
-                            switch (ValueType)
-                            {
-                                case ValueTypes.ImageData:
+                public string Value;
+                public ValueTypes ValueType = ValueTypes.PdfText;
+                public object Get()
+                {
+                    if (typedValue == null)
+                        switch (ValueType)
+                        {
+                            case ValueTypes.ImageData:
                                 typedValue = SerializationRoutines.Json.Deserialize<ImageDataElement>(Value);
-                                    break;
-                                case ValueTypes.OcrText:
-                                    break;
-                                case ValueTypes.PdfText:
+                                break;
+                            case ValueTypes.OcrText:
+                                break;
+                            case ValueTypes.PdfText:
                                 typedValue = SerializationRoutines.Json.Deserialize<PdfTextElement>(Value);
-                                    break;
-                                default:
-                                    throw new Exception("Unknown option: " + ValueType);
-                            }
-                        return typedValue;
-                    }
-                    object typedValue = null;
-                
-                public class PdfTextElement 
+                                break;
+                            default:
+                                throw new Exception("Unknown option: " + ValueType);
+                        }
+                    return typedValue;
+                }
+                object typedValue = null;
+
+                public class PdfTextElement
                 {
                     public List<CharBox> CharBoxs;
 
@@ -207,7 +207,7 @@ namespace Cliver.InvoiceParser
                 //{
                 //    public ImageData ImageData;
                 //}
-                public class OcrTextElement 
+                public class OcrTextElement
                 {
                     public string Text;
                     public RectangleF Rectangle;
