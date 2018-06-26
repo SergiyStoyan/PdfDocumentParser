@@ -23,7 +23,13 @@ namespace Cliver.InvoiceParser
         //public float Ratio;
         public int Width;
         public int Height;
-        public string GetAsString()
+
+        public override string ToString()
+        {
+            return Serialize();
+        }
+
+        public string Serialize()
         {
             //string g;
             //byte[] bs = new byte[2 + Hash.Length];

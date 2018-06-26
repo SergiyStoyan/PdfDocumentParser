@@ -5,7 +5,6 @@ using System.Data.Linq;
 using System.Linq;
 using System.Drawing;
 using System.Collections.Specialized;
-using ImageDataElement = Cliver.InvoiceParser.ImageData;
 
 namespace Cliver.InvoiceParser
 {
@@ -162,7 +161,7 @@ namespace Cliver.InvoiceParser
 
             public class Field
             {
-                public int FloatingAnchorId = -1;//when set, Rectangle.X,Y are bound to location of the anchor as to zero point
+                public int? FloatingAnchorId;//when set, Rectangle.X,Y are bound to location of the anchor as to zero point
                 public string Name;
                 public RectangleF Rectangle;//when FloatingAnchor is set, Rectangle.X,Y are bound to location of the anchor as to zero point
                 public ValueTypes ValueType = ValueTypes.PdfText;
@@ -172,6 +171,7 @@ namespace Cliver.InvoiceParser
             {
                 public int Id;
                 public string Value;
+                //public List<string> Values;
                 public ValueTypes ValueType = ValueTypes.PdfText;
                 public object Get()
                 {
@@ -182,6 +182,7 @@ namespace Cliver.InvoiceParser
                                 typedValue = SerializationRoutines.Json.Deserialize<ImageDataElement>(Value);
                                 break;
                             case ValueTypes.OcrText:
+                                typedValue = SerializationRoutines.Json.Deserialize<OcrTextElement>(Value);
                                 break;
                             case ValueTypes.PdfText:
                                 typedValue = SerializationRoutines.Json.Deserialize<PdfTextElement>(Value);
@@ -203,14 +204,25 @@ namespace Cliver.InvoiceParser
                         public RectangleF Rectangle;
                     }
                 }
-                //public class ImageDataElement 
-                //{
-                //    public ImageData ImageData;
-                //}
+                public class ImageDataElement
+                {
+                    public List<ImageBox> ImageBoxs;
+
+                    public class ImageBox
+                    {
+                        public ImageData ImageData;
+                        public RectangleF Rectangle;
+                    }
+                }
                 public class OcrTextElement
                 {
-                    public string Text;
-                    public RectangleF Rectangle;
+                    public List<TextBox> TextBoxs;
+
+                    public class TextBox
+                    {
+                        public string Text;
+                        public RectangleF Rectangle;
+                    }
                 }
             }
         }

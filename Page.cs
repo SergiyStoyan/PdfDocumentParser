@@ -96,6 +96,11 @@ namespace Cliver.InvoiceParser
         Settings.Template _activeTemplate;
         Dictionary<int, System.Drawing.PointF?> floatingAnchorIds2point0 = new Dictionary<int, System.Drawing.PointF?>();
 
+        public void UncacheFloatingAnchor(int floatingAnchorId)
+        {
+            floatingAnchorIds2point0.Remove(floatingAnchorId);
+        }
+
         public System.Drawing.Bitmap GetRectangeFromBitmapPreparedForTemplate(float x, float y, float w, float h)
         {
             return BitmapPreparedForTemplate.Clone(new RectangleF(x, y, w, h), System.Drawing.Imaging.PixelFormat.Undefined);
@@ -178,6 +183,8 @@ namespace Cliver.InvoiceParser
             {
                 case Settings.Template.ValueTypes.PdfText:
                     List<Settings.Template.FloatingAnchor.PdfTextElement.CharBox> ses = ((Settings.Template.FloatingAnchor.PdfTextElement)fa.Get()).CharBoxs;
+                    if (ses.Count < 1)
+                        return null;
                     List<Pdf.BoxText> bts = new List<Pdf.BoxText>();
                     foreach (Pdf.BoxText bt0 in charBoxLists.Where(a => a.Text == ses[0].Char))
                     {
@@ -210,14 +217,22 @@ namespace Cliver.InvoiceParser
                 case Settings.Template.ValueTypes.OcrText:
                     return null;
                 case Settings.Template.ValueTypes.ImageData:
-                    ImageData id = (ImageData)fa.Get();
-                        System.Drawing.PointF? p0 = id.FindWithinImage(imageData);
-                        if (p0 == null)
+                    List<Settings.Template.FloatingAnchor.ImageDataElement.ImageBox> ibs = ((Settings.Template.FloatingAnchor.ImageDataElement)fa.Get()).ImageBoxs;
+                    if (ibs.Count < 1)
+                        return null;
+
+                    System.Drawing.PointF? p0 = ibs[0].ImageData.FindWithinImage(imageData);
+                    if (p0 == null)
+                        return null;
+                    System.Drawing.PointF point0 = (PointF)p0;
+
+                    for (int i = 1; i < ibs.Count; i++)
+                    {
+                        Settings.Template.RectangleF r = new Settings.Template.RectangleF(ibs[i].Rectangle.X + point0.X, ibs[i].Rectangle.Height + point0.Y, ibs[i].Rectangle.Width, ibs[i].Rectangle.Height);
+                        if (!ibs[i].ImageData.ImageIsSimilar(new ImageData(GetRectangeFromBitmapPreparedForTemplate(r.X, r.Y, r.Width, r.Height))))
                             return null;
-                        System.Drawing.PointF point0 = (PointF)p0;
-                        //if (findFloatingAnchorSecondaryElements((PointF)point0, fa))
-                        //    return point0;
-                        return new List<RectangleF> { new RectangleF(point0.X, point0.Y, imageData.Width, imageData.Height) };
+                    }
+                    return new List<RectangleF> { new RectangleF(point0.X, point0.Y, imageData.Width, imageData.Height) };
                 default:
                     throw new Exception("Unknown option: " + fa.ValueType);
             }
@@ -318,29 +333,13 @@ namespace Cliver.InvoiceParser
         {
             foreach (Settings.Template.Mark m in ActiveTemplate.InvoiceFirstPageRecognitionMarks)
             {
-                System.Drawing.PointF point0 = new System.Drawing.PointF(0, 0);
-                if (m.FloatingAnchorId >= 0)
-                {
-                    System.Drawing.PointF? p0;
-                    p0 = GetFloatingAnchorPoint0(m.FloatingAnchorId);
-                    if (p0 != null)
-                        point0 = (PointF)p0;
-                    else
-                    {
-                        error = "FloatingAnchor[" + m.FloatingAnchorId + "] not found.";
-                        return false;
-                    }
-                }
-                Settings.Template.RectangleF r = new Settings.Template.RectangleF(m.Rectangle.X + point0.X, m.Rectangle.Height + point0.Y, m.Rectangle.Width, m.Rectangle.Height);
-
+                object v = GetValue(m.FloatingAnchorId, m.Rectangle, m.ValueType, out error);
                 switch (m.ValueType)
                 {
                     case Settings.Template.ValueTypes.PdfText:
                         {
-                            //string t = pr.ExtractText(pageI, r.X, Height - r.Y - r.Height, r.Width, r.Height);
-                            string t2 = Pdf.GetTextByTopLeftCoordinates(charBoxLists, r.X, r.Y, r.Width, r.Height);
-                            t2 = FieldPreparation.Normalize(t2);
                             string t1 = FieldPreparation.Normalize(m.Value);
+                            string t2 = FieldPreparation.Normalize((string)v);
                             if (t1 == t2)
                                 break;
                                 error = "InvoiceFirstPageRecognitionMark[" + ActiveTemplate.InvoiceFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
@@ -348,19 +347,16 @@ namespace Cliver.InvoiceParser
                         }
                     case Settings.Template.ValueTypes.OcrText:
                         {
-                            string t2 = TesseractW.This.GetText(BitmapPreparedForTemplate, r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);
-                            t2 = FieldPreparation.Normalize(t2);
                             string t1 = FieldPreparation.Normalize(m.Value);
+                            string t2 = FieldPreparation.Normalize((string)v);
                             if (t1 == t2)
-                                break;
-                            error = "InvoiceFirstPageRecognitionMark[" + ActiveTemplate.InvoiceFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
+                                error = "InvoiceFirstPageRecognitionMark[" + ActiveTemplate.InvoiceFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
                             return false;
                         }
                     case Settings.Template.ValueTypes.ImageData:
                         {
-                            System.Drawing.Bitmap b = GetRectangeFromBitmapPreparedForTemplate(r.X, r.Y, r.Width, r.Height);
                             ImageData id = ImageData.Deserialize(m.Value);
-                            if (id.ImageIsSimilar(new ImageData(b)))
+                            if (id.ImageIsSimilar((ImageData)(v)))
                                 break;
                             error = "InvoiceFirstPageRecognitionMark[" + ActiveTemplate.InvoiceFirstPageRecognitionMarks.IndexOf(m) + "]: image is not similar.";
                             return false;
@@ -373,38 +369,52 @@ namespace Cliver.InvoiceParser
             return true;
         }
 
-        public string GetFieldValue(Settings.Template.Field f)
+        public string GetFieldText(string fieldName)
         {
-            string t = null;
+            Settings.Template.Field f = ActiveTemplate.Fields.Find(a => a.Name == fieldName);
+            string error;
+            object v = GetValue(f.FloatingAnchorId, f.Rectangle, f.ValueType, out error);
+            if (v is ImageData)
+                return ((ImageData)v).Serialize();
+            return FieldPreparation.Normalize(prepareField((string)v));
+        }
 
-            System.Drawing.PointF point0 = new System.Drawing.PointF(0, 0);
-            if (f.FloatingAnchorId >= 0)
-            {
-                System.Drawing.PointF? p0;
-                p0 = GetFloatingAnchorPoint0(f.FloatingAnchorId);
-                if (p0 != null)
+        public object GetValue(int? floatingAnchorId, Settings.Template.RectangleF r_, Settings.Template.ValueTypes valueType, out string error)
+        {
+            //try
+            //{
+                System.Drawing.PointF point0 = new System.Drawing.PointF(0, 0);
+                if (floatingAnchorId != null)
+                {
+                    System.Drawing.PointF? p0;
+                    p0 = GetFloatingAnchorPoint0((int)floatingAnchorId);
+                    if (p0 == null)
+                    {
+                        error = "FloatingAnchor[" + floatingAnchorId + "] not found.";
+                        return null;
+                    }
                     point0 = (PointF)p0;
-                //else
-                //    Log.Main.Warning("");
-            }
-            Settings.Template.RectangleF r = new Settings.Template.RectangleF(f.Rectangle.X + point0.X, f.Rectangle.Height + point0.Y, f.Rectangle.Width, f.Rectangle.Height);
-
-            switch (f.ValueType)
-            {
-                case Settings.Template.ValueTypes.PdfText:
-                    //string t = pr.ExtractText(pageI, r.X, Height - r.Y - r.Height, r.Width, r.Height);
-                    t = Pdf.GetTextByTopLeftCoordinates(charBoxLists, r.X, r.Y, r.Width, r.Height);
-                    break;
-                case Settings.Template.ValueTypes.OcrText:
-                    t = TesseractW.This.GetText(BitmapPreparedForTemplate, r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);
-                    break;
-                case Settings.Template.ValueTypes.ImageData:
-                    ImageData id = new ImageData(GetRectangeFromBitmapPreparedForTemplate(r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio));
-                    return id.GetAsString();
-                default:
-                    throw new Exception("Unknown option: " + f.ValueType);
-            }
-            return prepareField(FieldPreparation.Normalize(t));
+                }
+                Settings.Template.RectangleF r = new Settings.Template.RectangleF(r_.X + point0.X, r_.Height + point0.Y, r_.Width, r_.Height);
+                error = null;
+                switch (valueType)
+                {
+                    case Settings.Template.ValueTypes.PdfText:
+                        //string t = pr.ExtractText(pageI, r.X, Height - r.Y - r.Height, r.Width, r.Height);
+                        return Pdf.GetTextByTopLeftCoordinates(charBoxLists, r.X, r.Y, r.Width, r.Height);
+                    case Settings.Template.ValueTypes.OcrText:
+                        return TesseractW.This.GetText(BitmapPreparedForTemplate, r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);
+                    case Settings.Template.ValueTypes.ImageData:
+                        return new ImageData(GetRectangeFromBitmapPreparedForTemplate(r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio));
+                    default:
+                        throw new Exception("Unknown option: " + valueType);
+                }
+            //}
+            //catch(Exception e)
+            //{
+            //    error = Log.GetExceptionMessage(e);
+            //}
+            //return null;
         }
 
         Dictionary<string, string> fieldNames2texts = new Dictionary<string, string>();

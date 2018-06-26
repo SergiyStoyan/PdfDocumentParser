@@ -153,8 +153,6 @@ namespace Cliver.InvoiceParser
                             if (invoiceFirstPageRecognitionMarks.SelectedRows.Count < 1)
                                 break;
                             DataGridViewRow rr = invoiceFirstPageRecognitionMarks.SelectedRows[0];
-                            r.X -= point0.X;
-                            r.Y -= point0.Y;
                             rr.Cells["Rectangle2"].Value = SerializationRoutines.Json.Serialize(r);
                             invoiceFirstPageRecognitionMarks.EndEdit();
                         }
@@ -164,8 +162,6 @@ namespace Cliver.InvoiceParser
                             if (fields.SelectedRows.Count < 1)
                                 break;
                             fields.SelectedRows[0].Cells["FloatingAnchor"].Value = null;
-                            r.X -= point0.X;
-                            r.Y -= point0.Y;
                             fields.SelectedRows[0].Cells["Rectangle"].Value = SerializationRoutines.Json.Serialize(r);
                             fields.EndEdit();
                         }
@@ -184,18 +180,17 @@ namespace Cliver.InvoiceParser
                 {
                     case "Rectangle":
                     case "Ocr":
-                    case "FloatingAnchor":
-                        string rs = (string)fields.Rows[e.RowIndex].Cells["Rectangle"].Value;
+                    case "FloatingAnchorId":
+                        var cs = fields.Rows[e.RowIndex].Cells;
+                        string rs = (string)cs["Rectangle"].Value;
                         if (!string.IsNullOrWhiteSpace(rs))
                         {
                             Settings.Template.FloatingAnchor fa = null;
-                            string fas = (string)fields.Rows[e.RowIndex].Cells["FloatingAnchor"].Value;
-                            if (!string.IsNullOrWhiteSpace(fas))
-                                fa = SerializationRoutines.Json.Deserialize<Settings.Template.FloatingAnchor>(fas);
+                            int? fI = (int?)cs["FloatingAnchorId"].Value;
+                            if (fI != null)
+                                fa = getFloatingAnchor((int)fI);
                             Settings.Template.RectangleF r = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>(rs);
-                            r.X += point0.X;
-                            r.Y += point0.Y;
-                            fields.Rows[e.RowIndex].Cells["Value"].Value = exctractValueAndDrawBox(fa, r, Convert.ToBoolean(fields.Rows[e.RowIndex].Cells["Ocr"].Value) ? Settings.Template.ValueTypes.OcrText : Settings.Template.ValueTypes.PdfText);
+                            cs["Value"].Value = extractValueAndDrawBox(fa, r, Convert.ToBoolean(cs["Ocr"].Value) ? Settings.Template.ValueTypes.OcrText : Settings.Template.ValueTypes.PdfText);
                         }
                         break;
                 }
@@ -296,20 +291,19 @@ namespace Cliver.InvoiceParser
 
                     if (fields.SelectedRows.Count > 0)
                     {
-                        cSetPosition0Anchor.Checked = false;
+                        floatingAnchors.ClearSelection();
                         invoiceFirstPageRecognitionMarks.ClearSelection();
                         int i = fields.SelectedRows[0].Index;
                         string rs = (string)fields.Rows[i].Cells["Rectangle"].Value;
                         if (!string.IsNullOrWhiteSpace(rs))
                         {
+                            var cs = fields.Rows[i].Cells;
                             Settings.Template.FloatingAnchor fa = null;
-                            string fas = (string)fields.Rows[i].Cells["FloatingAnchor"].Value;
-                            if (!string.IsNullOrWhiteSpace(fas))
-                                fa = SerializationRoutines.Json.Deserialize<Settings.Template.FloatingAnchor>(fas);
+                            int? fI = (int?)cs["FloatingAnchorId"].Value;
+                            if (fI != null)
+                                fa = getFloatingAnchor((int)fI);
                             Settings.Template.RectangleF r = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>(rs);
-                            r.X += point0.X;
-                            r.Y += point0.Y;
-                            fields.Rows[i].Cells["Value"].Value = exctractValueAndDrawBox(fa, r, Convert.ToBoolean(fields.Rows[i].Cells["Ocr"].Value) ? Settings.Template.ValueTypes.OcrText : Settings.Template.ValueTypes.PdfText);
+                            fields.Rows[i].Cells["Value"].Value = extractValueAndDrawBox(fa, r, Convert.ToBoolean(cs["Ocr"].Value) ? Settings.Template.ValueTypes.OcrText : Settings.Template.ValueTypes.PdfText);
                         }
                     }
                 }
@@ -336,10 +330,10 @@ namespace Cliver.InvoiceParser
                         scaledCurrentPageBitmap.Dispose();
                         scaledCurrentPageBitmap = null;
                     }
-                    if (pageBitmaps != null)
+                    if (pages != null)
                     {
-                        pageBitmaps.Dispose();
-                        pageBitmaps = null;
+                        pages.Dispose();
+                        pages = null;
                     }
 
                     if (string.IsNullOrWhiteSpace(testFile.Text))
@@ -351,30 +345,7 @@ namespace Cliver.InvoiceParser
                         return;
                     }
 
-                    pageBitmaps = new BitmapCollection(delegate (int page_i)
-                    {
-                        return BitmapCollection.GetPageBitmap(testFile.Text, page_i, pagesRotation, autoDeskew.Checked);
-                    });
-                    pdfReader = Pdf.CreatePdfReader(testFile.Text);
-
-                    pageCharBoxListss = new CharBoxCollection(delegate (int page_i)
-                    {
-                        var bts = pdfReader.GetCharacterTextChunks(page_i).Select(x => new BoxText
-                        {
-                            R = new RectangleF
-                            {
-                                X = x.StartLocation[Vector.I1],
-                                Y = pdfReader.GetPageSize(page_i).Height - x.EndLocation[Vector.I2],
-                                Width = x.EndLocation[Vector.I1] - x.StartLocation[Vector.I1],
-                                Height = x.EndLocation[Vector.I2] - x.StartLocation[Vector.I2],
-                            },
-                            Text = x.Text
-                        });
-                        //foreach(BoxText bt in bts.OrderBy(a=>a.R.Y))
-                        //     if()
-                        return bts.ToList();
-                    });
-
+                    pages = new PageCollection(testFile.Text);
                     totalPageNumber = pdfReader.NumberOfPages;
                     lTotalPages.Text = " / " + totalPageNumber;
                     showPage(1);
@@ -415,9 +386,7 @@ namespace Cliver.InvoiceParser
                             if (o != null)
                             {
                                 Settings.Template.RectangleF r = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>(rs);
-                                r.X += point0.X;
-                                r.Y += point0.Y;
-                                invoiceFirstPageRecognitionMarks.Rows[e.RowIndex].Cells["Value2"].Value = exctractValueAndDrawBox(null, r, (Settings.Template.ValueTypes)o);
+                                invoiceFirstPageRecognitionMarks.Rows[e.RowIndex].Cells["Value2"].Value = extractValueAndDrawBox(null, r, (Settings.Template.ValueTypes)o);
                             }
                         }
                         break;
@@ -433,7 +402,7 @@ namespace Cliver.InvoiceParser
 
                     if (invoiceFirstPageRecognitionMarks.SelectedRows.Count > 0)
                     {
-                        cSetPosition0Anchor.Checked = false;
+                        floatingAnchors.ClearSelection();
                         fields.ClearSelection();
                         int i = invoiceFirstPageRecognitionMarks.SelectedRows[0].Index;
 
@@ -443,12 +412,19 @@ namespace Cliver.InvoiceParser
                             invoiceFirstPageRecognitionMarks.Rows[i].Selected = true;
                             return;
                         }
-
-                        string rs = (string)invoiceFirstPageRecognitionMarks.Rows[i].Cells["Rectangle2"].Value;
+                        var cs = invoiceFirstPageRecognitionMarks.Rows[i].Cells;
+                        string rs = (string)cs["Rectangle2"].Value;
                         if (string.IsNullOrWhiteSpace(rs))
                             return;
+
                         Settings.Template.RectangleF r = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>(rs);
-                        //invoiceFirstPageRecognitionMarks.Rows[i].Cells["Value2"].Value = exctractTextAndDrawBox(r, Convert.ToBoolean(invoiceFirstPageRecognitionMarks.Rows[i].Cells["Ocr2"].Value));
+
+                        Settings.Template.FloatingAnchor fa = null;
+                        int? fI = (int?)cs["FloatingAnchorId2"].Value;
+                        if (fI != null)
+                            fa = getFloatingAnchor((int)fI);
+
+                        invoiceFirstPageRecognitionMarks.Rows[i].Cells["Value2"].Value = extractValueAndDrawBox(fa, r, Convert.ToBoolean(cs["Ocr2"].Value) ? Settings.Template.ValueTypes.OcrText : Settings.Template.ValueTypes.PdfText);
                         drawBox(Settings.General.SelectionBoxColor, r.X, r.Y, r.Width, r.Height, true);
                     }
                 }
@@ -497,6 +473,21 @@ namespace Cliver.InvoiceParser
 
         PageCollection pages = null;
 
+        Settings.Template.FloatingAnchor getFloatingAnchor(int id)
+        {
+            foreach (DataGridViewRow r in floatingAnchors.Rows)
+                if (!string.IsNullOrWhiteSpace((string)r.Cells["Id3"].Value) && (int)r.Cells["Id3"].Value == id)
+                {
+                    return new Settings.Template.FloatingAnchor
+                    { 
+                        Id = (int)r.Cells["Id3"].Value,
+                        ValueType = (Settings.Template.ValueTypes)r.Cells["ValueType3"].Value,
+                        Value = (string)r.Cells["Value3"].Value, 
+                    };
+                }
+            throw new Exception("There is no FloatingAnchor with Id==" + id);
+        }
+
         void reloadPageBitmaps()
         {
             if (pages == null)
@@ -521,7 +512,7 @@ namespace Cliver.InvoiceParser
                 e.Graphics.FillRectangle(SystemBrushes.ButtonShadow, s.SplitterRectangle);
         }
 
-        string exctractValueAndDrawBox(Settings.Template.FloatingAnchor fa, Settings.Template.RectangleF r, Settings.Template.ValueTypes valueType, bool renewImage = true)
+        string extractValueAndDrawBox(Settings.Template.FloatingAnchor fa, Settings.Template.RectangleF r, Settings.Template.ValueTypes valueType, bool renewImage = true)
         {
             try
             {
@@ -535,25 +526,23 @@ namespace Cliver.InvoiceParser
                     if (rs == null || rs.Count < 1)
                         return null;
                     drawBoxes(Settings.General.BoundingBoxColor, rs, renewImage);
-                    x += bts[0].R.X;
-                    y += bts[0].R.Y;
+                    x += rs[0].X;
+                    y += rs[0].Y;
                     renewImage = false;
                 }
 
                 drawBox(Settings.General.SelectionBoxColor, x, y, r.Width, r.Height, renewImage);
+
+                string error;
+              object v = pages[currentPage].GetValue(null, new Settings.Template.RectangleF(x, y, r.Width, r.Height), valueType, out error);
                 switch (valueType)
                 {
                     case Settings.Template.ValueTypes.PdfText:
-                        if (pdfReader != null)
-                            //return FieldPreparation.Normalize(pdfReader.ExtractText(currentPage, x, pdfReader.GetPageSize(currentPage).Height - y - r.Height, r.Width, r.Height));
-                            return FieldPreparation.Normalize(Pdf.GetTextByTopLeftCoordinates(pageCharBoxListss[currentPage], x, y, r.Width, r.Height));
-                        return null;
+                            return FieldPreparation.Normalize((string)v);
                     case Settings.Template.ValueTypes.OcrText:
-                        return FieldPreparation.Normalize(TesseractW.This.GetText(pageBitmaps.Get(currentPage), x / Settings.General.Image2PdfResolutionRatio, y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio));
+                        return FieldPreparation.Normalize((string)v);
                     case Settings.Template.ValueTypes.ImageData:
-                        Settings.Template.RectangleF r_ = new Settings.Template.RectangleF(x / Settings.General.Image2PdfResolutionRatio, y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);
-                        ImageData id = new ImageData(pageBitmaps.Get(currentPage, r_));
-                        return id.GetAsString();
+                        return ((ImageData)v).Serialize();
                     default:
                         throw new Exception("Unknown option: " + valueType);
                 }
@@ -567,7 +556,7 @@ namespace Cliver.InvoiceParser
 
         void drawBoxes(Color c, IEnumerable<System.Drawing.RectangleF> rs, bool renewImage = true)
         {
-            if (pageBitmaps == null)
+            if (pages == null)
                 return;
 
             Bitmap bm;
@@ -587,7 +576,7 @@ namespace Cliver.InvoiceParser
 
         void drawBox(Color c, float x, float y, float w, float h, bool renewImage = true)
         {
-            if (pageBitmaps == null)
+            if (pages == null)
                 return;
 
             Bitmap bm;
@@ -607,52 +596,50 @@ namespace Cliver.InvoiceParser
 
         void setFloatingAnchor()
         {
-            if (selectedBoxTexts == null)
-                return;
-            selectedBoxTexts = Pdf.RemoveDuplicatesAndOrder(selectedBoxTexts);
-            if (selectedBoxTexts.Count < 1)
-                return;
-            if (floatingAnchors.SelectedRows.Count < 1)
-                return;
-            DataGridViewRow r = floatingAnchors.SelectedRows[0];
-            string rs = (string)r.Cells["Rectangle3"].Value;
-            if (string.IsNullOrWhiteSpace(rs))
-                return;
-            Settings.Template.FloatingAnchor fa = new Settings.Template.FloatingAnchor();
-            fa.Elements = new List<Settings.Template.FloatingAnchor.Element>();
-            fa.Elements.Add(new Settings.Template.FloatingAnchor.Element {
-                ElementType = (Settings.Template.ValueTypes)r.Cells["ValueType3"].Value,
-                SerializedElement =
+            try
+            {
+                if (floatingAnchors.SelectedRows.Count < 1)
+                    return;
 
+                DataGridViewRow r = floatingAnchors.SelectedRows[0];
+                string rs = (string)r.Cells["Rectangle3"].Value;
+                if (string.IsNullOrWhiteSpace(rs))
+                    return;
 
+                Settings.Template.FloatingAnchor fa = new Settings.Template.FloatingAnchor();
+                fa.ValueType = (Settings.Template.ValueTypes)r.Cells["ValueType3"].Value;
 
-
-
-                selectedBoxTexts.Select(a => new Settings.Template.FloatingAnchor.Element
+                if (selectedPdfTextElement != null)
                 {
-                    Rectangle = new Settings.Template.RectangleF(a.R.X, a.R.Y, a.R.Width, a.R.Height),
-                    Text = a.Text
-                }).ToList();
-
-            Settings.Template.RectangleF fieldR = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>(rs);
-            fieldR.X -= fa.Elements[0].Rectangle.X;
-            fieldR.Y -= fa.Elements[0].Rectangle.Y;
-            fields.SelectedRows[0].Cells["Rectangle"].Value = SerializationRoutines.Json.Serialize(fieldR);
-            fields.SelectedRows[0].Cells["FloatingAnchor"].Value = SerializationRoutines.Json.Serialize(fa);
-            fields.EndEdit();
-
-
-
-            DataGridViewRow rr = floatingAnchors.SelectedRows[0];
-            r.X -= point0.X;
-            r.Y -= point0.Y;
-            rr.Cells["Rectangle3"].Value = SerializationRoutines.Json.Serialize(r);
-            floatingAnchors.EndEdit();
-
-
-            selectedBoxTexts = null;
+                    selectedPdfTextElement.CharBoxs = Pdf.RemoveDuplicatesAndOrder(selectedPdfTextElement.CharBoxs);
+                    if (selectedPdfTextElement.CharBoxs.Count < 1)
+                        return;
+                    fa.Value = SerializationRoutines.Json.Serialize(selectedPdfTextElement);
+                }
+                else if (selectedOcrTextElement != null)
+                {
+                    if (selectedOcrTextElement.TextBoxs.Count < 1)
+                        return;
+                    fa.Value = SerializationRoutines.Json.Serialize(selectedOcrTextElement);
+                }
+                else if (selectedImageDataElement != null)
+                {
+                    if (selectedImageDataElement.ImageBoxs.Count < 1)
+                        return;
+                    fa.Value = SerializationRoutines.Json.Serialize(selectedImageDataElement);
+                }
+            }
+            finally
+            {
+                floatingAnchors.EndEdit();
+                selectedPdfTextElement = null;
+                selectedOcrTextElement = null;
+                selectedImageDataElement = null;
+            }
         }
-        List<Pdf.BoxText> selectedBoxTexts;
+        Settings.Template.FloatingAnchor.PdfTextElement selectedPdfTextElement;
+        Settings.Template.FloatingAnchor.OcrTextElement selectedOcrTextElement;
+        Settings.Template.FloatingAnchor.ImageDataElement selectedImageDataElement;
 
         void setTemplate()
         {
