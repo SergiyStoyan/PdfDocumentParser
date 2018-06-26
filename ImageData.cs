@@ -42,7 +42,7 @@ namespace Cliver.InvoiceParser
             string s = SerializationRoutines.Json.Serialize(this);
             return s;
         }
-        static public ImageData GetFromString(string value)
+        static public ImageData Deserialize(string value)
         {
             return SerializationRoutines.Json.Deserialize<ImageData>(value);
 

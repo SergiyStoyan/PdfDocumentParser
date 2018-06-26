@@ -245,117 +245,145 @@ namespace Cliver.InvoiceParser
                 }
             return bs.OrderBy(a => a.R.Y).OrderBy(a => a.R.X).ToList();
         }
-    }
 
-    public class BitmapCollection : HandyDictionary<int, System.Drawing.Bitmap>
-    {
-        public BitmapCollection(Func<int, System.Drawing.Bitmap> get_page_bitmap) : base(get_page_bitmap)
+        public class CharBoxCollection : HandyDictionary<int, List<BoxText>>
         {
-        }
-
-        public System.Drawing.Bitmap Get(int page_i, Settings.Template.RectangleF r = null)
-        {
-            lock (this)
+            public CharBoxCollection(Func<int, List<BoxText>> get_boundingBox) : base(get_boundingBox)
             {
-                System.Drawing.Bitmap b = base[page_i];
-                if (r != null)
-                    b = b.Clone(r.GetSystemRectangle(), System.Drawing.Imaging.PixelFormat.Undefined);
-                    //b = ImageRoutines.GetCopy(b, r.GetSystem());
-                return b;
-
-                //switch (pages_rotation)
-                //{
-                //    case Settings.Template.PageRotations.NONE:
-                //        r_ = r == null ? new System.Drawing.RectangleF(0, 0, b.Width, b.Height) : r.Convert();
-                //        return b.Clone(r_, System.Drawing.Imaging.PixelFormat.Undefined);
-                //    case Settings.Template.PageRotations.Clockwise90:
-                //        r_ = r == null ? new System.Drawing.RectangleF(0, 0, b.Width, b.Height) : new System.Drawing.RectangleF(r.Y, b.Height - r.Width - r.X, r.Height, r.Width);
-                //        //b = ImageRoutines.GetCopy(b, r);
-                //        b = b.Clone(r_, System.Drawing.Imaging.PixelFormat.Undefined);
-                //        //b.Save(Log.AppDir + "\\test.png", System.Drawing.Imaging.ImageFormat.Png);
-                //        b.RotateFlip(System.Drawing.RotateFlipType.Rotate90FlipNone);
-                //        //b.Save(Log.AppDir + "\\test1.png", System.Drawing.Imaging.ImageFormat.Png);
-                //        //if(ReplaceWithConverted)
-                //        //    base[]
-                //        return b;
-                //    case Settings.Template.PageRotations.Clockwise180:
-                //        r_ = r == null ? new System.Drawing.RectangleF(0, 0, b.Width, b.Height) : new System.Drawing.RectangleF(b.Width - r.Width - r.X, b.Height - r.Height - r.Y, r.Width, r.Height);
-                //        //b = ImageRoutines.GetCopy(b, r);
-                //        b = b.Clone(r_, System.Drawing.Imaging.PixelFormat.Undefined);
-                //        b.RotateFlip(System.Drawing.RotateFlipType.Rotate180FlipNone);
-                //        return b;
-                //    case Settings.Template.PageRotations.Clockwise270:
-                //        r_ = r == null ? new System.Drawing.RectangleF(0, 0, b.Width, b.Height) : new System.Drawing.RectangleF(b.Width - r.Y - r.Height, r.X, r.Height, r.Width);
-                //        //b = ImageRoutines.GetCopy(b, r);
-                //        b = b.Clone(r_, System.Drawing.Imaging.PixelFormat.Undefined);
-                //        b.RotateFlip(System.Drawing.RotateFlipType.Rotate270FlipNone);
-                //        return b;
-                //    default:
-                //        throw new Exception("Unknown option: " + pages_rotation);
-                //}
             }
         }
-        static public System.Drawing.Bitmap GetPageBitmap(string pdfFile, int page_i, Settings.Template.PageRotations pagesRotation, bool autoDeskew)
+        public class BoxText
         {
-            System.Drawing.Bitmap b = Pdf.RenderBitmap(pdfFile, page_i, Settings.General.PdfPageImageResolution);
-            if (pagesRotation != Settings.Template.PageRotations.NONE || autoDeskew)
-            {
-                b = b.Clone(new System.Drawing.Rectangle(0, 0, b.Width, b.Height), System.Drawing.Imaging.PixelFormat.Undefined);
-                //b = ImageRoutines.GetCopy(b);
-                b = BitmapCollection.GetProcessed(b, pagesRotation, autoDeskew);
-            }
-            return b;
-        }
-        static public System.Drawing.Bitmap GetProcessed(System.Drawing.Bitmap b, Settings.Template.PageRotations pages_rotation, bool autoDeskew)
-        {
-            switch (pages_rotation)
-            {
-                case Settings.Template.PageRotations.NONE:
-                    break;
-                case Settings.Template.PageRotations.Clockwise90:
-                    b.RotateFlip(System.Drawing.RotateFlipType.Rotate90FlipNone);
-                    break;
-                case Settings.Template.PageRotations.Clockwise180:
-                    b.RotateFlip(System.Drawing.RotateFlipType.Rotate180FlipNone);
-                    break;
-                case Settings.Template.PageRotations.Clockwise270:
-                    b.RotateFlip(System.Drawing.RotateFlipType.Rotate270FlipNone);
-                    break;
-                default:
-                    throw new Exception("Unknown option: " + pages_rotation);
-            }
-
-            if (autoDeskew)
-            {
-                using (ImageMagick.MagickImage image = new ImageMagick.MagickImage(b))
-                {
-                    //image.Density = new PointD(600, 600);
-                    //image.AutoLevel();
-                    //image.Negate();
-                    //image.AdaptiveThreshold(10, 10, new ImageMagick.Percentage(20));
-                    //image.Negate();
-                    image.Deskew(new ImageMagick.Percentage(10));
-                    //image.AutoThreshold(AutoThresholdMethod.OTSU);
-                    //image.Despeckle();
-                    //image.WhiteThreshold(new Percentage(20));
-                    //image.Trim();
-                    b = image.ToBitmap();
-                }
-            }
-
-            return b;
+            public System.Drawing.RectangleF R;
+            public string Text;
         }
     }
 
-    public class CharBoxCollection : HandyDictionary<int, List<BoxText>>
+    //public class BitmapCollection : HandyDictionary<int, System.Drawing.Bitmap>
+    //{
+    //    public BitmapCollection(Func<int, System.Drawing.Bitmap> get_page_bitmap) : base(get_page_bitmap)
+    //    {
+    //    }
+
+    //    public System.Drawing.Bitmap Get(int page_i, Settings.Template.RectangleF r = null)
+    //    {
+    //        lock (this)
+    //        {
+    //            System.Drawing.Bitmap b = base[page_i];
+    //            if (r != null)
+    //                b = b.Clone(r.GetSystemRectangle(), System.Drawing.Imaging.PixelFormat.Undefined);
+    //            //b = ImageRoutines.GetCopy(b, r.GetSystem());
+    //            return b;
+
+    //            //switch (pages_rotation)
+    //            //{
+    //            //    case Settings.Template.PageRotations.NONE:
+    //            //        r_ = r == null ? new System.Drawing.RectangleF(0, 0, b.Width, b.Height) : r.Convert();
+    //            //        return b.Clone(r_, System.Drawing.Imaging.PixelFormat.Undefined);
+    //            //    case Settings.Template.PageRotations.Clockwise90:
+    //            //        r_ = r == null ? new System.Drawing.RectangleF(0, 0, b.Width, b.Height) : new System.Drawing.RectangleF(r.Y, b.Height - r.Width - r.X, r.Height, r.Width);
+    //            //        //b = ImageRoutines.GetCopy(b, r);
+    //            //        b = b.Clone(r_, System.Drawing.Imaging.PixelFormat.Undefined);
+    //            //        //b.Save(Log.AppDir + "\\test.png", System.Drawing.Imaging.ImageFormat.Png);
+    //            //        b.RotateFlip(System.Drawing.RotateFlipType.Rotate90FlipNone);
+    //            //        //b.Save(Log.AppDir + "\\test1.png", System.Drawing.Imaging.ImageFormat.Png);
+    //            //        //if(ReplaceWithConverted)
+    //            //        //    base[]
+    //            //        return b;
+    //            //    case Settings.Template.PageRotations.Clockwise180:
+    //            //        r_ = r == null ? new System.Drawing.RectangleF(0, 0, b.Width, b.Height) : new System.Drawing.RectangleF(b.Width - r.Width - r.X, b.Height - r.Height - r.Y, r.Width, r.Height);
+    //            //        //b = ImageRoutines.GetCopy(b, r);
+    //            //        b = b.Clone(r_, System.Drawing.Imaging.PixelFormat.Undefined);
+    //            //        b.RotateFlip(System.Drawing.RotateFlipType.Rotate180FlipNone);
+    //            //        return b;
+    //            //    case Settings.Template.PageRotations.Clockwise270:
+    //            //        r_ = r == null ? new System.Drawing.RectangleF(0, 0, b.Width, b.Height) : new System.Drawing.RectangleF(b.Width - r.Y - r.Height, r.X, r.Height, r.Width);
+    //            //        //b = ImageRoutines.GetCopy(b, r);
+    //            //        b = b.Clone(r_, System.Drawing.Imaging.PixelFormat.Undefined);
+    //            //        b.RotateFlip(System.Drawing.RotateFlipType.Rotate270FlipNone);
+    //            //        return b;
+    //            //    default:
+    //            //        throw new Exception("Unknown option: " + pages_rotation);
+    //            //}
+    //        }
+    //    }
+    //    static public System.Drawing.Bitmap GetPageBitmap(string pdfFile, int page_i, Settings.Template.PageRotations pagesRotation, bool autoDeskew)
+    //    {
+    //        System.Drawing.Bitmap b = Pdf.RenderBitmap(pdfFile, page_i, Settings.General.PdfPageImageResolution);
+    //        if (pagesRotation != Settings.Template.PageRotations.NONE || autoDeskew)
+    //        {
+    //            b = b.Clone(new System.Drawing.Rectangle(0, 0, b.Width, b.Height), System.Drawing.Imaging.PixelFormat.Undefined);
+    //            //b = ImageRoutines.GetCopy(b);
+    //            b = BitmapCollection.GetProcessed(b, pagesRotation, autoDeskew);
+    //        }
+    //        return b;
+    //    }
+    //    static public System.Drawing.Bitmap GetProcessed(System.Drawing.Bitmap b, Settings.Template.PageRotations pages_rotation, bool autoDeskew)
+    //    {
+    //        switch (pages_rotation)
+    //        {
+    //            case Settings.Template.PageRotations.NONE:
+    //                break;
+    //            case Settings.Template.PageRotations.Clockwise90:
+    //                b.RotateFlip(System.Drawing.RotateFlipType.Rotate90FlipNone);
+    //                break;
+    //            case Settings.Template.PageRotations.Clockwise180:
+    //                b.RotateFlip(System.Drawing.RotateFlipType.Rotate180FlipNone);
+    //                break;
+    //            case Settings.Template.PageRotations.Clockwise270:
+    //                b.RotateFlip(System.Drawing.RotateFlipType.Rotate270FlipNone);
+    //                break;
+    //            default:
+    //                throw new Exception("Unknown option: " + pages_rotation);
+    //        }
+
+    //        if (autoDeskew)
+    //        {
+    //            using (ImageMagick.MagickImage image = new ImageMagick.MagickImage(b))
+    //            {
+    //                //image.Density = new PointD(600, 600);
+    //                //image.AutoLevel();
+    //                //image.Negate();
+    //                //image.AdaptiveThreshold(10, 10, new ImageMagick.Percentage(20));
+    //                //image.Negate();
+    //                image.Deskew(new ImageMagick.Percentage(10));
+    //                //image.AutoThreshold(AutoThresholdMethod.OTSU);
+    //                //image.Despeckle();
+    //                //image.WhiteThreshold(new Percentage(20));
+    //                //image.Trim();
+    //                b = image.ToBitmap();
+    //            }
+    //        }
+
+    //        return b;
+    //    }
+    //}
+
+    public class PageCollection : HandyDictionary<int, Page>
     {
-        public CharBoxCollection(Func<int, List<BoxText>> get_boundingBox) : base(get_boundingBox)
+        public PageCollection(string pdfFile) : base(null)
         {
+            PdfFile = pdfFile;
+            PdfReader = new PdfReader(pdfFile);
+            getObject = (int pageI) => { return new Page(this, pageI); };
         }
-    }
-    public class BoxText
-    {
-        public System.Drawing.RectangleF R;
-        public string Text;
+
+        public readonly string PdfFile;
+        public readonly PdfReader PdfReader;
+
+        public Settings.Template ActiveTemplate
+        {
+            set
+            {
+                _ActiveTemplate = value;
+                foreach (Page p in Values)
+                    p.ActiveTemplate = value;
+            }
+            get
+            {
+                return _ActiveTemplate;
+            }
+        }
+        Settings.Template _ActiveTemplate;
     }
 }

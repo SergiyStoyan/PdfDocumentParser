@@ -4,6 +4,8 @@ using System.Text.RegularExpressions;
 using System.Data.Linq;
 using System.Linq;
 using System.Drawing;
+using System.Collections.Specialized;
+using ImageDataElement = Cliver.InvoiceParser.ImageData;
 
 namespace Cliver.InvoiceParser
 {
@@ -97,6 +99,8 @@ namespace Cliver.InvoiceParser
 
             public bool AutoDeskew = false;
 
+            public Dictionary<int, FloatingAnchor> FloatingAnchors;
+
             public List<Mark> InvoiceFirstPageRecognitionMarks;
 
             public List<Field> Fields;//preserving order for output
@@ -144,6 +148,7 @@ namespace Cliver.InvoiceParser
 
             public class Mark
             {
+                public int FloatingAnchorId = -1;//when set, Rectangle.X,Y are bound to location of the anchor as to zero point
                 public string Value;
                 public RectangleF Rectangle;
                 public ValueTypes ValueType = ValueTypes.PdfText;
@@ -157,100 +162,59 @@ namespace Cliver.InvoiceParser
 
             public class Field
             {
+                public int FloatingAnchorId = -1;//when set, Rectangle.X,Y are bound to location of the anchor as to zero point
                 public string Name;
                 public RectangleF Rectangle;//when FloatingAnchor is set, Rectangle.X,Y are bound to location of the anchor as to zero point
-                public bool Ocr = false;
-                //public List<ImageMark> PageRecognitionImageMarks;//not used do far
-                //public List<TextMark> PageRecognitionTextMarks;
-                public FloatingAnchor FloatingAnchor;//when set, Rectangle.X,Y are bound to location of the anchor as to zero point
-                public Regex Regex;//if set the rest settings are ignored; it is applied to the page text
+                public ValueTypes ValueType = ValueTypes.PdfText;
+                //public Regex Regex;//if set the rest settings are ignored; it is applied to the page text
             }
-            public class FloatingAnchor
+            public partial class FloatingAnchor
             {
+                public int Id;
                 public List<Element> Elements = new List<Element>();//first Element has undefined X,Y, the rest Elements have X,Y related on the first's Element X,Y
-                public class Element
+                public partial class Element
                 {
-                    public String Text;
-                    public RectangleF Rectangle;
-                    //public Object Value;
-                    //public ValueTypes ValueType = ValueTypes.PdfText;
-
-                    //public object GetTyped()
-                    //{
-                    //    switch (ValueType)
-                    //    {
-                    //        case ValueTypes.ImageData:
-                    //            return ImageData.GetFromString(Value);
-                    //        case ValueTypes.OcrText:
-                    //        case ValueTypes.PdfText:
-                    //            return (TextElement)SerializationRoutines.Json.Deserialize<TextElement>(Value);
-                    //        default:
-                    //            throw new Exception("Unknown option: " + ValueType);
-                    //    }
-                    //}
+                    public string SerializedElement;
+                    public ValueTypes ElementType = ValueTypes.PdfText;
+                    public object Get()
+                    {
+                        if (typedElement == null)
+                            switch (ElementType)
+                            {
+                                case ValueTypes.ImageData:
+                                    typedElement = SerializationRoutines.Json.Deserialize<ImageDataElement>(SerializedElement);
+                                    break;
+                                case ValueTypes.OcrText:
+                                    break;
+                                case ValueTypes.PdfText:
+                                    typedElement = SerializationRoutines.Json.Deserialize<PdfTextElement>(SerializedElement);
+                                    break;
+                                default:
+                                    throw new Exception("Unknown option: " + ElementType);
+                            }
+                        return typedElement;
+                    }
+                    object typedElement = null;
                 }
+                public class PdfTextElement 
+                {
+                    public List<CharBox> CharBoxs;
 
-                //public System.Drawing.PointF? FindFloatingAnchor(List<BoxText> boxTexts, Bitmap page)
+                    public class CharBox
+                    {
+                        public string Char;
+                        public RectangleF Rectangle;
+                    }
+                }
+                //public class ImageDataElement 
                 //{
-                //    List<BoxText> bts = new List<BoxText>();
-
-                //    foreach (BoxText bt0 in boxTexts.Where(a => a.Text == fa.Elements[0].Text))
-                //    {
-                //        bts.Clear();
-                //        bts.Add(bt0);
-                //        for (int i = 1; i < fa.Elements.Count; i++)
-                //        {
-                //            float x = bt0.R.X + fa.Elements[i].Rectangle.X - fa.Elements[0].Rectangle.X;
-                //            float y = bt0.R.Y + fa.Elements[i].Rectangle.Y - fa.Elements[0].Rectangle.Y;
-                //            foreach (BoxText bt in boxTexts.Where(a => a.Text == fa.Elements[i].Text))
-                //            {
-                //                if (Math.Abs(bt.R.X - x) > Settings.General.CoordinateDeviationMargin)
-                //                    continue;
-                //                if (Math.Abs(bt.R.Y - y) > Settings.General.CoordinateDeviationMargin)
-                //                    continue;
-                //                if (bts.Contains(bt))
-                //                    continue;
-                //                bts.Add(bt);
-                //            }
-                //        }
-                //        if (bts.Count == fa.Elements.Count)
-                //            return bts;
-                //    }
-                //    return null;
+                //    public ImageData ImageData;
                 //}
-
-                //public List<BoxText> FindFloatingAnchor(List<BoxText> boxTexts, Bitmap page)
-                //{
-                //    List<BoxText> bts = new List<BoxText>();
-                //    foreach (BoxText bt0 in boxTexts.Where(a => a.Text == fa.Elements[0].Text))
-                //    {
-                //        bts.Clear();
-                //        bts.Add(bt0);
-                //        for (int i = 1; i < fa.Elements.Count; i++)
-                //        {
-                //            float x = bt0.R.X + fa.Elements[i].Rectangle.X - fa.Elements[0].Rectangle.X;
-                //            float y = bt0.R.Y + fa.Elements[i].Rectangle.Y - fa.Elements[0].Rectangle.Y;
-                //            foreach (BoxText bt in boxTexts.Where(a => a.Text == fa.Elements[i].Text))
-                //            {
-                //                if (Math.Abs(bt.R.X - x) > Settings.General.CoordinateDeviationMargin)
-                //                    continue;
-                //                if (Math.Abs(bt.R.Y - y) > Settings.General.CoordinateDeviationMargin)
-                //                    continue;
-                //                if (bts.Contains(bt))
-                //                    continue;
-                //                bts.Add(bt);
-                //            }
-                //        }
-                //        if (bts.Count == fa.Elements.Count)
-                //            return bts;
-                //    }
-                //    return null;
-                //}
-            }
-            public class TextElement
-            {
-                public String Text;
-                public RectangleF Rectangle;
+                public class OcrTextElement 
+                {
+                    public string Text;
+                    public RectangleF Rectangle;
+                }
             }
         }
     }

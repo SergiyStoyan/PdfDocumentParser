@@ -51,10 +51,10 @@ namespace Cliver.InvoiceParser
                     scaledCurrentPageBitmap.Dispose();
                     scaledCurrentPageBitmap = null;
                 }
-                if (pageBitmaps != null)
+                if (pageCollection != null)
                 {
-                    pageBitmaps.Dispose();
-                    pageBitmaps = null;
+                    pageCollection.Dispose();
+                    pageCollection = null;
                 }
             };
 
@@ -72,7 +72,7 @@ namespace Cliver.InvoiceParser
 
             picture.MouseDown += delegate (object sender, MouseEventArgs e)
             {
-                if (pageBitmaps == null)
+                if (pageCollection == null)
                     return;
                 drawingSelectingBox = true;
                 p0 = new Point((int)(e.X / (float)pictureScale.Value), (int)(e.Y / (float)pictureScale.Value));
@@ -83,7 +83,7 @@ namespace Cliver.InvoiceParser
 
             picture.MouseMove += delegate (object sender, MouseEventArgs e)
             {
-                if (pageBitmaps == null)
+                if (pageCollection == null)
                     return;
 
                 Point p = new Point((int)(e.X / (float)pictureScale.Value), (int)(e.Y / (float)pictureScale.Value));
@@ -121,7 +121,7 @@ namespace Cliver.InvoiceParser
 
             picture.MouseUp += delegate (object sender, MouseEventArgs e)
             {
-                if (pageBitmaps == null)
+                if (pageCollection == null)
                     return;
 
                 if (!drawingSelectingBox)
@@ -145,6 +145,17 @@ namespace Cliver.InvoiceParser
 
                     switch (mode)
                     {
+                        case Modes.SetFloatingAnchor:
+                            {
+                                if (floatingAnchors.SelectedRows.Count < 1)
+                                    break;
+                                DataGridViewRow rr = floatingAnchors.SelectedRows[0];
+                                r.X -= point0.X;
+                                r.Y -= point0.Y;
+                                rr.Cells["Rectangle2"].Value = SerializationRoutines.Json.Serialize(r);
+                                invoiceFirstPageRecognitionMarks.EndEdit();
+                            }
+                            break;
                         case Modes.SetInvoiceFirstPageRecognitionTextMarks:
                             {
                                 if (invoiceFirstPageRecognitionMarks.SelectedRows.Count < 1)
@@ -515,21 +526,21 @@ namespace Cliver.InvoiceParser
             };
         }
 
-        BitmapCollection pageBitmaps = null;
+        PageCollection pageCollection = null;
 
         void reloadPageBitmaps()
         {
-            if (pageBitmaps == null)
+            if (pageCollection == null)
                 return;
-            pageBitmaps.Clear();
+            pageCollection.Clear();
             showPage(currentPage);
         }
 
         void setScaledImage()
         {
-            if (pageBitmaps == null)
+            if (pageCollection == null)
                 return;
-            scaledCurrentPageBitmap = ImageRoutines.GetScaled(pageBitmaps.Get(currentPage), (float)pictureScale.Value * Settings.General.Image2PdfResolutionRatio);
+            scaledCurrentPageBitmap = ImageRoutines.GetScaled(pageCollection[currentPage].BitmapPreparedForTemplate, (float)pictureScale.Value * Settings.General.Image2PdfResolutionRatio);
             picture.Image = scaledCurrentPageBitmap;
         }
         Bitmap scaledCurrentPageBitmap;
@@ -545,23 +556,23 @@ namespace Cliver.InvoiceParser
         {
             try
             {
-                if (pageBitmaps == null)
+                if (pageCollection == null)
                     return null;
 
                 float x = r.X, y = r.Y;
                 if (fa != null)
                 {
-                    List<BoxText> bts = PdfProcessor.FindFloatingAnchor(pageCharBoxListss[currentPage], fa);
-                    if (bts == null || bts.Count < 1)
+                    List<RectangleF> rs = pageCollection[currentPage].FindFloatingAnchor(fa);
+                    if (rs == null || rs.Count < 1)
                         return null;
-                    drawBoxes(Settings.General.BoundingBoxColor, bts.Select(a => a.R), renewImage);
+                    drawBoxes(Settings.General.BoundingBoxColor, rs, renewImage);
                     x += bts[0].R.X;
                     y += bts[0].R.Y;
                     renewImage = false;
                 }
 
                 drawBox(Settings.General.SelectionBoxColor, x, y, r.Width, r.Height, renewImage);
-                switch (valueType)
+                switch (valueType) 
                 {
                     case Settings.Template.ValueTypes.PdfText:
                         if (pdfReader != null)
@@ -908,14 +919,16 @@ namespace Cliver.InvoiceParser
         enum Modes
         {
             NULL,
+            SetFloatingAnchor,
             SetInvoiceFirstPageRecognitionTextMarks,
             SetFieldRectangle,
-            //SetPageRecognitionTextMarks,
         }
         Modes mode
         {
             get
             {
+                if (floatingAnchors.SelectedRows.Count > 0)
+                    return Modes.SetFloatingAnchor;
                 if (invoiceFirstPageRecognitionMarks.SelectedRows.Count > 0)
                     return Modes.SetInvoiceFirstPageRecognitionTextMarks;
                 if (fields.SelectedRows.Count > 0)
@@ -957,8 +970,8 @@ namespace Cliver.InvoiceParser
                 string t2 = exctractValueAndDrawBox(null, r, vt, renewImage);
                 if (vt == Settings.Template.ValueTypes.ImageData)
                 {
-                    ImageData id = ImageData.GetFromString(t);
-                    ImageData id2 = ImageData.GetFromString(t2);
+                    ImageData id = ImageData.Deserialize(t);
+                    ImageData id2 = ImageData.Deserialize(t2);
                     if(!id.ImageIsSimilar(id2))
                     {
                         lStatus.Text = "No match to first page of invoice!\r\nMark #" + row.Index + " not found.";
