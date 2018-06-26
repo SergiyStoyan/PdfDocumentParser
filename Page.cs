@@ -168,13 +168,13 @@ namespace Cliver.InvoiceParser
 
         public List<System.Drawing.RectangleF> FindFloatingAnchor(Settings.Template.FloatingAnchor fa)
         {
-            if (fa == null || fa.Elements.Count < 1)
+            if (fa == null)
                 return null;
 
-            switch (fa.Elements[0].ElementType)
+            switch (fa.ValueType)
             {
                 case Settings.Template.ValueTypes.PdfText:
-                    List<Settings.Template.FloatingAnchor.PdfTextElement.CharBox> ses = ((Settings.Template.FloatingAnchor.PdfTextElement)fa.Elements[0].Get()).CharBoxs;
+                    List<Settings.Template.FloatingAnchor.PdfTextElement.CharBox> ses = ((Settings.Template.FloatingAnchor.PdfTextElement)fa.Get()).CharBoxs;
                     List<Pdf.BoxText> bts = new List<Pdf.BoxText>();
                     foreach (Pdf.BoxText bt0 in charBoxLists.Where(a => a.Text == ses[0].Char))
                     {
@@ -207,7 +207,7 @@ namespace Cliver.InvoiceParser
                 case Settings.Template.ValueTypes.OcrText:
                     return null;
                 case Settings.Template.ValueTypes.ImageData:
-                    ImageData id = (ImageData)fa.Elements[0].Get();
+                    ImageData id = (ImageData)fa.Get();
                         System.Drawing.PointF? p0 = id.FindWithinImage(imageData);
                         if (p0 == null)
                             return null;
@@ -216,59 +216,59 @@ namespace Cliver.InvoiceParser
                         //    return point0;
                         return new List<RectangleF> { new RectangleF(point0.X, point0.Y, imageData.Width, imageData.Height) };
                 default:
-                    throw new Exception("Unknown option: " + fa.Elements[0].ElementType);
+                    throw new Exception("Unknown option: " + fa.ValueType);
             }
         }
 
-        bool findFloatingAnchorSecondaryElements(System.Drawing.PointF point0, Settings.Template.FloatingAnchor fa)
-        {
-            for (int i = 1; i < fa.Elements.Count; i++)
-            {
-                if (!findFloatingAnchorElement(point0, fa.Elements[i]))
-                    return false;
-            }
-            return true;
-        }
-        bool findFloatingAnchorElement(System.Drawing.PointF point0, Settings.Template.FloatingAnchor.Element e)
-        {
-            switch (e.ElementType)
-            {
-                case Settings.Template.ValueTypes.PdfText:
-                    {
-                        List<Settings.Template.FloatingAnchor.PdfTextElement.CharBox> ses = ((Settings.Template.FloatingAnchor.PdfTextElement)e.Get()).CharBoxs;
-                        List<Pdf.BoxText> bts = new List<Pdf.BoxText>();
+        //bool findFloatingAnchorSecondaryElements(System.Drawing.PointF point0, Settings.Template.FloatingAnchor fa)
+        //{
+        //    for (int i = 1; i < fa.Elements.Count; i++)
+        //    {
+        //        if (!findFloatingAnchorElement(point0, fa.Elements[i]))
+        //            return false;
+        //    }
+        //    return true;
+        //}
+        //bool findFloatingAnchorElement(System.Drawing.PointF point0, Settings.Template.FloatingAnchor.Element e)
+        //{
+        //    switch (e.ElementType)
+        //    {
+        //        case Settings.Template.ValueTypes.PdfText:
+        //            {
+        //                List<Settings.Template.FloatingAnchor.PdfTextElement.CharBox> ses = ((Settings.Template.FloatingAnchor.PdfTextElement)e.Get()).CharBoxs;
+        //                List<Pdf.BoxText> bts = new List<Pdf.BoxText>();
 
-                        bts.Clear();
-                        for (int i = 0; i < ses.Count; i++)
-                        {
-                            float x = point0.X + ses[i].Rectangle.X - ses[0].Rectangle.X;
-                            float y = point0.Y + ses[i].Rectangle.Y - ses[0].Rectangle.Y;
-                            foreach (Pdf.BoxText bt in charBoxLists.Where(a => a.Text == ses[i].Char))
-                            {
-                                if (Math.Abs(bt.R.X - x) > Settings.General.CoordinateDeviationMargin)
-                                    continue;
-                                if (Math.Abs(bt.R.Y - y) > Settings.General.CoordinateDeviationMargin)
-                                    continue;
-                                if (bts.Contains(bt))
-                                    continue;
-                                bts.Add(bt);
-                            }
-                        }
-                        return bts.Count == ses.Count;
-                    }
-                case Settings.Template.ValueTypes.OcrText:
-                    {
-                        return true;
-                    }
-                case Settings.Template.ValueTypes.ImageData:
-                    {
-                        ImageData id = (ImageData)e.Get();
-                        return id.ImageIsSimilar(new ImageData(GetRectangeFromBitmapPreparedForTemplate(new Settings.Template.RectangleF(point0.X, point0.Y, id.Width, id.Height))));
-                    }
-                default:
-                    throw new Exception("Unknown option: " + e.ElementType);
-            }
-        }
+        //                bts.Clear();
+        //                for (int i = 0; i < ses.Count; i++)
+        //                {
+        //                    float x = point0.X + ses[i].Rectangle.X - ses[0].Rectangle.X;
+        //                    float y = point0.Y + ses[i].Rectangle.Y - ses[0].Rectangle.Y;
+        //                    foreach (Pdf.BoxText bt in charBoxLists.Where(a => a.Text == ses[i].Char))
+        //                    {
+        //                        if (Math.Abs(bt.R.X - x) > Settings.General.CoordinateDeviationMargin)
+        //                            continue;
+        //                        if (Math.Abs(bt.R.Y - y) > Settings.General.CoordinateDeviationMargin)
+        //                            continue;
+        //                        if (bts.Contains(bt))
+        //                            continue;
+        //                        bts.Add(bt);
+        //                    }
+        //                }
+        //                return bts.Count == ses.Count;
+        //            }
+        //        case Settings.Template.ValueTypes.OcrText:
+        //            {
+        //                return true;
+        //            }
+        //        case Settings.Template.ValueTypes.ImageData:
+        //            {
+        //                ImageData id = (ImageData)e.Get();
+        //                return id.ImageIsSimilar(new ImageData(GetRectangeFromBitmapPreparedForTemplate(new Settings.Template.RectangleF(point0.X, point0.Y, id.Width, id.Height))));
+        //            }
+        //        default:
+        //            throw new Exception("Unknown option: " + e.ElementType);
+        //    }
+        //}
 
         ImageData imageData
         {

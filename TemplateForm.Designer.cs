@@ -31,11 +31,6 @@
             this.picture = new System.Windows.Forms.PictureBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.fields = new System.Windows.Forms.DataGridView();
-            this.Name_ = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FloatingAnchor = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Rectangle = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Ocr = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label1 = new System.Windows.Forms.Label();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.save = new System.Windows.Forms.Button();
@@ -70,16 +65,21 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.invoiceFirstPageRecognitionMarks = new System.Windows.Forms.DataGridView();
-            this.Rectangle2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FloatingAnchor2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.ValueType2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Value2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label4 = new System.Windows.Forms.Label();
             this.bNextPage = new System.Windows.Forms.Button();
             this.bPrevPage = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.testFile = new System.Windows.Forms.TextBox();
             this.bTestFile = new System.Windows.Forms.Button();
+            this.Name_ = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FloatingAnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Rectangle = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Ocr = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Rectangle2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FloatingAnchorId2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.ValueType2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Value2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -131,7 +131,7 @@
             this.fields.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.fields.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Name_,
-            this.FloatingAnchor,
+            this.FloatingAnchorId,
             this.Rectangle,
             this.Ocr,
             this.Value});
@@ -142,41 +142,6 @@
             this.fields.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.fields.Size = new System.Drawing.Size(338, 108);
             this.fields.TabIndex = 30;
-            // 
-            // Name_
-            // 
-            this.Name_.HeaderText = "Name";
-            this.Name_.Name = "Name_";
-            this.Name_.Width = 60;
-            // 
-            // FloatingAnchor
-            // 
-            this.FloatingAnchor.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.FloatingAnchor.HeaderText = "Floating Anchor";
-            this.FloatingAnchor.Name = "FloatingAnchor";
-            this.FloatingAnchor.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.FloatingAnchor.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.FloatingAnchor.Width = 97;
-            // 
-            // Rectangle
-            // 
-            this.Rectangle.HeaderText = "Rectangle";
-            this.Rectangle.Name = "Rectangle";
-            this.Rectangle.Width = 81;
-            // 
-            // Ocr
-            // 
-            this.Ocr.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Ocr.HeaderText = "OCR";
-            this.Ocr.Name = "Ocr";
-            this.Ocr.Width = 36;
-            // 
-            // Value
-            // 
-            this.Value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Value.HeaderText = "Value";
-            this.Value.Name = "Value";
-            this.Value.ReadOnly = true;
             // 
             // label1
             // 
@@ -556,7 +521,7 @@
             this.invoiceFirstPageRecognitionMarks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.invoiceFirstPageRecognitionMarks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Rectangle2,
-            this.FloatingAnchor2,
+            this.FloatingAnchorId2,
             this.ValueType2,
             this.Value2});
             this.invoiceFirstPageRecognitionMarks.Location = new System.Drawing.Point(2, 396);
@@ -565,34 +530,6 @@
             this.invoiceFirstPageRecognitionMarks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.invoiceFirstPageRecognitionMarks.Size = new System.Drawing.Size(335, 68);
             this.invoiceFirstPageRecognitionMarks.TabIndex = 29;
-            // 
-            // Rectangle2
-            // 
-            this.Rectangle2.HeaderText = "Rectangle";
-            this.Rectangle2.Name = "Rectangle2";
-            // 
-            // FloatingAnchor2
-            // 
-            this.FloatingAnchor2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.FloatingAnchor2.HeaderText = "Floating Anchor";
-            this.FloatingAnchor2.Name = "FloatingAnchor2";
-            this.FloatingAnchor2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.FloatingAnchor2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.FloatingAnchor2.Width = 97;
-            // 
-            // ValueType2
-            // 
-            this.ValueType2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.ValueType2.HeaderText = "Value Type";
-            this.ValueType2.Name = "ValueType2";
-            this.ValueType2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ValueType2.Width = 60;
-            // 
-            // Value2
-            // 
-            this.Value2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Value2.HeaderText = "Value";
-            this.Value2.Name = "Value2";
             // 
             // label4
             // 
@@ -653,6 +590,69 @@
             this.bTestFile.Text = "...";
             this.bTestFile.UseVisualStyleBackColor = true;
             this.bTestFile.Click += new System.EventHandler(this.bTestFile_Click);
+            // 
+            // Name_
+            // 
+            this.Name_.HeaderText = "Name";
+            this.Name_.Name = "Name_";
+            this.Name_.Width = 60;
+            // 
+            // FloatingAnchorId
+            // 
+            this.FloatingAnchorId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.FloatingAnchorId.HeaderText = "Floating Anchor";
+            this.FloatingAnchorId.Name = "FloatingAnchorId";
+            this.FloatingAnchorId.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.FloatingAnchorId.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.FloatingAnchorId.Width = 97;
+            // 
+            // Rectangle
+            // 
+            this.Rectangle.HeaderText = "Rectangle";
+            this.Rectangle.Name = "Rectangle";
+            this.Rectangle.Width = 81;
+            // 
+            // Ocr
+            // 
+            this.Ocr.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Ocr.HeaderText = "OCR";
+            this.Ocr.Name = "Ocr";
+            this.Ocr.Width = 36;
+            // 
+            // Value
+            // 
+            this.Value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Value.HeaderText = "Value";
+            this.Value.Name = "Value";
+            this.Value.ReadOnly = true;
+            // 
+            // Rectangle2
+            // 
+            this.Rectangle2.HeaderText = "Rectangle";
+            this.Rectangle2.Name = "Rectangle2";
+            // 
+            // FloatingAnchorId2
+            // 
+            this.FloatingAnchorId2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.FloatingAnchorId2.HeaderText = "Floating Anchor";
+            this.FloatingAnchorId2.Name = "FloatingAnchorId2";
+            this.FloatingAnchorId2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.FloatingAnchorId2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.FloatingAnchorId2.Width = 97;
+            // 
+            // ValueType2
+            // 
+            this.ValueType2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.ValueType2.HeaderText = "Value Type";
+            this.ValueType2.Name = "ValueType2";
+            this.ValueType2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.ValueType2.Width = 60;
+            // 
+            // Value2
+            // 
+            this.Value2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Value2.HeaderText = "Value";
+            this.Value2.Name = "Value2";
             // 
             // TemplateForm
             // 
@@ -725,18 +725,18 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.DataGridView floatingAnchors;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Rectangle2;
-        private System.Windows.Forms.DataGridViewComboBoxColumn FloatingAnchor2;
-        private System.Windows.Forms.DataGridViewComboBoxColumn ValueType2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Value2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Name_;
-        private System.Windows.Forms.DataGridViewComboBoxColumn FloatingAnchor;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Rectangle;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn Ocr;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Value;
         private System.Windows.Forms.DataGridViewTextBoxColumn Id3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Rectangle3;
         private System.Windows.Forms.DataGridViewComboBoxColumn ValueType3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Value3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Name_;
+        private System.Windows.Forms.DataGridViewComboBoxColumn FloatingAnchorId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Rectangle;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn Ocr;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Value;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Rectangle2;
+        private System.Windows.Forms.DataGridViewComboBoxColumn FloatingAnchorId2;
+        private System.Windows.Forms.DataGridViewComboBoxColumn ValueType2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Value2;
     }
 }

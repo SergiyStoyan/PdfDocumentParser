@@ -171,31 +171,28 @@ namespace Cliver.InvoiceParser
             public partial class FloatingAnchor
             {
                 public int Id;
-                public List<Element> Elements = new List<Element>();//first Element has undefined X,Y, the rest Elements have X,Y related on the first's Element X,Y
-                public partial class Element
-                {
-                    public string SerializedElement;
-                    public ValueTypes ElementType = ValueTypes.PdfText;
+                    public string Value;
+                    public ValueTypes ValueType = ValueTypes.PdfText;
                     public object Get()
                     {
-                        if (typedElement == null)
-                            switch (ElementType)
+                        if (typedValue == null)
+                            switch (ValueType)
                             {
                                 case ValueTypes.ImageData:
-                                    typedElement = SerializationRoutines.Json.Deserialize<ImageDataElement>(SerializedElement);
+                                typedValue = SerializationRoutines.Json.Deserialize<ImageDataElement>(Value);
                                     break;
                                 case ValueTypes.OcrText:
                                     break;
                                 case ValueTypes.PdfText:
-                                    typedElement = SerializationRoutines.Json.Deserialize<PdfTextElement>(SerializedElement);
+                                typedValue = SerializationRoutines.Json.Deserialize<PdfTextElement>(Value);
                                     break;
                                 default:
-                                    throw new Exception("Unknown option: " + ElementType);
+                                    throw new Exception("Unknown option: " + ValueType);
                             }
-                        return typedElement;
+                        return typedValue;
                     }
-                    object typedElement = null;
-                }
+                    object typedValue = null;
+                
                 public class PdfTextElement 
                 {
                     public List<CharBox> CharBoxs;

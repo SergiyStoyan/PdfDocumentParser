@@ -129,32 +129,24 @@ namespace Cliver.InvoiceParser
                 drawingSelectingBox = false;
 
                 Settings.Template.RectangleF r = new Settings.Template.RectangleF(p1.X, p1.Y, p2.X - p1.X, p2.Y - p1.Y);
-
-                if (!cSelectAnchor.Checked)
-                {
-                    if (cSetPosition0Anchor.Checked)
-                    {
-                        //cSetPosition0Anchor.Checked = false;
-                        Settings.Template.RectangleF r_ = new Settings.Template.RectangleF(r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);
-                        Bitmap b = pageBitmaps.Get(currentPage, r_);
-                        position0Anchor = new ImageData(b);
-                        findPoint0();
-                        position0AnchorRectangular.Text = SerializationRoutines.Json.Serialize(r);
-                        return;
-                    }
-
+                
                     switch (mode)
                     {
                         case Modes.SetFloatingAnchor:
                             {
                                 if (floatingAnchors.SelectedRows.Count < 1)
                                     break;
-                                DataGridViewRow rr = floatingAnchors.SelectedRows[0];
-                                r.X -= point0.X;
-                                r.Y -= point0.Y;
-                                rr.Cells["Rectangle2"].Value = SerializationRoutines.Json.Serialize(r);
-                                invoiceFirstPageRecognitionMarks.EndEdit();
-                            }
+                                
+                            if (selectedBoxTexts == null/* || (ModifierKeys & Keys.Control) != Keys.Control*/)
+                                selectedBoxTexts = new List<Pdf.BoxText>();
+                            RectangleF selectedR = new RectangleF(p1, new SizeF(p2.X - p1.X, p2.Y - p1.Y));
+                            selectedBoxTexts.AddRange(pageCharBoxListss[currentPage].Where(a => /*selectedR.IntersectsWith(a.R) || */selectedR.Contains(a.R)));
+
+                            if ((ModifierKeys & Keys.Control) != Keys.Control)
+                                saveSelectedBoxTexts();
+
+
+
                             break;
                         case Modes.SetInvoiceFirstPageRecognitionTextMarks:
                             {
@@ -181,29 +173,6 @@ namespace Cliver.InvoiceParser
                         default:
                             break;
                     }
-                    return;
-                }
-
-                if (fields.SelectedRows.Count < 1)
-                {
-                    cSelectAnchor.Checked = false;
-                    return;
-                }
-                string rs = (string)fields.SelectedRows[0].Cells["Rectangle"].Value;
-                if (string.IsNullOrWhiteSpace(rs))
-                {
-                    Message.Exclaim("Anchor has been already set. To reset it, first reset the field rectangle.");
-                    cSelectAnchor.Checked = false;
-                    return;
-                }
-
-                if (selectedBoxTexts == null/* || (ModifierKeys & Keys.Control) != Keys.Control*/)
-                    selectedBoxTexts = new List<BoxText>();
-                RectangleF selectedR = new RectangleF(p1, new SizeF(p2.X - p1.X, p2.Y - p1.Y));
-                selectedBoxTexts.AddRange(pageCharBoxListss[currentPage].Where(a => /*selectedR.IntersectsWith(a.R) || */selectedR.Contains(a.R)));
-
-                if ((ModifierKeys & Keys.Control) != Keys.Control)
-                    saveSelectedBoxTexts();
             };
 
             fields.CellValueChanged += delegate (object sender, DataGridViewCellEventArgs e)
@@ -636,19 +605,30 @@ namespace Cliver.InvoiceParser
         Point p0, p1, p2;
         bool drawingSelectingBox = false;
 
-        void saveSelectedBoxTexts()
+        void setFloatingAnchor()
         {
-            cSelectAnchor.Checked = false;
             if (selectedBoxTexts == null)
                 return;
             selectedBoxTexts = Pdf.RemoveDuplicatesAndOrder(selectedBoxTexts);
             if (selectedBoxTexts.Count < 1)
                 return;
-            string rs = (string)fields.SelectedRows[0].Cells["Rectangle"].Value;
+            if (floatingAnchors.SelectedRows.Count < 1)
+                return;
+            DataGridViewRow r = floatingAnchors.SelectedRows[0];
+            string rs = (string)r.Cells["Rectangle3"].Value;
             if (string.IsNullOrWhiteSpace(rs))
                 return;
             Settings.Template.FloatingAnchor fa = new Settings.Template.FloatingAnchor();
-            fa.Elements = selectedBoxTexts.Select(a => new Settings.Template.FloatingAnchor.Element
+            fa.Elements = new List<Settings.Template.FloatingAnchor.Element>();
+            fa.Elements.Add(new Settings.Template.FloatingAnchor.Element{
+                ElementType = (Settings.Template.ValueTypes)r.Cells["ValueType3"].Value,
+                 SerializedElement = 
+                
+
+
+
+
+                selectedBoxTexts.Select(a => new Settings.Template.FloatingAnchor.Element
             {
                 Rectangle = new Settings.Template.RectangleF(a.R.X, a.R.Y, a.R.Width, a.R.Height),
                 Text = a.Text
@@ -661,9 +641,18 @@ namespace Cliver.InvoiceParser
             fields.SelectedRows[0].Cells["FloatingAnchor"].Value = SerializationRoutines.Json.Serialize(fa);
             fields.EndEdit();
 
-            selectedBoxTexts = null;
+
+
+            DataGridViewRow rr = floatingAnchors.SelectedRows[0];
+            r.X -= point0.X;
+            r.Y -= point0.Y;
+            rr.Cells["Rectangle3"].Value = SerializationRoutines.Json.Serialize(r);
+            floatingAnchors.EndEdit();
+
+
+        selectedBoxTexts = null;
         }
-        List<BoxText> selectedBoxTexts;
+        List<Pdf.BoxText> selectedBoxTexts;
 
         void setTemplate()
         {
@@ -747,28 +736,6 @@ namespace Cliver.InvoiceParser
         Settings.Template template;
         PdfReader pdfReader;
         bool loadingTemplate = false;
-        ImageData position0Anchor
-        {
-            set
-            {
-                if (_position0Anchor == value)
-                    return;
-                _position0Anchor = value;
-
-                foreach (DataGridViewRow r in fields.Rows)
-                    if (string.IsNullOrWhiteSpace((string)r.Cells["FloatingAnchor"].Value))
-                        r.Cells["Rectangle"].Value = null;
-
-                //foreach (DataGridViewRow r in invoiceFirstPageRecognitionMarks.Rows)
-                //        r.Cells["Rectangle2"].Value = null;
-                invoiceFirstPageRecognitionMarks.Rows.Clear();
-            }
-            get
-            {
-                return _position0Anchor;
-            }
-        }
-        ImageData _position0Anchor;
 
         void showPage(int page_i)
         {
@@ -956,7 +923,7 @@ namespace Cliver.InvoiceParser
                 return null;
             }
 
-            bool renewImage = position0Anchor == null;
+            bool renewImage = true;
             foreach (DataGridViewRow row in invoiceFirstPageRecognitionMarks.Rows)
             {
                 string rs = (string)row.Cells["Rectangle2"].Value;
@@ -1008,14 +975,6 @@ namespace Cliver.InvoiceParser
             }
         }
 
-        //private void showTextChunks()
-        //{
-        //    if (pageBitmaps == null)
-        //        return;
-        //    drawBoxes(Settings.General.BoundingBoxColor, pageCharBoxListss[currentPage].Select(a => a.R));
-        //}
-        CharBoxCollection pageCharBoxListss;
-
         private void bText_Click(object sender, EventArgs e)
         {
             TextForm tf = new TextForm(PdfTextExtractor.GetTextFromPage(pdfReader, currentPage));
@@ -1065,44 +1024,53 @@ namespace Cliver.InvoiceParser
                     throw new Exception("InvoiceFirstPageRecognitionMarks is empty!");
 
                 template.Name = name.Text;
-
-                template.Fields = new List<Settings.Template.Field>();
-                foreach (DataGridViewRow r in fields.Rows)
-                    if (!string.IsNullOrWhiteSpace((string)r.Cells["Name_"].Value))
+                
+                template.FloatingAnchors = new Dictionary<int, Settings.Template.FloatingAnchor>();
+                foreach (DataGridViewRow r in floatingAnchors.Rows)
+                    if (!string.IsNullOrWhiteSpace((string)r.Cells["Id3"].Value))
                     {
-                        //string tms = (string)r.Cells["PageRecognitionTextMarks"].Value;
-                        //if (tms == null)
-                        //    tms = "";
-
                         string fas = (string)r.Cells["FloatingAnchor"].Value;
-                        template.Fields.Add(new Settings.Template.Field
+                        template.FloatingAnchors[(int)r.Cells["Id3"].Value] = new Settings.Template.FloatingAnchor
                         {
-                            Name = ((string)r.Cells["Name_"].Value).Trim(),
-                            Rectangle = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>((string)r.Cells["Rectangle"].Value),
-                            Ocr = Convert.ToBoolean(r.Cells["Ocr"].Value),
-                            //PageRecognitionTextMarks = SerializationRoutines.Json.Deserialize<List<Settings.Template.Mark>>(tms),
-                            FloatingAnchor = string.IsNullOrWhiteSpace(fas) ? null : SerializationRoutines.Json.Deserialize<Settings.Template.FloatingAnchor>(fas),
-                        });
+                            Id = (int)r.Cells["Id3"].Value,
+                            ValueType = (Settings.Template.ValueTypes)r.Cells["ValueType3"].Value,
+                            Value = (string)r.Cells["Value3"].Value,
+                        };
                     }
 
                 template.InvoiceFirstPageRecognitionMarks = new List<Settings.Template.Mark>();
                 foreach (DataGridViewRow r in invoiceFirstPageRecognitionMarks.Rows)
-                    if (r.Cells["Rectangle2"].Value != null)
+                    if (!string.IsNullOrWhiteSpace((string)r.Cells["Rectangle2"].Value))
+                    {
                         template.InvoiceFirstPageRecognitionMarks.Add(
                             new Settings.Template.Mark
                             {
                                 Rectangle = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>((string)r.Cells["Rectangle2"].Value),
                                 ValueType = (Settings.Template.ValueTypes)r.Cells["ValueType2"].Value,
-                                Value = (string)r.Cells["Value2"].Value
+                                Value = (string)r.Cells["Value2"].Value,
+                                FloatingAnchorId = r.Cells["FloatingAnchorId2"].Value==null?-1:(int)r.Cells["FloatingAnchorId2"].Value,
                             });
+                    }
+
+                template.Fields = new List<Settings.Template.Field>();
+                foreach (DataGridViewRow r in fields.Rows)
+                    if (!string.IsNullOrWhiteSpace((string)r.Cells["Name_"].Value))
+                    {
+                        string fas = (string)r.Cells["FloatingAnchor"].Value;
+                        template.Fields.Add(new Settings.Template.Field
+                        {
+                            Name = ((string)r.Cells["Name_"].Value).Trim(),
+                            Rectangle = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>((string)r.Cells["Rectangle"].Value),
+                            ValueType = Convert.ToBoolean(r.Cells["Ocr"].Value) ? Settings.Template.ValueTypes.OcrText : Settings.Template.ValueTypes.PdfText,
+                            FloatingAnchorId = r.Cells["FloatingAnchorId"].Value == null ? -1 : (int)r.Cells["FloatingAnchorId"].Value,
+                        });
+                    }
 
                 //if (pageRotation.SelectedIndex <= 0)
                 //    template.PageRotationRules = null;
                 //else
                 //    template.PageRotationRules = new List<Settings.Template.PageRotationRule> { new Settings.Template.PageRotationRule { Angle = pageRotation.SelectedIndex * 90 } };
                 template.PagesRotation = pagesRotation;
-                
-                template.Position0Anchor = position0Anchor;
 
                 template.AutoDeskew = autoDeskew.Checked;
 
