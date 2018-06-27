@@ -59,7 +59,7 @@ namespace Cliver.InvoiceParser
             }
         }
 
-        Bitmap bitmap
+        public Bitmap Bitmap
         {
             get
             {
@@ -127,10 +127,10 @@ namespace Cliver.InvoiceParser
                 {
                     Bitmap b;
                     if (pageCollection.ActiveTemplate.PagesRotation == Settings.Template.PageRotations.NONE && !pageCollection.ActiveTemplate.AutoDeskew)
-                        b = bitmap;
+                        b = Bitmap;
                     else
                     {
-                        b = _bitmap.Clone(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), System.Drawing.Imaging.PixelFormat.Undefined);
+                        b = Bitmap.Clone(new Rectangle(0, 0, Bitmap.Width, Bitmap.Height), System.Drawing.Imaging.PixelFormat.Undefined);
                         //b = ImageRoutines.GetCopy(b);
                         switch (pageCollection.ActiveTemplate.PagesRotation)
                         {
@@ -309,7 +309,7 @@ namespace Cliver.InvoiceParser
             get
             {
                 if (_imageData == null)
-                    _imageData = new ImageData(bitmap);
+                    _imageData = new ImageData(Bitmap);
                 return _imageData;
             }
         }
