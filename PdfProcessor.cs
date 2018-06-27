@@ -164,15 +164,12 @@ namespace Cliver.InvoiceParser
                     stampInvoicePages(invoice_first_page_i, page_i - 1);
                     fieldNames2texts.Clear();
                     invoice_first_page_i = page_i;
-                    foreach (Settings.Template.Field f in Pages.ActiveTemplate.Fields)//fields are read only from the first page!
-                        fieldNames2texts[f.Name] = Pages[page_i].GetFieldText(f.Name);
                 }
-                Settings.Template.Field costF = Pages.ActiveTemplate.Fields.Where(a => a.Name == "COST").FirstOrDefault();
-                if (costF != null)
+                foreach (Settings.Template.Field f in Pages.ActiveTemplate.Fields)
                 {
-                    string c = Pages[page_i].GetFieldText(costF.Name);
-                    if (c != null)
-                        fieldNames2texts["COST"] = c;
+                    string t = Pages[page_i].GetFieldText(f.Name);
+                    if (t != null)
+                        fieldNames2texts[f.Name] = t;
                 }
             }
             record(Pages.ActiveTemplate.Name, invoice_first_page_i, fieldNames2texts);
