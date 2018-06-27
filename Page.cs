@@ -229,25 +229,26 @@ namespace Cliver.InvoiceParser
                     }
                     return null;
                 case Settings.Template.ValueTypes.OcrText:
-                    throw new Exception("TBD");
+                    throw new Exception("TBD");//tesseract
                     return null;
                 case Settings.Template.ValueTypes.ImageData:
                     List<Settings.Template.FloatingAnchor.ImageDataElement.ImageBox> ibs = ((Settings.Template.FloatingAnchor.ImageDataElement)fa.Get()).ImageBoxs;
                     if (ibs.Count < 1)
                         return null;
-
                     PointF? p0 = ibs[0].ImageData.FindWithinImage(imageData);
                     if (p0 == null)
                         return null;
+                    List<RectangleF> rs = new List<RectangleF>();
+                    rs.Add(new RectangleF((PointF)p0, new SizeF(ibs[0].Rectangle.Width, ibs[0].Rectangle.Height)));
                     PointF point0 = (PointF)p0;
-
                     for (int i = 1; i < ibs.Count; i++)
                     {
                         Settings.Template.RectangleF r = new Settings.Template.RectangleF(ibs[i].Rectangle.X + point0.X, ibs[i].Rectangle.Height + point0.Y, ibs[i].Rectangle.Width, ibs[i].Rectangle.Height);
                         if (!ibs[i].ImageData.ImageIsSimilar(new ImageData(GetRectangeFromBitmapPreparedForTemplate(r.X, r.Y, r.Width, r.Height))))
                             return null;
+                        rs.Add(r.GetSystemRectangleF());
                     }
-                    return new List<RectangleF> { new RectangleF(point0.X, point0.Y, imageData.Width, imageData.Height) };
+                    return rs;
                 default:
                     throw new Exception("Unknown option: " + fa.ValueType);
             }

@@ -305,7 +305,13 @@ namespace Cliver.InvoiceParser
                     Settings.Template.FloatingAnchor fa = getFloatingAnchor((int)cs["Id3"].Value);
                     List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
                     if (rs == null || rs.Count < 1)
+                    {
+                        lStatus.BackColor = Color.LightPink;
+                        lStatus.Text = "FindFloatingAnchor[" + fa.Id + "] is not found.";
                         return;
+                    }
+                    lStatus.BackColor = Color.LightGreen;
+                    lStatus.Text = "FindFloatingAnchor[" + fa.Id + "] is found.";
                     drawBoxes(Settings.General.BoundingBoxColor, rs, true);
                 }
                 catch (Exception ex)
