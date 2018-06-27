@@ -191,9 +191,20 @@ namespace Cliver.InvoiceParser
                     case Modes.SetInvoiceFirstPageRecognitionTextMarks:
                         {
                             if (invoiceFirstPageRecognitionMarks.SelectedRows.Count < 1)
-                                break;
-                            DataGridViewRow rr = invoiceFirstPageRecognitionMarks.SelectedRows[0];
-                            rr.Cells["Rectangle2"].Value = SerializationRoutines.Json.Serialize(r);
+                                break;                            
+                            var cs = invoiceFirstPageRecognitionMarks.SelectedRows[0].Cells;
+                            Settings.Template.FloatingAnchor fa = null;
+                            int? fai = (int?)cs["FloatingAnchorId2"].Value;
+                            if (fai != null)
+                            {
+                                fa = getFloatingAnchor((int)fai);
+                                List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
+                                if (rs == null || rs.Count < 1)
+                                    throw new Exception("Could not find FloatingAnchor " + fa.Id + " in the page");
+                                r.X -= rs[0].X;
+                                r.Y -= rs[0].Y;
+                            }
+                            cs["Rectangle2"].Value = SerializationRoutines.Json.Serialize(r);
                             invoiceFirstPageRecognitionMarks.EndEdit();
                         }
                         break;
@@ -201,8 +212,19 @@ namespace Cliver.InvoiceParser
                         {
                             if (fields.SelectedRows.Count < 1)
                                 break;
-                            fields.SelectedRows[0].Cells["FloatingAnchorId"].Value = null;
-                            fields.SelectedRows[0].Cells["Rectangle"].Value = SerializationRoutines.Json.Serialize(r);
+                            var cs = fields.SelectedRows[0].Cells;
+                            Settings.Template.FloatingAnchor fa = null;
+                            int? fai = (int?)cs["FloatingAnchorId"].Value;
+                            if (fai != null)
+                            {
+                                fa = getFloatingAnchor((int)fai);
+                                List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
+                                if (rs == null || rs.Count < 1)
+                                    throw new Exception("Could not find FloatingAnchor " + fa.Id + " in the page");
+                                r.X -= rs[0].X;
+                                r.Y -= rs[0].Y;
+                            }
+                            cs["Rectangle"].Value = SerializationRoutines.Json.Serialize(r);
                             fields.EndEdit();
                         }
                         break;
@@ -213,14 +235,11 @@ namespace Cliver.InvoiceParser
 
             floatingAnchors.RowsAdded += delegate (object sender, DataGridViewRowsAddedEventArgs e)
             {
-                //if (loadingTemplate)
-                //    return;
                 foreach (DataGridViewRow rr in floatingAnchors.Rows)
                 {
                     if (rr.Cells["ValueType3"].Value == null)
                         rr.Cells["ValueType3"].Value = Settings.Template.ValueTypes.PdfText;
                 }
-                onFloatingAnchorsChanged(null);
             };
 
             floatingAnchors.UserDeletedRow += delegate (object sender, DataGridViewRowEventArgs e)
@@ -313,6 +332,8 @@ namespace Cliver.InvoiceParser
 
             invoiceFirstPageRecognitionMarks.CellValueChanged += delegate (object sender, DataGridViewCellEventArgs e)
             {
+                try
+                { 
                 if (loadingTemplate)
                     return;
 
@@ -332,13 +353,21 @@ namespace Cliver.InvoiceParser
                             cs["Value2"].Value = extractValueAndDrawBox(null, r, (Settings.Template.ValueTypes)o);
                         break;
                     case "FloatingAnchorId2":
-                        List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
-                        if (rs == null || rs.Count < 1)
-                            throw new Exception("Could not find FloatingAnchor " + fa.Id + " in the page");
-                        r.X -= rs[0].X;
-                        r.Y -= rs[0].Y;
+                        if (fa != null)
+                        {
+                            List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
+                            if (rs == null || rs.Count < 1)
+                                throw new Exception("Could not find FloatingAnchor " + fa.Id + " in the page");
+                            r.X -= rs[0].X;
+                            r.Y -= rs[0].Y;
+                        }
                         cs["Rectangle2"].Value = SerializationRoutines.Json.Serialize(r);
                         break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Message.Error2(ex);
                 }
             };
 
@@ -390,7 +419,7 @@ namespace Cliver.InvoiceParser
                 }
                 catch (Exception ex)
                 {
-                    LogMessage.Error(ex);
+                    Message.Error2(ex);
                 }
             };
 
@@ -405,34 +434,44 @@ namespace Cliver.InvoiceParser
 
             fields.CellValueChanged += delegate (object sender, DataGridViewCellEventArgs e)
             {
-                if (loadingTemplate)
-                    return;
-
-                var cs = fields.Rows[e.RowIndex].Cells;
-                Settings.Template.FloatingAnchor fa = null;
-                int? fai = (int?)cs["FloatingAnchorId"].Value;
-                if (fai != null)
-                    fa = getFloatingAnchor((int)fai);
-                string r_ = (string)cs["Rectangle"].Value;
-                Settings.Template.RectangleF r = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>(r_);
-                switch (fields.Columns[e.ColumnIndex].Name)
+                try
                 {
-                    case "Rectangle":
-                    case "Ocr":
-                        if (r != null)
-                            cs["Value"].Value = extractValueAndDrawBox(fa, r, Convert.ToBoolean(cs["Ocr"].Value) ? Settings.Template.ValueTypes.OcrText : Settings.Template.ValueTypes.PdfText);
-                        break;
-                    case "FloatingAnchorId":
-                        if (r != null)
-                        {
-                            List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
-                            if (rs == null || rs.Count < 1)
-                                throw new Exception("Could not find FloatingAnchor " + fa.Id + " in the page");
-                            r.X -= rs[0].X;
-                            r.Y -= rs[0].Y;
-                            cs["Rectangle"].Value = SerializationRoutines.Json.Serialize(r);
-                        }
-                        break;
+                    if (loadingTemplate)
+                        return;
+
+                    var cs = fields.Rows[e.RowIndex].Cells;
+                    Settings.Template.FloatingAnchor fa = null;
+                    int? fai = (int?)cs["FloatingAnchorId"].Value;
+                    if (fai != null)
+                        fa = getFloatingAnchor((int)fai);
+                    string r_ = (string)cs["Rectangle"].Value;
+                    Settings.Template.RectangleF r = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>(r_);
+                    switch (fields.Columns[e.ColumnIndex].Name)
+                    {
+                        case "Rectangle":
+                        case "Ocr":
+                            if (r != null)
+                                cs["Value"].Value = extractValueAndDrawBox(fa, r, Convert.ToBoolean(cs["Ocr"].Value) ? Settings.Template.ValueTypes.OcrText : Settings.Template.ValueTypes.PdfText);
+                            break;
+                        case "FloatingAnchorId":
+                            if (r != null)
+                            {
+                                if (fa != null)
+                                {
+                                    List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
+                                    if (rs == null || rs.Count < 1)
+                                        throw new Exception("Could not find FloatingAnchor " + fa.Id + " in the page");
+                                    r.X -= rs[0].X;
+                                    r.Y -= rs[0].Y;
+                                }
+                                cs["Rectangle"].Value = SerializationRoutines.Json.Serialize(r);
+                            }
+                            break;
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Message.Error2(ex);
                 }
             };
 
@@ -885,6 +924,7 @@ namespace Cliver.InvoiceParser
                         cs["ValueType3"].Value = f.ValueType;
                         cs["Value3"].Value = f.Value;
                     }
+                    onFloatingAnchorsChanged(null);
                 }
 
                 invoiceFirstPageRecognitionMarks.Rows.Clear();
