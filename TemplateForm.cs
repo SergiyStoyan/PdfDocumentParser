@@ -753,7 +753,7 @@ namespace Cliver.InvoiceParser
             if (pages == null)
                 return;
             pages.Clear();
-            pages.ActiveTemplate = getTemplateFromUI();
+            pages.ActiveTemplate = getTemplateFromUI(false);
             showPage(currentPage);
         }
 
@@ -1116,7 +1116,7 @@ namespace Cliver.InvoiceParser
                     return null;
                 }
 
-                Settings.Template t = getTemplateFromUI();
+                Settings.Template t = getTemplateFromUI(false);
                 pages.ActiveTemplate = t;
                 string error;
                 if (!pages[currentPage].IsInvoiceFirstPage(out error))
@@ -1196,7 +1196,7 @@ namespace Cliver.InvoiceParser
         {
             try
             {
-                EditedTemplate = getTemplateFromUI();
+                EditedTemplate = getTemplateFromUI(true);
                 DialogResult = DialogResult.OK;
                 Close();
             }
@@ -1216,15 +1216,17 @@ namespace Cliver.InvoiceParser
             }
         }
 
-        Settings.Template getTemplateFromUI()
+        Settings.Template getTemplateFromUI(bool savingValidation)
         {
             Settings.Template t = new Settings.Template();
 
             if (string.IsNullOrWhiteSpace(name.Text))
+                if(savingValidation)
                 throw new Exception("Name is empty!");
 
             if (invoiceFirstPageRecognitionMarks.Rows.Count < 2)
-                throw new Exception("InvoiceFirstPageRecognitionMarks is empty!");
+                if (savingValidation)
+                    throw new Exception("InvoiceFirstPageRecognitionMarks is empty!");
 
             t.Name = name.Text;
 
