@@ -152,7 +152,7 @@ namespace Cliver.InvoiceParser
 
             public class Mark
             {
-                public int FloatingAnchorId = -1;//when set, Rectangle.X,Y are bound to location of the anchor as to zero point
+                public int? FloatingAnchorId;//when set, Rectangle.X,Y are bound to location of the anchor as to zero point
                 public string Value;
                 public RectangleF Rectangle;
                 public ValueTypes ValueType = ValueTypes.PdfText;

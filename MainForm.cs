@@ -168,14 +168,15 @@ namespace Cliver.InvoiceParser
                     {
                         if (templates.Columns[e.ColumnIndex].Name == "Edit")
                         {
-                            TemplateForm tf = new TemplateForm();
                             Settings.Template t = (Settings.Template)templates.Rows[e.RowIndex].Tag;
                             t.Name = (string)templates.Rows[e.RowIndex].Cells["Name_"].Value;
-                            tf.Template = t;
+                            TemplateForm tf = new TemplateForm(t);
                             if (tf.ShowDialog() == DialogResult.OK)
                             {
-                                t = tf.Template;
-                                templates.Rows[e.RowIndex].Cells["Name_"].Value = t.Name;
+                                Settings.Templates.Templates[Settings.Templates.Templates.IndexOf(t)] = tf.EditedTemplate;
+                                Settings.Templates.Save();
+                                templates.Rows[e.RowIndex].Tag = tf.EditedTemplate;
+                                templates.Rows[e.RowIndex].Cells["Name_"].Value = tf.EditedTemplate.Name;
                             }
                         }
                     }

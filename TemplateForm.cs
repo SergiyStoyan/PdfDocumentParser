@@ -18,7 +18,7 @@ namespace Cliver.InvoiceParser
 {
     public partial class TemplateForm : Form
     {
-        public TemplateForm()
+        public TemplateForm(Settings.Template template)
         {
             InitializeComponent();
 
@@ -45,7 +45,7 @@ namespace Cliver.InvoiceParser
 
             Shown += delegate
             {
-                setTemplate();
+                setUIFromTemplate(template);
             };
 
             FormClosed += delegate
@@ -220,12 +220,12 @@ namespace Cliver.InvoiceParser
                     if (rr.Cells["ValueType3"].Value == null)
                         rr.Cells["ValueType3"].Value = Settings.Template.ValueTypes.PdfText;
                 }
-                onFloatingAnchorsChanged();
+                onFloatingAnchorsChanged(null);
             };
 
             floatingAnchors.UserDeletedRow += delegate (object sender, DataGridViewRowEventArgs e)
             {
-                onFloatingAnchorsChanged();
+                onFloatingAnchorsChanged(null);
             };
 
             floatingAnchors.CellContentClick += delegate (object sender, DataGridViewCellEventArgs e)
@@ -240,24 +240,22 @@ namespace Cliver.InvoiceParser
 
             floatingAnchors.CellValueChanged += delegate (object sender, DataGridViewCellEventArgs e)
             {
-                //if (loadingTemplate)
-                //    return;
-                //switch (floatingAnchors.Columns[e.ColumnIndex].Name)
-                //{
-                //    //case "Id3":
-                //    //        onFloatingAnchorsChanged();
-                //    //    break;
-                //    case "Value3":
-                //        //if (floatingAnchors.Rows[e.RowIndex].Cells["Value3"].Value == null)                        
-                //        //    floatingAnchors.Rows[e.RowIndex].Cells["Id3"].Value = null;
-                //        onFloatingAnchorsChanged();
-                //        break;
-                //    case "ValueType3":
-                //        floatingAnchors.Rows[e.RowIndex].Cells["Value3"].Value = null;
-                //        onFloatingAnchorsChanged();
-                //        break;
-                //}
-                onFloatingAnchorsChanged();
+                if (loadingTemplate)
+                    return;
+                switch (floatingAnchors.Columns[e.ColumnIndex].Name)
+                {
+                    //case "Id3":
+                    //        onFloatingAnchorsChanged();
+                    //    break;
+                    case "Value3":
+                        //if (floatingAnchors.Rows[e.RowIndex].Cells["Value3"].Value == null)                        
+                        //    floatingAnchors.Rows[e.RowIndex].Cells["Id3"].Value = null;
+                        onFloatingAnchorsChanged((int?)floatingAnchors.Rows[e.RowIndex].Cells["Id3"].Value);
+                        break;
+                    case "ValueType3":
+                        floatingAnchors.Rows[e.RowIndex].Cells["Value3"].Value = null;
+                        break;
+                }
             };
 
             floatingAnchors.SelectionChanged += delegate (object sender, EventArgs e)
@@ -318,20 +316,28 @@ namespace Cliver.InvoiceParser
                 if (loadingTemplate)
                     return;
 
+                var cs = invoiceFirstPageRecognitionMarks.Rows[e.RowIndex].Cells;
+                Settings.Template.FloatingAnchor fa = null;
+                int? fai = (int?)cs["FloatingAnchorId"].Value;
+                if (fai != null)
+                    fa = getFloatingAnchor((int)fai);
+                string r_ = (string)cs["Rectangle"].Value;
+                Settings.Template.RectangleF r = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>(r_);
                 switch (invoiceFirstPageRecognitionMarks.Columns[e.ColumnIndex].Name)
                 {
                     case "Rectangle2":
                     case "ValueType2":
-                        string rs = (string)invoiceFirstPageRecognitionMarks.Rows[e.RowIndex].Cells["Rectangle2"].Value;
-                        if (rs != null)
-                        {
-                            object o = invoiceFirstPageRecognitionMarks.Rows[e.RowIndex].Cells["ValueType2"].Value;
-                            if (o != null)
-                            {
-                                Settings.Template.RectangleF r = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>(rs);
-                                invoiceFirstPageRecognitionMarks.Rows[e.RowIndex].Cells["Value2"].Value = extractValueAndDrawBox(null, r, (Settings.Template.ValueTypes)o);
-                            }
-                        }
+                        object o = cs["ValueType2"].Value;
+                        if (o != null)
+                            cs["Value2"].Value = extractValueAndDrawBox(null, r, (Settings.Template.ValueTypes)o);
+                        break;
+                    case "FloatingAnchorId2":
+                        List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
+                        if (rs == null || rs.Count < 1)
+                            throw new Exception("Could not find FloatingAnchor " + fa.Id + " in the page");
+                        r.X -= rs[0].X;
+                        r.Y -= rs[0].Y;
+                        cs["Rectangle2"].Value = SerializationRoutines.Json.Serialize(r);
                         break;
                 }
             };
@@ -402,21 +408,29 @@ namespace Cliver.InvoiceParser
                 if (loadingTemplate)
                     return;
 
+                var cs = fields.Rows[e.RowIndex].Cells;
+                Settings.Template.FloatingAnchor fa = null;
+                int? fai = (int?)cs["FloatingAnchorId"].Value;
+                if (fai != null)
+                    fa = getFloatingAnchor((int)fai);
+                string r_ = (string)cs["Rectangle"].Value;
+                Settings.Template.RectangleF r = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>(r_);
                 switch (fields.Columns[e.ColumnIndex].Name)
                 {
                     case "Rectangle":
                     case "Ocr":
-                    case "FloatingAnchorId":
-                        var cs = fields.Rows[e.RowIndex].Cells;
-                        string rs = (string)cs["Rectangle"].Value;
-                        if (!string.IsNullOrWhiteSpace(rs))
-                        {
-                            Settings.Template.FloatingAnchor fa = null;
-                            int? fI = (int?)cs["FloatingAnchorId"].Value;
-                            if (fI != null)
-                                fa = getFloatingAnchor((int)fI);
-                            Settings.Template.RectangleF r = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>(rs);
+                        if (r != null)
                             cs["Value"].Value = extractValueAndDrawBox(fa, r, Convert.ToBoolean(cs["Ocr"].Value) ? Settings.Template.ValueTypes.OcrText : Settings.Template.ValueTypes.PdfText);
+                        break;
+                    case "FloatingAnchorId":
+                        if (r != null)
+                        {
+                            List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
+                            if (rs == null || rs.Count < 1)
+                                throw new Exception("Could not find FloatingAnchor " + fa.Id + " in the page");
+                            r.X -= rs[0].X;
+                            r.Y -= rs[0].Y;
+                            cs["Rectangle"].Value = SerializationRoutines.Json.Serialize(r);
                         }
                         break;
                 }
@@ -617,7 +631,7 @@ namespace Cliver.InvoiceParser
 
         PageCollection pages = null;
 
-        void onFloatingAnchorsChanged()
+        void onFloatingAnchorsChanged(int? changedFloatingAnchorId)
         {
             foreach (DataGridViewRow rr in floatingAnchors.Rows)
                 if (rr.Cells["Value3"].Value == null || rr.Cells["ValueType3"].Value == null)
@@ -644,7 +658,7 @@ namespace Cliver.InvoiceParser
             foreach (DataGridViewRow r in invoiceFirstPageRecognitionMarks.Rows)
             {
                 int? i = (int?)r.Cells["FloatingAnchorId2"].Value;
-                if (i != null && !fais.Contains((int)i))
+                if (i != null && !fais.Contains((int)i) || changedFloatingAnchorId != null && i == changedFloatingAnchorId)
                 {
                     r.Cells["FloatingAnchorId2"].Value = null;
                     r.Cells["Rectangle2"].Value = null;
@@ -654,7 +668,7 @@ namespace Cliver.InvoiceParser
             foreach (DataGridViewRow r in fields.Rows)
             {
                 int? i = (int?)r.Cells["FloatingAnchorId"].Value;
-                if (i != null && !fais.Contains((int)i))
+                if (i != null && !fais.Contains((int)i) || changedFloatingAnchorId != null && i == changedFloatingAnchorId)
                 {
                     r.Cells["FloatingAnchorId"].Value = null;
                     r.Cells["Rectangle"].Value = null;
@@ -683,7 +697,7 @@ namespace Cliver.InvoiceParser
                     };
                 }
             }
-            throw new Exception("There is no FloatingAnchor with Id==" + id);
+            throw new Exception("There is no FloatingAnchor with Id=" + id);
         }
 
         void reloadPageBitmaps()
@@ -847,23 +861,23 @@ namespace Cliver.InvoiceParser
         Settings.Template.FloatingAnchor.OcrTextElement selectedOcrTextElement;
         Settings.Template.FloatingAnchor.ImageDataElement selectedImageDataElement;
 
-        void setTemplate()
+        void setUIFromTemplate(Settings.Template t)
         {
             try
             {
                 loadingTemplate = true;
 
                 Text = "Template Editor";
-                name.Text = template.Name;
+                name.Text = t.Name;
 
                 //imageResolution.Value = template.ImageResolution;
 
-                autoDeskew.Checked = template.AutoDeskew;
+                autoDeskew.Checked = t.AutoDeskew;
 
                 floatingAnchors.Rows.Clear();
-                if (template.FloatingAnchors != null)
+                if (t.FloatingAnchors != null)
                 {
-                    foreach (Settings.Template.FloatingAnchor f in template.FloatingAnchors)
+                    foreach (Settings.Template.FloatingAnchor f in t.FloatingAnchors)
                     {
                         int i = floatingAnchors.Rows.Add();
                         var cs = floatingAnchors.Rows[i].Cells;
@@ -874,9 +888,9 @@ namespace Cliver.InvoiceParser
                 }
 
                 invoiceFirstPageRecognitionMarks.Rows.Clear();
-                if (template.InvoiceFirstPageRecognitionMarks != null)
+                if (t.InvoiceFirstPageRecognitionMarks != null)
                 {
-                    foreach (Settings.Template.Mark m in template.InvoiceFirstPageRecognitionMarks)
+                    foreach (Settings.Template.Mark m in t.InvoiceFirstPageRecognitionMarks)
                     {
                         int i = invoiceFirstPageRecognitionMarks.Rows.Add();
                         var cs = invoiceFirstPageRecognitionMarks.Rows[i].Cells;
@@ -888,9 +902,9 @@ namespace Cliver.InvoiceParser
                 }
 
                 fields.Rows.Clear();
-                if (template.Fields != null)
+                if (t.Fields != null)
                 {
-                    foreach (Settings.Template.Field f in template.Fields)
+                    foreach (Settings.Template.Field f in t.Fields)
                     {
                         int i = fields.Rows.Add();
                         var cs = fields.Rows[i].Cells;
@@ -901,15 +915,15 @@ namespace Cliver.InvoiceParser
                     }
                 }
 
-                if (template.FileFilterRegex != null)
-                    fileFilterRegex.Text = SerializationRoutines.Json.Serialize(template.FileFilterRegex);
+                if (t.FileFilterRegex != null)
+                    fileFilterRegex.Text = SerializationRoutines.Json.Serialize(t.FileFilterRegex);
                 else
                     fileFilterRegex.Text = "";
 
-                pictureScale.Value = template.TestPictureScale > 0 ? template.TestPictureScale : 1;
+                pictureScale.Value = t.TestPictureScale > 0 ? t.TestPictureScale : 1;
 
-                if (File.Exists(template.TestFile))
-                    testFile.Text = template.TestFile;
+                if (File.Exists(t.TestFile))
+                    testFile.Text = t.TestFile;
 
             }
             finally
@@ -917,21 +931,6 @@ namespace Cliver.InvoiceParser
                 loadingTemplate = false;
             }
         }
-
-        public Settings.Template Template
-        {
-            set
-            {
-                template = value;
-                if (Visible)
-                    setTemplate();
-            }
-            get
-            {
-                return template;//must be called after Save!
-            }
-        }
-        Settings.Template template;
         bool loadingTemplate = false;
 
         void showPage(int page_i)
@@ -996,8 +995,8 @@ namespace Cliver.InvoiceParser
         private void bTestFile_Click(object sender, EventArgs e)
         {
             OpenFileDialog d = new OpenFileDialog();
-            if (!string.IsNullOrWhiteSpace(template.TestFile))
-                d.InitialDirectory = PathRoutines.GetDirFromPath(template.TestFile);
+            if (!string.IsNullOrWhiteSpace(testFile.Text))
+                d.InitialDirectory = PathRoutines.GetDirFromPath(testFile.Text);
             else
                 if (!string.IsNullOrWhiteSpace(Settings.General.InputFolder))
                 d.InitialDirectory = Settings.General.InputFolder;
@@ -1067,7 +1066,7 @@ namespace Cliver.InvoiceParser
                     return null;
                 }
 
-                Settings.Template t = getCurrentTemplate();
+                Settings.Template t = getTemplateFromUI();
                 string error;
                 if (!pages[currentPage].IsInvoiceFirstPage(out error))
                 {
@@ -1140,13 +1139,13 @@ namespace Cliver.InvoiceParser
             Close();
         }
 
+        public Settings.Template EditedTemplate;
+
         private void save_Click(object sender, EventArgs e)
         {
             try
             {
-                template = getCurrentTemplate();
-                Settings.Templates.Save();
-
+                EditedTemplate = getTemplateFromUI();
                 DialogResult = DialogResult.OK;
                 Close();
             }
@@ -1166,7 +1165,7 @@ namespace Cliver.InvoiceParser
             }
         }
 
-        Settings.Template getCurrentTemplate()
+        Settings.Template getTemplateFromUI()
         {
             Settings.Template t = new Settings.Template();
 
@@ -1180,7 +1179,7 @@ namespace Cliver.InvoiceParser
 
             t.FloatingAnchors = new List<Settings.Template.FloatingAnchor>();
             foreach (DataGridViewRow r in floatingAnchors.Rows)
-                if (!string.IsNullOrWhiteSpace((string)r.Cells["Id3"].Value))
+                if (r.Cells["Id3"].Value != null)
                 {
                     t.FloatingAnchors.Add(new Settings.Template.FloatingAnchor
                     {
@@ -1195,27 +1194,32 @@ namespace Cliver.InvoiceParser
             foreach (DataGridViewRow r in invoiceFirstPageRecognitionMarks.Rows)
                 if (!string.IsNullOrWhiteSpace((string)r.Cells["Rectangle2"].Value))
                 {
-                    t.InvoiceFirstPageRecognitionMarks.Add(
-                        new Settings.Template.Mark
-                        {
-                            Rectangle = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>((string)r.Cells["Rectangle2"].Value),
-                            ValueType = (Settings.Template.ValueTypes)r.Cells["ValueType2"].Value,
-                            Value = (string)r.Cells["Value2"].Value,
-                            FloatingAnchorId = r.Cells["FloatingAnchorId2"].Value == null ? -1 : (int)r.Cells["FloatingAnchorId2"].Value,
-                        });
+                    Settings.Template.Mark m = new Settings.Template.Mark
+                    {
+                        Rectangle = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>((string)r.Cells["Rectangle2"].Value),
+                        ValueType = (Settings.Template.ValueTypes)r.Cells["ValueType2"].Value,
+                        Value = (string)r.Cells["Value2"].Value,
+                        FloatingAnchorId = (int?)r.Cells["FloatingAnchorId2"].Value,
+                    };
+                    if (m.FloatingAnchorId != null && t.FloatingAnchors.FirstOrDefault(x => x.Id == m.FloatingAnchorId) == null)
+                        throw new Exception("There is no FloatingAnchor with Id=" + m.FloatingAnchorId);
+                    t.InvoiceFirstPageRecognitionMarks.Add(m);
                 }
 
             t.Fields = new List<Settings.Template.Field>();
             foreach (DataGridViewRow r in fields.Rows)
                 if (!string.IsNullOrWhiteSpace((string)r.Cells["Name_"].Value))
                 {
-                    t.Fields.Add(new Settings.Template.Field
+                    Settings.Template.Field f = new Settings.Template.Field
                     {
                         Name = ((string)r.Cells["Name_"].Value).Trim(),
                         Rectangle = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>((string)r.Cells["Rectangle"].Value),
                         ValueType = Convert.ToBoolean(r.Cells["Ocr"].Value) ? Settings.Template.ValueTypes.OcrText : Settings.Template.ValueTypes.PdfText,
                         FloatingAnchorId = (int?)r.Cells["FloatingAnchorId"].Value
-                    });
+                    };
+                    if (f.FloatingAnchorId != null && t.FloatingAnchors.FirstOrDefault(x => x.Id == f.FloatingAnchorId) == null)
+                        throw new Exception("There is no FloatingAnchor with Id=" + f.FloatingAnchorId);
+                    t.Fields.Add(f);
                 }
 
             //if (pageRotation.SelectedIndex <= 0)
@@ -1233,6 +1237,7 @@ namespace Cliver.InvoiceParser
             t.TestPictureScale = pictureScale.Value;
 
             t.FileFilterRegex = SerializationRoutines.Json.Deserialize<Regex>(fileFilterRegex.Text);
+
             return t;
         }
     }
