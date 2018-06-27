@@ -30,13 +30,20 @@ namespace Cliver.InvoiceParser
         public readonly string PdfFile;
         public readonly PdfReader PdfReader;
 
+        public override void Dispose()
+        {
+            base.Dispose();
+            PdfReader.Dispose();
+        }
+
         public Settings.Template ActiveTemplate
         {
             set
             {
-                _ActiveTemplate = value;
                 foreach (Page p in Values)
-                    p.ActiveTemplate = value;
+                    //p.ActiveTemplate = value;
+                    p.OnActiveTemplateUpdating(value);
+                _ActiveTemplate = value;
             }
             get
             {

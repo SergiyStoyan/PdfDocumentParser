@@ -36,22 +36,22 @@ namespace Cliver.InvoiceParser
         {
             lock (this)
             {
-                if (bitmap != null)
+                if (_bitmap != null)
                 {
-                    bitmap.Dispose();
+                    _bitmap.Dispose();
                     _bitmap = null;
                 }
-                if (BitmapPreparedForTemplate != null)
+                if (_bitmapPreparedForTemplate != null)
                 {
-                    BitmapPreparedForTemplate.Dispose();
+                    _bitmapPreparedForTemplate.Dispose();
                     _bitmapPreparedForTemplate = null;
                 }
-                if (imageData != null)
+                if (_imageData != null)
                 {
                     //imageData.Dispose();
                     _imageData = null;
                 }
-                if (CharBoxs != null)
+                if (_CharBoxs != null)
                 {
                     //charBoxLists.Dispose();
                     _CharBoxs = null;
@@ -70,29 +70,44 @@ namespace Cliver.InvoiceParser
         }
         Bitmap _bitmap;
 
-        public Settings.Template ActiveTemplate
+        //public Settings.Template pageCollection.ActiveTemplate
+        //{
+        //    set
+        //    {
+        //        if (_activeTemplate == value)
+        //            return;
+        //        if (_activeTemplate.PagesRotation != value.PagesRotation || _activeTemplate.AutoDeskew != value.AutoDeskew)
+        //        {
+        //            if (BitmapPreparedForTemplate != null)
+        //            {
+        //                BitmapPreparedForTemplate.Dispose();
+        //                _bitmapPreparedForTemplate = null;
+        //            }
+        //        }
+        //        floatingAnchorIds2point0.Clear();
+        //        _activeTemplate = value;
+        //    }
+        //    get
+        //    {
+        //        return _activeTemplate;
+        //    }
+        //}
+        //Settings.Template _activeTemplate;
+        public void OnActiveTemplateUpdating(Settings.Template newTemplate)
         {
-            set
+            if (pageCollection.ActiveTemplate == newTemplate)
+                return;
+            if (pageCollection.ActiveTemplate.PagesRotation != newTemplate.PagesRotation || pageCollection.ActiveTemplate.AutoDeskew != newTemplate.AutoDeskew)
             {
-                if (_activeTemplate == value)
-                    return;
-                if (_activeTemplate.PagesRotation != value.PagesRotation || _activeTemplate.AutoDeskew != value.AutoDeskew)
+                if (BitmapPreparedForTemplate != null)
                 {
-                    if (BitmapPreparedForTemplate != null)
-                    {
-                        BitmapPreparedForTemplate.Dispose();
-                        _bitmapPreparedForTemplate = null;
-                    }
+                    BitmapPreparedForTemplate.Dispose();
+                    _bitmapPreparedForTemplate = null;
                 }
-                floatingAnchorIds2point0.Clear();
-                _activeTemplate = value;
             }
-            get
-            {
-                return _activeTemplate;
-            }
+            floatingAnchorIds2point0.Clear();
         }
-        Settings.Template _activeTemplate;
+
         Dictionary<int, PointF?> floatingAnchorIds2point0 = new Dictionary<int, PointF?>();
 
         public void UncacheFloatingAnchor(int floatingAnchorId)
@@ -111,13 +126,13 @@ namespace Cliver.InvoiceParser
                 if (_bitmapPreparedForTemplate == null)
                 {
                     Bitmap b;
-                    if (ActiveTemplate.PagesRotation == Settings.Template.PageRotations.NONE && !ActiveTemplate.AutoDeskew)
+                    if (pageCollection.ActiveTemplate.PagesRotation == Settings.Template.PageRotations.NONE && !pageCollection.ActiveTemplate.AutoDeskew)
                         b = bitmap;
                     else
                     {
                         b = _bitmap.Clone(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), System.Drawing.Imaging.PixelFormat.Undefined);
                         //b = ImageRoutines.GetCopy(b);
-                        switch (ActiveTemplate.PagesRotation)
+                        switch (pageCollection.ActiveTemplate.PagesRotation)
                         {
                             case Settings.Template.PageRotations.NONE:
                                 break;
@@ -131,9 +146,9 @@ namespace Cliver.InvoiceParser
                                 b.RotateFlip(RotateFlipType.Rotate270FlipNone);
                                 break;
                             default:
-                                throw new Exception("Unknown option: " + ActiveTemplate.PagesRotation);
+                                throw new Exception("Unknown option: " + pageCollection.ActiveTemplate.PagesRotation);
                         }
-                        if (ActiveTemplate.AutoDeskew)
+                        if (pageCollection.ActiveTemplate.AutoDeskew)
                         {
                             using (ImageMagick.MagickImage image = new ImageMagick.MagickImage(b))
                             {
@@ -163,7 +178,7 @@ namespace Cliver.InvoiceParser
             PointF? p;
             if (!floatingAnchorIds2point0.TryGetValue(floatingAnchorId, out p))
             {
-                List < RectangleF > rs = FindFloatingAnchor(ActiveTemplate.FloatingAnchors.Find(a=>a.Id == floatingAnchorId));
+                List < RectangleF > rs = FindFloatingAnchor(pageCollection.ActiveTemplate.FloatingAnchors.Find(a=>a.Id == floatingAnchorId));
                 if (rs == null || rs.Count < 1)
                     p = null;
                 else
@@ -317,7 +332,7 @@ namespace Cliver.InvoiceParser
 
         public bool IsInvoiceFirstPage(out string error)
         {
-            foreach (Settings.Template.Mark m in ActiveTemplate.InvoiceFirstPageRecognitionMarks)
+            foreach (Settings.Template.Mark m in pageCollection.ActiveTemplate.InvoiceFirstPageRecognitionMarks)
             {
                 object v = GetValue(m.FloatingAnchorId, m.Rectangle, m.ValueType, out error);
                 switch (m.ValueType)
@@ -328,7 +343,7 @@ namespace Cliver.InvoiceParser
                             string t2 = FieldPreparation.Normalize((string)v);
                             if (t1 == t2)
                                 break;
-                                error = "InvoiceFirstPageRecognitionMark[" + ActiveTemplate.InvoiceFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
+                                error = "InvoiceFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.InvoiceFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
                                 return false;
                         }
                     case Settings.Template.ValueTypes.OcrText:
@@ -336,7 +351,7 @@ namespace Cliver.InvoiceParser
                             string t1 = FieldPreparation.Normalize(m.Value);
                             string t2 = FieldPreparation.Normalize((string)v);
                             if (t1 == t2)
-                                error = "InvoiceFirstPageRecognitionMark[" + ActiveTemplate.InvoiceFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
+                                error = "InvoiceFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.InvoiceFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
                             return false;
                         }
                     case Settings.Template.ValueTypes.ImageData:
@@ -344,7 +359,7 @@ namespace Cliver.InvoiceParser
                             ImageData id = ImageData.Deserialize(m.Value);
                             if (id.ImageIsSimilar((ImageData)(v)))
                                 break;
-                            error = "InvoiceFirstPageRecognitionMark[" + ActiveTemplate.InvoiceFirstPageRecognitionMarks.IndexOf(m) + "]: image is not similar.";
+                            error = "InvoiceFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.InvoiceFirstPageRecognitionMarks.IndexOf(m) + "]: image is not similar.";
                             return false;
                         }
                     default:
@@ -357,7 +372,7 @@ namespace Cliver.InvoiceParser
 
         public string GetFieldText(string fieldName)
         {
-            Settings.Template.Field f = ActiveTemplate.Fields.Find(a => a.Name == fieldName);
+            Settings.Template.Field f = pageCollection.ActiveTemplate.Fields.Find(a => a.Name == fieldName);
             string error;
             object v = GetValue(f.FloatingAnchorId, f.Rectangle, f.ValueType, out error);
             if (v is ImageData)
