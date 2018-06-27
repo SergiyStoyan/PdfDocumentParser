@@ -345,7 +345,9 @@ namespace Cliver.InvoiceParser
                 int? fai = (int?)cs["FloatingAnchorId2"].Value;
                 if (fai != null)
                     fa = getFloatingAnchor((int)fai);
-                string r_ = (string)cs["Rectangle"].Value;
+                string r_ = (string)cs["Rectangle2"].Value;
+                    if (r_ == null)
+                        return;
                 Settings.Template.RectangleF r = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>(r_);
                 switch (invoiceFirstPageRecognitionMarks.Columns[e.ColumnIndex].Name)
                 {
@@ -353,7 +355,7 @@ namespace Cliver.InvoiceParser
                     case "ValueType2":
                         object o = cs["ValueType2"].Value;
                         if (o != null)
-                            cs["Value2"].Value = extractValueAndDrawBox(null, r, (Settings.Template.ValueTypes)o);
+                            cs["Value2"].Value = extractValueAndDrawBox(fa, r, (Settings.Template.ValueTypes)o);
                         break;
                     case "FloatingAnchorId2":
                         if (fa != null)
@@ -448,31 +450,29 @@ namespace Cliver.InvoiceParser
                     if (fai != null)
                         fa = getFloatingAnchor((int)fai);
                     string r_ = (string)cs["Rectangle"].Value;
+                    if (r_ == null)
+                        return;
                     Settings.Template.RectangleF r = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>(r_);
                     switch (fields.Columns[e.ColumnIndex].Name)
                     {
                         case "Rectangle":
                         case "Ocr":
-                            if (r != null)
-                                cs["Value"].Value = extractValueAndDrawBox(fa, r, Convert.ToBoolean(cs["Ocr"].Value) ? Settings.Template.ValueTypes.OcrText : Settings.Template.ValueTypes.PdfText);
+                            cs["Value"].Value = extractValueAndDrawBox(fa, r, Convert.ToBoolean(cs["Ocr"].Value) ? Settings.Template.ValueTypes.OcrText : Settings.Template.ValueTypes.PdfText);
                             break;
                         case "FloatingAnchorId":
-                            if (r != null)
+                            if (fa != null)
                             {
-                                if (fa != null)
-                                {
-                                    List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
-                                    if (rs == null || rs.Count < 1)
-                                        throw new Exception("Could not find FloatingAnchor " + fa.Id + " in the page");
-                                    r.X -= rs[0].X;
-                                    r.Y -= rs[0].Y;
-                                }
-                                cs["Rectangle"].Value = SerializationRoutines.Json.Serialize(r);
+                                List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
+                                if (rs == null || rs.Count < 1)
+                                    throw new Exception("Could not find FloatingAnchor " + fa.Id + " in the page");
+                                r.X -= rs[0].X;
+                                r.Y -= rs[0].Y;
                             }
+                            cs["Rectangle"].Value = SerializationRoutines.Json.Serialize(r);
                             break;
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Message.Error2(ex);
                 }
@@ -1110,6 +1110,7 @@ namespace Cliver.InvoiceParser
                 }
 
                 Settings.Template t = getTemplateFromUI();
+                pages.ActiveTemplate = t;
                 string error;
                 if (!pages[currentPage].IsInvoiceFirstPage(out error))
                 {
