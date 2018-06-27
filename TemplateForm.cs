@@ -627,9 +627,7 @@ namespace Cliver.InvoiceParser
                         Message.Error("File '" + testFile.Text + "' does not exist!");
                         return;
                     }
-
-                    pages = new PageCollection(testFile.Text);
-                    pages.ActiveTemplate = template;
+                    1
                     totalPageNumber = pages.PdfReader.NumberOfPages;
                     lTotalPages.Text = " / " + totalPageNumber;
                     showPage(1);
@@ -750,9 +748,13 @@ namespace Cliver.InvoiceParser
 
         void reloadPageBitmaps()
         {
-            if (pages == null)
-                return;
-            pages.Clear();
+            if (pages != null)
+            {
+                pages.Dispose();
+                pages = null;
+            }
+            pages = new PageCollection(testFile.Text);
+            pages.ActiveTemplate = getTemplateFromUI();
             showPage(currentPage);
         }
 
