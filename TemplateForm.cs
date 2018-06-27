@@ -46,6 +46,9 @@ namespace Cliver.InvoiceParser
             Shown += delegate
             {
                 setUIFromTemplate(template);
+                floatingAnchors.ClearSelection();
+                invoiceFirstPageRecognitionMarks.ClearSelection();
+                fields.ClearSelection();
             };
 
             FormClosed += delegate
@@ -339,7 +342,7 @@ namespace Cliver.InvoiceParser
 
                 var cs = invoiceFirstPageRecognitionMarks.Rows[e.RowIndex].Cells;
                 Settings.Template.FloatingAnchor fa = null;
-                int? fai = (int?)cs["FloatingAnchorId"].Value;
+                int? fai = (int?)cs["FloatingAnchorId2"].Value;
                 if (fai != null)
                     fa = getFloatingAnchor((int)fai);
                 string r_ = (string)cs["Rectangle"].Value;

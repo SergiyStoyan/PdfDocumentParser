@@ -229,6 +229,7 @@ namespace Cliver.InvoiceParser
                     }
                     return null;
                 case Settings.Template.ValueTypes.OcrText:
+                    throw new Exception("TBD");
                     return null;
                 case Settings.Template.ValueTypes.ImageData:
                     List<Settings.Template.FloatingAnchor.ImageDataElement.ImageBox> ibs = ((Settings.Template.FloatingAnchor.ImageDataElement)fa.Get()).ImageBoxs;
