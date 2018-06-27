@@ -396,12 +396,11 @@ namespace Cliver.InvoiceParser
                     }
                     point0 = (PointF)p0;
                 }
-                Settings.Template.RectangleF r = new Settings.Template.RectangleF(r_.X + point0.X, r_.Height + point0.Y, r_.Width, r_.Height);
+                Settings.Template.RectangleF r = new Settings.Template.RectangleF(r_.X + point0.X, r_.Y + point0.Y, r_.Width, r_.Height);
                 error = null;
                 switch (valueType)
                 {
                     case Settings.Template.ValueTypes.PdfText:
-                        //string t = pr.ExtractText(pageI, r.X, Height - r.Y - r.Height, r.Width, r.Height);
                         return Pdf.GetTextByTopLeftCoordinates(CharBoxs, r.X, r.Y, r.Width, r.Height);
                     case Settings.Template.ValueTypes.OcrText:
                         return TesseractW.This.GetText(BitmapPreparedForTemplate, r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);

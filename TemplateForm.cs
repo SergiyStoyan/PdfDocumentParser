@@ -201,7 +201,7 @@ namespace Cliver.InvoiceParser
                         {
                             if (fields.SelectedRows.Count < 1)
                                 break;
-                            fields.SelectedRows[0].Cells["FloatingAnchor"].Value = null;
+                            fields.SelectedRows[0].Cells["FloatingAnchorId"].Value = null;
                             fields.SelectedRows[0].Cells["Rectangle"].Value = SerializationRoutines.Json.Serialize(r);
                             fields.EndEdit();
                         }
@@ -282,7 +282,7 @@ namespace Cliver.InvoiceParser
                     var cs = r.Cells;
                     if (cs["Id3"].Value == null)
                         return;
-                    Settings.Template.FloatingAnchor fa = getFloatingAnchor(int.Parse((string)cs["Id3"].Value));
+                    Settings.Template.FloatingAnchor fa = getFloatingAnchor((int)cs["Id3"].Value);
                     List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
                     if (rs == null || rs.Count < 1)
                         return;
@@ -629,7 +629,7 @@ namespace Cliver.InvoiceParser
             List<int> fais = new List<int>();
             foreach (DataGridViewRow rr in floatingAnchors.Rows)
                 if (rr.Cells["Id3"].Value != null)
-                    fais.Add(int.Parse((string)rr.Cells["Id3"].Value));
+                    fais.Add((int)rr.Cells["Id3"].Value);
 
             foreach (DataGridViewRow rr in floatingAnchors.Rows)
                 if (rr.Cells["Id3"].Value == null && rr.Cells["Value3"].Value != null && rr.Cells["ValueType3"].Value != null)
@@ -670,9 +670,9 @@ namespace Cliver.InvoiceParser
         {
             foreach (DataGridViewRow r in floatingAnchors.Rows)
             {
-                if (string.IsNullOrWhiteSpace((string)r.Cells["Id3"].Value))
+                if (r.Cells["Id3"].Value == null)
                     continue;
-                int fai = int.Parse((string)r.Cells["Id3"].Value);
+                int fai = (int)r.Cells["Id3"].Value;
                 if (fai == id)
                 {
                     return new Settings.Template.FloatingAnchor
@@ -1182,7 +1182,6 @@ namespace Cliver.InvoiceParser
             foreach (DataGridViewRow r in floatingAnchors.Rows)
                 if (!string.IsNullOrWhiteSpace((string)r.Cells["Id3"].Value))
                 {
-                    int fai = int.Parse((string)r.Cells["Id3"].Value);
                     t.FloatingAnchors.Add(new Settings.Template.FloatingAnchor
                     {
                         Id = (int)r.Cells["Id3"].Value,
@@ -1210,13 +1209,12 @@ namespace Cliver.InvoiceParser
             foreach (DataGridViewRow r in fields.Rows)
                 if (!string.IsNullOrWhiteSpace((string)r.Cells["Name_"].Value))
                 {
-                    string fas = (string)r.Cells["FloatingAnchor"].Value;
                     t.Fields.Add(new Settings.Template.Field
                     {
                         Name = ((string)r.Cells["Name_"].Value).Trim(),
                         Rectangle = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>((string)r.Cells["Rectangle"].Value),
                         ValueType = Convert.ToBoolean(r.Cells["Ocr"].Value) ? Settings.Template.ValueTypes.OcrText : Settings.Template.ValueTypes.PdfText,
-                        FloatingAnchorId = r.Cells["FloatingAnchorId"].Value == null ? -1 : (int)r.Cells["FloatingAnchorId"].Value,
+                        FloatingAnchorId = (int?)r.Cells["FloatingAnchorId"].Value
                     });
                 }
 
