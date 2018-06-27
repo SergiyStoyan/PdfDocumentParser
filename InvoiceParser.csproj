@@ -145,6 +145,7 @@
     <Compile Include="OutputConfigForm.Designer.cs">
       <DependentUpon>OutputConfigForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PageCollection.cs" />
     <Compile Include="Page.cs" />
     <Compile Include="PdfProcessor.cs" />
     <Compile Include="Processor.cs" />

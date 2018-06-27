@@ -12,8 +12,7 @@ using System.IO;
 //using iTextSharp.text;
 //using iTextSharp.text.pdf;
 using System.Text.RegularExpressions;
-using iTextSharp.text.pdf.parser;
-using System.Windows.Forms;
+//using iTextSharp.text.pdf.parser;
 using System.Drawing;
 
 namespace Cliver.InvoiceParser
@@ -52,10 +51,10 @@ namespace Cliver.InvoiceParser
                     //imageData.Dispose();
                     _imageData = null;
                 }
-                if (charBoxLists != null)
+                if (CharBoxs != null)
                 {
                     //charBoxLists.Dispose();
-                    _charBoxLists = null;
+                    _CharBoxs = null;
                 }
             }
         }
@@ -94,18 +93,18 @@ namespace Cliver.InvoiceParser
             }
         }
         Settings.Template _activeTemplate;
-        Dictionary<int, System.Drawing.PointF?> floatingAnchorIds2point0 = new Dictionary<int, System.Drawing.PointF?>();
+        Dictionary<int, PointF?> floatingAnchorIds2point0 = new Dictionary<int, PointF?>();
 
         public void UncacheFloatingAnchor(int floatingAnchorId)
         {
             floatingAnchorIds2point0.Remove(floatingAnchorId);
         }
 
-        public System.Drawing.Bitmap GetRectangeFromBitmapPreparedForTemplate(float x, float y, float w, float h)
+        public Bitmap GetRectangeFromBitmapPreparedForTemplate(float x, float y, float w, float h)
         {
             return BitmapPreparedForTemplate.Clone(new RectangleF(x, y, w, h), System.Drawing.Imaging.PixelFormat.Undefined);
         }
-        public System.Drawing.Bitmap BitmapPreparedForTemplate
+        public Bitmap BitmapPreparedForTemplate
         {
             get
             {
@@ -116,20 +115,20 @@ namespace Cliver.InvoiceParser
                         b = bitmap;
                     else
                     {
-                        b = _bitmap.Clone(new System.Drawing.Rectangle(0, 0, _bitmap.Width, _bitmap.Height), System.Drawing.Imaging.PixelFormat.Undefined);
+                        b = _bitmap.Clone(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), System.Drawing.Imaging.PixelFormat.Undefined);
                         //b = ImageRoutines.GetCopy(b);
                         switch (ActiveTemplate.PagesRotation)
                         {
                             case Settings.Template.PageRotations.NONE:
                                 break;
                             case Settings.Template.PageRotations.Clockwise90:
-                                b.RotateFlip(System.Drawing.RotateFlipType.Rotate90FlipNone);
+                                b.RotateFlip(RotateFlipType.Rotate90FlipNone);
                                 break;
                             case Settings.Template.PageRotations.Clockwise180:
-                                b.RotateFlip(System.Drawing.RotateFlipType.Rotate180FlipNone);
+                                b.RotateFlip(RotateFlipType.Rotate180FlipNone);
                                 break;
                             case Settings.Template.PageRotations.Clockwise270:
-                                b.RotateFlip(System.Drawing.RotateFlipType.Rotate270FlipNone);
+                                b.RotateFlip(RotateFlipType.Rotate270FlipNone);
                                 break;
                             default:
                                 throw new Exception("Unknown option: " + ActiveTemplate.PagesRotation);
@@ -157,14 +156,14 @@ namespace Cliver.InvoiceParser
                 return _bitmapPreparedForTemplate;
             }
         }
-        System.Drawing.Bitmap _bitmapPreparedForTemplate = null;
+        Bitmap _bitmapPreparedForTemplate = null;
 
-        public System.Drawing.PointF? GetFloatingAnchorPoint0(int floatingAnchorId)
+        public PointF? GetFloatingAnchorPoint0(int floatingAnchorId)
         {
-            System.Drawing.PointF? p;
+            PointF? p;
             if (!floatingAnchorIds2point0.TryGetValue(floatingAnchorId, out p))
             {
-                List < System.Drawing.RectangleF > rs = FindFloatingAnchor(ActiveTemplate.FloatingAnchors[floatingAnchorId]);
+                List < RectangleF > rs = FindFloatingAnchor(ActiveTemplate.FloatingAnchors.Find(a=>a.Id == floatingAnchorId));
                 if (rs == null || rs.Count < 1)
                     p = null;
                 else
@@ -174,7 +173,7 @@ namespace Cliver.InvoiceParser
             return p;
         }
 
-        public List<System.Drawing.RectangleF> FindFloatingAnchor(Settings.Template.FloatingAnchor fa)
+        public List<RectangleF> FindFloatingAnchor(Settings.Template.FloatingAnchor fa)
         {
             if (fa == null)
                 return null;
@@ -186,7 +185,7 @@ namespace Cliver.InvoiceParser
                     if (ses.Count < 1)
                         return null;
                     List<Pdf.BoxText> bts = new List<Pdf.BoxText>();
-                    foreach (Pdf.BoxText bt0 in charBoxLists.Where(a => a.Text == ses[0].Char))
+                    foreach (Pdf.BoxText bt0 in CharBoxs.Where(a => a.Text == ses[0].Char))
                     {
                         bts.Clear();
                         bts.Add(bt0);
@@ -194,7 +193,7 @@ namespace Cliver.InvoiceParser
                         {
                             float x = bt0.R.X + ses[i].Rectangle.X - ses[0].Rectangle.X;
                             float y = bt0.R.Y + ses[i].Rectangle.Y - ses[0].Rectangle.Y;
-                            foreach (Pdf.BoxText bt in charBoxLists.Where(a => a.Text == ses[i].Char))
+                            foreach (Pdf.BoxText bt in CharBoxs.Where(a => a.Text == ses[i].Char))
                             {
                                 if (Math.Abs(bt.R.X - x) > Settings.General.CoordinateDeviationMargin)
                                     continue;
@@ -207,7 +206,7 @@ namespace Cliver.InvoiceParser
                         }
                         if (bts.Count == ses.Count)
                         {
-                            //System.Drawing.PointF point0 = new System.Drawing.PointF(bts[0].R.X, bts[0].R.Y);
+                            //PointF point0 = new PointF(bts[0].R.X, bts[0].R.Y);
                             //if (findFloatingAnchorSecondaryElements(point0, fa))
                             //    return point0;
                             return bts.Select(x => x.R).ToList();
@@ -221,10 +220,10 @@ namespace Cliver.InvoiceParser
                     if (ibs.Count < 1)
                         return null;
 
-                    System.Drawing.PointF? p0 = ibs[0].ImageData.FindWithinImage(imageData);
+                    PointF? p0 = ibs[0].ImageData.FindWithinImage(imageData);
                     if (p0 == null)
                         return null;
-                    System.Drawing.PointF point0 = (PointF)p0;
+                    PointF point0 = (PointF)p0;
 
                     for (int i = 1; i < ibs.Count; i++)
                     {
@@ -238,7 +237,7 @@ namespace Cliver.InvoiceParser
             }
         }
 
-        //bool findFloatingAnchorSecondaryElements(System.Drawing.PointF point0, Settings.Template.FloatingAnchor fa)
+        //bool findFloatingAnchorSecondaryElements(PointF point0, Settings.Template.FloatingAnchor fa)
         //{
         //    for (int i = 1; i < fa.Elements.Count; i++)
         //    {
@@ -247,7 +246,7 @@ namespace Cliver.InvoiceParser
         //    }
         //    return true;
         //}
-        //bool findFloatingAnchorElement(System.Drawing.PointF point0, Settings.Template.FloatingAnchor.Element e)
+        //bool findFloatingAnchorElement(PointF point0, Settings.Template.FloatingAnchor.Element e)
         //{
         //    switch (e.ElementType)
         //    {
@@ -299,29 +298,16 @@ namespace Cliver.InvoiceParser
         }
         ImageData _imageData;
 
-        List<Pdf.BoxText> charBoxLists
+        public List<Pdf.BoxText> CharBoxs
         {
             get
             {
-                if (_charBoxLists == null)
-                {
-                    var bts = pageCollection.PdfReader.GetCharacterTextChunks(pageI).Select(x => new Pdf.BoxText
-                    {
-                        R = new System.Drawing.RectangleF
-                        {
-                            X = x.StartLocation[Vector.I1],
-                            Y = pageCollection.PdfReader.GetPageSize(pageI).Height - x.EndLocation[Vector.I2],
-                            Width = x.EndLocation[Vector.I1] - x.StartLocation[Vector.I1],
-                            Height = x.EndLocation[Vector.I2] - x.StartLocation[Vector.I2],
-                        },
-                        Text = x.Text
-                    });
-                    _charBoxLists = bts.ToList();
-                }
-                return _charBoxLists;
+                if (_CharBoxs == null)
+                    _CharBoxs = Pdf.GetCharBoxsFromPage(pageCollection.PdfReader, pageI);
+                return _CharBoxs;
             }
         }
-        List<Pdf.BoxText> _charBoxLists;
+        List<Pdf.BoxText> _CharBoxs;
 
         public bool IsInvoiceFirstPage()
         {
@@ -383,10 +369,10 @@ namespace Cliver.InvoiceParser
         {
             //try
             //{
-                System.Drawing.PointF point0 = new System.Drawing.PointF(0, 0);
+                PointF point0 = new PointF(0, 0);
                 if (floatingAnchorId != null)
                 {
-                    System.Drawing.PointF? p0;
+                    PointF? p0;
                     p0 = GetFloatingAnchorPoint0((int)floatingAnchorId);
                     if (p0 == null)
                     {
@@ -401,7 +387,7 @@ namespace Cliver.InvoiceParser
                 {
                     case Settings.Template.ValueTypes.PdfText:
                         //string t = pr.ExtractText(pageI, r.X, Height - r.Y - r.Height, r.Width, r.Height);
-                        return Pdf.GetTextByTopLeftCoordinates(charBoxLists, r.X, r.Y, r.Width, r.Height);
+                        return Pdf.GetTextByTopLeftCoordinates(CharBoxs, r.X, r.Y, r.Width, r.Height);
                     case Settings.Template.ValueTypes.OcrText:
                         return TesseractW.This.GetText(BitmapPreparedForTemplate, r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);
                     case Settings.Template.ValueTypes.ImageData:

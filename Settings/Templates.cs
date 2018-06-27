@@ -98,7 +98,7 @@ namespace Cliver.InvoiceParser
 
             public bool AutoDeskew = false;
 
-            public Dictionary<int, FloatingAnchor> FloatingAnchors;
+            public List<FloatingAnchor> FloatingAnchors;
 
             public List<Mark> InvoiceFirstPageRecognitionMarks;
 
@@ -122,6 +122,11 @@ namespace Cliver.InvoiceParser
                     Y = y;
                     Width = w;
                     Height = h;
+                }
+
+                static public RectangleF GetFromSystemRectangleF(System.Drawing.RectangleF r)
+                {
+                    return new RectangleF(r.X, r.Y, r.Width, r.Height);
                 }
 
                 public System.Drawing.Rectangle GetSystemRectangle()
@@ -167,6 +172,7 @@ namespace Cliver.InvoiceParser
                 public ValueTypes ValueType = ValueTypes.PdfText;
                 //public Regex Regex;//if set the rest settings are ignored; it is applied to the page text
             }
+
             public partial class FloatingAnchor
             {
                 public int Id;

@@ -229,6 +229,11 @@ namespace Cliver.InvoiceParser
             return sb.ToString();
         }
 
+        public static List<BoxText> GetBoxTextsSurroundedByRectangle(List<BoxText> bts, System.Drawing.RectangleF r)
+        {
+            return bts.Where(a => /*selectedR.IntersectsWith(a.R) || */r.Contains(a.R)).ToList();
+        }
+
         public static List<BoxText> RemoveDuplicatesAndOrder(IEnumerable<BoxText> bts)
         {
             List<BoxText> bs = bts.Where(a => a.R.Width >= 0 && a.R.Height >= 0).ToList();//some symbols are duplicated with negative width anf height
@@ -246,12 +251,22 @@ namespace Cliver.InvoiceParser
             return bs.OrderBy(a => a.R.Y).OrderBy(a => a.R.X).ToList();
         }
 
-        public class CharBoxCollection : HandyDictionary<int, List<BoxText>>
+        public static List<BoxText> GetCharBoxsFromPage(PdfReader pdfReader, int pageI)
         {
-            public CharBoxCollection(Func<int, List<BoxText>> get_boundingBox) : base(get_boundingBox)
+            var bts = pdfReader.GetCharacterTextChunks(pageI).Select(x => new Pdf.BoxText
             {
-            }
+                R = new System.Drawing.RectangleF
+                {
+                    X = x.StartLocation[Vector.I1],
+                    Y = pdfReader.GetPageSize(pageI).Height - x.EndLocation[Vector.I2],
+                    Width = x.EndLocation[Vector.I1] - x.StartLocation[Vector.I1],
+                    Height = x.EndLocation[Vector.I2] - x.StartLocation[Vector.I2],
+                },
+                Text = x.Text
+            });
+            return bts.ToList();
         }
+
         public class BoxText
         {
             public System.Drawing.RectangleF R;
@@ -358,32 +373,4 @@ namespace Cliver.InvoiceParser
     //        return b;
     //    }
     //}
-
-    public class PageCollection : HandyDictionary<int, Page>
-    {
-        public PageCollection(string pdfFile) : base(null)
-        {
-            PdfFile = pdfFile;
-            PdfReader = new PdfReader(pdfFile);
-            getObject = (int pageI) => { return new Page(this, pageI); };
-        }
-
-        public readonly string PdfFile;
-        public readonly PdfReader PdfReader;
-
-        public Settings.Template ActiveTemplate
-        {
-            set
-            {
-                _ActiveTemplate = value;
-                foreach (Page p in Values)
-                    p.ActiveTemplate = value;
-            }
-            get
-            {
-                return _ActiveTemplate;
-            }
-        }
-        Settings.Template _ActiveTemplate;
-    }
 }
