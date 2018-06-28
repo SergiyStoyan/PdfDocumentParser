@@ -38,23 +38,11 @@ namespace Cliver.InvoiceParser
 
         public string GetText(Bitmap b, float x, float y, float w, float h)
         {
-            if (x < 0)
-            {
-                w += x;
-                x = 0;
-            }
-            if (y < 0)
-            {
-                h += y;
-                y = 0;
-            }
-            if (b.Width < x + w)
-                w = b.Width - x;
-            if (b.Height < y + h)
-                h = b.Height - y;
-            if (Math.Abs(w) < Settings.General.CoordinateDeviationMargin || Math.Abs(h) < Settings.General.CoordinateDeviationMargin)
+            Rectangle r = new Rectangle((int)x, (int)y, (int)w, (int)h);
+            r.Intersect(new Rectangle(0, 0, b.Width, b.Height));
+            if (Math.Abs(r.Width) < Settings.General.CoordinateDeviationMargin || Math.Abs(r.Height) < Settings.General.CoordinateDeviationMargin)
                 return null;
-            using (var page = engine.Process(b, new Tesseract.Rect((int)x, (int)y, (int)w, (int)h), Tesseract.PageSegMode.SingleBlock))
+            using (var page = engine.Process(b, new Tesseract.Rect(0, 0, r.Width, r.Height), Tesseract.PageSegMode.SingleBlock))
             {
                 return page.GetText();
             }
