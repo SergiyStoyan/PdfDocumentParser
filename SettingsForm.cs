@@ -25,6 +25,7 @@ namespace Cliver.InvoiceParser
         void load_settings()
         {
             imageResolution.Value = Settings.General.PdfPageImageResolution;
+            ignoreHidddenFiles.Checked = Settings.General.IgnoreHidddenFiles;
         }
 
         private void bCancel_Click(object sender, EventArgs e)
@@ -37,6 +38,7 @@ namespace Cliver.InvoiceParser
             try
             {
                 Settings.General.PdfPageImageResolution = (int)imageResolution.Value;
+                Settings.General.IgnoreHidddenFiles = ignoreHidddenFiles.Checked;
 
                 Settings.General.Save();
                 Settings.General.Reload();

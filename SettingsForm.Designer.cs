@@ -35,6 +35,7 @@
             this.bCancel = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.bResetTemplates = new System.Windows.Forms.Button();
+            this.ignoreHidddenFiles = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.imageResolution)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -128,11 +129,22 @@
             this.bResetTemplates.UseVisualStyleBackColor = true;
             this.bResetTemplates.Click += new System.EventHandler(this.bResetTemplates_Click);
             // 
+            // ignoreHidddenFiles
+            // 
+            this.ignoreHidddenFiles.AutoSize = true;
+            this.ignoreHidddenFiles.Location = new System.Drawing.Point(24, 48);
+            this.ignoreHidddenFiles.Name = "ignoreHidddenFiles";
+            this.ignoreHidddenFiles.Size = new System.Drawing.Size(123, 17);
+            this.ignoreHidddenFiles.TabIndex = 53;
+            this.ignoreHidddenFiles.Text = "Ignore Hiddden Files";
+            this.ignoreHidddenFiles.UseVisualStyleBackColor = true;
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(403, 289);
+            this.Controls.Add(this.ignoreHidddenFiles);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.imageResolution);
             this.Controls.Add(this.label8);
@@ -155,5 +167,6 @@
         private System.Windows.Forms.Button bCancel;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Button bResetTemplates;
+        private System.Windows.Forms.CheckBox ignoreHidddenFiles;
     }
 }
