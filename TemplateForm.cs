@@ -221,6 +221,8 @@ namespace Cliver.InvoiceParser
 
             floatingAnchors.RowsAdded += delegate (object sender, DataGridViewRowsAddedEventArgs e)
             {
+                if (floatingAnchors.Rows[e.RowIndex].Cells["ValueType3"].Value == null)
+                    floatingAnchors.Rows[e.RowIndex].Cells["ValueType3"].Value = Settings.Template.ValueTypes.PdfText;
             };
 
             floatingAnchors.RowValidating += delegate (object sender, DataGridViewCellCancelEventArgs e)
@@ -241,8 +243,8 @@ namespace Cliver.InvoiceParser
             {
                 try
                 {
-                    if (e.Row.Cells["ValueType3"].Value == null)
-                        e.Row.Cells["ValueType3"].Value = Settings.Template.ValueTypes.PdfText;
+                    //if (e.Row.Cells["ValueType3"].Value == null)
+                    //    e.Row.Cells["ValueType3"].Value = Settings.Template.ValueTypes.PdfText;
                 }
                 catch (Exception ex)
                 {
@@ -296,8 +298,8 @@ namespace Cliver.InvoiceParser
 
                     if (r.IsNewRow)//hacky forcing commit a newly added row and display the blank row
                     {
-                        floatingAnchors.Rows.Add();
-                        r.Selected = true;
+                        int i = floatingAnchors.Rows.Add();
+                        floatingAnchors.Rows[i].Selected = true;
                         return;
                     }
                     var cs = r.Cells;
@@ -323,6 +325,8 @@ namespace Cliver.InvoiceParser
 
             invoiceFirstPageRecognitionMarks.RowsAdded += delegate (object sender, DataGridViewRowsAddedEventArgs e)
             {
+                if (invoiceFirstPageRecognitionMarks.Rows[e.RowIndex].Cells["ValueType2"].Value == null)
+                    invoiceFirstPageRecognitionMarks.Rows[e.RowIndex].Cells["ValueType2"].Value = Settings.Template.ValueTypes.PdfText;
             };
 
             invoiceFirstPageRecognitionMarks.CurrentCellDirtyStateChanged += delegate
@@ -349,8 +353,6 @@ namespace Cliver.InvoiceParser
             {
                 try
                 {
-                    if (e.Row.Cells["ValueType2"].Value == null)
-                        e.Row.Cells["ValueType2"].Value = Settings.Template.ValueTypes.PdfText;
                 }
                 catch (Exception ex)
                 {
@@ -416,8 +418,8 @@ namespace Cliver.InvoiceParser
 
                         if (invoiceFirstPageRecognitionMarks.Rows[i].IsNewRow)//hacky forcing commit a newly added row and display the blank row
                         {
-                            invoiceFirstPageRecognitionMarks.Rows.Add();
-                            invoiceFirstPageRecognitionMarks.Rows[i].Selected = true;
+                            int j = invoiceFirstPageRecognitionMarks.Rows.Add();
+                            invoiceFirstPageRecognitionMarks.Rows[j].Selected = true;
                             return;
                         }
                         var cs = invoiceFirstPageRecognitionMarks.Rows[i].Cells;
