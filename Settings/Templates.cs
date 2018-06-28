@@ -181,6 +181,8 @@ namespace Cliver.InvoiceParser
                 public ValueTypes ValueType = ValueTypes.PdfText;
                 public object Get()
                 {
+                    if (Value == null)
+                        return null;
                     if (typedValue == null)
                         switch (ValueType)
                         {

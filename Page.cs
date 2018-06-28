@@ -190,7 +190,7 @@ namespace Cliver.InvoiceParser
 
         public List<RectangleF> FindFloatingAnchor(Settings.Template.FloatingAnchor fa)
         {
-            if (fa == null)
+            if (fa == null || fa.Value == null)
                 return null;
 
             switch (fa.ValueType)

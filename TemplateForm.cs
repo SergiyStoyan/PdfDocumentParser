@@ -267,6 +267,7 @@ namespace Cliver.InvoiceParser
             {
                 if (loadingTemplate)
                     return;
+                var r = floatingAnchors.Rows[e.RowIndex];
                 switch (floatingAnchors.Columns[e.ColumnIndex].Name)
                 {
                     //case "Id3":
@@ -275,13 +276,11 @@ namespace Cliver.InvoiceParser
                     case "Value3":
                         //if (floatingAnchors.Rows[e.RowIndex].Cells["Value3"].Value == null)                        
                         //    floatingAnchors.Rows[e.RowIndex].Cells["Id3"].Value = null;
-                        int? fai = (int?)floatingAnchors.Rows[e.RowIndex].Cells["Id3"].Value;
-                        onFloatingAnchorsChanged(fai);
-                        if (fai != null)
-                            drawFloatingAnchor((int)fai);
+                        onFloatingAnchorsChanged((int?)r.Cells["Id3"].Value);
+                        drawFloatingAnchor(r);
                         break;
                     case "ValueType3":
-                        floatingAnchors.Rows[e.RowIndex].Cells["Value3"].Value = null;
+                        r.Cells["Value3"].Value = null;
                         break;
                 }
             };
@@ -305,9 +304,7 @@ namespace Cliver.InvoiceParser
                         floatingAnchors.Rows[i].Selected = true;
                         return;
                     }
-                    int? fai = (int?)r.Cells["Id3"].Value;
-                    if (fai != null)
-                        drawFloatingAnchor((int)fai);
+                    drawFloatingAnchor(r);
                 }
                 catch (Exception ex)
                 {
@@ -703,12 +700,11 @@ namespace Cliver.InvoiceParser
 
         PageCollection pages = null;
 
-        void onFloatingAnchorsChanged(int? changedFloatingAnchorId)
+        void onFloatingAnchorsChanged(int? updatedFloatingAnchorId)
         {
             foreach (DataGridViewRow rr in floatingAnchors.Rows)
                 if (rr.Cells["Value3"].Value == null || rr.Cells["ValueType3"].Value == null)
                 {
-                    rr.Cells["Id3"].Value = null;
                     rr.Cells["Value3"].Value = null;
                 }
 
@@ -736,7 +732,7 @@ namespace Cliver.InvoiceParser
                     r.Cells["Rectangle2"].Value = null;
                     r.Cells["Value2"].Value = null;
                 }
-                if (changedFloatingAnchorId != null && i == changedFloatingAnchorId)
+                if (updatedFloatingAnchorId != null && i == updatedFloatingAnchorId)
                 {
                     r.Cells["Rectangle2"].Value = null;
                     r.Cells["Value2"].Value = null;
@@ -751,7 +747,7 @@ namespace Cliver.InvoiceParser
                     r.Cells["Rectangle"].Value = null;
                     r.Cells["Value"].Value = null;
                 }
-                if (changedFloatingAnchorId != null && i == changedFloatingAnchorId)
+                if (updatedFloatingAnchorId != null && i == updatedFloatingAnchorId)
                 {
                     r.Cells["Rectangle"].Value = null;
                     r.Cells["Value"].Value = null;
@@ -762,9 +758,18 @@ namespace Cliver.InvoiceParser
             FloatingAnchorId.DataSource = fais;
         }
 
-        void drawFloatingAnchor(int floatingAnchorId)
+        void drawFloatingAnchor(DataGridViewRow floatingAnchorRow)
         {
-            Settings.Template.FloatingAnchor fa = getFloatingAnchor(floatingAnchorId);
+            int? fai = (int?)floatingAnchorRow.Cells["Id3"].Value;
+            if (fai == null)
+                return;
+            Settings.Template.FloatingAnchor fa = getFloatingAnchor((int)fai);
+            if(fa.Value== null)
+            {
+                lStatus.BackColor = Color.LightYellow;
+                lStatus.Text = "FindFloatingAnchor[" + fa.Id + "] is not defined.";
+                return;
+            }
             List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
             if (rs == null || rs.Count < 1)
             {
