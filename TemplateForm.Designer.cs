@@ -83,6 +83,7 @@
             this.brightnessTolerance = new System.Windows.Forms.NumericUpDown();
             this.differentPixelNumberTolerance = new System.Windows.Forms.NumericUpDown();
             this.label13 = new System.Windows.Forms.Label();
+            this.findBestImageMatch = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -180,6 +181,7 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.findBestImageMatch);
             this.groupBox1.Controls.Add(this.differentPixelNumberTolerance);
             this.groupBox1.Controls.Add(this.label13);
             this.groupBox1.Controls.Add(this.brightnessTolerance);
@@ -695,7 +697,7 @@
             0,
             0,
             131072});
-            this.brightnessTolerance.Location = new System.Drawing.Point(117, 50);
+            this.brightnessTolerance.Location = new System.Drawing.Point(112, 50);
             this.brightnessTolerance.Maximum = new decimal(new int[] {
             1,
             0,
@@ -723,7 +725,7 @@
             0,
             0,
             131072});
-            this.differentPixelNumberTolerance.Location = new System.Drawing.Point(355, 50);
+            this.differentPixelNumberTolerance.Location = new System.Drawing.Point(345, 50);
             this.differentPixelNumberTolerance.Maximum = new decimal(new int[] {
             1,
             0,
@@ -746,11 +748,21 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(183, 53);
+            this.label13.Location = new System.Drawing.Point(173, 53);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(163, 13);
             this.label13.TabIndex = 56;
             this.label13.Text = "Different Pixel NumberTolerance:";
+            // 
+            // findBestImageMatch
+            // 
+            this.findBestImageMatch.AutoSize = true;
+            this.findBestImageMatch.Location = new System.Drawing.Point(312, 25);
+            this.findBestImageMatch.Name = "findBestImageMatch";
+            this.findBestImageMatch.Size = new System.Drawing.Size(135, 17);
+            this.findBestImageMatch.TabIndex = 58;
+            this.findBestImageMatch.Text = "Find Best Image Match";
+            this.findBestImageMatch.UseVisualStyleBackColor = true;
             // 
             // TemplateForm
             // 
@@ -849,5 +861,6 @@
         private System.Windows.Forms.NumericUpDown brightnessTolerance;
         private System.Windows.Forms.NumericUpDown differentPixelNumberTolerance;
         private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.CheckBox findBestImageMatch;
     }
 }

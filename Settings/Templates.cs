@@ -98,6 +98,7 @@ namespace Cliver.InvoiceParser
 
             public float BrightnessTolerance = 0.4f;
             public float DifferentPixelNumberTolerance = 0.01f;
+            public bool FindBestImageMatch = false;
 
             public List<FloatingAnchor> FloatingAnchors;
 

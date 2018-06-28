@@ -236,7 +236,7 @@ namespace Cliver.InvoiceParser
                     List<Settings.Template.FloatingAnchor.ImageDataElement.ImageBox> ibs = ((Settings.Template.FloatingAnchor.ImageDataElement)fa.Get()).ImageBoxs;
                     if (ibs.Count < 1)
                         return null;
-                    PointF? p0 = ibs[0].ImageData.FindWithinImage(ImageData, pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance);
+                    PointF? p0 = ibs[0].ImageData.FindWithinImage(ImageData, pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance, pageCollection.ActiveTemplate.FindBestImageMatch);
                     if (p0 == null)
                         return null;
                     List<RectangleF> rs = new List<RectangleF>();

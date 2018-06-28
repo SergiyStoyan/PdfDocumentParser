@@ -981,11 +981,9 @@ namespace Cliver.InvoiceParser
 
                 //imageResolution.Value = template.ImageResolution;
                 pagesRotation = t.PagesRotation;
-
                 autoDeskew.Checked = t.AutoDeskew;
-
+                findBestImageMatch.Checked = t.FindBestImageMatch;
                 brightnessTolerance.Value = (decimal)t.BrightnessTolerance;
-
                 differentPixelNumberTolerance.Value = (decimal)t.DifferentPixelNumberTolerance;
 
                 floatingAnchors.Rows.Clear();
@@ -1332,6 +1330,12 @@ namespace Cliver.InvoiceParser
 
             t.Name = name.Text;
 
+            t.PagesRotation = pagesRotation;
+            t.AutoDeskew = autoDeskew.Checked;
+            t.FindBestImageMatch = findBestImageMatch.Checked;
+            t.BrightnessTolerance = (float)brightnessTolerance.Value;
+            t.DifferentPixelNumberTolerance = (float)differentPixelNumberTolerance.Value;
+
             t.FloatingAnchors = new List<Settings.Template.FloatingAnchor>();
             foreach (DataGridViewRow r in floatingAnchors.Rows)
                 if (r.Cells["Id3"].Value != null)
@@ -1385,17 +1389,6 @@ namespace Cliver.InvoiceParser
                     t.Fields.Add(f);
                 }
             }
-
-            //if (pageRotation.SelectedIndex <= 0)
-            //    template.PageRotationRules = null;
-            //else
-            //    template.PageRotationRules = new List<Settings.Template.PageRotationRule> { new Settings.Template.PageRotationRule { Angle = pageRotation.SelectedIndex * 90 } };
-            t.PagesRotation = pagesRotation;
-
-            t.AutoDeskew = autoDeskew.Checked;
-
-            t.BrightnessTolerance = (float)brightnessTolerance.Value;
-            t.DifferentPixelNumberTolerance = (float)differentPixelNumberTolerance.Value;
 
             t.TestFile = testFile.Text;
 

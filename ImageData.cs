@@ -112,28 +112,38 @@ namespace Cliver.InvoiceParser
          */
         public bool ImageIsSimilar(ImageData imageData, float brightnessTolerance, float differentPixelNumberTolerance)
         {
-            return isHashMatch(imageData, 0, 0, (int)(brightnessTolerance * 255), (int)(Hash.Length * differentPixelNumberTolerance));
+            int differentPixelNumber;
+            return isHashMatch(imageData, 0, 0, (int)(brightnessTolerance * 255), (int)(Hash.Length * differentPixelNumberTolerance), out differentPixelNumber);
         }
 
         /*!!!ATTENTION!!!
          * tolerance values cannot be 0 even when comparing identical images! Because of separate rescaling of an image and its fragment, some pixels become not same!
          */
-        public System.Drawing.PointF? FindWithinImage(ImageData imageData, float brightnessTolerance, float differentPixelNumberTolerance, System.Drawing.PointF? startPoint = null)
+        public System.Drawing.PointF? FindWithinImage(ImageData imageData, float brightnessTolerance, float differentPixelNumberTolerance, bool findBestMatch, System.Drawing.PointF? startPoint = null)
         {
             int brightnessMaxDifference = (int)(brightnessTolerance * 255);
             int differentPixelMaxNumber = (int)(Hash.Length * differentPixelNumberTolerance);
             int bw = imageData.Width - Width;
             int bh = imageData.Height - Height;
+            PointF? p = null;
+            int minDifferentPixelNumber = int.MaxValue;
             for (int x = 0; x < bw; x++)
                 for (int y = 0; y < bh; y++)
-                    if (isHashMatch(imageData, x, y, brightnessMaxDifference, differentPixelMaxNumber))
-                        //return new System.Drawing.PointF((float)x / Settings.General.Image2PdfResolutionRatio, (float)y / Settings.General.Image2PdfResolutionRatio);
-                        return new System.Drawing.PointF(x, y);
-            return null;
+                {
+                    int differentPixelNumber;
+                    if (isHashMatch(imageData, x, y, brightnessMaxDifference, differentPixelMaxNumber, out differentPixelNumber))
+                    {
+                        if (!findBestMatch)
+                            return new PointF(x, y);
+                        if (minDifferentPixelNumber > differentPixelNumber)
+                            p = new PointF(x, y);
+                    }
+                }
+            return p;
         }
-        bool isHashMatch(ImageData imageData, int x, int y, int brightnessMaxDifference, int differentPixelMaxNumber)
+        bool isHashMatch(ImageData imageData, int x, int y, int brightnessMaxDifference, int differentPixelMaxNumber, out int differentPixelNumber)
         {
-            int differentPixelNumber = 0;
+            differentPixelNumber = 0;
             for (int i = 0; i < Width; i++)
                 for (int j = 0; j < Height; j++)
                 {
