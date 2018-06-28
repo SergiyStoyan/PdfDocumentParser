@@ -41,10 +41,10 @@ namespace Cliver.InvoiceParser
                     _bitmap.Dispose();
                     _bitmap = null;
                 }
-                if (_bitmapPreparedForTemplate != null)
+                if (_bitmapPreparedByTemplate != null)
                 {
-                    _bitmapPreparedForTemplate.Dispose();
-                    _bitmapPreparedForTemplate = null;
+                    _bitmapPreparedByTemplate.Dispose();
+                    _bitmapPreparedByTemplate = null;
                 }
                 if (_imageData != null)
                 {
@@ -78,10 +78,10 @@ namespace Cliver.InvoiceParser
         //            return;
         //        if (_activeTemplate.PagesRotation != value.PagesRotation || _activeTemplate.AutoDeskew != value.AutoDeskew)
         //        {
-        //            if (BitmapPreparedForTemplate != null)
+        //            if (BitmapPreparedByTemplate != null)
         //            {
-        //                BitmapPreparedForTemplate.Dispose();
-        //                _bitmapPreparedForTemplate = null;
+        //                BitmapPreparedByTemplate.Dispose();
+        //                _bitmapPreparedByTemplate = null;
         //            }
         //        }
         //        floatingAnchorIds2point0.Clear();
@@ -99,10 +99,10 @@ namespace Cliver.InvoiceParser
                 return;
             if (pageCollection.ActiveTemplate.PagesRotation != newTemplate.PagesRotation || pageCollection.ActiveTemplate.AutoDeskew != newTemplate.AutoDeskew)
             {
-                if (BitmapPreparedForTemplate != null)
+                if (BitmapPreparedByTemplate != null)
                 {
-                    BitmapPreparedForTemplate.Dispose();
-                    _bitmapPreparedForTemplate = null;
+                    BitmapPreparedByTemplate.Dispose();
+                    _bitmapPreparedByTemplate = null;
                 }
             }
             floatingAnchorIds2point0.Clear();
@@ -115,15 +115,16 @@ namespace Cliver.InvoiceParser
             floatingAnchorIds2point0.Remove(floatingAnchorId);
         }
 
-        public Bitmap GetRectangeFromBitmapPreparedForTemplate(float x, float y, float w, float h)
+        public Bitmap GetRectangeFromBitmapPreparedByTemplate(float x, float y, float w, float h)
         {
-            return BitmapPreparedForTemplate.Clone(new RectangleF(x, y, w, h), System.Drawing.Imaging.PixelFormat.Undefined);
+            return BitmapPreparedByTemplate.Clone(new RectangleF(x, y, w, h), System.Drawing.Imaging.PixelFormat.Undefined);
+            //return ImageRoutines.GetCopy(BitmapPreparedByTemplate, new RectangleF(x, y, w, h));
         }
-        public Bitmap BitmapPreparedForTemplate
+        public Bitmap BitmapPreparedByTemplate
         {
             get
             {
-                if (_bitmapPreparedForTemplate == null)
+                if (_bitmapPreparedByTemplate == null)
                 {
                     Bitmap b;
                     if (pageCollection.ActiveTemplate.PagesRotation == Settings.Template.PageRotations.NONE && !pageCollection.ActiveTemplate.AutoDeskew)
@@ -131,7 +132,7 @@ namespace Cliver.InvoiceParser
                     else
                     {
                         b = Bitmap.Clone(new Rectangle(0, 0, Bitmap.Width, Bitmap.Height), System.Drawing.Imaging.PixelFormat.Undefined);
-                        //b = ImageRoutines.GetCopy(b);
+                        //b = ImageRoutines.GetCopy(Bitmap);
                         switch (pageCollection.ActiveTemplate.PagesRotation)
                         {
                             case Settings.Template.PageRotations.NONE:
@@ -166,12 +167,12 @@ namespace Cliver.InvoiceParser
                             }
                         }
                     }
-                    _bitmapPreparedForTemplate = b;
+                    _bitmapPreparedByTemplate = b;
                 }
-                return _bitmapPreparedForTemplate;
+                return _bitmapPreparedByTemplate;
             }
         }
-        Bitmap _bitmapPreparedForTemplate = null;
+        Bitmap _bitmapPreparedByTemplate = null;
 
         public PointF? GetFloatingAnchorPoint0(int floatingAnchorId)
         {
@@ -235,7 +236,7 @@ namespace Cliver.InvoiceParser
                     List<Settings.Template.FloatingAnchor.ImageDataElement.ImageBox> ibs = ((Settings.Template.FloatingAnchor.ImageDataElement)fa.Get()).ImageBoxs;
                     if (ibs.Count < 1)
                         return null;
-                    PointF? p0 = ibs[0].ImageData.FindWithinImage(imageData);
+                    PointF? p0 = ibs[0].ImageData.FindWithinImage(ImageData, pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance);
                     if (p0 == null)
                         return null;
                     List<RectangleF> rs = new List<RectangleF>();
@@ -244,7 +245,7 @@ namespace Cliver.InvoiceParser
                     for (int i = 1; i < ibs.Count; i++)
                     {
                         Settings.Template.RectangleF r = new Settings.Template.RectangleF(ibs[i].Rectangle.X + point0.X, ibs[i].Rectangle.Height + point0.Y, ibs[i].Rectangle.Width, ibs[i].Rectangle.Height);
-                        if (!ibs[i].ImageData.ImageIsSimilar(new ImageData(GetRectangeFromBitmapPreparedForTemplate(r.X, r.Y, r.Width, r.Height))))
+                        if (!ibs[i].ImageData.ImageIsSimilar(new ImageData(GetRectangeFromBitmapPreparedByTemplate(r.X, r.Y, r.Width, r.Height)), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance))
                             return null;
                         rs.Add(r.GetSystemRectangleF());
                     }
@@ -297,19 +298,19 @@ namespace Cliver.InvoiceParser
         //        case Settings.Template.ValueTypes.ImageData:
         //            {
         //                ImageData id = (ImageData)e.Get();
-        //                return id.ImageIsSimilar(new ImageData(GetRectangeFromBitmapPreparedForTemplate(new Settings.Template.RectangleF(point0.X, point0.Y, id.Width, id.Height))));
+        //                return id.ImageIsSimilar(new ImageData(GetRectangeFromBitmapPreparedByTemplate(new Settings.Template.RectangleF(point0.X, point0.Y, id.Width, id.Height))));
         //            }
         //        default:
         //            throw new Exception("Unknown option: " + e.ElementType);
         //    }
         //}
 
-        ImageData imageData
+        public ImageData ImageData
         {
             get
             {
                 if (_imageData == null)
-                    _imageData = new ImageData(Bitmap);
+                    _imageData = new ImageData(BitmapPreparedByTemplate);
                 return _imageData;
             }
         }
@@ -359,7 +360,7 @@ namespace Cliver.InvoiceParser
                     case Settings.Template.ValueTypes.ImageData:
                         {
                             ImageData id = ImageData.Deserialize(m.Value);
-                            if (id.ImageIsSimilar((ImageData)(v)))
+                            if (id.ImageIsSimilar((ImageData)(v), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance))
                                 break;
                             error = "InvoiceFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.InvoiceFirstPageRecognitionMarks.IndexOf(m) + "]: image is not similar.";
                             return false;
@@ -386,31 +387,36 @@ namespace Cliver.InvoiceParser
         {
             //try
             //{
-                PointF point0 = new PointF(0, 0);
-                if (floatingAnchorId != null)
+            if(r_.Width <= Settings.General.CoordinateDeviationMargin || r_.Height <= Settings.General.CoordinateDeviationMargin)
+            {
+                error = "Rectangular is malformed.";
+                return null;
+            }
+            PointF point0 = new PointF(0, 0);
+            if (floatingAnchorId != null)
+            {
+                PointF? p0;
+                p0 = GetFloatingAnchorPoint0((int)floatingAnchorId);
+                if (p0 == null)
                 {
-                    PointF? p0;
-                    p0 = GetFloatingAnchorPoint0((int)floatingAnchorId);
-                    if (p0 == null)
-                    {
-                        error = "FloatingAnchor[" + floatingAnchorId + "] not found.";
-                        return null;
-                    }
-                    point0 = (PointF)p0;
+                    error = "FloatingAnchor[" + floatingAnchorId + "] not found.";
+                    return null;
                 }
-                Settings.Template.RectangleF r = new Settings.Template.RectangleF(r_.X + point0.X, r_.Y + point0.Y, r_.Width, r_.Height);
-                error = null;
-                switch (valueType)
-                {
-                    case Settings.Template.ValueTypes.PdfText:
-                        return Pdf.GetTextByTopLeftCoordinates(CharBoxs, r.X, r.Y, r.Width, r.Height);
-                    case Settings.Template.ValueTypes.OcrText:
-                        return TesseractW.This.GetText(BitmapPreparedForTemplate, r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);
-                    case Settings.Template.ValueTypes.ImageData:
-                        return new ImageData(GetRectangeFromBitmapPreparedForTemplate(r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio));
-                    default:
-                        throw new Exception("Unknown option: " + valueType);
-                }
+                point0 = (PointF)p0;
+            }
+            Settings.Template.RectangleF r = new Settings.Template.RectangleF(r_.X + point0.X, r_.Y + point0.Y, r_.Width, r_.Height);
+            error = null;
+            switch (valueType)
+            {
+                case Settings.Template.ValueTypes.PdfText:
+                    return Pdf.GetTextByTopLeftCoordinates(CharBoxs, r.X, r.Y, r.Width, r.Height);
+                case Settings.Template.ValueTypes.OcrText:
+                    return TesseractW.This.GetText(BitmapPreparedByTemplate, r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);
+                case Settings.Template.ValueTypes.ImageData:
+                    return new ImageData(GetRectangeFromBitmapPreparedByTemplate(r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio));
+                default:
+                    throw new Exception("Unknown option: " + valueType);
+            }
             //}
             //catch(Exception e)
             //{
@@ -418,6 +424,7 @@ namespace Cliver.InvoiceParser
             //}
             //return null;
         }
+        static Dictionary<Bitmap, ImageData> bs2id = new Dictionary<Bitmap, ImageData>();
 
         Dictionary<string, string> fieldNames2texts = new Dictionary<string, string>();
 

@@ -72,18 +72,7 @@ namespace Cliver.InvoiceParser
             Hash = getBitmapHash(bitmap);
             Width = Hash.GetLength(0);
             Height = Hash.GetLength(1);
-
-            //bool found = false;
-            //foreach (ImageData id in bs2id.Values)
-            //    if (EqualTo(id))
-            //    {
-            //        found = true;
-            //        break;
-            //    }
-            //if (!found)
-            //    bs2id[bitmap] = this;
         }
-        //static Dictionary<Bitmap, ImageData> bs2id = new Dictionary<Bitmap, ImageData>();
         public bool EqualTo(ImageData id)
         {
             if (Width != id.Width || Height != id.Height)
@@ -112,18 +101,24 @@ namespace Cliver.InvoiceParser
                 {
                     Color c = Color.FromArgb(rawImageData[y * w + x]);
                     //hash[x, y] = (byte)(c.GetBrightness() * 255);
-                    hash[x, y] = (byte)((c.GetBrightness() < 0.9 ? 0 : 1) * 255);
+                    hash[x, y] = (byte)((c.R + c.G + c.B) / 3);
+                    //hash[x, y] = (byte)((c.GetBrightness() < 0.9 ? 0 : 1) * 255);
                 }
             }
             return hash;
         }
-        const float brightnessTolerance = 0.5f;
-        const float differentPixelNumberTolerance = 0.05f;
-        public bool ImageIsSimilar(ImageData imageData, float brightnessTolerance = brightnessTolerance, float differentPixelNumberTolerance = differentPixelNumberTolerance)
+        /*!!!ATTENTION!!!
+         * tolerance values cannot be 0 even when comparing identical images! Because of separate rescaling of an image and its fragment, some pixels become not same!
+         */
+        public bool ImageIsSimilar(ImageData imageData, float brightnessTolerance, float differentPixelNumberTolerance)
         {
             return isHashMatch(imageData, 0, 0, (int)(brightnessTolerance * 255), (int)(Hash.Length * differentPixelNumberTolerance));
         }
-        public System.Drawing.PointF? FindWithinImage(ImageData imageData, System.Drawing.PointF? startPoint = null, float brightnessTolerance = brightnessTolerance, float differentPixelNumberTolerance = differentPixelNumberTolerance)
+
+        /*!!!ATTENTION!!!
+         * tolerance values cannot be 0 even when comparing identical images! Because of separate rescaling of an image and its fragment, some pixels become not same!
+         */
+        public System.Drawing.PointF? FindWithinImage(ImageData imageData, float brightnessTolerance, float differentPixelNumberTolerance, System.Drawing.PointF? startPoint = null)
         {
             int brightnessMaxDifference = (int)(brightnessTolerance * 255);
             int differentPixelMaxNumber = (int)(Hash.Length * differentPixelNumberTolerance);

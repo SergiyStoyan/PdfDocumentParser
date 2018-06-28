@@ -141,6 +141,7 @@ namespace Cliver.InvoiceParser
                                                 TextBoxs = new List<Settings.Template.FloatingAnchor.OcrTextElement.TextBox>()
                                             };
                                         string error;
+                                        pages.ActiveTemplate = getTemplateFromUI(false);
                                         selectedOcrTextElement.TextBoxs.Add(new Settings.Template.FloatingAnchor.OcrTextElement.TextBox
                                         {
                                             Rectangle = Settings.Template.RectangleF.GetFromSystemRectangleF(selectedR),
@@ -156,6 +157,7 @@ namespace Cliver.InvoiceParser
                                                 ImageBoxs = new List<Settings.Template.FloatingAnchor.ImageDataElement.ImageBox>()
                                             };
                                         string error;
+                                        pages.ActiveTemplate = getTemplateFromUI(false);
                                         selectedImageDataElement.ImageBoxs.Add(new Settings.Template.FloatingAnchor.ImageDataElement.ImageBox
                                         {
                                             Rectangle = Settings.Template.RectangleF.GetFromSystemRectangleF(selectedR),
@@ -181,6 +183,7 @@ namespace Cliver.InvoiceParser
                             if (fai != null)
                             {
                                 fa = getFloatingAnchor((int)fai);
+                                pages.ActiveTemplate = getTemplateFromUI(false);
                                 List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
                                 if (rs == null || rs.Count < 1)
                                     throw new Exception("Could not find FloatingAnchor " + fa.Id + " in the page");
@@ -201,6 +204,7 @@ namespace Cliver.InvoiceParser
                             if (fai != null)
                             {
                                 fa = getFloatingAnchor((int)fai);
+                                pages.ActiveTemplate = getTemplateFromUI(false);
                                 List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
                                 if (rs == null || rs.Count < 1)
                                     throw new Exception("Could not find FloatingAnchor " + fa.Id + " in the page");
@@ -372,8 +376,9 @@ namespace Cliver.InvoiceParser
                         break;
                     case "FloatingAnchorId2":
                         if (fa != null)
-                        {
-                            List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
+                            {
+                                pages.ActiveTemplate = getTemplateFromUI(false);
+                                List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
                             if (rs == null || rs.Count < 1)
                                 throw new Exception("Could not find FloatingAnchor " + fa.Id + " in the page");
                             r.X -= rs[0].X;
@@ -481,6 +486,7 @@ namespace Cliver.InvoiceParser
                         case "FloatingAnchorId":
                             if (fa != null)
                             {
+                                pages.ActiveTemplate = getTemplateFromUI(false);
                                 List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
                                 if (rs == null || rs.Count < 1)
                                     throw new Exception("Could not find FloatingAnchor " + fa.Id + " in the page");
@@ -765,6 +771,7 @@ namespace Cliver.InvoiceParser
                 setStatus(statuses.WARNING,"FindFloatingAnchor[" + fa.Id + "] is not defined.");
                 return;
             }
+            pages.ActiveTemplate = getTemplateFromUI(false);
             List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
             if (rs == null || rs.Count < 1)
             {
@@ -808,7 +815,7 @@ namespace Cliver.InvoiceParser
         {
             if (pages == null)
                 return;
-            scaledCurrentPageBitmap = ImageRoutines.GetScaled(pages[currentPage].BitmapPreparedForTemplate, (float)pictureScale.Value * Settings.General.Image2PdfResolutionRatio);
+            scaledCurrentPageBitmap = ImageRoutines.GetScaled(pages[currentPage].BitmapPreparedByTemplate, (float)pictureScale.Value * Settings.General.Image2PdfResolutionRatio);
             picture.Image = scaledCurrentPageBitmap;
         }
         Bitmap scaledCurrentPageBitmap;
@@ -830,6 +837,7 @@ namespace Cliver.InvoiceParser
                 float x = r.X, y = r.Y;
                 if (fa != null)
                 {
+                    pages.ActiveTemplate = getTemplateFromUI(false);
                     List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
                     if (rs == null || rs.Count < 1)
                     {
@@ -845,6 +853,7 @@ namespace Cliver.InvoiceParser
                 drawBox(Settings.General.SelectionBoxColor, x, y, r.Width, r.Height, renewImage);
 
                 string error;
+                pages.ActiveTemplate = getTemplateFromUI(false);
                 object v = pages[currentPage].GetValue(null, new Settings.Template.RectangleF(x, y, r.Width, r.Height), valueType, out error);
                 switch (valueType)
                 {
@@ -971,8 +980,13 @@ namespace Cliver.InvoiceParser
                 name.Text = t.Name;
 
                 //imageResolution.Value = template.ImageResolution;
+                pagesRotation = t.PagesRotation;
 
                 autoDeskew.Checked = t.AutoDeskew;
+
+                brightnessTolerance.Value = (decimal)t.BrightnessTolerance;
+
+                differentPixelNumberTolerance.Value = (decimal)t.DifferentPixelNumberTolerance;
 
                 floatingAnchors.Rows.Clear();
                 if (t.FloatingAnchors != null)
@@ -1298,6 +1312,10 @@ namespace Cliver.InvoiceParser
                 else
                     return (Settings.Template.PageRotations)pageRotation.SelectedIndex;
             }
+            set
+            {
+                pageRotation.SelectedValue = value;
+            }
         }
 
         Settings.Template getTemplateFromUI(bool savingValidation)
@@ -1345,11 +1363,19 @@ namespace Cliver.InvoiceParser
 
             t.Fields = new List<Settings.Template.Field>();
             foreach (DataGridViewRow r in fields.Rows)
-                if (!string.IsNullOrWhiteSpace((string)r.Cells["Name_"].Value))
+            {
+                string name = (string)r.Cells["Name_"].Value;
+                if (!string.IsNullOrWhiteSpace(name))
                 {
+                    if (r.Cells["Rectangle"].Value == null)
+                    {
+                        if (savingValidation)
+                            throw new Exception("Field '" + name + "' is not set!");
+                        continue;
+                    }
                     Settings.Template.Field f = new Settings.Template.Field
                     {
-                        Name = ((string)r.Cells["Name_"].Value).Trim(),
+                        Name = name.Trim(),
                         Rectangle = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>((string)r.Cells["Rectangle"].Value),
                         ValueType = Convert.ToBoolean(r.Cells["Ocr"].Value) ? Settings.Template.ValueTypes.OcrText : Settings.Template.ValueTypes.PdfText,
                         FloatingAnchorId = (int?)r.Cells["FloatingAnchorId"].Value
@@ -1358,6 +1384,7 @@ namespace Cliver.InvoiceParser
                         throw new Exception("There is no FloatingAnchor with Id=" + f.FloatingAnchorId);
                     t.Fields.Add(f);
                 }
+            }
 
             //if (pageRotation.SelectedIndex <= 0)
             //    template.PageRotationRules = null;
@@ -1366,6 +1393,9 @@ namespace Cliver.InvoiceParser
             t.PagesRotation = pagesRotation;
 
             t.AutoDeskew = autoDeskew.Checked;
+
+            t.BrightnessTolerance = (float)brightnessTolerance.Value;
+            t.DifferentPixelNumberTolerance = (float)differentPixelNumberTolerance.Value;
 
             t.TestFile = testFile.Text;
 

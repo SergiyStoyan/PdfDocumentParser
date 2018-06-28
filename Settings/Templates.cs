@@ -93,10 +93,11 @@ namespace Cliver.InvoiceParser
                 Clockwise180,
                 Clockwise270,
             }
-
-            public ImageData Position0Anchor;//when set, all the absolute cooordinates in the template are counted from this point
-
+            
             public bool AutoDeskew = false;
+
+            public float BrightnessTolerance = 0.4f;
+            public float DifferentPixelNumberTolerance = 0.01f;
 
             public List<FloatingAnchor> FloatingAnchors;
 

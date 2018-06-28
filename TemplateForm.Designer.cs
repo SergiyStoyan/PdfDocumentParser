@@ -79,6 +79,10 @@
             this.Rectangle2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ValueType2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Value2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label11 = new System.Windows.Forms.Label();
+            this.brightnessTolerance = new System.Windows.Forms.NumericUpDown();
+            this.differentPixelNumberTolerance = new System.Windows.Forms.NumericUpDown();
+            this.label13 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -99,6 +103,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.invoiceFirstPageRecognitionMarks)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.brightnessTolerance)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.differentPixelNumberTolerance)).BeginInit();
             this.SuspendLayout();
             // 
             // picture
@@ -174,15 +180,19 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.differentPixelNumberTolerance);
+            this.groupBox1.Controls.Add(this.label13);
+            this.groupBox1.Controls.Add(this.brightnessTolerance);
+            this.groupBox1.Controls.Add(this.label11);
             this.groupBox1.Controls.Add(this.pageRotation);
             this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.autoDeskew);
-            this.groupBox1.Location = new System.Drawing.Point(0, 237);
+            this.groupBox1.Location = new System.Drawing.Point(0, 209);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(440, 54);
+            this.groupBox1.Size = new System.Drawing.Size(440, 82);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Scanned Pdf Settings";
+            this.groupBox1.Text = "Scanned Document Settings";
             // 
             // pageRotation
             // 
@@ -210,7 +220,7 @@
             // autoDeskew
             // 
             this.autoDeskew.AutoSize = true;
-            this.autoDeskew.Location = new System.Drawing.Point(289, 27);
+            this.autoDeskew.Location = new System.Drawing.Point(214, 25);
             this.autoDeskew.Name = "autoDeskew";
             this.autoDeskew.Size = new System.Drawing.Size(88, 17);
             this.autoDeskew.TabIndex = 52;
@@ -221,7 +231,7 @@
             // 
             this.testFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.testFile.Location = new System.Drawing.Point(92, 33);
+            this.testFile.Location = new System.Drawing.Point(92, 30);
             this.testFile.Name = "testFile";
             this.testFile.Size = new System.Drawing.Size(318, 20);
             this.testFile.TabIndex = 10;
@@ -240,7 +250,7 @@
             this.floatingAnchors.MultiSelect = false;
             this.floatingAnchors.Name = "floatingAnchors";
             this.floatingAnchors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.floatingAnchors.Size = new System.Drawing.Size(440, 72);
+            this.floatingAnchors.Size = new System.Drawing.Size(443, 72);
             this.floatingAnchors.TabIndex = 50;
             // 
             // label10
@@ -256,7 +266,7 @@
             // 
             this.flowLayoutPanel2.Controls.Add(this.bText);
             this.flowLayoutPanel2.Controls.Add(this.bIsInvoiceFirstPage);
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 198);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 172);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Size = new System.Drawing.Size(360, 31);
             this.flowLayoutPanel2.TabIndex = 48;
@@ -286,7 +296,7 @@
             // bTestFile
             // 
             this.bTestFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bTestFile.Location = new System.Drawing.Point(416, 30);
+            this.bTestFile.Location = new System.Drawing.Point(416, 27);
             this.bTestFile.Name = "bTestFile";
             this.bTestFile.Size = new System.Drawing.Size(24, 23);
             this.bTestFile.TabIndex = 9;
@@ -306,7 +316,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(-3, 40);
+            this.label2.Location = new System.Drawing.Point(-3, 35);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(50, 13);
             this.label2.TabIndex = 12;
@@ -374,7 +384,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(0, 11);
+            this.label7.Location = new System.Drawing.Point(0, 5);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(37, 13);
             this.label7.TabIndex = 41;
@@ -383,7 +393,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(0, 156);
+            this.label12.Location = new System.Drawing.Point(0, 130);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(40, 13);
             this.label12.TabIndex = 30;
@@ -392,7 +402,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(0, 70);
+            this.label6.Location = new System.Drawing.Point(0, 60);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(87, 13);
             this.label6.TabIndex = 40;
@@ -401,7 +411,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(-3, 130);
+            this.label3.Location = new System.Drawing.Point(-3, 110);
             this.label3.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(113, 13);
@@ -412,7 +422,7 @@
             // 
             this.name.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.name.Location = new System.Drawing.Point(92, 63);
+            this.name.Location = new System.Drawing.Point(92, 56);
             this.name.Name = "name";
             this.name.Size = new System.Drawing.Size(198, 20);
             this.name.TabIndex = 39;
@@ -420,7 +430,7 @@
             // selectionCoordinates
             // 
             this.selectionCoordinates.AutoSize = true;
-            this.selectionCoordinates.Location = new System.Drawing.Point(129, 130);
+            this.selectionCoordinates.Location = new System.Drawing.Point(129, 110);
             this.selectionCoordinates.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.selectionCoordinates.Name = "selectionCoordinates";
             this.selectionCoordinates.Size = new System.Drawing.Size(25, 13);
@@ -430,7 +440,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(-3, 101);
+            this.label5.Location = new System.Drawing.Point(-2, 85);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(85, 13);
             this.label5.TabIndex = 38;
@@ -448,7 +458,7 @@
             // bTestFileFilterRegex
             // 
             this.bTestFileFilterRegex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bTestFileFilterRegex.Location = new System.Drawing.Point(393, 93);
+            this.bTestFileFilterRegex.Location = new System.Drawing.Point(393, 81);
             this.bTestFileFilterRegex.Name = "bTestFileFilterRegex";
             this.bTestFileFilterRegex.Size = new System.Drawing.Size(47, 23);
             this.bTestFileFilterRegex.TabIndex = 37;
@@ -460,7 +470,7 @@
             // 
             this.lStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lStatus.Location = new System.Drawing.Point(51, 153);
+            this.lStatus.Location = new System.Drawing.Point(51, 127);
             this.lStatus.Multiline = true;
             this.lStatus.Name = "lStatus";
             this.lStatus.ReadOnly = true;
@@ -472,7 +482,7 @@
             // 
             this.fileFilterRegex.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.fileFilterRegex.Location = new System.Drawing.Point(92, 94);
+            this.fileFilterRegex.Location = new System.Drawing.Point(92, 82);
             this.fileFilterRegex.Name = "fileFilterRegex";
             this.fileFilterRegex.Size = new System.Drawing.Size(295, 20);
             this.fileFilterRegex.TabIndex = 36;
@@ -668,6 +678,80 @@
             this.Value2.Name = "Value2";
             this.Value2.ReadOnly = true;
             // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(1, 53);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(110, 13);
+            this.label11.TabIndex = 54;
+            this.label11.Text = "Brightness Tolerance:";
+            // 
+            // brightnessTolerance
+            // 
+            this.brightnessTolerance.DecimalPlaces = 2;
+            this.brightnessTolerance.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.brightnessTolerance.Location = new System.Drawing.Point(117, 50);
+            this.brightnessTolerance.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.brightnessTolerance.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.brightnessTolerance.Name = "brightnessTolerance";
+            this.brightnessTolerance.Size = new System.Drawing.Size(55, 20);
+            this.brightnessTolerance.TabIndex = 55;
+            this.brightnessTolerance.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // differentPixelNumberTolerance
+            // 
+            this.differentPixelNumberTolerance.DecimalPlaces = 2;
+            this.differentPixelNumberTolerance.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.differentPixelNumberTolerance.Location = new System.Drawing.Point(355, 50);
+            this.differentPixelNumberTolerance.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.differentPixelNumberTolerance.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.differentPixelNumberTolerance.Name = "differentPixelNumberTolerance";
+            this.differentPixelNumberTolerance.Size = new System.Drawing.Size(55, 20);
+            this.differentPixelNumberTolerance.TabIndex = 57;
+            this.differentPixelNumberTolerance.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(183, 53);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(163, 13);
+            this.label13.TabIndex = 56;
+            this.label13.Text = "Different Pixel NumberTolerance:";
+            // 
             // TemplateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -702,6 +786,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.invoiceFirstPageRecognitionMarks)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).EndInit();
             this.flowLayoutPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.brightnessTolerance)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.differentPixelNumberTolerance)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -759,5 +845,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Rectangle2;
         private System.Windows.Forms.DataGridViewComboBoxColumn ValueType2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Value2;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.NumericUpDown brightnessTolerance;
+        private System.Windows.Forms.NumericUpDown differentPixelNumberTolerance;
+        private System.Windows.Forms.Label label13;
     }
 }

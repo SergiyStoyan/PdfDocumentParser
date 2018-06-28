@@ -161,6 +161,7 @@
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Settings\Constants.cs" />
+    <Compile Include="Settings\ImageProcessing.cs" />
     <Compile Include="Settings\General.cs" />
     <Compile Include="ImageData.cs" />
     <Compile Include="Settings\Templates.cs" />
