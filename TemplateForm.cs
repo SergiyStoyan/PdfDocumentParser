@@ -275,7 +275,10 @@ namespace Cliver.InvoiceParser
                     case "Value3":
                         //if (floatingAnchors.Rows[e.RowIndex].Cells["Value3"].Value == null)                        
                         //    floatingAnchors.Rows[e.RowIndex].Cells["Id3"].Value = null;
-                        onFloatingAnchorsChanged((int?)floatingAnchors.Rows[e.RowIndex].Cells["Id3"].Value);
+                        int? fai = (int?)floatingAnchors.Rows[e.RowIndex].Cells["Id3"].Value;
+                        onFloatingAnchorsChanged(fai);
+                        if (fai != null)
+                            drawFloatingAnchor((int)fai);
                         break;
                     case "ValueType3":
                         floatingAnchors.Rows[e.RowIndex].Cells["Value3"].Value = null;
@@ -302,20 +305,9 @@ namespace Cliver.InvoiceParser
                         floatingAnchors.Rows[i].Selected = true;
                         return;
                     }
-                    var cs = r.Cells;
-                    if (cs["Id3"].Value == null)
-                        return;
-                    Settings.Template.FloatingAnchor fa = getFloatingAnchor((int)cs["Id3"].Value);
-                    List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
-                    if (rs == null || rs.Count < 1)
-                    {
-                        lStatus.BackColor = Color.LightPink;
-                        lStatus.Text = "FindFloatingAnchor[" + fa.Id + "] is not found.";
-                        return;
-                    }
-                    lStatus.BackColor = Color.LightGreen;
-                    lStatus.Text = "FindFloatingAnchor[" + fa.Id + "] is found.";
-                    drawBoxes(Settings.General.BoundingBoxColor, rs, true);
+                    int? fai = (int?)r.Cells["Id3"].Value;
+                    if (fai != null)
+                        drawFloatingAnchor((int)fai);
                 }
                 catch (Exception ex)
                 {
@@ -768,6 +760,21 @@ namespace Cliver.InvoiceParser
 
             FloatingAnchorId2.DataSource = fais;
             FloatingAnchorId.DataSource = fais;
+        }
+
+        void drawFloatingAnchor(int floatingAnchorId)
+        {
+            Settings.Template.FloatingAnchor fa = getFloatingAnchor(floatingAnchorId);
+            List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
+            if (rs == null || rs.Count < 1)
+            {
+                lStatus.BackColor = Color.LightPink;
+                lStatus.Text = "FindFloatingAnchor[" + fa.Id + "] is not found.";
+                return;
+            }
+            lStatus.BackColor = Color.LightGreen;
+            lStatus.Text = "FindFloatingAnchor[" + fa.Id + "] is found.";
+            drawBoxes(Settings.General.BoundingBoxColor, rs, true);
         }
 
         Settings.Template.FloatingAnchor getFloatingAnchor(int id)
