@@ -111,8 +111,8 @@ namespace Cliver.InvoiceParser
                 for (int y = 0; y < h; y++)
                 {
                     Color c = Color.FromArgb(rawImageData[y * w + x]);
-                    //hash[x, y] = (byte)((c.GetBrightness() < 0.9 ? 0 : 1) * 255);
-                    hash[x, y] = (byte)(c.GetBrightness() * 255);
+                    //hash[x, y] = (byte)(c.GetBrightness() * 255);
+                    hash[x, y] = (byte)((c.GetBrightness() < 0.9 ? 0 : 1) * 255);
                 }
             }
             return hash;

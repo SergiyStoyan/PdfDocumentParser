@@ -41,9 +41,6 @@ namespace Cliver.InvoiceParser
             {
                 Application.DoEvents();//make form be drawn completely
                 setUIFromTemplate(template);
-                floatingAnchors.ClearSelection();
-                invoiceFirstPageRecognitionMarks.ClearSelection();
-                fields.ClearSelection();
             };
 
             FormClosed += delegate
@@ -429,19 +426,18 @@ namespace Cliver.InvoiceParser
                         string t2 = extractValueAndDrawBox(fa, r, vt);
                         if (t1 != t2)
                         {
-                            lStatus.BackColor = Color.LightPink;
                             if(vt!= Settings.Template.ValueTypes.ImageData)
-                                lStatus.Text = "InvoiceFirstPageRecognitionMark[" + i + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
+                                setStatus(statuses.ERROR, "InvoiceFirstPageRecognitionMark[" + i + "]:\r\n" + t2 + "\r\n <> \r\n" + t1);
                             else
-                                lStatus.Text = "InvoiceFirstPageRecognitionMark[" + i + "]:\r\nimage is not similar";
+                                setStatus(statuses.ERROR, "InvoiceFirstPageRecognitionMark[" + i + "]:\r\nimage is not similar");
                         }
                         else
                         {
                             lStatus.BackColor = Color.LightGreen;
                             if (vt != Settings.Template.ValueTypes.ImageData)
-                                lStatus.Text = "InvoiceFirstPageRecognitionMark[" + i + "]:\r\n" + t2;
+                                setStatus(statuses.SUCCESS, "InvoiceFirstPageRecognitionMark[" + i + "]:\r\n" + t2);
                             else
-                                lStatus.Text = "InvoiceFirstPageRecognitionMark[" + i + "]:\r\nimage is similar";
+                                setStatus(statuses.SUCCESS, "InvoiceFirstPageRecognitionMark[" + i + "]:\r\nimage is similar");
                         }
                     }
                 }
@@ -766,19 +762,16 @@ namespace Cliver.InvoiceParser
             Settings.Template.FloatingAnchor fa = getFloatingAnchor((int)fai);
             if(fa.Value== null)
             {
-                lStatus.BackColor = Color.LightYellow;
-                lStatus.Text = "FindFloatingAnchor[" + fa.Id + "] is not defined.";
+                setStatus(statuses.WARNING,"FindFloatingAnchor[" + fa.Id + "] is not defined.");
                 return;
             }
             List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
             if (rs == null || rs.Count < 1)
             {
-                lStatus.BackColor = Color.LightPink;
-                lStatus.Text = "FindFloatingAnchor[" + fa.Id + "] is not found.";
+                setStatus(statuses.ERROR, "FindFloatingAnchor[" + fa.Id + "] is not found.");
                 return;
             }
-            lStatus.BackColor = Color.LightGreen;
-            lStatus.Text = "FindFloatingAnchor[" + fa.Id + "] is found.";
+            setStatus(statuses.SUCCESS, "FindFloatingAnchor[" + fa.Id + "] is found.");
             drawBoxes(Settings.General.BoundingBoxColor, rs, true);
         }
 
@@ -839,7 +832,10 @@ namespace Cliver.InvoiceParser
                 {
                     List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
                     if (rs == null || rs.Count < 1)
+                    {
+                        setStatus(statuses.ERROR, "FindFloatingAnchor[" + fa.Id + "] is found.");
                         return null;
+                    }
                     drawBoxes(Settings.General.BoundingBoxColor, rs, renewImage);
                     x += rs[0].X;
                     y += rs[0].Y;
@@ -1038,12 +1034,45 @@ namespace Cliver.InvoiceParser
         }
         bool loadingTemplate = false;
 
+        void setStatus(statuses s, string m)
+        {
+            lStatus.Text = m;
+            switch(s)
+            {
+                case statuses.SUCCESS:
+                    lStatus.BackColor = Color.LightGreen;
+                    break;
+                case statuses.ERROR:
+                    lStatus.BackColor = Color.LightPink;
+                    break;
+                case statuses.WARNING:
+                    lStatus.BackColor = Color.LightYellow;
+                    break;
+                case statuses.NEUTRAL:
+                    lStatus.BackColor = Color.WhiteSmoke;
+                    break;
+                default:
+                    throw new Exception("Unknown option: " + s);
+            }
+        }
+        enum statuses
+        {
+            SUCCESS,
+            NEUTRAL,
+            WARNING,
+            ERROR,
+        }
+
         void showPage(int page_i)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(testFile.Text) || 0 >= page_i || totalPageNumber < page_i)
                     return;
+
+                floatingAnchors.ClearSelection();
+                invoiceFirstPageRecognitionMarks.ClearSelection();
+                fields.ClearSelection();
 
                 currentPage = page_i;
                 tCurrentPage.Text = currentPage.ToString();
