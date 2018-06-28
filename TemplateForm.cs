@@ -33,18 +33,13 @@ namespace Cliver.InvoiceParser
 
             FloatingAnchorId2.ValueType = typeof(int);
             FloatingAnchorId2.DataSource = null;
-
+            
             FloatingAnchorId.ValueType = typeof(int);
             FloatingAnchorId.DataSource = null;
 
-            invoiceFirstPageRecognitionMarks.CurrentCellDirtyStateChanged += delegate
-            {
-                if (invoiceFirstPageRecognitionMarks.IsCurrentCellDirty)
-                    invoiceFirstPageRecognitionMarks.CommitEdit(DataGridViewDataErrorContexts.Commit);
-            };
-
             Shown += delegate
             {
+                Application.DoEvents();//make form be drawn completely
                 setUIFromTemplate(template);
                 floatingAnchors.ClearSelection();
                 invoiceFirstPageRecognitionMarks.ClearSelection();
@@ -64,18 +59,6 @@ namespace Cliver.InvoiceParser
                     pages = null;
                 }
             };
-
-            //KeyDown += delegate (object sender, KeyEventArgs e)
-            //{
-            //    if (e.Control)
-            //        selectedBoxTexts = new HashSet<BoxText>();
-            //};         
-
-            //KeyUp += delegate (object sender, KeyEventArgs e)
-            //{
-            //    if ((e.Modifiers & Keys.Control) != Keys.Control)
-            //        saveSelectedBoxTexts();
-            //};
 
             picture.MouseDown += delegate (object sender, MouseEventArgs e)
             {
@@ -238,10 +221,32 @@ namespace Cliver.InvoiceParser
 
             floatingAnchors.RowsAdded += delegate (object sender, DataGridViewRowsAddedEventArgs e)
             {
-                foreach (DataGridViewRow rr in floatingAnchors.Rows)
+            };
+
+            floatingAnchors.RowValidating += delegate (object sender, DataGridViewCellCancelEventArgs e)
+            {
+                DataGridViewRow r = floatingAnchors.Rows[e.RowIndex];
+                try
                 {
-                    if (rr.Cells["ValueType3"].Value == null)
-                        rr.Cells["ValueType3"].Value = Settings.Template.ValueTypes.PdfText;
+                }
+                catch (Exception ex)
+                {
+                    //LogMessage.Error("Name", ex);
+                    LogMessage.Error(ex);
+                    e.Cancel = true;
+                }
+            };
+
+            floatingAnchors.DefaultValuesNeeded += delegate (object sender, DataGridViewRowEventArgs e)
+            {
+                try
+                {
+                    if (e.Row.Cells["ValueType3"].Value == null)
+                        e.Row.Cells["ValueType3"].Value = Settings.Template.ValueTypes.PdfText;
+                }
+                catch (Exception ex)
+                {
+                    LogMessage.Error(ex);
                 }
             };
 
@@ -250,14 +255,10 @@ namespace Cliver.InvoiceParser
                 onFloatingAnchorsChanged(null);
             };
 
-            floatingAnchors.CellContentClick += delegate (object sender, DataGridViewCellEventArgs e)
+            floatingAnchors.CurrentCellDirtyStateChanged += delegate
             {
-                switch (floatingAnchors.Columns[e.ColumnIndex].Name)
-                {
-                    case "ValueType3":
-                        floatingAnchors.EndEdit();
-                        break;
-                }
+                if (floatingAnchors.IsCurrentCellDirty)
+                    floatingAnchors.CommitEdit(DataGridViewDataErrorContexts.Commit);
             };
 
             floatingAnchors.CellValueChanged += delegate (object sender, DataGridViewCellEventArgs e)
@@ -322,20 +323,38 @@ namespace Cliver.InvoiceParser
 
             invoiceFirstPageRecognitionMarks.RowsAdded += delegate (object sender, DataGridViewRowsAddedEventArgs e)
             {
-                foreach (DataGridViewRow rr in invoiceFirstPageRecognitionMarks.Rows)
+            };
+
+            invoiceFirstPageRecognitionMarks.CurrentCellDirtyStateChanged += delegate
+            {
+                if (invoiceFirstPageRecognitionMarks.IsCurrentCellDirty)
+                    invoiceFirstPageRecognitionMarks.CommitEdit(DataGridViewDataErrorContexts.Commit);                
+            };
+
+            invoiceFirstPageRecognitionMarks.RowValidating += delegate (object sender, DataGridViewCellCancelEventArgs e)
+            {
+                DataGridViewRow r = invoiceFirstPageRecognitionMarks.Rows[e.RowIndex];
+                try
                 {
-                    if (rr.Cells["ValueType2"].Value == null)
-                        rr.Cells["ValueType2"].Value = Settings.Template.ValueTypes.PdfText;
+                }
+                catch (Exception ex)
+                {
+                    //LogMessage.Error("Name", ex);
+                    LogMessage.Error(ex);
+                    e.Cancel = true;
                 }
             };
 
-            invoiceFirstPageRecognitionMarks.CellContentClick += delegate (object sender, DataGridViewCellEventArgs e)
+            invoiceFirstPageRecognitionMarks.DefaultValuesNeeded += delegate (object sender, DataGridViewRowEventArgs e)
             {
-                switch (invoiceFirstPageRecognitionMarks.Columns[e.ColumnIndex].Name)
+                try
                 {
-                    case "ValueType2":
-                        invoiceFirstPageRecognitionMarks.EndEdit();
-                        break;
+                    if (e.Row.Cells["ValueType2"].Value == null)
+                        e.Row.Cells["ValueType2"].Value = Settings.Template.ValueTypes.PdfText;
+                }
+                catch (Exception ex)
+                {
+                    LogMessage.Error(ex);
                 }
             };
 
@@ -378,7 +397,7 @@ namespace Cliver.InvoiceParser
                 }
                 catch (Exception ex)
                 {
-                    Message.Error2(ex);
+                    LogMessage.Error(ex);
                 }
             };
 
@@ -415,22 +434,29 @@ namespace Cliver.InvoiceParser
 
                         //drawBox(Settings.General.SelectionBoxColor, r.X, r.Y, r.Width, r.Height, true);
                         string t1 = (string)cs["Value2"].Value;
-                        string t2 = (string)extractValueAndDrawBox(fa, r, (Settings.Template.ValueTypes)cs["ValueType2"].Value);
+                        var vt = (Settings.Template.ValueTypes)cs["ValueType2"].Value;
+                        string t2 = extractValueAndDrawBox(fa, r, vt);
                         if (t1 != t2)
                         {
                             lStatus.BackColor = Color.LightPink;
-                            lStatus.Text = "InvoiceFirstPageRecognitionMark[" + i + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
+                            if(vt!= Settings.Template.ValueTypes.ImageData)
+                                lStatus.Text = "InvoiceFirstPageRecognitionMark[" + i + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
+                            else
+                                lStatus.Text = "InvoiceFirstPageRecognitionMark[" + i + "]:\r\nimage is not similar";
                         }
                         else
                         {
                             lStatus.BackColor = Color.LightGreen;
-                            lStatus.Text = "InvoiceFirstPageRecognitionMark[" + i + "]:\r\n" + t2;
+                            if (vt != Settings.Template.ValueTypes.ImageData)
+                                lStatus.Text = "InvoiceFirstPageRecognitionMark[" + i + "]:\r\n" + t2;
+                            else
+                                lStatus.Text = "InvoiceFirstPageRecognitionMark[" + i + "]:\r\nimage is similar";
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    Message.Error2(ex);
+                    LogMessage.Error(ex);
                 }
             };
 
@@ -480,7 +506,7 @@ namespace Cliver.InvoiceParser
                 }
                 catch (Exception ex)
                 {
-                    Message.Error2(ex);
+                    LogMessage.Error(ex);
                 }
             };
 
@@ -497,7 +523,8 @@ namespace Cliver.InvoiceParser
                     }
                     catch (Exception ex)
                     {
-                        Message.Error2("Rectangle", ex);
+                        //LogMessage.Error("Rectangle", ex);
+                        LogMessage.Error(ex);
                         e.Cancel = true;
                     }
                 }
@@ -505,7 +532,7 @@ namespace Cliver.InvoiceParser
                 {
                     if (string.IsNullOrWhiteSpace((string)e.FormattedValue))
                     {
-                        Message.Error("Name cannot be empty!");
+                        LogMessage.Error("Name cannot be empty!");
                         e.Cancel = true;
                         return;
                     }
@@ -529,7 +556,8 @@ namespace Cliver.InvoiceParser
                 }
                 catch (Exception ex)
                 {
-                    Message.Error2("Name", ex);
+                    //LogMessage.Error("Name", ex);
+                    LogMessage.Error(ex);
                     e.Cancel = true;
                 }
                 try
@@ -540,7 +568,8 @@ namespace Cliver.InvoiceParser
                 }
                 catch (Exception ex)
                 {
-                    Message.Error2("Rectangle", ex);
+                    //LogMessage.Error("Rectangle", ex);
+                    LogMessage.Error(ex);
                     e.Cancel = true;
                 }
             };
@@ -624,7 +653,7 @@ namespace Cliver.InvoiceParser
 
                     if (!File.Exists(testFile.Text))
                     {
-                        Message.Error("File '" + testFile.Text + "' does not exist!");
+                        LogMessage.Error("File '" + testFile.Text + "' does not exist!");
                         return;
                     }
 
@@ -648,7 +677,8 @@ namespace Cliver.InvoiceParser
                 }
                 catch (Exception ex)
                 {
-                    Message.Error2("FileFilterRegex", ex);
+                    //LogMessage.Error("FileFilterRegex", ex);
+                    LogMessage.Error(ex);
                 }
             };
 
@@ -696,7 +726,7 @@ namespace Cliver.InvoiceParser
             foreach (DataGridViewRow rr in floatingAnchors.Rows)
                 if (rr.Cells["Id3"].Value == null && rr.Cells["Value3"].Value != null && rr.Cells["ValueType3"].Value != null)
                 {
-                    int fai = 0;
+                    int fai = 1;
                     if (fais.Count > 0)
                         fai = fais.Max() + 1;
                     fais.Add(fai);
@@ -706,9 +736,14 @@ namespace Cliver.InvoiceParser
             foreach (DataGridViewRow r in invoiceFirstPageRecognitionMarks.Rows)
             {
                 int? i = (int?)r.Cells["FloatingAnchorId2"].Value;
-                if (i != null && !fais.Contains((int)i) || changedFloatingAnchorId != null && i == changedFloatingAnchorId)
+                if (i != null && !fais.Contains((int)i))
                 {
                     r.Cells["FloatingAnchorId2"].Value = null;
+                    r.Cells["Rectangle2"].Value = null;
+                    r.Cells["Value2"].Value = null;
+                }
+                if (changedFloatingAnchorId != null && i == changedFloatingAnchorId)
+                {
                     r.Cells["Rectangle2"].Value = null;
                     r.Cells["Value2"].Value = null;
                 }
@@ -716,9 +751,14 @@ namespace Cliver.InvoiceParser
             foreach (DataGridViewRow r in fields.Rows)
             {
                 int? i = (int?)r.Cells["FloatingAnchorId"].Value;
-                if (i != null && !fais.Contains((int)i) || changedFloatingAnchorId != null && i == changedFloatingAnchorId)
+                if (i != null && !fais.Contains((int)i))
                 {
                     r.Cells["FloatingAnchorId"].Value = null;
+                    r.Cells["Rectangle"].Value = null;
+                    r.Cells["Value"].Value = null;
+                }
+                if (changedFloatingAnchorId != null && i == changedFloatingAnchorId)
+                {
                     r.Cells["Rectangle"].Value = null;
                     r.Cells["Value"].Value = null;
                 }
@@ -810,7 +850,8 @@ namespace Cliver.InvoiceParser
             }
             catch (Exception ex)
             {
-                Message.Error2("Rectangle", ex);
+                //LogMessage.Error("Rectangle", ex);
+                LogMessage.Error(ex);
             }
             return null;
         }
@@ -1131,7 +1172,7 @@ namespace Cliver.InvoiceParser
             }
             catch (Exception ex)
             {
-                Message.Error2(ex);
+                LogMessage.Error(ex);
             }
             return false;
         }
@@ -1146,7 +1187,7 @@ namespace Cliver.InvoiceParser
             }
             catch (Exception ex)
             {
-                Message.Error(ex);
+                LogMessage.Error(ex);
             }
         }
 
@@ -1173,7 +1214,7 @@ namespace Cliver.InvoiceParser
             }
             else
             {
-                Message.Error("Page is not a number.");
+                LogMessage.Error("Page is not a number.");
                 tCurrentPage.Text = currentPage.ToString();
             }
         }
