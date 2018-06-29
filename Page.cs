@@ -363,23 +363,24 @@ namespace Cliver.InvoiceParser
                             string t1 = FieldPreparation.Normalize(m.Value);
                             string t2 = FieldPreparation.Normalize((string)v);
                             if (t1 == t2)
-                                break;
-                                error = "InvoiceFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.InvoiceFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
-                                return false;
+                                continue;
+                            error = "InvoiceFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.InvoiceFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
+                            return false;
                         }
                     case Settings.Template.ValueTypes.OcrText:
                         {
                             string t1 = FieldPreparation.Normalize(m.Value);
                             string t2 = FieldPreparation.Normalize((string)v);
                             if (t1 == t2)
-                                error = "InvoiceFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.InvoiceFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
+                                continue;
+                            error = "InvoiceFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.InvoiceFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
                             return false;
                         }
                     case Settings.Template.ValueTypes.ImageData:
                         {
                             ImageData id = ImageData.Deserialize(m.Value);
                             if (id.ImageIsSimilar((ImageData)(v), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance))
-                                break;
+                                continue;
                             error = "InvoiceFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.InvoiceFirstPageRecognitionMarks.IndexOf(m) + "]: image is not similar.";
                             return false;
                         }
