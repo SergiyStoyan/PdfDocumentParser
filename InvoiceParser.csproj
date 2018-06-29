@@ -177,7 +177,7 @@
     <Compile Include="FileFilterForm.Designer.cs">
       <DependentUpon>FileFilterForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TesseractW.cs" />
+    <Compile Include="Ocr.cs" />
     <Compile Include="TextForm.cs">
       <SubType>Form</SubType>
     </Compile>

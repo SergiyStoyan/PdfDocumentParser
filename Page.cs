@@ -51,10 +51,14 @@ namespace Cliver.InvoiceParser
                     //imageData.Dispose();
                     _imageData = null;
                 }
-                if (_CharBoxs != null)
+                if (_pdfCharBoxs != null)
                 {
                     //charBoxLists.Dispose();
-                    _CharBoxs = null;
+                    _pdfCharBoxs = null;
+                }
+                if (_ocrCharBoxs != null)
+                {
+                    _ocrCharBoxs = null;
                 }
             }
         }
@@ -70,33 +74,8 @@ namespace Cliver.InvoiceParser
         }
         Bitmap _bitmap;
 
-        //public Settings.Template pageCollection.ActiveTemplate
-        //{
-        //    set
-        //    {
-        //        if (_activeTemplate == value)
-        //            return;
-        //        if (_activeTemplate.PagesRotation != value.PagesRotation || _activeTemplate.AutoDeskew != value.AutoDeskew)
-        //        {
-        //            if (BitmapPreparedByTemplate != null)
-        //            {
-        //                BitmapPreparedByTemplate.Dispose();
-        //                _bitmapPreparedByTemplate = null;
-        //            }
-        //        }
-        //        floatingAnchorIds2point0.Clear();
-        //        _activeTemplate = value;
-        //    }
-        //    get
-        //    {
-        //        return _activeTemplate;
-        //    }
-        //}
-        //Settings.Template _activeTemplate;
         public void OnActiveTemplateUpdating(Settings.Template newTemplate)
         {
-            if (pageCollection.ActiveTemplate == newTemplate)
-                return;
             if (pageCollection.ActiveTemplate.PagesRotation != newTemplate.PagesRotation || pageCollection.ActiveTemplate.AutoDeskew != newTemplate.AutoDeskew)
             {
                 if (BitmapPreparedByTemplate != null)
@@ -104,6 +83,8 @@ namespace Cliver.InvoiceParser
                     BitmapPreparedByTemplate.Dispose();
                     _bitmapPreparedByTemplate = null;
                 }
+                if (_ocrCharBoxs != null)
+                    _ocrCharBoxs = null;
             }
             floatingAnchorIds2point0.Clear();
         }
@@ -197,40 +178,64 @@ namespace Cliver.InvoiceParser
             switch (fa.ValueType)
             {
                 case Settings.Template.ValueTypes.PdfText:
-                    List<Settings.Template.FloatingAnchor.PdfTextValue.CharBox> ses = ((Settings.Template.FloatingAnchor.PdfTextValue)fa.GetValue()).CharBoxs;
-                    if (ses.Count < 1)
-                        return null;
-                    List<Pdf.BoxText> bts = new List<Pdf.BoxText>();
-                    foreach (Pdf.BoxText bt0 in CharBoxs.Where(a => a.Text == ses[0].Char))
                     {
-                        bts.Clear();
-                        bts.Add(bt0);
-                        for (int i = 1; i < ses.Count; i++)
+                        List<Settings.Template.FloatingAnchor.PdfTextValue.CharBox> ses = ((Settings.Template.FloatingAnchor.PdfTextValue)fa.GetValue()).CharBoxs;
+                        if (ses.Count < 1)
+                            return null;
+                        List<Pdf.CharBox> bts = new List<Pdf.CharBox>();
+                        foreach (Pdf.CharBox bt0 in PdfCharBoxs.Where(a => a.Char == ses[0].Char))
                         {
-                            float x = bt0.R.X + ses[i].Rectangle.X - ses[0].Rectangle.X;
-                            float y = bt0.R.Y + ses[i].Rectangle.Y - ses[0].Rectangle.Y;
-                            foreach (Pdf.BoxText bt in CharBoxs.Where(a => a.Text == ses[i].Char))
+                            bts.Clear();
+                            bts.Add(bt0);
+                            for (int i = 1; i < ses.Count; i++)
                             {
-                                if (Math.Abs(bt.R.X - x) > Settings.General.CoordinateDeviationMargin)
-                                    continue;
-                                if (Math.Abs(bt.R.Y - y) > Settings.General.CoordinateDeviationMargin)
-                                    continue;
-                                if (bts.Contains(bt))
-                                    continue;
-                                bts.Add(bt);
+                                float x = bt0.R.X + ses[i].Rectangle.X - ses[0].Rectangle.X;
+                                float y = bt0.R.Y + ses[i].Rectangle.Y - ses[0].Rectangle.Y;
+                                foreach (Pdf.CharBox bt in PdfCharBoxs.Where(a => a.Char == ses[i].Char))
+                                {
+                                    if (Math.Abs(bt.R.X - x) > Settings.General.CoordinateDeviationMargin)
+                                        continue;
+                                    if (Math.Abs(bt.R.Y - y) > Settings.General.CoordinateDeviationMargin)
+                                        continue;
+                                    if (bts.Contains(bt))
+                                        continue;
+                                    bts.Add(bt);
+                                }
                             }
-                        }
-                        if (bts.Count == ses.Count)
-                        {
-                            //PointF point0 = new PointF(bts[0].R.X, bts[0].R.Y);
-                            //if (findFloatingAnchorSecondaryElements(point0, fa))
-                            //    return point0;
-                            return bts.Select(x => x.R).ToList();
+                            if (bts.Count == ses.Count)
+                                return bts.Select(x => x.R).ToList();
                         }
                     }
                     return null;
                 case Settings.Template.ValueTypes.OcrText:
-                    throw new Exception("TBD");//tesseract
+                    {
+                        List<Settings.Template.FloatingAnchor.OcrTextValue.CharBox> ses = ((Settings.Template.FloatingAnchor.OcrTextValue)fa.GetValue()).CharBoxs;
+                        if (ses.Count < 1)
+                            return null;
+                        List<Ocr.CharBox> bts = new List<Ocr.CharBox>();
+                        foreach (Ocr.CharBox bt0 in OcrCharBoxs.Where(a => a.Char == ses[0].Char))
+                        {
+                            bts.Clear();
+                            bts.Add(bt0);
+                            for (int i = 1; i < ses.Count; i++)
+                            {
+                                float x = bt0.R.X + ses[i].Rectangle.X - ses[0].Rectangle.X;
+                                float y = bt0.R.Y + ses[i].Rectangle.Y - ses[0].Rectangle.Y;
+                                foreach (Ocr.CharBox bt in OcrCharBoxs.Where(a => a.Char == ses[i].Char))
+                                {
+                                    if (Math.Abs(bt.R.X - x) > Settings.General.CoordinateDeviationMargin)
+                                        continue;
+                                    if (Math.Abs(bt.R.Y - y) > Settings.General.CoordinateDeviationMargin)
+                                        continue;
+                                    if (bts.Contains(bt))
+                                        continue;
+                                    bts.Add(bt);
+                                }
+                            }
+                            if (bts.Count == ses.Count)
+                                return bts.Select(x => x.R).ToList();
+                        }
+                    }
                     return null;
                 case Settings.Template.ValueTypes.ImageData:
                     List<Settings.Template.FloatingAnchor.ImageDataValue.ImageBox> ibs = ((Settings.Template.FloatingAnchor.ImageDataValue)fa.GetValue()).ImageBoxs;
@@ -270,15 +275,15 @@ namespace Cliver.InvoiceParser
         //    {
         //        case Settings.Template.ValueTypes.PdfText:
         //            {
-        //                List<Settings.Template.FloatingAnchor.PdfTextElement.CharBox> ses = ((Settings.Template.FloatingAnchor.PdfTextElement)e.Get()).CharBoxs;
-        //                List<Pdf.BoxText> bts = new List<Pdf.BoxText>();
+        //                List<Settings.Template.FloatingAnchor.PdfTextElement.CharBox> ses = ((Settings.Template.FloatingAnchor.PdfTextElement)e.Get()).PdfCharBoxs;
+        //                List<Pdf.CharBox> bts = new List<Pdf.CharBox>();
 
         //                bts.Clear();
         //                for (int i = 0; i < ses.Count; i++)
         //                {
         //                    float x = point0.X + ses[i].Rectangle.X - ses[0].Rectangle.X;
         //                    float y = point0.Y + ses[i].Rectangle.Y - ses[0].Rectangle.Y;
-        //                    foreach (Pdf.BoxText bt in charBoxLists.Where(a => a.Text == ses[i].Char))
+        //                    foreach (Pdf.CharBox bt in charBoxLists.Where(a => a.Text == ses[i].Char))
         //                    {
         //                        if (Math.Abs(bt.R.X - x) > Settings.General.CoordinateDeviationMargin)
         //                            continue;
@@ -316,16 +321,29 @@ namespace Cliver.InvoiceParser
         }
         ImageData _imageData;
 
-        public List<Pdf.BoxText> CharBoxs
+        public List<Pdf.CharBox> PdfCharBoxs
         {
             get
             {
-                if (_CharBoxs == null)
-                    _CharBoxs = Pdf.GetCharBoxsFromPage(pageCollection.PdfReader, pageI);
-                return _CharBoxs;
+                if (_pdfCharBoxs == null)
+                    _pdfCharBoxs = Pdf.GetCharBoxsFromPage(pageCollection.PdfReader, pageI);
+                return _pdfCharBoxs;
             }
         }
-        List<Pdf.BoxText> _CharBoxs;
+        List<Pdf.CharBox> _pdfCharBoxs;
+
+        public List<Ocr.CharBox> OcrCharBoxs
+        {
+            get
+            {
+                if (_ocrCharBoxs == null)
+                {
+                    _ocrCharBoxs = Ocr.This.GetCharBoxs(BitmapPreparedByTemplate);
+                }
+                return _ocrCharBoxs;
+            }
+        }
+        List<Ocr.CharBox> _ocrCharBoxs;
 
         public bool IsInvoiceFirstPage()
         {
@@ -409,9 +427,9 @@ namespace Cliver.InvoiceParser
             switch (valueType)
             {
                 case Settings.Template.ValueTypes.PdfText:
-                    return Pdf.GetTextByTopLeftCoordinates(CharBoxs, r.X, r.Y, r.Width, r.Height);
+                    return Pdf.GetTextByTopLeftCoordinates(PdfCharBoxs, r.X, r.Y, r.Width, r.Height);
                 case Settings.Template.ValueTypes.OcrText:
-                    return TesseractW.This.GetText(BitmapPreparedByTemplate, r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);
+                    return Ocr.This.GetText(BitmapPreparedByTemplate, r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);
                 case Settings.Template.ValueTypes.ImageData:
                     return new ImageData(GetRectangeFromBitmapPreparedByTemplate(r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio));
                 default:

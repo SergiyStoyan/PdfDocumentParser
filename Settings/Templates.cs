@@ -303,11 +303,11 @@ namespace Cliver.InvoiceParser
                 [Serializable]
                 public class OcrTextValue : Value
                 {
-                    public List<TextBox> TextBoxs;
+                    public List<CharBox> CharBoxs;
                     [Serializable]
-                    public class TextBox
+                    public class CharBox
                     {
-                        public string Text;
+                        public string Char;
                         public RectangleF Rectangle;
                     }
                 }

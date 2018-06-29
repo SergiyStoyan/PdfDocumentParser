@@ -129,25 +129,28 @@ namespace Cliver.InvoiceParser
                             switch (vt)
                             {
                                 case Settings.Template.ValueTypes.PdfText:
-                                    if (selectedPdfBoxTexts == null/* || (ModifierKeys & Keys.Control) != Keys.Control*/)
-                                        selectedPdfBoxTexts = new List<Pdf.BoxText>();
-                                    selectedPdfBoxTexts.AddRange(Pdf.GetBoxTextsSurroundedByRectangle(pages[currentPage].CharBoxs, selectedR));
+                                    if (selectedPdfCharBoxs == null/* || (ModifierKeys & Keys.Control) != Keys.Control*/)
+                                        selectedPdfCharBoxs = new List<Pdf.CharBox>();
+                                    selectedPdfCharBoxs.AddRange(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPage].PdfCharBoxs, selectedR));
                                     break;
                                 case Settings.Template.ValueTypes.OcrText:
-                                    {
-                                        if (selectedOcrTextValue == null)
-                                            selectedOcrTextValue = new Settings.Template.FloatingAnchor.OcrTextValue
-                                            {
-                                                TextBoxs = new List<Settings.Template.FloatingAnchor.OcrTextValue.TextBox>()
-                                            };
-                                        string error;
-                                        pages.ActiveTemplate = getTemplateFromUI(false);
-                                        selectedOcrTextValue.TextBoxs.Add(new Settings.Template.FloatingAnchor.OcrTextValue.TextBox
-                                        {
-                                            Rectangle = Settings.Template.RectangleF.GetFromSystemRectangleF(selectedR),
-                                            Text = (string)pages[currentPage].GetValue(null, Settings.Template.RectangleF.GetFromSystemRectangleF(selectedR), Settings.Template.ValueTypes.OcrText, out error)
-                                        });
-                                    }
+                                    //{
+                                    //    if (selectedOcrTextValue == null)
+                                    //        selectedOcrTextValue = new Settings.Template.FloatingAnchor.OcrTextValue
+                                    //        {
+                                    //            TextBoxs = new List<Settings.Template.FloatingAnchor.OcrTextValue.TextBox>()
+                                    //        };
+                                    //    string error;
+                                    //    pages.ActiveTemplate = getTemplateFromUI(false);
+                                    //    selectedOcrTextValue.TextBoxs.Add(new Settings.Template.FloatingAnchor.OcrTextValue.TextBox
+                                    //    {
+                                    //        Rectangle = Settings.Template.RectangleF.GetFromSystemRectangleF(selectedR),
+                                    //        Text = (string)pages[currentPage].GetValue(null, Settings.Template.RectangleF.GetFromSystemRectangleF(selectedR), Settings.Template.ValueTypes.OcrText, out error)
+                                    //    });
+                                    //}
+                                    if (selectedOcrCharBoxs == null/* || (ModifierKeys & Keys.Control) != Keys.Control*/)
+                                        selectedOcrCharBoxs = new List<Ocr.CharBox>();
+                                    selectedOcrCharBoxs.AddRange(InvoiceParser.Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPage].OcrCharBoxs, selectedR));
                                     break;
                                 case Settings.Template.ValueTypes.ImageData:
                                     {
@@ -921,13 +924,13 @@ namespace Cliver.InvoiceParser
                 {
                     case Settings.Template.ValueTypes.PdfText:
                         {
-                            selectedPdfBoxTexts = Pdf.RemoveDuplicatesAndOrder(selectedPdfBoxTexts);
-                            if (selectedPdfBoxTexts.Count < 1)
+                            selectedPdfCharBoxs = Pdf.RemoveDuplicatesAndOrder(selectedPdfCharBoxs);
+                            if (selectedPdfCharBoxs.Count < 1)
                                 return;
                             Settings.Template.FloatingAnchor.PdfTextValue pte = new Settings.Template.FloatingAnchor.PdfTextValue();
-                            pte.CharBoxs = selectedPdfBoxTexts.Select(a => new Settings.Template.FloatingAnchor.PdfTextValue.CharBox
+                            pte.CharBoxs = selectedPdfCharBoxs.Select(a => new Settings.Template.FloatingAnchor.PdfTextValue.CharBox
                             {
-                                Char = a.Text,
+                                Char = a.Char,
                                 Rectangle = new Settings.Template.RectangleF(a.R.X, a.R.Y, a.R.Width, a.R.Height),
                             }).ToList();
                             r.Cells["Value3"].Value = pte.GetAsString();
@@ -935,9 +938,16 @@ namespace Cliver.InvoiceParser
                         break;
                     case Settings.Template.ValueTypes.OcrText:
                         {
-                            if (selectedOcrTextValue.TextBoxs.Count < 1)
+                            selectedOcrCharBoxs =InvoiceParser. Ocr.RemoveDuplicatesAndOrder(selectedOcrCharBoxs);
+                            if (selectedOcrCharBoxs.Count < 1)
                                 return;
-                            r.Cells["Value3"].Value = selectedOcrTextValue.GetAsString();
+                            Settings.Template.FloatingAnchor.OcrTextValue ote = new Settings.Template.FloatingAnchor.OcrTextValue();
+                            ote.CharBoxs = selectedOcrCharBoxs.Select(a => new Settings.Template.FloatingAnchor.OcrTextValue.CharBox
+                            {
+                                Char = a.Char,
+                                Rectangle = new Settings.Template.RectangleF(a.R.X, a.R.Y, a.R.Width, a.R.Height),
+                            }).ToList();
+                            r.Cells["Value3"].Value = ote.GetAsString();
                         }
                         break;
                     case Settings.Template.ValueTypes.ImageData:
@@ -954,13 +964,13 @@ namespace Cliver.InvoiceParser
             finally
             {
                 floatingAnchors.EndEdit();
-                selectedPdfBoxTexts = null;
-                selectedOcrTextValue = null;
+                selectedPdfCharBoxs = null;
+                selectedOcrCharBoxs = null;
                 selectedImageDataValue = null;
             }
         }
-        List<Pdf.BoxText> selectedPdfBoxTexts;
-        Settings.Template.FloatingAnchor.OcrTextValue selectedOcrTextValue;
+        List<Pdf.CharBox> selectedPdfCharBoxs;
+        List<Ocr.CharBox> selectedOcrCharBoxs;
         Settings.Template.FloatingAnchor.ImageDataValue selectedImageDataValue;
 
         void setUIFromTemplate(Settings.Template t)
