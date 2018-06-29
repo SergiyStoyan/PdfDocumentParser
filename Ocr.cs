@@ -37,13 +37,13 @@ namespace Cliver.InvoiceParser
         }
         Tesseract.TesseractEngine _engine = null;
 
-        public string GetText(Bitmap b, float x, float y, float w, float h)
+        public string GetText(Bitmap b, RectangleF r)
         {
-            Rectangle r = new Rectangle((int)x, (int)y, (int)w, (int)h);
+            r = new RectangleF(r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);            
             r.Intersect(new Rectangle(0, 0, b.Width, b.Height));
             if (Math.Abs(r.Width) < Settings.General.CoordinateDeviationMargin || Math.Abs(r.Height) < Settings.General.CoordinateDeviationMargin)
                 return null;
-            using (var page = engine.Process(b, new Rect(r.X, r.Y, r.Width, r.Height), PageSegMode.SingleBlock))
+            using (var page = engine.Process(b, new Rect((int)r.X, (int)r.Y, (int)r.Width, (int)r.Height), PageSegMode.SingleBlock))
             {
                 return page.GetText();
             }
@@ -80,12 +80,12 @@ namespace Cliver.InvoiceParser
                     //    //    b.Save(Log.AppDir + "\\test" + (j++) + ".png", System.Drawing.Imaging.ImageFormat.Png);
                     //    //}
                     //} while (i.Next(Tesseract.PageIteratorLevel.Block));
-                    do
-                    {
-                        do
-                        {
-                            do
-                            {
+                    //do
+                    //{
+                    //    do
+                    //    {
+                    //        do
+                    //        {
                                 do
                                 {
                                     //if (i.IsAtBeginningOf(PageIteratorLevel.Block))
@@ -102,13 +102,18 @@ namespace Cliver.InvoiceParser
                                     //}
 
                                     Rect r;
-                                    if (i.TryGetBoundingBox(PageIteratorLevel.Symbol, out r))
-                                        cbs.Add(new CharBox { Char = i.GetText(PageIteratorLevel.Symbol), R = new RectangleF(r.X1, r.Y1, r.Width, r.Height) });
-                                } while (i.Next(PageIteratorLevel.Word, PageIteratorLevel.Symbol));
-                            } while (i.Next(PageIteratorLevel.TextLine, PageIteratorLevel.Word));
-                        } while (i.Next(PageIteratorLevel.Para, PageIteratorLevel.TextLine));
-                    } while (i.Next(PageIteratorLevel.Block, PageIteratorLevel.Para));
-                }
+                        if (i.TryGetBoundingBox(PageIteratorLevel.Symbol, out r))
+                            cbs.Add(new CharBox
+                            {
+                                Char = i.GetText(PageIteratorLevel.Symbol),
+                                R = new RectangleF(r.X1 * Settings.General.Image2PdfResolutionRatio, r.Y1 * Settings.General.Image2PdfResolutionRatio, r.Width * Settings.General.Image2PdfResolutionRatio, r.Height * Settings.General.Image2PdfResolutionRatio)
+                            });
+                    } while (i.Next(PageIteratorLevel.Symbol));
+                //} while (i.Next(PageIteratorLevel.Word, PageIteratorLevel.Symbol)) ;
+                //        } while (i.Next(PageIteratorLevel.TextLine, PageIteratorLevel.Word));
+                //    } while (i.Next(PageIteratorLevel.Para, PageIteratorLevel.TextLine));
+                //} while (i.Next(PageIteratorLevel.Block, PageIteratorLevel.Para));
+            }
             }
             return cbs;
         }
@@ -119,10 +124,10 @@ namespace Cliver.InvoiceParser
             public System.Drawing.RectangleF R;
         }
 
-        public static string GetTextByTopLeftCoordinates(List<CharBox> bts, float x, float y, float w, float h)
+        public static string GetTextByTopLeftCoordinates(List<CharBox> bts, RectangleF r)
         {
-            System.Drawing.RectangleF d = new System.Drawing.RectangleF { X = x, Y = y, Width = w, Height = h };
-            bts = RemoveDuplicatesAndOrder(bts.Where(a => (d.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)));
+            //r = new RectangleF(r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);
+            bts = RemoveDuplicatesAndOrder(bts.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)));
             StringBuilder sb = new StringBuilder(bts.Count > 0 ? bts[0].Char : "");
             for (int i = 1; i < bts.Count; i++)
             {
@@ -154,6 +159,7 @@ namespace Cliver.InvoiceParser
 
         public static List<CharBox> GetCharBoxsSurroundedByRectangle(List<CharBox> bts, System.Drawing.RectangleF r)
         {
+            //r = new RectangleF(r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);
             return bts.Where(a => /*selectedR.IntersectsWith(a.R) || */r.Contains(a.R)).ToList();
         }
     }

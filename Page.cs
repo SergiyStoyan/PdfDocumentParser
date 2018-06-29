@@ -427,9 +427,10 @@ namespace Cliver.InvoiceParser
             switch (valueType)
             {
                 case Settings.Template.ValueTypes.PdfText:
-                    return Pdf.GetTextByTopLeftCoordinates(PdfCharBoxs, r.X, r.Y, r.Width, r.Height);
+                    return Pdf.GetTextByTopLeftCoordinates(PdfCharBoxs, r.GetSystemRectangleF());
                 case Settings.Template.ValueTypes.OcrText:
-                    return Ocr.This.GetText(BitmapPreparedByTemplate, r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);
+                    //return Ocr.This.GetText(BitmapPreparedByTemplate, r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);                    
+                    return Ocr.GetTextByTopLeftCoordinates(OcrCharBoxs, r.GetSystemRectangleF());
                 case Settings.Template.ValueTypes.ImageData:
                     return new ImageData(GetRectangeFromBitmapPreparedByTemplate(r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio));
                 default:

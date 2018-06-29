@@ -213,10 +213,9 @@ namespace Cliver.InvoiceParser
             }
         }
 
-        public static string GetTextByTopLeftCoordinates(List<CharBox> bts, float x, float y, float w, float h)
+        public static string GetTextByTopLeftCoordinates(List<CharBox> bts, System.Drawing.RectangleF r)
         {
-            System.Drawing.RectangleF d = new System.Drawing.RectangleF { X = x, Y = y, Width = w, Height = h };
-            bts = RemoveDuplicatesAndOrder(bts.Where(a => (d.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)));
+            bts = RemoveDuplicatesAndOrder(bts.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)));
             StringBuilder sb = new StringBuilder(bts.Count > 0 ? bts[0].Char : "");
             for (int i = 1; i < bts.Count; i++)
             {
