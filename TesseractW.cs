@@ -47,5 +47,39 @@ namespace Cliver.InvoiceParser
                 return page.GetText();
             }
         }
+
+        public void GetChars(Bitmap b)
+        {
+            using (var page = engine.Process(b, Tesseract.PageSegMode.Auto))
+            {
+                string t = page.GetHOCRText(1, true);
+                //var dfg = page.GetThresholdedImage();                        
+                Tesseract.Orientation o;
+                float c;
+                // page.DetectBestOrientation(out o, out c);
+                //  var l = page.AnalyseLayout();
+                //var ti =   l.GetBinaryImage(Tesseract.PageIteratorLevel.Para);
+                Tesseract.Rect r;
+                // l.TryGetBoundingBox(Tesseract.PageIteratorLevel.Block, out r);
+                using (var i = page.GetIterator())
+                {
+                    int j = 0;
+                    i.Begin();
+                    do
+                    {
+                        bool g = i.IsAtBeginningOf(Tesseract.PageIteratorLevel.Block);
+                        bool v = i.TryGetBoundingBox(Tesseract.PageIteratorLevel.Block, out r);
+                        var bt = i.BlockType;
+                        //if (Regex.IsMatch(bt.ToString(), @"image", RegexOptions.IgnoreCase))
+                        //{
+                        //    //i.TryGetBoundingBox(Tesseract.PageIteratorLevel.Block,out r);
+                        //    Tesseract.Pix p = i.GetBinaryImage(Tesseract.PageIteratorLevel.Block);
+                        //    Bitmap b = Tesseract.PixConverter.ToBitmap(p);
+                        //    b.Save(Log.AppDir + "\\test" + (j++) + ".png", System.Drawing.Imaging.ImageFormat.Png);
+                        //}
+                    } while (i.Next(Tesseract.PageIteratorLevel.Block));
+                }
+            }
+        }
     }
 }

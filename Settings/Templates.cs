@@ -187,11 +187,28 @@ namespace Cliver.InvoiceParser
                 //    return SerializationRoutines.Json.Serialize(value);
                 //}
             }
+
             public enum ValueTypes
             {
                 PdfText,
                 OcrText,
                 ImageData
+            }
+            [Serializable]
+            public class Value
+            {
+                public byte[] GetAsBytes()
+                {
+                    return SerializationRoutines.Binary.Serialize(this);
+                }
+                virtual public string GetAsString()
+                {
+                    return SerializationRoutines.Json.Serialize(this);
+                }
+                static public Value GetFromBytes(byte[] elementAsBytes)
+                {
+                    return SerializationRoutines.Binary.Deserialize<Value>(elementAsBytes);
+                }
             }
 
             public class Field
@@ -240,42 +257,25 @@ namespace Cliver.InvoiceParser
                     Id = id;
                     ValueType = valueType;
                     if (valueAsString != null)
-                        value = Value.GetFromString(ValueType, valueAsString);
+                        switch (valueType)
+                        {
+                            case ValueTypes.PdfText:
+                                value =SerializationRoutines.Json.Deserialize<PdfTextValue>(valueAsString);
+                                break;
+                            case ValueTypes.OcrText:
+                                value= SerializationRoutines.Json.Deserialize<OcrTextValue>(valueAsString);
+                                break;
+                            case ValueTypes.ImageData:
+                                value= SerializationRoutines.Json.Deserialize<ImageDataValue>(valueAsString);
+                                break;
+                            default:
+                                throw new Exception("Unknown option: " + valueType);
+                        }
                     else
                         value = null;
                 }
                 public FloatingAnchor()//!!!used only by serializer!!!
                 { 
-                }
-                [Serializable]
-                public class Value
-                {
-                    public byte[] GetAsBytes()
-                    {
-                        return SerializationRoutines.Binary.Serialize(this);
-                    }
-                    public string GetAsString()
-                    {
-                        return SerializationRoutines.Json.Serialize(this);
-                    }
-                    static public Value GetFromBytes(byte[] elementAsBytes)
-                    {
-                        return SerializationRoutines.Binary.Deserialize<Value>(elementAsBytes);
-                    }
-                    static public Value GetFromString(ValueTypes valueType, string elementAsString)
-                    {
-                        switch(valueType)
-                        {
-                            case ValueTypes.PdfText:
-                                return SerializationRoutines.Json.Deserialize<PdfTextValue>(elementAsString);
-                            case ValueTypes.OcrText:
-                                return SerializationRoutines.Json.Deserialize<OcrTextValue>(elementAsString);
-                            case ValueTypes.ImageData:
-                                return SerializationRoutines.Json.Deserialize<ImageDataValue>(elementAsString);
-                            default:
-                                throw new Exception("Unknown option: " + valueType);
-                        }
-                    }
                 }
 
                 [Serializable]

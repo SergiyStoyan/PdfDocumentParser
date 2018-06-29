@@ -1084,44 +1084,7 @@ namespace Cliver.InvoiceParser
                 setScaledImage();
                 enableNabigationButtons();
 
-                checkIfCurrentPageIsInvoiceFirstPage();
-
-                //if (invoiceFirstPageRecognitionMarks.SelectedRows.Count < 1)
-                //    catchFields();
-
-                //using (var engine = new Tesseract.TesseractEngine(@"./tessdata", "eng", Tesseract.EngineMode.Default))
-                //{
-                //    using (var page = engine.Process(pageBitmaps[currentPage/*, Settings.Template.PageRotations.Clockwise90*/]))
-                //    {
-                //        //string t = page.GetHOCRText(1, true);
-                //        //var dfg = page.GetThresholdedImage();                        
-                //        Tesseract.Orientation o;
-                //        float c;
-                //       // page.DetectBestOrientation(out o, out c);
-                //      //  var l = page.AnalyseLayout();
-                //     //var ti =   l.GetBinaryImage(Tesseract.PageIteratorLevel.Para);
-                //        Tesseract.Rect r;
-                //       // l.TryGetBoundingBox(Tesseract.PageIteratorLevel.Block, out r);
-                //        using (var i = page.GetIterator())
-                //        {
-                //            int j = 0;
-                //            i.Begin();
-                //            do
-                //            {
-                //                bool g = i.IsAtBeginningOf(Tesseract.PageIteratorLevel.Block);
-                //                bool v = i.TryGetBoundingBox(Tesseract.PageIteratorLevel.Block, out r);
-                //                var bt = i.BlockType;
-                //                if (Regex.IsMatch(bt.ToString(), @"image", RegexOptions.IgnoreCase))
-                //                {
-                //                    //i.TryGetBoundingBox(Tesseract.PageIteratorLevel.Block,out r);
-                //                    Tesseract.Pix p = i.GetBinaryImage(Tesseract.PageIteratorLevel.Block);
-                //                    Bitmap b = Tesseract.PixConverter.ToBitmap(p);
-                //                    b.Save(Log.AppDir + "\\test" + (j++) + ".png", System.Drawing.Imaging.ImageFormat.Png);
-                //                }
-                //            } while (i.Next(Tesseract.PageIteratorLevel.Block));
-                //        }
-                //    }
-                //}
+                checkIfCurrentPageIsInvoiceFirstPage(); 
             }
             catch (Exception e)
             {
