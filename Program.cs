@@ -15,9 +15,8 @@ namespace Cliver.InvoiceParser
 
 */
 {/*TBD:
-    - nove WPF
-    - tesseract find anchore
-    - Anchor serialize to byte[]
+    - move to WPF
+    - improve setting ActiveTemplate
     */
     class Program
     {
