@@ -191,13 +191,13 @@ namespace Cliver.InvoiceParser
 
         public List<RectangleF> FindFloatingAnchor(Settings.Template.FloatingAnchor fa)
         {
-            if (fa == null || fa.Value == null)
+            if (fa == null || fa.GetValue() == null)
                 return null;
 
             switch (fa.ValueType)
             {
                 case Settings.Template.ValueTypes.PdfText:
-                    List<Settings.Template.FloatingAnchor.PdfTextElement.CharBox> ses = ((Settings.Template.FloatingAnchor.PdfTextElement)fa.Get()).CharBoxs;
+                    List<Settings.Template.FloatingAnchor.PdfTextValue.CharBox> ses = ((Settings.Template.FloatingAnchor.PdfTextValue)fa.GetValue()).CharBoxs;
                     if (ses.Count < 1)
                         return null;
                     List<Pdf.BoxText> bts = new List<Pdf.BoxText>();
@@ -233,7 +233,7 @@ namespace Cliver.InvoiceParser
                     throw new Exception("TBD");//tesseract
                     return null;
                 case Settings.Template.ValueTypes.ImageData:
-                    List<Settings.Template.FloatingAnchor.ImageDataElement.ImageBox> ibs = ((Settings.Template.FloatingAnchor.ImageDataElement)fa.Get()).ImageBoxs;
+                    List<Settings.Template.FloatingAnchor.ImageDataValue.ImageBox> ibs = ((Settings.Template.FloatingAnchor.ImageDataValue)fa.GetValue()).ImageBoxs;
                     if (ibs.Count < 1)
                         return null;
                     PointF? p0 = ibs[0].ImageData.FindWithinImage(ImageData, pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance, pageCollection.ActiveTemplate.FindBestImageMatch);

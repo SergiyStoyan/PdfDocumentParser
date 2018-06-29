@@ -15,11 +15,9 @@ namespace Cliver.InvoiceParser
 
 */
 {/*TBD:
-    - settings panel
-    - headers management: dialog with moving columns, with lists of templates having this header
-- template editor: resolution, drop-down 'rotate', auto-deskew,auto-crop
-    - image rotation
-    - to cliverbot
+    - nove WPF
+    - tesseract find anchore
+    - Anchor serialize to byte[]
     */
     class Program
     {

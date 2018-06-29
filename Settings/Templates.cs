@@ -111,6 +111,7 @@ namespace Cliver.InvoiceParser
             public string TestFile;
             public decimal TestPictureScale = 1.3m;
 
+            [Serializable]
             public class RectangleF
             {
                 public float X;
@@ -141,11 +142,13 @@ namespace Cliver.InvoiceParser
                     return new System.Drawing.RectangleF(X, Y, Width, Height);
                 }
             }
+            [Serializable]
             public class PointF
             {
                 public float X;
                 public float Y;
             }
+            [Serializable]
             public class SizeF
             {
                 public float Width;
@@ -158,6 +161,31 @@ namespace Cliver.InvoiceParser
                 public string Value;
                 public RectangleF Rectangle;
                 public ValueTypes ValueType = ValueTypes.PdfText;
+                //public byte[] ValueAsBytes
+                //{
+                //    get
+                //    {
+                //        if (value == null)
+                //            return null;
+                //        return SerializationRoutines.Binary.Serialize(value);
+                //    }
+                //    set
+                //    {
+                //        this.value = SerializationRoutines.Binary.Deserialize(value);
+                //    }
+                //}
+
+                //public object GetValue()
+                //{
+                //    return value;
+                //}
+                //object value;
+                //public string GetValueAsString()
+                //{
+                //    if (value == null)
+                //        return null;
+                //    return SerializationRoutines.Json.Serialize(value);
+                //}
             }
             public enum ValueTypes
             {
@@ -177,57 +205,106 @@ namespace Cliver.InvoiceParser
 
             public partial class FloatingAnchor
             {
+                //serialized
                 public int Id;
-                public string Value;
-                //public List<string> Values;
+                //serialized
                 public ValueTypes ValueType = ValueTypes.PdfText;
-                public object Get()
+                //serialized
+                public byte[] ValueAsBytes
                 {
-                    if (Value == null)
-                        return null;
-                    if (typedValue == null)
-                        switch (ValueType)
-                        {
-                            case ValueTypes.ImageData:
-                                typedValue = SerializationRoutines.Json.Deserialize<ImageDataElement>(Value);
-                                break;
-                            case ValueTypes.OcrText:
-                                typedValue = SerializationRoutines.Json.Deserialize<OcrTextElement>(Value);
-                                break;
-                            case ValueTypes.PdfText:
-                                typedValue = SerializationRoutines.Json.Deserialize<PdfTextElement>(Value);
-                                break;
-                            default:
-                                throw new Exception("Unknown option: " + ValueType);
-                        }
-                    return typedValue;
+                    get
+                    {
+                        if (value == null)
+                            return null;
+                        return value.GetAsBytes();
+                    }
+                    set
+                    {
+                        this.value = Value.GetFromBytes(value);
+                    }
                 }
-                object typedValue = null;
 
-                public class PdfTextElement
+                public Value GetValue()
+                {
+                    return value;
+                }
+                Value value;
+                public string GetValueAsString()
+                {
+                    if (value == null)
+                        return null;
+                    return value.GetAsString();
+                }
+                public FloatingAnchor(int id, ValueTypes valueType, string valueAsString)
+                {
+                    Id = id;
+                    ValueType = valueType;
+                    if (valueAsString != null)
+                        value = Value.GetFromString(ValueType, valueAsString);
+                    else
+                        value = null;
+                }
+                public FloatingAnchor()//!!!used only by serializer!!!
+                { 
+                }
+                [Serializable]
+                public class Value
+                {
+                    public byte[] GetAsBytes()
+                    {
+                        return SerializationRoutines.Binary.Serialize(this);
+                    }
+                    public string GetAsString()
+                    {
+                        return SerializationRoutines.Json.Serialize(this);
+                    }
+                    static public Value GetFromBytes(byte[] elementAsBytes)
+                    {
+                        return SerializationRoutines.Binary.Deserialize<Value>(elementAsBytes);
+                    }
+                    static public Value GetFromString(ValueTypes valueType, string elementAsString)
+                    {
+                        switch(valueType)
+                        {
+                            case ValueTypes.PdfText:
+                                return SerializationRoutines.Json.Deserialize<PdfTextValue>(elementAsString);
+                            case ValueTypes.OcrText:
+                                return SerializationRoutines.Json.Deserialize<OcrTextValue>(elementAsString);
+                            case ValueTypes.ImageData:
+                                return SerializationRoutines.Json.Deserialize<ImageDataValue>(elementAsString);
+                            default:
+                                throw new Exception("Unknown option: " + valueType);
+                        }
+                    }
+                }
+
+                [Serializable]
+                public class PdfTextValue : Value
                 {
                     public List<CharBox> CharBoxs;
-
+                    [Serializable]
                     public class CharBox
                     {
                         public string Char;
                         public RectangleF Rectangle;
                     }
                 }
-                public class ImageDataElement
+                [Serializable]
+                public class ImageDataValue : Value
                 {
                     public List<ImageBox> ImageBoxs;
-
+                    [Serializable]
                     public class ImageBox
                     {
                         public ImageData ImageData;
                         public RectangleF Rectangle;
                     }
                 }
-                public class OcrTextElement
+                [Serializable]
+                public class OcrTextValue : Value
                 {
                     public List<TextBox> TextBoxs;
-
+                    [Serializable]
                     public class TextBox
                     {
                         public string Text;

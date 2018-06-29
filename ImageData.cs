@@ -17,10 +17,10 @@ using System.IO.Compression;
 
 namespace Cliver.InvoiceParser
 {
+    [Serializable]
     public class ImageData
     {
         public byte[,] Hash;
-        //public float Ratio;
         public int Width;
         public int Height;
 
@@ -45,14 +45,14 @@ namespace Cliver.InvoiceParser
             //    }
             //    g = Encoding.UTF8.GetString(ms.ToArray());
             //}
-            string s = SerializationRoutines.Json.Serialize(this);
-            return s;
+
+            byte[] bs = SerializationRoutines.Binary.Serialize(this);//more compact
+            return SerializationRoutines.Json.Serialize(bs);
         }
         static public ImageData Deserialize(string value)
         {
-            return SerializationRoutines.Json.Deserialize<ImageData>(value);
-
-            //byte[] bs = Encoding.UTF8.GetBytes(value);
+            byte[] bs = SerializationRoutines.Json.Deserialize<byte[]>(value);
+            return SerializationRoutines.Binary.Deserialize<ImageData>(bs);
             //using (MemoryStream ms = new MemoryStream(bs))
             //{
             //    using (GZipStream compressionStream = new GZipStream(ms, CompressionMode.Decompress))

@@ -21,7 +21,7 @@ namespace Cliver.InvoiceParser
         {
             public string InputFolder = @"d:\_d\_projects\mattpdf\_test_files";
             public string OutputFolder;
-            public bool IgnoreHidddenFiles = false;
+            public bool IgnoreHidddenFiles = true;
 
             public System.Drawing.Color SelectionBoxColor = System.Drawing.Color.Red;
             public System.Drawing.Color BoundingBoxColor = System.Drawing.Color.BlueViolet;

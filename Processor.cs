@@ -82,7 +82,7 @@ namespace Cliver.InvoiceParser
                         
             List<string> files = FileSystemRoutines.GetFiles(Settings.General.InputFolder, false);
             if (Settings.General.IgnoreHidddenFiles)
-               files = files.Select(f => new FileInfo(f)).Where(fi => fi.Attributes.HasFlag(FileAttributes.Hidden)).Select(fi => fi.FullName).ToList();
+               files = files.Select(f => new FileInfo(f)).Where(fi => !fi.Attributes.HasFlag(FileAttributes.Hidden)).Select(fi => fi.FullName).ToList();
 
             int processed_files = 0;
             int total_files = files.Count;

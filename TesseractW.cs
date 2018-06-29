@@ -42,7 +42,7 @@ namespace Cliver.InvoiceParser
             r.Intersect(new Rectangle(0, 0, b.Width, b.Height));
             if (Math.Abs(r.Width) < Settings.General.CoordinateDeviationMargin || Math.Abs(r.Height) < Settings.General.CoordinateDeviationMargin)
                 return null;
-            using (var page = engine.Process(b, new Tesseract.Rect(0, 0, r.Width, r.Height), Tesseract.PageSegMode.SingleBlock))
+            using (var page = engine.Process(b, new Tesseract.Rect(r.X, r.Y, r.Width, r.Height), Tesseract.PageSegMode.SingleBlock))
             {
                 return page.GetText();
             }
