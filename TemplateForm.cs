@@ -501,31 +501,31 @@ namespace Cliver.PdfDocumentParser
 
             fields.CellValidating += delegate (object sender, DataGridViewCellValidatingEventArgs e)
             {
-                if (e.ColumnIndex == fields.Columns["Rectangle"].Index)
-                {
-                    try
-                    {
-                        if ((string)fields.Rows[e.RowIndex].Cells["Rectangle"].Value == (string)e.FormattedValue)
-                            return;
+                //if (e.ColumnIndex == fields.Columns["Rectangle"].Index)
+                //{
+                //    try
+                //    {
+                //        if ((string)fields.Rows[e.RowIndex].Cells["Rectangle"].Value == (string)e.FormattedValue)
+                //            return;
 
-                        SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>((string)e.FormattedValue);
-                    }
-                    catch (Exception ex)
-                    {
-                        //LogMessage.Error("Rectangle", ex);
-                        LogMessage.Error(ex);
-                        e.Cancel = true;
-                    }
-                }
-                else if (e.ColumnIndex == fields.Columns["Name_"].Index)
-                {
-                    if (string.IsNullOrWhiteSpace((string)e.FormattedValue))
-                    {
-                        LogMessage.Error("Name cannot be empty!");
-                        e.Cancel = true;
-                        return;
-                    }
-                }
+                //        SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>((string)e.FormattedValue);
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        //LogMessage.Error("Rectangle", ex);
+                //        LogMessage.Error(ex);
+                //        e.Cancel = true;
+                //    }
+                //}
+                //else if (e.ColumnIndex == fields.Columns["Name_"].Index)
+                //{
+                //    if (string.IsNullOrWhiteSpace((string)e.FormattedValue))
+                //    {
+                //        LogMessage.Error("Name cannot be empty!");
+                //        e.Cancel = true;
+                //        return;
+                //    }
+                //}
             };
 
             fields.RowValidating += delegate (object sender, DataGridViewCellCancelEventArgs e)
@@ -549,33 +549,10 @@ namespace Cliver.PdfDocumentParser
                     LogMessage.Error(ex);
                     e.Cancel = true;
                 }
-                try
-                {
-                    if (string.IsNullOrWhiteSpace((string)r.Cells["Rectangle"].Value))
-                        throw new Exception("Rectangle cannot be empty!");
-                    SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>((string)r.Cells["Rectangle"].Value);
-                }
-                catch (Exception ex)
-                {
-                    //LogMessage.Error("Rectangle", ex);
-                    LogMessage.Error(ex);
-                    e.Cancel = true;
-                }
             };
 
             fields.DefaultValuesNeeded += delegate (object sender, DataGridViewRowEventArgs e)
-            {
-                try
-                {
-                    if (string.IsNullOrWhiteSpace((string)e.Row.Cells["Rectangle"].Value))
-                    {
-                        e.Row.Cells["Rectangle"].Value = SerializationRoutines.Json.Serialize(new Settings.Template.RectangleF(0, 0, 0, 0));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    LogMessage.Error(ex);
-                }
+            {               
             };
 
             fields.CellContentClick += delegate (object sender, DataGridViewCellEventArgs e)
@@ -601,10 +578,9 @@ namespace Cliver.PdfDocumentParser
                         documentFirstPageRecognitionMarks.ClearSelection();
                         int i = fields.SelectedRows[0].Index;
                         string rs = (string)fields.Rows[i].Cells["Rectangle"].Value;
-                        if (!string.IsNullOrWhiteSpace(rs))
+                        if (rs != null)
                         {
                             var cs = fields.Rows[i].Cells;
-                            Settings.Template.FloatingAnchor fa = null;
                             Settings.Template.RectangleF r = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>(rs);
                             fields.Rows[i].Cells["Value"].Value = extractValueAndDrawBox((int?)cs["FloatingAnchorId"].Value, r, Convert.ToBoolean(cs["Ocr"].Value) ? Settings.Template.ValueTypes.OcrText : Settings.Template.ValueTypes.PdfText);
                         }
@@ -1336,16 +1312,16 @@ namespace Cliver.PdfDocumentParser
                 string name = (string)r.Cells["Name_"].Value;
                 if (!string.IsNullOrWhiteSpace(name))
                 {
-                    if (r.Cells["Rectangle"].Value == null)
-                    {
-                        if (saving)
-                            throw new Exception("Field '" + name + "' is not set!");
-                        continue;
-                    }
+                    //if (r.Cells["Rectangle"].Value == null)
+                    //{
+                    //    if (saving)
+                    //        throw new Exception("Field '" + name + "' is not set!");
+                    //    continue;
+                    //}
                     Settings.Template.Field f = new Settings.Template.Field
                     {
                         Name = name.Trim(),
-                        Rectangle = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>((string)r.Cells["Rectangle"].Value),
+                        Rectangle = r.Cells["Rectangle"].Value == null ? null : SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>((string)r.Cells["Rectangle"].Value),
                         ValueType = Convert.ToBoolean(r.Cells["Ocr"].Value) ? Settings.Template.ValueTypes.OcrText : Settings.Template.ValueTypes.PdfText,
                         FloatingAnchorId = (int?)r.Cells["FloatingAnchorId"].Value
                     };

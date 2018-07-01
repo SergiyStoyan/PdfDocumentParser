@@ -60,12 +60,13 @@ namespace Cliver.PdfDocumentParser
             //    g = Encoding.UTF8.GetString(ms.ToArray());
             //}
         }
-        public ImageData(Bitmap bitmap)
+        public ImageData(Bitmap bitmap, bool scaleBitmap = true)
         {
             if (bitmap == null)// Used only by deserializer!!!
                 return;
 
-            bitmap = ImageRoutines.GetScaled(bitmap, Settings.General.Image2PdfResolutionRatio);
+            if(scaleBitmap)
+                bitmap = ImageRoutines.GetScaled(bitmap, Settings.General.Image2PdfResolutionRatio);
 
             Hash = getBitmapHash(bitmap);
             Width = Hash.GetLength(0);
@@ -110,6 +111,8 @@ namespace Cliver.PdfDocumentParser
          */
         public bool ImageIsSimilar(ImageData imageData, float brightnessTolerance, float differentPixelNumberTolerance)
         {
+            if (Width != imageData.Width || Height != imageData.Height)
+                throw new Exception("Images have different sizes.");
             int differentPixelNumber;
             return isHashMatch(imageData, 0, 0, (int)(brightnessTolerance * 255), (int)(Hash.Length * differentPixelNumberTolerance), out differentPixelNumber);
         }
@@ -117,27 +120,41 @@ namespace Cliver.PdfDocumentParser
         /*!!!ATTENTION!!!
          * tolerance values cannot be 0 even when comparing identical images! Because of separate rescaling of an image and its fragment, some pixels become not same!
          */
-        public System.Drawing.PointF? FindWithinImage(ImageData imageData, float brightnessTolerance, float differentPixelNumberTolerance, bool findBestMatch, System.Drawing.PointF? startPoint = null)
+        public System.Drawing.Point? FindWithinImage(ImageData imageData, float brightnessTolerance, float differentPixelNumberTolerance, bool findBestMatch)
+        {
+            Point? bestP = null;
+            float minDeviation = 1;
+            FindWithinImage(imageData, brightnessTolerance, differentPixelNumberTolerance, (Point p, float deviation) =>
+             {
+                 if (!findBestMatch)
+                     return false;
+                 if (deviation < minDeviation)
+                 {
+                     minDeviation = deviation;
+                     bestP = p;
+                 }
+                 return true;
+             });
+            return bestP;
+        }
+
+        public void FindWithinImage(ImageData imageData, float brightnessTolerance, float differentPixelNumberTolerance, Func<Point, float, bool> onFound)
         {
             int brightnessMaxDifference = (int)(brightnessTolerance * 255);
             int differentPixelMaxNumber = (int)(Hash.Length * differentPixelNumberTolerance);
             int bw = imageData.Width - Width;
             int bh = imageData.Height - Height;
-            PointF? p = null;
-            int minDifferentPixelNumber = int.MaxValue;
+            Point? p = null;
             for (int x = 0; x < bw; x++)
                 for (int y = 0; y < bh; y++)
                 {
                     int differentPixelNumber;
                     if (isHashMatch(imageData, x, y, brightnessMaxDifference, differentPixelMaxNumber, out differentPixelNumber))
                     {
-                        if (!findBestMatch)
-                            return new PointF(x, y);
-                        if (minDifferentPixelNumber > differentPixelNumber)
-                            p = new PointF(x, y);
+                        if (!onFound(new Point(x, y), differentPixelNumber / differentPixelMaxNumber))
+                            return;
                     }
                 }
-            return p;
         }
         bool isHashMatch(ImageData imageData, int x, int y, int brightnessMaxDifference, int differentPixelMaxNumber, out int differentPixelNumber)
         {

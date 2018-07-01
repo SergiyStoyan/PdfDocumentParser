@@ -247,20 +247,32 @@ namespace Cliver.PdfDocumentParser
                     List<Settings.Template.FloatingAnchor.ImageDataValue.ImageBox> ibs = ((Settings.Template.FloatingAnchor.ImageDataValue)fa.GetValue()).ImageBoxs;
                     if (ibs.Count < 1)
                         return null;
-                    PointF? p0 = ibs[0].ImageData.FindWithinImage(ImageData, pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance, pageCollection.ActiveTemplate.FindBestImageMatch);
-                    if (p0 == null)
-                        return null;
-                    List<RectangleF> rs = new List<RectangleF>();
-                    rs.Add(new RectangleF((PointF)p0, new SizeF(ibs[0].Rectangle.Width, ibs[0].Rectangle.Height)));
-                    PointF point0 = (PointF)p0;
-                    for (int i = 1; i < ibs.Count; i++)
+                    List<RectangleF> bestRs = null;
+                    float minDeviation = 1;
+                    ibs[0].ImageData.FindWithinImage(ImageData, pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance, (Point point0, float deviation) =>
                     {
-                        Settings.Template.RectangleF r = new Settings.Template.RectangleF(ibs[i].Rectangle.X + point0.X, ibs[i].Rectangle.Height + point0.Y, ibs[i].Rectangle.Width, ibs[i].Rectangle.Height);
-                        if (!ibs[i].ImageData.ImageIsSimilar(new ImageData(GetRectangeFromActiveTemplateBitmap(r.X, r.Y, r.Width, r.Height)), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance))
-                            return null;
-                        rs.Add(r.GetSystemRectangleF());
-                    }
-                    return rs;
+                        List<RectangleF> rs = new List<RectangleF>();
+                        rs.Add(new RectangleF(point0, new SizeF(ibs[0].Rectangle.Width, ibs[0].Rectangle.Height)));
+                        for (int i = 1; i < ibs.Count; i++)
+                        {
+                            Settings.Template.RectangleF r = new Settings.Template.RectangleF(ibs[i].Rectangle.X + point0.X, ibs[i].Rectangle.Height + point0.Y, ibs[i].Rectangle.Width, ibs[i].Rectangle.Height);
+                            if (!ibs[i].ImageData.ImageIsSimilar(new ImageData(GetRectangeFromActiveTemplateBitmap(r.X, r.Y, r.Width, r.Height), false), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance))
+                                return true;
+                            rs.Add(r.GetSystemRectangleF());
+                        }
+                        if (!pageCollection.ActiveTemplate.FindBestImageMatch)
+                        {
+                            bestRs = rs;
+                            return false;
+                        }
+                        if (deviation < minDeviation)
+                        {
+                            minDeviation = deviation;
+                            bestRs = rs;
+                        }
+                        return true;
+                    });
+                    return bestRs;
                 default:
                     throw new Exception("Unknown option: " + fa.ValueType);
             }
@@ -410,6 +422,8 @@ namespace Cliver.PdfDocumentParser
 
         public string GetFieldText(Settings.Template.Field field)
         {
+            if (field.Rectangle == null)
+                return null;
             string error;
             object v = GetValue(field.FloatingAnchorId, field.Rectangle, field.ValueType, out error);
             if (v is ImageData)
@@ -421,6 +435,11 @@ namespace Cliver.PdfDocumentParser
         {
             //try
             //{
+            if (r_ == null)
+            {
+                error = "Rectangular is not defined.";
+                return null;
+            }
             if (r_.Width <= Settings.General.CoordinateDeviationMargin || r_.Height <= Settings.General.CoordinateDeviationMargin)
             {
                 error = "Rectangular is malformed.";
