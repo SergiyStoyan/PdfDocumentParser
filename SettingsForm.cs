@@ -26,6 +26,11 @@ namespace Cliver.InvoiceParser
         {
             imageResolution.Value = Settings.General.PdfPageImageResolution;
             ignoreHidddenFiles.Checked = Settings.General.IgnoreHidddenFiles;
+            testPictureScale.Value = Settings.General.TestPictureScale;
+
+            brightnessTolerance.Value = (decimal)Settings.ImageProcessing.BrightnessTolerance;
+            differentPixelNumberTolerance.Value = (decimal)Settings.ImageProcessing.DifferentPixelNumberTolerance;
+            findBestImageMatch.Checked = Settings.ImageProcessing.FindBestImageMatch;
         }
 
         private void bCancel_Click(object sender, EventArgs e)
@@ -39,9 +44,18 @@ namespace Cliver.InvoiceParser
             {
                 Settings.General.PdfPageImageResolution = (int)imageResolution.Value;
                 Settings.General.IgnoreHidddenFiles = ignoreHidddenFiles.Checked;
+                Settings.General.TestPictureScale = testPictureScale.Value;    
 
                 Settings.General.Save();
-                Settings.General.Reload();
+                Settings.General.Reload();            
+
+                Settings.ImageProcessing.BrightnessTolerance = (float)brightnessTolerance.Value;
+                Settings.ImageProcessing.DifferentPixelNumberTolerance = (float)differentPixelNumberTolerance.Value;
+                Settings.ImageProcessing.FindBestImageMatch = findBestImageMatch.Checked;
+
+                Settings.ImageProcessing.Save();
+                Settings.ImageProcessing.Reload();
+
                 Close();
             }
             catch(Exception ex)

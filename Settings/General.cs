@@ -28,6 +28,7 @@ namespace Cliver.InvoiceParser
             public System.Drawing.Color StampColor = System.Drawing.Color.Red;
             public int PdfPageImageResolution = 300;//tessarct requires at least 300
             public float CoordinateDeviationMargin = 0.001f;
+            public decimal TestPictureScale = 1.3m;
 
             public float Image2PdfResolutionRatio { get { return _Image2PdfResolutionRatio; } }
             float _Image2PdfResolutionRatio;

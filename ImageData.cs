@@ -24,12 +24,7 @@ namespace Cliver.InvoiceParser
         public int Width;
         public int Height;
 
-        public override string ToString()
-        {
-            return Serialize();
-        }
-
-        public string Serialize()
+        public string GetAsString()
         {
             //string g;
             //byte[] bs = new byte[2 + Hash.Length];
@@ -49,7 +44,7 @@ namespace Cliver.InvoiceParser
             byte[] bs = SerializationRoutines.Binary.Serialize(this);//more compact
             return SerializationRoutines.Json.Serialize(bs);
         }
-        static public ImageData Deserialize(string value)
+        static public ImageData GetFromString(string value)
         {
             byte[] bs = SerializationRoutines.Json.Deserialize<byte[]>(value);
             return SerializationRoutines.Binary.Deserialize<ImageData>(bs);

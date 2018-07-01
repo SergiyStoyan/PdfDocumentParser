@@ -32,11 +32,19 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.findBestImageMatch = new System.Windows.Forms.CheckBox();
+            this.differentPixelNumberTolerance = new System.Windows.Forms.NumericUpDown();
+            this.label13 = new System.Windows.Forms.Label();
+            this.brightnessTolerance = new System.Windows.Forms.NumericUpDown();
+            this.label11 = new System.Windows.Forms.Label();
             this.pageRotation = new System.Windows.Forms.ComboBox();
             this.label9 = new System.Windows.Forms.Label();
             this.autoDeskew = new System.Windows.Forms.CheckBox();
             this.testFile = new System.Windows.Forms.TextBox();
             this.floatingAnchors = new System.Windows.Forms.DataGridView();
+            this.Id3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ValueType3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Value3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label10 = new System.Windows.Forms.Label();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.bText = new System.Windows.Forms.Button();
@@ -61,6 +69,10 @@
             this.fileFilterRegex = new System.Windows.Forms.TextBox();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.invoiceFirstPageRecognitionMarks = new System.Windows.Forms.DataGridView();
+            this.FloatingAnchorId2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Rectangle2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ValueType2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Value2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label4 = new System.Windows.Forms.Label();
             this.fields = new System.Windows.Forms.DataGridView();
             this.Name_ = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -72,18 +84,6 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.save = new System.Windows.Forms.Button();
             this.cancel = new System.Windows.Forms.Button();
-            this.Id3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ValueType3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Value3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FloatingAnchorId2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Rectangle2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ValueType2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Value2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.label11 = new System.Windows.Forms.Label();
-            this.brightnessTolerance = new System.Windows.Forms.NumericUpDown();
-            this.differentPixelNumberTolerance = new System.Windows.Forms.NumericUpDown();
-            this.label13 = new System.Windows.Forms.Label();
-            this.findBestImageMatch = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -94,6 +94,8 @@
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.differentPixelNumberTolerance)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.brightnessTolerance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.floatingAnchors)).BeginInit();
             this.flowLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureScale)).BeginInit();
@@ -104,8 +106,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.invoiceFirstPageRecognitionMarks)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.brightnessTolerance)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.differentPixelNumberTolerance)).BeginInit();
             this.SuspendLayout();
             // 
             // picture
@@ -196,6 +196,90 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Scanned Document Settings";
             // 
+            // findBestImageMatch
+            // 
+            this.findBestImageMatch.AutoSize = true;
+            this.findBestImageMatch.Location = new System.Drawing.Point(312, 25);
+            this.findBestImageMatch.Name = "findBestImageMatch";
+            this.findBestImageMatch.Size = new System.Drawing.Size(135, 17);
+            this.findBestImageMatch.TabIndex = 58;
+            this.findBestImageMatch.Text = "Find Best Image Match";
+            this.findBestImageMatch.UseVisualStyleBackColor = true;
+            // 
+            // differentPixelNumberTolerance
+            // 
+            this.differentPixelNumberTolerance.DecimalPlaces = 2;
+            this.differentPixelNumberTolerance.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.differentPixelNumberTolerance.Location = new System.Drawing.Point(345, 50);
+            this.differentPixelNumberTolerance.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.differentPixelNumberTolerance.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.differentPixelNumberTolerance.Name = "differentPixelNumberTolerance";
+            this.differentPixelNumberTolerance.Size = new System.Drawing.Size(55, 20);
+            this.differentPixelNumberTolerance.TabIndex = 57;
+            this.differentPixelNumberTolerance.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(173, 53);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(163, 13);
+            this.label13.TabIndex = 56;
+            this.label13.Text = "Different Pixel NumberTolerance:";
+            // 
+            // brightnessTolerance
+            // 
+            this.brightnessTolerance.DecimalPlaces = 2;
+            this.brightnessTolerance.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.brightnessTolerance.Location = new System.Drawing.Point(112, 50);
+            this.brightnessTolerance.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.brightnessTolerance.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.brightnessTolerance.Name = "brightnessTolerance";
+            this.brightnessTolerance.Size = new System.Drawing.Size(55, 20);
+            this.brightnessTolerance.TabIndex = 55;
+            this.brightnessTolerance.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(1, 53);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(110, 13);
+            this.label11.TabIndex = 54;
+            this.label11.Text = "Brightness Tolerance:";
+            // 
             // pageRotation
             // 
             this.pageRotation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -254,6 +338,28 @@
             this.floatingAnchors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.floatingAnchors.Size = new System.Drawing.Size(443, 72);
             this.floatingAnchors.TabIndex = 50;
+            // 
+            // Id3
+            // 
+            this.Id3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Id3.HeaderText = "Id";
+            this.Id3.Name = "Id3";
+            this.Id3.ReadOnly = true;
+            this.Id3.Width = 41;
+            // 
+            // ValueType3
+            // 
+            this.ValueType3.HeaderText = "Value Type";
+            this.ValueType3.Name = "ValueType3";
+            this.ValueType3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.ValueType3.Width = 70;
+            // 
+            // Value3
+            // 
+            this.Value3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Value3.HeaderText = "Value";
+            this.Value3.Name = "Value3";
+            this.Value3.ReadOnly = true;
             // 
             // label10
             // 
@@ -525,6 +631,34 @@
             this.invoiceFirstPageRecognitionMarks.Size = new System.Drawing.Size(443, 69);
             this.invoiceFirstPageRecognitionMarks.TabIndex = 29;
             // 
+            // FloatingAnchorId2
+            // 
+            this.FloatingAnchorId2.HeaderText = "Floating Anchor";
+            this.FloatingAnchorId2.Name = "FloatingAnchorId2";
+            this.FloatingAnchorId2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.FloatingAnchorId2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.FloatingAnchorId2.Width = 50;
+            // 
+            // Rectangle2
+            // 
+            this.Rectangle2.HeaderText = "Rectangle";
+            this.Rectangle2.Name = "Rectangle2";
+            this.Rectangle2.ReadOnly = true;
+            // 
+            // ValueType2
+            // 
+            this.ValueType2.HeaderText = "Value Type";
+            this.ValueType2.Name = "ValueType2";
+            this.ValueType2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.ValueType2.Width = 70;
+            // 
+            // Value2
+            // 
+            this.Value2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Value2.HeaderText = "Value";
+            this.Value2.Name = "Value2";
+            this.Value2.ReadOnly = true;
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -630,140 +764,6 @@
             this.cancel.UseVisualStyleBackColor = true;
             this.cancel.Click += new System.EventHandler(this.cancel_Click);
             // 
-            // Id3
-            // 
-            this.Id3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Id3.HeaderText = "Id";
-            this.Id3.Name = "Id3";
-            this.Id3.ReadOnly = true;
-            this.Id3.Width = 41;
-            // 
-            // ValueType3
-            // 
-            this.ValueType3.HeaderText = "Value Type";
-            this.ValueType3.Name = "ValueType3";
-            this.ValueType3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ValueType3.Width = 70;
-            // 
-            // Value3
-            // 
-            this.Value3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Value3.HeaderText = "Value";
-            this.Value3.Name = "Value3";
-            this.Value3.ReadOnly = true;
-            // 
-            // FloatingAnchorId2
-            // 
-            this.FloatingAnchorId2.HeaderText = "Floating Anchor";
-            this.FloatingAnchorId2.Name = "FloatingAnchorId2";
-            this.FloatingAnchorId2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.FloatingAnchorId2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.FloatingAnchorId2.Width = 50;
-            // 
-            // Rectangle2
-            // 
-            this.Rectangle2.HeaderText = "Rectangle";
-            this.Rectangle2.Name = "Rectangle2";
-            this.Rectangle2.ReadOnly = true;
-            // 
-            // ValueType2
-            // 
-            this.ValueType2.HeaderText = "Value Type";
-            this.ValueType2.Name = "ValueType2";
-            this.ValueType2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ValueType2.Width = 70;
-            // 
-            // Value2
-            // 
-            this.Value2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Value2.HeaderText = "Value";
-            this.Value2.Name = "Value2";
-            this.Value2.ReadOnly = true;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(1, 53);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(110, 13);
-            this.label11.TabIndex = 54;
-            this.label11.Text = "Brightness Tolerance:";
-            // 
-            // brightnessTolerance
-            // 
-            this.brightnessTolerance.DecimalPlaces = 2;
-            this.brightnessTolerance.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.brightnessTolerance.Location = new System.Drawing.Point(112, 50);
-            this.brightnessTolerance.Maximum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.brightnessTolerance.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.brightnessTolerance.Name = "brightnessTolerance";
-            this.brightnessTolerance.Size = new System.Drawing.Size(55, 20);
-            this.brightnessTolerance.TabIndex = 55;
-            this.brightnessTolerance.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // differentPixelNumberTolerance
-            // 
-            this.differentPixelNumberTolerance.DecimalPlaces = 2;
-            this.differentPixelNumberTolerance.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.differentPixelNumberTolerance.Location = new System.Drawing.Point(345, 50);
-            this.differentPixelNumberTolerance.Maximum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.differentPixelNumberTolerance.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.differentPixelNumberTolerance.Name = "differentPixelNumberTolerance";
-            this.differentPixelNumberTolerance.Size = new System.Drawing.Size(55, 20);
-            this.differentPixelNumberTolerance.TabIndex = 57;
-            this.differentPixelNumberTolerance.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(173, 53);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(163, 13);
-            this.label13.TabIndex = 56;
-            this.label13.Text = "Different Pixel NumberTolerance:";
-            // 
-            // findBestImageMatch
-            // 
-            this.findBestImageMatch.AutoSize = true;
-            this.findBestImageMatch.Location = new System.Drawing.Point(312, 25);
-            this.findBestImageMatch.Name = "findBestImageMatch";
-            this.findBestImageMatch.Size = new System.Drawing.Size(135, 17);
-            this.findBestImageMatch.TabIndex = 58;
-            this.findBestImageMatch.Text = "Find Best Image Match";
-            this.findBestImageMatch.UseVisualStyleBackColor = true;
-            // 
             // TemplateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -785,6 +785,8 @@
             this.splitContainer2.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.differentPixelNumberTolerance)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.brightnessTolerance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.floatingAnchors)).EndInit();
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel2.PerformLayout();
@@ -798,8 +800,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.invoiceFirstPageRecognitionMarks)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).EndInit();
             this.flowLayoutPanel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.brightnessTolerance)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.differentPixelNumberTolerance)).EndInit();
             this.ResumeLayout(false);
 
         }

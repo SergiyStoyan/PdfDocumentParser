@@ -138,7 +138,7 @@ namespace Cliver.InvoiceParser
                     Settings.Template t = (Settings.Template)e.Row.Tag;
                     if (t == null)
                     {
-                        t = SerializationRoutines.Json.Deserialize<Settings.Template>(Settings.TemplatesSettings.InitialTemplate);
+                        t = Settings.Template.CreateInitialTemplate();
                         Settings.Templates.Templates.Add(t);
                         e.Row.Tag = t;
                         e.Row.Cells["Name_"].Value = t.Name;

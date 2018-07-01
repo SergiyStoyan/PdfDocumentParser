@@ -360,7 +360,7 @@ namespace Cliver.InvoiceParser
                 {
                     case Settings.Template.ValueTypes.PdfText:
                         {
-                            string t1 = FieldPreparation.Normalize(m.Value);
+                            string t1 = FieldPreparation.Normalize((string)m.GetValue());
                             string t2 = FieldPreparation.Normalize((string)v);
                             if (t1 == t2)
                                 continue;
@@ -369,7 +369,7 @@ namespace Cliver.InvoiceParser
                         }
                     case Settings.Template.ValueTypes.OcrText:
                         {
-                            string t1 = FieldPreparation.Normalize(m.Value);
+                            string t1 = FieldPreparation.Normalize((string)m.GetValue());
                             string t2 = FieldPreparation.Normalize((string)v);
                             if (t1 == t2)
                                 continue;
@@ -378,7 +378,7 @@ namespace Cliver.InvoiceParser
                         }
                     case Settings.Template.ValueTypes.ImageData:
                         {
-                            ImageData id = ImageData.Deserialize(m.Value);
+                            ImageData id = (ImageData)m.GetValue();
                             if (id.ImageIsSimilar((ImageData)(v), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance))
                                 continue;
                             error = "InvoiceFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.InvoiceFirstPageRecognitionMarks.IndexOf(m) + "]: image is not similar.";
@@ -398,7 +398,7 @@ namespace Cliver.InvoiceParser
             string error;
             object v = GetValue(f.FloatingAnchorId, f.Rectangle, f.ValueType, out error);
             if (v is ImageData)
-                return ((ImageData)v).Serialize();
+                return ((ImageData)v).GetAsString();
             return FieldPreparation.Normalize(prepareField((string)v));
         }
 

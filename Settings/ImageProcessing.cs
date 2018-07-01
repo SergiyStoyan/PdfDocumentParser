@@ -19,8 +19,9 @@ namespace Cliver.InvoiceParser
 
         public class ImageProcessingSettings : Cliver.Settings
         {
-            public float BrightnessTolerance = 0.2f;
-            public float DifferentPixelNumberTolerance = 0.05f;
+            public float BrightnessTolerance = 0.4f;
+            public float DifferentPixelNumberTolerance = 0.01f;
+            public bool FindBestImageMatch = false;
 
             public override void Loaded()
             {

@@ -17,59 +17,10 @@ namespace Cliver.InvoiceParser
         {
             public List<Template> Templates = new List<Template>();//preserving order of matching: only the first match is to be applied
 
-            internal const string InitialTemplate = @"{
-""Name"":"""",
-""FileFilterRegex"":{
-  ""Pattern"": ""\\.pdf$"",
-  ""Options"": 1
-},
-""InvoiceFirstPageRecognitionMarks"":"""",
-""Active"": true,
-""TestFile"":"""",
-""Fields"":[
-    {
-        ""Name"":""JOB#"",
-        ""Rectangle"":{
-             ""X"": 245.0,
-            ""Y"": 510.0,
-            ""Width"": 190.0,
-            ""Height"": 12.0
-        },
-    },
-    {
-        ""Name"":""PO#"",
-        ""Rectangle"":{
-            ""X"": 435.0,
-            ""Y"": 510.0,
-            ""Width"": 165.0,
-            ""Height"": 12.0
-        },
-    },
-    {
-        ""Name"":""INVOICE#"",
-        ""Rectangle"":{
-            ""X"": 381.0,
-            ""Y"": 723.0,
-            ""Width"": 100.0,
-            ""Height"": 12.0
-        },
-    },
-    {
-        ""Name"":""COST"",
-        ""Rectangle"":{
-            ""X"": 381.0,
-            ""Y"": 723.0,
-            ""Width"": 100.0,
-            ""Height"": 12.0
-        },
-    },
-]
-            }";
-
             public override void Loaded()
             {
                 if (Templates.Count < 1)
-                    Templates.Add(SerializationRoutines.Json.Deserialize<Template>(InitialTemplate));
+                    Templates.Add(Template.CreateInitialTemplate());
             }
 
             public override void Saving()
@@ -79,6 +30,31 @@ namespace Cliver.InvoiceParser
 
         public partial class Template
         {
+            public static Template CreateInitialTemplate()
+            {
+                return new Template
+                {
+                    Active = true,
+                    AutoDeskew = false,
+                    BrightnessTolerance = Settings.ImageProcessing.BrightnessTolerance,
+                    DifferentPixelNumberTolerance = Settings.ImageProcessing.DifferentPixelNumberTolerance,
+                    Fields = new List<Field> {
+                        new Field { Name = "JOB#" },
+                        new Field { Name = "PO#" },
+                        new Field { Name = "INVOICE#" },
+                        new Field { Name = "COST" },
+                    },
+                    Name = "-new-",
+                    FileFilterRegex = new Regex(@"\.pdf$", RegexOptions.IgnoreCase),
+                    FindBestImageMatch = false,
+                    FloatingAnchors = new List<FloatingAnchor>(),
+                    InvoiceFirstPageRecognitionMarks = new List<Mark>(),
+                    PagesRotation = PageRotations.NONE,
+                    TestPictureScale = Settings.General.TestPictureScale,
+                    TestFile = "",
+                };
+            }
+
             public string Name;
 
             public Regex FileFilterRegex;
@@ -157,35 +133,70 @@ namespace Cliver.InvoiceParser
 
             public class Mark
             {
+                //serialized
                 public int? FloatingAnchorId;//when set, Rectangle.X,Y are bound to location of the anchor as to zero point
-                public string Value;
+                //serialized
                 public RectangleF Rectangle;
+                //serialized
                 public ValueTypes ValueType = ValueTypes.PdfText;
-                //public byte[] ValueAsBytes
-                //{
-                //    get
-                //    {
-                //        if (value == null)
-                //            return null;
-                //        return SerializationRoutines.Binary.Serialize(value);
-                //    }
-                //    set
-                //    {
-                //        this.value = SerializationRoutines.Binary.Deserialize(value);
-                //    }
-                //}
+                //serialized
+                public byte[] ValueAsBytes
+                {
+                    get
+                    {
+                        if (value == null)
+                            return null;
+                        return SerializationRoutines.Binary.Serialize(value);
+                    }
+                    set
+                    {
+                        this.value = SerializationRoutines.Binary.Deserialize(value);
+                    }
+                }
 
-                //public object GetValue()
-                //{
-                //    return value;
-                //}
-                //object value;
-                //public string GetValueAsString()
-                //{
-                //    if (value == null)
-                //        return null;
-                //    return SerializationRoutines.Json.Serialize(value);
-                //}
+                public object GetValue()
+                {
+                    return value;
+                }
+                object value;
+
+                public string GetValueAsString()
+                {
+                    if (value == null)
+                        return null;
+                    if (value is string)
+                        return (string)value;
+                    return SerializationRoutines.Json.Serialize(value);
+                }
+
+                public Mark (int? floatingAnchorid, RectangleF rectangle, ValueTypes valueType, string valueAsString)
+                {
+                    FloatingAnchorId = floatingAnchorid;
+                    Rectangle = rectangle;
+                    ValueType = valueType;
+                    if (valueAsString != null)
+                        switch (valueType)
+                        {
+                            case ValueTypes.PdfText:
+                                value = valueAsString;
+                                break;
+                            case ValueTypes.OcrText:
+                                value = valueAsString;
+                                break;
+                            case ValueTypes.ImageData:
+                                value = ImageData.GetFromString(valueAsString);
+                                break;
+                            default:
+                                throw new Exception("Unknown option: " + valueType);
+                        }
+                    else
+                        value = null;
+                }
+
+                public Mark()//!!!used only by serializer
+                {
+
+                }
             }
 
             public enum ValueTypes
@@ -193,22 +204,6 @@ namespace Cliver.InvoiceParser
                 PdfText,
                 OcrText,
                 ImageData
-            }
-            [Serializable]
-            public class Value
-            {
-                public byte[] GetAsBytes()
-                {
-                    return SerializationRoutines.Binary.Serialize(this);
-                }
-                virtual public string GetAsString()
-                {
-                    return SerializationRoutines.Json.Serialize(this);
-                }
-                static public Value GetFromBytes(byte[] elementAsBytes)
-                {
-                    return SerializationRoutines.Binary.Deserialize<Value>(elementAsBytes);
-                }
             }
 
             public class Field
@@ -233,25 +228,27 @@ namespace Cliver.InvoiceParser
                     {
                         if (value == null)
                             return null;
-                        return value.GetAsBytes();
+                        return SerializationRoutines.Binary.Serialize(value);
                     }
                     set
                     {
-                        this.value = Value.GetFromBytes(value);
+                        this.value = SerializationRoutines.Binary.Deserialize(value);
                     }
                 }
 
-                public Value GetValue()
-                {
-                    return value;
-                }
-                Value value;
-                public string GetValueAsString()
+                static public string GetValueAsString(object value)
                 {
                     if (value == null)
                         return null;
-                    return value.GetAsString();
+                    return SerializationRoutines.Json.Serialize(value);
                 }
+
+                public object GetValue()
+                {
+                    return value;
+                }
+                object value;
+
                 public FloatingAnchor(int id, ValueTypes valueType, string valueAsString)
                 {
                     Id = id;
@@ -274,12 +271,13 @@ namespace Cliver.InvoiceParser
                     else
                         value = null;
                 }
+
                 public FloatingAnchor()//!!!used only by serializer!!!
                 { 
                 }
 
                 [Serializable]
-                public class PdfTextValue : Value
+                public class PdfTextValue 
                 {
                     public List<CharBox> CharBoxs;
                     [Serializable]
@@ -290,7 +288,7 @@ namespace Cliver.InvoiceParser
                     }
                 }
                 [Serializable]
-                public class ImageDataValue : Value
+                public class ImageDataValue 
                 {
                     public List<ImageBox> ImageBoxs;
                     [Serializable]
@@ -301,7 +299,7 @@ namespace Cliver.InvoiceParser
                     }
                 }
                 [Serializable]
-                public class OcrTextValue : Value
+                public class OcrTextValue 
                 {
                     public List<CharBox> CharBoxs;
                     [Serializable]
