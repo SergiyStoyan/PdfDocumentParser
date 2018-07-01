@@ -273,15 +273,13 @@ namespace Cliver.PdfDocumentParser
                 switch (floatingAnchors.Columns[e.ColumnIndex].Name)
                 {
                     case "Id3":
-                        if (null != findAndDrawFloatingAnchor(fai))
-                            setStatus(statuses.SUCCESS, "FloatingAnchor[" + fai + "] is found.");
+                        findAndDrawFloatingAnchor(fai);
                         break;
                     case "Body3":
                         //if (floatingAnchors.Rows[e.RowIndex].Cells["Body3"].Value == null)                        
                         //    floatingAnchors.Rows[e.RowIndex].Cells["Id3"].Value = null;
                         onFloatingAnchorsChanged(fai);
-                        if (null != findAndDrawFloatingAnchor(fai))
-                            setStatus(statuses.SUCCESS, "FloatingAnchor[" + fai + "] is found.");
+                        findAndDrawFloatingAnchor(fai);
                         break;
                     case "ValueType3":
                         r.Cells["Body3"].Value = null;
@@ -308,9 +306,7 @@ namespace Cliver.PdfDocumentParser
                         floatingAnchors.Rows[i].Selected = true;
                         return;
                     }
-                    int? fai = (int?)r.Cells["Id3"].Value;
-                    if (null != findAndDrawFloatingAnchor(fai))
-                        setStatus(statuses.SUCCESS, "FloatingAnchor[" + fai + "] is found.");
+                    findAndDrawFloatingAnchor((int?)r.Cells["Id3"].Value);
                 }
                 catch (Exception ex)
                 {
@@ -764,7 +760,12 @@ namespace Cliver.PdfDocumentParser
                     continue;
                 int fai = (int)r.Cells["Id3"].Value;
                 if (fai == id)
-                    return new Settings.Template.FloatingAnchor(fai, (Settings.Template.ValueTypes)r.Cells["ValueType3"].Value, (string)r.Cells["Body3"].Value);
+                    return new Settings.Template.FloatingAnchor
+                    {
+                        Id = fai,
+                        ValueType = (Settings.Template.ValueTypes)r.Cells["ValueType3"].Value,
+                        ValueAsString = (string)r.Cells["Body3"].Value
+                    };
             }
             throw new Exception("There is no FloatingAnchor with Id=" + id);
         }
@@ -810,6 +811,7 @@ namespace Cliver.PdfDocumentParser
                 setStatus(statuses.ERROR, "FloatingAnchor[" + fa.Id + "] is not found.");
                 return null;
             }
+            setStatus(statuses.SUCCESS, "FloatingAnchor[" + fa.Id + "] is found.");
             drawBoxes(Settings.General.BoundingBoxColor, rs, renewImage);
             return new PointF(rs[0].X, rs[0].Y);
         }
@@ -987,7 +989,7 @@ namespace Cliver.PdfDocumentParser
                         var cs = floatingAnchors.Rows[i].Cells;
                         cs["Id3"].Value = fa.Id;
                         cs["ValueType3"].Value = fa.ValueType;
-                        cs["Body3"].Value = fa.GetValueAsString();
+                        cs["Body3"].Value = fa.ValueAsString;
                     }
                     onFloatingAnchorsChanged(null);
                 }
@@ -999,9 +1001,9 @@ namespace Cliver.PdfDocumentParser
                     {
                         int i = documentFirstPageRecognitionMarks.Rows.Add();
                         var cs = documentFirstPageRecognitionMarks.Rows[i].Cells;
-                        cs["Rectangle2"].Value = SerializationRoutines.Json.Serialize(m.Rectangle);
+                        cs["Rectangle2"].Value = m.Rectangle == null ? null : SerializationRoutines.Json.Serialize(m.Rectangle);
                         cs["ValueType2"].Value = m.ValueType;
-                        cs["Value2"].Value = m.GetValueAsString();
+                        cs["Value2"].Value = m.ValueAsString;
                         cs["FloatingAnchorId2"].Value = m.FloatingAnchorId;
                     }
                 }
@@ -1014,7 +1016,7 @@ namespace Cliver.PdfDocumentParser
                         int i = fields.Rows.Add();
                         var cs = fields.Rows[i].Cells;
                         cs["Name_"].Value = f.Name;
-                        cs["Rectangle"].Value = SerializationRoutines.Json.Serialize(f.Rectangle);
+                        cs["Rectangle"].Value = f.Rectangle == null ? null : SerializationRoutines.Json.Serialize(f.Rectangle);
                         cs["Ocr"].Value = f.ValueType == Settings.Template.ValueTypes.PdfText ? false : true;
                         cs["FloatingAnchorId"].Value = f.FloatingAnchorId;
                     }
@@ -1304,19 +1306,25 @@ namespace Cliver.PdfDocumentParser
             t.FloatingAnchors = new List<Settings.Template.FloatingAnchor>();
             foreach (DataGridViewRow r in floatingAnchors.Rows)
                 if (r.Cells["Id3"].Value != null)
-                    t.FloatingAnchors.Add(new Settings.Template.FloatingAnchor((int)r.Cells["Id3"].Value, (Settings.Template.ValueTypes)r.Cells["ValueType3"].Value, (string)r.Cells["Body3"].Value));
+                    t.FloatingAnchors.Add(new Settings.Template.FloatingAnchor
+                    {
+                        Id = (int)r.Cells["Id3"].Value,
+                        ValueType = (Settings.Template.ValueTypes)r.Cells["ValueType3"].Value,
+                        ValueAsString = (string)r.Cells["Body3"].Value
+                    });
             t.FloatingAnchors = t.FloatingAnchors.OrderBy(a => a.Id).ToList();
 
             t.DocumentFirstPageRecognitionMarks = new List<Settings.Template.Mark>();
             foreach (DataGridViewRow r in documentFirstPageRecognitionMarks.Rows)
                 if (r.Cells["Value2"].Value != null || r.Cells["FloatingAnchorId2"].Value != null)
                 {
-                    Settings.Template.Mark m = new Settings.Template.Mark(
-                        (int?)r.Cells["FloatingAnchorId2"].Value,
-                        r.Cells["Rectangle2"].Value == null ? null : SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>((string)r.Cells["Rectangle2"].Value),
-                        (Settings.Template.ValueTypes)r.Cells["ValueType2"].Value,
-                        (string)r.Cells["Value2"].Value
-                    );
+                    Settings.Template.Mark m = new Settings.Template.Mark
+                    {
+                        FloatingAnchorId = (int?)r.Cells["FloatingAnchorId2"].Value,
+                        Rectangle = r.Cells["Rectangle2"].Value == null ? null : SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>((string)r.Cells["Rectangle2"].Value),
+                        ValueType = (Settings.Template.ValueTypes)r.Cells["ValueType2"].Value,
+                        ValueAsString = (string)r.Cells["Value2"].Value
+                    };
                     if (m.FloatingAnchorId != null && t.FloatingAnchors.FirstOrDefault(x => x.Id == m.FloatingAnchorId) == null)
                         throw new Exception("There is no FloatingAnchor with Id=" + m.FloatingAnchorId);
                     t.DocumentFirstPageRecognitionMarks.Add(m);

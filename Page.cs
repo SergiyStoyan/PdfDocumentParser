@@ -162,7 +162,7 @@ namespace Cliver.PdfDocumentParser
         {
             Settings.Template.FloatingAnchor fa = pageCollection.ActiveTemplate.FloatingAnchors.Find(a => a.Id == floatingAnchorId);
             PointF? p;
-            string fas = fa.GetValueAsString();
+            string fas = fa.ValueAsString;
             if (!floatingAnchorValueStrings2point0.TryGetValue(fas, out p))
             {
                 List<RectangleF> rs = FindFloatingAnchor(fa);

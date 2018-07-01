@@ -41,13 +41,16 @@ namespace Cliver.PdfDocumentParser
             //    g = Encoding.UTF8.GetString(ms.ToArray());
             //}
 
-            byte[] bs = SerializationRoutines.Binary.Serialize(this);//more compact
-            return SerializationRoutines.Json.Serialize(bs);
+            //byte[] bs = SerializationRoutines.Binary.Serialize(this);//more compact
+            //return SerializationRoutines.Json.Serialize(bs, false);
+            return SerializationRoutines.Json.Serialize(this, false);
         }
-        static public ImageData GetFromString(string value)
+        static public ImageData GetFromString(string s)
         {
-            byte[] bs = SerializationRoutines.Json.Deserialize<byte[]>(value);
-            return SerializationRoutines.Binary.Deserialize<ImageData>(bs);
+            //byte[] bs = SerializationRoutines.Json.Deserialize<byte[]>(s);
+            //return SerializationRoutines.Binary.Deserialize<ImageData>(bs);
+            return SerializationRoutines.Json.Deserialize<ImageData>(s);
+
             //using (MemoryStream ms = new MemoryStream(bs))
             //{
             //    using (GZipStream compressionStream = new GZipStream(ms, CompressionMode.Decompress))
