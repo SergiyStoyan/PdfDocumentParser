@@ -16,7 +16,7 @@ using iTextSharp.text.pdf.parser;
 using System.Diagnostics;
 using ImageMagick;
 
-namespace Cliver.InvoiceParser
+namespace Cliver.PdfDocumentParser
 {
     public static partial class Pdf
     {

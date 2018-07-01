@@ -7,11 +7,11 @@ using System.Runtime.CompilerServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly: AssemblyTitle("Invoice Parser")]
-[assembly: AssemblyDescription("Invoice Parser")]
+[assembly: AssemblyTitle("Pdf Document Parser")]
+[assembly: AssemblyDescription("Pdf Document Parser")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CliverSoft")]
-[assembly: AssemblyProduct("Invoice Parser")]
+[assembly: AssemblyProduct("Pdf Document Parser")]
 [assembly: AssemblyCopyright("developed by Sergey Stoyan, sergey.stoyan@gmail.com")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

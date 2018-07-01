@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Cliver;
 
-namespace Cliver.InvoiceParser
+namespace Cliver.PdfDocumentParser
 {
     partial class AboutBox : Form//BaseForm // 
     {

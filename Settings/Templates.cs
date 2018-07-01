@@ -6,7 +6,7 @@ using System.Linq;
 using System.Drawing;
 using System.Collections.Specialized;
 
-namespace Cliver.InvoiceParser
+namespace Cliver.PdfDocumentParser
 {
     public partial class Settings
     {
@@ -39,16 +39,16 @@ namespace Cliver.InvoiceParser
                     BrightnessTolerance = Settings.ImageProcessing.BrightnessTolerance,
                     DifferentPixelNumberTolerance = Settings.ImageProcessing.DifferentPixelNumberTolerance,
                     Fields = new List<Field> {
-                        new Field { Name = "JOB#" },
-                        new Field { Name = "PO#" },
-                        new Field { Name = "INVOICE#" },
-                        new Field { Name = "COST" },
+                        new Field { Name = "INVOICE#" , Rectangle=new RectangleF(0,0,10,10)},
+                        new Field { Name = "JOB#", Rectangle=new RectangleF(0,0,10,10) },
+                        new Field { Name = "PO#", Rectangle=new RectangleF(0,0,10,10) },
+                        new Field { Name = "COST" , Rectangle=new RectangleF(0,0,10,10)},
                     },
                     Name = "-new-",
                     FileFilterRegex = new Regex(@"\.pdf$", RegexOptions.IgnoreCase),
                     FindBestImageMatch = false,
                     FloatingAnchors = new List<FloatingAnchor>(),
-                    InvoiceFirstPageRecognitionMarks = new List<Mark>(),
+                    DocumentFirstPageRecognitionMarks = new List<Mark>(),
                     PagesRotation = PageRotations.NONE,
                     TestPictureScale = Settings.General.TestPictureScale,
                     TestFile = "",
@@ -78,7 +78,7 @@ namespace Cliver.InvoiceParser
 
             public List<FloatingAnchor> FloatingAnchors;
 
-            public List<Mark> InvoiceFirstPageRecognitionMarks;
+            public List<Mark> DocumentFirstPageRecognitionMarks;
 
             public List<Field> Fields;//preserving order for output
 

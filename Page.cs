@@ -15,7 +15,7 @@ using System.Text.RegularExpressions;
 //using iTextSharp.text.pdf.parser;
 using System.Drawing;
 
-namespace Cliver.InvoiceParser
+namespace Cliver.PdfDocumentParser
 {
     public class Page : IDisposable
     {
@@ -41,10 +41,10 @@ namespace Cliver.InvoiceParser
                     _bitmap.Dispose();
                     _bitmap = null;
                 }
-                if (_bitmapPreparedByTemplate != null)
+                if (_activeTemplateBitmap != null)
                 {
-                    _bitmapPreparedByTemplate.Dispose();
-                    _bitmapPreparedByTemplate = null;
+                    _activeTemplateBitmap.Dispose();
+                    _activeTemplateBitmap = null;
                 }
                 if (_imageData != null)
                 {
@@ -84,10 +84,10 @@ namespace Cliver.InvoiceParser
                     //_imageData.Dispose();
                     _imageData = null;
                 }
-                if (_bitmapPreparedByTemplate != null)
+                if (_activeTemplateBitmap != null)
                 {
-                    _bitmapPreparedByTemplate.Dispose();
-                    _bitmapPreparedByTemplate = null;
+                    _activeTemplateBitmap.Dispose();
+                    _activeTemplateBitmap = null;
                 }
                 if (_ocrCharBoxs != null)
                     _ocrCharBoxs = null;
@@ -105,10 +105,12 @@ namespace Cliver.InvoiceParser
         {
             get
             {
-                if (_bitmapPreparedByTemplate == null)
+                if (_activeTemplateBitmap == null)
                 {
                     Bitmap b;
-                    if (pageCollection.ActiveTemplate.PagesRotation == Settings.Template.PageRotations.NONE && !pageCollection.ActiveTemplate.AutoDeskew)
+                    if (pageCollection.ActiveTemplate != null
+                        && (pageCollection.ActiveTemplate.PagesRotation == Settings.Template.PageRotations.NONE && !pageCollection.ActiveTemplate.AutoDeskew)
+                        )
                         b = Bitmap;
                     else
                     {
@@ -148,13 +150,13 @@ namespace Cliver.InvoiceParser
                             }
                         }
                     }
-                    _bitmapPreparedByTemplate = b;
+                    _activeTemplateBitmap = b;
                 }
-                return _bitmapPreparedByTemplate;
+                return _activeTemplateBitmap;
             }
         }
 
-        Bitmap _bitmapPreparedByTemplate = null;
+        Bitmap _activeTemplateBitmap = null;
 
         public PointF? GetFloatingAnchorPoint0(int floatingAnchorId)
         {
@@ -349,16 +351,26 @@ namespace Cliver.InvoiceParser
         }
         List<Ocr.CharBox> _ocrCharBoxs;
 
-        public bool IsInvoiceFirstPage()
+        public bool IsDocumentFirstPage()
         {
             string error;
-            return IsInvoiceFirstPage(out error);
+            return IsDocumentFirstPage(out error);
         }
 
-        public bool IsInvoiceFirstPage(out string error)
+        public bool IsDocumentFirstPage(out string error)
         {
-            foreach (Settings.Template.Mark m in pageCollection.ActiveTemplate.InvoiceFirstPageRecognitionMarks)
+            foreach (Settings.Template.Mark m in pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks)
             {
+                if (m.FloatingAnchorId != null && m.GetValue() == null)
+                {
+                    PointF? p0 = GetFloatingAnchorPoint0((int)m.FloatingAnchorId);
+                    if (p0 == null)
+                    {
+                        error = "FloatingAnchor[" + m.FloatingAnchorId + "] not found.";
+                        return false;
+                    }
+                    continue;
+                }
                 object v = GetValue(m.FloatingAnchorId, m.Rectangle, m.ValueType, out error);
                 switch (m.ValueType)
                 {
@@ -368,7 +380,7 @@ namespace Cliver.InvoiceParser
                             string t2 = FieldPreparation.Normalize((string)v);
                             if (t1 == t2)
                                 continue;
-                            error = "InvoiceFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.InvoiceFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
+                            error = "documentFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
                             return false;
                         }
                     case Settings.Template.ValueTypes.OcrText:
@@ -377,7 +389,7 @@ namespace Cliver.InvoiceParser
                             string t2 = FieldPreparation.Normalize((string)v);
                             if (t1 == t2)
                                 continue;
-                            error = "InvoiceFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.InvoiceFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
+                            error = "documentFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
                             return false;
                         }
                     case Settings.Template.ValueTypes.ImageData:
@@ -385,7 +397,7 @@ namespace Cliver.InvoiceParser
                             ImageData id = (ImageData)m.GetValue();
                             if (id.ImageIsSimilar((ImageData)(v), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance))
                                 continue;
-                            error = "InvoiceFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.InvoiceFirstPageRecognitionMarks.IndexOf(m) + "]: image is not similar.";
+                            error = "documentFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.IndexOf(m) + "]: image is not similar.";
                             return false;
                         }
                     default:

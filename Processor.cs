@@ -7,7 +7,7 @@ using System.IO;
 using Cliver;
 using System.Text.RegularExpressions;
 
-namespace Cliver.InvoiceParser
+namespace Cliver.PdfDocumentParser
 {
     class Processor
     {

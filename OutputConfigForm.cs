@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Cliver.InvoiceParser
+namespace Cliver.PdfDocumentParser
 {
     public partial class OutputConfigForm : Form
     {

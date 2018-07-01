@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using Tesseract;
 
-namespace Cliver.InvoiceParser
+namespace Cliver.PdfDocumentParser
 {
     public  class Ocr : IDisposable
     {

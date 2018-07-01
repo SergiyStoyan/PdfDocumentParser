@@ -1,4 +1,4 @@
-﻿namespace Cliver.InvoiceParser
+﻿namespace Cliver.PdfDocumentParser
 {
     partial class TemplateForm
     {
@@ -42,14 +42,11 @@
             this.autoDeskew = new System.Windows.Forms.CheckBox();
             this.testFile = new System.Windows.Forms.TextBox();
             this.floatingAnchors = new System.Windows.Forms.DataGridView();
-            this.Id3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ValueType3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Value3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label10 = new System.Windows.Forms.Label();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.bShowPdfText = new System.Windows.Forms.Button();
             this.bShowOcrText = new System.Windows.Forms.Button();
-            this.bIsInvoiceFirstPage = new System.Windows.Forms.Button();
+            this.bIsDocumentFirstPage = new System.Windows.Forms.Button();
             this.bTestFile = new System.Windows.Forms.Button();
             this.tCurrentPage = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -69,7 +66,7 @@
             this.lStatus = new System.Windows.Forms.TextBox();
             this.fileFilterRegex = new System.Windows.Forms.TextBox();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
-            this.invoiceFirstPageRecognitionMarks = new System.Windows.Forms.DataGridView();
+            this.documentFirstPageRecognitionMarks = new System.Windows.Forms.DataGridView();
             this.FloatingAnchorId2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Rectangle2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ValueType2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
@@ -85,6 +82,9 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.save = new System.Windows.Forms.Button();
             this.cancel = new System.Windows.Forms.Button();
+            this.Id3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ValueType3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Body3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -104,7 +104,7 @@
             this.splitContainer3.Panel1.SuspendLayout();
             this.splitContainer3.Panel2.SuspendLayout();
             this.splitContainer3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.invoiceFirstPageRecognitionMarks)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.documentFirstPageRecognitionMarks)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -332,35 +332,13 @@
             this.floatingAnchors.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Id3,
             this.ValueType3,
-            this.Value3});
+            this.Body3});
             this.floatingAnchors.Location = new System.Drawing.Point(0, 310);
             this.floatingAnchors.MultiSelect = false;
             this.floatingAnchors.Name = "floatingAnchors";
             this.floatingAnchors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.floatingAnchors.Size = new System.Drawing.Size(443, 72);
             this.floatingAnchors.TabIndex = 50;
-            // 
-            // Id3
-            // 
-            this.Id3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Id3.HeaderText = "Id";
-            this.Id3.Name = "Id3";
-            this.Id3.ReadOnly = true;
-            this.Id3.Width = 41;
-            // 
-            // ValueType3
-            // 
-            this.ValueType3.HeaderText = "Value Type";
-            this.ValueType3.Name = "ValueType3";
-            this.ValueType3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ValueType3.Width = 70;
-            // 
-            // Value3
-            // 
-            this.Value3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Value3.HeaderText = "Value";
-            this.Value3.Name = "Value3";
-            this.Value3.ReadOnly = true;
             // 
             // label10
             // 
@@ -375,7 +353,7 @@
             // 
             this.flowLayoutPanel2.Controls.Add(this.bShowPdfText);
             this.flowLayoutPanel2.Controls.Add(this.bShowOcrText);
-            this.flowLayoutPanel2.Controls.Add(this.bIsInvoiceFirstPage);
+            this.flowLayoutPanel2.Controls.Add(this.bIsDocumentFirstPage);
             this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 172);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Size = new System.Drawing.Size(360, 31);
@@ -403,16 +381,16 @@
             this.bShowOcrText.UseVisualStyleBackColor = true;
             this.bShowOcrText.Click += new System.EventHandler(this.bShowOcrText_Click);
             // 
-            // bIsInvoiceFirstPage
+            // bIsDocumentFirstPage
             // 
-            this.bIsInvoiceFirstPage.AutoSize = true;
-            this.bIsInvoiceFirstPage.Location = new System.Drawing.Point(190, 3);
-            this.bIsInvoiceFirstPage.Name = "bIsInvoiceFirstPage";
-            this.bIsInvoiceFirstPage.Size = new System.Drawing.Size(119, 23);
-            this.bIsInvoiceFirstPage.TabIndex = 27;
-            this.bIsInvoiceFirstPage.Text = "Is Invoice First Page?";
-            this.bIsInvoiceFirstPage.UseVisualStyleBackColor = true;
-            this.bIsInvoiceFirstPage.Click += new System.EventHandler(this.bIsInvoiceFirstPage_Click);
+            this.bIsDocumentFirstPage.AutoSize = true;
+            this.bIsDocumentFirstPage.Location = new System.Drawing.Point(190, 3);
+            this.bIsDocumentFirstPage.Name = "bIsDocumentFirstPage";
+            this.bIsDocumentFirstPage.Size = new System.Drawing.Size(133, 23);
+            this.bIsDocumentFirstPage.TabIndex = 27;
+            this.bIsDocumentFirstPage.Text = "Is Document First Page?";
+            this.bIsDocumentFirstPage.UseVisualStyleBackColor = true;
+            this.bIsDocumentFirstPage.Click += new System.EventHandler(this.bIsDocumentFirstPage_Click);
             // 
             // bTestFile
             // 
@@ -617,7 +595,7 @@
             // 
             // splitContainer3.Panel1
             // 
-            this.splitContainer3.Panel1.Controls.Add(this.invoiceFirstPageRecognitionMarks);
+            this.splitContainer3.Panel1.Controls.Add(this.documentFirstPageRecognitionMarks);
             this.splitContainer3.Panel1.Controls.Add(this.label4);
             // 
             // splitContainer3.Panel2
@@ -628,21 +606,21 @@
             this.splitContainer3.SplitterDistance = 82;
             this.splitContainer3.TabIndex = 0;
             // 
-            // invoiceFirstPageRecognitionMarks
+            // documentFirstPageRecognitionMarks
             // 
-            this.invoiceFirstPageRecognitionMarks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.invoiceFirstPageRecognitionMarks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.documentFirstPageRecognitionMarks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.documentFirstPageRecognitionMarks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.FloatingAnchorId2,
             this.Rectangle2,
             this.ValueType2,
             this.Value2});
-            this.invoiceFirstPageRecognitionMarks.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.invoiceFirstPageRecognitionMarks.Location = new System.Drawing.Point(0, 13);
-            this.invoiceFirstPageRecognitionMarks.MultiSelect = false;
-            this.invoiceFirstPageRecognitionMarks.Name = "invoiceFirstPageRecognitionMarks";
-            this.invoiceFirstPageRecognitionMarks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.invoiceFirstPageRecognitionMarks.Size = new System.Drawing.Size(443, 69);
-            this.invoiceFirstPageRecognitionMarks.TabIndex = 29;
+            this.documentFirstPageRecognitionMarks.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.documentFirstPageRecognitionMarks.Location = new System.Drawing.Point(0, 13);
+            this.documentFirstPageRecognitionMarks.MultiSelect = false;
+            this.documentFirstPageRecognitionMarks.Name = "documentFirstPageRecognitionMarks";
+            this.documentFirstPageRecognitionMarks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.documentFirstPageRecognitionMarks.Size = new System.Drawing.Size(443, 69);
+            this.documentFirstPageRecognitionMarks.TabIndex = 29;
             // 
             // FloatingAnchorId2
             // 
@@ -678,9 +656,9 @@
             this.label4.Dock = System.Windows.Forms.DockStyle.Top;
             this.label4.Location = new System.Drawing.Point(0, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(211, 13);
+            this.label4.Size = new System.Drawing.Size(225, 13);
             this.label4.TabIndex = 26;
-            this.label4.Text = "Invoice First Page Recognition Text Marks:";
+            this.label4.Text = "Document First Page Recognition Text Marks:";
             // 
             // fields
             // 
@@ -777,6 +755,28 @@
             this.cancel.UseVisualStyleBackColor = true;
             this.cancel.Click += new System.EventHandler(this.cancel_Click);
             // 
+            // Id3
+            // 
+            this.Id3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Id3.HeaderText = "Id";
+            this.Id3.Name = "Id3";
+            this.Id3.ReadOnly = true;
+            this.Id3.Width = 41;
+            // 
+            // ValueType3
+            // 
+            this.ValueType3.HeaderText = "Value Type";
+            this.ValueType3.Name = "ValueType3";
+            this.ValueType3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.ValueType3.Width = 70;
+            // 
+            // Body3
+            // 
+            this.Body3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Body3.HeaderText = "Body";
+            this.Body3.Name = "Body3";
+            this.Body3.ReadOnly = true;
+            // 
             // TemplateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -810,7 +810,7 @@
             this.splitContainer3.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
             this.splitContainer3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.invoiceFirstPageRecognitionMarks)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.documentFirstPageRecognitionMarks)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).EndInit();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -832,8 +832,8 @@
         private System.Windows.Forms.Button bNextPage;
         private System.Windows.Forms.Button bPrevPage;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button bIsInvoiceFirstPage;
-        private System.Windows.Forms.DataGridView invoiceFirstPageRecognitionMarks;
+        private System.Windows.Forms.Button bIsDocumentFirstPage;
+        private System.Windows.Forms.DataGridView documentFirstPageRecognitionMarks;
         private System.Windows.Forms.Label selectionCoordinates;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label12;
@@ -863,9 +863,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Rectangle;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Ocr;
         private System.Windows.Forms.DataGridViewTextBoxColumn Value;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Id3;
-        private System.Windows.Forms.DataGridViewComboBoxColumn ValueType3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Value3;
         private System.Windows.Forms.DataGridViewComboBoxColumn FloatingAnchorId2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Rectangle2;
         private System.Windows.Forms.DataGridViewComboBoxColumn ValueType2;
@@ -876,5 +873,8 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.CheckBox findBestImageMatch;
         private System.Windows.Forms.Button bShowOcrText;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Id3;
+        private System.Windows.Forms.DataGridViewComboBoxColumn ValueType3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Body3;
     }
 }

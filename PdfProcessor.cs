@@ -15,7 +15,7 @@ using System.Text.RegularExpressions;
 using iTextSharp.text.pdf.parser;
 using System.Windows.Forms;
 
-namespace Cliver.InvoiceParser
+namespace Cliver.PdfDocumentParser
 {
     class PdfProcessor : IDisposable
     {
@@ -136,7 +136,7 @@ namespace Cliver.InvoiceParser
                     for (int page_i = 1; page_i <= cp.Pages.PdfReader.NumberOfPages; page_i++)
                     {
                         cp.Pages.ActiveTemplate = t;
-                        if (cp.Pages[page_i].IsInvoiceFirstPage())
+                        if (cp.Pages[page_i].IsDocumentFirstPage())
                         {
                             Log.Main.Inform("Applying to file '" + inputPdf + "' template '" + t.Name + "'\r\nStamped file: '" + stampedPdf);
                             //cp.pageBitmaps.RememberConverted = true;
@@ -150,20 +150,20 @@ namespace Cliver.InvoiceParser
             return false;
         }
 
-        void process(int invoice_first_page_i, string stampedPdf, Action<string, int, Dictionary<string, string>> record)
+        void process(int documentFirstPageI, string stampedPdf, Action<string, int, Dictionary<string, string>> record)
         {
             ps = new PdfStamper(Pages.PdfReader, new FileStream(stampedPdf, FileMode.Create, FileAccess.Write, FileShare.None));
 
             foreach (Settings.Template.Field f in Pages.ActiveTemplate.Fields)
-                fieldNames2texts[f.Name] = Pages[invoice_first_page_i].GetFieldText(f);
-            for (int page_i = invoice_first_page_i + 1; page_i <= Pages.PdfReader.NumberOfPages; page_i++)
+                fieldNames2texts[f.Name] = Pages[documentFirstPageI].GetFieldText(f);
+            for (int page_i = documentFirstPageI + 1; page_i <= Pages.PdfReader.NumberOfPages; page_i++)
             {
-                if (Pages[page_i].IsInvoiceFirstPage())
+                if (Pages[page_i].IsDocumentFirstPage())
                 {
-                    record(Pages.ActiveTemplate.Name, invoice_first_page_i, fieldNames2texts);
-                    stampInvoicePages(invoice_first_page_i, page_i - 1);
+                    record(Pages.ActiveTemplate.Name, documentFirstPageI, fieldNames2texts);
+                    stampInvoicePages(documentFirstPageI, page_i - 1);
                     fieldNames2texts.Clear();
-                    invoice_first_page_i = page_i;
+                    documentFirstPageI = page_i;
                 }
                 foreach (Settings.Template.Field f in Pages.ActiveTemplate.Fields)
                 {
@@ -172,8 +172,8 @@ namespace Cliver.InvoiceParser
                         fieldNames2texts[f.Name] = t;
                 }
             }
-            record(Pages.ActiveTemplate.Name, invoice_first_page_i, fieldNames2texts);
-            stampInvoicePages(invoice_first_page_i, Pages.PdfReader.NumberOfPages);
+            record(Pages.ActiveTemplate.Name, documentFirstPageI, fieldNames2texts);
+            stampInvoicePages(documentFirstPageI, Pages.PdfReader.NumberOfPages);
         }
     }
 }

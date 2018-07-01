@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using OfficeOpenXml;
 using System.IO;
 
-namespace Cliver.InvoiceParser
+namespace Cliver.PdfDocumentParser
 {
     class Excel : IDisposable
     {

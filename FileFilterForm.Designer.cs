@@ -1,4 +1,4 @@
-﻿namespace Cliver.InvoiceParser
+﻿namespace Cliver.PdfDocumentParser
 {
     partial class FileFilterForm
     {
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.files = new Cliver.InvoiceParser.ReadOnlyListBox();
+            this.files = new Cliver.PdfDocumentParser.ReadOnlyListBox();
             this.SuspendLayout();
             // 
             // files
@@ -58,6 +58,6 @@
 
         #endregion
 
-        private Cliver.InvoiceParser.ReadOnlyListBox files;
+        private Cliver.PdfDocumentParser.ReadOnlyListBox files;
     }
 }

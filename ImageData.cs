@@ -15,7 +15,7 @@ using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.IO.Compression;
 
-namespace Cliver.InvoiceParser
+namespace Cliver.PdfDocumentParser
 {
     [Serializable]
     public class ImageData

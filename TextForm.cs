@@ -8,17 +8,26 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Cliver.InvoiceParser
+namespace Cliver.PdfDocumentParser
 {
     public partial class TextForm : Form
     {
-        public TextForm(string t)
+        public TextForm(string t, bool html)
         {
             InitializeComponent();
             this.Icon = AssemblyRoutines.GetAppIcon();
             Text = Application.ProductName;
 
-           browser.DocumentText = t;
+            if (html)
+            {
+                browser.DocumentText = t;
+                browser.BringToFront();
+            }
+            else
+            {
+                textBox.Text = t;
+                textBox.BringToFront();
+            }
         }
     }
 }

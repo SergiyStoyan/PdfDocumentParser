@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvoiceParser", "InvoiceParser.csproj", "{B1D7BA69-35AA-45BD-B1D0-D84FD2BC47A0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PdfDocumentParser", "PdfDocumentParser.csproj", "{B1D7BA69-35AA-45BD-B1D0-D84FD2BC47A0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliverRoutines", "..\..\CLIVER\CliverBot\CliverRoutines\CliverRoutines.csproj", "{ACA94788-BED1-4B8E-94EF-E54293E8D139}"
 EndProject

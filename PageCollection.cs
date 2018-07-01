@@ -16,7 +16,7 @@ using iTextSharp.text.pdf.parser;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace Cliver.InvoiceParser
+namespace Cliver.PdfDocumentParser
 {
     public class PageCollection : HandyDictionary<int, Page>
     {

@@ -12,7 +12,7 @@ using Cliver;
 using System.IO;
 using System.Threading;
 
-namespace Cliver.InvoiceParser
+namespace Cliver.PdfDocumentParser
 {
     public partial class MainForm : Form
     {

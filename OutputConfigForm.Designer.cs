@@ -1,4 +1,4 @@
-﻿namespace Cliver.InvoiceParser
+﻿namespace Cliver.PdfDocumentParser
 {
     partial class OutputConfigForm
     {
