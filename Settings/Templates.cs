@@ -144,13 +144,11 @@ namespace Cliver.InvoiceParser
                 {
                     get
                     {
-                        if (value == null)
-                            return null;
-                        return SerializationRoutines.Binary.Serialize(value);
+                        return value == null ? null : SerializationRoutines.Binary.Serialize(value);
                     }
                     set
                     {
-                        this.value = SerializationRoutines.Binary.Deserialize(value);
+                        this.value = value == null ? null : SerializationRoutines.Binary.Deserialize(value);
                     }
                 }
 
@@ -226,13 +224,11 @@ namespace Cliver.InvoiceParser
                 {
                     get
                     {
-                        if (value == null)
-                            return null;
-                        return SerializationRoutines.Binary.Serialize(value);
+                        return value == null ? null : SerializationRoutines.Binary.Serialize(value);
                     }
                     set
                     {
-                        this.value = SerializationRoutines.Binary.Deserialize(value);
+                        this.value = value == null ? null : SerializationRoutines.Binary.Deserialize(value);
                     }
                 }
 
