@@ -75,9 +75,10 @@ namespace Cliver.PdfDocumentParser
 
         public void OnActiveTemplateUpdating(Settings.Template newTemplate)
         {
-            if (pageCollection.ActiveTemplate != null
-                    && (newTemplate.PagesRotation != pageCollection.ActiveTemplate.PagesRotation || newTemplate.AutoDeskew != pageCollection.ActiveTemplate.AutoDeskew)
-                    )
+            if (pageCollection.ActiveTemplate == null)
+                return;
+
+            if (newTemplate.PagesRotation != pageCollection.ActiveTemplate.PagesRotation || newTemplate.AutoDeskew != pageCollection.ActiveTemplate.AutoDeskew)
             {
                 if (_imageData != null)
                 {
@@ -91,8 +92,12 @@ namespace Cliver.PdfDocumentParser
                 }
                 if (_ocrCharBoxs != null)
                     _ocrCharBoxs = null;
-                floatingAnchorValueStrings2point0.Clear();
+                floatingAnchorValueStrings2rectangles.Clear();
             }
+
+            if (newTemplate.BrightnessTolerance != pageCollection.ActiveTemplate.BrightnessTolerance
+                || newTemplate.DifferentPixelNumberTolerance != pageCollection.ActiveTemplate.DifferentPixelNumberTolerance)
+                floatingAnchorValueStrings2rectangles.Clear();
         }
 
         public Bitmap GetRectangeFromActiveTemplateBitmap(float x, float y, float w, float h)
@@ -161,22 +166,26 @@ namespace Cliver.PdfDocumentParser
         public PointF? GetFloatingAnchorPoint0(int floatingAnchorId)
         {
             Settings.Template.FloatingAnchor fa = pageCollection.ActiveTemplate.FloatingAnchors.Find(a => a.Id == floatingAnchorId);
-            PointF? p;
-            string fas = fa.ValueAsString;
-            if (!floatingAnchorValueStrings2point0.TryGetValue(fas, out p))
-            {
-                List<RectangleF> rs = FindFloatingAnchor(fa);
-                if (rs == null || rs.Count < 1)
-                    p = null;
-                else
-                    p = new PointF(rs[0].X, rs[0].Y);
-                floatingAnchorValueStrings2point0[fas] = p;
-            }
-            return p;
+            List<RectangleF> rs = GetFloatingAnchorRectangles(fa);
+            if (rs == null || rs.Count < 1)
+                return null;
+            return new PointF(rs[0].X, rs[0].Y);
         }
-        Dictionary<string, PointF?> floatingAnchorValueStrings2point0 = new Dictionary<string, PointF?>();
 
-        public List<RectangleF> FindFloatingAnchor(Settings.Template.FloatingAnchor fa)
+        public List<RectangleF> GetFloatingAnchorRectangles(Settings.Template.FloatingAnchor fa)
+        {
+            List<RectangleF> rs;
+            string fas = fa.ValueAsString;
+            if (!floatingAnchorValueStrings2rectangles.TryGetValue(fas, out rs))
+            {
+                rs = findFloatingAnchor(fa);
+                floatingAnchorValueStrings2rectangles[fas] = rs;
+            }
+            return rs;
+        }
+        Dictionary<string, List<RectangleF>> floatingAnchorValueStrings2rectangles = new Dictionary<string, List<RectangleF>>();
+
+        List<RectangleF> findFloatingAnchor(Settings.Template.FloatingAnchor fa)
         {
             if (fa == null || fa.GetValue() == null)
                 return null;
@@ -465,7 +474,8 @@ namespace Cliver.PdfDocumentParser
                     return Pdf.GetTextByTopLeftCoordinates(PdfCharBoxs, r.GetSystemRectangleF());
                 case Settings.Template.ValueTypes.OcrText:
                     //return Ocr.This.GetText(ActiveTemplateBitmap, r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);                    
-                    return Ocr.GetTextByTopLeftCoordinates(OcrCharBoxs, r.GetSystemRectangleF());
+                    //return Ocr.GetTextByTopLeftCoordinates(OcrCharBoxs, r.GetSystemRectangleF());//sometimes does not work
+                    return Ocr.This.GetText(ActiveTemplateBitmap, r.GetSystemRectangleF());
                 case Settings.Template.ValueTypes.ImageData:
                     return new ImageData(GetRectangeFromActiveTemplateBitmap(r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio));
                 default:

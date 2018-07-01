@@ -150,7 +150,7 @@ namespace Cliver.PdfDocumentParser
                                     //}
                                     if (selectedOcrCharBoxs == null/* || (ModifierKeys & Keys.Control) != Keys.Control*/)
                                         selectedOcrCharBoxs = new List<Ocr.CharBox>();
-                                    selectedOcrCharBoxs.AddRange(PdfDocumentParser.Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPage].OcrCharBoxs, selectedR));
+                                    selectedOcrCharBoxs.AddRange(PdfDocumentParser.Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPage].OcrCharBoxs, selectedR));                                    
                                     break;
                                 case Settings.Template.ValueTypes.ImageData:
                                     {
@@ -305,7 +305,7 @@ namespace Cliver.PdfDocumentParser
                         int i = floatingAnchors.Rows.Add();
                         floatingAnchors.Rows[i].Selected = true;
                         return;
-                    }
+                    }                    
                     findAndDrawFloatingAnchor((int?)r.Cells["Id3"].Value);
                 }
                 catch (Exception ex)
@@ -781,7 +781,8 @@ namespace Cliver.PdfDocumentParser
                 setStatus(statuses.WARNING, "FloatingAnchor[" + fa.Id + "] is not defined.");
                 return null;
             }
-            List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
+            pages.ActiveTemplate = getTemplateFromUI(false);
+            List<RectangleF> rs = pages[currentPage].GetFloatingAnchorRectangles(fa);
             if (rs == null || rs.Count < 1)
             {
                 setStatus(statuses.ERROR, "FloatingAnchor[" + fa.Id + "] is not found.");
