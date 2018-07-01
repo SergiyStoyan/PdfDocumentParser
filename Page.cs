@@ -53,7 +53,6 @@ namespace Cliver.InvoiceParser
                 }
                 if (_pdfCharBoxs != null)
                 {
-                    //charBoxLists.Dispose();
                     _pdfCharBoxs = null;
                 }
                 if (_ocrCharBoxs != null)
@@ -76,32 +75,33 @@ namespace Cliver.InvoiceParser
 
         public void OnActiveTemplateUpdating(Settings.Template newTemplate)
         {
-            if (pageCollection.ActiveTemplate.PagesRotation != newTemplate.PagesRotation || pageCollection.ActiveTemplate.AutoDeskew != newTemplate.AutoDeskew)
+            if (pageCollection.ActiveTemplate != null
+                    && (newTemplate.PagesRotation != pageCollection.ActiveTemplate.PagesRotation || newTemplate.AutoDeskew != pageCollection.ActiveTemplate.AutoDeskew)
+                    )
             {
-                if (BitmapPreparedByTemplate != null)
+                if (_imageData != null)
                 {
-                    BitmapPreparedByTemplate.Dispose();
+                    //_imageData.Dispose();
+                    _imageData = null;
+                }
+                if (_bitmapPreparedByTemplate != null)
+                {
+                    _bitmapPreparedByTemplate.Dispose();
                     _bitmapPreparedByTemplate = null;
                 }
                 if (_ocrCharBoxs != null)
                     _ocrCharBoxs = null;
+                floatingAnchorValueStrings2point0.Clear();
             }
-            floatingAnchorIds2point0.Clear();
         }
 
-        Dictionary<int, PointF?> floatingAnchorIds2point0 = new Dictionary<int, PointF?>();
-
-        public void UncacheFloatingAnchor(int floatingAnchorId)
+        public Bitmap GetRectangeFromActiveTemplateBitmap(float x, float y, float w, float h)
         {
-            floatingAnchorIds2point0.Remove(floatingAnchorId);
+            return ActiveTemplateBitmap.Clone(new RectangleF(x, y, w, h), System.Drawing.Imaging.PixelFormat.Undefined);
+            //return ImageRoutines.GetCopy(ActiveTemplateBitmap, new RectangleF(x, y, w, h));
         }
 
-        public Bitmap GetRectangeFromBitmapPreparedByTemplate(float x, float y, float w, float h)
-        {
-            return BitmapPreparedByTemplate.Clone(new RectangleF(x, y, w, h), System.Drawing.Imaging.PixelFormat.Undefined);
-            //return ImageRoutines.GetCopy(BitmapPreparedByTemplate, new RectangleF(x, y, w, h));
-        }
-        public Bitmap BitmapPreparedByTemplate
+        public Bitmap ActiveTemplateBitmap
         {
             get
             {
@@ -153,22 +153,26 @@ namespace Cliver.InvoiceParser
                 return _bitmapPreparedByTemplate;
             }
         }
+
         Bitmap _bitmapPreparedByTemplate = null;
 
         public PointF? GetFloatingAnchorPoint0(int floatingAnchorId)
         {
+            Settings.Template.FloatingAnchor fa = pageCollection.ActiveTemplate.FloatingAnchors.Find(a => a.Id == floatingAnchorId);
             PointF? p;
-            if (!floatingAnchorIds2point0.TryGetValue(floatingAnchorId, out p))
+            string fas = fa.GetValueAsString();
+            if (!floatingAnchorValueStrings2point0.TryGetValue(fas, out p))
             {
-                List < RectangleF > rs = FindFloatingAnchor(pageCollection.ActiveTemplate.FloatingAnchors.Find(a=>a.Id == floatingAnchorId));
+                List<RectangleF> rs = FindFloatingAnchor(fa);
                 if (rs == null || rs.Count < 1)
                     p = null;
                 else
                     p = new PointF(rs[0].X, rs[0].Y);
-                floatingAnchorIds2point0[floatingAnchorId] = p;
+                floatingAnchorValueStrings2point0[fas] = p;
             }
             return p;
         }
+        Dictionary<string, PointF?> floatingAnchorValueStrings2point0 = new Dictionary<string, PointF?>();
 
         public List<RectangleF> FindFloatingAnchor(Settings.Template.FloatingAnchor fa)
         {
@@ -250,7 +254,7 @@ namespace Cliver.InvoiceParser
                     for (int i = 1; i < ibs.Count; i++)
                     {
                         Settings.Template.RectangleF r = new Settings.Template.RectangleF(ibs[i].Rectangle.X + point0.X, ibs[i].Rectangle.Height + point0.Y, ibs[i].Rectangle.Width, ibs[i].Rectangle.Height);
-                        if (!ibs[i].ImageData.ImageIsSimilar(new ImageData(GetRectangeFromBitmapPreparedByTemplate(r.X, r.Y, r.Width, r.Height)), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance))
+                        if (!ibs[i].ImageData.ImageIsSimilar(new ImageData(GetRectangeFromActiveTemplateBitmap(r.X, r.Y, r.Width, r.Height)), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance))
                             return null;
                         rs.Add(r.GetSystemRectangleF());
                     }
@@ -303,7 +307,7 @@ namespace Cliver.InvoiceParser
         //        case Settings.Template.ValueTypes.ImageData:
         //            {
         //                ImageData id = (ImageData)e.Get();
-        //                return id.ImageIsSimilar(new ImageData(GetRectangeFromBitmapPreparedByTemplate(new Settings.Template.RectangleF(point0.X, point0.Y, id.Width, id.Height))));
+        //                return id.ImageIsSimilar(new ImageData(GetRectangeFromActiveTemplateBitmap(new Settings.Template.RectangleF(point0.X, point0.Y, id.Width, id.Height))));
         //            }
         //        default:
         //            throw new Exception("Unknown option: " + e.ElementType);
@@ -315,7 +319,7 @@ namespace Cliver.InvoiceParser
             get
             {
                 if (_imageData == null)
-                    _imageData = new ImageData(BitmapPreparedByTemplate);
+                    _imageData = new ImageData(ActiveTemplateBitmap);
                 return _imageData;
             }
         }
@@ -338,7 +342,7 @@ namespace Cliver.InvoiceParser
             {
                 if (_ocrCharBoxs == null)
                 {
-                    _ocrCharBoxs = Ocr.This.GetCharBoxs(BitmapPreparedByTemplate);
+                    _ocrCharBoxs = Ocr.This.GetCharBoxs(ActiveTemplateBitmap);
                 }
                 return _ocrCharBoxs;
             }
@@ -392,11 +396,10 @@ namespace Cliver.InvoiceParser
             return true;
         }
 
-        public string GetFieldText(string fieldName)
+        public string GetFieldText(Settings.Template.Field field)
         {
-            Settings.Template.Field f = pageCollection.ActiveTemplate.Fields.Find(a => a.Name == fieldName);
             string error;
-            object v = GetValue(f.FloatingAnchorId, f.Rectangle, f.ValueType, out error);
+            object v = GetValue(field.FloatingAnchorId, field.Rectangle, field.ValueType, out error);
             if (v is ImageData)
                 return ((ImageData)v).GetAsString();
             return FieldPreparation.Normalize(prepareField((string)v));
@@ -406,7 +409,7 @@ namespace Cliver.InvoiceParser
         {
             //try
             //{
-            if(r_.Width <= Settings.General.CoordinateDeviationMargin || r_.Height <= Settings.General.CoordinateDeviationMargin)
+            if (r_.Width <= Settings.General.CoordinateDeviationMargin || r_.Height <= Settings.General.CoordinateDeviationMargin)
             {
                 error = "Rectangular is malformed.";
                 return null;
@@ -430,10 +433,10 @@ namespace Cliver.InvoiceParser
                 case Settings.Template.ValueTypes.PdfText:
                     return Pdf.GetTextByTopLeftCoordinates(PdfCharBoxs, r.GetSystemRectangleF());
                 case Settings.Template.ValueTypes.OcrText:
-                    //return Ocr.This.GetText(BitmapPreparedByTemplate, r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);                    
+                    //return Ocr.This.GetText(ActiveTemplateBitmap, r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);                    
                     return Ocr.GetTextByTopLeftCoordinates(OcrCharBoxs, r.GetSystemRectangleF());
                 case Settings.Template.ValueTypes.ImageData:
-                    return new ImageData(GetRectangeFromBitmapPreparedByTemplate(r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio));
+                    return new ImageData(GetRectangeFromActiveTemplateBitmap(r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio));
                 default:
                     throw new Exception("Unknown option: " + valueType);
             }

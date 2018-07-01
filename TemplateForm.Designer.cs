@@ -47,7 +47,8 @@
             this.Value3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label10 = new System.Windows.Forms.Label();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-            this.bText = new System.Windows.Forms.Button();
+            this.bShowPdfText = new System.Windows.Forms.Button();
+            this.bShowOcrText = new System.Windows.Forms.Button();
             this.bIsInvoiceFirstPage = new System.Windows.Forms.Button();
             this.bTestFile = new System.Windows.Forms.Button();
             this.tCurrentPage = new System.Windows.Forms.TextBox();
@@ -372,32 +373,44 @@
             // 
             // flowLayoutPanel2
             // 
-            this.flowLayoutPanel2.Controls.Add(this.bText);
+            this.flowLayoutPanel2.Controls.Add(this.bShowPdfText);
+            this.flowLayoutPanel2.Controls.Add(this.bShowOcrText);
             this.flowLayoutPanel2.Controls.Add(this.bIsInvoiceFirstPage);
             this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 172);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Size = new System.Drawing.Size(360, 31);
             this.flowLayoutPanel2.TabIndex = 48;
             // 
-            // bText
+            // bShowPdfText
             // 
-            this.bText.AutoSize = true;
-            this.bText.Location = new System.Drawing.Point(3, 3);
-            this.bText.Name = "bText";
-            this.bText.Size = new System.Drawing.Size(68, 23);
-            this.bText.TabIndex = 45;
-            this.bText.Text = "Show Text";
-            this.bText.UseVisualStyleBackColor = true;
-            this.bText.Click += new System.EventHandler(this.bText_Click);
+            this.bShowPdfText.AutoSize = true;
+            this.bShowPdfText.Location = new System.Drawing.Point(3, 3);
+            this.bShowPdfText.Name = "bShowPdfText";
+            this.bShowPdfText.Size = new System.Drawing.Size(87, 23);
+            this.bShowPdfText.TabIndex = 45;
+            this.bShowPdfText.Text = "Show Pdf Text";
+            this.bShowPdfText.UseVisualStyleBackColor = true;
+            this.bShowPdfText.Click += new System.EventHandler(this.bShowPdfText_Click);
+            // 
+            // bShowOcrText
+            // 
+            this.bShowOcrText.AutoSize = true;
+            this.bShowOcrText.Location = new System.Drawing.Point(96, 3);
+            this.bShowOcrText.Name = "bShowOcrText";
+            this.bShowOcrText.Size = new System.Drawing.Size(88, 23);
+            this.bShowOcrText.TabIndex = 46;
+            this.bShowOcrText.Text = "Show Ocr Text";
+            this.bShowOcrText.UseVisualStyleBackColor = true;
+            this.bShowOcrText.Click += new System.EventHandler(this.bShowOcrText_Click);
             // 
             // bIsInvoiceFirstPage
             // 
             this.bIsInvoiceFirstPage.AutoSize = true;
-            this.bIsInvoiceFirstPage.Location = new System.Drawing.Point(77, 3);
+            this.bIsInvoiceFirstPage.Location = new System.Drawing.Point(190, 3);
             this.bIsInvoiceFirstPage.Name = "bIsInvoiceFirstPage";
             this.bIsInvoiceFirstPage.Size = new System.Drawing.Size(119, 23);
             this.bIsInvoiceFirstPage.TabIndex = 27;
-            this.bIsInvoiceFirstPage.Text = "Refresh Status";
+            this.bIsInvoiceFirstPage.Text = "Is Invoice First Page?";
             this.bIsInvoiceFirstPage.UseVisualStyleBackColor = true;
             this.bIsInvoiceFirstPage.Click += new System.EventHandler(this.bIsInvoiceFirstPage_Click);
             // 
@@ -833,7 +846,7 @@
         private System.Windows.Forms.TextBox name;
         private System.Windows.Forms.NumericUpDown pictureScale;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Button bText;
+        private System.Windows.Forms.Button bShowPdfText;
         private System.Windows.Forms.TextBox tCurrentPage;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
@@ -862,5 +875,6 @@
         private System.Windows.Forms.NumericUpDown differentPixelNumberTolerance;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.CheckBox findBestImageMatch;
+        private System.Windows.Forms.Button bShowOcrText;
     }
 }

@@ -28,24 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.text = new System.Windows.Forms.RichTextBox();
+            this.browser = new System.Windows.Forms.WebBrowser();
             this.SuspendLayout();
             // 
-            // text
+            // browser
             // 
-            this.text.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.text.Location = new System.Drawing.Point(0, 0);
-            this.text.Name = "text";
-            this.text.Size = new System.Drawing.Size(800, 450);
-            this.text.TabIndex = 0;
-            this.text.Text = "";
+            this.browser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.browser.Location = new System.Drawing.Point(0, 0);
+            this.browser.MinimumSize = new System.Drawing.Size(20, 20);
+            this.browser.Name = "browser";
+            this.browser.Size = new System.Drawing.Size(800, 450);
+            this.browser.TabIndex = 0;
             // 
             // TextForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.text);
+            this.Controls.Add(this.browser);
             this.Name = "TextForm";
             this.Text = "TextForm";
             this.ResumeLayout(false);
@@ -54,6 +54,6 @@
 
         #endregion
 
-        private System.Windows.Forms.RichTextBox text;
+        private System.Windows.Forms.WebBrowser browser;
     }
 }

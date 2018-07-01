@@ -239,6 +239,11 @@ namespace Cliver.InvoiceParser
                     return SerializationRoutines.Json.Serialize(value);
                 }
 
+                public string GetValueAsString()
+                {
+                    return FloatingAnchor.GetValueAsString(value);
+                }
+
                 public object GetValue()
                 {
                     return value;

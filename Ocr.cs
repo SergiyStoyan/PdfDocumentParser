@@ -49,6 +49,14 @@ namespace Cliver.InvoiceParser
             }
         }
 
+        public string GetHtml(Bitmap b)
+        {
+            using (var page = engine.Process(b, PageSegMode.Auto))
+            {
+                return page.GetHOCRText(0, false);
+            }
+        }
+
         public List<CharBox> GetCharBoxs(Bitmap b)
         {
             List<CharBox> cbs = new List<CharBox>();

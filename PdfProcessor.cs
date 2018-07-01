@@ -133,9 +133,9 @@ namespace Cliver.InvoiceParser
 
                 foreach (Settings.Template t in ts)
                 {
-                    cp.Pages.ActiveTemplate = t;
                     for (int page_i = 1; page_i <= cp.Pages.PdfReader.NumberOfPages; page_i++)
                     {
+                        cp.Pages.ActiveTemplate = t;
                         if (cp.Pages[page_i].IsInvoiceFirstPage())
                         {
                             Log.Main.Inform("Applying to file '" + inputPdf + "' template '" + t.Name + "'\r\nStamped file: '" + stampedPdf);
@@ -155,7 +155,7 @@ namespace Cliver.InvoiceParser
             ps = new PdfStamper(Pages.PdfReader, new FileStream(stampedPdf, FileMode.Create, FileAccess.Write, FileShare.None));
 
             foreach (Settings.Template.Field f in Pages.ActiveTemplate.Fields)
-                fieldNames2texts[f.Name] = Pages[invoice_first_page_i].GetFieldText(f.Name);
+                fieldNames2texts[f.Name] = Pages[invoice_first_page_i].GetFieldText(f);
             for (int page_i = invoice_first_page_i + 1; page_i <= Pages.PdfReader.NumberOfPages; page_i++)
             {
                 if (Pages[page_i].IsInvoiceFirstPage())
@@ -167,7 +167,7 @@ namespace Cliver.InvoiceParser
                 }
                 foreach (Settings.Template.Field f in Pages.ActiveTemplate.Fields)
                 {
-                    string t = Pages[page_i].GetFieldText(f.Name);
+                    string t = Pages[page_i].GetFieldText(f);
                     if (t != null)
                         fieldNames2texts[f.Name] = t;
                 }

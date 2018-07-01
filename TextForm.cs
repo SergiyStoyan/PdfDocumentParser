@@ -18,7 +18,7 @@ namespace Cliver.InvoiceParser
             this.Icon = AssemblyRoutines.GetAppIcon();
             Text = Application.ProductName;
 
-            text.Text = t;
+           browser.DocumentText = t;
         }
     }
 }

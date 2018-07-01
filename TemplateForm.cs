@@ -160,7 +160,6 @@ namespace Cliver.InvoiceParser
                                                 ImageBoxs = new List<Settings.Template.FloatingAnchor.ImageDataValue.ImageBox>()
                                             };
                                         string error;
-                                        pages.ActiveTemplate = getTemplateFromUI(false);
                                         selectedImageDataValue.ImageBoxs.Add(new Settings.Template.FloatingAnchor.ImageDataValue.ImageBox
                                         {
                                             Rectangle = Settings.Template.RectangleF.GetFromSystemRectangleF(selectedR),
@@ -185,13 +184,12 @@ namespace Cliver.InvoiceParser
                             int? fai = (int?)cs["FloatingAnchorId2"].Value;
                             if (fai != null)
                             {
-                                fa = getFloatingAnchor((int)fai);
                                 pages.ActiveTemplate = getTemplateFromUI(false);
-                                List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
-                                if (rs == null || rs.Count < 1)
+                                PointF? p = pages[currentPage].GetFloatingAnchorPoint0((int)fai);
+                                if (p == null)
                                     throw new Exception("Could not find FloatingAnchor " + fa.Id + " in the page");
-                                r.X -= rs[0].X;
-                                r.Y -= rs[0].Y;
+                                r.X -= ((PointF)p).X;
+                                r.Y -= ((PointF)p).Y;
                             }
                             cs["Rectangle2"].Value = SerializationRoutines.Json.Serialize(r);
                             invoiceFirstPageRecognitionMarks.EndEdit();
@@ -206,13 +204,12 @@ namespace Cliver.InvoiceParser
                             int? fai = (int?)cs["FloatingAnchorId"].Value;
                             if (fai != null)
                             {
-                                fa = getFloatingAnchor((int)fai);
                                 pages.ActiveTemplate = getTemplateFromUI(false);
-                                List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
-                                if (rs == null || rs.Count < 1)
+                                PointF? p = pages[currentPage].GetFloatingAnchorPoint0((int)fai);
+                                if (p == null)
                                     throw new Exception("Could not find FloatingAnchor " + fa.Id + " in the page");
-                                r.X -= rs[0].X;
-                                r.Y -= rs[0].Y;
+                                r.X -= ((PointF)p).X;
+                                r.Y -= ((PointF)p).Y;
                             }
                             cs["Rectangle"].Value = SerializationRoutines.Json.Serialize(r);
                             fields.EndEdit();
@@ -372,20 +369,22 @@ namespace Cliver.InvoiceParser
                     switch (invoiceFirstPageRecognitionMarks.Columns[e.ColumnIndex].Name)
                     {
                         case "Rectangle2":
-                        case "ValueType2":
                             object o = cs["ValueType2"].Value;
                             if (o != null)
                                 cs["Value2"].Value = extractValueAndDrawBox(fa, r, (Settings.Template.ValueTypes)o);
+                            break;
+                        case "ValueType2":
+                            cs["Value2"].Value = null;
                             break;
                         case "FloatingAnchorId2":
                             if (fa != null)
                             {
                                 pages.ActiveTemplate = getTemplateFromUI(false);
-                                List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
-                                if (rs == null || rs.Count < 1)
+                                PointF? p = pages[currentPage].GetFloatingAnchorPoint0((int)fai);
+                                if (p == null)
                                     throw new Exception("Could not find FloatingAnchor " + fa.Id + " in the page");
-                                r.X -= rs[0].X;
-                                r.Y -= rs[0].Y;
+                                r.X -= ((PointF)p).X;
+                                r.Y -= ((PointF)p).Y;
                             }
                             cs["Rectangle2"].Value = SerializationRoutines.Json.Serialize(r);
                             break;
@@ -490,11 +489,11 @@ namespace Cliver.InvoiceParser
                             if (fa != null)
                             {
                                 pages.ActiveTemplate = getTemplateFromUI(false);
-                                List<RectangleF> rs = pages[currentPage].FindFloatingAnchor(fa);
-                                if (rs == null || rs.Count < 1)
+                                PointF? p = pages[currentPage].GetFloatingAnchorPoint0((int)fai);
+                                if (p == null)
                                     throw new Exception("Could not find FloatingAnchor " + fa.Id + " in the page");
-                                r.X -= rs[0].X;
-                                r.Y -= rs[0].Y;
+                                r.X -= ((PointF)p).X;
+                                r.Y -= ((PointF)p).Y;
                             }
                             cs["Rectangle"].Value = SerializationRoutines.Json.Serialize(r);
                             break;
@@ -654,7 +653,6 @@ namespace Cliver.InvoiceParser
                     }
 
                     pages = new PageCollection(testFile.Text);
-                    pages.ActiveTemplate = template;
                     totalPageNumber = pages.PdfReader.NumberOfPages;
                     lTotalPages.Text = " / " + totalPageNumber;
                     showPage(1);
@@ -811,7 +809,7 @@ namespace Cliver.InvoiceParser
         {
             if (pages == null)
                 return;
-            scaledCurrentPageBitmap = ImageRoutines.GetScaled(pages[currentPage].BitmapPreparedByTemplate, (float)pictureScale.Value * Settings.General.Image2PdfResolutionRatio);
+            scaledCurrentPageBitmap = ImageRoutines.GetScaled(pages[currentPage].ActiveTemplateBitmap, (float)pictureScale.Value * Settings.General.Image2PdfResolutionRatio);
             picture.Image = scaledCurrentPageBitmap;
         }
         Bitmap scaledCurrentPageBitmap;
@@ -998,7 +996,7 @@ namespace Cliver.InvoiceParser
                         var cs = floatingAnchors.Rows[i].Cells;
                         cs["Id3"].Value = fa.Id;
                         cs["ValueType3"].Value = fa.ValueType;
-                        cs["Value3"].Value = Settings.Template.FloatingAnchor.GetValueAsString(fa.GetValue());
+                        cs["Value3"].Value = fa.GetValueAsString();
                     }
                     onFloatingAnchorsChanged(null);
                 }
@@ -1212,11 +1210,19 @@ namespace Cliver.InvoiceParser
             }
         }
 
-        private void bText_Click(object sender, EventArgs e)
+        private void bShowPdfText_Click(object sender, EventArgs e)
         {
             if (pages == null)
                 return;
             TextForm tf = new TextForm(PdfTextExtractor.GetTextFromPage(pages.PdfReader, currentPage));
+            tf.ShowDialog();
+        }
+
+        private void bShowOcrText_Click(object sender, EventArgs e)
+        {
+            if (pages == null)
+                return;
+            TextForm tf = new TextForm(InvoiceParser.Ocr.This.GetHtml(pages[currentPage].Bitmap));
             tf.ShowDialog();
         }
 
@@ -1267,6 +1273,7 @@ namespace Cliver.InvoiceParser
                 Message.Error2(ex);
             }
         }
+
         Settings.Template.PageRotations pagesRotation
         {
             get
