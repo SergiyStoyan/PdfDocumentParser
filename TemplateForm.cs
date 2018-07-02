@@ -951,7 +951,8 @@ namespace Cliver.PdfDocumentParser
                 name.Text = t.Name;
 
                 //imageResolution.Value = template.ImageResolution;
-                pagesRotation = t.PagesRotation;
+
+                pageRotation.SelectedIndex = (int)t.PagesRotation;
                 autoDeskew.Checked = t.AutoDeskew;
                 findBestImageMatch.Checked = t.FindBestImageMatch;
                 brightnessTolerance.Value = (decimal)t.BrightnessTolerance;
@@ -1244,22 +1245,7 @@ namespace Cliver.PdfDocumentParser
                 Message.Error2(ex);
             }
         }
-
-        Settings.Template.PageRotations pagesRotation
-        {
-            get
-            {
-                if (pageRotation.SelectedIndex <= 0)
-                    return 0;
-                else
-                    return (Settings.Template.PageRotations)pageRotation.SelectedIndex;
-            }
-            set
-            {
-                pageRotation.SelectedValue = value;
-            }
-        }
-
+        
         Settings.Template getTemplateFromUI(bool saving)
         {
             Settings.Template t = new Settings.Template();
@@ -1274,7 +1260,7 @@ namespace Cliver.PdfDocumentParser
 
             t.Name = name.Text;
 
-            t.PagesRotation = pagesRotation;
+            t.PagesRotation = (Settings.Template.PageRotations)pageRotation.SelectedIndex;
             t.AutoDeskew = autoDeskew.Checked;
             t.FindBestImageMatch = findBestImageMatch.Checked;
             t.BrightnessTolerance = (float)brightnessTolerance.Value;

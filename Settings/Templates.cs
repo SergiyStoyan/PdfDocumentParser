@@ -140,17 +140,6 @@ namespace Cliver.PdfDocumentParser
                 //serialized
                 public ValueTypes ValueType = ValueTypes.PdfText;
                 //serialized
-                public byte[] ValueAsBytes
-                {
-                    //get
-                    //{
-                    //    return value == null ? null : SerializationRoutines.Binary.Serialize(value);
-                    //}
-                    set
-                    {
-                        this.value = value == null ? null : SerializationRoutines.Binary.Deserialize(value);
-                    }
-                }
                 public string ValueAsString
                 {
                     get
@@ -204,35 +193,6 @@ namespace Cliver.PdfDocumentParser
                 //    if (value is string)
                 //        return (string)value;
                 //    return SerializationRoutines.Json.Serialize(value);
-                //}
-
-                //public Mark (int? floatingAnchorid, RectangleF rectangle, ValueTypes valueType, string valueAsString)
-                //{
-                //    FloatingAnchorId = floatingAnchorid;
-                //    Rectangle = rectangle;
-                //    ValueType = valueType;
-                //    if (valueAsString != null)
-                //        switch (valueType)
-                //        {
-                //            case ValueTypes.PdfText:
-                //                value = valueAsString;
-                //                break;
-                //            case ValueTypes.OcrText:
-                //                value = valueAsString;
-                //                break;
-                //            case ValueTypes.ImageData:
-                //                value = ImageData.GetFromString(valueAsString);
-                //                break;
-                //            default:
-                //                throw new Exception("Unknown option: " + valueType);
-                //        }
-                //    else
-                //        value = null;
-                //}
-
-                //public Mark()//!!!used only by serializer
-                //{
-
                 //}
             }
 
@@ -331,33 +291,6 @@ namespace Cliver.PdfDocumentParser
                     return value;
                 }
                 object value;
-
-                //public FloatingAnchor(int id, ValueTypes valueType, string valueAsString)
-                //{
-                //    Id = id;
-                //    ValueType = valueType;
-                //    if (valueAsString != null)
-                //        switch (valueType)
-                //        {
-                //            case ValueTypes.PdfText:
-                //                value = SerializationRoutines.Json.Deserialize<PdfTextValue>(valueAsString);
-                //                break;
-                //            case ValueTypes.OcrText:
-                //                value = SerializationRoutines.Json.Deserialize<OcrTextValue>(valueAsString);
-                //                break;
-                //            case ValueTypes.ImageData:
-                //                value = SerializationRoutines.Json.Deserialize<ImageDataValue>(valueAsString);
-                //                break;
-                //            default:
-                //                throw new Exception("Unknown option: " + valueType);
-                //        }
-                //    else
-                //        value = null;
-                //}
-
-                //public FloatingAnchor()//!!!used only by serializer!!!
-                //{ 
-                //}
 
                 [Serializable]
                 public class PdfTextValue 
