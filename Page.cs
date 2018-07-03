@@ -393,6 +393,11 @@ namespace Cliver.PdfDocumentParser
 
         public bool IsDocumentFirstPage(out string error)
         {
+            if (pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks == null || pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.Count < 1)
+            {
+                error = "Template '" + pageCollection.ActiveTemplate.Name + "' has no DocumentFirstPageRecognitionMarks defined.";
+                return false;
+            }
             foreach (Settings.Template.Mark m in pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks)
             {
                 if (m.FloatingAnchorId != null && m.GetValue() == null)
