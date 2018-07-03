@@ -147,7 +147,8 @@
     </Compile>
     <Compile Include="PageCollection.cs" />
     <Compile Include="Page.cs" />
-    <Compile Include="PdfProcessor.cs" />
+    <Compile Include="Customization\PdfDocumentProcessor.cs" />
+    <Compile Include="PdfDocumentProcessor.cs" />
     <Compile Include="Processor.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

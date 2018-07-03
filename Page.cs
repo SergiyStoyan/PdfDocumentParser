@@ -397,8 +397,8 @@ namespace Cliver.PdfDocumentParser
                 {
                     case Settings.Template.ValueTypes.PdfText:
                         {
-                            string t1 = FieldPreparation.Normalize((string)m.GetValue());
-                            string t2 = FieldPreparation.Normalize((string)v);
+                            string t1 = NormalizeText((string)m.GetValue());
+                            string t2 = NormalizeText((string)v);
                             if (t1 == t2)
                                 continue;
                             error = "documentFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
@@ -406,8 +406,8 @@ namespace Cliver.PdfDocumentParser
                         }
                     case Settings.Template.ValueTypes.OcrText:
                         {
-                            string t1 = FieldPreparation.Normalize((string)m.GetValue());
-                            string t2 = FieldPreparation.Normalize((string)v);
+                            string t1 = NormalizeText((string)m.GetValue());
+                            string t2 = NormalizeText((string)v);
                             if (t1 == t2)
                                 continue;
                             error = "documentFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
@@ -427,17 +427,6 @@ namespace Cliver.PdfDocumentParser
             }
             error = null;
             return true;
-        }
-
-        public string GetFieldText(Settings.Template.Field field)
-        {
-            if (field.Rectangle == null)
-                return null;
-            string error;
-            object v = GetValue(field.FloatingAnchorId, field.Rectangle, field.ValueType, out error);
-            if (v is ImageData)
-                return ((ImageData)v).GetAsString();
-            return FieldPreparation.Normalize(prepareField((string)v));
         }
 
         public object GetValue(int? floatingAnchorId, Settings.Template.RectangleF r_, Settings.Template.ValueTypes valueType, out string error)
@@ -494,11 +483,14 @@ namespace Cliver.PdfDocumentParser
 
         public float Height;
 
-        static string prepareField(string f)
+        public static string NormalizeText(string value)
         {
-            if (f == null)
+            if (value == null)
                 return null;
-            return Regex.Replace(f, @"\-", "");
+            value = FieldPreparation.RemoveNonPrintablesRegex.Replace(value, " ");
+            value = Regex.Replace(value, @"\s+", " ");
+            value = value.Trim();
+            return value;
         }
     }
 }

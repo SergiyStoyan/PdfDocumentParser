@@ -104,7 +104,7 @@ namespace Cliver.PdfDocumentParser
                     //}
                     //else
                     //    of = PathRoutines.InsertSuffixBeforeFileExtension(Settings.General.OutputFolder + "\\" + PathRoutines.GetFileNameFromPath(f), ".stamped");
-                    bool? result = PdfProcessor.Process(f, active_templates, of, (templateName, page_i, fieldNames2texts) =>
+                    bool? result = PdfDocumentProcessor.Process(f, active_templates, of, (templateName, page_i, fieldNames2texts) =>
                     {
                         List<string> values = new List<string>() { PathRoutines.GetFileNameFromPath(f), PathRoutines.GetFileNameFromPath(of) };
                         foreach (string fn in orderedOutputFieldNames)

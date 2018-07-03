@@ -830,9 +830,9 @@ namespace Cliver.PdfDocumentParser
                 switch (valueType)
                 {
                     case Settings.Template.ValueTypes.PdfText:
-                        return FieldPreparation.Normalize((string)v);
+                        return Page.NormalizeText((string)v);
                     case Settings.Template.ValueTypes.OcrText:
-                        return FieldPreparation.Normalize((string)v);
+                        return Page.NormalizeText((string)v);
                     case Settings.Template.ValueTypes.ImageData:
                         return ((ImageData)v).GetAsString();
                     default:

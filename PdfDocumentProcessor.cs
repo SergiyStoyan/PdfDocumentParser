@@ -17,16 +17,16 @@ using System.Windows.Forms;
 
 namespace Cliver.PdfDocumentParser
 {
-    class PdfProcessor : IDisposable
+    class PdfDocumentProcessor : IDisposable
     {
-        PdfProcessor(string inputPdf)
+        PdfDocumentProcessor(string inputPdf)
         {
             Pages = new PageCollection(inputPdf);
         }
         PageCollection Pages;
         PdfStamper ps;
 
-        ~PdfProcessor()
+        ~PdfDocumentProcessor()
         {
             Dispose();
         }
@@ -123,7 +123,7 @@ namespace Cliver.PdfDocumentParser
                 return false;
             }
 
-            using (PdfProcessor cp = new PdfProcessor(inputPdf))
+            using (PdfDocumentProcessor cp = new PdfDocumentProcessor(inputPdf))
             {
                 if (cp.Pages.PdfReader.NumberOfPages < 1)
                 {
@@ -155,7 +155,7 @@ namespace Cliver.PdfDocumentParser
             ps = new PdfStamper(Pages.PdfReader, new FileStream(stampedPdf, FileMode.Create, FileAccess.Write, FileShare.None));
 
             foreach (Settings.Template.Field f in Pages.ActiveTemplate.Fields)
-                fieldNames2texts[f.Name] = Pages[documentFirstPageI].GetFieldText(f);
+                fieldNames2texts[f.Name] = GetFieldText(Pages[documentFirstPageI], f);
             for (int page_i = documentFirstPageI + 1; page_i <= Pages.PdfReader.NumberOfPages; page_i++)
             {
                 if (Pages[page_i].IsDocumentFirstPage())
@@ -167,13 +167,26 @@ namespace Cliver.PdfDocumentParser
                 }
                 foreach (Settings.Template.Field f in Pages.ActiveTemplate.Fields)
                 {
-                    string t = Pages[page_i].GetFieldText(f);
+                    string t = GetFieldText(Pages[page_i], f);
                     if (t != null)
                         fieldNames2texts[f.Name] = t;
                 }
             }
             record(Pages.ActiveTemplate.Name, documentFirstPageI, fieldNames2texts);
             stampInvoicePages(documentFirstPageI, Pages.PdfReader.NumberOfPages);
+        }
+
+        public string GetFieldText(Page p, Settings.Template.Field field)
+        {
+            if (field.Rectangle == null)
+                return null;
+            string error;
+            object v = p.GetValue(field.FloatingAnchorId, field.Rectangle, field.ValueType, out error);
+            if (v is ImageData)
+                return ((ImageData)v).GetAsString();
+            if (v == null)
+                return null;
+            return Page.NormalizeText(Regex.Replace((string)v, @"\-", ""));
         }
     }
 }
