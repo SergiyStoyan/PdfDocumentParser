@@ -96,8 +96,8 @@ namespace Cliver.PdfDocumentParser
                 floatingAnchorValueStrings2rectangles.Clear();
             }
 
-            if (pageCollection.ActiveTemplate.Name != newTemplate.Name)
-                floatingAnchorValueStrings2rectangles.Clear();
+            //if (pageCollection.ActiveTemplate.Name != newTemplate.Name)
+            //    floatingAnchorValueStrings2rectangles.Clear();
 
             if (newTemplate.BrightnessTolerance != pageCollection.ActiveTemplate.BrightnessTolerance
                 || newTemplate.DifferentPixelNumberTolerance != pageCollection.ActiveTemplate.DifferentPixelNumberTolerance)
@@ -406,6 +406,8 @@ namespace Cliver.PdfDocumentParser
                     continue;
                 }
                 object v = GetValue(m.FloatingAnchorId, m.Rectangle, m.ValueType, out error);
+                if (v == null)
+                    return false;
                 switch (m.ValueType)
                 {
                     case Settings.Template.ValueTypes.PdfText:
@@ -463,7 +465,7 @@ namespace Cliver.PdfDocumentParser
                 p0 = GetFloatingAnchorPoint0((int)floatingAnchorId);
                 if (p0 == null)
                 {
-                    error = "FloatingAnchor[" + floatingAnchorId + "] not found.";
+                    error = "FloatingAnchor[" + floatingAnchorId + "] is not found.";
                     return null;
                 }
                 point0 = (PointF)p0;
