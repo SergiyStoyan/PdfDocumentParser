@@ -24,11 +24,13 @@ namespace Cliver.PdfDocumentParser
         {
             PdfFile = pdfFile;
             PdfReader = new PdfReader(pdfFile);
+            //TemplateEditorMode = templateEditorMode;
             getObject = (int pageI) => { return new Page(this, pageI); };
         }
 
         public readonly string PdfFile;
         public readonly PdfReader PdfReader;
+        //public readonly bool TemplateEditorMode;
 
         public override void Dispose()
         {
@@ -51,5 +53,8 @@ namespace Cliver.PdfDocumentParser
             }
         }
         Settings.Template _ActiveTemplate;
+
+        //public delegate void OnActiveTemplateUpdating(Settings.Template newTemplate);
+        //public event OnActiveTemplateUpdating ActiveTemplateUpdating = null;
     }
 }

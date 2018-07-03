@@ -133,9 +133,9 @@ namespace Cliver.PdfDocumentParser
 
                 foreach (Settings.Template t in ts)
                 {
+                    cp.Pages.ActiveTemplate = t;
                     for (int page_i = 1; page_i <= cp.Pages.PdfReader.NumberOfPages; page_i++)
                     {
-                        cp.Pages.ActiveTemplate = t;
                         if (cp.Pages[page_i].IsDocumentFirstPage())
                         {
                             Log.Main.Inform("Applying to file '" + inputPdf + "' template '" + t.Name + "'\r\nStamped file: '" + stampedPdf);
@@ -149,7 +149,6 @@ namespace Cliver.PdfDocumentParser
             Log.Main.Warning("No template found for file '" + inputPdf + "'");
             return false;
         }
-
         void process(int documentFirstPageI, string stampedPdf, Action<string, int, Dictionary<string, string>> record)
         {
             ps = new PdfStamper(Pages.PdfReader, new FileStream(stampedPdf, FileMode.Create, FileAccess.Write, FileShare.None));
