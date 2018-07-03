@@ -1,8 +1,8 @@
 {
-  "InputFolder": "D:\\_d\\_PROJECTS\\InvoiceParser.2\\_test_files\\Veolia",
+  "InputFolder": "D:\\_d\\_PROJECTS\\InvoiceParser.2\\_test",
   "OutputFolder": "D:\\_d\\_PROJECTS\\InvoiceParser.2\\_test_files_output",
   "IgnoreHidddenFiles": true,
-  "ReadInputFolderRecursively": false,
+  "ReadInputFolderRecursively": true,
   "SelectionBoxColor": "Red",
   "BoundingBoxColor": "BlueViolet",
   "StampColor": "Red",

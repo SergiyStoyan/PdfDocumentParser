@@ -86,14 +86,14 @@
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(16, 28);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(162, 13);
+            this.label8.Size = new System.Drawing.Size(194, 13);
             this.label8.TabIndex = 46;
-            this.label8.Text = "Resolution (OCR requires>=300):";
+            this.label8.Text = "Image Resolution (OCR requires>=300):";
             // 
             // bReset
             // 
             this.bReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bReset.Location = new System.Drawing.Point(110, 3);
+            this.bReset.Location = new System.Drawing.Point(142, 3);
             this.bReset.Name = "bReset";
             this.bReset.Size = new System.Drawing.Size(75, 23);
             this.bReset.TabIndex = 48;
@@ -104,7 +104,7 @@
             // bSave
             // 
             this.bSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bSave.Location = new System.Drawing.Point(191, 3);
+            this.bSave.Location = new System.Drawing.Point(223, 3);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(75, 23);
             this.bSave.TabIndex = 49;
@@ -115,7 +115,7 @@
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bCancel.Location = new System.Drawing.Point(272, 3);
+            this.bCancel.Location = new System.Drawing.Point(304, 3);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 50;
@@ -131,16 +131,16 @@
             this.flowLayoutPanel1.Controls.Add(this.bResetTemplates);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 374);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 379);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(350, 31);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(382, 31);
             this.flowLayoutPanel1.TabIndex = 51;
             // 
             // bResetTemplates
             // 
             this.bResetTemplates.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.bResetTemplates.AutoSize = true;
-            this.bResetTemplates.Location = new System.Drawing.Point(7, 3);
+            this.bResetTemplates.Location = new System.Drawing.Point(39, 3);
             this.bResetTemplates.Name = "bResetTemplates";
             this.bResetTemplates.Size = new System.Drawing.Size(97, 23);
             this.bResetTemplates.TabIndex = 51;
@@ -165,17 +165,17 @@
             this.groupBox1.Controls.Add(this.label13);
             this.groupBox1.Controls.Add(this.BrightnessTolerance);
             this.groupBox1.Controls.Add(this.label11);
-            this.groupBox1.Location = new System.Drawing.Point(12, 229);
+            this.groupBox1.Location = new System.Drawing.Point(16, 72);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(327, 127);
             this.groupBox1.TabIndex = 54;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Scanned Document";
+            this.groupBox1.Text = "Image Comparison";
             // 
             // FindBestImageMatch
             // 
             this.FindBestImageMatch.AutoSize = true;
-            this.FindBestImageMatch.Location = new System.Drawing.Point(16, 27);
+            this.FindBestImageMatch.Location = new System.Drawing.Point(16, 35);
             this.FindBestImageMatch.Name = "FindBestImageMatch";
             this.FindBestImageMatch.Size = new System.Drawing.Size(135, 17);
             this.FindBestImageMatch.TabIndex = 58;
@@ -309,7 +309,7 @@
             this.groupBox2.Controls.Add(this.ReadInputFolderRecursively);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(327, 83);
+            this.groupBox2.Size = new System.Drawing.Size(357, 83);
             this.groupBox2.TabIndex = 58;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Input";
@@ -320,7 +320,7 @@
             this.groupBox3.Controls.Add(this.TestPictureScale);
             this.groupBox3.Location = new System.Drawing.Point(12, 101);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(327, 50);
+            this.groupBox3.Size = new System.Drawing.Size(357, 50);
             this.groupBox3.TabIndex = 59;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Appearance";
@@ -329,9 +329,10 @@
             // 
             this.groupBox4.Controls.Add(this.label8);
             this.groupBox4.Controls.Add(this.PdfPageImageResolution);
+            this.groupBox4.Controls.Add(this.groupBox1);
             this.groupBox4.Location = new System.Drawing.Point(12, 157);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(327, 66);
+            this.groupBox4.Size = new System.Drawing.Size(357, 210);
             this.groupBox4.TabIndex = 60;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Engine";
@@ -340,11 +341,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(350, 405);
+            this.ClientSize = new System.Drawing.Size(382, 410);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Name = "SettingsForm";
             this.Text = "SettingsForm";
