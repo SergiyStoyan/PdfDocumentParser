@@ -92,17 +92,21 @@ namespace Cliver.PdfDocumentParser
                 }
                 if (_ocrCharBoxs != null)
                     _ocrCharBoxs = null;
+
                 floatingAnchorValueStrings2rectangles.Clear();
             }
+
+            if (pageCollection.ActiveTemplate.Name != newTemplate.Name)
+                floatingAnchorValueStrings2rectangles.Clear();
 
             if (newTemplate.BrightnessTolerance != pageCollection.ActiveTemplate.BrightnessTolerance
                 || newTemplate.DifferentPixelNumberTolerance != pageCollection.ActiveTemplate.DifferentPixelNumberTolerance)
                 floatingAnchorValueStrings2rectangles.Clear();
         }
 
-        public Bitmap GetRectangeFromActiveTemplateBitmap(float x, float y, float w, float h)
+        Bitmap getRectangleFromActiveTemplateBitmap(float x, float y, float w, float h)
         {
-            return ActiveTemplateBitmap.Clone(new RectangleF(x, y, w, h), System.Drawing.Imaging.PixelFormat.Undefined);
+            return ActiveTemplateBitmap.Clone(new RectangleF(x, y, w, h), System.Drawing.Imaging.PixelFormat.Undefined); 
             //return ImageRoutines.GetCopy(ActiveTemplateBitmap, new RectangleF(x, y, w, h));
         }
 
@@ -112,14 +116,17 @@ namespace Cliver.PdfDocumentParser
             {
                 if (_activeTemplateBitmap == null)
                 {
-                    Bitmap b;
-                    if (pageCollection.ActiveTemplate != null
-                        && (pageCollection.ActiveTemplate.PagesRotation == Settings.Template.PageRotations.NONE && !pageCollection.ActiveTemplate.AutoDeskew)
-                        )
-                        b = Bitmap;
-                    else
+                    if (pageCollection.ActiveTemplate == null)
+                        return null;
+
+                    //From stackoverflow:
+                    //Using the Graphics class to modify the clone (created with .Clone()) will not modify the original.
+                    //Similarly, using the LockBits method yields different memory blocks for the original and clone.
+                    //...change one random pixel to a random color on the clone... seems to trigger a copy of all pixel data from the original.
+                    Bitmap b = Bitmap.Clone(new Rectangle(0, 0, Bitmap.Width, Bitmap.Height), System.Drawing.Imaging.PixelFormat.Undefined);
+
+                    if (pageCollection.ActiveTemplate.PagesRotation != Settings.Template.PageRotations.NONE)
                     {
-                        b = Bitmap.Clone(new Rectangle(0, 0, Bitmap.Width, Bitmap.Height), System.Drawing.Imaging.PixelFormat.Undefined);
                         //b = ImageRoutines.GetCopy(Bitmap);
                         switch (pageCollection.ActiveTemplate.PagesRotation)
                         {
@@ -137,24 +144,27 @@ namespace Cliver.PdfDocumentParser
                             default:
                                 throw new Exception("Unknown option: " + pageCollection.ActiveTemplate.PagesRotation);
                         }
-                        if (pageCollection.ActiveTemplate.AutoDeskew)
+                    }
+
+                    if (pageCollection.ActiveTemplate.AutoDeskew)
+                    {
+                        using (ImageMagick.MagickImage image = new ImageMagick.MagickImage(b))
                         {
-                            using (ImageMagick.MagickImage image = new ImageMagick.MagickImage(b))
-                            {
-                                //image.Density = new PointD(600, 600);
-                                //image.AutoLevel();
-                                //image.Negate();
-                                //image.AdaptiveThreshold(10, 10, new ImageMagick.Percentage(20));
-                                //image.Negate();
-                                image.Deskew(new ImageMagick.Percentage(10));
-                                //image.AutoThreshold(AutoThresholdMethod.OTSU);
-                                //image.Despeckle();
-                                //image.WhiteThreshold(new Percentage(20));
-                                //image.Trim();
-                                b = image.ToBitmap();
-                            }
+                            //image.Density = new PointD(600, 600);
+                            //image.AutoLevel();
+                            //image.Negate();
+                            //image.AdaptiveThreshold(10, 10, new ImageMagick.Percentage(20));
+                            //image.Negate();
+                            image.Deskew(new ImageMagick.Percentage(10));
+                            //image.AutoThreshold(AutoThresholdMethod.OTSU);
+                            //image.Despeckle();
+                            //image.WhiteThreshold(new Percentage(20));
+                            //image.Trim();
+                            b.Dispose();
+                            b = image.ToBitmap();
                         }
                     }
+                    
                     _activeTemplateBitmap = b;
                 }
                 return _activeTemplateBitmap;
@@ -265,8 +275,11 @@ namespace Cliver.PdfDocumentParser
                         for (int i = 1; i < ibs.Count; i++)
                         {
                             Settings.Template.RectangleF r = new Settings.Template.RectangleF(ibs[i].Rectangle.X + point0.X, ibs[i].Rectangle.Height + point0.Y, ibs[i].Rectangle.Width, ibs[i].Rectangle.Height);
-                            if (!ibs[i].ImageData.ImageIsSimilar(new ImageData(GetRectangeFromActiveTemplateBitmap(r.X, r.Y, r.Width, r.Height), false), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance))
-                                return true;
+                            using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X, r.Y, r.Width, r.Height))
+                            {
+                                if (!ibs[i].ImageData.ImageIsSimilar(new ImageData(rb, false), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance))
+                                    return true;
+                            }
                             rs.Add(r.GetSystemRectangleF());
                         }
                         if (!pageCollection.ActiveTemplate.FindBestImageMatch)
@@ -466,7 +479,10 @@ namespace Cliver.PdfDocumentParser
                     //return Ocr.GetTextByTopLeftCoordinates(OcrCharBoxs, r.GetSystemRectangleF());//sometimes does not work
                     return Ocr.This.GetText(ActiveTemplateBitmap, r.GetSystemRectangleF());
                 case Settings.Template.ValueTypes.ImageData:
-                    return new ImageData(GetRectangeFromActiveTemplateBitmap(r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio));
+                    using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio))
+                    {
+                        return new ImageData(rb);
+                    }
                 default:
                     throw new Exception("Unknown option: " + valueType);
             }
