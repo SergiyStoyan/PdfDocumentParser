@@ -627,6 +627,15 @@ namespace Cliver.PdfDocumentParser
                         return;
                     }
 
+                    if (autoSaveTestFile && !string.IsNullOrWhiteSpace(name.Text))//the customer asked for this
+                    {
+                        Settings.TestFiles.TemplateNames2TestFile[name.Text] = testFile.Text;
+                        var deletedNs = Settings.TestFiles.TemplateNames2TestFile.Keys.Where(n => Settings.Templates.Templates.Where(t => t.Name == n).FirstOrDefault() == null).ToList();
+                        foreach (string n in deletedNs)
+                            Settings.TestFiles.TemplateNames2TestFile.Remove(n);
+                        Settings.TestFiles.Save();
+                    }
+
                     pages = new PageCollection(testFile.Text);
                     totalPageNumber = pages.PdfReader.NumberOfPages;
                     lTotalPages.Text = " / " + totalPageNumber;
@@ -948,7 +957,7 @@ namespace Cliver.PdfDocumentParser
         List<Pdf.CharBox> selectedPdfCharBoxs;
         List<Ocr.CharBox> selectedOcrCharBoxs;
         Settings.Template.FloatingAnchor.ImageDataValue selectedImageDataValue;
-
+        
         void setUIFromTemplate(Settings.Template t)
         {
             try
@@ -1015,8 +1024,15 @@ namespace Cliver.PdfDocumentParser
 
                 pictureScale.Value = t.TestPictureScale > 0 ? t.TestPictureScale : 1;
 
-                if (File.Exists(t.TestFile))
+                if (t.TestFile != null && File.Exists(t.TestFile))
                     testFile.Text = t.TestFile;
+                else
+                {
+                    autoSaveTestFile = true;
+                    string file;
+                    if (t.Name != null && Settings.TestFiles.TemplateNames2TestFile.TryGetValue(t.Name, out file))
+                        testFile.Text = file;
+                }
             }
             finally
             {
@@ -1024,6 +1040,7 @@ namespace Cliver.PdfDocumentParser
             }
         }
         bool loadingTemplate = false;
+        bool autoSaveTestFile = false;//the customer asked this
 
         void setStatus(statuses s, string m)
         {
