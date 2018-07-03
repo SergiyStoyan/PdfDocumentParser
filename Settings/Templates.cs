@@ -133,13 +133,13 @@ namespace Cliver.PdfDocumentParser
 
             public class Mark
             {
-                //serialized
+                //serialize
                 public int? FloatingAnchorId;//when set, Rectangle.X,Y are bound to location of the anchor as to zero point
-                //serialized
+                //serialize
                 public RectangleF Rectangle;
-                //serialized
+                //serialize
                 public ValueTypes ValueType = ValueTypes.PdfText;
-                //serialized
+                //serialize
                 public string ValueAsString
                 {
                     get
@@ -153,7 +153,7 @@ namespace Cliver.PdfDocumentParser
                             case ValueTypes.OcrText:
                                 return (string)value;
                             case ValueTypes.ImageData:
-                                return ((ImageData)value).GetAsString();
+                                return SerializationRoutines.Json.Serialize(value, false);
                             default:
                                 throw new Exception("Unknown option: " + ValueType);
                         }
@@ -170,7 +170,7 @@ namespace Cliver.PdfDocumentParser
                                     this.value = value;
                                     break;
                                 case ValueTypes.ImageData:
-                                    this.value = ImageData.GetFromString(value);
+                                    this.value = SerializationRoutines.Json.Deserialize<ImageData>(value);
                                     break;
                                 default:
                                     throw new Exception("Unknown option: " + ValueType);
@@ -214,22 +214,11 @@ namespace Cliver.PdfDocumentParser
 
             public partial class FloatingAnchor
             {
-                //serialized
+                //serialize
                 public int Id;
-                //serialized
+                //serialize
                 public ValueTypes ValueType = ValueTypes.PdfText;
-                //serialized
-                public byte[] ValueAsBytes
-                {
-                    //get
-                    //{
-                    //    return value == null ? null : SerializationRoutines.Binary.Serialize(value);
-                    //}
-                    set
-                    {
-                        this.value = value == null ? null : SerializationRoutines.Binary.Deserialize(value);
-                    }
-                }
+                //serialize
                 public string ValueAsString
                 {
                     get

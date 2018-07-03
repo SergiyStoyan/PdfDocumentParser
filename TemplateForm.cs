@@ -834,7 +834,7 @@ namespace Cliver.PdfDocumentParser
                     case Settings.Template.ValueTypes.OcrText:
                         return Page.NormalizeText((string)v);
                     case Settings.Template.ValueTypes.ImageData:
-                        return ((ImageData)v).GetAsString();
+                        return SerializationRoutines.Json.Serialize(v, false);
                     default:
                         throw new Exception("Unknown option: " + valueType);
                 }

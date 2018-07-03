@@ -24,42 +24,42 @@ namespace Cliver.PdfDocumentParser
         public int Width;
         public int Height;
 
-        public string GetAsString()
-        {
-            //string g;
-            //byte[] bs = new byte[2 + Hash.Length];
-            //BitConverter.GetBytes((ushort)Width).CopyTo(bs, 0);
-            //for (int i = 0; i < Width; i++)
-            //    for (int j = 0; j < Height; j++)
-            //        bs[2 + i * Height + j] = Hash[i, j];
-            //using (MemoryStream ms = new MemoryStream())
-            //{
-            //    using (GZipStream compressionStream = new GZipStream(ms, CompressionMode.Compress))
-            //    {
-            //        compressionStream.Write(bs, 0, bs.Length);
-            //    }
-            //    g = Encoding.UTF8.GetString(ms.ToArray());
-            //}
+        //public string GetAsString()
+        //{
+        //    //string g;
+        //    //byte[] bs = new byte[2 + Hash.Length];
+        //    //BitConverter.GetBytes((ushort)Width).CopyTo(bs, 0);
+        //    //for (int i = 0; i < Width; i++)
+        //    //    for (int j = 0; j < Height; j++)
+        //    //        bs[2 + i * Height + j] = Hash[i, j];
+        //    //using (MemoryStream ms = new MemoryStream())
+        //    //{
+        //    //    using (GZipStream compressionStream = new GZipStream(ms, CompressionMode.Compress))
+        //    //    {
+        //    //        compressionStream.Write(bs, 0, bs.Length);
+        //    //    }
+        //    //    g = Encoding.UTF8.GetString(ms.ToArray());
+        //    //}
 
-            //byte[] bs = SerializationRoutines.Binary.Serialize(this);//more compact
-            //return SerializationRoutines.Json.Serialize(bs, false);
-            return SerializationRoutines.Json.Serialize(this, false);
-        }
-        static public ImageData GetFromString(string s)
-        {
-            //byte[] bs = SerializationRoutines.Json.Deserialize<byte[]>(s);
-            //return SerializationRoutines.Binary.Deserialize<ImageData>(bs);
-            return SerializationRoutines.Json.Deserialize<ImageData>(s);
+        //    //byte[] bs = SerializationRoutines.Binary.Serialize(this);//more compact
+        //    //return SerializationRoutines.Json.Serialize(bs, false);
+        //    return SerializationRoutines.Json.Serialize(this, false);
+        //}
+        //static public ImageData GetFromString(string s)
+        //{
+        //    //byte[] bs = SerializationRoutines.Json.Deserialize<byte[]>(s);
+        //    //return SerializationRoutines.Binary.Deserialize<ImageData>(bs);
+        //    return SerializationRoutines.Json.Deserialize<ImageData>(s);
 
-            //using (MemoryStream ms = new MemoryStream(bs))
-            //{
-            //    using (GZipStream compressionStream = new GZipStream(ms, CompressionMode.Decompress))
-            //    {
-            //        compressionStream.Read(bs, 0, bs.Length);
-            //    }
-            //    g = Encoding.UTF8.GetString(ms.ToArray());
-            //}
-        }
+        //    //using (MemoryStream ms = new MemoryStream(bs))
+        //    //{
+        //    //    using (GZipStream compressionStream = new GZipStream(ms, CompressionMode.Decompress))
+        //    //    {
+        //    //        compressionStream.Read(bs, 0, bs.Length);
+        //    //    }
+        //    //    g = Encoding.UTF8.GetString(ms.ToArray());
+        //    //}
+        //}
         public ImageData(Bitmap bitmap, bool scaleBitmap = true)
         {
             if (bitmap == null)// Used only by deserializer!!!

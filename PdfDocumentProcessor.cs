@@ -182,7 +182,7 @@ namespace Cliver.PdfDocumentParser
             string error;
             object v = p.GetValue(field.FloatingAnchorId, field.Rectangle, field.ValueType, out error);
             if (v is ImageData)
-                return ((ImageData)v).GetAsString();
+                return SerializationRoutines.Json.Serialize(v, false);
             if (v == null)
                 return null;
             return Page.NormalizeText(Regex.Replace((string)v, @"\-", ""));
