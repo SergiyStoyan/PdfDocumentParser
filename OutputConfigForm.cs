@@ -19,7 +19,7 @@ namespace Cliver.PdfDocumentParser
             Icon = AssemblyRoutines.GetAppIcon();
             Text = "Output Headers";
 
-            List<string> fns2 = GetOrderedHeaders();
+            List<string> fns2 = GetOrderedOutputFieldNames();
             outputHeaders.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             List<string> templateNames = new List<string>();
             foreach (string fn in fns2)
@@ -35,7 +35,7 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public static List<string> GetOrderedHeaders()
+        public static List<string> GetOrderedOutputFieldNames()
         {
             List<Settings.Template> ts = Settings.Templates.Templates.Where(x => x.Active).ToList();
 

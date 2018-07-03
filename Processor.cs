@@ -30,7 +30,7 @@ namespace Cliver.PdfDocumentParser
                 LogMessage.Error("Output Folder is not specified.");
                 return;
             }
-            if (PathRoutines.GetNormalizedPath( Settings.General.InputFolder) == PathRoutines.GetNormalizedPath(Settings.General.OutputFolder))
+            if (PathRoutines.GetNormalizedPath(Settings.General.InputFolder) == PathRoutines.GetNormalizedPath(Settings.General.OutputFolder))
             {
                 LogMessage.Error("Output Folder cannot be Input Folder.");
                 return;
@@ -58,9 +58,12 @@ namespace Cliver.PdfDocumentParser
             List<Settings.Template> active_templates = Settings.Templates.Templates.Where(x => x.Active).ToList();
             if (active_templates.Count < 1)
             {
-                LogMessage.Error("No active template!");
+                LogMessage.Error("There is no active template!");
                 return;
             }
+
+            List<string> orderedOutputFieldNames = OutputConfigForm.GetOrderedOutputFieldNames();
+
             List<string> headers = active_templates[0].Fields.Select(x => x.Name).ToList();
             List<string> hs0 = headers.OrderBy(a => a).ToList();
             for (int i = 1; i < active_templates.Count; i++)
@@ -74,15 +77,15 @@ namespace Cliver.PdfDocumentParser
                 }
             }
             headers.Clear();
-            headers.AddRange(new List<string> { "Original File", "Stamped File"});
-            headers.AddRange(OutputConfigForm.GetOrderedHeaders());
+            headers.AddRange(new List<string> { "Original File", "Stamped File" });
+            headers.AddRange(orderedOutputFieldNames);
             headers.AddRange(new List<string> { "Template", "First Page" });
 
             xls.WriteLine(headers);
-                        
-            List<string> files = FileSystemRoutines.GetFiles(Settings.General.InputFolder, false);
+
+            List<string> files = FileSystemRoutines.GetFiles(Settings.General.InputFolder, Settings.General.ReadInputFolderRecursively);
             if (Settings.General.IgnoreHidddenFiles)
-               files = files.Select(f => new FileInfo(f)).Where(fi => !fi.Attributes.HasFlag(FileAttributes.Hidden)).Select(fi => fi.FullName).ToList();
+                files = files.Select(f => new FileInfo(f)).Where(fi => !fi.Attributes.HasFlag(FileAttributes.Hidden)).Select(fi => fi.FullName).ToList();
 
             int processed_files = 0;
             int total_files = files.Count;
@@ -92,14 +95,19 @@ namespace Cliver.PdfDocumentParser
             {
                 try
                 {
-                    //string od = PathRoutines.GetDirMirroredInDir(PathRoutines.GetDirFromPath(f), Settings.General.OutputFolder);
-                    //od = FileSystemRoutines.CreateDirectory(od, false);
-                    //string of = PathRoutines.InsertSuffixBeforeFileExtension(od + "\\" + PathRoutines.GetFileNameFromPath(f), ".stamped");
-                    string of = PathRoutines.InsertSuffixBeforeFileExtension(Settings.General.OutputFolder + "\\" + PathRoutines.GetFileNameFromPath(f), ".stamped");
+                    string of;
+                    //if (Settings.General.ReadInputFolderRecursively)
+                    //{
+                        string od = PathRoutines.GetDirMirroredInDir(PathRoutines.GetDirFromPath(f), Settings.General.InputFolder, Settings.General.OutputFolder);
+                        od = FileSystemRoutines.CreateDirectory(od, false);
+                        of = PathRoutines.InsertSuffixBeforeFileExtension(od + "\\" + PathRoutines.GetFileNameFromPath(f), ".stamped");
+                    //}
+                    //else
+                    //    of = PathRoutines.InsertSuffixBeforeFileExtension(Settings.General.OutputFolder + "\\" + PathRoutines.GetFileNameFromPath(f), ".stamped");
                     bool? result = PdfProcessor.Process(f, active_templates, of, (templateName, page_i, fieldNames2texts) =>
                     {
                         List<string> values = new List<string>() { PathRoutines.GetFileNameFromPath(f), PathRoutines.GetFileNameFromPath(of) };
-                        foreach (string fn in Settings.General.OrderedOutputFieldNames)
+                        foreach (string fn in orderedOutputFieldNames)
                         {
                             string t;
                             fieldNames2texts.TryGetValue(fn, out t);
@@ -109,8 +117,9 @@ namespace Cliver.PdfDocumentParser
                         int j = xls.WriteLine(values);
                         xls.SetLink(j, 1, new Uri(f, UriKind.Absolute));
                         xls.SetLink(j, 2, new Uri(of, UriKind.Relative));
-                        int i = 1 + Settings.General.OrderedOutputFieldNames.IndexOf("INVOICE#");
-                        xls.SetLink(j, 2 + i, new Uri(f, UriKind.Absolute));
+                        int i = orderedOutputFieldNames.IndexOf("INVOICE#");
+                        if (i >= 0)
+                            xls.SetLink(j, 2 + i + 1, new Uri(f, UriKind.Absolute));
                     });
 
                     if (result == true)
@@ -131,7 +140,7 @@ namespace Cliver.PdfDocumentParser
 
             Log.Main.Inform("COMPLETED:\r\nTotal files: " + processed_files + "\r\nSuccess files: " + (processed_files - failed_files.Count) + "\r\nFailed files: " + failed_files.Count + "\r\n" + string.Join("\r\n", failed_files));
             if (failed_files.Count > 0)
-                Message.Error("There were " + failed_files + " failed files.\r\nSee details in the log.");
+                Message.Error("There were " + failed_files.Count + " failed files.\r\nSee details in the log.");
             //progress(0, 0);
         }
     }

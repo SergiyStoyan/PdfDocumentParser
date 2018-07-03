@@ -379,11 +379,15 @@ namespace Cliver.PdfDocumentParser
                                 pages.ActiveTemplate = getTemplateFromUI(false);
                                 PointF? p = pages[currentPage].GetFloatingAnchorPoint0((int)fai);
                                 if (p == null)
-                                    throw new Exception("Could not find FloatingAnchor " + fai + " in the page");
-                                r.X -= ((PointF)p).X;
-                                r.Y -= ((PointF)p).Y;
+                                    setStatus(statuses.ERROR, "FloatingAnchor[" + fai + "] is not found.");
+                                else
+                                {
+                                    setStatus(statuses.SUCCESS, "FloatingAnchor[" + fai + "] is found.");
+                                    r.X -= ((PointF)p).X;
+                                    r.Y -= ((PointF)p).Y;
+                                    cs["Rectangle2"].Value = SerializationRoutines.Json.Serialize(r);
+                                }
                             }
-                            cs["Rectangle2"].Value = SerializationRoutines.Json.Serialize(r);
                             break;
                     }
                 }
@@ -485,11 +489,15 @@ namespace Cliver.PdfDocumentParser
                                 pages.ActiveTemplate = getTemplateFromUI(false);
                                 PointF? p = pages[currentPage].GetFloatingAnchorPoint0((int)fai);
                                 if (p == null)
-                                    throw new Exception("Could not find FloatingAnchor " + fai + " in the page");
-                                r.X -= ((PointF)p).X;
-                                r.Y -= ((PointF)p).Y;
+                                    setStatus(statuses.ERROR, "FloatingAnchor[" + fai + "] is not found.");
+                                else
+                                {
+                                    setStatus(statuses.SUCCESS, "FloatingAnchor[" + fai + "] is found.");
+                                    r.X -= ((PointF)p).X;
+                                    r.Y -= ((PointF)p).Y;
+                                    cs["Rectangle"].Value = SerializationRoutines.Json.Serialize(r);
+                                }
                             }
-                            cs["Rectangle"].Value = SerializationRoutines.Json.Serialize(r);
                             break;
                     }
                 }

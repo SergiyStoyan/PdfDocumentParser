@@ -22,6 +22,7 @@ namespace Cliver.PdfDocumentParser
             public string InputFolder = @"d:\_d\_projects\mattpdf\_test_files";
             public string OutputFolder;
             public bool IgnoreHidddenFiles = true;
+            public bool ReadInputFolderRecursively = false;
 
             public System.Drawing.Color SelectionBoxColor = System.Drawing.Color.Red;
             public System.Drawing.Color BoundingBoxColor = System.Drawing.Color.BlueViolet;

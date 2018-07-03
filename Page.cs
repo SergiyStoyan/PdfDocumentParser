@@ -496,6 +496,8 @@ namespace Cliver.PdfDocumentParser
 
         static string prepareField(string f)
         {
+            if (f == null)
+                return null;
             return Regex.Replace(f, @"\-", "");
         }
     }

@@ -24,13 +24,14 @@ namespace Cliver.PdfDocumentParser
 
         void load_settings()
         {
-            imageResolution.Value = Settings.General.PdfPageImageResolution;
-            ignoreHidddenFiles.Checked = Settings.General.IgnoreHidddenFiles;
-            testPictureScale.Value = Settings.General.TestPictureScale;
+            PdfPageImageResolution.Value = Settings.General.PdfPageImageResolution;
+            IgnoreHidddenFiles.Checked = Settings.General.IgnoreHidddenFiles;
+            ReadInputFolderRecursively.Checked = Settings.General.ReadInputFolderRecursively;
+            TestPictureScale.Value = Settings.General.TestPictureScale;
 
-            brightnessTolerance.Value = (decimal)Settings.ImageProcessing.BrightnessTolerance;
-            differentPixelNumberTolerance.Value = (decimal)Settings.ImageProcessing.DifferentPixelNumberTolerance;
-            findBestImageMatch.Checked = Settings.ImageProcessing.FindBestImageMatch;
+            BrightnessTolerance.Value = (decimal)Settings.ImageProcessing.BrightnessTolerance;
+            DifferentPixelNumberTolerance.Value = (decimal)Settings.ImageProcessing.DifferentPixelNumberTolerance;
+            FindBestImageMatch.Checked = Settings.ImageProcessing.FindBestImageMatch;
         }
 
         private void bCancel_Click(object sender, EventArgs e)
@@ -42,16 +43,17 @@ namespace Cliver.PdfDocumentParser
         {
             try
             {
-                Settings.General.PdfPageImageResolution = (int)imageResolution.Value;
-                Settings.General.IgnoreHidddenFiles = ignoreHidddenFiles.Checked;
-                Settings.General.TestPictureScale = testPictureScale.Value;    
+                Settings.General.PdfPageImageResolution = (int)PdfPageImageResolution.Value;
+                Settings.General.IgnoreHidddenFiles = IgnoreHidddenFiles.Checked;
+                Settings.General.ReadInputFolderRecursively = ReadInputFolderRecursively.Checked;
+                Settings.General.TestPictureScale = TestPictureScale.Value;    
 
                 Settings.General.Save();
                 Settings.General.Reload();            
 
-                Settings.ImageProcessing.BrightnessTolerance = (float)brightnessTolerance.Value;
-                Settings.ImageProcessing.DifferentPixelNumberTolerance = (float)differentPixelNumberTolerance.Value;
-                Settings.ImageProcessing.FindBestImageMatch = findBestImageMatch.Checked;
+                Settings.ImageProcessing.BrightnessTolerance = (float)BrightnessTolerance.Value;
+                Settings.ImageProcessing.DifferentPixelNumberTolerance = (float)DifferentPixelNumberTolerance.Value;
+                Settings.ImageProcessing.FindBestImageMatch = FindBestImageMatch.Checked;
 
                 Settings.ImageProcessing.Save();
                 Settings.ImageProcessing.Reload();
