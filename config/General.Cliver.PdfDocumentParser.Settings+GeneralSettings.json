@@ -1,13 +1,19 @@
 {
-  "InputFolder": "d:\\_d\\_projects\\mattpdf\\_test_files",
-  "OutputFolder": "d:\\_d\\_projects\\mattpdf\\_test_files\\Output",
+  "InputFolder": "D:\\_d\\_PROJECTS\\InvoiceParser.2\\_test_files\\CUT",
+  "OutputFolder": "D:\\_d\\_PROJECTS\\InvoiceParser.2\\_test_files_output",
   "IgnoreHidddenFiles": true,
+  "ReadInputFolderRecursively": false,
   "SelectionBoxColor": "Red",
   "BoundingBoxColor": "BlueViolet",
   "StampColor": "Red",
   "PdfPageImageResolution": 300,
   "CoordinateDeviationMargin": 0.001,
   "TestPictureScale": 1.3,
-  "OrderedOutputFieldNames": [],
+  "OrderedOutputFieldNames": [
+    "INVOICE#",
+    "JOB#",
+    "PO#",
+    "COST"
+  ],
   "Image2PdfResolutionRatio": 0.24
 }

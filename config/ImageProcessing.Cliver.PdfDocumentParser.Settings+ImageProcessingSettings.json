@@ -1,0 +1,5 @@
+{
+  "BrightnessTolerance": 0.4,
+  "DifferentPixelNumberTolerance": 0.01,
+  "FindBestImageMatch": false
+}
