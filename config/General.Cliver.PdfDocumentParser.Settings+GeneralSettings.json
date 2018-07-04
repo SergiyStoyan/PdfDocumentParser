@@ -1,5 +1,5 @@
 {
-  "InputFolder": "D:\\_d\\_PROJECTS\\InvoiceParser.2\\_test",
+  "InputFolder": "D:\\_d\\_PROJECTS\\InvoiceParser.2\\_test_files",
   "OutputFolder": "D:\\_d\\_PROJECTS\\InvoiceParser.2\\_test_files_output",
   "IgnoreHidddenFiles": true,
   "ReadInputFolderRecursively": true,

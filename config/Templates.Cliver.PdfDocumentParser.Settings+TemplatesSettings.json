@@ -98,7 +98,7 @@
         }
       ],
       "Active": true,
-      "TestFile": "D:\\_d\\_PROJECTS\\InvoiceParser\\_test_files\\Abatix Single.pdf",
+      "TestFile": "D:\\_d\\_PROJECTS\\InvoiceParser.2\\_test_files\\Abatix Single1.pdf",
       "TestPictureScale": 1.3
     },
     {
@@ -598,7 +598,7 @@
         }
       ],
       "Active": true,
-      "TestFile": "D:\\_d\\_PROJECTS\\InvoiceParser.2\\_test_files\\Apache\\Apache Multiple.pdf",
+      "TestFile": "D:\\_d\\_PROJECTS\\InvoiceParser.2\\_test_files\\Apache\\Contract 90818E.pdf",
       "TestPictureScale": 1.0
     },
     {
@@ -3182,7 +3182,7 @@
           "ValueType": 0
         }
       ],
-      "Active": true,
+      "Active": false,
       "TestFile": "D:\\_d\\_PROJECTS\\InvoiceParser.2\\_test_files\\A to Z\\R47752.PDF",
       "TestPictureScale": 1.2
     },
@@ -3451,7 +3451,7 @@
           "ValueType": 1
         }
       ],
-      "Active": true,
+      "Active": false,
       "TestFile": "D:\\_d\\_PROJECTS\\InvoiceParser.2\\_test_files\\CUT\\1st Cut Single.pdf",
       "TestPictureScale": 1.2
     },
@@ -3532,7 +3532,7 @@
           "ValueType": 1
         }
       ],
-      "Active": true,
+      "Active": false,
       "TestFile": "D:\\_d\\_PROJECTS\\InvoiceParser.2\\_test_files\\Acme\\Acme Multiple.pdf",
       "TestPictureScale": 1.3
     },
@@ -3633,71 +3633,8 @@
           "ValueType": 1
         }
       ],
-      "Active": true,
-      "TestFile": "D:\\_d\\_PROJECTS\\InvoiceParser.2\\_test_files\\Veolia\\Hawkeye Electric EW1456000 2018-04-26.pdf",
-      "TestPictureScale": 1.3
-    },
-    {
-      "Name": "Metal Solutions",
-      "FileFilterRegex": {
-        "Pattern": "\\.pdf$",
-        "Options": 1
-      },
-      "PagesRotation": 0,
-      "AutoDeskew": false,
-      "BrightnessTolerance": 0.4,
-      "DifferentPixelNumberTolerance": 0.01,
-      "FindBestImageMatch": false,
-      "FloatingAnchors": null,
-      "DocumentFirstPageRecognitionMarks": null,
-      "Fields": [
-        {
-          "FloatingAnchorId": null,
-          "Name": "JOB#",
-          "Rectangle": {
-            "X": 399.0,
-            "Y": 287.0,
-            "Width": 85.0,
-            "Height": 23.0
-          },
-          "ValueType": 0
-        },
-        {
-          "FloatingAnchorId": null,
-          "Name": "PO#",
-          "Rectangle": {
-            "X": 313.0,
-            "Y": 288.0,
-            "Width": 86.0,
-            "Height": 22.0
-          },
-          "ValueType": 0
-        },
-        {
-          "FloatingAnchorId": null,
-          "Name": "INVOICE#",
-          "Rectangle": {
-            "X": 504.0,
-            "Y": 90.0,
-            "Width": 71.0,
-            "Height": 22.0
-          },
-          "ValueType": 0
-        },
-        {
-          "FloatingAnchorId": null,
-          "Name": "COST",
-          "Rectangle": {
-            "X": 118.0,
-            "Y": -5.30285645,
-            "Width": 67.0,
-            "Height": 27.0
-          },
-          "ValueType": 0
-        }
-      ],
       "Active": false,
-      "TestFile": "D:\\_d\\_PROJECTS\\MattPdf\\_test_files\\new\\18-1192.pdf",
+      "TestFile": "D:\\_d\\_PROJECTS\\InvoiceParser.2\\_test_files\\Veolia\\Hawkeye Electric EW1456000 2018-04-26.pdf",
       "TestPictureScale": 1.3
     },
     {
@@ -4482,69 +4419,6 @@
       "TestPictureScale": 1.2
     },
     {
-      "Name": "CDL",
-      "FileFilterRegex": {
-        "Pattern": "\\.pdf$",
-        "Options": 1
-      },
-      "PagesRotation": 0,
-      "AutoDeskew": false,
-      "BrightnessTolerance": 0.4,
-      "DifferentPixelNumberTolerance": 0.01,
-      "FindBestImageMatch": false,
-      "FloatingAnchors": null,
-      "DocumentFirstPageRecognitionMarks": null,
-      "Fields": [
-        {
-          "FloatingAnchorId": null,
-          "Name": "JOB#",
-          "Rectangle": {
-            "X": 28.0,
-            "Y": 265.0,
-            "Width": 141.0,
-            "Height": 15.0
-          },
-          "ValueType": 0
-        },
-        {
-          "FloatingAnchorId": null,
-          "Name": "PO#",
-          "Rectangle": {
-            "X": 172.0,
-            "Y": 264.0,
-            "Width": 206.0,
-            "Height": 19.0
-          },
-          "ValueType": 0
-        },
-        {
-          "FloatingAnchorId": null,
-          "Name": "INVOICE#",
-          "Rectangle": {
-            "X": 480.0,
-            "Y": 46.0,
-            "Width": 104.0,
-            "Height": 24.0
-          },
-          "ValueType": 0
-        },
-        {
-          "FloatingAnchorId": null,
-          "Name": "COST",
-          "Rectangle": {
-            "X": 111.72,
-            "Y": -12.9846191,
-            "Width": 126.0,
-            "Height": 30.0
-          },
-          "ValueType": 0
-        }
-      ],
-      "Active": false,
-      "TestFile": "D:\\_d\\_PROJECTS\\MattPdf\\_test_files\\new4\\Invoice # P-76004.PDF",
-      "TestPictureScale": 1.3
-    },
-    {
       "Name": "Western Technologies",
       "FileFilterRegex": {
         "Pattern": "\\.pdf$",
@@ -4813,7 +4687,7 @@
           "ValueType": 1
         }
       ],
-      "Active": true,
+      "Active": false,
       "TestFile": "D:\\_d\\_PROJECTS\\InvoiceParser.2\\_test_files\\HAW\\HAW064 JUNE 2018.pdf",
       "TestPictureScale": 1.3
     },
@@ -4858,17 +4732,11 @@
       "DocumentFirstPageRecognitionMarks": [
         {
           "FloatingAnchorId": 1,
-          "Rectangle": null,
-          "ValueType": 0,
-          "ValueAsString": null
-        },
-        {
-          "FloatingAnchorId": null,
           "Rectangle": {
-            "X": 411.0,
-            "Y": 40.0,
-            "Width": 87.0,
-            "Height": 24.0
+            "X": 363.0,
+            "Y": -12.0,
+            "Width": 116.0,
+            "Height": 34.0
           },
           "ValueType": 0,
           "ValueAsString": "Invoice"
@@ -5203,7 +5071,7 @@
           "ValueType": 1
         }
       ],
-      "Active": true,
+      "Active": false,
       "TestFile": "D:\\_d\\_PROJECTS\\InvoiceParser.2\\_test_files\\SMS\\DOC010.pdf",
       "TestPictureScale": 1.3
     },

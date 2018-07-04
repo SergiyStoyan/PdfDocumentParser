@@ -1,0 +1,34 @@
+<html>
+<head>
+</head>
+<body>
+<h1>PdfDocumentParser Help</h1>
+<h2>Description</h2>
+<p>PdfDocumentParser is inteded to extract text/images from pdf documents that have predefined structure such as invoices and the like. 
+<p>It provides the following technologies of seeking and parsing:
+<ul>
+<li>Pdf elements processing. This is way is based on native pdf text presentation inside pdf files. It is the main way to operate with text in PdfDocumentParser because it is the most robust and fast.</li>
+<li>Getting text by OCR technology. It is based on OCR technology implemented by Tesseract engine which is used by PdfDocumentParser. This option must be chosen only when pdf processing does not work. It usually happens when documents you  want to parse consist completely or partially of images such as scanned documents, photos etc. This way cannot not give 100% accuracy against pdf processing and will acceptably work only for images with resolution not less than 300dpi. Also this way is much slower.</li>
+<li>Image comparison. This way is used for seeking and comparison images in documents. It is usually required for document type detection: PdfDocumentParser may look for cetain company logo in documents to detect which template mus be applied. This way is slower than pdf processing and so must be declined when possible. Also, it may not provide 100% accuracy on scanned documents if they have different quality.</li>
+</ul>
+<p>It can process documents of different structures at the same time. 
+<p>Every document type needs a template that contains information what info and how must be parsed from document.
+
+<h2>Template</h2>
+When you want to parse a new type document, first create an empty template and open it.
+<p>Select a pdf file that is to be parsed. When it loaded to the editor, first you have to crerate a floating anchor collection.
+
+<h3>Floating Anchor</h3>
+Floating anchor
+
+
+<ul>
+<li>Pdf elements processing. This is way is based on native pdf text presentation inside pdf files. It is the main way to operate with text in PdfDocumentParser because it is the most robust and fast.</li>
+<li>Getting text by OCR technology. It is based on OCR technology implemented by Tesseract engine which is used by PdfDocumentParser. This option must be chosen only when pdf processing does not work. It usually happens when documents you  want to parse consist completely or partially of images such as scanned documents, photos etc. This way cannot not give 100% accuracy against pdf processing and will acceptably work only for images with resolution not less than 300dpi. Also this way is much slower.</li>
+<li>Image comparison. This way is used for seeking and comparison images in documents. It is usually required for document type detection: PdfDocumentParser may look for cetain company logo in documents to detect which template mus be applied. This way is slower than pdf processing and so must be declined when possible. Also, it may not provide 100% accuracy on scanned documents if they have different quality.</li>
+</ul>
+
+ and thus you may want to keep templates that use this way inactive most of time and turn them on only when you want to parse a bunch of ducuments 
+
+</body>
+</html>
