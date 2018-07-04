@@ -279,7 +279,8 @@
     <PreBuildEvent>
     </PreBuildEvent>
     <PostBuildEvent>xcopy /Y /S "$(ProjectDir)externals" "$(TargetDir)"
-xcopy /Y "$(ProjectDir)config" "$(TargetDir)"</PostBuildEvent>
+xcopy /Y "$(ProjectDir)config" "$(TargetDir)"
+xcopy /Y "$(ProjectDir)help.html" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

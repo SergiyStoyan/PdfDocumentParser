@@ -375,5 +375,10 @@ namespace Cliver.PdfDocumentParser
             SettingsForm sf = new SettingsForm();
             sf.ShowDialog();
         }
+
+        private void help_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("help.html");
+        }
     }
 }

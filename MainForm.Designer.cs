@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.bAbout = new System.Windows.Forms.Button();
             this.bInputFolder = new System.Windows.Forms.Button();
             this.bOutputFolder = new System.Windows.Forms.Button();
@@ -52,6 +52,7 @@
             this.bHeaders = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.help = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.templates)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
@@ -111,7 +112,7 @@
             // bExit
             // 
             this.bExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bExit.Location = new System.Drawing.Point(140, 3);
+            this.bExit.Location = new System.Drawing.Point(116, 3);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(75, 23);
             this.bExit.TabIndex = 5;
@@ -122,7 +123,7 @@
             // bRun
             // 
             this.bRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bRun.Location = new System.Drawing.Point(59, 3);
+            this.bRun.Location = new System.Drawing.Point(35, 3);
             this.bRun.Name = "bRun";
             this.bRun.Size = new System.Drawing.Size(75, 23);
             this.bRun.TabIndex = 6;
@@ -183,8 +184,8 @@
             // Name_
             // 
             this.Name_.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            this.Name_.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            this.Name_.DefaultCellStyle = dataGridViewCellStyle1;
             this.Name_.HeaderText = "Name";
             this.Name_.Name = "Name_";
             this.Name_.Width = 60;
@@ -192,9 +193,9 @@
             // Edit
             // 
             this.Edit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.Edit.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.Edit.DefaultCellStyle = dataGridViewCellStyle2;
             this.Edit.HeaderText = "";
             this.Edit.Name = "Edit";
             this.Edit.Resizable = System.Windows.Forms.DataGridViewTriState.False;
@@ -214,7 +215,7 @@
             // bLog
             // 
             this.bLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bLog.Location = new System.Drawing.Point(165, 3);
+            this.bLog.Location = new System.Drawing.Point(246, 3);
             this.bLog.Name = "bLog";
             this.bLog.Size = new System.Drawing.Size(75, 23);
             this.bLog.TabIndex = 12;
@@ -225,7 +226,7 @@
             // bOutput
             // 
             this.bOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bOutput.Location = new System.Drawing.Point(327, 3);
+            this.bOutput.Location = new System.Drawing.Point(408, 3);
             this.bOutput.Name = "bOutput";
             this.bOutput.Size = new System.Drawing.Size(75, 23);
             this.bOutput.TabIndex = 13;
@@ -236,7 +237,7 @@
             // bSettings
             // 
             this.bSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bSettings.Location = new System.Drawing.Point(84, 3);
+            this.bSettings.Location = new System.Drawing.Point(165, 3);
             this.bSettings.Name = "bSettings";
             this.bSettings.Size = new System.Drawing.Size(75, 23);
             this.bSettings.TabIndex = 14;
@@ -257,7 +258,7 @@
             // bHeaders
             // 
             this.bHeaders.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bHeaders.Location = new System.Drawing.Point(246, 3);
+            this.bHeaders.Location = new System.Drawing.Point(327, 3);
             this.bHeaders.Name = "bHeaders";
             this.bHeaders.Size = new System.Drawing.Size(75, 23);
             this.bHeaders.TabIndex = 16;
@@ -269,13 +270,14 @@
             // 
             this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.flowLayoutPanel1.Controls.Add(this.bAbout);
+            this.flowLayoutPanel1.Controls.Add(this.help);
             this.flowLayoutPanel1.Controls.Add(this.bSettings);
             this.flowLayoutPanel1.Controls.Add(this.bLog);
             this.flowLayoutPanel1.Controls.Add(this.bHeaders);
             this.flowLayoutPanel1.Controls.Add(this.bOutput);
             this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 363);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(429, 30);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(496, 30);
             this.flowLayoutPanel1.TabIndex = 17;
             // 
             // flowLayoutPanel2
@@ -284,10 +286,21 @@
             this.flowLayoutPanel2.Controls.Add(this.bExit);
             this.flowLayoutPanel2.Controls.Add(this.bRun);
             this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(490, 363);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(514, 363);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(218, 31);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(194, 31);
             this.flowLayoutPanel2.TabIndex = 18;
+            // 
+            // help
+            // 
+            this.help.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.help.Location = new System.Drawing.Point(84, 3);
+            this.help.Name = "help";
+            this.help.Size = new System.Drawing.Size(75, 23);
+            this.help.TabIndex = 17;
+            this.help.Text = "Help";
+            this.help.UseVisualStyleBackColor = true;
+            this.help.Click += new System.EventHandler(this.help_Click);
             // 
             // MainForm
             // 
@@ -340,5 +353,6 @@
         private System.Windows.Forms.Button bHeaders;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+        private System.Windows.Forms.Button help;
     }
 }
