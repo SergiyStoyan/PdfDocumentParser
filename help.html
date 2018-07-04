@@ -29,6 +29,12 @@ p {
 <p>PdfDocumentParser can process documents of different structures at the same time. 
 <p>Every document type needs a template that contains information what info and how must be parsed from document.
 
+<h2>Base Assumptions</h2>
+<p>A document can consist of more than one page.
+<p>A pdf file can contain more than one document.
+<p>The same pdf file can contain documents of the same type only.
+
+
 <h2>Template</h2>
 <p>When you want to parse a new type document, first create an empty template and open it. Select a pdf file that is to be parsed and when it is displayed in the editor you go the following steps:
 <p>- create <a href="#floating_anchor">floating anchors</a>;
@@ -39,7 +45,7 @@ p {
 
 
 <h3><a name="floating_anchor">Floating Anchor</a></h3>
-<p>Floating anchor is a speciming of either text or image that PdfDocumentParser will look in every page of a document. Then the found anchor is used to locate in the page Marks or/and Fields that are linked to it. While the only idea of floating anchors is detecting absolute coordinate points in page, it solves the several tasks:
+<p>Floating anchor is a specimen of either text or image that PdfDocumentParser will look in every page of a document. Then the found anchor is used to locate in the page Marks or/and Fields that are linked to it. While the only idea of floating anchors is detecting absolute coordinate points in page, it serves for the several tasks:
 <p>- finding marks/fields whose position in the page may vary e.g. for 'total amount' in the bottom of invoice table. 
 <p>- recoginizing marks/fields which may be met only in one page of multypage document. If a field is not linked to a floating anchor then it will be extracted from every page and only the last value (which may be wrong) will be output;
 <p>- detecting zero position in scanned documents because usually their margines vary;
@@ -53,8 +59,8 @@ p {
 <p>Upon creating a floating anchor you can create either document recognition marks or fields and links them to it. Linking means that mark's or field's coordinates become relative to the floating anchor they are linked to. That's PdfDocumentParser first will look for the floating anchor and if it is found, it will locate mark or field depending on it's location.
 
 <h3><a name="mark">Document Recognition Mark</a></h3>
-<p>Document recognition mark is a speciming of either text or image that PdfDocumentParser will look in a document. One or more such marks is used by PdfDocumentParser to detect which tempate corresponds to the processed document. For this reason every template should have at least one document recognition mark defined. It is obviousely such marks must be unique enough to identhicate the document they belong with high confidence. It works the following way: PdfDocumentParser finds mark in page and compares found content with the stored mark content. 
-<p>If all marks of a template are found in page then this template is chosen for further processing of all the pages of this document. 
+<p>Document recognition mark is a speciming of either text or image that PdfDocumentParser will look in a document. One or more such marks is used by PdfDocumentParser to detect which tempate corresponds to the processed document. For this reason every template should have at least one document recognition mark defined. It is obviousely such marks must be unique enough to identhicate the document they belong with high confidence. It works the following way: PdfDocumentParser finds a mark in page and compares the found content with the stored mark's content. 
+<p>If all marks of a template are found in page then this template is chosen for further processing of all the pages of this document and no more tmplate recognition is done for this file. However, marks are checked for every page to detect beginning of a new document.
 <p>To create a document recognition mark, select a new row in the marks. Now, you have 3 options: 
 <p>- link the mark to a floating anchor by chosing its ID and it may be enough: that means that PdfDocumentParser will look for the anchor and if it is found it will be considered as the document recoginition mark;
 <p>- select with mouse a rectangle in the page whose content is unique for this document type. E.g. for invoice it will be a company name or logo printed in the top of page. If you are sure that this mark always is located in the same position in page then no need to link the mark to a floating anchor and it can be left as is. It this case it will work the following way: PdfDocumentParser locates mark's rectangle in page and compares its content with mark's content: when they are the same then the mark is considered found;
@@ -63,6 +69,7 @@ p {
 <h3><a name="field">Field</a></h3>
 <p>Field defines cetain text that you want extract from document. Like with document recognition mark it can either be linked to an anchor or retain absolute position in page. 
 <p>To create a field, select a new row in the fields table and select the area in page were text beloning to this field must be extracted. For conventinal pdf documents you shuld never use OCR option but for scanned documents it is the only way to get text in digital form that can be recorded in a file or database, indexed, searched and so on.
+<p>Every field is looked for in every page. So if a field has no anchor, it will be extracted from every page and only the value from the last page of document will be recorded. To detect the correct page a floating anchor should be used. E.g. if you want to extact invoice number then create a floating anchor pointing to something like "Invoice #:" and then link the field to it. Now PdfDocumentParser will extract this field only when "Invoice #:" is found.
 
 <h3>File Filter</h3>
 <p>When file names can suggest which template is appropriate then yon can specify file filter in this tempate. It is regex expression applied to document path. Such filter will reduce processing time hugely;
