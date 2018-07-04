@@ -4,17 +4,17 @@
 [Code]
 function AppName(Param: String): String;
 begin
-  Result := 'InvoiceParser';
+  Result := 'PdfDocumentParser';
 end;
 
 function Version(Param: String): String;
 begin
-  Result := '0.7';
+  Result := '0.1';
 end;
 
 [Setup]                         
 OutputDir=_Output
-OutputBaseFilename=InvoiceParser.Setup
+OutputBaseFilename=PdfDocumentParser.Setup
 AppName={code:AppName}
 AppVerName={code:AppName} {code:Version}
 AppPublisher=CliverSoft.com
