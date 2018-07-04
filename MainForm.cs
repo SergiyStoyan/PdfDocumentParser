@@ -111,7 +111,7 @@ namespace Cliver.PdfDocumentParser
                 //DataGridViewRow r = templates.Rows[e.RowIndex];
                 //if (r.IsNewRow && string.IsNullOrWhiteSpace((string)r.Cells["Name_"].Value))
                 //    templates.CancelEdit();//.Rows.Remove(r);
-                
+
                 //try
                 //{
                 //    string n = (string)r.Cells["Name_"].Value;
@@ -127,14 +127,14 @@ namespace Cliver.PdfDocumentParser
                 //    e.Cancel = true;
                 //}
             };
-            
+
             templates.DefaultValuesNeeded += delegate (object sender, DataGridViewRowEventArgs e)
             {
                 try
                 {
                     if (e.Row.Cells["Active"].Value == null)
                         e.Row.Cells["Active"].Value = true;
-                    
+
                     Settings.Template t = (Settings.Template)e.Row.Tag;
                     if (t == null)
                     {
@@ -249,9 +249,9 @@ namespace Cliver.PdfDocumentParser
         {
             FolderBrowserDialog d = new FolderBrowserDialog();
             if (string.IsNullOrWhiteSpace(d.SelectedPath))
-                if(string.IsNullOrWhiteSpace(Settings.General.InputFolder))
+                if (string.IsNullOrWhiteSpace(Settings.General.InputFolder))
                     d.SelectedPath = Log.AppDir;
-            else
+                else
                     d.SelectedPath = Settings.General.InputFolder;
             if (d.ShowDialog() != System.Windows.Forms.DialogResult.OK)
                 return;
@@ -378,7 +378,14 @@ namespace Cliver.PdfDocumentParser
 
         private void help_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("help.html");
+            //string helpFile = "help.html";
+            //try
+            //{
+            //    System.Net.WebClient wc = new System.Net.WebClient();
+            //    wc.DownloadFile("http.cliversoft.com/PdfDocumentParser/version.1/help.html", helpFile);
+            //}
+            //catch { }
+            System.Diagnostics.Process.Start(helpFile);
         }
     }
 }

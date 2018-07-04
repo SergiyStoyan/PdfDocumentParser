@@ -59,12 +59,12 @@ p {
 <li>OCR text - which is text recognized by OCR engine within the selected area;</li>
 <li>Image data - which is hash of the image bounded by the selection box;</li>
 </ul>
-Then select with mouse a rectangle in the document page. The text or image within the selection box will be that fragment that PdfDocumentParser will look for.
+<p>Then select with mouse a rectangle in the document page. The text or image within the selection box will be that fragment that PdfDocumentParser will look for.
 <p>Upon creating a floating anchor you can create either document recognition marks or fields and link them to the anchor. Linking means that mark's or field's coordinates become relative to the floating anchor they are linked to. That's PdfDocumentParser first will look for the floating anchor and if it is found, it will locate the linked mark or field depending on it's location.
 
 <h3><a name="mark">Document Recognition Mark</a></h3>
 <p>Document recognition mark is a fragment of either text or image that PdfDocumentParser will look in a document. One or more such marks is used by PdfDocumentParser to detect which template corresponds to the processed document. For this reason every template should have at least one document recognition mark defined. It is obviously that such marks must be unique enough to identify the document they belong to with a high confidence. It works the following way: PdfDocumentParser finds a mark in page and compares the found content with the stored mark's content. 
-<p>If all marks of a template are found in one page then this template is chosen for further processing of all the pages of this document and no more template recognition is done for this file. However, presence of marks is checked for every page to detect beginning of a new document.
+<p>If all marks of a template are found in one page then this template is chosen for further processing of all the pages of the whole file and no more template recognition is done. However, presence of marks is checked for every page to detect beginning of a new document.
 <p>To create a document recognition mark, select a new row in the marks. Then the new mark can be defined in 3 ways: 
 <ul>
 <li> link the mark to a floating anchor by choosing its ID and it finish on that leaving the mark itself empty. In this case, PdfDocumentParser will look for the anchor and when it is found, the document recognition mark is considered found as well;
@@ -76,7 +76,8 @@ Then select with mouse a rectangle in the document page. The text or image withi
 <p>Field defines certain text that you want extract from document. Like with document recognition marks it can either be linked to an anchor or retain absolute position in page. 
 <p>To create a field, select a new row in the fields table and select the area in page were text for this field must be extracted. 
 <p>For conventional PDF documents you should never use OCR option but for scanned documents it is the only way to get text in digital form that can be recorded in a file or database, indexed, searched and so on.
-<p>Every field is looked for in every page. This means that if a field has no anchor, it will be extracted from every page and only the value from the last page of a document will be recorded which may be wrong. To detect the correct page a floating anchor is used. E.g. if you want to extract invoice number then create a floating anchor pointing to something like "Invoice #:" and then link the field to it. Now PdfDocumentParser will extract the field only when "Invoice #:" is found. Of course, when you definitely know that every document consists only of a single page then there is no need in linking fields to anchors.
+<p>Every field is looked for in every page. This means that if a field has no anchor, it will be extracted from every page and only the value from the last page of a document will be recorded which may be wrong. To detect the correct page a floating anchor is used. E.g. if you want to extract invoice number then create a floating anchor pointing to something like "Invoice #:" and then link the field to it. Now PdfDocumentParser will extract the field only when "Invoice #:" is found. 
+<p>But when you definitely know that every document consists only of a single page and the field will always keep its location unchanged then there is no need to link it to a floating anchor.
 
 <h3>File Filter</h3>
 <p>When file names can suggest which template is appropriate then yon can specify file filter in this template. It is a <a href='https://en.wikipedia.org/wiki/Regular_expression'>regex expression</a> applied to document path. Such filter will reduce processing time hugely and should be used when possible;
@@ -96,7 +97,7 @@ Then select with mouse a rectangle in the document page. The text or image withi
 
 
 <h2>Considerations</h2>
-<p>When processing documents PdfDocumentParser applies every active template to every new document to recognize the proper template. So, if you have 50 templates and 1000 files evenly distributed for templates, PdfDocumentParser will try on average 1000/2 *50 = 25,000 templates. It may take a considerable time especially with templates using OCR. You can decrease processing time the following ways:
+<p>When processing documents PdfDocumentParser applies every active template to every new document to recognize a proper template. So, if you have 50 templates and 1000 files evenly distributed for templates, PdfDocumentParser will try on average 1000/2 *50 = 25,000 templates. It may take a considerable time especially with templates using OCR. You can decrease processing time by the following ways:
 <ul> 
 <li> specify file filters for templates. If it can be done then the tips below are not needed;
 <li> always set templates that do not correspond to files to be processed right now, inactive;
