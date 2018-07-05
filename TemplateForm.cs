@@ -1030,7 +1030,7 @@ namespace Cliver.PdfDocumentParser
                 {
                     autoSaveTestFile = true;
                     string file;
-                    if (t.Name != null && Settings.TestFiles.TemplateNames2TestFile.TryGetValue(t.Name, out file))
+                    if (t.Name != null && Settings.TestFiles.TemplateNames2TestFile.TryGetValue(t.Name, out file) && File.Exists(file))
                         testFile.Text = file;
                 }
             }
@@ -1256,6 +1256,20 @@ namespace Cliver.PdfDocumentParser
         }
 
         public Settings.Template EditedTemplate;
+
+        private void SaveAsInitialTemplate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                Settings.General.InitialTemplate = getTemplateFromUI(true);
+                Settings.General.Save();
+                Message.Inform("Saved");
+            }
+            catch(Exception ex)
+            {
+                Message.Error2(ex);
+            }
+        }
 
         private void save_Click(object sender, EventArgs e)
         {

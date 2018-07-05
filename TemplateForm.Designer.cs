@@ -85,6 +85,8 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.save = new System.Windows.Forms.Button();
             this.cancel = new System.Windows.Forms.Button();
+            this.SaveAsInitialTemplate = new System.Windows.Forms.LinkLabel();
+            this.panel1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -107,6 +109,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.documentFirstPageRecognitionMarks)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // picture
@@ -127,7 +130,6 @@
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Panel1.Controls.Add(this.flowLayoutPanel1);
             this.splitContainer1.Panel1.Padding = new System.Windows.Forms.Padding(10);
             // 
             // splitContainer1.Panel2
@@ -174,8 +176,8 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.splitContainer3);
-            this.splitContainer2.Size = new System.Drawing.Size(443, 594);
-            this.splitContainer2.SplitterDistance = 382;
+            this.splitContainer2.Size = new System.Drawing.Size(443, 625);
+            this.splitContainer2.SplitterDistance = 401;
             this.splitContainer2.TabIndex = 32;
             // 
             // groupBox1
@@ -545,7 +547,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.name.Location = new System.Drawing.Point(92, 56);
             this.name.Name = "name";
-            this.name.Size = new System.Drawing.Size(198, 20);
+            this.name.Size = new System.Drawing.Size(295, 20);
             this.name.TabIndex = 39;
             // 
             // selectionCoordinates
@@ -623,9 +625,10 @@
             // splitContainer3.Panel2
             // 
             this.splitContainer3.Panel2.Controls.Add(this.fields);
+            this.splitContainer3.Panel2.Controls.Add(this.panel1);
             this.splitContainer3.Panel2.Controls.Add(this.label1);
-            this.splitContainer3.Size = new System.Drawing.Size(443, 208);
-            this.splitContainer3.SplitterDistance = 82;
+            this.splitContainer3.Size = new System.Drawing.Size(443, 220);
+            this.splitContainer3.SplitterDistance = 86;
             this.splitContainer3.TabIndex = 0;
             // 
             // documentFirstPageRecognitionMarks
@@ -641,7 +644,7 @@
             this.documentFirstPageRecognitionMarks.MultiSelect = false;
             this.documentFirstPageRecognitionMarks.Name = "documentFirstPageRecognitionMarks";
             this.documentFirstPageRecognitionMarks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.documentFirstPageRecognitionMarks.Size = new System.Drawing.Size(443, 69);
+            this.documentFirstPageRecognitionMarks.Size = new System.Drawing.Size(443, 73);
             this.documentFirstPageRecognitionMarks.TabIndex = 29;
             // 
             // FloatingAnchorId2
@@ -696,7 +699,7 @@
             this.fields.MultiSelect = false;
             this.fields.Name = "fields";
             this.fields.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.fields.Size = new System.Drawing.Size(443, 109);
+            this.fields.Size = new System.Drawing.Size(443, 87);
             this.fields.TabIndex = 30;
             // 
             // Name_
@@ -746,19 +749,20 @@
             // 
             // flowLayoutPanel1
             // 
+            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.flowLayoutPanel1.Controls.Add(this.save);
             this.flowLayoutPanel1.Controls.Add(this.cancel);
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(10, 604);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(130, -1);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(443, 31);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(313, 31);
             this.flowLayoutPanel1.TabIndex = 27;
             // 
             // save
             // 
             this.save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.save.Location = new System.Drawing.Point(365, 3);
+            this.save.Location = new System.Drawing.Point(235, 3);
             this.save.Name = "save";
             this.save.Size = new System.Drawing.Size(75, 23);
             this.save.TabIndex = 20;
@@ -769,13 +773,35 @@
             // cancel
             // 
             this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.cancel.Location = new System.Drawing.Point(284, 3);
+            this.cancel.Location = new System.Drawing.Point(154, 3);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(75, 23);
             this.cancel.TabIndex = 21;
             this.cancel.Text = "Cancel";
             this.cancel.UseVisualStyleBackColor = true;
             this.cancel.Click += new System.EventHandler(this.cancel_Click);
+            // 
+            // SaveAsInitialTemplate
+            // 
+            this.SaveAsInitialTemplate.AutoSize = true;
+            this.SaveAsInitialTemplate.Location = new System.Drawing.Point(3, 9);
+            this.SaveAsInitialTemplate.Name = "SaveAsInitialTemplate";
+            this.SaveAsInitialTemplate.Size = new System.Drawing.Size(121, 13);
+            this.SaveAsInitialTemplate.TabIndex = 22;
+            this.SaveAsInitialTemplate.TabStop = true;
+            this.SaveAsInitialTemplate.Text = "Save As Initial Template";
+            this.SaveAsInitialTemplate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.SaveAsInitialTemplate.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.SaveAsInitialTemplate_LinkClicked);
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.flowLayoutPanel1);
+            this.panel1.Controls.Add(this.SaveAsInitialTemplate);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(0, 100);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(443, 30);
+            this.panel1.TabIndex = 1;
             // 
             // TemplateForm
             // 
@@ -813,6 +839,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.documentFirstPageRecognitionMarks)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).EndInit();
             this.flowLayoutPanel1.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -876,5 +904,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Id3;
         private System.Windows.Forms.DataGridViewComboBoxColumn ValueType3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Body3;
+        private System.Windows.Forms.LinkLabel SaveAsInitialTemplate;
+        private System.Windows.Forms.Panel panel1;
     }
 }

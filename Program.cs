@@ -16,7 +16,6 @@ namespace Cliver.PdfDocumentParser
 */
 {/*TBD:
     - move to WPF
-    - save as initial template
     - separate custom processor: 
         string customProcessExtractedField(string file, template, field, value);
         string customProcessFile(string file, template);

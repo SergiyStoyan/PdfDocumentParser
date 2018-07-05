@@ -45,7 +45,7 @@ p {
 <li> create <a href="#mark">document recognition marks</a>;</li>
 <li> create <a href="#field">fields</a>;</li>
 <li> select every created element and see in the status box if it works as expected;</li>
-<li> optionally define file filter;</li>
+<li> optionally define <a href="#file_filter">file filter</a>;</li>
 <li> save the template;</li>
 </ul>
 
@@ -83,7 +83,7 @@ p {
 <p>Every field is looked for in every page. This means that if a field has no anchor, it will be extracted from every page and only the value from the last page of a document will be recorded which may be wrong. To detect the correct page a floating anchor is used. E.g. if you want to extract invoice number then create a floating anchor pointing to something like "Invoice #:" and then link the field to it. Now PdfDocumentParser will extract the field only when "Invoice #:" is found. 
 <p>But when you definitely know that every document consists only of a single page and the field will always keep its location unchanged then there is no need to link it to a floating anchor.
 
-<h3>File Filter</h3>
+<h3><a name="file_filter">File Filter</a></h3>
 <p>When file names can suggest which template must be applied then yon can specify file filter in this template. It is a <a href='https://en.wikipedia.org/wiki/Regular_expression'>regex expression</a> applied to document path. Such filter will reduce processing time hugely and should be used when possible.
 
 <h2>Text image operation types</h2>

@@ -32,6 +32,11 @@ namespace Cliver.PdfDocumentParser
         {
             public static Template CreateInitialTemplate()
             {
+                if (Settings.General.InitialTemplate != null)
+                {
+                    string ts = SerializationRoutines.Json.Serialize(Settings.General.InitialTemplate);
+                    return SerializationRoutines.Json.Deserialize<Settings.Template>(ts);
+                }
                 return new Template
                 {
                     Active = true,

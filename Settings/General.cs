@@ -35,6 +35,8 @@ namespace Cliver.PdfDocumentParser
             float _Image2PdfResolutionRatio;
             public List<string> OrderedOutputFieldNames = new List<string>();
 
+            public Settings.Template InitialTemplate;
+
             public override void Loaded()
             {
                 if (string.IsNullOrWhiteSpace(InputFolder))
