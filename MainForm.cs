@@ -378,7 +378,7 @@ namespace Cliver.PdfDocumentParser
 
         private void help_Click(object sender, EventArgs e)
         {
-            //string helpFile = "help.html";
+            string helpFile = "help.html";
             //try
             //{
             //    System.Net.WebClient wc = new System.Net.WebClient();
