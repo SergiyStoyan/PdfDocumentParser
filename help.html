@@ -86,12 +86,12 @@ p {
 <h3><a name="file_filter">File Filter</a></h3>
 <p>When file names can suggest which template must be applied then yon can specify file filter in this template. It is a <a href='https://en.wikipedia.org/wiki/Regular_expression'>regex expression</a> applied to document path. Such filter will reduce processing time hugely and should be used when possible.
 
-<h2>Text image operation types</h2>
+<h2>Text/image operation types</h2>
 <p>PdfDocumentParser provides the following options to operate with text and images:
 <ul>
-<li>Extracting text by from PDF structure. This is way is based on native text presentation inside pdf files. It is the main way to operate with text in PdfDocumentParser as it is the most robust and fast.</li>
-<li>Getting text from image by OCR technology provided by Tesseract engine incorporated into PdfDocumentParser. This option must be chosen only when pdf processing does not work. It usually happens when documents you  want to parse consist completely or partially of images such as scanned documents, photos etc. This way cannot not give 100% accuracy against pdf processing and will acceptably work only for images with resolution not less than 300dpi. Also this way is much slower.</li>
-<li>Image comparison. This way is used for seeking and comparison images in documents. It is usually used in document detection marks but also can be used in floating anchors. This way is slower than pdf processing and so must be declined when possible. Also, it may not provide 100% accuracy on scanned documents if they have big discrepancy in quality such as size, contrast, brightness etc.</li>
+<li>Extracting text directly from PDF structure. This way is based on native text presentation inside PDF files. It is the main way to operate with text in PdfDocumentParser as it is the most robust and fast.</li>
+<li>Getting text from image by OCR technology provided by Tesseract engine incorporated into PdfDocumentParser. This option must be chosen only when PDF processing does not work. It usually happens when documents you  want to parse consist completely or partially of images such as scanned documents, photos etc. This way cannot not give 100% accuracy against PDF processing and will acceptably work only for images with resolution not less than 300dpi. Also this way is much slower.</li>
+<li>Image comparison. This way is used for seeking and comparing images in documents. It is usually used in document recognition marks but also can be used in floating anchors. This way is slower than PDF processing and so must be declined when possible. Also, it may not provide 100% accuracy on scanned documents if they have essential discrepancy in size, contrast, brightness etc.</li>
 </ul>
 
 <h2>Scanned documents</h2>
