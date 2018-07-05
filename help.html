@@ -17,9 +17,9 @@ p {
 <head>
 </head>
 <body>
-<h1>PdfDocumentParser Help</h1>
+<h1>PdfDocumentParser</h1>
 <h2>Overview</h2>
-<p>PdfDocumentParser is intended to extract text/images from PDF documents that have predefined graphic layout such as invoices and the like. The main approach of parsing is based on finding certain text or image fragments in page and then extracting text from rectangle whose coordinates relate to them.
+<p>PdfDocumentParser is intended to extract text/images from PDF documents which have predefined graphic layout - such as invoices and the like. The main approach of parsing is based on finding certain text or image fragments in page and then extracting text from rectangle whose coordinates relate to them.
 <p>Within this scope PdfDocumentParser provides the following options:
 <ul>
 <li>PDF elements processing (the main way to operate with text in PdfDocumentParser);</li>
@@ -27,31 +27,35 @@ p {
 <li>Image processing;</li>
 </ul>
 <p>PdfDocumentParser can process documents of different structures at the same time. 
-<p>Every document type needs a template that contains information what text/image must be parsed and how.
+<p>Every document type needs a template that contains information what text/image must be parsed and how. PdfDocumentParser provides GUI template editor where you can open a PDF file and create a parsing template for it.
 
-<h2>Base Assumptions</h2>
-<p>A document can consist of more than one page.
-<p>A PDF file can contain more than one document.
-<p>A PDF file can contain only documents of the same type.
+<h2>Assumptions</h2>
+<ul>
+<li>A PDF file can contain more than one document.</li>
+<li>A PDF file can contain only documents of the same type.</li>
+<li>A document can consist of more than one page.</li>
+</ul>
+<p>These assumptions is not something deep rooted in the code so if you have different requirements, the code can be easily modified.
 
 
 <h2>Template</h2>
 <p>When you want to parse a new type document, first create an empty template and open it. Select a sample PDF file to be parsed and when it is displayed in the editor you will go through the following steps:
 <ul>
-<li> create <a href="#floating_anchor">floating anchors</a>;
-<li> create <a href="#mark">document recognition marks</a>;
-<li> create <a href="#field">fields</a>;
-<li> select every created element and see in the status box if it works as expected;
-<li> save the template;
+<li> optionally create <a href="#floating_anchor">floating anchors</a>;</li>
+<li> create <a href="#mark">document recognition marks</a>;</li>
+<li> create <a href="#field">fields</a>;</li>
+<li> select every created element and see in the status box if it works as expected;</li>
+<li> optionally define file filter;</li>
+<li> save the template;</li>
 </ul>
 
 
 <h3><a name="floating_anchor">Floating Anchor</a></h3>
 <p>Floating anchor is a fragment of either text or image that PdfDocumentParser will look in every page of a document. Then the found anchor is used to locate in the page Marks or/and Fields that are linked to it. While the only idea of floating anchors is detecting absolute coordinate points in page, it serves for the several tasks:
 <ul>
-<li> finding marks/fields whose position in the page may vary e.g. for 'total amount' in the bottom of invoice table. 
-<li> recognizing marks/fields which may be met only in one page of a multipage document;
-<li> detecting zero position in scanned documents because usually their margins vary;
+<li> finding marks/fields whose position in the page may vary e.g. for 'total amount' in the bottom of invoice table;</li> 
+<li> recognizing marks/fields which may be met only in one page of a multipage document;</li>
+<li> detecting zero position in scanned documents because usually their margins vary;</li>
 </ul>
 <p>To create a Floating anchor, select a new row in the floating anchors table and chose its type which can be one of the following:
 <ul>
@@ -80,9 +84,9 @@ p {
 <p>But when you definitely know that every document consists only of a single page and the field will always keep its location unchanged then there is no need to link it to a floating anchor.
 
 <h3>File Filter</h3>
-<p>When file names can suggest which template must be applied then yon can specify file filter in this template. It is a <a href='https://en.wikipedia.org/wiki/Regular_expression'>regex expression</a> applied to document path. Such filter will reduce processing time hugely and should be used when possible;
+<p>When file names can suggest which template must be applied then yon can specify file filter in this template. It is a <a href='https://en.wikipedia.org/wiki/Regular_expression'>regex expression</a> applied to document path. Such filter will reduce processing time hugely and should be used when possible.
 
-<h2>Types of text/image operation</h2>
+<h2>Text image operation types</h2>
 <p>PdfDocumentParser provides the following options to operate with text and images:
 <ul>
 <li>Extracting text by from PDF structure. This is way is based on native text presentation inside pdf files. It is the main way to operate with text in PdfDocumentParser as it is the most robust and fast.</li>
