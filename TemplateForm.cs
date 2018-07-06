@@ -180,14 +180,13 @@ namespace Cliver.PdfDocumentParser
                             if (documentFirstPageRecognitionMarks.SelectedRows.Count < 1)
                                 break;
                             var cs = documentFirstPageRecognitionMarks.SelectedRows[0].Cells;
-                            Settings.Template.FloatingAnchor fa = null;
                             int? fai = (int?)cs["FloatingAnchorId2"].Value;
                             if (fai != null)
                             {
                                 pages.ActiveTemplate = getTemplateFromUI(false);
                                 PointF? p = pages[currentPage].GetFloatingAnchorPoint0((int)fai);
                                 if (p == null)
-                                    throw new Exception("Could not find FloatingAnchor " + fa.Id + " in the page");
+                                    throw new Exception("Could not find FloatingAnchor " + fai + " in the page");
                                 r.X -= ((PointF)p).X;
                                 r.Y -= ((PointF)p).Y;
                             }
@@ -200,14 +199,13 @@ namespace Cliver.PdfDocumentParser
                             if (fields.SelectedRows.Count < 1)
                                 break;
                             var cs = fields.SelectedRows[0].Cells;
-                            Settings.Template.FloatingAnchor fa = null;
                             int? fai = (int?)cs["FloatingAnchorId"].Value;
                             if (fai != null)
                             {
                                 pages.ActiveTemplate = getTemplateFromUI(false);
                                 PointF? p = pages[currentPage].GetFloatingAnchorPoint0((int)fai);
                                 if (p == null)
-                                    throw new Exception("Could not find FloatingAnchor " + fa.Id + " in the page");
+                                    throw new Exception("Could not find FloatingAnchor " + fai + " in the page");
                                 r.X -= ((PointF)p).X;
                                 r.Y -= ((PointF)p).Y;
                             }
@@ -585,12 +583,26 @@ namespace Cliver.PdfDocumentParser
                         floatingAnchors.ClearSelection();
                         documentFirstPageRecognitionMarks.ClearSelection();
                         int i = fields.SelectedRows[0].Index;
-                        string rs = (string)fields.Rows[i].Cells["Rectangle"].Value;
+
+                        if (fields.Rows[i].IsNewRow)//hacky forcing commit a newly added row and display the blank row
+                        {
+                            int j = fields.Rows.Add();
+                            fields.Rows[j].Selected = true;
+                            return;
+                        }
+                        var cs = fields.Rows[i].Cells;
+
+                        var vt = Convert.ToBoolean(cs["Ocr"].Value) ? Settings.Template.ValueTypes.OcrText : Settings.Template.ValueTypes.PdfText;
+                        int? fai = (int?)cs["FloatingAnchorId"].Value;
+                        string rs = (string)cs["Rectangle"].Value;
                         if (rs != null)
                         {
-                            var cs = fields.Rows[i].Cells;
-                            Settings.Template.RectangleF r = SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>(rs);
-                            fields.Rows[i].Cells["Value"].Value = extractValueAndDrawBox((int?)cs["FloatingAnchorId"].Value, r, Convert.ToBoolean(cs["Ocr"].Value) ? Settings.Template.ValueTypes.OcrText : Settings.Template.ValueTypes.PdfText);
+                            Settings.Template.RectangleF r = rs == null ? null : SerializationRoutines.Json.Deserialize<Settings.Template.RectangleF>(rs);
+                            cs["Value"].Value = extractValueAndDrawBox(fai, r, vt);
+                        }
+                        else
+                        {
+                            findAndDrawFloatingAnchor(fai);//to shows tatus
                         }
                     }
                 }
