@@ -274,7 +274,7 @@ namespace Cliver.PdfDocumentParser
                         rs.Add(new RectangleF(point0, new SizeF(ibs[0].Rectangle.Width, ibs[0].Rectangle.Height)));
                         for (int i = 1; i < ibs.Count; i++)
                         {
-                            Settings.Template.RectangleF r = new Settings.Template.RectangleF(ibs[i].Rectangle.X + point0.X, ibs[i].Rectangle.Height + point0.Y, ibs[i].Rectangle.Width, ibs[i].Rectangle.Height);
+                            Settings.Template.RectangleF r = new Settings.Template.RectangleF(point0.X + ibs[i].Rectangle.X - ibs[0].Rectangle.X, point0.Y + ibs[i].Rectangle.Y - ibs[0].Rectangle.Y, ibs[i].Rectangle.Width, ibs[i].Rectangle.Height);
                             using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X, r.Y, r.Width, r.Height))
                             {
                                 if (!ibs[i].ImageData.ImageIsSimilar(new ImageData(rb, false), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance))

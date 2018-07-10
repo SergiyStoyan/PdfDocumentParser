@@ -172,7 +172,7 @@ namespace Cliver.PdfDocumentParser
                             }
 
                             if ((ModifierKeys & Keys.Control) != Keys.Control)
-                                setFloatingAnchorFromSelectedElement();
+                                setFloatingAnchorFromSelectedElements();
                         }
                         break;
                     case Modes.SetDocumentFirstPageRecognitionTextMarks:
@@ -908,7 +908,7 @@ namespace Cliver.PdfDocumentParser
         Point p0, p1, p2;
         bool drawingSelectingBox = false;
 
-        void setFloatingAnchorFromSelectedElement()
+        void setFloatingAnchorFromSelectedElements()
         {
             try
             {
