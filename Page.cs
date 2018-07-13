@@ -46,18 +46,18 @@ namespace Cliver.PdfDocumentParser
                     _activeTemplateBitmap.Dispose();
                     _activeTemplateBitmap = null;
                 }
-                if (_imageData != null)
+                if (_activeTemplateImageData != null)
                 {
-                    //imageData.Dispose();
-                    _imageData = null;
+                    //_activeTemplateImageData.Dispose();
+                    _activeTemplateImageData = null;
                 }
                 if (_pdfCharBoxs != null)
                 {
                     _pdfCharBoxs = null;
                 }
-                if (_ocrCharBoxs != null)
+                if (_activeTemplateOcrCharBoxs != null)
                 {
-                    _ocrCharBoxs = null;
+                    _activeTemplateOcrCharBoxs = null;
                 }
             }
         }
@@ -80,18 +80,18 @@ namespace Cliver.PdfDocumentParser
 
             if (newTemplate.PagesRotation != pageCollection.ActiveTemplate.PagesRotation || newTemplate.AutoDeskew != pageCollection.ActiveTemplate.AutoDeskew)
             {
-                if (_imageData != null)
+                if (_activeTemplateImageData != null)
                 {
-                    //_imageData.Dispose();
-                    _imageData = null;
+                    //_activeTemplateImageData.Dispose();
+                    _activeTemplateImageData = null;
                 }
                 if (_activeTemplateBitmap != null)
                 {
                     _activeTemplateBitmap.Dispose();
                     _activeTemplateBitmap = null;
                 }
-                if (_ocrCharBoxs != null)
-                    _ocrCharBoxs = null;
+                if (_activeTemplateOcrCharBoxs != null)
+                    _activeTemplateOcrCharBoxs = null;
 
                 floatingAnchorValueStrings2rectangles.Clear();
             }
@@ -238,7 +238,7 @@ namespace Cliver.PdfDocumentParser
                         if (ses.Count < 1)
                             return null;
                         List<Ocr.CharBox> bts = new List<Ocr.CharBox>();
-                        foreach (Ocr.CharBox bt0 in OcrCharBoxs.Where(a => a.Char == ses[0].Char))
+                        foreach (Ocr.CharBox bt0 in ActiveTemplateOcrCharBoxs.Where(a => a.Char == ses[0].Char))
                         {
                             bts.Clear();
                             bts.Add(bt0);
@@ -246,7 +246,7 @@ namespace Cliver.PdfDocumentParser
                             {
                                 float x = bt0.R.X + ses[i].Rectangle.X - ses[0].Rectangle.X;
                                 float y = bt0.R.Y + ses[i].Rectangle.Y - ses[0].Rectangle.Y;
-                                foreach (Ocr.CharBox bt in OcrCharBoxs.Where(a => a.Char == ses[i].Char))
+                                foreach (Ocr.CharBox bt in ActiveTemplateOcrCharBoxs.Where(a => a.Char == ses[i].Char))
                                 {
                                     if (Math.Abs(bt.R.X - x) > Settings.General.CoordinateDeviationMargin)
                                         continue;
@@ -268,16 +268,16 @@ namespace Cliver.PdfDocumentParser
                         return null;
                     List<RectangleF> bestRs = null;
                     float minDeviation = 1;
-                    ibs[0].ImageData.FindWithinImage(ImageData, pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance, (Point point0, float deviation) =>
+                    ibs[0].ImageData.FindWithinImage(ActiveTemplateImageData, pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance, (Point point0, float deviation) =>
                     {
                         List<RectangleF> rs = new List<RectangleF>();
                         rs.Add(new RectangleF(point0, new SizeF(ibs[0].Rectangle.Width, ibs[0].Rectangle.Height)));
                         for (int i = 1; i < ibs.Count; i++)
                         {
                             Settings.Template.RectangleF r = new Settings.Template.RectangleF(point0.X + ibs[i].Rectangle.X - ibs[0].Rectangle.X, point0.Y + ibs[i].Rectangle.Y - ibs[0].Rectangle.Y, ibs[i].Rectangle.Width, ibs[i].Rectangle.Height);
-                            using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X, r.Y, r.Width, r.Height))
+                            using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio))
                             {
-                                if (!ibs[i].ImageData.ImageIsSimilar(new ImageData(rb, false), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance))
+                                if (!ibs[i].ImageData.ImageIsSimilar(new ImageData(rb), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance))
                                     return true;
                             }
                             rs.Add(r.GetSystemRectangleF());
@@ -350,16 +350,16 @@ namespace Cliver.PdfDocumentParser
         //    }
         //}
 
-        public ImageData ImageData
+        public ImageData ActiveTemplateImageData
         {
             get
             {
-                if (_imageData == null)
-                    _imageData = new ImageData(ActiveTemplateBitmap);
-                return _imageData;
+                if (_activeTemplateImageData == null)
+                    _activeTemplateImageData = new ImageData(ActiveTemplateBitmap);
+                return _activeTemplateImageData;
             }
         }
-        ImageData _imageData;
+        ImageData _activeTemplateImageData;
 
         public List<Pdf.CharBox> PdfCharBoxs
         {
@@ -372,18 +372,18 @@ namespace Cliver.PdfDocumentParser
         }
         List<Pdf.CharBox> _pdfCharBoxs;
 
-        public List<Ocr.CharBox> OcrCharBoxs
+        public List<Ocr.CharBox> ActiveTemplateOcrCharBoxs
         {
             get
             {
-                if (_ocrCharBoxs == null)
+                if (_activeTemplateOcrCharBoxs == null)
                 {
-                    _ocrCharBoxs = Ocr.This.GetCharBoxs(ActiveTemplateBitmap);
+                    _activeTemplateOcrCharBoxs = Ocr.This.GetCharBoxs(ActiveTemplateBitmap);
                 }
-                return _ocrCharBoxs;
+                return _activeTemplateOcrCharBoxs;
             }
         }
-        List<Ocr.CharBox> _ocrCharBoxs;
+        List<Ocr.CharBox> _activeTemplateOcrCharBoxs;
 
         public bool IsDocumentFirstPage()
         {

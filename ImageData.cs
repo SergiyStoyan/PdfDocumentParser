@@ -127,7 +127,10 @@ namespace Cliver.PdfDocumentParser
             FindWithinImage(imageData, brightnessTolerance, differentPixelNumberTolerance, (Point p, float deviation) =>
              {
                  if (!findBestMatch)
+                 {
+                     bestP = p;
                      return false;
+                 }
                  if (deviation < minDeviation)
                  {
                      minDeviation = deviation;

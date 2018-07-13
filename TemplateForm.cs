@@ -150,7 +150,7 @@ namespace Cliver.PdfDocumentParser
                                     //}
                                     if (selectedOcrCharBoxs == null/* || (ModifierKeys & Keys.Control) != Keys.Control*/)
                                         selectedOcrCharBoxs = new List<Ocr.CharBox>();
-                                    selectedOcrCharBoxs.AddRange(PdfDocumentParser.Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPage].OcrCharBoxs, selectedR));                                    
+                                    selectedOcrCharBoxs.AddRange(PdfDocumentParser.Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPage].ActiveTemplateOcrCharBoxs, selectedR));                                    
                                     break;
                                 case Settings.Template.ValueTypes.ImageData:
                                     {
@@ -950,7 +950,7 @@ namespace Cliver.PdfDocumentParser
                     case Settings.Template.ValueTypes.ImageData:
                         {
                             if (selectedImageDataValue.ImageBoxs.Count < 1)
-                                return;
+                                return;                            
                             r.Cells["Body3"].Value = Settings.Template.FloatingAnchor.GetValueAsString(selectedImageDataValue);
                         }
                         break;
