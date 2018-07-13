@@ -18,12 +18,14 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class TemplateForm : Form
     {
-        public TemplateForm(Settings.Template template)
+        public TemplateForm(Settings.Template template, Action<Settings.Template> onSave)
         {
             InitializeComponent();
 
             Icon = AssemblyRoutines.GetAppIcon();
             Text = "Template Manager";
+
+            this.onSave = onSave;
 
             ValueType3.ValueType = typeof(Settings.Template.ValueTypes);
             ValueType3.DataSource = Enum.GetValues(typeof(Settings.Template.ValueTypes));
@@ -1267,8 +1269,6 @@ namespace Cliver.PdfDocumentParser
             Close();
         }
 
-        public Settings.Template EditedTemplate;
-
         private void SaveAsInitialTemplate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             try
@@ -1287,7 +1287,7 @@ namespace Cliver.PdfDocumentParser
         {
             try
             {
-                EditedTemplate = getTemplateFromUI(true);
+                onSave(getTemplateFromUI(true));
                 DialogResult = DialogResult.OK;
                 Close();
             }
@@ -1296,7 +1296,8 @@ namespace Cliver.PdfDocumentParser
                 Message.Error2(ex);
             }
         }
-        
+        Action<Settings.Template> onSave;
+
         Settings.Template getTemplateFromUI(bool saving)
         {
             Settings.Template t = new Settings.Template();
@@ -1309,7 +1310,9 @@ namespace Cliver.PdfDocumentParser
                 if (saving)
                     throw new Exception("DocumentFirstPageRecognitionMarks is empty!");
 
-            t.Name = name.Text;
+            t.Name = name.Text.Trim();
+            if (saving && Settings.Templates.Templates.Where(a => a.Name == t.Name).Count() > 1)
+                throw new Exception("There is another template with name: '" + t.Name + "'");
 
             t.PagesRotation = (Settings.Template.PageRotations)pageRotation.SelectedIndex;
             t.AutoDeskew = autoDeskew.Checked;

@@ -170,14 +170,26 @@ namespace Cliver.PdfDocumentParser
                         {
                             Settings.Template t = (Settings.Template)templates.Rows[e.RowIndex].Tag;
                             t.Name = (string)templates.Rows[e.RowIndex].Cells["Name_"].Value;
-                            TemplateForm tf = new TemplateForm(t);
-                            if (tf.ShowDialog() == DialogResult.OK)
+                            TemplateForm tf = new TemplateForm(t, (Settings.Template nt) =>
                             {
-                                Settings.Templates.Templates[Settings.Templates.Templates.IndexOf(t)] = tf.EditedTemplate;
+                                t = Settings.Templates.Templates.Where(a => a.Name == nt.Name).FirstOrDefault();
+                                if (t == null)
+                                    Settings.Templates.Templates.Add(nt);
+                                else
+                                    Settings.Templates.Templates[Settings.Templates.Templates.IndexOf(t)] = nt;
                                 Settings.Templates.Save();
-                                templates.Rows[e.RowIndex].Tag = tf.EditedTemplate;
-                                templates.Rows[e.RowIndex].Cells["Name_"].Value = tf.EditedTemplate.Name;
-                            }
+
+                                foreach (DataGridViewRow r in templates.Rows)
+                                {
+                                    if ((string)r.Cells["Name_"].Value == nt.Name)
+                                    {
+                                        r.Tag = nt;
+                                        r.Cells["Name_"].Value = nt.Name;
+                                        break;
+                                    }
+                                }
+                            });
+                            tf.Show();
                         }
                     }
                 }
