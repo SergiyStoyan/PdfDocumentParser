@@ -239,9 +239,9 @@ namespace Cliver.PdfDocumentParser
             for (int i = 0; i < bs.Count; i++)
                 for (int j = bs.Count - 1; j > i; j--)
                 {
-                    if (Math.Abs(bs[i].R.X - bs[j].R.X) > Settings.General.CoordinateDeviationMargin)//some symbols are duplicated in [almost] same position
+                    if (Math.Abs(bs[i].R.X - bs[j].R.X) > Settings.ImageProcessing.CoordinateDeviationMargin)//some symbols are duplicated in [almost] same position
                         continue;
-                    if (Math.Abs(bs[i].R.Y - bs[j].R.Y) > Settings.General.CoordinateDeviationMargin)//some symbols are duplicated in [almost] same position
+                    if (Math.Abs(bs[i].R.Y - bs[j].R.Y) > Settings.ImageProcessing.CoordinateDeviationMargin)//some symbols are duplicated in [almost] same position
                         continue;
                     if (bs[i].Char != bs[j].Char)
                         continue;

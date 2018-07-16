@@ -113,6 +113,8 @@
       <HintPath>..\packages\iTextSharp.5.5.13\lib\itextsharp.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -126,9 +128,12 @@
     </Reference>
     <Reference Include="System.Security" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.XML">
       <Name>System.XML</Name>
     </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AboutBox.cs">
@@ -152,6 +157,7 @@
     </Compile>
     <Compile Include="PdfDocumentProcessor.cs" />
     <Compile Include="Processor.cs" />
+    <Compile Include="ProgramWpf.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -227,7 +233,10 @@
     <PreBuildEvent>
     </PreBuildEvent>
     <PostBuildEvent>xcopy /Y /S "$(ProjectDir)externals" "$(TargetDir)"
-xcopy /Y "$(ProjectDir)config" "$(TargetDir)"</PostBuildEvent>
+xcopy /Y "$(ProjectDir)config" "$(TargetDir)"
+xcopy /Y /S "$(SolutionDir)externals" "$(TargetDir)"
+xcopy /Y "$(SolutionDir)config" "$(TargetDir)"
+xcopy /Y "$(SolutionDir)help.html" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

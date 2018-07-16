@@ -25,10 +25,10 @@ namespace Cliver.InvoiceParser
 
         void load_settings()
         {
-            PdfPageImageResolution.Value = PdfDocumentParser.Settings.General.PdfPageImageResolution;
+            PdfPageImageResolution.Value = PdfDocumentParser.Settings.ImageProcessing.PdfPageImageResolution;
             IgnoreHidddenFiles.Checked = Settings.General.IgnoreHidddenFiles;
             ReadInputFolderRecursively.Checked = Settings.General.ReadInputFolderRecursively;
-            TestPictureScale.Value = PdfDocumentParser.Settings.General.TestPictureScale;
+            TestPictureScale.Value = PdfDocumentParser.Settings.Appearance.TestPictureScale;
 
             BrightnessTolerance.Value = (decimal)PdfDocumentParser.Settings.ImageProcessing.BrightnessTolerance;
             DifferentPixelNumberTolerance.Value = (decimal)PdfDocumentParser.Settings.ImageProcessing.DifferentPixelNumberTolerance;
@@ -50,15 +50,16 @@ namespace Cliver.InvoiceParser
                 Settings.General.Save();
                 Settings.General.Reload();
 
-                PdfDocumentParser.Settings.General.PdfPageImageResolution = (int)PdfPageImageResolution.Value;
-                PdfDocumentParser.Settings.General.TestPictureScale = TestPictureScale.Value;
+                PdfDocumentParser.Settings.Appearance.TestPictureScale = TestPictureScale.Value;
 
-                PdfDocumentParser.Settings.General.Save();
-                PdfDocumentParser.Settings.General.Reload();                
+                PdfDocumentParser.Settings.Appearance.Save();
+                PdfDocumentParser.Settings.Appearance.Reload();  
+                
+                PdfDocumentParser.Settings.ImageProcessing.PdfPageImageResolution = (int)PdfPageImageResolution.Value;
 
                 PdfDocumentParser.Settings.ImageProcessing.BrightnessTolerance = (float)BrightnessTolerance.Value;
                 PdfDocumentParser.Settings.ImageProcessing.DifferentPixelNumberTolerance = (float)DifferentPixelNumberTolerance.Value;
-                PdfDocumentParser.Settings.ImageProcessing.FindBestImageMatch = FindBestImageMatch.Checked;
+                //PdfDocumentParser.Settings.ImageProcessing.FindBestImageMatch = FindBestImageMatch.Checked;
 
                 PdfDocumentParser.Settings.ImageProcessing.Save();
                 PdfDocumentParser.Settings.ImageProcessing.Reload();
@@ -74,6 +75,8 @@ namespace Cliver.InvoiceParser
         private void bReset_Click(object sender, EventArgs e)
         {
             Settings.General.Reset();
+            PdfDocumentParser.Settings.Appearance.Reset();
+            PdfDocumentParser.Settings.ImageProcessing.Reset();
             load_settings();
         }
 

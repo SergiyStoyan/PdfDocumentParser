@@ -81,12 +81,12 @@
             this.Rectangle = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Ocr = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.label1 = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.save = new System.Windows.Forms.Button();
             this.cancel = new System.Windows.Forms.Button();
             this.SaveAsInitialTemplate = new System.Windows.Forms.LinkLabel();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -108,8 +108,8 @@
             this.splitContainer3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.documentFirstPageRecognitionMarks)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).BeginInit();
-            this.flowLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // picture
@@ -737,15 +737,15 @@
             this.Value.Name = "Value";
             this.Value.ReadOnly = true;
             // 
-            // label1
+            // panel1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label1.Location = new System.Drawing.Point(0, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(37, 13);
-            this.label1.TabIndex = 29;
-            this.label1.Text = "Fields:";
+            this.panel1.Controls.Add(this.flowLayoutPanel1);
+            this.panel1.Controls.Add(this.SaveAsInitialTemplate);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(0, 100);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(443, 30);
+            this.panel1.TabIndex = 1;
             // 
             // flowLayoutPanel1
             // 
@@ -793,15 +793,15 @@
             this.SaveAsInitialTemplate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.SaveAsInitialTemplate.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.SaveAsInitialTemplate_LinkClicked);
             // 
-            // panel1
+            // label1
             // 
-            this.panel1.Controls.Add(this.flowLayoutPanel1);
-            this.panel1.Controls.Add(this.SaveAsInitialTemplate);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 100);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(443, 30);
-            this.panel1.TabIndex = 1;
+            this.label1.AutoSize = true;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label1.Location = new System.Drawing.Point(0, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(37, 13);
+            this.label1.TabIndex = 29;
+            this.label1.Text = "Fields:";
             // 
             // TemplateForm
             // 
@@ -838,9 +838,9 @@
             this.splitContainer3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.documentFirstPageRecognitionMarks)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).EndInit();
-            this.flowLayoutPanel1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

@@ -39,9 +39,9 @@ namespace Cliver.PdfDocumentParser
 
         public string GetText(Bitmap b, RectangleF r)
         {
-            r = new RectangleF(r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);            
+            r = new RectangleF(r.X / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Y / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height / Settings.ImageProcessing.Image2PdfResolutionRatio);            
             r.Intersect(new Rectangle(0, 0, b.Width, b.Height));
-            if (Math.Abs(r.Width) < Settings.General.CoordinateDeviationMargin || Math.Abs(r.Height) < Settings.General.CoordinateDeviationMargin)
+            if (Math.Abs(r.Width) < Settings.ImageProcessing.CoordinateDeviationMargin || Math.Abs(r.Height) < Settings.ImageProcessing.CoordinateDeviationMargin)
                 return null;
             using (var page = engine.Process(b, new Rect((int)r.X, (int)r.Y, (int)r.Width, (int)r.Height), PageSegMode.SingleBlock))
             {
@@ -114,7 +114,7 @@ namespace Cliver.PdfDocumentParser
                             cbs.Add(new CharBox
                             {
                                 Char = i.GetText(PageIteratorLevel.Symbol),
-                                R = new RectangleF(r.X1 * Settings.General.Image2PdfResolutionRatio, r.Y1 * Settings.General.Image2PdfResolutionRatio, r.Width * Settings.General.Image2PdfResolutionRatio, r.Height * Settings.General.Image2PdfResolutionRatio)
+                                R = new RectangleF(r.X1 * Settings.ImageProcessing.Image2PdfResolutionRatio, r.Y1 * Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width * Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height * Settings.ImageProcessing.Image2PdfResolutionRatio)
                             });
                     } while (i.Next(PageIteratorLevel.Symbol));
                 //} while (i.Next(PageIteratorLevel.Word, PageIteratorLevel.Symbol)) ;
@@ -154,9 +154,9 @@ namespace Cliver.PdfDocumentParser
             for (int i = 0; i < bs.Count; i++)
                 for (int j = bs.Count - 1; j > i; j--)
                 {
-                    if (Math.Abs(bs[i].R.X - bs[j].R.X) > Settings.General.CoordinateDeviationMargin)//some symbols are duplicated in [almost] same position
+                    if (Math.Abs(bs[i].R.X - bs[j].R.X) > Settings.ImageProcessing.CoordinateDeviationMargin)//some symbols are duplicated in [almost] same position
                         continue;
-                    if (Math.Abs(bs[i].R.Y - bs[j].R.Y) > Settings.General.CoordinateDeviationMargin)//some symbols are duplicated in [almost] same position
+                    if (Math.Abs(bs[i].R.Y - bs[j].R.Y) > Settings.ImageProcessing.CoordinateDeviationMargin)//some symbols are duplicated in [almost] same position
                         continue;
                     if (bs[i].Char != bs[j].Char)
                         continue;

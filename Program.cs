@@ -9,9 +9,9 @@ using System.IO;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Cliver.InvoiceParser
+namespace Cliver.PdfDocumentParser
 {
-    class Program
+    public class Program
     {
         static Program()
         {
@@ -28,26 +28,15 @@ namespace Cliver.InvoiceParser
             Message.TopMost = true;
 
             Config.Reload();
+
             LogMessage.DisableStumblingDialogs = false;
             Log.ShowDeleteOldLogsDialog = false;
             Log.Initialize(Log.Mode.ONLY_LOG, Log.CompanyCommonDataDir, true);
         }
 
-        [STAThread]
-        static void Main()
-        {
-            try
-            {
-                PdfDocumentParser.Program.Initialize();
+        public static void Initialize()
+        {//trigger Program()
 
-                MainForm mf = new MainForm();
-                Application.Run(mf);
-            }
-            catch (Exception e)
-            {
-                Message.Error(e);
-            }
-            Environment.Exit(0);
         }
     }
 }

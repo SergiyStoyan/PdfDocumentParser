@@ -10,36 +10,6 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class Template
     {
-        public static Template CreateInitialTemplate()
-        {
-            if (Settings.General.InitialTemplate != null)
-            {
-                string ts = SerializationRoutines.Json.Serialize(Settings.General.InitialTemplate);
-                return SerializationRoutines.Json.Deserialize<Template>(ts);
-            }
-            return new Template
-            {
-                Active = true,
-                AutoDeskew = false,
-                BrightnessTolerance = Settings.ImageProcessing.BrightnessTolerance,
-                DifferentPixelNumberTolerance = Settings.ImageProcessing.DifferentPixelNumberTolerance,
-                Fields = new List<Field> {
-                        new Field { Name = "INVOICE#" , Rectangle=new RectangleF(0,0,10,10)},
-                        new Field { Name = "JOB#", Rectangle=new RectangleF(0,0,10,10) },
-                        new Field { Name = "PO#", Rectangle=new RectangleF(0,0,10,10) },
-                        new Field { Name = "COST" , Rectangle=new RectangleF(0,0,10,10)},
-                    },
-                Name = "-new-",
-                FileFilterRegex = new Regex(@"\.pdf$", RegexOptions.IgnoreCase),
-                FindBestImageMatch = false,
-                FloatingAnchors = new List<FloatingAnchor>(),
-                DocumentFirstPageRecognitionMarks = new List<Mark>(),
-                PagesRotation = PageRotations.NONE,
-                TestPictureScale = Settings.General.TestPictureScale,
-                TestFile = "",
-            };
-        }
-
         public string Name;
 
         public Regex FileFilterRegex;

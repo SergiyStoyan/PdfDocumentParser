@@ -106,7 +106,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 selectionCoordinates.Text = p1.ToString() + ":" + p2.ToString();
 
-                drawBox(Settings.General.SelectionBoxColor, p1.X, p1.Y, p2.X - p1.X, p2.Y - p1.Y);
+                drawBox(Settings.Appearance.SelectionBoxColor, p1.X, p1.Y, p2.X - p1.X, p2.Y - p1.Y);
             };
 
             picture.MouseUp += delegate (object sender, MouseEventArgs e)
@@ -791,7 +791,7 @@ namespace Cliver.PdfDocumentParser
         {
             if (pages == null)
                 return;
-            scaledCurrentPageBitmap = ImageRoutines.GetScaled(pages[currentPage].ActiveTemplateBitmap, (float)pictureScale.Value * Settings.General.Image2PdfResolutionRatio);
+            scaledCurrentPageBitmap = ImageRoutines.GetScaled(pages[currentPage].ActiveTemplateBitmap, (float)pictureScale.Value * Settings.ImageProcessing.Image2PdfResolutionRatio);
             picture.Image = scaledCurrentPageBitmap;
         }
         Bitmap scaledCurrentPageBitmap;
@@ -821,7 +821,7 @@ namespace Cliver.PdfDocumentParser
                 return null;
             }
             setStatus(statuses.SUCCESS, "FloatingAnchor[" + fa.Id + "] is found.");
-            drawBoxes(Settings.General.BoundingBoxColor, rs, renewImage);
+            drawBoxes(Settings.Appearance.BoundingBoxColor, rs, renewImage);
             return new PointF(rs[0].X, rs[0].Y);
         }
 
@@ -847,7 +847,7 @@ namespace Cliver.PdfDocumentParser
                     renewImage = false;
                 }
 
-                drawBox(Settings.General.SelectionBoxColor, x, y, r.Width, r.Height, renewImage);
+                drawBox(Settings.Appearance.SelectionBoxColor, x, y, r.Width, r.Height, renewImage);
 
                 string error;
                 object v = pages[currentPage].GetValue(null, new Template.RectangleF(x, y, r.Width, r.Height), valueType, out error);
@@ -884,7 +884,7 @@ namespace Cliver.PdfDocumentParser
             using (Graphics gr = Graphics.FromImage(bm))
             {
                 float factor = (float)pictureScale.Value;
-                Pen p = new Pen(Settings.General.BoundingBoxColor);
+                Pen p = new Pen(Settings.Appearance.BoundingBoxColor);
                 foreach (System.Drawing.RectangleF r in rs)
                     gr.DrawRectangle(p, r.X * factor, r.Y * factor, r.Width * factor, r.Height * factor);
             }
@@ -1275,8 +1275,8 @@ namespace Cliver.PdfDocumentParser
         {
             try
             {
-                Settings.General.InitialTemplate = getTemplateFromUI(true);
-                Settings.General.Save();
+                Settings.Templates.InitialTemplate = getTemplateFromUI(true);
+                Settings.Templates.Save();
                 Message.Inform("Saved");
             }
             catch(Exception ex)

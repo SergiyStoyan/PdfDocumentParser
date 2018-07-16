@@ -24,8 +24,8 @@ namespace Cliver.PdfDocumentParser
 
         void load_settings()
         {
-            PdfPageImageResolution.Value = Settings.General.PdfPageImageResolution;
-            TestPictureScale.Value = Settings.General.TestPictureScale;
+            PdfPageImageResolution.Value = Settings.ImageProcessing.PdfPageImageResolution;
+            TestPictureScale.Value = Settings.Appearance.TestPictureScale;
 
             BrightnessTolerance.Value = (decimal)Settings.ImageProcessing.BrightnessTolerance;
             DifferentPixelNumberTolerance.Value = (decimal)Settings.ImageProcessing.DifferentPixelNumberTolerance;
@@ -41,11 +41,12 @@ namespace Cliver.PdfDocumentParser
         {
             try
             {
-                Settings.General.PdfPageImageResolution = (int)PdfPageImageResolution.Value;
-                Settings.General.TestPictureScale = TestPictureScale.Value;    
+                Settings.Appearance.TestPictureScale = TestPictureScale.Value;    
 
-                Settings.General.Save();
-                Settings.General.Reload();            
+                Settings.Appearance.Save();
+                Settings.Appearance.Reload();   
+                
+                Settings.ImageProcessing.PdfPageImageResolution = (int)PdfPageImageResolution.Value;
 
                 Settings.ImageProcessing.BrightnessTolerance = (float)BrightnessTolerance.Value;
                 Settings.ImageProcessing.DifferentPixelNumberTolerance = (float)DifferentPixelNumberTolerance.Value;
@@ -64,7 +65,8 @@ namespace Cliver.PdfDocumentParser
 
         private void bReset_Click(object sender, EventArgs e)
         {
-            Settings.General.Reset();
+            Settings.Appearance.Reset();
+            Settings.ImageProcessing.Reset();
             load_settings();
         }
 

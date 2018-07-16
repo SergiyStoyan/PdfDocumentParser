@@ -139,7 +139,7 @@ namespace Cliver.InvoiceParser
                     Template t = (Template)e.Row.Tag;
                     if (t == null)
                     {
-                        t = Template.CreateInitialTemplate();
+                        t = PdfDocumentParser.Settings.Templates.CreateInitialTemplate();
                         PdfDocumentParser.Settings.Templates.Templates.Add(t);
                         e.Row.Tag = t;
                         e.Row.Cells["Name_"].Value = t.Name;

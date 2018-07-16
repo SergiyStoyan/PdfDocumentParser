@@ -67,7 +67,7 @@ namespace Cliver.PdfDocumentParser
             get
             {
                 if (_bitmap == null)
-                    _bitmap = Pdf.RenderBitmap(pageCollection.PdfFile, pageI, Settings.General.PdfPageImageResolution);
+                    _bitmap = Pdf.RenderBitmap(pageCollection.PdfFile, pageI, Settings.ImageProcessing.PdfPageImageResolution);
                 return _bitmap;
             }
         }
@@ -218,9 +218,9 @@ namespace Cliver.PdfDocumentParser
                                 float y = bt0.R.Y + ses[i].Rectangle.Y - ses[0].Rectangle.Y;
                                 foreach (Pdf.CharBox bt in PdfCharBoxs.Where(a => a.Char == ses[i].Char))
                                 {
-                                    if (Math.Abs(bt.R.X - x) > Settings.General.CoordinateDeviationMargin)
+                                    if (Math.Abs(bt.R.X - x) > Settings.ImageProcessing.CoordinateDeviationMargin)
                                         continue;
-                                    if (Math.Abs(bt.R.Y - y) > Settings.General.CoordinateDeviationMargin)
+                                    if (Math.Abs(bt.R.Y - y) > Settings.ImageProcessing.CoordinateDeviationMargin)
                                         continue;
                                     if (bts.Contains(bt))
                                         continue;
@@ -248,9 +248,9 @@ namespace Cliver.PdfDocumentParser
                                 float y = bt0.R.Y + ses[i].Rectangle.Y - ses[0].Rectangle.Y;
                                 foreach (Ocr.CharBox bt in ActiveTemplateOcrCharBoxs.Where(a => a.Char == ses[i].Char))
                                 {
-                                    if (Math.Abs(bt.R.X - x) > Settings.General.CoordinateDeviationMargin)
+                                    if (Math.Abs(bt.R.X - x) > Settings.ImageProcessing.CoordinateDeviationMargin)
                                         continue;
-                                    if (Math.Abs(bt.R.Y - y) > Settings.General.CoordinateDeviationMargin)
+                                    if (Math.Abs(bt.R.Y - y) > Settings.ImageProcessing.CoordinateDeviationMargin)
                                         continue;
                                     if (bts.Contains(bt))
                                         continue;
@@ -275,7 +275,7 @@ namespace Cliver.PdfDocumentParser
                         for (int i = 1; i < ibs.Count; i++)
                         {
                             Template.RectangleF r = new Template.RectangleF(point0.X + ibs[i].Rectangle.X - ibs[0].Rectangle.X, point0.Y + ibs[i].Rectangle.Y - ibs[0].Rectangle.Y, ibs[i].Rectangle.Width, ibs[i].Rectangle.Height);
-                            using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio))
+                            using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Y / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height / Settings.ImageProcessing.Image2PdfResolutionRatio))
                             {
                                 if (!ibs[i].ImageData.ImageIsSimilar(new ImageData(rb), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance))
                                     return true;
@@ -458,7 +458,7 @@ namespace Cliver.PdfDocumentParser
                 error = "Rectangular is not defined.";
                 return null;
             }
-            if (r_.Width <= Settings.General.CoordinateDeviationMargin || r_.Height <= Settings.General.CoordinateDeviationMargin)
+            if (r_.Width <= Settings.ImageProcessing.CoordinateDeviationMargin || r_.Height <= Settings.ImageProcessing.CoordinateDeviationMargin)
             {
                 error = "Rectangular is malformed.";
                 return null;
@@ -486,7 +486,7 @@ namespace Cliver.PdfDocumentParser
                     //return Ocr.GetTextByTopLeftCoordinates(OcrCharBoxs, r.GetSystemRectangleF());//sometimes does not work
                     return Ocr.This.GetText(ActiveTemplateBitmap, r.GetSystemRectangleF());
                 case Template.ValueTypes.ImageData:
-                    using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio))
+                    using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Y / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height / Settings.ImageProcessing.Image2PdfResolutionRatio))
                     {
                         return new ImageData(rb);
                     }

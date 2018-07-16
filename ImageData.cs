@@ -67,7 +67,7 @@ namespace Cliver.PdfDocumentParser
                 return;
 
             if(scaleBitmap)
-                bitmap = ImageRoutines.GetScaled(bitmap, Settings.General.Image2PdfResolutionRatio);
+                bitmap = ImageRoutines.GetScaled(bitmap, Settings.ImageProcessing.Image2PdfResolutionRatio);
 
             Hash = getBitmapHash(bitmap);
             Width = Hash.GetLength(0);

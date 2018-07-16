@@ -1,5 +1,8 @@
 {
+  "PdfPageImageResolution": 300,
+  "CoordinateDeviationMargin": 0.001,
   "BrightnessTolerance": 0.4,
   "DifferentPixelNumberTolerance": 0.01,
-  "FindBestImageMatch": false
+  "FindBestImageMatch": false,
+  "Image2PdfResolutionRatio": 0.24
 }

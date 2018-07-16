@@ -13,9 +13,9 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Text.RegularExpressions;
 using iTextSharp.text.pdf.parser;
-using System.Windows.Forms;
+using Cliver.PdfDocumentParser;
 
-namespace Cliver.PdfDocumentParser
+namespace Cliver.InvoiceParser
 {
     class PdfDocumentProcessor : IDisposable
     {

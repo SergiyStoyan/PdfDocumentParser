@@ -24,6 +24,8 @@ namespace Cliver.InvoiceParser
             public bool IgnoreHidddenFiles = true;
             public bool ReadInputFolderRecursively = false;
 
+            public System.Drawing.Color StampColor = System.Drawing.Color.Red;
+
             public List<string> OrderedOutputFieldNames = new List<string>();
 
             public override void Loaded()
