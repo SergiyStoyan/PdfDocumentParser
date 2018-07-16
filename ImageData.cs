@@ -60,6 +60,7 @@ namespace Cliver.PdfDocumentParser
         //    //    g = Encoding.UTF8.GetString(ms.ToArray());
         //    //}
         //}
+
         public ImageData(Bitmap bitmap, bool scaleBitmap = true)
         {
             if (bitmap == null)// Used only by deserializer!!!
@@ -71,18 +72,6 @@ namespace Cliver.PdfDocumentParser
             Hash = getBitmapHash(bitmap);
             Width = Hash.GetLength(0);
             Height = Hash.GetLength(1);
-        }
-        public bool EqualTo(ImageData id)
-        {
-            if (Width != id.Width || Height != id.Height)
-                return false;
-            for (int x = 0; x < Width; x++)
-            {
-                for (int y = 0; y < Height; y++)
-                    if (Hash[x, y] != id.Hash[x, y])
-                        return false;
-            }
-            return true;
         }
         static byte[,] getBitmapHash(Bitmap bitmap)
         {
@@ -106,6 +95,20 @@ namespace Cliver.PdfDocumentParser
             }
             return hash;
         }
+
+        public bool EqualTo(ImageData id)
+        {
+            if (Width != id.Width || Height != id.Height)
+                return false;
+            for (int x = 0; x < Width; x++)
+            {
+                for (int y = 0; y < Height; y++)
+                    if (Hash[x, y] != id.Hash[x, y])
+                        return false;
+            }
+            return true;
+        }
+
         /*!!!ATTENTION!!!
          * tolerance values cannot be 0 even when comparing identical images! Because of separate rescaling of an image and its fragment, some pixels become not same!
          */
