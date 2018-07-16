@@ -20,8 +20,8 @@ namespace Cliver.PdfDocumentParser
 
             public override void Loaded()
             {
-                if (Templates.Count < 1)
-                    Templates.Add(CreateInitialTemplate());
+                //if (Templates.Count < 1)
+                //    Templates.Add(CreateInitialTemplate());
             }
 
             public override void Saving()

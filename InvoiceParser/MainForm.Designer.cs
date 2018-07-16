@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.bAbout = new System.Windows.Forms.Button();
             this.bInputFolder = new System.Windows.Forms.Button();
             this.bOutputFolder = new System.Windows.Forms.Button();
@@ -51,8 +51,9 @@
             this.lProgress = new System.Windows.Forms.Label();
             this.bHeaders = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.help = new System.Windows.Forms.Button();
+            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.Engine = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.templates)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
@@ -72,7 +73,7 @@
             // bInputFolder
             // 
             this.bInputFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bInputFolder.Location = new System.Drawing.Point(684, 26);
+            this.bInputFolder.Location = new System.Drawing.Point(841, 26);
             this.bInputFolder.Name = "bInputFolder";
             this.bInputFolder.Size = new System.Drawing.Size(24, 23);
             this.bInputFolder.TabIndex = 1;
@@ -83,7 +84,7 @@
             // bOutputFolder
             // 
             this.bOutputFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bOutputFolder.Location = new System.Drawing.Point(684, 77);
+            this.bOutputFolder.Location = new System.Drawing.Point(841, 77);
             this.bOutputFolder.Name = "bOutputFolder";
             this.bOutputFolder.Size = new System.Drawing.Size(24, 23);
             this.bOutputFolder.TabIndex = 2;
@@ -97,7 +98,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.InputFolder.Location = new System.Drawing.Point(12, 29);
             this.InputFolder.Name = "InputFolder";
-            this.InputFolder.Size = new System.Drawing.Size(666, 20);
+            this.InputFolder.Size = new System.Drawing.Size(823, 20);
             this.InputFolder.TabIndex = 3;
             // 
             // OutputFolder
@@ -106,7 +107,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.OutputFolder.Location = new System.Drawing.Point(12, 77);
             this.OutputFolder.Name = "OutputFolder";
-            this.OutputFolder.Size = new System.Drawing.Size(666, 20);
+            this.OutputFolder.Size = new System.Drawing.Size(823, 20);
             this.OutputFolder.TabIndex = 4;
             // 
             // bExit
@@ -135,9 +136,9 @@
             // 
             this.progress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.progress.Location = new System.Drawing.Point(12, 343);
+            this.progress.Location = new System.Drawing.Point(12, 464);
             this.progress.Name = "progress";
-            this.progress.Size = new System.Drawing.Size(696, 12);
+            this.progress.Size = new System.Drawing.Size(853, 12);
             this.progress.TabIndex = 7;
             // 
             // label1
@@ -171,7 +172,7 @@
             this.templates.Location = new System.Drawing.Point(15, 123);
             this.templates.Name = "templates";
             this.templates.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.templates.Size = new System.Drawing.Size(693, 190);
+            this.templates.Size = new System.Drawing.Size(850, 311);
             this.templates.TabIndex = 10;
             // 
             // Active
@@ -184,8 +185,8 @@
             // Name_
             // 
             this.Name_.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            this.Name_.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            this.Name_.DefaultCellStyle = dataGridViewCellStyle3;
             this.Name_.HeaderText = "Name";
             this.Name_.Name = "Name_";
             this.Name_.Width = 60;
@@ -193,9 +194,9 @@
             // Edit
             // 
             this.Edit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.Edit.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.Edit.DefaultCellStyle = dataGridViewCellStyle4;
             this.Edit.HeaderText = "";
             this.Edit.Name = "Edit";
             this.Edit.Resizable = System.Windows.Forms.DataGridViewTriState.False;
@@ -215,7 +216,7 @@
             // bLog
             // 
             this.bLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bLog.Location = new System.Drawing.Point(246, 3);
+            this.bLog.Location = new System.Drawing.Point(327, 3);
             this.bLog.Name = "bLog";
             this.bLog.Size = new System.Drawing.Size(75, 23);
             this.bLog.TabIndex = 12;
@@ -226,7 +227,7 @@
             // bOutput
             // 
             this.bOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bOutput.Location = new System.Drawing.Point(408, 3);
+            this.bOutput.Location = new System.Drawing.Point(489, 3);
             this.bOutput.Name = "bOutput";
             this.bOutput.Size = new System.Drawing.Size(75, 23);
             this.bOutput.TabIndex = 13;
@@ -237,7 +238,7 @@
             // bSettings
             // 
             this.bSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bSettings.Location = new System.Drawing.Point(165, 3);
+            this.bSettings.Location = new System.Drawing.Point(246, 3);
             this.bSettings.Name = "bSettings";
             this.bSettings.Size = new System.Drawing.Size(75, 23);
             this.bSettings.TabIndex = 14;
@@ -249,7 +250,7 @@
             // 
             this.lProgress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lProgress.AutoSize = true;
-            this.lProgress.Location = new System.Drawing.Point(12, 325);
+            this.lProgress.Location = new System.Drawing.Point(12, 446);
             this.lProgress.Name = "lProgress";
             this.lProgress.Size = new System.Drawing.Size(22, 13);
             this.lProgress.TabIndex = 15;
@@ -258,7 +259,7 @@
             // bHeaders
             // 
             this.bHeaders.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bHeaders.Location = new System.Drawing.Point(327, 3);
+            this.bHeaders.Location = new System.Drawing.Point(408, 3);
             this.bHeaders.Name = "bHeaders";
             this.bHeaders.Size = new System.Drawing.Size(75, 23);
             this.bHeaders.TabIndex = 16;
@@ -271,25 +272,15 @@
             this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.flowLayoutPanel1.Controls.Add(this.bAbout);
             this.flowLayoutPanel1.Controls.Add(this.help);
+            this.flowLayoutPanel1.Controls.Add(this.Engine);
             this.flowLayoutPanel1.Controls.Add(this.bSettings);
             this.flowLayoutPanel1.Controls.Add(this.bLog);
             this.flowLayoutPanel1.Controls.Add(this.bHeaders);
             this.flowLayoutPanel1.Controls.Add(this.bOutput);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 363);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 484);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(496, 30);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(631, 30);
             this.flowLayoutPanel1.TabIndex = 17;
-            // 
-            // flowLayoutPanel2
-            // 
-            this.flowLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.flowLayoutPanel2.Controls.Add(this.bExit);
-            this.flowLayoutPanel2.Controls.Add(this.bRun);
-            this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(514, 363);
-            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(194, 31);
-            this.flowLayoutPanel2.TabIndex = 18;
             // 
             // help
             // 
@@ -302,11 +293,33 @@
             this.help.UseVisualStyleBackColor = true;
             this.help.Click += new System.EventHandler(this.help_Click);
             // 
+            // flowLayoutPanel2
+            // 
+            this.flowLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.flowLayoutPanel2.Controls.Add(this.bExit);
+            this.flowLayoutPanel2.Controls.Add(this.bRun);
+            this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(671, 484);
+            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(194, 31);
+            this.flowLayoutPanel2.TabIndex = 18;
+            // 
+            // Engine
+            // 
+            this.Engine.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Engine.Location = new System.Drawing.Point(165, 3);
+            this.Engine.Name = "Engine";
+            this.Engine.Size = new System.Drawing.Size(75, 23);
+            this.Engine.TabIndex = 18;
+            this.Engine.Text = "Engine";
+            this.Engine.UseVisualStyleBackColor = true;
+            this.Engine.Click += new System.EventHandler(this.Engine_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(720, 408);
+            this.ClientSize = new System.Drawing.Size(877, 529);
             this.Controls.Add(this.flowLayoutPanel2);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.lProgress);
@@ -354,5 +367,6 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
         private System.Windows.Forms.Button help;
+        private System.Windows.Forms.Button Engine;
     }
 }

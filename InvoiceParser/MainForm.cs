@@ -400,5 +400,11 @@ namespace Cliver.InvoiceParser
             //catch { }
             System.Diagnostics.Process.Start(helpFile);
         }
+
+        private void Engine_Click(object sender, EventArgs e)
+        {
+            PdfDocumentParser.SettingsForm sf = new PdfDocumentParser.SettingsForm();
+            sf.ShowDialog();
+        }
     }
 }

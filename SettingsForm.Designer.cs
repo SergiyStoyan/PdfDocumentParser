@@ -45,6 +45,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.CoordinateDeviationMargin = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.PdfPageImageResolution)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -53,11 +55,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.TestPictureScale)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.CoordinateDeviationMargin)).BeginInit();
             this.SuspendLayout();
             // 
             // PdfPageImageResolution
             // 
-            this.PdfPageImageResolution.Location = new System.Drawing.Point(234, 26);
+            this.PdfPageImageResolution.Location = new System.Drawing.Point(234, 33);
             this.PdfPageImageResolution.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -80,7 +83,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(16, 28);
+            this.label8.Location = new System.Drawing.Point(16, 35);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(194, 13);
             this.label8.TabIndex = 46;
@@ -89,7 +92,7 @@
             // bReset
             // 
             this.bReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bReset.Location = new System.Drawing.Point(142, 3);
+            this.bReset.Location = new System.Drawing.Point(113, 3);
             this.bReset.Name = "bReset";
             this.bReset.Size = new System.Drawing.Size(75, 23);
             this.bReset.TabIndex = 48;
@@ -100,7 +103,7 @@
             // bSave
             // 
             this.bSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bSave.Location = new System.Drawing.Point(223, 3);
+            this.bSave.Location = new System.Drawing.Point(194, 3);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(75, 23);
             this.bSave.TabIndex = 49;
@@ -111,7 +114,7 @@
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bCancel.Location = new System.Drawing.Point(304, 3);
+            this.bCancel.Location = new System.Drawing.Point(275, 3);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 50;
@@ -127,16 +130,16 @@
             this.flowLayoutPanel1.Controls.Add(this.bResetTemplates);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 379);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 306);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(382, 31);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(353, 31);
             this.flowLayoutPanel1.TabIndex = 51;
             // 
             // bResetTemplates
             // 
             this.bResetTemplates.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.bResetTemplates.AutoSize = true;
-            this.bResetTemplates.Location = new System.Drawing.Point(39, 3);
+            this.bResetTemplates.Location = new System.Drawing.Point(10, 3);
             this.bResetTemplates.Name = "bResetTemplates";
             this.bResetTemplates.Size = new System.Drawing.Size(97, 23);
             this.bResetTemplates.TabIndex = 51;
@@ -151,9 +154,9 @@
             this.groupBox1.Controls.Add(this.label13);
             this.groupBox1.Controls.Add(this.BrightnessTolerance);
             this.groupBox1.Controls.Add(this.label11);
-            this.groupBox1.Location = new System.Drawing.Point(16, 72);
+            this.groupBox1.Location = new System.Drawing.Point(13, 171);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(327, 127);
+            this.groupBox1.Size = new System.Drawing.Size(328, 124);
             this.groupBox1.TabIndex = 54;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Image Comparison";
@@ -213,7 +216,7 @@
             0,
             0,
             131072});
-            this.BrightnessTolerance.Location = new System.Drawing.Point(234, 63);
+            this.BrightnessTolerance.Location = new System.Drawing.Point(234, 61);
             this.BrightnessTolerance.Maximum = new decimal(new int[] {
             1,
             0,
@@ -236,7 +239,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(16, 65);
+            this.label11.Location = new System.Drawing.Point(16, 63);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(110, 13);
             this.label11.TabIndex = 54;
@@ -283,33 +286,67 @@
             // 
             this.groupBox3.Controls.Add(this.label1);
             this.groupBox3.Controls.Add(this.TestPictureScale);
-            this.groupBox3.Location = new System.Drawing.Point(12, 101);
+            this.groupBox3.Location = new System.Drawing.Point(13, 12);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(357, 50);
+            this.groupBox3.Size = new System.Drawing.Size(328, 50);
             this.groupBox3.TabIndex = 59;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Appearance";
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.label2);
+            this.groupBox4.Controls.Add(this.CoordinateDeviationMargin);
             this.groupBox4.Controls.Add(this.label8);
             this.groupBox4.Controls.Add(this.PdfPageImageResolution);
-            this.groupBox4.Controls.Add(this.groupBox1);
-            this.groupBox4.Location = new System.Drawing.Point(12, 157);
+            this.groupBox4.Location = new System.Drawing.Point(13, 68);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(357, 210);
+            this.groupBox4.Size = new System.Drawing.Size(328, 97);
             this.groupBox4.TabIndex = 60;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Engine";
+            this.groupBox4.Text = "Common";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(16, 63);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(138, 13);
+            this.label2.TabIndex = 55;
+            this.label2.Text = "CoordinateDeviationMargin:";
+            // 
+            // CoordinateDeviationMargin
+            // 
+            this.CoordinateDeviationMargin.DecimalPlaces = 3;
+            this.CoordinateDeviationMargin.Location = new System.Drawing.Point(234, 61);
+            this.CoordinateDeviationMargin.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.CoordinateDeviationMargin.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            262144});
+            this.CoordinateDeviationMargin.Name = "CoordinateDeviationMargin";
+            this.CoordinateDeviationMargin.Size = new System.Drawing.Size(69, 20);
+            this.CoordinateDeviationMargin.TabIndex = 56;
+            this.CoordinateDeviationMargin.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            196608});
             // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(382, 410);
+            this.ClientSize = new System.Drawing.Size(353, 337);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.flowLayoutPanel1);
+            this.Controls.Add(this.groupBox1);
             this.Name = "SettingsForm";
             this.Text = "SettingsForm";
             ((System.ComponentModel.ISupportInitialize)(this.PdfPageImageResolution)).EndInit();
@@ -324,6 +361,7 @@
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.CoordinateDeviationMargin)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -347,5 +385,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.NumericUpDown CoordinateDeviationMargin;
     }
 }
