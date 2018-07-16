@@ -111,7 +111,7 @@ namespace Cliver.PdfDocumentParser
         }
         Dictionary<string, string> fieldNames2texts = new Dictionary<string, string>();
 
-        static public bool? Process(string inputPdf, List<Settings.Template> templates, string stampedPdf, Action<string, int, Dictionary<string, string>> record)
+        static public bool? Process(string inputPdf, List<Template> templates, string stampedPdf, Action<string, int, Dictionary<string, string>> record)
         {
             if (File.Exists(stampedPdf))
                 File.Delete(stampedPdf);
@@ -131,7 +131,7 @@ namespace Cliver.PdfDocumentParser
                     return false;
                 }
 
-                foreach (Settings.Template t in ts)
+                foreach (Template t in ts)
                 {
                     cp.Pages.ActiveTemplate = t;
                     for (int page_i = 1; page_i <= cp.Pages.PdfReader.NumberOfPages; page_i++)
@@ -153,7 +153,7 @@ namespace Cliver.PdfDocumentParser
         {
             ps = new PdfStamper(Pages.PdfReader, new FileStream(stampedPdf, FileMode.Create, FileAccess.Write, FileShare.None));
 
-            foreach (Settings.Template.Field f in Pages.ActiveTemplate.Fields)
+            foreach (Template.Field f in Pages.ActiveTemplate.Fields)
                 fieldNames2texts[f.Name] = GetFieldText(Pages[documentFirstPageI], f);
             for (int page_i = documentFirstPageI + 1; page_i <= Pages.PdfReader.NumberOfPages; page_i++)
             {
@@ -164,7 +164,7 @@ namespace Cliver.PdfDocumentParser
                     fieldNames2texts.Clear();
                     documentFirstPageI = page_i;
                 }
-                foreach (Settings.Template.Field f in Pages.ActiveTemplate.Fields)
+                foreach (Template.Field f in Pages.ActiveTemplate.Fields)
                 {
                     string t = GetFieldText(Pages[page_i], f);
                     if (t != null)
@@ -175,7 +175,7 @@ namespace Cliver.PdfDocumentParser
             stampInvoicePages(documentFirstPageI, Pages.PdfReader.NumberOfPages);
         }
 
-        public string GetFieldText(Page p, Settings.Template.Field field)
+        public string GetFieldText(Page p, Template.Field field)
         {
             if (field.Rectangle == null)
                 return null;

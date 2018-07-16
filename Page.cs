@@ -73,7 +73,7 @@ namespace Cliver.PdfDocumentParser
         }
         Bitmap _bitmap;
 
-        public void OnActiveTemplateUpdating(Settings.Template newTemplate)
+        public void OnActiveTemplateUpdating(Template newTemplate)
         {
             if (pageCollection.ActiveTemplate == null)
                 return;
@@ -125,20 +125,20 @@ namespace Cliver.PdfDocumentParser
                     //...change one random pixel to a random color on the clone... seems to trigger a copy of all pixel data from the original.
                     Bitmap b = Bitmap.Clone(new Rectangle(0, 0, Bitmap.Width, Bitmap.Height), System.Drawing.Imaging.PixelFormat.Undefined);
 
-                    if (pageCollection.ActiveTemplate.PagesRotation != Settings.Template.PageRotations.NONE)
+                    if (pageCollection.ActiveTemplate.PagesRotation != Template.PageRotations.NONE)
                     {
                         //b = ImageRoutines.GetCopy(Bitmap);
                         switch (pageCollection.ActiveTemplate.PagesRotation)
                         {
-                            case Settings.Template.PageRotations.NONE:
+                            case Template.PageRotations.NONE:
                                 break;
-                            case Settings.Template.PageRotations.Clockwise90:
+                            case Template.PageRotations.Clockwise90:
                                 b.RotateFlip(RotateFlipType.Rotate90FlipNone);
                                 break;
-                            case Settings.Template.PageRotations.Clockwise180:
+                            case Template.PageRotations.Clockwise180:
                                 b.RotateFlip(RotateFlipType.Rotate180FlipNone);
                                 break;
-                            case Settings.Template.PageRotations.Clockwise270:
+                            case Template.PageRotations.Clockwise270:
                                 b.RotateFlip(RotateFlipType.Rotate270FlipNone);
                                 break;
                             default:
@@ -175,14 +175,14 @@ namespace Cliver.PdfDocumentParser
 
         public PointF? GetFloatingAnchorPoint0(int floatingAnchorId)
         {
-            Settings.Template.FloatingAnchor fa = pageCollection.ActiveTemplate.FloatingAnchors.Find(a => a.Id == floatingAnchorId);
+            Template.FloatingAnchor fa = pageCollection.ActiveTemplate.FloatingAnchors.Find(a => a.Id == floatingAnchorId);
             List<RectangleF> rs = GetFloatingAnchorRectangles(fa);
             if (rs == null || rs.Count < 1)
                 return null;
             return new PointF(rs[0].X, rs[0].Y);
         }
 
-        public List<RectangleF> GetFloatingAnchorRectangles(Settings.Template.FloatingAnchor fa)
+        public List<RectangleF> GetFloatingAnchorRectangles(Template.FloatingAnchor fa)
         {
             List<RectangleF> rs;
             string fas = fa.ValueAsString;
@@ -195,16 +195,16 @@ namespace Cliver.PdfDocumentParser
         }
         Dictionary<string, List<RectangleF>> floatingAnchorValueStrings2rectangles = new Dictionary<string, List<RectangleF>>();
 
-        List<RectangleF> findFloatingAnchor(Settings.Template.FloatingAnchor fa)
+        List<RectangleF> findFloatingAnchor(Template.FloatingAnchor fa)
         {
             if (fa == null || fa.GetValue() == null)
                 return null;
 
             switch (fa.ValueType)
             {
-                case Settings.Template.ValueTypes.PdfText:
+                case Template.ValueTypes.PdfText:
                     {
-                        List<Settings.Template.FloatingAnchor.PdfTextValue.CharBox> ses = ((Settings.Template.FloatingAnchor.PdfTextValue)fa.GetValue()).CharBoxs;
+                        List<Template.FloatingAnchor.PdfTextValue.CharBox> ses = ((Template.FloatingAnchor.PdfTextValue)fa.GetValue()).CharBoxs;
                         if (ses.Count < 1)
                             return null;
                         List<Pdf.CharBox> bts = new List<Pdf.CharBox>();
@@ -232,9 +232,9 @@ namespace Cliver.PdfDocumentParser
                         }
                     }
                     return null;
-                case Settings.Template.ValueTypes.OcrText:
+                case Template.ValueTypes.OcrText:
                     {
-                        List<Settings.Template.FloatingAnchor.OcrTextValue.CharBox> ses = ((Settings.Template.FloatingAnchor.OcrTextValue)fa.GetValue()).CharBoxs;
+                        List<Template.FloatingAnchor.OcrTextValue.CharBox> ses = ((Template.FloatingAnchor.OcrTextValue)fa.GetValue()).CharBoxs;
                         if (ses.Count < 1)
                             return null;
                         List<Ocr.CharBox> bts = new List<Ocr.CharBox>();
@@ -262,8 +262,8 @@ namespace Cliver.PdfDocumentParser
                         }
                     }
                     return null;
-                case Settings.Template.ValueTypes.ImageData:
-                    List<Settings.Template.FloatingAnchor.ImageDataValue.ImageBox> ibs = ((Settings.Template.FloatingAnchor.ImageDataValue)fa.GetValue()).ImageBoxs;
+                case Template.ValueTypes.ImageData:
+                    List<Template.FloatingAnchor.ImageDataValue.ImageBox> ibs = ((Template.FloatingAnchor.ImageDataValue)fa.GetValue()).ImageBoxs;
                     if (ibs.Count < 1)
                         return null;
                     List<RectangleF> bestRs = null;
@@ -274,7 +274,7 @@ namespace Cliver.PdfDocumentParser
                         rs.Add(new RectangleF(point0, new SizeF(ibs[0].Rectangle.Width, ibs[0].Rectangle.Height)));
                         for (int i = 1; i < ibs.Count; i++)
                         {
-                            Settings.Template.RectangleF r = new Settings.Template.RectangleF(point0.X + ibs[i].Rectangle.X - ibs[0].Rectangle.X, point0.Y + ibs[i].Rectangle.Y - ibs[0].Rectangle.Y, ibs[i].Rectangle.Width, ibs[i].Rectangle.Height);
+                            Template.RectangleF r = new Template.RectangleF(point0.X + ibs[i].Rectangle.X - ibs[0].Rectangle.X, point0.Y + ibs[i].Rectangle.Y - ibs[0].Rectangle.Y, ibs[i].Rectangle.Width, ibs[i].Rectangle.Height);
                             using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio))
                             {
                                 if (!ibs[i].ImageData.ImageIsSimilar(new ImageData(rb), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance))
@@ -398,7 +398,7 @@ namespace Cliver.PdfDocumentParser
                 error = "Template '" + pageCollection.ActiveTemplate.Name + "' has no DocumentFirstPageRecognitionMarks defined.";
                 return false;
             }
-            foreach (Settings.Template.Mark m in pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks)
+            foreach (Template.Mark m in pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks)
             {
                 if (m.FloatingAnchorId != null && m.GetValue() == null)
                 {
@@ -415,7 +415,7 @@ namespace Cliver.PdfDocumentParser
                     return false;
                 switch (m.ValueType)
                 {
-                    case Settings.Template.ValueTypes.PdfText:
+                    case Template.ValueTypes.PdfText:
                         {
                             string t1 = NormalizeText((string)m.GetValue());
                             string t2 = NormalizeText((string)v);
@@ -424,7 +424,7 @@ namespace Cliver.PdfDocumentParser
                             error = "documentFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
                             return false;
                         }
-                    case Settings.Template.ValueTypes.OcrText:
+                    case Template.ValueTypes.OcrText:
                         {
                             string t1 = NormalizeText((string)m.GetValue());
                             string t2 = NormalizeText((string)v);
@@ -433,7 +433,7 @@ namespace Cliver.PdfDocumentParser
                             error = "documentFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
                             return false;
                         }
-                    case Settings.Template.ValueTypes.ImageData:
+                    case Template.ValueTypes.ImageData:
                         {
                             ImageData id = (ImageData)m.GetValue();
                             if (id.ImageIsSimilar((ImageData)(v), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance))
@@ -449,7 +449,7 @@ namespace Cliver.PdfDocumentParser
             return true;
         }
 
-        public object GetValue(int? floatingAnchorId, Settings.Template.RectangleF r_, Settings.Template.ValueTypes valueType, out string error)
+        public object GetValue(int? floatingAnchorId, Template.RectangleF r_, Template.ValueTypes valueType, out string error)
         {
             //try
             //{
@@ -475,17 +475,17 @@ namespace Cliver.PdfDocumentParser
                 }
                 point0 = (PointF)p0;
             }
-            Settings.Template.RectangleF r = new Settings.Template.RectangleF(r_.X + point0.X, r_.Y + point0.Y, r_.Width, r_.Height);
+            Template.RectangleF r = new Template.RectangleF(r_.X + point0.X, r_.Y + point0.Y, r_.Width, r_.Height);
             error = null;
             switch (valueType)
             {
-                case Settings.Template.ValueTypes.PdfText:
+                case Template.ValueTypes.PdfText:
                     return Pdf.GetTextByTopLeftCoordinates(PdfCharBoxs, r.GetSystemRectangleF());
-                case Settings.Template.ValueTypes.OcrText:
+                case Template.ValueTypes.OcrText:
                     //return Ocr.This.GetText(ActiveTemplateBitmap, r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);                    
                     //return Ocr.GetTextByTopLeftCoordinates(OcrCharBoxs, r.GetSystemRectangleF());//sometimes does not work
                     return Ocr.This.GetText(ActiveTemplateBitmap, r.GetSystemRectangleF());
-                case Settings.Template.ValueTypes.ImageData:
+                case Template.ValueTypes.ImageData:
                     using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio))
                     {
                         return new ImageData(rb);

@@ -4,21 +4,21 @@
     <ProjectType>Local</ProjectType>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B1D7BA69-35AA-45BD-B1D0-D84FD2BC47A0}</ProjectGuid>
+    <ProjectGuid>{0B7E116B-39DA-4769-B7C9-0E13502CDC85}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ApplicationIcon>computers308.ico</ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>PdfDocumentParser</AssemblyName>
+    <AssemblyName>InvoiceParser</AssemblyName>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
-    <OutputType>Library</OutputType>
-    <RootNamespace>Cliver.PdfDocumentParser</RootNamespace>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Cliver.InvoiceParser</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
@@ -110,12 +110,8 @@
       <HintPath>packages\EPPlus.4.5.2.1\lib\net40\EPPlus.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp, Version=5.5.13.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>packages\iTextSharp.5.5.13\lib\itextsharp.dll</HintPath>
+      <HintPath>..\packages\iTextSharp.5.5.13\lib\itextsharp.dll</HintPath>
     </Reference>
-    <Reference Include="Magick.NET-Q16-AnyCPU, Version=7.4.6.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
-      <HintPath>packages\Magick.NET-Q16-AnyCPU.7.4.6\lib\net40\Magick.NET-Q16-AnyCPU.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="PresentationCore" />
     <Reference Include="System">
       <Name>System</Name>
@@ -133,14 +129,29 @@
     <Reference Include="System.XML">
       <Name>System.XML</Name>
     </Reference>
-    <Reference Include="Tesseract, Version=3.0.2.0, Culture=neutral, PublicKeyToken=ebeb3d86bef60cbe, processorArchitecture=MSIL">
-      <HintPath>packages\Tesseract.3.0.2.0\lib\net451\Tesseract.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PageCollection.cs" />
-    <Compile Include="Page.cs" />
-    <Compile Include="Customization\PdfDocumentProcessor.cs" />
+    <Compile Include="AboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutBox.Designer.cs">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Excel.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OutputConfigForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OutputConfigForm.Designer.cs">
+      <DependentUpon>OutputConfigForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PdfDocumentProcessor.cs" />
+    <Compile Include="Processor.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -152,55 +163,15 @@
     <Compile Include="SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Settings\Templates.cs" />
-    <Compile Include="Settings\TestFiles.cs" />
-    <Compile Include="Settings\ImageProcessing.cs" />
     <Compile Include="Settings\General.cs" />
-    <Compile Include="ImageData.cs" />
-    <Compile Include="TemplateForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TemplateForm.Designer.cs">
-      <DependentUpon>TemplateForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FileFilterForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FileFilterForm.Designer.cs">
-      <DependentUpon>FileFilterForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Ocr.cs" />
-    <Compile Include="Template.cs" />
-    <Compile Include="TextForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TextForm.Designer.cs">
-      <DependentUpon>TextForm.cs</DependentUpon>
-    </Compile>
     <Content Include="3RINGS~1.ICO" />
-    <Compile Include="AboutBox.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AboutBox.Designer.cs">
-      <DependentUpon>AboutBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Pdf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Program.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Content Include="computers308.ico" />
-    <Content Include="x64\liblept172.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="x64\libtesseract304.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="x86\liblept172.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="x86\libtesseract304.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -227,6 +198,12 @@
     <EmbeddedResource Include="AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OutputConfigForm.resx">
+      <DependentUpon>OutputConfigForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -234,20 +211,15 @@
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TemplateForm.resx">
-      <DependentUpon>TemplateForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FileFilterForm.resx">
-      <DependentUpon>FileFilterForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TextForm.resx">
-      <DependentUpon>TextForm.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\CLIVER\CliverBot\CliverRoutines\CliverRoutines.csproj">
+    <ProjectReference Include="..\..\..\CLIVER\CliverBot\CliverRoutines\CliverRoutines.csproj">
       <Project>{aca94788-bed1-4b8e-94ef-e54293e8d139}</Project>
       <Name>CliverRoutines</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PdfDocumentParser.csproj">
+      <Project>{b1d7ba69-35aa-45bd-b1d0-d84fd2bc47a0}</Project>
+      <Name>PdfDocumentParser</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -255,8 +227,7 @@
     <PreBuildEvent>
     </PreBuildEvent>
     <PostBuildEvent>xcopy /Y /S "$(ProjectDir)externals" "$(TargetDir)"
-xcopy /Y "$(ProjectDir)config" "$(TargetDir)"
-xcopy /Y "$(ProjectDir)help.html" "$(TargetDir)"</PostBuildEvent>
+xcopy /Y "$(ProjectDir)config" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

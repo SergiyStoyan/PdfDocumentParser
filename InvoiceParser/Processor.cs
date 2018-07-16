@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using System.IO;
 using Cliver;
 using System.Text.RegularExpressions;
+using Cliver.PdfDocumentParser;
 
-namespace Cliver.PdfDocumentParser
+namespace Cliver.InvoiceParser
 {
     class Processor
     {
@@ -55,7 +56,7 @@ namespace Cliver.PdfDocumentParser
             if (File.Exists(output_records_file))
                 File.Delete(output_records_file);
             Excel xls = new Excel(output_records_file, DateTime.Now.ToString());
-            List<Settings.Template> active_templates = Settings.Templates.Templates.Where(x => x.Active).ToList();
+            List<Template> active_templates = PdfDocumentParser.Settings.Templates.Templates.Where(x => x.Active).ToList();
             if (active_templates.Count < 1)
             {
                 LogMessage.Error("There is no active template!");
@@ -68,7 +69,7 @@ namespace Cliver.PdfDocumentParser
             List<string> hs0 = headers.OrderBy(a => a).ToList();
             for (int i = 1; i < active_templates.Count; i++)
             {
-                Settings.Template t = active_templates[i];
+                Template t = active_templates[i];
                 List<string> hs = t.Fields.Select(x => x.Name).ToList();
                 if (!hs.OrderBy(a => a).SequenceEqual(hs0))
                 {

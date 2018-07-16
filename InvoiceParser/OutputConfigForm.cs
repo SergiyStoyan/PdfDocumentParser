@@ -7,8 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Cliver.PdfDocumentParser;
 
-namespace Cliver.PdfDocumentParser
+namespace Cliver.InvoiceParser
 {
     public partial class OutputConfigForm : Form
     {
@@ -25,7 +26,7 @@ namespace Cliver.PdfDocumentParser
             foreach (string fn in fns2)
             {
                 int i = outputHeaders.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = fn, DefaultCellStyle = new DataGridViewCellStyle { WrapMode = DataGridViewTriState.True, Alignment = DataGridViewContentAlignment.TopLeft, }, SortMode = DataGridViewColumnSortMode.NotSortable });
-                templateNames.Add(string.Join("\r\n", Settings.Templates.Templates.Where(x => x.Active && x.Fields.Where(f => f.Name == fn).FirstOrDefault() != null).Select(x => x.Name)));
+                templateNames.Add(string.Join("\r\n", PdfDocumentParser.Settings.Templates.Templates.Where(x => x.Active && x.Fields.Where(f => f.Name == fn).FirstOrDefault() != null).Select(x => x.Name)));
             }
             if (fns2.Count > 0)
             {
@@ -37,11 +38,11 @@ namespace Cliver.PdfDocumentParser
 
         public static List<string> GetOrderedOutputFieldNames()
         {
-            List<Settings.Template> ts = Settings.Templates.Templates.Where(x => x.Active).ToList();
+            List<Template> ts = PdfDocumentParser.Settings.Templates.Templates.Where(x => x.Active).ToList();
 
             List<string> fns = new List<string>();
-            foreach (Settings.Template t in ts)
-                foreach (Settings.Template.Field f in t.Fields)
+            foreach (Template t in ts)
+                foreach (Template.Field f in t.Fields)
                     if (!fns.Contains(f.Name))
                         fns.Add(f.Name);
 

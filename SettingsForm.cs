@@ -25,8 +25,6 @@ namespace Cliver.PdfDocumentParser
         void load_settings()
         {
             PdfPageImageResolution.Value = Settings.General.PdfPageImageResolution;
-            IgnoreHidddenFiles.Checked = Settings.General.IgnoreHidddenFiles;
-            ReadInputFolderRecursively.Checked = Settings.General.ReadInputFolderRecursively;
             TestPictureScale.Value = Settings.General.TestPictureScale;
 
             BrightnessTolerance.Value = (decimal)Settings.ImageProcessing.BrightnessTolerance;
@@ -44,8 +42,6 @@ namespace Cliver.PdfDocumentParser
             try
             {
                 Settings.General.PdfPageImageResolution = (int)PdfPageImageResolution.Value;
-                Settings.General.IgnoreHidddenFiles = IgnoreHidddenFiles.Checked;
-                Settings.General.ReadInputFolderRecursively = ReadInputFolderRecursively.Checked;
                 Settings.General.TestPictureScale = TestPictureScale.Value;    
 
                 Settings.General.Save();

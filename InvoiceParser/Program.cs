@@ -9,11 +9,7 @@ using System.IO;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Cliver.PdfDocumentParser
-/*
-
-
-*/
+namespace Cliver.InvoiceParser
 {/*TBD:
     - move to WPF
     - separate custom processor: 

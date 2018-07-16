@@ -1,4 +1,4 @@
-﻿namespace Cliver.PdfDocumentParser
+﻿namespace Cliver.InvoiceParser
 {
     partial class SettingsForm
     {
@@ -35,6 +35,7 @@
             this.bCancel = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.bResetTemplates = new System.Windows.Forms.Button();
+            this.IgnoreHidddenFiles = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.FindBestImageMatch = new System.Windows.Forms.CheckBox();
             this.DifferentPixelNumberTolerance = new System.Windows.Forms.NumericUpDown();
@@ -43,6 +44,8 @@
             this.label11 = new System.Windows.Forms.Label();
             this.TestPictureScale = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
+            this.ReadInputFolderRecursively = new System.Windows.Forms.CheckBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.PdfPageImageResolution)).BeginInit();
@@ -51,6 +54,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.DifferentPixelNumberTolerance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BrightnessTolerance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TestPictureScale)).BeginInit();
+            this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.SuspendLayout();
@@ -143,6 +147,16 @@
             this.bResetTemplates.Text = "Reset Templates";
             this.bResetTemplates.UseVisualStyleBackColor = true;
             this.bResetTemplates.Click += new System.EventHandler(this.bResetTemplates_Click);
+            // 
+            // IgnoreHidddenFiles
+            // 
+            this.IgnoreHidddenFiles.AutoSize = true;
+            this.IgnoreHidddenFiles.Location = new System.Drawing.Point(16, 24);
+            this.IgnoreHidddenFiles.Name = "IgnoreHidddenFiles";
+            this.IgnoreHidddenFiles.Size = new System.Drawing.Size(123, 17);
+            this.IgnoreHidddenFiles.TabIndex = 53;
+            this.IgnoreHidddenFiles.Text = "Ignore Hiddden Files";
+            this.IgnoreHidddenFiles.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
@@ -279,6 +293,27 @@
             this.label1.TabIndex = 55;
             this.label1.Text = "Test Picture Scale";
             // 
+            // ReadInputFolderRecursively
+            // 
+            this.ReadInputFolderRecursively.AutoSize = true;
+            this.ReadInputFolderRecursively.Location = new System.Drawing.Point(16, 50);
+            this.ReadInputFolderRecursively.Name = "ReadInputFolderRecursively";
+            this.ReadInputFolderRecursively.Size = new System.Drawing.Size(169, 17);
+            this.ReadInputFolderRecursively.TabIndex = 57;
+            this.ReadInputFolderRecursively.Text = "Read Input Folder Recursively";
+            this.ReadInputFolderRecursively.UseVisualStyleBackColor = true;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.IgnoreHidddenFiles);
+            this.groupBox2.Controls.Add(this.ReadInputFolderRecursively);
+            this.groupBox2.Location = new System.Drawing.Point(12, 12);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(357, 83);
+            this.groupBox2.TabIndex = 58;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Input";
+            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.label1);
@@ -309,6 +344,7 @@
             this.ClientSize = new System.Drawing.Size(382, 410);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Name = "SettingsForm";
             this.Text = "SettingsForm";
@@ -320,6 +356,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.DifferentPixelNumberTolerance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.BrightnessTolerance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TestPictureScale)).EndInit();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
@@ -337,6 +375,7 @@
         private System.Windows.Forms.Button bCancel;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Button bResetTemplates;
+        private System.Windows.Forms.CheckBox IgnoreHidddenFiles;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox FindBestImageMatch;
         private System.Windows.Forms.NumericUpDown DifferentPixelNumberTolerance;
@@ -345,6 +384,8 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.NumericUpDown TestPictureScale;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox ReadInputFolderRecursively;
+        private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox4;
     }

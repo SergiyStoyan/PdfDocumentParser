@@ -11,8 +11,9 @@ using System.Windows.Forms;
 using Cliver;
 using System.IO;
 using System.Threading;
+using Cliver.PdfDocumentParser;
 
-namespace Cliver.PdfDocumentParser
+namespace Cliver.InvoiceParser
 {
     public partial class MainForm : Form
     {
@@ -84,8 +85,8 @@ namespace Cliver.PdfDocumentParser
                     if (e.Row == null)
                         return;
 
-                    Settings.Template t = (Settings.Template)e.Row.Tag;
-                    Settings.Templates.Templates.RemoveAll(x => x == t);
+                    Template t = (Template)e.Row.Tag;
+                    PdfDocumentParser.Settings.Templates.Templates.RemoveAll(x => x == t);
                 }
                 catch (Exception ex)
                 {
@@ -99,7 +100,7 @@ namespace Cliver.PdfDocumentParser
                     return;
 
                 var r = templates.Rows[e.RowIndex];
-                Settings.Template t = (Settings.Template)r.Tag;
+                Template t = (Template)r.Tag;
                 templates.EndEdit();//needed to set checkbox values
 
                 t.Name = (string)r.Cells["Name_"].Value;
@@ -135,11 +136,11 @@ namespace Cliver.PdfDocumentParser
                     if (e.Row.Cells["Active"].Value == null)
                         e.Row.Cells["Active"].Value = true;
 
-                    Settings.Template t = (Settings.Template)e.Row.Tag;
+                    Template t = (Template)e.Row.Tag;
                     if (t == null)
                     {
-                        t = Settings.Template.CreateInitialTemplate();
-                        Settings.Templates.Templates.Add(t);
+                        t = Template.CreateInitialTemplate();
+                        PdfDocumentParser.Settings.Templates.Templates.Add(t);
                         e.Row.Tag = t;
                         e.Row.Cells["Name_"].Value = t.Name;
                         e.Row.Cells["Active"].Value = t.Active;
@@ -168,16 +169,16 @@ namespace Cliver.PdfDocumentParser
                     {
                         if (templates.Columns[e.ColumnIndex].Name == "Edit")
                         {
-                            Settings.Template t = (Settings.Template)templates.Rows[e.RowIndex].Tag;
+                            Template t = (Template)templates.Rows[e.RowIndex].Tag;
                             t.Name = (string)templates.Rows[e.RowIndex].Cells["Name_"].Value;
-                            TemplateForm tf = new TemplateForm(t, (Settings.Template nt) =>
+                            TemplateForm tf = new TemplateForm(t, Settings.General.InputFolder, (Template nt) =>
                             {
-                                t = Settings.Templates.Templates.Where(a => a.Name == nt.Name).FirstOrDefault();
+                                t = PdfDocumentParser.Settings.Templates.Templates.Where(a => a.Name == nt.Name).FirstOrDefault();
                                 if (t == null)
-                                    Settings.Templates.Templates.Add(nt);
+                                    PdfDocumentParser.Settings.Templates.Templates.Add(nt);
                                 else
-                                    Settings.Templates.Templates[Settings.Templates.Templates.IndexOf(t)] = nt;
-                                Settings.Templates.Save();
+                                    PdfDocumentParser.Settings.Templates.Templates[PdfDocumentParser.Settings.Templates.Templates.IndexOf(t)] = nt;
+                                PdfDocumentParser.Settings.Templates.Save();
 
                                 foreach (DataGridViewRow r in templates.Rows)
                                 {
@@ -201,8 +202,8 @@ namespace Cliver.PdfDocumentParser
 
             templates.Validating += delegate (object sender, CancelEventArgs e)
             {
-                Settings.Templates.Templates.RemoveAll(x => string.IsNullOrWhiteSpace(x.Name));
-                Settings.Templates.Save();
+                PdfDocumentParser.Settings.Templates.Templates.RemoveAll(x => string.IsNullOrWhiteSpace(x.Name));
+                PdfDocumentParser.Settings.Templates.Save();
             };
 
             progress.Maximum = 10000;
@@ -215,7 +216,7 @@ namespace Cliver.PdfDocumentParser
         {
             try
             {
-                foreach (Settings.Template t in Settings.Templates.Templates)
+                foreach (Template t in PdfDocumentParser.Settings.Templates.Templates)
                 {
                     if (string.IsNullOrWhiteSpace(t.Name))
                         continue;
@@ -249,7 +250,7 @@ namespace Cliver.PdfDocumentParser
         //            t.Name = n;
         //            t.Active = Convert.ToBoolean(r.Cells["Active"].Value);
         //        }
-        //        Settings.Templates.Save();
+        //        PdfDocumentParser.Settings.Templates.Save();
         //    }
         //    catch (Exception e)
         //    {
@@ -394,7 +395,7 @@ namespace Cliver.PdfDocumentParser
             //try
             //{
             //    System.Net.WebClient wc = new System.Net.WebClient();
-            //    wc.DownloadFile("http.cliversoft.com/PdfDocumentParser/version.1/help.html", helpFile);
+            //    wc.DownloadFile("http.cliversoft.com/InvoiceParser/version.1/help.html", helpFile);
             //}
             //catch { }
             System.Diagnostics.Process.Start(helpFile);

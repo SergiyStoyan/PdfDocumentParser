@@ -1,4 +1,4 @@
-﻿namespace Cliver.PdfDocumentParser
+﻿namespace Cliver.InvoiceParser
 {
     partial class MainForm
     {

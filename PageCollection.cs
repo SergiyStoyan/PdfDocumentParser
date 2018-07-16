@@ -38,7 +38,7 @@ namespace Cliver.PdfDocumentParser
             PdfReader.Dispose();
         }
 
-        public Settings.Template ActiveTemplate
+        public Template ActiveTemplate
         {
             set
             {
@@ -52,7 +52,7 @@ namespace Cliver.PdfDocumentParser
                 return _ActiveTemplate;
             }
         }
-        Settings.Template _ActiveTemplate;
+        Template _ActiveTemplate;
 
         //public delegate void OnActiveTemplateUpdating(Settings.Template newTemplate);
         //public event OnActiveTemplateUpdating ActiveTemplateUpdating = null;
