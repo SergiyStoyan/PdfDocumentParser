@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.bAbout = new System.Windows.Forms.Button();
             this.bInputFolder = new System.Windows.Forms.Button();
             this.bOutputFolder = new System.Windows.Forms.Button();
@@ -87,7 +87,7 @@
             this.bOutputFolder.Location = new System.Drawing.Point(841, 77);
             this.bOutputFolder.Name = "bOutputFolder";
             this.bOutputFolder.Size = new System.Drawing.Size(24, 23);
-            this.bOutputFolder.TabIndex = 2;
+            this.bOutputFolder.TabIndex = 3;
             this.bOutputFolder.Text = "...";
             this.bOutputFolder.UseVisualStyleBackColor = true;
             this.bOutputFolder.Click += new System.EventHandler(this.bOutputFolder_Click);
@@ -99,7 +99,7 @@
             this.InputFolder.Location = new System.Drawing.Point(12, 29);
             this.InputFolder.Name = "InputFolder";
             this.InputFolder.Size = new System.Drawing.Size(823, 20);
-            this.InputFolder.TabIndex = 3;
+            this.InputFolder.TabIndex = 0;
             // 
             // OutputFolder
             // 
@@ -108,7 +108,7 @@
             this.OutputFolder.Location = new System.Drawing.Point(12, 77);
             this.OutputFolder.Name = "OutputFolder";
             this.OutputFolder.Size = new System.Drawing.Size(823, 20);
-            this.OutputFolder.TabIndex = 4;
+            this.OutputFolder.TabIndex = 2;
             // 
             // bExit
             // 
@@ -116,7 +116,7 @@
             this.bExit.Location = new System.Drawing.Point(116, 3);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(75, 23);
-            this.bExit.TabIndex = 5;
+            this.bExit.TabIndex = 1;
             this.bExit.Text = "Exit";
             this.bExit.UseVisualStyleBackColor = true;
             this.bExit.Click += new System.EventHandler(this.bExit_Click);
@@ -127,7 +127,7 @@
             this.bRun.Location = new System.Drawing.Point(35, 3);
             this.bRun.Name = "bRun";
             this.bRun.Size = new System.Drawing.Size(75, 23);
-            this.bRun.TabIndex = 6;
+            this.bRun.TabIndex = 0;
             this.bRun.Text = "Run";
             this.bRun.UseVisualStyleBackColor = true;
             this.bRun.Click += new System.EventHandler(this.bRun_Click);
@@ -173,7 +173,7 @@
             this.templates.Name = "templates";
             this.templates.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.templates.Size = new System.Drawing.Size(850, 311);
-            this.templates.TabIndex = 10;
+            this.templates.TabIndex = 4;
             // 
             // Active
             // 
@@ -185,8 +185,8 @@
             // Name_
             // 
             this.Name_.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            this.Name_.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            this.Name_.DefaultCellStyle = dataGridViewCellStyle5;
             this.Name_.HeaderText = "Name";
             this.Name_.Name = "Name_";
             this.Name_.Width = 60;
@@ -194,9 +194,9 @@
             // Edit
             // 
             this.Edit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.Edit.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.Edit.DefaultCellStyle = dataGridViewCellStyle6;
             this.Edit.HeaderText = "";
             this.Edit.Name = "Edit";
             this.Edit.Resizable = System.Windows.Forms.DataGridViewTriState.False;
@@ -219,7 +219,7 @@
             this.bLog.Location = new System.Drawing.Point(327, 3);
             this.bLog.Name = "bLog";
             this.bLog.Size = new System.Drawing.Size(75, 23);
-            this.bLog.TabIndex = 12;
+            this.bLog.TabIndex = 4;
             this.bLog.Text = "Log";
             this.bLog.UseVisualStyleBackColor = true;
             this.bLog.Click += new System.EventHandler(this.bLog_Click);
@@ -230,7 +230,7 @@
             this.bOutput.Location = new System.Drawing.Point(489, 3);
             this.bOutput.Name = "bOutput";
             this.bOutput.Size = new System.Drawing.Size(75, 23);
-            this.bOutput.TabIndex = 13;
+            this.bOutput.TabIndex = 6;
             this.bOutput.Text = "Output";
             this.bOutput.UseVisualStyleBackColor = true;
             this.bOutput.Click += new System.EventHandler(this.bOutput_Click);
@@ -241,7 +241,7 @@
             this.bSettings.Location = new System.Drawing.Point(246, 3);
             this.bSettings.Name = "bSettings";
             this.bSettings.Size = new System.Drawing.Size(75, 23);
-            this.bSettings.TabIndex = 14;
+            this.bSettings.TabIndex = 3;
             this.bSettings.Text = "Settings";
             this.bSettings.UseVisualStyleBackColor = true;
             this.bSettings.Click += new System.EventHandler(this.bSettings_Click);
@@ -262,7 +262,7 @@
             this.bHeaders.Location = new System.Drawing.Point(408, 3);
             this.bHeaders.Name = "bHeaders";
             this.bHeaders.Size = new System.Drawing.Size(75, 23);
-            this.bHeaders.TabIndex = 16;
+            this.bHeaders.TabIndex = 5;
             this.bHeaders.Text = "Headers";
             this.bHeaders.UseVisualStyleBackColor = true;
             this.bHeaders.Click += new System.EventHandler(this.bHeaders_Click);
@@ -288,7 +288,7 @@
             this.help.Location = new System.Drawing.Point(84, 3);
             this.help.Name = "help";
             this.help.Size = new System.Drawing.Size(75, 23);
-            this.help.TabIndex = 17;
+            this.help.TabIndex = 1;
             this.help.Text = "Help";
             this.help.UseVisualStyleBackColor = true;
             this.help.Click += new System.EventHandler(this.help_Click);
@@ -310,7 +310,7 @@
             this.Engine.Location = new System.Drawing.Point(165, 3);
             this.Engine.Name = "Engine";
             this.Engine.Size = new System.Drawing.Size(75, 23);
-            this.Engine.TabIndex = 18;
+            this.Engine.TabIndex = 2;
             this.Engine.Text = "Engine";
             this.Engine.UseVisualStyleBackColor = true;
             this.Engine.Click += new System.EventHandler(this.Engine_Click);
