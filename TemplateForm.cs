@@ -16,9 +16,19 @@ using System.IO;
 
 namespace Cliver.PdfDocumentParser
 {
+    public abstract class TemplateManager
+    {
+        abstract public void Save(Template template);
+
+        virtual public void SaveAsInitialTemplate(Template template)
+        {
+            throw new Exception("Not implemented");
+        }
+    }
+
     public partial class TemplateForm : Form
     {
-        public TemplateForm(Template template, string testFileDefaultFolder, Action<Template> onSave)
+        public TemplateForm(Template template, string testFileDefaultFolder, TemplateManager templateManager)
         {
             InitializeComponent();
 
@@ -26,7 +36,7 @@ namespace Cliver.PdfDocumentParser
             Text = "Template Manager";
 
             this.testFileDefaultFolder = testFileDefaultFolder;
-            this.onSave = onSave;
+            this.templateManager = templateManager;
 
             ValueType3.ValueType = typeof(Template.ValueTypes);
             ValueType3.DataSource = Enum.GetValues(typeof(Template.ValueTypes));
@@ -1275,8 +1285,7 @@ namespace Cliver.PdfDocumentParser
         {
             try
             {
-                Settings.Templates.InitialTemplate = getTemplateFromUI(true);
-                Settings.Templates.Save();
+                templateManager.SaveAsInitialTemplate(getTemplateFromUI(true));
                 Message.Inform("Saved");
             }
             catch(Exception ex)
@@ -1289,7 +1298,7 @@ namespace Cliver.PdfDocumentParser
         {
             try
             {
-                onSave(getTemplateFromUI(true));
+                templateManager.Save(getTemplateFromUI(true));
                 DialogResult = DialogResult.OK;
                 Close();
             }
@@ -1298,7 +1307,7 @@ namespace Cliver.PdfDocumentParser
                 Message.Error2(ex);
             }
         }
-        Action<Template> onSave;
+        TemplateManager templateManager;
 
         Template getTemplateFromUI(bool saving)
         {

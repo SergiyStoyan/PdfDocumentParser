@@ -171,25 +171,13 @@ namespace Cliver.InvoiceParser
                         {
                             Template t = (Template)templates.Rows[e.RowIndex].Tag;
                             t.Name = (string)templates.Rows[e.RowIndex].Cells["Name_"].Value;
-                            TemplateForm tf = new TemplateForm(t, Settings.General.InputFolder, (Template nt) =>
-                            {
-                                t = PdfDocumentParser.Settings.Templates.Templates.Where(a => a.Name == nt.Name).FirstOrDefault();
-                                if (t == null)
-                                    PdfDocumentParser.Settings.Templates.Templates.Add(nt);
-                                else
-                                    PdfDocumentParser.Settings.Templates.Templates[PdfDocumentParser.Settings.Templates.Templates.IndexOf(t)] = nt;
-                                PdfDocumentParser.Settings.Templates.Save();
 
-                                foreach (DataGridViewRow r in templates.Rows)
-                                {
-                                    if ((string)r.Cells["Name_"].Value == nt.Name)
-                                    {
-                                        r.Tag = nt;
-                                        r.Cells["Name_"].Value = nt.Name;
-                                        break;
-                                    }
-                                }
-                            });
+                            TemplateManager tm = new TemplateManager { Templates = templates };
+                            TemplateForm tf = new TemplateForm(t, Settings.General.InputFolder, tm);
+                            tf.FormClosed += delegate 
+                            {
+                                //tf.
+                            };
                             tf.Show();
                         }
                     }
@@ -210,6 +198,37 @@ namespace Cliver.InvoiceParser
 
             if (string.IsNullOrWhiteSpace(Settings.General.OutputFolder))
                 OutputFolder.Text = Log.AppDir;
+        }
+
+        public class TemplateManager : PdfDocumentParser.TemplateManager
+        {
+            public DataGridView Templates;
+
+            override public void Save(Template template)
+            {
+              Template  t = PdfDocumentParser.Settings.Templates.Templates.Where(a => a.Name == template.Name).FirstOrDefault();
+                if (t == null)
+                    PdfDocumentParser.Settings.Templates.Templates.Add(template);
+                else
+                    PdfDocumentParser.Settings.Templates.Templates[PdfDocumentParser.Settings.Templates.Templates.IndexOf(t)] = template;
+                PdfDocumentParser.Settings.Templates.Save();
+
+                foreach (DataGridViewRow r in Templates.Rows)
+                {
+                    if ((string)r.Cells["Name_"].Value == template.Name)
+                    {
+                        r.Tag = template;
+                        r.Cells["Name_"].Value = template.Name;
+                        break;
+                    }
+                }
+            }
+
+            override public void SaveAsInitialTemplate(Template template)
+            {
+                PdfDocumentParser.Settings.Templates.InitialTemplate = template;
+                PdfDocumentParser.Settings.Templates.Save();
+            }
         }
 
         void loadTemplates()
