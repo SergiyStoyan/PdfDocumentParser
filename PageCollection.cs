@@ -25,7 +25,7 @@ namespace Cliver.PdfDocumentParser
             PdfFile = pdfFile;
             PdfReader = new PdfReader(pdfFile);
             //TemplateEditorMode = templateEditorMode;
-            getObject = (int pageI) => { return new Page(this, pageI); };
+            getValue = (int pageI) => { return new Page(this, pageI); };
         }
 
         public readonly string PdfFile;

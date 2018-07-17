@@ -60,6 +60,7 @@ namespace Cliver.PdfDocumentParser
         }
 
         public bool AutoDeskew = false;
+        public int AutoDeskewThreshold = 100;
 
         public float BrightnessTolerance = 0.4f;
         public float DifferentPixelNumberTolerance = 0.01f;

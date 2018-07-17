@@ -1,4 +1,5 @@
 {
+  "InitialTemplate": null,
   "Templates": [
     {
       "Name": "Abatix",
@@ -8,6 +9,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -109,6 +111,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -205,6 +208,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -311,6 +315,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -412,6 +417,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -508,6 +514,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -609,6 +616,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -700,6 +708,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -801,6 +810,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -902,6 +912,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -1003,6 +1014,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -1099,6 +1111,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -1200,6 +1213,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -1301,6 +1315,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -1413,6 +1428,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -1514,6 +1530,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -1621,6 +1638,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -1722,6 +1740,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -1823,6 +1842,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -1924,6 +1944,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -2025,6 +2046,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -2137,6 +2159,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -2238,6 +2261,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -2329,6 +2353,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -2425,6 +2450,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -2506,6 +2532,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -2587,6 +2614,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -2668,6 +2696,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -2754,6 +2783,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -2840,6 +2870,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -2921,6 +2952,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -3007,6 +3039,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -3093,6 +3126,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -3194,6 +3228,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -3275,6 +3310,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -3361,6 +3397,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": true,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.5,
       "DifferentPixelNumberTolerance": 0.05,
       "FindBestImageMatch": false,
@@ -3463,6 +3500,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -3544,6 +3582,7 @@
       },
       "PagesRotation": 3,
       "AutoDeskew": true,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.03,
       "FindBestImageMatch": false,
@@ -3645,6 +3684,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -3731,6 +3771,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -3812,6 +3853,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -3904,6 +3946,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -3996,6 +4039,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -4082,6 +4126,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -4168,6 +4213,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -4259,6 +4305,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -4345,6 +4392,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -4426,6 +4474,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -4512,6 +4561,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -4613,6 +4663,7 @@
       },
       "PagesRotation": 1,
       "AutoDeskew": true,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.6,
       "DifferentPixelNumberTolerance": 0.04,
       "FindBestImageMatch": false,
@@ -4699,6 +4750,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -4800,6 +4852,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -4891,6 +4944,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -4992,6 +5046,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": true,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.44,
       "DifferentPixelNumberTolerance": 0.1,
       "FindBestImageMatch": false,
@@ -5083,6 +5138,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -5164,6 +5220,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -5265,6 +5322,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.04,
       "FindBestImageMatch": false,
@@ -5367,6 +5425,7 @@
       },
       "PagesRotation": 0,
       "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
       "BrightnessTolerance": 0.4,
       "DifferentPixelNumberTolerance": 0.01,
       "FindBestImageMatch": false,
@@ -5465,6 +5524,335 @@
       "Active": true,
       "TestFile": "D:\\_d\\_PROJECTS\\PdfDocumentParser\\_test_files\\SMS\\RentalInvoice_RI564147_2018-07-09.pdf",
       "TestPictureScale": 1.3
+    },
+    {
+      "Name": "Wesco2",
+      "FileFilterRegex": {
+        "Pattern": "\\.pdf$",
+        "Options": 1
+      },
+      "PagesRotation": 0,
+      "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
+      "BrightnessTolerance": 0.4,
+      "DifferentPixelNumberTolerance": 0.01,
+      "FindBestImageMatch": false,
+      "FloatingAnchors": [
+        {
+          "Id": 1,
+          "ValueType": 2,
+          "ValueAsString": "{\"ImageBoxs\":[{\"ImageData\":{\"Hash\":[[253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253],[253,255,255,246,238,255,255,255,255,255,255,255,255,255,255,255,255,255,255,253],[253,255,255,207,104,109,130,143,170,195,221,245,253,255,255,255,255,255,255,253],[253,255,255,255,247,223,210,180,155,135,118,120,113,134,158,185,213,228,255,253],[253,255,255,255,255,255,255,255,255,255,255,235,200,144,90,48,57,68,208,253],[253,255,255,255,254,246,223,196,166,144,118,109,112,124,148,172,198,217,254,253],[253,255,255,209,90,71,75,121,154,198,213,242,253,255,255,255,255,255,255,253],[253,255,255,229,163,138,125,117,134,132,152,168,192,217,225,247,255,255,255,253],[253,255,255,255,255,255,254,250,244,223,202,182,158,146,109,102,102,123,217,253],[253,255,255,255,255,255,255,254,249,230,211,183,156,136,116,99,102,123,218,253],[253,255,255,243,192,167,144,136,113,119,130,150,179,204,235,250,255,255,255,253],[253,255,255,207,106,130,150,178,185,208,228,230,220,217,213,210,217,218,248,253],[253,255,255,202,73,109,141,132,134,116,68,89,129,126,126,127,84,57,195,253],[253,255,255,198,52,154,255,255,255,221,58,134,255,255,255,255,117,53,194,253],[253,255,255,199,53,155,255,255,255,221,59,134,255,255,255,255,118,55,195,253],[253,255,255,199,53,154,255,255,255,220,57,131,255,255,255,255,117,54,195,253],[253,255,255,196,53,158,255,255,255,228,84,144,255,255,255,255,124,53,192,253],[253,255,255,243,162,131,156,158,157,146,169,240,255,191,152,154,121,168,251,253],[253,255,255,215,72,94,185,199,201,135,54,150,255,216,195,184,86,78,218,253],[253,255,255,176,51,187,255,255,255,227,66,87,247,255,255,255,144,49,157,253],[253,255,255,179,53,194,255,255,255,227,67,87,244,255,255,255,144,51,159,253],[253,255,255,177,50,195,255,255,255,224,61,88,244,255,255,255,143,48,159,253],[253,255,255,225,80,88,155,159,236,251,106,58,149,208,207,172,72,73,220,253],[253,255,255,255,250,192,128,122,204,241,223,154,125,119,121,132,174,244,255,253],[253,255,255,247,168,112,109,123,120,115,121,131,132,129,119,112,118,182,255,253],[253,255,255,186,47,136,243,249,252,251,251,251,251,251,250,237,102,50,183,253],[253,255,255,178,52,194,255,255,255,255,255,255,255,255,255,255,144,51,157,253],[253,255,255,180,53,193,255,255,255,255,255,255,255,255,255,255,143,51,160,253],[253,255,255,175,49,186,255,255,255,255,255,255,255,255,255,255,140,48,160,253],[253,255,255,219,83,91,162,161,204,255,255,255,250,192,176,152,80,81,222,253],[253,255,255,255,246,189,138,114,147,188,184,187,175,95,81,110,192,245,255,253],[253,255,255,233,122,95,132,138,131,124,125,125,126,139,141,130,89,138,245,253],[253,255,255,177,46,173,255,255,255,255,255,255,255,255,255,255,128,46,166,253],[253,255,255,179,53,193,255,255,255,255,255,255,255,255,255,255,144,51,159,253],[253,255,255,180,53,193,255,255,255,255,255,255,255,255,255,255,143,51,161,253],[253,255,255,175,49,188,255,255,255,255,255,255,255,255,255,255,143,47,156,253],[253,255,255,215,75,89,158,185,182,182,182,182,182,182,185,149,71,87,223,253],[253,255,255,255,237,170,146,125,125,125,125,125,126,125,126,154,190,245,255,253],[253,255,255,223,179,161,187,217,255,255,255,255,255,255,255,255,255,255,255,253],[253,255,255,246,220,197,215,244,255,255,255,255,255,255,255,255,255,255,255,253],[253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253]],\"Width\":41,\"Height\":20},\"Rectangle\":{\"X\":62.0,\"Y\":42.0,\"Width\":41.0,\"Height\":20.0}}]}"
+        },
+        {
+          "Id": 2,
+          "ValueType": 0,
+          "ValueAsString": "{\"CharBoxs\":[{\"Char\":\"P\",\"Rectangle\":{\"X\":503.198,\"Y\":63.74597,\"Width\":4.66900635,\"Height\":5.026001}},{\"Char\":\"a\",\"Rectangle\":{\"X\":507.867,\"Y\":63.74597,\"Width\":3.89199829,\"Height\":5.026001}},{\"Char\":\"g\",\"Rectangle\":{\"X\":511.759,\"Y\":63.74597,\"Width\":3.89199829,\"Height\":5.026001}},{\"Char\":\"e\",\"Rectangle\":{\"X\":515.651,\"Y\":63.74597,\"Width\":3.89202881,\"Height\":5.026001}},{\"Char\":\" \",\"Rectangle\":{\"X\":519.542969,\"Y\":63.74597,\"Width\":1.94598389,\"Height\":5.026001}},{\"Char\":\"1\",\"Rectangle\":{\"X\":521.487,\"Y\":63.74597,\"Width\":3.89202881,\"Height\":5.026001}},{\"Char\":\" \",\"Rectangle\":{\"X\":525.38,\"Y\":63.74597,\"Width\":1.94598389,\"Height\":5.026001}},{\"Char\":\"o\",\"Rectangle\":{\"X\":527.326,\"Y\":63.74597,\"Width\":3.89202881,\"Height\":5.026001}},{\"Char\":\"f\",\"Rectangle\":{\"X\":531.218,\"Y\":63.74597,\"Width\":1.94598389,\"Height\":5.026001}},{\"Char\":\" \",\"Rectangle\":{\"X\":533.164,\"Y\":63.74597,\"Width\":1.94598389,\"Height\":5.026001}},{\"Char\":\"1\",\"Rectangle\":{\"X\":535.11,\"Y\":63.74597,\"Width\":3.89202881,\"Height\":5.026001}}]}"
+        },
+        {
+          "Id": 3,
+          "ValueType": 0,
+          "ValueAsString": "{\"CharBoxs\":[{\"Char\":\"I\",\"Rectangle\":{\"X\":509.116,\"Y\":37.70703,\"Width\":1.66799927,\"Height\":4.3079834}},{\"Char\":\"N\",\"Rectangle\":{\"X\":510.784,\"Y\":37.70703,\"Width\":4.33197,\"Height\":4.3079834}},{\"Char\":\"V\",\"Rectangle\":{\"X\":515.115967,\"Y\":37.70703,\"Width\":4.002014,\"Height\":4.3079834}},{\"Char\":\"O\",\"Rectangle\":{\"X\":519.118,\"Y\":37.70703,\"Width\":4.66803,\"Height\":4.3079834}},{\"Char\":\"I\",\"Rectangle\":{\"X\":523.786,\"Y\":37.70703,\"Width\":1.66802979,\"Height\":4.3079834}},{\"Char\":\"C\",\"Rectangle\":{\"X\":525.454,\"Y\":37.70703,\"Width\":4.33197,\"Height\":4.3079834}},{\"Char\":\"E\",\"Rectangle\":{\"X\":529.786,\"Y\":37.70703,\"Width\":4.002014,\"Height\":4.3079834}},{\"Char\":\" \",\"Rectangle\":{\"X\":533.787964,\"Y\":37.70703,\"Width\":1.66802979,\"Height\":4.3079834}},{\"Char\":\"N\",\"Rectangle\":{\"X\":535.456,\"Y\":37.70703,\"Width\":4.33197,\"Height\":4.3079834}},{\"Char\":\"U\",\"Rectangle\":{\"X\":539.787964,\"Y\":37.70703,\"Width\":4.33197,\"Height\":4.3079834}},{\"Char\":\"M\",\"Rectangle\":{\"X\":544.12,\"Y\":37.70703,\"Width\":4.997986,\"Height\":4.3079834}},{\"Char\":\"B\",\"Rectangle\":{\"X\":549.118,\"Y\":37.70703,\"Width\":4.33197,\"Height\":4.3079834}},{\"Char\":\"E\",\"Rectangle\":{\"X\":553.45,\"Y\":37.70703,\"Width\":4.002014,\"Height\":4.3079834}},{\"Char\":\"R\",\"Rectangle\":{\"X\":557.452,\"Y\":37.70703,\"Width\":4.33197,\"Height\":4.3079834}}]}"
+        },
+        {
+          "Id": 4,
+          "ValueType": 0,
+          "ValueAsString": "{\"CharBoxs\":[{\"Char\":\"C\",\"Rectangle\":{\"X\":235.236,\"Y\":37.70703,\"Width\":4.33200073,\"Height\":4.3079834}},{\"Char\":\"U\",\"Rectangle\":{\"X\":239.568,\"Y\":37.70703,\"Width\":4.33200073,\"Height\":4.3079834}},{\"Char\":\"S\",\"Rectangle\":{\"X\":243.9,\"Y\":37.70703,\"Width\":4.001999,\"Height\":4.3079834}},{\"Char\":\"T\",\"Rectangle\":{\"X\":247.902,\"Y\":37.70703,\"Width\":3.66600037,\"Height\":4.3079834}},{\"Char\":\"O\",\"Rectangle\":{\"X\":251.568,\"Y\":37.70703,\"Width\":4.66799927,\"Height\":4.3079834}},{\"Char\":\"M\",\"Rectangle\":{\"X\":256.236,\"Y\":37.70703,\"Width\":4.997986,\"Height\":4.3079834}},{\"Char\":\"E\",\"Rectangle\":{\"X\":261.234,\"Y\":37.70703,\"Width\":4.002014,\"Height\":4.3079834}},{\"Char\":\"R\",\"Rectangle\":{\"X\":265.236,\"Y\":37.70703,\"Width\":4.33200073,\"Height\":4.3079834}},{\"Char\":\" \",\"Rectangle\":{\"X\":269.568,\"Y\":37.70703,\"Width\":1.66799927,\"Height\":4.3079834}},{\"Char\":\"N\",\"Rectangle\":{\"X\":271.236,\"Y\":37.70703,\"Width\":4.33200073,\"Height\":4.3079834}},{\"Char\":\"U\",\"Rectangle\":{\"X\":275.568,\"Y\":37.70703,\"Width\":4.33200073,\"Height\":4.3079834}},{\"Char\":\"M\",\"Rectangle\":{\"X\":279.9,\"Y\":37.70703,\"Width\":4.997986,\"Height\":4.3079834}},{\"Char\":\"B\",\"Rectangle\":{\"X\":284.898,\"Y\":37.70703,\"Width\":4.33200073,\"Height\":4.3079834}},{\"Char\":\"E\",\"Rectangle\":{\"X\":289.22998,\"Y\":37.70703,\"Width\":4.002014,\"Height\":4.3079834}},{\"Char\":\"R\",\"Rectangle\":{\"X\":293.232,\"Y\":37.70703,\"Width\":4.33200073,\"Height\":4.3079834}}]}"
+        },
+        {
+          "Id": 5,
+          "ValueType": 0,
+          "ValueAsString": "{\"CharBoxs\":[{\"Char\":\"C\",\"Rectangle\":{\"X\":336.469,\"Y\":53.9390259,\"Width\":4.33200073,\"Height\":4.3079834}},{\"Char\":\"U\",\"Rectangle\":{\"X\":340.801,\"Y\":53.9390259,\"Width\":4.33200073,\"Height\":4.3079834}},{\"Char\":\"S\",\"Rectangle\":{\"X\":345.133,\"Y\":53.9390259,\"Width\":4.002014,\"Height\":4.3079834}},{\"Char\":\"T\",\"Rectangle\":{\"X\":349.134979,\"Y\":53.9390259,\"Width\":3.665985,\"Height\":4.3079834}},{\"Char\":\"O\",\"Rectangle\":{\"X\":352.801,\"Y\":53.9390259,\"Width\":4.66799927,\"Height\":4.3079834}},{\"Char\":\"M\",\"Rectangle\":{\"X\":357.469,\"Y\":53.9390259,\"Width\":4.997986,\"Height\":4.3079834}},{\"Char\":\"E\",\"Rectangle\":{\"X\":362.46698,\"Y\":53.9390259,\"Width\":4.002014,\"Height\":4.3079834}},{\"Char\":\"R\",\"Rectangle\":{\"X\":366.469,\"Y\":53.9390259,\"Width\":4.33200073,\"Height\":4.3079834}},{\"Char\":\" \",\"Rectangle\":{\"X\":370.801,\"Y\":53.9390259,\"Width\":1.66799927,\"Height\":4.3079834}},{\"Char\":\"O\",\"Rectangle\":{\"X\":372.469,\"Y\":53.9390259,\"Width\":4.66799927,\"Height\":4.3079834}},{\"Char\":\"R\",\"Rectangle\":{\"X\":377.137,\"Y\":53.9390259,\"Width\":4.33200073,\"Height\":4.3079834}},{\"Char\":\"D\",\"Rectangle\":{\"X\":381.469,\"Y\":53.9390259,\"Width\":4.33200073,\"Height\":4.3079834}},{\"Char\":\"E\",\"Rectangle\":{\"X\":385.801,\"Y\":53.9390259,\"Width\":4.002014,\"Height\":4.3079834}},{\"Char\":\"R\",\"Rectangle\":{\"X\":389.802979,\"Y\":53.9390259,\"Width\":4.33200073,\"Height\":4.3079834}},{\"Char\":\" \",\"Rectangle\":{\"X\":394.135,\"Y\":53.9390259,\"Width\":1.66799927,\"Height\":4.3079834}},{\"Char\":\"N\",\"Rectangle\":{\"X\":395.802979,\"Y\":53.9390259,\"Width\":4.33200073,\"Height\":4.3079834}},{\"Char\":\"U\",\"Rectangle\":{\"X\":400.135,\"Y\":53.9390259,\"Width\":4.33200073,\"Height\":4.3079834}},{\"Char\":\"M\",\"Rectangle\":{\"X\":404.46698,\"Y\":53.9390259,\"Width\":4.997986,\"Height\":4.3079834}},{\"Char\":\"B\",\"Rectangle\":{\"X\":409.465,\"Y\":53.9390259,\"Width\":4.33200073,\"Height\":4.3079834}},{\"Char\":\"E\",\"Rectangle\":{\"X\":413.797,\"Y\":53.9390259,\"Width\":4.002014,\"Height\":4.3079834}},{\"Char\":\"R\",\"Rectangle\":{\"X\":417.799,\"Y\":53.9390259,\"Width\":4.33200073,\"Height\":4.3079834}}]}"
+        },
+        {
+          "Id": 6,
+          "ValueType": 0,
+          "ValueAsString": "{\"CharBoxs\":[{\"Char\":\"T\",\"Rectangle\":{\"X\":458.901,\"Y\":476.402985,\"Width\":3.665985,\"Height\":4.308014}},{\"Char\":\"O\",\"Rectangle\":{\"X\":462.567,\"Y\":476.402985,\"Width\":4.66799927,\"Height\":4.308014}},{\"Char\":\"T\",\"Rectangle\":{\"X\":467.235,\"Y\":476.402985,\"Width\":3.665985,\"Height\":4.308014}},{\"Char\":\"A\",\"Rectangle\":{\"X\":470.901,\"Y\":476.402985,\"Width\":4.33200073,\"Height\":4.308014}},{\"Char\":\"L\",\"Rectangle\":{\"X\":475.233,\"Y\":476.402985,\"Width\":3.665985,\"Height\":4.308014}}]}"
+        }
+      ],
+      "DocumentFirstPageRecognitionMarks": [
+        {
+          "FloatingAnchorId": 1,
+          "Rectangle": null,
+          "ValueType": 0,
+          "ValueAsString": null
+        },
+        {
+          "FloatingAnchorId": 2,
+          "Rectangle": null,
+          "ValueType": 0,
+          "ValueAsString": null
+        }
+      ],
+      "Fields": [
+        {
+          "FloatingAnchorId": 3,
+          "Name": "INVOICE#",
+          "Rectangle": {
+            "X": -17.1159973,
+            "Y": 4.29296875,
+            "Width": 87.0,
+            "Height": 11.0
+          },
+          "ValueType": 0
+        },
+        {
+          "FloatingAnchorId": 4,
+          "Name": "JOB#",
+          "Rectangle": {
+            "X": -25.2359924,
+            "Y": 2.29296875,
+            "Width": 110.0,
+            "Height": 13.0
+          },
+          "ValueType": 0
+        },
+        {
+          "FloatingAnchorId": 5,
+          "Name": "PO#",
+          "Rectangle": {
+            "X": -41.4689941,
+            "Y": 6.060974,
+            "Width": 170.0,
+            "Height": 12.0
+          },
+          "ValueType": 0
+        },
+        {
+          "FloatingAnchorId": 6,
+          "Name": "COST",
+          "Rectangle": {
+            "X": 26.098999,
+            "Y": -6.40298462,
+            "Width": 96.0,
+            "Height": 22.0
+          },
+          "ValueType": 0
+        }
+      ],
+      "Active": true,
+      "TestFile": "D:\\_d\\_PROJECTS\\PdfDocumentParser\\_test\\753949182_Attachment.pdf",
+      "TestPictureScale": 1.3
+    },
+    {
+      "Name": "Graybar2",
+      "FileFilterRegex": {
+        "Pattern": "\\.pdf$",
+        "Options": 1
+      },
+      "PagesRotation": 0,
+      "AutoDeskew": false,
+      "AutoDeskewThreshold": 100,
+      "BrightnessTolerance": 0.4,
+      "DifferentPixelNumberTolerance": 0.01,
+      "FindBestImageMatch": false,
+      "FloatingAnchors": [
+        {
+          "Id": 1,
+          "ValueType": 2,
+          "ValueAsString": "{\"ImageBoxs\":[{\"ImageData\":{\"Hash\":[[253,253,253,253,253,253,223,32,0,0,0,0,0,0,0,0,0,0,0,0,0,2,182,253,253,253,253,253,253],[253,255,255,255,255,248,53,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,22,224,255,255,255,255,253],[253,255,255,255,255,114,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,79,255,255,255,255,253],[253,255,255,255,214,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,195,255,255,255,253],[253,255,255,255,121,0,0,0,0,0,0,0,3,12,11,12,3,0,0,0,0,0,0,0,99,255,255,255,253],[253,255,255,255,45,0,0,0,0,29,112,177,198,234,231,234,198,177,112,29,0,0,0,0,32,248,255,255,253],[253,255,255,217,4,0,0,0,120,249,255,255,255,255,255,255,255,255,255,249,120,0,0,0,0,210,255,255,253],[253,255,255,200,0,0,0,123,255,255,255,255,255,255,255,255,255,255,255,255,255,112,0,0,0,189,255,255,253],[253,255,255,154,0,0,27,241,255,255,255,255,255,255,255,255,255,255,255,255,255,230,19,0,0,152,255,255,253],[253,255,255,152,0,0,77,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,76,0,0,152,255,255,253],[253,255,255,155,0,0,132,255,255,255,255,255,255,240,145,136,170,255,255,255,255,255,76,0,0,152,255,255,253],[253,255,255,202,0,0,109,255,255,255,255,255,255,221,3,0,60,255,255,255,255,255,76,0,0,178,255,255,253],[253,255,255,238,21,0,62,255,255,255,255,255,255,221,3,0,60,255,255,255,255,254,47,0,0,211,255,255,253],[253,255,255,255,89,0,0,186,255,255,255,255,255,221,3,0,14,155,179,174,179,87,0,0,45,254,255,255,253],[253,255,255,255,192,0,0,41,237,255,255,255,255,221,3,0,0,0,0,0,0,0,0,0,116,255,255,255,253],[253,255,255,255,255,89,0,0,29,173,254,255,255,221,3,0,0,0,0,0,0,0,0,17,219,255,255,255,253],[253,255,255,254,97,7,0,0,0,0,32,68,188,235,3,0,0,0,0,0,0,0,0,59,240,255,255,255,253],[253,255,255,249,30,0,0,0,0,0,0,0,146,242,3,0,0,0,0,0,0,0,0,0,41,251,255,255,253],[253,255,255,249,30,0,0,0,0,0,0,0,146,242,3,0,0,0,0,0,0,0,0,0,30,249,255,255,253],[253,255,255,251,101,74,80,80,80,80,80,66,184,235,3,0,0,0,0,0,0,0,0,0,30,249,255,255,253],[253,255,255,255,255,255,255,255,255,255,255,255,255,221,3,0,22,191,213,207,207,207,210,210,215,254,255,255,253],[253,255,255,255,255,255,255,255,255,255,252,250,255,221,3,0,60,255,255,255,255,255,255,255,255,255,255,255,253],[253,255,255,255,255,255,255,255,255,255,102,2,110,236,14,0,68,255,255,255,255,255,99,2,104,255,255,255,253],[253,255,255,255,255,255,255,255,255,255,80,0,75,255,247,245,248,255,255,255,255,255,73,0,82,255,255,255,253],[253,255,255,255,255,255,255,255,255,255,80,0,12,159,200,194,191,184,184,184,191,156,12,0,82,255,255,255,253],[253,255,255,255,255,255,255,255,255,255,80,0,0,0,0,0,0,0,0,0,0,0,0,0,82,255,255,255,253],[253,255,255,255,255,255,255,255,255,255,80,0,0,0,0,0,0,0,0,0,0,0,0,0,82,255,255,255,253],[253,255,255,255,255,255,255,255,255,255,80,0,0,0,0,0,0,0,0,0,0,0,0,0,82,255,255,255,253],[253,255,255,255,255,255,255,255,255,255,80,0,0,0,0,0,0,0,0,0,0,0,0,0,82,255,255,255,253],[253,255,255,255,255,255,255,255,255,255,79,0,4,0,0,0,0,0,0,0,0,0,0,0,82,255,255,255,253],[253,255,255,255,255,255,255,255,255,255,224,159,20,27,123,131,128,128,128,128,132,115,10,0,82,255,255,255,253],[253,255,255,255,255,255,255,255,255,255,214,19,66,253,255,255,255,255,255,255,255,255,74,0,82,255,255,255,253],[253,255,255,255,255,255,255,255,255,255,57,0,221,192,170,243,255,255,255,255,255,255,76,0,82,255,255,255,253],[253,255,255,255,255,255,255,255,255,212,0,31,114,0,0,96,255,255,255,255,255,255,226,207,226,255,255,255,253],[253,255,255,255,255,255,255,255,255,205,0,8,16,0,0,14,232,255,255,255,255,255,255,255,255,255,255,255,253],[253,255,255,255,255,255,255,255,255,236,21,0,0,0,0,8,228,255,255,255,255,255,255,255,255,255,255,255,253],[253,255,255,255,255,255,255,255,255,255,125,0,0,0,0,55,255,255,255,255,255,255,255,255,255,255,255,255,253],[253,255,255,255,255,255,255,255,255,255,255,137,10,0,28,215,255,255,238,120,56,54,98,210,255,255,255,255,253],[253,255,255,255,255,255,255,255,255,255,255,197,15,0,8,188,255,255,58,0,0,0,0,12,203,255,255,255,253],[253,255,255,255,255,255,255,255,255,255,235,29,0,0,0,54,255,174,0,0,0,0,0,0,72,255,255,255,253],[253,255,255,255,255,255,255,255,255,255,147,0,0,0,0,9,243,96,0,0,0,0,0,0,7,221,255,255,253],[253,255,255,255,255,255,255,255,255,255,65,0,51,0,0,23,229,42,0,0,0,0,0,0,0,207,255,255,253],[253,255,255,255,255,255,255,255,255,248,19,40,171,0,0,106,249,19,0,7,23,11,0,0,0,207,255,255,253],[253,255,255,255,255,255,255,255,255,215,0,64,255,168,138,255,201,0,0,165,255,206,14,0,0,207,255,255,253],[253,255,255,255,255,255,255,255,255,205,0,65,255,255,255,255,161,0,75,255,255,255,76,0,15,231,255,255,253],[253,255,255,255,255,255,255,255,255,205,0,21,238,255,255,255,99,0,174,255,255,255,58,0,96,255,255,255,253],[253,255,255,255,255,255,255,255,255,205,0,0,121,255,255,218,8,25,245,255,255,169,0,13,215,255,255,255,253],[253,255,255,255,255,255,255,255,255,205,0,0,0,46,84,24,0,23,84,82,47,0,0,157,255,255,255,255,253],[253,255,255,255,255,255,255,255,255,236,19,0,0,0,0,0,0,0,0,0,0,0,0,10,180,255,255,255,253],[253,255,255,255,255,255,255,255,255,255,56,0,0,0,0,0,0,0,0,0,0,0,0,0,54,255,255,255,253],[253,255,255,255,255,255,255,255,255,255,146,0,0,0,0,0,0,0,0,0,0,0,0,0,0,208,255,255,253],[253,255,255,255,255,255,255,255,255,255,255,97,0,0,0,0,0,0,0,0,0,0,0,0,0,207,255,255,253],[253,255,255,255,255,255,255,255,255,255,192,137,63,62,47,50,50,50,50,50,53,33,0,0,0,210,238,167,183],[253,255,255,255,255,255,255,255,255,255,80,0,78,255,255,255,255,255,255,255,255,255,66,0,15,155,21,0,0],[253,255,255,255,255,255,255,255,255,255,80,0,13,192,255,255,255,255,255,219,178,121,12,0,53,63,0,0,0],[253,255,255,255,255,255,255,255,255,255,80,0,0,0,73,199,255,255,255,105,0,0,0,7,155,34,0,0,0],[253,255,255,255,255,255,255,255,255,255,80,0,0,0,0,0,73,200,255,164,72,96,148,214,255,52,0,0,0],[253,255,255,255,255,255,255,255,255,255,80,0,0,0,0,0,0,1,53,182,255,255,255,255,255,165,0,0,64],[253,255,255,255,255,255,255,255,255,255,80,0,0,0,0,0,0,0,0,0,48,174,254,255,255,255,224,230,249],[253,255,255,255,255,255,255,255,255,255,80,0,0,0,0,0,0,0,0,0,0,0,48,173,254,255,255,251,111],[253,255,255,255,255,255,255,255,255,255,80,0,9,58,9,0,0,0,0,0,0,0,0,0,53,166,113,18,0],[253,255,255,255,255,255,255,255,255,255,80,0,66,255,218,114,12,0,0,0,0,0,0,0,0,0,0,0,0],[253,255,255,255,255,255,255,255,255,255,102,2,101,255,255,255,229,113,11,0,0,0,0,0,0,0,0,0,23],[253,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,228,59,0,0,0,0,0,0,0,96,230],[253,255,255,255,255,255,255,255,255,255,145,73,144,255,255,255,245,163,67,8,0,0,0,0,1,84,210,255,253],[253,255,255,255,255,255,255,255,255,255,80,0,67,255,232,125,32,0,0,0,0,0,13,114,212,255,255,255,253],[253,255,255,255,255,255,255,255,255,255,80,0,10,65,16,0,0,0,0,0,30,143,230,255,255,255,255,255,253],[253,255,255,255,255,255,255,255,255,255,80,0,0,0,0,0,0,0,52,156,243,255,255,255,255,255,255,255,253],[253,255,255,255,234,220,233,255,255,255,80,0,0,0,0,2,66,175,254,255,255,255,255,255,255,255,255,255,253],[253,255,255,255,85,0,80,255,255,255,80,0,0,11,91,201,255,255,255,255,255,255,255,255,255,255,255,255,253],[253,255,255,255,82,0,75,255,255,255,80,0,28,229,255,255,255,255,255,255,255,255,255,255,255,255,255,255,253],[253,255,255,255,82,0,16,171,205,210,62,0,64,220,199,198,198,198,198,198,198,198,198,194,216,255,255,255,253],[253,255,255,255,82,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,82,255,255,255,253],[253,255,255,255,82,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,82,255,255,255,253],[253,255,255,255,82,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,82,255,255,255,253],[253,255,255,255,82,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,119,255,255,255,253],[253,255,255,255,82,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,180,255,255,255,255,253],[253,255,255,255,163,109,119,119,119,118,131,73,0,4,56,113,121,119,120,121,64,2,0,81,249,255,255,255,253],[253,253,253,253,253,253,253,253,253,253,235,38,0,163,253,253,253,253,253,253,253,181,13,0,119,253,253,253,253]],\"Width\":79,\"Height\":29},\"Rectangle\":{\"X\":17.0,\"Y\":51.0,\"Width\":79.0,\"Height\":29.0}}]}"
+        },
+        {
+          "Id": 2,
+          "ValueType": 0,
+          "ValueAsString": "{\"CharBoxs\":[{\"Char\":\"P\",\"Rectangle\":{\"X\":470.55,\"Y\":215.051453,\"Width\":4.752014,\"Height\":6.098572}},{\"Char\":\"a\",\"Rectangle\":{\"X\":475.302,\"Y\":215.051453,\"Width\":4.3039856,\"Height\":6.098572}},{\"Char\":\"g\",\"Rectangle\":{\"X\":479.606,\"Y\":215.051453,\"Width\":4.600006,\"Height\":6.098572}},{\"Char\":\"e\",\"Rectangle\":{\"X\":484.206,\"Y\":215.051453,\"Width\":4.3039856,\"Height\":6.098572}},{\"Char\":\" \",\"Rectangle\":{\"X\":488.509979,\"Y\":215.051453,\"Width\":2.223999,\"Height\":6.098572}},{\"Char\":\"1\",\"Rectangle\":{\"X\":492.534,\"Y\":215.051453,\"Width\":5.048004,\"Height\":6.098572}},{\"Char\":\" \",\"Rectangle\":{\"X\":497.582,\"Y\":215.051453,\"Width\":2.223999,\"Height\":6.098572}},{\"Char\":\" \",\"Rectangle\":{\"X\":501.606,\"Y\":215.051453,\"Width\":2.223999,\"Height\":6.098572}},{\"Char\":\" \",\"Rectangle\":{\"X\":505.63,\"Y\":215.051453,\"Width\":2.223999,\"Height\":6.098572}},{\"Char\":\"o\",\"Rectangle\":{\"X\":509.654,\"Y\":215.051453,\"Width\":4.59997559,\"Height\":6.098572}},{\"Char\":\"f\",\"Rectangle\":{\"X\":514.253967,\"Y\":215.051453,\"Width\":2.95202637,\"Height\":6.098572}},{\"Char\":\" \",\"Rectangle\":{\"X\":517.206,\"Y\":215.051453,\"Width\":2.223999,\"Height\":6.098572}},{\"Char\":\" \",\"Rectangle\":{\"X\":521.1,\"Y\":215.051453,\"Width\":2.223999,\"Height\":6.098572}},{\"Char\":\" \",\"Rectangle\":{\"X\":525.123962,\"Y\":215.051453,\"Width\":2.223999,\"Height\":6.098572}},{\"Char\":\"1\",\"Rectangle\":{\"X\":529.147949,\"Y\":215.051453,\"Width\":5.04797363,\"Height\":6.098572}}]}"
+        },
+        {
+          "Id": 3,
+          "ValueType": 0,
+          "ValueAsString": "{\"CharBoxs\":[{\"Char\":\"I\",\"Rectangle\":{\"X\":365.65,\"Y\":95.81,\"Width\":6.0,\"Height\":6.289978}},{\"Char\":\"n\",\"Rectangle\":{\"X\":371.65,\"Y\":95.81,\"Width\":6.0,\"Height\":6.289978}},{\"Char\":\"v\",\"Rectangle\":{\"X\":377.65,\"Y\":95.81,\"Width\":6.0,\"Height\":6.289978}},{\"Char\":\"o\",\"Rectangle\":{\"X\":383.65,\"Y\":95.81,\"Width\":6.0,\"Height\":6.289978}},{\"Char\":\"i\",\"Rectangle\":{\"X\":389.65,\"Y\":95.81,\"Width\":6.0,\"Height\":6.289978}},{\"Char\":\"c\",\"Rectangle\":{\"X\":395.65,\"Y\":95.81,\"Width\":6.0,\"Height\":6.289978}},{\"Char\":\"e\",\"Rectangle\":{\"X\":401.65,\"Y\":95.81,\"Width\":6.0,\"Height\":6.289978}},{\"Char\":\" \",\"Rectangle\":{\"X\":407.65,\"Y\":95.81,\"Width\":6.0,\"Height\":6.289978}},{\"Char\":\"N\",\"Rectangle\":{\"X\":413.65,\"Y\":95.81,\"Width\":6.0,\"Height\":6.289978}},{\"Char\":\"o\",\"Rectangle\":{\"X\":419.65,\"Y\":95.81,\"Width\":6.0,\"Height\":6.289978}},{\"Char\":\":\",\"Rectangle\":{\"X\":425.65,\"Y\":95.81,\"Width\":6.0,\"Height\":6.289978}}]}"
+        },
+        {
+          "Id": 4,
+          "ValueType": 0,
+          "ValueAsString": "{\"CharBoxs\":[{\"Char\":\"S\",\"Rectangle\":{\"X\":480.05,\"Y\":234.710022,\"Width\":6.0,\"Height\":6.289978}},{\"Char\":\"O\",\"Rectangle\":{\"X\":486.05,\"Y\":234.710022,\"Width\":6.0,\"Height\":6.289978}},{\"Char\":\"#\",\"Rectangle\":{\"X\":492.05,\"Y\":234.710022,\"Width\":6.0,\"Height\":6.289978}},{\"Char\":\":\",\"Rectangle\":{\"X\":498.05,\"Y\":234.710022,\"Width\":6.0,\"Height\":6.289978}}]}"
+        },
+        {
+          "Id": 5,
+          "ValueType": 0,
+          "ValueAsString": "{\"CharBoxs\":[{\"Char\":\"O\",\"Rectangle\":{\"X\":5.65,\"Y\":234.901428,\"Width\":6.048,\"Height\":6.098572}},{\"Char\":\"r\",\"Rectangle\":{\"X\":11.698,\"Y\":234.901428,\"Width\":2.80000019,\"Height\":6.098572}},{\"Char\":\"d\",\"Rectangle\":{\"X\":14.4979992,\"Y\":234.901428,\"Width\":4.60000038,\"Height\":6.098572}},{\"Char\":\"e\",\"Rectangle\":{\"X\":19.098,\"Y\":234.901428,\"Width\":4.304001,\"Height\":6.098572}},{\"Char\":\"r\",\"Rectangle\":{\"X\":23.4019985,\"Y\":234.901428,\"Width\":2.79999924,\"Height\":6.098572}},{\"Char\":\" \",\"Rectangle\":{\"X\":26.2019978,\"Y\":234.901428,\"Width\":2.224001,\"Height\":6.098572}},{\"Char\":\"N\",\"Rectangle\":{\"X\":30.2259979,\"Y\":234.901428,\"Width\":5.799999,\"Height\":6.098572}},{\"Char\":\"o\",\"Rectangle\":{\"X\":36.026,\"Y\":234.901428,\"Width\":4.59999847,\"Height\":6.098572}},{\"Char\":\":\",\"Rectangle\":{\"X\":40.626,\"Y\":234.901428,\"Width\":2.64799881,\"Height\":6.098572}},{\"Char\":\" \",\"Rectangle\":{\"X\":43.274,\"Y\":234.901428,\"Width\":2.223999,\"Height\":6.098572}}]}"
+        },
+        {
+          "Id": 6,
+          "ValueType": 0,
+          "ValueAsString": "{\"CharBoxs\":[{\"Char\":\"T\",\"Rectangle\":{\"X\":256.65,\"Y\":461.4514,\"Width\":5.048004,\"Height\":6.09860229}},{\"Char\":\"o\",\"Rectangle\":{\"X\":261.698,\"Y\":461.4514,\"Width\":4.600006,\"Height\":6.09860229}},{\"Char\":\"t\",\"Rectangle\":{\"X\":266.298,\"Y\":461.4514,\"Width\":2.95199585,\"Height\":6.09860229}},{\"Char\":\"a\",\"Rectangle\":{\"X\":269.25,\"Y\":461.4514,\"Width\":4.3039856,\"Height\":6.09860229}},{\"Char\":\"l\",\"Rectangle\":{\"X\":273.554,\"Y\":461.4514,\"Width\":1.95199585,\"Height\":6.09860229}},{\"Char\":\" \",\"Rectangle\":{\"X\":275.505981,\"Y\":461.4514,\"Width\":2.223999,\"Height\":6.09860229}},{\"Char\":\"D\",\"Rectangle\":{\"X\":279.53,\"Y\":461.4514,\"Width\":5.799988,\"Height\":6.09860229}},{\"Char\":\"u\",\"Rectangle\":{\"X\":285.33,\"Y\":461.4514,\"Width\":4.600006,\"Height\":6.09860229}},{\"Char\":\"e\",\"Rectangle\":{\"X\":289.93,\"Y\":461.4514,\"Width\":4.3039856,\"Height\":6.09860229}},{\"Char\":\":\",\"Rectangle\":{\"X\":294.234,\"Y\":461.4514,\"Width\":2.64801025,\"Height\":6.09860229}}]}"
+        }
+      ],
+      "DocumentFirstPageRecognitionMarks": [
+        {
+          "FloatingAnchorId": 1,
+          "Rectangle": {
+            "X": 226.0,
+            "Y": -1.0,
+            "Width": 69.0,
+            "Height": 20.0
+          },
+          "ValueType": 0,
+          "ValueAsString": "INVOICE"
+        },
+        {
+          "FloatingAnchorId": 2,
+          "Rectangle": null,
+          "ValueType": 0,
+          "ValueAsString": null
+        }
+      ],
+      "Fields": [
+        {
+          "FloatingAnchorId": 3,
+          "Name": "INVOICE#",
+          "Rectangle": {
+            "X": 64.3500061,
+            "Y": -5.80999756,
+            "Width": 93.0,
+            "Height": 16.0
+          },
+          "ValueType": 0
+        },
+        {
+          "FloatingAnchorId": 4,
+          "Name": "JOB#",
+          "Rectangle": {
+            "X": 24.9500122,
+            "Y": -4.710022,
+            "Width": 69.0,
+            "Height": 15.0
+          },
+          "ValueType": 0
+        },
+        {
+          "FloatingAnchorId": 5,
+          "Name": "PO#",
+          "Rectangle": {
+            "X": 37.35,
+            "Y": -5.901428,
+            "Width": 120.0,
+            "Height": 16.0
+          },
+          "ValueType": 0
+        },
+        {
+          "FloatingAnchorId": 6,
+          "Name": "COST",
+          "Rectangle": {
+            "X": 75.3500061,
+            "Y": -4.4513855,
+            "Width": 231.0,
+            "Height": 13.0
+          },
+          "ValueType": 0
+        }
+      ],
+      "Active": true,
+      "TestFile": "D:\\_d\\_PROJECTS\\PdfDocumentParser\\_test_files\\Graybar\\9304697566.PDF",
+      "TestPictureScale": 1.3
+    },
+    {
+      "Name": "Firetrol Protection_scan",
+      "FileFilterRegex": {
+        "Pattern": "\\.pdf$",
+        "Options": 1
+      },
+      "PagesRotation": 3,
+      "AutoDeskew": true,
+      "AutoDeskewThreshold": 100,
+      "BrightnessTolerance": 0.4,
+      "DifferentPixelNumberTolerance": 0.04,
+      "FindBestImageMatch": false,
+      "FloatingAnchors": [
+        {
+          "Id": 1,
+          "ValueType": 2,
+          "ValueAsString": "{\"ImageBoxs\":[{\"ImageData\":{\"Hash\":[[252,252,253,253,253,253,253,253,250,251],[253,255,218,228,234,234,233,227,246,253],[253,255,123,70,80,77,83,70,201,253],[253,255,198,243,230,198,249,241,252,251],[253,255,181,255,209,163,254,254,255,252],[253,255,177,205,252,247,255,255,255,251],[253,255,238,225,232,234,232,229,244,252],[253,255,127,77,93,86,83,68,163,253],[253,255,219,246,248,250,254,247,238,251],[253,255,173,150,156,159,155,141,179,253],[253,255,133,105,116,101,123,104,182,253],[253,255,186,255,250,101,188,255,255,252],[253,255,135,90,93,136,97,126,250,253],[253,255,236,111,139,255,247,101,148,253],[253,255,253,255,255,255,255,245,205,253],[253,255,162,141,153,152,150,136,189,253],[253,255,136,143,139,99,135,141,171,253],[253,255,209,255,246,182,255,251,213,251],[253,255,170,227,226,145,253,225,179,253],[253,255,203,192,255,254,254,173,199,253],[253,255,196,211,255,253,251,251,255,251],[253,255,172,245,255,255,255,254,255,253],[253,255,143,128,136,135,136,118,166,253],[253,255,156,156,164,162,167,154,194,253],[253,255,162,238,255,255,255,255,255,248],[253,255,198,221,255,255,255,255,255,247],[253,255,162,130,140,139,108,97,172,253],[253,255,146,146,169,121,165,160,197,253],[253,255,182,241,255,114,154,255,255,252],[253,255,164,71,84,140,112,109,239,253],[252,255,254,166,169,255,255,162,151,253],[252,255,252,255,246,212,237,255,241,248],[252,255,255,153,72,50,56,126,255,253],[253,255,190,133,214,227,212,124,177,253],[253,255,187,249,255,255,255,254,194,244],[253,255,177,230,255,255,255,246,188,247],[253,255,214,115,151,174,164,100,187,253],[253,255,255,216,110,63,94,179,255,253],[253,255,224,225,233,216,230,226,206,248],[253,255,152,76,107,105,103,91,121,253],[253,255,236,236,243,241,241,240,223,247],[252,255,254,255,255,255,255,255,199,244],[252,255,252,252,252,251,253,211,147,247],[253,255,255,255,255,255,255,229,245,253],[252,252,251,250,250,250,252,252,253,252]],\"Width\":45,\"Height\":10},\"Rectangle\":{\"X\":100.0,\"Y\":98.0,\"Width\":45.0,\"Height\":10.0}}]}"
+        },
+        {
+          "Id": 2,
+          "ValueType": 2,
+          "ValueAsString": "{\"ImageBoxs\":[{\"ImageData\":{\"Hash\":[[252,251,248,251,250,252,251,253,252],[253,255,255,255,255,255,255,255,253],[253,251,214,213,219,213,218,254,251],[253,193,88,111,69,88,106,240,253],[253,190,191,255,148,225,250,255,253],[253,186,175,255,143,226,255,255,252],[253,226,106,130,132,254,255,255,250],[252,255,216,187,243,246,238,255,250],[253,255,255,170,185,132,104,233,253],[253,255,239,135,200,149,155,191,253],[253,255,244,129,115,112,113,233,253],[252,255,255,213,129,120,150,237,253],[252,255,255,182,140,142,176,164,164],[252,255,250,136,234,255,140,161,110],[252,255,255,132,157,181,102,126,146],[252,255,255,204,142,130,129,154,243],[252,255,255,222,130,124,172,255,252],[252,255,255,127,127,148,128,207,253],[253,255,249,133,180,195,171,186,253],[252,255,255,195,87,174,146,237,253],[252,255,255,255,235,240,249,255,250],[252,255,255,255,255,255,255,255,252],[253,255,251,241,252,254,251,255,252],[252,255,201,139,255,255,255,255,251],[253,243,82,100,120,126,126,226,253],[253,248,200,210,186,182,179,237,253],[252,255,255,255,255,255,255,255,248],[252,255,255,255,255,255,254,255,251],[252,255,254,255,227,201,244,255,251],[252,255,255,200,100,95,116,242,253],[252,255,255,126,217,255,152,156,253],[252,255,255,158,156,214,128,198,253],[252,255,255,234,155,127,178,255,250],[253,250,140,76,127,151,144,228,253],[253,203,123,161,192,225,218,252,253],[253,241,240,253,253,253,253,251,251]],\"Width\":36,\"Height\":9},\"Rectangle\":{\"X\":692.0,\"Y\":41.0,\"Width\":36.0,\"Height\":9.0}}]}"
+        },
+        {
+          "Id": 3,
+          "ValueType": 2,
+          "ValueAsString": "{\"ImageBoxs\":[{\"ImageData\":{\"Hash\":[[252,252,252,252,252,252,252,252,252,252,252,252,252],[253,255,255,255,255,255,255,255,255,255,255,255,253],[252,255,255,255,255,255,255,255,255,255,254,255,252],[253,255,248,212,208,210,211,211,208,237,255,255,252],[253,255,242,141,120,124,126,128,122,201,255,255,252],[253,255,249,214,210,201,204,205,203,235,255,255,252],[252,255,247,74,31,101,97,92,83,193,255,255,252],[253,255,253,216,106,133,230,255,253,250,254,255,252],[253,255,251,255,255,161,72,173,255,253,254,255,252],[253,255,250,219,215,225,182,68,102,223,255,255,252],[253,255,246,107,70,76,98,102,59,181,255,255,252],[253,255,243,191,229,255,252,247,250,250,254,255,252],[253,255,251,130,87,139,216,255,255,255,254,255,252],[253,255,254,255,224,144,88,108,190,242,255,255,252],[251,255,253,255,255,255,249,150,38,167,255,255,252],[251,255,252,255,243,176,105,110,168,236,255,255,252],[252,255,251,139,88,115,187,252,255,253,254,255,252],[253,255,246,177,231,255,250,253,255,254,254,255,252],[251,255,255,250,142,94,76,102,193,255,254,255,252],[251,255,255,137,123,222,229,197,84,211,255,255,252],[252,255,234,104,242,255,255,255,176,128,255,255,252],[253,255,228,103,251,255,255,255,204,135,255,255,252],[253,255,255,118,148,249,250,230,97,186,255,255,252],[253,255,255,231,120,81,79,89,166,255,255,255,252],[252,255,253,255,255,232,221,242,255,254,254,255,252],[252,255,251,122,86,102,104,97,85,180,255,255,252],[252,255,247,191,193,183,174,186,185,208,255,255,252],[252,255,255,247,144,102,124,128,203,255,254,255,252],[253,255,255,137,103,209,237,183,85,197,255,255,252],[253,255,231,110,248,255,255,255,204,141,255,255,252],[253,255,236,100,241,255,250,255,192,140,255,255,252],[253,255,255,137,88,240,255,196,90,204,255,255,252],[250,255,255,249,182,243,255,193,201,255,254,255,252],[249,255,252,225,212,211,206,211,209,233,255,255,252],[252,255,246,92,100,96,66,112,77,129,255,255,252],[251,255,238,122,251,212,134,255,195,127,255,255,252],[251,255,240,141,253,214,117,255,198,132,255,255,252],[253,255,242,149,249,216,123,255,193,125,255,255,252],[253,255,248,201,250,243,225,255,223,192,255,255,252],[252,255,253,254,251,253,255,253,253,254,254,255,252],[250,255,254,255,255,255,255,254,253,253,254,255,252],[253,255,252,253,255,255,254,252,255,254,254,255,252],[253,255,253,137,87,120,111,109,101,169,255,255,252],[253,255,255,170,46,129,219,220,208,230,255,255,252],[253,255,255,255,229,116,97,218,255,254,254,255,252],[253,255,253,254,255,255,181,87,146,248,255,255,252],[253,255,255,158,93,110,146,95,6,139,255,255,252],[252,255,252,216,211,219,215,221,218,225,255,255,252],[253,255,250,255,224,145,125,166,242,255,254,255,252],[253,255,255,190,70,142,170,131,107,232,255,255,252],[253,255,255,123,203,255,255,255,176,133,255,255,252],[253,255,236,112,248,255,253,255,235,132,253,255,252],[252,255,255,114,178,255,255,255,176,149,255,255,252],[252,255,255,225,88,115,158,113,95,230,255,255,252],[252,255,252,255,229,156,148,164,234,255,254,255,252],[252,255,254,252,254,255,255,255,237,217,255,255,252],[252,255,254,254,253,254,255,255,216,187,255,255,252],[252,255,254,254,249,245,253,253,245,246,254,255,252],[252,255,254,255,234,172,253,255,212,163,255,255,252],[253,255,255,255,254,248,255,255,252,246,255,255,253],[252,252,252,252,253,253,253,252,251,253,252,252,252]],\"Width\":61,\"Height\":13},\"Rectangle\":{\"X\":538.0,\"Y\":136.0,\"Width\":61.0,\"Height\":13.0}}]}"
+        },
+        {
+          "Id": 4,
+          "ValueType": 2,
+          "ValueAsString": "{\"ImageBoxs\":[{\"ImageData\":{\"Hash\":[[252,252,252,252,252,252,252,252,252,252,252,252,252,252,252,252,252,252,252,252,252,252,252,252],[253,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,253],[253,255,227,217,219,223,217,215,237,255,254,254,254,254,254,253,253,254,253,253,254,254,255,252],[253,236,74,77,79,59,79,65,179,255,255,254,254,254,254,253,253,253,251,252,254,254,255,252],[253,228,116,245,222,110,254,248,248,254,255,253,255,255,254,254,255,255,255,255,255,255,255,252],[253,231,122,255,235,117,255,255,255,255,253,253,252,254,255,255,226,148,140,146,221,255,255,253],[253,255,104,156,133,123,255,254,253,255,253,254,252,253,255,202,73,121,167,136,67,191,255,253],[252,255,222,102,123,240,255,255,254,255,255,255,255,255,255,109,184,255,255,255,191,87,255,253],[252,255,232,226,229,223,214,210,229,255,255,253,255,255,245,114,236,255,251,255,238,101,255,253],[253,249,82,71,69,63,79,69,173,255,253,252,255,255,255,141,108,245,255,240,122,138,255,253],[253,240,109,244,199,135,255,251,254,255,254,252,255,255,255,243,127,214,255,189,116,244,255,252],[253,244,117,255,214,67,229,255,253,253,255,253,253,255,253,252,255,233,197,228,255,253,255,252],[253,252,96,198,143,99,83,164,247,255,251,253,253,254,255,253,144,74,89,92,125,244,255,253],[250,255,184,94,123,245,212,87,148,255,254,254,252,252,255,147,91,233,253,240,106,137,255,253],[249,255,255,255,255,246,254,252,238,252,255,255,255,254,255,104,214,255,255,255,233,98,255,253],[251,255,244,130,77,87,88,177,255,253,254,254,255,255,255,99,197,255,255,255,224,100,255,253],[252,255,119,107,217,222,190,73,188,255,255,255,252,255,255,162,64,199,241,223,100,157,255,253],[253,231,98,248,255,255,255,189,119,255,255,254,251,254,254,255,159,68,72,89,145,255,255,252],[253,233,114,252,255,254,255,204,119,255,253,254,251,254,255,250,247,224,194,223,236,238,255,252],[253,255,108,137,249,255,237,109,162,255,254,255,254,254,255,131,22,81,87,71,55,111,255,253],[251,255,234,110,85,85,78,147,255,254,253,253,255,255,255,211,93,103,211,249,235,235,255,253],[253,255,252,255,220,200,209,214,253,255,253,252,254,255,254,255,255,169,78,154,255,255,255,253],[253,255,254,253,255,255,217,66,158,255,255,254,253,252,252,246,241,254,208,95,82,210,255,253],[251,255,255,255,255,255,255,209,105,255,255,254,253,253,255,158,66,75,83,94,17,93,255,253],[253,255,140,115,94,81,85,74,162,255,253,254,255,255,255,236,222,225,221,220,230,240,255,252],[253,255,203,189,191,189,188,212,254,255,253,254,255,255,255,121,190,255,255,255,255,254,255,252],[252,255,204,179,189,192,193,170,216,255,253,254,254,255,255,119,164,245,234,230,223,229,255,253],[252,252,85,102,99,60,119,83,128,255,255,255,252,253,255,147,69,106,100,93,79,122,255,253],[253,250,125,253,232,126,255,213,138,255,254,255,253,254,255,146,157,244,232,232,236,240,255,253],[253,251,128,248,224,125,255,209,139,255,252,254,255,255,255,176,195,255,255,255,255,253,255,253],[253,250,124,248,229,136,255,206,130,255,254,253,254,255,254,249,232,222,231,224,223,229,255,253],[252,255,222,253,255,251,255,239,204,255,252,253,253,254,255,169,62,101,61,91,73,118,255,253],[251,255,255,215,135,113,150,227,255,253,254,253,254,254,255,152,169,253,106,236,241,237,255,253],[252,255,178,71,140,160,140,90,203,255,255,254,255,254,255,150,180,255,87,174,255,255,255,252],[253,255,105,215,255,255,255,198,115,255,255,255,255,255,255,144,133,221,85,73,124,238,255,253],[253,245,113,248,255,252,255,239,108,249,255,254,255,254,255,229,98,81,191,247,109,112,255,253],[253,255,140,121,243,255,239,115,144,255,253,252,254,254,252,253,250,241,255,255,245,183,248,253],[251,255,245,118,217,255,179,113,243,255,254,253,254,253,252,253,255,255,215,149,85,137,255,253],[253,255,203,240,253,253,253,255,254,254,253,253,253,255,255,252,194,112,84,66,206,255,255,252],[253,255,102,210,255,255,255,255,255,253,251,254,255,255,255,159,40,172,252,121,243,255,255,252],[253,255,110,119,148,142,144,144,190,255,253,254,255,255,255,225,153,114,112,85,237,255,255,252],[253,255,127,107,117,119,119,111,165,255,255,252,254,255,255,255,255,240,174,120,87,147,255,253],[253,255,132,223,255,255,255,255,255,255,254,253,253,254,254,255,255,255,255,255,230,161,247,253],[251,255,202,234,255,253,253,253,254,254,254,253,252,253,253,255,190,93,110,103,136,244,255,253],[252,255,253,255,255,252,251,252,253,254,254,254,253,254,255,195,86,193,228,220,133,104,255,253],[250,255,255,255,255,255,255,255,255,255,255,254,254,255,255,140,167,255,255,255,255,101,226,253],[253,255,236,230,229,224,225,227,234,253,253,255,255,253,255,150,162,255,255,255,250,103,233,253],[252,255,127,35,102,118,106,103,140,253,255,254,253,252,255,220,69,185,255,231,95,143,255,253],[253,255,229,110,101,219,255,255,255,254,254,252,252,254,255,255,209,211,255,224,169,251,255,252],[249,255,255,255,189,75,144,247,255,251,253,255,255,253,255,186,202,255,255,255,255,254,255,252],[251,255,245,243,255,226,98,61,192,255,253,254,255,253,255,142,171,255,255,255,255,255,255,252],[251,255,155,95,100,110,114,53,104,255,252,252,255,255,255,161,89,130,122,108,100,122,243,253],[251,255,242,244,241,235,243,255,249,253,254,254,255,253,255,157,132,219,212,188,177,211,255,253],[252,255,255,190,105,111,104,173,254,250,252,255,255,253,255,159,181,255,255,255,255,255,255,252],[253,255,186,84,182,212,196,88,154,255,254,252,254,254,255,236,234,255,254,253,255,254,255,252],[253,255,126,206,255,255,255,232,109,242,255,254,255,255,255,255,254,254,253,254,254,252,255,252],[253,255,133,227,255,253,255,253,135,231,255,255,253,252,253,255,255,233,247,241,240,255,255,252],[253,255,149,134,247,255,255,164,126,255,253,253,254,255,255,255,255,106,177,116,100,131,247,253],[252,255,250,127,81,97,83,102,232,255,254,252,254,254,255,217,121,50,85,64,119,192,255,253],[251,255,254,255,220,167,200,248,255,252,254,253,254,254,255,219,175,99,158,119,80,129,246,253],[252,255,254,254,255,255,255,241,174,247,255,253,255,255,255,220,120,46,89,79,128,202,255,253],[252,255,255,255,255,252,255,237,196,250,255,252,254,254,255,215,173,149,229,207,210,255,255,252],[253,255,254,245,211,248,255,243,220,250,255,255,255,255,253,253,255,213,238,255,253,190,247,253],[253,255,255,250,159,241,255,244,178,251,255,255,255,255,255,255,255,177,217,255,254,156,241,253],[253,253,253,252,253,253,252,251,252,252,253,253,253,251,251,253,252,252,252,252,252,253,251,253]],\"Width\":65,\"Height\":24},\"Rectangle\":{\"X\":539.0,\"Y\":83.0,\"Width\":65.0,\"Height\":24.0}}]}"
+        },
+        {
+          "Id": 5,
+          "ValueType": 2,
+          "ValueAsString": "{\"ImageBoxs\":[{\"ImageData\":{\"Hash\":[[253,252,252,252,253,253,252,252,252,253],[253,255,255,255,255,255,255,255,255,253],[253,247,176,162,167,171,163,167,243,253],[253,221,79,152,116,83,140,149,247,253],[253,210,132,255,223,132,255,255,255,252],[253,214,117,255,198,116,255,254,255,253],[253,255,104,101,82,197,255,254,255,252],[251,255,235,179,211,255,255,254,255,252],[251,255,255,171,124,121,156,245,255,252],[252,255,141,93,182,188,120,120,255,253],[253,222,102,250,255,255,255,134,200,253],[253,205,129,255,255,255,255,160,175,253],[253,247,99,224,255,255,249,111,208,253],[253,255,176,85,122,134,87,151,255,252],[253,255,255,225,160,142,205,254,255,252],[253,255,253,255,255,255,255,254,255,252],[253,255,255,253,254,254,253,255,255,252],[253,255,255,198,185,197,116,181,235,253],[252,255,200,94,66,77,63,139,235,253],[252,246,153,100,116,164,105,167,227,253],[253,255,188,99,77,77,73,143,235,253],[253,251,151,106,154,199,142,255,255,252],[251,255,255,244,243,252,243,248,255,253],[253,255,255,208,188,255,255,170,208,253],[253,253,253,248,240,250,252,240,245,252]],\"Width\":25,\"Height\":10},\"Rectangle\":{\"X\":578.0,\"Y\":108.0,\"Width\":25.0,\"Height\":10.0}}]}"
+        },
+        {
+          "Id": 6,
+          "ValueType": 2,
+          "ValueAsString": "{\"ImageBoxs\":[{\"ImageData\":{\"Hash\":[[252,252,253,253,253,253,253,253,251,251,252],[253,255,214,172,179,182,172,197,255,255,253],[253,251,79,66,64,52,70,118,255,255,252],[253,243,88,237,190,137,255,255,253,255,252],[253,255,71,173,121,139,255,254,253,255,252],[253,255,149,55,73,215,255,254,252,255,252],[252,255,252,244,248,239,162,132,251,255,252],[252,255,249,206,122,56,69,175,255,255,251],[253,255,97,40,155,116,156,255,255,255,251],[253,255,133,77,102,70,135,255,255,255,250],[253,255,255,242,175,113,70,118,248,255,251],[253,255,225,255,255,255,226,189,244,255,251],[253,255,102,116,239,255,255,254,252,255,251],[251,255,226,121,85,154,165,179,251,255,252],[251,255,255,197,55,91,104,133,249,255,253],[252,255,139,62,171,255,255,255,254,255,253],[253,254,178,244,255,255,255,255,254,255,253],[253,255,187,151,142,136,131,154,249,255,251],[253,255,63,25,86,106,104,134,250,255,252],[252,255,171,116,108,114,152,198,251,255,252],[253,255,255,245,170,70,13,78,251,255,253],[253,255,128,73,97,131,174,219,250,255,253],[253,255,80,42,87,90,63,99,250,255,253],[253,255,228,205,200,197,197,210,252,255,251],[253,255,198,173,182,177,168,196,244,255,253],[253,255,76,83,58,71,98,75,240,255,252],[253,255,124,225,145,152,238,93,241,255,250],[253,255,117,219,141,148,236,87,241,255,250],[253,255,130,227,207,206,239,139,243,255,251],[253,255,242,233,232,222,223,213,248,255,250],[253,255,120,45,82,92,81,92,236,255,251],[252,255,214,95,69,183,253,249,247,255,252],[250,255,255,255,173,77,120,229,255,255,250],[253,255,160,97,119,87,21,70,239,255,248],[251,255,170,119,129,156,163,174,248,255,251],[251,255,141,193,255,255,255,255,251,255,253],[253,255,112,122,190,180,176,173,240,255,252],[253,255,127,49,62,55,69,89,224,255,253],[253,255,106,166,255,249,250,253,250,255,252],[253,255,177,218,255,255,255,254,253,255,252],[252,255,255,254,254,254,253,253,252,255,252],[252,255,254,255,255,255,255,255,253,255,253],[253,255,205,140,130,144,162,166,242,255,251],[251,255,124,80,109,107,111,61,222,255,252],[253,255,123,183,255,255,255,100,216,255,251],[252,255,129,139,255,255,213,86,233,255,251],[251,255,217,81,89,100,61,159,255,255,252],[249,255,255,224,158,145,200,255,251,255,253],[253,255,141,75,97,102,86,152,255,255,252],[253,255,216,192,197,201,170,65,218,255,253],[252,255,254,255,255,255,255,101,168,255,253],[253,255,190,149,157,161,131,68,226,255,252],[253,255,166,95,105,117,131,209,255,255,251],[250,255,225,184,204,186,190,173,241,255,251],[251,255,132,92,100,70,92,52,218,255,251],[253,255,133,200,195,137,255,103,219,255,250],[253,255,127,195,184,144,255,102,220,255,251],[252,255,168,203,214,191,254,134,225,255,253],[251,255,252,251,252,255,251,249,248,255,253],[253,255,255,255,255,255,255,255,255,255,253],[252,252,252,252,252,252,252,253,253,252,252]],\"Width\":61,\"Height\":11},\"Rectangle\":{\"X\":39.0,\"Y\":388.0,\"Width\":61.0,\"Height\":11.0}}]}"
+        }
+      ],
+      "DocumentFirstPageRecognitionMarks": [
+        {
+          "FloatingAnchorId": 1,
+          "Rectangle": null,
+          "ValueType": 0,
+          "ValueAsString": null
+        },
+        {
+          "FloatingAnchorId": 2,
+          "Rectangle": null,
+          "ValueType": 0,
+          "ValueAsString": null
+        }
+      ],
+      "Fields": [
+        {
+          "FloatingAnchorId": 3,
+          "Name": "INVOICE#",
+          "Rectangle": {
+            "X": 64.0,
+            "Y": 0.0,
+            "Width": 69.0,
+            "Height": 13.0
+          },
+          "ValueType": 1
+        },
+        {
+          "FloatingAnchorId": 4,
+          "Name": "JOB#",
+          "Rectangle": {
+            "X": 68.0,
+            "Y": 13.0,
+            "Width": 81.0,
+            "Height": 12.0
+          },
+          "ValueType": 1
+        },
+        {
+          "FloatingAnchorId": 5,
+          "Name": "PO#",
+          "Rectangle": {
+            "X": 27.0,
+            "Y": -2.0,
+            "Width": 79.0,
+            "Height": 14.0
+          },
+          "ValueType": 1
+        },
+        {
+          "FloatingAnchorId": 6,
+          "Name": "COST",
+          "Rectangle": {
+            "X": 220.0,
+            "Y": -3.0,
+            "Width": 86.0,
+            "Height": 12.0
+          },
+          "ValueType": 1
+        }
+      ],
+      "Active": false,
+      "TestFile": "D:\\_d\\_PROJECTS\\PdfDocumentParser\\_test_files\\Firetrol Protection_scan.pdf",
+      "TestPictureScale": 1.6
     }
   ]
 }

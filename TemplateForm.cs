@@ -783,7 +783,6 @@ namespace Cliver.PdfDocumentParser
             if (pages == null)
                 return;
             pages.Clear();
-            pages.ActiveTemplate = getTemplateFromUI(false);
             showPage(currentPage);
         }
 
@@ -986,6 +985,7 @@ namespace Cliver.PdfDocumentParser
 
                 pageRotation.SelectedIndex = (int)t.PagesRotation;
                 autoDeskew.Checked = t.AutoDeskew;
+                AutoDeskewThreshold.Value = t.AutoDeskewThreshold;
                 findBestImageMatch.Checked = t.FindBestImageMatch;
                 brightnessTolerance.Value = (decimal)t.BrightnessTolerance;
                 differentPixelNumberTolerance.Value = (decimal)t.DifferentPixelNumberTolerance;
@@ -1318,6 +1318,7 @@ namespace Cliver.PdfDocumentParser
 
             t.PagesRotation = (Template.PageRotations)pageRotation.SelectedIndex;
             t.AutoDeskew = autoDeskew.Checked;
+            t.AutoDeskewThreshold = (int)AutoDeskewThreshold.Value;
             t.FindBestImageMatch = findBestImageMatch.Checked;
             t.BrightnessTolerance = (float)brightnessTolerance.Value;
             t.DifferentPixelNumberTolerance = (float)differentPixelNumberTolerance.Value;

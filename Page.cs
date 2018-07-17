@@ -155,7 +155,7 @@ namespace Cliver.PdfDocumentParser
                             //image.Negate();
                             //image.AdaptiveThreshold(10, 10, new ImageMagick.Percentage(20));
                             //image.Negate();
-                            image.Deskew(new ImageMagick.Percentage(10));
+                            image.Deskew(new ImageMagick.Percentage(pageCollection.ActiveTemplate.AutoDeskewThreshold));
                             //image.AutoThreshold(AutoThresholdMethod.OTSU);
                             //image.Despeckle();
                             //image.WhiteThreshold(new Percentage(20));

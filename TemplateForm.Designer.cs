@@ -87,6 +87,8 @@
             this.cancel = new System.Windows.Forms.Button();
             this.SaveAsInitialTemplate = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
+            this.AutoDeskewThreshold = new System.Windows.Forms.NumericUpDown();
+            this.label14 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -110,6 +112,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.fields)).BeginInit();
             this.panel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.AutoDeskewThreshold)).BeginInit();
             this.SuspendLayout();
             // 
             // picture
@@ -136,7 +139,7 @@
             // 
             this.splitContainer1.Panel2.AutoScroll = true;
             this.splitContainer1.Panel2.Controls.Add(this.picture);
-            this.splitContainer1.Size = new System.Drawing.Size(1080, 645);
+            this.splitContainer1.Size = new System.Drawing.Size(1080, 695);
             this.splitContainer1.SplitterDistance = 463;
             this.splitContainer1.TabIndex = 1;
             // 
@@ -176,14 +179,16 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.splitContainer3);
-            this.splitContainer2.Size = new System.Drawing.Size(443, 625);
-            this.splitContainer2.SplitterDistance = 401;
+            this.splitContainer2.Size = new System.Drawing.Size(443, 675);
+            this.splitContainer2.SplitterDistance = 433;
             this.splitContainer2.TabIndex = 32;
             // 
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.AutoDeskewThreshold);
+            this.groupBox1.Controls.Add(this.label14);
             this.groupBox1.Controls.Add(this.findBestImageMatch);
             this.groupBox1.Controls.Add(this.differentPixelNumberTolerance);
             this.groupBox1.Controls.Add(this.label13);
@@ -194,7 +199,7 @@
             this.groupBox1.Controls.Add(this.autoDeskew);
             this.groupBox1.Location = new System.Drawing.Point(0, 209);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(440, 82);
+            this.groupBox1.Size = new System.Drawing.Size(440, 99);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Scanned Document Settings";
@@ -202,7 +207,7 @@
             // findBestImageMatch
             // 
             this.findBestImageMatch.AutoSize = true;
-            this.findBestImageMatch.Location = new System.Drawing.Point(312, 25);
+            this.findBestImageMatch.Location = new System.Drawing.Point(224, 25);
             this.findBestImageMatch.Name = "findBestImageMatch";
             this.findBestImageMatch.Size = new System.Drawing.Size(135, 17);
             this.findBestImageMatch.TabIndex = 58;
@@ -217,7 +222,7 @@
             0,
             0,
             131072});
-            this.differentPixelNumberTolerance.Location = new System.Drawing.Point(345, 50);
+            this.differentPixelNumberTolerance.Location = new System.Drawing.Point(345, 73);
             this.differentPixelNumberTolerance.Maximum = new decimal(new int[] {
             1,
             0,
@@ -240,7 +245,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(173, 53);
+            this.label13.Location = new System.Drawing.Point(173, 76);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(163, 13);
             this.label13.TabIndex = 56;
@@ -254,7 +259,7 @@
             0,
             0,
             131072});
-            this.brightnessTolerance.Location = new System.Drawing.Point(112, 50);
+            this.brightnessTolerance.Location = new System.Drawing.Point(112, 73);
             this.brightnessTolerance.Maximum = new decimal(new int[] {
             1,
             0,
@@ -277,7 +282,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(1, 53);
+            this.label11.Location = new System.Drawing.Point(1, 76);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(110, 13);
             this.label11.TabIndex = 54;
@@ -309,7 +314,7 @@
             // autoDeskew
             // 
             this.autoDeskew.AutoSize = true;
-            this.autoDeskew.Location = new System.Drawing.Point(214, 25);
+            this.autoDeskew.Location = new System.Drawing.Point(4, 50);
             this.autoDeskew.Name = "autoDeskew";
             this.autoDeskew.Size = new System.Drawing.Size(88, 17);
             this.autoDeskew.TabIndex = 52;
@@ -335,11 +340,11 @@
             this.Id3,
             this.ValueType3,
             this.Body3});
-            this.floatingAnchors.Location = new System.Drawing.Point(0, 310);
+            this.floatingAnchors.Location = new System.Drawing.Point(0, 327);
             this.floatingAnchors.MultiSelect = false;
             this.floatingAnchors.Name = "floatingAnchors";
             this.floatingAnchors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.floatingAnchors.Size = new System.Drawing.Size(443, 72);
+            this.floatingAnchors.Size = new System.Drawing.Size(443, 87);
             this.floatingAnchors.TabIndex = 50;
             // 
             // Id3
@@ -367,7 +372,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(-2, 294);
+            this.label10.Location = new System.Drawing.Point(-2, 311);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(89, 13);
             this.label10.TabIndex = 49;
@@ -627,8 +632,8 @@
             this.splitContainer3.Panel2.Controls.Add(this.fields);
             this.splitContainer3.Panel2.Controls.Add(this.panel1);
             this.splitContainer3.Panel2.Controls.Add(this.label1);
-            this.splitContainer3.Size = new System.Drawing.Size(443, 220);
-            this.splitContainer3.SplitterDistance = 86;
+            this.splitContainer3.Size = new System.Drawing.Size(443, 238);
+            this.splitContainer3.SplitterDistance = 93;
             this.splitContainer3.TabIndex = 0;
             // 
             // documentFirstPageRecognitionMarks
@@ -644,7 +649,7 @@
             this.documentFirstPageRecognitionMarks.MultiSelect = false;
             this.documentFirstPageRecognitionMarks.Name = "documentFirstPageRecognitionMarks";
             this.documentFirstPageRecognitionMarks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.documentFirstPageRecognitionMarks.Size = new System.Drawing.Size(443, 73);
+            this.documentFirstPageRecognitionMarks.Size = new System.Drawing.Size(443, 80);
             this.documentFirstPageRecognitionMarks.TabIndex = 29;
             // 
             // FloatingAnchorId2
@@ -699,7 +704,7 @@
             this.fields.MultiSelect = false;
             this.fields.Name = "fields";
             this.fields.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.fields.Size = new System.Drawing.Size(443, 87);
+            this.fields.Size = new System.Drawing.Size(443, 98);
             this.fields.TabIndex = 30;
             // 
             // Name_
@@ -742,7 +747,7 @@
             this.panel1.Controls.Add(this.flowLayoutPanel1);
             this.panel1.Controls.Add(this.SaveAsInitialTemplate);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 100);
+            this.panel1.Location = new System.Drawing.Point(0, 111);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(443, 30);
             this.panel1.TabIndex = 1;
@@ -803,11 +808,37 @@
             this.label1.TabIndex = 29;
             this.label1.Text = "Fields:";
             // 
+            // AutoDeskewThreshold
+            // 
+            this.AutoDeskewThreshold.Location = new System.Drawing.Point(331, 48);
+            this.AutoDeskewThreshold.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.AutoDeskewThreshold.Name = "AutoDeskewThreshold";
+            this.AutoDeskewThreshold.Size = new System.Drawing.Size(69, 20);
+            this.AutoDeskewThreshold.TabIndex = 62;
+            this.AutoDeskewThreshold.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(204, 51);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(124, 13);
+            this.label14.TabIndex = 61;
+            this.label14.Text = "Auto-Deskew Threshold:";
+            // 
             // TemplateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1080, 645);
+            this.ClientSize = new System.Drawing.Size(1080, 695);
             this.Controls.Add(this.splitContainer1);
             this.Name = "TemplateForm";
             this.Text = "TemplateForm";
@@ -841,6 +872,7 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.flowLayoutPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.AutoDeskewThreshold)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -906,5 +938,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Body3;
         private System.Windows.Forms.LinkLabel SaveAsInitialTemplate;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.NumericUpDown AutoDeskewThreshold;
+        private System.Windows.Forms.Label label14;
     }
 }

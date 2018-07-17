@@ -36,6 +36,8 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.bResetTemplates = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.AutoDeskewThreshold = new System.Windows.Forms.NumericUpDown();
+            this.label3 = new System.Windows.Forms.Label();
             this.FindBestImageMatch = new System.Windows.Forms.CheckBox();
             this.DifferentPixelNumberTolerance = new System.Windows.Forms.NumericUpDown();
             this.label13 = new System.Windows.Forms.Label();
@@ -50,6 +52,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.PdfPageImageResolution)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.AutoDeskewThreshold)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DifferentPixelNumberTolerance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BrightnessTolerance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TestPictureScale)).BeginInit();
@@ -130,7 +133,7 @@
             this.flowLayoutPanel1.Controls.Add(this.bResetTemplates);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 306);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 353);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(353, 31);
             this.flowLayoutPanel1.TabIndex = 51;
@@ -149,6 +152,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.AutoDeskewThreshold);
+            this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.FindBestImageMatch);
             this.groupBox1.Controls.Add(this.DifferentPixelNumberTolerance);
             this.groupBox1.Controls.Add(this.label13);
@@ -156,10 +161,36 @@
             this.groupBox1.Controls.Add(this.label11);
             this.groupBox1.Location = new System.Drawing.Point(13, 171);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(328, 124);
+            this.groupBox1.Size = new System.Drawing.Size(328, 176);
             this.groupBox1.TabIndex = 54;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Image Comparison";
+            // 
+            // AutoDeskewThreshold
+            // 
+            this.AutoDeskewThreshold.Location = new System.Drawing.Point(234, 66);
+            this.AutoDeskewThreshold.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.AutoDeskewThreshold.Name = "AutoDeskewThreshold";
+            this.AutoDeskewThreshold.Size = new System.Drawing.Size(69, 20);
+            this.AutoDeskewThreshold.TabIndex = 60;
+            this.AutoDeskewThreshold.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(16, 68);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(124, 13);
+            this.label3.TabIndex = 59;
+            this.label3.Text = "Auto-Deskew Threshold:";
             // 
             // FindBestImageMatch
             // 
@@ -179,7 +210,7 @@
             0,
             0,
             131072});
-            this.DifferentPixelNumberTolerance.Location = new System.Drawing.Point(234, 89);
+            this.DifferentPixelNumberTolerance.Location = new System.Drawing.Point(234, 120);
             this.DifferentPixelNumberTolerance.Maximum = new decimal(new int[] {
             1,
             0,
@@ -202,7 +233,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(16, 91);
+            this.label13.Location = new System.Drawing.Point(16, 122);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(163, 13);
             this.label13.TabIndex = 56;
@@ -216,7 +247,7 @@
             0,
             0,
             131072});
-            this.BrightnessTolerance.Location = new System.Drawing.Point(234, 61);
+            this.BrightnessTolerance.Location = new System.Drawing.Point(234, 92);
             this.BrightnessTolerance.Maximum = new decimal(new int[] {
             1,
             0,
@@ -239,7 +270,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(16, 63);
+            this.label11.Location = new System.Drawing.Point(16, 94);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(110, 13);
             this.label11.TabIndex = 54;
@@ -342,7 +373,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(353, 337);
+            this.ClientSize = new System.Drawing.Size(353, 384);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.flowLayoutPanel1);
@@ -354,6 +385,7 @@
             this.flowLayoutPanel1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.AutoDeskewThreshold)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DifferentPixelNumberTolerance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.BrightnessTolerance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TestPictureScale)).EndInit();
@@ -387,5 +419,7 @@
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown CoordinateDeviationMargin;
+        private System.Windows.Forms.NumericUpDown AutoDeskewThreshold;
+        private System.Windows.Forms.Label label3;
     }
 }

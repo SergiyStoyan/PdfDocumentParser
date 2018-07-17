@@ -28,6 +28,8 @@ namespace Cliver.PdfDocumentParser
             public float DifferentPixelNumberTolerance = 0.01f;
             public bool FindBestImageMatch = false;
 
+            public int AutoDeskewThreshold = 100;
+
             public override void Loaded()
             {
                 _Image2PdfResolutionRatio = (float)72 / PdfPageImageResolution;//72 is resolution of the most pdf's

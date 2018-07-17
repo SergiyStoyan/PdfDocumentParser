@@ -94,22 +94,24 @@ namespace Cliver.PdfDocumentParser
                     //    {
                     //        do
                     //        {
-                                do
-                                {
-                                    //if (i.IsAtBeginningOf(PageIteratorLevel.Block))
-                                    //{
-                                    //}
-                                    //if (i.IsAtBeginningOf(PageIteratorLevel.Para))
-                                    //{
-                                    //}
-                                    //if (i.IsAtBeginningOf(PageIteratorLevel.TextLine))
-                                    //{
-                                    //}
-                                    //if (i.IsAtBeginningOf(PageIteratorLevel.Word))
-                                    //{
-                                    //}
+                    //            do
+                    //            {
+                    do
+                    {
+                        //if (i.IsAtBeginningOf(PageIteratorLevel.Block))
+                        //{
+                        //}
+                        //if (i.IsAtBeginningOf(PageIteratorLevel.Para))
+                        //{
+                        //}
+                        //if (i.IsAtBeginningOf(PageIteratorLevel.TextLine))
+                        //{
+                        //}
+                        //if (i.IsAtBeginningOf(PageIteratorLevel.Word))
+                        //{
+                        //}
 
-                                    Rect r;
+                        Rect r;
                         if (i.TryGetBoundingBox(PageIteratorLevel.Symbol, out r))
                             cbs.Add(new CharBox
                             {
@@ -117,11 +119,11 @@ namespace Cliver.PdfDocumentParser
                                 R = new RectangleF(r.X1 * Settings.ImageProcessing.Image2PdfResolutionRatio, r.Y1 * Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width * Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height * Settings.ImageProcessing.Image2PdfResolutionRatio)
                             });
                     } while (i.Next(PageIteratorLevel.Symbol));
-                //} while (i.Next(PageIteratorLevel.Word, PageIteratorLevel.Symbol)) ;
-                //        } while (i.Next(PageIteratorLevel.TextLine, PageIteratorLevel.Word));
-                //    } while (i.Next(PageIteratorLevel.Para, PageIteratorLevel.TextLine));
-                //} while (i.Next(PageIteratorLevel.Block, PageIteratorLevel.Para));
-            }
+                    //            } while (i.Next(PageIteratorLevel.Word, PageIteratorLevel.Symbol));
+                    //        } while (i.Next(PageIteratorLevel.TextLine, PageIteratorLevel.Word));
+                    //    } while (i.Next(PageIteratorLevel.Para, PageIteratorLevel.TextLine));
+                    //} while (i.Next(PageIteratorLevel.Block, PageIteratorLevel.Para));
+                }
             }
             return cbs;
         }
@@ -150,7 +152,7 @@ namespace Cliver.PdfDocumentParser
 
         public static List<CharBox> RemoveDuplicatesAndOrder(IEnumerable<CharBox> bts)
         {
-            List<CharBox> bs = bts.Where(a => a.R.Width >= 0 && a.R.Height >= 0).ToList();//some symbols are duplicated with negative width anf height
+            List<CharBox> bs = bts.Where(a => a.R.Width >= 0 && a.R.Height >= 0).ToList();//some symbols are duplicated with negative width and height
             for (int i = 0; i < bs.Count; i++)
                 for (int j = bs.Count - 1; j > i; j--)
                 {

@@ -32,6 +32,8 @@ namespace Cliver.PdfDocumentParser
             BrightnessTolerance.Value = (decimal)Settings.ImageProcessing.BrightnessTolerance;
             DifferentPixelNumberTolerance.Value = (decimal)Settings.ImageProcessing.DifferentPixelNumberTolerance;
             FindBestImageMatch.Checked = Settings.ImageProcessing.FindBestImageMatch;
+
+            AutoDeskewThreshold.Value = Settings.ImageProcessing.AutoDeskewThreshold;
         }
 
         private void bCancel_Click(object sender, EventArgs e)
@@ -54,6 +56,8 @@ namespace Cliver.PdfDocumentParser
                 Settings.ImageProcessing.BrightnessTolerance = (float)BrightnessTolerance.Value;
                 Settings.ImageProcessing.DifferentPixelNumberTolerance = (float)DifferentPixelNumberTolerance.Value;
                 Settings.ImageProcessing.FindBestImageMatch = FindBestImageMatch.Checked;
+
+                Settings.ImageProcessing.AutoDeskewThreshold = (int)AutoDeskewThreshold.Value;
 
                 Settings.ImageProcessing.Save();
                 Settings.ImageProcessing.Reload();
