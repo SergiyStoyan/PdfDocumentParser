@@ -17,9 +17,12 @@ using System.Drawing;
 
 namespace Cliver.PdfDocumentParser
 {
+    /// <summary>
+    /// pdf page parsing API
+    /// </summary>
     public class Page : IDisposable
     {
-        public Page(PageCollection pageCollection, int pageI)
+        internal Page(PageCollection pageCollection, int pageI)
         {
             this.pageCollection = pageCollection;
             this.pageI = pageI;
@@ -73,7 +76,7 @@ namespace Cliver.PdfDocumentParser
         }
         Bitmap _bitmap;
 
-        public void OnActiveTemplateUpdating(Template newTemplate)
+        internal void OnActiveTemplateUpdating(Template newTemplate)
         {
             if (pageCollection.ActiveTemplate == null)
                 return;
@@ -110,7 +113,7 @@ namespace Cliver.PdfDocumentParser
             //return ImageRoutines.GetCopy(ActiveTemplateBitmap, new RectangleF(x, y, w, h));
         }
 
-        public Bitmap ActiveTemplateBitmap
+        internal Bitmap ActiveTemplateBitmap
         {
             get
             {
@@ -173,7 +176,7 @@ namespace Cliver.PdfDocumentParser
 
         Bitmap _activeTemplateBitmap = null;
 
-        public PointF? GetFloatingAnchorPoint0(int floatingAnchorId)
+        internal PointF? GetFloatingAnchorPoint0(int floatingAnchorId)
         {
             Template.FloatingAnchor fa = pageCollection.ActiveTemplate.FloatingAnchors.Find(a => a.Id == floatingAnchorId);
             List<RectangleF> rs = GetFloatingAnchorRectangles(fa);
@@ -182,7 +185,7 @@ namespace Cliver.PdfDocumentParser
             return new PointF(rs[0].X, rs[0].Y);
         }
 
-        public List<RectangleF> GetFloatingAnchorRectangles(Template.FloatingAnchor fa)
+        internal List<RectangleF> GetFloatingAnchorRectangles(Template.FloatingAnchor fa)
         {
             List<RectangleF> rs;
             string fas = fa.ValueAsString;
@@ -350,7 +353,7 @@ namespace Cliver.PdfDocumentParser
         //    }
         //}
 
-        public ImageData ActiveTemplateImageData
+        internal ImageData ActiveTemplateImageData
         {
             get
             {
@@ -361,7 +364,7 @@ namespace Cliver.PdfDocumentParser
         }
         ImageData _activeTemplateImageData;
 
-        public List<Pdf.CharBox> PdfCharBoxs
+        internal List<Pdf.CharBox> PdfCharBoxs
         {
             get
             {
@@ -372,7 +375,7 @@ namespace Cliver.PdfDocumentParser
         }
         List<Pdf.CharBox> _pdfCharBoxs;
 
-        public List<Ocr.CharBox> ActiveTemplateOcrCharBoxs
+        internal List<Ocr.CharBox> ActiveTemplateOcrCharBoxs
         {
             get
             {
@@ -503,8 +506,6 @@ namespace Cliver.PdfDocumentParser
         static Dictionary<Bitmap, ImageData> bs2id = new Dictionary<Bitmap, ImageData>();
 
         Dictionary<string, string> fieldNames2texts = new Dictionary<string, string>();
-
-        public float Height;
 
         public static string NormalizeText(string value)
         {

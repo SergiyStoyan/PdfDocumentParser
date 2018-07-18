@@ -8,7 +8,10 @@ using Tesseract;
 
 namespace Cliver.PdfDocumentParser
 {
-    public  class Ocr : IDisposable
+    /// <summary>
+    /// Auxiliary OCR routines
+    /// </summary>
+    internal class Ocr : IDisposable
     {
         public static Ocr This = new Ocr();
 

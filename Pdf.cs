@@ -18,25 +18,11 @@ using ImageMagick;
 
 namespace Cliver.PdfDocumentParser
 {
-    public static partial class Pdf
+    /// <summary>
+    /// Auxiliary pdf routines
+    /// </summary>
+    internal static partial class Pdf
     {
-        //public Pdf(string pdf)
-        //{
-        //    PdfReader.unethicalreading = true;
-        //    pr = new PdfReader(pdf);
-
-        //}
-        //PdfReader pr;
-
-        //~Pdf()
-        //{
-        //    if (pr != null)
-        //    {
-        //        pr.Close();
-        //        pr = null;
-        //    }
-        //} 
-
         static public PdfReader CreatePdfReader(string pdfFile)
         {
             PdfReader.unethicalreading = true;

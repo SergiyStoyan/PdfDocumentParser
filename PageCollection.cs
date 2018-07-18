@@ -18,19 +18,20 @@ using System.Drawing;
 
 namespace Cliver.PdfDocumentParser
 {
+    /// <summary>
+    /// page collection manager of a single pdf file 
+    /// </summary>
     public class PageCollection : HandyDictionary<int, Page>
     {
         public PageCollection(string pdfFile) : base(null)
         {
             PdfFile = pdfFile;
             PdfReader = new PdfReader(pdfFile);
-            //TemplateEditorMode = templateEditorMode;
             getValue = (int pageI) => { return new Page(this, pageI); };
         }
 
         public readonly string PdfFile;
         public readonly PdfReader PdfReader;
-        //public readonly bool TemplateEditorMode;
 
         public override void Dispose()
         {
