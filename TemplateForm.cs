@@ -39,7 +39,7 @@ namespace Cliver.PdfDocumentParser
             InitializeComponent();
 
             Icon = AssemblyRoutines.GetAppIcon();
-            Text = "Template Manager";
+            Text = AboutBox.AssemblyProduct + ": Template Editor";
 
             this.templateManager = templateManager;
             this.testFileDefaultFolder = testFileDefaultFolder;
@@ -984,7 +984,6 @@ namespace Cliver.PdfDocumentParser
             {
                 loadingTemplate = true;
 
-                Text = "Template Editor";
                 name.Text = t.Name;
 
                 //imageResolution.Value = template.ImageResolution;
@@ -1284,7 +1283,7 @@ namespace Cliver.PdfDocumentParser
         {
             if (pages == null)
                 return;
-            TextForm tf = new TextForm(PdfTextExtractor.GetTextFromPage(pages.PdfReader, currentPage), false);
+            TextForm tf = new TextForm("Pdf text", PdfTextExtractor.GetTextFromPage(pages.PdfReader, currentPage), false);
             tf.ShowDialog();
         }
 
@@ -1292,7 +1291,7 @@ namespace Cliver.PdfDocumentParser
         {
             if (pages == null)
                 return;
-            TextForm tf = new TextForm(PdfDocumentParser.Ocr.This.GetHtml(pages[currentPage].Bitmap), true);
+            TextForm tf = new TextForm("Ocr text", PdfDocumentParser.Ocr.This.GetHtml(pages[currentPage].Bitmap), true);
             tf.ShowDialog();
         }
 

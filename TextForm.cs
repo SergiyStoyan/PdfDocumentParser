@@ -12,11 +12,11 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class TextForm : Form
     {
-        public TextForm(string t, bool html)
+        public TextForm(string caption, string t, bool html)
         {
             InitializeComponent();
             this.Icon = AssemblyRoutines.GetAppIcon();
-            Text = Application.ProductName;
+            Text = AboutBox.AssemblyProduct + ": " + caption;// Application.ProductName;
 
             if (html)
             {

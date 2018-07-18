@@ -235,7 +235,7 @@ namespace Cliver.InvoiceParser
                 {
                     if ((string)r.Cells["Name_"].Value == Template.Name)
                     {
-                        r.Tag = this;
+                        r.Tag = newTemplate;
                         r.Cells["Name_"].Value = newTemplate.Name;
                         break;
                     }
