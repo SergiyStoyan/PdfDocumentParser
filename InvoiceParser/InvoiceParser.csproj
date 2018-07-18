@@ -236,9 +236,9 @@
     </PreBuildEvent>
     <PostBuildEvent>xcopy /Y /S "$(ProjectDir)externals" "$(TargetDir)"
 xcopy /Y "$(ProjectDir)config" "$(TargetDir)"
-xcopy /Y /S "$(SolutionDir)externals" "$(TargetDir)"
-xcopy /Y "$(SolutionDir)config" "$(TargetDir)"
-xcopy /Y "$(SolutionDir)help.html" "$(TargetDir)"</PostBuildEvent>
+xcopy /Y /S "$(SolutionDir)..\externals" "$(TargetDir)"
+xcopy /Y "$(SolutionDir)..\config" "$(TargetDir)"
+xcopy /Y "$(SolutionDir)..\help.html" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

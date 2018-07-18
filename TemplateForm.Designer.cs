@@ -32,6 +32,8 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.AutoDeskewThreshold = new System.Windows.Forms.NumericUpDown();
+            this.label14 = new System.Windows.Forms.Label();
             this.findBestImageMatch = new System.Windows.Forms.CheckBox();
             this.differentPixelNumberTolerance = new System.Windows.Forms.NumericUpDown();
             this.label13 = new System.Windows.Forms.Label();
@@ -87,8 +89,6 @@
             this.cancel = new System.Windows.Forms.Button();
             this.SaveAsInitialTemplate = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
-            this.AutoDeskewThreshold = new System.Windows.Forms.NumericUpDown();
-            this.label14 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -99,6 +99,7 @@
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.AutoDeskewThreshold)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.differentPixelNumberTolerance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.brightnessTolerance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.floatingAnchors)).BeginInit();
@@ -112,7 +113,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.fields)).BeginInit();
             this.panel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.AutoDeskewThreshold)).BeginInit();
             this.SuspendLayout();
             // 
             // picture
@@ -204,10 +204,36 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Scanned Document Settings";
             // 
+            // AutoDeskewThreshold
+            // 
+            this.AutoDeskewThreshold.Location = new System.Drawing.Point(345, 48);
+            this.AutoDeskewThreshold.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.AutoDeskewThreshold.Name = "AutoDeskewThreshold";
+            this.AutoDeskewThreshold.Size = new System.Drawing.Size(55, 20);
+            this.AutoDeskewThreshold.TabIndex = 62;
+            this.AutoDeskewThreshold.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(204, 51);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(124, 13);
+            this.label14.TabIndex = 61;
+            this.label14.Text = "Auto-Deskew Threshold:";
+            // 
             // findBestImageMatch
             // 
             this.findBestImageMatch.AutoSize = true;
-            this.findBestImageMatch.Location = new System.Drawing.Point(224, 25);
+            this.findBestImageMatch.Location = new System.Drawing.Point(252, 25);
             this.findBestImageMatch.Name = "findBestImageMatch";
             this.findBestImageMatch.Size = new System.Drawing.Size(135, 17);
             this.findBestImageMatch.TabIndex = 58;
@@ -299,13 +325,13 @@
             "90 degree counterclockwise"});
             this.pageRotation.Location = new System.Drawing.Point(77, 23);
             this.pageRotation.Name = "pageRotation";
-            this.pageRotation.Size = new System.Drawing.Size(121, 21);
+            this.pageRotation.Size = new System.Drawing.Size(148, 21);
             this.pageRotation.TabIndex = 51;
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(0, 31);
+            this.label9.Location = new System.Drawing.Point(1, 26);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(75, 13);
             this.label9.TabIndex = 50;
@@ -808,32 +834,6 @@
             this.label1.TabIndex = 29;
             this.label1.Text = "Fields:";
             // 
-            // AutoDeskewThreshold
-            // 
-            this.AutoDeskewThreshold.Location = new System.Drawing.Point(331, 48);
-            this.AutoDeskewThreshold.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.AutoDeskewThreshold.Name = "AutoDeskewThreshold";
-            this.AutoDeskewThreshold.Size = new System.Drawing.Size(69, 20);
-            this.AutoDeskewThreshold.TabIndex = 62;
-            this.AutoDeskewThreshold.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(204, 51);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(124, 13);
-            this.label14.TabIndex = 61;
-            this.label14.Text = "Auto-Deskew Threshold:";
-            // 
             // TemplateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -855,6 +855,7 @@
             this.splitContainer2.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.AutoDeskewThreshold)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.differentPixelNumberTolerance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.brightnessTolerance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.floatingAnchors)).EndInit();
@@ -872,7 +873,6 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.flowLayoutPanel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.AutoDeskewThreshold)).EndInit();
             this.ResumeLayout(false);
 
         }

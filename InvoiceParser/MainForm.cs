@@ -211,7 +211,7 @@ namespace Cliver.InvoiceParser
                 OutputFolder.Text = Log.AppDir;
         }
 
-        public class TemplateManager : PdfDocumentParser.TemplateManager
+        public class TemplateManager : TemplateForm.TemplateManager
         {
             static public DataGridView Templates;
 

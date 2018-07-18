@@ -16,16 +16,16 @@ using System.IO;
 
 namespace Cliver.PdfDocumentParser
 {
-    public abstract class TemplateManager
-    {
-        public Template Template;
-        abstract public void ReplaceWith(Template newTemplate);
-        abstract public void SaveAsInitialTemplate(Template template);
-        public string LastTestFile;
-    }
-
     public partial class TemplateForm : Form
     {
+        public abstract class TemplateManager
+        {
+            public Template Template;
+            abstract public void ReplaceWith(Template newTemplate);
+            abstract public void SaveAsInitialTemplate(Template template);
+            public string LastTestFile;
+        }       
+
         public TemplateForm(TemplateManager templateManager, string testFileDefaultFolder)
         {
             InitializeComponent();
@@ -66,6 +66,8 @@ namespace Cliver.PdfDocumentParser
                     pages.Dispose();
                     pages = null;
                 }
+
+                templateManager.LastTestFile = testFile.Text;
             };
 
             picture.MouseDown += delegate (object sender, MouseEventArgs e)
