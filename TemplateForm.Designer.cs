@@ -206,7 +206,7 @@
             // 
             // AutoDeskewThreshold
             // 
-            this.AutoDeskewThreshold.Location = new System.Drawing.Point(132, 74);
+            this.AutoDeskewThreshold.Location = new System.Drawing.Point(132, 73);
             this.AutoDeskewThreshold.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -370,7 +370,7 @@
             this.floatingAnchors.MultiSelect = false;
             this.floatingAnchors.Name = "floatingAnchors";
             this.floatingAnchors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.floatingAnchors.Size = new System.Drawing.Size(443, 103);
+            this.floatingAnchors.Size = new System.Drawing.Size(443, 104);
             this.floatingAnchors.TabIndex = 50;
             // 
             // Id3
