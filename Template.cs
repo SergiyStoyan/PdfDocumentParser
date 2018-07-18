@@ -1,3 +1,8 @@
+//********************************************************************************************
+//Author: Sergey Stoyan
+//        sergey.stoyan@gmail.com
+//        http://www.cliversoft.com
+//********************************************************************************************
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -8,6 +13,9 @@ using System.Collections.Specialized;
 
 namespace Cliver.PdfDocumentParser
 {
+    /// <summary>
+    /// processing rule set corresponding to certain pdf document layout
+    /// </summary>
     public partial class Template
     {
         public static Template CreateInitialTemplate(Template initialTemplate = null)

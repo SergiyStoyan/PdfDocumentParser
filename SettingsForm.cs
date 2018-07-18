@@ -1,4 +1,9 @@
-﻿using System;
+﻿//********************************************************************************************
+//Author: Sergey Stoyan
+//        sergey.stoyan@gmail.com
+//        http://www.cliversoft.com
+//********************************************************************************************
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,7 +22,8 @@ namespace Cliver.PdfDocumentParser
             InitializeComponent();
 
             this.Icon = AssemblyRoutines.GetAppIcon();
-            Text = Application.ProductName;
+            //Text = Application.ProductName;
+            Text = AboutBox.AssemblyTitle;
 
             load_settings();
         }
@@ -75,6 +81,12 @@ namespace Cliver.PdfDocumentParser
             Settings.Appearance.Reset();
             Settings.ImageProcessing.Reset();
             load_settings();
+        }
+
+        private void About_Click(object sender, EventArgs e)
+        {
+            AboutBox ab = new AboutBox();
+            ab.ShowDialog();
         }
     }
 }

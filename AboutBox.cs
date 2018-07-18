@@ -1,4 +1,9 @@
-﻿using System;
+﻿//********************************************************************************************
+//Author: Sergey Stoyan
+//        sergey.stoyan@gmail.com
+//        http://www.cliversoft.com
+//********************************************************************************************
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -10,7 +15,7 @@ using Cliver;
 
 namespace Cliver.PdfDocumentParser
 {
-    partial class AboutBox : Form//BaseForm // 
+    partial class AboutBox : Form
     {
         public AboutBox()
         {
@@ -26,7 +31,7 @@ namespace Cliver.PdfDocumentParser
 
         #region Assembly Attribute Accessors
 
-        public string AssemblyTitle
+        static public string AssemblyTitle
         {
             get
             {
@@ -43,7 +48,7 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public string AssemblyVersion
+        static public string AssemblyVersion
         {
             get
             {
@@ -51,7 +56,7 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public string AssemblyDescription
+        static public string AssemblyDescription
         {
             get
             {
@@ -64,7 +69,7 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public string AssemblyProduct
+        static public string AssemblyProduct
         {
             get
             {
@@ -77,7 +82,7 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public string AssemblyCopyright
+        static public string AssemblyCopyright
         {
             get
             {
@@ -90,7 +95,7 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public string AssemblyCompany
+        static public string AssemblyCompany
         {
             get
             {

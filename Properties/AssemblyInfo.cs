@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 // associated with an assembly.
 //
 [assembly: AssemblyTitle("Pdf Document Parser")]
-[assembly: AssemblyDescription("Pdf Document Parser")]
+[assembly: AssemblyDescription("Pdf Document Parser Framework")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CliverSoft")]
 [assembly: AssemblyProduct("Pdf Document Parser")]

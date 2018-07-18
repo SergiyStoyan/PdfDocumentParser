@@ -65,7 +65,7 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public Bitmap Bitmap
+        internal Bitmap Bitmap
         {
             get
             {

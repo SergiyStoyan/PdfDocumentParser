@@ -48,6 +48,7 @@
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.CoordinateDeviationMargin = new System.Windows.Forms.NumericUpDown();
+            this.About = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.PdfPageImageResolution)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -129,6 +130,7 @@
             this.flowLayoutPanel1.Controls.Add(this.bCancel);
             this.flowLayoutPanel1.Controls.Add(this.bSave);
             this.flowLayoutPanel1.Controls.Add(this.bReset);
+            this.flowLayoutPanel1.Controls.Add(this.About);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 353);
@@ -328,9 +330,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(16, 63);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(138, 13);
+            this.label2.Size = new System.Drawing.Size(144, 13);
             this.label2.TabIndex = 55;
-            this.label2.Text = "CoordinateDeviationMargin:";
+            this.label2.Text = "Coordinate Deviation Margin:";
             // 
             // CoordinateDeviationMargin
             // 
@@ -354,6 +356,17 @@
             0,
             0,
             196608});
+            // 
+            // About
+            // 
+            this.About.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.About.Location = new System.Drawing.Point(32, 3);
+            this.About.Name = "About";
+            this.About.Size = new System.Drawing.Size(75, 23);
+            this.About.TabIndex = 51;
+            this.About.Text = "About";
+            this.About.UseVisualStyleBackColor = true;
+            this.About.Click += new System.EventHandler(this.About_Click);
             // 
             // SettingsForm
             // 
@@ -405,5 +418,6 @@
         private System.Windows.Forms.NumericUpDown CoordinateDeviationMargin;
         private System.Windows.Forms.NumericUpDown AutoDeskewThreshold;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button About;
     }
 }
