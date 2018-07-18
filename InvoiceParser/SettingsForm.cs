@@ -64,7 +64,7 @@ namespace Cliver.InvoiceParser
         {
             if (!Message.YesNo("The templates will be reset to the initial state. Proceed?"))
                 return;
-            PdfDocumentParser.Settings.Templates.Reset();
+            Settings.Templates.Reset();
             ProcessRoutines.Restart();
         }
     }

@@ -8,8 +8,9 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Net;
+using Cliver.PdfDocumentParser;
 
-namespace Cliver.PdfDocumentParser
+namespace Cliver.InvoiceParser
 {
     public partial class Settings
     {

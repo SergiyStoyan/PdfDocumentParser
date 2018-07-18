@@ -173,8 +173,6 @@
     <Compile Include="SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Settings\Templates.cs" />
-    <Compile Include="Settings\TestFiles.cs" />
     <Compile Include="Settings\ImageProcessing.cs" />
     <Compile Include="Settings\Appearance.cs" />
     <Compile Include="ImageData.cs" />

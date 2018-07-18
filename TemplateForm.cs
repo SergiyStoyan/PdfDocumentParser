@@ -18,25 +18,23 @@ namespace Cliver.PdfDocumentParser
 {
     public abstract class TemplateManager
     {
-        abstract public void Save(Template template);
-
-        virtual public void SaveAsInitialTemplate(Template template)
-        {
-            throw new Exception("Not implemented");
-        }
+        public Template Template;
+        abstract public void ReplaceWith(Template newTemplate);
+        abstract public void SaveAsInitialTemplate(Template template);
+        public string LastTestFile;
     }
 
     public partial class TemplateForm : Form
     {
-        public TemplateForm(Template template, string testFileDefaultFolder, TemplateManager templateManager)
+        public TemplateForm(TemplateManager templateManager, string testFileDefaultFolder)
         {
             InitializeComponent();
 
             Icon = AssemblyRoutines.GetAppIcon();
             Text = "Template Manager";
 
-            this.testFileDefaultFolder = testFileDefaultFolder;
             this.templateManager = templateManager;
+            this.testFileDefaultFolder = testFileDefaultFolder;
 
             ValueType3.ValueType = typeof(Template.ValueTypes);
             ValueType3.DataSource = Enum.GetValues(typeof(Template.ValueTypes));
@@ -53,7 +51,7 @@ namespace Cliver.PdfDocumentParser
             Shown += delegate
             {
                 Application.DoEvents();//make form be drawn completely
-                setUIFromTemplate(template);
+                setUIFromTemplate(templateManager.Template);
             };
 
             FormClosed += delegate
@@ -652,15 +650,6 @@ namespace Cliver.PdfDocumentParser
                         return;
                     }
 
-                    if (autoSaveTestFile && !string.IsNullOrWhiteSpace(name.Text))//the customer asked for this
-                    {
-                        Settings.TestFiles.TemplateNames2TestFile[name.Text] = testFile.Text;
-                        var deletedNs = Settings.TestFiles.TemplateNames2TestFile.Keys.Where(n => Settings.Templates.Templates.Where(t => t.Name == n).FirstOrDefault() == null).ToList();
-                        foreach (string n in deletedNs)
-                            Settings.TestFiles.TemplateNames2TestFile.Remove(n);
-                        Settings.TestFiles.Save();
-                    }
-
                     pages = new PageCollection(testFile.Text);
                     totalPageNumber = pages.PdfReader.NumberOfPages;
                     lTotalPages.Text = " / " + totalPageNumber;
@@ -1053,10 +1042,8 @@ namespace Cliver.PdfDocumentParser
                     testFile.Text = t.TestFile;
                 else
                 {
-                    autoSaveTestFile = true;
-                    string file;
-                    if (t.Name != null && Settings.TestFiles.TemplateNames2TestFile.TryGetValue(t.Name, out file) && File.Exists(file))
-                        testFile.Text = file;
+                    if (templateManager.LastTestFile != null && File.Exists(templateManager.LastTestFile))
+                        testFile.Text = templateManager.LastTestFile;
                 }
             }
             finally
@@ -1065,7 +1052,6 @@ namespace Cliver.PdfDocumentParser
             }
         }
         bool loadingTemplate = false;
-        bool autoSaveTestFile = false;//the customer asked this
 
         void setStatus(statuses s, string m)
         {
@@ -1140,6 +1126,7 @@ namespace Cliver.PdfDocumentParser
             testFile.Text = d.FileName;
         }
         string testFileDefaultFolder;
+        TemplateManager templateManager;
 
         private void bPrevPage_Click(object sender, EventArgs e)
         {
@@ -1285,7 +1272,8 @@ namespace Cliver.PdfDocumentParser
         {
             try
             {
-                templateManager.SaveAsInitialTemplate(getTemplateFromUI(true));
+                Template t = getTemplateFromUI(true);
+                templateManager.SaveAsInitialTemplate(t);
                 Message.Inform("Saved");
             }
             catch(Exception ex)
@@ -1298,7 +1286,9 @@ namespace Cliver.PdfDocumentParser
         {
             try
             {
-                templateManager.Save(getTemplateFromUI(true));
+                //NewTemplate = getTemplateFromUI(true);
+                Template t = getTemplateFromUI(true);
+                templateManager.ReplaceWith(t);
                 DialogResult = DialogResult.OK;
                 Close();
             }
@@ -1307,7 +1297,6 @@ namespace Cliver.PdfDocumentParser
                 Message.Error2(ex);
             }
         }
-        TemplateManager templateManager;
 
         Template getTemplateFromUI(bool saving)
         {
@@ -1322,8 +1311,6 @@ namespace Cliver.PdfDocumentParser
                     throw new Exception("DocumentFirstPageRecognitionMarks is empty!");
 
             t.Name = name.Text.Trim();
-            if (saving && Settings.Templates.Templates.Where(a => a.Name == t.Name).Count() > 1)
-                throw new Exception("There is another template with name: '" + t.Name + "'");
 
             t.PagesRotation = (Template.PageRotations)pageRotation.SelectedIndex;
             t.AutoDeskew = autoDeskew.Checked;

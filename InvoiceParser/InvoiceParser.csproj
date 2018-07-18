@@ -170,6 +170,8 @@
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Settings\General.cs" />
+    <Compile Include="Settings\Templates.cs" />
+    <Compile Include="Settings\TestFiles.cs" />
     <Content Include="3RINGS~1.ICO" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

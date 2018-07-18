@@ -76,13 +76,5 @@ namespace Cliver.PdfDocumentParser
             Settings.ImageProcessing.Reset();
             load_settings();
         }
-
-        private void bResetTemplates_Click(object sender, EventArgs e)
-        {
-            if (!Message.YesNo("The templates will be reset to the initial state. Proceed?"))
-                return;
-            Settings.Templates.Reset();
-            ProcessRoutines.Restart();
-        }
     }
 }

@@ -86,7 +86,7 @@ namespace Cliver.InvoiceParser
                         return;
 
                     Template t = (Template)e.Row.Tag;
-                    PdfDocumentParser.Settings.Templates.Templates.RemoveAll(x => x == t);
+                    Settings.Templates.Templates.RemoveAll(x => x == t);
                 }
                 catch (Exception ex)
                 {
@@ -129,6 +129,8 @@ namespace Cliver.InvoiceParser
                 //}
             };
 
+            TemplateManager.Templates = templates;
+
             templates.DefaultValuesNeeded += delegate (object sender, DataGridViewRowEventArgs e)
             {
                 try
@@ -139,8 +141,8 @@ namespace Cliver.InvoiceParser
                     Template t = (Template)e.Row.Tag;
                     if (t == null)
                     {
-                        t = PdfDocumentParser.Settings.Templates.CreateInitialTemplate();
-                        PdfDocumentParser.Settings.Templates.Templates.Add(t);
+                        t = Settings.Templates.CreateInitialTemplate();
+                        Settings.Templates.Templates.Add(t);
                         e.Row.Tag = t;
                         e.Row.Cells["Name_"].Value = t.Name;
                         e.Row.Cells["Active"].Value = t.Active;
@@ -172,11 +174,20 @@ namespace Cliver.InvoiceParser
                             Template t = (Template)templates.Rows[e.RowIndex].Tag;
                             t.Name = (string)templates.Rows[e.RowIndex].Cells["Name_"].Value;
 
-                            TemplateManager tm = new TemplateManager { Templates = templates };
-                            TemplateForm tf = new TemplateForm(t, Settings.General.InputFolder, tm);
-                            tf.FormClosed += delegate 
+                            string lastTestFile;
+                            Settings.TestFiles.TemplateNames2TestFile.TryGetValue(t.Name, out lastTestFile);
+                            TemplateManager tm = new TemplateManager { Template = t, LastTestFile = lastTestFile };
+                            TemplateForm tf = new TemplateForm(tm, Settings.General.InputFolder);
+                            tf.FormClosed += delegate
                             {
-                                //tf.
+                                if (tm.Template.TestFile != tm.LastTestFile && tm.LastTestFile != null)//the customer asked for this
+                                {
+                                    Settings.TestFiles.TemplateNames2TestFile[tm.Template.Name] = tm.LastTestFile;
+                                    var deletedNs = Settings.TestFiles.TemplateNames2TestFile.Keys.Where(n => Settings.Templates.Templates.Where(a => a.Name == n).FirstOrDefault() == null).ToList();
+                                    foreach (string n in deletedNs)
+                                        Settings.TestFiles.TemplateNames2TestFile.Remove(n);
+                                    Settings.TestFiles.Save();
+                                }
                             };
                             tf.Show();
                         }
@@ -190,8 +201,8 @@ namespace Cliver.InvoiceParser
 
             templates.Validating += delegate (object sender, CancelEventArgs e)
             {
-                PdfDocumentParser.Settings.Templates.Templates.RemoveAll(x => string.IsNullOrWhiteSpace(x.Name));
-                PdfDocumentParser.Settings.Templates.Save();
+                Settings.Templates.Templates.RemoveAll(x => string.IsNullOrWhiteSpace(x.Name));
+                Settings.Templates.Save();
             };
 
             progress.Maximum = 10000;
@@ -202,32 +213,36 @@ namespace Cliver.InvoiceParser
 
         public class TemplateManager : PdfDocumentParser.TemplateManager
         {
-            public DataGridView Templates;
+            static public DataGridView Templates;
 
-            override public void Save(Template template)
+            override public void ReplaceWith(Template newTemplate)
             {
-              Template  t = PdfDocumentParser.Settings.Templates.Templates.Where(a => a.Name == template.Name).FirstOrDefault();
+                if (Template.Name != newTemplate.Name && Settings.Templates.Templates.Where(a => a.Name == newTemplate.Name).FirstOrDefault() != null)
+                    throw new Exception("Template '" + newTemplate.Name + "' already exists.");
+                Template t = Settings.Templates.Templates.Where(a => a.Name == Template.Name).FirstOrDefault();
                 if (t == null)
-                    PdfDocumentParser.Settings.Templates.Templates.Add(template);
+                    Settings.Templates.Templates.Add(newTemplate);
                 else
-                    PdfDocumentParser.Settings.Templates.Templates[PdfDocumentParser.Settings.Templates.Templates.IndexOf(t)] = template;
-                PdfDocumentParser.Settings.Templates.Save();
+                    Settings.Templates.Templates[Settings.Templates.Templates.IndexOf(t)] = newTemplate;
+                Settings.Templates.Save();
 
                 foreach (DataGridViewRow r in Templates.Rows)
                 {
-                    if ((string)r.Cells["Name_"].Value == template.Name)
+                    if ((string)r.Cells["Name_"].Value == Template.Name)
                     {
-                        r.Tag = template;
-                        r.Cells["Name_"].Value = template.Name;
+                        r.Tag = this;
+                        r.Cells["Name_"].Value = newTemplate.Name;
                         break;
                     }
                 }
+
+                Template = newTemplate;
             }
 
             override public void SaveAsInitialTemplate(Template template)
             {
-                PdfDocumentParser.Settings.Templates.InitialTemplate = template;
-                PdfDocumentParser.Settings.Templates.Save();
+                Settings.Templates.InitialTemplate = template;
+                Settings.Templates.Save();
             }
         }
 
@@ -235,7 +250,7 @@ namespace Cliver.InvoiceParser
         {
             try
             {
-                foreach (Template t in PdfDocumentParser.Settings.Templates.Templates)
+                foreach (Template t in Settings.Templates.Templates)
                 {
                     if (string.IsNullOrWhiteSpace(t.Name))
                         continue;

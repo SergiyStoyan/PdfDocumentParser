@@ -5,8 +5,9 @@ using System.Data.Linq;
 using System.Linq;
 using System.Drawing;
 using System.Collections.Specialized;
+using Cliver.PdfDocumentParser;
 
-namespace Cliver.PdfDocumentParser
+namespace Cliver.InvoiceParser
 {
     public partial class Settings
     {
@@ -35,16 +36,16 @@ namespace Cliver.PdfDocumentParser
                     string ts = SerializationRoutines.Json.Serialize(Settings.Templates.InitialTemplate);
                     return SerializationRoutines.Json.Deserialize<Template>(ts);
                 }
-                if (Settings.ImageProcessing == null)
+                if (PdfDocumentParser.Settings.ImageProcessing == null)
                     Config.PreloadField("ImageProcessing");
-                if (Settings.Appearance == null)
+                if (PdfDocumentParser.Settings.Appearance == null)
                     Config.PreloadField("Appearance");
                 return new Template
                 {
                     Active = true,
                     AutoDeskew = false,
-                    BrightnessTolerance = Settings.ImageProcessing.BrightnessTolerance,
-                    DifferentPixelNumberTolerance = Settings.ImageProcessing.DifferentPixelNumberTolerance,
+                    BrightnessTolerance = PdfDocumentParser.Settings.ImageProcessing.BrightnessTolerance,
+                    DifferentPixelNumberTolerance = PdfDocumentParser.Settings.ImageProcessing.DifferentPixelNumberTolerance,
                     Fields = new List<Template.Field> {
                         new Template.Field { Name = "INVOICE#" , Rectangle=new Template.RectangleF(0,0,10,10)},
                         new Template.Field { Name = "JOB#", Rectangle=new Template.RectangleF(0,0,10,10) },
@@ -57,7 +58,7 @@ namespace Cliver.PdfDocumentParser
                     FloatingAnchors = new List<Template.FloatingAnchor>(),
                     DocumentFirstPageRecognitionMarks = new List<Template.Mark>(),
                     PagesRotation = Template.PageRotations.NONE,
-                    TestPictureScale = Settings.Appearance.TestPictureScale,
+                    TestPictureScale = PdfDocumentParser.Settings.Appearance.TestPictureScale,
                     TestFile = "",
                 };
             }

@@ -150,7 +150,6 @@ namespace Cliver.PdfDocumentParser
             int differentPixelMaxNumber = (int)(Hash.Length * differentPixelNumberTolerance);
             int bw = imageData.Width - Width;
             int bh = imageData.Height - Height;
-            Point? p = null;
             for (int x = 0; x < bw; x++)
                 for (int y = 0; y < bh; y++)
                 {

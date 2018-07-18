@@ -34,7 +34,6 @@
             this.bSave = new System.Windows.Forms.Button();
             this.bCancel = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.bResetTemplates = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.AutoDeskewThreshold = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
@@ -130,25 +129,12 @@
             this.flowLayoutPanel1.Controls.Add(this.bCancel);
             this.flowLayoutPanel1.Controls.Add(this.bSave);
             this.flowLayoutPanel1.Controls.Add(this.bReset);
-            this.flowLayoutPanel1.Controls.Add(this.bResetTemplates);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 353);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(353, 31);
             this.flowLayoutPanel1.TabIndex = 51;
-            // 
-            // bResetTemplates
-            // 
-            this.bResetTemplates.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bResetTemplates.AutoSize = true;
-            this.bResetTemplates.Location = new System.Drawing.Point(10, 3);
-            this.bResetTemplates.Name = "bResetTemplates";
-            this.bResetTemplates.Size = new System.Drawing.Size(97, 23);
-            this.bResetTemplates.TabIndex = 51;
-            this.bResetTemplates.Text = "Reset Templates";
-            this.bResetTemplates.UseVisualStyleBackColor = true;
-            this.bResetTemplates.Click += new System.EventHandler(this.bResetTemplates_Click);
             // 
             // groupBox1
             // 
@@ -382,7 +368,6 @@
             this.Text = "SettingsForm";
             ((System.ComponentModel.ISupportInitialize)(this.PdfPageImageResolution)).EndInit();
             this.flowLayoutPanel1.ResumeLayout(false);
-            this.flowLayoutPanel1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AutoDeskewThreshold)).EndInit();
@@ -406,7 +391,6 @@
         private System.Windows.Forms.Button bSave;
         private System.Windows.Forms.Button bCancel;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
-        private System.Windows.Forms.Button bResetTemplates;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox FindBestImageMatch;
         private System.Windows.Forms.NumericUpDown DifferentPixelNumberTolerance;
