@@ -52,9 +52,9 @@ namespace Cliver.InvoiceParser
             }
             else
             {
-                if (Directory.GetFiles(Settings.General.OutputFolder).FirstOrDefault() != null && !Message.YesNo("Output folder '" + Settings.General.OutputFolder + "' is not empty and will be cleaned up. Proceed?"))
+                if ((Directory.GetFiles(Settings.General.OutputFolder).FirstOrDefault() != null || Directory.GetDirectories(Settings.General.OutputFolder).FirstOrDefault() != null) && !Message.YesNo("Output folder '" + Settings.General.OutputFolder + "' is not empty and will be cleaned up. Proceed?"))
                     return;
-                FileSystemRoutines.ClearDirectory(Settings.General.OutputFolder, false);
+                FileSystemRoutines.ClearDirectory(Settings.General.OutputFolder, true);
             }
 
             string output_records_file = Settings.General.OutputFolder + "\\output.xlsx";
