@@ -211,6 +211,17 @@
       <SubType>Code</SubType>
     </Compile>
     <Content Include="computers308.ico" />
+    <Content Include="help.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <ContentWithTargetPath Include="config\Appearance.Cliver.PdfDocumentParser.Settings+AppearanceSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>Appearance.Cliver.PdfDocumentParser.Settings+AppearanceSettings.json</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="config\ImageProcessing.Cliver.PdfDocumentParser.Settings+ImageProcessingSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>ImageProcessing.Cliver.PdfDocumentParser.Settings+ImageProcessingSettings.json</TargetPath>
+    </ContentWithTargetPath>
     <Content Include="x64\liblept172.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -282,9 +293,8 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>xcopy /Y /S "$(ProjectDir)externals" "$(TargetDir)"
-xcopy /Y "$(ProjectDir)config" "$(TargetDir)"
-xcopy /Y "$(ProjectDir)help.html" "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

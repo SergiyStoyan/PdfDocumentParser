@@ -206,7 +206,7 @@
             // 
             // AutoDeskewThreshold
             // 
-            this.AutoDeskewThreshold.Location = new System.Drawing.Point(345, 48);
+            this.AutoDeskewThreshold.Location = new System.Drawing.Point(132, 74);
             this.AutoDeskewThreshold.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -224,7 +224,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(204, 51);
+            this.label14.Location = new System.Drawing.Point(1, 76);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(124, 13);
             this.label14.TabIndex = 61;
@@ -248,7 +248,7 @@
             0,
             0,
             131072});
-            this.differentPixelNumberTolerance.Location = new System.Drawing.Point(345, 73);
+            this.differentPixelNumberTolerance.Location = new System.Drawing.Point(367, 73);
             this.differentPixelNumberTolerance.Maximum = new decimal(new int[] {
             1,
             0,
@@ -271,7 +271,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(173, 76);
+            this.label13.Location = new System.Drawing.Point(202, 76);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(163, 13);
             this.label13.TabIndex = 56;
@@ -285,7 +285,7 @@
             0,
             0,
             131072});
-            this.brightnessTolerance.Location = new System.Drawing.Point(112, 73);
+            this.brightnessTolerance.Location = new System.Drawing.Point(367, 48);
             this.brightnessTolerance.Maximum = new decimal(new int[] {
             1,
             0,
@@ -308,7 +308,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(1, 76);
+            this.label11.Location = new System.Drawing.Point(256, 52);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(110, 13);
             this.label11.TabIndex = 54;
@@ -340,7 +340,7 @@
             // autoDeskew
             // 
             this.autoDeskew.AutoSize = true;
-            this.autoDeskew.Location = new System.Drawing.Point(4, 50);
+            this.autoDeskew.Location = new System.Drawing.Point(6, 51);
             this.autoDeskew.Name = "autoDeskew";
             this.autoDeskew.Size = new System.Drawing.Size(88, 17);
             this.autoDeskew.TabIndex = 52;
@@ -370,7 +370,7 @@
             this.floatingAnchors.MultiSelect = false;
             this.floatingAnchors.Name = "floatingAnchors";
             this.floatingAnchors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.floatingAnchors.Size = new System.Drawing.Size(443, 87);
+            this.floatingAnchors.Size = new System.Drawing.Size(443, 103);
             this.floatingAnchors.TabIndex = 50;
             // 
             // Id3

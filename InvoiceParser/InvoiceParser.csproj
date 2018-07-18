@@ -37,6 +37,9 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -51,9 +54,6 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -200,6 +200,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <AdditionalFiles Include="config\General.Cliver.InvoiceParser.Settings+GeneralSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AdditionalFiles>
+    <AdditionalFiles Include="config\Templates.Cliver.InvoiceParser.Settings+TemplatesSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AdditionalFiles>
+    <AdditionalFiles Include="config\TestFiles.Cliver.PdfDocumentParser.Settings+TestFilesSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AdditionalFiles>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -234,11 +243,8 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>xcopy /Y /S "$(ProjectDir)externals" "$(TargetDir)"
-xcopy /Y "$(ProjectDir)config" "$(TargetDir)"
-xcopy /Y /S "$(SolutionDir)..\externals" "$(TargetDir)"
-xcopy /Y "$(SolutionDir)..\config" "$(TargetDir)"
-xcopy /Y "$(SolutionDir)..\help.html" "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
