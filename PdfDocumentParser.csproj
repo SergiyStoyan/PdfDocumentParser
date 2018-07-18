@@ -214,14 +214,6 @@
     <Content Include="help.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <ContentWithTargetPath Include="config\Appearance.Cliver.PdfDocumentParser.Settings+AppearanceSettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>Appearance.Cliver.PdfDocumentParser.Settings+AppearanceSettings.json</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="config\ImageProcessing.Cliver.PdfDocumentParser.Settings+ImageProcessingSettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>ImageProcessing.Cliver.PdfDocumentParser.Settings+ImageProcessingSettings.json</TargetPath>
-    </ContentWithTargetPath>
     <Content Include="x64\liblept172.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

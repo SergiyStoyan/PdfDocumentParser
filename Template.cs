@@ -33,8 +33,8 @@ namespace Cliver.PdfDocumentParser
             {
                 Active = true,
                 AutoDeskew = false,
-                BrightnessTolerance = Settings.ImageProcessing.BrightnessTolerance,
-                DifferentPixelNumberTolerance = Settings.ImageProcessing.DifferentPixelNumberTolerance,
+                BrightnessTolerance = 0.4f,
+                DifferentPixelNumberTolerance = 0.01f,
                 Fields = new List<Template.Field> {
                         new Template.Field { Name = "INVOICE#" , Rectangle=new Template.RectangleF(0,0,10,10)},
                         new Template.Field { Name = "JOB#", Rectangle=new Template.RectangleF(0,0,10,10) },
@@ -47,7 +47,7 @@ namespace Cliver.PdfDocumentParser
                 FloatingAnchors = new List<Template.FloatingAnchor>(),
                 DocumentFirstPageRecognitionMarks = new List<Template.Mark>(),
                 PagesRotation = Template.PageRotations.NONE,
-                TestPictureScale = Settings.Appearance.TestPictureScale,
+                TestPictureScale = 1.3m,
                 TestFile = "",
             };
         }

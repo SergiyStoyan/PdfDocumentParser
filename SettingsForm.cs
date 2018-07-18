@@ -30,16 +30,11 @@ namespace Cliver.PdfDocumentParser
 
         void load_settings()
         {
-            TestPictureScale.Value = Settings.Appearance.TestPictureScale;
+            BoundingBoxColor.ForeColor = Settings.Appearance.BoundingBoxColor;
+            SelectionBoxColor.ForeColor = Settings.Appearance.SelectionBoxColor;
 
             PdfPageImageResolution.Value = Settings.ImageProcessing.PdfPageImageResolution;
             CoordinateDeviationMargin.Value = (decimal)Settings.ImageProcessing.CoordinateDeviationMargin;
-
-            BrightnessTolerance.Value = (decimal)Settings.ImageProcessing.BrightnessTolerance;
-            DifferentPixelNumberTolerance.Value = (decimal)Settings.ImageProcessing.DifferentPixelNumberTolerance;
-            FindBestImageMatch.Checked = Settings.ImageProcessing.FindBestImageMatch;
-
-            AutoDeskewThreshold.Value = Settings.ImageProcessing.AutoDeskewThreshold;
         }
 
         private void bCancel_Click(object sender, EventArgs e)
@@ -51,26 +46,21 @@ namespace Cliver.PdfDocumentParser
         {
             try
             {
-                Settings.Appearance.TestPictureScale = TestPictureScale.Value;    
+                Settings.Appearance.BoundingBoxColor = BoundingBoxColor.ForeColor;
+                Settings.Appearance.SelectionBoxColor = SelectionBoxColor.ForeColor;
 
                 Settings.Appearance.Save();
-                Settings.Appearance.Reload();   
-                
+                Settings.Appearance.Reload();
+
                 Settings.ImageProcessing.PdfPageImageResolution = (int)PdfPageImageResolution.Value;
                 Settings.ImageProcessing.CoordinateDeviationMargin = (float)CoordinateDeviationMargin.Value;
-
-                Settings.ImageProcessing.BrightnessTolerance = (float)BrightnessTolerance.Value;
-                Settings.ImageProcessing.DifferentPixelNumberTolerance = (float)DifferentPixelNumberTolerance.Value;
-                Settings.ImageProcessing.FindBestImageMatch = FindBestImageMatch.Checked;
-
-                Settings.ImageProcessing.AutoDeskewThreshold = (int)AutoDeskewThreshold.Value;
 
                 Settings.ImageProcessing.Save();
                 Settings.ImageProcessing.Reload();
 
                 Close();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Message.Error2(ex);
             }
@@ -87,6 +77,22 @@ namespace Cliver.PdfDocumentParser
         {
             AboutBox ab = new AboutBox();
             ab.ShowDialog();
+        }
+
+        private void bSelectionBoxColor_Click(object sender, EventArgs e)
+        {
+            ColorDialog cd = new ColorDialog();
+            cd.Color = Settings.Appearance.SelectionBoxColor;
+            if (cd.ShowDialog() == DialogResult.OK)
+                SelectionBoxColor.ForeColor = cd.Color;
+        }
+
+        private void bBoundingBoxColor_Click(object sender, EventArgs e)
+        {
+            ColorDialog cd = new ColorDialog();
+            cd.Color = Settings.Appearance.BoundingBoxColor;
+            if (cd.ShowDialog() == DialogResult.OK)
+                BoundingBoxColor.ForeColor = cd.Color;
         }
     }
 }

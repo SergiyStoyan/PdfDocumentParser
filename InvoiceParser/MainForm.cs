@@ -146,7 +146,7 @@ namespace Cliver.InvoiceParser
                     Template t = (Template)e.Row.Tag;
                     if (t == null)
                     {
-                        t = Settings.Templates.CreateInitialTemplate();
+                        t = Template.CreateInitialTemplate(Settings.Templates.InitialTemplate);
                         Settings.Templates.Templates.Add(t);
                         e.Row.Tag = t;
                         e.Row.Cells["Name_"].Value = t.Name;

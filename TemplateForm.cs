@@ -82,11 +82,11 @@ namespace Cliver.PdfDocumentParser
             {
                 if (pages == null)
                     return;
-                drawingSelectingBox = true;
-                p0 = new Point((int)(e.X / (float)pictureScale.Value), (int)(e.Y / (float)pictureScale.Value));
-                p1 = new Point(p0.X, p0.Y);
-                p2 = new Point(p0.X, p0.Y);
-                selectionCoordinates.Text = p1.ToString();
+                drawingSelectionBox = true;
+                selectionBoxPoint0 = new Point((int)(e.X / (float)pictureScale.Value), (int)(e.Y / (float)pictureScale.Value));
+                selectionBoxPoint1 = new Point(selectionBoxPoint0.X, selectionBoxPoint0.Y);
+                selectionBoxPoint2 = new Point(selectionBoxPoint0.X, selectionBoxPoint0.Y);
+                selectionCoordinates.Text = selectionBoxPoint1.ToString();
             };
 
             picture.MouseMove += delegate (object sender, MouseEventArgs e)
@@ -96,35 +96,35 @@ namespace Cliver.PdfDocumentParser
 
                 Point p = new Point((int)(e.X / (float)pictureScale.Value), (int)(e.Y / (float)pictureScale.Value));
 
-                if (!drawingSelectingBox)
+                if (!drawingSelectionBox)
                 {
                     selectionCoordinates.Text = p.ToString();
                     return;
                 }
 
-                if (p0.X < p.X)
+                if (selectionBoxPoint0.X < p.X)
                 {
-                    p1.X = p0.X;
-                    p2.X = p.X;
+                    selectionBoxPoint1.X = selectionBoxPoint0.X;
+                    selectionBoxPoint2.X = p.X;
                 }
                 else
                 {
-                    p1.X = p.X;
-                    p2.X = p0.X;
+                    selectionBoxPoint1.X = p.X;
+                    selectionBoxPoint2.X = selectionBoxPoint0.X;
                 }
-                if (p0.Y < p.Y)
+                if (selectionBoxPoint0.Y < p.Y)
                 {
-                    p1.Y = p0.Y;
-                    p2.Y = p.Y;
+                    selectionBoxPoint1.Y = selectionBoxPoint0.Y;
+                    selectionBoxPoint2.Y = p.Y;
                 }
                 else
                 {
-                    p1.Y = p.Y;
-                    p2.Y = p0.Y;
+                    selectionBoxPoint1.Y = p.Y;
+                    selectionBoxPoint2.Y = selectionBoxPoint0.Y;
                 }
-                selectionCoordinates.Text = p1.ToString() + ":" + p2.ToString();
+                selectionCoordinates.Text = selectionBoxPoint1.ToString() + ":" + selectionBoxPoint2.ToString();
 
-                drawBox(Settings.Appearance.SelectionBoxColor, p1.X, p1.Y, p2.X - p1.X, p2.Y - p1.Y);
+                drawBox(Settings.Appearance.SelectionBoxColor, selectionBoxPoint1.X, selectionBoxPoint1.Y, selectionBoxPoint2.X - selectionBoxPoint1.X, selectionBoxPoint2.Y - selectionBoxPoint1.Y);
             };
 
             picture.MouseUp += delegate (object sender, MouseEventArgs e)
@@ -132,11 +132,11 @@ namespace Cliver.PdfDocumentParser
                 if (pages == null)
                     return;
 
-                if (!drawingSelectingBox)
+                if (!drawingSelectionBox)
                     return;
-                drawingSelectingBox = false;
+                drawingSelectionBox = false;
 
-                Template.RectangleF r = new Template.RectangleF(p1.X, p1.Y, p2.X - p1.X, p2.Y - p1.Y);
+                Template.RectangleF r = new Template.RectangleF(selectionBoxPoint1.X, selectionBoxPoint1.Y, selectionBoxPoint2.X - selectionBoxPoint1.X, selectionBoxPoint2.Y - selectionBoxPoint1.Y);
 
                 switch (mode)
                 {
@@ -145,7 +145,7 @@ namespace Cliver.PdfDocumentParser
                             if (floatingAnchors.SelectedRows.Count < 1)
                                 break;
 
-                            RectangleF selectedR = new RectangleF(p1, new SizeF(p2.X - p1.X, p2.Y - p1.Y));
+                            RectangleF selectedR = new RectangleF(selectionBoxPoint1, new SizeF(selectionBoxPoint2.X - selectionBoxPoint1.X, selectionBoxPoint2.Y - selectionBoxPoint1.Y));
                             Template.ValueTypes vt = (Template.ValueTypes)floatingAnchors.SelectedRows[0].Cells["ValueType3"].Value;
                             switch (vt)
                             {
@@ -387,7 +387,7 @@ namespace Cliver.PdfDocumentParser
                         case "Rectangle2":
                             object o = cs["ValueType2"].Value;
                             if (o != null)
-                                cs["Value2"].Value = extractValueAndDrawBox(fai, r, (Template.ValueTypes)o);
+                                cs["Value2"].Value = extractValueAndDrawSelectionBox(fai, r, (Template.ValueTypes)o);
                             break;
                         case "ValueType2":
                             cs["Value2"].Value = null;
@@ -444,7 +444,7 @@ namespace Cliver.PdfDocumentParser
                         {
                             Template.RectangleF r = rs == null ? null : SerializationRoutines.Json.Deserialize<Template.RectangleF>(rs);
                             string t1 = (string)cs["Value2"].Value;
-                            string t2 = extractValueAndDrawBox(fai, r, vt);
+                            string t2 = extractValueAndDrawSelectionBox(fai, r, vt);
                             if (t1 != t2)
                             {
                                 if (vt != Template.ValueTypes.ImageData)
@@ -499,7 +499,7 @@ namespace Cliver.PdfDocumentParser
                     {
                         case "Rectangle":
                         case "Ocr":
-                            cs["Value"].Value = extractValueAndDrawBox((int?)cs["FloatingAnchorId"].Value, r, Convert.ToBoolean(cs["Ocr"].Value) ? Template.ValueTypes.OcrText : Template.ValueTypes.PdfText);
+                            cs["Value"].Value = extractValueAndDrawSelectionBox((int?)cs["FloatingAnchorId"].Value, r, Convert.ToBoolean(cs["Ocr"].Value) ? Template.ValueTypes.OcrText : Template.ValueTypes.PdfText);
                             break;
                         case "FloatingAnchorId":
                             int? fai = (int?)cs["FloatingAnchorId"].Value;
@@ -619,7 +619,7 @@ namespace Cliver.PdfDocumentParser
                         if (rs != null)
                         {
                             Template.RectangleF r = rs == null ? null : SerializationRoutines.Json.Deserialize<Template.RectangleF>(rs);
-                            cs["Value"].Value = extractValueAndDrawBox(fai, r, vt);
+                            cs["Value"].Value = extractValueAndDrawSelectionBox(fai, r, vt);
                         }
                         else
                         {
@@ -639,7 +639,11 @@ namespace Cliver.PdfDocumentParser
             {
                 try
                 {
-                    picture.Image = null;
+                    if (picture.Image != null)
+                    {
+                        picture.Image.Dispose();
+                        picture.Image = null;
+                    }
                     if (scaledCurrentPageBitmap != null)
                     {
                         scaledCurrentPageBitmap.Dispose();
@@ -799,8 +803,12 @@ namespace Cliver.PdfDocumentParser
         {
             if (pages == null)
                 return;
+            if (scaledCurrentPageBitmap != null)
+                scaledCurrentPageBitmap.Dispose();
             scaledCurrentPageBitmap = ImageRoutines.GetScaled(pages[currentPage].ActiveTemplateBitmap, (float)pictureScale.Value * Settings.ImageProcessing.Image2PdfResolutionRatio);
-            picture.Image = scaledCurrentPageBitmap;
+            if (picture.Image != null)
+                picture.Image.Dispose();
+            picture.Image = new Bitmap(scaledCurrentPageBitmap);
         }
         Bitmap scaledCurrentPageBitmap;
 
@@ -833,7 +841,7 @@ namespace Cliver.PdfDocumentParser
             return new PointF(rs[0].X, rs[0].Y);
         }
 
-        string extractValueAndDrawBox(int? floatingAnchorId, Template.RectangleF r, Template.ValueTypes valueType, bool renewImage = true)
+        string extractValueAndDrawSelectionBox(int? floatingAnchorId, Template.RectangleF r, Template.ValueTypes valueType, bool renewImage = true)
         {
             try
             {
@@ -892,32 +900,21 @@ namespace Cliver.PdfDocumentParser
             using (Graphics gr = Graphics.FromImage(bm))
             {
                 float factor = (float)pictureScale.Value;
-                Pen p = new Pen(Settings.Appearance.BoundingBoxColor);
+                Pen p = new Pen(c);
                 foreach (System.Drawing.RectangleF r in rs)
                     gr.DrawRectangle(p, r.X * factor, r.Y * factor, r.Width * factor, r.Height * factor);
             }
+            if (picture.Image != null)
+                picture.Image.Dispose();
             picture.Image = bm;
         }
 
         void drawBox(Color c, float x, float y, float w, float h, bool renewImage = true)
         {
-            if (pages == null)
-                return;
-
-            Bitmap bm;
-            if (renewImage)
-                bm = new Bitmap(scaledCurrentPageBitmap);
-            else
-                bm = new Bitmap(picture.Image);
-            using (Graphics gr = Graphics.FromImage(bm))
-            {
-                float factor = (float)pictureScale.Value;
-                gr.DrawRectangle(new Pen(c), x * factor, y * factor, w * factor, h * factor);
-            }
-            picture.Image = bm;
+            drawBoxes(c, new List<System.Drawing.RectangleF> { new RectangleF(x, y, w, h) }, renewImage);
         }
-        Point p0, p1, p2;
-        bool drawingSelectingBox = false;
+        Point selectionBoxPoint0, selectionBoxPoint1, selectionBoxPoint2;
+        bool drawingSelectionBox = false;
 
         void setFloatingAnchorFromSelectedElements()
         {
@@ -1180,11 +1177,6 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        private void bIsDocumentFirstPage_Click(object sender, EventArgs e)
-        {
-            checkIfCurrentPageIsDocumentFirstPage();
-        }
-
         bool? checkIfCurrentPageIsDocumentFirstPage()
         {
             try
@@ -1228,22 +1220,6 @@ namespace Cliver.PdfDocumentParser
             {
                 LogMessage.Error(ex);
             }
-        }
-
-        private void bShowPdfText_Click(object sender, EventArgs e)
-        {
-            if (pages == null)
-                return;
-            TextForm tf = new TextForm(PdfTextExtractor.GetTextFromPage(pages.PdfReader, currentPage), false);
-            tf.ShowDialog();
-        }
-
-        private void bShowOcrText_Click(object sender, EventArgs e)
-        {
-            if (pages == null)
-                return;
-            TextForm tf = new TextForm(PdfDocumentParser.Ocr.This.GetHtml(pages[currentPage].Bitmap), true);
-            tf.ShowDialog();
         }
 
         private void tCurrentPage_Leave(object sender, EventArgs e)
@@ -1290,6 +1266,39 @@ namespace Cliver.PdfDocumentParser
             {
                 Message.Error2(ex);
             }
+        }
+
+        private void About_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            AboutBox ab = new AboutBox();
+            ab.ShowDialog();
+        }
+
+        private void Configure_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            SettingsForm sf = new SettingsForm();
+            sf.ShowDialog();
+        }
+
+        private void ShowPdfText_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (pages == null)
+                return;
+            TextForm tf = new TextForm(PdfTextExtractor.GetTextFromPage(pages.PdfReader, currentPage), false);
+            tf.ShowDialog();
+        }
+
+        private void ShowOcrText_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (pages == null)
+                return;
+            TextForm tf = new TextForm(PdfDocumentParser.Ocr.This.GetHtml(pages[currentPage].Bitmap), true);
+            tf.ShowDialog();
+        }
+
+        private void IsDocumentFirstPage_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            checkIfCurrentPageIsDocumentFirstPage();
         }
 
         private void save_Click(object sender, EventArgs e)

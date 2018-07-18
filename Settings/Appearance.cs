@@ -25,7 +25,6 @@ namespace Cliver.PdfDocumentParser
         {
             public System.Drawing.Color SelectionBoxColor = System.Drawing.Color.Red;
             public System.Drawing.Color BoundingBoxColor = System.Drawing.Color.BlueViolet;
-            public decimal TestPictureScale = 1.3m;
 
             public override void Loaded()
             {

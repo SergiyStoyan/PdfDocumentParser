@@ -31,6 +31,12 @@
             this.picture = new System.Windows.Forms.PictureBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
+            this.ShowPdfText = new System.Windows.Forms.LinkLabel();
+            this.label17 = new System.Windows.Forms.Label();
+            this.ShowOcrText = new System.Windows.Forms.LinkLabel();
+            this.label18 = new System.Windows.Forms.Label();
+            this.IsDocumentFirstPage = new System.Windows.Forms.LinkLabel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.AutoDeskewThreshold = new System.Windows.Forms.NumericUpDown();
             this.label14 = new System.Windows.Forms.Label();
@@ -48,10 +54,6 @@
             this.ValueType3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Body3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label10 = new System.Windows.Forms.Label();
-            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-            this.bShowPdfText = new System.Windows.Forms.Button();
-            this.bShowOcrText = new System.Windows.Forms.Button();
-            this.bIsDocumentFirstPage = new System.Windows.Forms.Button();
             this.bTestFile = new System.Windows.Forms.Button();
             this.tCurrentPage = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -62,7 +64,6 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.name = new System.Windows.Forms.TextBox();
             this.selectionCoordinates = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -83,12 +84,18 @@
             this.Rectangle = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Ocr = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.save = new System.Windows.Forms.Button();
             this.cancel = new System.Windows.Forms.Button();
+            this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
             this.SaveAsInitialTemplate = new System.Windows.Forms.LinkLabel();
+            this.label15 = new System.Windows.Forms.Label();
+            this.Configure = new System.Windows.Forms.LinkLabel();
+            this.label16 = new System.Windows.Forms.Label();
+            this.About = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -98,12 +105,12 @@
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            this.flowLayoutPanel4.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AutoDeskewThreshold)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.differentPixelNumberTolerance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.brightnessTolerance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.floatingAnchors)).BeginInit();
-            this.flowLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureScale)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
             this.splitContainer3.Panel1.SuspendLayout();
@@ -111,8 +118,9 @@
             this.splitContainer3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.documentFirstPageRecognitionMarks)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).BeginInit();
-            this.panel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
+            this.flowLayoutPanel3.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // picture
@@ -139,7 +147,7 @@
             // 
             this.splitContainer1.Panel2.AutoScroll = true;
             this.splitContainer1.Panel2.Controls.Add(this.picture);
-            this.splitContainer1.Size = new System.Drawing.Size(1080, 695);
+            this.splitContainer1.Size = new System.Drawing.Size(1080, 649);
             this.splitContainer1.SplitterDistance = 463;
             this.splitContainer1.TabIndex = 1;
             // 
@@ -152,11 +160,11 @@
             // 
             // splitContainer2.Panel1
             // 
+            this.splitContainer2.Panel1.Controls.Add(this.flowLayoutPanel4);
             this.splitContainer2.Panel1.Controls.Add(this.groupBox1);
             this.splitContainer2.Panel1.Controls.Add(this.testFile);
             this.splitContainer2.Panel1.Controls.Add(this.floatingAnchors);
             this.splitContainer2.Panel1.Controls.Add(this.label10);
-            this.splitContainer2.Panel1.Controls.Add(this.flowLayoutPanel2);
             this.splitContainer2.Panel1.Controls.Add(this.bTestFile);
             this.splitContainer2.Panel1.Controls.Add(this.tCurrentPage);
             this.splitContainer2.Panel1.Controls.Add(this.label2);
@@ -179,9 +187,78 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.splitContainer3);
-            this.splitContainer2.Size = new System.Drawing.Size(443, 675);
-            this.splitContainer2.SplitterDistance = 433;
+            this.splitContainer2.Size = new System.Drawing.Size(443, 629);
+            this.splitContainer2.SplitterDistance = 403;
             this.splitContainer2.TabIndex = 32;
+            // 
+            // flowLayoutPanel4
+            // 
+            this.flowLayoutPanel4.AutoSize = true;
+            this.flowLayoutPanel4.Controls.Add(this.ShowPdfText);
+            this.flowLayoutPanel4.Controls.Add(this.label17);
+            this.flowLayoutPanel4.Controls.Add(this.ShowOcrText);
+            this.flowLayoutPanel4.Controls.Add(this.label18);
+            this.flowLayoutPanel4.Controls.Add(this.IsDocumentFirstPage);
+            this.flowLayoutPanel4.Location = new System.Drawing.Point(4, 166);
+            this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
+            this.flowLayoutPanel4.Name = "flowLayoutPanel4";
+            this.flowLayoutPanel4.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
+            this.flowLayoutPanel4.Size = new System.Drawing.Size(354, 23);
+            this.flowLayoutPanel4.TabIndex = 51;
+            // 
+            // ShowPdfText
+            // 
+            this.ShowPdfText.AutoSize = true;
+            this.ShowPdfText.Location = new System.Drawing.Point(3, 5);
+            this.ShowPdfText.Name = "ShowPdfText";
+            this.ShowPdfText.Size = new System.Drawing.Size(77, 13);
+            this.ShowPdfText.TabIndex = 22;
+            this.ShowPdfText.TabStop = true;
+            this.ShowPdfText.Text = "Show Pdf Text";
+            this.ShowPdfText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.ShowPdfText.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ShowPdfText_LinkClicked);
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(86, 5);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(9, 13);
+            this.label17.TabIndex = 24;
+            this.label17.Text = "|";
+            // 
+            // ShowOcrText
+            // 
+            this.ShowOcrText.AutoSize = true;
+            this.ShowOcrText.Location = new System.Drawing.Point(101, 5);
+            this.ShowOcrText.Name = "ShowOcrText";
+            this.ShowOcrText.Size = new System.Drawing.Size(78, 13);
+            this.ShowOcrText.TabIndex = 25;
+            this.ShowOcrText.TabStop = true;
+            this.ShowOcrText.Text = "Show Ocr Text";
+            this.ShowOcrText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.ShowOcrText.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ShowOcrText_LinkClicked);
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(185, 5);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(9, 13);
+            this.label18.TabIndex = 26;
+            this.label18.Text = "|";
+            // 
+            // IsDocumentFirstPage
+            // 
+            this.IsDocumentFirstPage.AutoSize = true;
+            this.IsDocumentFirstPage.Location = new System.Drawing.Point(200, 5);
+            this.IsDocumentFirstPage.Name = "IsDocumentFirstPage";
+            this.IsDocumentFirstPage.Size = new System.Drawing.Size(123, 13);
+            this.IsDocumentFirstPage.TabIndex = 23;
+            this.IsDocumentFirstPage.TabStop = true;
+            this.IsDocumentFirstPage.Text = "Is Document First Page?";
+            this.IsDocumentFirstPage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.IsDocumentFirstPage.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.IsDocumentFirstPage_LinkClicked);
             // 
             // groupBox1
             // 
@@ -197,9 +274,9 @@
             this.groupBox1.Controls.Add(this.pageRotation);
             this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.autoDeskew);
-            this.groupBox1.Location = new System.Drawing.Point(0, 209);
+            this.groupBox1.Location = new System.Drawing.Point(0, 192);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(440, 99);
+            this.groupBox1.Size = new System.Drawing.Size(440, 104);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Scanned Document Settings";
@@ -366,11 +443,11 @@
             this.Id3,
             this.ValueType3,
             this.Body3});
-            this.floatingAnchors.Location = new System.Drawing.Point(0, 327);
+            this.floatingAnchors.Location = new System.Drawing.Point(0, 315);
             this.floatingAnchors.MultiSelect = false;
             this.floatingAnchors.Name = "floatingAnchors";
             this.floatingAnchors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.floatingAnchors.Size = new System.Drawing.Size(443, 104);
+            this.floatingAnchors.Size = new System.Drawing.Size(443, 85);
             this.floatingAnchors.TabIndex = 50;
             // 
             // Id3
@@ -398,54 +475,11 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(-2, 311);
+            this.label10.Location = new System.Drawing.Point(-2, 299);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(89, 13);
             this.label10.TabIndex = 49;
             this.label10.Text = "Floating Anchors:";
-            // 
-            // flowLayoutPanel2
-            // 
-            this.flowLayoutPanel2.Controls.Add(this.bShowPdfText);
-            this.flowLayoutPanel2.Controls.Add(this.bShowOcrText);
-            this.flowLayoutPanel2.Controls.Add(this.bIsDocumentFirstPage);
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 172);
-            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(360, 31);
-            this.flowLayoutPanel2.TabIndex = 48;
-            // 
-            // bShowPdfText
-            // 
-            this.bShowPdfText.AutoSize = true;
-            this.bShowPdfText.Location = new System.Drawing.Point(3, 3);
-            this.bShowPdfText.Name = "bShowPdfText";
-            this.bShowPdfText.Size = new System.Drawing.Size(87, 23);
-            this.bShowPdfText.TabIndex = 45;
-            this.bShowPdfText.Text = "Show Pdf Text";
-            this.bShowPdfText.UseVisualStyleBackColor = true;
-            this.bShowPdfText.Click += new System.EventHandler(this.bShowPdfText_Click);
-            // 
-            // bShowOcrText
-            // 
-            this.bShowOcrText.AutoSize = true;
-            this.bShowOcrText.Location = new System.Drawing.Point(96, 3);
-            this.bShowOcrText.Name = "bShowOcrText";
-            this.bShowOcrText.Size = new System.Drawing.Size(88, 23);
-            this.bShowOcrText.TabIndex = 46;
-            this.bShowOcrText.Text = "Show Ocr Text";
-            this.bShowOcrText.UseVisualStyleBackColor = true;
-            this.bShowOcrText.Click += new System.EventHandler(this.bShowOcrText_Click);
-            // 
-            // bIsDocumentFirstPage
-            // 
-            this.bIsDocumentFirstPage.AutoSize = true;
-            this.bIsDocumentFirstPage.Location = new System.Drawing.Point(190, 3);
-            this.bIsDocumentFirstPage.Name = "bIsDocumentFirstPage";
-            this.bIsDocumentFirstPage.Size = new System.Drawing.Size(133, 23);
-            this.bIsDocumentFirstPage.TabIndex = 27;
-            this.bIsDocumentFirstPage.Text = "Is Document First Page?";
-            this.bIsDocumentFirstPage.UseVisualStyleBackColor = true;
-            this.bIsDocumentFirstPage.Click += new System.EventHandler(this.bIsDocumentFirstPage_Click);
             // 
             // bTestFile
             // 
@@ -460,7 +494,7 @@
             // 
             // tCurrentPage
             // 
-            this.tCurrentPage.Location = new System.Drawing.Point(163, 2);
+            this.tCurrentPage.Location = new System.Drawing.Point(197, 2);
             this.tCurrentPage.Name = "tCurrentPage";
             this.tCurrentPage.Size = new System.Drawing.Size(26, 20);
             this.tCurrentPage.TabIndex = 47;
@@ -479,7 +513,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(122, 6);
+            this.label8.Location = new System.Drawing.Point(156, 6);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(35, 13);
             this.label8.TabIndex = 46;
@@ -504,7 +538,7 @@
             0,
             0,
             65536});
-            this.pictureScale.Location = new System.Drawing.Point(58, 3);
+            this.pictureScale.Location = new System.Drawing.Point(92, 3);
             this.pictureScale.Maximum = new decimal(new int[] {
             10,
             0,
@@ -562,16 +596,6 @@
             this.label6.TabIndex = 40;
             this.label6.Text = "Name/Company:";
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(-3, 110);
-            this.label3.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(113, 13);
-            this.label3.TabIndex = 31;
-            this.label3.Text = "Selection Coordinates:";
-            // 
             // name
             // 
             this.name.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -603,7 +627,7 @@
             // lTotalPages
             // 
             this.lTotalPages.AutoSize = true;
-            this.lTotalPages.Location = new System.Drawing.Point(193, 6);
+            this.lTotalPages.Location = new System.Drawing.Point(227, 6);
             this.lTotalPages.Name = "lTotalPages";
             this.lTotalPages.Size = new System.Drawing.Size(32, 13);
             this.lTotalPages.TabIndex = 33;
@@ -658,8 +682,8 @@
             this.splitContainer3.Panel2.Controls.Add(this.fields);
             this.splitContainer3.Panel2.Controls.Add(this.panel1);
             this.splitContainer3.Panel2.Controls.Add(this.label1);
-            this.splitContainer3.Size = new System.Drawing.Size(443, 238);
-            this.splitContainer3.SplitterDistance = 93;
+            this.splitContainer3.Size = new System.Drawing.Size(443, 222);
+            this.splitContainer3.SplitterDistance = 85;
             this.splitContainer3.TabIndex = 0;
             // 
             // documentFirstPageRecognitionMarks
@@ -675,7 +699,7 @@
             this.documentFirstPageRecognitionMarks.MultiSelect = false;
             this.documentFirstPageRecognitionMarks.Name = "documentFirstPageRecognitionMarks";
             this.documentFirstPageRecognitionMarks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.documentFirstPageRecognitionMarks.Size = new System.Drawing.Size(443, 80);
+            this.documentFirstPageRecognitionMarks.Size = new System.Drawing.Size(443, 72);
             this.documentFirstPageRecognitionMarks.TabIndex = 29;
             // 
             // FloatingAnchorId2
@@ -730,7 +754,7 @@
             this.fields.MultiSelect = false;
             this.fields.Name = "fields";
             this.fields.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.fields.Size = new System.Drawing.Size(443, 98);
+            this.fields.Size = new System.Drawing.Size(443, 89);
             this.fields.TabIndex = 30;
             // 
             // Name_
@@ -768,32 +792,21 @@
             this.Value.Name = "Value";
             this.Value.ReadOnly = true;
             // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.flowLayoutPanel1);
-            this.panel1.Controls.Add(this.SaveAsInitialTemplate);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 111);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(443, 30);
-            this.panel1.TabIndex = 1;
-            // 
             // flowLayoutPanel1
             // 
-            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.flowLayoutPanel1.Controls.Add(this.save);
             this.flowLayoutPanel1.Controls.Add(this.cancel);
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(130, -1);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(273, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(313, 31);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(170, 31);
             this.flowLayoutPanel1.TabIndex = 27;
             // 
             // save
             // 
             this.save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.save.Location = new System.Drawing.Point(235, 3);
+            this.save.Location = new System.Drawing.Point(92, 3);
             this.save.Name = "save";
             this.save.Size = new System.Drawing.Size(75, 23);
             this.save.TabIndex = 20;
@@ -804,7 +817,7 @@
             // cancel
             // 
             this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.cancel.Location = new System.Drawing.Point(154, 3);
+            this.cancel.Location = new System.Drawing.Point(11, 3);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(75, 23);
             this.cancel.TabIndex = 21;
@@ -812,10 +825,25 @@
             this.cancel.UseVisualStyleBackColor = true;
             this.cancel.Click += new System.EventHandler(this.cancel_Click);
             // 
+            // flowLayoutPanel3
+            // 
+            this.flowLayoutPanel3.AutoSize = true;
+            this.flowLayoutPanel3.Controls.Add(this.SaveAsInitialTemplate);
+            this.flowLayoutPanel3.Controls.Add(this.label15);
+            this.flowLayoutPanel3.Controls.Add(this.Configure);
+            this.flowLayoutPanel3.Controls.Add(this.label16);
+            this.flowLayoutPanel3.Controls.Add(this.About);
+            this.flowLayoutPanel3.Location = new System.Drawing.Point(1, 4);
+            this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
+            this.flowLayoutPanel3.Name = "flowLayoutPanel3";
+            this.flowLayoutPanel3.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
+            this.flowLayoutPanel3.Size = new System.Drawing.Size(256, 23);
+            this.flowLayoutPanel3.TabIndex = 28;
+            // 
             // SaveAsInitialTemplate
             // 
             this.SaveAsInitialTemplate.AutoSize = true;
-            this.SaveAsInitialTemplate.Location = new System.Drawing.Point(3, 9);
+            this.SaveAsInitialTemplate.Location = new System.Drawing.Point(3, 5);
             this.SaveAsInitialTemplate.Name = "SaveAsInitialTemplate";
             this.SaveAsInitialTemplate.Size = new System.Drawing.Size(121, 13);
             this.SaveAsInitialTemplate.TabIndex = 22;
@@ -823,6 +851,48 @@
             this.SaveAsInitialTemplate.Text = "Save As Initial Template";
             this.SaveAsInitialTemplate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.SaveAsInitialTemplate.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.SaveAsInitialTemplate_LinkClicked);
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(130, 5);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(9, 13);
+            this.label15.TabIndex = 24;
+            this.label15.Text = "|";
+            // 
+            // Configure
+            // 
+            this.Configure.AutoSize = true;
+            this.Configure.Location = new System.Drawing.Point(145, 5);
+            this.Configure.Name = "Configure";
+            this.Configure.Size = new System.Drawing.Size(52, 13);
+            this.Configure.TabIndex = 25;
+            this.Configure.TabStop = true;
+            this.Configure.Text = "Configure";
+            this.Configure.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.Configure.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Configure_LinkClicked);
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(203, 5);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(9, 13);
+            this.label16.TabIndex = 26;
+            this.label16.Text = "|";
+            // 
+            // About
+            // 
+            this.About.AutoSize = true;
+            this.About.Location = new System.Drawing.Point(218, 5);
+            this.About.Name = "About";
+            this.About.Size = new System.Drawing.Size(35, 13);
+            this.About.TabIndex = 23;
+            this.About.TabStop = true;
+            this.About.Text = "About";
+            this.About.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.About.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.About_LinkClicked);
             // 
             // label1
             // 
@@ -834,11 +904,32 @@
             this.label1.TabIndex = 29;
             this.label1.Text = "Fields:";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(-3, 110);
+            this.label3.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(113, 13);
+            this.label3.TabIndex = 31;
+            this.label3.Text = "Selection Coordinates:";
+            // 
+            // panel1
+            // 
+            this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel1.Controls.Add(this.flowLayoutPanel1);
+            this.panel1.Controls.Add(this.flowLayoutPanel3);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(0, 102);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(443, 31);
+            this.panel1.TabIndex = 28;
+            // 
             // TemplateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1080, 695);
+            this.ClientSize = new System.Drawing.Size(1080, 649);
             this.Controls.Add(this.splitContainer1);
             this.Name = "TemplateForm";
             this.Text = "TemplateForm";
@@ -853,14 +944,14 @@
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
+            this.flowLayoutPanel4.ResumeLayout(false);
+            this.flowLayoutPanel4.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AutoDeskewThreshold)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.differentPixelNumberTolerance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.brightnessTolerance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.floatingAnchors)).EndInit();
-            this.flowLayoutPanel2.ResumeLayout(false);
-            this.flowLayoutPanel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureScale)).EndInit();
             this.splitContainer3.Panel1.ResumeLayout(false);
             this.splitContainer3.Panel1.PerformLayout();
@@ -870,9 +961,11 @@
             this.splitContainer3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.documentFirstPageRecognitionMarks)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).EndInit();
+            this.flowLayoutPanel1.ResumeLayout(false);
+            this.flowLayoutPanel3.ResumeLayout(false);
+            this.flowLayoutPanel3.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -892,10 +985,8 @@
         private System.Windows.Forms.Button bNextPage;
         private System.Windows.Forms.Button bPrevPage;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button bIsDocumentFirstPage;
         private System.Windows.Forms.DataGridView documentFirstPageRecognitionMarks;
         private System.Windows.Forms.Label selectionCoordinates;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label lTotalPages;
         private System.Windows.Forms.TextBox lStatus;
@@ -906,10 +997,8 @@
         private System.Windows.Forms.TextBox name;
         private System.Windows.Forms.NumericUpDown pictureScale;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Button bShowPdfText;
         private System.Windows.Forms.TextBox tCurrentPage;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ComboBox pageRotation;
         private System.Windows.Forms.CheckBox autoDeskew;
@@ -932,13 +1021,24 @@
         private System.Windows.Forms.NumericUpDown differentPixelNumberTolerance;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.CheckBox findBestImageMatch;
-        private System.Windows.Forms.Button bShowOcrText;
         private System.Windows.Forms.DataGridViewTextBoxColumn Id3;
         private System.Windows.Forms.DataGridViewComboBoxColumn ValueType3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Body3;
         private System.Windows.Forms.LinkLabel SaveAsInitialTemplate;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.NumericUpDown AutoDeskewThreshold;
         private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
+        private System.Windows.Forms.LinkLabel About;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.LinkLabel Configure;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel4;
+        private System.Windows.Forms.LinkLabel ShowPdfText;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.LinkLabel ShowOcrText;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.LinkLabel IsDocumentFirstPage;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Panel panel1;
     }
 }

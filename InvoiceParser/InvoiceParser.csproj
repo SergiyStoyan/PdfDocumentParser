@@ -200,15 +200,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <AdditionalFiles Include="config\General.Cliver.InvoiceParser.Settings+GeneralSettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </AdditionalFiles>
-    <AdditionalFiles Include="config\Templates.Cliver.InvoiceParser.Settings+TemplatesSettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </AdditionalFiles>
-    <AdditionalFiles Include="config\TestFiles.Cliver.PdfDocumentParser.Settings+TestFilesSettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </AdditionalFiles>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -243,8 +234,9 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>xcopy /Y /S "$(ProjectDir)config" "$(TargetDir)"
+xcopy /Y /S "$(ProjectDir)..\externals" "$(TargetDir)"
+xcopy /Y /S "$(ProjectDir)..\config" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

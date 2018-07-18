@@ -34,39 +34,39 @@ namespace Cliver.InvoiceParser
             {
             }
 
-            public Template CreateInitialTemplate()
-            {
-                if (InitialTemplate != null)
-                {
-                    string ts = SerializationRoutines.Json.Serialize(Settings.Templates.InitialTemplate);
-                    return SerializationRoutines.Json.Deserialize<Template>(ts);
-                }
-                if (PdfDocumentParser.Settings.ImageProcessing == null)
-                    Config.PreloadField("ImageProcessing");
-                if (PdfDocumentParser.Settings.Appearance == null)
-                    Config.PreloadField("Appearance");
-                return new Template
-                {
-                    Active = true,
-                    AutoDeskew = false,
-                    BrightnessTolerance = PdfDocumentParser.Settings.ImageProcessing.BrightnessTolerance,
-                    DifferentPixelNumberTolerance = PdfDocumentParser.Settings.ImageProcessing.DifferentPixelNumberTolerance,
-                    Fields = new List<Template.Field> {
-                        new Template.Field { Name = "INVOICE#" , Rectangle=new Template.RectangleF(0,0,10,10)},
-                        new Template.Field { Name = "JOB#", Rectangle=new Template.RectangleF(0,0,10,10) },
-                        new Template.Field { Name = "PO#", Rectangle=new Template.RectangleF(0,0,10,10) },
-                        new Template.Field { Name = "COST" , Rectangle=new Template.RectangleF(0,0,10,10)},
-                    },
-                    Name = "-new-",
-                    FileFilterRegex = new Regex(@"\.pdf$", RegexOptions.IgnoreCase),
-                    FindBestImageMatch = false,
-                    FloatingAnchors = new List<Template.FloatingAnchor>(),
-                    DocumentFirstPageRecognitionMarks = new List<Template.Mark>(),
-                    PagesRotation = Template.PageRotations.NONE,
-                    TestPictureScale = PdfDocumentParser.Settings.Appearance.TestPictureScale,
-                    TestFile = "",
-                };
-            }
+            //public Template CreateInitialTemplate()
+            //{
+            //    if (InitialTemplate != null)
+            //    {
+            //        string ts = SerializationRoutines.Json.Serialize(Settings.Templates.InitialTemplate);
+            //        return SerializationRoutines.Json.Deserialize<Template>(ts);
+            //    }
+            //    if (PdfDocumentParser.Settings.ImageProcessing == null)
+            //        Config.PreloadField("ImageProcessing");
+            //    if (PdfDocumentParser.Settings.Appearance == null)
+            //        Config.PreloadField("Appearance");
+            //    return new Template
+            //    {
+            //        Active = true,
+            //        AutoDeskew = false,
+            //        BrightnessTolerance = PdfDocumentParser.Settings.ImageProcessing.BrightnessTolerance,
+            //        DifferentPixelNumberTolerance = PdfDocumentParser.Settings.ImageProcessing.DifferentPixelNumberTolerance,
+            //        Fields = new List<Template.Field> {
+            //            new Template.Field { Name = "INVOICE#" , Rectangle=new Template.RectangleF(0,0,10,10)},
+            //            new Template.Field { Name = "JOB#", Rectangle=new Template.RectangleF(0,0,10,10) },
+            //            new Template.Field { Name = "PO#", Rectangle=new Template.RectangleF(0,0,10,10) },
+            //            new Template.Field { Name = "COST" , Rectangle=new Template.RectangleF(0,0,10,10)},
+            //        },
+            //        Name = "-new-",
+            //        FileFilterRegex = new Regex(@"\.pdf$", RegexOptions.IgnoreCase),
+            //        FindBestImageMatch = false,
+            //        FloatingAnchors = new List<Template.FloatingAnchor>(),
+            //        DocumentFirstPageRecognitionMarks = new List<Template.Mark>(),
+            //        PagesRotation = Template.PageRotations.NONE,
+            //        TestPictureScale = 1.3m,
+            //        TestFile = "",
+            //    };
+            //}
         }
     }
 }
