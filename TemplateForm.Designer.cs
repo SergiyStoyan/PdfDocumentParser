@@ -37,6 +37,8 @@
             this.ShowOcrText = new System.Windows.Forms.LinkLabel();
             this.label18 = new System.Windows.Forms.Label();
             this.IsDocumentFirstPage = new System.Windows.Forms.LinkLabel();
+            this.name = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.AutoDeskewThreshold = new System.Windows.Forms.NumericUpDown();
             this.label14 = new System.Windows.Forms.Label();
@@ -63,8 +65,6 @@
             this.bNextPage = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.name = new System.Windows.Forms.TextBox();
             this.selectionCoordinates = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.lTotalPages = new System.Windows.Forms.Label();
@@ -95,6 +95,8 @@
             this.label16 = new System.Windows.Forms.Label();
             this.About = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.Help = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -147,7 +149,7 @@
             this.splitContainer1.Panel2.AutoScroll = true;
             this.splitContainer1.Panel2.Controls.Add(this.picture);
             this.splitContainer1.Size = new System.Drawing.Size(1080, 649);
-            this.splitContainer1.SplitterDistance = 463;
+            this.splitContainer1.SplitterDistance = 449;
             this.splitContainer1.TabIndex = 1;
             // 
             // splitContainer2
@@ -185,7 +187,7 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.splitContainer3);
-            this.splitContainer2.Size = new System.Drawing.Size(443, 629);
+            this.splitContainer2.Size = new System.Drawing.Size(429, 629);
             this.splitContainer2.SplitterDistance = 403;
             this.splitContainer2.TabIndex = 32;
             // 
@@ -258,6 +260,24 @@
             this.IsDocumentFirstPage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.IsDocumentFirstPage.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.IsDocumentFirstPage_LinkClicked);
             // 
+            // name
+            // 
+            this.name.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.name.Location = new System.Drawing.Point(51, 2);
+            this.name.Name = "name";
+            this.name.Size = new System.Drawing.Size(156, 20);
+            this.name.TabIndex = 39;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(-3, 5);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(54, 13);
+            this.label6.TabIndex = 40;
+            this.label6.Text = "Template:";
+            // 
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -274,7 +294,7 @@
             this.groupBox1.Controls.Add(this.autoDeskew);
             this.groupBox1.Location = new System.Drawing.Point(0, 174);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(440, 104);
+            this.groupBox1.Size = new System.Drawing.Size(426, 104);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Scanned Document Settings";
@@ -426,9 +446,9 @@
             // 
             this.testFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.testFile.Location = new System.Drawing.Point(88, 55);
+            this.testFile.Location = new System.Drawing.Point(51, 55);
             this.testFile.Name = "testFile";
-            this.testFile.Size = new System.Drawing.Size(322, 20);
+            this.testFile.Size = new System.Drawing.Size(345, 20);
             this.testFile.TabIndex = 10;
             // 
             // floatingAnchors
@@ -445,7 +465,7 @@
             this.floatingAnchors.MultiSelect = false;
             this.floatingAnchors.Name = "floatingAnchors";
             this.floatingAnchors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.floatingAnchors.Size = new System.Drawing.Size(443, 103);
+            this.floatingAnchors.Size = new System.Drawing.Size(429, 103);
             this.floatingAnchors.TabIndex = 50;
             // 
             // Id3
@@ -482,7 +502,7 @@
             // bTestFile
             // 
             this.bTestFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bTestFile.Location = new System.Drawing.Point(416, 52);
+            this.bTestFile.Location = new System.Drawing.Point(402, 52);
             this.bTestFile.Name = "bTestFile";
             this.bTestFile.Size = new System.Drawing.Size(24, 23);
             this.bTestFile.TabIndex = 9;
@@ -493,7 +513,7 @@
             // tCurrentPage
             // 
             this.tCurrentPage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.tCurrentPage.Location = new System.Drawing.Point(256, 30);
+            this.tCurrentPage.Location = new System.Drawing.Point(242, 30);
             this.tCurrentPage.Name = "tCurrentPage";
             this.tCurrentPage.Size = new System.Drawing.Size(26, 20);
             this.tCurrentPage.TabIndex = 47;
@@ -513,7 +533,7 @@
             // 
             this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(219, 32);
+            this.label8.Location = new System.Drawing.Point(205, 32);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(35, 13);
             this.label8.TabIndex = 46;
@@ -522,7 +542,7 @@
             // bPrevPage
             // 
             this.bPrevPage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bPrevPage.Location = new System.Drawing.Point(340, 26);
+            this.bPrevPage.Location = new System.Drawing.Point(326, 26);
             this.bPrevPage.Name = "bPrevPage";
             this.bPrevPage.Size = new System.Drawing.Size(47, 23);
             this.bPrevPage.TabIndex = 22;
@@ -538,7 +558,7 @@
             0,
             0,
             65536});
-            this.pictureScale.Location = new System.Drawing.Point(88, 29);
+            this.pictureScale.Location = new System.Drawing.Point(51, 28);
             this.pictureScale.Maximum = new decimal(new int[] {
             10,
             0,
@@ -561,7 +581,7 @@
             // bNextPage
             // 
             this.bNextPage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bNextPage.Location = new System.Drawing.Point(393, 26);
+            this.bNextPage.Location = new System.Drawing.Point(379, 26);
             this.bNextPage.Name = "bNextPage";
             this.bNextPage.Size = new System.Drawing.Size(47, 23);
             this.bNextPage.TabIndex = 23;
@@ -587,29 +607,11 @@
             this.label12.TabIndex = 30;
             this.label12.Text = "Status:";
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(-3, 5);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(54, 13);
-            this.label6.TabIndex = 40;
-            this.label6.Text = "Template:";
-            // 
-            // name
-            // 
-            this.name.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.name.Location = new System.Drawing.Point(88, 2);
-            this.name.Name = "name";
-            this.name.Size = new System.Drawing.Size(133, 20);
-            this.name.TabIndex = 39;
-            // 
             // selectionCoordinates
             // 
             this.selectionCoordinates.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.selectionCoordinates.AutoSize = true;
-            this.selectionCoordinates.Location = new System.Drawing.Point(232, 5);
+            this.selectionCoordinates.Location = new System.Drawing.Point(218, 5);
             this.selectionCoordinates.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.selectionCoordinates.Name = "selectionCoordinates";
             this.selectionCoordinates.Size = new System.Drawing.Size(119, 13);
@@ -621,15 +623,15 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(-2, 85);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(85, 13);
+            this.label5.Size = new System.Drawing.Size(51, 13);
             this.label5.TabIndex = 38;
-            this.label5.Text = "File Filter Regex:";
+            this.label5.Text = "File Filter:";
             // 
             // lTotalPages
             // 
             this.lTotalPages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lTotalPages.AutoSize = true;
-            this.lTotalPages.Location = new System.Drawing.Point(284, 32);
+            this.lTotalPages.Location = new System.Drawing.Point(270, 32);
             this.lTotalPages.Name = "lTotalPages";
             this.lTotalPages.Size = new System.Drawing.Size(32, 13);
             this.lTotalPages.TabIndex = 33;
@@ -638,7 +640,7 @@
             // bTestFileFilterRegex
             // 
             this.bTestFileFilterRegex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bTestFileFilterRegex.Location = new System.Drawing.Point(393, 81);
+            this.bTestFileFilterRegex.Location = new System.Drawing.Point(379, 81);
             this.bTestFileFilterRegex.Name = "bTestFileFilterRegex";
             this.bTestFileFilterRegex.Size = new System.Drawing.Size(47, 23);
             this.bTestFileFilterRegex.TabIndex = 37;
@@ -655,16 +657,16 @@
             this.lStatus.Name = "lStatus";
             this.lStatus.ReadOnly = true;
             this.lStatus.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.lStatus.Size = new System.Drawing.Size(389, 39);
+            this.lStatus.Size = new System.Drawing.Size(375, 39);
             this.lStatus.TabIndex = 35;
             // 
             // fileFilterRegex
             // 
             this.fileFilterRegex.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.fileFilterRegex.Location = new System.Drawing.Point(88, 82);
+            this.fileFilterRegex.Location = new System.Drawing.Point(51, 82);
             this.fileFilterRegex.Name = "fileFilterRegex";
-            this.fileFilterRegex.Size = new System.Drawing.Size(299, 20);
+            this.fileFilterRegex.Size = new System.Drawing.Size(322, 20);
             this.fileFilterRegex.TabIndex = 36;
             // 
             // splitContainer3
@@ -684,7 +686,7 @@
             this.splitContainer3.Panel2.Controls.Add(this.fields);
             this.splitContainer3.Panel2.Controls.Add(this.panel1);
             this.splitContainer3.Panel2.Controls.Add(this.label1);
-            this.splitContainer3.Size = new System.Drawing.Size(443, 222);
+            this.splitContainer3.Size = new System.Drawing.Size(429, 222);
             this.splitContainer3.SplitterDistance = 85;
             this.splitContainer3.TabIndex = 0;
             // 
@@ -701,7 +703,7 @@
             this.documentFirstPageRecognitionMarks.MultiSelect = false;
             this.documentFirstPageRecognitionMarks.Name = "documentFirstPageRecognitionMarks";
             this.documentFirstPageRecognitionMarks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.documentFirstPageRecognitionMarks.Size = new System.Drawing.Size(443, 72);
+            this.documentFirstPageRecognitionMarks.Size = new System.Drawing.Size(429, 72);
             this.documentFirstPageRecognitionMarks.TabIndex = 29;
             // 
             // FloatingAnchorId2
@@ -756,7 +758,7 @@
             this.fields.MultiSelect = false;
             this.fields.Name = "fields";
             this.fields.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.fields.Size = new System.Drawing.Size(443, 89);
+            this.fields.Size = new System.Drawing.Size(429, 89);
             this.fields.TabIndex = 30;
             // 
             // Name_
@@ -802,7 +804,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 102);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(443, 31);
+            this.panel1.Size = new System.Drawing.Size(429, 31);
             this.panel1.TabIndex = 28;
             // 
             // flowLayoutPanel1
@@ -811,7 +813,7 @@
             this.flowLayoutPanel1.Controls.Add(this.save);
             this.flowLayoutPanel1.Controls.Add(this.cancel);
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(273, 0);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(259, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(170, 31);
             this.flowLayoutPanel1.TabIndex = 27;
@@ -845,12 +847,14 @@
             this.flowLayoutPanel3.Controls.Add(this.label15);
             this.flowLayoutPanel3.Controls.Add(this.Configure);
             this.flowLayoutPanel3.Controls.Add(this.label16);
+            this.flowLayoutPanel3.Controls.Add(this.Help);
+            this.flowLayoutPanel3.Controls.Add(this.label3);
             this.flowLayoutPanel3.Controls.Add(this.About);
             this.flowLayoutPanel3.Location = new System.Drawing.Point(1, 4);
             this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel3.Name = "flowLayoutPanel3";
             this.flowLayoutPanel3.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
-            this.flowLayoutPanel3.Size = new System.Drawing.Size(256, 23);
+            this.flowLayoutPanel3.Size = new System.Drawing.Size(306, 23);
             this.flowLayoutPanel3.TabIndex = 28;
             // 
             // SaveAsInitialTemplate
@@ -898,7 +902,7 @@
             // About
             // 
             this.About.AutoSize = true;
-            this.About.Location = new System.Drawing.Point(218, 5);
+            this.About.Location = new System.Drawing.Point(268, 5);
             this.About.Name = "About";
             this.About.Size = new System.Drawing.Size(35, 13);
             this.About.TabIndex = 23;
@@ -916,6 +920,27 @@
             this.label1.Size = new System.Drawing.Size(37, 13);
             this.label1.TabIndex = 29;
             this.label1.Text = "Fields:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(253, 5);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(9, 13);
+            this.label3.TabIndex = 28;
+            this.label3.Text = "|";
+            // 
+            // Help
+            // 
+            this.Help.AutoSize = true;
+            this.Help.Location = new System.Drawing.Point(218, 5);
+            this.Help.Name = "Help";
+            this.Help.Size = new System.Drawing.Size(29, 13);
+            this.Help.TabIndex = 27;
+            this.Help.TabStop = true;
+            this.Help.Text = "Help";
+            this.Help.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.Help.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Help_LinkClicked);
             // 
             // TemplateForm
             // 
@@ -1031,5 +1056,7 @@
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.LinkLabel IsDocumentFirstPage;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.LinkLabel Help;
+        private System.Windows.Forms.Label label3;
     }
 }

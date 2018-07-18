@@ -19,10 +19,10 @@ p {
 <body>
 <h1>PdfDocumentParser</h1>
 <h2>Overview</h2>
-<p>PdfDocumentParser is intended to extract text/images from PDF documents which have predefined graphic layout - such as invoices and the like. The main approach of parsing is based on finding certain text or image fragments in page and then extracting text from rectangle whose coordinates relate to them.
+<p>PdfDocumentParser is intended to extract text/images from PDF documents that conform to a predefined graphic layout - such as invoices and the like. The main approach of parsing is based on finding certain text or image fragments in page and then extracting text from rectangle whose coordinates relate to them.
 <p>Within this scope PdfDocumentParser provides the following options:
 <ul>
-<li>PDF elements processing (the main way to operate with text in PdfDocumentParser);</li>
+<li>PDF entities processing (the main way to operate with text in PdfDocumentParser);</li>
 <li>OCR processing;</li>
 <li>Image processing;</li>
 </ul>
@@ -44,24 +44,24 @@ p {
 <li> optionally create <a href="#floating_anchor">floating anchors</a>;</li>
 <li> create <a href="#mark">document recognition marks</a>;</li>
 <li> create <a href="#field">fields</a>;</li>
-<li> select every created element and see in the status box if it works as expected;</li>
+<li> select each created element and see in the status box if it works as expected;</li>
 <li> optionally define <a href="#file_filter">file filter</a>;</li>
 <li> save the template;</li>
 </ul>
 
 
 <h3><a name="floating_anchor">Floating Anchor</a></h3>
-<p>Floating anchor is a fragment of either text or image that PdfDocumentParser will look in every page of a document. Then the found anchor is used to locate in the page Marks or/and Fields that are linked to it. While the only idea of floating anchors is detecting absolute coordinate points in page, it serves for the several tasks:
+<p>Floating anchor is a fragment of either text or image that PdfDocumentParser will look for in every page of a document. Then if found, the anchor is used to locate in the page Marks or/and Fields that are linked to this anchor. While the idea of floating anchors is detecting points in page that can be used as absolute coordinate zero, it serves for multiple tasks:
 <ul>
-<li> finding marks/fields whose position in the page may vary e.g. for 'total amount' in the bottom of invoice table;</li> 
+<li> finding marks/fields whose position in the page may vary e.g. finding value of 'total amount' in the bottom of invoice table;</li> 
 <li> recognizing marks/fields which may be met only in one page of a multipage document;</li>
-<li> detecting zero position in scanned documents because usually their margins vary;</li>
+<li> detecting page zero position in scanned documents that usually have their margins vary;</li>
 </ul>
 <p>To create a Floating anchor, select a new row in the floating anchors table and chose its type which can be one of the following:
 <ul>
-<li>PDF text - which is text presented as PDF char boxes;</li>
-<li>OCR text - which is text recognized by OCR engine within the selected area;</li>
-<li>Image data - which is hash of the image bounded by the selection box;</li>
+<li>PDF text, which is text presented as PDF char boxes;</li>
+<li>OCR text, which is text recognized by OCR engine within the selected area;</li>
+<li>Image data, which is a hash of the image bounded by the selection box;</li>
 </ul>
 <p>Then select with mouse a rectangle in the document page. The text or image within the selection box will be that fragment that PdfDocumentParser will look for.
 <p>Upon creating a floating anchor you can create either document recognition marks or fields and link them to the anchor. Linking means that mark's or field's coordinates become relative to the floating anchor they are linked to. That's PdfDocumentParser first will look for the floating anchor and if it is found, it will locate the linked mark or field depending on it's location.

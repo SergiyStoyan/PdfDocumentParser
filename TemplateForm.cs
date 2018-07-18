@@ -1300,6 +1300,12 @@ namespace Cliver.PdfDocumentParser
             checkIfCurrentPageIsDocumentFirstPage();
         }
 
+        private void Help_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            string helpFile = "help.html";
+            System.Diagnostics.Process.Start(helpFile);
+        }
+
         private void save_Click(object sender, EventArgs e)
         {
             try
