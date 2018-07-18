@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 // associated with an assembly.
 //
 [assembly: AssemblyTitle("Invoice Parser")]
-[assembly: AssemblyDescription("Invoice Parser")]
+[assembly: AssemblyDescription("A custom invoice parser based on Pdf Document Parser Framework")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CliverSoft")]
 [assembly: AssemblyProduct("Invoice Parser")]
