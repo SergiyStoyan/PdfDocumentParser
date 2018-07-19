@@ -32,7 +32,6 @@
             this.bSave = new System.Windows.Forms.Button();
             this.bCancel = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.bResetTemplates = new System.Windows.Forms.Button();
             this.IgnoreHidddenFiles = new System.Windows.Forms.CheckBox();
             this.ReadInputFolderRecursively = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -78,25 +77,12 @@
             this.flowLayoutPanel1.Controls.Add(this.bCancel);
             this.flowLayoutPanel1.Controls.Add(this.bSave);
             this.flowLayoutPanel1.Controls.Add(this.bReset);
-            this.flowLayoutPanel1.Controls.Add(this.bResetTemplates);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 108);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(382, 31);
             this.flowLayoutPanel1.TabIndex = 51;
-            // 
-            // bResetTemplates
-            // 
-            this.bResetTemplates.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bResetTemplates.AutoSize = true;
-            this.bResetTemplates.Location = new System.Drawing.Point(39, 3);
-            this.bResetTemplates.Name = "bResetTemplates";
-            this.bResetTemplates.Size = new System.Drawing.Size(97, 23);
-            this.bResetTemplates.TabIndex = 51;
-            this.bResetTemplates.Text = "Reset Templates";
-            this.bResetTemplates.UseVisualStyleBackColor = true;
-            this.bResetTemplates.Click += new System.EventHandler(this.bResetTemplates_Click);
             // 
             // IgnoreHidddenFiles
             // 
@@ -139,7 +125,6 @@
             this.Name = "SettingsForm";
             this.Text = "SettingsForm";
             this.flowLayoutPanel1.ResumeLayout(false);
-            this.flowLayoutPanel1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
@@ -154,6 +139,5 @@
         private System.Windows.Forms.CheckBox IgnoreHidddenFiles;
         private System.Windows.Forms.CheckBox ReadInputFolderRecursively;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Button bResetTemplates;
     }
 }
