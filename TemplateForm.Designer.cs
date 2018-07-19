@@ -93,10 +93,10 @@
             this.label15 = new System.Windows.Forms.Label();
             this.Configure = new System.Windows.Forms.LinkLabel();
             this.label16 = new System.Windows.Forms.Label();
+            this.Help = new System.Windows.Forms.LinkLabel();
+            this.label3 = new System.Windows.Forms.Label();
             this.About = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.Help = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -450,6 +450,7 @@
             this.testFile.Name = "testFile";
             this.testFile.Size = new System.Drawing.Size(345, 20);
             this.testFile.TabIndex = 10;
+            this.testFile.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // floatingAnchors
             // 
@@ -899,6 +900,27 @@
             this.label16.TabIndex = 26;
             this.label16.Text = "|";
             // 
+            // Help
+            // 
+            this.Help.AutoSize = true;
+            this.Help.Location = new System.Drawing.Point(218, 5);
+            this.Help.Name = "Help";
+            this.Help.Size = new System.Drawing.Size(29, 13);
+            this.Help.TabIndex = 27;
+            this.Help.TabStop = true;
+            this.Help.Text = "Help";
+            this.Help.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.Help.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Help_LinkClicked);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(253, 5);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(9, 13);
+            this.label3.TabIndex = 28;
+            this.label3.Text = "|";
+            // 
             // About
             // 
             this.About.AutoSize = true;
@@ -920,27 +942,6 @@
             this.label1.Size = new System.Drawing.Size(37, 13);
             this.label1.TabIndex = 29;
             this.label1.Text = "Fields:";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(253, 5);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(9, 13);
-            this.label3.TabIndex = 28;
-            this.label3.Text = "|";
-            // 
-            // Help
-            // 
-            this.Help.AutoSize = true;
-            this.Help.Location = new System.Drawing.Point(218, 5);
-            this.Help.Name = "Help";
-            this.Help.Size = new System.Drawing.Size(29, 13);
-            this.Help.TabIndex = 27;
-            this.Help.TabStop = true;
-            this.Help.Text = "Help";
-            this.Help.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.Help.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Help_LinkClicked);
             // 
             // TemplateForm
             // 

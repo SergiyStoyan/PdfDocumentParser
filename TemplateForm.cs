@@ -658,6 +658,9 @@ namespace Cliver.PdfDocumentParser
                     if (string.IsNullOrWhiteSpace(testFile.Text))
                         return;
 
+                    testFile.SelectionStart = testFile.Text.Length;
+                    testFile.ScrollToCaret();
+
                     if (!File.Exists(testFile.Text))
                     {
                         LogMessage.Error("File '" + testFile.Text + "' does not exist!");
@@ -1043,6 +1046,7 @@ namespace Cliver.PdfDocumentParser
                     fileFilterRegex.Text = "";
 
                 pictureScale.Value = t.TestPictureScale > 0 ? t.TestPictureScale : 1;
+
 
                 if (t.TestFile != null && File.Exists(t.TestFile))
                     testFile.Text = t.TestFile;
