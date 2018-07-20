@@ -39,11 +39,11 @@ namespace Cliver.InvoiceParser
 
             templates.CellValidating += delegate (object sender, DataGridViewCellValidatingEventArgs e)
             {
-                DataGridViewRow r = templates.Rows[e.RowIndex];
-
-                if (e.ColumnIndex == templates.Columns["Name_"].Index)
+                try
                 {
-                    try
+                    DataGridViewRow r = templates.Rows[e.RowIndex];
+
+                    if (e.ColumnIndex == templates.Columns["Name_"].Index)
                     {
                         if (string.IsNullOrWhiteSpace((string)e.FormattedValue) && r.Tag != null)
                             throw new Exception("Name cannot be empty!");
@@ -55,15 +55,15 @@ namespace Cliver.InvoiceParser
                         if ((string)r.Cells["Name_"].Value != ((string)e.FormattedValue).Trim())
                             r.Cells["Name_"].Value = ((string)e.FormattedValue).Trim();
                     }
-                    catch (Exception ex)
+                    else if (e.ColumnIndex == templates.Columns["Active"].Index)
                     {
-                        e.Cancel = true;
-                        Message.Error2("Name", ex);
-                        return;
                     }
                 }
-                else if (e.ColumnIndex == templates.Columns["Active"].Index)
+                catch (Exception ex)
                 {
+                    e.Cancel = true;
+                    Message.Error2(ex);
+                    return;
                 }
             };
 
@@ -189,7 +189,7 @@ namespace Cliver.InvoiceParser
             Template t = (Template)r.Tag;
             if (t == null)
             {
-                t = Template.CreateInitialTemplate(Settings.Templates.InitialTemplate);
+                t = Settings.Templates.CreateInitialTemplate();
                 if (!string.IsNullOrWhiteSpace((string)r.Cells["Name_"].Value))
                     t.Name = (string)r.Cells["Name_"].Value;
                 //t.Active = Convert.ToBoolean(r.Cells["Active"].Value);
@@ -222,15 +222,20 @@ namespace Cliver.InvoiceParser
             static internal DataGridView Templates;
             internal DataGridViewRow Row;
 
-            override public void ReplaceWith(Template newTemplate)
+            public override PdfDocumentParser.Template CreateTemplate()
+            {
+                return new Template();
+            }
+
+            override public void ReplaceWith(PdfDocumentParser.Template newTemplate)
             {
                 if (Settings.Templates.Templates.Where(a => a != Template && a.Name == newTemplate.Name).FirstOrDefault() != null)
                     throw new Exception("Template '" + newTemplate.Name + "' already exists.");
 
                 if (!Settings.Templates.Templates.Contains(Template))
-                    Settings.Templates.Templates.Add(newTemplate);
+                    Settings.Templates.Templates.Add((Template)newTemplate);
                 else
-                    Settings.Templates.Templates[Settings.Templates.Templates.IndexOf(Template)] = newTemplate;
+                    Settings.Templates.Templates[Settings.Templates.Templates.IndexOf((Template)Template)] = (Template)newTemplate;
                 Settings.Templates.Save();
 
                 Row.Tag = newTemplate;
@@ -239,9 +244,9 @@ namespace Cliver.InvoiceParser
                 Template = newTemplate;
             }
 
-            override public void SaveAsInitialTemplate(Template template)
+            override public void SaveAsInitialTemplate(PdfDocumentParser.Template template)
             {
-                Settings.Templates.InitialTemplate = template;
+                Settings.Templates.InitialTemplate = (Template)template;
                 Settings.Templates.Save();
             }
         }

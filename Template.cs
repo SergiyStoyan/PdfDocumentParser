@@ -18,40 +18,6 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class Template
     {
-        public static Template CreateInitialTemplate(Template initialTemplate = null)
-        {
-            if (initialTemplate != null)
-            {
-                string ts = SerializationRoutines.Json.Serialize(initialTemplate);
-                return SerializationRoutines.Json.Deserialize<Template>(ts);
-            }
-            if (Settings.ImageProcessing == null)
-                Config.PreloadField("ImageProcessing");
-            if (Settings.Appearance == null)
-                Config.PreloadField("Appearance");
-            return new Template
-            {
-                Active = true,
-                AutoDeskew = false,
-                BrightnessTolerance = 0.4f,
-                DifferentPixelNumberTolerance = 0.01f,
-                Fields = new List<Template.Field> {
-                        new Template.Field { Name = "INVOICE#" , Rectangle=new Template.RectangleF(0,0,10,10)},
-                        new Template.Field { Name = "JOB#", Rectangle=new Template.RectangleF(0,0,10,10) },
-                        new Template.Field { Name = "PO#", Rectangle=new Template.RectangleF(0,0,10,10) },
-                        new Template.Field { Name = "COST" , Rectangle=new Template.RectangleF(0,0,10,10)},
-                    },
-                Name = "-new-",
-                FileFilterRegex = new Regex(@"\.pdf$", RegexOptions.IgnoreCase),
-                FindBestImageMatch = false,
-                FloatingAnchors = new List<Template.FloatingAnchor>(),
-                DocumentFirstPageRecognitionMarks = new List<Template.Mark>(),
-                PagesRotation = Template.PageRotations.NONE,
-                TestPictureScale = 1.3m,
-                TestFile = "",
-            };
-        }
-
         public string Name;
 
         public Regex FileFilterRegex;
@@ -79,8 +45,6 @@ namespace Cliver.PdfDocumentParser
         public List<Mark> DocumentFirstPageRecognitionMarks;
 
         public List<Field> Fields;//preserving order for output
-
-        public bool Active = true;
 
         public string TestFile;
         public decimal TestPictureScale = 1.3m;

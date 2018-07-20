@@ -29,6 +29,7 @@ namespace Cliver.PdfDocumentParser
         public abstract class TemplateManager
         {
             public Template Template;
+            abstract public Template CreateTemplate();
             abstract public void ReplaceWith(Template newTemplate);
             abstract public void SaveAsInitialTemplate(Template template);
             public string LastTestFile;
@@ -1328,7 +1329,11 @@ namespace Cliver.PdfDocumentParser
 
         Template getTemplateFromUI(bool saving)
         {
-            Template t = new Template();
+            Template t;
+            if (saving)
+                t = templateManager.CreateTemplate();
+            else
+                t = new Template();
 
             if (string.IsNullOrWhiteSpace(name.Text))
                 if (saving)
