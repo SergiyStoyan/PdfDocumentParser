@@ -1307,7 +1307,7 @@ namespace Cliver.PdfDocumentParser
 
         private void Help_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            string helpFile = "help\\help.html";
+            string helpFile = @"help\help.html";
             System.Diagnostics.Process.Start(helpFile);
         }
 
