@@ -24,7 +24,7 @@ namespace Cliver.PdfDocumentParser
 
         public class ImageProcessingSettings : Cliver.Settings
         {
-            public int PdfPageImageResolution = 300;//tessarct requires at least 300
+            public int PdfPageImageResolution = 300;//tesseract requires at least 300
             public float CoordinateDeviationMargin = 0.001f;
             public float Image2PdfResolutionRatio { get { return _Image2PdfResolutionRatio; } }
             float _Image2PdfResolutionRatio;

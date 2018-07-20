@@ -22,7 +22,7 @@ namespace Cliver.PdfDocumentParser
 
         public Regex FileFilterRegex;
 
-        //public int ImageResolution = 300;//tessarct requires at least 300
+        //public int ImageResolution = 300;//tesseract requires at least 300
 
         public PageRotations PagesRotation = 0;
         public enum PageRotations
