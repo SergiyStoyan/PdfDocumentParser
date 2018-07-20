@@ -222,7 +222,7 @@ namespace Cliver.InvoiceParser
             static internal DataGridView Templates;
             internal DataGridViewRow Row;
 
-            public override PdfDocumentParser.Template CreateTemplate()
+            public override PdfDocumentParser.Template New()
             {
                 return new Template();
             }

@@ -29,7 +29,7 @@ namespace Cliver.PdfDocumentParser
         public abstract class TemplateManager
         {
             public Template Template;
-            abstract public Template CreateTemplate();
+            abstract public Template New();
             abstract public void ReplaceWith(Template newTemplate);
             abstract public void SaveAsInitialTemplate(Template template);
             public string LastTestFile;
@@ -1307,7 +1307,7 @@ namespace Cliver.PdfDocumentParser
 
         private void Help_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            string helpFile = "help.html";
+            string helpFile = "help\\help.html";
             System.Diagnostics.Process.Start(helpFile);
         }
 
@@ -1331,7 +1331,7 @@ namespace Cliver.PdfDocumentParser
         {
             Template t;
             if (saving)
-                t = templateManager.CreateTemplate();
+                t = templateManager.New();
             else
                 t = new Template();
 
