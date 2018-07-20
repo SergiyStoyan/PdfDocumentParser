@@ -169,6 +169,7 @@
             this.Name_,
             this.Edit});
             this.templates.Location = new System.Drawing.Point(15, 123);
+            this.templates.MultiSelect = false;
             this.templates.Name = "templates";
             this.templates.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.templates.Size = new System.Drawing.Size(707, 311);

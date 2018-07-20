@@ -39,19 +39,21 @@ namespace Cliver.InvoiceParser
 
             templates.CellValidating += delegate (object sender, DataGridViewCellValidatingEventArgs e)
             {
+                DataGridViewRow r = templates.Rows[e.RowIndex];
+
                 if (e.ColumnIndex == templates.Columns["Name_"].Index)
                 {
                     try
                     {
-                        if (string.IsNullOrWhiteSpace((string)e.FormattedValue))
+                        if (string.IsNullOrWhiteSpace((string)e.FormattedValue) && r.Tag != null)
                             throw new Exception("Name cannot be empty!");
-                        foreach (DataGridViewRow r in templates.Rows)
+                        foreach (DataGridViewRow rr in templates.Rows)
                         {
-                            if (r.Index != e.RowIndex && (string)e.FormattedValue == (string)r.Cells["Name_"].Value)
+                            if (rr.Index != e.RowIndex && (string)e.FormattedValue == (string)rr.Cells["Name_"].Value)
                                 throw new Exception("Name '" + e.FormattedValue + "' is duplicated!");
                         }
-                        if ((string)templates.Rows[e.RowIndex].Cells["Name_"].Value != ((string)e.FormattedValue).Trim())
-                            templates.Rows[e.RowIndex].Cells["Name_"].Value = ((string)e.FormattedValue).Trim();
+                        if ((string)r.Cells["Name_"].Value != ((string)e.FormattedValue).Trim())
+                            r.Cells["Name_"].Value = ((string)e.FormattedValue).Trim();
                     }
                     catch (Exception ex)
                     {
@@ -69,7 +71,7 @@ namespace Cliver.InvoiceParser
             {
                 try
                 {
-                    if (e.Row == null)
+                    if (e.Row == null || e.Row.Tag == null)
                         return;
                     if (!Message.YesNo("Template '" + e.Row.Cells["Name_"].Value + "' will be deleted forever! Are you sure to proceed?"))
                     {
@@ -87,7 +89,7 @@ namespace Cliver.InvoiceParser
             {
                 try
                 {
-                    if (e.Row == null)
+                    if (e.Row == null || e.Row.Tag == null)
                         return;
 
                     Template t = (Template)e.Row.Tag;
@@ -105,6 +107,11 @@ namespace Cliver.InvoiceParser
                     return;
 
                 var r = templates.Rows[e.RowIndex];
+                if (r.Tag == null)
+                {
+                    //editTemplate(r);
+                    return;
+                }
                 Template t = (Template)r.Tag;
                 templates.EndEdit();//needed to set checkbox values
 
@@ -114,24 +121,6 @@ namespace Cliver.InvoiceParser
 
             templates.RowValidating += delegate (object sender, DataGridViewCellCancelEventArgs e)
             {
-                //DataGridViewRow r = templates.Rows[e.RowIndex];
-                //if (r.IsNewRow && string.IsNullOrWhiteSpace((string)r.Cells["Name_"].Value))
-                //    templates.CancelEdit();//.Rows.Remove(r);
-
-                //try
-                //{
-                //    string n = (string)r.Cells["Name_"].Value;
-                //    if (string.IsNullOrWhiteSpace(n))
-                //        throw new Exception("Name cannot be empty!");
-
-                //    //templates.NotifyCurrentCellDirty(true);
-                //    //templates.EndEdit();
-                //}
-                //catch (Exception ex)
-                //{
-                //    Message.Error2("Name", ex);
-                //    e.Cancel = true;
-                //}
             };
 
             TemplateManager.Templates = templates;
@@ -140,20 +129,6 @@ namespace Cliver.InvoiceParser
             {
                 try
                 {
-                    if (e.Row.Cells["Active"].Value == null)
-                        e.Row.Cells["Active"].Value = true;
-
-                    Template t = (Template)e.Row.Tag;
-                    if (t == null)
-                    {
-                        t = Template.CreateInitialTemplate(Settings.Templates.InitialTemplate);
-                        Settings.Templates.Templates.Add(t);
-                        e.Row.Tag = t;
-                        e.Row.Cells["Name_"].Value = t.Name;
-                        e.Row.Cells["Active"].Value = t.Active;
-                        //templates.NotifyCurrentCellDirty(true);
-                        //templates.EndEdit();
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -165,43 +140,28 @@ namespace Cliver.InvoiceParser
             {
             };
 
-            templates.CellContentClick += delegate (object sender, DataGridViewCellEventArgs e)
+            templates.SelectionChanged += delegate (object sender, EventArgs e)
             {
-                try
+                var r = templates.SelectedRows[0];
+                if (r.IsNewRow)//hacky forcing commit a newly added row and display the blank row
                 {
-                    if (e.RowIndex < 0 || templates.Rows[e.RowIndex].IsNewRow)
-                        return;
-
-                    if (templates.Columns[e.ColumnIndex] is DataGridViewButtonColumn)
+                    try
                     {
-                        if (templates.Columns[e.ColumnIndex].Name == "Edit")
-                        {
-                            Template t = (Template)templates.Rows[e.RowIndex].Tag;
-                            t.Name = (string)templates.Rows[e.RowIndex].Cells["Name_"].Value;
-
-                            string lastTestFile;
-                            Settings.TestFiles.TemplateNames2TestFile.TryGetValue(t.Name, out lastTestFile);
-                            TemplateManager tm = new TemplateManager { Template = t, LastTestFile = lastTestFile };
-                            TemplateForm tf = new TemplateForm(tm, Settings.General.InputFolder);
-                            tf.FormClosed += delegate
-                            {
-                                if (tm.Template.TestFile != tm.LastTestFile && tm.LastTestFile != null)//the customer asked for this
-                                {
-                                    Settings.TestFiles.TemplateNames2TestFile[tm.Template.Name] = tm.LastTestFile;
-                                    var deletedNs = Settings.TestFiles.TemplateNames2TestFile.Keys.Where(n => Settings.Templates.Templates.Where(a => a.Name == n).FirstOrDefault() == null).ToList();
-                                    foreach (string n in deletedNs)
-                                        Settings.TestFiles.TemplateNames2TestFile.Remove(n);
-                                    Settings.TestFiles.Save();
-                                }
-                            };
-                            tf.Show();
-                        }
+                        int i = templates.Rows.Add();
+                        templates.Rows[i].Selected = true;
                     }
+                    catch { }
+                    return;
                 }
-                catch (Exception ex)
-                {
-                    LogMessage.Error(ex);
-                }
+            };
+
+            templates.CellClick += delegate (object sender, DataGridViewCellEventArgs e)
+            {
+                if (e.RowIndex < 0)
+                    return;
+                DataGridViewRow r = templates.Rows[e.RowIndex];
+                if (e.ColumnIndex >= 0 && templates.Columns[e.ColumnIndex].Name == "Edit")
+                    editTemplate(r);
             };
 
             templates.Validating += delegate (object sender, CancelEventArgs e)
@@ -215,31 +175,66 @@ namespace Cliver.InvoiceParser
             if (string.IsNullOrWhiteSpace(Settings.General.OutputFolder))
                 OutputFolder.Text = Log.AppDir;
         }
+        
+        void editTemplate(DataGridViewRow r)
+        {
+            TemplateForm tf;
+            if(rows2TemplateForm.TryGetValue(r, out tf)&&!tf.IsDisposed)
+            {
+                tf.Show();
+                tf.Activate();
+                return;
+            }
 
+            Template t = (Template)r.Tag;
+            if (t == null)
+            {
+                t = Template.CreateInitialTemplate(Settings.Templates.InitialTemplate);
+                if (!string.IsNullOrWhiteSpace((string)r.Cells["Name_"].Value))
+                    t.Name = (string)r.Cells["Name_"].Value;
+                //t.Active = Convert.ToBoolean(r.Cells["Active"].Value);
+            }
+            else
+                t.Name = (string)r.Cells["Name_"].Value;
+            string lastTestFile = null;
+            if (t.Name != null)
+                Settings.TestFiles.TemplateNames2TestFile.TryGetValue(t.Name, out lastTestFile);
+            TemplateManager tm = new TemplateManager { Template = t, LastTestFile = lastTestFile, Row = r };
+            tf = new TemplateForm(tm, Settings.General.InputFolder);
+            tf.FormClosed += delegate
+            {
+                if (tm.Template.TestFile != tm.LastTestFile && tm.LastTestFile != null)//the customer asked for this
+                {
+                    Settings.TestFiles.TemplateNames2TestFile[tm.Template.Name] = tm.LastTestFile;
+                    var deletedNs = Settings.TestFiles.TemplateNames2TestFile.Keys.Where(n => Settings.Templates.Templates.Where(a => a.Name == n).FirstOrDefault() == null).ToList();
+                    foreach (string n in deletedNs)
+                        Settings.TestFiles.TemplateNames2TestFile.Remove(n);
+                    Settings.TestFiles.Save();
+                }
+            };
+            tf.Show();
+            rows2TemplateForm[r] = tf;
+        }
+        Dictionary<DataGridViewRow, TemplateForm> rows2TemplateForm = new Dictionary<DataGridViewRow, TemplateForm>();
+        
         public class TemplateManager : TemplateForm.TemplateManager
         {
-            static public DataGridView Templates;
+            static internal DataGridView Templates;
+            internal DataGridViewRow Row;
 
             override public void ReplaceWith(Template newTemplate)
             {
-                if (Template.Name != newTemplate.Name && Settings.Templates.Templates.Where(a => a.Name == newTemplate.Name).FirstOrDefault() != null)
+                if (Settings.Templates.Templates.Where(a => a != Template && a.Name == newTemplate.Name).FirstOrDefault() != null)
                     throw new Exception("Template '" + newTemplate.Name + "' already exists.");
-                Template t = Settings.Templates.Templates.Where(a => a.Name == Template.Name).FirstOrDefault();
-                if (t == null)
+
+                if (!Settings.Templates.Templates.Contains(Template))
                     Settings.Templates.Templates.Add(newTemplate);
                 else
-                    Settings.Templates.Templates[Settings.Templates.Templates.IndexOf(t)] = newTemplate;
+                    Settings.Templates.Templates[Settings.Templates.Templates.IndexOf(Template)] = newTemplate;
                 Settings.Templates.Save();
 
-                foreach (DataGridViewRow r in Templates.Rows)
-                {
-                    if ((string)r.Cells["Name_"].Value == Template.Name)
-                    {
-                        r.Tag = newTemplate;
-                        r.Cells["Name_"].Value = newTemplate.Name;
-                        break;
-                    }
-                }
+                Row.Tag = newTemplate;
+                Row.Cells["Name_"].Value = newTemplate.Name;
 
                 Template = newTemplate;
             }
@@ -337,7 +332,6 @@ namespace Cliver.InvoiceParser
             }
 
             Settings.General.InputFolder = InputFolder.Text;
-            Settings.General.Save();
             Settings.General.OutputFolder = OutputFolder.Text;
             Settings.General.Save();
 
