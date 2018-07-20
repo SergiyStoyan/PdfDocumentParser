@@ -2,8 +2,8 @@
 
 <style>
 h1 {color:#347; text-align: center;}
-h2 {color:#770022; text-indent: 20px; margin-top:50}
-h3 {color:#0000aa; margin-top:40}
+h2 {color:#702; text-indent: 20px; margin-top:50}
+h3 {color:#069; margin-top:40}
 p {
     margin: 5;
     margin-top:5
@@ -59,12 +59,12 @@ p {
 </ul>
 <p>To create a Floating anchor, select a new row in the floating anchors table and chose its type which can be one of the following:
 <ul>
-<li>PDF text, which is text presented as PDF char boxes;</li>
-<li>OCR text, which is text recognized by OCR engine within the selected area;</li>
+<li>PDF text, which is a text presented as PDF char boxes;</li>
+<li>OCR text, which is a text recognized by OCR engine within selected area;</li>
 <li>Image data, which is a hash of the image bounded by the selection box;</li>
 </ul>
-<p>Then select with mouse a rectangle in the document page. The text or image within the selection box will be that fragment that PdfDocumentParser will look for.
-<p>Upon creating a floating anchor you can create either document recognition marks or fields and link them to the anchor. Linking means that mark's or field's coordinates become relative to the floating anchor they are linked to. That's PdfDocumentParser first will look for the floating anchor and if it is found, it will locate the linked mark or field depending on it's location.
+<p>Then select with mouse a rectangle in the document page. The text or image within the selection box will be a fragment that PdfDocumentParser will look for.
+<p>Upon creating a floating anchor you can create either document recognition marks or fields and link them to the anchor. Linking means that mark's or field's coordinates become relative to the floating anchor they are linked to. That's PdfDocumentParser first will look for the floating anchor and if it is found, it will then locate on the page the linked marks/fields depending on the location of their anchor.
 
 <h3><a name="mark">Document Recognition Mark</a></h3>
 <p>Document recognition mark is a fragment of either text or image that PdfDocumentParser will look in a document. One or more such marks is used by PdfDocumentParser to detect which template corresponds to the processed document. For this reason every template should have at least one document recognition mark defined. It is obviously that such marks must be unique enough to identify the document they belong to with a high confidence. It works the following way: PdfDocumentParser finds a mark in page and compares the found content with the stored mark's content. 
