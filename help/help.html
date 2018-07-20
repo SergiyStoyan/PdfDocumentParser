@@ -64,6 +64,7 @@ p {
 <li>Image data, which is a hash of the image bounded by the selection box;</li>
 </ul>
 <p>Then select with mouse a rectangle in the document page. The text or image within the selection box will be a fragment that PdfDocumentParser will look for.
+<p>If you keep Ctrl pressed while selecting, you can select more than 1 element for the same anchor. To stop selecting, you have to release Ctrl before releasing mouse button.
 <p>Upon creating a floating anchor you can create either document recognition marks or fields and link them to the anchor. Linking means that mark's or field's coordinates become relative to the floating anchor they are linked to. That's PdfDocumentParser first will look for the floating anchor and if it is found, it will then locate on the page the linked marks/fields depending on the location of their anchor.
 
 <h3><a name="mark">Document Recognition Mark</a></h3>
