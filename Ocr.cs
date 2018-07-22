@@ -39,7 +39,7 @@ namespace Cliver.PdfDocumentParser
             get
             {
                 if (_engine == null)
-                    _engine = new Tesseract.TesseractEngine(@"./tessdata", "eng", Tesseract.EngineMode.Default);
+                    _engine = new Tesseract.TesseractEngine(@"./tessdata", "eng", Tesseract.EngineMode.TesseractAndCube);
                 return _engine;
             }
         }
