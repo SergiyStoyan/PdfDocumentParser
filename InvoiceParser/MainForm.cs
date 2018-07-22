@@ -45,8 +45,12 @@ namespace Cliver.InvoiceParser
 
                     if (e.ColumnIndex == templates.Columns["Name_"].Index)
                     {
-                        if (string.IsNullOrWhiteSpace((string)e.FormattedValue) && r.Tag != null)
-                            throw new Exception("Name cannot be empty!");
+                        if (string.IsNullOrWhiteSpace((string)e.FormattedValue))
+                        {
+                            if (r.Tag != null)
+                                throw new Exception("Name cannot be empty!");
+                            return;
+                        }
                         foreach (DataGridViewRow rr in templates.Rows)
                         {
                             if (rr.Index != e.RowIndex && (string)e.FormattedValue == (string)rr.Cells["Name_"].Value)
@@ -63,7 +67,6 @@ namespace Cliver.InvoiceParser
                 {
                     e.Cancel = true;
                     Message.Error2(ex);
-                    return;
                 }
             };
 
@@ -78,6 +81,8 @@ namespace Cliver.InvoiceParser
                         e.Cancel = true;
                         return;
                     }
+                    if (e.Row.Index > 0)
+                        templates.Rows[e.Row.Index - 1].Selected = true;
                 }
                 catch (Exception ex)
                 {
@@ -325,13 +330,13 @@ namespace Cliver.InvoiceParser
 
         private void bRun_Click(object sender, EventArgs e)
         {
-            if (t != null && t.IsAlive)
+            if (processorThread != null && processorThread.IsAlive)
             {
                 if (!LogMessage.AskYesNo("Processing is running. Would you like to abort it and restart?", true))
                     return;
-                while (t.IsAlive)
+                while (processorThread.IsAlive)
                 {
-                    t.Abort();
+                    processorThread.Abort();
                     Thread.Sleep(100);
                 }
             }
@@ -341,7 +346,7 @@ namespace Cliver.InvoiceParser
             Settings.General.Save();
 
             bRun.Enabled = false;
-            t = Cliver.ThreadRoutines.Start(
+            processorThread = Cliver.ThreadRoutines.Start(
                 () =>
                 {
                     try
@@ -383,7 +388,7 @@ namespace Cliver.InvoiceParser
                 );
         }
 
-        Thread t = null;
+        Thread processorThread = null;
 
         private void bAbout_Click(object sender, EventArgs e)
         {
@@ -393,7 +398,7 @@ namespace Cliver.InvoiceParser
 
         private void bExit_Click(object sender, EventArgs e)
         {
-            if (t != null && t.IsAlive)
+            if (processorThread != null && processorThread.IsAlive)
             {
                 if (!LogMessage.AskYesNo("Processing is running. Would you like to abort it?", true))
                     return;
