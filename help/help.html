@@ -110,6 +110,11 @@ p {
 </ul>
 <p>A rule of thumb would be to process files which need OCR separately and keep their templates inactive when processing the rest files.
 
+<h2>To be done</h2>
+<p>While PDF text mode works as expected, OCR and Image modes have a lot rooom for improvement:
+<ul> 
+<li> Tesseract recognizes text from a page fragment better than from the whole page. Text from the wrole page is sometimes a complete garbage. Needed: some effective image preprocessing and probably right Tesseract settings;
+<li> Image search and comparison is very basic. On the one hand, it is open to further development and tuning, on the other hand, it may be better to switch to some advanced graphic processing package;
 <br>
 <br>
 <br>

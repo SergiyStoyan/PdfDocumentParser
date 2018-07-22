@@ -126,7 +126,7 @@ namespace Cliver.PdfDocumentParser
         }
 
         /*!!!ATTENTION!!!
-         * tolerance values cannot be 0 even when comparing identical images! Because of separate rescaling of an image and its fragment, some pixels become not same!
+         * tolerance values cannot be 0 even when comparing identical images! Because of separate rescaling of an image and its fragment, some pixels become not equal!
          */
         public System.Drawing.Point? FindWithinImage(ImageData imageData, float brightnessTolerance, float differentPixelNumberTolerance, bool findBestMatch)
         {
