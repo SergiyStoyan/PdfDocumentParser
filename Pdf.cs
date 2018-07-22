@@ -199,19 +199,19 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public static string GetTextByTopLeftCoordinates(List<CharBox> bts, System.Drawing.RectangleF r)
+        public static string GetTextByTopLeftCoordinates(List<CharBox> cbs, System.Drawing.RectangleF r)
         {
-            bts = RemoveDuplicatesAndOrder(bts.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)));
-            StringBuilder sb = new StringBuilder(bts.Count > 0 ? bts[0].Char : "");
-            for (int i = 1; i < bts.Count; i++)
+            cbs = removeDuplicates(cbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)));
+            cbs = cbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)).ToList();
+            List<string> ls = new List<string>();
+            foreach (Line l in getLines(cbs, true))
             {
-                if (Math.Abs(bts[i - 1].R.Y - bts[i].R.Y) > bts[i - 1].R.Height / 2)
-                    sb.Append("\r\n");
-                else if (Math.Abs(bts[i - 1].R.Right - bts[i].R.X) > Math.Min(bts[i - 1].R.Width, bts[i].R.Width) / 2)
-                    sb.Append(" ");
-                sb.Append(bts[i].Char);
+                StringBuilder sb = new StringBuilder();
+                foreach (CharBox cb in l.CharBoxes)
+                    sb.Append(cb.Char);
+                ls.Add(sb.ToString());
             }
-            return sb.ToString();
+            return string.Join("\r\n", ls);
         }
 
         public static List<CharBox> GetCharBoxsSurroundedByRectangle(List<CharBox> bts, System.Drawing.RectangleF r)
@@ -219,9 +219,14 @@ namespace Cliver.PdfDocumentParser
             return bts.Where(a => /*selectedR.IntersectsWith(a.R) || */r.Contains(a.R)).ToList();
         }
 
-        public static List<CharBox> RemoveDuplicatesAndOrder(IEnumerable<CharBox> bts)
+        public static List<Line> RemoveDuplicatesAndGetLines(IEnumerable<CharBox> cbs)
         {
-            List<CharBox> bs = bts.Where(a => a.R.Width >= 0 && a.R.Height >= 0).ToList();//some symbols are duplicated with negative width anf height
+            return getLines(removeDuplicates(cbs), false);
+        }
+
+        static List<CharBox> removeDuplicates(IEnumerable<CharBox> cbs)
+        {
+            List<CharBox> bs = cbs.Where(a => a.R.Width >= 0 && a.R.Height >= 0).ToList();//some symbols are duplicated with negative width anf height
             for (int i = 0; i < bs.Count; i++)
                 for (int j = bs.Count - 1; j > i; j--)
                 {
@@ -233,7 +238,56 @@ namespace Cliver.PdfDocumentParser
                         continue;
                     bs.RemoveAt(j);
                 }
-            return bs.OrderBy(a => a.R.Y).OrderBy(a => a.R.X).ToList();
+            return bs;
+        }
+
+        static List<Line> getLines(IEnumerable<CharBox> cbs, bool spaceAutoInsert)
+        {
+            List<Line> lines = new List<Line>();
+            foreach (CharBox cb in cbs)
+            {
+                for (int i = 0; i < lines.Count; i++)
+                {
+                    if (cb.R.Bottom < lines[i].Top)
+                    {
+                        Line l = new Line { Top = cb.R.Top, Bottom = cb.R.Bottom };
+                        l.CharBoxes.Add(cb);
+                        lines.Insert(i, l);
+                        goto CONTINUE;
+                    }
+                    if (cb.R.Bottom - cb.R.Height / 2 <= lines[i].Bottom)
+                    {
+                        if (spaceAutoInsert && cb.Char != " " && lines[i].CharBoxes.Count > 0)
+                        {
+                            CharBox cb0 = lines[i].CharBoxes[lines[i].CharBoxes.Count - 1];
+                            if (cb0.Char != " " && cb.R.Left - cb0.R.Right > (cb.R.Width + cb.R.Height) / 5)
+                                lines[i].CharBoxes.Add(new CharBox { Char = " ", R = new System.Drawing.RectangleF((cb.R.Left + cb0.R.Right) / 2, 0, 0, 0) });
+                        }
+                        lines[i].CharBoxes.Add(cb);
+                        if (lines[i].Top > cb.R.Top)
+                            lines[i].Top = cb.R.Top;
+                        if (lines[i].Bottom < cb.R.Bottom)
+                            lines[i].Bottom = cb.R.Bottom;
+                        goto CONTINUE;
+                    }
+                }
+                {
+                    Line l = new Line { Top = cb.R.Top, Bottom = cb.R.Bottom };
+                    l.CharBoxes.Add(cb);
+                    lines.Add(l);
+                }
+                CONTINUE:;
+            }
+            foreach (Line l in lines)
+                l.CharBoxes = l.CharBoxes.OrderBy(a => a.R.X).ToList();
+            return lines;
+        }
+
+        public class Line
+        {
+            public float Top;
+            public float Bottom;
+            public List<CharBox> CharBoxes = new List<CharBox>();
         }
 
         public static List<CharBox> GetCharBoxsFromPage(PdfReader pdfReader, int pageI)

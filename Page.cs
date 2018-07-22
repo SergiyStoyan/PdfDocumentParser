@@ -303,56 +303,6 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        //bool findFloatingAnchorSecondaryElements(PointF point0, Settings.Template.FloatingAnchor fa)
-        //{
-        //    for (int i = 1; i < fa.Elements.Count; i++)
-        //    {
-        //        if (!findFloatingAnchorElement(point0, fa.Elements[i]))
-        //            return false;
-        //    }
-        //    return true;
-        //}
-        //bool findFloatingAnchorElement(PointF point0, Settings.Template.FloatingAnchor.Element e)
-        //{
-        //    switch (e.ElementType)
-        //    {
-        //        case Settings.Template.ValueTypes.PdfText:
-        //            {
-        //                List<Settings.Template.FloatingAnchor.PdfTextElement.CharBox> ses = ((Settings.Template.FloatingAnchor.PdfTextElement)e.Get()).PdfCharBoxs;
-        //                List<Pdf.CharBox> bts = new List<Pdf.CharBox>();
-
-        //                bts.Clear();
-        //                for (int i = 0; i < ses.Count; i++)
-        //                {
-        //                    float x = point0.X + ses[i].Rectangle.X - ses[0].Rectangle.X;
-        //                    float y = point0.Y + ses[i].Rectangle.Y - ses[0].Rectangle.Y;
-        //                    foreach (Pdf.CharBox bt in charBoxLists.Where(a => a.Text == ses[i].Char))
-        //                    {
-        //                        if (Math.Abs(bt.R.X - x) > Settings.General.CoordinateDeviationMargin)
-        //                            continue;
-        //                        if (Math.Abs(bt.R.Y - y) > Settings.General.CoordinateDeviationMargin)
-        //                            continue;
-        //                        if (bts.Contains(bt))
-        //                            continue;
-        //                        bts.Add(bt);
-        //                    }
-        //                }
-        //                return bts.Count == ses.Count;
-        //            }
-        //        case Settings.Template.ValueTypes.OcrText:
-        //            {
-        //                return true;
-        //            }
-        //        case Settings.Template.ValueTypes.ImageData:
-        //            {
-        //                ImageData id = (ImageData)e.Get();
-        //                return id.ImageIsSimilar(new ImageData(GetRectangeFromActiveTemplateBitmap(new Settings.Template.RectangleF(point0.X, point0.Y, id.Width, id.Height))));
-        //            }
-        //        default:
-        //            throw new Exception("Unknown option: " + e.ElementType);
-        //    }
-        //}
-
         internal ImageData ActiveTemplateImageData
         {
             get
@@ -485,8 +435,7 @@ namespace Cliver.PdfDocumentParser
                 case Template.ValueTypes.PdfText:
                     return Pdf.GetTextByTopLeftCoordinates(PdfCharBoxs, r.GetSystemRectangleF());
                 case Template.ValueTypes.OcrText:
-                    //return Ocr.This.GetText(ActiveTemplateBitmap, r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);                    
-                    //return Ocr.GetTextByTopLeftCoordinates(OcrCharBoxs, r.GetSystemRectangleF());//sometimes does not work
+                    //return Ocr.GetTextByTopLeftCoordinates(ActiveTemplateOcrCharBoxs, r.GetSystemRectangleF());//for unknown reason tesseract often parses a whole page much warse than a fragment and so ActiveTemplateOcrCharBoxs gives very bad output.
                     return Ocr.This.GetText(ActiveTemplateBitmap, r.GetSystemRectangleF());
                 case Template.ValueTypes.ImageData:
                     using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Y / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height / Settings.ImageProcessing.Image2PdfResolutionRatio))

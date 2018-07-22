@@ -933,29 +933,33 @@ namespace Cliver.PdfDocumentParser
                 {
                     case Template.ValueTypes.PdfText:
                         {
-                            selectedPdfCharBoxs = Pdf.RemoveDuplicatesAndOrder(selectedPdfCharBoxs);
-                            if (selectedPdfCharBoxs.Count < 1)
+                            List<Pdf.Line> lines = Pdf.RemoveDuplicatesAndGetLines(selectedPdfCharBoxs);
+                            if (lines.Count < 1)
                                 return;
-                            Template.FloatingAnchor.PdfTextValue pte = new Template.FloatingAnchor.PdfTextValue();
-                            pte.CharBoxs = selectedPdfCharBoxs.Select(a => new Template.FloatingAnchor.PdfTextValue.CharBox
-                            {
-                                Char = a.Char,
-                                Rectangle = new Template.RectangleF(a.R.X, a.R.Y, a.R.Width, a.R.Height),
-                            }).ToList();
+                            Template.FloatingAnchor.PdfTextValue pte = new Template.FloatingAnchor.PdfTextValue { CharBoxs = new List<Template.FloatingAnchor.PdfTextValue.CharBox>() };
+                            foreach (Pdf.Line l in lines)
+                                foreach (Pdf.CharBox cb in l.CharBoxes)
+                                    pte.CharBoxs.Add(new Template.FloatingAnchor.PdfTextValue.CharBox
+                                    {
+                                        Char = cb.Char,
+                                        Rectangle = new Template.RectangleF(cb.R.X, cb.R.Y, cb.R.Width, cb.R.Height),
+                                    });
                             r.Cells["Body3"].Value = Template.FloatingAnchor.GetValueAsString(pte);
                         }
                         break;
                     case Template.ValueTypes.OcrText:
                         {
-                            selectedOcrCharBoxs =PdfDocumentParser. Ocr.RemoveDuplicatesAndOrder(selectedOcrCharBoxs);
-                            if (selectedOcrCharBoxs.Count < 1)
+                            List<Ocr.Line> lines = PdfDocumentParser.Ocr.GetLines(selectedOcrCharBoxs);
+                            if (lines.Count < 1)
                                 return;
-                            Template.FloatingAnchor.OcrTextValue ote = new Template.FloatingAnchor.OcrTextValue();
-                            ote.CharBoxs = selectedOcrCharBoxs.Select(a => new Template.FloatingAnchor.OcrTextValue.CharBox
-                            {
-                                Char = a.Char,
-                                Rectangle = new Template.RectangleF(a.R.X, a.R.Y, a.R.Width, a.R.Height),
-                            }).ToList();
+                            Template.FloatingAnchor.OcrTextValue ote = new Template.FloatingAnchor.OcrTextValue { CharBoxs = new List<Template.FloatingAnchor.OcrTextValue.CharBox>() };
+                            foreach (Ocr.Line l in lines)
+                                foreach (Ocr.CharBox cb in l.CharBoxes)
+                                    ote.CharBoxs.Add(new Template.FloatingAnchor.OcrTextValue.CharBox
+                                    {
+                                        Char = cb.Char,
+                                        Rectangle = new Template.RectangleF(cb.R.X, cb.R.Y, cb.R.Width, cb.R.Height),
+                                    });
                             r.Cells["Body3"].Value = Template.FloatingAnchor.GetValueAsString(ote);
                         }
                         break;

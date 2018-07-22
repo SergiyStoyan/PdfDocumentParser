@@ -39,7 +39,9 @@ namespace Cliver.PdfDocumentParser
             get
             {
                 if (_engine == null)
-                    _engine = new Tesseract.TesseractEngine(@"./tessdata", "eng", Tesseract.EngineMode.TesseractAndCube);
+                    _engine = new Tesseract.TesseractEngine(@"./tessdata", "eng", Tesseract.EngineMode.Default);
+                //if(!_engine.SetVariable("preserve_interword_spaces", 1))
+                //    throw new Exception("Not set!");
                 return _engine;
             }
         }
@@ -103,7 +105,7 @@ namespace Cliver.PdfDocumentParser
                     //        do
                     //        {
                     //            do
-                    //            {
+                        //        {
                     do
                     {
                         //if (i.IsAtBeginningOf(PageIteratorLevel.Block))
@@ -115,17 +117,25 @@ namespace Cliver.PdfDocumentParser
                         //if (i.IsAtBeginningOf(PageIteratorLevel.TextLine))
                         //{
                         //}
-                        //if (i.IsAtBeginningOf(PageIteratorLevel.Word))
-                        //{
-                        //}
 
                         Rect r;
                         if (i.TryGetBoundingBox(PageIteratorLevel.Symbol, out r))
+                        {
+                            if (i.IsAtBeginningOf(PageIteratorLevel.Word))
+                            {
+                                cbs.Add(new CharBox
+                                {
+                                    Char = " ",
+                                    AutoInserted = true,
+                                    R = new RectangleF(r.X1 * Settings.ImageProcessing.Image2PdfResolutionRatio - Settings.ImageProcessing.CoordinateDeviationMargin * 2, r.Y1 * Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width * Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height * Settings.ImageProcessing.Image2PdfResolutionRatio)
+                                });
+                            }
                             cbs.Add(new CharBox
                             {
                                 Char = i.GetText(PageIteratorLevel.Symbol),
                                 R = new RectangleF(r.X1 * Settings.ImageProcessing.Image2PdfResolutionRatio, r.Y1 * Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width * Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height * Settings.ImageProcessing.Image2PdfResolutionRatio)
                             });
+                        }
                     } while (i.Next(PageIteratorLevel.Symbol));
                     //            } while (i.Next(PageIteratorLevel.Word, PageIteratorLevel.Symbol));
                     //        } while (i.Next(PageIteratorLevel.TextLine, PageIteratorLevel.Word));
@@ -139,46 +149,70 @@ namespace Cliver.PdfDocumentParser
         public class CharBox
         {
             public string Char;
+            public bool AutoInserted = false;
             public System.Drawing.RectangleF R;
         }
 
-        public static string GetTextByTopLeftCoordinates(List<CharBox> bts, RectangleF r)
+        public static string GetTextByTopLeftCoordinates(List<CharBox> cbs, RectangleF r)
         {
-            //r = new RectangleF(r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);
-            bts = RemoveDuplicatesAndOrder(bts.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)));
-            StringBuilder sb = new StringBuilder(bts.Count > 0 ? bts[0].Char : "");
-            for (int i = 1; i < bts.Count; i++)
+            cbs = cbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)).ToList();
+            List<string> ls = new List<string>();
+            foreach (Line l in GetLines(cbs))
             {
-                if (Math.Abs(bts[i - 1].R.Y - bts[i].R.Y) > bts[i - 1].R.Height / 2)
-                    sb.Append("\r\n");
-                else if (Math.Abs(bts[i - 1].R.Right - bts[i].R.X) > Math.Min(bts[i - 1].R.Width, bts[i].R.Width) / 2)
-                    sb.Append(" ");
-                sb.Append(bts[i].Char);
+                StringBuilder sb = new StringBuilder();
+                foreach (CharBox cb in l.CharBoxes)
+                    sb.Append(cb.Char);
+                ls.Add(sb.ToString());
             }
-            return sb.ToString();
+            return string.Join("\r\n", ls);
         }
 
-        public static List<CharBox> RemoveDuplicatesAndOrder(IEnumerable<CharBox> bts)
+        public static List<Line> GetLines(IEnumerable<CharBox> cbs)
         {
-            List<CharBox> bs = bts.Where(a => a.R.Width >= 0 && a.R.Height >= 0).ToList();//some symbols are duplicated with negative width and height
-            for (int i = 0; i < bs.Count; i++)
-                for (int j = bs.Count - 1; j > i; j--)
+            List<Line> lines = new List<Line>();
+            foreach (CharBox cb in cbs)
+            {
+                for (int i = 0; i < lines.Count; i++)
                 {
-                    if (Math.Abs(bs[i].R.X - bs[j].R.X) > Settings.ImageProcessing.CoordinateDeviationMargin)//some symbols are duplicated in [almost] same position
-                        continue;
-                    if (Math.Abs(bs[i].R.Y - bs[j].R.Y) > Settings.ImageProcessing.CoordinateDeviationMargin)//some symbols are duplicated in [almost] same position
-                        continue;
-                    if (bs[i].Char != bs[j].Char)
-                        continue;
-                    bs.RemoveAt(j);
+                    if (cb.R.Bottom < lines[i].Top)
+                    {
+                        Line l = new Line { Top = cb.R.Top, Bottom = cb.R.Bottom };
+                        l.CharBoxes.Add(cb);
+                        lines.Insert(i, l);
+                        goto CONTINUE;
+                    }
+                    if (cb.R.Bottom - cb.R.Height / 2 <= lines[i].Bottom)
+                    {
+                        lines[i].CharBoxes.Add(cb);
+                        if (lines[i].Top > cb.R.Top)
+                            lines[i].Top = cb.R.Top;
+                        if (lines[i].Bottom < cb.R.Bottom)
+                            lines[i].Bottom = cb.R.Bottom;
+                        goto CONTINUE;
+                    }
                 }
-            return bs.OrderBy(a => a.R.Y).OrderBy(a => a.R.X).ToList();
+                {
+                    Line l = new Line { Top = cb.R.Top, Bottom = cb.R.Bottom };
+                    l.CharBoxes.Add(cb);
+                    lines.Add(l);
+                }
+                CONTINUE:;
+            }
+            foreach (Line l in lines)
+                l.CharBoxes = l.CharBoxes.OrderBy(a => a.R.X).ToList();
+            return lines;
+        }
+        public class Line
+        {
+            public float Top;
+            public float Bottom;
+            public List<CharBox> CharBoxes = new List<CharBox>();
         }
 
-        public static List<CharBox> GetCharBoxsSurroundedByRectangle(List<CharBox> bts, System.Drawing.RectangleF r)
+        public static List<CharBox> GetCharBoxsSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r)
         {
             //r = new RectangleF(r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);
-            return bts.Where(a => /*selectedR.IntersectsWith(a.R) || */r.Contains(a.R)).ToList();
+            return cbs.Where(a => !a.AutoInserted && /*selectedR.IntersectsWith(a.R) || */r.Contains(a.R)).ToList();
         }
     }
 }
