@@ -49,7 +49,7 @@ namespace Cliver.PdfDocumentParser
 
         public string GetText(Bitmap b, RectangleF r)
         {
-            r = new RectangleF(r.X / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Y / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height / Settings.ImageProcessing.Image2PdfResolutionRatio);            
+            r = new RectangleF(r.X / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Y / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height / Settings.ImageProcessing.Image2PdfResolutionRatio);
             r.Intersect(new Rectangle(0, 0, b.Width, b.Height));
             if (Math.Abs(r.Width) < Settings.ImageProcessing.CoordinateDeviationMargin || Math.Abs(r.Height) < Settings.ImageProcessing.CoordinateDeviationMargin)
                 return null;
@@ -123,7 +123,7 @@ namespace Cliver.PdfDocumentParser
                     //        do
                     //        {
                     //            do
-                        //        {
+                    //        {
                     do
                     {
                         //if (i.IsAtBeginningOf(PageIteratorLevel.Block))
