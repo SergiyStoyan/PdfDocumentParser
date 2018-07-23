@@ -61,16 +61,34 @@ namespace Cliver.PdfDocumentParser
 
         public string GetHtml(Bitmap b)
         {
-            using (var page = engine.Process(b, PageSegMode.Auto))
+            using (var page = engine.Process(b, PageSegMode.SingleBlock))
             {
                 return page.GetHOCRText(0, false);
             }
         }
 
+        public static string GetText(List<CharBox> cbs)
+        {
+            List<string> ls = new List<string>();
+            foreach (Line l in GetLines(cbs))
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (CharBox cb in l.CharBoxes)
+                    sb.Append(cb.Char);
+                ls.Add(sb.ToString());
+            }
+            return string.Join("\r\n", ls);
+        }
+
+        //public static string GetText(List<CharBox> orderedCbs)
+        //{
+        //    return orderedCbs.Aggregate(new StringBuilder(), (sb, n) => sb.Append(n.Char)).ToString();
+        //}
+
         public List<CharBox> GetCharBoxs(Bitmap b)
         {
             List<CharBox> cbs = new List<CharBox>();
-            using (var page = engine.Process(b, PageSegMode.Auto))
+            using (var page = engine.Process(b, PageSegMode.SingleBlock))
             {
                 //string t = page.GetHOCRText(1, true);
                 //var dfg = page.GetThresholdedImage();                        
@@ -123,6 +141,15 @@ namespace Cliver.PdfDocumentParser
                         {
                             if (i.IsAtBeginningOf(PageIteratorLevel.Word))
                             {
+                                //if (i.IsAtBeginningOf(PageIteratorLevel.Para))
+                                //{
+                                //    cbs.Add(new CharBox
+                                //    {
+                                //        Char = "\r\n",
+                                //        AutoInserted = true,
+                                //        R = new RectangleF(r.X1 * Settings.ImageProcessing.Image2PdfResolutionRatio - Settings.ImageProcessing.CoordinateDeviationMargin * 2, r.Y1 * Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width * Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height * Settings.ImageProcessing.Image2PdfResolutionRatio)
+                                //    });
+                                //}//seems to work not well
                                 cbs.Add(new CharBox
                                 {
                                     Char = " ",
@@ -152,6 +179,12 @@ namespace Cliver.PdfDocumentParser
             public bool AutoInserted = false;
             public System.Drawing.RectangleF R;
         }
+
+        //public static string GetTextByTopLeftCoordinates(List<CharBox> orderedCbs, RectangleF r)
+        //{
+        //    orderedCbs = orderedCbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)).ToList();
+        //    return orderedCbs.Aggregate(new StringBuilder(), (sb, n) => sb.Append(n)).ToString();
+        //}
 
         public static string GetTextByTopLeftCoordinates(List<CharBox> cbs, RectangleF r)
         {
@@ -211,8 +244,20 @@ namespace Cliver.PdfDocumentParser
 
         public static List<CharBox> GetCharBoxsSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r)
         {
-            //r = new RectangleF(r.X / Settings.General.Image2PdfResolutionRatio, r.Y / Settings.General.Image2PdfResolutionRatio, r.Width / Settings.General.Image2PdfResolutionRatio, r.Height / Settings.General.Image2PdfResolutionRatio);
             return cbs.Where(a => !a.AutoInserted && /*selectedR.IntersectsWith(a.R) || */r.Contains(a.R)).ToList();
+        }
+
+        public static List<CharBox> GetOrdered(List<CharBox> orderedContainerCbs, List<CharBox> cbs)
+        {
+            List<CharBox> orderedCbs = new List<CharBox>();
+            foreach (CharBox cb in orderedContainerCbs)
+            {
+                if (orderedCbs.Count == cbs.Count)
+                    break;
+                if (cbs.Contains(cb))
+                    orderedCbs.Add(cb);
+            }
+            return orderedCbs;
         }
     }
 }

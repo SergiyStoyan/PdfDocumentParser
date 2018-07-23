@@ -435,7 +435,7 @@ namespace Cliver.PdfDocumentParser
                 case Template.ValueTypes.PdfText:
                     return Pdf.GetTextByTopLeftCoordinates(PdfCharBoxs, r.GetSystemRectangleF());
                 case Template.ValueTypes.OcrText:
-                    //return Ocr.GetTextByTopLeftCoordinates(ActiveTemplateOcrCharBoxs, r.GetSystemRectangleF());//for unknown reason tesseract often parses a whole page much warse than a fragment and so ActiveTemplateOcrCharBoxs gives very bad output.
+                    //return Ocr.GetTextByTopLeftCoordinates(ActiveTemplateOcrCharBoxs, r.GetSystemRectangleF());//for unknown reason tesseract often parses a whole page much worse than a fragment and so ActiveTemplateOcrCharBoxs give not reliable result.
                     return Ocr.This.GetText(ActiveTemplateBitmap, r.GetSystemRectangleF());
                 case Template.ValueTypes.ImageData:
                     using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Y / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height / Settings.ImageProcessing.Image2PdfResolutionRatio))

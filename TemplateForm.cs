@@ -1300,7 +1300,8 @@ namespace Cliver.PdfDocumentParser
         {
             if (pages == null)
                 return;
-            TextForm tf = new TextForm("OCR'ed Text", PdfDocumentParser.Ocr.This.GetHtml(pages[currentPage].Bitmap), true);
+            //TextForm tf = new TextForm("OCR Text", PdfDocumentParser.Ocr.This.GetHtml(pages[currentPage].Bitmap), true);
+            TextForm tf = new TextForm("OCR Text", PdfDocumentParser.Ocr.GetText(pages[currentPage].ActiveTemplateOcrCharBoxs), false);
             tf.ShowDialog();
         }
 
