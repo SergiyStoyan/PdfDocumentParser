@@ -130,113 +130,120 @@ namespace Cliver.PdfDocumentParser
 
             picture.MouseUp += delegate (object sender, MouseEventArgs e)
             {
-                if (pages == null)
-                    return;
-
-                if (!drawingSelectionBox)
-                    return;
-                drawingSelectionBox = false;
-
-                Template.RectangleF r = new Template.RectangleF(selectionBoxPoint1.X, selectionBoxPoint1.Y, selectionBoxPoint2.X - selectionBoxPoint1.X, selectionBoxPoint2.Y - selectionBoxPoint1.Y);
-
-                switch (mode)
+                try
                 {
-                    case Modes.SetFloatingAnchor:
-                        {
-                            if (floatingAnchors.SelectedRows.Count < 1)
-                                break;
+                    if (pages == null)
+                        return;
 
-                            RectangleF selectedR = new RectangleF(selectionBoxPoint1, new SizeF(selectionBoxPoint2.X - selectionBoxPoint1.X, selectionBoxPoint2.Y - selectionBoxPoint1.Y));
-                            Template.ValueTypes vt = (Template.ValueTypes)floatingAnchors.SelectedRows[0].Cells["ValueType3"].Value;
-                            switch (vt)
+                    if (!drawingSelectionBox)
+                        return;
+                    drawingSelectionBox = false;
+
+                    Template.RectangleF r = new Template.RectangleF(selectionBoxPoint1.X, selectionBoxPoint1.Y, selectionBoxPoint2.X - selectionBoxPoint1.X, selectionBoxPoint2.Y - selectionBoxPoint1.Y);
+
+                    switch (mode)
+                    {
+                        case Modes.SetFloatingAnchor:
                             {
-                                case Template.ValueTypes.PdfText:
-                                    if (selectedPdfCharBoxs == null/* || (ModifierKeys & Keys.Control) != Keys.Control*/)
-                                        selectedPdfCharBoxs = new List<Pdf.CharBox>();
-                                    selectedPdfCharBoxs.AddRange(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPage].PdfCharBoxs, selectedR));
+                                if (floatingAnchors.SelectedRows.Count < 1)
                                     break;
-                                case Template.ValueTypes.OcrText:
-                                    //{
-                                    //    if (selectedOcrTextValue == null)
-                                    //        selectedOcrTextValue = new Settings.Template.FloatingAnchor.OcrTextValue
-                                    //        {
-                                    //            TextBoxs = new List<Settings.Template.FloatingAnchor.OcrTextValue.TextBox>()
-                                    //        };
-                                    //    string error;
-                                    //    pages.ActiveTemplate = getTemplateFromUI(false);
-                                    //    selectedOcrTextValue.TextBoxs.Add(new Settings.Template.FloatingAnchor.OcrTextValue.TextBox
-                                    //    {
-                                    //        Rectangle = Settings.Template.RectangleF.GetFromSystemRectangleF(selectedR),
-                                    //        Text = (string)pages[currentPage].GetValue(null, Settings.Template.RectangleF.GetFromSystemRectangleF(selectedR), Settings.Template.ValueTypes.OcrText, out error)
-                                    //    });
-                                    //}
-                                    if (selectedOcrCharBoxs == null/* || (ModifierKeys & Keys.Control) != Keys.Control*/)
-                                        selectedOcrCharBoxs = new List<Ocr.CharBox>();
-                                    selectedOcrCharBoxs.AddRange(PdfDocumentParser.Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPage].ActiveTemplateOcrCharBoxs, selectedR));                                    
-                                    break;
-                                case Template.ValueTypes.ImageData:
-                                    {
-                                        if (selectedImageDataValue == null)
-                                            selectedImageDataValue = new Template.FloatingAnchor.ImageDataValue
-                                            {
-                                                ImageBoxs = new List<Template.FloatingAnchor.ImageDataValue.ImageBox>()
-                                            };
-                                        string error;
-                                        selectedImageDataValue.ImageBoxs.Add(new Template.FloatingAnchor.ImageDataValue.ImageBox
+
+                                RectangleF selectedR = new RectangleF(selectionBoxPoint1, new SizeF(selectionBoxPoint2.X - selectionBoxPoint1.X, selectionBoxPoint2.Y - selectionBoxPoint1.Y));
+                                Template.ValueTypes vt = (Template.ValueTypes)floatingAnchors.SelectedRows[0].Cells["ValueType3"].Value;
+                                switch (vt)
+                                {
+                                    case Template.ValueTypes.PdfText:
+                                        if (selectedPdfCharBoxs == null/* || (ModifierKeys & Keys.Control) != Keys.Control*/)
+                                            selectedPdfCharBoxs = new List<Pdf.CharBox>();
+                                        selectedPdfCharBoxs.AddRange(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPage].PdfCharBoxs, selectedR));
+                                        break;
+                                    case Template.ValueTypes.OcrText:
+                                        //{
+                                        //    if (selectedOcrTextValue == null)
+                                        //        selectedOcrTextValue = new Settings.Template.FloatingAnchor.OcrTextValue
+                                        //        {
+                                        //            TextBoxs = new List<Settings.Template.FloatingAnchor.OcrTextValue.TextBox>()
+                                        //        };
+                                        //    string error;
+                                        //    pages.ActiveTemplate = getTemplateFromUI(false);
+                                        //    selectedOcrTextValue.TextBoxs.Add(new Settings.Template.FloatingAnchor.OcrTextValue.TextBox
+                                        //    {
+                                        //        Rectangle = Settings.Template.RectangleF.GetFromSystemRectangleF(selectedR),
+                                        //        Text = (string)pages[currentPage].GetValue(null, Settings.Template.RectangleF.GetFromSystemRectangleF(selectedR), Settings.Template.ValueTypes.OcrText, out error)
+                                        //    });
+                                        //}
+                                        if (selectedOcrCharBoxs == null/* || (ModifierKeys & Keys.Control) != Keys.Control*/)
+                                            selectedOcrCharBoxs = new List<Ocr.CharBox>();
+                                        selectedOcrCharBoxs.AddRange(PdfDocumentParser.Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPage].ActiveTemplateOcrCharBoxs, selectedR));
+                                        break;
+                                    case Template.ValueTypes.ImageData:
                                         {
-                                            Rectangle = Template.RectangleF.GetFromSystemRectangleF(selectedR),
-                                            ImageData = (ImageData)pages[currentPage].GetValue(null, Template.RectangleF.GetFromSystemRectangleF(selectedR), Template.ValueTypes.ImageData, out error)
-                                        });
-                                    }
-                                    break;
-                                default:
-                                    throw new Exception("Unknown option: " + vt);
-                            }
+                                            if (selectedImageDataValue == null)
+                                                selectedImageDataValue = new Template.FloatingAnchor.ImageDataValue
+                                                {
+                                                    ImageBoxs = new List<Template.FloatingAnchor.ImageDataValue.ImageBox>()
+                                                };
+                                            string error;
+                                            selectedImageDataValue.ImageBoxs.Add(new Template.FloatingAnchor.ImageDataValue.ImageBox
+                                            {
+                                                Rectangle = Template.RectangleF.GetFromSystemRectangleF(selectedR),
+                                                ImageData = (ImageData)pages[currentPage].GetValue(null, Template.RectangleF.GetFromSystemRectangleF(selectedR), Template.ValueTypes.ImageData, out error)
+                                            });
+                                        }
+                                        break;
+                                    default:
+                                        throw new Exception("Unknown option: " + vt);
+                                }
 
-                            if ((ModifierKeys & Keys.Control) != Keys.Control)
-                                setFloatingAnchorFromSelectedElements();
-                        }
-                        break;
-                    case Modes.SetDocumentFirstPageRecognitionTextMarks:
-                        {
-                            if (documentFirstPageRecognitionMarks.SelectedRows.Count < 1)
-                                break;
-                            var cs = documentFirstPageRecognitionMarks.SelectedRows[0].Cells;
-                            int? fai = (int?)cs["FloatingAnchorId2"].Value;
-                            if (fai != null)
-                            {
-                                pages.ActiveTemplate = getTemplateFromUI(false);
-                                PointF? p = pages[currentPage].GetFloatingAnchorPoint0((int)fai);
-                                if (p == null)
-                                    throw new Exception("Could not find FloatingAnchor " + fai + " in the page");
-                                r.X -= ((PointF)p).X;
-                                r.Y -= ((PointF)p).Y;
+                                if ((ModifierKeys & Keys.Control) != Keys.Control)
+                                    setFloatingAnchorFromSelectedElements();
                             }
-                            cs["Rectangle2"].Value = SerializationRoutines.Json.Serialize(r);
-                            documentFirstPageRecognitionMarks.EndEdit();
-                        }
-                        break;
-                    case Modes.SetFieldRectangle:
-                        {
-                            if (fields.SelectedRows.Count < 1)
-                                break;
-                            var cs = fields.SelectedRows[0].Cells;
-                            int? fai = (int?)cs["FloatingAnchorId"].Value;
-                            if (fai != null)
+                            break;
+                        case Modes.SetDocumentFirstPageRecognitionTextMarks:
                             {
-                                pages.ActiveTemplate = getTemplateFromUI(false);
-                                PointF? p = pages[currentPage].GetFloatingAnchorPoint0((int)fai);
-                                if (p == null)
-                                    throw new Exception("Could not find FloatingAnchor " + fai + " in the page");
-                                r.X -= ((PointF)p).X;
-                                r.Y -= ((PointF)p).Y;
+                                if (documentFirstPageRecognitionMarks.SelectedRows.Count < 1)
+                                    break;
+                                var cs = documentFirstPageRecognitionMarks.SelectedRows[0].Cells;
+                                int? fai = (int?)cs["FloatingAnchorId2"].Value;
+                                if (fai != null)
+                                {
+                                    pages.ActiveTemplate = getTemplateFromUI(false);
+                                    PointF? p = pages[currentPage].GetFloatingAnchorPoint0((int)fai);
+                                    if (p == null)
+                                        throw new Exception("Could not find FloatingAnchor " + fai + " in the page");
+                                    r.X -= ((PointF)p).X;
+                                    r.Y -= ((PointF)p).Y;
+                                }
+                                cs["Rectangle2"].Value = SerializationRoutines.Json.Serialize(r);
+                                documentFirstPageRecognitionMarks.EndEdit();
                             }
-                            cs["Rectangle"].Value = SerializationRoutines.Json.Serialize(r);
-                            fields.EndEdit();
-                        }
-                        break;
-                    default:
-                        break;
+                            break;
+                        case Modes.SetFieldRectangle:
+                            {
+                                if (fields.SelectedRows.Count < 1)
+                                    break;
+                                var cs = fields.SelectedRows[0].Cells;
+                                int? fai = (int?)cs["FloatingAnchorId"].Value;
+                                if (fai != null)
+                                {
+                                    pages.ActiveTemplate = getTemplateFromUI(false);
+                                    PointF? p = pages[currentPage].GetFloatingAnchorPoint0((int)fai);
+                                    if (p == null)
+                                        throw new Exception("Could not find FloatingAnchor " + fai + " in the page");
+                                    r.X -= ((PointF)p).X;
+                                    r.Y -= ((PointF)p).Y;
+                                }
+                                cs["Rectangle"].Value = SerializationRoutines.Json.Serialize(r);
+                                fields.EndEdit();
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Message.Error2(ex);
                 }
             };
 
@@ -574,7 +581,7 @@ namespace Cliver.PdfDocumentParser
                 catch (Exception ex)
                 {
                     //LogMessage.Error("Name", ex);
-                    LogMessage.Error(ex);
+                    Message.Error2(ex);
                     e.Cancel = true;
                 }
             };
