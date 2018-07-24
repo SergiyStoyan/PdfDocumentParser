@@ -214,9 +214,15 @@ namespace Cliver.PdfDocumentParser
             return string.Join("\r\n", ls);
         }
 
-        public static List<CharBox> GetCharBoxsSurroundedByRectangle(List<CharBox> bts, System.Drawing.RectangleF r)
+        public static List<CharBox> GetCharBoxsSurroundedByRectangle(List<CharBox> bts, System.Drawing.RectangleF r, bool excludeInvisibleCharacters)
         {
-            return bts.Where(a => /*selectedR.IntersectsWith(a.R) || */r.Contains(a.R)).ToList();
+            var bts_ = bts.Where(a => /*selectedR.IntersectsWith(a.R) || */r.Contains(a.R));
+            if (excludeInvisibleCharacters)
+            {
+                string ignoredCharacters = " \t";
+                bts_ = bts_.Where(a => !ignoredCharacters.Contains(a.Char));
+            }
+            return bts_.ToList();
         }
 
         public static List<Line> RemoveDuplicatesAndGetLines(IEnumerable<CharBox> cbs)

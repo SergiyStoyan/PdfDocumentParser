@@ -38,7 +38,7 @@ namespace Cliver.InvoiceParser
         {
             try
             {
-                //PdfDocumentParser.Program.Initialize();
+                PdfDocumentParser.Program.Initialize();
 
                 //PdfDocumentParser.TemplateWindow tw = new PdfDocumentParser.TemplateWindow();
                 //tw.ShowDialog();

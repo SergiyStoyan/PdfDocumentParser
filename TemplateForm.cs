@@ -155,7 +155,7 @@ namespace Cliver.PdfDocumentParser
                                     case Template.ValueTypes.PdfText:
                                         if (selectedPdfCharBoxs == null/* || (ModifierKeys & Keys.Control) != Keys.Control*/)
                                             selectedPdfCharBoxs = new List<Pdf.CharBox>();
-                                        selectedPdfCharBoxs.AddRange(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPage].PdfCharBoxs, selectedR));
+                                        selectedPdfCharBoxs.AddRange(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPage].PdfCharBoxs, selectedR, true));
                                         break;
                                     case Template.ValueTypes.OcrText:
                                         //{
