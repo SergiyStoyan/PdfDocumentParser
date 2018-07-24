@@ -57,6 +57,18 @@ namespace Cliver.PdfDocumentParser
             FloatingAnchorId.ValueType = typeof(int);
             FloatingAnchorId.DataSource = null;
 
+            int statusDefaultHeight = status.Height;
+            status.MouseEnter += delegate
+            {
+                if (status.Text.Contains("\n"))
+                    status.Height = splitContainer2.Panel1.Bottom - status.Top;
+            };
+            status.MouseLeave += delegate
+            {
+                status.Height = statusDefaultHeight;
+            };
+
+
             Shown += delegate
             {
                 Application.DoEvents();//make form be drawn completely
@@ -462,7 +474,7 @@ namespace Cliver.PdfDocumentParser
                             }
                             else
                             {
-                                lStatus.BackColor = Color.LightGreen;
+                                status.BackColor = Color.LightGreen;
                                 if (vt != Template.ValueTypes.ImageData)
                                     setStatus(statuses.SUCCESS, "documentFirstPageRecognitionMark[" + i + "]:\r\n" + t2);
                                 else
@@ -1079,20 +1091,20 @@ namespace Cliver.PdfDocumentParser
 
         void setStatus(statuses s, string m)
         {
-            lStatus.Text = m;
+            status.Text = m;
             switch (s)
             {
                 case statuses.SUCCESS:
-                    lStatus.BackColor = Color.LightGreen;
+                    status.BackColor = Color.LightGreen;
                     break;
                 case statuses.ERROR:
-                    lStatus.BackColor = Color.LightPink;
+                    status.BackColor = Color.LightPink;
                     break;
                 case statuses.WARNING:
-                    lStatus.BackColor = Color.LightYellow;
+                    status.BackColor = Color.LightYellow;
                     break;
                 case statuses.NEUTRAL:
-                    lStatus.BackColor = Color.WhiteSmoke;
+                    status.BackColor = Color.WhiteSmoke;
                     break;
                 default:
                     throw new Exception("Unknown option: " + s);
@@ -1200,8 +1212,8 @@ namespace Cliver.PdfDocumentParser
             {
                 if (documentFirstPageRecognitionMarks.Rows.Count < 2)
                 {
-                    lStatus.Text = "No condition of first page of document is specified!";
-                    lStatus.BackColor = Color.LightYellow;
+                    status.Text = "No condition of first page of document is specified!";
+                    status.BackColor = Color.LightYellow;
                     return null;
                 }
 
@@ -1210,12 +1222,12 @@ namespace Cliver.PdfDocumentParser
                 string error;
                 if (!pages[currentPage].IsDocumentFirstPage(out error))
                 {
-                    lStatus.Text = error;
-                    lStatus.BackColor = Color.LightPink;
+                    status.Text = error;
+                    status.BackColor = Color.LightPink;
                     return false;
                 }
-                lStatus.Text = "The page matches first page of document.";
-                lStatus.BackColor = Color.LightGreen;
+                status.Text = "The page matches first page of document.";
+                status.BackColor = Color.LightGreen;
                 return true;
             }
             catch (Exception ex)
