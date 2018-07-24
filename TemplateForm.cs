@@ -68,7 +68,6 @@ namespace Cliver.PdfDocumentParser
                 status.Height = statusDefaultHeight;
             };
 
-
             Shown += delegate
             {
                 Application.DoEvents();//make form be drawn completely
