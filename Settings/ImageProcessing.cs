@@ -26,12 +26,12 @@ namespace Cliver.PdfDocumentParser
         {
             public int PdfPageImageResolution = 300;//tesseract requires at least 300
             public float CoordinateDeviationMargin = 0.001f;
-            public float Image2PdfResolutionRatio { get { return _Image2PdfResolutionRatio; } }
-            float _Image2PdfResolutionRatio;
-            
+            //not serialize
+            internal float Image2PdfResolutionRatio { get; private set; }
+
             public override void Loaded()
             {
-                _Image2PdfResolutionRatio = (float)72 / PdfPageImageResolution;//72 is resolution of the most pdf's
+                Image2PdfResolutionRatio = (float)72 / PdfPageImageResolution;//72 is resolution of the most pdf's
             }
 
             public override void Saving()
