@@ -103,7 +103,8 @@ namespace Cliver.PdfDocumentParser
             //    floatingAnchorValueStrings2rectangles.Clear();
 
             if (newTemplate.BrightnessTolerance != pageCollection.ActiveTemplate.BrightnessTolerance
-                || newTemplate.DifferentPixelNumberTolerance != pageCollection.ActiveTemplate.DifferentPixelNumberTolerance)
+                || newTemplate.DifferentPixelNumberTolerance != pageCollection.ActiveTemplate.DifferentPixelNumberTolerance
+                || newTemplate.FloatingAnchorCharacterPositionDeviation != pageCollection.ActiveTemplate.FloatingAnchorCharacterPositionDeviation)
                 floatingAnchorValueStrings2rectangles.Clear();
         }
 
@@ -221,9 +222,9 @@ namespace Cliver.PdfDocumentParser
                                 float y = bt0.R.Y + ses[i].Rectangle.Y - ses[0].Rectangle.Y;
                                 foreach (Pdf.CharBox bt in PdfCharBoxs.Where(a => a.Char == ses[i].Char))
                                 {
-                                    if (Math.Abs(bt.R.X - x) > Settings.ImageProcessing.CoordinateDeviationMargin)
+                                    if (Math.Abs(bt.R.X - x) > pageCollection.ActiveTemplate.FloatingAnchorCharacterPositionDeviation)
                                         continue;
-                                    if (Math.Abs(bt.R.Y - y) > Settings.ImageProcessing.CoordinateDeviationMargin)
+                                    if (Math.Abs(bt.R.Y - y) > pageCollection.ActiveTemplate.FloatingAnchorCharacterPositionDeviation)
                                         continue;
                                     if (bts.Contains(bt))
                                         continue;
@@ -251,9 +252,9 @@ namespace Cliver.PdfDocumentParser
                                 float y = bt0.R.Y + ses[i].Rectangle.Y - ses[0].Rectangle.Y;
                                 foreach (Ocr.CharBox bt in ActiveTemplateOcrCharBoxs.Where(a => a.Char == ses[i].Char))
                                 {
-                                    if (Math.Abs(bt.R.X - x) > Settings.ImageProcessing.CoordinateDeviationMargin)
+                                    if (Math.Abs(bt.R.X - x) > pageCollection.ActiveTemplate.FloatingAnchorCharacterPositionDeviation)
                                         continue;
-                                    if (Math.Abs(bt.R.Y - y) > Settings.ImageProcessing.CoordinateDeviationMargin)
+                                    if (Math.Abs(bt.R.Y - y) > pageCollection.ActiveTemplate.FloatingAnchorCharacterPositionDeviation)
                                         continue;
                                     if (bts.Contains(bt))
                                         continue;

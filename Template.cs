@@ -174,6 +174,8 @@ namespace Cliver.PdfDocumentParser
             //public Regex Regex;//if set the rest settings are ignored; it is applied to the page text
         }
 
+        public float FloatingAnchorCharacterPositionDeviation = 0.01f;
+
         public partial class FloatingAnchor
         {
             //serialize

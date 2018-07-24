@@ -1010,6 +1010,8 @@ namespace Cliver.PdfDocumentParser
                 brightnessTolerance.Value = (decimal)t.BrightnessTolerance;
                 differentPixelNumberTolerance.Value = (decimal)t.DifferentPixelNumberTolerance;
 
+                floatingAnchorCharacterPositionDeviation.Value = (decimal)t.FloatingAnchorCharacterPositionDeviation;
+
                 floatingAnchors.Rows.Clear();
                 if (t.FloatingAnchors != null)
                 {
@@ -1363,6 +1365,8 @@ namespace Cliver.PdfDocumentParser
             t.FindBestImageMatch = findBestImageMatch.Checked;
             t.BrightnessTolerance = (float)brightnessTolerance.Value;
             t.DifferentPixelNumberTolerance = (float)differentPixelNumberTolerance.Value;
+
+            t.FloatingAnchorCharacterPositionDeviation = (float)floatingAnchorCharacterPositionDeviation.Value;
 
             t.FloatingAnchors = new List<Template.FloatingAnchor>();
             foreach (DataGridViewRow r in floatingAnchors.Rows)
