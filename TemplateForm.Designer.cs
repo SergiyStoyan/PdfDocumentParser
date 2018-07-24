@@ -699,8 +699,7 @@
             this.status.Multiline = true;
             this.status.Name = "status";
             this.status.ReadOnly = true;
-            this.status.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.status.Size = new System.Drawing.Size(375, 21);
+            this.status.Size = new System.Drawing.Size(375, 20);
             this.status.TabIndex = 35;
             // 
             // fileFilterRegex

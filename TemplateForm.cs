@@ -60,12 +60,18 @@ namespace Cliver.PdfDocumentParser
             int statusDefaultHeight = status.Height;
             status.MouseEnter += delegate
             {
-                if (status.Text.Contains("\n"))
+                Size s = TextRenderer.MeasureText(status.Text, status.Font);
+                if (s.Width > status.Width || s.Height > status.Height)
+                {
                     status.Height = splitContainer2.Panel1.Bottom - status.Top;
+                    if (s.Width > status.Width || s.Height > status.Height)
+                        status.ScrollBars = ScrollBars.Both;
+                }
             };
             status.MouseLeave += delegate
             {
                 status.Height = statusDefaultHeight;
+                status.ScrollBars = ScrollBars.None;
             };
 
             Shown += delegate
@@ -467,17 +473,17 @@ namespace Cliver.PdfDocumentParser
                             if (t1 != t2)
                             {
                                 if (vt != Template.ValueTypes.ImageData)
-                                    setStatus(statuses.ERROR, "documentFirstPageRecognitionMark[" + i + "]:\r\n" + t2 + "\r\n <> \r\n" + t1);
+                                    setStatus(statuses.ERROR, "documentFirstPageRecognitionMark[" + i + "] is not found:\r\n" + t2 + "\r\n <> \r\n" + t1);
                                 else
-                                    setStatus(statuses.ERROR, "documentFirstPageRecognitionMark[" + i + "]:\r\nimage is not similar");
+                                    setStatus(statuses.ERROR, "documentFirstPageRecognitionMark[" + i + "] is not found:\r\nimage is not similar");
                             }
                             else
                             {
                                 status.BackColor = Color.LightGreen;
                                 if (vt != Template.ValueTypes.ImageData)
-                                    setStatus(statuses.SUCCESS, "documentFirstPageRecognitionMark[" + i + "]:\r\n" + t2);
+                                    setStatus(statuses.SUCCESS, "documentFirstPageRecognitionMark[" + i + "] is found:\r\n" + t2);
                                 else
-                                    setStatus(statuses.SUCCESS, "documentFirstPageRecognitionMark[" + i + "]:\r\nimage is similar");
+                                    setStatus(statuses.SUCCESS, "documentFirstPageRecognitionMark[" + i + "] is found:\r\nimage is similar");
                             }
                         }
                         else if (fai != null)
