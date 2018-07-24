@@ -336,7 +336,7 @@
             this.groupBox1.Controls.Add(this.autoDeskew);
             this.groupBox1.Location = new System.Drawing.Point(0, 164);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(426, 104);
+            this.groupBox1.Size = new System.Drawing.Size(429, 104);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Scanned Document Settings";
@@ -545,7 +545,7 @@
             // bTestFile
             // 
             this.bTestFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bTestFile.Location = new System.Drawing.Point(402, 52);
+            this.bTestFile.Location = new System.Drawing.Point(405, 52);
             this.bTestFile.Name = "bTestFile";
             this.bTestFile.Size = new System.Drawing.Size(24, 23);
             this.bTestFile.TabIndex = 9;
@@ -624,7 +624,7 @@
             // bNextPage
             // 
             this.bNextPage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bNextPage.Location = new System.Drawing.Point(379, 26);
+            this.bNextPage.Location = new System.Drawing.Point(382, 26);
             this.bNextPage.Name = "bNextPage";
             this.bNextPage.Size = new System.Drawing.Size(47, 23);
             this.bNextPage.TabIndex = 23;
@@ -683,7 +683,7 @@
             // bTestFileFilterRegex
             // 
             this.bTestFileFilterRegex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bTestFileFilterRegex.Location = new System.Drawing.Point(379, 81);
+            this.bTestFileFilterRegex.Location = new System.Drawing.Point(382, 81);
             this.bTestFileFilterRegex.Name = "bTestFileFilterRegex";
             this.bTestFileFilterRegex.Size = new System.Drawing.Size(47, 23);
             this.bTestFileFilterRegex.TabIndex = 37;
@@ -699,7 +699,7 @@
             this.status.Multiline = true;
             this.status.Name = "status";
             this.status.ReadOnly = true;
-            this.status.Size = new System.Drawing.Size(375, 20);
+            this.status.Size = new System.Drawing.Size(378, 20);
             this.status.TabIndex = 35;
             // 
             // fileFilterRegex
