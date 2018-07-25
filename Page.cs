@@ -96,6 +96,7 @@ namespace Cliver.PdfDocumentParser
                 if (_activeTemplateOcrCharBoxs != null)
                     _activeTemplateOcrCharBoxs = null;
 
+                floatingAnchorHashes2rectangles.Clear();
             }
 
             //if (pageCollection.ActiveTemplate.Name != newTemplate.Name)
@@ -103,6 +104,7 @@ namespace Cliver.PdfDocumentParser
 
             if (newTemplate.BrightnessTolerance != pageCollection.ActiveTemplate.BrightnessTolerance
                 || newTemplate.DifferentPixelNumberTolerance != pageCollection.ActiveTemplate.DifferentPixelNumberTolerance)
+                floatingAnchorHashes2rectangles.Clear();
         }
 
         Bitmap getRectangleFromActiveTemplateBitmap(float x, float y, float w, float h)
@@ -187,11 +189,14 @@ namespace Cliver.PdfDocumentParser
         {
             List<RectangleF> rs;
             string fas = SerializationRoutines.Json.Serialize(fa);
+            if (!floatingAnchorHashes2rectangles.TryGetValue(fas, out rs))
             {
                 rs = findFloatingAnchor(fa);
+                floatingAnchorHashes2rectangles[fas] = rs;
             }
             return rs;
         }
+        Dictionary<string, List<RectangleF>> floatingAnchorHashes2rectangles = new Dictionary<string, List<RectangleF>>();
 
         List<RectangleF> findFloatingAnchor(Template.FloatingAnchor fa)
         {
