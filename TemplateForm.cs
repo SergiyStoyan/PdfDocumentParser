@@ -44,7 +44,8 @@ namespace Cliver.PdfDocumentParser
 
             this.templateManager = templateManager;
             this.testFileDefaultFolder = testFileDefaultFolder;
-
+            
+            PositionDeviation3.ValueType = typeof(float);
             ValueType3.ValueType = typeof(Template.ValueTypes);
             ValueType3.DataSource = Enum.GetValues(typeof(Template.ValueTypes));
 
@@ -275,13 +276,21 @@ namespace Cliver.PdfDocumentParser
                 DataGridViewRow r = floatingAnchors.Rows[e.RowIndex];
                 try
                 {
+                    //if (!(r.Cells["PositionDeviation3"].Value is float))
+                    //    throw new Exception("Position deviation must be a float number.");
                 }
                 catch (Exception ex)
                 {
                     //LogMessage.Error("Name", ex);
-                    LogMessage.Error(ex);
+                    Message.Error2(ex);
                     e.Cancel = true;
                 }
+            };
+
+            floatingAnchors.DataError += delegate (object sender, DataGridViewDataErrorEventArgs e) 
+            {
+                DataGridViewRow r = floatingAnchors.Rows[e.RowIndex];
+                Message.Error("FloatingAnchor[" + r.Cells["Id3"].Value + "] has unacceptable value of " + floatingAnchors.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message);
             };
 
             floatingAnchors.DefaultValuesNeeded += delegate (object sender, DataGridViewRowEventArgs e)
@@ -547,7 +556,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 catch (Exception ex)
                 {
-                    LogMessage.Error(ex);
+                    Message.Error2(ex);
                 }
             };
 
@@ -648,7 +657,7 @@ namespace Cliver.PdfDocumentParser
                         }
                         else
                         {
-                            findAndDrawFloatingAnchor(fai);//to shows tatus
+                            findAndDrawFloatingAnchor(fai);//to show status
                         }
                     }
                 }
@@ -740,7 +749,7 @@ namespace Cliver.PdfDocumentParser
                     documentFirstPageRecognitionMarks.Rows[0].Selected = true;
             };
         }
-
+        
         PageCollection pages = null;
 
         void onFloatingAnchorsChanged(int? updatedFloatingAnchorId)
@@ -801,24 +810,6 @@ namespace Cliver.PdfDocumentParser
             FloatingAnchorId.DataSource = fais;
         }
 
-        Template.FloatingAnchor getFloatingAnchor(int id)
-        {
-            foreach (DataGridViewRow r in floatingAnchors.Rows)
-            {
-                if (r.Cells["Id3"].Value == null)
-                    continue;
-                int fai = (int)r.Cells["Id3"].Value;
-                if (fai == id)
-                    return new Template.FloatingAnchor
-                    {
-                        Id = fai,
-                        ValueType = (Template.ValueTypes)r.Cells["ValueType3"].Value,
-                        ValueAsString = (string)r.Cells["Body3"].Value
-                    };
-            }
-            throw new Exception("There is no FloatingAnchor with Id=" + id);
-        }
-
         void reloadPageBitmaps()
         {
             if (pages == null)
@@ -851,13 +842,16 @@ namespace Cliver.PdfDocumentParser
         {
             if (floatingAnchorId == null)
                 return null;
-            Template.FloatingAnchor fa = getFloatingAnchor((int)floatingAnchorId);
-            if (fa.GetValue() == null)
+
+            pages.ActiveTemplate = getTemplateFromUI(false);
+
+            Template.FloatingAnchor fa = pages.ActiveTemplate.FloatingAnchors.Where(a=>a.Id == (int)floatingAnchorId).FirstOrDefault();
+            if (fa == null || fa.GetValue() == null)
             {
                 setStatus(statuses.WARNING, "FloatingAnchor[" + fa.Id + "] is not defined.");
                 return null;
             }
-            pages.ActiveTemplate = getTemplateFromUI(false);
+
             List<RectangleF> rs = pages[currentPage].GetFloatingAnchorRectangles(fa);
             if (rs == null || rs.Count < 1)
             {
@@ -1027,8 +1021,6 @@ namespace Cliver.PdfDocumentParser
                 brightnessTolerance.Value = (decimal)t.BrightnessTolerance;
                 differentPixelNumberTolerance.Value = (decimal)t.DifferentPixelNumberTolerance;
 
-                floatingAnchorCharacterPositionDeviation.Value = (decimal)t.FloatingAnchorCharacterPositionDeviation;
-
                 floatingAnchors.Rows.Clear();
                 if (t.FloatingAnchors != null)
                 {
@@ -1038,6 +1030,7 @@ namespace Cliver.PdfDocumentParser
                         var cs = floatingAnchors.Rows[i].Cells;
                         cs["Id3"].Value = fa.Id;
                         cs["ValueType3"].Value = fa.ValueType;
+                        cs["PositionDeviation3"].Value = fa.PositionDeviation;
                         cs["Body3"].Value = fa.ValueAsString;
                     }
                     onFloatingAnchorsChanged(null);
@@ -1382,9 +1375,7 @@ namespace Cliver.PdfDocumentParser
             t.FindBestImageMatch = findBestImageMatch.Checked;
             t.BrightnessTolerance = (float)brightnessTolerance.Value;
             t.DifferentPixelNumberTolerance = (float)differentPixelNumberTolerance.Value;
-
-            t.FloatingAnchorCharacterPositionDeviation = (float)floatingAnchorCharacterPositionDeviation.Value;
-
+            
             t.FloatingAnchors = new List<Template.FloatingAnchor>();
             foreach (DataGridViewRow r in floatingAnchors.Rows)
                 if (r.Cells["Id3"].Value != null)
@@ -1392,6 +1383,7 @@ namespace Cliver.PdfDocumentParser
                     {
                         Id = (int)r.Cells["Id3"].Value,
                         ValueType = (Template.ValueTypes)r.Cells["ValueType3"].Value,
+                        PositionDeviation = (float)r.Cells["PositionDeviation3"].Value,
                         ValueAsString = (string)r.Cells["Body3"].Value
                     });
             t.FloatingAnchors = t.FloatingAnchors.OrderBy(a => a.Id).ToList();

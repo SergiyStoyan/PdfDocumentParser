@@ -173,15 +173,15 @@ namespace Cliver.PdfDocumentParser
             public ValueTypes ValueType = ValueTypes.PdfText;
             //public Regex Regex;//if set the rest settings are ignored; it is applied to the page text
         }
-
-        public float FloatingAnchorCharacterPositionDeviation = 0.01f;
-
+        
         public partial class FloatingAnchor
         {
             //serialize
             public int Id;
             //serialize
             public ValueTypes ValueType = ValueTypes.PdfText;
+            //serialize
+            public float PositionDeviation = 0.01f;
             //serialize
             public string ValueAsString
             {

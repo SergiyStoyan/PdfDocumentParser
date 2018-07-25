@@ -103,8 +103,7 @@ namespace Cliver.PdfDocumentParser
             //    floatingAnchorValueStrings2rectangles.Clear();
 
             if (newTemplate.BrightnessTolerance != pageCollection.ActiveTemplate.BrightnessTolerance
-                || newTemplate.DifferentPixelNumberTolerance != pageCollection.ActiveTemplate.DifferentPixelNumberTolerance
-                || newTemplate.FloatingAnchorCharacterPositionDeviation != pageCollection.ActiveTemplate.FloatingAnchorCharacterPositionDeviation)
+                || newTemplate.DifferentPixelNumberTolerance != pageCollection.ActiveTemplate.DifferentPixelNumberTolerance)
                 floatingAnchorValueStrings2rectangles.Clear();
         }
 
@@ -189,7 +188,7 @@ namespace Cliver.PdfDocumentParser
         internal List<RectangleF> GetFloatingAnchorRectangles(Template.FloatingAnchor fa)
         {
             List<RectangleF> rs;
-            string fas = fa.ValueAsString;
+            string fas = SerializationRoutines.Json.Serialize(fa);
             if (!floatingAnchorValueStrings2rectangles.TryGetValue(fas, out rs))
             {
                 rs = findFloatingAnchor(fa);
@@ -222,9 +221,9 @@ namespace Cliver.PdfDocumentParser
                                 float y = bt0.R.Y + ses[i].Rectangle.Y - ses[0].Rectangle.Y;
                                 foreach (Pdf.CharBox bt in PdfCharBoxs.Where(a => a.Char == ses[i].Char))
                                 {
-                                    if (Math.Abs(bt.R.X - x) > pageCollection.ActiveTemplate.FloatingAnchorCharacterPositionDeviation)
+                                    if (Math.Abs(bt.R.X - x) > fa.PositionDeviation)
                                         continue;
-                                    if (Math.Abs(bt.R.Y - y) > pageCollection.ActiveTemplate.FloatingAnchorCharacterPositionDeviation)
+                                    if (Math.Abs(bt.R.Y - y) > fa.PositionDeviation)
                                         continue;
                                     if (bts.Contains(bt))
                                         continue;
@@ -252,9 +251,9 @@ namespace Cliver.PdfDocumentParser
                                 float y = bt0.R.Y + ses[i].Rectangle.Y - ses[0].Rectangle.Y;
                                 foreach (Ocr.CharBox bt in ActiveTemplateOcrCharBoxs.Where(a => a.Char == ses[i].Char))
                                 {
-                                    if (Math.Abs(bt.R.X - x) > pageCollection.ActiveTemplate.FloatingAnchorCharacterPositionDeviation)
+                                    if (Math.Abs(bt.R.X - x) > fa.PositionDeviation)
                                         continue;
-                                    if (Math.Abs(bt.R.Y - y) > pageCollection.ActiveTemplate.FloatingAnchorCharacterPositionDeviation)
+                                    if (Math.Abs(bt.R.Y - y) > fa.PositionDeviation)
                                         continue;
                                     if (bts.Contains(bt))
                                         continue;
@@ -278,10 +277,16 @@ namespace Cliver.PdfDocumentParser
                         rs.Add(new RectangleF(point0, new SizeF(ibs[0].Rectangle.Width, ibs[0].Rectangle.Height)));
                         for (int i = 1; i < ibs.Count; i++)
                         {
-                            Template.RectangleF r = new Template.RectangleF(point0.X + ibs[i].Rectangle.X - ibs[0].Rectangle.X, point0.Y + ibs[i].Rectangle.Y - ibs[0].Rectangle.Y, ibs[i].Rectangle.Width, ibs[i].Rectangle.Height);
+                            //Template.RectangleF r = new Template.RectangleF(point0.X + ibs[i].Rectangle.X - ibs[0].Rectangle.X, point0.Y + ibs[i].Rectangle.Y - ibs[0].Rectangle.Y, ibs[i].Rectangle.Width, ibs[i].Rectangle.Height);
+                            //using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Y / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height / Settings.ImageProcessing.Image2PdfResolutionRatio))
+                            //{
+                            //    if (!ibs[i].ImageData.ImageIsSimilar(new ImageData(rb), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance))
+                            //        return true;
+                            //}
+                            Template.RectangleF r = new Template.RectangleF(point0.X + ibs[i].Rectangle.X - ibs[0].Rectangle.X - fa.PositionDeviation, point0.Y + ibs[i].Rectangle.Y - ibs[0].Rectangle.Y - fa.PositionDeviation, ibs[i].Rectangle.Width + fa.PositionDeviation, ibs[i].Rectangle.Height + fa.PositionDeviation);
                             using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Y / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height / Settings.ImageProcessing.Image2PdfResolutionRatio))
                             {
-                                if (!ibs[i].ImageData.ImageIsSimilar(new ImageData(rb), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance))
+                                if (null == ibs[i].ImageData.FindWithinImage(new ImageData(rb), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance, false))
                                     return true;
                             }
                             rs.Add(r.GetSystemRectangleF());
