@@ -96,7 +96,6 @@ namespace Cliver.PdfDocumentParser
                 if (_activeTemplateOcrCharBoxs != null)
                     _activeTemplateOcrCharBoxs = null;
 
-                floatingAnchorValueStrings2rectangles.Clear();
             }
 
             //if (pageCollection.ActiveTemplate.Name != newTemplate.Name)
@@ -104,12 +103,11 @@ namespace Cliver.PdfDocumentParser
 
             if (newTemplate.BrightnessTolerance != pageCollection.ActiveTemplate.BrightnessTolerance
                 || newTemplate.DifferentPixelNumberTolerance != pageCollection.ActiveTemplate.DifferentPixelNumberTolerance)
-                floatingAnchorValueStrings2rectangles.Clear();
         }
 
         Bitmap getRectangleFromActiveTemplateBitmap(float x, float y, float w, float h)
         {
-            return ActiveTemplateBitmap.Clone(new RectangleF(x, y, w, h), System.Drawing.Imaging.PixelFormat.Undefined); 
+            return ActiveTemplateBitmap.Clone(new RectangleF(x, y, w, h), System.Drawing.Imaging.PixelFormat.Undefined);
             //return ImageRoutines.GetCopy(ActiveTemplateBitmap, new RectangleF(x, y, w, h));
         }
 
@@ -167,7 +165,7 @@ namespace Cliver.PdfDocumentParser
                             b = image.ToBitmap();
                         }
                     }
-                    
+
                     _activeTemplateBitmap = b;
                 }
                 return _activeTemplateBitmap;
@@ -189,14 +187,11 @@ namespace Cliver.PdfDocumentParser
         {
             List<RectangleF> rs;
             string fas = SerializationRoutines.Json.Serialize(fa);
-            if (!floatingAnchorValueStrings2rectangles.TryGetValue(fas, out rs))
             {
                 rs = findFloatingAnchor(fa);
-                floatingAnchorValueStrings2rectangles[fas] = rs;
             }
             return rs;
         }
-        Dictionary<string, List<RectangleF>> floatingAnchorValueStrings2rectangles = new Dictionary<string, List<RectangleF>>();
 
         List<RectangleF> findFloatingAnchor(Template.FloatingAnchor fa)
         {
@@ -407,6 +402,131 @@ namespace Cliver.PdfDocumentParser
             error = null;
             return true;
         }
+
+        //        public bool IsDocumentFirstPage(out string error)
+        //        {
+        //            if (pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks == null || pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.Count < 1)
+        //            {
+        //                error = "Template '" + pageCollection.ActiveTemplate.Name + "' has no DocumentFirstPageRecognitionMarks defined.";
+        //                return false;
+        //            }
+        //            foreach (Template.Mark m in pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks)
+        //            {
+        //                if (m.FloatingAnchorId != null && m.GetValue() == null)
+        //                {
+        //                    PointF? p0 = GetFloatingAnchorPoint0((int)m.FloatingAnchorId);
+        //                    if (p0 == null)
+        //                    {
+        //                        error = "FloatingAnchor[" + m.FloatingAnchorId + "] not found.";
+        //                        return false;
+        //                    }
+        //                    continue;
+        //                }
+        //                switch (m.ValueType)
+        //                {
+        //                    case Template.ValueTypes.PdfText:
+        //                        {
+        //                            List<Template.Mark.FloatingAnchor.PdfTextValue.CharBox> ses = ((Template.FloatingAnchor.PdfTextValue)fa.GetValue()).CharBoxs;
+        //                        if (ses.Count< 1)
+        //                            return null;
+        //                        List<Pdf.CharBox> bts = new List<Pdf.CharBox>();
+        //                        foreach (Pdf.CharBox bt0 in PdfCharBoxs.Where(a => a.Char == ses[0].Char))
+        //                        {
+        //                            bts.Clear();
+        //                            bts.Add(bt0);
+        //                            for (int i = 1; i<ses.Count; i++)
+        //                            {
+        //                                float x = bt0.R.X + ses[i].Rectangle.X - ses[0].Rectangle.X;
+        //        float y = bt0.R.Y + ses[i].Rectangle.Y - ses[0].Rectangle.Y;
+        //                                foreach (Pdf.CharBox bt in PdfCharBoxs.Where(a => a.Char == ses[i].Char))
+        //                                {
+        //                                    if (Math.Abs(bt.R.X - x) > fa.PositionDeviation)
+        //                                        continue;
+        //                                    if (Math.Abs(bt.R.Y - y) > fa.PositionDeviation)
+        //                                        continue;
+        //                                    if (bts.Contains(bt))
+        //                                        continue;
+        //                                    bts.Add(bt);
+        //                                }
+        //}
+        //                            if (bts.Count == ses.Count)
+        //                                return bts.Select(x => x.R).ToList();
+        //                        }
+        //                    }
+        //                    return null;
+        //                case Template.ValueTypes.OcrText:
+        //                    {
+        //                        List<Template.FloatingAnchor.OcrTextValue.CharBox> ses = ((Template.FloatingAnchor.OcrTextValue)fa.GetValue()).CharBoxs;
+        //                        if (ses.Count< 1)
+        //                            return null;
+        //                        List<Ocr.CharBox> bts = new List<Ocr.CharBox>();
+        //                        foreach (Ocr.CharBox bt0 in ActiveTemplateOcrCharBoxs.Where(a => a.Char == ses[0].Char))
+        //                        {
+        //                            bts.Clear();
+        //                            bts.Add(bt0);
+        //                            for (int i = 1; i<ses.Count; i++)
+        //                            {
+        //                                float x = bt0.R.X + ses[i].Rectangle.X - ses[0].Rectangle.X;
+        //float y = bt0.R.Y + ses[i].Rectangle.Y - ses[0].Rectangle.Y;
+        //                                foreach (Ocr.CharBox bt in ActiveTemplateOcrCharBoxs.Where(a => a.Char == ses[i].Char))
+        //                                {
+        //                                    if (Math.Abs(bt.R.X - x) > fa.PositionDeviation)
+        //                                        continue;
+        //                                    if (Math.Abs(bt.R.Y - y) > fa.PositionDeviation)
+        //                                        continue;
+        //                                    if (bts.Contains(bt))
+        //                                        continue;
+        //                                    bts.Add(bt);
+        //                                }
+        //                            }
+        //                            if (bts.Count == ses.Count)
+        //                                return bts.Select(x => x.R).ToList();
+        //                        }
+        //                    }
+        //                    return null;
+        //                case Template.ValueTypes.ImageData:
+        //                    List<Template.FloatingAnchor.ImageDataValue.ImageBox> ibs = ((Template.FloatingAnchor.ImageDataValue)fa.GetValue()).ImageBoxs;
+        //                    if (ibs.Count< 1)
+        //                        return null;
+        //                    List<RectangleF> bestRs = null;
+        //float minDeviation = 1;
+        //ibs[0].ImageData.FindWithinImage(ActiveTemplateImageData, pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance, (Point point0, float deviation) =>
+        //                    {
+        //                        List<RectangleF> rs = new List<RectangleF>();
+        //rs.Add(new RectangleF(point0, new SizeF(ibs[0].Rectangle.Width, ibs[0].Rectangle.Height)));
+        //                        for (int i = 1; i<ibs.Count; i++)
+        //                        {
+        //                            //Template.RectangleF r = new Template.RectangleF(point0.X + ibs[i].Rectangle.X - ibs[0].Rectangle.X, point0.Y + ibs[i].Rectangle.Y - ibs[0].Rectangle.Y, ibs[i].Rectangle.Width, ibs[i].Rectangle.Height);
+        //                            //using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Y / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height / Settings.ImageProcessing.Image2PdfResolutionRatio))
+        //                            //{
+        //                            //    if (!ibs[i].ImageData.ImageIsSimilar(new ImageData(rb), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance))
+        //                            //        return true;
+        //                            //}
+        //                            Template.RectangleF r = new Template.RectangleF(point0.X + ibs[i].Rectangle.X - ibs[0].Rectangle.X - fa.PositionDeviation, point0.Y + ibs[i].Rectangle.Y - ibs[0].Rectangle.Y - fa.PositionDeviation, ibs[i].Rectangle.Width + fa.PositionDeviation, ibs[i].Rectangle.Height + fa.PositionDeviation);
+        //                            using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Y / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height / Settings.ImageProcessing.Image2PdfResolutionRatio))
+        //                            {
+        //                                if (null == ibs[i].ImageData.FindWithinImage(new ImageData(rb), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance, false))
+        //                                    return true;
+        //                            }
+        //                            rs.Add(r.GetSystemRectangleF());
+        //                        }
+        //                        if (!pageCollection.ActiveTemplate.FindBestImageMatch)
+        //                        {
+        //                            bestRs = rs;
+        //                            return false;
+        //                        }
+        //                        if (deviation<minDeviation)
+        //                        {
+        //                            minDeviation = deviation;
+        //                            bestRs = rs;
+        //                        }
+        //                        return true;
+        //                    });
+        //                    return bestRs;
+        //                default:
+        //                    throw new Exception("Unknown option: " + fa.ValueType);
+        //            }
+        //    }
 
         public object GetValue(int? floatingAnchorId, Template.RectangleF r_, Template.ValueTypes valueType, out string error)
         {
