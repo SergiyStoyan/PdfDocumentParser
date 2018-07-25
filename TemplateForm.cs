@@ -44,7 +44,8 @@ namespace Cliver.PdfDocumentParser
 
             this.templateManager = templateManager;
             this.testFileDefaultFolder = testFileDefaultFolder;
-            
+
+            Id3.ValueType = typeof(int);
             PositionDeviation3.ValueType = typeof(float);
             ValueType3.ValueType = typeof(Template.ValueTypes);
             ValueType3.DataSource = Enum.GetValues(typeof(Template.ValueTypes));
@@ -229,7 +230,7 @@ namespace Cliver.PdfDocumentParser
                                     pages.ActiveTemplate = getTemplateFromUI(false);
                                     PointF? p = pages[currentPage].GetFloatingAnchorPoint0((int)fai);
                                     if (p == null)
-                                        throw new Exception("Could not find FloatingAnchor " + fai + " in the page");
+                                        throw new Exception("Could not find FloatingAnchor[" + fai + "] in the page");
                                     r.X -= ((PointF)p).X;
                                     r.Y -= ((PointF)p).Y;
                                 }
@@ -248,7 +249,7 @@ namespace Cliver.PdfDocumentParser
                                     pages.ActiveTemplate = getTemplateFromUI(false);
                                     PointF? p = pages[currentPage].GetFloatingAnchorPoint0((int)fai);
                                     if (p == null)
-                                        throw new Exception("Could not find FloatingAnchor " + fai + " in the page");
+                                        throw new Exception("Could not find FloatingAnchor[" + fai + "] in the page");
                                     r.X -= ((PointF)p).X;
                                     r.Y -= ((PointF)p).Y;
                                 }
@@ -376,7 +377,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 catch (Exception ex)
                 {
-                    LogMessage.Error(ex);
+                    Message.Error2(ex);
                 }
             };
 
@@ -1413,7 +1414,7 @@ namespace Cliver.PdfDocumentParser
                 {
                     float positionDeviation = r.Cells["PositionDeviation3"].Value != null ? (float)r.Cells["PositionDeviation3"].Value : Settings.ImageProcessing.CoordinateDeviationMargin;//it must be > 0
                     if (positionDeviation <= 0)
-                        throw new Exception("FloatingAnchor " + (int)r.Cells["Id3"].Value + " has wrong Deviation. Deviation always must be a positive floating number due to internal image re-scaling.");
+                        throw new Exception("FloatingAnchor[" + (int)r.Cells["Id3"].Value + "] has wrong Deviation. Deviation always must be a positive floating number due to internal image re-scaling.");
                     t.FloatingAnchors.Add(new Template.FloatingAnchor
                     {
                         Id = (int)r.Cells["Id3"].Value,
