@@ -80,8 +80,8 @@ namespace Cliver.PdfDocumentParser
             AboutBox ab = new AboutBox();
             ab.ShowDialog();
         }
-
-        private void bSelectionBoxColor_Click(object sender, EventArgs e)
+        
+        private void SelectionBoxColor_Click(object sender, EventArgs e)
         {
             ColorDialog cd = new ColorDialog();
             cd.Color = Settings.Appearance.SelectionBoxColor;
@@ -89,7 +89,7 @@ namespace Cliver.PdfDocumentParser
                 SelectionBoxColor.ForeColor = cd.Color;
         }
 
-        private void bFloatingAnchorMasterBoxColor_Click(object sender, EventArgs e)
+        private void FloatingAnchorMasterBoxColor_Click(object sender, EventArgs e)
         {
             ColorDialog cd = new ColorDialog();
             cd.Color = Settings.Appearance.FloatingAnchorMasterBoxColor;
@@ -97,12 +97,13 @@ namespace Cliver.PdfDocumentParser
                 FloatingAnchorMasterBoxColor.ForeColor = cd.Color;
         }
 
-        private void bFloatingAnchorSecondaryBoxColor_Click(object sender, EventArgs e)
+        private void FloatingAnchorSecondaryBoxColor_Click(object sender, EventArgs e)
         {
             ColorDialog cd = new ColorDialog();
             cd.Color = Settings.Appearance.FloatingAnchorSecondaryBoxColor;
             if (cd.ShowDialog() == DialogResult.OK)
                 FloatingAnchorSecondaryBoxColor.ForeColor = cd.Color;
+
         }
     }
 }

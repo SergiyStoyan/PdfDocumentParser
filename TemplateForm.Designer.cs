@@ -692,9 +692,9 @@
             this.label4.Dock = System.Windows.Forms.DockStyle.Top;
             this.label4.Location = new System.Drawing.Point(0, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(225, 13);
+            this.label4.Size = new System.Drawing.Size(201, 13);
             this.label4.TabIndex = 26;
-            this.label4.Text = "Document First Page Recognition Text Marks:";
+            this.label4.Text = "Document First Page Recognition Marks:";
             // 
             // fields
             // 
