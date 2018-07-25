@@ -4,6 +4,7 @@
 h1 {color:#347; text-align: center;}
 h2 {color:#702; text-indent: 20px; margin-top:50}
 h3 {color:#069; margin-top:40}
+h4 {color:#000; text-indent: 0px; margin-top:10; margin-bottom:0}
 p {
     margin: 5;
     margin-top:5
@@ -66,8 +67,10 @@ p {
 <p>Then select with mouse a rectangle in the document page. The text or image within the selection box will be a fragment that PdfDocumentParser will look for.
 <p>If you keep Ctrl pressed while selecting, you can select more than 1 element for the same anchor. To stop selecting, you have to release Ctrl before releasing mouse button.
 <p>Upon creating a floating anchor you can create either document recognition marks or fields and link them to the anchor. Linking means that mark's or field's coordinates become relative to the floating anchor they are linked to. That's PdfDocumentParser first will look for the floating anchor and if it is found, it will then locate on the page the linked marks/fields depending on the location of their anchor.
-<h4>Deviation</h4>
-Deviation parameter alows to loose bonds between master element and secondary elements in a floating anchor. It is measured in pixels and must be a positive not-zero float number even for identical documents due to internal image re-scaling. In floating acnhors of PDF or OCR type, every character is a separate element where the first one is master and the rest are secondary. The same is for Image type floating anchors that have more than 1 image. Position of the master element is position of the floating anchor itself.
+<h4>Elements</h4>
+A foating anchor can consist of many elements where the first one is master and the rest are secodnary. Position of the master element is position of the floating anchor itself. Secodnary elements are found relatively to the master element's positon just like linked Marks or Fields are. In PDF or OCR type floating anchors, every character is a separate element where the first one is master and the rest are secondary. In Image type floating anchors, every image is a separate element.
+<h4>Deviation</h4>                
+Position deviation parameter allows to loose bonds between master element and secondary elements in a floating anchor when for some reason they can slightly shift relatively to each other. It is measured in pixels and must be a positive float number, non-zero even for identical documents due to internal image re-scaling. It makes no sense when floating anchor contains no secondary element.
 
 <h3><a name="mark">Document Recognition Mark</a></h3>
 <p>Document recognition mark is a fragment of either text or image that PdfDocumentParser will look in a document. One or more such marks is used by PdfDocumentParser to detect which template corresponds to the processed document. For this reason every template should have at least one document recognition mark defined. It is obviously that such marks must be unique enough to identify the document they belong to with a high confidence. It works the following way: PdfDocumentParser finds a mark in page and compares the found content with the stored mark's content. 
