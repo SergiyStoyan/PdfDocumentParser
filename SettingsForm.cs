@@ -30,7 +30,7 @@ namespace Cliver.PdfDocumentParser
 
         void load_settings()
         {
-            BoundingBoxColor.ForeColor = Settings.Appearance.BoundingBoxColor;
+            FloatingAnchorMasterBoxColor.ForeColor = Settings.Appearance.FloatingAnchorMasterBoxColor;
             SelectionBoxColor.ForeColor = Settings.Appearance.SelectionBoxColor;
 
             PdfPageImageResolution.Value = Settings.ImageProcessing.PdfPageImageResolution;
@@ -46,7 +46,8 @@ namespace Cliver.PdfDocumentParser
         {
             try
             {
-                Settings.Appearance.BoundingBoxColor = BoundingBoxColor.ForeColor;
+                Settings.Appearance.FloatingAnchorMasterBoxColor = FloatingAnchorMasterBoxColor.ForeColor;
+                Settings.Appearance.FloatingAnchorSecondaryBoxColor = FloatingAnchorSecondaryBoxColor.ForeColor;
                 Settings.Appearance.SelectionBoxColor = SelectionBoxColor.ForeColor;
 
                 Settings.Appearance.Save();
@@ -87,12 +88,20 @@ namespace Cliver.PdfDocumentParser
                 SelectionBoxColor.ForeColor = cd.Color;
         }
 
-        private void bBoundingBoxColor_Click(object sender, EventArgs e)
+        private void bFloatingAnchorMasterBoxColor_Click(object sender, EventArgs e)
         {
             ColorDialog cd = new ColorDialog();
-            cd.Color = Settings.Appearance.BoundingBoxColor;
+            cd.Color = Settings.Appearance.FloatingAnchorMasterBoxColor;
             if (cd.ShowDialog() == DialogResult.OK)
-                BoundingBoxColor.ForeColor = cd.Color;
+                FloatingAnchorMasterBoxColor.ForeColor = cd.Color;
+        }
+
+        private void bFloatingAnchorSecondaryBoxColor_Click(object sender, EventArgs e)
+        {
+            ColorDialog cd = new ColorDialog();
+            cd.Color = Settings.Appearance.FloatingAnchorSecondaryBoxColor;
+            if (cd.ShowDialog() == DialogResult.OK)
+                FloatingAnchorSecondaryBoxColor.ForeColor = cd.Color;
         }
     }
 }

@@ -143,7 +143,8 @@ namespace Cliver.PdfDocumentParser
                 }
                 selectionCoordinates.Text = selectionBoxPoint1.ToString() + ":" + selectionBoxPoint2.ToString();
 
-                drawBox(Settings.Appearance.SelectionBoxColor, selectionBoxPoint1.X, selectionBoxPoint1.Y, selectionBoxPoint2.X - selectionBoxPoint1.X, selectionBoxPoint2.Y - selectionBoxPoint1.Y);
+                RectangleF r = new RectangleF(selectionBoxPoint1.X, selectionBoxPoint1.Y, selectionBoxPoint2.X - selectionBoxPoint1.X, selectionBoxPoint2.Y - selectionBoxPoint1.Y);
+                drawBoxes(Settings.Appearance.SelectionBoxColor, new List<System.Drawing.RectangleF> { r }, true);
             };
 
             picture.MouseUp += delegate (object sender, MouseEventArgs e)
@@ -845,7 +846,7 @@ namespace Cliver.PdfDocumentParser
 
             pages.ActiveTemplate = getTemplateFromUI(false);
 
-            Template.FloatingAnchor fa = pages.ActiveTemplate.FloatingAnchors.Where(a=>a.Id == (int)floatingAnchorId).FirstOrDefault();
+            Template.FloatingAnchor fa = pages.ActiveTemplate.FloatingAnchors.Where(a => a.Id == (int)floatingAnchorId).FirstOrDefault();
             if (fa == null || fa.GetValue() == null)
             {
                 setStatus(statuses.WARNING, "FloatingAnchor[" + fa.Id + "] is not defined.");
@@ -859,7 +860,10 @@ namespace Cliver.PdfDocumentParser
                 return null;
             }
             setStatus(statuses.SUCCESS, "FloatingAnchor[" + fa.Id + "] is found.");
-            drawBoxes(Settings.Appearance.BoundingBoxColor, rs, renewImage);
+
+            drawBoxes(Settings.Appearance.FloatingAnchorMasterBoxColor, new List<System.Drawing.RectangleF> { rs[0] }, renewImage);
+            if (rs.Count > 1)
+                drawBoxes(Settings.Appearance.FloatingAnchorSecondaryBoxColor, rs.GetRange(1, rs.Count - 1), false);
             return new PointF(rs[0].X, rs[0].Y);
         }
 
@@ -885,7 +889,8 @@ namespace Cliver.PdfDocumentParser
                     renewImage = false;
                 }
 
-                drawBox(Settings.Appearance.SelectionBoxColor, x, y, r.Width, r.Height, renewImage);
+                RectangleF r_ = new RectangleF(x, y, r.Width, r.Height);
+                drawBoxes(Settings.Appearance.SelectionBoxColor, new List<System.Drawing.RectangleF> { r_ }, renewImage);
 
                 string error;
                 object v = pages[currentPage].GetValue(null, new Template.RectangleF(x, y, r.Width, r.Height), valueType, out error);
@@ -909,7 +914,7 @@ namespace Cliver.PdfDocumentParser
             return null;
         }
 
-        void drawBoxes(Color c, IEnumerable<System.Drawing.RectangleF> rs, bool renewImage = true)
+        void drawBoxes(Color c, IEnumerable<System.Drawing.RectangleF> rs, bool renewImage)
         {
             if (pages == null)
                 return;
@@ -924,16 +929,24 @@ namespace Cliver.PdfDocumentParser
                 float factor = (float)pictureScale.Value;
                 Pen p = new Pen(c);
                 foreach (System.Drawing.RectangleF r in rs)
-                    gr.DrawRectangle(p, r.X * factor, r.Y * factor, r.Width * factor, r.Height * factor);
+                {
+                    System.Drawing.Rectangle r_ = new System.Drawing.Rectangle((int)(r.X * factor), (int)(r.Y * factor), (int)(r.Width * factor), (int)(r.Height * factor));
+                    //if (invertColor)
+                    //{
+                    //    for (int i = r_.X; i <= r_.X + r_.Width; i++)
+                    //        for (int j = r_.Y; j <= r_.Y + r_.Height; j++)
+                    //        {
+                    //            Color rgb = bm.GetPixel(i, j);
+                    //            rgb = Color.FromArgb(255 - rgb.R, 255 - rgb.G, 255 - rgb.B);
+                    //            bm.SetPixel(i, j, rgb);
+                    //        }
+                    //}
+                    gr.DrawRectangle(p, r_);
+                }
             }
             if (picture.Image != null)
                 picture.Image.Dispose();
             picture.Image = bm;
-        }
-
-        void drawBox(Color c, float x, float y, float w, float h, bool renewImage = true)
-        {
-            drawBoxes(c, new List<System.Drawing.RectangleF> { new RectangleF(x, y, w, h) }, renewImage);
         }
         Point selectionBoxPoint0, selectionBoxPoint1, selectionBoxPoint2;
         bool drawingSelectionBox = false;

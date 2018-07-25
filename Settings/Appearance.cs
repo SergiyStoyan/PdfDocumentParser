@@ -24,7 +24,8 @@ namespace Cliver.PdfDocumentParser
         public class AppearanceSettings : Cliver.Settings
         {
             public System.Drawing.Color SelectionBoxColor = System.Drawing.Color.Red;
-            public System.Drawing.Color BoundingBoxColor = System.Drawing.Color.BlueViolet;
+            public System.Drawing.Color FloatingAnchorMasterBoxColor = System.Drawing.Color.Violet;
+            public System.Drawing.Color FloatingAnchorSecondaryBoxColor = System.Drawing.Color.BlueViolet;
 
             public override void Loaded()
             {
