@@ -1410,13 +1410,18 @@ namespace Cliver.PdfDocumentParser
             t.FloatingAnchors = new List<Template.FloatingAnchor>();
             foreach (DataGridViewRow r in floatingAnchors.Rows)
                 if (r.Cells["Id3"].Value != null)
+                {
+                    float positionDeviation = r.Cells["PositionDeviation3"].Value != null ? (float)r.Cells["PositionDeviation3"].Value : Settings.ImageProcessing.CoordinateDeviationMargin;//it must be > 0
+                    if (positionDeviation <= 0)
+                        throw new Exception("FloatingAnchor " + (int)r.Cells["Id3"].Value + " has wrong Deviation. Deviation always must be a positive floating number due to internal image re-scaling.");
                     t.FloatingAnchors.Add(new Template.FloatingAnchor
                     {
                         Id = (int)r.Cells["Id3"].Value,
                         ValueType = (Template.ValueTypes)r.Cells["ValueType3"].Value,
-                        PositionDeviation = r.Cells["PositionDeviation3"].Value != null ? (float)r.Cells["PositionDeviation3"].Value : Settings.ImageProcessing.CoordinateDeviationMargin,//it must be > 0
+                        PositionDeviation = positionDeviation,
                         ValueAsString = (string)r.Cells["Body3"].Value
                     });
+                }
             t.FloatingAnchors = t.FloatingAnchors.OrderBy(a => a.Id).ToList();
 
             t.DocumentFirstPageRecognitionMarks = new List<Template.Mark>();

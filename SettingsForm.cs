@@ -31,6 +31,7 @@ namespace Cliver.PdfDocumentParser
         void load_settings()
         {
             FloatingAnchorMasterBoxColor.ForeColor = Settings.Appearance.FloatingAnchorMasterBoxColor;
+            FloatingAnchorSecondaryBoxColor.ForeColor = Settings.Appearance.FloatingAnchorSecondaryBoxColor;
             SelectionBoxColor.ForeColor = Settings.Appearance.SelectionBoxColor;
 
             PdfPageImageResolution.Value = Settings.ImageProcessing.PdfPageImageResolution;
