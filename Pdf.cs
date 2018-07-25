@@ -249,6 +249,7 @@ namespace Cliver.PdfDocumentParser
 
         static List<Line> getLines(IEnumerable<CharBox> cbs, bool spaceAutoInsert)
         {
+            cbs = cbs.OrderBy(a => a.R.X).ToList();
             List<Line> lines = new List<Line>();
             foreach (CharBox cb in cbs)
             {
@@ -284,8 +285,6 @@ namespace Cliver.PdfDocumentParser
                 }
                 CONTINUE:;
             }
-            foreach (Line l in lines)
-                l.CharBoxes = l.CharBoxes.OrderBy(a => a.R.X).ToList();
             return lines;
         }
 

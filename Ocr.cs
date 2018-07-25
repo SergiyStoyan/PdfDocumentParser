@@ -202,6 +202,7 @@ namespace Cliver.PdfDocumentParser
 
         public static List<Line> GetLines(IEnumerable<CharBox> cbs)
         {
+            cbs = cbs.OrderBy(a => a.R.X).ToList();
             List<Line> lines = new List<Line>();
             foreach (CharBox cb in cbs)
             {
@@ -231,8 +232,8 @@ namespace Cliver.PdfDocumentParser
                 }
                 CONTINUE:;
             }
-            foreach (Line l in lines)
-                l.CharBoxes = l.CharBoxes.OrderBy(a => a.R.X).ToList();
+            //foreach (Line l in lines)
+            //    l.CharBoxes = l.CharBoxes.OrderBy(a => a.R.X).ToList();
             return lines;
         }
         public class Line
