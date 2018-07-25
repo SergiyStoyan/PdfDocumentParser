@@ -181,7 +181,7 @@ namespace Cliver.PdfDocumentParser
             //serialize
             public ValueTypes ValueType = ValueTypes.PdfText;
             //serialize
-            public float PositionDeviation = 0.01f;
+            public float PositionDeviation = 0.1f;
             //serialize
             public string ValueAsString
             {

@@ -298,8 +298,20 @@ namespace Cliver.PdfDocumentParser
             {
                 try
                 {
-                    //if (e.Row.Cells["ValueType3"].Value == null)
-                    //    e.Row.Cells["ValueType3"].Value = Settings.Template.ValueTypes.PdfText;
+                    //if (e.Row.Cells["PositionDeviation3"].Value == null)
+                    //{
+                    //    float? f = null;
+                    //    foreach (DataGridViewRow rr in floatingAnchors.Rows)
+                    //    {
+                    //        f = (float?)rr.Cells["PositionDeviation3"].Value;
+                    //        if (f != null)
+                    //            break;
+                    //    }
+                    //    if (f != null)
+                    //        e.Row.Cells["PositionDeviation3"].Value = (float)f;
+                    //    else
+                    //        e.Row.Cells["PositionDeviation3"].Value = 0.1;
+                    //}
                 }
                 catch (Exception ex)
                 {
@@ -559,6 +571,12 @@ namespace Cliver.PdfDocumentParser
                 {
                     Message.Error2(ex);
                 }
+            };
+
+            fields.CurrentCellDirtyStateChanged += delegate
+            {
+                if (fields.IsCurrentCellDirty)
+                    fields.CommitEdit(DataGridViewDataErrorContexts.Commit);
             };
 
             fields.CellValidating += delegate (object sender, DataGridViewCellValidatingEventArgs e)
@@ -1396,7 +1414,7 @@ namespace Cliver.PdfDocumentParser
                     {
                         Id = (int)r.Cells["Id3"].Value,
                         ValueType = (Template.ValueTypes)r.Cells["ValueType3"].Value,
-                        PositionDeviation = (float)r.Cells["PositionDeviation3"].Value,
+                        PositionDeviation = r.Cells["PositionDeviation3"].Value != null ? (float)r.Cells["PositionDeviation3"].Value : Settings.ImageProcessing.CoordinateDeviationMargin,//it must be > 0
                         ValueAsString = (string)r.Cells["Body3"].Value
                     });
             t.FloatingAnchors = t.FloatingAnchors.OrderBy(a => a.Id).ToList();

@@ -94,10 +94,10 @@
             this.Rectangle2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ValueType2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Value2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Id3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ValueType3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.PositionDeviation3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Body3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PositionDeviation3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ValueType3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Id3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -922,13 +922,18 @@
             this.Value2.Name = "Value2";
             this.Value2.ReadOnly = true;
             // 
-            // Id3
+            // Body3
             // 
-            this.Id3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Id3.HeaderText = "Id";
-            this.Id3.Name = "Id3";
-            this.Id3.ReadOnly = true;
-            this.Id3.Width = 41;
+            this.Body3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Body3.HeaderText = "Body";
+            this.Body3.Name = "Body3";
+            this.Body3.ReadOnly = true;
+            // 
+            // PositionDeviation3
+            // 
+            this.PositionDeviation3.HeaderText = "Deviation";
+            this.PositionDeviation3.Name = "PositionDeviation3";
+            this.PositionDeviation3.Width = 60;
             // 
             // ValueType3
             // 
@@ -937,18 +942,13 @@
             this.ValueType3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.ValueType3.Width = 70;
             // 
-            // PositionDeviation3
+            // Id3
             // 
-            this.PositionDeviation3.HeaderText = "Deviation";
-            this.PositionDeviation3.Name = "PositionDeviation3";
-            this.PositionDeviation3.Width = 60;
-            // 
-            // Body3
-            // 
-            this.Body3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Body3.HeaderText = "Body";
-            this.Body3.Name = "Body3";
-            this.Body3.ReadOnly = true;
+            this.Id3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Id3.HeaderText = "Id";
+            this.Id3.Name = "Id3";
+            this.Id3.ReadOnly = true;
+            this.Id3.Width = 41;
             // 
             // TemplateForm
             // 
