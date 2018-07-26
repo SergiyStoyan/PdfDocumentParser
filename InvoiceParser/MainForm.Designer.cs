@@ -279,7 +279,8 @@
             this.Active.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
             this.Active.HeaderText = "Active";
             this.Active.Name = "Active";
-            this.Active.Width = 43;
+            this.Active.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.Active.Width = 62;
             // 
             // Name_
             // 

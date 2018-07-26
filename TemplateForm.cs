@@ -325,6 +325,13 @@ namespace Cliver.PdfDocumentParser
                 onFloatingAnchorsChanged(null);
             };
 
+            floatingAnchors.CellMouseEnter += delegate (object sender, DataGridViewCellEventArgs e)
+            {
+            };
+            floatingAnchors.CellMouseLeave += delegate (object sender, DataGridViewCellEventArgs e)
+            {
+            };
+
             floatingAnchors.CurrentCellDirtyStateChanged += delegate
             {
                 if (floatingAnchors.IsCurrentCellDirty)

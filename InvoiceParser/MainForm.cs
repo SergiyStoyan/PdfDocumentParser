@@ -37,6 +37,8 @@ namespace Cliver.InvoiceParser
 
             loadTemplates();
 
+            Active.ValueType = typeof(bool);
+
             templates.CellValidating += delegate (object sender, DataGridViewCellValidatingEventArgs e)
             {
                 try
@@ -121,7 +123,7 @@ namespace Cliver.InvoiceParser
                 templates.EndEdit();//needed to set checkbox values
 
                 t.Name = (string)r.Cells["Name_"].Value;
-                t.Active = Convert.ToBoolean(r.Cells["Active"].Value);
+                t.Active = (bool)r.Cells["Active"].Value;
             };
 
             templates.RowValidating += delegate (object sender, DataGridViewCellCancelEventArgs e)
@@ -154,6 +156,7 @@ namespace Cliver.InvoiceParser
                     {
                         int i = templates.Rows.Add();
                         templates.Rows[i].Selected = true;
+                        templates.Rows[i].Cells["Active"].Value = true;
                     }
                     catch { }
                     return;
