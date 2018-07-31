@@ -207,60 +207,56 @@ namespace Cliver.PdfDocumentParser
             {
                 case Template.ValueTypes.PdfText:
                     {
-                        List<Template.FloatingAnchor.PdfTextValue.CharBox> ses = ((Template.FloatingAnchor.PdfTextValue)fa.GetValue()).CharBoxs;
-                        if (ses.Count < 1)
+                        List<Template.FloatingAnchor.PdfTextValue.CharBox> faes = ((Template.FloatingAnchor.PdfTextValue)fa.GetValue()).CharBoxs;
+                        if (faes.Count < 1)
                             return null;
                         List<Pdf.CharBox> bts = new List<Pdf.CharBox>();
-                        foreach (Pdf.CharBox bt0 in PdfCharBoxs.Where(a => a.Char == ses[0].Char))
+                        foreach (Pdf.CharBox bt0 in PdfCharBoxs.Where(a => a.Char == faes[0].Char))
                         {
                             bts.Clear();
                             bts.Add(bt0);
-                            for (int i = 1; i < ses.Count; i++)
+                            for (int i = 1; i < faes.Count; i++)
                             {
-                                float x = bt0.R.X + ses[i].Rectangle.X - ses[0].Rectangle.X;
-                                float y = bt0.R.Y + ses[i].Rectangle.Y - ses[0].Rectangle.Y;
-                                foreach (Pdf.CharBox bt in PdfCharBoxs.Where(a => a.Char == ses[i].Char))
-                                {
-                                    if (Math.Abs(bt.R.X - x) > fa.PositionDeviation)
-                                        continue;
-                                    if (Math.Abs(bt.R.Y - y) > fa.PositionDeviation)
-                                        continue;
-                                    if (bts.Contains(bt))
-                                        continue;
-                                    bts.Add(bt);
-                                }
+                                float x = bt0.R.X + faes[i].Rectangle.X - faes[0].Rectangle.X;
+                                float y = bt0.R.Y + faes[i].Rectangle.Y - faes[0].Rectangle.Y;
+                                foreach (Pdf.CharBox bt in PdfCharBoxs.Where(a => a.Char == faes[i].Char))
+                                    if (Math.Abs(bt.R.X - x) <= fa.PositionDeviation && Math.Abs(bt.R.Y - y) <= fa.PositionDeviation)
+                                    {
+                                        bts.Add(bt);
+                                        break;
+                                    }
+                                if (bts.Count - 1 < i)
+                                    break;
                             }
-                            if (bts.Count == ses.Count)
+                            if (bts.Count == faes.Count)
                                 return bts.Select(x => x.R).ToList();
                         }
                     }
                     return null;
                 case Template.ValueTypes.OcrText:
                     {
-                        List<Template.FloatingAnchor.OcrTextValue.CharBox> ses = ((Template.FloatingAnchor.OcrTextValue)fa.GetValue()).CharBoxs;
-                        if (ses.Count < 1)
+                        List<Template.FloatingAnchor.OcrTextValue.CharBox> faes = ((Template.FloatingAnchor.OcrTextValue)fa.GetValue()).CharBoxs;
+                        if (faes.Count < 1)
                             return null;
                         List<Ocr.CharBox> bts = new List<Ocr.CharBox>();
-                        foreach (Ocr.CharBox bt0 in ActiveTemplateOcrCharBoxs.Where(a => a.Char == ses[0].Char))
+                        foreach (Ocr.CharBox bt0 in ActiveTemplateOcrCharBoxs.Where(a => a.Char == faes[0].Char))
                         {
                             bts.Clear();
                             bts.Add(bt0);
-                            for (int i = 1; i < ses.Count; i++)
+                            for (int i = 1; i < faes.Count; i++)
                             {
-                                float x = bt0.R.X + ses[i].Rectangle.X - ses[0].Rectangle.X;
-                                float y = bt0.R.Y + ses[i].Rectangle.Y - ses[0].Rectangle.Y;
-                                foreach (Ocr.CharBox bt in ActiveTemplateOcrCharBoxs.Where(a => a.Char == ses[i].Char))
-                                {
-                                    if (Math.Abs(bt.R.X - x) > fa.PositionDeviation)
-                                        continue;
-                                    if (Math.Abs(bt.R.Y - y) > fa.PositionDeviation)
-                                        continue;
-                                    if (bts.Contains(bt))
-                                        continue;
-                                    bts.Add(bt);
-                                }
+                                float x = bt0.R.X + faes[i].Rectangle.X - faes[0].Rectangle.X;
+                                float y = bt0.R.Y + faes[i].Rectangle.Y - faes[0].Rectangle.Y;
+                                foreach (Ocr.CharBox bt in ActiveTemplateOcrCharBoxs.Where(a => a.Char == faes[i].Char))
+                                    if (Math.Abs(bt.R.X - x) <= fa.PositionDeviation && Math.Abs(bt.R.Y - y) <= fa.PositionDeviation)
+                                    {
+                                        bts.Add(bt);
+                                        break;
+                                    }
+                                if (bts.Count - 1 < i)
+                                    break;
                             }
-                            if (bts.Count == ses.Count)
+                            if (bts.Count == faes.Count)
                                 return bts.Select(x => x.R).ToList();
                         }
                     }
