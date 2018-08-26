@@ -42,9 +42,8 @@ namespace Cliver.InvoiceParser
 
                 //PdfDocumentParser.TemplateWindow tw = new PdfDocumentParser.TemplateWindow();
                 //tw.ShowDialog();
-
-                MainForm mf = new MainForm();
-                Application.Run(mf);
+                
+                Application.Run(MainForm.This);
             }
             catch (Exception e)
             {

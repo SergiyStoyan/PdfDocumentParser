@@ -14,6 +14,10 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Net;
 using Cliver.PdfDocumentParser;
+using System.Threading.Tasks;
+using System.Data.Linq;
+using System.Linq;
+
 
 namespace Cliver.InvoiceParser
 {
@@ -28,6 +32,10 @@ namespace Cliver.InvoiceParser
             public string OutputFolder;
             public bool IgnoreHidddenFiles = true;
             public bool ReadInputFolderRecursively = false;
+
+            public string TemplatesUrl = "https://www.dropbox.com/s/mhpgr119gg4sqnx/Templates.Cliver.InvoiceParser.Settings%2BTemplatesSettings.json?dl=0";
+            public bool UpdateTemplatesOnStart = true;
+            public DateTime LastDownloadedTemplatesTimestamp = DateTime.MinValue;
 
             public System.Drawing.Color StampColor = System.Drawing.Color.Red;
 

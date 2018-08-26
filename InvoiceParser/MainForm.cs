@@ -22,6 +22,17 @@ namespace Cliver.InvoiceParser
 {
     public partial class MainForm : Form
     {
+        public static MainForm This
+        {
+            get
+            {
+                if (_This == null)
+                    _This = new MainForm();
+                return _This;
+            }
+        }
+        static MainForm _This = null;
+
         public MainForm()
         {
             InitializeComponent();
@@ -31,11 +42,16 @@ namespace Cliver.InvoiceParser
 
             Message.Owner = this;
 
+            TemplatesUpdatingForm.StartUpdatingTemplates(true, this, () =>
+            {
+                LoadTemplates();
+            });
+
             InputFolder.Text = Settings.General.InputFolder;
 
             OutputFolder.Text = Settings.General.OutputFolder;
 
-            loadTemplates();
+            LoadTemplates();
 
             Active.ValueType = typeof(bool);
 
@@ -149,6 +165,8 @@ namespace Cliver.InvoiceParser
 
             templates.SelectionChanged += delegate (object sender, EventArgs e)
             {
+                if (templates.SelectedRows.Count < 1)
+                    return;
                 var r = templates.SelectedRows[0];
                 if (r.IsNewRow)//hacky forcing commit a newly added row and display the blank row
                 {
@@ -259,10 +277,11 @@ namespace Cliver.InvoiceParser
             }
         }
 
-        void loadTemplates()
+        public void LoadTemplates()
         {
             try
             {
+                templates.Rows.Clear();
                 foreach (Template t in Settings.Templates.Templates)
                 {
                     if (string.IsNullOrWhiteSpace(t.Name))

@@ -158,6 +158,12 @@
     <Compile Include="PdfProcessor.cs" />
     <Compile Include="Processor.cs" />
     <Compile Include="ProgramWpf.cs" />
+    <Compile Include="TemplatesUpdatingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TemplatesUpdatingForm.Designer.cs">
+      <DependentUpon>TemplatesUpdatingForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -211,6 +217,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="OutputConfigForm.resx">
       <DependentUpon>OutputConfigForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TemplatesUpdatingForm.resx">
+      <DependentUpon>TemplatesUpdatingForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
