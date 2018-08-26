@@ -131,11 +131,11 @@ namespace Cliver.InvoiceParser
                     return false;
                 }
 
-                foreach (Template t in ts)
+                for (int page_i = 1; page_i <= cp.Pages.PdfReader.NumberOfPages; page_i++)
                 {
-                    cp.Pages.ActiveTemplate = t;
-                    for (int page_i = 1; page_i <= cp.Pages.PdfReader.NumberOfPages; page_i++)
+                    foreach (Template t in ts)
                     {
+                        cp.Pages.ActiveTemplate = t;
                         if (cp.Pages[page_i].IsDocumentFirstPage())
                         {
                             Log.Main.Inform("Applying to file '" + inputPdf + "' template '" + t.Name + "'\r\nStamped file: '" + stampedPdf);

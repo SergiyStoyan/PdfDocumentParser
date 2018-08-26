@@ -11,6 +11,19 @@ using System.Windows.Forms;
 
 namespace Cliver.InvoiceParser
 {
+    /*
+ TBD:
+     
+ - MainForm to WPF;
+- add group column;
+- filter by name, group;
+- switch Active for all filtered;
+
+- get file mod.time from dropbox API;
+
+- tutorial;
+
+     */
     class Program
     {
         static Program()
