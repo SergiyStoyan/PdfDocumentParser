@@ -39,7 +39,7 @@ namespace Cliver.InvoiceParser
                 LastDownloadedTemplatesTimestamp.Text = Settings.General.LastDownloadedTemplatesTimestamp.ToString();
             else
                 LastDownloadedTemplatesTimestamp.Text = "-- empty --";
-            //TemplatesUrl.Text = Settings.General.TemplatesUrl;
+            RemoteAccessToken.Text = Settings.General.RemoteAccessToken;
             UpdateTemplatesOnStart.Checked = Settings.General.UpdateTemplatesOnStart;
         }
 
@@ -55,7 +55,7 @@ namespace Cliver.InvoiceParser
                 Settings.General.IgnoreHidddenFiles = IgnoreHidddenFiles.Checked;
                 Settings.General.ReadInputFolderRecursively = ReadInputFolderRecursively.Checked;
 
-                //Settings.General.TemplatesUrl = TemplatesUrl.Text;
+                Settings.General.RemoteAccessToken = RemoteAccessToken.Text;
                 Settings.General.UpdateTemplatesOnStart = UpdateTemplatesOnStart.Checked;
 
                 Settings.General.Save();
@@ -79,20 +79,7 @@ namespace Cliver.InvoiceParser
 
         private void updateTemplates_Click(object sender, EventArgs e)
         {
-            //Action cancelUpdatingTemplates = null;
-            //FormClosingEventHandler _onClosing = delegate (object o, FormClosingEventArgs ee)
-            //{
-            //    if (cancelUpdatingTemplates == null)
-            //        return;
-            //    if(Message.YesNo("The template collection is being updated. Would you like to abort the operation and close the window?"))
-            //    {
-            //        cancelUpdatingTemplates();
-            //        return;
-            //    }
-            //    ee.Cancel = true;
-            //};
-            //this.FormClosing += _onClosing;
-            //Settings.General.TemplatesUrl = TemplatesUrl.Text;
+            Settings.General.RemoteAccessToken = RemoteAccessToken.Text;
             TemplatesUpdatingForm.StartUpdatingTemplates(false, this, () =>
             {
                 MainForm.This.LoadTemplates();
