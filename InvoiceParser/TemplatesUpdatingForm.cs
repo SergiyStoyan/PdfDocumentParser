@@ -148,13 +148,13 @@ namespace Cliver.InvoiceParser
                 WebClient wc = null;
                 DateTime lastModifiedTimestamp = DateTime.MinValue;
                 Action cancel = () =>
+                {
+                    try
                     {
-                        try
-                        {
-                            wc?.CancelAsync();
-                        }
-                        catch { }//if disposed
-                    };
+                        wc?.CancelAsync();
+                    }
+                    catch { }//if disposed
+                };
 
                 if (!automaticlyLookingForNewerTemplates)
                     pf = TemplatesUpdatingForm.startShowDialog(owner, cancel);
@@ -248,6 +248,85 @@ namespace Cliver.InvoiceParser
                     wc.UploadDataAsync(new Uri("https://content.dropboxapi.com/2/files/download"), "POST", new byte[0]);
                     //wc.Headers["Content-Type"] = "application/json";
                     //wc.UploadDataAsync(new Uri("https://api.dropboxapi.com/2/files/download"), "POST", Encoding.ASCII.GetBytes(body));
+                }
+            }
+            catch (Exception e)
+            {
+                LogMessage.Error("Downloading templates collection: \r\n" + Log.GetExceptionMessage(e), owner);
+            }
+        }
+
+        async static public void StartUploadingTemplates(Action onFinished, Form owner)
+        {
+            try
+            {
+                WebClient wc = null;
+                Action cancel = () =>
+                {
+                    try
+                    {
+                        wc?.CancelAsync();
+                    }
+                    catch { }//if disposed
+                };
+                
+                using (wc = new WebClient())
+                {
+                    wc.UploadProgressChanged += delegate (object sender, UploadProgressChangedEventArgs e)
+                    {
+                        try
+                        {
+                            //if (pf != null)
+                            //{
+                            //    pf.showProgress(e.ProgressPercentage);
+                            //    return;
+                            //}
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Main.Error(ex);
+                        }
+                    };
+
+                    wc.UploadDataCompleted += delegate (object sender, UploadDataCompletedEventArgs e)
+                    {
+                        try
+                        {
+                            if (e.Cancelled)
+                                return;
+
+                            //Settings.General.LastDownloadedTemplatesTimestamp = lastModifiedTimestamp;
+                            //Settings.General.Save();
+                            //Settings.Templates.Reload();
+                        }
+                        catch (Exception ex)
+                        {
+                            LogMessage.Error(ex, owner);
+                        }
+                        finally
+                        {
+                            onFinished();
+                            //if (pf != null)
+                            //    pf.stopShowDialog();
+                        }
+                    };
+                    if (string.IsNullOrWhiteSpace(Settings.Templates.__File) || !File.Exists(Settings.Templates.__File))
+                    {
+                        Message.Inform("There is no template collection file to upload:\r\n" + Settings.Templates.__File);
+                        return;
+                    }
+                    object dropboxAPIArg = new
+                    {
+                        path = Settings.General.RemoteTemplatesPath,
+                        mode = "overwrite",
+                        autorename = false,
+                        mute = false,
+                        strict_conflict = false,
+                    };
+                    string parameters = SerializationRoutines.Json.Serialize(dropboxAPIArg, false);
+                    wc.Headers["Dropbox-API-Arg"] = parameters;
+                    wc.Headers["Content-Type"] = "application/octet-stream";
+                    wc.UploadDataAsync(new Uri("https://content.dropboxapi.com/2/files/upload"), "POST", File.ReadAllBytes(Settings.Templates.__File));
                 }
             }
             catch (Exception e)
