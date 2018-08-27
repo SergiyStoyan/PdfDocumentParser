@@ -33,7 +33,9 @@ namespace Cliver.InvoiceParser
             public bool IgnoreHidddenFiles = true;
             public bool ReadInputFolderRecursively = false;
 
-            public string TemplatesUrl = "https://www.dropbox.com/s/mhpgr119gg4sqnx/Templates.Cliver.InvoiceParser.Settings%2BTemplatesSettings.json?dl=0";
+            //readonly  public string RemouteStorageUrl = "https://content.dropboxapi.com/2/files/download";
+            readonly public string RemoteTemplatesPath = "/Templates.Cliver.InvoiceParser.Settings+TemplatesSettings.json";
+            public string RemoteAccessToken = "ddQ5o69t6GAAAAAAAAAFHV8L4u-tRc2YveTJ1n_n160fBok6EUOuaSYZvcuBrn0z";
             public bool UpdateTemplatesOnStart = true;
             public DateTime LastDownloadedTemplatesTimestamp = DateTime.MinValue;
 

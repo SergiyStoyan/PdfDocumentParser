@@ -18,13 +18,15 @@ namespace Cliver.InvoiceParser
 - add group column;
 - filter by name, group;
 - switch Active for all filtered;
-- new from any template
+- new from any template;
 
 - get file mod.time from dropbox API;
 
 - store each template in separate file;
 
 - tutorial;
+
+- switch to Tesseract.4
 
      */
     class Program

@@ -39,7 +39,7 @@ namespace Cliver.InvoiceParser
                 LastDownloadedTemplatesTimestamp.Text = Settings.General.LastDownloadedTemplatesTimestamp.ToString();
             else
                 LastDownloadedTemplatesTimestamp.Text = "-- empty --";
-            TemplatesUrl.Text = Settings.General.TemplatesUrl;
+            //TemplatesUrl.Text = Settings.General.TemplatesUrl;
             UpdateTemplatesOnStart.Checked = Settings.General.UpdateTemplatesOnStart;
         }
 
@@ -55,7 +55,7 @@ namespace Cliver.InvoiceParser
                 Settings.General.IgnoreHidddenFiles = IgnoreHidddenFiles.Checked;
                 Settings.General.ReadInputFolderRecursively = ReadInputFolderRecursively.Checked;
 
-                Settings.General.TemplatesUrl = TemplatesUrl.Text;
+                //Settings.General.TemplatesUrl = TemplatesUrl.Text;
                 Settings.General.UpdateTemplatesOnStart = UpdateTemplatesOnStart.Checked;
 
                 Settings.General.Save();
@@ -92,7 +92,7 @@ namespace Cliver.InvoiceParser
             //    ee.Cancel = true;
             //};
             //this.FormClosing += _onClosing;
-            Settings.General.TemplatesUrl = TemplatesUrl.Text;
+            //Settings.General.TemplatesUrl = TemplatesUrl.Text;
             TemplatesUpdatingForm.StartUpdatingTemplates(false, this, () =>
             {
                 MainForm.This.LoadTemplates();
