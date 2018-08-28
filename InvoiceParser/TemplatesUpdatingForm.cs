@@ -10,10 +10,6 @@ using System.Windows.Forms;
 using System.Net;
 using System.IO;
 using System.Text.RegularExpressions;
-using Dropbox.Api;
-using Dropbox.Api.Common;
-using Dropbox.Api.Files;
-using Dropbox.Api.Team;
 
 namespace Cliver.InvoiceParser
 {
@@ -24,12 +20,13 @@ namespace Cliver.InvoiceParser
             InitializeComponent();
 
             this.Icon = AssemblyRoutines.GetAppIcon();
-            Text = Application.ProductName;
+            Text = Application.ProductName + ": upadating templates";
         }
 
         static TemplatesUpdatingForm startShowDialog(Form owner, Action cancel)
         {
             TemplatesUpdatingForm pf = new TemplatesUpdatingForm();
+            pf.CreateHandle();
             owner.BeginInvoke(() =>
             {
                 pf.ShowDialog(owner);
@@ -42,7 +39,21 @@ namespace Cliver.InvoiceParser
         {
             this.Invoke(() =>
             {
-                progressBar.Value = p;
+                try
+                {
+                    progressBar.Value = p;
+                }
+                catch
+                {
+                }//it gives negative in the end for some reason
+            });
+        }
+
+        void showState(string s)
+        {
+            this.Invoke(() =>
+            {
+                state.Text = s;
             });
         }
 
@@ -62,67 +73,12 @@ namespace Cliver.InvoiceParser
             stopShowDialog();
         }
 
-        //static private async Task<ListFolderResult> ListFolder(DropboxClient client, string path)
-        //{
-        //    Console.WriteLine("--- Files ---");
-        //    var list = await client.Files.ListFolderAsync(path);
-
-        //    // show folders then files
-        //    foreach (var item in list.Entries.Where(i => i.IsFolder))
-        //    {
-        //        Console.WriteLine("D  {0}/", item.Name);
-        //    }
-
-        //    foreach (var item in list.Entries.Where(i => i.IsFile))
-        //    {
-        //        var file = item.AsFile;
-
-        //        Console.WriteLine("F{0,8} {1}",
-        //            file.Size,
-        //            item.Name);
-        //    }
-
-        //    if (list.HasMore)
-        //    {
-        //        Console.WriteLine("   ...");
-        //    }
-        //    return list;
-        //}
-
-        //static private async Task RunUserTests()
-        //{
-        //    DropboxClient client = new DropboxClient(Settings.General.RemoteAccessToken);
-        //    //await GetCurrentAccount(client);
-
-        //    //var path = "/home/Apps/PdfDocumentParser";
-        //    var path = "";
-        //    var list = await ListFolder(client, path);
-
-        //    var firstFile = list.Entries.FirstOrDefault(i => i.IsFile);
-        //    if (firstFile != null)
-        //    {///Templates.Cliver.InvoiceParser.Settings+TemplatesSettings.json
-        //        await Download(client, path, firstFile.AsFile);
-        //    }
-        //}
-        //static private async Task Download(DropboxClient client, string folder, FileMetadata file)
-        //{
-        //    Console.WriteLine("Download file...");
-
-        //    using (var response = await client.Files.DownloadAsync(folder + "/" + file.Name))
-        //    {
-        //        Console.WriteLine("Downloaded {0} Rev {1}", response.Response.Name, response.Response.Rev);
-        //        Console.WriteLine("------------------------------");
-        //        Console.WriteLine(await response.GetContentAsStringAsync());
-        //        Console.WriteLine("------------------------------");
-        //    }
-        //}
-
         async static Task<DateTime> getRemoteTemplatesTimestamp(WebClient wc)
         {
-            wc.Headers["Authorization"] = "Bearer " + Settings.General.RemoteAccessToken;
+            wc.Headers["Authorization"] = "Bearer " + Settings.Remote.AccessToken;
             object dropboxAPIArg = new
             {
-                path = Settings.General.RemoteTemplatesPath,
+                path = Settings.Remote.TemplatesPath,
                 include_media_info = false,
                 include_deleted = false,
                 include_has_explicit_shared_members = false,
@@ -140,11 +96,11 @@ namespace Cliver.InvoiceParser
             return lastModifiedTimestamp;
         }
 
-        async static public void StartUpdatingTemplates(bool automaticlyLookingForNewerTemplates, Form owner, Action onFinished)
+        async static public void StartUpdatingTemplatesFromRemoteLocation(bool automaticlyLookingForNewerTemplates, Form owner, Action onFinished)
         {
+            TemplatesUpdatingForm pf = null;
             try
             {
-                TemplatesUpdatingForm pf = null;
                 WebClient wc = null;
                 DateTime lastModifiedTimestamp = DateTime.MinValue;
                 Action cancel = () =>
@@ -165,15 +121,18 @@ namespace Cliver.InvoiceParser
                 }
                 if (!string.IsNullOrWhiteSpace(Settings.Templates.__File) && File.Exists(Settings.Templates.__File))
                 {
-                    if (lastModifiedTimestamp <= Settings.General.LastDownloadedTemplatesTimestamp)
+                    string m2 = "The current template collection will be copied to the remote location and also to the local folder '_old' from where it can be restored when needed.";
+                    if (lastModifiedTimestamp <= Settings.Remote.LastDownloadedTemplatesTimestamp)
                     {
-                        if (!automaticlyLookingForNewerTemplates)
-                            Message.Inform("There is no newer templates collection to download.", owner);
-                        if (pf != null)
-                            pf.stopShowDialog();
-                        return;
+                        if (automaticlyLookingForNewerTemplates
+                            || !Message.YesNo("There is no newer templates collection to download. Do you want to download the remote version anyway?\r\n\r\n" + m2, pf, Message.Icons.Question, false))
+                        {
+                            if (pf != null)
+                                pf.stopShowDialog();
+                            return;
+                        }
                     }
-                    if (!Message.YesNo("A newer template collection can be downloaded. The existing template collection will be moved to folder '_old' where the changes you've done if any, can be restored from. Proceed with downloading the templates from the internet?", owner, Message.Icons.Exclamation))
+                    else if (!Message.YesNo("A newer template collection can be downloaded. " + m2 + "\r\nProceed with updating the templates from the remote location?", pf))
                     {
                         if (pf != null)
                             pf.stopShowDialog();
@@ -182,6 +141,19 @@ namespace Cliver.InvoiceParser
                 }
                 if (pf == null)
                     pf = startShowDialog(owner, cancel);
+
+                using (wc = new WebClient())
+                {
+                    if (!await pf.uploadLocalTemplates(wc))
+                    {
+                        if (pf != null)
+                            pf.stopShowDialog();
+                        return;
+                    }
+                }
+
+                pf.showState("Downloading the template collection from the internet...");
+                pf.showProgress(0);
 
                 using (wc = new WebClient())
                 {
@@ -221,13 +193,14 @@ namespace Cliver.InvoiceParser
                                     File.Move(Settings.Templates.__File, oldDir + "\\" + PathRoutines.InsertSuffixBeforeFileExtension(PathRoutines.GetFileNameFromPath(Settings.Templates.__File), DateTime.Now.ToString("_yyyy-MM-dd-hh-mm-ss")));
                             }
                             File.Move(file2, Settings.Templates.__File);
-                            Settings.General.LastDownloadedTemplatesTimestamp = lastModifiedTimestamp;
-                            Settings.General.Save();
+                            Settings.Remote.LastDownloadedTemplatesTimestamp = lastModifiedTimestamp;
+                            Settings.Remote.Save();
                             Settings.Templates.Reload();
+                            Message.Inform("The template collection has been updated successfully. The previous version can be found in folder 'old'.", pf);
                         }
                         catch (Exception ex)
                         {
-                            LogMessage.Error(ex, owner);
+                            LogMessage.Error(ex, pf);
                         }
                         finally
                         {
@@ -236,10 +209,10 @@ namespace Cliver.InvoiceParser
                                 pf.stopShowDialog();
                         }
                     };
-                    wc.Headers["Authorization"] = "Bearer " + Settings.General.RemoteAccessToken;
+                    wc.Headers["Authorization"] = "Bearer " + Settings.Remote.AccessToken;
                     object dropboxAPIArg = new
                     {
-                        path = Settings.General.RemoteTemplatesPath,
+                        path = Settings.Remote.TemplatesPath,
                     };
                     string parameters = SerializationRoutines.Json.Serialize(dropboxAPIArg, false);
                     wc.Headers["Dropbox-API-Arg"] = parameters;// "{\"path\": \"" + Settings.General.RemoteTemplatesPath + "\"}";
@@ -252,87 +225,77 @@ namespace Cliver.InvoiceParser
             }
             catch (Exception e)
             {
-                LogMessage.Error("Downloading templates collection: \r\n" + Log.GetExceptionMessage(e), owner);
+                LogMessage.Error("Downloading templates collection: \r\n" + Log.GetExceptionMessage(e), pf);
             }
         }
 
-        async static public void StartUploadingTemplates(Action onFinished, Form owner)
+        async public Task<bool> uploadLocalTemplates(WebClient wc)
         {
+            UploadProgressChangedEventHandler uploadProgressChangedEventHandler = delegate (object sender, UploadProgressChangedEventArgs e)
+            {
+                try
+                {
+                    showProgress(e.ProgressPercentage);
+                }
+                catch (Exception ex)
+                {
+                    Log.Main.Error(ex);
+                }
+            };
+
+            UploadDataCompletedEventHandler uploadDataCompletedEventHandler = delegate (object sender, UploadDataCompletedEventArgs e)
+            {
+                try
+                {
+                }
+                catch (Exception ex)
+                {
+                    LogMessage.Error(ex, this);
+                }
+                finally
+                {
+                }
+            };
+
             try
             {
-                WebClient wc = null;
-                Action cancel = () =>
-                {
-                    try
-                    {
-                        wc?.CancelAsync();
-                    }
-                    catch { }//if disposed
-                };
-                
-                using (wc = new WebClient())
-                {
-                    wc.UploadProgressChanged += delegate (object sender, UploadProgressChangedEventArgs e)
-                    {
-                        try
-                        {
-                            //if (pf != null)
-                            //{
-                            //    pf.showProgress(e.ProgressPercentage);
-                            //    return;
-                            //}
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.Main.Error(ex);
-                        }
-                    };
+                showState("Uploading the current template collection to the remote location...");
 
-                    wc.UploadDataCompleted += delegate (object sender, UploadDataCompletedEventArgs e)
-                    {
-                        try
-                        {
-                            if (e.Cancelled)
-                                return;
-
-                            //Settings.General.LastDownloadedTemplatesTimestamp = lastModifiedTimestamp;
-                            //Settings.General.Save();
-                            //Settings.Templates.Reload();
-                        }
-                        catch (Exception ex)
-                        {
-                            LogMessage.Error(ex, owner);
-                        }
-                        finally
-                        {
-                            onFinished();
-                            //if (pf != null)
-                            //    pf.stopShowDialog();
-                        }
-                    };
-                    if (string.IsNullOrWhiteSpace(Settings.Templates.__File) || !File.Exists(Settings.Templates.__File))
-                    {
-                        Message.Inform("There is no template collection file to upload:\r\n" + Settings.Templates.__File);
-                        return;
-                    }
-                    object dropboxAPIArg = new
-                    {
-                        path = Settings.General.RemoteTemplatesPath,
-                        mode = "overwrite",
-                        autorename = false,
-                        mute = false,
-                        strict_conflict = false,
-                    };
-                    string parameters = SerializationRoutines.Json.Serialize(dropboxAPIArg, false);
-                    wc.Headers["Dropbox-API-Arg"] = parameters;
-                    wc.Headers["Content-Type"] = "application/octet-stream";
-                    wc.UploadDataAsync(new Uri("https://content.dropboxapi.com/2/files/upload"), "POST", File.ReadAllBytes(Settings.Templates.__File));
+                wc.UploadProgressChanged += uploadProgressChangedEventHandler;
+                wc.UploadDataCompleted += uploadDataCompletedEventHandler;
+                if (string.IsNullOrWhiteSpace(Settings.Templates.__File) || !File.Exists(Settings.Templates.__File))
+                {
+                    Message.Inform("There is no template collection file to upload:\r\n" + Settings.Templates.__File, this);
+                    return false;
                 }
+                //ddQ5o69t6GAAAAAAAAAFG0oLO5Oq3Xhs_j_W0hIhJazCpkoKQJ6mvKLMACURYv1C
+                wc.Headers["Authorization"] = "Bearer " + Settings.Remote.AccessToken;
+                object dropboxAPIArg = new
+                {
+                    path = "/_last" + Settings.Remote.TemplatesPath,
+                    mode = "overwrite",
+                    autorename = false,
+                    mute = false,
+                    strict_conflict = false,
+                };
+                string parameters = SerializationRoutines.Json.Serialize(dropboxAPIArg, false);
+                wc.Headers["Dropbox-API-Arg"] = parameters;
+                wc.Headers["Content-Type"] = "application/octet-stream";
+                byte[] r = await wc.UploadDataTaskAsync(new Uri("https://content.dropboxapi.com/2/files/upload"), "POST", File.ReadAllBytes(Settings.Templates.__File));
+                Dictionary<string, string> keys2value = SerializationRoutines.Json.Deserialize<Dictionary<string, string>>(Encoding.UTF8.GetString(r));
+                if(keys2value.ContainsKey("rev"))
+                    return true;
             }
             catch (Exception e)
             {
-                LogMessage.Error("Downloading templates collection: \r\n" + Log.GetExceptionMessage(e), owner);
+                LogMessage.Error("Uploading templates collection: \r\n" + Log.GetExceptionMessage(e), this);
             }
+            finally
+            {
+                wc.UploadProgressChanged -= uploadProgressChangedEventHandler;
+                wc.UploadDataCompleted -= uploadDataCompletedEventHandler;
+            }
+            return false;
         }
     }
 }

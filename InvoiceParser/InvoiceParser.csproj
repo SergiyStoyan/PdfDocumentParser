@@ -106,9 +106,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Dropbox.Api, Version=4.0.0.0, Culture=neutral, PublicKeyToken=310f0e82fbb45d01, processorArchitecture=MSIL">
-      <HintPath>packages\Dropbox.Api.4.9.0\lib\net45\Dropbox.Api.dll</HintPath>
-    </Reference>
     <Reference Include="EPPlus, Version=4.5.2.1, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>packages\EPPlus.4.5.2.1\lib\net40\EPPlus.dll</HintPath>
     </Reference>
@@ -164,6 +161,7 @@
     <Compile Include="PdfProcessor.cs" />
     <Compile Include="Processor.cs" />
     <Compile Include="ProgramWpf.cs" />
+    <Compile Include="Settings\Remote.cs" />
     <Compile Include="TemplatesUpdatingForm.cs">
       <SubType>Form</SubType>
     </Compile>

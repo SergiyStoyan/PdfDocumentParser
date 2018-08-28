@@ -42,7 +42,7 @@ namespace Cliver.InvoiceParser
 
             Message.Owner = this;
 
-            TemplatesUpdatingForm.StartUpdatingTemplates(true, this, () =>
+            TemplatesUpdatingForm.StartUpdatingTemplatesFromRemoteLocation(true, this, () =>
             {
                 LoadTemplates();
             });

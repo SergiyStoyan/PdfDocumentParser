@@ -36,11 +36,11 @@ namespace Cliver.InvoiceParser
 
             if (!string.IsNullOrWhiteSpace(Settings.Templates.__File) && File.Exists(Settings.Templates.__File))
                 //currentTemplatesTime.Text = "Current templates timestamp: " + File.GetLastWriteTime(Settings.Templates.__File).ToString();
-                LastDownloadedTemplatesTimestamp.Text = Settings.General.LastDownloadedTemplatesTimestamp.ToString();
+                LastDownloadedTemplatesTimestamp.Text = Settings.Remote.LastDownloadedTemplatesTimestamp.ToString();
             else
                 LastDownloadedTemplatesTimestamp.Text = "-- empty --";
-            RemoteAccessToken.Text = Settings.General.RemoteAccessToken;
-            UpdateTemplatesOnStart.Checked = Settings.General.UpdateTemplatesOnStart;
+            RemoteAccessToken.Text = Settings.Remote.AccessToken;
+            UpdateTemplatesOnStart.Checked = Settings.Remote.UpdateTemplatesOnStart;
         }
 
         private void bCancel_Click(object sender, EventArgs e)
@@ -55,11 +55,14 @@ namespace Cliver.InvoiceParser
                 Settings.General.IgnoreHidddenFiles = IgnoreHidddenFiles.Checked;
                 Settings.General.ReadInputFolderRecursively = ReadInputFolderRecursively.Checked;
 
-                Settings.General.RemoteAccessToken = RemoteAccessToken.Text;
-                Settings.General.UpdateTemplatesOnStart = UpdateTemplatesOnStart.Checked;
+                Settings.Remote.AccessToken = RemoteAccessToken.Text;
+                Settings.Remote.UpdateTemplatesOnStart = UpdateTemplatesOnStart.Checked;
 
                 Settings.General.Save();
                 Settings.General.Reload();
+
+                Settings.Remote.Save();
+                Settings.Remote.Reload();
 
                 Close();
             }
@@ -72,6 +75,7 @@ namespace Cliver.InvoiceParser
         private void bReset_Click(object sender, EventArgs e)
         {
             Settings.General.Reset();
+            Settings.Remote.Reset();
             PdfDocumentParser.Settings.Appearance.Reset();
             PdfDocumentParser.Settings.ImageProcessing.Reset();
             load_settings();
@@ -79,9 +83,10 @@ namespace Cliver.InvoiceParser
 
         private void updateTemplates_Click(object sender, EventArgs e)
         {
-            Settings.General.RemoteAccessToken = RemoteAccessToken.Text;
-            TemplatesUpdatingForm.StartUpdatingTemplates(false, this, () =>
+            Settings.Remote.AccessToken = RemoteAccessToken.Text;
+            TemplatesUpdatingForm.StartUpdatingTemplatesFromRemoteLocation(false, this, () =>
             {
+                this.BeginInvoke(() => { LastDownloadedTemplatesTimestamp.Text = Settings.Remote.LastDownloadedTemplatesTimestamp.ToString(); });
                 MainForm.This.LoadTemplates();
             });
         }

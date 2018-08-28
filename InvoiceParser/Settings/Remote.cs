@@ -24,25 +24,17 @@ namespace Cliver.InvoiceParser
     public partial class Settings
     {
         [Cliver.Settings.Obligatory]
-        public static readonly GeneralSettings General;
+        public static readonly RemoteSettings Remote;
 
-        public class GeneralSettings : Cliver.Settings
+        public class RemoteSettings : Cliver.Settings
         {
-            public string InputFolder = @"d:\_d\_projects\PdfDocumentParser\_test_files";
-            public string OutputFolder;
-            public bool IgnoreHidddenFiles = true;
-            public bool ReadInputFolderRecursively = false;
-
-            public System.Drawing.Color StampColor = System.Drawing.Color.Red;
-
-            public List<string> OrderedOutputFieldNames = new List<string>();
+            readonly public string TemplatesPath = "/Templates.Cliver.InvoiceParser.Settings+TemplatesSettings.json";
+            public string AccessToken = "";
+            public bool UpdateTemplatesOnStart = true;
+            public DateTime LastDownloadedTemplatesTimestamp = DateTime.MinValue;
 
             public override void Loaded()
             {
-                if (string.IsNullOrWhiteSpace(InputFolder))
-                    InputFolder = ProgramRoutines.GetAppDirectory();
-                if (string.IsNullOrWhiteSpace(OutputFolder))
-                    OutputFolder = InputFolder + "\\Output";// + DateTime.Now.ToString("yyMMddHHmmss");  
             }
 
             public override void Saving()

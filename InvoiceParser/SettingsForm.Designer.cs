@@ -165,9 +165,9 @@
             // 
             this.RemoteAccessToken.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.RemoteAccessToken.Location = new System.Drawing.Point(116, 45);
+            this.RemoteAccessToken.Location = new System.Drawing.Point(97, 45);
             this.RemoteAccessToken.Name = "RemoteAccessToken";
-            this.RemoteAccessToken.Size = new System.Drawing.Size(345, 20);
+            this.RemoteAccessToken.Size = new System.Drawing.Size(364, 20);
             this.RemoteAccessToken.TabIndex = 51;
             // 
             // updateTemplates
@@ -186,18 +186,18 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 22);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(98, 13);
+            this.label1.Size = new System.Drawing.Size(162, 13);
             this.label1.TabIndex = 60;
-            this.label1.Text = "Current Timestamp:";
+            this.label1.Text = "Downloaded Version Timestamp:";
             // 
             // LastDownloadedTemplatesTimestamp
             // 
             this.LastDownloadedTemplatesTimestamp.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.LastDownloadedTemplatesTimestamp.Location = new System.Drawing.Point(116, 19);
+            this.LastDownloadedTemplatesTimestamp.Location = new System.Drawing.Point(180, 19);
             this.LastDownloadedTemplatesTimestamp.Name = "LastDownloadedTemplatesTimestamp";
             this.LastDownloadedTemplatesTimestamp.ReadOnly = true;
-            this.LastDownloadedTemplatesTimestamp.Size = new System.Drawing.Size(345, 20);
+            this.LastDownloadedTemplatesTimestamp.Size = new System.Drawing.Size(281, 20);
             this.LastDownloadedTemplatesTimestamp.TabIndex = 59;
             // 
             // SettingsForm
