@@ -152,7 +152,7 @@ namespace Cliver.InvoiceParser
                     }
                 }
 
-                pf.showState("Downloading the template collection from the internet...");
+                pf.showState("Downloading the template collection from the remote location...");
                 pf.showProgress(0);
 
                 using (wc = new WebClient())
@@ -265,8 +265,8 @@ namespace Cliver.InvoiceParser
                 wc.UploadDataCompleted += uploadDataCompletedEventHandler;
                 if (string.IsNullOrWhiteSpace(Settings.Templates.__File) || !File.Exists(Settings.Templates.__File))
                 {
-                    Message.Inform("There is no template collection file to upload:\r\n" + Settings.Templates.__File, this);
-                    return false;
+                    Log.Main.Inform("There is no template collection file to upload:\r\n" + Settings.Templates.__File);
+                    return true;
                 }
                 //ddQ5o69t6GAAAAAAAAAFG0oLO5Oq3Xhs_j_W0hIhJazCpkoKQJ6mvKLMACURYv1C
                 wc.Headers["Authorization"] = "Bearer " + Settings.Remote.AccessToken;
