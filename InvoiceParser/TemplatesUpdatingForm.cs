@@ -125,7 +125,7 @@ namespace Cliver.InvoiceParser
                     if (lastModifiedTimestamp <= Settings.Remote.LastDownloadedTemplatesTimestamp)
                     {
                         if (automaticlyLookingForNewerTemplates
-                            || !Message.YesNo("There is no newer templates collection to download. Do you want to download the remote version anyway?\r\n\r\n" + m2, pf, Message.Icons.Question, false))
+                            || !Message.YesNo("There is no newer template collection to download. Do you want to download the remote version anyway?\r\n\r\n" + m2, pf, Message.Icons.Question, false))
                         {
                             if (pf != null)
                                 pf.stopShowDialog();
@@ -225,7 +225,7 @@ namespace Cliver.InvoiceParser
             }
             catch (Exception e)
             {
-                LogMessage.Error("Downloading templates collection: \r\n" + Log.GetExceptionMessage(e), pf);
+                LogMessage.Error("Downloading template collection: \r\n" + Log.GetExceptionMessage2(e), pf);
             }
         }
 
@@ -288,7 +288,7 @@ namespace Cliver.InvoiceParser
             }
             catch (Exception e)
             {
-                LogMessage.Error("Uploading templates collection: \r\n" + Log.GetExceptionMessage(e), this);
+                LogMessage.Error("Uploading template collection: \r\n" + Log.GetExceptionMessage2(e), this);
             }
             finally
             {
