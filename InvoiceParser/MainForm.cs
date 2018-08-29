@@ -42,11 +42,6 @@ namespace Cliver.InvoiceParser
 
             Message.Owner = this;
 
-            TemplatesUpdatingForm.StartUpdatingTemplatesFromRemoteLocation(true, this, () =>
-            {
-                LoadTemplates();
-            });
-
             InputFolder.Text = Settings.General.InputFolder;
 
             OutputFolder.Text = Settings.General.OutputFolder;
@@ -450,8 +445,8 @@ namespace Cliver.InvoiceParser
 
         private void bSettings_Click(object sender, EventArgs e)
         {
-            SettingsForm sf = new SettingsForm();
-            sf.ShowDialog();
+            SettingsForm f = new SettingsForm();
+            f.ShowDialog();
         }
 
         private void help_Click(object sender, EventArgs e)

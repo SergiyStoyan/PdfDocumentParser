@@ -36,12 +36,10 @@
             this.ReadInputFolderRecursively = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.UpdateTemplatesOnStart = new System.Windows.Forms.CheckBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.RemoteAccessToken = new System.Windows.Forms.TextBox();
-            this.updateTemplates = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.LastDownloadedTemplatesTimestamp = new System.Windows.Forms.TextBox();
+            this.SynchronizedFolder = new System.Windows.Forms.TextBox();
+            this.Synchronize = new System.Windows.Forms.CheckBox();
+            this.bSynchronizedFolder = new System.Windows.Forms.Button();
             this.flowLayoutPanel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -50,7 +48,7 @@
             // bReset
             // 
             this.bReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bReset.Location = new System.Drawing.Point(252, 3);
+            this.bReset.Location = new System.Drawing.Point(228, 3);
             this.bReset.Name = "bReset";
             this.bReset.Size = new System.Drawing.Size(75, 23);
             this.bReset.TabIndex = 48;
@@ -61,7 +59,7 @@
             // bSave
             // 
             this.bSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bSave.Location = new System.Drawing.Point(333, 3);
+            this.bSave.Location = new System.Drawing.Point(309, 3);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(75, 23);
             this.bSave.TabIndex = 49;
@@ -72,7 +70,7 @@
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bCancel.Location = new System.Drawing.Point(414, 3);
+            this.bCancel.Location = new System.Drawing.Point(390, 3);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 50;
@@ -87,9 +85,9 @@
             this.flowLayoutPanel1.Controls.Add(this.bReset);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 225);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 223);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(492, 31);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(468, 31);
             this.flowLayoutPanel1.TabIndex = 51;
             // 
             // IgnoreHidddenFiles
@@ -120,7 +118,7 @@
             this.groupBox2.Controls.Add(this.ReadInputFolderRecursively);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(467, 83);
+            this.groupBox2.Size = new System.Drawing.Size(443, 83);
             this.groupBox2.TabIndex = 58;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Input";
@@ -129,82 +127,62 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.bSynchronizedFolder);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.LastDownloadedTemplatesTimestamp);
-            this.groupBox1.Controls.Add(this.UpdateTemplatesOnStart);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.RemoteAccessToken);
-            this.groupBox1.Controls.Add(this.updateTemplates);
+            this.groupBox1.Controls.Add(this.SynchronizedFolder);
+            this.groupBox1.Controls.Add(this.Synchronize);
             this.groupBox1.Location = new System.Drawing.Point(13, 101);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(467, 116);
+            this.groupBox1.Size = new System.Drawing.Size(443, 111);
             this.groupBox1.TabIndex = 59;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Templates";
-            // 
-            // UpdateTemplatesOnStart
-            // 
-            this.UpdateTemplatesOnStart.AutoSize = true;
-            this.UpdateTemplatesOnStart.Location = new System.Drawing.Point(15, 81);
-            this.UpdateTemplatesOnStart.Name = "UpdateTemplatesOnStart";
-            this.UpdateTemplatesOnStart.Size = new System.Drawing.Size(155, 17);
-            this.UpdateTemplatesOnStart.TabIndex = 58;
-            this.UpdateTemplatesOnStart.Text = "Update Templates On Start";
-            this.UpdateTemplatesOnStart.UseVisualStyleBackColor = true;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 48);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(79, 13);
-            this.label2.TabIndex = 52;
-            this.label2.Text = "Access Token:";
-            // 
-            // RemoteAccessToken
-            // 
-            this.RemoteAccessToken.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.RemoteAccessToken.Location = new System.Drawing.Point(97, 45);
-            this.RemoteAccessToken.Name = "RemoteAccessToken";
-            this.RemoteAccessToken.Size = new System.Drawing.Size(364, 20);
-            this.RemoteAccessToken.TabIndex = 51;
-            // 
-            // updateTemplates
-            // 
-            this.updateTemplates.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.updateTemplates.Location = new System.Drawing.Point(386, 75);
-            this.updateTemplates.Name = "updateTemplates";
-            this.updateTemplates.Size = new System.Drawing.Size(75, 23);
-            this.updateTemplates.TabIndex = 49;
-            this.updateTemplates.Text = "Update";
-            this.updateTemplates.UseVisualStyleBackColor = true;
-            this.updateTemplates.Click += new System.EventHandler(this.updateTemplates_Click);
+            this.groupBox1.Text = "Remote Storage";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 22);
+            this.label1.Location = new System.Drawing.Point(12, 55);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(162, 13);
+            this.label1.Size = new System.Drawing.Size(106, 13);
             this.label1.TabIndex = 60;
-            this.label1.Text = "Downloaded Version Timestamp:";
+            this.label1.Text = "Synchronized Folder:";
             // 
-            // LastDownloadedTemplatesTimestamp
+            // SynchronizedFolder
             // 
-            this.LastDownloadedTemplatesTimestamp.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.SynchronizedFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.LastDownloadedTemplatesTimestamp.Location = new System.Drawing.Point(180, 19);
-            this.LastDownloadedTemplatesTimestamp.Name = "LastDownloadedTemplatesTimestamp";
-            this.LastDownloadedTemplatesTimestamp.ReadOnly = true;
-            this.LastDownloadedTemplatesTimestamp.Size = new System.Drawing.Size(281, 20);
-            this.LastDownloadedTemplatesTimestamp.TabIndex = 59;
+            this.SynchronizedFolder.Location = new System.Drawing.Point(15, 74);
+            this.SynchronizedFolder.Name = "SynchronizedFolder";
+            this.SynchronizedFolder.ReadOnly = true;
+            this.SynchronizedFolder.Size = new System.Drawing.Size(422, 20);
+            this.SynchronizedFolder.TabIndex = 59;
+            // 
+            // Synchronize
+            // 
+            this.Synchronize.AutoSize = true;
+            this.Synchronize.Location = new System.Drawing.Point(15, 27);
+            this.Synchronize.Name = "Synchronize";
+            this.Synchronize.Size = new System.Drawing.Size(84, 17);
+            this.Synchronize.TabIndex = 58;
+            this.Synchronize.Text = "Synchronize";
+            this.Synchronize.UseVisualStyleBackColor = true;
+            this.Synchronize.CheckedChanged += new System.EventHandler(this.Synchronize_CheckedChanged);
+            // 
+            // bSynchronizedFolder
+            // 
+            this.bSynchronizedFolder.Location = new System.Drawing.Point(135, 48);
+            this.bSynchronizedFolder.Name = "bSynchronizedFolder";
+            this.bSynchronizedFolder.Size = new System.Drawing.Size(26, 23);
+            this.bSynchronizedFolder.TabIndex = 61;
+            this.bSynchronizedFolder.Text = "...";
+            this.bSynchronizedFolder.UseVisualStyleBackColor = true;
+            this.bSynchronizedFolder.Click += new System.EventHandler(this.bSynchronizedFolder_Click);
             // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(492, 256);
+            this.ClientSize = new System.Drawing.Size(468, 254);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.flowLayoutPanel1);
@@ -228,11 +206,9 @@
         private System.Windows.Forms.CheckBox ReadInputFolderRecursively;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TextBox RemoteAccessToken;
-        private System.Windows.Forms.Button updateTemplates;
-        private System.Windows.Forms.CheckBox UpdateTemplatesOnStart;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox Synchronize;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox LastDownloadedTemplatesTimestamp;
+        private System.Windows.Forms.TextBox SynchronizedFolder;
+        private System.Windows.Forms.Button bSynchronizedFolder;
     }
 }

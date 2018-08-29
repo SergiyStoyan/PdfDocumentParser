@@ -19,6 +19,24 @@ namespace Cliver.InvoiceParser
 {
     public partial class SettingsForm : Form
     {
+        //static public void OpenDialog()
+        //{
+        //    if (SettingsForm.This.Visible)
+        //        SettingsForm.This.Activate();
+        //    else
+        //        SettingsForm.This.ShowDialog();
+        //}
+        //public static SettingsForm This
+        //{
+        //    get
+        //    {
+        //        if (_This == null || _This.IsDisposed)
+        //            _This = new SettingsForm();
+        //        return _This;
+        //    }
+        //}
+        //static SettingsForm _This = null;
+
         public SettingsForm()
         {
             InitializeComponent();
@@ -34,13 +52,9 @@ namespace Cliver.InvoiceParser
             IgnoreHidddenFiles.Checked = Settings.General.IgnoreHidddenFiles;
             ReadInputFolderRecursively.Checked = Settings.General.ReadInputFolderRecursively;
 
-            if (!string.IsNullOrWhiteSpace(Settings.Templates.__File) && File.Exists(Settings.Templates.__File))
-                //currentTemplatesTime.Text = "Current templates timestamp: " + File.GetLastWriteTime(Settings.Templates.__File).ToString();
-                LastDownloadedTemplatesTimestamp.Text = Settings.Remote.LastDownloadedTemplatesTimestamp.ToString();
-            else
-                LastDownloadedTemplatesTimestamp.Text = "-- empty --";
-            RemoteAccessToken.Text = Settings.Remote.AccessToken;
-            UpdateTemplatesOnStart.Checked = Settings.Remote.UpdateTemplatesOnStart;
+            Synchronize.Checked = Settings.General.Synchronize;
+            SynchronizedFolder.Text = Settings.General.SynchronizedFolder;
+            SynchronizedFolder.Enabled = Synchronize.Checked;
         }
 
         private void bCancel_Click(object sender, EventArgs e)
@@ -55,19 +69,19 @@ namespace Cliver.InvoiceParser
                 Settings.General.IgnoreHidddenFiles = IgnoreHidddenFiles.Checked;
                 Settings.General.ReadInputFolderRecursively = ReadInputFolderRecursively.Checked;
 
-                Settings.Remote.AccessToken = RemoteAccessToken.Text;
-                Settings.Remote.UpdateTemplatesOnStart = UpdateTemplatesOnStart.Checked;
+                Settings.General.Synchronize = Synchronize.Checked;
+                if (Synchronize.Checked && string.IsNullOrWhiteSpace(SynchronizedFolder.Text))
+                    throw new Exception("Synchronized Folder is empty.");
+                Settings.General.SynchronizedFolder = SynchronizedFolder.Text;
 
                 Settings.General.Save();
                 Settings.General.Reload();
-
-                Settings.Remote.Save();
-                Settings.Remote.Reload();
 
                 Close();
             }
             catch (Exception ex)
             {
+                Settings.General.Reload();
                 Message.Error2(ex);
             }
         }
@@ -75,20 +89,22 @@ namespace Cliver.InvoiceParser
         private void bReset_Click(object sender, EventArgs e)
         {
             Settings.General.Reset();
-            Settings.Remote.Reset();
             PdfDocumentParser.Settings.Appearance.Reset();
             PdfDocumentParser.Settings.ImageProcessing.Reset();
             load_settings();
         }
 
-        private void updateTemplates_Click(object sender, EventArgs e)
+        private void bSynchronizedFolder_Click(object sender, EventArgs e)
         {
-            Settings.Remote.AccessToken = RemoteAccessToken.Text;
-            TemplatesUpdatingForm.StartUpdatingTemplatesFromRemoteLocation(false, this, () =>
-            {
-                this.BeginInvoke(() => { LastDownloadedTemplatesTimestamp.Text = Settings.Remote.LastDownloadedTemplatesTimestamp.ToString(); });
-                MainForm.This.LoadTemplates();
-            });
+            FolderBrowserDialog d = new FolderBrowserDialog();
+            d.SelectedPath = string.IsNullOrWhiteSpace(SynchronizedFolder.Text) ? Settings.General.InputFolder : SynchronizedFolder.Text;
+            if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                SynchronizedFolder.Text = d.SelectedPath;
+        }
+
+        private void Synchronize_CheckedChanged(object sender, EventArgs e)
+        {
+            SynchronizedFolder.Enabled = Synchronize.Checked;
         }
 
         //private void bResetTemplates_Click(object sender, EventArgs e)

@@ -104,7 +104,7 @@ namespace Cliver.InvoiceParser
                     string of;
                     //if (Settings.General.ReadInputFolderRecursively)
                     //{
-                        string od = PathRoutines.GetDirMirroredInDir(PathRoutines.GetDirFromPath(f), Settings.General.InputFolder, Settings.General.OutputFolder);
+                        string od = PathRoutines.GetPathMirroredInDir(PathRoutines.GetDirFromPath(f), Settings.General.InputFolder, Settings.General.OutputFolder);
                         od = FileSystemRoutines.CreateDirectory(od, false);
                         of = PathRoutines.InsertSuffixBeforeFileExtension(od + "\\" + PathRoutines.GetFileNameFromPath(f), ".stamped");
                     //}

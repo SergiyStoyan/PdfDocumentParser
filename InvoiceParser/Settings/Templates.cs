@@ -11,6 +11,7 @@ using System.Linq;
 using System.Drawing;
 using System.Collections.Specialized;
 using Cliver.PdfDocumentParser;
+using System.Net;
 
 namespace Cliver.InvoiceParser
 {
