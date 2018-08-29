@@ -64,9 +64,16 @@ namespace Cliver.InvoiceParser
                     {
                         SynchronizedUploadedFolder = FileSystemRoutines.CreateDirectory(SynchronizedFolder + "\\uploaded");
 
-                        FileSystemWatcher fileSystemWatcher = new FileSystemWatcher()
+                        string downloaded = FileSystemRoutines.CreateDirectory(SynchronizedFolder + "\\downloaded");
+                        if (fileSystemWatcher != null)
                         {
-                            Path = FileSystemRoutines.CreateDirectory(SynchronizedFolder + "\\downloaded"),
+                            if (fileSystemWatcher.Path == downloaded)
+                                return;
+                            fileSystemWatcher.Dispose();
+                        }
+                        fileSystemWatcher = new FileSystemWatcher()
+                        {
+                            Path = downloaded,
                             NotifyFilter = NotifyFilters.LastWrite,
                             Filter = "*.*",
                             EnableRaisingEvents = true,
