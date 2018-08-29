@@ -120,6 +120,7 @@ namespace Cliver.InvoiceParser
                                                 if (file2 == Settings.Templates.__File)
                                                 {
                                                     Message.Inform("A newer templates have been downloaded from the remote storage. Upon closing this message they will be updated in the application.");
+                                                    Settings.Templates.Reload();
                                                     MainForm.This.BeginInvoke(() => { MainForm.This.LoadTemplates(); });
                                                 }
                                                 break;
