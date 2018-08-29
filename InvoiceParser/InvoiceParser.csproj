@@ -172,6 +172,7 @@
     <Compile Include="SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Settings\Synchronization.cs" />
     <Compile Include="Settings\General.cs" />
     <Compile Include="Settings\Templates.cs" />
     <Compile Include="Settings\TestFiles.cs" />

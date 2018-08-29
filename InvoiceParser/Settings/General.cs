@@ -34,11 +34,7 @@ namespace Cliver.InvoiceParser
             public bool ReadInputFolderRecursively = false;
 
             public System.Drawing.Color StampColor = System.Drawing.Color.Red;
-
-            public string SynchronizedFolder = Config.StorageDir + "/_synchronised";
-            public bool Synchronize = true;
-            public string SynchronizedUploadedFolder { get; private set; }
-
+            
             public List<string> OrderedOutputFieldNames = new List<string>();
 
             public override void Loaded()
@@ -47,75 +43,11 @@ namespace Cliver.InvoiceParser
                     InputFolder = ProgramRoutines.GetAppDirectory();
                 if (string.IsNullOrWhiteSpace(OutputFolder))
                     OutputFolder = InputFolder + "\\Output";// + DateTime.Now.ToString("yyMMddHHmmss"); 
-
-                switchSynchronization();
             }
 
             public override void Saving()
             {
-                switchSynchronization();
             }
-
-            void switchSynchronization()
-            {
-                try
-                {
-                    if (Synchronize && !string.IsNullOrWhiteSpace(SynchronizedFolder))
-                    {
-                        SynchronizedUploadedFolder = FileSystemRoutines.CreateDirectory(SynchronizedFolder + "\\uploaded");
-
-                        string downloaded = FileSystemRoutines.CreateDirectory(SynchronizedFolder + "\\downloaded");
-                        if (fileSystemWatcher != null)
-                        {
-                            if (fileSystemWatcher.Path == downloaded)
-                                return;
-                            fileSystemWatcher.Dispose();
-                        }
-                        fileSystemWatcher = new FileSystemWatcher()
-                        {
-                            Path = downloaded,
-                            NotifyFilter = NotifyFilters.LastWrite,
-                            Filter = "*.*",
-                            EnableRaisingEvents = true,
-                        };
-                        FileSystemEventHandler fileSystemEventHandler = delegate (object sender, FileSystemEventArgs e)
-                        {
-                            try
-                            {
-                                if (File.Exists(e.FullPath))
-                                {
-                                    string file2 = PathRoutines.GetPathMirroredInDir(e.FullPath, fileSystemWatcher.Path, Config.StorageDir);
-                                    File.Copy(e.FullPath, file2, true);
-                                    if (file2 == Settings.Templates.__File)
-                                    {
-                                        Message.Inform("A newer templates have been downloaded from the remote storage. Upon closing this message they will be updated in the application.");
-                                        MainForm.This.LoadTemplates();
-                                    }
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                Message.Error(ex);
-                            }
-                        };
-                        fileSystemWatcher.Created += fileSystemEventHandler;
-                        fileSystemWatcher.Changed += fileSystemEventHandler;
-                    }
-                    else
-                    {
-                        if (fileSystemWatcher != null)
-                        {
-                            fileSystemWatcher.Dispose();
-                            fileSystemWatcher = null;
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    Message.Error(e);
-                }
-            }
-            FileSystemWatcher fileSystemWatcher = null;
         }
     }
 }

@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Cliver.PdfDocumentParser;
 using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Cliver.InvoiceParser
 {
@@ -44,6 +46,7 @@ namespace Cliver.InvoiceParser
             this.Icon = AssemblyRoutines.GetAppIcon();
             Text = Application.ProductName;
 
+            important.Text = "Important! Letting folder '" + Config.StorageDir + "' be synchronized by a remote drive application may bring to malfunction.";
             load_settings();
         }
 
@@ -52,8 +55,9 @@ namespace Cliver.InvoiceParser
             IgnoreHidddenFiles.Checked = Settings.General.IgnoreHidddenFiles;
             ReadInputFolderRecursively.Checked = Settings.General.ReadInputFolderRecursively;
 
-            Synchronize.Checked = Settings.General.Synchronize;
-            SynchronizedFolder.Text = Settings.General.SynchronizedFolder;
+            Synchronize.Checked = Settings.Synchronization.Synchronize;
+            SynchronizedFolder.Text = Settings.Synchronization.SynchronizedFolder;
+
             SynchronizedFolder.Enabled = Synchronize.Checked;
         }
 
@@ -66,22 +70,27 @@ namespace Cliver.InvoiceParser
         {
             try
             {
+                if (Synchronize.Checked && string.IsNullOrWhiteSpace(SynchronizedFolder.Text))
+                    throw new Exception("Synchronized Folder is empty.");
+                if (PathRoutines.ArePathsEqual(SynchronizedFolder.Text, Config.StorageDir))
+                    throw new Exception("Synchronized Folder cannot be the application's config folder itself.");
+
                 Settings.General.IgnoreHidddenFiles = IgnoreHidddenFiles.Checked;
                 Settings.General.ReadInputFolderRecursively = ReadInputFolderRecursively.Checked;
 
-                Settings.General.Synchronize = Synchronize.Checked;
-                if (Synchronize.Checked && string.IsNullOrWhiteSpace(SynchronizedFolder.Text))
-                    throw new Exception("Synchronized Folder is empty.");
-                Settings.General.SynchronizedFolder = SynchronizedFolder.Text;
+                Settings.Synchronization.Synchronize = Synchronize.Checked;
+                Settings.Synchronization.SynchronizedFolder = SynchronizedFolder.Text;
 
                 Settings.General.Save();
                 Settings.General.Reload();
+                Settings.Synchronization.Save();
+                Settings.Synchronization.Reload();
 
                 Close();
             }
             catch (Exception ex)
             {
-                Settings.General.Reload();
+                //Settings.General.Reload();
                 Message.Error2(ex);
             }
         }
@@ -105,6 +114,27 @@ namespace Cliver.InvoiceParser
         private void Synchronize_CheckedChanged(object sender, EventArgs e)
         {
             SynchronizedFolder.Enabled = Synchronize.Checked;
+
+            if (Synchronize.Checked)
+            {
+                if (string.IsNullOrWhiteSpace(SynchronizedFolder.Text))
+                {
+                    string cf = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Dropbox\info.json";
+                    if (!File.Exists(cf))
+                        cf = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Dropbox\info.json";
+                    if (File.Exists(cf))
+                    {
+                        JObject o = JObject.Parse(File.ReadAllText(cf, Encoding.UTF8));
+                        string path = (string)o.SelectToken("personal.path");
+                        if (path == null)
+                            path = (string)o.SelectToken("business.path");
+                        if (path != null)
+                            SynchronizedFolder.Text = path + "\\" + ProgramRoutines.GetAppName() + "_synchronised data";
+                    }
+                    if (string.IsNullOrWhiteSpace(SynchronizedFolder.Text))
+                        SynchronizedFolder.Text = Config.StorageDir + "\\" + ProgramRoutines.GetAppName() + "_synchronised data";
+                }
+            }
         }
 
         //private void bResetTemplates_Click(object sender, EventArgs e)

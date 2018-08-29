@@ -13,13 +13,13 @@ namespace Cliver.InvoiceParser
 {
     /*
  TBD:
-     
- - Template not enherited but enbedded
+     - clear anchor
+- new from any template;
+ - Template not enherited but embedded
  - MainForm to WPF;
 - add group column;
 - filter by name, group;
 - switch Active for all filtered;
-- new from any template;
 
 - store each template in separate file;
 
