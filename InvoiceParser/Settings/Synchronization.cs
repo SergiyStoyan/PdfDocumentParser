@@ -32,11 +32,6 @@ namespace Cliver.InvoiceParser
 
             public override void Loaded()
             {
-                //if (SynchronizedFileNames == null)
-                //{
-                //    Config.PreloadField("Templates");
-                //    SynchronizedFileNames = new HashSet<string> { PathRoutines.GetFileNameFromPath(Settings.Templates.__File) };
-                //}
                 switchSynchronization(this);
             }
 
@@ -50,7 +45,6 @@ namespace Cliver.InvoiceParser
                 try
                 {
                     synchronize = synchronization.Synchronize;
-                    //synchronizedFileNames = synchronization.SynchronizedFileNames;
                     downloadFolder = FileSystemRoutines.CreateDirectory(synchronization.SynchronizationFolder + "\\download");
                     uploadFolder = FileSystemRoutines.CreateDirectory(synchronization.SynchronizationFolder + "\\upload");
 
@@ -78,7 +72,7 @@ namespace Cliver.InvoiceParser
                         pollUploadFile(file);
                         pollDownloadFile(file);
                     }
-                    Thread.Sleep(100000);
+                    Thread.Sleep(10000);
                 }
             }
             static void pollUploadFile(string file)
@@ -86,7 +80,7 @@ namespace Cliver.InvoiceParser
                 try
                 {
                     DateTime uploadLWT = File.GetLastWriteTime(file);
-                    if (uploadLWT.AddSeconds(10) > DateTime.Now)//it is not being written
+                    if (uploadLWT.AddSeconds(10) > DateTime.Now)//it is being written
                         return;
                     string file2 = uploadFolder + "\\" + PathRoutines.GetFileNameFromPath(file);
                     if (File.Exists(file2) && uploadLWT <= File.GetLastWriteTime(file2))
@@ -121,7 +115,7 @@ namespace Cliver.InvoiceParser
                     if (!File.Exists(file))
                         return;
                     DateTime downloadLWT = File.GetLastWriteTime(file);
-                    if (downloadLWT.AddSeconds(100) > DateTime.Now)//it is not being written
+                    if (downloadLWT.AddSeconds(100) > DateTime.Now)//it is being written
                         return;
                     if (downloadLWT <= File.GetLastWriteTime(file2))
                         return;
