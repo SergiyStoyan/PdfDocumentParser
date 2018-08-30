@@ -136,7 +136,7 @@ namespace Cliver.InvoiceParser
                 templates.EndEdit();//needed to set checkbox values
 
                 t.Name = (string)r.Cells["Name_"].Value;
-                t.Active = (bool)r.Cells["Active"].Value;
+                t.Active = getBoolValue(r, "Active");
                 t.Group = (string)r.Cells["Group"].Value;
             };
 
@@ -188,6 +188,20 @@ namespace Cliver.InvoiceParser
                 DataGridViewRow r = templates.Rows[e.RowIndex];
                 if (e.ColumnIndex < 0)
                     return;
+
+                if (r.IsNewRow)//hacky forcing commit a newly added row and display the blank row
+                {
+                    try
+                    {
+                        int i = templates.Rows.Add();
+                        templates.Rows[i].Selected = true;
+                        templates.Rows[i].Cells["Active"].Value = true;
+                        templates.Rows[i].Cells["Group"].Value = "";
+                        r.Selected = false;
+                    }
+                    catch { }
+                }
+
                 switch (templates.Columns[e.ColumnIndex].Name)
                 {
                     case "Edit":
@@ -493,6 +507,18 @@ namespace Cliver.InvoiceParser
             sf.ShowDialog();
         }
 
+        bool getBoolValue(DataGridViewRow r, string name)
+        {
+            bool? s = (bool?)r.Cells[name].Value;
+            return s == null ? false : (bool)s;
+        }
+
+        string getStringValue(DataGridViewRow r, string name)
+        {
+            string s = (string)r.Cells[name].Value;
+            return s == null ? "" : s;
+        }
+
         void initiateSelectionEngine()
         {
             templates.SelectionChanged += delegate
@@ -500,7 +526,11 @@ namespace Cliver.InvoiceParser
                 foreach (DataGridViewRow r in templates.Rows)
                     r.Cells["Selected"].Value = r.Selected;
             };
-            
+
+            useActivePattern.CheckedChanged += delegate { activePattern.Enabled = useActivePattern.Checked; };
+            useNamePattern.CheckedChanged += delegate { namePattern.Enabled = useNamePattern.Checked; };
+            useGroupPattern.CheckedChanged += delegate { groupPattern.Enabled = useGroupPattern.Checked; };
+
             select.Click += delegate { selectTemplates(); };
             selectAll.Click += delegate
             {
@@ -538,25 +568,13 @@ namespace Cliver.InvoiceParser
             };
         }
 
-        bool getBoolValue(DataGridViewRow r, string name)
-        {
-            bool? s = (bool?)r.Cells[name].Value;
-            return s == null ? false : (bool)s;
-        }
-
-        string getStringValue(DataGridViewRow r, string name)
-        {
-            string s = (string)r.Cells[name].Value;
-            return s == null ? "" : s;
-        }
-
         void selectTemplates()
         {
             foreach (DataGridViewRow r in templates.Rows)
             {
-                r.Selected = getBoolValue(r, "Active") == activePattern.Checked
-                     && Regex.IsMatch(getStringValue(r, "Name_"), Regex.Escape(namePattern.Text))
-                     && Regex.IsMatch(getStringValue(r, "Group"), Regex.Escape(groupPattern.Text));
+                r.Selected = (!activePattern.Enabled || (getBoolValue(r, "Active") == activePattern.Checked))
+                     && (!namePattern.Enabled || (string.IsNullOrEmpty(namePattern.Text) ? string.IsNullOrEmpty(getStringValue(r, "Name_")) : Regex.IsMatch(getStringValue(r, "Name_"), namePattern.Text, RegexOptions.IgnoreCase)))
+                     && (!groupPattern.Enabled || (string.IsNullOrEmpty(groupPattern.Text)? string.IsNullOrEmpty( getStringValue(r, "Group")) : Regex.IsMatch(getStringValue(r, "Group"), groupPattern.Text, RegexOptions.IgnoreCase)));
             }
         }
     }

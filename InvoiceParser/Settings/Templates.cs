@@ -45,7 +45,9 @@ namespace Cliver.InvoiceParser
                 if (InitialTemplate != null)
                 {
                     string ts = SerializationRoutines.Json.Serialize(InitialTemplate);
-                    return SerializationRoutines.Json.Deserialize<Template>(ts);
+                    Template t = SerializationRoutines.Json.Deserialize<Template>(ts);
+                    t.Name = "";
+                    return t;
                 }
                 return new Template
                 {
@@ -59,7 +61,7 @@ namespace Cliver.InvoiceParser
                         new Template.Field { Name = "PO#", Rectangle=new Template.RectangleF(0,0,10,10) },
                         new Template.Field { Name = "COST" , Rectangle=new Template.RectangleF(0,0,10,10)},
                     },
-                    Name = "-new-",
+                    Name = "",
                     FileFilterRegex = new Regex(@"\.pdf$", RegexOptions.IgnoreCase),
                     FindBestImageMatch = false,
                     FloatingAnchors = new List<Template.FloatingAnchor>(),

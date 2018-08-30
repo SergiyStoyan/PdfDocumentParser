@@ -67,12 +67,16 @@
             this.activeChange = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
             this.groupChange = new System.Windows.Forms.TextBox();
+            this.select = new System.Windows.Forms.Button();
             this.Active = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Name_ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Group = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Edit = new System.Windows.Forms.DataGridViewButtonColumn();
             this.Copy = new System.Windows.Forms.DataGridViewButtonColumn();
             this.Selected = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.select = new System.Windows.Forms.Button();
+            this.useActivePattern = new System.Windows.Forms.CheckBox();
+            this.useGroupPattern = new System.Windows.Forms.CheckBox();
+            this.useNamePattern = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.templates)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
@@ -94,7 +98,7 @@
             // bInputFolder
             // 
             this.bInputFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bInputFolder.Location = new System.Drawing.Point(689, 26);
+            this.bInputFolder.Location = new System.Drawing.Point(733, 26);
             this.bInputFolder.Name = "bInputFolder";
             this.bInputFolder.Size = new System.Drawing.Size(24, 23);
             this.bInputFolder.TabIndex = 1;
@@ -105,7 +109,7 @@
             // bOutputFolder
             // 
             this.bOutputFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bOutputFolder.Location = new System.Drawing.Point(689, 75);
+            this.bOutputFolder.Location = new System.Drawing.Point(733, 75);
             this.bOutputFolder.Name = "bOutputFolder";
             this.bOutputFolder.Size = new System.Drawing.Size(24, 23);
             this.bOutputFolder.TabIndex = 3;
@@ -119,7 +123,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.InputFolder.Location = new System.Drawing.Point(12, 29);
             this.InputFolder.Name = "InputFolder";
-            this.InputFolder.Size = new System.Drawing.Size(671, 20);
+            this.InputFolder.Size = new System.Drawing.Size(715, 20);
             this.InputFolder.TabIndex = 0;
             // 
             // OutputFolder
@@ -128,7 +132,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.OutputFolder.Location = new System.Drawing.Point(12, 75);
             this.OutputFolder.Name = "OutputFolder";
-            this.OutputFolder.Size = new System.Drawing.Size(671, 20);
+            this.OutputFolder.Size = new System.Drawing.Size(715, 20);
             this.OutputFolder.TabIndex = 2;
             // 
             // bExit
@@ -159,7 +163,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progress.Location = new System.Drawing.Point(12, 464);
             this.progress.Name = "progress";
-            this.progress.Size = new System.Drawing.Size(701, 12);
+            this.progress.Size = new System.Drawing.Size(745, 12);
             this.progress.TabIndex = 7;
             // 
             // label1
@@ -190,12 +194,13 @@
             this.Active,
             this.Name_,
             this.Group,
+            this.Edit,
             this.Copy,
             this.Selected});
             this.templates.Location = new System.Drawing.Point(15, 123);
             this.templates.Name = "templates";
             this.templates.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.templates.Size = new System.Drawing.Size(399, 311);
+            this.templates.Size = new System.Drawing.Size(443, 311);
             this.templates.TabIndex = 4;
             // 
             // label3
@@ -292,21 +297,24 @@
             this.flowLayoutPanel2.Controls.Add(this.bExit);
             this.flowLayoutPanel2.Controls.Add(this.bRun);
             this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(519, 484);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(563, 484);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Size = new System.Drawing.Size(194, 31);
             this.flowLayoutPanel2.TabIndex = 18;
             // 
             // namePattern
             // 
-            this.namePattern.Location = new System.Drawing.Point(67, 64);
+            this.namePattern.Location = new System.Drawing.Point(99, 64);
             this.namePattern.Name = "namePattern";
-            this.namePattern.Size = new System.Drawing.Size(206, 20);
+            this.namePattern.Size = new System.Drawing.Size(174, 20);
             this.namePattern.TabIndex = 19;
             // 
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.useNamePattern);
+            this.groupBox1.Controls.Add(this.useGroupPattern);
+            this.groupBox1.Controls.Add(this.useActivePattern);
             this.groupBox1.Controls.Add(this.select);
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.activePattern);
@@ -317,7 +325,7 @@
             this.groupBox1.Controls.Add(this.groupPattern);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.namePattern);
-            this.groupBox1.Location = new System.Drawing.Point(420, 107);
+            this.groupBox1.Location = new System.Drawing.Point(464, 107);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(293, 177);
             this.groupBox1.TabIndex = 20;
@@ -327,7 +335,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(23, 34);
+            this.label8.Location = new System.Drawing.Point(53, 34);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(40, 13);
             this.label8.TabIndex = 33;
@@ -336,7 +344,7 @@
             // activePattern
             // 
             this.activePattern.AutoSize = true;
-            this.activePattern.Location = new System.Drawing.Point(67, 34);
+            this.activePattern.Location = new System.Drawing.Point(99, 34);
             this.activePattern.Name = "activePattern";
             this.activePattern.Size = new System.Drawing.Size(15, 14);
             this.activePattern.TabIndex = 32;
@@ -372,7 +380,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(23, 98);
+            this.label5.Location = new System.Drawing.Point(57, 98);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(39, 13);
             this.label5.TabIndex = 22;
@@ -380,15 +388,15 @@
             // 
             // groupPattern
             // 
-            this.groupPattern.Location = new System.Drawing.Point(67, 95);
+            this.groupPattern.Location = new System.Drawing.Point(99, 95);
             this.groupPattern.Name = "groupPattern";
-            this.groupPattern.Size = new System.Drawing.Size(206, 20);
+            this.groupPattern.Size = new System.Drawing.Size(174, 20);
             this.groupPattern.TabIndex = 21;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(23, 67);
+            this.label4.Location = new System.Drawing.Point(55, 67);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(38, 13);
             this.label4.TabIndex = 20;
@@ -404,7 +412,7 @@
             this.groupBox2.Controls.Add(this.activeChange);
             this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.groupChange);
-            this.groupBox2.Location = new System.Drawing.Point(420, 290);
+            this.groupBox2.Location = new System.Drawing.Point(464, 290);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(293, 144);
             this.groupBox2.TabIndex = 26;
@@ -451,6 +459,8 @@
             // activeChange
             // 
             this.activeChange.AutoSize = true;
+            this.activeChange.Checked = true;
+            this.activeChange.CheckState = System.Windows.Forms.CheckState.Checked;
             this.activeChange.Location = new System.Drawing.Point(99, 33);
             this.activeChange.Name = "activeChange";
             this.activeChange.Size = new System.Drawing.Size(15, 14);
@@ -472,6 +482,15 @@
             this.groupChange.Name = "groupChange";
             this.groupChange.Size = new System.Drawing.Size(174, 20);
             this.groupChange.TabIndex = 21;
+            // 
+            // select
+            // 
+            this.select.Location = new System.Drawing.Point(15, 138);
+            this.select.Name = "select";
+            this.select.Size = new System.Drawing.Size(56, 23);
+            this.select.TabIndex = 34;
+            this.select.Text = "Apply";
+            this.select.UseVisualStyleBackColor = true;
             // 
             // Active
             // 
@@ -497,6 +516,15 @@
             this.Group.Name = "Group";
             this.Group.Width = 61;
             // 
+            // Edit
+            // 
+            this.Edit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Edit.HeaderText = "";
+            this.Edit.Name = "Edit";
+            this.Edit.Text = "Edit";
+            this.Edit.UseColumnTextForButtonValue = true;
+            this.Edit.Width = 21;
+            // 
             // Copy
             // 
             this.Copy.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
@@ -514,20 +542,44 @@
             this.Selected.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             this.Selected.Width = 21;
             // 
-            // select
+            // useActivePattern
             // 
-            this.select.Location = new System.Drawing.Point(26, 138);
-            this.select.Name = "select";
-            this.select.Size = new System.Drawing.Size(56, 23);
-            this.select.TabIndex = 34;
-            this.select.Text = "Apply";
-            this.select.UseVisualStyleBackColor = true;
+            this.useActivePattern.AutoSize = true;
+            this.useActivePattern.Checked = true;
+            this.useActivePattern.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.useActivePattern.Location = new System.Drawing.Point(15, 33);
+            this.useActivePattern.Name = "useActivePattern";
+            this.useActivePattern.Size = new System.Drawing.Size(15, 14);
+            this.useActivePattern.TabIndex = 35;
+            this.useActivePattern.UseVisualStyleBackColor = true;
+            // 
+            // useGroupPattern
+            // 
+            this.useGroupPattern.AutoSize = true;
+            this.useGroupPattern.Checked = true;
+            this.useGroupPattern.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.useGroupPattern.Location = new System.Drawing.Point(15, 97);
+            this.useGroupPattern.Name = "useGroupPattern";
+            this.useGroupPattern.Size = new System.Drawing.Size(15, 14);
+            this.useGroupPattern.TabIndex = 37;
+            this.useGroupPattern.UseVisualStyleBackColor = true;
+            // 
+            // useNamePattern
+            // 
+            this.useNamePattern.AutoSize = true;
+            this.useNamePattern.Checked = true;
+            this.useNamePattern.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.useNamePattern.Location = new System.Drawing.Point(15, 67);
+            this.useNamePattern.Name = "useNamePattern";
+            this.useNamePattern.Size = new System.Drawing.Size(15, 14);
+            this.useNamePattern.TabIndex = 38;
+            this.useNamePattern.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(725, 529);
+            this.ClientSize = new System.Drawing.Size(769, 529);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.flowLayoutPanel2);
@@ -596,11 +648,15 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.CheckBox activePattern;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Button select;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Active;
         private System.Windows.Forms.DataGridViewTextBoxColumn Name_;
         private System.Windows.Forms.DataGridViewTextBoxColumn Group;
+        private System.Windows.Forms.DataGridViewButtonColumn Edit;
         private System.Windows.Forms.DataGridViewButtonColumn Copy;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Selected;
-        private System.Windows.Forms.Button select;
+        private System.Windows.Forms.CheckBox useGroupPattern;
+        private System.Windows.Forms.CheckBox useActivePattern;
+        private System.Windows.Forms.CheckBox useNamePattern;
     }
 }
