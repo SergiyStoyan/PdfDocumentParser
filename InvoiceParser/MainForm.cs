@@ -135,6 +135,7 @@ namespace Cliver.InvoiceParser
 
                 t.Name = (string)r.Cells["Name_"].Value;
                 t.Active = (bool)r.Cells["Active"].Value;
+                t.Group = (string)r.Cells["Group"].Value;
             };
 
             templates.RowValidating += delegate (object sender, DataGridViewCellCancelEventArgs e)
@@ -170,6 +171,7 @@ namespace Cliver.InvoiceParser
                         int i = templates.Rows.Add();
                         templates.Rows[i].Selected = true;
                         templates.Rows[i].Cells["Active"].Value = true;
+                        templates.Rows[i].Cells["Group"].Value = "";
                     }
                     catch { }
                     return;
@@ -181,8 +183,28 @@ namespace Cliver.InvoiceParser
                 if (e.RowIndex < 0)
                     return;
                 DataGridViewRow r = templates.Rows[e.RowIndex];
-                if (e.ColumnIndex >= 0 && templates.Columns[e.ColumnIndex].Name == "Edit")
-                    editTemplate(r);
+                if (e.ColumnIndex < 0)
+                    return;
+                switch (templates.Columns[e.ColumnIndex].Name)
+                {
+                    case "Edit":
+                        editTemplate(r);
+                        break;
+                    case "Copy":
+                        Template t = (Template)r.Tag;
+                        if (t == null)
+                            return;
+                        Template t2 = SerializationRoutines.Json.Deserialize<Template>(SerializationRoutines.Json.Serialize(t));
+                        t2.Name = "";
+                        int i = templates.Rows.Add(new DataGridViewRow());
+                        DataGridViewRow r2 = templates.Rows[i];
+                        r2.Cells["Name_"].Value = t2.Name.Trim();
+                        r2.Cells["Active"].Value = t2.Active;
+                        r2.Cells["Group"].Value = t2.Group;
+                        r2.Tag = t2;
+                        editTemplate(r2);
+                        break;
+                }
             };
 
             templates.Validating += delegate (object sender, CancelEventArgs e)
@@ -285,6 +307,7 @@ namespace Cliver.InvoiceParser
                     DataGridViewRow r = templates.Rows[i];
                     r.Cells["Name_"].Value = t.Name.Trim();
                     r.Cells["Active"].Value = t.Active;
+                    r.Cells["Group"].Value = t.Group;
                     r.Tag = t;
                 }
                 //templates.Columns["Name_"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;

@@ -35,13 +35,13 @@
             this.IgnoreHidddenFiles = new System.Windows.Forms.CheckBox();
             this.ReadInputFolderRecursively = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.DetectTemplateInDocumentFirstPages = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.bSynchronizedFolder = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.SynchronizationFolder = new System.Windows.Forms.TextBox();
             this.Synchronize = new System.Windows.Forms.CheckBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.DetectTemplateInDocumentFirstPages = new System.Windows.Forms.TextBox();
             this.flowLayoutPanel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -127,6 +127,22 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Input";
             // 
+            // DetectTemplateInDocumentFirstPages
+            // 
+            this.DetectTemplateInDocumentFirstPages.Location = new System.Drawing.Point(214, 76);
+            this.DetectTemplateInDocumentFirstPages.Name = "DetectTemplateInDocumentFirstPages";
+            this.DetectTemplateInDocumentFirstPages.Size = new System.Drawing.Size(22, 20);
+            this.DetectTemplateInDocumentFirstPages.TabIndex = 63;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(13, 79);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(195, 13);
+            this.label2.TabIndex = 61;
+            this.label2.Text = "To Detect Template, Look In Pages: 1 -";
+            // 
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -180,22 +196,6 @@
             this.Synchronize.Text = "Synchronize";
             this.Synchronize.UseVisualStyleBackColor = true;
             this.Synchronize.CheckedChanged += new System.EventHandler(this.Synchronize_CheckedChanged);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 79);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(223, 13);
-            this.label2.TabIndex = 61;
-            this.label2.Text = "While Detecting Template, Look In Pages: 1 -";
-            // 
-            // DetectTemplateInDocumentFirstPages
-            // 
-            this.DetectTemplateInDocumentFirstPages.Location = new System.Drawing.Point(242, 76);
-            this.DetectTemplateInDocumentFirstPages.Name = "DetectTemplateInDocumentFirstPages";
-            this.DetectTemplateInDocumentFirstPages.Size = new System.Drawing.Size(22, 20);
-            this.DetectTemplateInDocumentFirstPages.TabIndex = 63;
             // 
             // SettingsForm
             // 
