@@ -47,8 +47,8 @@ namespace Cliver.InvoiceParser
                 {
                     synchronize = synchronization.Synchronize;
                     synchronizeFileFilter = synchronization.SynchronizeFileFilter;
-                    downloadFolder = FileSystemRoutines.CreateDirectory(synchronization.SynchronizationFolder + "\\download");
-                    uploadFolder = FileSystemRoutines.CreateDirectory(synchronization.SynchronizationFolder + "\\upload");
+                    downloadFolder = FileSystemRoutines.CreateDirectory(synchronization.SynchronizationFolder + "\\_download");
+                    uploadFolder = FileSystemRoutines.CreateDirectory(synchronization.SynchronizationFolder + "\\_upload");
 
                     if (synchronization.Synchronize && !string.IsNullOrWhiteSpace(synchronization.SynchronizationFolder))
                     {
@@ -74,6 +74,11 @@ namespace Cliver.InvoiceParser
                         if (synchronizeFileFilter == null || !synchronizeFileFilter.IsMatch(file))
                             continue;
                         pollUploadFile(file);
+                    }
+                    foreach (string file in Directory.GetFiles(downloadFolder))
+                    {
+                        if (synchronizeFileFilter == null || !synchronizeFileFilter.IsMatch(file))
+                            continue;
                         pollDownloadFile(file);
                     }
                     Thread.Sleep(10000);
@@ -86,7 +91,7 @@ namespace Cliver.InvoiceParser
                     DateTime uploadLWT = File.GetLastWriteTime(file);
                     if (uploadLWT.AddSeconds(10) > DateTime.Now)//it is being written
                         return;
-                    string file2 = uploadFolder + "\\" + PathRoutines.GetFileNameFromPath(file);
+                    string file2 = PathRoutines.GetPathMirroredInDir(file, Config.StorageDir, uploadFolder);
                     if (File.Exists(file2) && uploadLWT <= File.GetLastWriteTime(file2))
                         return;
                     copy(file, file2);
@@ -111,16 +116,14 @@ namespace Cliver.InvoiceParser
                         Thread.Sleep(1000);
                     }
             }
-            static void pollDownloadFile(string file2)
+            static void pollDownloadFile(string file)
             {
                 try
                 {
-                    string file = downloadFolder + "\\" + PathRoutines.GetFileNameFromPath(file2);
-                    if (!File.Exists(file))
-                        return;
                     DateTime downloadLWT = File.GetLastWriteTime(file);
                     if (downloadLWT.AddSeconds(100) > DateTime.Now)//it is being written
                         return;
+                    string file2 = PathRoutines.GetPathMirroredInDir(file, downloadFolder, Config.StorageDir);
                     if (downloadLWT <= File.GetLastWriteTime(file2))
                         return;
                     copy(file, file2);
@@ -147,7 +150,7 @@ namespace Cliver.InvoiceParser
             {
                 try
                 {
-                    copy(file, uploadFolder + "\\" + PathRoutines.GetFileNameFromPath(file));
+                    copy(file, PathRoutines.GetPathMirroredInDir(file, Config.StorageDir, uploadFolder));
                 }
                 catch (Exception e)
                 {

@@ -24,6 +24,7 @@ namespace Cliver.InvoiceParser
         {
             public bool Active = true;
             public Cliver.PdfDocumentParser.Template BaseTemplate;
+            public string Group;
         }
 
         public class Templates2Settings : Cliver.Settings

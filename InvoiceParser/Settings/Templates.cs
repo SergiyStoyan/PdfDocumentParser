@@ -24,6 +24,7 @@ namespace Cliver.InvoiceParser
         {
             public Template InitialTemplate;
             public List<Template> Templates = new List<Template>();//preserving order of matching: only the first match is to be applied
+            public string Group;
 
             public override void Loaded()
             {

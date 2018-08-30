@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.bAbout = new System.Windows.Forms.Button();
             this.bInputFolder = new System.Windows.Forms.Button();
             this.bOutputFolder = new System.Windows.Forms.Button();
@@ -41,9 +40,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.templates = new System.Windows.Forms.DataGridView();
-            this.Active = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.Name_ = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Edit = new System.Windows.Forms.DataGridViewButtonColumn();
             this.label3 = new System.Windows.Forms.Label();
             this.bLog = new System.Windows.Forms.Button();
             this.bOutput = new System.Windows.Forms.Button();
@@ -53,6 +49,11 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.help = new System.Windows.Forms.Button();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.Selected = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Active = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Name_ = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Group = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Copy = new System.Windows.Forms.DataGridViewButtonColumn();
             ((System.ComponentModel.ISupportInitialize)(this.templates)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
@@ -165,46 +166,17 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.templates.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.templates.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Selected,
             this.Active,
             this.Name_,
-            this.Edit});
+            this.Group,
+            this.Copy});
             this.templates.Location = new System.Drawing.Point(15, 123);
             this.templates.MultiSelect = false;
             this.templates.Name = "templates";
             this.templates.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.templates.Size = new System.Drawing.Size(698, 311);
             this.templates.TabIndex = 4;
-            // 
-            // Active
-            // 
-            this.Active.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-            this.Active.HeaderText = "Active";
-            this.Active.Name = "Active";
-            this.Active.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.Active.Width = 62;
-            // 
-            // Name_
-            // 
-            this.Name_.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            this.Name_.DefaultCellStyle = dataGridViewCellStyle1;
-            this.Name_.HeaderText = "Name";
-            this.Name_.Name = "Name_";
-            this.Name_.ReadOnly = true;
-            this.Name_.Width = 60;
-            // 
-            // Edit
-            // 
-            this.Edit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.Edit.DefaultCellStyle = dataGridViewCellStyle2;
-            this.Edit.HeaderText = "";
-            this.Edit.Name = "Edit";
-            this.Edit.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.Edit.Text = "Edit";
-            this.Edit.UseColumnTextForButtonValue = true;
-            this.Edit.Width = 21;
             // 
             // label3
             // 
@@ -305,6 +277,46 @@
             this.flowLayoutPanel2.Size = new System.Drawing.Size(194, 31);
             this.flowLayoutPanel2.TabIndex = 18;
             // 
+            // Selected
+            // 
+            this.Selected.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.Selected.HeaderText = "Selected";
+            this.Selected.Name = "Selected";
+            this.Selected.Width = 55;
+            // 
+            // Active
+            // 
+            this.Active.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.Active.HeaderText = "Active";
+            this.Active.Name = "Active";
+            this.Active.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.Active.Width = 62;
+            // 
+            // Name_
+            // 
+            this.Name_.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            this.Name_.DefaultCellStyle = dataGridViewCellStyle1;
+            this.Name_.HeaderText = "Name";
+            this.Name_.Name = "Name_";
+            this.Name_.ReadOnly = true;
+            this.Name_.Width = 60;
+            // 
+            // Group
+            // 
+            this.Group.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Group.HeaderText = "Group";
+            this.Group.Name = "Group";
+            this.Group.Width = 61;
+            // 
+            // Copy
+            // 
+            this.Copy.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.Copy.HeaderText = "Copy";
+            this.Copy.Name = "Copy";
+            this.Copy.Text = "Copy";
+            this.Copy.Width = 37;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -354,8 +366,10 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
         private System.Windows.Forms.Button help;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn Selected;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Active;
         private System.Windows.Forms.DataGridViewTextBoxColumn Name_;
-        private System.Windows.Forms.DataGridViewButtonColumn Edit;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Group;
+        private System.Windows.Forms.DataGridViewButtonColumn Copy;
     }
 }
