@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.bAbout = new System.Windows.Forms.Button();
             this.bInputFolder = new System.Windows.Forms.Button();
             this.bOutputFolder = new System.Windows.Forms.Button();
@@ -49,29 +49,30 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.help = new System.Windows.Forms.Button();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.namePattern = new System.Windows.Forms.TextBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.activePattern = new System.Windows.Forms.CheckBox();
+            this.selectInvertion = new System.Windows.Forms.Button();
+            this.selectNothing = new System.Windows.Forms.Button();
+            this.selectAll = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.groupPattern = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.applyActiveChange = new System.Windows.Forms.Button();
+            this.applyGroupChange = new System.Windows.Forms.Button();
+            this.activeChange = new System.Windows.Forms.CheckBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.groupChange = new System.Windows.Forms.TextBox();
             this.Active = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Name_ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Group = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Copy = new System.Windows.Forms.DataGridViewButtonColumn();
             this.Selected = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.namePattern = new System.Windows.Forms.TextBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.groupPattern = new System.Windows.Forms.TextBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.selectedGroup = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.activePattern = new System.Windows.Forms.CheckBox();
-            this.label9 = new System.Windows.Forms.Label();
+            this.select = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.templates)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
@@ -104,7 +105,7 @@
             // bOutputFolder
             // 
             this.bOutputFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bOutputFolder.Location = new System.Drawing.Point(689, 74);
+            this.bOutputFolder.Location = new System.Drawing.Point(689, 75);
             this.bOutputFolder.Name = "bOutputFolder";
             this.bOutputFolder.Size = new System.Drawing.Size(24, 23);
             this.bOutputFolder.TabIndex = 3;
@@ -125,7 +126,7 @@
             // 
             this.OutputFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.OutputFolder.Location = new System.Drawing.Point(12, 74);
+            this.OutputFolder.Location = new System.Drawing.Point(12, 75);
             this.OutputFolder.Name = "OutputFolder";
             this.OutputFolder.Size = new System.Drawing.Size(671, 20);
             this.OutputFolder.TabIndex = 2;
@@ -173,7 +174,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 58);
+            this.label2.Location = new System.Drawing.Point(12, 59);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(74, 13);
             this.label2.TabIndex = 9;
@@ -296,6 +297,182 @@
             this.flowLayoutPanel2.Size = new System.Drawing.Size(194, 31);
             this.flowLayoutPanel2.TabIndex = 18;
             // 
+            // namePattern
+            // 
+            this.namePattern.Location = new System.Drawing.Point(67, 64);
+            this.namePattern.Name = "namePattern";
+            this.namePattern.Size = new System.Drawing.Size(206, 20);
+            this.namePattern.TabIndex = 19;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.select);
+            this.groupBox1.Controls.Add(this.label8);
+            this.groupBox1.Controls.Add(this.activePattern);
+            this.groupBox1.Controls.Add(this.selectInvertion);
+            this.groupBox1.Controls.Add(this.selectNothing);
+            this.groupBox1.Controls.Add(this.selectAll);
+            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Controls.Add(this.groupPattern);
+            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.namePattern);
+            this.groupBox1.Location = new System.Drawing.Point(420, 107);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(293, 177);
+            this.groupBox1.TabIndex = 20;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Select";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(23, 34);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(40, 13);
+            this.label8.TabIndex = 33;
+            this.label8.Text = "Active:";
+            // 
+            // activePattern
+            // 
+            this.activePattern.AutoSize = true;
+            this.activePattern.Location = new System.Drawing.Point(67, 34);
+            this.activePattern.Name = "activePattern";
+            this.activePattern.Size = new System.Drawing.Size(15, 14);
+            this.activePattern.TabIndex = 32;
+            this.activePattern.UseVisualStyleBackColor = true;
+            // 
+            // selectInvertion
+            // 
+            this.selectInvertion.Location = new System.Drawing.Point(217, 138);
+            this.selectInvertion.Name = "selectInvertion";
+            this.selectInvertion.Size = new System.Drawing.Size(56, 23);
+            this.selectInvertion.TabIndex = 28;
+            this.selectInvertion.Text = "Invert";
+            this.selectInvertion.UseVisualStyleBackColor = true;
+            // 
+            // selectNothing
+            // 
+            this.selectNothing.Location = new System.Drawing.Point(155, 138);
+            this.selectNothing.Name = "selectNothing";
+            this.selectNothing.Size = new System.Drawing.Size(56, 23);
+            this.selectNothing.TabIndex = 27;
+            this.selectNothing.Text = "Nothing";
+            this.selectNothing.UseVisualStyleBackColor = true;
+            // 
+            // selectAll
+            // 
+            this.selectAll.Location = new System.Drawing.Point(93, 138);
+            this.selectAll.Name = "selectAll";
+            this.selectAll.Size = new System.Drawing.Size(56, 23);
+            this.selectAll.TabIndex = 26;
+            this.selectAll.Text = "All";
+            this.selectAll.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(23, 98);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(39, 13);
+            this.label5.TabIndex = 22;
+            this.label5.Text = "Group:";
+            // 
+            // groupPattern
+            // 
+            this.groupPattern.Location = new System.Drawing.Point(67, 95);
+            this.groupPattern.Name = "groupPattern";
+            this.groupPattern.Size = new System.Drawing.Size(206, 20);
+            this.groupPattern.TabIndex = 21;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(23, 67);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(38, 13);
+            this.label4.TabIndex = 20;
+            this.label4.Text = "Name:";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.label9);
+            this.groupBox2.Controls.Add(this.label7);
+            this.groupBox2.Controls.Add(this.applyActiveChange);
+            this.groupBox2.Controls.Add(this.applyGroupChange);
+            this.groupBox2.Controls.Add(this.activeChange);
+            this.groupBox2.Controls.Add(this.label6);
+            this.groupBox2.Controls.Add(this.groupChange);
+            this.groupBox2.Location = new System.Drawing.Point(420, 290);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(293, 144);
+            this.groupBox2.TabIndex = 26;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Change Selected";
+            // 
+            // label9
+            // 
+            this.label9.Location = new System.Drawing.Point(12, 102);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(261, 29);
+            this.label9.TabIndex = 32;
+            this.label9.Text = "To drop recent changes, close the application without entering Templates table!";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(56, 33);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(40, 13);
+            this.label7.TabIndex = 31;
+            this.label7.Text = "Active:";
+            // 
+            // applyActiveChange
+            // 
+            this.applyActiveChange.AutoSize = true;
+            this.applyActiveChange.Location = new System.Drawing.Point(15, 28);
+            this.applyActiveChange.Name = "applyActiveChange";
+            this.applyActiveChange.Size = new System.Drawing.Size(35, 23);
+            this.applyActiveChange.TabIndex = 30;
+            this.applyActiveChange.Text = "Set";
+            this.applyActiveChange.UseVisualStyleBackColor = true;
+            // 
+            // applyGroupChange
+            // 
+            this.applyGroupChange.AutoSize = true;
+            this.applyGroupChange.Location = new System.Drawing.Point(15, 63);
+            this.applyGroupChange.Name = "applyGroupChange";
+            this.applyGroupChange.Size = new System.Drawing.Size(35, 23);
+            this.applyGroupChange.TabIndex = 29;
+            this.applyGroupChange.Text = "Set";
+            this.applyGroupChange.UseVisualStyleBackColor = true;
+            // 
+            // activeChange
+            // 
+            this.activeChange.AutoSize = true;
+            this.activeChange.Location = new System.Drawing.Point(99, 33);
+            this.activeChange.Name = "activeChange";
+            this.activeChange.Size = new System.Drawing.Size(15, 14);
+            this.activeChange.TabIndex = 25;
+            this.activeChange.UseVisualStyleBackColor = true;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(56, 68);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(39, 13);
+            this.label6.TabIndex = 22;
+            this.label6.Text = "Group:";
+            // 
+            // groupChange
+            // 
+            this.groupChange.Location = new System.Drawing.Point(99, 65);
+            this.groupChange.Name = "groupChange";
+            this.groupChange.Size = new System.Drawing.Size(174, 20);
+            this.groupChange.TabIndex = 21;
+            // 
             // Active
             // 
             this.Active.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
@@ -307,8 +484,8 @@
             // Name_
             // 
             this.Name_.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            this.Name_.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            this.Name_.DefaultCellStyle = dataGridViewCellStyle1;
             this.Name_.HeaderText = "Name";
             this.Name_.Name = "Name_";
             this.Name_.Width = 60;
@@ -334,182 +511,17 @@
             this.Selected.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.Selected.HeaderText = "";
             this.Selected.Name = "Selected";
+            this.Selected.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             this.Selected.Width = 21;
             // 
-            // namePattern
+            // select
             // 
-            this.namePattern.Location = new System.Drawing.Point(67, 64);
-            this.namePattern.Name = "namePattern";
-            this.namePattern.Size = new System.Drawing.Size(206, 20);
-            this.namePattern.TabIndex = 19;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.label8);
-            this.groupBox1.Controls.Add(this.activePattern);
-            this.groupBox1.Controls.Add(this.button3);
-            this.groupBox1.Controls.Add(this.button2);
-            this.groupBox1.Controls.Add(this.button1);
-            this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.groupPattern);
-            this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Controls.Add(this.namePattern);
-            this.groupBox1.Location = new System.Drawing.Point(420, 107);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(293, 177);
-            this.groupBox1.TabIndex = 20;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Select";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(23, 67);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(38, 13);
-            this.label4.TabIndex = 20;
-            this.label4.Text = "Name:";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(23, 98);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(39, 13);
-            this.label5.TabIndex = 22;
-            this.label5.Text = "Group:";
-            // 
-            // groupPattern
-            // 
-            this.groupPattern.Location = new System.Drawing.Point(67, 95);
-            this.groupPattern.Name = "groupPattern";
-            this.groupPattern.Size = new System.Drawing.Size(206, 20);
-            this.groupPattern.TabIndex = 21;
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.label9);
-            this.groupBox2.Controls.Add(this.label7);
-            this.groupBox2.Controls.Add(this.button5);
-            this.groupBox2.Controls.Add(this.button4);
-            this.groupBox2.Controls.Add(this.checkBox1);
-            this.groupBox2.Controls.Add(this.label6);
-            this.groupBox2.Controls.Add(this.selectedGroup);
-            this.groupBox2.Location = new System.Drawing.Point(420, 290);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(293, 144);
-            this.groupBox2.TabIndex = 26;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Change Selected";
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(99, 33);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(15, 14);
-            this.checkBox1.TabIndex = 25;
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // selectedGroup
-            // 
-            this.selectedGroup.Location = new System.Drawing.Point(99, 65);
-            this.selectedGroup.Name = "selectedGroup";
-            this.selectedGroup.Size = new System.Drawing.Size(174, 20);
-            this.selectedGroup.TabIndex = 21;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(26, 138);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 26;
-            this.button1.Text = "All";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(107, 138);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 27;
-            this.button2.Text = "Nothing";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(188, 138);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 28;
-            this.button3.Text = "Invert";
-            this.button3.UseVisualStyleBackColor = true;
-            // 
-            // button4
-            // 
-            this.button4.AutoSize = true;
-            this.button4.Location = new System.Drawing.Point(15, 63);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(35, 23);
-            this.button4.TabIndex = 29;
-            this.button4.Text = "Set";
-            this.button4.UseVisualStyleBackColor = true;
-            // 
-            // button5
-            // 
-            this.button5.AutoSize = true;
-            this.button5.Location = new System.Drawing.Point(15, 28);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(35, 23);
-            this.button5.TabIndex = 30;
-            this.button5.Text = "Set";
-            this.button5.UseVisualStyleBackColor = true;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(56, 68);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(39, 13);
-            this.label6.TabIndex = 22;
-            this.label6.Text = "Group:";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(56, 33);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(40, 13);
-            this.label7.TabIndex = 31;
-            this.label7.Text = "Active:";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(23, 34);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(40, 13);
-            this.label8.TabIndex = 33;
-            this.label8.Text = "Active:";
-            // 
-            // activePattern
-            // 
-            this.activePattern.AutoSize = true;
-            this.activePattern.Location = new System.Drawing.Point(67, 34);
-            this.activePattern.Name = "activePattern";
-            this.activePattern.Size = new System.Drawing.Size(15, 14);
-            this.activePattern.TabIndex = 32;
-            this.activePattern.UseVisualStyleBackColor = true;
-            // 
-            // label9
-            // 
-            this.label9.Location = new System.Drawing.Point(12, 102);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(261, 29);
-            this.label9.TabIndex = 32;
-            this.label9.Text = "To drop recent changes, close the application without entering Templates table!";
+            this.select.Location = new System.Drawing.Point(26, 138);
+            this.select.Name = "select";
+            this.select.Size = new System.Drawing.Size(56, 23);
+            this.select.TabIndex = 34;
+            this.select.Text = "Apply";
+            this.select.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -566,28 +578,29 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
         private System.Windows.Forms.Button help;
+        private System.Windows.Forms.TextBox namePattern;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button selectInvertion;
+        private System.Windows.Forms.Button selectNothing;
+        private System.Windows.Forms.Button selectAll;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox groupPattern;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.CheckBox activeChange;
+        private System.Windows.Forms.TextBox groupChange;
+        private System.Windows.Forms.Button applyGroupChange;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button applyActiveChange;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.CheckBox activePattern;
+        private System.Windows.Forms.Label label9;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Active;
         private System.Windows.Forms.DataGridViewTextBoxColumn Name_;
         private System.Windows.Forms.DataGridViewTextBoxColumn Group;
         private System.Windows.Forms.DataGridViewButtonColumn Copy;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Selected;
-        private System.Windows.Forms.TextBox namePattern;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox groupPattern;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.TextBox selectedGroup;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.CheckBox activePattern;
-        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Button select;
     }
 }

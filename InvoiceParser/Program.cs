@@ -14,15 +14,12 @@ namespace Cliver.InvoiceParser
     /*
  TBD:
 - tutorial;
-
- - Template not enherited but embedded
-
 - select by name, group;
 - set Active, Group for all selected;
+
+ - ? Template not enherited but embedded
  - MainForm to WPF;
-
 - store each template in separate file;
-
 
 - switch to Tesseract.4
 

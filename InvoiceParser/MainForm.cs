@@ -48,6 +48,8 @@ namespace Cliver.InvoiceParser
 
             LoadTemplates();
 
+            initiateSelectionEngine();
+
             Active.ValueType = typeof(bool);
 
             templates.CellValidating += delegate (object sender, DataGridViewCellValidatingEventArgs e)
@@ -124,7 +126,7 @@ namespace Cliver.InvoiceParser
                 if (e.RowIndex < 0)
                     return;
 
-                var r = templates.Rows[e.RowIndex];
+                var r = templates.Rows[e.RowIndex];                  
                 if (r.Tag == null)
                 {
                     //editTemplate(r);
@@ -161,6 +163,7 @@ namespace Cliver.InvoiceParser
 
             templates.SelectionChanged += delegate (object sender, EventArgs e)
             {
+                return;
                 if (templates.SelectedRows.Count < 1)
                     return;
                 var r = templates.SelectedRows[0];
@@ -218,11 +221,11 @@ namespace Cliver.InvoiceParser
             if (string.IsNullOrWhiteSpace(Settings.General.OutputFolder))
                 OutputFolder.Text = Log.AppDir;
         }
-        
+
         void editTemplate(DataGridViewRow r)
         {
             TemplateForm tf;
-            if(rows2TemplateForm.TryGetValue(r, out tf)&&!tf.IsDisposed)
+            if (rows2TemplateForm.TryGetValue(r, out tf) && !tf.IsDisposed)
             {
                 tf.Show();
                 tf.Activate();
@@ -259,7 +262,7 @@ namespace Cliver.InvoiceParser
             rows2TemplateForm[r] = tf;
         }
         Dictionary<DataGridViewRow, TemplateForm> rows2TemplateForm = new Dictionary<DataGridViewRow, TemplateForm>();
-        
+
         public class TemplateManager : TemplateForm.TemplateManager
         {
             static internal DataGridView Templates;
@@ -488,6 +491,73 @@ namespace Cliver.InvoiceParser
         {
             PdfDocumentParser.SettingsForm sf = new PdfDocumentParser.SettingsForm();
             sf.ShowDialog();
+        }
+
+        void initiateSelectionEngine()
+        {
+            templates.SelectionChanged += delegate
+            {
+                foreach (DataGridViewRow r in templates.Rows)
+                    r.Cells["Selected"].Value = r.Selected;
+            };
+            
+            select.Click += delegate { selectTemplates(); };
+            selectAll.Click += delegate
+            {
+                foreach (DataGridViewRow r in templates.Rows)
+                {
+                    r.Selected = true;
+                }
+            };
+            selectNothing.Click += delegate
+            {
+                foreach (DataGridViewRow r in templates.Rows)
+                {
+                    r.Selected = false;
+                }
+            };
+            selectInvertion.Click += delegate
+            {
+                foreach (DataGridViewRow r in templates.Rows)
+                {
+                    r.Selected = !r.Selected;
+                }
+            };
+
+            applyActiveChange.Click += delegate
+            {
+                foreach (DataGridViewRow r in templates.Rows)
+                    if (r.Selected)
+                        r.Cells["Active"].Value = activeChange.Checked;
+            };
+            applyGroupChange.Click += delegate
+            {
+                foreach (DataGridViewRow r in templates.Rows)
+                    if (r.Selected)
+                        r.Cells["Group"].Value = groupChange.Text;
+            };
+        }
+
+        bool getBoolValue(DataGridViewRow r, string name)
+        {
+            bool? s = (bool?)r.Cells[name].Value;
+            return s == null ? false : (bool)s;
+        }
+
+        string getStringValue(DataGridViewRow r, string name)
+        {
+            string s = (string)r.Cells[name].Value;
+            return s == null ? "" : s;
+        }
+
+        void selectTemplates()
+        {
+            foreach (DataGridViewRow r in templates.Rows)
+            {
+                r.Selected = getBoolValue(r, "Active") == activePattern.Checked
+                     && Regex.IsMatch(getStringValue(r, "Name_"), Regex.Escape(namePattern.Text))
+                     && Regex.IsMatch(getStringValue(r, "Group"), Regex.Escape(groupPattern.Text));
+            }
         }
     }
 }
