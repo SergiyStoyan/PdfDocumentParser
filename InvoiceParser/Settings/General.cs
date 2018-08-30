@@ -32,6 +32,7 @@ namespace Cliver.InvoiceParser
             public string OutputFolder;
             public bool IgnoreHidddenFiles = true;
             public bool ReadInputFolderRecursively = false;
+            public int MaxPageNumberToDetectTemplate = 3;
 
             public System.Drawing.Color StampColor = System.Drawing.Color.Red;
             
