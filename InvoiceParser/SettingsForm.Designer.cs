@@ -173,9 +173,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 55);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(106, 13);
+            this.label1.Size = new System.Drawing.Size(117, 13);
             this.label1.TabIndex = 60;
-            this.label1.Text = "Synchronized Folder:";
+            this.label1.Text = "Synchronization Folder:";
             // 
             // SynchronizationFolder
             // 
