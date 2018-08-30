@@ -163,22 +163,21 @@ namespace Cliver.InvoiceParser
 
             templates.SelectionChanged += delegate (object sender, EventArgs e)
             {
-                return;
-                if (templates.SelectedRows.Count < 1)
-                    return;
-                var r = templates.SelectedRows[0];
-                if (r.IsNewRow)//hacky forcing commit a newly added row and display the blank row
-                {
-                    try
-                    {
-                        int i = templates.Rows.Add();
-                        templates.Rows[i].Selected = true;
-                        templates.Rows[i].Cells["Active"].Value = true;
-                        templates.Rows[i].Cells["Group"].Value = "";
-                    }
-                    catch { }
-                    return;
-                }
+                //if (templates.SelectedRows.Count < 1)
+                //    return;
+                //var r = templates.SelectedRows[0];
+                //if (r.IsNewRow)//hacky forcing commit a newly added row and display the blank row
+                //{
+                //    try
+                //    {
+                //        int i = templates.Rows.Add();
+                //        templates.Rows[i].Selected = true;
+                //        templates.Rows[i].Cells["Active"].Value = true;
+                //        templates.Rows[i].Cells["Group"].Value = "";
+                //    }
+                //    catch { }
+                //    return;
+                //}
             };
 
             templates.CellClick += delegate (object sender, DataGridViewCellEventArgs e)

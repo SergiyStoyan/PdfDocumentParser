@@ -335,7 +335,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(53, 34);
+            this.label8.Location = new System.Drawing.Point(53, 35);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(40, 13);
             this.label8.TabIndex = 33;
@@ -344,7 +344,7 @@
             // activePattern
             // 
             this.activePattern.AutoSize = true;
-            this.activePattern.Location = new System.Drawing.Point(99, 34);
+            this.activePattern.Location = new System.Drawing.Point(99, 35);
             this.activePattern.Name = "activePattern";
             this.activePattern.Size = new System.Drawing.Size(15, 14);
             this.activePattern.TabIndex = 32;
@@ -547,7 +547,7 @@
             this.useActivePattern.AutoSize = true;
             this.useActivePattern.Checked = true;
             this.useActivePattern.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.useActivePattern.Location = new System.Drawing.Point(15, 33);
+            this.useActivePattern.Location = new System.Drawing.Point(16, 35);
             this.useActivePattern.Name = "useActivePattern";
             this.useActivePattern.Size = new System.Drawing.Size(15, 14);
             this.useActivePattern.TabIndex = 35;
@@ -558,7 +558,7 @@
             this.useGroupPattern.AutoSize = true;
             this.useGroupPattern.Checked = true;
             this.useGroupPattern.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.useGroupPattern.Location = new System.Drawing.Point(15, 97);
+            this.useGroupPattern.Location = new System.Drawing.Point(15, 98);
             this.useGroupPattern.Name = "useGroupPattern";
             this.useGroupPattern.Size = new System.Drawing.Size(15, 14);
             this.useGroupPattern.TabIndex = 37;
