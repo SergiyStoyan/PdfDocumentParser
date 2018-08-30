@@ -35,7 +35,7 @@
             this.IgnoreHidddenFiles = new System.Windows.Forms.CheckBox();
             this.ReadInputFolderRecursively = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.DetectTemplateInDocumentFirstPages = new System.Windows.Forms.TextBox();
+            this.MaxPageNumberToDetectTemplate = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.bSynchronizedFolder = new System.Windows.Forms.Button();
@@ -116,7 +116,7 @@
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.DetectTemplateInDocumentFirstPages);
+            this.groupBox2.Controls.Add(this.MaxPageNumberToDetectTemplate);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.IgnoreHidddenFiles);
             this.groupBox2.Controls.Add(this.ReadInputFolderRecursively);
@@ -127,12 +127,12 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Input";
             // 
-            // DetectTemplateInDocumentFirstPages
+            // MaxPageNumberToDetectTemplate
             // 
-            this.DetectTemplateInDocumentFirstPages.Location = new System.Drawing.Point(214, 76);
-            this.DetectTemplateInDocumentFirstPages.Name = "DetectTemplateInDocumentFirstPages";
-            this.DetectTemplateInDocumentFirstPages.Size = new System.Drawing.Size(22, 20);
-            this.DetectTemplateInDocumentFirstPages.TabIndex = 63;
+            this.MaxPageNumberToDetectTemplate.Location = new System.Drawing.Point(214, 76);
+            this.MaxPageNumberToDetectTemplate.Name = "MaxPageNumberToDetectTemplate";
+            this.MaxPageNumberToDetectTemplate.Size = new System.Drawing.Size(22, 20);
+            this.MaxPageNumberToDetectTemplate.TabIndex = 63;
             // 
             // label2
             // 
@@ -229,7 +229,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox SynchronizationFolder;
         private System.Windows.Forms.Button bSynchronizedFolder;
-        private System.Windows.Forms.TextBox DetectTemplateInDocumentFirstPages;
+        private System.Windows.Forms.TextBox MaxPageNumberToDetectTemplate;
         private System.Windows.Forms.Label label2;
     }
 }

@@ -54,7 +54,7 @@ namespace Cliver.InvoiceParser
         {
             IgnoreHidddenFiles.Checked = Settings.General.IgnoreHidddenFiles;
             ReadInputFolderRecursively.Checked = Settings.General.ReadInputFolderRecursively;
-            DetectTemplateInDocumentFirstPages.Text = Settings.General.DetectTemplateInDocumentFirstPages.ToString();
+            MaxPageNumberToDetectTemplate.Text = Settings.General.MaxPageNumberToDetectTemplate.ToString();
 
             Synchronize.Checked = Settings.Synchronization.Synchronize;
             SynchronizationFolder.Text = Settings.Synchronization.SynchronizationFolder;
@@ -71,17 +71,17 @@ namespace Cliver.InvoiceParser
         {
             try
             {
-                int detectTemplateInDocumentFirstPages;
-                if(!int.TryParse(DetectTemplateInDocumentFirstPages.Text, out detectTemplateInDocumentFirstPages) || detectTemplateInDocumentFirstPages<1)
-                    throw new Exception("DetectTemplateInDocumentFirstPages must be a positive number.");
+                int maxPageNumberToDetectTemplate;
+                if (!int.TryParse(MaxPageNumberToDetectTemplate.Text, out maxPageNumberToDetectTemplate) || maxPageNumberToDetectTemplate < 1)
+                    throw new Exception("MaxPageNumberToDetectTemplate must be a positive number.");
                 if (Synchronize.Checked && string.IsNullOrWhiteSpace(SynchronizationFolder.Text))
-                    throw new Exception("Synchronized Folder is empty.");
+                    throw new Exception("Synchronization Folder is empty.");
                 if (PathRoutines.ArePathsEqual(SynchronizationFolder.Text, Config.StorageDir))
-                    throw new Exception("Synchronized Folder cannot be the application's config folder itself.");
+                    throw new Exception("Synchronization Folder cannot be the application's config folder itself.");
 
                 Settings.General.IgnoreHidddenFiles = IgnoreHidddenFiles.Checked;
                 Settings.General.ReadInputFolderRecursively = ReadInputFolderRecursively.Checked;
-                Settings.General.DetectTemplateInDocumentFirstPages = detectTemplateInDocumentFirstPages;
+                Settings.General.MaxPageNumberToDetectTemplate = maxPageNumberToDetectTemplate;
 
                 Settings.Synchronization.Synchronize = Synchronize.Checked;
                 Settings.Synchronization.SynchronizationFolder = SynchronizationFolder.Text;
@@ -132,10 +132,10 @@ namespace Cliver.InvoiceParser
                     if (path == null)
                         path = (string)o.SelectToken("business.path");
                     if (path != null)
-                        SynchronizationFolder.Text = path + "\\" + ProgramRoutines.GetAppName() + "_synchronised data";
+                        SynchronizationFolder.Text = path + "\\" + ProgramRoutines.GetAppName();
                 }
                 if (string.IsNullOrWhiteSpace(SynchronizationFolder.Text))
-                    SynchronizationFolder.Text = Config.StorageDir + "\\" + ProgramRoutines.GetAppName() + "_synchronised data";
+                    SynchronizationFolder.Text = Config.StorageDir + "\\" + ProgramRoutines.GetAppName();
             }
         }
 
