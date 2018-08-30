@@ -29,6 +29,7 @@ namespace Cliver.InvoiceParser
         {
             public string SynchronizationFolder = null;
             public bool Synchronize = false;
+            public Regex SynchronizeFileFilter = new Regex(@"Templates");
 
             public override void Loaded()
             {
@@ -45,6 +46,7 @@ namespace Cliver.InvoiceParser
                 try
                 {
                     synchronize = synchronization.Synchronize;
+                    synchronizeFileFilter = synchronization.SynchronizeFileFilter;
                     downloadFolder = FileSystemRoutines.CreateDirectory(synchronization.SynchronizationFolder + "\\download");
                     uploadFolder = FileSystemRoutines.CreateDirectory(synchronization.SynchronizationFolder + "\\upload");
 
@@ -69,6 +71,8 @@ namespace Cliver.InvoiceParser
                 {
                     foreach (string file in Directory.GetFiles(Config.StorageDir))
                     {
+                        if (synchronizeFileFilter == null || !synchronizeFileFilter.IsMatch(file))
+                            return;
                         pollUploadFile(file);
                         pollDownloadFile(file);
                     }
@@ -134,6 +138,7 @@ namespace Cliver.InvoiceParser
             }
             static Thread pollingThread = null;
             static bool synchronize = false;
+            static Regex synchronizeFileFilter = null;
             static string downloadFolder = null;
             static string uploadFolder = null;
 
