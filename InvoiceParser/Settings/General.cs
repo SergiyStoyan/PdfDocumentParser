@@ -30,7 +30,7 @@ namespace Cliver.InvoiceParser
         {
             public string InputFolder = @"d:\_d\_projects\PdfDocumentParser\_test_files";
             public string OutputFolder;
-            public bool IgnoreHidddenFiles = true;
+            public bool IgnoreHiddenFiles = true;
             public bool ReadInputFolderRecursively = false;
             public int MaxPageNumberToDetectTemplate = 3;
 

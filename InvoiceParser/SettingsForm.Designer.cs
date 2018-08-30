@@ -32,7 +32,7 @@
             this.bSave = new System.Windows.Forms.Button();
             this.bCancel = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.IgnoreHidddenFiles = new System.Windows.Forms.CheckBox();
+            this.IgnoreHiddenFiles = new System.Windows.Forms.CheckBox();
             this.ReadInputFolderRecursively = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.MaxPageNumberToDetectTemplate = new System.Windows.Forms.TextBox();
@@ -92,15 +92,15 @@
             this.flowLayoutPanel1.Size = new System.Drawing.Size(468, 31);
             this.flowLayoutPanel1.TabIndex = 51;
             // 
-            // IgnoreHidddenFiles
+            // IgnoreHiddenFiles
             // 
-            this.IgnoreHidddenFiles.AutoSize = true;
-            this.IgnoreHidddenFiles.Location = new System.Drawing.Point(16, 24);
-            this.IgnoreHidddenFiles.Name = "IgnoreHidddenFiles";
-            this.IgnoreHidddenFiles.Size = new System.Drawing.Size(123, 17);
-            this.IgnoreHidddenFiles.TabIndex = 53;
-            this.IgnoreHidddenFiles.Text = "Ignore Hiddden Files";
-            this.IgnoreHidddenFiles.UseVisualStyleBackColor = true;
+            this.IgnoreHiddenFiles.AutoSize = true;
+            this.IgnoreHiddenFiles.Location = new System.Drawing.Point(16, 24);
+            this.IgnoreHiddenFiles.Name = "IgnoreHiddenFiles";
+            this.IgnoreHiddenFiles.Size = new System.Drawing.Size(117, 17);
+            this.IgnoreHiddenFiles.TabIndex = 53;
+            this.IgnoreHiddenFiles.Text = "Ignore Hidden Files";
+            this.IgnoreHiddenFiles.UseVisualStyleBackColor = true;
             // 
             // ReadInputFolderRecursively
             // 
@@ -118,7 +118,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.MaxPageNumberToDetectTemplate);
             this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Controls.Add(this.IgnoreHidddenFiles);
+            this.groupBox2.Controls.Add(this.IgnoreHiddenFiles);
             this.groupBox2.Controls.Add(this.ReadInputFolderRecursively);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
@@ -221,7 +221,7 @@
         private System.Windows.Forms.Button bSave;
         private System.Windows.Forms.Button bCancel;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
-        private System.Windows.Forms.CheckBox IgnoreHidddenFiles;
+        private System.Windows.Forms.CheckBox IgnoreHiddenFiles;
         private System.Windows.Forms.CheckBox ReadInputFolderRecursively;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox1;

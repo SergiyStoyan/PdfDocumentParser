@@ -90,7 +90,7 @@ namespace Cliver.InvoiceParser
             xls.WriteLine(headers);
 
             List<string> files = FileSystemRoutines.GetFiles(Settings.General.InputFolder, Settings.General.ReadInputFolderRecursively);
-            if (Settings.General.IgnoreHidddenFiles)
+            if (Settings.General.IgnoreHiddenFiles)
                 files = files.Select(f => new FileInfo(f)).Where(fi => !fi.Attributes.HasFlag(FileAttributes.Hidden)).Select(fi => fi.FullName).ToList();
 
             int processed_files = 0;

@@ -13,15 +13,16 @@ namespace Cliver.InvoiceParser
 {
     /*
  TBD:
+- tutorial;
+
  - Template not enherited but embedded
 
+- select by name, group;
+- set Active, Group for all selected;
  - MainForm to WPF;
-- filter by name, group;
-- switch Active for all filtered;
 
 - store each template in separate file;
 
-- tutorial;
 
 - switch to Tesseract.4
 
