@@ -33,7 +33,7 @@ namespace Cliver.PdfDocumentParser
             abstract public void ReplaceWith(Template newTemplate);
             abstract public void SaveAsInitialTemplate(Template template);
             public string LastTestFile;
-        }       
+        }
 
         public TemplateForm(TemplateManager templateManager, string testFileDefaultFolder)
         {
@@ -54,10 +54,12 @@ namespace Cliver.PdfDocumentParser
             ValueType2.DataSource = Enum.GetValues(typeof(Template.ValueTypes));
 
             FloatingAnchorId2.ValueType = typeof(int);
-            FloatingAnchorId2.DataSource = null;
+            FloatingAnchorId2.ValueMember = "Id";
+            FloatingAnchorId2.DisplayMember = "Name";
 
             FloatingAnchorId.ValueType = typeof(int);
-            FloatingAnchorId.DataSource = null;
+            FloatingAnchorId.ValueMember = "Id";
+            FloatingAnchorId.DisplayMember = "Name";
 
             int statusDefaultHeight = status.Height;
             status.MouseEnter += delegate
@@ -261,7 +263,7 @@ namespace Cliver.PdfDocumentParser
                             break;
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Message.Error2(ex);
                 }
@@ -289,7 +291,7 @@ namespace Cliver.PdfDocumentParser
                 }
             };
 
-            floatingAnchors.DataError += delegate (object sender, DataGridViewDataErrorEventArgs e) 
+            floatingAnchors.DataError += delegate (object sender, DataGridViewDataErrorEventArgs e)
             {
                 DataGridViewRow r = floatingAnchors.Rows[e.RowIndex];
                 Message.Error("FloatingAnchor[" + r.Cells["Id3"].Value + "] has unacceptable value of " + floatingAnchors.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message);
@@ -368,6 +370,7 @@ namespace Cliver.PdfDocumentParser
                     if (loadingTemplate)
                         return;
 
+                    setStatus(statuses.NEUTRAL, "");
                     if (floatingAnchors.SelectedRows.Count < 1)
                         return;
                     documentFirstPageRecognitionMarks.ClearSelection();
@@ -379,7 +382,7 @@ namespace Cliver.PdfDocumentParser
                         int i = floatingAnchors.Rows.Add();
                         floatingAnchors.Rows[i].Selected = true;
                         return;
-                    }                    
+                    }
                     findAndDrawFloatingAnchor((int?)r.Cells["Id3"].Value);
                 }
                 catch (Exception ex)
@@ -440,9 +443,11 @@ namespace Cliver.PdfDocumentParser
                     switch (documentFirstPageRecognitionMarks.Columns[e.ColumnIndex].Name)
                     {
                         case "Rectangle2":
-                            object o = cs["ValueType2"].Value;
-                            if (o != null)
-                                cs["Value2"].Value = extractValueAndDrawSelectionBox(fai, r, (Template.ValueTypes)o);
+                            {
+                                object o = cs["ValueType2"].Value;
+                                if (o != null)
+                                    cs["Value2"].Value = extractValueAndDrawSelectionBox(fai, r, (Template.ValueTypes)o);
+                            }
                             break;
                         case "ValueType2":
                             cs["Value2"].Value = null;
@@ -462,6 +467,13 @@ namespace Cliver.PdfDocumentParser
                                     cs["Rectangle2"].Value = SerializationRoutines.Json.Serialize(r);
                                 }
                             }
+                            else//anchor deselected
+                            {
+                                setStatus(statuses.WARNING, "FloatingAnchor unlinked. The selection rectangle may need fix.");
+                                object o = cs["ValueType2"].Value;
+                                if (o != null)
+                                    cs["Value2"].Value = extractValueAndDrawSelectionBox(fai, r, (Template.ValueTypes)o);
+                            }
                             break;
                     }
                 }
@@ -478,6 +490,7 @@ namespace Cliver.PdfDocumentParser
                     if (loadingTemplate)
                         return;
 
+                    setStatus(statuses.NEUTRAL, "");
                     if (documentFirstPageRecognitionMarks.SelectedRows.Count > 0)
                     {
                         floatingAnchors.ClearSelection();
@@ -572,6 +585,11 @@ namespace Cliver.PdfDocumentParser
                                     cs["Rectangle"].Value = SerializationRoutines.Json.Serialize(r);
                                 }
                             }
+                            else//anchor deselected
+                            {
+                                setStatus(statuses.WARNING, "FloatingAnchor unlinked. The selection rectangle may need fix.");
+                                cs["Value"].Value = extractValueAndDrawSelectionBox((int?)cs["FloatingAnchorId"].Value, r, Convert.ToBoolean(cs["Ocr"].Value) ? Template.ValueTypes.OcrText : Template.ValueTypes.PdfText);
+                            }
                             break;
                     }
                 }
@@ -640,7 +658,7 @@ namespace Cliver.PdfDocumentParser
             };
 
             fields.DefaultValuesNeeded += delegate (object sender, DataGridViewRowEventArgs e)
-            {               
+            {
             };
 
             fields.CellContentClick += delegate (object sender, DataGridViewCellEventArgs e)
@@ -660,6 +678,7 @@ namespace Cliver.PdfDocumentParser
                     if (loadingTemplate)
                         return;
 
+                    setStatus(statuses.NEUTRAL, "");
                     if (fields.SelectedRows.Count > 0)
                     {
                         floatingAnchors.ClearSelection();
@@ -776,7 +795,7 @@ namespace Cliver.PdfDocumentParser
                     documentFirstPageRecognitionMarks.Rows[0].Selected = true;
             };
         }
-        
+
         PageCollection pages = null;
 
         void onFloatingAnchorsChanged(int? updatedFloatingAnchorId)
@@ -833,8 +852,10 @@ namespace Cliver.PdfDocumentParser
                 }
             }
 
-            FloatingAnchorId2.DataSource = fais;
-            FloatingAnchorId.DataSource = fais;
+            List<dynamic> fais_ = fais.Select(f => new { Id = f, Name = f.ToString() }).ToList<dynamic>();
+            fais_.Insert(0, new { Id = -1, Name = string.Empty });//commbobox returns value null for -1 (and throws an unclear expection if Id=null)
+            FloatingAnchorId2.DataSource = fais_;
+            FloatingAnchorId.DataSource = fais_;
         }
 
         void reloadPageBitmaps()
