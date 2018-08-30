@@ -38,9 +38,8 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.bSynchronizedFolder = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.SynchronizedFolder = new System.Windows.Forms.TextBox();
+            this.SynchronizationFolder = new System.Windows.Forms.TextBox();
             this.Synchronize = new System.Windows.Forms.CheckBox();
-            this.important = new System.Windows.Forms.Label();
             this.flowLayoutPanel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -86,7 +85,7 @@
             this.flowLayoutPanel1.Controls.Add(this.bReset);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 263);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 221);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(468, 31);
             this.flowLayoutPanel1.TabIndex = 51;
@@ -128,14 +127,13 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.important);
             this.groupBox1.Controls.Add(this.bSynchronizedFolder);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.SynchronizedFolder);
+            this.groupBox1.Controls.Add(this.SynchronizationFolder);
             this.groupBox1.Controls.Add(this.Synchronize);
             this.groupBox1.Location = new System.Drawing.Point(13, 101);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(443, 156);
+            this.groupBox1.Size = new System.Drawing.Size(443, 114);
             this.groupBox1.TabIndex = 59;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Remote Storage";
@@ -159,14 +157,14 @@
             this.label1.TabIndex = 60;
             this.label1.Text = "Synchronized Folder:";
             // 
-            // SynchronizedFolder
+            // SynchronizationFolder
             // 
-            this.SynchronizedFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.SynchronizationFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.SynchronizedFolder.Location = new System.Drawing.Point(15, 74);
-            this.SynchronizedFolder.Name = "SynchronizedFolder";
-            this.SynchronizedFolder.Size = new System.Drawing.Size(422, 20);
-            this.SynchronizedFolder.TabIndex = 59;
+            this.SynchronizationFolder.Location = new System.Drawing.Point(15, 74);
+            this.SynchronizationFolder.Name = "SynchronizationFolder";
+            this.SynchronizationFolder.Size = new System.Drawing.Size(422, 20);
+            this.SynchronizationFolder.TabIndex = 59;
             // 
             // Synchronize
             // 
@@ -179,19 +177,11 @@
             this.Synchronize.UseVisualStyleBackColor = true;
             this.Synchronize.CheckedChanged += new System.EventHandler(this.Synchronize_CheckedChanged);
             // 
-            // important
-            // 
-            this.important.Location = new System.Drawing.Point(12, 103);
-            this.important.Name = "important";
-            this.important.Size = new System.Drawing.Size(425, 50);
-            this.important.TabIndex = 62;
-            this.important.Text = "Important! ... must not be synchronized.";
-            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(468, 294);
+            this.ClientSize = new System.Drawing.Size(468, 252);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.flowLayoutPanel1);
@@ -217,8 +207,7 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox Synchronize;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox SynchronizedFolder;
+        private System.Windows.Forms.TextBox SynchronizationFolder;
         private System.Windows.Forms.Button bSynchronizedFolder;
-        private System.Windows.Forms.Label important;
     }
 }

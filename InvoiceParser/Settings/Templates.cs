@@ -35,6 +35,11 @@ namespace Cliver.InvoiceParser
             {
             }
 
+            public override void Saved()
+            {
+                Settings.SynchronizationSettings.SynchronizeUploadFile(this.__File);
+            }
+
             public Template CreateInitialTemplate()
             {
                 if (InitialTemplate != null)

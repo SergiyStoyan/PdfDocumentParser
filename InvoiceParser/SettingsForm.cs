@@ -46,7 +46,7 @@ namespace Cliver.InvoiceParser
             this.Icon = AssemblyRoutines.GetAppIcon();
             Text = Application.ProductName;
 
-            important.Text = "Important! Letting folder '" + Config.StorageDir + "' be synchronized by a remote drive application may bring to malfunction.";
+            //important.Text = "Important! Letting folder '" + Config.StorageDir + "' be synchronized by a remote drive application may bring to malfunction.";
             load_settings();
         }
 
@@ -56,9 +56,9 @@ namespace Cliver.InvoiceParser
             ReadInputFolderRecursively.Checked = Settings.General.ReadInputFolderRecursively;
 
             Synchronize.Checked = Settings.Synchronization.Synchronize;
-            SynchronizedFolder.Text = Settings.Synchronization.SynchronizedFolder;
+            SynchronizationFolder.Text = Settings.Synchronization.SynchronizationFolder;
 
-            SynchronizedFolder.Enabled = Synchronize.Checked;
+            SynchronizationFolder.Enabled = Synchronize.Checked;
         }
 
         private void bCancel_Click(object sender, EventArgs e)
@@ -70,16 +70,16 @@ namespace Cliver.InvoiceParser
         {
             try
             {
-                if (Synchronize.Checked && string.IsNullOrWhiteSpace(SynchronizedFolder.Text))
+                if (Synchronize.Checked && string.IsNullOrWhiteSpace(SynchronizationFolder.Text))
                     throw new Exception("Synchronized Folder is empty.");
-                if (PathRoutines.ArePathsEqual(SynchronizedFolder.Text, Config.StorageDir))
+                if (PathRoutines.ArePathsEqual(SynchronizationFolder.Text, Config.StorageDir))
                     throw new Exception("Synchronized Folder cannot be the application's config folder itself.");
 
                 Settings.General.IgnoreHidddenFiles = IgnoreHidddenFiles.Checked;
                 Settings.General.ReadInputFolderRecursively = ReadInputFolderRecursively.Checked;
 
                 Settings.Synchronization.Synchronize = Synchronize.Checked;
-                Settings.Synchronization.SynchronizedFolder = SynchronizedFolder.Text;
+                Settings.Synchronization.SynchronizationFolder = SynchronizationFolder.Text;
 
                 Settings.General.Save();
                 Settings.General.Reload();
@@ -106,34 +106,31 @@ namespace Cliver.InvoiceParser
         private void bSynchronizedFolder_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog d = new FolderBrowserDialog();
-            d.SelectedPath = string.IsNullOrWhiteSpace(SynchronizedFolder.Text) ? Settings.General.InputFolder : SynchronizedFolder.Text;
+            d.SelectedPath = string.IsNullOrWhiteSpace(SynchronizationFolder.Text) ? Settings.General.InputFolder : SynchronizationFolder.Text;
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                SynchronizedFolder.Text = d.SelectedPath;
+                SynchronizationFolder.Text = d.SelectedPath;
         }
 
         private void Synchronize_CheckedChanged(object sender, EventArgs e)
         {
-            SynchronizedFolder.Enabled = Synchronize.Checked;
+            SynchronizationFolder.Enabled = Synchronize.Checked;
 
-            if (Synchronize.Checked)
+            if (string.IsNullOrWhiteSpace(SynchronizationFolder.Text))
             {
-                if (string.IsNullOrWhiteSpace(SynchronizedFolder.Text))
+                string cf = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Dropbox\info.json";
+                if (!File.Exists(cf))
+                    cf = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Dropbox\info.json";
+                if (File.Exists(cf))
                 {
-                    string cf = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Dropbox\info.json";
-                    if (!File.Exists(cf))
-                        cf = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Dropbox\info.json";
-                    if (File.Exists(cf))
-                    {
-                        JObject o = JObject.Parse(File.ReadAllText(cf, Encoding.UTF8));
-                        string path = (string)o.SelectToken("personal.path");
-                        if (path == null)
-                            path = (string)o.SelectToken("business.path");
-                        if (path != null)
-                            SynchronizedFolder.Text = path + "\\" + ProgramRoutines.GetAppName() + "_synchronised data";
-                    }
-                    if (string.IsNullOrWhiteSpace(SynchronizedFolder.Text))
-                        SynchronizedFolder.Text = Config.StorageDir + "\\" + ProgramRoutines.GetAppName() + "_synchronised data";
+                    JObject o = JObject.Parse(File.ReadAllText(cf, Encoding.UTF8));
+                    string path = (string)o.SelectToken("personal.path");
+                    if (path == null)
+                        path = (string)o.SelectToken("business.path");
+                    if (path != null)
+                        SynchronizationFolder.Text = path + "\\" + ProgramRoutines.GetAppName() + "_synchronised data";
                 }
+                if (string.IsNullOrWhiteSpace(SynchronizationFolder.Text))
+                    SynchronizationFolder.Text = Config.StorageDir + "\\" + ProgramRoutines.GetAppName() + "_synchronised data";
             }
         }
 

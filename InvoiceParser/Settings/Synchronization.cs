@@ -27,17 +27,16 @@ namespace Cliver.InvoiceParser
 
         public class SynchronizationSettings : Cliver.Settings
         {
-            public string SynchronizedFolder = null;
+            public string SynchronizationFolder = null;
             public bool Synchronize = false;
-            public HashSet<string> SynchronizeFileNames = null;
 
             public override void Loaded()
             {
-                if (SynchronizeFileNames == null)
-                {
-                    Config.PreloadField("Templates");
-                    SynchronizeFileNames = new HashSet<string> { PathRoutines.GetFileNameFromPath(Settings.Templates.__File) };
-                }
+                //if (SynchronizedFileNames == null)
+                //{
+                //    Config.PreloadField("Templates");
+                //    SynchronizedFileNames = new HashSet<string> { PathRoutines.GetFileNameFromPath(Settings.Templates.__File) };
+                //}
                 switchSynchronization(this);
             }
 
@@ -50,11 +49,16 @@ namespace Cliver.InvoiceParser
             {
                 try
                 {
-                    if (synchronization.Synchronize && !string.IsNullOrWhiteSpace(synchronization.SynchronizedFolder))
+                    synchronize = synchronization.Synchronize;
+                    //synchronizedFileNames = synchronization.SynchronizedFileNames;
+                    downloadFolder = FileSystemRoutines.CreateDirectory(synchronization.SynchronizationFolder + "\\download");
+                    uploadFolder = FileSystemRoutines.CreateDirectory(synchronization.SynchronizationFolder + "\\upload");
+
+                    if (synchronization.Synchronize && !string.IsNullOrWhiteSpace(synchronization.SynchronizationFolder))
                     {
                         if (pollingThread != null && pollingThread.IsAlive)
                             return;
-                        pollingThread = ThreadRoutines.StartTry(()=> { polling(synchronization); });
+                        pollingThread = ThreadRoutines.StartTry(polling);
                     }
                     else
                     {
@@ -65,85 +69,110 @@ namespace Cliver.InvoiceParser
                     Message.Error(e);
                 }
             }
-            static void polling(SynchronizationSettings synchronization)
+            static void polling()
             {
-                while (synchronization.Synchronize)
+                while (synchronize)
                 {
-                    string downloadFolder = FileSystemRoutines.CreateDirectory(synchronization.SynchronizedFolder + "\\download");
-                    string uploadFolder = FileSystemRoutines.CreateDirectory(synchronization.SynchronizedFolder + "\\upload");
-                    foreach (string fn in synchronization.SynchronizeFileNames)
+                    foreach (string file in Directory.GetFiles(Config.StorageDir))
                     {
-                        try
-                        {
-                            string file = Config.StorageDir + "\\" + fn;
-                            if (File.Exists(file))
-                            {
-                                DateTime uploadLWT = File.GetLastWriteTime(file);
-                                if (uploadLWT.AddSeconds(10) < DateTime.Now)//it is not being written
-                                {
-                                    string file2 = uploadFolder + "\\" + fn;
-                                    if (!File.Exists(file2) || uploadLWT > File.GetLastWriteTime(file2))
-                                        for (int i = 0; ; i++)
-                                            try
-                                            {
-                                                FileSystemRoutines.CopyFile(file, file2, true);
-                                                break;
-                                            }
-                                            catch (IOException ex)//no access while locked by sycnhronizing app
-                                            {
-                                                if (i >= 100)
-                                                    throw new Exception("Could not copy file '" + file + "' to '" + file2 + "'", ex);
-                                                Thread.Sleep(1000);
-                                            }
-                                }
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            LogMessage.Error(e);
-                        }
-                        try
-                        {
-                            string file = downloadFolder + "\\" + fn;
-                            if (File.Exists(file))
-                            {
-                                DateTime downloadLWT = File.GetLastWriteTime(file);
-                                if (downloadLWT.AddSeconds(100) < DateTime.Now)//it is not being written
-                                {
-                                    string file2 = Config.StorageDir + "\\" + fn;
-                                    if (!File.Exists(file2) || downloadLWT > File.GetLastWriteTime(file2))
-                                    {
-                                        for (int i = 0; ; i++)
-                                            try
-                                            {
-                                                FileSystemRoutines.CopyFile(file, file2, true);
-                                                if (file2 == Settings.Templates.__File)
-                                                {
-                                                    Message.Inform("A newer templates have been downloaded from the remote storage. Upon closing this message they will be updated in the application.");
-                                                    Settings.Templates.Reload();
-                                                    MainForm.This.BeginInvoke(() => { MainForm.This.LoadTemplates(); });
-                                                }
-                                                break;
-                                            }
-                                            catch (IOException ex)//no access while locked by sycnhronizing app
-                                            {
-                                                if (i >= 100)
-                                                    throw new Exception("Could not copy file '" + file + "' to '" + file2 + "'", ex);
-                                                Thread.Sleep(1000);
-                                            }
-                                    }
-                                }
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            LogMessage.Error(e);
-                        }
+                        pollUploadFile(file);
+                        pollDownloadFile(file);
                     }
                     Thread.Sleep(100000);
                 }
             }
+            static void pollUploadFile(string file)
+            {
+                try
+                {
+                    DateTime uploadLWT = File.GetLastWriteTime(file);
+                    if (uploadLWT.AddSeconds(10) > DateTime.Now)//it is not being written
+                        return;
+                    string file2 = uploadFolder + "\\" + PathRoutines.GetFileNameFromPath(file);
+                    if (File.Exists(file2) && uploadLWT <= File.GetLastWriteTime(file2))
+                        return;
+                    for (int i = 0; ; i++)
+                        try
+                        {
+                            FileSystemRoutines.CopyFile(file, file2, true);
+                            return;
+                        }
+                        catch (IOException ex)//no access while locked by sycnhronizing app
+                        {
+                            if (i >= 100)
+                                throw new Exception("Could not copy file '" + file + "' to '" + file2 + "'", ex);
+                            Thread.Sleep(1000);
+                        }
+                }
+                catch (Exception e)
+                {
+                    LogMessage.Error(e);
+                }
+            }
+            static void pollDownloadFile(string file2)
+            {
+                try
+                {
+                    string file = downloadFolder + "\\" + PathRoutines.GetFileNameFromPath(file2);
+                    if (!File.Exists(file))
+                        return;
+                    DateTime downloadLWT = File.GetLastWriteTime(file);
+                    if (downloadLWT.AddSeconds(100) > DateTime.Now)//it is not being written
+                        return;
+                    if (downloadLWT <= File.GetLastWriteTime(file2))
+                        return;
+                    for (int i = 0; ; i++)
+                        try
+                        {
+                            FileSystemRoutines.CopyFile(file, file2, true);
+                            if (file2 == Settings.Templates.__File)
+                            {
+                                Message.Inform("A newer templates have been downloaded from the remote storage. Upon closing this message they will be updated in the application.");
+                                Settings.Templates.Reload();
+                                MainForm.This.BeginInvoke(() => { MainForm.This.LoadTemplates(); });
+                            }
+                            return;
+                        }
+                        catch (IOException ex)//no access while locked by sycnhronizing app
+                        {
+                            if (i >= 100)
+                                throw new Exception("Could not copy file '" + file + "' to '" + file2 + "'", ex);
+                            Thread.Sleep(1000);
+                        }
+                }
+                catch (Exception e)
+                {
+                    LogMessage.Error(e);
+                }
+            }
             static Thread pollingThread = null;
+            static bool synchronize = false;
+            static string downloadFolder = null;
+            static string uploadFolder = null;
+
+            public static void SynchronizeUploadFile(string file)
+            {
+                try
+                {
+                    string file2 = uploadFolder + "\\" + PathRoutines.GetFileNameFromPath(file);
+                    for (int i = 0; ; i++)
+                        try
+                        {
+                            FileSystemRoutines.CopyFile(file, file2, true);
+                            break;
+                        }
+                        catch (IOException ex)//no access while locked by sycnhronizing app
+                        {
+                            if (i >= 100)
+                                throw new Exception("Could not copy file '" + file + "' to '" + file2 + "'", ex);
+                            Thread.Sleep(1000);
+                        }
+                }
+                catch (Exception e)
+                {
+                    LogMessage.Error(e);
+                }
+            }
         }
     }
 }
