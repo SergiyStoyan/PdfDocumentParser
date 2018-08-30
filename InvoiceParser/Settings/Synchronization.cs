@@ -91,23 +91,27 @@ namespace Cliver.InvoiceParser
                     string file2 = uploadFolder + "\\" + PathRoutines.GetFileNameFromPath(file);
                     if (File.Exists(file2) && uploadLWT <= File.GetLastWriteTime(file2))
                         return;
-                    for (int i = 0; ; i++)
-                        try
-                        {
-                            FileSystemRoutines.CopyFile(file, file2, true);
-                            return;
-                        }
-                        catch (IOException ex)//no access while locked by sycnhronizing app
-                        {
-                            if (i >= 100)
-                                throw new Exception("Could not copy file '" + file + "' to '" + file2 + "'", ex);
-                            Thread.Sleep(1000);
-                        }
+                    copy(file, file2);
                 }
                 catch (Exception e)
                 {
                     LogMessage.Error(e);
                 }
+            }
+            static void copy(string file, string file2)
+            {
+                for (int i = 0; ; i++)
+                    try
+                    {
+                        FileSystemRoutines.CopyFile(file, file2, true);
+                        return;
+                    }
+                    catch (IOException ex)//no access while locked by sycnhronizing app
+                    {
+                        if (i >= 100)
+                            throw new Exception("Could not copy file '" + file + "' to '" + file2 + "'", ex);
+                        Thread.Sleep(1000);
+                    }
             }
             static void pollDownloadFile(string file2)
             {
@@ -121,24 +125,13 @@ namespace Cliver.InvoiceParser
                         return;
                     if (downloadLWT <= File.GetLastWriteTime(file2))
                         return;
-                    for (int i = 0; ; i++)
-                        try
-                        {
-                            FileSystemRoutines.CopyFile(file, file2, true);
-                            if (file2 == Settings.Templates.__File)
-                            {
-                                Message.Inform("A newer templates have been downloaded from the remote storage. Upon closing this message they will be updated in the application.");
-                                Settings.Templates.Reload();
-                                MainForm.This.BeginInvoke(() => { MainForm.This.LoadTemplates(); });
-                            }
-                            return;
-                        }
-                        catch (IOException ex)//no access while locked by sycnhronizing app
-                        {
-                            if (i >= 100)
-                                throw new Exception("Could not copy file '" + file + "' to '" + file2 + "'", ex);
-                            Thread.Sleep(1000);
-                        }
+                    copy(file, file2);
+                    if (file2 == Settings.Templates.__File)
+                    {
+                        Message.Inform("A newer templates have been downloaded from the remote storage. Upon closing this message they will be updated in the application.");
+                        Settings.Templates.Reload();
+                        MainForm.This.BeginInvoke(() => { MainForm.This.LoadTemplates(); });
+                    }
                 }
                 catch (Exception e)
                 {
@@ -154,19 +147,7 @@ namespace Cliver.InvoiceParser
             {
                 try
                 {
-                    string file2 = uploadFolder + "\\" + PathRoutines.GetFileNameFromPath(file);
-                    for (int i = 0; ; i++)
-                        try
-                        {
-                            FileSystemRoutines.CopyFile(file, file2, true);
-                            break;
-                        }
-                        catch (IOException ex)//no access while locked by sycnhronizing app
-                        {
-                            if (i >= 100)
-                                throw new Exception("Could not copy file '" + file + "' to '" + file2 + "'", ex);
-                            Thread.Sleep(1000);
-                        }
+                    copy(file, uploadFolder + "\\" + PathRoutines.GetFileNameFromPath(file));
                 }
                 catch (Exception e)
                 {
