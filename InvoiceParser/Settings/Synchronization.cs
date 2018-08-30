@@ -72,7 +72,7 @@ namespace Cliver.InvoiceParser
                     foreach (string file in Directory.GetFiles(Config.StorageDir))
                     {
                         if (synchronizeFileFilter == null || !synchronizeFileFilter.IsMatch(file))
-                            return;
+                            continue;
                         pollUploadFile(file);
                         pollDownloadFile(file);
                     }
@@ -124,7 +124,8 @@ namespace Cliver.InvoiceParser
                     if (downloadLWT <= File.GetLastWriteTime(file2))
                         return;
                     copy(file, file2);
-                    if (file2 == Settings.Templates.__File)
+                    //if (file2 == Settings.Templates.__File)//in the start it is null
+                    if (PathRoutines.ArePathsEqual(file2, Config.StorageDir + @"\Templates.Cliver.InvoiceParser.Settings+TemplatesSettings.json"))
                     {
                         Message.Inform("A newer templates have been downloaded from the remote storage. Upon closing this message they will be updated in the application.");
                         Settings.Templates.Reload();

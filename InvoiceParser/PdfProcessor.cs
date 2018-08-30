@@ -131,7 +131,7 @@ namespace Cliver.InvoiceParser
                     return false;
                 }
 
-                for (int page_i = 1; page_i <= cp.Pages.PdfReader.NumberOfPages; page_i++)
+                for (int page_i = 1; page_i <= Math.Min(Settings.General.DetectTemplateInDocumentFirstPages, cp.Pages.PdfReader.NumberOfPages); page_i++)
                 {
                     foreach (Template t in ts)
                     {

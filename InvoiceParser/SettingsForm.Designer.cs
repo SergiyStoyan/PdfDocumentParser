@@ -40,6 +40,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.SynchronizationFolder = new System.Windows.Forms.TextBox();
             this.Synchronize = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.DetectTemplateInDocumentFirstPages = new System.Windows.Forms.TextBox();
             this.flowLayoutPanel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -85,7 +87,7 @@
             this.flowLayoutPanel1.Controls.Add(this.bReset);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 221);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 255);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(468, 31);
             this.flowLayoutPanel1.TabIndex = 51;
@@ -114,11 +116,13 @@
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.DetectTemplateInDocumentFirstPages);
+            this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.IgnoreHidddenFiles);
             this.groupBox2.Controls.Add(this.ReadInputFolderRecursively);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(443, 83);
+            this.groupBox2.Size = new System.Drawing.Size(443, 114);
             this.groupBox2.TabIndex = 58;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Input";
@@ -131,7 +135,7 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.SynchronizationFolder);
             this.groupBox1.Controls.Add(this.Synchronize);
-            this.groupBox1.Location = new System.Drawing.Point(13, 101);
+            this.groupBox1.Location = new System.Drawing.Point(12, 132);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(443, 114);
             this.groupBox1.TabIndex = 59;
@@ -177,11 +181,27 @@
             this.Synchronize.UseVisualStyleBackColor = true;
             this.Synchronize.CheckedChanged += new System.EventHandler(this.Synchronize_CheckedChanged);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(13, 79);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(223, 13);
+            this.label2.TabIndex = 61;
+            this.label2.Text = "While Detecting Template, Look In Pages: 1 -";
+            // 
+            // DetectTemplateInDocumentFirstPages
+            // 
+            this.DetectTemplateInDocumentFirstPages.Location = new System.Drawing.Point(242, 76);
+            this.DetectTemplateInDocumentFirstPages.Name = "DetectTemplateInDocumentFirstPages";
+            this.DetectTemplateInDocumentFirstPages.Size = new System.Drawing.Size(22, 20);
+            this.DetectTemplateInDocumentFirstPages.TabIndex = 63;
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(468, 252);
+            this.ClientSize = new System.Drawing.Size(468, 286);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.flowLayoutPanel1);
@@ -209,5 +229,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox SynchronizationFolder;
         private System.Windows.Forms.Button bSynchronizedFolder;
+        private System.Windows.Forms.TextBox DetectTemplateInDocumentFirstPages;
+        private System.Windows.Forms.Label label2;
     }
 }
