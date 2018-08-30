@@ -91,24 +91,28 @@ namespace Cliver.InvoiceParser
             oc.SetTextMatrix(x, y);
             oc.ShowText("INVOICE");
             oc.SetTextMatrix(x + d, y);
-            string v;
-            if (fieldNames2texts.TryGetValue("INVOICE#", out v))
-                oc.ShowText("#: " + v);
+            oc.ShowText("#: " + getStampValue("INVOICE#"));
             y -= s;
             oc.SetTextMatrix(x, y);
             oc.ShowText("JOB");
             oc.SetTextMatrix(x + d, y);
-            if (fieldNames2texts.TryGetValue("JOB#", out v))
-                oc.ShowText("#: " + v);
+            oc.ShowText("#: " + getStampValue("JOB#"));
             y -= s;
             oc.SetTextMatrix(x, y);
             oc.ShowText("PO");
             oc.SetTextMatrix(x + d, y);
-            if (fieldNames2texts.TryGetValue("PO#", out v))
-                oc.ShowText("#: " + v);
+            oc.ShowText("#: " + getStampValue("PO#"));
             oc.EndText();
             oc.RestoreState();
         }
+        string getStampValue(string fieldName)
+        {
+            string v;
+            if (fieldNames2texts.TryGetValue(fieldName, out v) && v!=null)
+                return Regex.Replace(v, @"\-", "");
+            return "";
+        }
+
         Dictionary<string, string> fieldNames2texts = new Dictionary<string, string>();
 
         static public bool? Process(string inputPdf, List<Template> templates, string stampedPdf, Action<string, int, Dictionary<string, string>> record)
@@ -154,7 +158,7 @@ namespace Cliver.InvoiceParser
             ps = new PdfStamper(Pages.PdfReader, new FileStream(stampedPdf, FileMode.Create, FileAccess.Write, FileShare.None));
 
             foreach (Template.Field f in Pages.ActiveTemplate.Fields)
-                fieldNames2texts[f.Name] = GetFieldText(Pages[documentFirstPageI], f);
+                fieldNames2texts[f.Name] = getFieldText(Pages[documentFirstPageI], f);
             for (int page_i = documentFirstPageI + 1; page_i <= Pages.PdfReader.NumberOfPages; page_i++)
             {
                 if (Pages[page_i].IsDocumentFirstPage())
@@ -165,27 +169,23 @@ namespace Cliver.InvoiceParser
                     documentFirstPageI = page_i;
                 }
                 foreach (Template.Field f in Pages.ActiveTemplate.Fields)
-                {
-                    string t = GetFieldText(Pages[page_i], f);
-                    if (t != null)
-                        fieldNames2texts[f.Name] = t;
-                }
+                    fieldNames2texts[f.Name] = getFieldText(Pages[page_i], f);
             }
             record(Pages.ActiveTemplate.Name, documentFirstPageI, fieldNames2texts);
             stampInvoicePages(documentFirstPageI, Pages.PdfReader.NumberOfPages);
         }
 
-        public string GetFieldText(Page p, Template.Field field)
+        string getFieldText(Page p, Template.Field field)
         {
             if (field.Rectangle == null)
                 return null;
             string error;
             object v = p.GetValue(field.FloatingAnchorId, field.Rectangle, field.ValueType, out error);
             if (v is ImageData)
-                return SerializationRoutines.Json.Serialize(v, false);
+                return "--image--";
             if (v == null)
                 return null;
-            return Page.NormalizeText(Regex.Replace((string)v, @"\-", ""));
+            return Page.NormalizeText((string)v);
         }
     }
 }
