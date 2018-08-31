@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.bAbout = new System.Windows.Forms.Button();
             this.bInputFolder = new System.Windows.Forms.Button();
             this.bOutputFolder = new System.Windows.Forms.Button();
@@ -60,7 +60,7 @@
             this.useNamePattern = new System.Windows.Forms.CheckBox();
             this.useGroupPattern = new System.Windows.Forms.CheckBox();
             this.useActivePattern = new System.Windows.Forms.CheckBox();
-            this.select = new System.Windows.Forms.Button();
+            this.selectByFilter = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.activePattern = new System.Windows.Forms.CheckBox();
             this.selectInvertion = new System.Windows.Forms.Button();
@@ -71,12 +71,11 @@
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
             this.applyActiveChange = new System.Windows.Forms.Button();
             this.applyGroupChange = new System.Windows.Forms.Button();
             this.activeChange = new System.Windows.Forms.CheckBox();
-            this.label6 = new System.Windows.Forms.Label();
             this.groupChange = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.templates)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
@@ -215,8 +214,8 @@
             // Name_
             // 
             this.Name_.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            this.Name_.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            this.Name_.DefaultCellStyle = dataGridViewCellStyle2;
             this.Name_.HeaderText = "Name";
             this.Name_.Name = "Name_";
             this.Name_.Width = 60;
@@ -355,18 +354,19 @@
             // 
             // namePattern
             // 
-            this.namePattern.Location = new System.Drawing.Point(99, 64);
+            this.namePattern.Location = new System.Drawing.Point(81, 59);
             this.namePattern.Name = "namePattern";
-            this.namePattern.Size = new System.Drawing.Size(174, 20);
+            this.namePattern.Size = new System.Drawing.Size(192, 20);
             this.namePattern.TabIndex = 19;
             // 
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Controls.Add(this.useNamePattern);
             this.groupBox1.Controls.Add(this.useGroupPattern);
             this.groupBox1.Controls.Add(this.useActivePattern);
-            this.groupBox1.Controls.Add(this.select);
+            this.groupBox1.Controls.Add(this.selectByFilter);
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.activePattern);
             this.groupBox1.Controls.Add(this.selectInvertion);
@@ -378,7 +378,7 @@
             this.groupBox1.Controls.Add(this.namePattern);
             this.groupBox1.Location = new System.Drawing.Point(464, 107);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(293, 177);
+            this.groupBox1.Size = new System.Drawing.Size(293, 186);
             this.groupBox1.TabIndex = 20;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select";
@@ -388,7 +388,7 @@
             this.useNamePattern.AutoSize = true;
             this.useNamePattern.Checked = true;
             this.useNamePattern.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.useNamePattern.Location = new System.Drawing.Point(15, 67);
+            this.useNamePattern.Location = new System.Drawing.Point(15, 62);
             this.useNamePattern.Name = "useNamePattern";
             this.useNamePattern.Size = new System.Drawing.Size(15, 14);
             this.useNamePattern.TabIndex = 38;
@@ -399,7 +399,7 @@
             this.useGroupPattern.AutoSize = true;
             this.useGroupPattern.Checked = true;
             this.useGroupPattern.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.useGroupPattern.Location = new System.Drawing.Point(15, 98);
+            this.useGroupPattern.Location = new System.Drawing.Point(15, 93);
             this.useGroupPattern.Name = "useGroupPattern";
             this.useGroupPattern.Size = new System.Drawing.Size(15, 14);
             this.useGroupPattern.TabIndex = 37;
@@ -410,25 +410,25 @@
             this.useActivePattern.AutoSize = true;
             this.useActivePattern.Checked = true;
             this.useActivePattern.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.useActivePattern.Location = new System.Drawing.Point(16, 35);
+            this.useActivePattern.Location = new System.Drawing.Point(15, 31);
             this.useActivePattern.Name = "useActivePattern";
             this.useActivePattern.Size = new System.Drawing.Size(15, 14);
             this.useActivePattern.TabIndex = 35;
             this.useActivePattern.UseVisualStyleBackColor = true;
             // 
-            // select
+            // selectByFilter
             // 
-            this.select.Location = new System.Drawing.Point(15, 138);
-            this.select.Name = "select";
-            this.select.Size = new System.Drawing.Size(56, 23);
-            this.select.TabIndex = 34;
-            this.select.Text = "Apply";
-            this.select.UseVisualStyleBackColor = true;
+            this.selectByFilter.Location = new System.Drawing.Point(15, 119);
+            this.selectByFilter.Name = "selectByFilter";
+            this.selectByFilter.Size = new System.Drawing.Size(60, 23);
+            this.selectByFilter.TabIndex = 34;
+            this.selectByFilter.Text = "Apply";
+            this.selectByFilter.UseVisualStyleBackColor = true;
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(53, 35);
+            this.label8.Location = new System.Drawing.Point(36, 31);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(40, 13);
             this.label8.TabIndex = 33;
@@ -437,7 +437,7 @@
             // activePattern
             // 
             this.activePattern.AutoSize = true;
-            this.activePattern.Location = new System.Drawing.Point(99, 35);
+            this.activePattern.Location = new System.Drawing.Point(81, 31);
             this.activePattern.Name = "activePattern";
             this.activePattern.Size = new System.Drawing.Size(15, 14);
             this.activePattern.TabIndex = 32;
@@ -445,27 +445,27 @@
             // 
             // selectInvertion
             // 
-            this.selectInvertion.Location = new System.Drawing.Point(217, 138);
+            this.selectInvertion.Location = new System.Drawing.Point(213, 151);
             this.selectInvertion.Name = "selectInvertion";
-            this.selectInvertion.Size = new System.Drawing.Size(56, 23);
+            this.selectInvertion.Size = new System.Drawing.Size(60, 23);
             this.selectInvertion.TabIndex = 28;
             this.selectInvertion.Text = "Invert";
             this.selectInvertion.UseVisualStyleBackColor = true;
             // 
             // selectNothing
             // 
-            this.selectNothing.Location = new System.Drawing.Point(155, 138);
+            this.selectNothing.Location = new System.Drawing.Point(146, 151);
             this.selectNothing.Name = "selectNothing";
-            this.selectNothing.Size = new System.Drawing.Size(56, 23);
+            this.selectNothing.Size = new System.Drawing.Size(60, 23);
             this.selectNothing.TabIndex = 27;
             this.selectNothing.Text = "Nothing";
             this.selectNothing.UseVisualStyleBackColor = true;
             // 
             // selectAll
             // 
-            this.selectAll.Location = new System.Drawing.Point(93, 138);
+            this.selectAll.Location = new System.Drawing.Point(80, 151);
             this.selectAll.Name = "selectAll";
-            this.selectAll.Size = new System.Drawing.Size(56, 23);
+            this.selectAll.Size = new System.Drawing.Size(60, 23);
             this.selectAll.TabIndex = 26;
             this.selectAll.Text = "All";
             this.selectAll.UseVisualStyleBackColor = true;
@@ -473,7 +473,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(57, 98);
+            this.label5.Location = new System.Drawing.Point(36, 93);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(39, 13);
             this.label5.TabIndex = 22;
@@ -481,15 +481,15 @@
             // 
             // groupPattern
             // 
-            this.groupPattern.Location = new System.Drawing.Point(99, 95);
+            this.groupPattern.Location = new System.Drawing.Point(81, 90);
             this.groupPattern.Name = "groupPattern";
-            this.groupPattern.Size = new System.Drawing.Size(174, 20);
+            this.groupPattern.Size = new System.Drawing.Size(192, 20);
             this.groupPattern.TabIndex = 21;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(55, 67);
+            this.label4.Location = new System.Drawing.Point(36, 62);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(38, 13);
             this.label4.TabIndex = 20;
@@ -499,15 +499,13 @@
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.label9);
-            this.groupBox2.Controls.Add(this.label7);
             this.groupBox2.Controls.Add(this.applyActiveChange);
             this.groupBox2.Controls.Add(this.applyGroupChange);
             this.groupBox2.Controls.Add(this.activeChange);
-            this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.groupChange);
-            this.groupBox2.Location = new System.Drawing.Point(464, 290);
+            this.groupBox2.Location = new System.Drawing.Point(464, 299);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(293, 144);
+            this.groupBox2.Size = new System.Drawing.Size(293, 135);
             this.groupBox2.TabIndex = 26;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Change Selected";
@@ -518,35 +516,24 @@
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(261, 29);
             this.label9.TabIndex = 32;
-            this.label9.Text = "You will be asked before saving templates to disk!";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(56, 33);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(40, 13);
-            this.label7.TabIndex = 31;
-            this.label7.Text = "Active:";
+            this.label9.Text = "Your approval will be asked before saving templates to disk!";
             // 
             // applyActiveChange
             // 
-            this.applyActiveChange.AutoSize = true;
             this.applyActiveChange.Location = new System.Drawing.Point(15, 28);
             this.applyActiveChange.Name = "applyActiveChange";
-            this.applyActiveChange.Size = new System.Drawing.Size(35, 23);
+            this.applyActiveChange.Size = new System.Drawing.Size(60, 23);
             this.applyActiveChange.TabIndex = 30;
-            this.applyActiveChange.Text = "Set";
+            this.applyActiveChange.Text = "Active =";
             this.applyActiveChange.UseVisualStyleBackColor = true;
             // 
             // applyGroupChange
             // 
-            this.applyGroupChange.AutoSize = true;
             this.applyGroupChange.Location = new System.Drawing.Point(15, 63);
             this.applyGroupChange.Name = "applyGroupChange";
-            this.applyGroupChange.Size = new System.Drawing.Size(35, 23);
+            this.applyGroupChange.Size = new System.Drawing.Size(60, 23);
             this.applyGroupChange.TabIndex = 29;
-            this.applyGroupChange.Text = "Set";
+            this.applyGroupChange.Text = "Group =";
             this.applyGroupChange.UseVisualStyleBackColor = true;
             // 
             // activeChange
@@ -554,27 +541,27 @@
             this.activeChange.AutoSize = true;
             this.activeChange.Checked = true;
             this.activeChange.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.activeChange.Location = new System.Drawing.Point(99, 33);
+            this.activeChange.Location = new System.Drawing.Point(81, 33);
             this.activeChange.Name = "activeChange";
             this.activeChange.Size = new System.Drawing.Size(15, 14);
             this.activeChange.TabIndex = 25;
             this.activeChange.UseVisualStyleBackColor = true;
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(56, 68);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(39, 13);
-            this.label6.TabIndex = 22;
-            this.label6.Text = "Group:";
-            // 
             // groupChange
             // 
-            this.groupChange.Location = new System.Drawing.Point(99, 65);
+            this.groupChange.Location = new System.Drawing.Point(81, 65);
             this.groupChange.Name = "groupChange";
-            this.groupChange.Size = new System.Drawing.Size(174, 20);
+            this.groupChange.Size = new System.Drawing.Size(192, 20);
             this.groupChange.TabIndex = 21;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(34, 156);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(40, 13);
+            this.label10.TabIndex = 39;
+            this.label10.Text = "Select:";
             // 
             // MainForm
             // 
@@ -643,13 +630,11 @@
         private System.Windows.Forms.CheckBox activeChange;
         private System.Windows.Forms.TextBox groupChange;
         private System.Windows.Forms.Button applyGroupChange;
-        private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button applyActiveChange;
-        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.CheckBox activePattern;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Button select;
+        private System.Windows.Forms.Button selectByFilter;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Active;
         private System.Windows.Forms.DataGridViewTextBoxColumn Name_;
         private System.Windows.Forms.DataGridViewTextBoxColumn Group;
@@ -659,5 +644,6 @@
         private System.Windows.Forms.CheckBox useGroupPattern;
         private System.Windows.Forms.CheckBox useActivePattern;
         private System.Windows.Forms.CheckBox useNamePattern;
+        private System.Windows.Forms.Label label10;
     }
 }

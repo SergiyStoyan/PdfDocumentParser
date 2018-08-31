@@ -506,7 +506,7 @@ namespace Cliver.InvoiceParser
             useNamePattern.CheckedChanged += delegate { namePattern.Enabled = useNamePattern.Checked; };
             useGroupPattern.CheckedChanged += delegate { groupPattern.Enabled = useGroupPattern.Checked; };
 
-            select.Click += delegate { selectTemplates(); };
+            selectByFilter.Click += delegate { selectTemplates(); };
             selectAll.Click += delegate
             {
                 foreach (DataGridViewRow r in templates.Rows)
