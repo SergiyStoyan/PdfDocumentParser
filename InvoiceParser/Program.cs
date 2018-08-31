@@ -14,8 +14,6 @@ namespace Cliver.InvoiceParser
     /*
  TBD:
 - tutorial;
-- select by name, group;
-- set Active, Group for all selected;
 
  - ? Template not enherited but embedded
  - MainForm to WPF;

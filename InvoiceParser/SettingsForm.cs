@@ -76,8 +76,8 @@ namespace Cliver.InvoiceParser
                     throw new Exception("MaxPageNumberToDetectTemplate must be a positive number.");
                 if (Synchronize.Checked && string.IsNullOrWhiteSpace(SynchronizationFolder.Text))
                     throw new Exception("Synchronization Folder is empty.");
-                if (PathRoutines.ArePathsEqual(SynchronizationFolder.Text, Config.StorageDir))
-                    throw new Exception("Synchronization Folder cannot be the application's config folder itself.");
+                //if (PathRoutines.ArePathsEqual(SynchronizationFolder.Text, Config.StorageDir))
+                //    throw new Exception("Synchronization Folder cannot be the application's config folder itself.");
 
                 Settings.General.IgnoreHiddenFiles = IgnoreHiddenFiles.Checked;
                 Settings.General.ReadInputFolderRecursively = ReadInputFolderRecursively.Checked;
@@ -95,7 +95,6 @@ namespace Cliver.InvoiceParser
             }
             catch (Exception ex)
             {
-                //Settings.General.Reload();
                 Message.Error2(ex);
             }
         }
@@ -130,15 +129,6 @@ namespace Cliver.InvoiceParser
                     SynchronizationFolder.Text = Config.StorageDir + "\\" + ProgramRoutines.GetAppName();
             }
         }
-
-        //private void bResetTemplates_Click(object sender, EventArgs e)
-        //{
-        //    if (!Message.YesNo("The templates will be reset to the initial state. Proceed?"))
-        //        return;
-        //    Settings.Templates.Reset();
-        //    Settings.Templates.Save();
-        //    ProcessRoutines.Restart();
-        //}
 
         public static string GetDropboxDirectory()
         {

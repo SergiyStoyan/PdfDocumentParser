@@ -33,10 +33,29 @@ namespace Cliver.InvoiceParser
 
             public override void Saving()
             {
+                Templates.RemoveAll(x => string.IsNullOrWhiteSpace(x.Name));
+            }
+
+            //public void SaveIfTouched()
+            //{
+            //    if (!touched)
+            //        return;
+            //    Save();
+            //}
+
+            public void Touch()
+            {
+                touched = true;
+            }
+            bool touched = false;
+            public bool IsTouched()
+            {
+                return touched;
             }
 
             public override void Saved()
             {
+                touched = false;
                 Settings.SynchronizationSettings.SynchronizeUploadFile(this.__File);
             }
 
