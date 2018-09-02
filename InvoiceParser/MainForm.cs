@@ -472,14 +472,14 @@ namespace Cliver.InvoiceParser
 
         private void help_Click(object sender, EventArgs e)
         {
-            string helpFile = @"help\help.html";
-            //try
-            //{
-            //    System.Net.WebClient wc = new System.Net.WebClient();
-            //    wc.DownloadFile("http.cliversoft.com/InvoiceParser/version.1/help.html", helpFile);
-            //}
-            //catch { }
-            System.Diagnostics.Process.Start(helpFile);
+            try
+            {
+                System.Diagnostics.Process.Start(Settings.General.HelpFile);
+            }
+            catch(Exception ex)
+            {
+                LogMessage.Error(ex);
+            }
         }
 
         private void Engine_Click(object sender, EventArgs e)

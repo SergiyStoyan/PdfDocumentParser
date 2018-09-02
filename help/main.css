@@ -1,0 +1,12 @@
+
+h1 {color:#347; text-align: center;}
+h2 {color:#702; text-indent: 20px; margin-top:50}
+h3 {color:#069; margin-top:40}
+h4 {color:#000; text-indent: 0px; margin-top:10; margin-bottom:0}
+p {
+    margin: 5;
+    margin-top:5
+    padding1: 0;
+}
+
+img {max-width: 1200px; max-height: 700px;}

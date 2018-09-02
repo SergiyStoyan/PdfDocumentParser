@@ -1,21 +1,6 @@
 <html>
-
-<style>
-h1 {color:#347; text-align: center;}
-h2 {color:#702; text-indent: 20px; margin-top:50}
-h3 {color:#069; margin-top:40}
-h4 {color:#000; text-indent: 0px; margin-top:10; margin-bottom:0}
-p {
-    margin: 5;
-    margin-top:5
-    padding1: 0;
-}
-</style>
-
-
-
-
 <head>
+<link rel="stylesheet" type="text/css" href="../main.css">
 </head>
 <body>
 <h1>Pdf Document Parser</h1>
@@ -110,10 +95,10 @@ Position deviation parameter allows to loose bonds between master element and se
 <p>When processing documents PdfDocumentParser applies every active template to every new document to recognize a proper template. So, if you have 50 templates and 1000 files evenly distributed for templates, PdfDocumentParser will do on average 1000/2 *50 = 25,000 template tries. It may take a considerable time especially with templates using OCR. You can decrease processing time by the following ways:
 <ul> 
 <li> specify file filters for templates. If it can be done then the tips below are not needed;
-<li> always keep templates that do not correspond to files to be processed right now, inactive;
-<li> put files which correspond to 1-10 templates only to a separate folder and make active only these templates and now process them. This way PdfDocumentParser will have to choose not among 50 templates but only 1-10 that will essentially decrease processing time. Do so for every batch of files;
+<li> try to keep templates that do not correspond to files to be processed right now, inactive;
+<li> order templates so that slow ones like those that use auto-deskew should be checked in the last place when the rest templates have not matched;
+<li> put files which correspond to 1-10 templates only to a separate folder, set active only these templates and then process them. This way PdfDocumentParser will have to choose not among 50 templates but only 1-10 that will essentially decrease processing time. Do so for every batch of files;
 </ul>
-<p>A rule of thumb would be to process files which need OCR separately and keep their templates inactive when processing the rest files.
 
 <h2>To be done</h2>
 <p>While PDF mode just works as expected, OCR and Image modes due to their subjective nature have room for enhancement:
@@ -130,8 +115,8 @@ Position deviation parameter allows to loose bonds between master element and se
     display: flex;
     justify-content: center;    
     ">
-        <script src="copyright.js"></script>
-        &nbsp;©2018,&nbsp;&nbsp;<a href="mailto:sergey.stoyan@gmail.com?Subject=PdfDocumentParser request" target="_top">Sergey Stoyan</a>
+        <script src="../copyright.js"></script>
+        &nbsp;2018,&nbsp;&nbsp;<a href="mailto:sergey.stoyan@gmail.com?Subject=PdfDocumentParser request" target="_top">Sergey Stoyan</a>
 </div>
 </body>
 </html>

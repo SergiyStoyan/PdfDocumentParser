@@ -38,6 +38,8 @@ namespace Cliver.InvoiceParser
             
             public List<string> OrderedOutputFieldNames = new List<string>();
 
+            public string HelpFile = @"help\index.html";
+
             public override void Loaded()
             {
                 if (string.IsNullOrWhiteSpace(InputFolder))

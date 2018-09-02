@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.bAbout = new System.Windows.Forms.Button();
             this.bInputFolder = new System.Windows.Forms.Button();
             this.bOutputFolder = new System.Windows.Forms.Button();
@@ -214,8 +214,8 @@
             // Name_
             // 
             this.Name_.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            this.Name_.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            this.Name_.DefaultCellStyle = dataGridViewCellStyle4;
             this.Name_.HeaderText = "Name";
             this.Name_.Name = "Name_";
             this.Name_.Width = 60;
@@ -498,23 +498,22 @@
             // groupBox2
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.label9);
             this.groupBox2.Controls.Add(this.applyActiveChange);
             this.groupBox2.Controls.Add(this.applyGroupChange);
             this.groupBox2.Controls.Add(this.activeChange);
             this.groupBox2.Controls.Add(this.groupChange);
             this.groupBox2.Location = new System.Drawing.Point(464, 299);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(293, 135);
+            this.groupBox2.Size = new System.Drawing.Size(293, 100);
             this.groupBox2.TabIndex = 26;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Change Selected";
             // 
             // label9
             // 
-            this.label9.Location = new System.Drawing.Point(12, 102);
+            this.label9.Location = new System.Drawing.Point(479, 406);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(261, 29);
+            this.label9.Size = new System.Drawing.Size(258, 29);
             this.label9.TabIndex = 32;
             this.label9.Text = "Your approval will be asked before saving templates to disk!";
             // 
@@ -568,6 +567,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(769, 529);
+            this.Controls.Add(this.label9);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.flowLayoutPanel2);
