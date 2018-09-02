@@ -18,6 +18,12 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class Template
     {
+        public class EditorSettings
+        {
+            public bool ExtractFieldsAutomaticallyWhenPageChanged = true;
+        }
+        public EditorSettings Editor;
+
         public string Name;
 
         public Regex FileFilterRegex;
@@ -44,7 +50,7 @@ namespace Cliver.PdfDocumentParser
 
         public List<Mark> DocumentFirstPageRecognitionMarks;
 
-        public List<Field> Fields;//preserving order for output
+        public List<Field> Fields;
 
         public string TestFile;
         public decimal TestPictureScale = 1.3m;

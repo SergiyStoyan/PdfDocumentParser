@@ -697,14 +697,9 @@ namespace Cliver.PdfDocumentParser
                         int? fai = (int?)cs["FloatingAnchorId"].Value;
                         string rs = (string)cs["Rectangle"].Value;
                         if (rs != null)
-                        {
-                            Template.RectangleF r = rs == null ? null : SerializationRoutines.Json.Deserialize<Template.RectangleF>(rs);
-                            cs["Value"].Value = extractValueAndDrawSelectionBox(fai, r, vt);
-                        }
+                            cs["Value"].Value = extractValueAndDrawSelectionBox(fai, SerializationRoutines.Json.Deserialize<Template.RectangleF>(rs), vt);
                         else
-                        {
                             findAndDrawFloatingAnchor(fai);//to show status
-                        }
                     }
                 }
                 catch (Exception ex)
@@ -1131,6 +1126,7 @@ namespace Cliver.PdfDocumentParser
 
                 pictureScale.Value = t.TestPictureScale > 0 ? t.TestPictureScale : 1;
 
+                ExtractFieldsAutomaticallyWhenPageChanged.Checked = t.Editor == null || t.Editor.ExtractFieldsAutomaticallyWhenPageChanged;
 
                 if (t.TestFile != null && File.Exists(t.TestFile))
                     testFile.Text = t.TestFile;
@@ -1187,6 +1183,9 @@ namespace Cliver.PdfDocumentParser
                 documentFirstPageRecognitionMarks.ClearSelection();
                 fields.ClearSelection();
 
+                foreach (DataGridViewRow r in fields.Rows)
+                    r.Cells["Value"].Value = null;
+
                 currentPage = page_i;
                 tCurrentPage.Text = currentPage.ToString();
 
@@ -1194,7 +1193,21 @@ namespace Cliver.PdfDocumentParser
                 setScaledImage();
                 enableNabigationButtons();
 
-                checkIfCurrentPageIsDocumentFirstPage(); 
+                if (ExtractFieldsAutomaticallyWhenPageChanged.Checked)
+                {
+                    foreach (DataGridViewRow r in fields.Rows)
+                    {
+                        if (r.IsNewRow)
+                            continue;
+                        var vt = Convert.ToBoolean(r.Cells["Ocr"].Value) ? Template.ValueTypes.OcrText : Template.ValueTypes.PdfText;
+                        int? fai = (int?)r.Cells["FloatingAnchorId"].Value;
+                        string rs = (string)r.Cells["Rectangle"].Value;
+                        if (rs != null)
+                            r.Cells["Value"].Value = extractValueAndDrawSelectionBox(fai, SerializationRoutines.Json.Deserialize<Template.RectangleF>(rs), vt);
+                    }
+                }
+
+                checkIfCurrentPageIsDocumentFirstPage();
             }
             catch (Exception e)
             {
@@ -1503,6 +1516,13 @@ namespace Cliver.PdfDocumentParser
             t.TestPictureScale = pictureScale.Value;
 
             t.FileFilterRegex = SerializationRoutines.Json.Deserialize<Regex>(fileFilterRegex.Text);
+
+            if (saving)
+            {
+                if (t.Editor == null)
+                    t.Editor = new Template.EditorSettings();
+                t.Editor.ExtractFieldsAutomaticallyWhenPageChanged = ExtractFieldsAutomaticallyWhenPageChanged.Checked;
+            }
 
             return t;
         }

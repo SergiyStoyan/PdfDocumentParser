@@ -87,8 +87,8 @@
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1 = new System.Windows.Forms.Panel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.save = new System.Windows.Forms.Button();
             this.cancel = new System.Windows.Forms.Button();
+            this.save = new System.Windows.Forms.Button();
             this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
             this.SaveAsInitialTemplate = new System.Windows.Forms.LinkLabel();
             this.label15 = new System.Windows.Forms.Label();
@@ -98,6 +98,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.About = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
+            this.ExtractFieldsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -692,6 +693,7 @@
             // splitContainer3.Panel2
             // 
             this.splitContainer3.Panel2.Controls.Add(this.fields);
+            this.splitContainer3.Panel2.Controls.Add(this.ExtractFieldsAutomaticallyWhenPageChanged);
             this.splitContainer3.Panel2.Controls.Add(this.panel1);
             this.splitContainer3.Panel2.Controls.Add(this.label1);
             this.splitContainer3.Size = new System.Drawing.Size(429, 222);
@@ -826,17 +828,6 @@
             this.flowLayoutPanel1.Size = new System.Drawing.Size(170, 31);
             this.flowLayoutPanel1.TabIndex = 27;
             // 
-            // save
-            // 
-            this.save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.save.Location = new System.Drawing.Point(11, 3);
-            this.save.Name = "save";
-            this.save.Size = new System.Drawing.Size(75, 23);
-            this.save.TabIndex = 20;
-            this.save.Text = "OK";
-            this.save.UseVisualStyleBackColor = true;
-            this.save.Click += new System.EventHandler(this.save_Click);
-            // 
             // cancel
             // 
             this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -847,6 +838,17 @@
             this.cancel.Text = "Cancel";
             this.cancel.UseVisualStyleBackColor = true;
             this.cancel.Click += new System.EventHandler(this.cancel_Click);
+            // 
+            // save
+            // 
+            this.save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.save.Location = new System.Drawing.Point(11, 3);
+            this.save.Name = "save";
+            this.save.Size = new System.Drawing.Size(75, 23);
+            this.save.TabIndex = 20;
+            this.save.Text = "OK";
+            this.save.UseVisualStyleBackColor = true;
+            this.save.Click += new System.EventHandler(this.save_Click);
             // 
             // flowLayoutPanel3
             // 
@@ -949,6 +951,16 @@
             this.label1.Size = new System.Drawing.Size(37, 13);
             this.label1.TabIndex = 29;
             this.label1.Text = "Fields:";
+            // 
+            // ExtractFieldsAutomaticallyWhenPageChanged
+            // 
+            this.ExtractFieldsAutomaticallyWhenPageChanged.AutoSize = true;
+            this.ExtractFieldsAutomaticallyWhenPageChanged.Location = new System.Drawing.Point(175, -1);
+            this.ExtractFieldsAutomaticallyWhenPageChanged.Name = "ExtractFieldsAutomaticallyWhenPageChanged";
+            this.ExtractFieldsAutomaticallyWhenPageChanged.Size = new System.Drawing.Size(195, 17);
+            this.ExtractFieldsAutomaticallyWhenPageChanged.TabIndex = 53;
+            this.ExtractFieldsAutomaticallyWhenPageChanged.Text = "Extract Fields When Page Changed";
+            this.ExtractFieldsAutomaticallyWhenPageChanged.UseVisualStyleBackColor = true;
             // 
             // TemplateForm
             // 
@@ -1067,5 +1079,6 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn ValueType3;
         private System.Windows.Forms.DataGridViewTextBoxColumn PositionDeviation3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Body3;
+        private System.Windows.Forms.CheckBox ExtractFieldsAutomaticallyWhenPageChanged;
     }
 }

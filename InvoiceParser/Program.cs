@@ -14,6 +14,7 @@ namespace Cliver.InvoiceParser
     /*
  TBD:
 - tutorial;
+- clear fields when moving through pages
 
  - ? Template not enherited but embedded
  - MainForm to WPF;
