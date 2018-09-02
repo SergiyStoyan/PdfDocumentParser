@@ -640,12 +640,15 @@ namespace Cliver.PdfDocumentParser
                 try
                 {
                     string n = FieldPreparation.Normalize((string)r.Cells["Name_"].Value);
-                    if (string.IsNullOrWhiteSpace(n))
-                        throw new Exception("Name cannot be empty!");
-                    foreach (DataGridViewRow rr in fields.Rows)
+                    if (!r.IsNewRow)
                     {
-                        if (r != rr && n == FieldPreparation.Normalize((string)rr.Cells["Name_"].Value))
-                            throw new Exception("Name '" + n + "' is duplicated!");
+                        if (string.IsNullOrWhiteSpace(n))
+                            throw new Exception("Name cannot be empty!");
+                        foreach (DataGridViewRow rr in fields.Rows)
+                        {
+                            if (r != rr && n == FieldPreparation.Normalize((string)rr.Cells["Name_"].Value))
+                                throw new Exception("Name '" + n + "' is duplicated!");
+                        }
                     }
                     r.Cells["Name_"].Value = n;
                 }

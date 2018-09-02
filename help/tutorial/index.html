@@ -1,0 +1,66 @@
+<html>
+
+<head>
+<link rel="stylesheet" type="text/css" href="../main.css">
+
+
+</head>
+<body>
+<h1>Pdf Document Parser Tutorial: creating a parsing template</h1>
+<h2>1.Create a blank template</h2>
+It can be created from scratch or copied from an existing one. Usually copying saves time because you can adapt existing settings instead of creating them. However, in this tutorial we'll see how to set up a template from scratch. So, let's remove all the anchors and marks if any. Assumed that in every template we need 4 fields INVOICE, JOB#, PO# and COST so we will not remove them.
+<img src='1.png'/>
+<p>
+
+<h2>2.Create an invoice first page recognition mark with anchor</h2>
+<img src='2.png'/>
+<p>
+
+<h2>3.Create a recognition mark that checks the company brand</h2>
+<img src='3.png'/>
+<p><br>
+<img src='4.png'/>
+<p>
+
+<h2>4.Create a recognition mark that checks if the page is first page of invoice</h2>
+<img src='5.png'/>
+<p>
+
+<h2>5.Set fields</h2>
+<img src='6.png'/>
+<p><br>
+<img src='8.png'/>
+<p>
+
+<h2>6.Go though pages and check how the template works on them</h2>
+<img src='9.png'/>
+<p><br>
+<img src='10.png'/>
+<p><br>
+<img src='11.png'/>
+<p><br>
+<img src='12.png'/>
+<p>
+
+<h2>7.Save</h2>
+<img src='13.png'/>
+<p>
+<br>
+<br>
+
+<p>That's all! When processing a document, Parser will check it for the template's marks and if they found, choose this template for application.
+<br>
+<br>
+<br>
+<br>
+
+<div style=" margin-top:auto;    margin-bottom:auto;    text-align:center;
+    align-content: center;
+    display: flex;
+    justify-content: center;    
+    ">
+        <script src="../copyright.js"></script>
+        &nbsp;2018,&nbsp;&nbsp;<a href="mailto:sergey.stoyan@gmail.com?Subject=PdfDocumentParser request" target="_top">Sergey Stoyan</a>
+</div>
+</body>
+</html>
