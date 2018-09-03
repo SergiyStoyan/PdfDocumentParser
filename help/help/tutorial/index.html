@@ -9,32 +9,36 @@
 <h1>Pdf Document Parser Tutorial: creating a parsing template</h1>
 <h2>1. Create a blank template</h2>
 <p>It can be created from scratch or copied from an existing one. Usually copying saves time because you can adapt existing settings instead of creating them. However, in this tutorial we'll see how to set up a template from scratch. So, let's remove all the anchors and marks if any. Assumed that in every template we need 4 fields INVOICE, JOB#, PO# and COST so we will not remove them.
-<p>Open a test PDF file in the template editor and specify the template's name. As an exapmle, we will parse a PDF consisting of 2 invoices.
+<p class='screenshot_title'>Open a test PDF file in the template editor and specify the template's name. As an example, we will parse a PDF consisting of 2 invoices.
 <img src='1.png'/>
 
 <h2>2. Create an invoice first page recognition marks</h2>
-<p>Any template needs at least one mark that will certainly identify type of document and distingush it from the rest documents you may want to parse. Such a mark should be targeted to some fragment of a document that is unique to its type. Usually it is a logo of a company issued the document.
-<p>To create such a mark, first we need to create an anchor that will capture the logo. Then we create a mark and link it to the anchor.
+<p>Any template needs at least one mark that will certainly identify type of document and distinguish it from the rest documents you may want to parse. Such a mark should be targeted to some fragment of a document that is unique to its type. Usually it is a logo of a company issued the document.
+<p class='screenshot_title'>To create such a mark, first we need to create an anchor that will capture the logo. Then we create a mark and link it to the anchor.
 <img src='2.png'/>
-<p>Now, how those anchor and mark work inside the parser? In every page Parser looks for the fragment defined by the anchor. Depending on its type it can be either pdf text, OCR'ed text, or image. Each of types is processed by its own very different way and so choosing the right type is determinative of successful and robust parsing. The logo in our example document is an image that is why we set anchor's type to ImageData. That means that Parser will look for the image we selected when created the anchor. An anchor can be located anywheare on the page. In general, if the anchor is found, Parser takes a rectagnle specified in the linked mark and locates it is relatively to the found anchor. Then compares text surrounded by the rectange to the text in the mark and if they are equal then the mark is considered found. 
-<p>But a mark does not obligatory have a rectange specified. In such a simple case it is considered found just together with its anchor. It is what we have in out example: Parser will look for the logo image and when found then it will choose this this template for processing.
-<p>While the first mark is a must, usually a template requires one more mark that will check number of document page. It is needed when a parsed PDF file consists of multiple documents. So let's create a mark for the first page: when Parser finds it, all the previously found fields are recorded and reset.
+<p>How do those anchor and mark work inside the parser? In every page Parser looks for the fragment defined by the anchor. Depending on its type it can be either PDF text, OCR'ed text, or image. Each of types is processed by its own very different way and so choosing the right type is crucial in successful and robust parsing. The logo in our example document is an image that is why we set anchor's type to ImageData. This means that Parser will look for the image we selected while creating the anchor. 
+<p>An anchor can be found anywhere on page. In general way, having an anchor found, Parser takes the selecting rectangle specified by a mark linked to this anchor and locates it relatively to the anchor's position in page. Then Parser compares a text surrounded by the rectangle with the text defined in the mark and when they are equal, the mark is considered found. 
+<p>But a mark does not obligatory have a selecting rectangle specified. In such a simpler case it is considered found just when its anchor found. It is the case in our example: Parser will look for the logo image and if found, it will choose this template for processing of the document.
+<br><br><p>Now, besides the first mark which is a must, a template usually needs one more mark that will check number of document page. It is necessary when parsing a multi-document PDF file. 
+<p class='screenshot_title'>So let's create a mark for the first page: when Parser finds it, all the previously found fields are recorded and reset.
 <img src='3.png'/>
-<p>Now our template has 2 marks that can recognize the document and its first page. Sometimes more marks are required: for instance when we need to parse documents of different types issued by the same company. For our example 2 marks are sufficient though. 
+<p>Now our template has 2 marks that can recognize the document and its first page. Sometimes more mark is required: for instance when we need to parse different type documents issued by the same company. In our example 2 marks are sufficient though. 
+<p><span class='attention'>NOTE: </span>when you select a line in either table, Parser processes it on the current page and the result is displayed in the page viewer and in Status.
 
 <h2>3. Create fields</h2>
-<p>Let's create fields. Click on the blank line and fill names if they are not preset. Now the same way as above create anchors for fields and link fields to them.
+<p class='screenshot_title'>Let's create fields. Click on the blank line and fill names if they are not preset. In the same way as above create anchors for the fields and link the fields to them.
 <img src='4.png'/>
-<p>How does Parser process fields? The likeness between fields and marks is that all of them have a rectangle (well, a mark might not have but field always does). And like with marks, when field's anchor is found, Parser locates field's rectangle relatively to the anchor and extracts text it surrounds. But further the difference between marks and fields comes out: while in a case of mark the captured text is compared with mark's predefined text, in a case of field the captured text is recorded as a field value. 
-<p>And one more difference: while all the marks must be met on the same page, fields should not neccessary do so. In every page Parser tries to capture all the fields and only the last found value is remembered and recorded when the end of file or a new document is reached.
+<p>How does Parser process fields? The likeness between a field and a mark is that each has a selecting rectangle (well, a mark might not have but a field always does). And like with a mark, when a field's anchor is found, Parser locates the field's rectangle relatively to the anchor's position and extracts text surrounded by the rectangle. But further the difference between marks and fields comes out: while in a case of mark the captured text is compared with the mark's predefined text, in a case of field the captured text is recorded as a field value. 
+<p>And one more difference: while all the marks must be met on the same page, fields should not necessary do so. In every page Parser tries to capture all the fields and only the last captures are remembered and recorded when the end of PDF file or a new document is reached.
+<p><span class='attention'>NOTE: </span>the same anchor can be linked by multiple marks and fields.
 
 <h2>4. Walk though PDF and check how the template works on the rest pages</h2>
-<p>When all the fields are set, it's time to walk through the rest pages of the PDF file and see how the template works on them. 
-<p>The page 2 is a new invoice and 2 marks in our template recoginize it properly:
+<p>When all the fields are set, it's time to walk through the rest pages of the PDF file and see how the template we created works on them. 
+<p class='screenshot_title'>The page 2 is a new invoice and the marks in our template recognized it properly:
 <img src='5.png'/>
-<p>The page 3 is an invoice continuation. On this page, Parser captures COST and keeps INVOCE, JOB# and PO# found on the previous page: 
+<p class='screenshot_title'>The page 3 is an invoice continuation. On this page, Parser captured COST while remembering INVOCE, JOB# and PO# captured on the previous page: 
 <img src='6.png'/>
-<p>The template worked properly. Now click OK and engage it in parsing.
+<p>The template worked properly. Now click OK to engage it in parsing.
 <br>
 <br>
 <br>
