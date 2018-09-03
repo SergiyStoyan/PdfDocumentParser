@@ -12,7 +12,7 @@ using System.Windows.Forms;
 namespace Cliver.InvoiceParser
 {
     /*
- TBD:
+ TBD: 
 
  - ? Template not enherited but embedded
  - MainForm to WPF;

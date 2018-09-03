@@ -8,7 +8,7 @@ p {
     margin-top:5
     padding1: 0;
 }
-img {max-width: 1200px; max-height: 700px; margin-top:20; margin-bottom:20}
+img {max-width: 1200px; max-height: 700px; margin-top:20; margin-bottom:30;display:block;}
 
 .footer {margin-top:auto;margin-bottom:auto;text-align:center;align-content:center;display:flex;justify-content:center;}
 .attention{font-style:italic;font-weight:bold;color1:#503;}
