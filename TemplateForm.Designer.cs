@@ -99,6 +99,7 @@
             this.About = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
             this.ExtractFieldsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
+            this.label19 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -693,9 +694,10 @@
             // splitContainer3.Panel2
             // 
             this.splitContainer3.Panel2.Controls.Add(this.fields);
-            this.splitContainer3.Panel2.Controls.Add(this.ExtractFieldsAutomaticallyWhenPageChanged);
             this.splitContainer3.Panel2.Controls.Add(this.panel1);
             this.splitContainer3.Panel2.Controls.Add(this.label1);
+            this.splitContainer3.Panel2.Controls.Add(this.ExtractFieldsAutomaticallyWhenPageChanged);
+            this.splitContainer3.Panel2.Controls.Add(this.label19);
             this.splitContainer3.Size = new System.Drawing.Size(429, 222);
             this.splitContainer3.SplitterDistance = 85;
             this.splitContainer3.TabIndex = 0;
@@ -955,12 +957,21 @@
             // ExtractFieldsAutomaticallyWhenPageChanged
             // 
             this.ExtractFieldsAutomaticallyWhenPageChanged.AutoSize = true;
-            this.ExtractFieldsAutomaticallyWhenPageChanged.Location = new System.Drawing.Point(175, -1);
+            this.ExtractFieldsAutomaticallyWhenPageChanged.Location = new System.Drawing.Point(51, -1);
             this.ExtractFieldsAutomaticallyWhenPageChanged.Name = "ExtractFieldsAutomaticallyWhenPageChanged";
-            this.ExtractFieldsAutomaticallyWhenPageChanged.Size = new System.Drawing.Size(195, 17);
+            this.ExtractFieldsAutomaticallyWhenPageChanged.Size = new System.Drawing.Size(198, 17);
             this.ExtractFieldsAutomaticallyWhenPageChanged.TabIndex = 53;
-            this.ExtractFieldsAutomaticallyWhenPageChanged.Text = "Extract Fields When Page Changed";
+            this.ExtractFieldsAutomaticallyWhenPageChanged.Text = "Extract Fields When Page Changed]";
             this.ExtractFieldsAutomaticallyWhenPageChanged.UseVisualStyleBackColor = true;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(44, 0);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(10, 13);
+            this.label19.TabIndex = 54;
+            this.label19.Text = "[";
             // 
             // TemplateForm
             // 
@@ -1080,5 +1091,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn PositionDeviation3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Body3;
         private System.Windows.Forms.CheckBox ExtractFieldsAutomaticallyWhenPageChanged;
+        private System.Windows.Forms.Label label19;
     }
 }
