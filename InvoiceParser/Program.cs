@@ -23,7 +23,7 @@ namespace Cliver.InvoiceParser
 
 - switch to Tesseract.4
 
-     */
+     */ 
     class Program
     {
         static Program()

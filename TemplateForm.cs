@@ -24,7 +24,7 @@ namespace Cliver.PdfDocumentParser
     /// <summary>
     /// template editor GUI
     /// </summary>
-    public partial class TemplateForm : Form
+    public partial class TemplateForm : Form 
     {
         public abstract class TemplateManager
         {
@@ -33,6 +33,17 @@ namespace Cliver.PdfDocumentParser
             abstract public void ReplaceWith(Template newTemplate);
             abstract public void SaveAsInitialTemplate(Template template);
             public string LastTestFile;
+            public void HelpRequest()
+            {
+                try
+                {
+                    System.Diagnostics.Process.Start(Settings.Constants.HelpFile);
+                }
+                catch (Exception ex)
+                {
+                    LogMessage.Error(ex);
+                }
+            }
         }
 
         public TemplateForm(TemplateManager templateManager, string testFileDefaultFolder)
@@ -1407,8 +1418,7 @@ namespace Cliver.PdfDocumentParser
 
         private void Help_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            string helpFile = @"help\help.html";
-            System.Diagnostics.Process.Start(helpFile);
+            templateManager.HelpRequest();
         }
 
         private void save_Click(object sender, EventArgs e)

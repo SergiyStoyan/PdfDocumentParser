@@ -176,6 +176,7 @@
     <Compile Include="SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Settings\Constants.cs" />
     <Compile Include="Settings\ImageProcessing.cs" />
     <Compile Include="Settings\Appearance.cs" />
     <Compile Include="ImageData.cs" />

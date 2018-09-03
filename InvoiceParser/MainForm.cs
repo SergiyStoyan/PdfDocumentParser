@@ -472,11 +472,16 @@ namespace Cliver.InvoiceParser
 
         private void help_Click(object sender, EventArgs e)
         {
+            helpRequest();
+        }
+
+        void helpRequest()
+        {
             try
             {
                 System.Diagnostics.Process.Start(Settings.General.HelpFile);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 LogMessage.Error(ex);
             }

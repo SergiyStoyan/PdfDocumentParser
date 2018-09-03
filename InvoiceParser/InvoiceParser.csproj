@@ -243,7 +243,7 @@
 xcopy /Y /S "$(ProjectDir)_config" "$(TargetDir)"
 xcopy /Y /S "$(ProjectDir)..\externals" "$(TargetDir)"
 xcopy /Y /S "$(ProjectDir)..\config" "$(TargetDir)"
-xcopy /Y /S "$(ProjectDir)..\help" "$(TargetDir)\help"</PostBuildEvent>
+xcopy /Y /S "$(ProjectDir)..\help\help" "$(TargetDir)\help"</PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
