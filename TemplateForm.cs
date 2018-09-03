@@ -826,6 +826,13 @@ namespace Cliver.PdfDocumentParser
                     int fai = 1;
                     if (fais.Count > 0)
                         fai = fais.Max() + 1;
+                    //foreach (int i in fais)
+                    //{
+                    //    if (fai < i)
+                    //        break;
+                    //    if (fai == i)
+                    //        fai++;
+                    //}
                     fais.Add(fai);
                     rr.Cells["Id3"].Value = fai;
                 }
@@ -1461,7 +1468,8 @@ namespace Cliver.PdfDocumentParser
             t.FindBestImageMatch = findBestImageMatch.Checked;
             t.BrightnessTolerance = (float)brightnessTolerance.Value;
             t.DifferentPixelNumberTolerance = (float)differentPixelNumberTolerance.Value;
-            
+
+            bool? removeNotLinkedAnchors = null;
             t.FloatingAnchors = new List<Template.FloatingAnchor>();
             foreach (DataGridViewRow r in floatingAnchors.Rows)
                 if (r.Cells["Id3"].Value != null)
@@ -1471,9 +1479,45 @@ namespace Cliver.PdfDocumentParser
                     float positionDeviation = (float)r.Cells["PositionDeviation3"].Value;
                     if (positionDeviation <= 0)
                         throw new Exception("FloatingAnchor[" + (int)r.Cells["Id3"].Value + "] has wrong Deviation. Deviation always must be a positive floating number due to internal image re-scaling.");
+
+                    int floatingAnchorId = (int)r.Cells["Id3"].Value;
+
+                    if (saving)
+                    {
+                        bool linked = false;
+                        foreach (DataGridViewRow rr in documentFirstPageRecognitionMarks.Rows)
+                            if (rr.Cells["FloatingAnchorId2"].Value != null)
+                            {
+                                int fai = (int)rr.Cells["FloatingAnchorId2"].Value;
+                                if (fai == floatingAnchorId)
+                                {
+                                    linked = true;
+                                    break;
+                                }
+                            }
+                        if (!linked)
+                            foreach (DataGridViewRow rr in fields.Rows)
+                                if (rr.Cells["FloatingAnchorId"].Value != null)
+                                {
+                                    int fai = (int)rr.Cells["FloatingAnchorId"].Value;
+                                    if (fai == floatingAnchorId)
+                                    {
+                                        linked = true;
+                                        break;
+                                    }
+                                }
+                        if (!linked)
+                        {
+                            if (removeNotLinkedAnchors == null)
+                                removeNotLinkedAnchors = Message.YesNo("The template contains not linked anchor[s]. Should they be removed?");
+                            if (removeNotLinkedAnchors == true)
+                                continue;
+                        }
+                    }
+
                     t.FloatingAnchors.Add(new Template.FloatingAnchor
                     {
-                        Id = (int)r.Cells["Id3"].Value,
+                        Id = floatingAnchorId,
                         ValueType = (Template.ValueTypes)r.Cells["ValueType3"].Value,
                         PositionDeviation = positionDeviation,
                         ValueAsString = (string)r.Cells["Body3"].Value
