@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.bAbout = new System.Windows.Forms.Button();
             this.bInputFolder = new System.Windows.Forms.Button();
             this.bOutputFolder = new System.Windows.Forms.Button();
@@ -57,6 +57,7 @@
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.namePattern = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.useNamePattern = new System.Windows.Forms.CheckBox();
             this.useGroupPattern = new System.Windows.Forms.CheckBox();
             this.useActivePattern = new System.Windows.Forms.CheckBox();
@@ -70,12 +71,11 @@
             this.groupPattern = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label9 = new System.Windows.Forms.Label();
             this.applyActiveChange = new System.Windows.Forms.Button();
             this.applyGroupChange = new System.Windows.Forms.Button();
             this.activeChange = new System.Windows.Forms.CheckBox();
             this.groupChange = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.templates)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
@@ -214,8 +214,8 @@
             // Name_
             // 
             this.Name_.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            this.Name_.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            this.Name_.DefaultCellStyle = dataGridViewCellStyle1;
             this.Name_.HeaderText = "Name";
             this.Name_.Name = "Name_";
             this.Name_.Width = 60;
@@ -383,6 +383,15 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select";
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(34, 156);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(40, 13);
+            this.label10.TabIndex = 39;
+            this.label10.Text = "Select:";
+            // 
             // useNamePattern
             // 
             this.useNamePattern.AutoSize = true;
@@ -509,14 +518,6 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Change Selected";
             // 
-            // label9
-            // 
-            this.label9.Location = new System.Drawing.Point(479, 406);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(258, 29);
-            this.label9.TabIndex = 32;
-            this.label9.Text = "Your approval will be asked before saving templates to disk!";
-            // 
             // applyActiveChange
             // 
             this.applyActiveChange.Location = new System.Drawing.Point(15, 28);
@@ -553,14 +554,14 @@
             this.groupChange.Size = new System.Drawing.Size(192, 20);
             this.groupChange.TabIndex = 21;
             // 
-            // label10
+            // label9
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(34, 156);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(40, 13);
-            this.label10.TabIndex = 39;
-            this.label10.Text = "Select:";
+            this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label9.Location = new System.Drawing.Point(479, 406);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(258, 29);
+            this.label9.TabIndex = 32;
+            this.label9.Text = "Your approval will be asked before saving templates to disk!";
             // 
             // MainForm
             // 
