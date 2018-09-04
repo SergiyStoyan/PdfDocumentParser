@@ -824,15 +824,15 @@ namespace Cliver.PdfDocumentParser
                 if (rr.Cells["Id3"].Value == null && rr.Cells["Body3"].Value != null && rr.Cells["ValueType3"].Value != null)
                 {
                     int fai = 1;
-                    if (fais.Count > 0)
-                        fai = fais.Max() + 1;
-                    //foreach (int i in fais)
-                    //{
-                    //    if (fai < i)
-                    //        break;
-                    //    if (fai == i)
-                    //        fai++;
-                    //}
+                    //if (fais.Count > 0)
+                    //    fai = fais.Max() + 1;
+                    foreach (int i in fais)
+                    {
+                        if (fai < i)
+                            break;
+                        if (fai == i)
+                            fai++;
+                    }
                     fais.Add(fai);
                     rr.Cells["Id3"].Value = fai;
                 }
