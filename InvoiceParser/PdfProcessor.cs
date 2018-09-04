@@ -108,7 +108,7 @@ namespace Cliver.InvoiceParser
         string getStampValue(string fieldName)
         {
             string v;
-            if (fieldNames2texts.TryGetValue(fieldName, out v) && v!=null)
+            if (fieldNames2texts.TryGetValue(fieldName, out v) && v != null)
                 return Regex.Replace(v, @"\-", "");
             return "";
         }
@@ -158,7 +158,7 @@ namespace Cliver.InvoiceParser
             ps = new PdfStamper(Pages.PdfReader, new FileStream(stampedPdf, FileMode.Create, FileAccess.Write, FileShare.None));
 
             foreach (Template.Field f in Pages.ActiveTemplate.Fields)
-                fieldNames2texts[f.Name] = getFieldText(Pages[documentFirstPageI], f);
+                setFieldText(Pages[documentFirstPageI], f);
             for (int page_i = documentFirstPageI + 1; page_i <= Pages.PdfReader.NumberOfPages; page_i++)
             {
                 if (Pages[page_i].IsDocumentFirstPage())
@@ -169,23 +169,26 @@ namespace Cliver.InvoiceParser
                     documentFirstPageI = page_i;
                 }
                 foreach (Template.Field f in Pages.ActiveTemplate.Fields)
-                    fieldNames2texts[f.Name] = getFieldText(Pages[page_i], f);
+                    setFieldText(Pages[page_i], f);
             }
             record(Pages.ActiveTemplate.Name, documentFirstPageI, fieldNames2texts);
             stampInvoicePages(documentFirstPageI, Pages.PdfReader.NumberOfPages);
         }
 
-        string getFieldText(Page p, Template.Field field)
+        void setFieldText(Page p, Template.Field field)
         {
             if (field.Rectangle == null)
-                return null;
+                return;
             string error;
             object v = p.GetValue(field.FloatingAnchorId, field.Rectangle, field.ValueType, out error);
             if (v is ImageData)
-                return "--image--";
-            if (v == null)
-                return null;
-            return Page.NormalizeText((string)v);
+            {
+                if (!fieldNames2texts.ContainsKey(field.Name))
+                    fieldNames2texts[field.Name] = "--image--";
+                return;
+            }
+            if (v != null)
+                fieldNames2texts[field.Name] = Page.NormalizeText((string)v);
         }
     }
 }
