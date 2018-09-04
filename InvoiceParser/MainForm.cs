@@ -479,7 +479,7 @@ namespace Cliver.InvoiceParser
         {
             try
             {
-                System.Diagnostics.Process.Start(Settings.General.HelpFile);
+                System.Diagnostics.Process.Start(PdfDocumentParser.Settings.Constants.HelpFile);
             }
             catch (Exception ex)
             {
