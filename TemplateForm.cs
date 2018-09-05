@@ -713,7 +713,10 @@ namespace Cliver.PdfDocumentParser
                         if (rs != null)
                             cs["Value"].Value = extractValueAndDrawSelectionBox(fai, SerializationRoutines.Json.Deserialize<Template.RectangleF>(rs), vt);
                         else
-                            findAndDrawFloatingAnchor(fai);//to show status
+                        {//to show status
+                            if (fai == null || findAndDrawFloatingAnchor(fai) != null)
+                                setStatus(statuses.WARNING, "field[" + i + "] has no selecting box defined");
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -815,7 +818,7 @@ namespace Cliver.PdfDocumentParser
                     rr.Cells["Body3"].Value = null;
                 }
 
-            List<int> fais = new List<int>();
+            SortedSet<int> fais = new SortedSet<int>();
             foreach (DataGridViewRow rr in floatingAnchors.Rows)
                 if (rr.Cells["Id3"].Value != null)
                     fais.Add((int)rr.Cells["Id3"].Value);
@@ -825,7 +828,7 @@ namespace Cliver.PdfDocumentParser
                 {
                     int fai = 1;
                     //if (fais.Count > 0)
-                    //    fai = fais.Max() + 1;
+                    //    fai = fais.Max() + 1;                    
                     foreach (int i in fais)
                     {
                         if (fai < i)
@@ -913,6 +916,7 @@ namespace Cliver.PdfDocumentParser
             if (fa == null || fa.GetValue() == null)
             {
                 setStatus(statuses.WARNING, "FloatingAnchor[" + fa.Id + "] is not defined.");
+                clearPicture(renewImage);
                 return null;
             }
 
@@ -920,6 +924,7 @@ namespace Cliver.PdfDocumentParser
             if (rs == null || rs.Count < 1)
             {
                 setStatus(statuses.ERROR, "FloatingAnchor[" + fa.Id + "] is not found.");
+                clearPicture(renewImage);
                 return null;
             }
             setStatus(statuses.SUCCESS, "FloatingAnchor[" + fa.Id + "] is found.");
@@ -987,6 +992,7 @@ namespace Cliver.PdfDocumentParser
                 bm = new Bitmap(scaledCurrentPageBitmap);
             else
                 bm = new Bitmap(picture.Image);
+
             using (Graphics gr = Graphics.FromImage(bm))
             {
                 float factor = (float)pictureScale.Value;
@@ -1013,6 +1019,22 @@ namespace Cliver.PdfDocumentParser
         }
         Point selectionBoxPoint0, selectionBoxPoint1, selectionBoxPoint2;
         bool drawingSelectionBox = false;
+
+        void clearPicture(bool renewImage)
+        {
+            if (pages == null)
+                return;
+
+            Bitmap bm;
+            if (renewImage)
+            {
+                bm = new Bitmap(scaledCurrentPageBitmap);
+                if (picture.Image != null)
+                    picture.Image.Dispose();
+                picture.Image = bm;
+                return;
+            }
+        }
 
         void setFloatingAnchorFromSelectedElements()
         {

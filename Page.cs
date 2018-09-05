@@ -103,7 +103,8 @@ namespace Cliver.PdfDocumentParser
             //    floatingAnchorValueStrings2rectangles.Clear();
 
             if (newTemplate.BrightnessTolerance != pageCollection.ActiveTemplate.BrightnessTolerance
-                || newTemplate.DifferentPixelNumberTolerance != pageCollection.ActiveTemplate.DifferentPixelNumberTolerance)
+                || newTemplate.DifferentPixelNumberTolerance != pageCollection.ActiveTemplate.DifferentPixelNumberTolerance
+                || newTemplate.FindBestImageMatch != pageCollection.ActiveTemplate.FindBestImageMatch)
                 floatingAnchorHashes2rectangles.Clear();
         }
 

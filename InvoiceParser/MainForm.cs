@@ -507,11 +507,28 @@ namespace Cliver.InvoiceParser
 
         void initiateSelectionEngine()
         {
+            useActivePattern.Checked = Settings.General.UseActiveSelectPattern;
+            useNamePattern.Checked = Settings.General.UseNameSelectPattern;
+            useGroupPattern.Checked = Settings.General.UseGroupSelectPattern;
+
             useActivePattern.CheckedChanged += delegate { activePattern.Enabled = useActivePattern.Checked; };
             useNamePattern.CheckedChanged += delegate { namePattern.Enabled = useNamePattern.Checked; };
             useGroupPattern.CheckedChanged += delegate { groupPattern.Enabled = useGroupPattern.Checked; };
 
-            selectByFilter.Click += delegate { selectTemplates(); };
+            selectByFilter.Click += delegate
+            {
+                foreach (DataGridViewRow r in templates.Rows)
+                {
+                    r.Cells["Selected"].Value = (!activePattern.Enabled || (getBoolValue(r, "Active") == activePattern.Checked))
+                         && (!namePattern.Enabled || (string.IsNullOrEmpty(namePattern.Text) ? string.IsNullOrEmpty(getStringValue(r, "Name_")) : Regex.IsMatch(getStringValue(r, "Name_"), namePattern.Text, RegexOptions.IgnoreCase)))
+                         && (!groupPattern.Enabled || (string.IsNullOrEmpty(groupPattern.Text) ? string.IsNullOrEmpty(getStringValue(r, "Group")) : Regex.IsMatch(getStringValue(r, "Group"), groupPattern.Text, RegexOptions.IgnoreCase)));
+                }
+
+                Settings.General.UseActiveSelectPattern = useActivePattern.Checked;
+                Settings.General.UseNameSelectPattern = useNamePattern.Checked;
+                Settings.General.UseGroupSelectPattern = useGroupPattern.Checked;
+                Settings.General.Save();
+            };
             selectAll.Click += delegate
             {
                 foreach (DataGridViewRow r in templates.Rows)
@@ -548,16 +565,6 @@ namespace Cliver.InvoiceParser
                         r.Cells["Group"].Value = groupChange.Text;
                 Settings.Templates.Touch();
             };
-        }
-
-        void selectTemplates()
-        {
-            foreach (DataGridViewRow r in templates.Rows)
-            {
-                r.Cells["Selected"].Value = (!activePattern.Enabled || (getBoolValue(r, "Active") == activePattern.Checked))
-                     && (!namePattern.Enabled || (string.IsNullOrEmpty(namePattern.Text) ? string.IsNullOrEmpty(getStringValue(r, "Name_")) : Regex.IsMatch(getStringValue(r, "Name_"), namePattern.Text, RegexOptions.IgnoreCase)))
-                     && (!groupPattern.Enabled || (string.IsNullOrEmpty(groupPattern.Text) ? string.IsNullOrEmpty(getStringValue(r, "Group")) : Regex.IsMatch(getStringValue(r, "Group"), groupPattern.Text, RegexOptions.IgnoreCase)));
-            }
         }
     }
 }
