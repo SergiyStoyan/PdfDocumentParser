@@ -507,13 +507,13 @@ namespace Cliver.InvoiceParser
 
         void initiateSelectionEngine()
         {
-            useActivePattern.Checked = Settings.General.UseActiveSelectPattern;
-            useNamePattern.Checked = Settings.General.UseNameSelectPattern;
-            useGroupPattern.Checked = Settings.General.UseGroupSelectPattern;
-
             useActivePattern.CheckedChanged += delegate { activePattern.Enabled = useActivePattern.Checked; };
             useNamePattern.CheckedChanged += delegate { namePattern.Enabled = useNamePattern.Checked; };
             useGroupPattern.CheckedChanged += delegate { groupPattern.Enabled = useGroupPattern.Checked; };
+
+            useActivePattern.Checked = Settings.General.UseActiveSelectPattern;
+            useNamePattern.Checked = Settings.General.UseNameSelectPattern;
+            useGroupPattern.Checked = Settings.General.UseGroupSelectPattern;
 
             selectByFilter.Click += delegate
             {
