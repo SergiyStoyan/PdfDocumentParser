@@ -286,63 +286,15 @@ namespace Cliver.PdfDocumentParser
                     floatingAnchors.Rows[e.RowIndex].Cells["ValueType3"].Value = Template.ValueTypes.PdfText;
             };
 
-            floatingAnchors.RowValidating += delegate (object sender, DataGridViewCellCancelEventArgs e)
-            {
-                DataGridViewRow r = floatingAnchors.Rows[e.RowIndex];
-                try
-                {
-                    //if (!(r.Cells["PositionDeviation3"].Value is float))
-                    //    throw new Exception("Position deviation must be a float number.");
-                }
-                catch (Exception ex)
-                {
-                    //LogMessage.Error("Name", ex);
-                    Message.Error2(ex);
-                    e.Cancel = true;
-                }
-            };
-
             floatingAnchors.DataError += delegate (object sender, DataGridViewDataErrorEventArgs e)
             {
                 DataGridViewRow r = floatingAnchors.Rows[e.RowIndex];
                 Message.Error("FloatingAnchor[" + r.Cells["Id3"].Value + "] has unacceptable value of " + floatingAnchors.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message);
             };
 
-            floatingAnchors.DefaultValuesNeeded += delegate (object sender, DataGridViewRowEventArgs e)
-            {
-                try
-                {
-                    //if (e.Row.Cells["PositionDeviation3"].Value == null)
-                    //{
-                    //    float? f = null;
-                    //    foreach (DataGridViewRow rr in floatingAnchors.Rows)
-                    //    {
-                    //        f = (float?)rr.Cells["PositionDeviation3"].Value;
-                    //        if (f != null)
-                    //            break;
-                    //    }
-                    //    if (f != null)
-                    //        e.Row.Cells["PositionDeviation3"].Value = (float)f;
-                    //    else
-                    //        e.Row.Cells["PositionDeviation3"].Value = 0.1;
-                    //}
-                }
-                catch (Exception ex)
-                {
-                    LogMessage.Error(ex);
-                }
-            };
-
             floatingAnchors.UserDeletedRow += delegate (object sender, DataGridViewRowEventArgs e)
             {
                 onFloatingAnchorsChanged(null);
-            };
-
-            floatingAnchors.CellMouseEnter += delegate (object sender, DataGridViewCellEventArgs e)
-            {
-            };
-            floatingAnchors.CellMouseLeave += delegate (object sender, DataGridViewCellEventArgs e)
-            {
             };
 
             floatingAnchors.CurrentCellDirtyStateChanged += delegate
@@ -355,21 +307,22 @@ namespace Cliver.PdfDocumentParser
             {
                 if (loadingTemplate)
                     return;
-                var r = floatingAnchors.Rows[e.RowIndex];
-                int? fai = (int?)r.Cells["Id3"].Value;
+                var row = floatingAnchors.Rows[e.RowIndex];
+                int? fai = (int?)row.Cells["Id3"].Value;
                 switch (floatingAnchors.Columns[e.ColumnIndex].Name)
                 {
                     case "Id3":
                         findAndDrawFloatingAnchor(fai);
                         break;
-                    case "Body3":
-                        //if (floatingAnchors.Rows[e.RowIndex].Cells["Body3"].Value == null)                        
+                    case "Value3":
+                        //if (floatingAnchors.Rows[e.RowIndex].Cells["Value3"].Value == null)                        
                         //    floatingAnchors.Rows[e.RowIndex].Cells["Id3"].Value = null;
                         onFloatingAnchorsChanged(fai);
                         findAndDrawFloatingAnchor(fai);
                         break;
                     case "ValueType3":
-                        r.Cells["Body3"].Value = null;
+                        row.Cells["Value3"].Value = null;
+                        setImageProcessingControls(row);
                         break;
                 }
             };
@@ -383,7 +336,10 @@ namespace Cliver.PdfDocumentParser
 
                     setStatus(statuses.NEUTRAL, "");
                     if (floatingAnchors.SelectedRows.Count < 1)
+                    {
+                        setImageProcessingControls(null);
                         return;
+                    }
                     documentFirstPageRecognitionMarks.ClearSelection();
                     fields.ClearSelection();
                     var r = floatingAnchors.SelectedRows[0];
@@ -394,6 +350,7 @@ namespace Cliver.PdfDocumentParser
                         floatingAnchors.Rows[i].Selected = true;
                         return;
                     }
+                    setImageProcessingControls(r);
                     findAndDrawFloatingAnchor((int?)r.Cells["Id3"].Value);
                 }
                 catch (Exception ex)
@@ -416,27 +373,10 @@ namespace Cliver.PdfDocumentParser
 
             documentFirstPageRecognitionMarks.RowValidating += delegate (object sender, DataGridViewCellCancelEventArgs e)
             {
-                DataGridViewRow r = documentFirstPageRecognitionMarks.Rows[e.RowIndex];
-                try
-                {
-                }
-                catch (Exception ex)
-                {
-                    //LogMessage.Error("Name", ex);
-                    LogMessage.Error(ex);
-                    e.Cancel = true;
-                }
             };
 
             documentFirstPageRecognitionMarks.DefaultValuesNeeded += delegate (object sender, DataGridViewRowEventArgs e)
             {
-                try
-                {
-                }
-                catch (Exception ex)
-                {
-                    LogMessage.Error(ex);
-                }
             };
 
             documentFirstPageRecognitionMarks.CellValueChanged += delegate (object sender, DataGridViewCellEventArgs e)
@@ -445,47 +385,91 @@ namespace Cliver.PdfDocumentParser
                 {
                     if (loadingTemplate)
                         return;
-                    var cs = documentFirstPageRecognitionMarks.Rows[e.RowIndex].Cells;
+                    DataGridViewRow row = documentFirstPageRecognitionMarks.Rows[e.RowIndex];
+                    var cs = row.Cells;
                     int? fai = (int?)cs["FloatingAnchorId2"].Value;
                     string r_ = (string)cs["Rectangle2"].Value;
-                    if (r_ == null)
-                        return;
-                    Template.RectangleF r = SerializationRoutines.Json.Deserialize<Template.RectangleF>(r_);
+                    Template.RectangleF r = null;
+                    if (r_ != null)
+                        r = SerializationRoutines.Json.Deserialize<Template.RectangleF>(r_);
                     switch (documentFirstPageRecognitionMarks.Columns[e.ColumnIndex].Name)
                     {
                         case "Rectangle2":
                             {
-                                object o = cs["ValueType2"].Value;
-                                if (o != null)
-                                    cs["Value2"].Value = extractValueAndDrawSelectionBox(fai, r, (Template.ValueTypes)o);
+                                if (r == null)
+                                {
+                                    setStatus(statuses.WARNING, "The selection rectangle is empty.");
+                                    cs["Value2"].Value = null;
+                                    return;
+                                }
+                                Template.ValueTypes vt = (Template.ValueTypes)cs["ValueType2"].Value;
+                                object v = extractValueAndDrawSelectionBox(fai, r, vt);
+                                if (vt == Template.ValueTypes.ImageData)
+                                {
+                                    imageProcessingControls2Value();
+                                    Template.Mark.ImageDataValue idv = (Template.Mark.ImageDataValue)Template.Mark.GetValueFromString(Template.ValueTypes.ImageData, (string)cs["Value2"].Value);
+                                    idv.ImageData = (ImageData)v;
+                                    cs["Value2"].Value = Template.Mark.GetValueAsString(Template.ValueTypes.ImageData, idv);
+                                }
+                                else
+                                    cs["Value2"].Value = (string)v;
                             }
-                            break;
+                            return;
                         case "ValueType2":
                             cs["Value2"].Value = null;
-                            break;
+                            setImageProcessingControls(row);
+                            //if (r != null)
+                            //{
+                            //    Template.ValueTypes vt = (Template.ValueTypes)cs["ValueType2"].Value;
+                            //    object v = extractValueAndDrawSelectionBox(fai, r, vt);
+                            //    if (vt == Template.ValueTypes.ImageData)
+                            //    {
+                            //        imageProcessingControls2Value();
+                            //        Template.Mark.ImageDataValue idv = (Template.Mark.ImageDataValue)Template.Mark.GetValueFromString(Template.ValueTypes.ImageData, (string)cs["Value2"].Value);
+                            //        idv.ImageData = (ImageData)v;
+                            //        cs["Value2"].Value = Template.Mark.GetValueAsString(Template.ValueTypes.ImageData, idv);
+                            //    }
+                            //    else
+                            //        cs["Value2"].Value = (string)v;
+                            //}
+                            cs["Rectangle2"].Value = null;
+                            return;
                         case "FloatingAnchorId2":
-                            if (fai != null)
-                            {
-                                pages.ActiveTemplate = getTemplateFromUI(false);
-                                PointF? p = pages[currentPage].GetFloatingAnchorPoint0((int)fai);
-                                if (p == null)
-                                    setStatus(statuses.ERROR, "FloatingAnchor[" + fai + "] is not found.");
-                                else
-                                {
-                                    setStatus(statuses.SUCCESS, "FloatingAnchor[" + fai + "] is found.");
-                                    r.X -= ((PointF)p).X;
-                                    r.Y -= ((PointF)p).Y;
-                                    cs["Rectangle2"].Value = SerializationRoutines.Json.Serialize(r);
-                                }
-                            }
-                            else//anchor deselected
-                            {
-                                setStatus(statuses.WARNING, "FloatingAnchor unlinked. The selection rectangle may need fix.");
-                                object o = cs["ValueType2"].Value;
-                                if (o != null)
-                                    cs["Value2"].Value = extractValueAndDrawSelectionBox(fai, r, (Template.ValueTypes)o);
-                            }
-                            break;
+                            //if (fai != null)
+                            //{
+                            //    pages.ActiveTemplate = getTemplateFromUI(false);
+                            //    PointF? p = pages[currentPage].GetFloatingAnchorPoint0((int)fai);
+                            //    if (p == null)
+                            //        setStatus(statuses.ERROR, "FloatingAnchor[" + fai + "] is not found.");
+                            //    else
+                            //    {
+                            //        setStatus(statuses.SUCCESS, "FloatingAnchor[" + fai + "] is found.");
+                            //        if (r != null)
+                            //        {
+                            //            r.X -= ((PointF)p).X;
+                            //            r.Y -= ((PointF)p).Y;
+                            //            cs["Rectangle2"].Value = SerializationRoutines.Json.Serialize(r);
+                            //        }
+                            //    }
+                            //}
+                            //else//anchor deselected
+                            //    if (r != null)
+                            //{
+                            //    setStatus(statuses.WARNING, "FloatingAnchor unlinked. The selection rectangle may need fix.");
+                            //    Template.ValueTypes vt = (Template.ValueTypes)cs["ValueType2"].Value;
+                            //    object v = extractValueAndDrawSelectionBox(fai, r, vt);
+                            //    if (vt == Template.ValueTypes.ImageData)
+                            //    {
+                            //        imageProcessingControls2Value();
+                            //        Template.Mark.ImageDataValue idv = (Template.Mark.ImageDataValue)Template.Mark.GetValueFromString(Template.ValueTypes.ImageData, (string)cs["Value2"].Value);
+                            //        idv.ImageData = (ImageData)v;
+                            //        cs["Value2"].Value = Template.Mark.GetValueAsString(Template.ValueTypes.ImageData, idv);
+                            //    }
+                            //    else
+                            //        cs["Value2"].Value = (string)v;
+                            //}
+                            cs["Rectangle2"].Value = null;
+                            return;
                     }
                 }
                 catch (Exception ex)
@@ -502,49 +486,53 @@ namespace Cliver.PdfDocumentParser
                         return;
 
                     setStatus(statuses.NEUTRAL, "");
-                    if (documentFirstPageRecognitionMarks.SelectedRows.Count > 0)
+                    if (documentFirstPageRecognitionMarks.SelectedRows.Count < 1)
                     {
-                        floatingAnchors.ClearSelection();
-                        fields.ClearSelection();
-                        int i = documentFirstPageRecognitionMarks.SelectedRows[0].Index;
+                        setImageProcessingControls(null);
+                        return;
+                    }
+                    floatingAnchors.ClearSelection();
+                    fields.ClearSelection();
+                    int i = documentFirstPageRecognitionMarks.SelectedRows[0].Index;
 
-                        if (documentFirstPageRecognitionMarks.Rows[i].IsNewRow)//hacky forcing commit a newly added row and display the blank row
-                        {
-                            int j = documentFirstPageRecognitionMarks.Rows.Add();
-                            documentFirstPageRecognitionMarks.Rows[j].Selected = true;
-                            return;
-                        }
-                        var cs = documentFirstPageRecognitionMarks.Rows[i].Cells;
+                    if (documentFirstPageRecognitionMarks.Rows[i].IsNewRow)//hacky forcing commit a newly added row and display the blank row
+                    {
+                        int j = documentFirstPageRecognitionMarks.Rows.Add();
+                        documentFirstPageRecognitionMarks.Rows[j].Selected = true;
+                        return;
+                    }
+                    setImageProcessingControls(documentFirstPageRecognitionMarks.Rows[i]);
 
-                        var vt = (Template.ValueTypes)cs["ValueType2"].Value;
-                        int? fai = (int?)cs["FloatingAnchorId2"].Value;
-                        string rs = (string)cs["Rectangle2"].Value;
-                        if (rs != null)
+                    var cs = documentFirstPageRecognitionMarks.Rows[i].Cells;
+                    var vt = (Template.ValueTypes)cs["ValueType2"].Value;
+                    int? fai = (int?)cs["FloatingAnchorId2"].Value;
+                    string rs = (string)cs["Rectangle2"].Value;
+                    if (rs != null)
+                    {
+                        Template.RectangleF r = rs == null ? null : SerializationRoutines.Json.Deserialize<Template.RectangleF>(rs);
+                        if (vt != Template.ValueTypes.ImageData)
                         {
-                            Template.RectangleF r = rs == null ? null : SerializationRoutines.Json.Deserialize<Template.RectangleF>(rs);
                             string t1 = (string)cs["Value2"].Value;
-                            string t2 = extractValueAndDrawSelectionBox(fai, r, vt);
+                            string t2 = (string)extractValueAndDrawSelectionBox(fai, r, vt);
                             if (t1 != t2)
-                            {
-                                if (vt != Template.ValueTypes.ImageData)
-                                    setStatus(statuses.ERROR, "documentFirstPageRecognitionMark[" + i + "] is not found:\r\n" + t2 + "\r\n <> \r\n" + t1);
-                                else
-                                    setStatus(statuses.ERROR, "documentFirstPageRecognitionMark[" + i + "] is not found:\r\nimage is not similar");
-                            }
+                                setStatus(statuses.ERROR, "documentFirstPageRecognitionMark[" + i + "] is not found:\r\n" + t2 + "\r\n <> \r\n" + t1);
                             else
-                            {
-                                status.BackColor = Color.LightGreen;
-                                if (vt != Template.ValueTypes.ImageData)
-                                    setStatus(statuses.SUCCESS, "documentFirstPageRecognitionMark[" + i + "] is found:\r\n" + t2);
-                                else
-                                    setStatus(statuses.SUCCESS, "documentFirstPageRecognitionMark[" + i + "] is found:\r\nimage is similar");
-                            }
+                                setStatus(statuses.SUCCESS, "documentFirstPageRecognitionMark[" + i + "] is found:\r\n" + t2);
                         }
-                        else if (fai != null)
+                        else
                         {
-                            if (null != findAndDrawFloatingAnchor(fai))
-                                setStatus(statuses.SUCCESS, "documentFirstPageRecognitionMark[" + i + "] is found");
+                            Template.Mark.ImageDataValue idv1 = (Template.Mark.ImageDataValue)Template.Mark.GetValueFromString(Template.ValueTypes.ImageData, (string)cs["Value2"].Value);
+                            ImageData id2 = (ImageData)extractValueAndDrawSelectionBox(fai, r, vt);
+                            if (idv1.ImageData.ImageIsSimilar(id2, idv1.BrightnessTolerance, idv1.DifferentPixelNumberTolerance))
+                                setStatus(statuses.ERROR, "documentFirstPageRecognitionMark[" + i + "] is not found:\r\nimage is not similar");
+                            else
+                                setStatus(statuses.SUCCESS, "documentFirstPageRecognitionMark[" + i + "] is found:\r\nimage is similar");
                         }
+                    }
+                    else if (fai != null)
+                    {
+                        if (null != findAndDrawFloatingAnchor(fai))
+                            setStatus(statuses.SUCCESS, "documentFirstPageRecognitionMark[" + i + "] is found");
                     }
                 }
                 catch (Exception ex)
@@ -808,14 +796,105 @@ namespace Cliver.PdfDocumentParser
             };
         }
 
+        void setImageProcessingControls(DataGridViewRow row)
+        {
+            imageProcessingControls2Value();
+
+            if (row != null && row.Selected)
+            {
+                editingRow = row;
+                if (floatingAnchors.Rows.Contains(row))
+                {
+                    Template.ValueTypes valueType = (Template.ValueTypes)row.Cells["ValueType3"].Value;
+                    if (valueType == Template.ValueTypes.ImageData)
+                    {
+                        findBestImageMatch.Enabled = true;
+                        brightnessTolerance.Enabled = true;
+                        differentPixelNumberTolerance.Enabled = true;
+                        Template.FloatingAnchor.ImageDataValue idv = (Template.FloatingAnchor.ImageDataValue)Template.FloatingAnchor.GetValueFromString(Template.ValueTypes.ImageData, (string)row.Cells["Value3"].Value);
+                        if (idv == null)
+                            idv = new Template.FloatingAnchor.ImageDataValue();
+                        findBestImageMatch.Checked = idv.FindBestImageMatch;
+                        brightnessTolerance.Value = (decimal)idv.BrightnessTolerance;
+                        differentPixelNumberTolerance.Value = (decimal)idv.DifferentPixelNumberTolerance;
+                        return;
+                    }
+                }
+                else if (documentFirstPageRecognitionMarks.Rows.Contains(row))
+                {
+                    Template.ValueTypes valueType = (Template.ValueTypes)row.Cells["ValueType2"].Value;
+                    if (valueType == Template.ValueTypes.ImageData)
+                    {
+                        findBestImageMatch.Enabled = true;
+                        brightnessTolerance.Enabled = true;
+                        differentPixelNumberTolerance.Enabled = true;
+                        Template.Mark.ImageDataValue idv = (Template.Mark.ImageDataValue)Template.Mark.GetValueFromString(Template.ValueTypes.ImageData, (string)row.Cells["Value2"].Value);
+                        if (idv == null)
+                            idv = new Template.Mark.ImageDataValue();
+                        findBestImageMatch.Checked = idv.FindBestImageMatch;
+                        brightnessTolerance.Value = (decimal)idv.BrightnessTolerance;
+                        differentPixelNumberTolerance.Value = (decimal)idv.DifferentPixelNumberTolerance;
+                        return;
+                    }
+                }
+            }
+            editingRow = null;
+            findBestImageMatch.Enabled = false;
+            brightnessTolerance.Enabled = false;
+            differentPixelNumberTolerance.Enabled = false;
+        }
+        DataGridViewRow editingRow = null;
+        void imageProcessingControls2Value()
+        {
+            try
+            {
+                if (editingRow == null || !findBestImageMatch.Enabled)
+                    return;
+                if (floatingAnchors.Rows.Contains(editingRow))
+                {
+                    var cs = editingRow.Cells;
+                    if ((Template.ValueTypes)cs["ValueType3"].Value != Template.ValueTypes.ImageData)
+                        return;
+                    Template.FloatingAnchor.ImageDataValue idv = (Template.FloatingAnchor.ImageDataValue)Template.FloatingAnchor.GetValueFromString(Template.ValueTypes.ImageData, (string)cs["Value3"].Value);
+                    if (idv == null)
+                        idv = new Template.FloatingAnchor.ImageDataValue();
+                    idv.FindBestImageMatch = findBestImageMatch.Checked;
+                    idv.BrightnessTolerance = (float)brightnessTolerance.Value;
+                    idv.DifferentPixelNumberTolerance = (float)differentPixelNumberTolerance.Value;
+
+                    cs["Value3"].Value = Template.FloatingAnchor.GetValueAsString(Template.ValueTypes.ImageData,idv);
+                    return;
+                }
+                if (documentFirstPageRecognitionMarks.Rows.Contains(editingRow))
+                {
+                    var cs = editingRow.Cells;
+                    if ((Template.ValueTypes)cs["ValueType2"].Value != Template.ValueTypes.ImageData)
+                        return;
+                    Template.Mark.ImageDataValue idv = (Template.Mark.ImageDataValue)Template.Mark.GetValueFromString(Template.ValueTypes.ImageData, (string)cs["Value2"].Value);
+                    if (idv == null)
+                        idv = new Template.Mark.ImageDataValue();
+                    idv.FindBestImageMatch = findBestImageMatch.Checked;
+                    idv.BrightnessTolerance = (float)brightnessTolerance.Value;
+                    idv.DifferentPixelNumberTolerance = (float)differentPixelNumberTolerance.Value;
+
+                    cs["Value2"].Value = Template.Mark.GetValueAsString(Template.ValueTypes.ImageData,  idv);
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                Message.Error2(ex);
+            }
+        }
+
         PageCollection pages = null;
 
         void onFloatingAnchorsChanged(int? updatedFloatingAnchorId)
         {
             foreach (DataGridViewRow rr in floatingAnchors.Rows)
-                if (rr.Cells["Body3"].Value == null || rr.Cells["ValueType3"].Value == null)
+                if (rr.Cells["Value3"].Value == null || rr.Cells["ValueType3"].Value == null)
                 {
-                    rr.Cells["Body3"].Value = null;
+                    rr.Cells["Value3"].Value = null;
                 }
 
             SortedSet<int> fais = new SortedSet<int>();
@@ -824,7 +903,7 @@ namespace Cliver.PdfDocumentParser
                     fais.Add((int)rr.Cells["Id3"].Value);
 
             foreach (DataGridViewRow rr in floatingAnchors.Rows)
-                if (rr.Cells["Id3"].Value == null && rr.Cells["Body3"].Value != null && rr.Cells["ValueType3"].Value != null)
+                if (rr.Cells["Id3"].Value == null && rr.Cells["Value3"].Value != null && rr.Cells["ValueType3"].Value != null)
                 {
                     int fai = 1;
                     //if (fais.Count > 0)
@@ -935,7 +1014,7 @@ namespace Cliver.PdfDocumentParser
             return new PointF(rs[0].X, rs[0].Y);
         }
 
-        string extractValueAndDrawSelectionBox(int? floatingAnchorId, Template.RectangleF r, Template.ValueTypes valueType, bool renewImage = true)
+        object extractValueAndDrawSelectionBox(int? floatingAnchorId, Template.RectangleF r, Template.ValueTypes valueType, bool renewImage = true)
         {
             try
             {
@@ -969,7 +1048,7 @@ namespace Cliver.PdfDocumentParser
                     case Template.ValueTypes.OcrText:
                         return Page.NormalizeText((string)v);
                     case Template.ValueTypes.ImageData:
-                        return SerializationRoutines.Json.Serialize(v, false);
+                        return v;
                     default:
                         throw new Exception("Unknown option: " + valueType);
                 }
@@ -1060,7 +1139,7 @@ namespace Cliver.PdfDocumentParser
                                         Char = cb.Char,
                                         Rectangle = new Template.RectangleF(cb.R.X, cb.R.Y, cb.R.Width, cb.R.Height),
                                     });
-                            r.Cells["Body3"].Value = Template.FloatingAnchor.GetValueAsString(pte);
+                            r.Cells["Value3"].Value = Template.FloatingAnchor.GetValueAsString(Template.ValueTypes.PdfText, pte);
                         }
                         break;
                     case Template.ValueTypes.OcrText:
@@ -1076,14 +1155,14 @@ namespace Cliver.PdfDocumentParser
                                         Char = cb.Char,
                                         Rectangle = new Template.RectangleF(cb.R.X, cb.R.Y, cb.R.Width, cb.R.Height),
                                     });
-                            r.Cells["Body3"].Value = Template.FloatingAnchor.GetValueAsString(ote);
+                            r.Cells["Value3"].Value = Template.FloatingAnchor.GetValueAsString(Template.ValueTypes.OcrText, ote);
                         }
                         break;
                     case Template.ValueTypes.ImageData:
                         {
                             if (selectedImageDataValue.ImageBoxs.Count < 1)
                                 return;                            
-                            r.Cells["Body3"].Value = Template.FloatingAnchor.GetValueAsString(selectedImageDataValue);
+                            r.Cells["Value3"].Value = Template.FloatingAnchor.GetValueAsString(Template.ValueTypes.ImageData, selectedImageDataValue);
                         }
                         break;
                     default:
@@ -1114,10 +1193,7 @@ namespace Cliver.PdfDocumentParser
 
                 pageRotation.SelectedIndex = (int)t.PagesRotation;
                 autoDeskew.Checked = t.AutoDeskew;
-                AutoDeskewThreshold.Value = t.AutoDeskewThreshold;
-                findBestImageMatch.Checked = t.FindBestImageMatch;
-                brightnessTolerance.Value = (decimal)t.BrightnessTolerance;
-                differentPixelNumberTolerance.Value = (decimal)t.DifferentPixelNumberTolerance;
+                autoDeskewThreshold.Value = t.AutoDeskewThreshold;
 
                 floatingAnchors.Rows.Clear();
                 if (t.FloatingAnchors != null)
@@ -1129,7 +1205,7 @@ namespace Cliver.PdfDocumentParser
                         cs["Id3"].Value = fa.Id;
                         cs["ValueType3"].Value = fa.ValueType;
                         cs["PositionDeviation3"].Value = fa.PositionDeviation;
-                        cs["Body3"].Value = fa.ValueAsString;
+                        cs["Value3"].Value = fa.ValueAsString;
                     }
                     onFloatingAnchorsChanged(null);
                 }
@@ -1225,6 +1301,11 @@ namespace Cliver.PdfDocumentParser
                 floatingAnchors.ClearSelection();
                 documentFirstPageRecognitionMarks.ClearSelection();
                 fields.ClearSelection();
+
+                editingRow = null;
+                findBestImageMatch.Enabled = false;
+                brightnessTolerance.Enabled = false;
+                differentPixelNumberTolerance.Enabled = false;
 
                 foreach (DataGridViewRow r in fields.Rows)
                     r.Cells["Value"].Value = null;
@@ -1486,22 +1567,13 @@ namespace Cliver.PdfDocumentParser
 
             t.PagesRotation = (Template.PageRotations)pageRotation.SelectedIndex;
             t.AutoDeskew = autoDeskew.Checked;
-            t.AutoDeskewThreshold = (int)AutoDeskewThreshold.Value;
-            t.FindBestImageMatch = findBestImageMatch.Checked;
-            t.BrightnessTolerance = (float)brightnessTolerance.Value;
-            t.DifferentPixelNumberTolerance = (float)differentPixelNumberTolerance.Value;
+            t.AutoDeskewThreshold = (int)autoDeskewThreshold.Value;
 
             bool? removeNotLinkedAnchors = null;
             t.FloatingAnchors = new List<Template.FloatingAnchor>();
             foreach (DataGridViewRow r in floatingAnchors.Rows)
                 if (r.Cells["Id3"].Value != null)
                 {
-                    if(r.Cells["PositionDeviation3"].Value == null)
-                        r.Cells["PositionDeviation3"].Value = Settings.ImageProcessing.CoordinateDeviationMargin;//it must be > 0
-                    float positionDeviation = (float)r.Cells["PositionDeviation3"].Value;
-                    if (positionDeviation <= 0)
-                        throw new Exception("FloatingAnchor[" + (int)r.Cells["Id3"].Value + "] has wrong Deviation. Deviation always must be a positive floating number due to internal image re-scaling.");
-
                     int floatingAnchorId = (int)r.Cells["Id3"].Value;
 
                     if (saving)
@@ -1537,12 +1609,18 @@ namespace Cliver.PdfDocumentParser
                         }
                     }
 
+                    if (r.Cells["PositionDeviation3"].Value == null)
+                        r.Cells["PositionDeviation3"].Value = Settings.ImageProcessing.CoordinateDeviationMargin;//it must be > 0
+                    float positionDeviation = (float)r.Cells["PositionDeviation3"].Value;
+                    if (positionDeviation <= 0)
+                        throw new Exception("FloatingAnchor[" + (int)r.Cells["Id3"].Value + "] has wrong Deviation. Deviation always must be a positive floating number due to internal image re-scaling.");
+                    
                     t.FloatingAnchors.Add(new Template.FloatingAnchor
                     {
                         Id = floatingAnchorId,
                         ValueType = (Template.ValueTypes)r.Cells["ValueType3"].Value,
                         PositionDeviation = positionDeviation,
-                        ValueAsString = (string)r.Cells["Body3"].Value
+                        ValueAsString = (string)r.Cells["Value3"].Value
                     });
                 }
             t.FloatingAnchors = t.FloatingAnchors.OrderBy(a => a.Id).ToList();
@@ -1588,18 +1666,14 @@ namespace Cliver.PdfDocumentParser
                 }
             }
 
-            t.Editor.TestFile = testFile.Text;
-
-            //t.ImageResolution = (int)imageResolution.Value;
-
-            t.Editor.TestPictureScale = pictureScale.Value;
-
             t.FileFilterRegex = SerializationRoutines.Json.Deserialize<Regex>(fileFilterRegex.Text);
 
             if (saving)
             {
                 if (t.Editor == null)
                     t.Editor = new Template.EditorSettings();
+                t.Editor.TestFile = testFile.Text;
+                t.Editor.TestPictureScale = pictureScale.Value;
                 t.Editor.ExtractFieldsAutomaticallyWhenPageChanged = ExtractFieldsAutomaticallyWhenPageChanged.Checked;
             }
 

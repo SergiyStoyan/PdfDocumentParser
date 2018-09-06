@@ -29,6 +29,15 @@ namespace Cliver.InvoiceParser
             {
                 //if (Templates.Count < 1)
                 //    Templates.Add(CreateInitialTemplate());
+
+                //conversion to new format
+                foreach (Template t in Templates.Where(x => x.Editor == null))
+                    t.Editor = new PdfDocumentParser.Template.EditorSettings
+                    {
+                        TestPictureScale = 1.2m,
+                        TestFile = "",
+                        ExtractFieldsAutomaticallyWhenPageChanged = true,
+                    };
             }
 
             public override void Saving()
@@ -72,8 +81,6 @@ namespace Cliver.InvoiceParser
                 {
                     Active = true,
                     AutoDeskew = false,
-                    BrightnessTolerance = 0.4f,
-                    DifferentPixelNumberTolerance = 0.01f,
                     Fields = new List<Template.Field> {
                         new Template.Field { Name = "INVOICE#" , Rectangle=new Template.RectangleF(0,0,10,10)},
                         new Template.Field { Name = "JOB#", Rectangle=new Template.RectangleF(0,0,10,10) },
@@ -82,13 +89,12 @@ namespace Cliver.InvoiceParser
                     },
                     Name = "",
                     FileFilterRegex = new Regex(@"\.pdf$", RegexOptions.IgnoreCase),
-                    FindBestImageMatch = false,
                     FloatingAnchors = new List<Template.FloatingAnchor>(),
                     DocumentFirstPageRecognitionMarks = new List<Template.Mark>(),
                     PagesRotation = Template.PageRotations.NONE,
                     Editor = new PdfDocumentParser.Template.EditorSettings
                     {
-                        TestPictureScale = 1.3m,
+                        TestPictureScale = 1.2m,
                         TestFile = "",
                         ExtractFieldsAutomaticallyWhenPageChanged = true,
                     },

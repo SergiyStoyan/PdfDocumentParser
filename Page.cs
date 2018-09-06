@@ -101,11 +101,6 @@ namespace Cliver.PdfDocumentParser
 
             //if (pageCollection.ActiveTemplate.Name != newTemplate.Name)
             //    floatingAnchorValueStrings2rectangles.Clear();
-
-            if (newTemplate.BrightnessTolerance != pageCollection.ActiveTemplate.BrightnessTolerance
-                || newTemplate.DifferentPixelNumberTolerance != pageCollection.ActiveTemplate.DifferentPixelNumberTolerance
-                || newTemplate.FindBestImageMatch != pageCollection.ActiveTemplate.FindBestImageMatch)
-                floatingAnchorHashes2rectangles.Clear();
         }
 
         Bitmap getRectangleFromActiveTemplateBitmap(float x, float y, float w, float h)
@@ -263,12 +258,13 @@ namespace Cliver.PdfDocumentParser
                     }
                     return null;
                 case Template.ValueTypes.ImageData:
-                    List<Template.FloatingAnchor.ImageDataValue.ImageBox> ibs = ((Template.FloatingAnchor.ImageDataValue)fa.GetValue()).ImageBoxs;
+                    Template.FloatingAnchor.ImageDataValue idv = (Template.FloatingAnchor.ImageDataValue)fa.GetValue();
+                    List<Template.FloatingAnchor.ImageDataValue.ImageBox> ibs = idv.ImageBoxs;
                     if (ibs.Count < 1)
                         return null;
                     List<RectangleF> bestRs = null;
                     float minDeviation = 1;
-                    ibs[0].ImageData.FindWithinImage(ActiveTemplateImageData, pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance, (Point point0, float deviation) =>
+                    ibs[0].ImageData.FindWithinImage(ActiveTemplateImageData, idv.BrightnessTolerance, idv.DifferentPixelNumberTolerance, (Point point0, float deviation) =>
                     {
                         List<RectangleF> rs = new List<RectangleF>();
                         rs.Add(new RectangleF(point0, new SizeF(ibs[0].Rectangle.Width, ibs[0].Rectangle.Height)));
@@ -283,12 +279,12 @@ namespace Cliver.PdfDocumentParser
                             Template.RectangleF r = new Template.RectangleF(point0.X + ibs[i].Rectangle.X - ibs[0].Rectangle.X - fa.PositionDeviation, point0.Y + ibs[i].Rectangle.Y - ibs[0].Rectangle.Y - fa.PositionDeviation, ibs[i].Rectangle.Width + fa.PositionDeviation, ibs[i].Rectangle.Height + fa.PositionDeviation);
                             using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Y / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height / Settings.ImageProcessing.Image2PdfResolutionRatio))
                             {
-                                if (null == ibs[i].ImageData.FindWithinImage(new ImageData(rb), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance, false))
+                                if (null == ibs[i].ImageData.FindWithinImage(new ImageData(rb), idv.BrightnessTolerance, idv.DifferentPixelNumberTolerance, false))
                                     return true;
                             }
                             rs.Add(r.GetSystemRectangleF());
                         }
-                        if (!pageCollection.ActiveTemplate.FindBestImageMatch)
+                        if (!idv.FindBestImageMatch)
                         {
                             bestRs = rs;
                             return false;
@@ -391,8 +387,8 @@ namespace Cliver.PdfDocumentParser
                         }
                     case Template.ValueTypes.ImageData:
                         {
-                            ImageData id = (ImageData)m.GetValue();
-                            if (id.ImageIsSimilar((ImageData)(v), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance))
+                            Template.Mark.ImageDataValue idv = (Template.Mark.ImageDataValue)m.GetValue();
+                            if (idv.ImageData.ImageIsSimilar((ImageData)(v), idv.BrightnessTolerance, idv.DifferentPixelNumberTolerance))
                                 continue;
                             error = "documentFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.IndexOf(m) + "]: image is not similar.";
                             return false;
