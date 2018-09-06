@@ -55,6 +55,10 @@
             this.autoDeskew = new System.Windows.Forms.CheckBox();
             this.testFile = new System.Windows.Forms.TextBox();
             this.floatingAnchors = new System.Windows.Forms.DataGridView();
+            this.Id3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ValueType3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.PositionDeviation3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Value3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label10 = new System.Windows.Forms.Label();
             this.bTestFile = new System.Windows.Forms.Button();
             this.tCurrentPage = new System.Windows.Forms.TextBox();
@@ -97,10 +101,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.ExtractFieldsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
             this.label19 = new System.Windows.Forms.Label();
-            this.Id3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ValueType3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.PositionDeviation3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Value3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -199,6 +201,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label20);
             this.groupBox2.Controls.Add(this.label13);
             this.groupBox2.Controls.Add(this.label11);
             this.groupBox2.Controls.Add(this.findBestImageMatch);
@@ -233,11 +236,10 @@
             // 
             this.findBestImageMatch.AutoSize = true;
             this.findBestImageMatch.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.findBestImageMatch.Location = new System.Drawing.Point(47, 25);
+            this.findBestImageMatch.Location = new System.Drawing.Point(171, 26);
             this.findBestImageMatch.Name = "findBestImageMatch";
-            this.findBestImageMatch.Size = new System.Drawing.Size(138, 17);
+            this.findBestImageMatch.Size = new System.Drawing.Size(15, 14);
             this.findBestImageMatch.TabIndex = 58;
-            this.findBestImageMatch.Text = "Find Best Image Match:";
             this.findBestImageMatch.UseVisualStyleBackColor = true;
             // 
             // brightnessTolerance
@@ -407,6 +409,7 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.label21);
             this.groupBox1.Controls.Add(this.autoDeskewThreshold);
             this.groupBox1.Controls.Add(this.label14);
             this.groupBox1.Controls.Add(this.pageRotation);
@@ -472,11 +475,10 @@
             // 
             this.autoDeskew.AutoSize = true;
             this.autoDeskew.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.autoDeskew.Location = new System.Drawing.Point(0, 51);
+            this.autoDeskew.Location = new System.Drawing.Point(84, 52);
             this.autoDeskew.Name = "autoDeskew";
-            this.autoDeskew.Size = new System.Drawing.Size(91, 17);
+            this.autoDeskew.Size = new System.Drawing.Size(15, 14);
             this.autoDeskew.TabIndex = 52;
-            this.autoDeskew.Text = "Auto-deskew:";
             this.autoDeskew.UseVisualStyleBackColor = true;
             // 
             // testFile
@@ -506,6 +508,34 @@
             this.floatingAnchors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.floatingAnchors.Size = new System.Drawing.Size(429, 122);
             this.floatingAnchors.TabIndex = 50;
+            // 
+            // Id3
+            // 
+            this.Id3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Id3.HeaderText = "Id";
+            this.Id3.Name = "Id3";
+            this.Id3.ReadOnly = true;
+            this.Id3.Width = 41;
+            // 
+            // ValueType3
+            // 
+            this.ValueType3.HeaderText = "Type";
+            this.ValueType3.Name = "ValueType3";
+            this.ValueType3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.ValueType3.Width = 70;
+            // 
+            // PositionDeviation3
+            // 
+            this.PositionDeviation3.HeaderText = "Deviation";
+            this.PositionDeviation3.Name = "PositionDeviation3";
+            this.PositionDeviation3.Width = 60;
+            // 
+            // Value3
+            // 
+            this.Value3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Value3.HeaderText = "Value";
+            this.Value3.Name = "Value3";
+            this.Value3.ReadOnly = true;
             // 
             // label10
             // 
@@ -959,33 +989,23 @@
             this.label19.TabIndex = 54;
             this.label19.Text = "[";
             // 
-            // Id3
+            // label20
             // 
-            this.Id3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Id3.HeaderText = "Id";
-            this.Id3.Name = "Id3";
-            this.Id3.ReadOnly = true;
-            this.Id3.Width = 41;
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(51, 26);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(119, 13);
+            this.label20.TabIndex = 59;
+            this.label20.Text = "Find Best Image Match:";
             // 
-            // ValueType3
+            // label21
             // 
-            this.ValueType3.HeaderText = "Type";
-            this.ValueType3.Name = "ValueType3";
-            this.ValueType3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ValueType3.Width = 70;
-            // 
-            // PositionDeviation3
-            // 
-            this.PositionDeviation3.HeaderText = "Deviation";
-            this.PositionDeviation3.Name = "PositionDeviation3";
-            this.PositionDeviation3.Width = 60;
-            // 
-            // Value3
-            // 
-            this.Value3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Value3.HeaderText = "Value";
-            this.Value3.Name = "Value3";
-            this.Value3.ReadOnly = true;
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(2, 52);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(72, 13);
+            this.label21.TabIndex = 63;
+            this.label21.Text = "Auto-deskew:";
             // 
             // TemplateForm
             // 
@@ -1109,5 +1129,7 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn ValueType3;
         private System.Windows.Forms.DataGridViewTextBoxColumn PositionDeviation3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Value3;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label21;
     }
 }

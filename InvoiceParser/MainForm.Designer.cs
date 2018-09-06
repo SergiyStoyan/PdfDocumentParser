@@ -76,6 +76,7 @@
             this.activeChange = new System.Windows.Forms.CheckBox();
             this.groupChange = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
+            this.sortSelectedUp = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.templates)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
@@ -354,7 +355,7 @@
             // 
             // namePattern
             // 
-            this.namePattern.Location = new System.Drawing.Point(81, 59);
+            this.namePattern.Location = new System.Drawing.Point(81, 58);
             this.namePattern.Name = "namePattern";
             this.namePattern.Size = new System.Drawing.Size(192, 20);
             this.namePattern.TabIndex = 19;
@@ -362,6 +363,7 @@
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.sortSelectedUp);
             this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Controls.Add(this.useNamePattern);
             this.groupBox1.Controls.Add(this.useGroupPattern);
@@ -397,7 +399,7 @@
             this.useNamePattern.AutoSize = true;
             this.useNamePattern.Checked = true;
             this.useNamePattern.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.useNamePattern.Location = new System.Drawing.Point(15, 62);
+            this.useNamePattern.Location = new System.Drawing.Point(15, 61);
             this.useNamePattern.Name = "useNamePattern";
             this.useNamePattern.Size = new System.Drawing.Size(15, 14);
             this.useNamePattern.TabIndex = 38;
@@ -408,7 +410,7 @@
             this.useGroupPattern.AutoSize = true;
             this.useGroupPattern.Checked = true;
             this.useGroupPattern.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.useGroupPattern.Location = new System.Drawing.Point(15, 93);
+            this.useGroupPattern.Location = new System.Drawing.Point(15, 91);
             this.useGroupPattern.Name = "useGroupPattern";
             this.useGroupPattern.Size = new System.Drawing.Size(15, 14);
             this.useGroupPattern.TabIndex = 37;
@@ -427,7 +429,7 @@
             // 
             // selectByFilter
             // 
-            this.selectByFilter.Location = new System.Drawing.Point(15, 119);
+            this.selectByFilter.Location = new System.Drawing.Point(213, 116);
             this.selectByFilter.Name = "selectByFilter";
             this.selectByFilter.Size = new System.Drawing.Size(60, 23);
             this.selectByFilter.TabIndex = 34;
@@ -482,7 +484,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(36, 93);
+            this.label5.Location = new System.Drawing.Point(36, 91);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(39, 13);
             this.label5.TabIndex = 22;
@@ -490,7 +492,7 @@
             // 
             // groupPattern
             // 
-            this.groupPattern.Location = new System.Drawing.Point(81, 90);
+            this.groupPattern.Location = new System.Drawing.Point(81, 88);
             this.groupPattern.Name = "groupPattern";
             this.groupPattern.Size = new System.Drawing.Size(192, 20);
             this.groupPattern.TabIndex = 21;
@@ -498,7 +500,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(36, 62);
+            this.label4.Location = new System.Drawing.Point(36, 61);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(38, 13);
             this.label4.TabIndex = 20;
@@ -562,6 +564,16 @@
             this.label9.Size = new System.Drawing.Size(258, 29);
             this.label9.TabIndex = 32;
             this.label9.Text = "Your approval will be asked before saving templates to disk!";
+            // 
+            // sortSelectedUp
+            // 
+            this.sortSelectedUp.AutoSize = true;
+            this.sortSelectedUp.Location = new System.Drawing.Point(15, 120);
+            this.sortSelectedUp.Name = "sortSelectedUp";
+            this.sortSelectedUp.Size = new System.Drawing.Size(107, 17);
+            this.sortSelectedUp.TabIndex = 40;
+            this.sortSelectedUp.Text = "Sort Selected Up";
+            this.sortSelectedUp.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -647,5 +659,6 @@
         private System.Windows.Forms.CheckBox useActivePattern;
         private System.Windows.Forms.CheckBox useNamePattern;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.CheckBox sortSelectedUp;
     }
 }

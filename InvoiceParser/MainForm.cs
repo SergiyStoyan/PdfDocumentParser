@@ -514,6 +514,7 @@ namespace Cliver.InvoiceParser
             useActivePattern.Checked = Settings.General.UseActiveSelectPattern;
             useNamePattern.Checked = Settings.General.UseNameSelectPattern;
             useGroupPattern.Checked = Settings.General.UseGroupSelectPattern;
+            sortSelectedUp.Checked = Settings.General.SortSelectedUp;
 
             selectByFilter.Click += delegate
             {
@@ -523,10 +524,13 @@ namespace Cliver.InvoiceParser
                          && (!namePattern.Enabled || (string.IsNullOrEmpty(namePattern.Text) ? string.IsNullOrEmpty(getStringValue(r, "Name_")) : Regex.IsMatch(getStringValue(r, "Name_"), namePattern.Text, RegexOptions.IgnoreCase)))
                          && (!groupPattern.Enabled || (string.IsNullOrEmpty(groupPattern.Text) ? string.IsNullOrEmpty(getStringValue(r, "Group")) : Regex.IsMatch(getStringValue(r, "Group"), groupPattern.Text, RegexOptions.IgnoreCase)));
                 }
+                if (sortSelectedUp.Checked)
+                    templates.Sort(templates.Columns["Selected"], ListSortDirection.Descending);
 
                 Settings.General.UseActiveSelectPattern = useActivePattern.Checked;
                 Settings.General.UseNameSelectPattern = useNamePattern.Checked;
                 Settings.General.UseGroupSelectPattern = useGroupPattern.Checked;
+                Settings.General.SortSelectedUp = sortSelectedUp.Checked;
                 Settings.General.Save();
             };
             selectAll.Click += delegate
