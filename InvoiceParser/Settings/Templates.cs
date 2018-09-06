@@ -86,8 +86,12 @@ namespace Cliver.InvoiceParser
                     FloatingAnchors = new List<Template.FloatingAnchor>(),
                     DocumentFirstPageRecognitionMarks = new List<Template.Mark>(),
                     PagesRotation = Template.PageRotations.NONE,
-                    TestPictureScale = 1.3m,
-                    TestFile = "",
+                    Editor = new PdfDocumentParser.Template.EditorSettings
+                    {
+                        TestPictureScale = 1.3m,
+                        TestFile = "",
+                        ExtractFieldsAutomaticallyWhenPageChanged = true,
+                    },
                 };
             }
         }

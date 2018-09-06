@@ -228,7 +228,7 @@ namespace Cliver.InvoiceParser
             tf = new TemplateForm(tm, Settings.General.InputFolder);
             tf.FormClosed += delegate
             {
-                if (tm.Template.TestFile != tm.LastTestFile && tm.LastTestFile != null)//the customer asked for this
+                if (tm.Template.Editor.TestFile != tm.LastTestFile && tm.LastTestFile != null)//the customer asked for this
                 {
                     Settings.TestFiles.TemplateNames2TestFile[tm.Template.Name] = tm.LastTestFile;
                     var deletedNs = Settings.TestFiles.TemplateNames2TestFile.Keys.Where(n => Settings.Templates.Templates.Where(a => a.Name == n).FirstOrDefault() == null).ToList();

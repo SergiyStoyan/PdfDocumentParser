@@ -21,6 +21,8 @@ namespace Cliver.PdfDocumentParser
         public class EditorSettings
         {
             public bool ExtractFieldsAutomaticallyWhenPageChanged = true;
+            public string TestFile;
+            public decimal TestPictureScale = 1.3m;
         }
         public EditorSettings Editor;
 
@@ -51,9 +53,6 @@ namespace Cliver.PdfDocumentParser
         public List<Mark> DocumentFirstPageRecognitionMarks;
 
         public List<Field> Fields;
-
-        public string TestFile;
-        public decimal TestPictureScale = 1.3m;
 
         [Serializable]
         public class RectangleF

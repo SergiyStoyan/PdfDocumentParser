@@ -1167,12 +1167,12 @@ namespace Cliver.PdfDocumentParser
                 else
                     fileFilterRegex.Text = "";
 
-                pictureScale.Value = t.TestPictureScale > 0 ? t.TestPictureScale : 1;
+                pictureScale.Value = t.Editor.TestPictureScale > 0 ? t.Editor.TestPictureScale : 1;
 
                 ExtractFieldsAutomaticallyWhenPageChanged.Checked = t.Editor == null || t.Editor.ExtractFieldsAutomaticallyWhenPageChanged;
 
-                if (t.TestFile != null && File.Exists(t.TestFile))
-                    testFile.Text = t.TestFile;
+                if (t.Editor.TestFile != null && File.Exists(t.Editor.TestFile))
+                    testFile.Text = t.Editor.TestFile;
                 else
                 {
                     if (templateManager.LastTestFile != null && File.Exists(templateManager.LastTestFile))
@@ -1588,11 +1588,11 @@ namespace Cliver.PdfDocumentParser
                 }
             }
 
-            t.TestFile = testFile.Text;
+            t.Editor.TestFile = testFile.Text;
 
             //t.ImageResolution = (int)imageResolution.Value;
 
-            t.TestPictureScale = pictureScale.Value;
+            t.Editor.TestPictureScale = pictureScale.Value;
 
             t.FileFilterRegex = SerializationRoutines.Json.Deserialize<Regex>(fileFilterRegex.Text);
 
