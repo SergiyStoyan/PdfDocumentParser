@@ -351,7 +351,7 @@ namespace Cliver.InvoiceParser
 
                 Row.Tag = t2;
                 Row.Cells["Name_"].Value = t2.Name;
-                Row.Cells["ModifiedTime"].Value = t2.ModifiedTime;
+                Row.Cells["ModifiedTime"].Value = t2.GetModifiedTimeAsString();
 
                 Template = t2;
             }
@@ -410,7 +410,7 @@ namespace Cliver.InvoiceParser
                     r.Cells["Name_"].Value = t.Name.Trim();
                     r.Cells["Active"].Value = t.Active;
                     r.Cells["Group"].Value = t.Group;
-                    r.Cells["ModifiedTime"].Value = t.ModifiedTime.ToString("yy-MM-dd HH:mm:ss");
+                    r.Cells["ModifiedTime"].Value = t.GetModifiedTimeAsString();
                     r.Cells["Comment"].Value = t.Comment;
                     r.Cells["OrderWeight"].Value = t.OrderWeight;
                     r.Cells["DetectingTemplateLastPageNumber"].Value = t.DetectingTemplateLastPageNumber;

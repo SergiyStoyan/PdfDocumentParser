@@ -115,5 +115,10 @@ namespace Cliver.InvoiceParser
         public float OrderWeight = 1f;
         //public int PdfPageMinNumberToDetectTemplate = 3;
         public uint DetectingTemplateLastPageNumber = 1;
+
+        public string GetModifiedTimeAsString()
+        {
+            return ModifiedTime.ToString("yy-MM-dd HH:mm:ss");
+        }
     }
 }
