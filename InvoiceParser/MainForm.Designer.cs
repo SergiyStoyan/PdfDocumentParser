@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.bAbout = new System.Windows.Forms.Button();
             this.bInputFolder = new System.Windows.Forms.Button();
             this.bOutputFolder = new System.Windows.Forms.Button();
@@ -57,6 +57,7 @@
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.namePattern = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.sortSelectedUp = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
             this.useNamePattern = new System.Windows.Forms.CheckBox();
             this.useGroupPattern = new System.Windows.Forms.CheckBox();
@@ -76,7 +77,7 @@
             this.activeChange = new System.Windows.Forms.CheckBox();
             this.groupChange = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.sortSelectedUp = new System.Windows.Forms.CheckBox();
+            this.saveTemplates = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.templates)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
@@ -215,8 +216,8 @@
             // Name_
             // 
             this.Name_.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            this.Name_.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            this.Name_.DefaultCellStyle = dataGridViewCellStyle1;
             this.Name_.HeaderText = "Name";
             this.Name_.Name = "Name_";
             this.Name_.Width = 60;
@@ -384,6 +385,16 @@
             this.groupBox1.TabIndex = 20;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select";
+            // 
+            // sortSelectedUp
+            // 
+            this.sortSelectedUp.AutoSize = true;
+            this.sortSelectedUp.Location = new System.Drawing.Point(15, 120);
+            this.sortSelectedUp.Name = "sortSelectedUp";
+            this.sortSelectedUp.Size = new System.Drawing.Size(107, 17);
+            this.sortSelectedUp.TabIndex = 40;
+            this.sortSelectedUp.Text = "Sort Selected Up";
+            this.sortSelectedUp.UseVisualStyleBackColor = true;
             // 
             // label10
             // 
@@ -561,25 +572,25 @@
             this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label9.Location = new System.Drawing.Point(479, 406);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(258, 29);
+            this.label9.Size = new System.Drawing.Size(209, 29);
             this.label9.TabIndex = 32;
-            this.label9.Text = "Your approval will be asked before saving templates to disk!";
+            this.label9.Text = "You will be reminded if you forgot to save templates to disk!";
             // 
-            // sortSelectedUp
+            // saveTemplates
             // 
-            this.sortSelectedUp.AutoSize = true;
-            this.sortSelectedUp.Location = new System.Drawing.Point(15, 120);
-            this.sortSelectedUp.Name = "sortSelectedUp";
-            this.sortSelectedUp.Size = new System.Drawing.Size(107, 17);
-            this.sortSelectedUp.TabIndex = 40;
-            this.sortSelectedUp.Text = "Sort Selected Up";
-            this.sortSelectedUp.UseVisualStyleBackColor = true;
+            this.saveTemplates.Location = new System.Drawing.Point(697, 412);
+            this.saveTemplates.Name = "saveTemplates";
+            this.saveTemplates.Size = new System.Drawing.Size(60, 23);
+            this.saveTemplates.TabIndex = 33;
+            this.saveTemplates.Text = "Save";
+            this.saveTemplates.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(769, 529);
+            this.Controls.Add(this.saveTemplates);
             this.Controls.Add(this.flowLayoutPanel2);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.lProgress);
@@ -660,5 +671,6 @@
         private System.Windows.Forms.CheckBox useNamePattern;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.CheckBox sortSelectedUp;
+        private System.Windows.Forms.Button saveTemplates;
     }
 }

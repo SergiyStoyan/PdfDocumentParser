@@ -55,16 +55,20 @@ namespace Cliver.InvoiceParser
             public void Touch()
             {
                 touched = true;
+                TouchedChanged?.BeginInvoke(null, null);
             }
             bool touched = false;
             public bool IsTouched()
             {
                 return touched;
             }
+            public delegate void OnTouchedChanged();
+            public event OnTouchedChanged TouchedChanged;
 
             public override void Saved()
             {
                 touched = false;
+                TouchedChanged?.BeginInvoke(null, null);
                 Settings.SynchronizationSettings.SynchronizeUploadFile(this.__File);
             }
 

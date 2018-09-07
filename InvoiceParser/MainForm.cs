@@ -52,6 +52,18 @@ namespace Cliver.InvoiceParser
 
             Active.ValueType = typeof(bool);
 
+            Settings.Templates.TouchedChanged += delegate {
+                this.BeginInvoke(() =>
+                {
+                    saveTemplates.Enabled = Settings.Templates.IsTouched();
+                });
+            };
+            saveTemplates.Enabled = false;
+            saveTemplates.Click += delegate
+            {
+                saveTemplatesFromTableIfTouched(false);
+            };
+
             FormClosing += delegate (object sender, FormClosingEventArgs e)
               {
                   if (!saveTemplatesFromTableIfTouched(true))
