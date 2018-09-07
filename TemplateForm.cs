@@ -212,7 +212,15 @@ namespace Cliver.PdfDocumentParser
                                     case Template.ValueTypes.ImageData:
                                         {
                                             if (selectedImageDataValue == null)
+                                            {
                                                 selectedImageDataValue = new Template.FloatingAnchor.ImageDataValue();
+                                                if (findBestImageMatch.Enabled)
+                                                {
+                                                    selectedImageDataValue.FindBestImageMatch = findBestImageMatch.Checked;
+                                                    selectedImageDataValue.BrightnessTolerance = (float)brightnessTolerance.Value;
+                                                    selectedImageDataValue.DifferentPixelNumberTolerance = (float)differentPixelNumberTolerance.Value;
+                                                }
+                                            }
                                             string error;
                                             selectedImageDataValue.ImageBoxs.Add(new Template.FloatingAnchor.ImageDataValue.ImageBox
                                             {
@@ -804,12 +812,6 @@ namespace Cliver.PdfDocumentParser
 
         void onFloatingAnchorsChanged(int? updatedFloatingAnchorId)
         {
-            foreach (DataGridViewRow rr in floatingAnchors.Rows)
-                if (rr.Cells["Value3"].Value == null || rr.Cells["ValueType3"].Value == null)
-                {
-                    rr.Cells["Value3"].Value = null;
-                }
-
             SortedSet<int> fais = new SortedSet<int>();
             foreach (DataGridViewRow rr in floatingAnchors.Rows)
                 if (rr.Cells["Id3"].Value != null)

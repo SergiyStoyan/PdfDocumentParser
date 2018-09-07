@@ -529,7 +529,7 @@ namespace Cliver.InvoiceParser
             useGroupPattern.Checked = Settings.General.UseGroupSelectPattern;
             sortSelectedUp.Checked = Settings.General.SortSelectedUp;
 
-            selectByFilter.Click += delegate
+            EventHandler select_by_filter = delegate 
             {
                 foreach (DataGridViewRow r in templates.Rows)
                 {
@@ -546,6 +546,20 @@ namespace Cliver.InvoiceParser
                 Settings.General.SortSelectedUp = sortSelectedUp.Checked;
                 Settings.General.Save();
             };
+            selectByFilter.Click += select_by_filter;
+
+            KeyEventHandler select_on_Enter = delegate (object sender, KeyEventArgs e)
+            {
+                if (e.KeyCode != Keys.Enter)
+                    return;
+                e.Handled = true;
+                select_by_filter(null, null);
+            };
+            //AcceptButton = new Button { Visible = false };//just to suppress a ding
+            activePattern.KeyDown += select_on_Enter;
+            namePattern.KeyDown += select_on_Enter;
+            groupPattern.KeyDown += select_on_Enter;
+
             selectAll.Click += delegate
             {
                 foreach (DataGridViewRow r in templates.Rows)
