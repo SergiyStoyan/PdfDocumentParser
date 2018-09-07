@@ -37,9 +37,10 @@ namespace Cliver.InvoiceParser
             
             public List<string> OrderedOutputFieldNames = new List<string>();
 
-            public bool UseActiveSelectPattern = true;
+            public bool UseActiveSelectPattern = false;
             public bool UseNameSelectPattern = true;
-            public bool UseGroupSelectPattern = true;
+            public bool UseGroupSelectPattern = false;
+            public bool UseCommentSelectPattern = false;
             public bool SortSelectedUp = true;
 
             public override void Loaded()

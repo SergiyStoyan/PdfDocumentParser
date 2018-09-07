@@ -83,12 +83,21 @@
             this.label9 = new System.Windows.Forms.Label();
             this.applyOrderWeightChange = new System.Windows.Forms.Button();
             this.orderWeightChange = new System.Windows.Forms.NumericUpDown();
+            this.useCommentPattern = new System.Windows.Forms.CheckBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.commentPattern = new System.Windows.Forms.TextBox();
+            this.useOrderWeightPattern = new System.Windows.Forms.CheckBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.templates)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.orderWeightChange)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             this.SuspendLayout();
             // 
             // bAbout
@@ -414,6 +423,13 @@
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.numericUpDown2);
+            this.groupBox1.Controls.Add(this.numericUpDown1);
+            this.groupBox1.Controls.Add(this.commentPattern);
+            this.groupBox1.Controls.Add(this.useOrderWeightPattern);
+            this.groupBox1.Controls.Add(this.label7);
+            this.groupBox1.Controls.Add(this.useCommentPattern);
+            this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.sortSelectedUp);
             this.groupBox1.Controls.Add(this.useNamePattern);
             this.groupBox1.Controls.Add(this.useGroupPattern);
@@ -430,7 +446,7 @@
             this.groupBox1.Controls.Add(this.namePattern);
             this.groupBox1.Location = new System.Drawing.Point(664, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(242, 218);
+            this.groupBox1.Size = new System.Drawing.Size(242, 272);
             this.groupBox1.TabIndex = 20;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select";
@@ -438,7 +454,7 @@
             // sortSelectedUp
             // 
             this.sortSelectedUp.AutoSize = true;
-            this.sortSelectedUp.Location = new System.Drawing.Point(15, 126);
+            this.sortSelectedUp.Location = new System.Drawing.Point(17, 188);
             this.sortSelectedUp.Name = "sortSelectedUp";
             this.sortSelectedUp.Size = new System.Drawing.Size(107, 17);
             this.sortSelectedUp.TabIndex = 40;
@@ -480,7 +496,7 @@
             // 
             // selectByFilter
             // 
-            this.selectByFilter.Location = new System.Drawing.Point(166, 122);
+            this.selectByFilter.Location = new System.Drawing.Point(168, 184);
             this.selectByFilter.Name = "selectByFilter";
             this.selectByFilter.Size = new System.Drawing.Size(60, 23);
             this.selectByFilter.TabIndex = 34;
@@ -490,7 +506,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(36, 31);
+            this.label8.Location = new System.Drawing.Point(30, 31);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(40, 13);
             this.label8.TabIndex = 33;
@@ -507,7 +523,7 @@
             // 
             // selectInvertion
             // 
-            this.selectInvertion.Location = new System.Drawing.Point(166, 177);
+            this.selectInvertion.Location = new System.Drawing.Point(168, 230);
             this.selectInvertion.Name = "selectInvertion";
             this.selectInvertion.Size = new System.Drawing.Size(60, 23);
             this.selectInvertion.TabIndex = 28;
@@ -516,7 +532,7 @@
             // 
             // selectNothing
             // 
-            this.selectNothing.Location = new System.Drawing.Point(99, 177);
+            this.selectNothing.Location = new System.Drawing.Point(101, 230);
             this.selectNothing.Name = "selectNothing";
             this.selectNothing.Size = new System.Drawing.Size(60, 23);
             this.selectNothing.TabIndex = 27;
@@ -525,7 +541,7 @@
             // 
             // selectAll
             // 
-            this.selectAll.Location = new System.Drawing.Point(33, 177);
+            this.selectAll.Location = new System.Drawing.Point(35, 230);
             this.selectAll.Name = "selectAll";
             this.selectAll.Size = new System.Drawing.Size(60, 23);
             this.selectAll.TabIndex = 26;
@@ -535,7 +551,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(36, 91);
+            this.label5.Location = new System.Drawing.Point(30, 91);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(39, 13);
             this.label5.TabIndex = 22;
@@ -551,7 +567,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(36, 61);
+            this.label4.Location = new System.Drawing.Point(30, 61);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(38, 13);
             this.label4.TabIndex = 20;
@@ -566,7 +582,7 @@
             this.groupBox2.Controls.Add(this.applyGroupChange);
             this.groupBox2.Controls.Add(this.activeChange);
             this.groupBox2.Controls.Add(this.groupChange);
-            this.groupBox2.Location = new System.Drawing.Point(664, 236);
+            this.groupBox2.Location = new System.Drawing.Point(666, 290);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(242, 146);
             this.groupBox2.TabIndex = 26;
@@ -612,7 +628,7 @@
             // label9
             // 
             this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label9.Location = new System.Drawing.Point(676, 439);
+            this.label9.Location = new System.Drawing.Point(676, 448);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(214, 29);
             this.label9.TabIndex = 32;
@@ -639,6 +655,83 @@
             this.orderWeightChange.Name = "orderWeightChange";
             this.orderWeightChange.Size = new System.Drawing.Size(145, 20);
             this.orderWeightChange.TabIndex = 33;
+            // 
+            // useCommentPattern
+            // 
+            this.useCommentPattern.AutoSize = true;
+            this.useCommentPattern.Checked = true;
+            this.useCommentPattern.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.useCommentPattern.Location = new System.Drawing.Point(16, 121);
+            this.useCommentPattern.Name = "useCommentPattern";
+            this.useCommentPattern.Size = new System.Drawing.Size(15, 14);
+            this.useCommentPattern.TabIndex = 43;
+            this.useCommentPattern.UseVisualStyleBackColor = true;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(31, 121);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(54, 13);
+            this.label6.TabIndex = 42;
+            this.label6.Text = "Comment:";
+            // 
+            // commentPattern
+            // 
+            this.commentPattern.Location = new System.Drawing.Point(82, 118);
+            this.commentPattern.Name = "commentPattern";
+            this.commentPattern.Size = new System.Drawing.Size(145, 20);
+            this.commentPattern.TabIndex = 41;
+            // 
+            // useOrderWeightPattern
+            // 
+            this.useOrderWeightPattern.AutoSize = true;
+            this.useOrderWeightPattern.Checked = true;
+            this.useOrderWeightPattern.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.useOrderWeightPattern.Enabled = false;
+            this.useOrderWeightPattern.Location = new System.Drawing.Point(17, 151);
+            this.useOrderWeightPattern.Name = "useOrderWeightPattern";
+            this.useOrderWeightPattern.Size = new System.Drawing.Size(15, 14);
+            this.useOrderWeightPattern.TabIndex = 46;
+            this.useOrderWeightPattern.UseVisualStyleBackColor = true;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Enabled = false;
+            this.label7.Location = new System.Drawing.Point(32, 151);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(36, 13);
+            this.label7.TabIndex = 45;
+            this.label7.Text = "Order:";
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.DecimalPlaces = 5;
+            this.numericUpDown1.Enabled = false;
+            this.numericUpDown1.Location = new System.Drawing.Point(81, 149);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(63, 20);
+            this.numericUpDown1.TabIndex = 47;
+            // 
+            // numericUpDown2
+            // 
+            this.numericUpDown2.DecimalPlaces = 5;
+            this.numericUpDown2.Enabled = false;
+            this.numericUpDown2.Location = new System.Drawing.Point(163, 149);
+            this.numericUpDown2.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.numericUpDown2.Name = "numericUpDown2";
+            this.numericUpDown2.Size = new System.Drawing.Size(63, 20);
+            this.numericUpDown2.TabIndex = 48;
             // 
             // MainForm
             // 
@@ -671,6 +764,8 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.orderWeightChange)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -732,5 +827,12 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn DetectingTemplateLastPageNumber;
         private System.Windows.Forms.Button applyOrderWeightChange;
         private System.Windows.Forms.NumericUpDown orderWeightChange;
+        private System.Windows.Forms.TextBox commentPattern;
+        private System.Windows.Forms.CheckBox useOrderWeightPattern;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.CheckBox useCommentPattern;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.NumericUpDown numericUpDown2;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
     }
 }

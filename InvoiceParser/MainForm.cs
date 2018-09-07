@@ -598,10 +598,14 @@ namespace Cliver.InvoiceParser
             useActivePattern.CheckedChanged += delegate { activePattern.Enabled = useActivePattern.Checked; };
             useNamePattern.CheckedChanged += delegate { namePattern.Enabled = useNamePattern.Checked; };
             useGroupPattern.CheckedChanged += delegate { groupPattern.Enabled = useGroupPattern.Checked; };
+            useCommentPattern.CheckedChanged += delegate { commentPattern.Enabled = useCommentPattern.Checked; };
+            //useOrderWeightPattern.CheckedChanged += delegate { orderWeightPattern.Enabled = useGroupPattern.Checked; };
 
             useActivePattern.Checked = Settings.General.UseActiveSelectPattern;
             useNamePattern.Checked = Settings.General.UseNameSelectPattern;
             useGroupPattern.Checked = Settings.General.UseGroupSelectPattern;
+            useCommentPattern.Checked = Settings.General.UseCommentSelectPattern;
+            //useOrderWeightPattern.Checked = Settings.General.;
             sortSelectedUp.Checked = Settings.General.SortSelectedUp;
 
             EventHandler select_by_filter = delegate 
@@ -610,7 +614,9 @@ namespace Cliver.InvoiceParser
                 {
                     r.Cells["Selected"].Value = (!activePattern.Enabled || (getBoolValue(r, "Active") == activePattern.Checked))
                          && (!namePattern.Enabled || (string.IsNullOrEmpty(namePattern.Text) ? string.IsNullOrEmpty(getStringValue(r, "Name_")) : Regex.IsMatch(getStringValue(r, "Name_"), namePattern.Text, RegexOptions.IgnoreCase)))
-                         && (!groupPattern.Enabled || (string.IsNullOrEmpty(groupPattern.Text) ? string.IsNullOrEmpty(getStringValue(r, "Group")) : Regex.IsMatch(getStringValue(r, "Group"), groupPattern.Text, RegexOptions.IgnoreCase)));
+                         && (!groupPattern.Enabled || (string.IsNullOrEmpty(groupPattern.Text) ? string.IsNullOrEmpty(getStringValue(r, "Group")) : Regex.IsMatch(getStringValue(r, "Group"), groupPattern.Text, RegexOptions.IgnoreCase)))
+                 && (!commentPattern.Enabled || (string.IsNullOrEmpty(commentPattern.Text) ? string.IsNullOrEmpty(getStringValue(r, "Comment")) : Regex.IsMatch(getStringValue(r, "Comment"), commentPattern.Text, RegexOptions.IgnoreCase)));
+                    //&& (!orderWeightPattern.Enabled || (string.IsNullOrEmpty(orderWeightPattern.Text) ? string.IsNullOrEmpty(getStringValue(r, "OrderWeight")) : Regex.IsMatch(getStringValue(r, "OrderWeight"), groupPattern.Text, RegexOptions.IgnoreCase)));
                 }
                 if (sortSelectedUp.Checked)
                     templates.Sort(templates.Columns["Selected"], ListSortDirection.Descending);
@@ -618,6 +624,8 @@ namespace Cliver.InvoiceParser
                 Settings.General.UseActiveSelectPattern = useActivePattern.Checked;
                 Settings.General.UseNameSelectPattern = useNamePattern.Checked;
                 Settings.General.UseGroupSelectPattern = useGroupPattern.Checked;
+                Settings.General.UseCommentSelectPattern = useCommentPattern.Checked;
+                //Settings.General. = useOrderWeightPattern.Checked;
                 Settings.General.SortSelectedUp = sortSelectedUp.Checked;
                 Settings.General.Save();
             };
@@ -634,6 +642,8 @@ namespace Cliver.InvoiceParser
             activePattern.KeyDown += select_on_Enter;
             namePattern.KeyDown += select_on_Enter;
             groupPattern.KeyDown += select_on_Enter;
+            commentPattern.KeyDown += select_on_Enter;
+            //orderWeightPattern.KeyDown += select_on_Enter;
 
             selectAll.Click += delegate
             {
