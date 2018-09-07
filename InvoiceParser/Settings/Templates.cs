@@ -111,5 +111,7 @@ namespace Cliver.InvoiceParser
     {
         public bool Active = true;
         public string Group;
+        public DateTime ModifiedTime;
+        public string Comment;
     }
 }

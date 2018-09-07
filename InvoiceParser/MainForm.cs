@@ -75,25 +75,32 @@ namespace Cliver.InvoiceParser
                 try
                 {
                     DataGridViewRow r = templates.Rows[e.RowIndex];
+                    Template t = (Template)r.Tag;
 
-                    if (e.ColumnIndex == templates.Columns["Name_"].Index)
+                    switch (templates.Columns[e.ColumnIndex].Name)
                     {
-                        if (string.IsNullOrWhiteSpace((string)e.FormattedValue))
-                        {
-                            if (r.Tag != null)
-                                throw new Exception("Name cannot be empty!");
+                        case "Name_":
+                            {
+                                if (string.IsNullOrWhiteSpace((string)e.FormattedValue))
+                                {
+                                    if (t != null)
+                                        throw new Exception("Name cannot be empty!");
+                                    return;
+                                }
+                                string name2 = ((string)e.FormattedValue).Trim();
+                                foreach (DataGridViewRow rr in templates.Rows)
+                                {
+                                    if (rr.Index != e.RowIndex && name2 == (string)rr.Cells["Name_"].Value)
+                                        throw new Exception("Name '" + name2 + "' is duplicated!");
+                                }
+                                if ((string)r.Cells["Name_"].Value != name2)
+                                    r.Cells["Name_"].Value = name2;
+                            }
                             return;
-                        }
-                        foreach (DataGridViewRow rr in templates.Rows)
-                        {
-                            if (rr.Index != e.RowIndex && (string)e.FormattedValue == (string)rr.Cells["Name_"].Value)
-                                throw new Exception("Name '" + e.FormattedValue + "' is duplicated!");
-                        }
-                        if ((string)r.Cells["Name_"].Value != ((string)e.FormattedValue).Trim())
-                            r.Cells["Name_"].Value = ((string)e.FormattedValue).Trim();
-                    }
-                    else if (e.ColumnIndex == templates.Columns["Active"].Index)
-                    {
+                        case "Active":
+                            return;
+                        case "Comment":
+                            return;
                     }
                 }
                 catch (Exception ex)
@@ -107,12 +114,29 @@ namespace Cliver.InvoiceParser
             {
                 try
                 {
-                    if (e.ColumnIndex == templates.Columns["Name_"].Index
-                    || e.ColumnIndex == templates.Columns["Active"].Index
-                    || e.ColumnIndex == templates.Columns["Group"].Index
-                    )
+                    DataGridViewRow r = templates.Rows[e.RowIndex];
+                    Template t = (Template)r.Tag;
+                    if (t == null)
+                        return;
+
+                    switch (templates.Columns[e.ColumnIndex].Name)
                     {
-                        Settings.Templates.Touch();
+                        case "Name_":
+                            t.Name = (string)r.Cells["Name_"].Value;
+                            Settings.Templates.Touch();
+                            return;
+                        case "Active":
+                            t.Active = (bool)r.Cells["Active"].Value;
+                            Settings.Templates.Touch();
+                            return;
+                        case "Comment":
+                            t.Comment = (string)r.Cells["Comment"].Value;
+                            Settings.Templates.Touch();
+                            return;
+                        case "Group":
+                            t.Group = (string)r.Cells["Group"].Value;
+                            Settings.Templates.Touch();
+                            return;
                     }
                 }
                 catch (Exception ex)
@@ -267,19 +291,26 @@ namespace Cliver.InvoiceParser
 
             override public void ReplaceWith(PdfDocumentParser.Template newTemplate)
             {
-                if (Settings.Templates.Templates.Where(a => a != Template && a.Name == newTemplate.Name).FirstOrDefault() != null)
-                    throw new Exception("Template '" + newTemplate.Name + "' already exists.");
+                Template t2 = (Template)newTemplate;
+
+                if (Settings.Templates.Templates.Where(a => a != Template && a.Name == t2.Name).FirstOrDefault() != null)
+                    throw new Exception("Template '" + t2.Name + "' already exists.");
+
+                t2.ModifiedTime = DateTime.Now;
+                t2.Group = (string)Row.Cells["Group"].Value;
+                t2.Comment = (string)Row.Cells["Comment"].Value;
 
                 if (!Settings.Templates.Templates.Contains(Template))
-                    Settings.Templates.Templates.Add((Template)newTemplate);
+                    Settings.Templates.Templates.Add(t2);
                 else
-                    Settings.Templates.Templates[Settings.Templates.Templates.IndexOf((Template)Template)] = (Template)newTemplate;
+                    Settings.Templates.Templates[Settings.Templates.Templates.IndexOf((Template)Template)] = t2;
                 Settings.Templates.Touch();
 
-                Row.Tag = newTemplate;
-                Row.Cells["Name_"].Value = newTemplate.Name;
+                Row.Tag = t2;
+                Row.Cells["Name_"].Value = t2.Name;
+                Row.Cells["ModifiedTime"].Value = t2.ModifiedTime;
 
-                Template = newTemplate;
+                Template = t2;
             }
 
             override public void SaveAsInitialTemplate(PdfDocumentParser.Template template)
@@ -307,9 +338,6 @@ namespace Cliver.InvoiceParser
                     Template t = (Template)r.Tag;
                     if (t == null)
                         continue;
-                    t.Name = (string)r.Cells["Name_"].Value;
-                    t.Active = getBoolValue(r, "Active");
-                    t.Group = (string)r.Cells["Group"].Value;
 
                     if (Settings.Templates.Templates.Where(a => a.Name == t.Name).FirstOrDefault() != null)
                         throw new Exception("Template name '" + t.Name + "' is duplicated!");
@@ -339,6 +367,8 @@ namespace Cliver.InvoiceParser
                     r.Cells["Name_"].Value = t.Name.Trim();
                     r.Cells["Active"].Value = t.Active;
                     r.Cells["Group"].Value = t.Group;
+                    r.Cells["ModifiedTime"].Value = t.ModifiedTime.ToString("yy-MM-dd HH:mm:ss");
+                    r.Cells["Comment"].Value = t.Comment;
                     r.Tag = t;
                 }
                 //templates.Columns["Name_"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;

@@ -16,9 +16,10 @@ namespace Cliver.InvoiceParser
  - add columns: modified, used time, comment
  - add edit2:comment,to detect template use ?-? pages, this template cannot share a file with another template
  - ? Template not enherited but embedded
+ - custom Value in anchors and marks table
 
  - MainForm to WPF;
-- store each template in separate file;
+- ? store each template in separate file;
 
 - switch to Tesseract.4
 
