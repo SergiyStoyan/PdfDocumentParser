@@ -71,7 +71,7 @@ namespace Cliver.PdfDocumentParser
             if (bitmap == null)// Used only by deserializer!!!
                 return;
 
-            if(scaleBitmap)
+            if (scaleBitmap)
                 bitmap = ImageRoutines.GetScaled(bitmap, Settings.ImageProcessing.Image2PdfResolutionRatio);
 
             Hash = getBitmapHash(bitmap);

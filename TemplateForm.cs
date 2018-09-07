@@ -24,7 +24,7 @@ namespace Cliver.PdfDocumentParser
     /// <summary>
     /// template editor GUI
     /// </summary>
-    public partial class TemplateForm : Form 
+    public partial class TemplateForm : Form
     {
         public abstract class TemplateManager
         {
@@ -71,7 +71,7 @@ namespace Cliver.PdfDocumentParser
             FloatingAnchorId.ValueType = typeof(int);
             FloatingAnchorId.ValueMember = "Id";
             FloatingAnchorId.DisplayMember = "Name";
-            
+
             int statusDefaultHeight = status.Height;
             status.MouseEnter += delegate
             {
@@ -309,7 +309,7 @@ namespace Cliver.PdfDocumentParser
                 switch (floatingAnchors.Columns[e.ColumnIndex].Name)
                 {
                     case "Id3":
-                        if(row.Selected)
+                        if (row.Selected)
                             findAndDrawFloatingAnchor(fai);
                         break;
                     case "Value3":
@@ -321,7 +321,7 @@ namespace Cliver.PdfDocumentParser
                         break;
                     case "ValueType3":
                         row.Cells["Value3"].Value = null;
-                        //setImageProcessingAdditionalControls(row);
+                        setImageProcessingAdditionalControls(row);
                         break;
                 }
             };
@@ -415,7 +415,7 @@ namespace Cliver.PdfDocumentParser
                             }
                             return;
                         case "ValueType2":
-                            //setImageProcessingAdditionalControls(row);
+                            setImageProcessingAdditionalControls(row);
                             cs["Rectangle2"].Value = null;
                             return;
                         case "FloatingAnchorId2":
@@ -775,7 +775,7 @@ namespace Cliver.PdfDocumentParser
                     idv.BrightnessTolerance = (float)brightnessTolerance.Value;
                     idv.DifferentPixelNumberTolerance = (float)differentPixelNumberTolerance.Value;
 
-                    cs["Value3"].Value = Template.FloatingAnchor.GetValueAsString(Template.ValueTypes.ImageData,idv);
+                    cs["Value3"].Value = Template.FloatingAnchor.GetValueAsString(Template.ValueTypes.ImageData, idv);
                     return;
                 }
                 if (documentFirstPageRecognitionMarks.Rows.Contains(editingRow))
@@ -790,7 +790,7 @@ namespace Cliver.PdfDocumentParser
                     idv.BrightnessTolerance = (float)brightnessTolerance.Value;
                     idv.DifferentPixelNumberTolerance = (float)differentPixelNumberTolerance.Value;
 
-                    cs["Value2"].Value = Template.Mark.GetValueAsString(Template.ValueTypes.ImageData,  idv);
+                    cs["Value2"].Value = Template.Mark.GetValueAsString(Template.ValueTypes.ImageData, idv);
                     return;
                 }
             }
@@ -940,7 +940,7 @@ namespace Cliver.PdfDocumentParser
                 float y = r.Y;
                 if (floatingAnchorId != null)
                 {
-                   PointF? p0_ = findAndDrawFloatingAnchor(floatingAnchorId);
+                    PointF? p0_ = findAndDrawFloatingAnchor(floatingAnchorId);
                     if (p0_ == null)
                         return null;
                     PointF p0 = (PointF)p0_;
@@ -1043,7 +1043,11 @@ namespace Cliver.PdfDocumentParser
                         {
                             List<Pdf.Line> lines = Pdf.RemoveDuplicatesAndGetLines(selectedPdfCharBoxs);
                             if (lines.Count < 1)
+                            {
+                                r.Cells["Value3"].Value = null;
+                                setStatus(statuses.WARNING, "FloatingAnchor[" + r.Cells["Id3"].Value + "] has not been set.");
                                 return;
+                            }
                             Template.FloatingAnchor.PdfTextValue pte = new Template.FloatingAnchor.PdfTextValue { CharBoxs = new List<Template.FloatingAnchor.PdfTextValue.CharBox>() };
                             foreach (Pdf.Line l in lines)
                                 foreach (Pdf.CharBox cb in l.CharBoxes)
@@ -1052,6 +1056,12 @@ namespace Cliver.PdfDocumentParser
                                         Char = cb.Char,
                                         Rectangle = new Template.RectangleF(cb.R.X, cb.R.Y, cb.R.Width, cb.R.Height),
                                     });
+                            if (pte.CharBoxs.Count < 1)
+                            {
+                                r.Cells["Value3"].Value = null;
+                                setStatus(statuses.WARNING, "FloatingAnchor[" + r.Cells["Id3"].Value + "] has not been set.");
+                                return;
+                            }
                             r.Cells["Value3"].Value = Template.FloatingAnchor.GetValueAsString(Template.ValueTypes.PdfText, pte);
                         }
                         break;
@@ -1059,7 +1069,11 @@ namespace Cliver.PdfDocumentParser
                         {
                             List<Ocr.Line> lines = PdfDocumentParser.Ocr.GetLines(selectedOcrCharBoxs);
                             if (lines.Count < 1)
+                            {
+                                r.Cells["Value3"].Value = null;
+                                setStatus(statuses.WARNING, "FloatingAnchor[" + r.Cells["Id3"].Value + "] has not been set.");
                                 return;
+                            }
                             Template.FloatingAnchor.OcrTextValue ote = new Template.FloatingAnchor.OcrTextValue { CharBoxs = new List<Template.FloatingAnchor.OcrTextValue.CharBox>() };
                             foreach (Ocr.Line l in lines)
                                 foreach (Ocr.CharBox cb in l.CharBoxes)
@@ -1068,13 +1082,29 @@ namespace Cliver.PdfDocumentParser
                                         Char = cb.Char,
                                         Rectangle = new Template.RectangleF(cb.R.X, cb.R.Y, cb.R.Width, cb.R.Height),
                                     });
+                            if (ote.CharBoxs.Count < 1)
+                            {
+                                r.Cells["Value3"].Value = null;
+                                setStatus(statuses.WARNING, "FloatingAnchor[" + r.Cells["Id3"].Value + "] has not been set.");
+                                return;
+                            }
                             r.Cells["Value3"].Value = Template.FloatingAnchor.GetValueAsString(Template.ValueTypes.OcrText, ote);
                         }
                         break;
                     case Template.ValueTypes.ImageData:
                         {
                             if (selectedImageDataValue.ImageBoxs.Count < 1)
-                                return;                            
+                            {
+                                r.Cells["Value3"].Value = null;
+                                setStatus(statuses.WARNING, "FloatingAnchor[" + r.Cells["Id3"].Value + "] has not been set.");
+                                return;
+                            }
+                            if (selectedImageDataValue.ImageBoxs.Where(x => x.ImageData == null).FirstOrDefault() != null)
+                            {
+                                r.Cells["Value3"].Value = null;
+                                setStatus(statuses.WARNING, "FloatingAnchor[" + r.Cells["Id3"].Value + "] has not been set.");
+                                return;
+                            }
                             r.Cells["Value3"].Value = Template.FloatingAnchor.GetValueAsString(Template.ValueTypes.ImageData, selectedImageDataValue);
                         }
                         break;
@@ -1093,7 +1123,7 @@ namespace Cliver.PdfDocumentParser
         List<Pdf.CharBox> selectedPdfCharBoxs;
         List<Ocr.CharBox> selectedOcrCharBoxs;
         Template.FloatingAnchor.ImageDataValue selectedImageDataValue;
-        
+
         void setUIFromTemplate(Template t)
         {
             try
@@ -1399,7 +1429,7 @@ namespace Cliver.PdfDocumentParser
                 templateManager.SaveAsInitialTemplate(t);
                 Message.Inform("Saved");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Message.Error2(ex);
             }
@@ -1527,14 +1557,25 @@ namespace Cliver.PdfDocumentParser
                     float positionDeviation = (float)r.Cells["PositionDeviation3"].Value;
                     if (positionDeviation <= 0)
                         throw new Exception("FloatingAnchor[" + (int)r.Cells["Id3"].Value + "] has wrong Deviation. Deviation always must be a positive floating number due to internal image re-scaling.");
-                    
-                    t.FloatingAnchors.Add(new Template.FloatingAnchor
+
+                    Template.FloatingAnchor fa = new Template.FloatingAnchor
                     {
                         Id = floatingAnchorId,
                         ValueType = (Template.ValueTypes)r.Cells["ValueType3"].Value,
                         PositionDeviation = positionDeviation,
                         ValueAsString = (string)r.Cells["Value3"].Value
-                    });
+                    };
+                    //if (fa.GetValue() == null)
+                    //    throw new Exception("FloatingAnchor[" + fa.Id + "] is not set.");
+                    //if (fa.ValueType == Template.ValueTypes.ImageData)
+                    //{
+                    //    var v = (Template.FloatingAnchor.ImageDataValue)fa.GetValue();
+                    //    if (v.ImageBoxs.Count < 1)
+                    //        throw new Exception("FloatingAnchor[" + fa.Id + "] is malformed.");
+                    //    if (v.ImageBoxs.Where(x => x.ImageData == null).FirstOrDefault() != null)
+                    //        throw new Exception("FloatingAnchor[" + fa.Id + "] is malformed.");
+                    //}
+                    t.FloatingAnchors.Add(fa);
                 }
             t.FloatingAnchors = t.FloatingAnchors.OrderBy(a => a.Id).ToList();
 
