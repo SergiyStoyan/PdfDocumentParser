@@ -135,9 +135,12 @@ namespace Cliver.InvoiceParser
                     return false;
                 }
 
-                for (int page_i = 1; page_i <= Math.Min(Settings.General.MaxPageNumberToDetectTemplate, cp.Pages.PdfReader.NumberOfPages); page_i++)
+                for (int page_i = 1; page_i <= cp.Pages.PdfReader.NumberOfPages; page_i++)
                 {
-                    foreach (Template t in ts)
+                    var ts2 = ts.Where(x => x.DetectingTemplateLastPageNumber >= page_i).ToList();
+                    if (ts2.Count < 1)
+                        break;
+                    foreach (Template t in ts2)
                     {
                         cp.Pages.ActiveTemplate = t;
                         if (cp.Pages[page_i].IsDocumentFirstPage())

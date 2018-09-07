@@ -54,7 +54,6 @@ namespace Cliver.InvoiceParser
         {
             IgnoreHiddenFiles.Checked = Settings.General.IgnoreHiddenFiles;
             ReadInputFolderRecursively.Checked = Settings.General.ReadInputFolderRecursively;
-            MaxPageNumberToDetectTemplate.Text = Settings.General.MaxPageNumberToDetectTemplate.ToString();
 
             Synchronize.Checked = Settings.Synchronization.Synchronize;
             SynchronizationFolder.Text = Settings.Synchronization.SynchronizationFolder;
@@ -71,9 +70,6 @@ namespace Cliver.InvoiceParser
         {
             try
             {
-                int maxPageNumberToDetectTemplate;
-                if (!int.TryParse(MaxPageNumberToDetectTemplate.Text, out maxPageNumberToDetectTemplate) || maxPageNumberToDetectTemplate < 1)
-                    throw new Exception("MaxPageNumberToDetectTemplate must be a positive number.");
                 if (Synchronize.Checked && string.IsNullOrWhiteSpace(SynchronizationFolder.Text))
                     throw new Exception("Synchronization Folder is empty.");
                 //if (PathRoutines.ArePathsEqual(SynchronizationFolder.Text, Config.StorageDir))
@@ -81,7 +77,6 @@ namespace Cliver.InvoiceParser
 
                 Settings.General.IgnoreHiddenFiles = IgnoreHiddenFiles.Checked;
                 Settings.General.ReadInputFolderRecursively = ReadInputFolderRecursively.Checked;
-                Settings.General.MaxPageNumberToDetectTemplate = maxPageNumberToDetectTemplate;
 
                 Settings.Synchronization.Synchronize = Synchronize.Checked;
                 Settings.Synchronization.SynchronizationFolder = SynchronizationFolder.Text;

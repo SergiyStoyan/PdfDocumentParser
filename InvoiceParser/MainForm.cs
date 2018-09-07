@@ -51,6 +51,9 @@ namespace Cliver.InvoiceParser
             initiateSelectionEngine();
 
             Active.ValueType = typeof(bool);
+            Selected.ValueType = typeof(bool);
+            OrderWeight.ValueType = typeof(float);
+            DetectingTemplateLastPageNumber.ValueType = typeof(uint);
 
             Settings.Templates.TouchedChanged += delegate {
                 this.BeginInvoke(() =>
@@ -97,15 +100,40 @@ namespace Cliver.InvoiceParser
                                     r.Cells["Name_"].Value = name2;
                             }
                             return;
-                        case "Active":
-                            return;
-                        case "Comment":
-                            return;
+                            //case "OrderWeight":
+                            //    if(!(e.FormattedValue is float))
+                            //        throw new Exception("Order must be a float number.");
+                            //    return;
+                            //case "DetectingTemplateLastPageNumber":
+                            //    if (!(e.FormattedValue is uint))
+                            //        throw new Exception("DetectingTemplateLastPageNumber must be a uint number.");
+                            //    return;
                     }
                 }
                 catch (Exception ex)
                 {
                     e.Cancel = true;
+                    Message.Error2(ex);
+                }
+            };
+
+            templates.DataError += delegate (object sender, DataGridViewDataErrorEventArgs e)
+            {
+                try
+                {
+                    DataGridViewRow r = templates.Rows[e.RowIndex];
+                    Template t = (Template)r.Tag;
+
+                    switch (templates.Columns[e.ColumnIndex].Name)
+                    {
+                        case "OrderWeight":
+                            throw new Exception("Order must be a float number:\r\n" + e.Exception.Message);
+                        case "DetectingTemplateLastPageNumber":
+                            throw new Exception("DetectingTemplateLastPageNumber must be a uint number:\r\n" + e.Exception.Message);
+                    }
+                }
+                catch (Exception ex)
+                {
                     Message.Error2(ex);
                 }
             };
@@ -135,6 +163,14 @@ namespace Cliver.InvoiceParser
                             return;
                         case "Group":
                             t.Group = (string)r.Cells["Group"].Value;
+                            Settings.Templates.Touch();
+                            return;
+                        case "OrderWeight":
+                            t.OrderWeight = (float)r.Cells["OrderWeight"].Value;
+                            Settings.Templates.Touch();
+                            return;
+                        case "DetectingTemplateLastPageNumber":
+                            t.DetectingTemplateLastPageNumber = (uint)r.Cells["DetectingTemplateLastPageNumber"].Value;
                             Settings.Templates.Touch();
                             return;
                     }
@@ -202,8 +238,11 @@ namespace Cliver.InvoiceParser
                     {
                         int i = templates.Rows.Add();
                         templates.Rows[i].Selected = true;
-                        templates.Rows[i].Cells["Active"].Value = true;
-                        templates.Rows[i].Cells["Group"].Value = "";
+                        Template t = Settings.Templates.CreateInitialTemplate();
+                        templates.Rows[i].Cells["Active"].Value = t.Active;
+                        templates.Rows[i].Cells["Group"].Value = t.Group;
+                        templates.Rows[i].Cells["OrderWeight"].Value = t.OrderWeight;
+                        templates.Rows[i].Cells["OrderWeight"].Value = t.DetectingTemplateLastPageNumber;
                         r.Selected = false;
                     }
                     catch { }
@@ -226,6 +265,8 @@ namespace Cliver.InvoiceParser
                         r2.Cells["Name_"].Value = t2.Name.Trim();
                         r2.Cells["Active"].Value = t2.Active;
                         r2.Cells["Group"].Value = t2.Group;
+                        r2.Cells["OrderWeight"].Value = t2.OrderWeight;
+                        r2.Cells["DetectingTemplateLastPageNumber"].Value = t2.DetectingTemplateLastPageNumber;
                         r2.Tag = t2;
                         editTemplate(r2);
                         break;
@@ -299,6 +340,8 @@ namespace Cliver.InvoiceParser
                 t2.ModifiedTime = DateTime.Now;
                 t2.Group = (string)Row.Cells["Group"].Value;
                 t2.Comment = (string)Row.Cells["Comment"].Value;
+                t2.OrderWeight = (float)Row.Cells["OrderWeight"].Value;
+                t2.DetectingTemplateLastPageNumber = (uint)Row.Cells["DetectingTemplateLastPageNumber"].Value;
 
                 if (!Settings.Templates.Templates.Contains(Template))
                     Settings.Templates.Templates.Add(t2);
@@ -369,6 +412,8 @@ namespace Cliver.InvoiceParser
                     r.Cells["Group"].Value = t.Group;
                     r.Cells["ModifiedTime"].Value = t.ModifiedTime.ToString("yy-MM-dd HH:mm:ss");
                     r.Cells["Comment"].Value = t.Comment;
+                    r.Cells["OrderWeight"].Value = t.OrderWeight;
+                    r.Cells["DetectingTemplateLastPageNumber"].Value = t.DetectingTemplateLastPageNumber;
                     r.Tag = t;
                 }
                 //templates.Columns["Name_"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
@@ -624,6 +669,13 @@ namespace Cliver.InvoiceParser
                 foreach (DataGridViewRow r in templates.Rows)
                     if (getBoolValue(r, "Selected"))
                         r.Cells["Group"].Value = groupChange.Text;
+                Settings.Templates.Touch();
+            };
+            applyOrderWeightChange.Click += delegate
+            {
+                foreach (DataGridViewRow r in templates.Rows)
+                    if (getBoolValue(r, "Selected"))
+                        r.Cells["OrderWeight"].Value = (float)orderWeightChange.Value;
                 Settings.Templates.Touch();
             };
         }

@@ -96,8 +96,8 @@ Position deviation parameter allows to loose bonds between master element and se
 <ul> 
 <li> specify file filters for templates. If it can be done then the tips below are not needed;
 <li> keep templates that are known as not corresponding to the files to be processed right now, inactive so that PdfDocumentParser will have to choose the right templates from a lesser collection. Put PDF files that correspond to 1-10 templates to a separate folder, set active these templates only and then process. Do so for every batch of files;
-<li> as every template is checked for matching its recognition marks to document pages, avoid using OCR'ed text type in marks and their anchors because this type requires an essential time to build an OCR cache of page (being built it is very fast though). This tip makes sense only when the most of templates use Image type in marks which usually happens. Otherwise, if marks of the most of templates can use OCR'ed text then it may give a faster parsing;
-<li> order templates so that slow ones like those that use auto-deskew should be checked in the last place when the rest templates have not matched;
+<li> as every template is checked for matching its recognition marks to document pages, avoid using OCR'ed text type in marks and their anchors because this type requires an essential time to build an OCR cache of page (being built it is very fast then). This tip makes sense only when the most of templates use Image type in marks which usually happens. Otherwise, if marks of the most of templates can use OCR'ed text then it may give a faster parsing;
+<li> order your templates so that slow ones like those that use auto-deskew should be checked in the last place when the rest templates have not matched;
 </ul>
 
 <h2>To be done</h2>

@@ -30,7 +30,7 @@ namespace Cliver.InvoiceParser
                 //if (Templates.Count < 1)
                 //    Templates.Add(CreateInitialTemplate());
 
-                //conversion to new format
+                //TEMPORARY: conversion to new format
                 foreach (Template t in Templates.Where(x => x.Editor == null))
                     t.Editor = new PdfDocumentParser.Template.EditorSettings
                     {
@@ -83,7 +83,6 @@ namespace Cliver.InvoiceParser
                 }
                 return new Template
                 {
-                    Active = true,
                     AutoDeskew = false,
                     Fields = new List<Template.Field> {
                         new Template.Field { Name = "INVOICE#" , Rectangle=new Template.RectangleF(0,0,10,10)},
@@ -113,5 +112,8 @@ namespace Cliver.InvoiceParser
         public string Group;
         public DateTime ModifiedTime;
         public string Comment;
+        public float OrderWeight = 1f;
+        //public int PdfPageMinNumberToDetectTemplate = 3;
+        public uint DetectingTemplateLastPageNumber = 1;
     }
 }
