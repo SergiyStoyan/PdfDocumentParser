@@ -184,6 +184,7 @@ namespace Cliver.InvoiceParser
                             return;
                         Template t2 = SerializationRoutines.Json.Deserialize<Template>(SerializationRoutines.Json.Serialize(t));
                         t2.Name = "";
+                        t2.Editor.TestFile = null;
                         int i = templates.Rows.Add(new DataGridViewRow());
                         DataGridViewRow r2 = templates.Rows[i];
                         r2.Cells["Name_"].Value = t2.Name.Trim();
@@ -228,7 +229,7 @@ namespace Cliver.InvoiceParser
             tf = new TemplateForm(tm, Settings.General.InputFolder);
             tf.FormClosed += delegate
             {
-                if (tm.Template.Editor.TestFile != tm.LastTestFile && tm.LastTestFile != null)//the customer asked for this
+                if (tm.LastTestFile != null)//the customer asked for this
                 {
                     Settings.TestFiles.TemplateNames2TestFile[tm.Template.Name] = tm.LastTestFile;
                     var deletedNs = Settings.TestFiles.TemplateNames2TestFile.Keys.Where(n => Settings.Templates.Templates.Where(a => a.Name == n).FirstOrDefault() == null).ToList();

@@ -71,7 +71,7 @@ namespace Cliver.PdfDocumentParser
             FloatingAnchorId.ValueType = typeof(int);
             FloatingAnchorId.ValueMember = "Id";
             FloatingAnchorId.DisplayMember = "Name";
-
+            
             int statusDefaultHeight = status.Height;
             status.MouseEnter += delegate
             {
@@ -212,10 +212,7 @@ namespace Cliver.PdfDocumentParser
                                     case Template.ValueTypes.ImageData:
                                         {
                                             if (selectedImageDataValue == null)
-                                                selectedImageDataValue = new Template.FloatingAnchor.ImageDataValue
-                                                {
-                                                    ImageBoxs = new List<Template.FloatingAnchor.ImageDataValue.ImageBox>()
-                                                };
+                                                selectedImageDataValue = new Template.FloatingAnchor.ImageDataValue();
                                             string error;
                                             selectedImageDataValue.ImageBoxs.Add(new Template.FloatingAnchor.ImageDataValue.ImageBox
                                             {
@@ -312,13 +309,15 @@ namespace Cliver.PdfDocumentParser
                 switch (floatingAnchors.Columns[e.ColumnIndex].Name)
                 {
                     case "Id3":
-                        findAndDrawFloatingAnchor(fai);
+                        if(row.Selected)
+                            findAndDrawFloatingAnchor(fai);
                         break;
                     case "Value3":
                         //if (floatingAnchors.Rows[e.RowIndex].Cells["Value3"].Value == null)                        
                         //    floatingAnchors.Rows[e.RowIndex].Cells["Id3"].Value = null;
                         onFloatingAnchorsChanged(fai);
-                        findAndDrawFloatingAnchor(fai);
+                        if (row.Selected)
+                            findAndDrawFloatingAnchor(fai);
                         break;
                     case "ValueType3":
                         row.Cells["Value3"].Value = null;
