@@ -207,7 +207,7 @@
             this.groupBox2.Controls.Add(this.findBestImageMatch);
             this.groupBox2.Controls.Add(this.brightnessTolerance);
             this.groupBox2.Controls.Add(this.differentPixelNumberTolerance);
-            this.groupBox2.Location = new System.Drawing.Point(207, 160);
+            this.groupBox2.Location = new System.Drawing.Point(189, 160);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(222, 103);
             this.groupBox2.TabIndex = 1;
@@ -226,7 +226,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(60, 52);
+            this.label11.Location = new System.Drawing.Point(6, 52);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(110, 13);
             this.label11.TabIndex = 54;
@@ -417,21 +417,21 @@
             this.groupBox1.Controls.Add(this.autoDeskew);
             this.groupBox1.Location = new System.Drawing.Point(0, 160);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(203, 103);
+            this.groupBox1.Size = new System.Drawing.Size(183, 103);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Scanned Document Settings";
             // 
             // autoDeskewThreshold
             // 
-            this.autoDeskewThreshold.Location = new System.Drawing.Point(138, 74);
+            this.autoDeskewThreshold.Location = new System.Drawing.Point(125, 74);
             this.autoDeskewThreshold.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
             this.autoDeskewThreshold.Name = "autoDeskewThreshold";
-            this.autoDeskewThreshold.Size = new System.Drawing.Size(55, 20);
+            this.autoDeskewThreshold.Size = new System.Drawing.Size(52, 20);
             this.autoDeskewThreshold.TabIndex = 62;
             this.autoDeskewThreshold.Value = new decimal(new int[] {
             100,
@@ -453,13 +453,13 @@
             this.pageRotation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.pageRotation.FormattingEnabled = true;
             this.pageRotation.Items.AddRange(new object[] {
-            "---",
-            "90 clockwise",
-            "180 clockwise",
-            "90 counterclockwise"});
-            this.pageRotation.Location = new System.Drawing.Point(77, 23);
+            "",
+            "↻ 90°",
+            "↻ 180°",
+            "↺ 90°"});
+            this.pageRotation.Location = new System.Drawing.Point(125, 23);
             this.pageRotation.Name = "pageRotation";
-            this.pageRotation.Size = new System.Drawing.Size(116, 21);
+            this.pageRotation.Size = new System.Drawing.Size(52, 21);
             this.pageRotation.TabIndex = 51;
             // 
             // label9
@@ -475,7 +475,7 @@
             // 
             this.autoDeskew.AutoSize = true;
             this.autoDeskew.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.autoDeskew.Location = new System.Drawing.Point(84, 52);
+            this.autoDeskew.Location = new System.Drawing.Point(125, 52);
             this.autoDeskew.Name = "autoDeskew";
             this.autoDeskew.Size = new System.Drawing.Size(15, 14);
             this.autoDeskew.TabIndex = 52;
@@ -992,7 +992,7 @@
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(51, 26);
+            this.label20.Location = new System.Drawing.Point(6, 26);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(119, 13);
             this.label20.TabIndex = 59;

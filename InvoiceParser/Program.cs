@@ -14,9 +14,8 @@ namespace Cliver.InvoiceParser
     /*
  TBD:
  - add columns: modified, used time, comment
- - add edit2:comment,to detect template use ?-? pages
+ - add edit2:comment,to detect template use ?-? pages, this template cannot share a file with another template
  - ? Template not enherited but embedded
- - this template cannot share a file with another template
 
  - MainForm to WPF;
 - store each template in separate file;

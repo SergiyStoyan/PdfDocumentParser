@@ -255,7 +255,7 @@ namespace Cliver.PdfDocumentParser
 
             public class PdfTextValue
             {
-                public List<CharBox> CharBoxs;
+                public List<CharBox> CharBoxs = new List<CharBox>();
                 [Serializable]
                 public class CharBox
                 {
@@ -265,7 +265,7 @@ namespace Cliver.PdfDocumentParser
             }
             public class OcrTextValue
             {
-                public List<CharBox> CharBoxs;
+                public List<CharBox> CharBoxs = new List<CharBox>();
                 [Serializable]
                 public class CharBox
                 {
@@ -275,7 +275,7 @@ namespace Cliver.PdfDocumentParser
             }
             public class ImageDataValue
             {
-                public List<ImageBox> ImageBoxs;
+                public List<ImageBox> ImageBoxs = new List<ImageBox>();
                 [Serializable]
                 public class ImageBox
                 {
