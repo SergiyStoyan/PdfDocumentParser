@@ -28,10 +28,9 @@ namespace Cliver.PdfDocumentParser
 
         public string Name;
 
-        public Regex FileFilterRegex;
-
         //public int ImageResolution = 300;//tesseract requires at least 300
 
+        public bool AutoPagesRotation = false;//!!!not implemented!!!
         public PageRotations PagesRotation = 0;
         public enum PageRotations
         {
