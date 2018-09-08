@@ -491,12 +491,7 @@ namespace Cliver.PdfDocumentParser
                         cs["FloatingAnchorId"].Value = f.FloatingAnchorId;
                     }
                 }
-
-                if (t.FileFilterRegex != null)
-                    fileFilterRegex.Text = SerializationRoutines.Json.Serialize(t.FileFilterRegex);
-                else
-                    fileFilterRegex.Text = "";
-
+                
                 pictureScale.Value = t.Editor.TestPictureScale > 0 ? t.Editor.TestPictureScale : 1;
 
                 ExtractFieldsAutomaticallyWhenPageChanged.Checked = t.Editor.ExtractFieldsAutomaticallyWhenPageChanged;
@@ -684,20 +679,6 @@ namespace Cliver.PdfDocumentParser
                 LogMessage.Error(ex);
             }
             return false;
-        }
-
-        private void bTestFileFilterRegex_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string d = string.IsNullOrWhiteSpace(testFile.Text) ? testFileDefaultFolder : PathRoutines.GetDirFromPath(testFile.Text);
-                FileFilterForm f = new FileFilterForm(d, SerializationRoutines.Json.Deserialize<Regex>(fileFilterRegex.Text));
-                f.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                LogMessage.Error(ex);
-            }
         }
 
         private void tCurrentPage_Leave(object sender, EventArgs e)
@@ -930,8 +911,6 @@ namespace Cliver.PdfDocumentParser
                     t.Fields.Add(f);
                 }
             }
-
-            t.FileFilterRegex = SerializationRoutines.Json.Deserialize<Regex>(fileFilterRegex.Text);
 
             if (saving)
             {

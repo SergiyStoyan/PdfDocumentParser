@@ -39,7 +39,6 @@
             this.brightnessTolerance = new System.Windows.Forms.NumericUpDown();
             this.differentPixelNumberTolerance = new System.Windows.Forms.NumericUpDown();
             this.status = new System.Windows.Forms.TextBox();
-            this.fileFilterRegex = new System.Windows.Forms.TextBox();
             this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
             this.ShowPdfText = new System.Windows.Forms.LinkLabel();
             this.label17 = new System.Windows.Forms.Label();
@@ -72,9 +71,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.selectionCoordinates = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.lTotalPages = new System.Windows.Forms.Label();
-            this.bTestFileFilterRegex = new System.Windows.Forms.Button();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.documentFirstPageRecognitionMarks = new System.Windows.Forms.DataGridView();
             this.FloatingAnchorId2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
@@ -170,7 +167,6 @@
             // 
             this.splitContainer2.Panel1.Controls.Add(this.groupBox2);
             this.splitContainer2.Panel1.Controls.Add(this.status);
-            this.splitContainer2.Panel1.Controls.Add(this.fileFilterRegex);
             this.splitContainer2.Panel1.Controls.Add(this.flowLayoutPanel4);
             this.splitContainer2.Panel1.Controls.Add(this.name);
             this.splitContainer2.Panel1.Controls.Add(this.label6);
@@ -188,9 +184,7 @@
             this.splitContainer2.Panel1.Controls.Add(this.label7);
             this.splitContainer2.Panel1.Controls.Add(this.label12);
             this.splitContainer2.Panel1.Controls.Add(this.selectionCoordinates);
-            this.splitContainer2.Panel1.Controls.Add(this.label5);
             this.splitContainer2.Panel1.Controls.Add(this.lTotalPages);
-            this.splitContainer2.Panel1.Controls.Add(this.bTestFileFilterRegex);
             // 
             // splitContainer2.Panel2
             // 
@@ -207,7 +201,7 @@
             this.groupBox2.Controls.Add(this.findBestImageMatch);
             this.groupBox2.Controls.Add(this.brightnessTolerance);
             this.groupBox2.Controls.Add(this.differentPixelNumberTolerance);
-            this.groupBox2.Location = new System.Drawing.Point(189, 160);
+            this.groupBox2.Location = new System.Drawing.Point(204, 137);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(222, 103);
             this.groupBox2.TabIndex = 1;
@@ -311,21 +305,12 @@
             // 
             this.status.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.status.Location = new System.Drawing.Point(51, 109);
+            this.status.Location = new System.Drawing.Point(51, 82);
             this.status.Multiline = true;
             this.status.Name = "status";
             this.status.ReadOnly = true;
             this.status.Size = new System.Drawing.Size(378, 20);
             this.status.TabIndex = 35;
-            // 
-            // fileFilterRegex
-            // 
-            this.fileFilterRegex.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.fileFilterRegex.Location = new System.Drawing.Point(51, 82);
-            this.fileFilterRegex.Name = "fileFilterRegex";
-            this.fileFilterRegex.Size = new System.Drawing.Size(322, 20);
-            this.fileFilterRegex.TabIndex = 36;
             // 
             // flowLayoutPanel4
             // 
@@ -335,7 +320,7 @@
             this.flowLayoutPanel4.Controls.Add(this.ShowOcrText);
             this.flowLayoutPanel4.Controls.Add(this.label18);
             this.flowLayoutPanel4.Controls.Add(this.IsDocumentFirstPage);
-            this.flowLayoutPanel4.Location = new System.Drawing.Point(4, 132);
+            this.flowLayoutPanel4.Location = new System.Drawing.Point(1, 107);
             this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel4.Name = "flowLayoutPanel4";
             this.flowLayoutPanel4.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
@@ -422,9 +407,9 @@
             this.groupBox1.Controls.Add(this.pageRotation);
             this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.autoDeskew);
-            this.groupBox1.Location = new System.Drawing.Point(0, 160);
+            this.groupBox1.Location = new System.Drawing.Point(0, 137);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(183, 103);
+            this.groupBox1.Size = new System.Drawing.Size(198, 103);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Scanned Document Settings";
@@ -432,7 +417,7 @@
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(2, 52);
+            this.label21.Location = new System.Drawing.Point(11, 52);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(72, 13);
             this.label21.TabIndex = 63;
@@ -440,7 +425,7 @@
             // 
             // autoDeskewThreshold
             // 
-            this.autoDeskewThreshold.Location = new System.Drawing.Point(125, 74);
+            this.autoDeskewThreshold.Location = new System.Drawing.Point(134, 74);
             this.autoDeskewThreshold.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -458,7 +443,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(1, 76);
+            this.label14.Location = new System.Drawing.Point(10, 76);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(122, 13);
             this.label14.TabIndex = 61;
@@ -473,7 +458,7 @@
             "↻ 90°",
             "↻ 180°",
             "↺ 90°"});
-            this.pageRotation.Location = new System.Drawing.Point(125, 23);
+            this.pageRotation.Location = new System.Drawing.Point(134, 23);
             this.pageRotation.Name = "pageRotation";
             this.pageRotation.Size = new System.Drawing.Size(52, 21);
             this.pageRotation.TabIndex = 51;
@@ -481,7 +466,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(1, 26);
+            this.label9.Location = new System.Drawing.Point(10, 26);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(75, 13);
             this.label9.TabIndex = 50;
@@ -491,7 +476,7 @@
             // 
             this.autoDeskew.AutoSize = true;
             this.autoDeskew.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.autoDeskew.Location = new System.Drawing.Point(125, 52);
+            this.autoDeskew.Location = new System.Drawing.Point(134, 52);
             this.autoDeskew.Name = "autoDeskew";
             this.autoDeskew.Size = new System.Drawing.Size(15, 14);
             this.autoDeskew.TabIndex = 52;
@@ -518,11 +503,11 @@
             this.ValueType3,
             this.PositionDeviation3,
             this.Value3});
-            this.floatingAnchors.Location = new System.Drawing.Point(0, 282);
+            this.floatingAnchors.Location = new System.Drawing.Point(0, 259);
             this.floatingAnchors.MultiSelect = false;
             this.floatingAnchors.Name = "floatingAnchors";
             this.floatingAnchors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.floatingAnchors.Size = new System.Drawing.Size(429, 122);
+            this.floatingAnchors.Size = new System.Drawing.Size(429, 141);
             this.floatingAnchors.TabIndex = 50;
             // 
             // Id3
@@ -556,7 +541,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(-2, 266);
+            this.label10.Location = new System.Drawing.Point(-2, 243);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(89, 13);
             this.label10.TabIndex = 49;
@@ -664,7 +649,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(0, 112);
+            this.label12.Location = new System.Drawing.Point(-2, 85);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(40, 13);
             this.label12.TabIndex = 30;
@@ -681,15 +666,6 @@
             this.selectionCoordinates.TabIndex = 32;
             this.selectionCoordinates.Text = "<selection coordinates>";
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(-2, 85);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(51, 13);
-            this.label5.TabIndex = 38;
-            this.label5.Text = "File Filter:";
-            // 
             // lTotalPages
             // 
             this.lTotalPages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -699,17 +675,6 @@
             this.lTotalPages.Size = new System.Drawing.Size(32, 13);
             this.lTotalPages.TabIndex = 33;
             this.lTotalPages.Text = "Page";
-            // 
-            // bTestFileFilterRegex
-            // 
-            this.bTestFileFilterRegex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bTestFileFilterRegex.Location = new System.Drawing.Point(382, 81);
-            this.bTestFileFilterRegex.Name = "bTestFileFilterRegex";
-            this.bTestFileFilterRegex.Size = new System.Drawing.Size(47, 23);
-            this.bTestFileFilterRegex.TabIndex = 37;
-            this.bTestFileFilterRegex.Text = "Test";
-            this.bTestFileFilterRegex.UseVisualStyleBackColor = true;
-            this.bTestFileFilterRegex.Click += new System.EventHandler(this.bTestFileFilterRegex_Click);
             // 
             // splitContainer3
             // 
@@ -1072,9 +1037,6 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label lTotalPages;
         private System.Windows.Forms.TextBox status;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button bTestFileFilterRegex;
-        private System.Windows.Forms.TextBox fileFilterRegex;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox name;
         private System.Windows.Forms.NumericUpDown pictureScale;

@@ -115,7 +115,7 @@ namespace Cliver.InvoiceParser
         public float OrderWeight = 1f;
         //public int PdfPageMinNumberToDetectTemplate = 3;
         public uint DetectingTemplateLastPageNumber = 1;
-        public bool CanShareFileWithAnotherTemplates = false;
+        public bool CanShareFileWithAnotherTemplates = false;//!!!not engaged!!!
 
         public string GetModifiedTimeAsString()
         {

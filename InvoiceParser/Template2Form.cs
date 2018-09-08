@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace Cliver.InvoiceParser
 {
@@ -26,14 +27,26 @@ namespace Cliver.InvoiceParser
             Comment.Text = t.Comment;
             OrderWeight.Value = (decimal)t.OrderWeight;
             DetectingTemplateLastPageNumber.Value = t.DetectingTemplateLastPageNumber;
-            FileFilterRegex.Text = t.FileFilterRegex.ToString();
+            if (t.FileFilterRegex != null)
+                FileFilterRegex.Text = SerializationRoutines.Json.Serialize(t.FileFilterRegex);
+            else
+                FileFilterRegex.Text = "";
             CanShareFileWithAnotherTemplates.Checked = t.CanShareFileWithAnotherTemplates;
         }
         Template template;
 
         private void bTestFileFilterRegex_Click(object sender, EventArgs e)
         {
-
+            try
+            {
+                string d = string.IsNullOrWhiteSpace(template.Editor.TestFile) ? Settings.General.InputFolder : PathRoutines.GetDirFromPath(template.Editor.TestFile);
+                FileFilterForm f = new FileFilterForm(d, SerializationRoutines.Json.Deserialize<Regex>(FileFilterRegex.Text));
+                f.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                LogMessage.Error(ex);
+            }
         }
 
         private void bOK_Click(object sender, EventArgs e)
@@ -45,7 +58,7 @@ namespace Cliver.InvoiceParser
                 template.Comment = Comment.Text;
                 template.OrderWeight = (float)OrderWeight.Value;
                 template.DetectingTemplateLastPageNumber = (uint)DetectingTemplateLastPageNumber.Value;
-                template.FileFilterRegex = new System.Text.RegularExpressions.Regex(FileFilterRegex.Text);
+                template.FileFilterRegex = SerializationRoutines.Json.Deserialize<Regex>(FileFilterRegex.Text);
                 template.CanShareFileWithAnotherTemplates = CanShareFileWithAnotherTemplates.Checked;
 
                 Close();

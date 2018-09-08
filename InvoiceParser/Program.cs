@@ -13,10 +13,8 @@ namespace Cliver.InvoiceParser
 {
     /*
  TBD:
- - add edit2:comment,to detect template use ?-? pages, this template cannot share a file with another template
  - ? Template not enherited but embedded
  - custom Value in anchors and marks table
- - move FileFilterRegex to InvoiceParser
  - detect page rotation by tesseract
  - implement image recognition by brightness delta
 

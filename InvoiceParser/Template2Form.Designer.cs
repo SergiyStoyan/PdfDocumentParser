@@ -216,6 +216,7 @@
             // CanShareFileWithAnotherTemplates
             // 
             this.CanShareFileWithAnotherTemplates.AutoSize = true;
+            this.CanShareFileWithAnotherTemplates.Enabled = false;
             this.CanShareFileWithAnotherTemplates.Location = new System.Drawing.Point(214, 192);
             this.CanShareFileWithAnotherTemplates.Name = "CanShareFileWithAnotherTemplates";
             this.CanShareFileWithAnotherTemplates.Size = new System.Drawing.Size(15, 14);
@@ -225,6 +226,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
+            this.label6.Enabled = false;
             this.label6.Location = new System.Drawing.Point(12, 192);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(196, 13);

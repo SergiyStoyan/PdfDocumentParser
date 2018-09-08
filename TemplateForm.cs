@@ -693,19 +693,6 @@ namespace Cliver.PdfDocumentParser
                 }
             };
 
-            fileFilterRegex.TextChanged += delegate
-            {
-                try
-                {
-                    SerializationRoutines.Json.Deserialize<Regex>(fileFilterRegex.Text);
-                }
-                catch (Exception ex)
-                {
-                    //LogMessage.Error("FileFilterRegex", ex);
-                    LogMessage.Error(ex);
-                }
-            };
-
             pictureScale.ValueChanged += delegate
             {
                 if (!loadingTemplate)

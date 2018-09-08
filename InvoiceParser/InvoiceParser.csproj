@@ -146,6 +146,12 @@
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Excel.cs" />
+    <Compile Include="FileFilterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FileFilterForm.Designer.cs">
+      <DependentUpon>FileFilterForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -216,6 +222,9 @@
   <ItemGroup>
     <EmbeddedResource Include="AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FileFilterForm.resx">
+      <DependentUpon>FileFilterForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
