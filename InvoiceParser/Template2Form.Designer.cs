@@ -62,9 +62,11 @@
             // 
             // Comment
             // 
+            this.Comment.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.Comment.Location = new System.Drawing.Point(72, 69);
             this.Comment.Name = "Comment";
-            this.Comment.Size = new System.Drawing.Size(479, 20);
+            this.Comment.Size = new System.Drawing.Size(371, 20);
             this.Comment.TabIndex = 1;
             // 
             // label2
@@ -79,7 +81,7 @@
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bCancel.Location = new System.Drawing.Point(488, 3);
+            this.bCancel.Location = new System.Drawing.Point(380, 3);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 50;
@@ -90,7 +92,7 @@
             // bOK
             // 
             this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bOK.Location = new System.Drawing.Point(407, 3);
+            this.bOK.Location = new System.Drawing.Point(299, 3);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(75, 23);
             this.bOK.TabIndex = 49;
@@ -106,7 +108,7 @@
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 227);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(566, 31);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(458, 31);
             this.flowLayoutPanel1.TabIndex = 60;
             // 
             // Active
@@ -120,9 +122,11 @@
             // 
             // Group
             // 
+            this.Group.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.Group.Location = new System.Drawing.Point(72, 39);
             this.Group.Name = "Group";
-            this.Group.Size = new System.Drawing.Size(123, 20);
+            this.Group.Size = new System.Drawing.Size(371, 20);
             this.Group.TabIndex = 64;
             // 
             // label3
@@ -189,9 +193,11 @@
             // 
             // FileFilterRegex
             // 
+            this.FileFilterRegex.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.FileFilterRegex.Location = new System.Drawing.Point(72, 159);
             this.FileFilterRegex.Name = "FileFilterRegex";
-            this.FileFilterRegex.Size = new System.Drawing.Size(426, 20);
+            this.FileFilterRegex.Size = new System.Drawing.Size(318, 20);
             this.FileFilterRegex.TabIndex = 69;
             // 
             // label5
@@ -205,7 +211,8 @@
             // 
             // bTestFileFilterRegex
             // 
-            this.bTestFileFilterRegex.Location = new System.Drawing.Point(504, 156);
+            this.bTestFileFilterRegex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.bTestFileFilterRegex.Location = new System.Drawing.Point(396, 156);
             this.bTestFileFilterRegex.Name = "bTestFileFilterRegex";
             this.bTestFileFilterRegex.Size = new System.Drawing.Size(47, 23);
             this.bTestFileFilterRegex.TabIndex = 70;
@@ -237,7 +244,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(566, 258);
+            this.ClientSize = new System.Drawing.Size(458, 258);
             this.Controls.Add(this.CanShareFileWithAnotherTemplates);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.FileFilterRegex);

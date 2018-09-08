@@ -607,17 +607,17 @@ namespace Cliver.InvoiceParser
             return s == null ? false : (bool)s;
         }
 
-        string getStringValue(DataGridViewRow r, string name)
-        {
-            string s = (string)r.Cells[name].Value;
-            return s == null ? "" : s;
-        }
+        //string getStringValue(DataGridViewRow r, string name)
+        //{
+        //    string s = (string)r.Cells[name].Value;
+        //    return s == null ? "" : s;
+        //}
 
-        float getFloatValue(DataGridViewRow r, string name)
-        {
-            float? f = (float?)r.Cells[name].Value;
-            return f == null ? 0f : (float)f;
-        }
+        //float getFloatValue(DataGridViewRow r, string name)
+        //{
+        //    float? f = (float?)r.Cells[name].Value;
+        //    return f == null ? 0f : (float)f;
+        //}
 
         void initializeSelectionEngine()
         {
@@ -641,11 +641,14 @@ namespace Cliver.InvoiceParser
                 int count = 0;
                 foreach (DataGridViewRow r in templates.Rows)
                 {
-                    bool s = (!activePattern.Enabled || (getBoolValue(r, "Active") == activePattern.Checked))
-                         && (!namePattern.Enabled || (string.IsNullOrEmpty(namePattern.Text) ? string.IsNullOrEmpty(getStringValue(r, "Name_")) : Regex.IsMatch(getStringValue(r, "Name_"), namePattern.Text, RegexOptions.IgnoreCase)))
-                         && (!groupPattern.Enabled || (string.IsNullOrEmpty(groupPattern.Text) ? string.IsNullOrEmpty(getStringValue(r, "Group")) : Regex.IsMatch(getStringValue(r, "Group"), groupPattern.Text, RegexOptions.IgnoreCase)))
-                         && (!commentPattern.Enabled || (string.IsNullOrEmpty(commentPattern.Text) ? string.IsNullOrEmpty(getStringValue(r, "Comment")) : Regex.IsMatch(getStringValue(r, "Comment"), commentPattern.Text, RegexOptions.IgnoreCase)))
-                         && (!orderWeightPattern2.Enabled || (orderWeight1 <= getFloatValue(r, "OrderWeight") && getFloatValue(r, "OrderWeight") <= orderWeight2));
+                    Template t = (Template)r.Tag;
+                    if (t == null)
+                        continue;
+                    bool s = (!activePattern.Enabled || (t.Active == activePattern.Checked))
+                         && (!namePattern.Enabled || (string.IsNullOrEmpty(namePattern.Text) ? string.IsNullOrEmpty(t.Name) : Regex.IsMatch(t.Name, namePattern.Text, RegexOptions.IgnoreCase)))
+                         && (!groupPattern.Enabled || (string.IsNullOrEmpty(groupPattern.Text) ? string.IsNullOrEmpty(t.Group) : Regex.IsMatch(t.Group, groupPattern.Text, RegexOptions.IgnoreCase)))
+                         && (!commentPattern.Enabled || (string.IsNullOrEmpty(commentPattern.Text) ? string.IsNullOrEmpty(t.Comment) : Regex.IsMatch(t.Comment, commentPattern.Text, RegexOptions.IgnoreCase)))
+                         && (!orderWeightPattern2.Enabled || (orderWeight1 <= t.OrderWeight && t.OrderWeight <= orderWeight2));
                     r.Cells["Selected"].Value = s;
                     if (s)
                         count++;
