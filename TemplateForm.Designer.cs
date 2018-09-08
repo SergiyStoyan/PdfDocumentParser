@@ -32,6 +32,7 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label20 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.findBestImageMatch = new System.Windows.Forms.CheckBox();
@@ -48,6 +49,7 @@
             this.name = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label21 = new System.Windows.Forms.Label();
             this.autoDeskewThreshold = new System.Windows.Forms.NumericUpDown();
             this.label14 = new System.Windows.Forms.Label();
             this.pageRotation = new System.Windows.Forms.ComboBox();
@@ -101,8 +103,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.ExtractFieldsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
             this.label19 = new System.Windows.Forms.Label();
-            this.label20 = new System.Windows.Forms.Label();
-            this.label21 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -213,6 +213,15 @@
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "ImageData Settings";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(6, 26);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(119, 13);
+            this.label20.TabIndex = 59;
+            this.label20.Text = "Find Best Image Match:";
             // 
             // label13
             // 
@@ -419,6 +428,15 @@
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Scanned Document Settings";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(2, 52);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(72, 13);
+            this.label21.TabIndex = 63;
+            this.label21.Text = "Auto-deskew:";
             // 
             // autoDeskewThreshold
             // 
@@ -986,24 +1004,6 @@
             this.label19.Size = new System.Drawing.Size(10, 13);
             this.label19.TabIndex = 54;
             this.label19.Text = "[";
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(6, 26);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(119, 13);
-            this.label20.TabIndex = 59;
-            this.label20.Text = "Find Best Image Match:";
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(2, 52);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(72, 13);
-            this.label21.TabIndex = 63;
-            this.label21.Text = "Auto-deskew:";
             // 
             // TemplateForm
             // 

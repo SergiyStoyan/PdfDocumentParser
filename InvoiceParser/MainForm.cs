@@ -243,7 +243,7 @@ namespace Cliver.InvoiceParser
                         templates.Rows[i].Cells["Active"].Value = t.Active;
                         templates.Rows[i].Cells["Group"].Value = t.Group;
                         templates.Rows[i].Cells["OrderWeight"].Value = t.OrderWeight;
-                        templates.Rows[i].Cells["OrderWeight"].Value = t.DetectingTemplateLastPageNumber;
+                        templates.Rows[i].Cells["DetectingTemplateLastPageNumber"].Value = t.DetectingTemplateLastPageNumber;
                         r.Selected = false;
                     }
                     catch { }
@@ -271,6 +271,9 @@ namespace Cliver.InvoiceParser
                         r2.Tag = t2;
                         editTemplate(r2);
                         break;
+                    case "Edit2":
+                        edit2Template(r);
+                        break;
                 }
             };
 
@@ -278,6 +281,22 @@ namespace Cliver.InvoiceParser
 
             if (string.IsNullOrWhiteSpace(Settings.General.OutputFolder))
                 OutputFolder.Text = Log.AppDir;
+        }
+
+        void edit2Template(DataGridViewRow r)
+        {
+            Template t = (Template)r.Tag;
+            if (t == null)
+                return;
+
+         Template2Form   tf = new Template2Form(t);
+            if (tf.ShowDialog() != DialogResult.OK)
+                return;
+            r.Cells["Active"].Value = t.Active;
+            r.Cells["Group"].Value = t.Group;
+            r.Cells["Comment"].Value = t.Comment;
+            r.Cells["OrderWeight"].Value = t.OrderWeight;
+            r.Cells["DetectingTemplateLastPageNumber"].Value = t.DetectingTemplateLastPageNumber;
         }
 
         void editTemplate(DataGridViewRow r)

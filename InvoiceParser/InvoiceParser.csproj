@@ -177,6 +177,12 @@
     <Compile Include="Settings\Templates2.cs" />
     <Compile Include="Settings\Templates.cs" />
     <Compile Include="Settings\TestFiles.cs" />
+    <Compile Include="Template2Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Template2Form.Designer.cs">
+      <DependentUpon>Template2Form.cs</DependentUpon>
+    </Compile>
     <Content Include="3RINGS~1.ICO" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -223,6 +229,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template2Form.resx">
+      <DependentUpon>Template2Form.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
