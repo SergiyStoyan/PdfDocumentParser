@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.bAbout = new System.Windows.Forms.Button();
             this.bInputFolder = new System.Windows.Forms.Button();
             this.bOutputFolder = new System.Windows.Forms.Button();
@@ -50,7 +50,6 @@
             this.ModifiedTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Comment = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DetectingTemplateLastPageNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.label3 = new System.Windows.Forms.Label();
             this.bLog = new System.Windows.Forms.Button();
             this.bOutput = new System.Windows.Forms.Button();
             this.bSettings = new System.Windows.Forms.Button();
@@ -88,16 +87,18 @@
             this.commentPattern = new System.Windows.Forms.TextBox();
             this.useOrderWeightPattern = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.orderWeightPattern1 = new System.Windows.Forms.NumericUpDown();
+            this.orderWeightPattern2 = new System.Windows.Forms.NumericUpDown();
+            this.selectedTemplatesCount = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.templates)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.orderWeightChange)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.orderWeightPattern1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.orderWeightPattern2)).BeginInit();
             this.SuspendLayout();
             // 
             // bAbout
@@ -114,7 +115,7 @@
             // bInputFolder
             // 
             this.bInputFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bInputFolder.Location = new System.Drawing.Point(634, 27);
+            this.bInputFolder.Location = new System.Drawing.Point(634, 8);
             this.bInputFolder.Name = "bInputFolder";
             this.bInputFolder.Size = new System.Drawing.Size(24, 23);
             this.bInputFolder.TabIndex = 1;
@@ -125,7 +126,7 @@
             // bOutputFolder
             // 
             this.bOutputFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bOutputFolder.Location = new System.Drawing.Point(634, 73);
+            this.bOutputFolder.Location = new System.Drawing.Point(634, 38);
             this.bOutputFolder.Name = "bOutputFolder";
             this.bOutputFolder.Size = new System.Drawing.Size(24, 23);
             this.bOutputFolder.TabIndex = 3;
@@ -137,18 +138,18 @@
             // 
             this.InputFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.InputFolder.Location = new System.Drawing.Point(12, 29);
+            this.InputFolder.Location = new System.Drawing.Point(92, 10);
             this.InputFolder.Name = "InputFolder";
-            this.InputFolder.Size = new System.Drawing.Size(616, 20);
+            this.InputFolder.Size = new System.Drawing.Size(536, 20);
             this.InputFolder.TabIndex = 0;
             // 
             // OutputFolder
             // 
             this.OutputFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.OutputFolder.Location = new System.Drawing.Point(12, 75);
+            this.OutputFolder.Location = new System.Drawing.Point(92, 40);
             this.OutputFolder.Name = "OutputFolder";
-            this.OutputFolder.Size = new System.Drawing.Size(616, 20);
+            this.OutputFolder.Size = new System.Drawing.Size(536, 20);
             this.OutputFolder.TabIndex = 2;
             // 
             // bExit
@@ -194,7 +195,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 59);
+            this.label2.Location = new System.Drawing.Point(12, 43);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(74, 13);
             this.label2.TabIndex = 9;
@@ -217,11 +218,11 @@
             this.ModifiedTime,
             this.Comment,
             this.DetectingTemplateLastPageNumber});
-            this.templates.Location = new System.Drawing.Point(15, 123);
+            this.templates.Location = new System.Drawing.Point(15, 73);
             this.templates.MultiSelect = false;
             this.templates.Name = "templates";
             this.templates.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.templates.Size = new System.Drawing.Size(643, 354);
+            this.templates.Size = new System.Drawing.Size(643, 404);
             this.templates.TabIndex = 4;
             // 
             // Selected
@@ -261,8 +262,8 @@
             // Name_
             // 
             this.Name_.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            this.Name_.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            this.Name_.DefaultCellStyle = dataGridViewCellStyle4;
             this.Name_.HeaderText = "Name";
             this.Name_.Name = "Name_";
             this.Name_.Width = 60;
@@ -302,15 +303,6 @@
             this.DetectingTemplateLastPageNumber.Name = "DetectingTemplateLastPageNumber";
             this.DetectingTemplateLastPageNumber.ToolTipText = "Detecting template last pdf page number";
             this.DetectingTemplateLastPageNumber.Width = 78;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(13, 107);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(59, 13);
-            this.label3.TabIndex = 11;
-            this.label3.Text = "Templates:";
             // 
             // bLog
             // 
@@ -423,8 +415,10 @@
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.numericUpDown2);
-            this.groupBox1.Controls.Add(this.numericUpDown1);
+            this.groupBox1.Controls.Add(this.label10);
+            this.groupBox1.Controls.Add(this.selectedTemplatesCount);
+            this.groupBox1.Controls.Add(this.orderWeightPattern2);
+            this.groupBox1.Controls.Add(this.orderWeightPattern1);
             this.groupBox1.Controls.Add(this.commentPattern);
             this.groupBox1.Controls.Add(this.useOrderWeightPattern);
             this.groupBox1.Controls.Add(this.label7);
@@ -446,7 +440,7 @@
             this.groupBox1.Controls.Add(this.namePattern);
             this.groupBox1.Location = new System.Drawing.Point(664, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(242, 272);
+            this.groupBox1.Size = new System.Drawing.Size(242, 294);
             this.groupBox1.TabIndex = 20;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select";
@@ -523,7 +517,7 @@
             // 
             // selectInvertion
             // 
-            this.selectInvertion.Location = new System.Drawing.Point(168, 230);
+            this.selectInvertion.Location = new System.Drawing.Point(168, 228);
             this.selectInvertion.Name = "selectInvertion";
             this.selectInvertion.Size = new System.Drawing.Size(60, 23);
             this.selectInvertion.TabIndex = 28;
@@ -532,7 +526,7 @@
             // 
             // selectNothing
             // 
-            this.selectNothing.Location = new System.Drawing.Point(101, 230);
+            this.selectNothing.Location = new System.Drawing.Point(93, 228);
             this.selectNothing.Name = "selectNothing";
             this.selectNothing.Size = new System.Drawing.Size(60, 23);
             this.selectNothing.TabIndex = 27;
@@ -541,7 +535,7 @@
             // 
             // selectAll
             // 
-            this.selectAll.Location = new System.Drawing.Point(35, 230);
+            this.selectAll.Location = new System.Drawing.Point(17, 228);
             this.selectAll.Name = "selectAll";
             this.selectAll.Size = new System.Drawing.Size(60, 23);
             this.selectAll.TabIndex = 26;
@@ -582,9 +576,9 @@
             this.groupBox2.Controls.Add(this.applyGroupChange);
             this.groupBox2.Controls.Add(this.activeChange);
             this.groupBox2.Controls.Add(this.groupChange);
-            this.groupBox2.Location = new System.Drawing.Point(666, 290);
+            this.groupBox2.Location = new System.Drawing.Point(666, 312);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(242, 146);
+            this.groupBox2.Size = new System.Drawing.Size(242, 133);
             this.groupBox2.TabIndex = 26;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Change Selected";
@@ -645,15 +639,15 @@
             // 
             // orderWeightChange
             // 
-            this.orderWeightChange.DecimalPlaces = 5;
-            this.orderWeightChange.Location = new System.Drawing.Point(81, 99);
+            this.orderWeightChange.DecimalPlaces = 1;
+            this.orderWeightChange.Location = new System.Drawing.Point(81, 98);
             this.orderWeightChange.Maximum = new decimal(new int[] {
-            100000,
+            10000,
             0,
             0,
             0});
             this.orderWeightChange.Name = "orderWeightChange";
-            this.orderWeightChange.Size = new System.Drawing.Size(145, 20);
+            this.orderWeightChange.Size = new System.Drawing.Size(61, 20);
             this.orderWeightChange.TabIndex = 33;
             // 
             // useCommentPattern
@@ -688,7 +682,6 @@
             this.useOrderWeightPattern.AutoSize = true;
             this.useOrderWeightPattern.Checked = true;
             this.useOrderWeightPattern.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.useOrderWeightPattern.Enabled = false;
             this.useOrderWeightPattern.Location = new System.Drawing.Point(17, 151);
             this.useOrderWeightPattern.Name = "useOrderWeightPattern";
             this.useOrderWeightPattern.Size = new System.Drawing.Size(15, 14);
@@ -698,55 +691,69 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Enabled = false;
             this.label7.Location = new System.Drawing.Point(32, 151);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(36, 13);
             this.label7.TabIndex = 45;
             this.label7.Text = "Order:";
             // 
-            // numericUpDown1
+            // orderWeightPattern1
             // 
-            this.numericUpDown1.DecimalPlaces = 5;
-            this.numericUpDown1.Enabled = false;
-            this.numericUpDown1.Location = new System.Drawing.Point(81, 149);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
-            100000,
+            this.orderWeightPattern1.DecimalPlaces = 1;
+            this.orderWeightPattern1.Location = new System.Drawing.Point(83, 149);
+            this.orderWeightPattern1.Maximum = new decimal(new int[] {
+            10000,
             0,
             0,
             0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(63, 20);
-            this.numericUpDown1.TabIndex = 47;
+            this.orderWeightPattern1.Name = "orderWeightPattern1";
+            this.orderWeightPattern1.Size = new System.Drawing.Size(63, 20);
+            this.orderWeightPattern1.TabIndex = 47;
             // 
-            // numericUpDown2
+            // orderWeightPattern2
             // 
-            this.numericUpDown2.DecimalPlaces = 5;
-            this.numericUpDown2.Enabled = false;
-            this.numericUpDown2.Location = new System.Drawing.Point(163, 149);
-            this.numericUpDown2.Maximum = new decimal(new int[] {
-            100000,
+            this.orderWeightPattern2.DecimalPlaces = 1;
+            this.orderWeightPattern2.Location = new System.Drawing.Point(163, 149);
+            this.orderWeightPattern2.Maximum = new decimal(new int[] {
+            10000,
             0,
             0,
             0});
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(63, 20);
-            this.numericUpDown2.TabIndex = 48;
+            this.orderWeightPattern2.Name = "orderWeightPattern2";
+            this.orderWeightPattern2.Size = new System.Drawing.Size(63, 20);
+            this.orderWeightPattern2.TabIndex = 48;
+            // 
+            // selectedTemplatesCount
+            // 
+            this.selectedTemplatesCount.AutoSize = true;
+            this.selectedTemplatesCount.Location = new System.Drawing.Point(14, 263);
+            this.selectedTemplatesCount.Name = "selectedTemplatesCount";
+            this.selectedTemplatesCount.Size = new System.Drawing.Size(16, 13);
+            this.selectedTemplatesCount.TabIndex = 49;
+            this.selectedTemplatesCount.Text = "...";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(149, 151);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(10, 13);
+            this.label10.TabIndex = 50;
+            this.label10.Text = "-";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(918, 572);
+            this.Controls.Add(this.OutputFolder);
             this.Controls.Add(this.flowLayoutPanel2);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.lProgress);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.templates);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.progress);
-            this.Controls.Add(this.OutputFolder);
             this.Controls.Add(this.InputFolder);
             this.Controls.Add(this.bOutputFolder);
             this.Controls.Add(this.bInputFolder);
@@ -764,8 +771,8 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.orderWeightChange)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.orderWeightPattern1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.orderWeightPattern2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -784,7 +791,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DataGridView templates;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button bLog;
         private System.Windows.Forms.Button bOutput;
         private System.Windows.Forms.Button bSettings;
@@ -832,7 +838,9 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.CheckBox useCommentPattern;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.NumericUpDown numericUpDown2;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.NumericUpDown orderWeightPattern2;
+        private System.Windows.Forms.NumericUpDown orderWeightPattern1;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label selectedTemplatesCount;
     }
 }

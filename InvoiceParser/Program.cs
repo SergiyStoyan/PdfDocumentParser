@@ -18,6 +18,7 @@ namespace Cliver.InvoiceParser
  - custom Value in anchors and marks table
  - move FileFilterRegex to InvoiceParser
  - detect page rotation by tesseract
+ - implement image recognition by brightness delta
 
  - MainForm to WPF;
 - ? store each template in separate file;

@@ -41,6 +41,7 @@ namespace Cliver.InvoiceParser
             public bool UseNameSelectPattern = true;
             public bool UseGroupSelectPattern = false;
             public bool UseCommentSelectPattern = false;
+            public bool UseOrderWeightPattern = false; 
             public bool SortSelectedUp = true;
 
             public override void Loaded()

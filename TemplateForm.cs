@@ -423,11 +423,24 @@ namespace Cliver.PdfDocumentParser
                             }
                             return;
                         case "ValueType2":
-                            setImageProcessingAdditionalControls(row);
-                            cs["Rectangle2"].Value = null;
+                            {
+                                setImageProcessingAdditionalControls(row);
+                                Template.ValueTypes vt = (Template.ValueTypes)cs["ValueType2"].Value;
+                                object v = extractValueAndDrawSelectionBox(fai, r, vt);
+                                if (vt == Template.ValueTypes.ImageData)
+                                {
+                                    imageProcessingAdditionalControls2Value();
+                                    Template.Mark.ImageDataValue idv = (Template.Mark.ImageDataValue)Template.Mark.GetValueFromString(Template.ValueTypes.ImageData, (string)cs["Value2"].Value);
+                                    idv.ImageData = (ImageData)v;
+                                    cs["Value2"].Value = Template.Mark.GetValueAsString(Template.ValueTypes.ImageData, idv);
+                                }
+                                else
+                                    cs["Value2"].Value = (string)v;
+                            }
                             return;
                         case "FloatingAnchorId2":
-                            cs["Rectangle2"].Value = null;
+                            cs["Value2"].Value = null;
+                            setStatus(statuses.WARNING, "documentFirstPageRecognitionMark[" + e.RowIndex + "] may need correction due to anchor change");
                             return;
                     }
                 }
