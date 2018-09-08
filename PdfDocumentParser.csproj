@@ -194,6 +194,9 @@
     </Compile>
     <Compile Include="Ocr.cs" />
     <Compile Include="Template.cs" />
+    <Compile Include="TemplateForm.extention.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="TemplateWindow.xaml.cs">
       <DependentUpon>TemplateWindow.xaml</DependentUpon>
     </Compile>
