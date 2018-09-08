@@ -424,6 +424,7 @@ namespace Cliver.PdfDocumentParser
                             return;
                         case "ValueType2":
                             {
+                                cs["Value2"].Value = null;
                                 setImageProcessingAdditionalControls(row);
                                 Template.ValueTypes vt = (Template.ValueTypes)cs["ValueType2"].Value;
                                 object v = extractValueAndDrawSelectionBox(fai, r, vt);
@@ -439,8 +440,8 @@ namespace Cliver.PdfDocumentParser
                             }
                             return;
                         case "FloatingAnchorId2":
-                            cs["Value2"].Value = null;
-                            setStatus(statuses.WARNING, "documentFirstPageRecognitionMark[" + e.RowIndex + "] may need correction due to anchor change");
+                            //cs["Value2"].Value = null;
+                            setStatus(statuses.WARNING, "documentFirstPageRecognitionMark[" + e.RowIndex + "] may need correction due to anchor change.");
                             return;
                     }
                 }
