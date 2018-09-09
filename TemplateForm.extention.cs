@@ -31,6 +31,7 @@ namespace Cliver.PdfDocumentParser
             row.Tag = value;
             if (loadingTemplate)
                 return;
+            setFloatingAnchorControl(row);
             int? fai = (int?)row.Cells["Id3"].Value;
             onFloatingAnchorsChanged(fai);
             if (row.Selected)
@@ -39,7 +40,7 @@ namespace Cliver.PdfDocumentParser
 
         void setFloatingAnchorControl(DataGridViewRow row)
         {
-            if (row == null || !row.Selected || row.Tag == null)
+            if (row == null || !row.Selected || row.IsNewRow)
             {
                 currentFloatingAnchorRow = null;
                 currentFloatingAnchorControl = null;
@@ -55,6 +56,8 @@ namespace Cliver.PdfDocumentParser
                         {
                             FloatingAnchorPdfTextControl c = new FloatingAnchorPdfTextControl(row);
                             currentFloatingAnchorControl = c;
+                            //if (row.Tag == null)
+                            //    row.Tag = new Template.FloatingAnchor.PdfTextValue();
                             c.Value = (Template.FloatingAnchor.PdfTextValue)row.Tag;
                         }
                         return;
@@ -62,6 +65,8 @@ namespace Cliver.PdfDocumentParser
                         {
                             FloatingAnchorOcrTextControl c = new FloatingAnchorOcrTextControl(row);
                             currentFloatingAnchorControl = c;
+                            //if (row.Tag == null)
+                            //    row.Tag = new Template.FloatingAnchor.OcrTextValue();
                             c.Value = (Template.FloatingAnchor.OcrTextValue)row.Tag;
                         }
                         return;
@@ -69,6 +74,8 @@ namespace Cliver.PdfDocumentParser
                         {
                             FloatingAnchorImageDataControl c = new FloatingAnchorImageDataControl(row);
                             currentFloatingAnchorControl = c;
+                            //if (row.Tag == null)
+                            //    row.Tag = new Template.FloatingAnchor.ImageDataValue();
                             c.Value = (Template.FloatingAnchor.ImageDataValue)row.Tag;
                         }
                         return;
@@ -122,10 +129,13 @@ namespace Cliver.PdfDocumentParser
         void setMarkValue(DataGridViewRow row, object value)
         {
             row.Tag = value;
+            if (loadingTemplate)
+                return;
+            setMarkControl(row);
         }
         void setMarkControl(DataGridViewRow row)
         {
-            if (row == null || !row.Selected || row.Tag==null)
+            if (row == null || !row.Selected || row.IsNewRow || row.Tag == null)
             {
                 currentMarkRow = null;
                 currentMarkControl = null;
@@ -141,6 +151,8 @@ namespace Cliver.PdfDocumentParser
                         {
                             MarkPdfTextControl c = new MarkPdfTextControl();
                             currentMarkControl = c;
+                            //if (row.Tag == null)
+                            //    row.Tag = new Template.Mark.PdfTextValue();
                             c.Value = (Template.Mark.PdfTextValue)row.Tag;
                         }
                         return;
@@ -148,6 +160,8 @@ namespace Cliver.PdfDocumentParser
                         {
                             MarkOcrTextControl c = new MarkOcrTextControl();
                             currentMarkControl = c;
+                            //if (row.Tag == null)
+                            //    row.Tag = new Template.Mark.OcrTextValue();
                             c.Value = (Template.Mark.OcrTextValue)row.Tag;
                         }
                         return;
@@ -155,6 +169,8 @@ namespace Cliver.PdfDocumentParser
                         {
                             MarkImageDataControl c = new MarkImageDataControl();
                             currentMarkControl = c;
+                            //if (row.Tag == null)
+                            //    row.Tag = new Template.Mark.ImageDataValue();
                             c.Value = (Template.Mark.ImageDataValue)row.Tag;
                         }
                         return;
@@ -191,10 +207,10 @@ namespace Cliver.PdfDocumentParser
                 switch (valueType)
                 {
                     case Template.ValueTypes.PdfText:
-                        value = ((FloatingAnchorPdfTextControl)currentFloatingAnchorControl).Value;
+                        value = ((MarkPdfTextControl)currentMarkControl).Value;
                         break;
                     case Template.ValueTypes.OcrText:
-                        value = ((FloatingAnchorOcrTextControl)currentFloatingAnchorControl).Value;
+                        value = ((MarkOcrTextControl)currentMarkControl).Value;
                         break;
                     case Template.ValueTypes.ImageData:
                         value = ((MarkImageDataControl)currentMarkControl).Value;
@@ -203,7 +219,7 @@ namespace Cliver.PdfDocumentParser
                         throw new Exception("Unknown option: " + valueType);
                 }
                 if (value != null)
-                    setFloatingAnchorValue(currentMarkRow, value);
+                    setMarkValue(currentMarkRow, value);
             }
         }
         

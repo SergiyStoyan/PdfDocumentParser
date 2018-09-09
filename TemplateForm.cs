@@ -323,7 +323,6 @@ namespace Cliver.PdfDocumentParser
                         break;
                     case "ValueType3":
                         setFloatingAnchorValue(row, null);
-                        setFloatingAnchorControl(row);
                         break;
                 }
             };
@@ -443,10 +442,14 @@ namespace Cliver.PdfDocumentParser
                             return;
                         case "ValueType2":
                             {
-                                setMarkValue(row, null);
-                                setMarkControl(row);
                                 Template.ValueTypes vt = (Template.ValueTypes)cs["ValueType2"].Value;
                                 object v = extractValueAndDrawSelectionBox(fai, r, vt);
+                                if (v == null)
+                                {
+                                    setStatus(statuses.WARNING, "No value was selected.");
+                                    setMarkValue(row, null);
+                                    return;
+                                }
                                 switch (vt)
                                 {
                                     case Template.ValueTypes.PdfText:

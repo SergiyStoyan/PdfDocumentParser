@@ -53,6 +53,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.text.Location = new System.Drawing.Point(3, 32);
             this.text.Name = "text";
+            this.text.ReadOnly = true;
             this.text.Size = new System.Drawing.Size(141, 41);
             this.text.TabIndex = 60;
             this.text.Text = "";
