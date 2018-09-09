@@ -247,19 +247,24 @@ namespace Cliver.PdfDocumentParser
 
                 pages.ActiveTemplate = getTemplateFromUI(false);
 
-                float x = r.X;
-                float y = r.Y;
+                float x = 0;
+                float y = 0;
                 if (floatingAnchorId != null)
                 {
                     PointF? p0_ = findAndDrawFloatingAnchor(floatingAnchorId);
                     if (p0_ == null)
                         return null;
                     PointF p0 = (PointF)p0_;
-                    x += p0.X;
-                    y += p0.Y;
+                    x = p0.X;
+                    y = p0.Y;
                     renewImage = false;
                 }
 
+                if (r == null)
+                    return null;
+
+                x += r.X;
+                y += r.Y;
                 RectangleF r_ = new RectangleF(x, y, r.Width, r.Height);
                 drawBoxes(Settings.Appearance.SelectionBoxColor, new List<System.Drawing.RectangleF> { r_ }, renewImage);
 

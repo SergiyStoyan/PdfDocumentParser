@@ -166,17 +166,63 @@ namespace Cliver.PdfDocumentParser
                     }
                 }
         }
-        bool isHashMatch(ImageData imageData, int x, int y, int brightnessMaxDifference, int differentPixelMaxNumber, out int differentPixelNumber)
+        bool isHashMatch(ImageData imageData, int x, int y, int brightnessMaxDifference, /*int brightnessFactor,*/ int differentPixelMaxNumber, out int differentPixelNumber)
         {
             differentPixelNumber = 0;
             for (int i = 0; i < Width; i++)
                 for (int j = 0; j < Height; j++)
-                {
+                {                    
                     if (Math.Abs(imageData.Hash[x + i, y + j] - Hash[i, j]) > brightnessMaxDifference)
                         if (++differentPixelNumber > differentPixelMaxNumber)
                             return false;
                 }
             return true;
         }
+        void getMinMaxBrightnessOptimums(out byte min, out byte max)
+        {
+            SortedList<byte, int> brightnesses2pointCount = new SortedList<byte, int>();
+            for (int x = 0; x < Width; x++)
+            {
+                for (int y = 0; y < Height; y++)
+                {
+                    int count = 0;
+                    brightnesses2pointCount.TryGetValue(Hash[x, y], out count);
+                    brightnesses2pointCount[Hash[x, y]] = count + 1;
+                }
+            }
+            List<int> count_optimums = new List<int>();
+            int minBrightnessPointCount = 0;
+            min = 0;
+            for (byte i = 0; i < 128; i++)
+                if (minBrightnessPointCount < brightnesses2pointCount[i])
+                {
+                    minBrightnessPointCount = brightnesses2pointCount[i];
+                    min = i;
+                }
+            int maxBrightnessPointCount = 255;
+            max = 255;
+            for (byte i = 127; 127 < i; i++)
+                if (maxBrightnessPointCount > brightnesses2pointCount[i])
+                {
+                    maxBrightnessPointCount = brightnesses2pointCount[i];
+                    max = i;
+                }
+        }
+        //byte[,] absolutizedHash;
+        //byte[,] getAbsolutizedBitmapHash()
+        //{
+        //    byte[,] hash = new byte[Width, Height];
+        //    for (int x = 0; x < Width; x++)
+        //    {
+        //        for (int y = 0; y < Height; y++)
+        //        {
+        //            Color c = Color.FromArgb(rawImageData[y * w + x]);
+        //            //hash[x, y] = (byte)(c.GetBrightness() * 255);
+        //            hash[x, y] = (byte)((c.R + c.G + c.B) / 3);
+        //            //hash[x, y] = (byte)((c.GetBrightness() < 0.9 ? 0 : 1) * 255);
+        //        }
+        //    }
+        //    return hash;
+        //}
     }
 }
