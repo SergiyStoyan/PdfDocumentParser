@@ -171,7 +171,7 @@ namespace Cliver.PdfDocumentParser
             differentPixelNumber = 0;
             for (int i = 0; i < Width; i++)
                 for (int j = 0; j < Height; j++)
-                {                    
+                {
                     if (Math.Abs(imageData.Hash[x + i, y + j] - Hash[i, j]) > brightnessMaxDifference)
                         if (++differentPixelNumber > differentPixelMaxNumber)
                             return false;
@@ -224,5 +224,14 @@ namespace Cliver.PdfDocumentParser
         //    }
         //    return hash;
         //}
+
+        public Image GetImage()
+        {
+            Bitmap b = new Bitmap(Width, Height);
+            for (int x = 0; x < Width; x++)
+                for (int y = 0; y < Height; y++)
+                    b.SetPixel(x, y, Color.FromArgb(Hash[x, y], Hash[x, y], Hash[x, y]));
+            return b;
+        }
     }
 }

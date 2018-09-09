@@ -162,6 +162,24 @@
     <Compile Include="FloatingAnchorForm.Designer.cs">
       <DependentUpon>FloatingAnchorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="FloatingAnchorImageDataControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FloatingAnchorImageDataControl.Designer.cs">
+      <DependentUpon>FloatingAnchorImageDataControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FloatingAnchorOcrTextControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FloatingAnchorOcrTextControl.Designer.cs">
+      <DependentUpon>FloatingAnchorOcrTextControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FloatingAnchorPdfTextControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FloatingAnchorPdfTextControl.Designer.cs">
+      <DependentUpon>FloatingAnchorPdfTextControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="PageCollection.cs" />
     <Compile Include="Page.cs" />
     <Compile Include="Program.cs" />
@@ -169,6 +187,24 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="MarkImageDataControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MarkImageDataControl.Designer.cs">
+      <DependentUpon>MarkImageDataControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MarkOcrTextControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MarkOcrTextControl.Designer.cs">
+      <DependentUpon>MarkOcrTextControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MarkPdfTextControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MarkPdfTextControl.Designer.cs">
+      <DependentUpon>MarkPdfTextControl.cs</DependentUpon>
     </Compile>
     <Compile Include="SettingsForm.cs">
       <SubType>Form</SubType>
@@ -194,6 +230,9 @@
     </Compile>
     <Compile Include="Ocr.cs" />
     <Compile Include="Template.cs" />
+    <Compile Include="TemplateForm.pages.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="TemplateForm.extention.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -259,9 +298,27 @@
     <EmbeddedResource Include="FloatingAnchorForm.resx">
       <DependentUpon>FloatingAnchorForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FloatingAnchorImageDataControl.resx">
+      <DependentUpon>FloatingAnchorImageDataControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FloatingAnchorOcrTextControl.resx">
+      <DependentUpon>FloatingAnchorOcrTextControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FloatingAnchorPdfTextControl.resx">
+      <DependentUpon>FloatingAnchorPdfTextControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MarkImageDataControl.resx">
+      <DependentUpon>MarkImageDataControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MarkOcrTextControl.resx">
+      <DependentUpon>MarkOcrTextControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MarkPdfTextControl.resx">
+      <DependentUpon>MarkPdfTextControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
