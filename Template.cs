@@ -14,7 +14,7 @@ using System.Collections.Specialized;
 namespace Cliver.PdfDocumentParser
 {
     /// <summary>
-    /// processing rule set corresponding to certain pdf document layout
+    /// parsing rules corresponding to certain pdf document layout
     /// </summary>
     public partial class Template
     {
@@ -30,7 +30,7 @@ namespace Cliver.PdfDocumentParser
 
         //public int ImageResolution = 300;//tesseract requires at least 300
 
-        public bool AutoPagesRotation = false;//!!!not implemented!!!
+        public bool AutoPagesRotation = false;//!!!not implemented!!! to do by tesseract
         public PageRotations PagesRotation = 0;
         public enum PageRotations
         {

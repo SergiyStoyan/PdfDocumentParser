@@ -120,7 +120,7 @@ namespace Cliver.InvoiceParser
             if (File.Exists(stampedPdf))
                 File.Delete(stampedPdf);
 
-            var ts = templates.Where(x => x.FileFilterRegex.IsMatch(inputPdf)).ToList();
+            var ts = templates.Where(x => x.FileFilterRegex == null || x.FileFilterRegex.IsMatch(inputPdf)).ToList();
             if (ts.Count < 1)
             {
                 Log.Main.Warning("No template matched to file path '" + inputPdf + "'");

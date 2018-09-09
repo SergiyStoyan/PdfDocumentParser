@@ -161,7 +161,7 @@ namespace Cliver.PdfDocumentParser
                     int differentPixelNumber;
                     if (isHashMatch(imageData, x, y, brightnessMaxDifference, differentPixelMaxNumber, out differentPixelNumber))
                     {
-                        if (!onFound(new Point(x, y), differentPixelMaxNumber == 0 ? 0 : differentPixelNumber / differentPixelMaxNumber))
+                        if (!onFound(new Point(x, y), differentPixelMaxNumber == 0 ? 0 : (float)differentPixelNumber / differentPixelMaxNumber))
                             return;
                     }
                 }
