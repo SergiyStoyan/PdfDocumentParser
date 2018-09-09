@@ -411,15 +411,37 @@ namespace Cliver.PdfDocumentParser
                                 }
                                 Template.ValueTypes vt = (Template.ValueTypes)cs["ValueType2"].Value;
                                 object v = extractValueAndDrawSelectionBox(fai, r, vt);
-                                if (vt == Template.ValueTypes.ImageData)
+                                switch (vt)
                                 {
-                                    imageProcessingAdditionalControls2Value();
-                                    Template.Mark.ImageDataValue idv = (Template.Mark.ImageDataValue)Template.Mark.GetValueFromString(Template.ValueTypes.ImageData, (string)cs["Value2"].Value);
-                                    idv.ImageData = (ImageData)v;
-                                    cs["Value2"].Value = Template.Mark.GetValueAsString(Template.ValueTypes.ImageData, idv);
+                                    case Template.ValueTypes.PdfText:
+                                        {
+                                            Template.Mark.PdfTextValue ptv = (Template.Mark.PdfTextValue)Template.Mark.GetValueFromString(Template.ValueTypes.PdfText, (string)cs["Value2"].Value);
+                                            ptv.Text = (string)v;
+                                            if (ptv == null)
+                                                ptv = new Template.Mark.PdfTextValue();
+                                            cs["Value2"].Value = Template.Mark.GetValueAsString(Template.ValueTypes.PdfText, ptv);
+                                        }
+                                        break;
+                                    case Template.ValueTypes.OcrText:
+                                        {
+                                            Template.Mark.OcrTextValue otv = (Template.Mark.OcrTextValue)Template.Mark.GetValueFromString(Template.ValueTypes.OcrText, (string)cs["Value2"].Value);
+                                            otv.Text = (string)v;
+                                            if (otv == null)
+                                                otv = new Template.Mark.OcrTextValue();
+                                            cs["Value2"].Value = Template.Mark.GetValueAsString(Template.ValueTypes.OcrText, otv);
+                                        }
+                                        break;
+                                    case Template.ValueTypes.ImageData:
+                                        {
+                                            imageProcessingAdditionalControls2Value();
+                                            Template.Mark.ImageDataValue idv = (Template.Mark.ImageDataValue)Template.Mark.GetValueFromString(Template.ValueTypes.ImageData, (string)cs["Value2"].Value);
+                                            idv.ImageData = (ImageData)v;
+                                            cs["Value2"].Value = Template.Mark.GetValueAsString(Template.ValueTypes.ImageData, idv);
+                                        }
+                                        break;
+                                    default:
+                                        throw new Exception("Unknown option: " + vt);
                                 }
-                                else
-                                    cs["Value2"].Value = (string)v;
                             }
                             return;
                         case "ValueType2":
@@ -428,15 +450,37 @@ namespace Cliver.PdfDocumentParser
                                 setImageProcessingAdditionalControls(row);
                                 Template.ValueTypes vt = (Template.ValueTypes)cs["ValueType2"].Value;
                                 object v = extractValueAndDrawSelectionBox(fai, r, vt);
-                                if (vt == Template.ValueTypes.ImageData)
+                                switch(vt)
                                 {
-                                    imageProcessingAdditionalControls2Value();
-                                    Template.Mark.ImageDataValue idv = (Template.Mark.ImageDataValue)Template.Mark.GetValueFromString(Template.ValueTypes.ImageData, (string)cs["Value2"].Value);
-                                    idv.ImageData = (ImageData)v;
-                                    cs["Value2"].Value = Template.Mark.GetValueAsString(Template.ValueTypes.ImageData, idv);
+                                    case Template.ValueTypes.PdfText:
+                                        {
+                                            Template.Mark.PdfTextValue ptv = (Template.Mark.PdfTextValue)Template.Mark.GetValueFromString(Template.ValueTypes.PdfText, (string)cs["Value2"].Value);
+                                            if (ptv == null)
+                                                ptv = new Template.Mark.PdfTextValue();
+                                            ptv.Text = (string)v;
+                                            cs["Value2"].Value = Template.Mark.GetValueAsString(Template.ValueTypes.PdfText, ptv);
+                                        }
+                                        break;
+                                    case Template.ValueTypes.OcrText:
+                                        {
+                                            Template.Mark.OcrTextValue otv = (Template.Mark.OcrTextValue)Template.Mark.GetValueFromString(Template.ValueTypes.OcrText, (string)cs["Value2"].Value);
+                                            if (otv == null)
+                                                otv = new Template.Mark.OcrTextValue();
+                                            otv.Text = (string)v;
+                                            cs["Value2"].Value = Template.Mark.GetValueAsString(Template.ValueTypes.OcrText, otv);
+                                        }
+                                        break;
+                                    case Template.ValueTypes.ImageData:
+                                        {
+                                            imageProcessingAdditionalControls2Value();
+                                            Template.Mark.ImageDataValue idv = (Template.Mark.ImageDataValue)Template.Mark.GetValueFromString(Template.ValueTypes.ImageData, (string)cs["Value2"].Value);
+                                            idv.ImageData = (ImageData)v;
+                                            cs["Value2"].Value = Template.Mark.GetValueAsString(Template.ValueTypes.ImageData, idv);
+                                        }
+                                        break;
+                                    default:
+                                        throw new Exception("Unknown option: " + vt);
                                 }
-                                else
-                                    cs["Value2"].Value = (string)v;
                             }
                             return;
                         case "FloatingAnchorId2":
@@ -483,23 +527,40 @@ namespace Cliver.PdfDocumentParser
                     if (rs != null)
                     {
                         Template.RectangleF r = rs == null ? null : SerializationRoutines.Json.Deserialize<Template.RectangleF>(rs);
-                        if (vt != Template.ValueTypes.ImageData)
+                        switch (vt)
                         {
-                            string t1 = (string)cs["Value2"].Value;
-                            string t2 = (string)extractValueAndDrawSelectionBox(fai, r, vt);
-                            if (t1 != t2)
-                                setStatus(statuses.ERROR, "documentFirstPageRecognitionMark[" + i + "] is not found:\r\n" + t2 + "\r\n <> \r\n" + t1);
-                            else
-                                setStatus(statuses.SUCCESS, "documentFirstPageRecognitionMark[" + i + "] is found:\r\n" + t2);
-                        }
-                        else
-                        {
-                            Template.Mark.ImageDataValue idv1 = (Template.Mark.ImageDataValue)Template.Mark.GetValueFromString(Template.ValueTypes.ImageData, (string)cs["Value2"].Value);
-                            ImageData id2 = (ImageData)extractValueAndDrawSelectionBox(fai, r, vt);
-                            if (idv1.ImageData.ImageIsSimilar(id2, idv1.BrightnessTolerance, idv1.DifferentPixelNumberTolerance))
-                                setStatus(statuses.ERROR, "documentFirstPageRecognitionMark[" + i + "] is not found:\r\nimage is not similar");
-                            else
-                                setStatus(statuses.SUCCESS, "documentFirstPageRecognitionMark[" + i + "] is found:\r\nimage is similar");
+                            case Template.ValueTypes.PdfText:
+                                {
+                                    Template.Mark.PdfTextValue ptv1 = (Template.Mark.PdfTextValue)Template.Mark.GetValueFromString(Template.ValueTypes.PdfText, (string)cs["Value2"].Value);
+                                    string t2 = (string)extractValueAndDrawSelectionBox(fai, r, vt);
+                                    if (ptv1.Text != t2)
+                                        setStatus(statuses.ERROR, "documentFirstPageRecognitionMark[" + i + "] is not found:\r\n" + t2 + "\r\n <> \r\n" + ptv1.Text);
+                                    else
+                                        setStatus(statuses.SUCCESS, "documentFirstPageRecognitionMark[" + i + "] is found:\r\n" + t2);
+                                }
+                                break;
+                            case Template.ValueTypes.OcrText:
+                                {
+                                    Template.Mark.OcrTextValue otv1 = (Template.Mark.OcrTextValue)Template.Mark.GetValueFromString(Template.ValueTypes.OcrText, (string)cs["Value2"].Value);
+                                    string t2 = (string)extractValueAndDrawSelectionBox(fai, r, vt);
+                                    if (otv1.Text != t2)
+                                        setStatus(statuses.ERROR, "documentFirstPageRecognitionMark[" + i + "] is not found:\r\n" + t2 + "\r\n <> \r\n" + otv1.Text);
+                                    else
+                                        setStatus(statuses.SUCCESS, "documentFirstPageRecognitionMark[" + i + "] is found:\r\n" + t2);
+                                }
+                                break;
+                            case Template.ValueTypes.ImageData:
+                                {
+                                    Template.Mark.ImageDataValue idv1 = (Template.Mark.ImageDataValue)Template.Mark.GetValueFromString(Template.ValueTypes.ImageData, (string)cs["Value2"].Value);
+                                    ImageData id2 = (ImageData)extractValueAndDrawSelectionBox(fai, r, vt);
+                                    if (idv1.ImageData.ImageIsSimilar(id2, idv1.BrightnessTolerance, idv1.DifferentPixelNumberTolerance))
+                                        setStatus(statuses.ERROR, "documentFirstPageRecognitionMark[" + i + "] is not found:\r\nimage is not similar");
+                                    else
+                                        setStatus(statuses.SUCCESS, "documentFirstPageRecognitionMark[" + i + "] is found:\r\nimage is similar");
+                                }
+                                break;
+                            default:
+                                throw new Exception("Unknown option: " + vt);
                         }
                     }
                     else if (fai != null)

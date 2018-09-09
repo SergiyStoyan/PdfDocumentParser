@@ -362,15 +362,16 @@ namespace Cliver.PdfDocumentParser
                     }
                     continue;
                 }
-                object v = GetValue(m.FloatingAnchorId, m.Rectangle, m.ValueType, out error);
-                if (v == null)
+                object v2 = GetValue(m.FloatingAnchorId, m.Rectangle, m.ValueType, out error);
+                if (v2 == null)
                     return false;
                 switch (m.ValueType)
                 {
                     case Template.ValueTypes.PdfText:
                         {
-                            string t1 = NormalizeText((string)m.GetValue());
-                            string t2 = NormalizeText((string)v);
+                            Template.Mark.PdfTextValue ptv1 = (Template.Mark.PdfTextValue)m.GetValue();
+                            string t1 = NormalizeText(ptv1.Text);
+                            string t2 = NormalizeText((string)v2);
                             if (t1 == t2)
                                 continue;
                             error = "documentFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
@@ -378,8 +379,9 @@ namespace Cliver.PdfDocumentParser
                         }
                     case Template.ValueTypes.OcrText:
                         {
-                            string t1 = NormalizeText((string)m.GetValue());
-                            string t2 = NormalizeText((string)v);
+                            Template.Mark.OcrTextValue otv1 = (Template.Mark.OcrTextValue)m.GetValue();
+                            string t1 = NormalizeText(otv1.Text);
+                            string t2 = NormalizeText((string)v2);
                             if (t1 == t2)
                                 continue;
                             error = "documentFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
@@ -387,8 +389,8 @@ namespace Cliver.PdfDocumentParser
                         }
                     case Template.ValueTypes.ImageData:
                         {
-                            Template.Mark.ImageDataValue idv = (Template.Mark.ImageDataValue)m.GetValue();
-                            if (idv.ImageData.ImageIsSimilar((ImageData)(v), idv.BrightnessTolerance, idv.DifferentPixelNumberTolerance))
+                            Template.Mark.ImageDataValue idv1 = (Template.Mark.ImageDataValue)m.GetValue();
+                            if (idv1.ImageData.ImageIsSimilar((ImageData)v2, idv1.BrightnessTolerance, idv1.DifferentPixelNumberTolerance))
                                 continue;
                             error = "documentFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.IndexOf(m) + "]: image is not similar.";
                             return false;

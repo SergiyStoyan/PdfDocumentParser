@@ -121,9 +121,9 @@ namespace Cliver.PdfDocumentParser
                 switch (valueType)
                 {
                     case ValueTypes.PdfText:
-                        return (string)value;
+                        return SerializationRoutines.Json.Serialize(value, false);
                     case ValueTypes.OcrText:
-                        return (string)value;
+                        return SerializationRoutines.Json.Serialize(value, false);
                     case ValueTypes.ImageData:
                         return SerializationRoutines.Json.Serialize(value, false);
                     default:
@@ -138,9 +138,23 @@ namespace Cliver.PdfDocumentParser
                 switch (valueType)
                 {
                     case ValueTypes.PdfText:
-                        return value;
+                        try
+                        {
+                            return SerializationRoutines.Json.Deserialize<PdfTextValue>(value);
+                        }
+                        catch//compatibility with old format
+                        {
+                            return new PdfTextValue { Text = value };
+                        }
                     case ValueTypes.OcrText:
-                        return value;
+                        try
+                        {
+                            return SerializationRoutines.Json.Deserialize<OcrTextValue>(value);
+                        }
+                        catch//compatibility with old format
+                        {
+                            return new OcrTextValue { Text = value };
+                        }
                     case ValueTypes.ImageData:
                         return SerializationRoutines.Json.Deserialize<ImageDataValue>(value);
                     default:
@@ -154,14 +168,14 @@ namespace Cliver.PdfDocumentParser
             }
             object value;
 
-            //public class PdfTextValue
-            //{
-            //    public string Text;
-            //}
-            //public class OcrTextValue
-            //{
-            //    public string Text;
-            //}
+            public class PdfTextValue
+            {
+                public string Text;
+            }
+            public class OcrTextValue
+            {
+                public string Text;
+            }
             public class ImageDataValue
             {
                 public ImageData ImageData;

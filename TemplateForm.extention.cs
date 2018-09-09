@@ -53,6 +53,10 @@ namespace Cliver.PdfDocumentParser
                 else if (documentFirstPageRecognitionMarks.Rows.Contains(row))
                 {
                     Template.ValueTypes valueType = (Template.ValueTypes)row.Cells["ValueType2"].Value;
+                    //switch(valueType)
+                    //{
+                    //    case Template.ValueTypes:
+                    //}
                     if (valueType == Template.ValueTypes.ImageData)
                     {
                         findBestImageMatch.Enabled = true;
