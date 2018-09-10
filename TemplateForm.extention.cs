@@ -40,49 +40,36 @@ namespace Cliver.PdfDocumentParser
 
         void setFloatingAnchorControl(DataGridViewRow row)
         {
-            if (row == null || !row.Selected || row.IsNewRow)
+            if (row == null || !row.Selected || row.IsNewRow || !floatingAnchors.Rows.Contains(row))
             {
                 currentFloatingAnchorRow = null;
                 currentFloatingAnchorControl = null;
                 return;
             }
             currentFloatingAnchorRow = row;
-            if (floatingAnchors.Rows.Contains(row))
+            Template.ValueTypes valueType = (Template.ValueTypes)row.Cells["ValueType3"].Value;
+            Control c = null;
+            switch (valueType)
             {
-                Template.ValueTypes valueType = (Template.ValueTypes)row.Cells["ValueType3"].Value;
-                switch (valueType)
-                {
-                    case Template.ValueTypes.PdfText:
-                        {
-                            FloatingAnchorPdfTextControl c = new FloatingAnchorPdfTextControl(row);
-                            currentFloatingAnchorControl = c;
-                            //if (row.Tag == null)
-                            //    row.Tag = new Template.FloatingAnchor.PdfTextValue();
-                            c.Value = (Template.FloatingAnchor.PdfTextValue)row.Tag;
-                        }
-                        return;
-                    case Template.ValueTypes.OcrText:
-                        {
-                            FloatingAnchorOcrTextControl c = new FloatingAnchorOcrTextControl(row);
-                            currentFloatingAnchorControl = c;
-                            //if (row.Tag == null)
-                            //    row.Tag = new Template.FloatingAnchor.OcrTextValue();
-                            c.Value = (Template.FloatingAnchor.OcrTextValue)row.Tag;
-                        }
-                        return;
-                    case Template.ValueTypes.ImageData:
-                        {
-                            FloatingAnchorImageDataControl c = new FloatingAnchorImageDataControl(row);
-                            currentFloatingAnchorControl = c;
-                            //if (row.Tag == null)
-                            //    row.Tag = new Template.FloatingAnchor.ImageDataValue();
-                            c.Value = (Template.FloatingAnchor.ImageDataValue)row.Tag;
-                        }
-                        return;
-                    default:
-                        throw new Exception("Unknown option: " + valueType);
-                }
+                case Template.ValueTypes.PdfText:
+                    {
+                        c = new FloatingAnchorPdfTextControl((Template.FloatingAnchor.PdfTextValue)row.Tag);
+                    }
+                    break;
+                case Template.ValueTypes.OcrText:
+                    {
+                        c = new FloatingAnchorOcrTextControl((Template.FloatingAnchor.OcrTextValue)row.Tag);
+                    }
+                    break;
+                case Template.ValueTypes.ImageData:
+                    {
+                        c = new FloatingAnchorImageDataControl((Template.FloatingAnchor.ImageDataValue)row.Tag);
+                    }
+                    break;
+                default:
+                    throw new Exception("Unknown option: " + valueType);
             }
+            currentFloatingAnchorControl = c;
         }
         Control currentFloatingAnchorControl
         {
@@ -135,49 +122,37 @@ namespace Cliver.PdfDocumentParser
         }
         void setMarkControl(DataGridViewRow row)
         {
-            if (row == null || !row.Selected || row.IsNewRow || row.Tag == null)
+            if (row == null || !row.Selected || row.IsNewRow || row.Tag == null || !documentFirstPageRecognitionMarks.Rows.Contains(row))
             {
                 currentMarkRow = null;
                 currentMarkControl = null;
                 return;
             }
             currentMarkRow = row;
-            if (documentFirstPageRecognitionMarks.Rows.Contains(row))
+            Template.RectangleF r = (Template.RectangleF)row.Cells["Rectangle2"].Value;
+            Template.ValueTypes valueType = (Template.ValueTypes)row.Cells["ValueType2"].Value;
+            Control c = null;
+            switch (valueType)
             {
-                Template.ValueTypes valueType = (Template.ValueTypes)row.Cells["ValueType2"].Value;
-                switch (valueType)
-                {
-                    case Template.ValueTypes.PdfText:
-                        {
-                            MarkPdfTextControl c = new MarkPdfTextControl();
-                            currentMarkControl = c;
-                            //if (row.Tag == null)
-                            //    row.Tag = new Template.Mark.PdfTextValue();
-                            c.Value = (Template.Mark.PdfTextValue)row.Tag;
-                        }
-                        return;
-                    case Template.ValueTypes.OcrText:
-                        {
-                            MarkOcrTextControl c = new MarkOcrTextControl();
-                            currentMarkControl = c;
-                            //if (row.Tag == null)
-                            //    row.Tag = new Template.Mark.OcrTextValue();
-                            c.Value = (Template.Mark.OcrTextValue)row.Tag;
-                        }
-                        return;
-                    case Template.ValueTypes.ImageData:
-                        {
-                            MarkImageDataControl c = new MarkImageDataControl();
-                            currentMarkControl = c;
-                            //if (row.Tag == null)
-                            //    row.Tag = new Template.Mark.ImageDataValue();
-                            c.Value = (Template.Mark.ImageDataValue)row.Tag;
-                        }
-                        return;
-                    default:
-                        throw new Exception("Unknown option: " + valueType);
-                }
+                case Template.ValueTypes.PdfText:
+                    {
+                        c = new MarkPdfTextControl((Template.Mark.PdfTextValue)row.Tag, r);
+                    }
+                    break;
+                case Template.ValueTypes.OcrText:
+                    {
+                        c = new MarkOcrTextControl((Template.Mark.OcrTextValue)row.Tag, r);
+                    }
+                    break;
+                case Template.ValueTypes.ImageData:
+                    {
+                        c = new MarkImageDataControl((Template.Mark.ImageDataValue)row.Tag, r);
+                    }
+                    break;
+                default:
+                    throw new Exception("Unknown option: " + valueType);
             }
+            currentMarkControl = c;
         }
         Control currentMarkControl
         {
@@ -222,7 +197,7 @@ namespace Cliver.PdfDocumentParser
                     setMarkValue(currentMarkRow, value);
             }
         }
-        
+
         void onFloatingAnchorsChanged(int? updatedFloatingAnchorId)
         {
             SortedSet<int> fais = new SortedSet<int>();
@@ -281,7 +256,7 @@ namespace Cliver.PdfDocumentParser
             FloatingAnchorId2.DataSource = fais_;
             FloatingAnchorId.DataSource = fais_;
         }
-        
+
         void setFloatingAnchorFromSelectedElements()
         {
             try
@@ -415,7 +390,7 @@ namespace Cliver.PdfDocumentParser
                         int i = documentFirstPageRecognitionMarks.Rows.Add();
                         var row = documentFirstPageRecognitionMarks.Rows[i];
                         var cs = row.Cells;
-                        cs["Rectangle2"].Value = m.Rectangle == null ? null : SerializationRoutines.Json.Serialize(m.Rectangle);
+                        cs["Rectangle2"].Value = m.Rectangle;
                         cs["ValueType2"].Value = m.ValueType;
                         cs["FloatingAnchorId2"].Value = m.FloatingAnchorId;
                         setMarkValue(row, m.GetValue());
@@ -621,7 +596,7 @@ namespace Cliver.PdfDocumentParser
                     Template.Mark m = new Template.Mark
                     {
                         FloatingAnchorId = (int?)r.Cells["FloatingAnchorId2"].Value,
-                        Rectangle = r.Cells["Rectangle2"].Value == null ? null : SerializationRoutines.Json.Deserialize<Template.RectangleF>((string)r.Cells["Rectangle2"].Value),
+                        Rectangle = (Template.RectangleF)r.Cells["Rectangle2"].Value,
                         ValueType = (Template.ValueTypes)r.Cells["ValueType2"].Value,
                         ValueAsString = Template.Mark.GetValueAsString((Template.ValueTypes)r.Cells["ValueType2"].Value, r.Tag)
                     };

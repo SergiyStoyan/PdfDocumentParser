@@ -12,13 +12,12 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class FloatingAnchorOcrTextControl : UserControl
     {
-        public FloatingAnchorOcrTextControl(DataGridViewRow row)
+        public FloatingAnchorOcrTextControl(Template.FloatingAnchor.OcrTextValue value)
         {
             InitializeComponent();
 
-            Row = row;
+            Value = value;
         }
-        public readonly DataGridViewRow Row;
 
         public Template.FloatingAnchor.OcrTextValue Value
         {
@@ -29,6 +28,8 @@ namespace Cliver.PdfDocumentParser
             set
             {
                 _value = value;
+                if (value == null)
+                    return;
                 StringBuilder sb = new StringBuilder();
                 foreach (var l in Ocr.GetLines(value.CharBoxs.Select(x => new Ocr.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() })))
                 {

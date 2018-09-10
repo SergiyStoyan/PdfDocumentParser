@@ -12,9 +12,12 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class MarkImageDataControl : UserControl
     {
-        public MarkImageDataControl()
+        public MarkImageDataControl(Template.Mark.ImageDataValue value, Template.RectangleF rectangle)
         {
             InitializeComponent();
+
+            Value = value;
+            this.rectangle.Text = SerializationRoutines.Json.Serialize(rectangle);
         }
 
         public Template.Mark.ImageDataValue Value
@@ -29,11 +32,14 @@ namespace Cliver.PdfDocumentParser
             set
             {
                 _value = value;
-                findBestImageMatch.Checked = value.FindBestImageMatch;
-                brightnessTolerance.Value = (decimal)value.BrightnessTolerance;
-                differentPixelNumberTolerance.Value = (decimal)value.DifferentPixelNumberTolerance;
-                if (value.ImageData != null)
-                    picture.Image = value.ImageData.GetImage();
+                if (value != null)
+                {
+                    findBestImageMatch.Checked = value.FindBestImageMatch;
+                    brightnessTolerance.Value = (decimal)value.BrightnessTolerance;
+                    differentPixelNumberTolerance.Value = (decimal)value.DifferentPixelNumberTolerance;
+                    if (value.ImageData != null)
+                        picture.Image = value.ImageData.GetImage();
+                }
             }
         }
         Template.Mark.ImageDataValue _value;

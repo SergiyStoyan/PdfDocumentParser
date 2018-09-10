@@ -12,13 +12,12 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class FloatingAnchorPdfTextControl : UserControl
     {
-        public FloatingAnchorPdfTextControl(DataGridViewRow row)
+        public FloatingAnchorPdfTextControl(Template.FloatingAnchor.PdfTextValue value)
         {
             InitializeComponent();
 
-            Row = row;
+            Value = value;
         }
-        public readonly DataGridViewRow Row;
 
         public Template.FloatingAnchor.PdfTextValue Value
         {
@@ -29,7 +28,9 @@ namespace Cliver.PdfDocumentParser
             set
             {
                 _value = value;
-                   StringBuilder sb = new StringBuilder();
+                if (value == null)
+                    return;
+                StringBuilder sb = new StringBuilder();
                 foreach (var l in Pdf.RemoveDuplicatesAndGetLines(value.CharBoxs.Select(x => new Pdf.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() })))
                 {
                     foreach (var cb in l.CharBoxes)

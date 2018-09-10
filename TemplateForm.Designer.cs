@@ -66,6 +66,7 @@
             this.selectionCoordinates = new System.Windows.Forms.Label();
             this.lTotalPages = new System.Windows.Forms.Label();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
+            this.marksContainer = new System.Windows.Forms.SplitContainer();
             this.documentFirstPageRecognitionMarks = new System.Windows.Forms.DataGridView();
             this.label4 = new System.Windows.Forms.Label();
             this.fields = new System.Windows.Forms.DataGridView();
@@ -89,7 +90,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.ExtractFieldsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
             this.label19 = new System.Windows.Forms.Label();
-            this.marksContainer = new System.Windows.Forms.SplitContainer();
             this.FloatingAnchorId2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Rectangle2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ValueType2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
@@ -114,14 +114,14 @@
             this.splitContainer3.Panel1.SuspendLayout();
             this.splitContainer3.Panel2.SuspendLayout();
             this.splitContainer3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.marksContainer)).BeginInit();
+            this.marksContainer.Panel1.SuspendLayout();
+            this.marksContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.documentFirstPageRecognitionMarks)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).BeginInit();
             this.panel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.marksContainer)).BeginInit();
-            this.marksContainer.Panel1.SuspendLayout();
-            this.marksContainer.SuspendLayout();
             this.SuspendLayout();
             // 
             // picture
@@ -592,6 +592,20 @@
             this.splitContainer3.SplitterDistance = 93;
             this.splitContainer3.TabIndex = 0;
             // 
+            // marksContainer
+            // 
+            this.marksContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.marksContainer.Location = new System.Drawing.Point(0, 0);
+            this.marksContainer.Name = "marksContainer";
+            // 
+            // marksContainer.Panel1
+            // 
+            this.marksContainer.Panel1.Controls.Add(this.documentFirstPageRecognitionMarks);
+            this.marksContainer.Panel1.Controls.Add(this.label4);
+            this.marksContainer.Size = new System.Drawing.Size(429, 93);
+            this.marksContainer.SplitterDistance = 163;
+            this.marksContainer.TabIndex = 0;
+            // 
             // documentFirstPageRecognitionMarks
             // 
             this.documentFirstPageRecognitionMarks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -604,7 +618,7 @@
             this.documentFirstPageRecognitionMarks.MultiSelect = false;
             this.documentFirstPageRecognitionMarks.Name = "documentFirstPageRecognitionMarks";
             this.documentFirstPageRecognitionMarks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.documentFirstPageRecognitionMarks.Size = new System.Drawing.Size(223, 80);
+            this.documentFirstPageRecognitionMarks.Size = new System.Drawing.Size(163, 80);
             this.documentFirstPageRecognitionMarks.TabIndex = 29;
             // 
             // label4
@@ -834,20 +848,6 @@
             this.label19.TabIndex = 54;
             this.label19.Text = "[";
             // 
-            // marksContainer
-            // 
-            this.marksContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.marksContainer.Location = new System.Drawing.Point(0, 0);
-            this.marksContainer.Name = "marksContainer";
-            // 
-            // marksContainer.Panel1
-            // 
-            this.marksContainer.Panel1.Controls.Add(this.documentFirstPageRecognitionMarks);
-            this.marksContainer.Panel1.Controls.Add(this.label4);
-            this.marksContainer.Size = new System.Drawing.Size(429, 93);
-            this.marksContainer.SplitterDistance = 223;
-            this.marksContainer.TabIndex = 0;
-            // 
             // FloatingAnchorId2
             // 
             this.FloatingAnchorId2.HeaderText = "Anchor";
@@ -861,6 +861,7 @@
             this.Rectangle2.HeaderText = "Rectangle";
             this.Rectangle2.Name = "Rectangle2";
             this.Rectangle2.ReadOnly = true;
+            this.Rectangle2.Visible = false;
             this.Rectangle2.Width = 50;
             // 
             // ValueType2
@@ -904,6 +905,10 @@
             this.splitContainer3.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
             this.splitContainer3.ResumeLayout(false);
+            this.marksContainer.Panel1.ResumeLayout(false);
+            this.marksContainer.Panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.marksContainer)).EndInit();
+            this.marksContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.documentFirstPageRecognitionMarks)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).EndInit();
             this.panel1.ResumeLayout(false);
@@ -911,10 +916,6 @@
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel3.ResumeLayout(false);
             this.flowLayoutPanel3.PerformLayout();
-            this.marksContainer.Panel1.ResumeLayout(false);
-            this.marksContainer.Panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.marksContainer)).EndInit();
-            this.marksContainer.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

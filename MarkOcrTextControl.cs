@@ -12,9 +12,12 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class MarkOcrTextControl : UserControl
     {
-        public MarkOcrTextControl()
+        public MarkOcrTextControl(Template.Mark.OcrTextValue value, Template.RectangleF rectangle)
         {
             InitializeComponent();
+
+            Value = value;
+            this.rectangle.Text = SerializationRoutines.Json.Serialize(rectangle);
         }
 
         public Template.Mark.OcrTextValue Value
@@ -26,6 +29,8 @@ namespace Cliver.PdfDocumentParser
             set
             {
                 _value = value;
+                if (value == null)
+                    return;
                 text.Text = value.Text;
             }
         }

@@ -217,9 +217,9 @@ namespace Cliver.PdfDocumentParser
                                                 //if (currentFloatingAnchorControl!=null)
                                                 {
                                                     FloatingAnchorImageDataControl c = (FloatingAnchorImageDataControl)currentFloatingAnchorControl;
-                                                    selectedImageDataValue.FindBestImageMatch = c.FindBestImageMatch;
-                                                    selectedImageDataValue.BrightnessTolerance = c.BrightnessTolerance;
-                                                    selectedImageDataValue.DifferentPixelNumberTolerance = c.DifferentPixelNumberTolerance;
+                                                    selectedImageDataValue.FindBestImageMatch = c.Value.FindBestImageMatch;
+                                                    selectedImageDataValue.BrightnessTolerance = c.Value.BrightnessTolerance;
+                                                    selectedImageDataValue.DifferentPixelNumberTolerance = c.Value.DifferentPixelNumberTolerance;
                                                 }
                                             }
                                             string error;
@@ -253,7 +253,7 @@ namespace Cliver.PdfDocumentParser
                                     r.X -= ((PointF)p).X;
                                     r.Y -= ((PointF)p).Y;
                                 }
-                                cs["Rectangle2"].Value = SerializationRoutines.Json.Serialize(r);
+                                cs["Rectangle2"].Value = r;
                                 documentFirstPageRecognitionMarks.EndEdit();
                             }
                             break;
@@ -390,10 +390,7 @@ namespace Cliver.PdfDocumentParser
                     DataGridViewRow row = documentFirstPageRecognitionMarks.Rows[e.RowIndex];
                     var cs = row.Cells;
                     int? fai = (int?)cs["FloatingAnchorId2"].Value;
-                    string r_ = (string)cs["Rectangle2"].Value;
-                    Template.RectangleF r = null;
-                    if (r_ != null)
-                        r = SerializationRoutines.Json.Deserialize<Template.RectangleF>(r_);
+                    Template.RectangleF r = (Template.RectangleF)cs["Rectangle2"].Value;
                     switch (documentFirstPageRecognitionMarks.Columns[e.ColumnIndex].Name)
                     {
                         case "Rectangle2":
@@ -458,7 +455,7 @@ namespace Cliver.PdfDocumentParser
                                             if (ptv == null)
                                                 ptv = new Template.Mark.PdfTextValue();
                                             ptv.Text = (string)v;
-                                            setMarkValue(row, ptv); 
+                                            setMarkValue(row, ptv);
                                         }
                                         break;
                                     case Template.ValueTypes.OcrText:
@@ -526,10 +523,9 @@ namespace Cliver.PdfDocumentParser
                     var cs = row.Cells;
                     var vt = (Template.ValueTypes)cs["ValueType2"].Value;
                     int? fai = (int?)cs["FloatingAnchorId2"].Value;
-                    string rs = (string)cs["Rectangle2"].Value;
-                    if (rs != null)
+                    Template.RectangleF r = (Template.RectangleF)cs["Rectangle2"].Value;
+                    if (r != null)
                     {
-                        Template.RectangleF r = rs == null ? null : SerializationRoutines.Json.Deserialize<Template.RectangleF>(rs);
                         switch (vt)
                         {
                             case Template.ValueTypes.PdfText:
@@ -557,9 +553,9 @@ namespace Cliver.PdfDocumentParser
                                     Template.Mark.ImageDataValue idv1 = (Template.Mark.ImageDataValue)row.Tag;
                                     ImageData id2 = (ImageData)extractValueAndDrawSelectionBox(fai, r, vt);
                                     if (idv1.ImageData.ImageIsSimilar(id2, idv1.BrightnessTolerance, idv1.DifferentPixelNumberTolerance))
-                                        setStatus(statuses.ERROR, "documentFirstPageRecognitionMark[" + i + "] is not found:\r\nimage is not similar");
-                                    else
                                         setStatus(statuses.SUCCESS, "documentFirstPageRecognitionMark[" + i + "] is found:\r\nimage is similar");
+                                    else
+                                        setStatus(statuses.ERROR, "documentFirstPageRecognitionMark[" + i + "] is not found:\r\nimage is not similar");
                                 }
                                 break;
                             default:

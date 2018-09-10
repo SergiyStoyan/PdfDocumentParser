@@ -12,13 +12,12 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class FloatingAnchorImageDataControl : UserControl
     {
-        public FloatingAnchorImageDataControl(DataGridViewRow row)
+        public FloatingAnchorImageDataControl(Template.FloatingAnchor.ImageDataValue value)
         {
             InitializeComponent();
 
-            Row = row;
+            Value = value;
         }
-        public readonly DataGridViewRow Row;
 
         public Template.FloatingAnchor.ImageDataValue Value
         {
@@ -32,6 +31,8 @@ namespace Cliver.PdfDocumentParser
             set
             {
                 _value = value;
+                if (value == null)
+                    return;
                 findBestImageMatch.Checked = value.FindBestImageMatch;
                 brightnessTolerance.Value = (decimal)value.BrightnessTolerance;
                 differentPixelNumberTolerance.Value = (decimal)value.DifferentPixelNumberTolerance;
@@ -41,41 +42,41 @@ namespace Cliver.PdfDocumentParser
         }
         Template.FloatingAnchor.ImageDataValue _value;
 
-        public bool FindBestImageMatch
-        {
-            get
-            {
-                return findBestImageMatch.Checked;
-            }
-            //set
-            //{
-            //    findBestImageMatch.Checked = value;
-            //}
-        }
+        //public bool FindBestImageMatch
+        //{
+        //    get
+        //    {
+        //        return findBestImageMatch.Checked;
+        //    }
+        //    //set
+        //    //{
+        //    //    findBestImageMatch.Checked = value;
+        //    //}
+        //}
 
-        public float BrightnessTolerance
-        {
-            get
-            {
-                return (float)brightnessTolerance.Value;
-            }
-            //set
-            //{
-            //    brightnessTolerance.Value = (decimal)value;
-            //}
-        }
+        //public float BrightnessTolerance
+        //{
+        //    get
+        //    {
+        //        return (float)brightnessTolerance.Value;
+        //    }
+        //    //set
+        //    //{
+        //    //    brightnessTolerance.Value = (decimal)value;
+        //    //}
+        //}
 
-        public float DifferentPixelNumberTolerance
-        {
-            get
-            {
-                return (float)differentPixelNumberTolerance.Value;
-            }
-            //set
-            //{
-            //    differentPixelNumberTolerance.Value = (decimal)value;
-            //}
-        }
+        //public float DifferentPixelNumberTolerance
+        //{
+        //    get
+        //    {
+        //        return (float)differentPixelNumberTolerance.Value;
+        //    }
+        //    //set
+        //    //{
+        //    //    differentPixelNumberTolerance.Value = (decimal)value;
+        //    //}
+        //}
 
         //public Image Image
         //{
