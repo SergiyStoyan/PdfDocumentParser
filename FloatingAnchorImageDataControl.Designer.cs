@@ -32,12 +32,12 @@
             this.label20 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.findBestImageMatch = new System.Windows.Forms.CheckBox();
-            this.brightnessTolerance = new System.Windows.Forms.NumericUpDown();
-            this.differentPixelNumberTolerance = new System.Windows.Forms.NumericUpDown();
+            this.FindBestImageMatch = new System.Windows.Forms.CheckBox();
+            this.BrightnessTolerance = new System.Windows.Forms.NumericUpDown();
+            this.DifferentPixelNumberTolerance = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.brightnessTolerance)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.differentPixelNumberTolerance)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BrightnessTolerance)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DifferentPixelNumberTolerance)).BeginInit();
             this.SuspendLayout();
             // 
             // picture
@@ -79,67 +79,67 @@
             this.label11.TabIndex = 61;
             this.label11.Text = "Brightness Tolerance:";
             // 
-            // findBestImageMatch
+            // FindBestImageMatch
             // 
-            this.findBestImageMatch.AutoSize = true;
-            this.findBestImageMatch.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.findBestImageMatch.Location = new System.Drawing.Point(171, 4);
-            this.findBestImageMatch.Name = "findBestImageMatch";
-            this.findBestImageMatch.Size = new System.Drawing.Size(15, 14);
-            this.findBestImageMatch.TabIndex = 65;
-            this.findBestImageMatch.UseVisualStyleBackColor = true;
+            this.FindBestImageMatch.AutoSize = true;
+            this.FindBestImageMatch.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.FindBestImageMatch.Location = new System.Drawing.Point(171, 4);
+            this.FindBestImageMatch.Name = "FindBestImageMatch";
+            this.FindBestImageMatch.Size = new System.Drawing.Size(15, 14);
+            this.FindBestImageMatch.TabIndex = 65;
+            this.FindBestImageMatch.UseVisualStyleBackColor = true;
             // 
-            // brightnessTolerance
+            // BrightnessTolerance
             // 
-            this.brightnessTolerance.DecimalPlaces = 2;
-            this.brightnessTolerance.Increment = new decimal(new int[] {
+            this.BrightnessTolerance.DecimalPlaces = 2;
+            this.BrightnessTolerance.Increment = new decimal(new int[] {
             1,
             0,
             0,
             131072});
-            this.brightnessTolerance.Location = new System.Drawing.Point(171, 26);
-            this.brightnessTolerance.Maximum = new decimal(new int[] {
+            this.BrightnessTolerance.Location = new System.Drawing.Point(171, 26);
+            this.BrightnessTolerance.Maximum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.brightnessTolerance.Minimum = new decimal(new int[] {
+            this.BrightnessTolerance.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             131072});
-            this.brightnessTolerance.Name = "brightnessTolerance";
-            this.brightnessTolerance.Size = new System.Drawing.Size(42, 20);
-            this.brightnessTolerance.TabIndex = 62;
-            this.brightnessTolerance.Value = new decimal(new int[] {
+            this.BrightnessTolerance.Name = "BrightnessTolerance";
+            this.BrightnessTolerance.Size = new System.Drawing.Size(42, 20);
+            this.BrightnessTolerance.TabIndex = 62;
+            this.BrightnessTolerance.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
             // 
-            // differentPixelNumberTolerance
+            // DifferentPixelNumberTolerance
             // 
-            this.differentPixelNumberTolerance.DecimalPlaces = 2;
-            this.differentPixelNumberTolerance.Increment = new decimal(new int[] {
+            this.DifferentPixelNumberTolerance.DecimalPlaces = 2;
+            this.DifferentPixelNumberTolerance.Increment = new decimal(new int[] {
             1,
             0,
             0,
             131072});
-            this.differentPixelNumberTolerance.Location = new System.Drawing.Point(171, 52);
-            this.differentPixelNumberTolerance.Maximum = new decimal(new int[] {
+            this.DifferentPixelNumberTolerance.Location = new System.Drawing.Point(171, 52);
+            this.DifferentPixelNumberTolerance.Maximum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.differentPixelNumberTolerance.Minimum = new decimal(new int[] {
+            this.DifferentPixelNumberTolerance.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             131072});
-            this.differentPixelNumberTolerance.Name = "differentPixelNumberTolerance";
-            this.differentPixelNumberTolerance.Size = new System.Drawing.Size(42, 20);
-            this.differentPixelNumberTolerance.TabIndex = 64;
-            this.differentPixelNumberTolerance.Value = new decimal(new int[] {
+            this.DifferentPixelNumberTolerance.Name = "DifferentPixelNumberTolerance";
+            this.DifferentPixelNumberTolerance.Size = new System.Drawing.Size(42, 20);
+            this.DifferentPixelNumberTolerance.TabIndex = 64;
+            this.DifferentPixelNumberTolerance.Value = new decimal(new int[] {
             1,
             0,
             0,
@@ -153,14 +153,14 @@
             this.Controls.Add(this.label20);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.label11);
-            this.Controls.Add(this.findBestImageMatch);
-            this.Controls.Add(this.brightnessTolerance);
-            this.Controls.Add(this.differentPixelNumberTolerance);
+            this.Controls.Add(this.FindBestImageMatch);
+            this.Controls.Add(this.BrightnessTolerance);
+            this.Controls.Add(this.DifferentPixelNumberTolerance);
             this.Name = "FloatingAnchorImageDataControl";
             this.Size = new System.Drawing.Size(218, 186);
             ((System.ComponentModel.ISupportInitialize)(this.picture)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.brightnessTolerance)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.differentPixelNumberTolerance)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BrightnessTolerance)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DifferentPixelNumberTolerance)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -172,8 +172,8 @@
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.CheckBox findBestImageMatch;
-        private System.Windows.Forms.NumericUpDown brightnessTolerance;
-        private System.Windows.Forms.NumericUpDown differentPixelNumberTolerance;
+        public System.Windows.Forms.CheckBox FindBestImageMatch;
+        public System.Windows.Forms.NumericUpDown BrightnessTolerance;
+        public System.Windows.Forms.NumericUpDown DifferentPixelNumberTolerance;
     }
 }

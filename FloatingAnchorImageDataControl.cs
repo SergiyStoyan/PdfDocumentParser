@@ -23,9 +23,9 @@ namespace Cliver.PdfDocumentParser
         {
             get
             {
-                _value.FindBestImageMatch = findBestImageMatch.Checked;
-                _value.BrightnessTolerance = (float)brightnessTolerance.Value;
-                _value.DifferentPixelNumberTolerance = (float)differentPixelNumberTolerance.Value;
+                _value.FindBestImageMatch = FindBestImageMatch.Checked;
+                _value.BrightnessTolerance = (float)BrightnessTolerance.Value;
+                _value.DifferentPixelNumberTolerance = (float)DifferentPixelNumberTolerance.Value;
                 return _value;
             }
             set
@@ -33,9 +33,9 @@ namespace Cliver.PdfDocumentParser
                 _value = value;
                 if (value == null)
                     return;
-                findBestImageMatch.Checked = value.FindBestImageMatch;
-                brightnessTolerance.Value = (decimal)value.BrightnessTolerance;
-                differentPixelNumberTolerance.Value = (decimal)value.DifferentPixelNumberTolerance;
+                FindBestImageMatch.Checked = value.FindBestImageMatch;
+                BrightnessTolerance.Value = (decimal)value.BrightnessTolerance;
+                DifferentPixelNumberTolerance.Value = (decimal)value.DifferentPixelNumberTolerance;
                 if (value.ImageBoxs != null && value.ImageBoxs.Count > 0)
                     picture.Image = value.ImageBoxs[0].ImageData.GetImage();
             }

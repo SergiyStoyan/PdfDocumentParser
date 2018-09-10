@@ -208,6 +208,8 @@ namespace Cliver.PdfDocumentParser
                     max = i;
                 }
         }
+        short minOptimum = -1;
+        short maxOptimum = -1;
         //byte[,] absolutizedHash;
         //byte[,] getAbsolutizedBitmapHash()
         //{

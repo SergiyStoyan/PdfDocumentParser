@@ -270,7 +270,7 @@ namespace Cliver.PdfDocumentParser
                 {
                     case Template.ValueTypes.PdfText:
                         {
-                            List<Pdf.Line> lines = Pdf.RemoveDuplicatesAndGetLines(selectedPdfCharBoxs);
+                            List<Pdf.Line> lines = Pdf.RemoveDuplicatesAndGetLines(selectedPdfCharBoxs, false);
                             if (lines.Count < 1)
                             {
                                 setFloatingAnchorValue(r, null);

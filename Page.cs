@@ -203,18 +203,32 @@ namespace Cliver.PdfDocumentParser
             {
                 case Template.ValueTypes.PdfText:
                     {
-                        List<Template.FloatingAnchor.PdfTextValue.CharBox> faes = ((Template.FloatingAnchor.PdfTextValue)fa.GetValue()).CharBoxs;
+                        Template.FloatingAnchor.PdfTextValue ptv = (Template.FloatingAnchor.PdfTextValue)fa.GetValue();
+                        List<Template.FloatingAnchor.PdfTextValue.CharBox> faes = ptv.CharBoxs;
                         if (faes.Count < 1)
                             return null;
-                        List<Pdf.CharBox> bts = new List<Pdf.CharBox>();
+        List<Pdf.CharBox> bts = new List<Pdf.CharBox>();
                         foreach (Pdf.CharBox bt0 in PdfCharBoxs.Where(a => a.Char == faes[0].Char))
                         {
                             bts.Clear();
                             bts.Add(bt0);
                             for (int i = 1; i < faes.Count; i++)
                             {
-                                float x = bt0.R.X + faes[i].Rectangle.X - faes[0].Rectangle.X;
-                                float y = bt0.R.Y + faes[i].Rectangle.Y - faes[0].Rectangle.Y;
+                                float x,y;
+                                if (ptv.PositionDeviationIsAbsolute)
+                                {
+                                    x = bt0.R.X + faes[i].Rectangle.X - faes[0].Rectangle.X;
+                                    y = bt0.R.Y + faes[i].Rectangle.Y - faes[0].Rectangle.Y;
+                                }
+                                else
+                                {
+                                    //float xd = (bts[i - 1].R.X - bts[0].R.X) - (faes[i - 1].Rectangle.X - faes[0].Rectangle.X);
+                                    //float yd = (bts[i - 1].R.Y - bts[0].R.Y) - (faes[i - 1].Rectangle.Y - faes[0].Rectangle.Y);
+                                    //x = bt0.R.X + faes[i].Rectangle.X - faes[0].Rectangle.X + xd;
+                                    //y = bt0.R.Y + faes[i].Rectangle.Y - faes[0].Rectangle.Y + xd;
+                                    x = bts[i - 1].R.X + faes[i].Rectangle.X - faes[i - 1].Rectangle.X;
+                                    y = bts[i - 1].R.Y + faes[i].Rectangle.Y - faes[i - 1].Rectangle.Y;
+                                }
                                 foreach (Pdf.CharBox bt in PdfCharBoxs.Where(a => a.Char == faes[i].Char))
                                     if (Math.Abs(bt.R.X - x) <= fa.PositionDeviation && Math.Abs(bt.R.Y - y) <= fa.PositionDeviation)
                                     {

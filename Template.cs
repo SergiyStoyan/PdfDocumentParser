@@ -269,6 +269,7 @@ namespace Cliver.PdfDocumentParser
             public class PdfTextValue
             {
                 public List<CharBox> CharBoxs = new List<CharBox>();
+                public bool PositionDeviationIsAbsolute = true;
                 [Serializable]
                 public class CharBox
                 {

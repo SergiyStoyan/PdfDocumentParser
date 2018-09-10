@@ -30,6 +30,7 @@
         {
             this.text = new System.Windows.Forms.RichTextBox();
             this.label20 = new System.Windows.Forms.Label();
+            this.PositionDeviationIsAbsolute = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // text
@@ -40,7 +41,7 @@
             this.text.Location = new System.Drawing.Point(0, 17);
             this.text.Name = "text";
             this.text.ReadOnly = true;
-            this.text.Size = new System.Drawing.Size(228, 176);
+            this.text.Size = new System.Drawing.Size(228, 153);
             this.text.TabIndex = 62;
             this.text.Text = "";
             // 
@@ -53,10 +54,22 @@
             this.label20.TabIndex = 61;
             this.label20.Text = "Text:";
             // 
+            // PositionDeviationIsAbsolute
+            // 
+            this.PositionDeviationIsAbsolute.AutoSize = true;
+            this.PositionDeviationIsAbsolute.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.PositionDeviationIsAbsolute.Location = new System.Drawing.Point(0, 176);
+            this.PositionDeviationIsAbsolute.Name = "PositionDeviationIsAbsolute";
+            this.PositionDeviationIsAbsolute.Size = new System.Drawing.Size(228, 17);
+            this.PositionDeviationIsAbsolute.TabIndex = 63;
+            this.PositionDeviationIsAbsolute.Text = "Position Deviation Is Absolute";
+            this.PositionDeviationIsAbsolute.UseVisualStyleBackColor = true;
+            // 
             // FloatingAnchorPdfTextControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.PositionDeviationIsAbsolute);
             this.Controls.Add(this.text);
             this.Controls.Add(this.label20);
             this.Name = "FloatingAnchorPdfTextControl";
@@ -70,5 +83,6 @@
 
         private System.Windows.Forms.RichTextBox text;
         private System.Windows.Forms.Label label20;
+        public System.Windows.Forms.CheckBox PositionDeviationIsAbsolute;
     }
 }

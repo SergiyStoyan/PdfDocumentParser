@@ -225,9 +225,9 @@ namespace Cliver.PdfDocumentParser
             return bts_.ToList();
         }
 
-        public static List<Line> RemoveDuplicatesAndGetLines(IEnumerable<CharBox> cbs)
+        public static List<Line> RemoveDuplicatesAndGetLines(IEnumerable<CharBox> cbs, bool spaceAutoInsert)
         {
-            return getLines(removeDuplicates(cbs), false);
+            return getLines(removeDuplicates(cbs), spaceAutoInsert);
         }
 
         static List<CharBox> removeDuplicates(IEnumerable<CharBox> cbs)

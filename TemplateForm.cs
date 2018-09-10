@@ -217,9 +217,9 @@ namespace Cliver.PdfDocumentParser
                                                 //if (currentFloatingAnchorControl!=null)
                                                 {
                                                     FloatingAnchorImageDataControl c = (FloatingAnchorImageDataControl)currentFloatingAnchorControl;
-                                                    selectedImageDataValue.FindBestImageMatch = c.Value.FindBestImageMatch;
-                                                    selectedImageDataValue.BrightnessTolerance = c.Value.BrightnessTolerance;
-                                                    selectedImageDataValue.DifferentPixelNumberTolerance = c.Value.DifferentPixelNumberTolerance;
+                                                    selectedImageDataValue.FindBestImageMatch = c.FindBestImageMatch.Checked;
+                                                    selectedImageDataValue.BrightnessTolerance = (float)c.BrightnessTolerance.Value;
+                                                    selectedImageDataValue.DifferentPixelNumberTolerance = (float)c.DifferentPixelNumberTolerance.Value;
                                                 }
                                             }
                                             string error;
