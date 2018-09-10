@@ -14,7 +14,7 @@ namespace Cliver.InvoiceParser
     /*
  TBD:
  - ? Template not enherited but embedded
- - custom Value in anchors and marks table
+ - move Deviation to Value class
  - detect page rotation by tesseract
  - implement image recognition by brightness delta
 

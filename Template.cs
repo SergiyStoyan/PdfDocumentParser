@@ -198,7 +198,6 @@ namespace Cliver.PdfDocumentParser
             public string Name;
             public RectangleF Rectangle;//when FloatingAnchor is set, Rectangle.X,Y are bound to location of the anchor as to zero point
             public ValueTypes ValueType = ValueTypes.PdfText;
-            //public Regex Regex;//if set the rest settings are ignored; it is applied to the page text
         }
         
         public partial class FloatingAnchor
