@@ -118,7 +118,7 @@ namespace Cliver.PdfDocumentParser
             row.Tag = value;
             if (loadingTemplate)
                 return;
-            setMarkControl(row);
+            setMarkControl(row); 
         }
         void setMarkControl(DataGridViewRow row)
         {

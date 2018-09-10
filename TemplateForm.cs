@@ -401,6 +401,7 @@ namespace Cliver.PdfDocumentParser
                                     setMarkValue(row, null);
                                     return;
                                 }
+                                setStatus(statuses.SUCCESS, "documentFirstPageRecognitionMark[" + row.Index + "] has been set.");
                                 Template.ValueTypes vt = (Template.ValueTypes)cs["ValueType2"].Value;
                                 object v = extractValueAndDrawSelectionBox(fai, r, vt);
                                 switch (vt)

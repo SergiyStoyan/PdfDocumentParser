@@ -47,8 +47,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.picture.Location = new System.Drawing.Point(0, 78);
             this.picture.Name = "picture";
-            this.picture.Size = new System.Drawing.Size(223, 108);
-            this.picture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picture.Size = new System.Drawing.Size(218, 108);
+            this.picture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.picture.TabIndex = 67;
             this.picture.TabStop = false;
             // 
@@ -157,7 +157,7 @@
             this.Controls.Add(this.brightnessTolerance);
             this.Controls.Add(this.differentPixelNumberTolerance);
             this.Name = "FloatingAnchorImageDataControl";
-            this.Size = new System.Drawing.Size(223, 186);
+            this.Size = new System.Drawing.Size(218, 186);
             ((System.ComponentModel.ISupportInitialize)(this.picture)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.brightnessTolerance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.differentPixelNumberTolerance)).EndInit();

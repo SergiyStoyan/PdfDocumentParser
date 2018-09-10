@@ -603,7 +603,7 @@
             this.marksContainer.Panel1.Controls.Add(this.documentFirstPageRecognitionMarks);
             this.marksContainer.Panel1.Controls.Add(this.label4);
             this.marksContainer.Size = new System.Drawing.Size(429, 93);
-            this.marksContainer.SplitterDistance = 163;
+            this.marksContainer.SplitterDistance = 228;
             this.marksContainer.TabIndex = 0;
             // 
             // documentFirstPageRecognitionMarks
@@ -618,7 +618,7 @@
             this.documentFirstPageRecognitionMarks.MultiSelect = false;
             this.documentFirstPageRecognitionMarks.Name = "documentFirstPageRecognitionMarks";
             this.documentFirstPageRecognitionMarks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.documentFirstPageRecognitionMarks.Size = new System.Drawing.Size(163, 80);
+            this.documentFirstPageRecognitionMarks.Size = new System.Drawing.Size(228, 80);
             this.documentFirstPageRecognitionMarks.TabIndex = 29;
             // 
             // label4
@@ -861,7 +861,6 @@
             this.Rectangle2.HeaderText = "Rectangle";
             this.Rectangle2.Name = "Rectangle2";
             this.Rectangle2.ReadOnly = true;
-            this.Rectangle2.Visible = false;
             this.Rectangle2.Width = 50;
             // 
             // ValueType2
