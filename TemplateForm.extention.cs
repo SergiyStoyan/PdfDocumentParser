@@ -91,7 +91,7 @@ namespace Cliver.PdfDocumentParser
         DataGridViewRow currentFloatingAnchorRow = null;
         void setCurrentFloatingAnchorValueFromControl()
         {
-            if (currentFloatingAnchorRow == null)
+            if (currentFloatingAnchorRow == null || currentFloatingAnchorRow.Index < 0)//removed row
                 return;
             object value = null;
             Template.ValueTypes valueType = (Template.ValueTypes)currentFloatingAnchorRow.Cells["ValueType3"].Value;
@@ -118,7 +118,7 @@ namespace Cliver.PdfDocumentParser
             row.Tag = value;
             if (loadingTemplate)
                 return;
-            setMarkControl(row); 
+            setMarkControl(row);
         }
         void setMarkControl(DataGridViewRow row)
         {
@@ -174,7 +174,7 @@ namespace Cliver.PdfDocumentParser
         DataGridViewRow currentMarkRow = null;
         void setCurrentMarkValueFromControl()
         {
-            if (currentMarkRow != null)
+            if (currentMarkRow != null || currentMarkRow.Index < 0)//removed row
             {
                 //    var cs = currentfloatingAnchorRow.Cells;
                 object value = null;

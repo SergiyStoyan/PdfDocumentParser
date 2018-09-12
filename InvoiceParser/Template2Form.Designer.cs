@@ -187,9 +187,9 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(12, 132);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(254, 13);
+            this.label4.Size = new System.Drawing.Size(251, 13);
             this.label4.TabIndex = 67;
-            this.label4.Text = "Last Page Number In PDF File To Detect Template :";
+            this.label4.Text = "Last Page Number In PDF File To Detect Template:";
             // 
             // FileFilterRegex
             // 
