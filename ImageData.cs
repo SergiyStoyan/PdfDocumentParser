@@ -178,17 +178,42 @@ namespace Cliver.PdfDocumentParser
                 }
             return true;
         }
+
+        //public bool ImageIsSimilar2(ImageData imageData, float brightnessTolerance, float differentPixelNumberTolerance)
+        //{
+        //    if (Width != imageData.Width || Height != imageData.Height)
+        //        throw new Exception("Images have different sizes.");
+        //    if (absolutizedID == null)
+        //        absolutizedID = getAbsolutizedImageData();
+        //    if (imageData.absolutizedID == null)
+        //        imageData.absolutizedID = getAbsolutizedImageData();
+        //    int differentPixelNumber;
+        //    return imageData.isHashMatch(imageData, 0, 0, (int)(brightnessTolerance * 255), (int)(Hash.Length * differentPixelNumberTolerance), out differentPixelNumber);
+        //}
+        //public System.Drawing.Point? FindWithinImage2(ImageData imageData, float brightnessTolerance, float differentPixelNumberTolerance, bool findBestMatch)
+        //{
+        //    if (absolutizedID == null)
+        //        absolutizedID = getAbsolutizedImageData();
+        //    if (imageData.absolutizedID == null)
+        //        imageData.absolutizedID = imageData.getAbsolutizedImageData();
+        //    return imageData.FindWithinImage2(imageData, brightnessTolerance, differentPixelNumberTolerance, findBestMatch);
+        //}
+        //public void FindWithinImage2(ImageData imageData, float brightnessTolerance, float differentPixelNumberTolerance, Func<Point, float, bool> onFound)
+        //{
+        //    if (absolutizedID == null)
+        //        absolutizedID = getAbsolutizedImageData();
+        //    if (imageData.absolutizedID == null)
+        //        imageData.absolutizedID = imageData.getAbsolutizedImageData();
+        //    absolutizedID.FindWithinImage(imageData, brightnessTolerance, differentPixelNumberTolerance, onFound);
+        //}
+        ImageData absolutizedID = null;
         void getMinMaxBrightnessOptimums(out byte min, out byte max)
         {
-            SortedList<byte, int> brightnesses2pointCount = new SortedList<byte, int>();
+            int[] brightnesses2pointCount = new int[256];
             for (int x = 0; x < Width; x++)
             {
                 for (int y = 0; y < Height; y++)
-                {
-                    int count = 0;
-                    brightnesses2pointCount.TryGetValue(Hash[x, y], out count);
-                    brightnesses2pointCount[Hash[x, y]] = count + 1;
-                }
+                    brightnesses2pointCount[Hash[x, y]] = brightnesses2pointCount[Hash[x, y]] + 1;
             }
             List<int> count_optimums = new List<int>();
             int minBrightnessPointCount = 0;
@@ -199,33 +224,41 @@ namespace Cliver.PdfDocumentParser
                     minBrightnessPointCount = brightnesses2pointCount[i];
                     min = i;
                 }
-            int maxBrightnessPointCount = 255;
+            int maxBrightnessPointCount = 0;
             max = 255;
-            for (byte i = 127; 127 < i; i++)
-                if (maxBrightnessPointCount > brightnesses2pointCount[i])
+            for (byte i = 127; 127 <= i; i++)
+                if (maxBrightnessPointCount < brightnesses2pointCount[i])
                 {
                     maxBrightnessPointCount = brightnesses2pointCount[i];
                     max = i;
                 }
         }
-        short minOptimum = -1;
-        short maxOptimum = -1;
-        //byte[,] absolutizedHash;
-        //byte[,] getAbsolutizedBitmapHash()
-        //{
-        //    byte[,] hash = new byte[Width, Height];
-        //    for (int x = 0; x < Width; x++)
-        //    {
-        //        for (int y = 0; y < Height; y++)
-        //        {
-        //            Color c = Color.FromArgb(rawImageData[y * w + x]);
-        //            //hash[x, y] = (byte)(c.GetBrightness() * 255);
-        //            hash[x, y] = (byte)((c.R + c.G + c.B) / 3);
-        //            //hash[x, y] = (byte)((c.GetBrightness() < 0.9 ? 0 : 1) * 255);
-        //        }
-        //    }
-        //    return hash;
-        //}
+        ImageData getAbsolutizedImageData()
+        {
+            ImageData aid = new ImageData(null);
+            aid.Width = Width;
+            aid.Height = Height;
+
+            byte minOptimum = 0;
+            byte maxOptimum = 255;
+            getMinMaxBrightnessOptimums(out minOptimum, out maxOptimum);
+            float brightnessFactor = ((float)(maxOptimum - minOptimum)) / 255;
+
+            aid.Hash = new byte[Width, Height];
+            for (int x = 0; x < Width; x++)
+            {
+                for (int y = 0; y < Height; y++)
+                {
+                    if (Hash[x, y] <= minOptimum)
+                        aid.Hash[x, y] = 0;
+                    else if (Hash[x, y] < maxOptimum)
+                        aid.Hash[x, y] = (byte)(brightnessFactor * (aid.Hash[x, y] - minOptimum));
+                    else
+                        aid.Hash[x, y] = 255;
+                }
+            }
+            return aid;//(a - n) * ((m2 - n2)/(m - n))
+        }
 
         public Image GetImage()
         {
