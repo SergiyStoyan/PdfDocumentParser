@@ -111,6 +111,36 @@ namespace Cliver.PdfDocumentParser
                 set
                 {
                     this.value = GetValueFromString(ValueType, value);
+                    ////TEMPORARY: trasferring to a new version
+                    //switch (ValueType)
+                    //{
+                    //    case ValueTypes.PdfText:
+                    //        var ptv = (PdfTextValue)this.value;
+                    //        if (ptv.Rectangle == null && this.Rectangle!=null)
+                    //        {
+                    //            ptv.Rectangle = this.Rectangle;
+                    //            this.Rectangle = null;
+                    //        }
+                    //        break;
+                    //    case ValueTypes.OcrText:
+                    //        var otv = (OcrTextValue)this.value;
+                    //        if (otv.Rectangle == null && this.Rectangle != null)
+                    //        {
+                    //            otv.Rectangle = this.Rectangle;
+                    //            this.Rectangle = null;
+                    //        }
+                    //        break;
+                    //    case ValueTypes.ImageData:
+                    //        var idv = (ImageDataValue)this.value;
+                    //        if (idv.Rectangle == null && this.Rectangle != null)
+                    //        {
+                    //            idv.Rectangle = this.Rectangle;
+                    //            this.Rectangle = null;
+                    //        }
+                    //        break;
+                    //    default:
+                    //        throw new Exception("Unknown option: " + ValueType);
+                    //}
                 }
             }
 
@@ -138,23 +168,9 @@ namespace Cliver.PdfDocumentParser
                 switch (valueType)
                 {
                     case ValueTypes.PdfText:
-                        try
-                        {
                             return SerializationRoutines.Json.Deserialize<PdfTextValue>(value);
-                        }
-                        catch//compatibility with old format
-                        {
-                            return new PdfTextValue { Text = value };
-                        }
                     case ValueTypes.OcrText:
-                        try
-                        {
                             return SerializationRoutines.Json.Deserialize<OcrTextValue>(value);
-                        }
-                        catch//compatibility with old format
-                        {
-                            return new OcrTextValue { Text = value };
-                        }
                     case ValueTypes.ImageData:
                         return SerializationRoutines.Json.Deserialize<ImageDataValue>(value);
                     default:
@@ -170,14 +186,17 @@ namespace Cliver.PdfDocumentParser
 
             public class PdfTextValue
             {
+                //public RectangleF Rectangle;
                 public string Text;
             }
             public class OcrTextValue
             {
+                //public RectangleF Rectangle;
                 public string Text;
             }
             public class ImageDataValue
             {
+                //public RectangleF Rectangle;
                 public ImageData ImageData;
                 public float BrightnessTolerance = 0.4f;
                 public float DifferentPixelNumberTolerance = 0.02f;
@@ -218,6 +237,36 @@ namespace Cliver.PdfDocumentParser
                 set
                 {
                     this.value = GetValueFromString(ValueType, value);
+                    ////TEMPORARY: trasferring to a new version
+                    //switch (ValueType)
+                    //{
+                    //    case ValueTypes.PdfText:
+                    //        var ptv = (PdfTextValue)this.value;
+                    //        if (ptv.PositionDeviation < this.PositionDeviation)
+                    //        {
+                    //            ptv.PositionDeviation = this.PositionDeviation;
+                    //            this.PositionDeviation = -1;
+                    //        }
+                    //        break;
+                    //case ValueTypes.OcrText:
+                    //        var otv = (OcrTextValue)this.value;
+                    //        if (otv.PositionDeviation < this.PositionDeviation)
+                    //        {
+                    //            otv.PositionDeviation = this.PositionDeviation;
+                    //            this.PositionDeviation = -1;
+                    //        }
+                    //        break;
+                    //    case ValueTypes.ImageData:
+                    //        var idv = (ImageDataValue)this.value;
+                    //        if (idv.PositionDeviation < this.PositionDeviation)
+                    //        {
+                    //            idv.PositionDeviation = this.PositionDeviation;
+                    //            this.PositionDeviation = -1;
+                    //        }
+                    //        break;
+                    //    default:
+                    //        throw new Exception("Unknown option: " + ValueType);
+                    //}
                 }
             }
 
@@ -268,8 +317,8 @@ namespace Cliver.PdfDocumentParser
             public class PdfTextValue
             {
                 public List<CharBox> CharBoxs = new List<CharBox>();
+                //public float PositionDeviation = 0.1f;
                 public bool PositionDeviationIsAbsolute = true;
-                [Serializable]
                 public class CharBox
                 {
                     public string Char;
@@ -279,7 +328,8 @@ namespace Cliver.PdfDocumentParser
             public class OcrTextValue
             {
                 public List<CharBox> CharBoxs = new List<CharBox>();
-                [Serializable]
+                //public float PositionDeviation = 0.1f;
+                //public bool PositionDeviationIsAbsolute = true;
                 public class CharBox
                 {
                     public string Char;
@@ -289,7 +339,8 @@ namespace Cliver.PdfDocumentParser
             public class ImageDataValue
             {
                 public List<ImageBox> ImageBoxs = new List<ImageBox>();
-                [Serializable]
+                //public float PositionDeviation = 0.1f;
+                //public bool PositionDeviationIsAbsolute = true;
                 public class ImageBox
                 {
                     public ImageData ImageData;

@@ -387,6 +387,8 @@ namespace Cliver.PdfDocumentParser
                 {
                     if (loadingTemplate)
                         return;
+                    if (e.ColumnIndex < 0)//row's header
+                        return;
                     DataGridViewRow row = documentFirstPageRecognitionMarks.Rows[e.RowIndex];
                     var cs = row.Cells;
                     int? fai = (int?)cs["FloatingAnchorId2"].Value;

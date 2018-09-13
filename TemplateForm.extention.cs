@@ -124,6 +124,14 @@ namespace Cliver.PdfDocumentParser
         {
             if (row == null || !row.Selected || row.IsNewRow || row.Tag == null || !documentFirstPageRecognitionMarks.Rows.Contains(row))
             {
+                //if (row != null)
+                //{
+                //    documentFirstPageRecognitionMarks.EnableHeadersVisualStyles = false;
+                //    row.HeaderCell.Style.BackColor = Color.Blue;
+                //    row.HeaderCell.Value = "tttt";
+                //    row.HeaderCell.ErrorText = "eeee";
+                //    //row.DefaultCellStyle.BackColor = Color.Red;
+                //}
                 currentMarkRow = null;
                 currentMarkControl = null;
                 return;
