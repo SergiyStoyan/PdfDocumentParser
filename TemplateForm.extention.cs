@@ -174,28 +174,27 @@ namespace Cliver.PdfDocumentParser
         DataGridViewRow currentMarkRow = null;
         void setCurrentMarkValueFromControl()
         {
-            if (currentMarkRow != null || currentMarkRow.Index < 0)//removed row
+            if (currentMarkRow == null || currentMarkRow.Index < 0)//removed row
+                return;
+            //    var cs = currentfloatingAnchorRow.Cells;
+            object value = null;
+            Template.ValueTypes valueType = (Template.ValueTypes)currentMarkRow.Cells["ValueType2"].Value;
+            switch (valueType)
             {
-                //    var cs = currentfloatingAnchorRow.Cells;
-                object value = null;
-                Template.ValueTypes valueType = (Template.ValueTypes)currentMarkRow.Cells["ValueType2"].Value;
-                switch (valueType)
-                {
-                    case Template.ValueTypes.PdfText:
-                        value = ((MarkPdfTextControl)currentMarkControl).Value;
-                        break;
-                    case Template.ValueTypes.OcrText:
-                        value = ((MarkOcrTextControl)currentMarkControl).Value;
-                        break;
-                    case Template.ValueTypes.ImageData:
-                        value = ((MarkImageDataControl)currentMarkControl).Value;
-                        break;
-                    default:
-                        throw new Exception("Unknown option: " + valueType);
-                }
-                if (value != null)
-                    setMarkValue(currentMarkRow, value);
+                case Template.ValueTypes.PdfText:
+                    value = ((MarkPdfTextControl)currentMarkControl).Value;
+                    break;
+                case Template.ValueTypes.OcrText:
+                    value = ((MarkOcrTextControl)currentMarkControl).Value;
+                    break;
+                case Template.ValueTypes.ImageData:
+                    value = ((MarkImageDataControl)currentMarkControl).Value;
+                    break;
+                default:
+                    throw new Exception("Unknown option: " + valueType);
             }
+            if (value != null)
+                setMarkValue(currentMarkRow, value);
         }
 
         void onFloatingAnchorsChanged(int? updatedFloatingAnchorId)
