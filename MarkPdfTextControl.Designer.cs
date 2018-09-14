@@ -28,52 +28,52 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.rectangle = new System.Windows.Forms.RichTextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.text = new System.Windows.Forms.RichTextBox();
             this.label20 = new System.Windows.Forms.Label();
+            this.text = new System.Windows.Forms.RichTextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.rectangle = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
-            // 
-            // rectangle
-            // 
-            this.rectangle.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.rectangle.Location = new System.Drawing.Point(-3, 60);
-            this.rectangle.Name = "rectangle";
-            this.rectangle.ReadOnly = true;
-            this.rectangle.Size = new System.Drawing.Size(184, 49);
-            this.rectangle.TabIndex = 68;
-            this.rectangle.Text = "";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(0, 44);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(59, 13);
-            this.label1.TabIndex = 67;
-            this.label1.Text = "Rectangle:";
-            // 
-            // text
-            // 
-            this.text.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.text.Location = new System.Drawing.Point(-3, 15);
-            this.text.Name = "text";
-            this.text.ReadOnly = true;
-            this.text.Size = new System.Drawing.Size(184, 26);
-            this.text.TabIndex = 66;
-            this.text.Text = "";
             // 
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(0, 2);
+            this.label20.Location = new System.Drawing.Point(3, 1);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(31, 13);
-            this.label20.TabIndex = 65;
+            this.label20.TabIndex = 73;
             this.label20.Text = "Text:";
+            // 
+            // text
+            // 
+            this.text.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.text.Location = new System.Drawing.Point(0, 14);
+            this.text.Name = "text";
+            this.text.ReadOnly = true;
+            this.text.Size = new System.Drawing.Size(181, 40);
+            this.text.TabIndex = 74;
+            this.text.Text = "";
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 57);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(59, 13);
+            this.label1.TabIndex = 75;
+            this.label1.Text = "Rectangle:";
+            // 
+            // rectangle
+            // 
+            this.rectangle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rectangle.Location = new System.Drawing.Point(0, 73);
+            this.rectangle.Name = "rectangle";
+            this.rectangle.ReadOnly = true;
+            this.rectangle.Size = new System.Drawing.Size(181, 20);
+            this.rectangle.TabIndex = 76;
             // 
             // MarkPdfTextControl
             // 
@@ -84,7 +84,7 @@
             this.Controls.Add(this.text);
             this.Controls.Add(this.label20);
             this.Name = "MarkPdfTextControl";
-            this.Size = new System.Drawing.Size(181, 109);
+            this.Size = new System.Drawing.Size(181, 93);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -92,9 +92,9 @@
 
         #endregion
 
-        private System.Windows.Forms.RichTextBox rectangle;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.RichTextBox text;
         private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.RichTextBox text;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox rectangle;
     }
 }

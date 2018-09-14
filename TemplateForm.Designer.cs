@@ -31,12 +31,15 @@
             this.picture = new System.Windows.Forms.PictureBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.floatingAnchorsContainer = new System.Windows.Forms.SplitContainer();
+            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
+            this.tablesContainer = new System.Windows.Forms.SplitContainer();
             this.floatingAnchors = new System.Windows.Forms.DataGridView();
             this.Id3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ValueType3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.PositionDeviation3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label10 = new System.Windows.Forms.Label();
+            this.documentFirstPageRecognitionMarks = new System.Windows.Forms.DataGridView();
+            this.label4 = new System.Windows.Forms.Label();
+            this.tableControlsContainer = new System.Windows.Forms.SplitContainer();
             this.status = new System.Windows.Forms.TextBox();
             this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
             this.ShowPdfText = new System.Windows.Forms.LinkLabel();
@@ -65,19 +68,15 @@
             this.label12 = new System.Windows.Forms.Label();
             this.selectionCoordinates = new System.Windows.Forms.Label();
             this.lTotalPages = new System.Windows.Forms.Label();
-            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
-            this.marksContainer = new System.Windows.Forms.SplitContainer();
-            this.documentFirstPageRecognitionMarks = new System.Windows.Forms.DataGridView();
-            this.FloatingAnchorId2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Rectangle2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ValueType2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.label4 = new System.Windows.Forms.Label();
             this.fields = new System.Windows.Forms.DataGridView();
             this.Name_ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FloatingAnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Rectangle = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Ocr = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtractFieldsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.cancel = new System.Windows.Forms.Button();
@@ -90,9 +89,11 @@
             this.Help = new System.Windows.Forms.LinkLabel();
             this.label3 = new System.Windows.Forms.Label();
             this.About = new System.Windows.Forms.LinkLabel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.ExtractFieldsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
-            this.label19 = new System.Windows.Forms.Label();
+            this.FloatingAnchorId2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.ValueType2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Rectangle2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.anchorControl = new System.Windows.Forms.GroupBox();
+            this.markControl = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -102,22 +103,24 @@
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.floatingAnchorsContainer)).BeginInit();
-            this.floatingAnchorsContainer.Panel1.SuspendLayout();
-            this.floatingAnchorsContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.floatingAnchors)).BeginInit();
-            this.flowLayoutPanel4.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.autoDeskewThreshold)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureScale)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
             this.splitContainer3.Panel1.SuspendLayout();
             this.splitContainer3.Panel2.SuspendLayout();
             this.splitContainer3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.marksContainer)).BeginInit();
-            this.marksContainer.Panel1.SuspendLayout();
-            this.marksContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tablesContainer)).BeginInit();
+            this.tablesContainer.Panel1.SuspendLayout();
+            this.tablesContainer.Panel2.SuspendLayout();
+            this.tablesContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.floatingAnchors)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.documentFirstPageRecognitionMarks)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tableControlsContainer)).BeginInit();
+            this.tableControlsContainer.Panel1.SuspendLayout();
+            this.tableControlsContainer.Panel2.SuspendLayout();
+            this.tableControlsContainer.SuspendLayout();
+            this.flowLayoutPanel4.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.autoDeskewThreshold)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureScale)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).BeginInit();
             this.panel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
@@ -161,7 +164,7 @@
             // 
             // splitContainer2.Panel1
             // 
-            this.splitContainer2.Panel1.Controls.Add(this.floatingAnchorsContainer);
+            this.splitContainer2.Panel1.Controls.Add(this.splitContainer3);
             this.splitContainer2.Panel1.Controls.Add(this.status);
             this.splitContainer2.Panel1.Controls.Add(this.flowLayoutPanel4);
             this.splitContainer2.Panel1.Controls.Add(this.name);
@@ -182,40 +185,66 @@
             // 
             // splitContainer2.Panel2
             // 
-            this.splitContainer2.Panel2.Controls.Add(this.splitContainer3);
+            this.splitContainer2.Panel2.Controls.Add(this.fields);
+            this.splitContainer2.Panel2.Controls.Add(this.ExtractFieldsAutomaticallyWhenPageChanged);
+            this.splitContainer2.Panel2.Controls.Add(this.label19);
+            this.splitContainer2.Panel2.Controls.Add(this.label1);
+            this.splitContainer2.Panel2.Controls.Add(this.panel1);
             this.splitContainer2.Size = new System.Drawing.Size(429, 629);
-            this.splitContainer2.SplitterDistance = 380;
+            this.splitContainer2.SplitterDistance = 458;
             this.splitContainer2.TabIndex = 32;
             // 
-            // floatingAnchorsContainer
+            // splitContainer3
             // 
-            this.floatingAnchorsContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.splitContainer3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.floatingAnchorsContainer.Location = new System.Drawing.Point(0, 194);
-            this.floatingAnchorsContainer.Name = "floatingAnchorsContainer";
+            this.splitContainer3.Location = new System.Drawing.Point(0, 186);
+            this.splitContainer3.Name = "splitContainer3";
             // 
-            // floatingAnchorsContainer.Panel1
+            // splitContainer3.Panel1
             // 
-            this.floatingAnchorsContainer.Panel1.Controls.Add(this.floatingAnchors);
-            this.floatingAnchorsContainer.Panel1.Controls.Add(this.label10);
-            this.floatingAnchorsContainer.Size = new System.Drawing.Size(429, 184);
-            this.floatingAnchorsContainer.SplitterDistance = 222;
-            this.floatingAnchorsContainer.TabIndex = 52;
+            this.splitContainer3.Panel1.Controls.Add(this.tablesContainer);
+            // 
+            // splitContainer3.Panel2
+            // 
+            this.splitContainer3.Panel2.Controls.Add(this.tableControlsContainer);
+            this.splitContainer3.Size = new System.Drawing.Size(429, 273);
+            this.splitContainer3.SplitterDistance = 169;
+            this.splitContainer3.TabIndex = 52;
+            // 
+            // tablesContainer
+            // 
+            this.tablesContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tablesContainer.Location = new System.Drawing.Point(0, 0);
+            this.tablesContainer.Name = "tablesContainer";
+            this.tablesContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // tablesContainer.Panel1
+            // 
+            this.tablesContainer.Panel1.Controls.Add(this.floatingAnchors);
+            this.tablesContainer.Panel1.Controls.Add(this.label10);
+            // 
+            // tablesContainer.Panel2
+            // 
+            this.tablesContainer.Panel2.Controls.Add(this.documentFirstPageRecognitionMarks);
+            this.tablesContainer.Panel2.Controls.Add(this.label4);
+            this.tablesContainer.Size = new System.Drawing.Size(169, 273);
+            this.tablesContainer.SplitterDistance = 137;
+            this.tablesContainer.TabIndex = 52;
             // 
             // floatingAnchors
             // 
             this.floatingAnchors.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.floatingAnchors.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Id3,
-            this.ValueType3,
-            this.PositionDeviation3});
+            this.ValueType3});
             this.floatingAnchors.Dock = System.Windows.Forms.DockStyle.Fill;
             this.floatingAnchors.Location = new System.Drawing.Point(0, 13);
             this.floatingAnchors.MultiSelect = false;
             this.floatingAnchors.Name = "floatingAnchors";
             this.floatingAnchors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.floatingAnchors.Size = new System.Drawing.Size(222, 171);
+            this.floatingAnchors.Size = new System.Drawing.Size(169, 124);
             this.floatingAnchors.TabIndex = 50;
             // 
             // Id3
@@ -233,20 +262,57 @@
             this.ValueType3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.ValueType3.Width = 70;
             // 
-            // PositionDeviation3
-            // 
-            this.PositionDeviation3.HeaderText = "Deviation";
-            this.PositionDeviation3.Name = "PositionDeviation3";
-            this.PositionDeviation3.Width = 60;
-            // 
             // label10
             // 
             this.label10.Dock = System.Windows.Forms.DockStyle.Top;
             this.label10.Location = new System.Drawing.Point(0, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(222, 13);
+            this.label10.Size = new System.Drawing.Size(169, 13);
             this.label10.TabIndex = 49;
             this.label10.Text = "Floating Anchors:";
+            // 
+            // documentFirstPageRecognitionMarks
+            // 
+            this.documentFirstPageRecognitionMarks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.documentFirstPageRecognitionMarks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.FloatingAnchorId2,
+            this.ValueType2,
+            this.Rectangle2});
+            this.documentFirstPageRecognitionMarks.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.documentFirstPageRecognitionMarks.Location = new System.Drawing.Point(0, 13);
+            this.documentFirstPageRecognitionMarks.MultiSelect = false;
+            this.documentFirstPageRecognitionMarks.Name = "documentFirstPageRecognitionMarks";
+            this.documentFirstPageRecognitionMarks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.documentFirstPageRecognitionMarks.Size = new System.Drawing.Size(169, 119);
+            this.documentFirstPageRecognitionMarks.TabIndex = 29;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label4.Location = new System.Drawing.Point(0, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(201, 13);
+            this.label4.TabIndex = 26;
+            this.label4.Text = "Document First Page Recognition Marks:";
+            // 
+            // tableControlsContainer
+            // 
+            this.tableControlsContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableControlsContainer.Location = new System.Drawing.Point(0, 0);
+            this.tableControlsContainer.Name = "tableControlsContainer";
+            this.tableControlsContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // tableControlsContainer.Panel1
+            // 
+            this.tableControlsContainer.Panel1.Controls.Add(this.anchorControl);
+            // 
+            // tableControlsContainer.Panel2
+            // 
+            this.tableControlsContainer.Panel2.Controls.Add(this.markControl);
+            this.tableControlsContainer.Size = new System.Drawing.Size(256, 273);
+            this.tableControlsContainer.SplitterDistance = 137;
+            this.tableControlsContainer.TabIndex = 54;
             // 
             // status
             // 
@@ -570,89 +636,6 @@
             this.lTotalPages.TabIndex = 33;
             this.lTotalPages.Text = "Page";
             // 
-            // splitContainer3
-            // 
-            this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer3.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer3.Name = "splitContainer3";
-            this.splitContainer3.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer3.Panel1
-            // 
-            this.splitContainer3.Panel1.Controls.Add(this.marksContainer);
-            // 
-            // splitContainer3.Panel2
-            // 
-            this.splitContainer3.Panel2.Controls.Add(this.fields);
-            this.splitContainer3.Panel2.Controls.Add(this.panel1);
-            this.splitContainer3.Panel2.Controls.Add(this.label1);
-            this.splitContainer3.Panel2.Controls.Add(this.ExtractFieldsAutomaticallyWhenPageChanged);
-            this.splitContainer3.Panel2.Controls.Add(this.label19);
-            this.splitContainer3.Size = new System.Drawing.Size(429, 245);
-            this.splitContainer3.SplitterDistance = 93;
-            this.splitContainer3.TabIndex = 0;
-            // 
-            // marksContainer
-            // 
-            this.marksContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.marksContainer.Location = new System.Drawing.Point(0, 0);
-            this.marksContainer.Name = "marksContainer";
-            // 
-            // marksContainer.Panel1
-            // 
-            this.marksContainer.Panel1.Controls.Add(this.documentFirstPageRecognitionMarks);
-            this.marksContainer.Panel1.Controls.Add(this.label4);
-            this.marksContainer.Size = new System.Drawing.Size(429, 93);
-            this.marksContainer.SplitterDistance = 228;
-            this.marksContainer.TabIndex = 0;
-            // 
-            // documentFirstPageRecognitionMarks
-            // 
-            this.documentFirstPageRecognitionMarks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.documentFirstPageRecognitionMarks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.FloatingAnchorId2,
-            this.Rectangle2,
-            this.ValueType2});
-            this.documentFirstPageRecognitionMarks.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.documentFirstPageRecognitionMarks.Location = new System.Drawing.Point(0, 13);
-            this.documentFirstPageRecognitionMarks.MultiSelect = false;
-            this.documentFirstPageRecognitionMarks.Name = "documentFirstPageRecognitionMarks";
-            this.documentFirstPageRecognitionMarks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.documentFirstPageRecognitionMarks.Size = new System.Drawing.Size(228, 80);
-            this.documentFirstPageRecognitionMarks.TabIndex = 29;
-            // 
-            // FloatingAnchorId2
-            // 
-            this.FloatingAnchorId2.HeaderText = "Anchor";
-            this.FloatingAnchorId2.Name = "FloatingAnchorId2";
-            this.FloatingAnchorId2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.FloatingAnchorId2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.FloatingAnchorId2.Width = 50;
-            // 
-            // Rectangle2
-            // 
-            this.Rectangle2.HeaderText = "Rectangle";
-            this.Rectangle2.Name = "Rectangle2";
-            this.Rectangle2.ReadOnly = true;
-            this.Rectangle2.Width = 50;
-            // 
-            // ValueType2
-            // 
-            this.ValueType2.HeaderText = "Type";
-            this.ValueType2.Name = "ValueType2";
-            this.ValueType2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ValueType2.Width = 70;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label4.Location = new System.Drawing.Point(0, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(201, 13);
-            this.label4.TabIndex = 26;
-            this.label4.Text = "Document First Page Recognition Marks:";
-            // 
             // fields
             // 
             this.fields.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -667,7 +650,7 @@
             this.fields.MultiSelect = false;
             this.fields.Name = "fields";
             this.fields.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.fields.Size = new System.Drawing.Size(429, 104);
+            this.fields.Size = new System.Drawing.Size(429, 123);
             this.fields.TabIndex = 30;
             // 
             // Name_
@@ -705,16 +688,45 @@
             this.Value.Name = "Value";
             this.Value.ReadOnly = true;
             // 
+            // ExtractFieldsAutomaticallyWhenPageChanged
+            // 
+            this.ExtractFieldsAutomaticallyWhenPageChanged.AutoSize = true;
+            this.ExtractFieldsAutomaticallyWhenPageChanged.Location = new System.Drawing.Point(51, -1);
+            this.ExtractFieldsAutomaticallyWhenPageChanged.Name = "ExtractFieldsAutomaticallyWhenPageChanged";
+            this.ExtractFieldsAutomaticallyWhenPageChanged.Size = new System.Drawing.Size(198, 17);
+            this.ExtractFieldsAutomaticallyWhenPageChanged.TabIndex = 56;
+            this.ExtractFieldsAutomaticallyWhenPageChanged.Text = "Extract Fields When Page Changed]";
+            this.ExtractFieldsAutomaticallyWhenPageChanged.UseVisualStyleBackColor = true;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(44, 0);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(10, 13);
+            this.label19.TabIndex = 57;
+            this.label19.Text = "[";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label1.Location = new System.Drawing.Point(0, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(37, 13);
+            this.label1.TabIndex = 55;
+            this.label1.Text = "Fields:";
+            // 
             // panel1
             // 
             this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel1.Controls.Add(this.flowLayoutPanel1);
             this.panel1.Controls.Add(this.flowLayoutPanel3);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 117);
+            this.panel1.Location = new System.Drawing.Point(0, 136);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(429, 31);
-            this.panel1.TabIndex = 28;
+            this.panel1.TabIndex = 29;
             // 
             // flowLayoutPanel1
             // 
@@ -736,7 +748,6 @@
             this.cancel.TabIndex = 21;
             this.cancel.Text = "Cancel";
             this.cancel.UseVisualStyleBackColor = true;
-            this.cancel.Click += new System.EventHandler(this.cancel_Click);
             // 
             // save
             // 
@@ -747,7 +758,6 @@
             this.save.TabIndex = 20;
             this.save.Text = "OK";
             this.save.UseVisualStyleBackColor = true;
-            this.save.Click += new System.EventHandler(this.save_Click);
             // 
             // flowLayoutPanel3
             // 
@@ -776,7 +786,6 @@
             this.SaveAsInitialTemplate.TabStop = true;
             this.SaveAsInitialTemplate.Text = "Save As Initial Template";
             this.SaveAsInitialTemplate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.SaveAsInitialTemplate.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.SaveAsInitialTemplate_LinkClicked);
             // 
             // label15
             // 
@@ -797,7 +806,6 @@
             this.Configure.TabStop = true;
             this.Configure.Text = "Configure";
             this.Configure.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.Configure.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Configure_LinkClicked);
             // 
             // label16
             // 
@@ -818,7 +826,6 @@
             this.Help.TabStop = true;
             this.Help.Text = "Help";
             this.Help.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.Help.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Help_LinkClicked);
             // 
             // label3
             // 
@@ -839,36 +846,47 @@
             this.About.TabStop = true;
             this.About.Text = "About";
             this.About.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.About.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.About_LinkClicked);
             // 
-            // label1
+            // FloatingAnchorId2
             // 
-            this.label1.AutoSize = true;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label1.Location = new System.Drawing.Point(0, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(37, 13);
-            this.label1.TabIndex = 29;
-            this.label1.Text = "Fields:";
+            this.FloatingAnchorId2.HeaderText = "Anchor";
+            this.FloatingAnchorId2.Name = "FloatingAnchorId2";
+            this.FloatingAnchorId2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.FloatingAnchorId2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.FloatingAnchorId2.Width = 50;
             // 
-            // ExtractFieldsAutomaticallyWhenPageChanged
+            // ValueType2
             // 
-            this.ExtractFieldsAutomaticallyWhenPageChanged.AutoSize = true;
-            this.ExtractFieldsAutomaticallyWhenPageChanged.Location = new System.Drawing.Point(51, -1);
-            this.ExtractFieldsAutomaticallyWhenPageChanged.Name = "ExtractFieldsAutomaticallyWhenPageChanged";
-            this.ExtractFieldsAutomaticallyWhenPageChanged.Size = new System.Drawing.Size(198, 17);
-            this.ExtractFieldsAutomaticallyWhenPageChanged.TabIndex = 53;
-            this.ExtractFieldsAutomaticallyWhenPageChanged.Text = "Extract Fields When Page Changed]";
-            this.ExtractFieldsAutomaticallyWhenPageChanged.UseVisualStyleBackColor = true;
+            this.ValueType2.HeaderText = "Type";
+            this.ValueType2.Name = "ValueType2";
+            this.ValueType2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.ValueType2.Width = 70;
             // 
-            // label19
+            // Rectangle2
             // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(44, 0);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(10, 13);
-            this.label19.TabIndex = 54;
-            this.label19.Text = "[";
+            this.Rectangle2.HeaderText = "Rectangle";
+            this.Rectangle2.Name = "Rectangle2";
+            this.Rectangle2.Visible = false;
+            // 
+            // anchorControl
+            // 
+            this.anchorControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.anchorControl.Location = new System.Drawing.Point(0, 0);
+            this.anchorControl.Name = "anchorControl";
+            this.anchorControl.Size = new System.Drawing.Size(256, 137);
+            this.anchorControl.TabIndex = 0;
+            this.anchorControl.TabStop = false;
+            this.anchorControl.Text = "Anchor";
+            // 
+            // markControl
+            // 
+            this.markControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.markControl.Location = new System.Drawing.Point(0, 0);
+            this.markControl.Name = "markControl";
+            this.markControl.Size = new System.Drawing.Size(256, 132);
+            this.markControl.TabIndex = 1;
+            this.markControl.TabStop = false;
+            this.markControl.Text = "Mark";
             // 
             // TemplateForm
             // 
@@ -887,28 +905,30 @@
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel1.PerformLayout();
             this.splitContainer2.Panel2.ResumeLayout(false);
+            this.splitContainer2.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
-            this.floatingAnchorsContainer.Panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.floatingAnchorsContainer)).EndInit();
-            this.floatingAnchorsContainer.ResumeLayout(false);
+            this.splitContainer3.Panel1.ResumeLayout(false);
+            this.splitContainer3.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
+            this.splitContainer3.ResumeLayout(false);
+            this.tablesContainer.Panel1.ResumeLayout(false);
+            this.tablesContainer.Panel2.ResumeLayout(false);
+            this.tablesContainer.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tablesContainer)).EndInit();
+            this.tablesContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.floatingAnchors)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.documentFirstPageRecognitionMarks)).EndInit();
+            this.tableControlsContainer.Panel1.ResumeLayout(false);
+            this.tableControlsContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.tableControlsContainer)).EndInit();
+            this.tableControlsContainer.ResumeLayout(false);
             this.flowLayoutPanel4.ResumeLayout(false);
             this.flowLayoutPanel4.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.autoDeskewThreshold)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureScale)).EndInit();
-            this.splitContainer3.Panel1.ResumeLayout(false);
-            this.splitContainer3.Panel2.ResumeLayout(false);
-            this.splitContainer3.Panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
-            this.splitContainer3.ResumeLayout(false);
-            this.marksContainer.Panel1.ResumeLayout(false);
-            this.marksContainer.Panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.marksContainer)).EndInit();
-            this.marksContainer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.documentFirstPageRecognitionMarks)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -923,11 +943,7 @@
 
         private System.Windows.Forms.PictureBox picture;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.Button cancel;
-        private System.Windows.Forms.Button save;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.DataGridView fields;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox testFile;
         private System.Windows.Forms.Button bTestFile;
@@ -952,39 +968,44 @@
         private System.Windows.Forms.DataGridView floatingAnchors;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.SplitContainer splitContainer2;
-        private System.Windows.Forms.SplitContainer splitContainer3;
-        private System.Windows.Forms.LinkLabel SaveAsInitialTemplate;
         private System.Windows.Forms.NumericUpDown autoDeskewThreshold;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
-        private System.Windows.Forms.LinkLabel About;
-        private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.LinkLabel Configure;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel4;
         private System.Windows.Forms.LinkLabel ShowPdfText;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.LinkLabel ShowOcrText;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.LinkLabel IsDocumentFirstPage;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.LinkLabel Help;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Name_;
         private System.Windows.Forms.DataGridViewComboBoxColumn FloatingAnchorId;
         private System.Windows.Forms.DataGridViewTextBoxColumn Rectangle;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Ocr;
         private System.Windows.Forms.DataGridViewTextBoxColumn Value;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.SplitContainer tablesContainer;
+        private System.Windows.Forms.SplitContainer splitContainer3;
+        private System.Windows.Forms.SplitContainer tableControlsContainer;
         private System.Windows.Forms.CheckBox ExtractFieldsAutomaticallyWhenPageChanged;
         private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.SplitContainer floatingAnchorsContainer;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.Button cancel;
+        private System.Windows.Forms.Button save;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
+        private System.Windows.Forms.LinkLabel SaveAsInitialTemplate;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.LinkLabel Configure;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.LinkLabel Help;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.LinkLabel About;
         private System.Windows.Forms.DataGridViewTextBoxColumn Id3;
         private System.Windows.Forms.DataGridViewComboBoxColumn ValueType3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn PositionDeviation3;
-        private System.Windows.Forms.SplitContainer marksContainer;
         private System.Windows.Forms.DataGridViewComboBoxColumn FloatingAnchorId2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Rectangle2;
         private System.Windows.Forms.DataGridViewComboBoxColumn ValueType2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Rectangle2;
+        private System.Windows.Forms.GroupBox anchorControl;
+        private System.Windows.Forms.GroupBox markControl;
     }
 }

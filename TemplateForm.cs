@@ -57,7 +57,6 @@ namespace Cliver.PdfDocumentParser
             this.testFileDefaultFolder = testFileDefaultFolder;
 
             Id3.ValueType = typeof(int);
-            PositionDeviation3.ValueType = typeof(float);
             ValueType3.ValueType = typeof(Template.ValueTypes);
             ValueType3.DataSource = Enum.GetValues(typeof(Template.ValueTypes));
 
@@ -779,6 +778,12 @@ namespace Cliver.PdfDocumentParser
                 if (documentFirstPageRecognitionMarks.Rows.Count > 0 && !documentFirstPageRecognitionMarks.Rows[0].IsNewRow)
                     documentFirstPageRecognitionMarks.Rows[0].Selected = true;
             };
+
+            save.Click += Save_Click;
+            Help.LinkClicked += Help_LinkClicked;
+            SaveAsInitialTemplate.LinkClicked += SaveAsInitialTemplate_LinkClicked;
+            Configure.LinkClicked += Configure_LinkClicked;
+            cancel.Click += delegate { Close(); };
         }
 
         private void bTestFile_Click(object sender, EventArgs e)

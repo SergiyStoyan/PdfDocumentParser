@@ -46,6 +46,8 @@ namespace Cliver.PdfDocumentParser
                 currentFloatingAnchorControl = null;
                 return;
             }
+            if (currentFloatingAnchorRow == row)
+                return;
             currentFloatingAnchorRow = row;
             Template.ValueTypes valueType = (Template.ValueTypes)row.Cells["ValueType3"].Value;
             Control c = null;
@@ -75,16 +77,16 @@ namespace Cliver.PdfDocumentParser
         {
             get
             {
-                if (floatingAnchorsContainer.Panel2.Controls.Count < 1)
+                if (anchorControl.Controls.Count < 1)
                     return null;
-                return floatingAnchorsContainer.Panel2.Controls[0];
+                return anchorControl.Controls[0];
             }
             set
             {
-                floatingAnchorsContainer.Panel2.Controls.Clear();
+                anchorControl.Controls.Clear();
                 if (value == null)
                     return;
-                floatingAnchorsContainer.Panel2.Controls.Add(value);
+                anchorControl.Controls.Add(value);
                 value.Dock = DockStyle.Fill;
             }
         }
@@ -113,16 +115,18 @@ namespace Cliver.PdfDocumentParser
                 setFloatingAnchorValue(currentFloatingAnchorRow, value);
         }
 
-        void setMarkValue(DataGridViewRow row, object value)
+        void setMarkValue(DataGridViewRow row, Template.Mark.BaseValue value)
         {
+            Template.Mark.BaseValue value0 = (Template.Mark.BaseValue)row.Tag;
             row.Tag = value;
             if (loadingTemplate)
                 return;
+
             setMarkControl(row);
         }
         void setMarkControl(DataGridViewRow row)
         {
-            if (row == null || !row.Selected || row.IsNewRow || row.Tag == null || !documentFirstPageRecognitionMarks.Rows.Contains(row))
+            if (row == null || !row.Selected || row.IsNewRow || !documentFirstPageRecognitionMarks.Rows.Contains(row))
             {
                 //if (row != null)
                 //{
@@ -136,9 +140,11 @@ namespace Cliver.PdfDocumentParser
                 currentMarkControl = null;
                 return;
             }
+            if (currentMarkRow == row)
+                return;
             currentMarkRow = row;
-            Template.RectangleF r = (Template.RectangleF)row.Cells["Rectangle2"].Value;
             Template.ValueTypes valueType = (Template.ValueTypes)row.Cells["ValueType2"].Value;
+            Template.RectangleF r = (Template.RectangleF)row.Cells["Rectangle2"].Value;
             Control c = null;
             switch (valueType)
             {
@@ -166,16 +172,16 @@ namespace Cliver.PdfDocumentParser
         {
             get
             {
-                if (marksContainer.Panel2.Controls.Count < 1)
+                if (markControl.Controls.Count < 1)
                     return null;
-                return marksContainer.Panel2.Controls[0];
+                return markControl.Controls[0];
             }
             set
             {
-                marksContainer.Panel2.Controls.Clear();
+                markControl.Controls.Clear();
                 if (value == null)
                     return;
-                marksContainer.Panel2.Controls.Add(value);
+                markControl.Controls.Add(value);
                 value.Dock = DockStyle.Fill;
             }
         }
@@ -185,7 +191,7 @@ namespace Cliver.PdfDocumentParser
             if (currentMarkRow == null || currentMarkRow.Index < 0)//removed row
                 return;
             //    var cs = currentfloatingAnchorRow.Cells;
-            object value = null;
+            Template.Mark.BaseValue value = null;
             Template.ValueTypes valueType = (Template.ValueTypes)currentMarkRow.Cells["ValueType2"].Value;
             switch (valueType)
             {
@@ -383,8 +389,7 @@ namespace Cliver.PdfDocumentParser
                         var cs = floatingAnchors.Rows[i].Cells;
                         cs["Id3"].Value = fa.Id;
                         cs["ValueType3"].Value = fa.ValueType;
-                        cs["PositionDeviation3"].Value = fa.PositionDeviation;
-                        setFloatingAnchorValue(floatingAnchors.Rows[i], fa.GetValue());
+                        setFloatingAnchorValue(floatingAnchors.Rows[i], fa.Value);
                     }
                     onFloatingAnchorsChanged(null);
                 }
@@ -400,7 +405,7 @@ namespace Cliver.PdfDocumentParser
                         cs["Rectangle2"].Value = m.Rectangle;
                         cs["ValueType2"].Value = m.ValueType;
                         cs["FloatingAnchorId2"].Value = m.FloatingAnchorId;
-                        setMarkValue(row, m.GetValue());
+                        setMarkValue(row, m.Value);
                     }
                 }
 
@@ -491,7 +496,7 @@ namespace Cliver.PdfDocumentParser
             templateManager.HelpRequest();
         }
 
-        private void save_Click(object sender, EventArgs e)
+        private void Save_Click(object sender, EventArgs e)
         {
             try
             {
@@ -569,18 +574,11 @@ namespace Cliver.PdfDocumentParser
                         }
                     }
 
-                    if (r.Cells["PositionDeviation3"].Value == null)
-                        r.Cells["PositionDeviation3"].Value = Settings.ImageProcessing.CoordinateDeviationMargin;//it must be > 0
-                    float positionDeviation = (float)r.Cells["PositionDeviation3"].Value;
-                    if (positionDeviation <= 0)
-                        throw new Exception("FloatingAnchor[" + (int)r.Cells["Id3"].Value + "] has wrong Deviation. Deviation always must be a positive floating number due to internal image re-scaling.");
-
                     Template.FloatingAnchor fa = new Template.FloatingAnchor
                     {
                         Id = floatingAnchorId,
                         ValueType = (Template.ValueTypes)r.Cells["ValueType3"].Value,
-                        PositionDeviation = positionDeviation,
-                        ValueAsString = Template.FloatingAnchor.GetValueAsString((Template.ValueTypes)r.Cells["ValueType3"].Value, r.Tag),
+                        Value = r.Tag,
                     };
                     //if (fa.GetValue() == null)
                     //    throw new Exception("FloatingAnchor[" + fa.Id + "] is not set.");
@@ -603,9 +601,9 @@ namespace Cliver.PdfDocumentParser
                     Template.Mark m = new Template.Mark
                     {
                         FloatingAnchorId = (int?)r.Cells["FloatingAnchorId2"].Value,
-                        Rectangle = (Template.RectangleF)r.Cells["Rectangle2"].Value,
                         ValueType = (Template.ValueTypes)r.Cells["ValueType2"].Value,
-                        ValueAsString = Template.Mark.GetValueAsString((Template.ValueTypes)r.Cells["ValueType2"].Value, r.Tag)
+                        Rectangle = (Template.RectangleF)r.Cells["Rectangle2"].Value,
+                        Value = (Template.Mark.BaseValue)r.Tag,
                     };
                     if (m.FloatingAnchorId != null && t.FloatingAnchors.FirstOrDefault(x => x.Id == m.FloatingAnchorId) == null)
                         throw new Exception("There is no FloatingAnchor with Id=" + m.FloatingAnchorId);

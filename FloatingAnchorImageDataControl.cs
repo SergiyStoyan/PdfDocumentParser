@@ -26,6 +26,8 @@ namespace Cliver.PdfDocumentParser
                 _value.FindBestImageMatch = FindBestImageMatch.Checked;
                 _value.BrightnessTolerance = (float)BrightnessTolerance.Value;
                 _value.DifferentPixelNumberTolerance = (float)DifferentPixelNumberTolerance.Value;
+                //_value.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
+                _value.PositionDeviation = (float)PositionDeviation.Value;
                 return _value;
             }
             set
@@ -38,6 +40,11 @@ namespace Cliver.PdfDocumentParser
                 DifferentPixelNumberTolerance.Value = (decimal)value.DifferentPixelNumberTolerance;
                 if (value.ImageBoxs != null && value.ImageBoxs.Count > 0)
                     picture.Image = value.ImageBoxs[0].ImageData.GetImage();
+                try
+                {
+                    PositionDeviation.Value = (decimal)value.PositionDeviation;
+                }
+                catch { }
             }
         }
         Template.FloatingAnchor.ImageDataValue _value;

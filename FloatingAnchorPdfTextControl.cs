@@ -24,6 +24,7 @@ namespace Cliver.PdfDocumentParser
             get
             {
                 _value.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
+                _value.PositionDeviation = (float)PositionDeviation.Value;
                 return _value;
             }
             set
@@ -41,6 +42,11 @@ namespace Cliver.PdfDocumentParser
                 text.Text = sb.ToString();
 
                 PositionDeviationIsAbsolute.Checked = value.PositionDeviationIsAbsolute;
+                try
+                {
+                    PositionDeviation.Value = (decimal)value.PositionDeviation;
+                }
+                catch { }
             }
         }
         Template.FloatingAnchor.PdfTextValue _value;

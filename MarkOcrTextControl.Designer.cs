@@ -28,26 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.rectangle = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.text = new System.Windows.Forms.RichTextBox();
             this.label20 = new System.Windows.Forms.Label();
+            this.rectangle = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
-            // 
-            // rectangle
-            // 
-            this.rectangle.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.rectangle.Location = new System.Drawing.Point(-2, 58);
-            this.rectangle.Name = "rectangle";
-            this.rectangle.ReadOnly = true;
-            this.rectangle.Size = new System.Drawing.Size(162, 49);
-            this.rectangle.TabIndex = 72;
-            this.rectangle.Text = "";
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(1, 42);
             this.label1.Name = "label1";
@@ -57,7 +46,8 @@
             // 
             // text
             // 
-            this.text.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.text.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.text.Location = new System.Drawing.Point(-2, 13);
             this.text.Name = "text";
@@ -75,6 +65,16 @@
             this.label20.TabIndex = 69;
             this.label20.Text = "Text:";
             // 
+            // rectangle
+            // 
+            this.rectangle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rectangle.Location = new System.Drawing.Point(0, 58);
+            this.rectangle.Name = "rectangle";
+            this.rectangle.ReadOnly = true;
+            this.rectangle.Size = new System.Drawing.Size(160, 20);
+            this.rectangle.TabIndex = 72;
+            // 
             // MarkOcrTextControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -84,17 +84,16 @@
             this.Controls.Add(this.text);
             this.Controls.Add(this.label20);
             this.Name = "MarkOcrTextControl";
-            this.Size = new System.Drawing.Size(160, 107);
+            this.Size = new System.Drawing.Size(160, 79);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.RichTextBox rectangle;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RichTextBox text;
         private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.TextBox rectangle;
     }
 }

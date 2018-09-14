@@ -196,14 +196,14 @@ namespace Cliver.PdfDocumentParser
 
         List<RectangleF> findFloatingAnchor(Template.FloatingAnchor fa)
         {
-            if (fa == null || fa.GetValue() == null)
+            if (fa == null || fa.Value == null)
                 return null;
 
             switch (fa.ValueType)
             {
                 case Template.ValueTypes.PdfText:
                     {
-                        Template.FloatingAnchor.PdfTextValue ptv = (Template.FloatingAnchor.PdfTextValue)fa.GetValue();
+                        Template.FloatingAnchor.PdfTextValue ptv = (Template.FloatingAnchor.PdfTextValue)fa.Value;
                         List<Template.FloatingAnchor.PdfTextValue.CharBox> faes = ptv.CharBoxs;
                         if (faes.Count < 1)
                             return null;
@@ -222,15 +222,11 @@ namespace Cliver.PdfDocumentParser
                                 }
                                 else
                                 {
-                                    //float xd = (bts[i - 1].R.X - bts[0].R.X) - (faes[i - 1].Rectangle.X - faes[0].Rectangle.X);
-                                    //float yd = (bts[i - 1].R.Y - bts[0].R.Y) - (faes[i - 1].Rectangle.Y - faes[0].Rectangle.Y);
-                                    //x = bt0.R.X + faes[i].Rectangle.X - faes[0].Rectangle.X + xd;
-                                    //y = bt0.R.Y + faes[i].Rectangle.Y - faes[0].Rectangle.Y + xd;
                                     x = bts[i - 1].R.X + faes[i].Rectangle.X - faes[i - 1].Rectangle.X;
                                     y = bts[i - 1].R.Y + faes[i].Rectangle.Y - faes[i - 1].Rectangle.Y;
                                 }
                                 foreach (Pdf.CharBox bt in PdfCharBoxs.Where(a => a.Char == faes[i].Char))
-                                    if (Math.Abs(bt.R.X - x) <= fa.PositionDeviation && Math.Abs(bt.R.Y - y) <= fa.PositionDeviation)
+                                    if (Math.Abs(bt.R.X - x) <= ptv.PositionDeviation && Math.Abs(bt.R.Y - y) <= ptv.PositionDeviation)
                                     {
                                         bts.Add(bt);
                                         break;
@@ -245,7 +241,8 @@ namespace Cliver.PdfDocumentParser
                     return null;
                 case Template.ValueTypes.OcrText:
                     {
-                        List<Template.FloatingAnchor.OcrTextValue.CharBox> faes = ((Template.FloatingAnchor.OcrTextValue)fa.GetValue()).CharBoxs;
+                        Template.FloatingAnchor.OcrTextValue otv = (Template.FloatingAnchor.OcrTextValue)fa.Value;
+                        List<Template.FloatingAnchor.OcrTextValue.CharBox> faes = otv.CharBoxs;
                         if (faes.Count < 1)
                             return null;
                         List<Ocr.CharBox> bts = new List<Ocr.CharBox>();
@@ -258,7 +255,7 @@ namespace Cliver.PdfDocumentParser
                                 float x = bt0.R.X + faes[i].Rectangle.X - faes[0].Rectangle.X;
                                 float y = bt0.R.Y + faes[i].Rectangle.Y - faes[0].Rectangle.Y;
                                 foreach (Ocr.CharBox bt in ActiveTemplateOcrCharBoxs.Where(a => a.Char == faes[i].Char))
-                                    if (Math.Abs(bt.R.X - x) <= fa.PositionDeviation && Math.Abs(bt.R.Y - y) <= fa.PositionDeviation)
+                                    if (Math.Abs(bt.R.X - x) <= otv.PositionDeviation && Math.Abs(bt.R.Y - y) <= otv.PositionDeviation)
                                     {
                                         bts.Add(bt);
                                         break;
@@ -272,7 +269,7 @@ namespace Cliver.PdfDocumentParser
                     }
                     return null;
                 case Template.ValueTypes.ImageData:
-                    Template.FloatingAnchor.ImageDataValue idv = (Template.FloatingAnchor.ImageDataValue)fa.GetValue();
+                    Template.FloatingAnchor.ImageDataValue idv = (Template.FloatingAnchor.ImageDataValue)fa.Value;
                     List<Template.FloatingAnchor.ImageDataValue.ImageBox> ibs = idv.ImageBoxs;
                     if (ibs.Count < 1)
                         return null;
@@ -290,7 +287,7 @@ namespace Cliver.PdfDocumentParser
                             //    if (!ibs[i].ImageData.ImageIsSimilar(new ImageData(rb), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance))
                             //        return true;
                             //}
-                            Template.RectangleF r = new Template.RectangleF(point0.X + ibs[i].Rectangle.X - ibs[0].Rectangle.X - fa.PositionDeviation, point0.Y + ibs[i].Rectangle.Y - ibs[0].Rectangle.Y - fa.PositionDeviation, ibs[i].Rectangle.Width + fa.PositionDeviation, ibs[i].Rectangle.Height + fa.PositionDeviation);
+                            Template.RectangleF r = new Template.RectangleF(point0.X + ibs[i].Rectangle.X - ibs[0].Rectangle.X - idv.PositionDeviation, point0.Y + ibs[i].Rectangle.Y - ibs[0].Rectangle.Y - idv.PositionDeviation, ibs[i].Rectangle.Width + idv.PositionDeviation, ibs[i].Rectangle.Height + idv.PositionDeviation);
                             using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Y / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height / Settings.ImageProcessing.Image2PdfResolutionRatio))
                             {
                                 if (null == ibs[i].ImageData.FindWithinImage(new ImageData(rb), idv.BrightnessTolerance, idv.DifferentPixelNumberTolerance, false))
@@ -366,7 +363,7 @@ namespace Cliver.PdfDocumentParser
             }
             foreach (Template.Mark m in pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks)
             {
-                if (m.FloatingAnchorId != null && m.GetValue() == null)
+                if (m.FloatingAnchorId != null && m.Value == null)
                 {
                     PointF? p0 = GetFloatingAnchorPoint0((int)m.FloatingAnchorId);
                     if (p0 == null)
@@ -383,7 +380,7 @@ namespace Cliver.PdfDocumentParser
                 {
                     case Template.ValueTypes.PdfText:
                         {
-                            Template.Mark.PdfTextValue ptv1 = (Template.Mark.PdfTextValue)m.GetValue();
+                            Template.Mark.PdfTextValue ptv1 = (Template.Mark.PdfTextValue)m.Value;
                             string t1 = NormalizeText(ptv1.Text);
                             string t2 = NormalizeText((string)v2);
                             if (t1 == t2)
@@ -393,7 +390,7 @@ namespace Cliver.PdfDocumentParser
                         }
                     case Template.ValueTypes.OcrText:
                         {
-                            Template.Mark.OcrTextValue otv1 = (Template.Mark.OcrTextValue)m.GetValue();
+                            Template.Mark.OcrTextValue otv1 = (Template.Mark.OcrTextValue)m.Value;
                             string t1 = NormalizeText(otv1.Text);
                             string t2 = NormalizeText((string)v2);
                             if (t1 == t2)
@@ -403,7 +400,7 @@ namespace Cliver.PdfDocumentParser
                         }
                     case Template.ValueTypes.ImageData:
                         {
-                            Template.Mark.ImageDataValue idv1 = (Template.Mark.ImageDataValue)m.GetValue();
+                            Template.Mark.ImageDataValue idv1 = (Template.Mark.ImageDataValue)m.Value;
                             if (idv1.ImageData.ImageIsSimilar((ImageData)v2, idv1.BrightnessTolerance, idv1.DifferentPixelNumberTolerance))
                                 continue;
                             error = "documentFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.IndexOf(m) + "]: image is not similar.";

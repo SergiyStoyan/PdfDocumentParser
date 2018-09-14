@@ -23,6 +23,8 @@ namespace Cliver.PdfDocumentParser
         {
             get
             {
+                //_value.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
+                _value.PositionDeviation = (float)PositionDeviation.Value;
                 return _value;
             }
             set
@@ -38,6 +40,11 @@ namespace Cliver.PdfDocumentParser
                     sb.Append("\r\n");
                 }
                 text.Text = sb.ToString();
+                try
+                {
+                    PositionDeviation.Value = (decimal)value.PositionDeviation;
+                }
+                catch { }
             }
         }
         Template.FloatingAnchor.OcrTextValue _value;

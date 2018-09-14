@@ -17,7 +17,7 @@ namespace Cliver.PdfDocumentParser
             InitializeComponent();
 
             Value = value;
-            //this.rectangle.Text = SerializationRoutines.Json.Serialize(rectangle);
+            this.rectangle.Text = SerializationRoutines.Json.Serialize(rectangle);
         }
 
         public Template.Mark.ImageDataValue Value

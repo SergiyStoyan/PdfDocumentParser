@@ -97,7 +97,7 @@ namespace Cliver.PdfDocumentParser
         {
             //serialize
             public int? FloatingAnchorId;//when set, Rectangle.X,Y are bound to location of the anchor as to zero point
-                                         //serialize
+            //serialize
             public RectangleF Rectangle;
             //serialize
             public ValueTypes ValueType = ValueTypes.PdfText;
@@ -106,34 +106,65 @@ namespace Cliver.PdfDocumentParser
             {
                 get
                 {
-                    return GetValueAsString(ValueType, value);
+                    if (Value == null)
+                        return null;
+                    switch (ValueType)
+                    {
+                        case ValueTypes.PdfText:
+                            return SerializationRoutines.Json.Serialize(Value, false);
+                        case ValueTypes.OcrText:
+                            return SerializationRoutines.Json.Serialize(Value, false);
+                        case ValueTypes.ImageData:
+                            return SerializationRoutines.Json.Serialize(Value, false);
+                        default:
+                            throw new Exception("Unknown option: " + ValueType);
+                    }
                 }
                 set
                 {
-                    this.value = GetValueFromString(ValueType, value);
+                    if (value == null)
+                    {
+                        Value = null;
+                        return;
+                    }
+                    switch (ValueType)
+                    {
+                        case ValueTypes.PdfText:
+                            Value = SerializationRoutines.Json.Deserialize<PdfTextValue>(value);
+                            break;
+                        case ValueTypes.OcrText:
+                            Value = SerializationRoutines.Json.Deserialize<OcrTextValue>(value);
+                            break;
+                        case ValueTypes.ImageData:
+                            Value = SerializationRoutines.Json.Deserialize<ImageDataValue>(value);
+                            break;
+                        default:
+                            throw new Exception("Unknown option: " + ValueType);
+                    }
+
                     ////TEMPORARY: trasferring to a new version
                     //switch (ValueType)
                     //{
                     //    case ValueTypes.PdfText:
-                    //        var ptv = (PdfTextValue)this.value;
-                    //        if (ptv.Rectangle == null && this.Rectangle!=null)
+                    //        if (this.Rectangle != null)
                     //        {
+                    //            var ptv = (PdfTextValue)Value;
                     //            ptv.Rectangle = this.Rectangle;
                     //            this.Rectangle = null;
                     //        }
                     //        break;
                     //    case ValueTypes.OcrText:
-                    //        var otv = (OcrTextValue)this.value;
-                    //        if (otv.Rectangle == null && this.Rectangle != null)
+                    //        if (this.Rectangle != null)
                     //        {
+                    //            var otv = (OcrTextValue)Value;
                     //            otv.Rectangle = this.Rectangle;
                     //            this.Rectangle = null;
                     //        }
                     //        break;
                     //    case ValueTypes.ImageData:
-                    //        var idv = (ImageDataValue)this.value;
-                    //        if (idv.Rectangle == null && this.Rectangle != null)
+                    //        if (this.Rectangle != null)
                     //        {
+                    //            var idv = (ImageDataValue)Value;
                     //            idv.Rectangle = this.Rectangle;
                     //            this.Rectangle = null;
                     //        }
@@ -143,58 +174,29 @@ namespace Cliver.PdfDocumentParser
                     //}
                 }
             }
+            
+            //not to serialize!
+            internal BaseValue Value { get; set; }
 
-            static public string GetValueAsString(ValueType valueType, object value)
+            public class BaseValue
             {
-                if (value == null)
-                    return null;
-                switch (valueType)
-                {
-                    case ValueTypes.PdfText:
-                        return SerializationRoutines.Json.Serialize(value, false);
-                    case ValueTypes.OcrText:
-                        return SerializationRoutines.Json.Serialize(value, false);
-                    case ValueTypes.ImageData:
-                        return SerializationRoutines.Json.Serialize(value, false);
-                    default:
-                        throw new Exception("Unknown option: " + valueType);
-                }
+                //public RectangleF Rectangle
+                //{
+                //    get { return; }
+                //}
+                //RectangleF rectangle;
             }
-
-            static public object GetValueFromString(ValueTypes valueType, string value)
-            {
-                if (value == null)
-                    return null;
-                switch (valueType)
-                {
-                    case ValueTypes.PdfText:
-                            return SerializationRoutines.Json.Deserialize<PdfTextValue>(value);
-                    case ValueTypes.OcrText:
-                            return SerializationRoutines.Json.Deserialize<OcrTextValue>(value);
-                    case ValueTypes.ImageData:
-                        return SerializationRoutines.Json.Deserialize<ImageDataValue>(value);
-                    default:
-                        throw new Exception("Unknown option: " + valueType);
-                }
-            }
-
-            public object GetValue()
-            {
-                return value;
-            }
-            object value;
-
-            public class PdfTextValue
+            public class PdfTextValue: BaseValue
             {
                 //public RectangleF Rectangle;
                 public string Text;
             }
-            public class OcrTextValue
+            public class OcrTextValue: BaseValue
             {
                 //public RectangleF Rectangle;
                 public string Text;
             }
-            public class ImageDataValue
+            public class ImageDataValue: BaseValue
             {
                 //public RectangleF Rectangle;
                 public ImageData ImageData;
@@ -232,92 +234,78 @@ namespace Cliver.PdfDocumentParser
             {
                 get
                 {
-                    return GetValueAsString(ValueType, value);
+                    if (Value == null)
+                        return null;
+                    switch (ValueType)
+                    {
+                        case ValueTypes.PdfText:
+                            return SerializationRoutines.Json.Serialize(Value, false);
+                        case ValueTypes.OcrText:
+                            return SerializationRoutines.Json.Serialize(Value, false);
+                        case ValueTypes.ImageData:
+                            //byte[] bs = SerializationRoutines.Binary.Serialize(value);//more compact
+                            //s = SerializationRoutines.Json.Serialize(bs, false);
+                            return SerializationRoutines.Json.Serialize(Value, false);
+                        default:
+                            throw new Exception("Unknown option: " + ValueType);
+                    }
                 }
                 set
                 {
-                    this.value = GetValueFromString(ValueType, value);
-                    ////TEMPORARY: trasferring to a new version
-                    //switch (ValueType)
-                    //{
-                    //    case ValueTypes.PdfText:
-                    //        var ptv = (PdfTextValue)this.value;
-                    //        if (ptv.PositionDeviation < this.PositionDeviation)
-                    //        {
-                    //            ptv.PositionDeviation = this.PositionDeviation;
-                    //            this.PositionDeviation = -1;
-                    //        }
-                    //        break;
-                    //case ValueTypes.OcrText:
-                    //        var otv = (OcrTextValue)this.value;
-                    //        if (otv.PositionDeviation < this.PositionDeviation)
-                    //        {
-                    //            otv.PositionDeviation = this.PositionDeviation;
-                    //            this.PositionDeviation = -1;
-                    //        }
-                    //        break;
-                    //    case ValueTypes.ImageData:
-                    //        var idv = (ImageDataValue)this.value;
-                    //        if (idv.PositionDeviation < this.PositionDeviation)
-                    //        {
-                    //            idv.PositionDeviation = this.PositionDeviation;
-                    //            this.PositionDeviation = -1;
-                    //        }
-                    //        break;
-                    //    default:
-                    //        throw new Exception("Unknown option: " + ValueType);
-                    //}
+                    if (value == null)
+                    {
+                        Value = null;
+                        return;
+                    }
+                    switch (ValueType)
+                    {
+                        case ValueTypes.PdfText:
+                            Value = SerializationRoutines.Json.Deserialize<PdfTextValue>(value);
+                            break;
+                        case ValueTypes.OcrText:
+                            Value = SerializationRoutines.Json.Deserialize<OcrTextValue>(value);
+                            break;
+                        case ValueTypes.ImageData:
+                            //byte[] bs = SerializationRoutines.Json.Deserialize<byte[]>(value);
+                            //this.value = SerializationRoutines.Binary.Deserialize<ImageDataValue>(bs);
+                            Value = SerializationRoutines.Json.Deserialize<ImageDataValue>(value);
+                            break;
+                        default:
+                            throw new Exception("Unknown option: " + ValueType);
+                    }
+
+                    //TEMPORARY: transferring to a new version
+                    switch (ValueType)
+                    {
+                        case ValueTypes.PdfText:
+                            var ptv = (PdfTextValue)this.Value;
+                            if (this.PositionDeviation > 0)
+                                ptv.PositionDeviation = this.PositionDeviation;
+                            break;
+                        case ValueTypes.OcrText:
+                            var otv = (OcrTextValue)this.Value;
+                            if (this.PositionDeviation > 0)
+                                otv.PositionDeviation = this.PositionDeviation;
+                            break;
+                        case ValueTypes.ImageData:
+                            var idv = (ImageDataValue)this.Value;
+                            if (this.PositionDeviation > 0)
+                                idv.PositionDeviation = this.PositionDeviation;
+                            break;
+                        default:
+                            throw new Exception("Unknown option: " + ValueType);
+                    }
+                    this.PositionDeviation = -1;
                 }
             }
 
-            static public string GetValueAsString(ValueTypes valueType, object value)
-            {
-                if (value == null)
-                    return null;
-                switch (valueType)
-                {
-                    case ValueTypes.PdfText:
-                        return SerializationRoutines.Json.Serialize(value, false);
-                    case ValueTypes.OcrText:
-                        return SerializationRoutines.Json.Serialize(value, false);
-                    case ValueTypes.ImageData:
-                        //byte[] bs = SerializationRoutines.Binary.Serialize(value);//more compact
-                        //s = SerializationRoutines.Json.Serialize(bs, false);
-                        return SerializationRoutines.Json.Serialize(value, false);
-                    default:
-                        throw new Exception("Unknown option: " + valueType);
-                }
-            }
-
-            static public object GetValueFromString(ValueTypes valueType, string value)
-            {
-                if (value == null)
-                    return null;
-                switch (valueType)
-                {
-                    case ValueTypes.PdfText:
-                        return SerializationRoutines.Json.Deserialize<PdfTextValue>(value);
-                    case ValueTypes.OcrText:
-                        return SerializationRoutines.Json.Deserialize<OcrTextValue>(value);
-                    case ValueTypes.ImageData:
-                        //byte[] bs = SerializationRoutines.Json.Deserialize<byte[]>(value);
-                        //this.value = SerializationRoutines.Binary.Deserialize<ImageDataValue>(bs);
-                        return SerializationRoutines.Json.Deserialize<ImageDataValue>(value);
-                    default:
-                        throw new Exception("Unknown option: " + valueType);
-                }
-            }
-
-            public object GetValue()
-            {
-                return value;
-            }
-            object value;
+            //not to serialize!
+            internal object Value { get; set; }
 
             public class PdfTextValue
             {
                 public List<CharBox> CharBoxs = new List<CharBox>();
-                //public float PositionDeviation = 0.1f;
+                public float PositionDeviation = 0.1f;
                 public bool PositionDeviationIsAbsolute = true;
                 public class CharBox
                 {
@@ -328,7 +316,7 @@ namespace Cliver.PdfDocumentParser
             public class OcrTextValue
             {
                 public List<CharBox> CharBoxs = new List<CharBox>();
-                //public float PositionDeviation = 0.1f;
+                public float PositionDeviation = 0.1f;
                 //public bool PositionDeviationIsAbsolute = true;
                 public class CharBox
                 {
@@ -339,7 +327,7 @@ namespace Cliver.PdfDocumentParser
             public class ImageDataValue
             {
                 public List<ImageBox> ImageBoxs = new List<ImageBox>();
-                //public float PositionDeviation = 0.1f;
+                public float PositionDeviation = 0.1f;
                 //public bool PositionDeviationIsAbsolute = true;
                 public class ImageBox
                 {

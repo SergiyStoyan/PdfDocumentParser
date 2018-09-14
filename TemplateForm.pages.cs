@@ -57,7 +57,7 @@ namespace Cliver.PdfDocumentParser
             pages.ActiveTemplate = getTemplateFromUI(false);
 
             Template.FloatingAnchor fa = pages.ActiveTemplate.FloatingAnchors.Where(a => a.Id == (int)floatingAnchorId).FirstOrDefault();
-            if (fa == null || fa.GetValue() == null)
+            if (fa == null || fa.Value == null)
             {
                 setStatus(statuses.WARNING, "FloatingAnchor[" + fa.Id + "] is not defined.");
                 clearPicture(renewImage);
