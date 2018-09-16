@@ -180,19 +180,15 @@ namespace Cliver.PdfDocumentParser
                     }
                 }
         }
-        bool isHashMatch(ImageData imageData, int x, int y, int brightnessMaxDifference, /*int brightnessFactor,*/ int differentPixelMaxNumber, out int differentPixelNumber)
+        bool isHashMatch(ImageData imageData, int x, int y, int brightnessMaxDifference, int differentPixelMaxNumber, out int differentPixelNumber)
         {
-            //List<string> ds = new List<string>(); 
             differentPixelNumber = 0;
             for (int i = 0; i < Width; i++)
                 for (int j = 0; j < Height; j++)
                 {
                     if (Math.Abs(imageData.Hash[x + i, y + j] - Hash[i, j]) > brightnessMaxDifference)
-                    {
-                        //ds.Add("" + Math.Abs(imageData.Hash[x + i, y + j] - Hash[i, j]) + "=[" + i + "," + j + "]=" + Hash[i, j] + "-[" + x + i + "," + y + j + "]=" + imageData.Hash[x + i, y + j]);
                         if (++differentPixelNumber > differentPixelMaxNumber)
                             return false;
-                    }
                 }
             return true;
         }
@@ -275,7 +271,7 @@ namespace Cliver.PdfDocumentParser
                         aid.Hash[x, y] = 255;
                 }
             }
-            return aid;//(a - n) * ((m2 - n2)/(m - n))
+            return aid;
         }
 
         public Image GetImage()
