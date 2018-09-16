@@ -26,6 +26,93 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class TemplateForm : Form
     {
+        void setStatus(statuses s, string m)
+        {
+            status.Text = m;
+            switch (s)
+            {
+                case statuses.SUCCESS:
+                    status.BackColor = Color.LightGreen;
+                    break;
+                case statuses.ERROR:
+                    status.BackColor = Color.Pink;
+                    break;
+                case statuses.WARNING:
+                    status.BackColor = Color.Yellow;
+                    break;
+                case statuses.NEUTRAL:
+                    status.BackColor = Color.WhiteSmoke;
+                    break;
+                default:
+                    throw new Exception("Unknown option: " + s);
+            }
+        }
+        enum statuses
+        {
+            SUCCESS,
+            NEUTRAL,
+            WARNING,
+            ERROR,
+        }
+
+        void setRowStatus(statuses s, DataGridViewRow r, string m)
+        {
+            r.HeaderCell.Value = m;
+            //r.HeaderCell.ErrorText = "eeee";
+            //row.DefaultCellStyle.BackColor = Color.Red;
+            switch (s)
+            {
+                case statuses.SUCCESS:
+                    r.HeaderCell.Style.BackColor = Color.LightGreen;
+                    break;
+                case statuses.ERROR:
+                    r.HeaderCell.Style.BackColor = Color.Pink;
+                    break;
+                case statuses.WARNING:
+                    r.HeaderCell.Style.BackColor = Color.Yellow;
+                    break;
+                case statuses.NEUTRAL:
+                    r.HeaderCell.Style.BackColor = SystemColors.Control;
+                    break;
+                default:
+                    throw new Exception("Unknown option: " + s);
+            }
+        }
+
+        void setFloatingAnchorStatus(statuses s, Template.FloatingAnchor fa, string m)
+        {
+            DataGridViewRow row = null;
+            foreach (DataGridViewRow r in floatingAnchors.Rows)
+                if (r.Cells["Id3"].Value != null && (int)r.Cells["Id3"].Value == fa.Id)
+                {
+                    row = r;
+                    break;
+                }
+            if (row == null)
+            {
+                setStatus(statuses.ERROR, "FloatingAnchor[" + fa.Id + "] does not exist.");
+                return;
+            }
+            setRowStatus(s, row, m);
+        }
+
+        //void setMarkStatus(statuses s, int, string m)
+        //{
+        //    DataGridViewRow row = null;
+        //    foreach (DataGridViewRow r in floatingAnchors.Rows)
+        //        if (r.Cells["Id3"].Value != null && (int)r.Cells["Id3"].Value == fa.Id)
+        //        {
+        //            row = r;
+        //            break;
+        //        }
+        //    if (row == null)
+        //    {
+        //        setStatus(statuses.ERROR, "FloatingAnchor[" + fa.Id + "] does not exist.");
+        //        return;
+        //    }
+        //    setRowStatus(s, row, m);
+        //}
+
         void setFloatingAnchorValue(DataGridViewRow row, object value)
         {
             row.Tag = value;
@@ -128,14 +215,6 @@ namespace Cliver.PdfDocumentParser
         {
             if (row == null || !row.Selected || row.IsNewRow || !documentFirstPageRecognitionMarks.Rows.Contains(row))
             {
-                //if (row != null)
-                //{
-                //    documentFirstPageRecognitionMarks.EnableHeadersVisualStyles = false;
-                //    row.HeaderCell.Style.BackColor = Color.Blue;
-                //    row.HeaderCell.Value = "tttt";
-                //    row.HeaderCell.ErrorText = "eeee";
-                //    //row.DefaultCellStyle.BackColor = Color.Red;
-                //}
                 currentMarkRow = null;
                 currentMarkControl = null;
                 return;

@@ -72,11 +72,25 @@ namespace Cliver.PdfDocumentParser
                 return;
 
             if (scaleBitmap)
-                bitmap = ImageRoutines.GetScaled(bitmap, Settings.ImageProcessing.Image2PdfResolutionRatio);
+                bitmap = getScaled(bitmap, Settings.ImageProcessing.Image2PdfResolutionRatio);
 
             Hash = getBitmapHash(bitmap);
             Width = Hash.GetLength(0);
             Height = Hash.GetLength(1);
+        }
+        static Bitmap getScaled(Image image, float ratio)
+        {
+            var b = new Bitmap((int)Math.Round(image.Width * ratio, 0), (int)Math.Round(image.Height * ratio, 0), PixelFormat.Format24bppRgb);
+            using (var g = Graphics.FromImage(b))
+            {
+                g.CompositingMode = CompositingMode.SourceCopy;
+                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                g.SmoothingMode = SmoothingMode.HighQuality;
+                g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                g.CompositingQuality = CompositingQuality.HighQuality;
+                g.DrawImage(image, 0, 0, b.Width, b.Height);
+            }
+            return b;
         }
         static byte[,] getBitmapHash(Bitmap bitmap)
         {
@@ -168,13 +182,17 @@ namespace Cliver.PdfDocumentParser
         }
         bool isHashMatch(ImageData imageData, int x, int y, int brightnessMaxDifference, /*int brightnessFactor,*/ int differentPixelMaxNumber, out int differentPixelNumber)
         {
+            List<string> ds = new List<string>(); ;
             differentPixelNumber = 0;
             for (int i = 0; i < Width; i++)
                 for (int j = 0; j < Height; j++)
                 {
                     if (Math.Abs(imageData.Hash[x + i, y + j] - Hash[i, j]) > brightnessMaxDifference)
+                    {
+                        //ds.Add("" + Math.Abs(imageData.Hash[x + i, y + j] - Hash[i, j]) + "=[" + i + "," + j + "]=" + Hash[i, j] + "-[" + x + i + "," + y + j + "]=" + imageData.Hash[x + i, y + j]);
                         if (++differentPixelNumber > differentPixelMaxNumber)
                             return false;
+                    }
                 }
             return true;
         }

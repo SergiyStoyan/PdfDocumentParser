@@ -71,6 +71,10 @@ namespace Cliver.PdfDocumentParser
             FloatingAnchorId.ValueMember = "Id";
             FloatingAnchorId.DisplayMember = "Name";
 
+            floatingAnchors.EnableHeadersVisualStyles = false;//needed to set row headers
+            documentFirstPageRecognitionMarks.EnableHeadersVisualStyles = false;//needed to set row headers
+            fields.EnableHeadersVisualStyles = false;//needed to set row headers
+
             int statusDefaultHeight = status.Height;
             status.MouseEnter += delegate
             {
@@ -311,6 +315,8 @@ namespace Cliver.PdfDocumentParser
             floatingAnchors.CellValueChanged += delegate (object sender, DataGridViewCellEventArgs e)
             {
                 if (loadingTemplate)
+                    return;
+                if (e.ColumnIndex < 0)//row's header
                     return;
                 var row = floatingAnchors.Rows[e.RowIndex];
                 int? fai = (int?)row.Cells["Id3"].Value;
@@ -582,7 +588,8 @@ namespace Cliver.PdfDocumentParser
                 {
                     if (loadingTemplate)
                         return;
-
+                    if (e.ColumnIndex < 0)//row's header
+                        return;
                     var cs = fields.Rows[e.RowIndex].Cells;
                     string r_ = (string)cs["Rectangle"].Value;
                     if (r_ == null)
@@ -803,35 +810,6 @@ namespace Cliver.PdfDocumentParser
         }
         string testFileDefaultFolder;
         TemplateManager templateManager;
-
-        void setStatus(statuses s, string m)
-        {
-            status.Text = m;
-            switch (s)
-            {
-                case statuses.SUCCESS:
-                    status.BackColor = Color.LightGreen;
-                    break;
-                case statuses.ERROR:
-                    status.BackColor = Color.Pink;
-                    break;
-                case statuses.WARNING:
-                    status.BackColor = Color.Yellow;
-                    break;
-                case statuses.NEUTRAL:
-                    status.BackColor = Color.WhiteSmoke;
-                    break;
-                default:
-                    throw new Exception("Unknown option: " + s);
-            }
-        }
-        enum statuses
-        {
-            SUCCESS,
-            NEUTRAL,
-            WARNING,
-            ERROR,
-        }
 
         enum Modes
         {

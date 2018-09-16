@@ -67,11 +67,11 @@ namespace Cliver.PdfDocumentParser
             List<RectangleF> rs = pages[currentPage].GetFloatingAnchorRectangles(fa);
             if (rs == null || rs.Count < 1)
             {
-                setStatus(statuses.ERROR, "FloatingAnchor[" + fa.Id + "] is not found.");
+                setFloatingAnchorStatus(statuses.ERROR, fa, "Not found.");
                 clearPicture(renewImage);
                 return null;
             }
-            setStatus(statuses.SUCCESS, "FloatingAnchor[" + fa.Id + "] is found.");
+            setFloatingAnchorStatus(statuses.SUCCESS, fa, "Found.");
 
             drawBoxes(Settings.Appearance.FloatingAnchorMasterBoxColor, new List<System.Drawing.RectangleF> { rs[0] }, renewImage);
             if (rs.Count > 1)
