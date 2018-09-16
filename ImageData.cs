@@ -182,7 +182,7 @@ namespace Cliver.PdfDocumentParser
         }
         bool isHashMatch(ImageData imageData, int x, int y, int brightnessMaxDifference, /*int brightnessFactor,*/ int differentPixelMaxNumber, out int differentPixelNumber)
         {
-            List<string> ds = new List<string>(); ;
+            //List<string> ds = new List<string>(); 
             differentPixelNumber = 0;
             for (int i = 0; i < Width; i++)
                 for (int j = 0; j < Height; j++)
