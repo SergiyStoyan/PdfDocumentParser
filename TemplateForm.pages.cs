@@ -65,13 +65,24 @@ namespace Cliver.PdfDocumentParser
             }
 
             List<RectangleF> rs = pages[currentPage].GetFloatingAnchorRectangles(fa);
+
+            DataGridViewRow row = null;
+            foreach (DataGridViewRow r in floatingAnchors.Rows)
+                if ((int?)r.Cells["Id3"].Value == fa.Id)
+                {
+                    row = r;
+                    break;
+                }
+            if (row == null)
+                throw new Exception("FloatingAnchor[Id=" + fa.Id + "] does not exist.");
+
             if (rs == null || rs.Count < 1)
             {
-                setFloatingAnchorStatus(statuses.ERROR, fa.Id, "Not found.");
+                setRowStatus(statuses.ERROR, row, "Not found");
                 clearPicture(renewImage);
                 return null;
             }
-            setFloatingAnchorStatus(statuses.SUCCESS, fa.Id, "Found.");
+            setRowStatus(statuses.SUCCESS, row, "Found");
 
             drawBoxes(Settings.Appearance.FloatingAnchorMasterBoxColor, new List<System.Drawing.RectangleF> { rs[0] }, renewImage);
             if (rs.Count > 1)
@@ -221,7 +232,15 @@ namespace Cliver.PdfDocumentParser
                         int? fai = (int?)r.Cells["FloatingAnchorId"].Value;
                         string rs = (string)r.Cells["Rectangle"].Value;
                         if (rs != null)
+                        {
                             r.Cells["Value"].Value = extractValueAndDrawSelectionBox(fai, SerializationRoutines.Json.Deserialize<Template.RectangleF>(rs), vt);
+                            if (r.Cells["Value"].Value != null)
+                                setRowStatus(statuses.SUCCESS, r, "Found");
+                            else
+                                setRowStatus(statuses.ERROR, r, "Not found");
+                        }
+                        else
+                            setRowStatus(statuses.WARNING, r, "Not set");
                     }
                 }
 
@@ -257,18 +276,24 @@ namespace Cliver.PdfDocumentParser
             {
                 if (documentFirstPageRecognitionMarks.Rows.Count < 2)
                 {
-                    Message.Warning( "No condition of first page of document is specified!");
+                    Message.Warning("No condition of first page of document is specified!");
                     return null;
                 }
 
+                bool failed = false;
                 foreach (DataGridViewRow r in documentFirstPageRecognitionMarks.Rows)
-                    if (!r.IsNewRow)
-                        r.Selected = true;
-
-                Template t = getTemplateFromUI(false);
-                pages.ActiveTemplate = t;
-                string error;
-                if (!pages[currentPage].IsDocumentFirstPage(out error))
+                    if (!r.IsNewRow && !isMarkFound(r, false))
+                        failed = true;
+                //documentFirstPageRecognitionMarks.ClearSelection();
+                //Template t = getTemplateFromUI(false);
+                //pages.ActiveTemplate = t;
+                //string error;
+                //if (!pages[currentPage].IsDocumentFirstPage(out error))
+                //{
+                //    documentFirstPageRecognitionMarks.BackgroundColor = Color.LightPink;
+                //    return false;
+                //}
+                if (failed)
                 {
                     documentFirstPageRecognitionMarks.BackgroundColor = Color.LightPink;
                     return false;

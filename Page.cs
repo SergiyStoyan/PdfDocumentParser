@@ -381,7 +381,7 @@ namespace Cliver.PdfDocumentParser
                     case Template.ValueTypes.PdfText:
                         {
                             Template.Mark.PdfTextValue ptv1 = (Template.Mark.PdfTextValue)m.Value;
-                            string t1 = NormalizeText(ptv1.Text);
+                            string t1 = ptv1.Text;//it is expected the text is saved normalized
                             string t2 = NormalizeText((string)v2);
                             if (t1 == t2)
                                 continue;
@@ -391,7 +391,7 @@ namespace Cliver.PdfDocumentParser
                     case Template.ValueTypes.OcrText:
                         {
                             Template.Mark.OcrTextValue otv1 = (Template.Mark.OcrTextValue)m.Value;
-                            string t1 = NormalizeText(otv1.Text);
+                            string t1 = otv1.Text;//it is expected the text is saved normalized
                             string t2 = NormalizeText((string)v2);
                             if (t1 == t2)
                                 continue;

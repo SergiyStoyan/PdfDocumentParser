@@ -58,42 +58,6 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        void setFloatingAnchorStatus(statuses s, int? fai, string m)
-        {
-            DataGridViewRow row = null;
-            if (fai != null)
-                foreach (DataGridViewRow r in floatingAnchors.Rows)
-                    if ((int?)r.Cells["Id3"].Value == fai)
-                    {
-                        row = r;
-                        break;
-                    }
-            if (row == null)
-            {
-                //setStatus(statuses.ERROR, "FloatingAnchor[Id=" + fai + "] does not exist.");
-                Message.Error("FloatingAnchor[Id=" + fai + "] does not exist.");
-                return;
-            }
-            setRowStatus(s, row, m);
-        }
-
-        //void setMarkStatus(statuses s, int, string m)
-        //{
-        //    DataGridViewRow row = null;
-        //    foreach (DataGridViewRow r in floatingAnchors.Rows)
-        //        if (r.Cells["Id3"].Value != null && (int)r.Cells["Id3"].Value == fa.Id)
-        //        {
-        //            row = r;
-        //            break;
-        //        }
-        //    if (row == null)
-        //    {
-        //        setStatus(statuses.ERROR, "FloatingAnchor[" + fa.Id + "] does not exist.");
-        //        return;
-        //    }
-        //    setRowStatus(s, row, m);
-        //}
-
         void setFloatingAnchorValue(DataGridViewRow row, object value)
         {
             if (SerializationRoutines.Json.Serialize(row.Tag) == SerializationRoutines.Json.Serialize(value))

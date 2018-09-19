@@ -51,7 +51,6 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Enabled = false;
             this.label2.Location = new System.Drawing.Point(3, 25);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(150, 13);
@@ -98,7 +97,6 @@
             // PositionDeviationIsAbsolute
             // 
             this.PositionDeviationIsAbsolute.AutoSize = true;
-            this.PositionDeviationIsAbsolute.Enabled = false;
             this.PositionDeviationIsAbsolute.Location = new System.Drawing.Point(154, 25);
             this.PositionDeviationIsAbsolute.Name = "PositionDeviationIsAbsolute";
             this.PositionDeviationIsAbsolute.Size = new System.Drawing.Size(15, 14);

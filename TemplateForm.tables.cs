@@ -108,10 +108,10 @@ namespace Cliver.PdfDocumentParser
                         return;
                     }
 
-                        documentFirstPageRecognitionMarks.ClearSelection();
-                        documentFirstPageRecognitionMarks.CurrentCell = null;
-                        fields.ClearSelection();
-                        fields.CurrentCell = null;
+                    documentFirstPageRecognitionMarks.ClearSelection();
+                    documentFirstPageRecognitionMarks.CurrentCell = null;
+                    fields.ClearSelection();
+                    fields.CurrentCell = null;
 
                     var row = floatingAnchors.SelectedRows[0];
 
@@ -158,6 +158,9 @@ namespace Cliver.PdfDocumentParser
                         return;
                     if (e.ColumnIndex < 0)//row's header
                         return;
+
+                    documentFirstPageRecognitionMarks.BackgroundColor = SystemColors.ControlDarkDark;
+
                     DataGridViewRow row = documentFirstPageRecognitionMarks.Rows[e.RowIndex];
                     var cs = row.Cells;
                     int? fai = (int?)cs["FloatingAnchorId2"].Value;
@@ -303,54 +306,7 @@ namespace Cliver.PdfDocumentParser
                     }
 
                     setMarkControl(row);
-                    var cs = row.Cells;
-                    var vt = (Template.ValueTypes)cs["ValueType2"].Value;
-                    int? fai = (int?)cs["FloatingAnchorId2"].Value;
-                    setCurrentFloatingAnchor(fai, false);
-                    Template.RectangleF r = (Template.RectangleF)cs["Rectangle2"].Value;
-                    if (r != null)
-                    {
-                        switch (vt)
-                        {
-                            case Template.ValueTypes.PdfText:
-                                {
-                                    Template.Mark.PdfTextValue ptv1 = (Template.Mark.PdfTextValue)row.Tag;
-                                    string t2 = (string)extractValueAndDrawSelectionBox(fai, r, vt);
-                                    if (ptv1.Text != t2)
-                                        setRowStatus(statuses.ERROR, row, "not found:\r\n" + t2 + "\r\n <> \r\n" + ptv1.Text);
-                                    else
-                                        setRowStatus(statuses.SUCCESS, row, "found:\r\n" + t2);
-                                }
-                                break;
-                            case Template.ValueTypes.OcrText:
-                                {
-                                    Template.Mark.OcrTextValue otv1 = (Template.Mark.OcrTextValue)row.Tag;
-                                    string t2 = (string)extractValueAndDrawSelectionBox(fai, r, vt);
-                                    if (otv1.Text != t2)
-                                        setRowStatus(statuses.ERROR, row, "not found:\r\n" + t2 + "\r\n <> \r\n" + otv1.Text);
-                                    else
-                                        setRowStatus(statuses.SUCCESS, row, "found:\r\n" + t2);
-                                }
-                                break;
-                            case Template.ValueTypes.ImageData:
-                                {
-                                    Template.Mark.ImageDataValue idv1 = (Template.Mark.ImageDataValue)row.Tag;
-                                    ImageData id2 = (ImageData)extractValueAndDrawSelectionBox(fai, r, vt);
-                                    if (idv1.ImageData.ImageIsSimilar(id2, idv1.BrightnessTolerance, idv1.DifferentPixelNumberTolerance))
-                                        setRowStatus(statuses.SUCCESS, row, "found:\r\nimage is similar");
-                                    else
-                                        setRowStatus(statuses.ERROR, row, "not found:\r\nimage is not similar");
-                                }
-                                break;
-                            default:
-                                throw new Exception("Unknown option: " + vt);
-                        }
-                    }
-                    else if (fai != null)
-                        if (null != findAndDrawFloatingAnchor(fai))
-                            setRowStatus(statuses.SUCCESS, row, "Found");
-                        else
-                            setRowStatus(statuses.ERROR, row, "Not found");
+                    isMarkFound(row, true);
                 }
                 catch (Exception ex)
                 {
@@ -532,5 +488,74 @@ namespace Cliver.PdfDocumentParser
             }
         }
         bool settingCurrentFloatingAnchorRow = false;
+
+        bool isMarkFound(DataGridViewRow row, bool selectAnchor)
+        {
+            var cs = row.Cells;
+            var vt = (Template.ValueTypes)cs["ValueType2"].Value;
+            int? fai = (int?)cs["FloatingAnchorId2"].Value;
+            if (selectAnchor)
+                setCurrentFloatingAnchor(fai, false);
+            Template.RectangleF r = (Template.RectangleF)cs["Rectangle2"].Value;
+            if (r != null)
+            {
+                switch (vt)
+                {
+                    case Template.ValueTypes.PdfText:
+                        {
+                            Template.Mark.PdfTextValue ptv1 = (Template.Mark.PdfTextValue)row.Tag;
+                            string t2 = (string)extractValueAndDrawSelectionBox(fai, r, vt);
+                            if (ptv1.Text != t2)
+                            {
+                                setRowStatus(statuses.ERROR, row, "not found:\r\n" + t2 + "\r\n <> \r\n" + ptv1.Text);
+                                return false;
+                            }
+                            setRowStatus(statuses.SUCCESS, row, "found:\r\n" + t2);
+                            return true;
+                        }
+                    case Template.ValueTypes.OcrText:
+                        {
+                            Template.Mark.OcrTextValue otv1 = (Template.Mark.OcrTextValue)row.Tag;
+                            string t2 = (string)extractValueAndDrawSelectionBox(fai, r, vt);
+                            if (otv1.Text != t2)
+                            {
+                                setRowStatus(statuses.ERROR, row, "not found:\r\n" + t2 + "\r\n <> \r\n" + otv1.Text);
+                                return false;
+                            }
+                            setRowStatus(statuses.SUCCESS, row, "found:\r\n" + t2);
+                            return true;
+                        }
+                    case Template.ValueTypes.ImageData:
+                        {
+                            Template.Mark.ImageDataValue idv1 = (Template.Mark.ImageDataValue)row.Tag;
+                            ImageData id2 = (ImageData)extractValueAndDrawSelectionBox(fai, r, vt);
+                            if (!idv1.ImageData.ImageIsSimilar(id2, idv1.BrightnessTolerance, idv1.DifferentPixelNumberTolerance))
+                            {
+                                setRowStatus(statuses.ERROR, row, "not found:\r\nimage is not similar");
+                                return false;
+                            }
+                            setRowStatus(statuses.SUCCESS, row, "found:\r\nimage is similar");
+                            return true;
+                        }
+                    default:
+                        throw new Exception("Unknown option: " + vt);
+                }
+            }
+            else
+            {
+                if (fai != null)
+                {
+                    if (null != findAndDrawFloatingAnchor(fai))
+                    {
+                        setRowStatus(statuses.SUCCESS, row, "Found");
+                        return true;
+                    }
+                    setRowStatus(statuses.ERROR, row, "Not found");
+                    return false;
+                }
+                setRowStatus(statuses.NEUTRAL, row, "");
+                return true;
+            }
+        }
     }
 }

@@ -328,8 +328,8 @@ namespace Cliver.PdfDocumentParser
 
             Load += delegate
             {
-                if (documentFirstPageRecognitionMarks.Rows.Count > 0 && !documentFirstPageRecognitionMarks.Rows[0].IsNewRow)
-                    documentFirstPageRecognitionMarks.Rows[0].Selected = true;
+                //if (documentFirstPageRecognitionMarks.Rows.Count > 0 && !documentFirstPageRecognitionMarks.Rows[0].IsNewRow)
+                //    documentFirstPageRecognitionMarks.Rows[0].Selected = true;
             };
 
             save.Click += Save_Click;
