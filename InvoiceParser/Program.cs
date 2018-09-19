@@ -13,7 +13,6 @@ namespace Cliver.InvoiceParser
 {
     /*
  TBD:
- - status in each row
   - record UsedTime to a separate table
  - ? Template not enherited but embedded
  - detect page rotation by tesseract

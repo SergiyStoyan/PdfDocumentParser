@@ -226,7 +226,7 @@
             this.tablesContainer.Panel2.Controls.Add(this.documentFirstPageRecognitionMarks);
             this.tablesContainer.Panel2.Controls.Add(this.label4);
             this.tablesContainer.Size = new System.Drawing.Size(169, 304);
-            this.tablesContainer.SplitterDistance = 164;
+            this.tablesContainer.SplitterDistance = 188;
             this.tablesContainer.TabIndex = 52;
             // 
             // floatingAnchors
@@ -240,7 +240,7 @@
             this.floatingAnchors.MultiSelect = false;
             this.floatingAnchors.Name = "floatingAnchors";
             this.floatingAnchors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.floatingAnchors.Size = new System.Drawing.Size(169, 151);
+            this.floatingAnchors.Size = new System.Drawing.Size(169, 175);
             this.floatingAnchors.TabIndex = 50;
             // 
             // Id3
@@ -279,7 +279,7 @@
             this.documentFirstPageRecognitionMarks.MultiSelect = false;
             this.documentFirstPageRecognitionMarks.Name = "documentFirstPageRecognitionMarks";
             this.documentFirstPageRecognitionMarks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.documentFirstPageRecognitionMarks.Size = new System.Drawing.Size(169, 123);
+            this.documentFirstPageRecognitionMarks.Size = new System.Drawing.Size(169, 99);
             this.documentFirstPageRecognitionMarks.TabIndex = 29;
             // 
             // FloatingAnchorId2
