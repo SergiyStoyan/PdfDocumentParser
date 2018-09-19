@@ -256,13 +256,16 @@ namespace Cliver.PdfDocumentParser
 
             this.EnumControls((Control c) =>
             {
-                if (c is SplitContainer)
-                    c.Paint += delegate (object sender, PaintEventArgs e)
-                    {
-                        SplitContainer s = sender as SplitContainer;
-                        if (s != null)
-                            e.Graphics.FillRectangle(SystemBrushes.ButtonShadow, s.SplitterRectangle);
-                    };
+                SplitContainer s = c as SplitContainer;
+                if (s != null)
+                {
+                    s.Panel1.BackColor = Color.Blue;
+                    s.Panel2.BackColor = Color.Blue;
+                    s.BackColor = Color.DarkGray;
+                    s.SplitterWidth = 2;
+                    s.Panel1.BackColor = SystemColors.Control;
+                    s.Panel2.BackColor = SystemColors.Control;
+                }
             }, true);
 
             testFile.TextChanged += delegate
