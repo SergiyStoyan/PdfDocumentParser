@@ -26,27 +26,6 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class TemplateForm : Form
     {
-        void setStatus(statuses s, string m)
-        {
-            status.Text = m;
-            switch (s)
-            {
-                case statuses.SUCCESS:
-                    status.BackColor = Color.LightGreen;
-                    break;
-                case statuses.ERROR:
-                    status.BackColor = Color.Pink;
-                    break;
-                case statuses.WARNING:
-                    status.BackColor = Color.Yellow;
-                    break;
-                case statuses.NEUTRAL:
-                    status.BackColor = Color.WhiteSmoke;
-                    break;
-                default:
-                    throw new Exception("Unknown option: " + s);
-            }
-        }
         enum statuses
         {
             SUCCESS,
@@ -79,18 +58,20 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        void setFloatingAnchorStatus(statuses s, Template.FloatingAnchor fa, string m)
+        void setFloatingAnchorStatus(statuses s, int? fai, string m)
         {
             DataGridViewRow row = null;
-            foreach (DataGridViewRow r in floatingAnchors.Rows)
-                if (r.Cells["Id3"].Value != null && (int)r.Cells["Id3"].Value == fa.Id)
-                {
-                    row = r;
-                    break;
-                }
+            if (fai != null)
+                foreach (DataGridViewRow r in floatingAnchors.Rows)
+                    if ((int?)r.Cells["Id3"].Value == fai)
+                    {
+                        row = r;
+                        break;
+                    }
             if (row == null)
             {
-                setStatus(statuses.ERROR, "FloatingAnchor[" + fa.Id + "] does not exist.");
+                //setStatus(statuses.ERROR, "FloatingAnchor[Id=" + fai + "] does not exist.");
+                Message.Error("FloatingAnchor[Id=" + fai + "] does not exist.");
                 return;
             }
             setRowStatus(s, row, m);
@@ -115,11 +96,17 @@ namespace Cliver.PdfDocumentParser
 
         void setFloatingAnchorValue(DataGridViewRow row, object value)
         {
+            if (SerializationRoutines.Json.Serialize(row.Tag) == SerializationRoutines.Json.Serialize(value))
+                return;
             row.Tag = value;
+            int? fai = (int?)row.Cells["Id3"].Value;
+            if (value == null)
+                setRowStatus(statuses.WARNING, row, "Not set");
+            else
+                setRowStatus(statuses.NEUTRAL, row, "Set");
             if (loadingTemplate)
                 return;
             setFloatingAnchorControl(row);
-            int? fai = (int?)row.Cells["Id3"].Value;
             onFloatingAnchorsChanged(fai);
             if (row.Selected)
                 findAndDrawFloatingAnchor(fai);
@@ -127,7 +114,7 @@ namespace Cliver.PdfDocumentParser
 
         void setFloatingAnchorControl(DataGridViewRow row)
         {
-            if (row == null || !row.Selected || row.IsNewRow || !floatingAnchors.Rows.Contains(row))
+            if (row == null || floatingAnchors.CurrentCell == null || row.Index != floatingAnchors.CurrentCell.RowIndex || row.IsNewRow || !floatingAnchors.Rows.Contains(row))
             {
                 currentFloatingAnchorRow = null;
                 currentFloatingAnchorControl = null;
@@ -356,8 +343,8 @@ namespace Cliver.PdfDocumentParser
                 if (floatingAnchors.SelectedRows.Count < 1)
                     return;
 
-                DataGridViewRow r = floatingAnchors.SelectedRows[0];
-                var vt = (Template.ValueTypes)r.Cells["ValueType3"].Value;
+                DataGridViewRow row = floatingAnchors.SelectedRows[0];
+                var vt = (Template.ValueTypes)row.Cells["ValueType3"].Value;
                 switch (vt)
                 {
                     case Template.ValueTypes.PdfText:
@@ -365,8 +352,7 @@ namespace Cliver.PdfDocumentParser
                             List<Pdf.Line> lines = Pdf.RemoveDuplicatesAndGetLines(selectedPdfCharBoxs, false);
                             if (lines.Count < 1)
                             {
-                                setFloatingAnchorValue(r, null);
-                                setStatus(statuses.WARNING, "FloatingAnchor[" + r.Cells["Id3"].Value + "] has not been set.");
+                                setFloatingAnchorValue(row, null);
                                 return;
                             }
                             Template.FloatingAnchor.PdfTextValue pte = new Template.FloatingAnchor.PdfTextValue { CharBoxs = new List<Template.FloatingAnchor.PdfTextValue.CharBox>() };
@@ -379,11 +365,10 @@ namespace Cliver.PdfDocumentParser
                                     });
                             if (pte.CharBoxs.Count < 1)
                             {
-                                setFloatingAnchorValue(r, null);
-                                setStatus(statuses.WARNING, "FloatingAnchor[" + r.Cells["Id3"].Value + "] has not been set.");
+                                setFloatingAnchorValue(row, null);
                                 return;
                             }
-                            setFloatingAnchorValue(r, pte);
+                            setFloatingAnchorValue(row, pte);
                         }
                         break;
                     case Template.ValueTypes.OcrText:
@@ -391,8 +376,7 @@ namespace Cliver.PdfDocumentParser
                             List<Ocr.Line> lines = PdfDocumentParser.Ocr.GetLines(selectedOcrCharBoxs);
                             if (lines.Count < 1)
                             {
-                                setFloatingAnchorValue(r, null);
-                                setStatus(statuses.WARNING, "FloatingAnchor[" + r.Cells["Id3"].Value + "] has not been set.");
+                                setFloatingAnchorValue(row, null);
                                 return;
                             }
                             Template.FloatingAnchor.OcrTextValue ote = new Template.FloatingAnchor.OcrTextValue { CharBoxs = new List<Template.FloatingAnchor.OcrTextValue.CharBox>() };
@@ -405,28 +389,25 @@ namespace Cliver.PdfDocumentParser
                                     });
                             if (ote.CharBoxs.Count < 1)
                             {
-                                setFloatingAnchorValue(r, null);
-                                setStatus(statuses.WARNING, "FloatingAnchor[" + r.Cells["Id3"].Value + "] has not been set.");
+                                setFloatingAnchorValue(row, null);
                                 return;
                             }
-                            setFloatingAnchorValue(r, ote);
+                            setFloatingAnchorValue(row, ote);
                         }
                         break;
                     case Template.ValueTypes.ImageData:
                         {
                             if (selectedImageDataValue.ImageBoxs.Count < 1)
                             {
-                                setFloatingAnchorValue(r, null);
-                                setStatus(statuses.WARNING, "FloatingAnchor[" + r.Cells["Id3"].Value + "] has not been set.");
+                                setFloatingAnchorValue(row, null);
                                 return;
                             }
                             if (selectedImageDataValue.ImageBoxs.Where(x => x.ImageData == null).FirstOrDefault() != null)
                             {
-                                setFloatingAnchorValue(r, null);
-                                setStatus(statuses.WARNING, "FloatingAnchor[" + r.Cells["Id3"].Value + "] has not been set.");
+                                setFloatingAnchorValue(row, null);
                                 return;
                             }
-                            setFloatingAnchorValue(r, selectedImageDataValue);
+                            setFloatingAnchorValue(row, selectedImageDataValue);
                         }
                         break;
                     default:

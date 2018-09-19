@@ -54,65 +54,8 @@ namespace Cliver.PdfDocumentParser
             Text = AboutBox.AssemblyProduct + ": Template Editor";
 
             this.templateManager = templateManager;
-            this.testFileDefaultFolder = testFileDefaultFolder;
 
-            Id3.ValueType = typeof(int);
-            ValueType3.ValueType = typeof(Template.ValueTypes);
-            ValueType3.DataSource = Enum.GetValues(typeof(Template.ValueTypes));
-
-            ValueType2.ValueType = typeof(Template.ValueTypes);
-            ValueType2.DataSource = Enum.GetValues(typeof(Template.ValueTypes));
-
-            FloatingAnchorId2.ValueType = typeof(int);
-            FloatingAnchorId2.ValueMember = "Id";
-            FloatingAnchorId2.DisplayMember = "Name";
-
-            FloatingAnchorId.ValueType = typeof(int);
-            FloatingAnchorId.ValueMember = "Id";
-            FloatingAnchorId.DisplayMember = "Name";
-
-            floatingAnchors.EnableHeadersVisualStyles = false;//needed to set row headers
-            documentFirstPageRecognitionMarks.EnableHeadersVisualStyles = false;//needed to set row headers
-            fields.EnableHeadersVisualStyles = false;//needed to set row headers
-
-            int statusDefaultHeight = status.Height;
-            status.MouseEnter += delegate
-            {
-                Size s = TextRenderer.MeasureText(status.Text, status.Font);
-                if (s.Width > status.Width || s.Height > status.Height)
-                {
-                    status.Height = splitContainer2.Panel1.Bottom - status.Top;
-                    if (s.Width > status.Width || s.Height > status.Height)
-                        status.ScrollBars = ScrollBars.Both;
-                }
-            };
-            status.MouseLeave += delegate
-            {
-                status.Height = statusDefaultHeight;
-                status.ScrollBars = ScrollBars.None;
-            };
-
-            Shown += delegate
-            {
-                Application.DoEvents();//make form be drawn completely
-                setUIFromTemplate(templateManager.Template);
-            };
-
-            FormClosed += delegate
-            {
-                if (scaledCurrentPageBitmap != null)
-                {
-                    scaledCurrentPageBitmap.Dispose();
-                    scaledCurrentPageBitmap = null;
-                }
-                if (pages != null)
-                {
-                    pages.Dispose();
-                    pages = null;
-                }
-
-                templateManager.LastTestFile = testFile.Text;
-            };
+            setTableHandlers();
 
             picture.MouseDown += delegate (object sender, MouseEventArgs e)
             {
@@ -289,435 +232,38 @@ namespace Cliver.PdfDocumentParser
                 }
             };
 
-            floatingAnchors.RowsAdded += delegate (object sender, DataGridViewRowsAddedEventArgs e)
+            Shown += delegate
             {
-                if (floatingAnchors.Rows[e.RowIndex].Cells["ValueType3"].Value == null)
-                    floatingAnchors.Rows[e.RowIndex].Cells["ValueType3"].Value = Template.ValueTypes.PdfText;
+                Application.DoEvents();//make form be drawn completely
+                setUIFromTemplate(templateManager.Template);
             };
 
-            floatingAnchors.DataError += delegate (object sender, DataGridViewDataErrorEventArgs e)
+            FormClosed += delegate
             {
-                DataGridViewRow r = floatingAnchors.Rows[e.RowIndex];
-                Message.Error("FloatingAnchor[" + r.Cells["Id3"].Value + "] has unacceptable value of " + floatingAnchors.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message);
-            };
-
-            floatingAnchors.UserDeletedRow += delegate (object sender, DataGridViewRowEventArgs e)
-            {
-                onFloatingAnchorsChanged(null);
-            };
-
-            floatingAnchors.CurrentCellDirtyStateChanged += delegate
-            {
-                if (floatingAnchors.IsCurrentCellDirty)
-                    floatingAnchors.CommitEdit(DataGridViewDataErrorContexts.Commit);
-            };
-
-            floatingAnchors.CellValueChanged += delegate (object sender, DataGridViewCellEventArgs e)
-            {
-                if (loadingTemplate)
-                    return;
-                if (e.ColumnIndex < 0)//row's header
-                    return;
-                var row = floatingAnchors.Rows[e.RowIndex];
-                int? fai = (int?)row.Cells["Id3"].Value;
-                switch (floatingAnchors.Columns[e.ColumnIndex].Name)
+                if (scaledCurrentPageBitmap != null)
                 {
-                    case "Id3":
-                        if (row.Selected)
-                            findAndDrawFloatingAnchor(fai);
-                        break;
-                    case "ValueType3":
-                        setFloatingAnchorValue(row, null);
-                        break;
+                    scaledCurrentPageBitmap.Dispose();
+                    scaledCurrentPageBitmap = null;
                 }
+                if (pages != null)
+                {
+                    pages.Dispose();
+                    pages = null;
+                }
+
+                templateManager.LastTestFile = testFile.Text;
             };
 
-            floatingAnchors.SelectionChanged += delegate (object sender, EventArgs e)
+            this.EnumControls((Control c) =>
             {
-                try
-                {
-                    if (loadingTemplate)
-                        return;
-
-                    setCurrentFloatingAnchorValueFromControl();
-
-                    setStatus(statuses.NEUTRAL, "");
-                    if (floatingAnchors.SelectedRows.Count < 1)
+                if (c is SplitContainer)
+                    c.Paint += delegate (object sender, PaintEventArgs e)
                     {
-                        setFloatingAnchorControl(null);
-                        return;
-                    }
-                    documentFirstPageRecognitionMarks.ClearSelection();
-                    fields.ClearSelection();
-                    var row = floatingAnchors.SelectedRows[0];
-
-                    if (row.IsNewRow)//hacky forcing commit a newly added row and display the blank row
-                    {
-                        int i = floatingAnchors.Rows.Add();
-                        floatingAnchors.Rows[i].Selected = true;
-                        return;
-                    }
-                    setFloatingAnchorControl(row);
-                    findAndDrawFloatingAnchor((int?)row.Cells["Id3"].Value);
-                }
-                catch (Exception ex)
-                {
-                    Message.Error2(ex);
-                }
-            };
-
-            documentFirstPageRecognitionMarks.RowsAdded += delegate (object sender, DataGridViewRowsAddedEventArgs e)
-            {
-                if (documentFirstPageRecognitionMarks.Rows[e.RowIndex].Cells["ValueType2"].Value == null)
-                    documentFirstPageRecognitionMarks.Rows[e.RowIndex].Cells["ValueType2"].Value = Template.ValueTypes.PdfText;
-            };
-
-            documentFirstPageRecognitionMarks.CurrentCellDirtyStateChanged += delegate
-            {
-                if (documentFirstPageRecognitionMarks.IsCurrentCellDirty)
-                    documentFirstPageRecognitionMarks.CommitEdit(DataGridViewDataErrorContexts.Commit);
-            };
-
-            documentFirstPageRecognitionMarks.RowValidating += delegate (object sender, DataGridViewCellCancelEventArgs e)
-            {
-            };
-
-            documentFirstPageRecognitionMarks.DefaultValuesNeeded += delegate (object sender, DataGridViewRowEventArgs e)
-            {
-            };
-
-            documentFirstPageRecognitionMarks.CellValueChanged += delegate (object sender, DataGridViewCellEventArgs e)
-            {
-                try
-                {
-                    if (loadingTemplate)
-                        return;
-                    if (e.ColumnIndex < 0)//row's header
-                        return;
-                    DataGridViewRow row = documentFirstPageRecognitionMarks.Rows[e.RowIndex];
-                    var cs = row.Cells;
-                    int? fai = (int?)cs["FloatingAnchorId2"].Value;
-                    Template.RectangleF r = (Template.RectangleF)cs["Rectangle2"].Value;
-                    switch (documentFirstPageRecognitionMarks.Columns[e.ColumnIndex].Name)
-                    {
-                        case "Rectangle2":
-                            {
-                                if (r == null)
-                                {
-                                    setStatus(statuses.WARNING, "The selection rectangle is empty.");
-                                    setMarkValue(row, null);
-                                    return;
-                                }
-                                setStatus(statuses.SUCCESS, "documentFirstPageRecognitionMark[" + row.Index + "] has been set.");
-                                Template.ValueTypes vt = (Template.ValueTypes)cs["ValueType2"].Value;
-                                object v = extractValueAndDrawSelectionBox(fai, r, vt);
-                                switch (vt)
-                                {
-                                    case Template.ValueTypes.PdfText:
-                                        {
-                                            Template.Mark.PdfTextValue ptv = (Template.Mark.PdfTextValue)row.Tag;
-                                            if (ptv == null)
-                                                ptv = new Template.Mark.PdfTextValue();
-                                            ptv.Text = (string)v;
-                                            setMarkValue(row, ptv);
-                                        }
-                                        break;
-                                    case Template.ValueTypes.OcrText:
-                                        {
-                                            Template.Mark.OcrTextValue otv = (Template.Mark.OcrTextValue)row.Tag;
-                                            if (otv == null)
-                                                otv = new Template.Mark.OcrTextValue();
-                                            otv.Text = (string)v;
-                                            setMarkValue(row, otv);
-                                        }
-                                        break;
-                                    case Template.ValueTypes.ImageData:
-                                        {
-                                            Template.Mark.ImageDataValue idv = (Template.Mark.ImageDataValue)row.Tag;
-                                            if (idv == null)
-                                                idv = new Template.Mark.ImageDataValue();
-                                            idv.ImageData = (ImageData)v;
-                                            setMarkValue(row, idv);
-                                        }
-                                        break;
-                                    default:
-                                        throw new Exception("Unknown option: " + vt);
-                                }
-                            }
-                            return;
-                        case "ValueType2":
-                            {
-                                Template.ValueTypes vt = (Template.ValueTypes)cs["ValueType2"].Value;
-                                object v = extractValueAndDrawSelectionBox(fai, r, vt);
-                                if (v == null)
-                                {
-                                    setStatus(statuses.WARNING, "No value was selected.");
-                                    setMarkValue(row, null);
-                                    return;
-                                }
-                                switch (vt)
-                                {
-                                    case Template.ValueTypes.PdfText:
-                                        {
-                                            Template.Mark.PdfTextValue ptv = (Template.Mark.PdfTextValue)row.Tag;
-                                            if (ptv == null)
-                                                ptv = new Template.Mark.PdfTextValue();
-                                            ptv.Text = (string)v;
-                                            setMarkValue(row, ptv);
-                                        }
-                                        break;
-                                    case Template.ValueTypes.OcrText:
-                                        {
-                                            Template.Mark.OcrTextValue otv = (Template.Mark.OcrTextValue)row.Tag;
-                                            if (otv == null)
-                                                otv = new Template.Mark.OcrTextValue();
-                                            otv.Text = (string)v;
-                                            setMarkValue(row, otv);
-                                        }
-                                        break;
-                                    case Template.ValueTypes.ImageData:
-                                        {
-                                            Template.Mark.ImageDataValue idv = (Template.Mark.ImageDataValue)row.Tag;
-                                            if (idv == null)
-                                                idv = new Template.Mark.ImageDataValue();
-                                            idv.ImageData = (ImageData)v;
-                                            setMarkValue(row, idv);
-                                        }
-                                        break;
-                                    default:
-                                        throw new Exception("Unknown option: " + vt);
-                                }
-                            }
-                            return;
-                        case "FloatingAnchorId2":
-                            setStatus(statuses.WARNING, "documentFirstPageRecognitionMark[" + e.RowIndex + "] may need correction due to anchor change.");
-                            return;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    LogMessage.Error(ex);
-                }
-            };
-
-            documentFirstPageRecognitionMarks.SelectionChanged += delegate (object sender, EventArgs e)
-            {
-                try
-                {
-                    if (loadingTemplate)
-                        return;
-
-                    setCurrentMarkValueFromControl();
-
-                    setStatus(statuses.NEUTRAL, "");
-                    if (documentFirstPageRecognitionMarks.SelectedRows.Count < 1)
-                    {
-                        setMarkControl(null);
-                        return;
-                    }
-                    floatingAnchors.ClearSelection();
-                    fields.ClearSelection();
-                    int i = documentFirstPageRecognitionMarks.SelectedRows[0].Index;
-                    var row = documentFirstPageRecognitionMarks.Rows[i];
-
-                    if (row.IsNewRow)//hacky forcing commit a newly added row and display the blank row
-                    {
-                        int j = documentFirstPageRecognitionMarks.Rows.Add();
-                        documentFirstPageRecognitionMarks.Rows[j].Selected = true;
-                        return;
-                    }
-
-                    setMarkControl(row);
-                    var cs = row.Cells;
-                    var vt = (Template.ValueTypes)cs["ValueType2"].Value;
-                    int? fai = (int?)cs["FloatingAnchorId2"].Value;
-                    Template.RectangleF r = (Template.RectangleF)cs["Rectangle2"].Value;
-                    if (r != null)
-                    {
-                        switch (vt)
-                        {
-                            case Template.ValueTypes.PdfText:
-                                {
-                                    Template.Mark.PdfTextValue ptv1 = (Template.Mark.PdfTextValue)row.Tag;
-                                    string t2 = (string)extractValueAndDrawSelectionBox(fai, r, vt);
-                                    if (ptv1.Text != t2)
-                                        setStatus(statuses.ERROR, "documentFirstPageRecognitionMark[" + i + "] is not found:\r\n" + t2 + "\r\n <> \r\n" + ptv1.Text);
-                                    else
-                                        setStatus(statuses.SUCCESS, "documentFirstPageRecognitionMark[" + i + "] is found:\r\n" + t2);
-                                }
-                                break;
-                            case Template.ValueTypes.OcrText:
-                                {
-                                    Template.Mark.OcrTextValue otv1 = (Template.Mark.OcrTextValue)row.Tag;
-                                    string t2 = (string)extractValueAndDrawSelectionBox(fai, r, vt);
-                                    if (otv1.Text != t2)
-                                        setStatus(statuses.ERROR, "documentFirstPageRecognitionMark[" + i + "] is not found:\r\n" + t2 + "\r\n <> \r\n" + otv1.Text);
-                                    else
-                                        setStatus(statuses.SUCCESS, "documentFirstPageRecognitionMark[" + i + "] is found:\r\n" + t2);
-                                }
-                                break;
-                            case Template.ValueTypes.ImageData:
-                                {
-                                    Template.Mark.ImageDataValue idv1 = (Template.Mark.ImageDataValue)row.Tag;
-                                    ImageData id2 = (ImageData)extractValueAndDrawSelectionBox(fai, r, vt);
-                                    if (idv1.ImageData.ImageIsSimilar(id2, idv1.BrightnessTolerance, idv1.DifferentPixelNumberTolerance))
-                                        setStatus(statuses.SUCCESS, "documentFirstPageRecognitionMark[" + i + "] is found:\r\nimage is similar");
-                                    else
-                                        setStatus(statuses.ERROR, "documentFirstPageRecognitionMark[" + i + "] is not found:\r\nimage is not similar");
-                                }
-                                break;
-                            default:
-                                throw new Exception("Unknown option: " + vt);
-                        }
-                    }
-                    else if (fai != null)
-                    {
-                        if (null != findAndDrawFloatingAnchor(fai))
-                            setStatus(statuses.SUCCESS, "documentFirstPageRecognitionMark[" + i + "] is found");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    LogMessage.Error(ex);
-                }
-            };
-
-            fields.CellValueChanged += delegate (object sender, DataGridViewCellEventArgs e)
-            {
-                try
-                {
-                    if (loadingTemplate)
-                        return;
-                    if (e.ColumnIndex < 0)//row's header
-                        return;
-                    var cs = fields.Rows[e.RowIndex].Cells;
-                    string r_ = (string)cs["Rectangle"].Value;
-                    if (r_ == null)
-                        return;
-                    Template.RectangleF r = SerializationRoutines.Json.Deserialize<Template.RectangleF>(r_);
-                    switch (fields.Columns[e.ColumnIndex].Name)
-                    {
-                        case "Rectangle":
-                        case "Ocr":
-                            cs["Value"].Value = extractValueAndDrawSelectionBox((int?)cs["FloatingAnchorId"].Value, r, Convert.ToBoolean(cs["Ocr"].Value) ? Template.ValueTypes.OcrText : Template.ValueTypes.PdfText);
-                            break;
-                        case "FloatingAnchorId":
-                            int? fai = (int?)cs["FloatingAnchorId"].Value;
-                            if (fai != null)
-                            {
-                                pages.ActiveTemplate = getTemplateFromUI(false);
-                                PointF? p = pages[currentPage].GetFloatingAnchorPoint0((int)fai);
-                                if (p == null)
-                                    setStatus(statuses.ERROR, "FloatingAnchor[" + fai + "] is not found.");
-                                else
-                                {
-                                    setStatus(statuses.SUCCESS, "FloatingAnchor[" + fai + "] is found.");
-                                    r.X -= ((PointF)p).X;
-                                    r.Y -= ((PointF)p).Y;
-                                    cs["Rectangle"].Value = SerializationRoutines.Json.Serialize(r);
-                                }
-                            }
-                            else//anchor deselected
-                            {
-                                setStatus(statuses.WARNING, "FloatingAnchor unlinked. The selection rectangle may need fix.");
-                                cs["Value"].Value = extractValueAndDrawSelectionBox((int?)cs["FloatingAnchorId"].Value, r, Convert.ToBoolean(cs["Ocr"].Value) ? Template.ValueTypes.OcrText : Template.ValueTypes.PdfText);
-                            }
-                            break;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Message.Error2(ex);
-                }
-            };
-
-            fields.CurrentCellDirtyStateChanged += delegate
-            {
-                if (fields.IsCurrentCellDirty)
-                    fields.CommitEdit(DataGridViewDataErrorContexts.Commit);
-            };
-
-            fields.RowValidating += delegate (object sender, DataGridViewCellCancelEventArgs e)
-            {
-                DataGridViewRow r = fields.Rows[e.RowIndex];
-                try
-                {
-                    string n = FieldPreparation.Normalize((string)r.Cells["Name_"].Value);
-                    if (!r.IsNewRow)
-                    {
-                        if (string.IsNullOrWhiteSpace(n))
-                            throw new Exception("Name cannot be empty!");
-                        foreach (DataGridViewRow rr in fields.Rows)
-                        {
-                            if (r != rr && n == FieldPreparation.Normalize((string)rr.Cells["Name_"].Value))
-                                throw new Exception("Name '" + n + "' is duplicated!");
-                        }
-                    }
-                    r.Cells["Name_"].Value = n;
-                }
-                catch (Exception ex)
-                {
-                    //LogMessage.Error("Name", ex);
-                    Message.Error2(ex);
-                    e.Cancel = true;
-                }
-            };
-
-            fields.DefaultValuesNeeded += delegate (object sender, DataGridViewRowEventArgs e)
-            {
-            };
-
-            fields.CellContentClick += delegate (object sender, DataGridViewCellEventArgs e)
-            {
-                switch (fields.Columns[e.ColumnIndex].Name)
-                {
-                    case "Ocr":
-                        fields.EndEdit();
-                        break;
-                }
-            };
-
-            fields.SelectionChanged += delegate (object sender, EventArgs e)
-            {
-                try
-                {
-                    if (loadingTemplate)
-                        return;
-
-                    setStatus(statuses.NEUTRAL, "");
-                    if (fields.SelectedRows.Count > 0)
-                    {
-                        floatingAnchors.ClearSelection();
-                        documentFirstPageRecognitionMarks.ClearSelection();
-                        int i = fields.SelectedRows[0].Index;
-
-                        if (fields.Rows[i].IsNewRow)//hacky forcing commit a newly added row and display the blank row
-                        {
-                            int j = fields.Rows.Add();
-                            fields.Rows[j].Selected = true;
-                            return;
-                        }
-                        var cs = fields.Rows[i].Cells;
-
-                        var vt = Convert.ToBoolean(cs["Ocr"].Value) ? Template.ValueTypes.OcrText : Template.ValueTypes.PdfText;
-                        int? fai = (int?)cs["FloatingAnchorId"].Value;
-                        string rs = (string)cs["Rectangle"].Value;
-                        if (rs != null)
-                            cs["Value"].Value = extractValueAndDrawSelectionBox(fai, SerializationRoutines.Json.Deserialize<Template.RectangleF>(rs), vt);
-                        else
-                        {//to show status
-                            if (fai == null || findAndDrawFloatingAnchor(fai) != null)
-                                setStatus(statuses.WARNING, "field[" + i + "] has no selecting box defined");
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    LogMessage.Error(ex);
-                }
-            };
-
-            splitContainer1.Paint += SplitContainer1_Paint;
+                        SplitContainer s = sender as SplitContainer;
+                        if (s != null)
+                            e.Graphics.FillRectangle(SystemBrushes.ButtonShadow, s.SplitterRectangle);
+                    };
+            }, true);
 
             testFile.TextChanged += delegate
             {
@@ -791,24 +337,23 @@ namespace Cliver.PdfDocumentParser
             SaveAsInitialTemplate.LinkClicked += SaveAsInitialTemplate_LinkClicked;
             Configure.LinkClicked += Configure_LinkClicked;
             cancel.Click += delegate { Close(); };
-        }
 
-        private void bTestFile_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog d = new OpenFileDialog();
-            if (!string.IsNullOrWhiteSpace(testFile.Text))
-                d.InitialDirectory = PathRoutines.GetDirFromPath(testFile.Text);
-            else
+            bTestFile.Click += delegate (object sender, EventArgs e)
+         {
+             OpenFileDialog d = new OpenFileDialog();
+             if (!string.IsNullOrWhiteSpace(testFile.Text))
+                 d.InitialDirectory = PathRoutines.GetDirFromPath(testFile.Text);
+             else
                 if (!string.IsNullOrWhiteSpace(testFileDefaultFolder))
-                d.InitialDirectory = testFileDefaultFolder;
+                 d.InitialDirectory = testFileDefaultFolder;
 
-            d.Filter = "PDF|*.pdf|"
+             d.Filter = "PDF|*.pdf|"
                 + "All files (*.*)|*.*";
-            if (d.ShowDialog() != System.Windows.Forms.DialogResult.OK)
-                return;
-            testFile.Text = d.FileName;
+             if (d.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                 return;
+             testFile.Text = d.FileName;
+         };
         }
-        string testFileDefaultFolder;
         TemplateManager templateManager;
 
         enum Modes
@@ -835,13 +380,6 @@ namespace Cliver.PdfDocumentParser
                 //}
                 return Modes.NULL;
             }
-        }
-
-        private void SplitContainer1_Paint(object sender, PaintEventArgs e)
-        {
-            SplitContainer s = sender as SplitContainer;
-            if (s != null)
-                e.Graphics.FillRectangle(SystemBrushes.ButtonShadow, s.SplitterRectangle);
         }
     }
 }

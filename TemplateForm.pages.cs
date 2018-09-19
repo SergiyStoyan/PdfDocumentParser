@@ -59,7 +59,7 @@ namespace Cliver.PdfDocumentParser
             Template.FloatingAnchor fa = pages.ActiveTemplate.FloatingAnchors.Where(a => a.Id == (int)floatingAnchorId).FirstOrDefault();
             if (fa == null || fa.Value == null)
             {
-                setStatus(statuses.WARNING, "FloatingAnchor[" + fa.Id + "] is not defined.");
+                Message.Error("FloatingAnchor[Id=" + fa.Id + "] is not defined.");
                 clearPicture(renewImage);
                 return null;
             }
@@ -67,11 +67,11 @@ namespace Cliver.PdfDocumentParser
             List<RectangleF> rs = pages[currentPage].GetFloatingAnchorRectangles(fa);
             if (rs == null || rs.Count < 1)
             {
-                setFloatingAnchorStatus(statuses.ERROR, fa, "Not found.");
+                setFloatingAnchorStatus(statuses.ERROR, fa.Id, "Not found.");
                 clearPicture(renewImage);
                 return null;
             }
-            setFloatingAnchorStatus(statuses.SUCCESS, fa, "Found.");
+            setFloatingAnchorStatus(statuses.SUCCESS, fa.Id, "Found.");
 
             drawBoxes(Settings.Appearance.FloatingAnchorMasterBoxColor, new List<System.Drawing.RectangleF> { rs[0] }, renewImage);
             if (rs.Count > 1)
@@ -192,9 +192,14 @@ namespace Cliver.PdfDocumentParser
                 if (string.IsNullOrWhiteSpace(testFile.Text) || 0 >= page_i || totalPageNumber < page_i)
                     return;
 
+                loadingTemplate = false;
+
                 floatingAnchors.ClearSelection();
+                floatingAnchors.CurrentCell = null;
                 documentFirstPageRecognitionMarks.ClearSelection();
+                documentFirstPageRecognitionMarks.CurrentCell = null;
                 fields.ClearSelection();
+                fields.CurrentCell = null;
 
                 foreach (DataGridViewRow r in fields.Rows)
                     r.Cells["Value"].Value = null;
@@ -252,22 +257,23 @@ namespace Cliver.PdfDocumentParser
             {
                 if (documentFirstPageRecognitionMarks.Rows.Count < 2)
                 {
-                    status.Text = "No condition of first page of document is specified!";
-                    status.BackColor = Color.LightYellow;
+                    Message.Warning( "No condition of first page of document is specified!");
                     return null;
                 }
+
+                foreach (DataGridViewRow r in documentFirstPageRecognitionMarks.Rows)
+                    if (!r.IsNewRow)
+                        r.Selected = true;
 
                 Template t = getTemplateFromUI(false);
                 pages.ActiveTemplate = t;
                 string error;
                 if (!pages[currentPage].IsDocumentFirstPage(out error))
                 {
-                    status.Text = error;
-                    status.BackColor = Color.LightPink;
+                    documentFirstPageRecognitionMarks.BackgroundColor = Color.LightPink;
                     return false;
                 }
-                status.Text = "The page matches first page of document.";
-                status.BackColor = Color.LightGreen;
+                documentFirstPageRecognitionMarks.BackgroundColor = Color.LightGreen;
                 return true;
             }
             catch (Exception ex)

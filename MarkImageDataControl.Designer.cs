@@ -50,7 +50,6 @@
             this.picture.Location = new System.Drawing.Point(0, 89);
             this.picture.Name = "picture";
             this.picture.Size = new System.Drawing.Size(215, 98);
-            this.picture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.picture.TabIndex = 81;
             this.picture.TabStop = false;
             // 
@@ -155,9 +154,8 @@
             this.rectangle.Location = new System.Drawing.Point(65, 64);
             this.rectangle.Name = "rectangle";
             this.rectangle.ReadOnly = true;
-            this.rectangle.Size = new System.Drawing.Size(150, 19);
+            this.rectangle.Size = new System.Drawing.Size(150, 20);
             this.rectangle.TabIndex = 83;
-            this.rectangle.Text = "";
             // 
             // label1
             // 

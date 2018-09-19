@@ -193,6 +193,7 @@ namespace Cliver.PdfDocumentParser
             return true;
         }
 
+        //#region    with taking image brightness to account (needs further work as optimums of a fragment too differ from those of a whole image)
         //public bool ImageIsSimilar2(ImageData imageData, float brightnessTolerance, float differentPixelNumberTolerance)
         //{
         //    if (Width != imageData.Width || Height != imageData.Height)
@@ -202,15 +203,11 @@ namespace Cliver.PdfDocumentParser
         //    if (imageData.absolutizedID == null)
         //        imageData.absolutizedID = getAbsolutizedImageData();
         //    int differentPixelNumber;
-        //    return imageData.isHashMatch(imageData, 0, 0, (int)(brightnessTolerance * 255), (int)(Hash.Length * differentPixelNumberTolerance), out differentPixelNumber);
+        //    return absolutizedID.isHashMatch(imageData.absolutizedID, 0, 0, (int)(brightnessTolerance * 255), (int)(Hash.Length * differentPixelNumberTolerance), out differentPixelNumber);
         //}
         //public System.Drawing.Point? FindWithinImage2(ImageData imageData, float brightnessTolerance, float differentPixelNumberTolerance, bool findBestMatch)
         //{
-        //    if (absolutizedID == null)
-        //        absolutizedID = getAbsolutizedImageData();
-        //    if (imageData.absolutizedID == null)
-        //        imageData.absolutizedID = imageData.getAbsolutizedImageData();
-        //    return imageData.FindWithinImage2(imageData, brightnessTolerance, differentPixelNumberTolerance, findBestMatch);
+        //    return FindWithinImage2(imageData, brightnessTolerance, differentPixelNumberTolerance, findBestMatch);
         //}
         //public void FindWithinImage2(ImageData imageData, float brightnessTolerance, float differentPixelNumberTolerance, Func<Point, float, bool> onFound)
         //{
@@ -218,61 +215,62 @@ namespace Cliver.PdfDocumentParser
         //        absolutizedID = getAbsolutizedImageData();
         //    if (imageData.absolutizedID == null)
         //        imageData.absolutizedID = imageData.getAbsolutizedImageData();
-        //    absolutizedID.FindWithinImage(imageData, brightnessTolerance, differentPixelNumberTolerance, onFound);
+        //    absolutizedID.FindWithinImage(imageData.absolutizedID, brightnessTolerance, differentPixelNumberTolerance, onFound);
         //}
-        ImageData absolutizedID = null;
-        void getMinMaxBrightnessOptimums(out byte min, out byte max)
-        {
-            int[] brightnesses2pointCount = new int[256];
-            for (int x = 0; x < Width; x++)
-            {
-                for (int y = 0; y < Height; y++)
-                    brightnesses2pointCount[Hash[x, y]] = brightnesses2pointCount[Hash[x, y]] + 1;
-            }
-            List<int> count_optimums = new List<int>();
-            int minBrightnessPointCount = 0;
-            min = 0;
-            for (byte i = 0; i < 128; i++)
-                if (minBrightnessPointCount < brightnesses2pointCount[i])
-                {
-                    minBrightnessPointCount = brightnesses2pointCount[i];
-                    min = i;
-                }
-            int maxBrightnessPointCount = 0;
-            max = 255;
-            for (byte i = 127; 127 <= i; i++)
-                if (maxBrightnessPointCount < brightnesses2pointCount[i])
-                {
-                    maxBrightnessPointCount = brightnesses2pointCount[i];
-                    max = i;
-                }
-        }
-        ImageData getAbsolutizedImageData()
-        {
-            ImageData aid = new ImageData(null);
-            aid.Width = Width;
-            aid.Height = Height;
+        //ImageData absolutizedID = null;
+        //void getMinMaxBrightnessOptimums(out byte min, out byte max)
+        //{
+        //    int[] brightnesses2pointCount = new int[256];
+        //    for (int x = 0; x < Width; x++)
+        //    {
+        //        for (int y = 0; y < Height; y++)
+        //            brightnesses2pointCount[Hash[x, y]] = brightnesses2pointCount[Hash[x, y]] + 1;
+        //    }
+        //    List<int> count_optimums = new List<int>();
+        //    int minBrightnessPointCount = 0;
+        //    min = 0;
+        //    for (byte i = 0; i < 128; i++)
+        //        if (minBrightnessPointCount < brightnesses2pointCount[i])
+        //        {
+        //            minBrightnessPointCount = brightnesses2pointCount[i];
+        //            min = i;
+        //        }
+        //    int maxBrightnessPointCount = 0;
+        //    max = 255;
+        //    for (byte i = 127; 127 <= i; i++)
+        //        if (maxBrightnessPointCount < brightnesses2pointCount[i])
+        //        {
+        //            maxBrightnessPointCount = brightnesses2pointCount[i];
+        //            max = i;
+        //        }
+        //}
+        //ImageData getAbsolutizedImageData()
+        //{
+        //    ImageData aid = new ImageData(null);
+        //    aid.Width = Width;
+        //    aid.Height = Height;
 
-            byte minOptimum = 0;
-            byte maxOptimum = 255;
-            getMinMaxBrightnessOptimums(out minOptimum, out maxOptimum);
-            float brightnessFactor = ((float)(maxOptimum - minOptimum)) / 255;
+        //    byte minOptimum = 0;
+        //    byte maxOptimum = 255;
+        //    getMinMaxBrightnessOptimums(out minOptimum, out maxOptimum);
+        //    float brightnessFactor = (float)255 / (maxOptimum - minOptimum);
 
-            aid.Hash = new byte[Width, Height];
-            for (int x = 0; x < Width; x++)
-            {
-                for (int y = 0; y < Height; y++)
-                {
-                    if (Hash[x, y] <= minOptimum)
-                        aid.Hash[x, y] = 0;
-                    else if (Hash[x, y] < maxOptimum)
-                        aid.Hash[x, y] = (byte)(brightnessFactor * (aid.Hash[x, y] - minOptimum));
-                    else
-                        aid.Hash[x, y] = 255;
-                }
-            }
-            return aid;
-        }
+        //    aid.Hash = new byte[Width, Height];
+        //    for (int x = 0; x < Width; x++)
+        //    {
+        //        for (int y = 0; y < Height; y++)
+        //        {
+        //            if (Hash[x, y] <= minOptimum)
+        //                aid.Hash[x, y] = 0;
+        //            else if (Hash[x, y] < maxOptimum)
+        //                aid.Hash[x, y] = (byte)(brightnessFactor * (aid.Hash[x, y] - minOptimum));
+        //            else
+        //                aid.Hash[x, y] = 255;
+        //        }
+        //    }
+        //    return aid;
+        //}
+        //#endregion
 
         public Image GetImage()
         {
