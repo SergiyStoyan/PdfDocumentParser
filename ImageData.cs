@@ -193,7 +193,7 @@ namespace Cliver.PdfDocumentParser
             return true;
         }
 
-        //#region    with taking image brightness to account (needs further work as optimums of a fragment too differ from those of a whole image)
+        #region    with taking image brightness to account (needs further work as optimums of a fragment too differ from those of a whole image)
         //public bool ImageIsSimilar2(ImageData imageData, float brightnessTolerance, float differentPixelNumberTolerance)
         //{
         //    if (Width != imageData.Width || Height != imageData.Height)
@@ -270,68 +270,73 @@ namespace Cliver.PdfDocumentParser
         //    }
         //    return aid;
         //}
-        //#endregion
-
-        #region    with summing image brightness deltas
-        public bool ImageIsSimilar(ImageData imageData, float brightnessDifferenceTolerance)
-        {
-            if (Width != imageData.Width || Height != imageData.Height)
-                throw new Exception("Images have different sizes.");
-            uint brightnessDifferenceNumber;
-            return isHashMatch(imageData, 0, 0, (uint)(Width * Height * 255 * brightnessDifferenceTolerance), out brightnessDifferenceNumber);
-        }
-
-        public System.Drawing.Point? FindWithinImage(ImageData imageData, float brightnessDifferenceTolerance, bool findBestMatch)
-        {
-            Point? bestP = null;
-            float minDeviation = 1;
-            FindWithinImage(imageData, brightnessDifferenceTolerance, (Point p, float deviation) =>
-            {
-                if (!findBestMatch)
-                {
-                    bestP = p;
-                    return false;
-                }
-                if (deviation < minDeviation)
-                {
-                    minDeviation = deviation;
-                    bestP = p;
-                }
-                return true;
-            });
-            return bestP;
-        }
-
-        public void FindWithinImage(ImageData imageData, float brightnessDifferenceTolerance, Func<Point, float, bool> onFound)
-        {
-            uint brightnessDifferenceMaxNumber = (uint)(Width * Height * 255 * brightnessDifferenceTolerance);
-            int bw = imageData.Width - Width;
-            int bh = imageData.Height - Height;
-            for (int x = 0; x <= bw; x++)
-                for (int y = 0; y <= bh; y++)
-                {
-                    uint brightnessDifferenceNumber;
-                    if (isHashMatch(imageData, x, y, brightnessDifferenceMaxNumber, out brightnessDifferenceNumber))
-                    {
-                        if (!onFound(new Point(x, y), brightnessDifferenceMaxNumber == 0 ? 0 : (float)brightnessDifferenceNumber / brightnessDifferenceMaxNumber))
-                            return;
-                    }
-                }
-        }
-
-        bool isHashMatch(ImageData imageData, int x, int y, uint brightnessDifferenceMaxNumber, out uint brightnessDifferenceNumber)
-        {
-            brightnessDifferenceNumber = 0;
-            for (int i = 0; i < Width; i++)
-                for (int j = 0; j < Height; j++)
-                {
-                    brightnessDifferenceNumber += (uint)Math.Abs(imageData.Hash[x + i, y + j] - Hash[i, j]);
-                    if (brightnessDifferenceNumber > brightnessDifferenceMaxNumber)
-                        return false;
-                }
-            return true;
-        }
         #endregion
+
+        //#region    with summing image brightness deltas
+        //public bool ImageIsSimilar(ImageData imageData, float brightnessTolerance, float brightnessTotalDifferenceTolerance)
+        //{
+        //    if (Width != imageData.Width || Height != imageData.Height)
+        //        throw new Exception("Images have different sizes.");
+        //    uint brightnessDifferenceNumber;
+        //    return isHashMatch(imageData, 0, 0, (uint)(brightnessTolerance * 255), (uint)(Width * Height * 255 * brightnessTotalDifferenceTolerance), out brightnessDifferenceNumber);
+        //}
+
+        //public System.Drawing.Point? FindWithinImage(ImageData imageData, float brightnessTolerance, float brightnessTotalDifferenceTolerance, bool findBestMatch)
+        //{
+        //    Point? bestP = null;
+        //    float minDeviation = 1;
+        //    FindWithinImage(imageData, brightnessTolerance, brightnessTotalDifferenceTolerance, (Point p, float deviation) =>
+        //    {
+        //        if (!findBestMatch)
+        //        {
+        //            bestP = p;
+        //            return false;
+        //        }
+        //        if (deviation < minDeviation)
+        //        {
+        //            minDeviation = deviation;
+        //            bestP = p;
+        //        }
+        //        return true;
+        //    });
+        //    return bestP;
+        //}
+
+        //public void FindWithinImage(ImageData imageData, float brightnessTolerance, float brightnessDifferenceTolerance, Func<Point, float, bool> onFound)
+        //{
+        //    uint brightnessMaxDifference = (uint)(brightnessTolerance * 255);
+        //    uint brightnessTotalMaxDifference = (uint)(Width * Height * 255 * brightnessDifferenceTolerance);
+        //    int bw = imageData.Width - Width;
+        //    int bh = imageData.Height - Height;
+        //    for (int x = 0; x <= bw; x++)
+        //        for (int y = 0; y <= bh; y++)
+        //        {
+        //            uint brightnessTotalDifference;
+        //            if (isHashMatch(imageData, x, y, brightnessMaxDifference, brightnessTotalMaxDifference, out brightnessTotalDifference))
+        //            {
+        //                if (!onFound(new Point(x, y), brightnessTotalMaxDifference == 0 ? 0 : (float)brightnessTotalDifference / brightnessTotalMaxDifference))
+        //                    return;
+        //            }
+        //        }
+        //}
+
+        //bool isHashMatch(ImageData imageData, int x, int y, uint brightnessMaxDifference, uint brightnessTotalMaxDifference, out uint brightnessTotalDifference)
+        //{
+        //    brightnessTotalDifference = 0;
+        //    for (int i = 0; i < Width; i++)
+        //        for (int j = 0; j < Height; j++)
+        //        {
+        //            uint d = (uint)Math.Abs(imageData.Hash[x + i, y + j] - Hash[i, j]);
+        //            if (d > brightnessMaxDifference)
+        //            {
+        //                brightnessTotalDifference += d;
+        //                if (brightnessTotalDifference > brightnessTotalMaxDifference)
+        //                    return false;
+        //            }
+        //        }
+        //    return true;
+        //}
+        //#endregion
 
         public Image GetImage()
         {

@@ -105,7 +105,9 @@ namespace Cliver.PdfDocumentParser
 
         Bitmap getRectangleFromActiveTemplateBitmap(float x, float y, float w, float h)
         {
-            return ActiveTemplateBitmap.Clone(new RectangleF(x, y, w, h), System.Drawing.Imaging.PixelFormat.Undefined);
+            RectangleF r = new RectangleF(0, 0, ActiveTemplateBitmap.Width, ActiveTemplateBitmap.Height);
+            r.Intersect(new RectangleF(x, y, w, h));
+            return ActiveTemplateBitmap.Clone(r, System.Drawing.Imaging.PixelFormat.Undefined);
             //return ImageRoutines.GetCopy(ActiveTemplateBitmap, new RectangleF(x, y, w, h));
         }
 
@@ -207,14 +209,22 @@ namespace Cliver.PdfDocumentParser
                         List<Template.FloatingAnchor.PdfTextValue.CharBox> faes = ptv.CharBoxs;
                         if (faes.Count < 1)
                             return null;
-        List<Pdf.CharBox> bts = new List<Pdf.CharBox>();
-                        foreach (Pdf.CharBox bt0 in PdfCharBoxs.Where(a => a.Char == faes[0].Char))
+                        IEnumerable<Pdf.CharBox> bt0s;
+                        if (ptv.SearchRectangleMargin < 0)
+                            bt0s = PdfCharBoxs.Where(a => a.Char == faes[0].Char);
+                        else
+                        {
+                            RectangleF sr = Template.FloatingAnchor.BaseValue.GetSearchRectangle(faes[0].Rectangle, ptv.SearchRectangleMargin);
+                            bt0s = PdfCharBoxs.Where(a => a.Char == faes[0].Char && sr.Contains(a.R));
+                        }
+                        List<Pdf.CharBox> bts = new List<Pdf.CharBox>();
+                        foreach (Pdf.CharBox bt0 in bt0s)
                         {
                             bts.Clear();
                             bts.Add(bt0);
                             for (int i = 1; i < faes.Count; i++)
                             {
-                                float x,y;
+                                float x, y;
                                 if (ptv.PositionDeviationIsAbsolute)
                                 {
                                     x = bt0.R.X + faes[i].Rectangle.X - faes[0].Rectangle.X;
@@ -245,15 +255,32 @@ namespace Cliver.PdfDocumentParser
                         List<Template.FloatingAnchor.OcrTextValue.CharBox> faes = otv.CharBoxs;
                         if (faes.Count < 1)
                             return null;
+                        IEnumerable<Ocr.CharBox> bt0s;
+                        if (otv.SearchRectangleMargin < 0)
+                            bt0s = ActiveTemplateOcrCharBoxs.Where(a => a.Char == faes[0].Char);
+                        else
+                        {
+                            RectangleF sr = Template.FloatingAnchor.BaseValue.GetSearchRectangle(faes[0].Rectangle, otv.SearchRectangleMargin);
+                            bt0s = ActiveTemplateOcrCharBoxs.Where(a => a.Char == faes[0].Char && sr.Contains(a.R));
+                        }
                         List<Ocr.CharBox> bts = new List<Ocr.CharBox>();
-                        foreach (Ocr.CharBox bt0 in ActiveTemplateOcrCharBoxs.Where(a => a.Char == faes[0].Char))
+                        foreach (Ocr.CharBox bt0 in bt0s)
                         {
                             bts.Clear();
                             bts.Add(bt0);
                             for (int i = 1; i < faes.Count; i++)
                             {
-                                float x = bt0.R.X + faes[i].Rectangle.X - faes[0].Rectangle.X;
-                                float y = bt0.R.Y + faes[i].Rectangle.Y - faes[0].Rectangle.Y;
+                                float x, y;
+                                if (otv.PositionDeviationIsAbsolute)
+                                {
+                                    x = bt0.R.X + faes[i].Rectangle.X - faes[0].Rectangle.X;
+                                    y = bt0.R.Y + faes[i].Rectangle.Y - faes[0].Rectangle.Y;
+                                }
+                                else
+                                {
+                                    x = bts[i - 1].R.X + faes[i].Rectangle.X - faes[i - 1].Rectangle.X;
+                                    y = bts[i - 1].R.Y + faes[i].Rectangle.Y - faes[i - 1].Rectangle.Y;
+                                }
                                 foreach (Ocr.CharBox bt in ActiveTemplateOcrCharBoxs.Where(a => a.Char == faes[i].Char))
                                     if (Math.Abs(bt.R.X - x) <= otv.PositionDeviation && Math.Abs(bt.R.Y - y) <= otv.PositionDeviation)
                                     {
@@ -269,45 +296,61 @@ namespace Cliver.PdfDocumentParser
                     }
                     return null;
                 case Template.ValueTypes.ImageData:
-                    Template.FloatingAnchor.ImageDataValue idv = (Template.FloatingAnchor.ImageDataValue)fa.Value;
-                    List<Template.FloatingAnchor.ImageDataValue.ImageBox> ibs = idv.ImageBoxs;
-                    if (ibs.Count < 1)
-                        return null;
-                    List<RectangleF> bestRs = null;
-                    float minDeviation = 1;
-                    ibs[0].ImageData.FindWithinImage(ActiveTemplateImageData, idv.BrightnessTolerance, idv.DifferentPixelNumberTolerance, (Point point0, float deviation) =>
                     {
-                        List<RectangleF> rs = new List<RectangleF>();
-                        rs.Add(new RectangleF(point0, new SizeF(ibs[0].Rectangle.Width, ibs[0].Rectangle.Height)));
-                        for (int i = 1; i < ibs.Count; i++)
+                        Template.FloatingAnchor.ImageDataValue idv = (Template.FloatingAnchor.ImageDataValue)fa.Value;
+                        List<Template.FloatingAnchor.ImageDataValue.ImageBox> ibs = idv.ImageBoxs;
+                        if (ibs.Count < 1)
+                            return null;
+                        Point shift;
+                        ImageData id0;
+                        if (idv.SearchRectangleMargin < 0)
                         {
-                            //Template.RectangleF r = new Template.RectangleF(point0.X + ibs[i].Rectangle.X - ibs[0].Rectangle.X, point0.Y + ibs[i].Rectangle.Y - ibs[0].Rectangle.Y, ibs[i].Rectangle.Width, ibs[i].Rectangle.Height);
-                            //using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Y / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height / Settings.ImageProcessing.Image2PdfResolutionRatio))
-                            //{
-                            //    if (!ibs[i].ImageData.ImageIsSimilar(new ImageData(rb), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance))
-                            //        return true;
-                            //}
-                            Template.RectangleF r = new Template.RectangleF(point0.X + ibs[i].Rectangle.X - ibs[0].Rectangle.X - idv.PositionDeviation, point0.Y + ibs[i].Rectangle.Y - ibs[0].Rectangle.Y - idv.PositionDeviation, ibs[i].Rectangle.Width + idv.PositionDeviation, ibs[i].Rectangle.Height + idv.PositionDeviation);
-                            using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Y / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height / Settings.ImageProcessing.Image2PdfResolutionRatio))
+                            id0 = ActiveTemplateImageData;
+                            shift = new Point(0, 0);
+                        }
+                        else
+                        {
+                            RectangleF sr = Template.FloatingAnchor.BaseValue.GetSearchRectangle(ibs[0].Rectangle, idv.SearchRectangleMargin);
+                            id0 = new ImageData(getRectangleFromActiveTemplateBitmap(sr.X / Settings.ImageProcessing.Image2PdfResolutionRatio, sr.Y / Settings.ImageProcessing.Image2PdfResolutionRatio, sr.Width / Settings.ImageProcessing.Image2PdfResolutionRatio, sr.Height / Settings.ImageProcessing.Image2PdfResolutionRatio));
+                            shift = new Point(sr.X < 0 ? 0 : (int)sr.X, sr.Y < 0 ? 0 : (int)sr.Y);
+                        }
+                        List<RectangleF> bestRs = null;
+                        float minDeviation = 1;
+                        ibs[0].ImageData.FindWithinImage(id0, idv.BrightnessTolerance, idv.DifferentPixelNumberTolerance, (Point point0, float deviation) =>
+                        {
+                            point0 = new Point(shift.X + point0.X, shift.Y + point0.Y);
+                            List<RectangleF> rs = new List<RectangleF>();
+                            rs.Add(new RectangleF(point0, new SizeF(ibs[0].Rectangle.Width, ibs[0].Rectangle.Height)));
+                            for (int i = 1; i < ibs.Count; i++)
                             {
-                                if (null == ibs[i].ImageData.FindWithinImage(new ImageData(rb), idv.BrightnessTolerance, idv.DifferentPixelNumberTolerance, false))
-                                    return true;
+                                //Template.RectangleF r = new Template.RectangleF(point0.X + ibs[i].Rectangle.X - ibs[0].Rectangle.X, point0.Y + ibs[i].Rectangle.Y - ibs[0].Rectangle.Y, ibs[i].Rectangle.Width, ibs[i].Rectangle.Height);
+                                //using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Y / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height / Settings.ImageProcessing.Image2PdfResolutionRatio))
+                                //{
+                                //    if (!ibs[i].ImageData.ImageIsSimilar(new ImageData(rb), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance))
+                                //        return true;
+                                //}
+                                Template.RectangleF r = new Template.RectangleF(point0.X + ibs[i].Rectangle.X - ibs[0].Rectangle.X - idv.PositionDeviation, point0.Y + ibs[i].Rectangle.Y - ibs[0].Rectangle.Y - idv.PositionDeviation, ibs[i].Rectangle.Width + idv.PositionDeviation, ibs[i].Rectangle.Height + idv.PositionDeviation);
+                                using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Y / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height / Settings.ImageProcessing.Image2PdfResolutionRatio))
+                                {
+                                    if (null == ibs[i].ImageData.FindWithinImage(new ImageData(rb), idv.BrightnessTolerance, idv.DifferentPixelNumberTolerance, false))
+                                        return true;
+                                }
+                                rs.Add(r.GetSystemRectangleF());
                             }
-                            rs.Add(r.GetSystemRectangleF());
-                        }
-                        if (!idv.FindBestImageMatch)
-                        {
-                            bestRs = rs;
-                            return false;
-                        }
-                        if (deviation < minDeviation)
-                        {
-                            minDeviation = deviation;
-                            bestRs = rs;
-                        }
-                        return true;
-                    });
-                    return bestRs;
+                            if (!idv.FindBestImageMatch)
+                            {
+                                bestRs = rs;
+                                return false;
+                            }
+                            if (deviation < minDeviation)
+                            {
+                                minDeviation = deviation;
+                                bestRs = rs;
+                            }
+                            return true;
+                        });
+                        return bestRs;
+                    }
                 default:
                     throw new Exception("Unknown option: " + fa.ValueType);
             }

@@ -28,16 +28,16 @@ namespace Cliver.PdfDocumentParser
         {
             get
             {
-                if (_value == null)
-                    return _value;
                 _value.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
                 _value.PositionDeviation = (float)PositionDeviation.Value;
+                _value.SearchRectangleMargin = (int)SearchRectangleMargin.Value;
                 return _value;
             }
             set
             {
                 if (value == null)
                     value = new Template.FloatingAnchor.PdfTextValue();
+                _value = value;
                 StringBuilder sb = new StringBuilder();
                 foreach (var l in Pdf.RemoveDuplicatesAndGetLines(value.CharBoxs.Select(x => new Pdf.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() }), true))
                 {
@@ -53,6 +53,7 @@ namespace Cliver.PdfDocumentParser
                     PositionDeviation.Value = (decimal)value.PositionDeviation;
                 }
                 catch { }
+                SearchRectangleMargin.Value = value.SearchRectangleMargin;
             }
         }
         Template.FloatingAnchor.PdfTextValue _value;

@@ -28,13 +28,12 @@ namespace Cliver.PdfDocumentParser
         {
             get
             {
-                if (_value == null)
-                    return _value;
                 _value.FindBestImageMatch = FindBestImageMatch.Checked;
                 _value.BrightnessTolerance = (float)BrightnessTolerance.Value;
                 _value.DifferentPixelNumberTolerance = (float)DifferentPixelNumberTolerance.Value;
                 //_value.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
                 _value.PositionDeviation = (float)PositionDeviation.Value;
+                _value.SearchRectangleMargin = (int)SearchRectangleMargin.Value;
                 return _value;
             }
             private set
@@ -52,6 +51,7 @@ namespace Cliver.PdfDocumentParser
                     PositionDeviation.Value = (decimal)value.PositionDeviation;
                 }
                 catch { }
+                SearchRectangleMargin.Value = _value.SearchRectangleMargin;
             }
         }
         Template.FloatingAnchor.ImageDataValue _value;

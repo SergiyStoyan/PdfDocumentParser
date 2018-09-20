@@ -39,10 +39,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.PositionDeviation = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.SearchRectangleMargin = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BrightnessTolerance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DifferentPixelNumberTolerance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PositionDeviation)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SearchRectangleMargin)).BeginInit();
             this.SuspendLayout();
             // 
             // picture
@@ -50,9 +53,9 @@
             this.picture.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.picture.Location = new System.Drawing.Point(0, 97);
+            this.picture.Location = new System.Drawing.Point(0, 122);
             this.picture.Name = "picture";
-            this.picture.Size = new System.Drawing.Size(218, 89);
+            this.picture.Size = new System.Drawing.Size(218, 92);
             this.picture.TabIndex = 67;
             this.picture.TabStop = false;
             // 
@@ -113,7 +116,7 @@
             0,
             131072});
             this.BrightnessTolerance.Name = "BrightnessTolerance";
-            this.BrightnessTolerance.Size = new System.Drawing.Size(42, 20);
+            this.BrightnessTolerance.Size = new System.Drawing.Size(47, 20);
             this.BrightnessTolerance.TabIndex = 62;
             this.BrightnessTolerance.Value = new decimal(new int[] {
             1,
@@ -141,7 +144,7 @@
             0,
             131072});
             this.DifferentPixelNumberTolerance.Name = "DifferentPixelNumberTolerance";
-            this.DifferentPixelNumberTolerance.Size = new System.Drawing.Size(42, 20);
+            this.DifferentPixelNumberTolerance.Size = new System.Drawing.Size(47, 20);
             this.DifferentPixelNumberTolerance.TabIndex = 64;
             this.DifferentPixelNumberTolerance.Value = new decimal(new int[] {
             1,
@@ -188,7 +191,7 @@
             0,
             65536});
             this.PositionDeviation.Name = "PositionDeviation";
-            this.PositionDeviation.Size = new System.Drawing.Size(42, 20);
+            this.PositionDeviation.Size = new System.Drawing.Size(47, 20);
             this.PositionDeviation.TabIndex = 70;
             this.PositionDeviation.Value = new decimal(new int[] {
             1,
@@ -206,10 +209,43 @@
             this.label2.TabIndex = 71;
             this.label2.Text = "Position Deviation Is Absolute:";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(3, 98);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(131, 13);
+            this.label3.TabIndex = 72;
+            this.label3.Text = "Search Rectangle Margin:";
+            // 
+            // SearchRectangleMargin
+            // 
+            this.SearchRectangleMargin.Location = new System.Drawing.Point(168, 96);
+            this.SearchRectangleMargin.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.SearchRectangleMargin.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.SearchRectangleMargin.Name = "SearchRectangleMargin";
+            this.SearchRectangleMargin.Size = new System.Drawing.Size(47, 20);
+            this.SearchRectangleMargin.TabIndex = 73;
+            this.SearchRectangleMargin.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            // 
             // FloatingAnchorImageDataControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.SearchRectangleMargin);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.PositionDeviation);
@@ -222,11 +258,12 @@
             this.Controls.Add(this.BrightnessTolerance);
             this.Controls.Add(this.DifferentPixelNumberTolerance);
             this.Name = "FloatingAnchorImageDataControl";
-            this.Size = new System.Drawing.Size(218, 186);
+            this.Size = new System.Drawing.Size(218, 214);
             ((System.ComponentModel.ISupportInitialize)(this.picture)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.BrightnessTolerance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DifferentPixelNumberTolerance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PositionDeviation)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SearchRectangleMargin)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -245,5 +282,7 @@
         private System.Windows.Forms.Label label1;
         public System.Windows.Forms.NumericUpDown PositionDeviation;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        public System.Windows.Forms.NumericUpDown SearchRectangleMargin;
     }
 }

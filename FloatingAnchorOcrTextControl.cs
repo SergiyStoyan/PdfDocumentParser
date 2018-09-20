@@ -28,16 +28,16 @@ namespace Cliver.PdfDocumentParser
         {
             get
             {
-                if (_value == null)
-                    return _value;
-                //_value.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
+                _value.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
                 _value.PositionDeviation = (float)PositionDeviation.Value;
+                _value.SearchRectangleMargin = (int)SearchRectangleMargin.Value;
                 return _value;
             }
             set
             {
                 if (value == null)
                     value = new Template.FloatingAnchor.OcrTextValue();
+                _value = value;
                 StringBuilder sb = new StringBuilder();
                 foreach (var l in Ocr.GetLines(value.CharBoxs.Select(x => new Ocr.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() })))
                 {
@@ -46,11 +46,13 @@ namespace Cliver.PdfDocumentParser
                     sb.Append("\r\n");
                 }
                 text.Text = sb.ToString();
+                PositionDeviationIsAbsolute.Checked = value.PositionDeviationIsAbsolute;
                 try
                 {
                     PositionDeviation.Value = (decimal)value.PositionDeviation;
                 }
                 catch { }
+                SearchRectangleMargin.Value = _value.SearchRectangleMargin;
             }
         }
         Template.FloatingAnchor.OcrTextValue _value;

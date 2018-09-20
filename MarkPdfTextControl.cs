@@ -35,6 +35,7 @@ namespace Cliver.PdfDocumentParser
             {
                 if (value == null)
                     value = new Template.Mark.PdfTextValue();
+                _value = value;
                 text.Text = value.Text;
             }
         }

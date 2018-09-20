@@ -33,7 +33,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.PositionDeviation = new System.Windows.Forms.NumericUpDown();
             this.PositionDeviationIsAbsolute = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.SearchRectangleMargin = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.PositionDeviation)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SearchRectangleMargin)).BeginInit();
             this.SuspendLayout();
             // 
             // text
@@ -41,10 +44,10 @@
             this.text.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.text.Location = new System.Drawing.Point(0, 45);
+            this.text.Location = new System.Drawing.Point(0, 68);
             this.text.Name = "text";
             this.text.ReadOnly = true;
-            this.text.Size = new System.Drawing.Size(204, 107);
+            this.text.Size = new System.Drawing.Size(204, 84);
             this.text.TabIndex = 62;
             this.text.Text = "";
             // 
@@ -86,7 +89,7 @@
             0,
             65536});
             this.PositionDeviation.Name = "PositionDeviation";
-            this.PositionDeviation.Size = new System.Drawing.Size(42, 20);
+            this.PositionDeviation.Size = new System.Drawing.Size(47, 20);
             this.PositionDeviation.TabIndex = 74;
             this.PositionDeviation.Value = new decimal(new int[] {
             1,
@@ -103,10 +106,43 @@
             this.PositionDeviationIsAbsolute.TabIndex = 72;
             this.PositionDeviationIsAbsolute.UseVisualStyleBackColor = true;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(3, 44);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(131, 13);
+            this.label3.TabIndex = 83;
+            this.label3.Text = "Search Rectangle Margin:";
+            // 
+            // SearchRectangleMargin
+            // 
+            this.SearchRectangleMargin.Location = new System.Drawing.Point(154, 42);
+            this.SearchRectangleMargin.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.SearchRectangleMargin.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.SearchRectangleMargin.Name = "SearchRectangleMargin";
+            this.SearchRectangleMargin.Size = new System.Drawing.Size(47, 20);
+            this.SearchRectangleMargin.TabIndex = 84;
+            this.SearchRectangleMargin.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            // 
             // FloatingAnchorPdfTextControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.SearchRectangleMargin);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.PositionDeviation);
@@ -115,6 +151,7 @@
             this.Name = "FloatingAnchorPdfTextControl";
             this.Size = new System.Drawing.Size(204, 152);
             ((System.ComponentModel.ISupportInitialize)(this.PositionDeviation)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SearchRectangleMargin)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -127,5 +164,7 @@
         private System.Windows.Forms.Label label1;
         public System.Windows.Forms.NumericUpDown PositionDeviation;
         public System.Windows.Forms.CheckBox PositionDeviationIsAbsolute;
+        private System.Windows.Forms.Label label3;
+        public System.Windows.Forms.NumericUpDown SearchRectangleMargin;
     }
 }

@@ -228,7 +228,7 @@ namespace Cliver.PdfDocumentParser
             //serialize
             public ValueTypes ValueType = ValueTypes.PdfText;
             //serialize
-            public float PositionDeviation = 0.1f;
+            public float PositionDeviation = 0.1f;//to be removed after update
             //serialize
             public string ValueAsString
             {
@@ -302,14 +302,22 @@ namespace Cliver.PdfDocumentParser
             //not to serialize!
             internal BaseValue Value { get; set; }
 
-            public class BaseValue
+            public abstract class BaseValue
             {
+                public int SearchRectangleMargin = -1;//px
+                public float PositionDeviation = 0.1f;
+                public bool PositionDeviationIsAbsolute = true;
+
+                public static System.Drawing.RectangleF GetSearchRectangle(RectangleF rectangle0, int margin/*, System.Drawing.RectangleF pageRectangle*/)
+                {
+                    System.Drawing.RectangleF r = new System.Drawing.RectangleF(rectangle0.X - margin, rectangle0.Y - margin, rectangle0.Width + 2 * margin, rectangle0.Height + 2 * margin);
+                    //r.Intersect(pageRectangle);
+                    return r;
+                }
             }
             public class PdfTextValue: BaseValue
             {
                 public List<CharBox> CharBoxs = new List<CharBox>();
-                public float PositionDeviation = 0.1f;
-                public bool PositionDeviationIsAbsolute = true;
                 public class CharBox
                 {
                     public string Char;
@@ -319,8 +327,6 @@ namespace Cliver.PdfDocumentParser
             public class OcrTextValue: BaseValue
             {
                 public List<CharBox> CharBoxs = new List<CharBox>();
-                public float PositionDeviation = 0.1f;
-                //public bool PositionDeviationIsAbsolute = true;
                 public class CharBox
                 {
                     public string Char;
@@ -330,8 +336,6 @@ namespace Cliver.PdfDocumentParser
             public class ImageDataValue: BaseValue
             {
                 public List<ImageBox> ImageBoxs = new List<ImageBox>();
-                public float PositionDeviation = 0.1f;
-                //public bool PositionDeviationIsAbsolute = true;
                 public class ImageBox
                 {
                     public ImageData ImageData;
