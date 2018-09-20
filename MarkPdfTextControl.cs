@@ -26,11 +26,10 @@ namespace Cliver.PdfDocumentParser
             {
                 return _value;
             }
-            set
+            private set
             {
-                _value = value;
                 if (value == null)
-                    return;
+                    value = new Template.Mark.PdfTextValue();
                 text.Text = value.Text;
             }
         }

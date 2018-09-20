@@ -335,8 +335,8 @@ namespace Cliver.PdfDocumentParser
                     public RectangleF Rectangle;
                 }
 
-                public float BrightnessTolerance = 0.4f;
-                public float DifferentPixelNumberTolerance = 0.02f;
+                public float BrightnessTolerance = 0.20f;
+                public float DifferentPixelNumberTolerance = 0.15f;
                 public bool FindBestImageMatch = false;
             }
         }

@@ -31,9 +31,8 @@ namespace Cliver.PdfDocumentParser
             }
             set
             {
-                _value = value;
                 if (value == null)
-                    return;
+                    value = new Template.FloatingAnchor.PdfTextValue();
                 StringBuilder sb = new StringBuilder();
                 foreach (var l in Pdf.RemoveDuplicatesAndGetLines(value.CharBoxs.Select(x => new Pdf.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() }), true))
                 {

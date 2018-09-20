@@ -32,11 +32,11 @@ namespace Cliver.PdfDocumentParser
                 _value.PositionDeviation = (float)PositionDeviation.Value;
                 return _value;
             }
-            set
+            private set
             {
-                _value = value;
                 if (value == null)
-                    return;
+                    value = new Template.FloatingAnchor.ImageDataValue();
+                _value = value;
                 FindBestImageMatch.Checked = value.FindBestImageMatch;
                 BrightnessTolerance.Value = (decimal)value.BrightnessTolerance;
                 DifferentPixelNumberTolerance.Value = (decimal)value.DifferentPixelNumberTolerance;

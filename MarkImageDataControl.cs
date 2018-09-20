@@ -33,15 +33,13 @@ namespace Cliver.PdfDocumentParser
             }
             set
             {
-                _value = value;
-                if (value != null)
-                {
-                    findBestImageMatch.Checked = value.FindBestImageMatch;
-                    brightnessTolerance.Value = (decimal)value.BrightnessTolerance;
-                    differentPixelNumberTolerance.Value = (decimal)value.DifferentPixelNumberTolerance;
-                    if (value.ImageData != null)
-                        picture.Image = value.ImageData.GetImage();
-                }
+                if (value == null)
+                    value = new Template.Mark.ImageDataValue();
+                findBestImageMatch.Checked = value.FindBestImageMatch;
+                brightnessTolerance.Value = (decimal)value.BrightnessTolerance;
+                differentPixelNumberTolerance.Value = (decimal)value.DifferentPixelNumberTolerance;
+                if (value.ImageData != null)
+                    picture.Image = value.ImageData.GetImage();
             }
         }
         Template.Mark.ImageDataValue _value;

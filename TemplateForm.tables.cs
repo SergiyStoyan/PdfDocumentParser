@@ -447,7 +447,7 @@ namespace Cliver.PdfDocumentParser
                         if (cs["Value"].Value != null)
                             setRowStatus(statuses.SUCCESS, row, "Found");
                         else
-                            setRowStatus(statuses.ERROR, row, "Not found");
+                            setRowStatus(statuses.ERROR, row, "Error");
                     }
                     else
                         setRowStatus(statuses.WARNING, row, "Not set");

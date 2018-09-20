@@ -28,9 +28,8 @@ namespace Cliver.PdfDocumentParser
             }
             set
             {
-                _value = value;
                 if (value == null)
-                    return;
+                    value = new Template.Mark.OcrTextValue();
                 text.Text = value.Text;
             }
         }

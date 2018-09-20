@@ -31,9 +31,8 @@ namespace Cliver.PdfDocumentParser
             }
             set
             {
-                _value = value;
                 if (value == null)
-                    return;
+                    value = new Template.FloatingAnchor.OcrTextValue();
                 StringBuilder sb = new StringBuilder();
                 foreach (var l in Ocr.GetLines(value.CharBoxs.Select(x => new Ocr.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() })))
                 {
