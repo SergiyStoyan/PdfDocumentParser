@@ -57,14 +57,8 @@ namespace Cliver.PdfDocumentParser
             pages.ActiveTemplate = getTemplateFromUI(false);
 
             Template.FloatingAnchor fa = pages.ActiveTemplate.FloatingAnchors.Where(a => a.Id == (int)floatingAnchorId).FirstOrDefault();
-            if (fa == null || fa.Value == null)
-            {
-                Message.Error("FloatingAnchor[Id=" + fa.Id + "] is not defined.");
-                clearPicture(renewImage);
-                return null;
-            }
-
-            List<RectangleF> rs = pages[currentPage].GetFloatingAnchorRectangles(fa);
+            if (fa == null)
+                throw new Exception("FloatingAnchor[Id=" + fa.Id + "] is not defined.");
 
             DataGridViewRow row = null;
             foreach (DataGridViewRow r in floatingAnchors.Rows)
@@ -76,6 +70,14 @@ namespace Cliver.PdfDocumentParser
             if (row == null)
                 throw new Exception("FloatingAnchor[Id=" + fa.Id + "] does not exist.");
 
+            if (fa.Value == null)
+            {
+                setRowStatus(statuses.WARNING, row, "Not set");
+                clearPicture(renewImage);
+                return null;
+            }
+
+            List<RectangleF> rs = pages[currentPage].GetFloatingAnchorRectangles(fa);
             if (rs == null || rs.Count < 1)
             {
                 setRowStatus(statuses.ERROR, row, "Not found");
@@ -224,23 +226,23 @@ namespace Cliver.PdfDocumentParser
 
                 if (ExtractFieldsAutomaticallyWhenPageChanged.Checked)
                 {
-                    foreach (DataGridViewRow r in fields.Rows)
+                    foreach (DataGridViewRow row in fields.Rows)
                     {
-                        if (r.IsNewRow)
+                        if (row.IsNewRow)
                             continue;
-                        var vt = Convert.ToBoolean(r.Cells["Ocr"].Value) ? Template.ValueTypes.OcrText : Template.ValueTypes.PdfText;
-                        int? fai = (int?)r.Cells["FloatingAnchorId"].Value;
-                        string rs = (string)r.Cells["Rectangle"].Value;
+                        var vt = Convert.ToBoolean(row.Cells["Ocr"].Value) ? Template.ValueTypes.OcrText : Template.ValueTypes.PdfText;
+                        int? fai = (int?)row.Cells["FloatingAnchorId"].Value;
+                        string rs = (string)row.Cells["Rectangle"].Value;
                         if (rs != null)
                         {
-                            r.Cells["Value"].Value = extractValueAndDrawSelectionBox(fai, SerializationRoutines.Json.Deserialize<Template.RectangleF>(rs), vt);
-                            if (r.Cells["Value"].Value != null)
-                                setRowStatus(statuses.SUCCESS, r, "Found");
+                            row.Cells["Value"].Value = extractValueAndDrawSelectionBox(fai, SerializationRoutines.Json.Deserialize<Template.RectangleF>(rs), vt);
+                            if (row.Cells["Value"].Value != null)
+                                setRowStatus(statuses.SUCCESS, row, "Found");
                             else
-                                setRowStatus(statuses.ERROR, r, "Not found");
+                                setRowStatus(statuses.ERROR, row, "Not found");
                         }
                         else
-                            setRowStatus(statuses.WARNING, r, "Not set");
+                            setRowStatus(statuses.WARNING, row, "Not set");
                     }
                 }
 

@@ -402,6 +402,8 @@ namespace Cliver.PdfDocumentParser
 
             fields.CellContentClick += delegate (object sender, DataGridViewCellEventArgs e)
             {
+                if (e.ColumnIndex < 0)//row's header
+                    return;
                 switch (fields.Columns[e.ColumnIndex].Name)
                 {
                     case "Ocr":
@@ -437,15 +439,18 @@ namespace Cliver.PdfDocumentParser
 
                     var vt = Convert.ToBoolean(cs["Ocr"].Value) ? Template.ValueTypes.OcrText : Template.ValueTypes.PdfText;
                     int? fai = (int?)cs["FloatingAnchorId"].Value;
-                    setCurrentFloatingAnchor(fai, true);
+                    setCurrentFloatingAnchorRow(fai, true);
                     string rs = (string)cs["Rectangle"].Value;
                     if (rs != null)
+                    {
                         cs["Value"].Value = extractValueAndDrawSelectionBox(fai, SerializationRoutines.Json.Deserialize<Template.RectangleF>(rs), vt);
-                    else
-                    {//to show status
-                        if (fai == null || findAndDrawFloatingAnchor(fai) != null)
-                            setRowStatus(statuses.WARNING, row, "Empty");
+                        if (cs["Value"].Value != null)
+                            setRowStatus(statuses.SUCCESS, row, "Found");
+                        else
+                            setRowStatus(statuses.ERROR, row, "Not found");
                     }
+                    else
+                        setRowStatus(statuses.WARNING, row, "Not set");
                 }
                 catch (Exception ex)
                 {
@@ -454,7 +459,7 @@ namespace Cliver.PdfDocumentParser
             };
         }
 
-        void setCurrentFloatingAnchor(int? fai, bool unselectMark_SelectField)
+        void setCurrentFloatingAnchorRow(int? fai, bool unselectMark_SelectField)
         {
             try
             {
@@ -495,7 +500,7 @@ namespace Cliver.PdfDocumentParser
             var vt = (Template.ValueTypes)cs["ValueType2"].Value;
             int? fai = (int?)cs["FloatingAnchorId2"].Value;
             if (selectAnchor)
-                setCurrentFloatingAnchor(fai, false);
+                setCurrentFloatingAnchorRow(fai, false);
             Template.RectangleF r = (Template.RectangleF)cs["Rectangle2"].Value;
             if (r != null)
             {

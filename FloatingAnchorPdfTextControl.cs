@@ -23,6 +23,8 @@ namespace Cliver.PdfDocumentParser
         {
             get
             {
+                if (_value == null)
+                    return _value;
                 _value.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
                 _value.PositionDeviation = (float)PositionDeviation.Value;
                 return _value;

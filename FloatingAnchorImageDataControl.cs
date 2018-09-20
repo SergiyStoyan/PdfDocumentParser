@@ -23,6 +23,8 @@ namespace Cliver.PdfDocumentParser
         {
             get
             {
+                if (_value == null)
+                    return _value;
                 _value.FindBestImageMatch = FindBestImageMatch.Checked;
                 _value.BrightnessTolerance = (float)BrightnessTolerance.Value;
                 _value.DifferentPixelNumberTolerance = (float)DifferentPixelNumberTolerance.Value;

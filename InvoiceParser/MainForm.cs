@@ -147,6 +147,8 @@ namespace Cliver.InvoiceParser
                     Template t = (Template)r.Tag;
                     if (t == null)
                         return;
+                    if (e.ColumnIndex < 0)//row's header
+                        return;
 
                     switch (templates.Columns[e.ColumnIndex].Name)
                     {
@@ -230,7 +232,7 @@ namespace Cliver.InvoiceParser
                 if (e.RowIndex < 0)
                     return;
                 DataGridViewRow r = templates.Rows[e.RowIndex];
-                if (e.ColumnIndex < 0)
+                if (e.ColumnIndex < 0)//row's header
                     return;
 
                 if (r.IsNewRow)//hacky forcing commit a newly added row and display the blank row

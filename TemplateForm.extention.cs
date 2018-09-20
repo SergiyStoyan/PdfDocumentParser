@@ -84,8 +84,6 @@ namespace Cliver.PdfDocumentParser
                 currentFloatingAnchorControl = null;
                 return;
             }
-            if (currentFloatingAnchorRow == row)
-                return;
             currentFloatingAnchorRow = row;
             Template.ValueTypes valueType = (Template.ValueTypes)row.Cells["ValueType3"].Value;
             Control c = null;
