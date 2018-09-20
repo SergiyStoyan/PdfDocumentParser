@@ -58,18 +58,19 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        void setFloatingAnchorValue(DataGridViewRow row, object value)
+        void setFloatingAnchorValue(DataGridViewRow row, Template.FloatingAnchor.BaseValue value)
         {
-            if (SerializationRoutines.Json.Serialize(row.Tag) == SerializationRoutines.Json.Serialize(value))
-                return;
+            string v0 = SerializationRoutines.Json.Serialize(row.Tag);
             row.Tag = value;
+            if (loadingTemplate)
+                return;
+            if (v0 == SerializationRoutines.Json.Serialize(value))
+                return;
             int? fai = (int?)row.Cells["Id3"].Value;
             if (value == null)
                 setRowStatus(statuses.WARNING, row, "Not set");
             else
                 setRowStatus(statuses.NEUTRAL, row, "Set");
-            if (loadingTemplate)
-                return;
             setFloatingAnchorControl(row);
             onFloatingAnchorsChanged(fai);
             if (row.Selected)
@@ -131,7 +132,7 @@ namespace Cliver.PdfDocumentParser
         {
             if (currentFloatingAnchorRow == null || currentFloatingAnchorRow.Index < 0)//removed row
                 return;
-            object value = null;
+            Template.FloatingAnchor.BaseValue value = null;
             Template.ValueTypes valueType = (Template.ValueTypes)currentFloatingAnchorRow.Cells["ValueType3"].Value;
             switch (valueType)
             {
@@ -153,9 +154,11 @@ namespace Cliver.PdfDocumentParser
 
         void setMarkValue(DataGridViewRow row, Template.Mark.BaseValue value)
         {
-            Template.Mark.BaseValue value0 = (Template.Mark.BaseValue)row.Tag;
+            string v0 = SerializationRoutines.Json.Serialize(row.Tag);
             row.Tag = value;
             if (loadingTemplate)
+                return;
+            if (v0 == SerializationRoutines.Json.Serialize(value))
                 return;
 
             setMarkControl(row);
@@ -600,7 +603,7 @@ namespace Cliver.PdfDocumentParser
                     {
                         Id = floatingAnchorId,
                         ValueType = (Template.ValueTypes)r.Cells["ValueType3"].Value,
-                        Value = r.Tag,
+                        Value = (Template.FloatingAnchor.BaseValue)r.Tag,
                     };
                     //if (fa.GetValue() == null)
                     //    throw new Exception("FloatingAnchor[" + fa.Id + "] is not set.");

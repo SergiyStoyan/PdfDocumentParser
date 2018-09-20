@@ -300,9 +300,12 @@ namespace Cliver.PdfDocumentParser
             }
 
             //not to serialize!
-            internal object Value { get; set; }
+            internal BaseValue Value { get; set; }
 
-            public class PdfTextValue
+            public class BaseValue
+            {
+            }
+            public class PdfTextValue: BaseValue
             {
                 public List<CharBox> CharBoxs = new List<CharBox>();
                 public float PositionDeviation = 0.1f;
@@ -313,7 +316,7 @@ namespace Cliver.PdfDocumentParser
                     public RectangleF Rectangle;
                 }
             }
-            public class OcrTextValue
+            public class OcrTextValue: BaseValue
             {
                 public List<CharBox> CharBoxs = new List<CharBox>();
                 public float PositionDeviation = 0.1f;
@@ -324,7 +327,7 @@ namespace Cliver.PdfDocumentParser
                     public RectangleF Rectangle;
                 }
             }
-            public class ImageDataValue
+            public class ImageDataValue: BaseValue
             {
                 public List<ImageBox> ImageBoxs = new List<ImageBox>();
                 public float PositionDeviation = 0.1f;
