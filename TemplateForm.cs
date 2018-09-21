@@ -188,7 +188,8 @@ namespace Cliver.PdfDocumentParser
                             {
                                 if (documentFirstPageRecognitionMarks.SelectedRows.Count < 1)
                                     break;
-                                var cs = documentFirstPageRecognitionMarks.SelectedRows[0].Cells;
+                             DataGridViewRow row=   documentFirstPageRecognitionMarks.SelectedRows[0];
+                                var cs = row.Cells;
                                 int? fai = (int?)cs["FloatingAnchorId2"].Value;
                                 if (fai != null)
                                 {
@@ -199,8 +200,7 @@ namespace Cliver.PdfDocumentParser
                                     r.X -= ((PointF)p).X;
                                     r.Y -= ((PointF)p).Y;
                                 }
-                                cs["Rectangle2"].Value = r;
-                                documentFirstPageRecognitionMarks.EndEdit();
+                                setMarkRectangle(row, r);
                             }
                             break;
                         case Modes.SetFieldRectangle:
@@ -219,7 +219,7 @@ namespace Cliver.PdfDocumentParser
                                     r.Y -= ((PointF)p).Y;
                                 }
                                 cs["Rectangle"].Value = SerializationRoutines.Json.Serialize(r);
-                                fields.EndEdit();
+                                //fields.EndEdit();
                             }
                             break;
                         default:

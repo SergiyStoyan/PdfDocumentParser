@@ -13,7 +13,6 @@ namespace Cliver.InvoiceParser
 {
     /*
  TBD:
- - search anchor in region
  - implement image recognition by sum of brightness deltas
   - record UsedTime to a separate table
  - ? Template not enherited but embedded

@@ -17,12 +17,9 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class MarkPdfTextControl : UserControl
     {
-        public MarkPdfTextControl(Template.Mark.PdfTextValue value, Template.RectangleF rectangle)
+        public MarkPdfTextControl()
         {
             InitializeComponent();
-
-            Value = value;
-            this.rectangle.Text = SerializationRoutines.Json.Serialize(rectangle);
         }
 
         public Template.Mark.PdfTextValue Value
@@ -31,12 +28,13 @@ namespace Cliver.PdfDocumentParser
             {
                 return _value;
             }
-            private set
+            set
             {
                 if (value == null)
                     value = new Template.Mark.PdfTextValue();
                 _value = value;
                 text.Text = value.Text;
+                rectangle.Text = SerializationRoutines.Json.Serialize(value.Rectangle);
             }
         }
         Template.Mark.PdfTextValue _value;

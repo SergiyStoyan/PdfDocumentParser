@@ -17,11 +17,9 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class FloatingAnchorOcrTextControl : UserControl
     {
-        public FloatingAnchorOcrTextControl(Template.FloatingAnchor.OcrTextValue value)
+        public FloatingAnchorOcrTextControl()
         {
             InitializeComponent();
-
-            Value = value;
         }
 
         public Template.FloatingAnchor.OcrTextValue Value

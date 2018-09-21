@@ -17,12 +17,9 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class MarkImageDataControl : UserControl
     {
-        public MarkImageDataControl(Template.Mark.ImageDataValue value, Template.RectangleF rectangle)
+        public MarkImageDataControl()
         {
             InitializeComponent();
-
-            Value = value;
-            this.rectangle.Text = SerializationRoutines.Json.Serialize(rectangle);
         }
 
         public Template.Mark.ImageDataValue Value
@@ -44,6 +41,7 @@ namespace Cliver.PdfDocumentParser
                 differentPixelNumberTolerance.Value = (decimal)value.DifferentPixelNumberTolerance;
                 if (value.ImageData != null)
                     picture.Image = value.ImageData.GetImage();
+                rectangle.Text = SerializationRoutines.Json.Serialize(value.Rectangle);
             }
         }
         Template.Mark.ImageDataValue _value;

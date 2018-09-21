@@ -17,11 +17,9 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class FloatingAnchorImageDataControl : UserControl
     {
-        public FloatingAnchorImageDataControl(Template.FloatingAnchor.ImageDataValue value)
+        public FloatingAnchorImageDataControl()
         {
             InitializeComponent();
-
-            Value = value;
         }
 
         public Template.FloatingAnchor.ImageDataValue Value
@@ -36,7 +34,7 @@ namespace Cliver.PdfDocumentParser
                 _value.SearchRectangleMargin = (int)SearchRectangleMargin.Value;
                 return _value;
             }
-            private set
+            set
             {
                 if (value == null)
                     value = new Template.FloatingAnchor.ImageDataValue();

@@ -164,57 +164,9 @@ namespace Cliver.PdfDocumentParser
                     DataGridViewRow row = documentFirstPageRecognitionMarks.Rows[e.RowIndex];
                     var cs = row.Cells;
                     int? fai = (int?)cs["FloatingAnchorId2"].Value;
-                    Template.RectangleF r = (Template.RectangleF)cs["Rectangle2"].Value;
+                    Template.RectangleF r = getMarkRectangle(row);
                     switch (documentFirstPageRecognitionMarks.Columns[e.ColumnIndex].Name)
                     {
-                        case "Rectangle2":
-                            {
-                                if (r == null)
-                                {
-                                    setRowStatus(statuses.WARNING, row, "Empty");
-                                    setMarkValue(row, null);
-                                    return;
-                                }
-                                Template.ValueTypes vt = (Template.ValueTypes)cs["ValueType2"].Value;
-                                object v = extractValueAndDrawSelectionBox(fai, r, vt);
-                                if (v == null)
-                                    setRowStatus(statuses.ERROR, row, "Not found");
-                                else
-                                    setRowStatus(statuses.SUCCESS, row, "Set");
-                                switch (vt)
-                                {
-                                    case Template.ValueTypes.PdfText:
-                                        {
-                                            Template.Mark.PdfTextValue ptv = (Template.Mark.PdfTextValue)row.Tag;
-                                            if (ptv == null)
-                                                ptv = new Template.Mark.PdfTextValue();
-                                            ptv.Text = (string)v;
-                                            setMarkValue(row, ptv);
-                                        }
-                                        break;
-                                    case Template.ValueTypes.OcrText:
-                                        {
-                                            Template.Mark.OcrTextValue otv = (Template.Mark.OcrTextValue)row.Tag;
-                                            if (otv == null)
-                                                otv = new Template.Mark.OcrTextValue();
-                                            otv.Text = (string)v;
-                                            setMarkValue(row, otv);
-                                        }
-                                        break;
-                                    case Template.ValueTypes.ImageData:
-                                        {
-                                            Template.Mark.ImageDataValue idv = (Template.Mark.ImageDataValue)row.Tag;
-                                            if (idv == null)
-                                                idv = new Template.Mark.ImageDataValue();
-                                            idv.ImageData = (ImageData)v;
-                                            setMarkValue(row, idv);
-                                        }
-                                        break;
-                                    default:
-                                        throw new Exception("Unknown option: " + vt);
-                                }
-                            }
-                            return;
                         case "ValueType2":
                             {
                                 Template.ValueTypes vt = (Template.ValueTypes)cs["ValueType2"].Value;
@@ -501,7 +453,7 @@ namespace Cliver.PdfDocumentParser
             int? fai = (int?)cs["FloatingAnchorId2"].Value;
             if (selectAnchor)
                 setCurrentFloatingAnchorRow(fai, false);
-            Template.RectangleF r = (Template.RectangleF)cs["Rectangle2"].Value;
+            Template.RectangleF r = getMarkRectangle(row);
             if (r != null)
             {
                 switch (vt)
@@ -512,10 +464,10 @@ namespace Cliver.PdfDocumentParser
                             string t2 = (string)extractValueAndDrawSelectionBox(fai, r, vt);
                             if (ptv1.Text != t2)
                             {
-                                setRowStatus(statuses.ERROR, row, "not found:\r\n" + t2 + "\r\n <> \r\n" + ptv1.Text);
+                                setRowStatus(statuses.ERROR, row, "Not found:!'" + t2 + "'");
                                 return false;
                             }
-                            setRowStatus(statuses.SUCCESS, row, "found:\r\n" + t2);
+                            setRowStatus(statuses.SUCCESS, row, "Found");
                             return true;
                         }
                     case Template.ValueTypes.OcrText:
@@ -524,10 +476,10 @@ namespace Cliver.PdfDocumentParser
                             string t2 = (string)extractValueAndDrawSelectionBox(fai, r, vt);
                             if (otv1.Text != t2)
                             {
-                                setRowStatus(statuses.ERROR, row, "not found:\r\n" + t2 + "\r\n <> \r\n" + otv1.Text);
+                                setRowStatus(statuses.ERROR, row, "Not found:!'" + t2 + "'");
                                 return false;
                             }
-                            setRowStatus(statuses.SUCCESS, row, "found:\r\n" + t2);
+                            setRowStatus(statuses.SUCCESS, row, "Found");
                             return true;
                         }
                     case Template.ValueTypes.ImageData:
@@ -536,10 +488,10 @@ namespace Cliver.PdfDocumentParser
                             ImageData id2 = (ImageData)extractValueAndDrawSelectionBox(fai, r, vt);
                             if (!idv1.ImageData.ImageIsSimilar(id2, idv1.BrightnessTolerance, idv1.DifferentPixelNumberTolerance))
                             {
-                                setRowStatus(statuses.ERROR, row, "not found:\r\nimage is not similar");
+                                setRowStatus(statuses.ERROR, row, "Not found");
                                 return false;
                             }
-                            setRowStatus(statuses.SUCCESS, row, "found:\r\nimage is similar");
+                            setRowStatus(statuses.SUCCESS, row, "Found");
                             return true;
                         }
                     default:
@@ -560,6 +512,66 @@ namespace Cliver.PdfDocumentParser
                 }
                 setRowStatus(statuses.NEUTRAL, row, "");
                 return true;
+            }
+        }
+
+        Template.RectangleF getMarkRectangle(DataGridViewRow row)
+        {
+            Template.Mark.BaseValue v = (Template.Mark.BaseValue)row.Tag;
+            if (v != null)
+                return v.Rectangle;
+            return null;
+        }
+
+        void setMarkRectangle(DataGridViewRow row, Template.RectangleF r)
+        {
+            int? fai = (int?)row.Cells["FloatingAnchorId2"].Value;
+            if (fai == null && r == null)
+            {
+                setRowStatus(statuses.WARNING, row, "Not set");
+                setMarkValue(row, null);
+                return;
+            }
+            Template.ValueTypes vt = (Template.ValueTypes)row.Cells["ValueType2"].Value;
+            object v = extractValueAndDrawSelectionBox(fai, r, vt);
+            if (v == null)
+                setRowStatus(statuses.ERROR, row, "Not found");
+            else
+                setRowStatus(statuses.SUCCESS, row, "Set");
+            switch (vt)
+            {
+                case Template.ValueTypes.PdfText:
+                    {
+                        Template.Mark.PdfTextValue ptv = (Template.Mark.PdfTextValue)row.Tag;
+                        if (ptv == null)
+                            ptv = new Template.Mark.PdfTextValue();
+                        ptv.Text = (string)v;
+                        ptv.Rectangle = r;
+                        setMarkValue(row, ptv);
+                    }
+                    break;
+                case Template.ValueTypes.OcrText:
+                    {
+                        Template.Mark.OcrTextValue otv = (Template.Mark.OcrTextValue)row.Tag;
+                        if (otv == null)
+                            otv = new Template.Mark.OcrTextValue();
+                        otv.Text = (string)v;
+                        otv.Rectangle = r;
+                        setMarkValue(row, otv);
+                    }
+                    break;
+                case Template.ValueTypes.ImageData:
+                    {
+                        Template.Mark.ImageDataValue idv = (Template.Mark.ImageDataValue)row.Tag;
+                        if (idv == null)
+                            idv = new Template.Mark.ImageDataValue();
+                        idv.ImageData = (ImageData)v;
+                        idv.Rectangle = r;
+                        setMarkValue(row, idv);
+                    }
+                    break;
+                default:
+                    throw new Exception("Unknown option: " + vt);
             }
         }
     }

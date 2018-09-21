@@ -49,7 +49,6 @@ namespace Cliver.PdfDocumentParser
 
         public List<Field> Fields;
 
-        [Serializable]
         public class RectangleF
         {
             public float X;
@@ -80,13 +79,13 @@ namespace Cliver.PdfDocumentParser
                 return new System.Drawing.RectangleF(X, Y, Width, Height);
             }
         }
-        [Serializable]
+
         public class PointF
         {
             public float X;
             public float Y;
         }
-        [Serializable]
+
         public class SizeF
         {
             public float Width;
@@ -98,7 +97,7 @@ namespace Cliver.PdfDocumentParser
             //serialize
             public int? FloatingAnchorId;//when set, Rectangle.X,Y are bound to location of the anchor as to zero point
             //serialize
-            public RectangleF Rectangle;
+            public RectangleF Rectangle;//to be removed in next update
             //serialize
             public ValueTypes ValueType = ValueTypes.PdfText;
             //serialize
@@ -142,63 +141,56 @@ namespace Cliver.PdfDocumentParser
                             throw new Exception("Unknown option: " + ValueType);
                     }
 
-                    ////TEMPORARY: trasferring to a new version
-                    //switch (ValueType)
-                    //{
-                    //    case ValueTypes.PdfText:
-                    //        if (this.Rectangle != null)
-                    //        {
-                    //            var ptv = (PdfTextValue)Value;
-                    //            ptv.Rectangle = this.Rectangle;
-                    //            this.Rectangle = null;
-                    //        }
-                    //        break;
-                    //    case ValueTypes.OcrText:
-                    //        if (this.Rectangle != null)
-                    //        {
-                    //            var otv = (OcrTextValue)Value;
-                    //            otv.Rectangle = this.Rectangle;
-                    //            this.Rectangle = null;
-                    //        }
-                    //        break;
-                    //    case ValueTypes.ImageData:
-                    //        if (this.Rectangle != null)
-                    //        {
-                    //            var idv = (ImageDataValue)Value;
-                    //            idv.Rectangle = this.Rectangle;
-                    //            this.Rectangle = null;
-                    //        }
-                    //        break;
-                    //    default:
-                    //        throw new Exception("Unknown option: " + ValueType);
-                    //}
+                    //TEMPORARY: trasferring to a new version
+                    switch (ValueType)
+                    {
+                        case ValueTypes.PdfText:
+                            if (this.Rectangle != null)
+                            {
+                                var ptv = (PdfTextValue)Value;
+                                ptv.Rectangle = this.Rectangle;
+                                this.Rectangle = null;
+                            }
+                            break;
+                        case ValueTypes.OcrText:
+                            if (this.Rectangle != null)
+                            {
+                                var otv = (OcrTextValue)Value;
+                                otv.Rectangle = this.Rectangle;
+                                this.Rectangle = null;
+                            }
+                            break;
+                        case ValueTypes.ImageData:
+                            if (this.Rectangle != null)
+                            {
+                                var idv = (ImageDataValue)Value;
+                                idv.Rectangle = this.Rectangle;
+                                this.Rectangle = null;
+                            }
+                            break;
+                        default:
+                            throw new Exception("Unknown option: " + ValueType);
+                    }
                 }
             }
             
             //not to serialize!
             internal BaseValue Value { get; set; }
 
-            public class BaseValue
+            public abstract class BaseValue
             {
-                //public RectangleF Rectangle
-                //{
-                //    get { return; }
-                //}
-                //RectangleF rectangle;
+                public RectangleF Rectangle;
             }
             public class PdfTextValue: BaseValue
             {
-                //public RectangleF Rectangle;
                 public string Text;
             }
             public class OcrTextValue: BaseValue
             {
-                //public RectangleF Rectangle;
                 public string Text;
             }
             public class ImageDataValue: BaseValue
             {
-                //public RectangleF Rectangle;
                 public ImageData ImageData;
                 public float BrightnessTolerance = 0.4f;
                 public float DifferentPixelNumberTolerance = 0.02f;

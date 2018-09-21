@@ -416,7 +416,7 @@ namespace Cliver.PdfDocumentParser
                     }
                     continue;
                 }
-                object v2 = GetValue(m.FloatingAnchorId, m.Rectangle, m.ValueType, out error);
+                object v2 = GetValue(m.FloatingAnchorId, m.Value.Rectangle, m.ValueType, out error);
                 if (v2 == null)
                     return false;
                 switch (m.ValueType)
