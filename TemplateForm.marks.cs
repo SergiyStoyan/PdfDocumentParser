@@ -36,14 +36,15 @@ namespace Cliver.PdfDocumentParser
             FloatingAnchorId2.DisplayMember = "Name";
 
             documentFirstPageRecognitionMarks.EnableHeadersVisualStyles = false;//needed to set row headers
+            
+            documentFirstPageRecognitionMarks.DataError += delegate (object sender, DataGridViewDataErrorEventArgs e)
+            {
+                DataGridViewRow r = documentFirstPageRecognitionMarks.Rows[e.RowIndex];
+                Message.Error("documentFirstPageRecognitionMarks[" + r.Index + "] has unacceptable value of " + documentFirstPageRecognitionMarks.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message);
+            };
 
             documentFirstPageRecognitionMarks.RowsAdded += delegate (object sender, DataGridViewRowsAddedEventArgs e)
             {
-                DataGridViewRow row = documentFirstPageRecognitionMarks.Rows[e.RowIndex];
-                Template.Mark fa = (Template.Mark)row.Tag;
-                if (fa == null)
-                    fa = new Template.Mark.PdfText();
-                row.Cells["Type2"].Value = fa.Type;
             };
 
             documentFirstPageRecognitionMarks.CurrentCellDirtyStateChanged += delegate
@@ -176,8 +177,12 @@ namespace Cliver.PdfDocumentParser
 
                     if (row.IsNewRow)//hacky forcing commit a newly added row and display the blank row
                     {
-                        int j = documentFirstPageRecognitionMarks.Rows.Add();
-                        documentFirstPageRecognitionMarks.Rows[j].Selected = true;
+                        int i = documentFirstPageRecognitionMarks.Rows.Add();
+                        row = documentFirstPageRecognitionMarks.Rows[i];
+                        Template.Mark fa = new Template.Mark.PdfText();
+                        row.Tag = fa;
+                        row.Cells["Type2"].Value = fa.Type;
+                        row.Selected = true;
                         return;
                     }
 
@@ -193,20 +198,17 @@ namespace Cliver.PdfDocumentParser
 
         bool isMarkFound(DataGridViewRow row, bool selectAnchor)
         {
-            var cs = row.Cells;
-            var vt = (Template.Types)cs["Type2"].Value;
-            int? fai = (int?)cs["FloatingAnchorId2"].Value;
+            Template.Mark m = (Template.Mark)row.Tag;
             if (selectAnchor)
-                setCurrentFloatingAnchorRow(fai, false);
-            Template.RectangleF r = getMarkRectangle(row);
-            if (r != null)
+                setCurrentFloatingAnchorRow(m.FloatingAnchorId, false);
+            if (m.Rectangle != null)
             {
-                switch (vt)
+                switch (m.Type)
                 {
                     case Template.Types.PdfText:
                         {
                             Template.Mark.PdfText ptv1 = (Template.Mark.PdfText)row.Tag;
-                            string t2 = (string)extractValueAndDrawSelectionBox(fai, r, vt);
+                            string t2 = (string)extractValueAndDrawSelectionBox(m.FloatingAnchorId, m.Rectangle, m.Type);
                             if (ptv1.Text != t2)
                             {
                                 setRowStatus(statuses.ERROR, row, "Not found:!'" + t2 + "'");
@@ -218,7 +220,7 @@ namespace Cliver.PdfDocumentParser
                     case Template.Types.OcrText:
                         {
                             Template.Mark.OcrText otv1 = (Template.Mark.OcrText)row.Tag;
-                            string t2 = (string)extractValueAndDrawSelectionBox(fai, r, vt);
+                            string t2 = (string)extractValueAndDrawSelectionBox(m.FloatingAnchorId, m.Rectangle, m.Type);
                             if (otv1.Text != t2)
                             {
                                 setRowStatus(statuses.ERROR, row, "Not found:!'" + t2 + "'");
@@ -230,7 +232,7 @@ namespace Cliver.PdfDocumentParser
                     case Template.Types.ImageData:
                         {
                             Template.Mark.ImageData idv1 = (Template.Mark.ImageData)row.Tag;
-                            ImageData id2 = (ImageData)extractValueAndDrawSelectionBox(fai, r, vt);
+                            ImageData id2 = (ImageData)extractValueAndDrawSelectionBox(m.FloatingAnchorId, m.Rectangle, m.Type);
                             if (!idv1.ImageData_.ImageIsSimilar(id2, idv1.BrightnessTolerance, idv1.DifferentPixelNumberTolerance))
                             {
                                 setRowStatus(statuses.ERROR, row, "Not found");
@@ -240,14 +242,14 @@ namespace Cliver.PdfDocumentParser
                             return true;
                         }
                     default:
-                        throw new Exception("Unknown option: " + vt);
+                        throw new Exception("Unknown option: " + m.Type);
                 }
             }
             else
             {
-                if (fai != null)
+                if (m.FloatingAnchorId != null)
                 {
-                    if (null != findAndDrawFloatingAnchor(fai))
+                    if (null != findAndDrawFloatingAnchor(m.FloatingAnchorId))
                     {
                         setRowStatus(statuses.SUCCESS, row, "Found");
                         return true;
@@ -258,14 +260,6 @@ namespace Cliver.PdfDocumentParser
                 setRowStatus(statuses.NEUTRAL, row, "");
                 return true;
             }
-        }
-
-        Template.RectangleF getMarkRectangle(DataGridViewRow row)
-        {
-            Template.Mark m = (Template.Mark)row.Tag;
-            if (m != null)
-                return m.Rectangle;
-            return null;
         }
 
         void setMarkRectangle(DataGridViewRow row, Template.RectangleF r)
@@ -343,16 +337,16 @@ namespace Cliver.PdfDocumentParser
 
         void setMarkControl(DataGridViewRow row)
         {
-            if (row == null || !row.Selected || row.IsNewRow || !documentFirstPageRecognitionMarks.Rows.Contains(row))
+            if (row == null || !row.Selected || row.IsNewRow || row.Tag==null || !documentFirstPageRecognitionMarks.Rows.Contains(row))
             {
                 currentMarkRow = null;
                 currentMarkControl = null;
                 return;
             }
-            currentMarkRow = row;
-            Template.Types valueType = (Template.Types)row.Cells["Type2"].Value;
+            currentMarkRow = row;            
             Control c = currentMarkControl;
-            switch (valueType)
+            Template.Types t = ((Template.Mark)row.Tag).Type;
+            switch (t)
             {
                 case Template.Types.PdfText:
                     {
@@ -376,7 +370,7 @@ namespace Cliver.PdfDocumentParser
                     }
                     break;
                 default:
-                    throw new Exception("Unknown option: " + valueType);
+                    throw new Exception("Unknown option: " + t);
             }
             currentMarkControl = c;
         }
@@ -404,26 +398,25 @@ namespace Cliver.PdfDocumentParser
         {
             if (currentMarkRow == null || currentMarkRow.Index < 0)//removed row
                 return;
-            //    var cs = currentfloatingAnchorRow.Cells;
-            Template.Mark mark = null;
-            Template.Types valueType = (Template.Types)currentMarkRow.Cells["Type2"].Value;
-            switch (valueType)
+            Template.Mark m = (Template.Mark)currentMarkRow.Tag;
+            Template.Mark m2 = null;
+            switch (m.Type)
             {
                 case Template.Types.PdfText:
-                    mark = ((MarkPdfTextControl)currentMarkControl).Mark;
+                    m2 = ((MarkPdfTextControl)currentMarkControl).Mark;
                     break;
                 case Template.Types.OcrText:
-                    mark = ((MarkOcrTextControl)currentMarkControl).Mark;
+                    m2 = ((MarkOcrTextControl)currentMarkControl).Mark;
                     break;
                 case Template.Types.ImageData:
-                    mark = ((MarkImageDataControl)currentMarkControl).Mark;
+                    m2 = ((MarkImageDataControl)currentMarkControl).Mark;
                     break;
                 default:
-                    throw new Exception("Unknown option: " + valueType);
+                    throw new Exception("Unknown option: " + m.Type);
             }
-            if (currentMarkRow.Cells["FloatingAnchorId2"].Value == null && mark.Rectangle == null)
+            if (currentMarkRow.Cells["FloatingAnchorId2"].Value == null && m2.Rectangle == null)
                 setRowStatus(statuses.WARNING, currentMarkRow, "Not set");
-            setMarkRow(currentMarkRow, mark);
+            setMarkRow(currentMarkRow, m2);
         }
     }
 }

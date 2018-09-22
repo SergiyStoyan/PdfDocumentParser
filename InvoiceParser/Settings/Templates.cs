@@ -27,183 +27,198 @@ namespace Cliver.InvoiceParser
 
             public override void Loaded()
             {
-                //TEMPORARY: conversion to new format
-                if (Templates.Count > 0 && Templates[0].Base == null)
+                try
                 {
-                    FileSystemRoutines.CopyFile(__File, Config.StorageDir + "\\Templates0.Cliver.InvoiceParser.Settings+Templates0Settings.json", true);
-                    Settings.Templates0.Reload();
-                    Templates.Clear();
-                    foreach (Template0 t0 in Settings.Templates0.Templates)
+                    //TEMPORARY: conversion to new format
+                    if (Templates.Count > 0 && Templates[0].Base == null)
                     {
-                        Template t = new Template
-                        { CanShareFileWithAnotherTemplates = t0.CanShareFileWithAnotherTemplates,
-                            Comment = t0.Comment,
-                            DetectingTemplateLastPageNumber = t0.DetectingTemplateLastPageNumber,
-                            FileFilterRegex = t0.FileFilterRegex,
-                            ModifiedTime = t0.ModifiedTime,
-                            OrderWeight = t0.OrderWeight,
-                            Active = t0.Active,
-                            Group = t0.Group,
-                            Base = new PdfDocumentParser.Template
-                            {
-                                Name = t0.Name,
-                                AutoDeskew = t0.AutoDeskew,
-                                AutoDeskewThreshold = t0.AutoDeskewThreshold,
-                                AutoPagesRotation = t0.AutoPagesRotation,
-                                PagesRotation = t0.PagesRotation,
-                                FloatingAnchors = new List<PdfDocumentParser.Template.FloatingAnchor>(),
-                                DocumentFirstPageRecognitionMarks = new List<PdfDocumentParser.Template.Mark>(),
-                                Fields = new List<PdfDocumentParser.Template.Field>() ,
-                            },                            
-                        };
-                        t.Base.Editor.ExtractFieldsAutomaticallyWhenPageChanged = t0.Editor.ExtractFieldsAutomaticallyWhenPageChanged;
-                        t.Base.Editor.TestFile = t0.Editor.TestFile;
-                        t.Base.Editor.TestPictureScale = t0.Editor.TestPictureScale;
-
-                        foreach (PdfDocumentParser.Template0.FloatingAnchor fa0 in t0.FloatingAnchors)
+                        FileSystemRoutines.CopyFile(__File, Config.StorageDir + "\\Templates0.Cliver.InvoiceParser.Settings+Templates0Settings.json", true);
+                        Settings.Templates0.Reload();
+                        Templates.Clear();
+                        foreach (Template0 t0 in Settings.Templates0.Templates)
                         {
-                            PdfDocumentParser.Template.FloatingAnchor fa;
-                            switch (fa0.Type)
+                            Template t = new Template
                             {
-                                case PdfDocumentParser.Template0.ValueTypes.PdfText:
-                                    {
-                                        PdfDocumentParser.Template0.FloatingAnchor.PdfTextValue v0 = (PdfDocumentParser.Template0.FloatingAnchor.PdfTextValue)fa0.Value;
-                                        PdfDocumentParser.Template.FloatingAnchor.PdfText v = new PdfDocumentParser.Template.FloatingAnchor.PdfText
-                                        {
-                                            Id = fa0.Id,
-                                            PositionDeviation = fa0.PositionDeviation,
-                                            PositionDeviationIsAbsolute = v0.PositionDeviationIsAbsolute,
-                                            SearchRectangleMargin = v0.SearchRectangleMargin,
-                                            CharBoxs = v0.CharBoxs,
-                                        };
-                                        fa = v;
-                                        break;
-                                    }
-                                case PdfDocumentParser.Template0.ValueTypes.OcrText:
-                                    {
-                                        PdfDocumentParser.Template0.FloatingAnchor.OcrTextValue v0 = (PdfDocumentParser.Template0.FloatingAnchor.OcrTextValue)fa0.Value;
-                                        PdfDocumentParser.Template.FloatingAnchor.OcrText v = new PdfDocumentParser.Template.FloatingAnchor.OcrText
-                                        {
-                                            Id = fa0.Id,
-                                            PositionDeviation = fa0.PositionDeviation,
-                                            PositionDeviationIsAbsolute = v0.PositionDeviationIsAbsolute,
-                                            SearchRectangleMargin = v0.SearchRectangleMargin,
-                                            CharBoxs = v0.CharBoxs,
-                                        };
-                                        fa = v;
-                                        break;
-                                    }
-                                case PdfDocumentParser.Template0.ValueTypes.ImageData:
-                                    {
-                                        PdfDocumentParser.Template0.FloatingAnchor.ImageDataValue v0 = (PdfDocumentParser.Template0.FloatingAnchor.ImageDataValue)fa0.Value;
-                                        PdfDocumentParser.Template.FloatingAnchor.ImageData v = new PdfDocumentParser.Template.FloatingAnchor.ImageData
-                                        {
-                                            Id = fa0.Id,
-                                            PositionDeviation = fa0.PositionDeviation,
-                                            PositionDeviationIsAbsolute = v0.PositionDeviationIsAbsolute,
-                                            SearchRectangleMargin = v0.SearchRectangleMargin,
-                                            BrightnessTolerance = v0.BrightnessTolerance,
-                                            DifferentPixelNumberTolerance = v0.DifferentPixelNumberTolerance,
-                                            FindBestImageMatch = v0.FindBestImageMatch,
-                                            ImageBoxs = v0.ImageBoxs,
-                                        };
-                                        fa = v;
-                                        break;
-                                    }
-                                default: throw new Exception("1");
-                            }
-                            t.Base.FloatingAnchors.Add(fa);
-                        }
+                                CanShareFileWithAnotherTemplates = t0.CanShareFileWithAnotherTemplates,
+                                Comment = t0.Comment,
+                                DetectingTemplateLastPageNumber = t0.DetectingTemplateLastPageNumber,
+                                FileFilterRegex = t0.FileFilterRegex,
+                                ModifiedTime = t0.ModifiedTime,
+                                OrderWeight = t0.OrderWeight,
+                                Active = t0.Active,
+                                Group = t0.Group,
+                                Base = new PdfDocumentParser.Template
+                                {
+                                    Name = t0.Name,
+                                    AutoDeskew = t0.AutoDeskew,
+                                    AutoDeskewThreshold = t0.AutoDeskewThreshold,
+                                    AutoPagesRotation = t0.AutoPagesRotation,
+                                    PagesRotation = t0.PagesRotation,
+                                    FloatingAnchors = new List<PdfDocumentParser.Template.FloatingAnchor>(),
+                                    DocumentFirstPageRecognitionMarks = new List<PdfDocumentParser.Template.Mark>(),
+                                    Fields = new List<PdfDocumentParser.Template.Field>(),
+                                },
+                            };
+                            t.Base.Editor = t0.Editor;
 
-                        foreach (PdfDocumentParser.Template0.Mark m0 in t0.DocumentFirstPageRecognitionMarks)
-                        {
-                            PdfDocumentParser.Template.Mark m;
-                            switch (m0.Type)
+                            foreach (PdfDocumentParser.Template0.FloatingAnchor fa0 in t0.FloatingAnchors)
                             {
-                                case PdfDocumentParser.Template0.ValueTypes.PdfText:
-                                    {
-                                        PdfDocumentParser.Template0.Mark.PdfTextValue v0 = (PdfDocumentParser.Template0.Mark.PdfTextValue)m0.Value;
-                                        PdfDocumentParser.Template.Mark.PdfText v = new PdfDocumentParser.Template.Mark.PdfText
+                                PdfDocumentParser.Template.FloatingAnchor fa;
+                                switch (fa0.ValueType)
+                                {
+                                    case PdfDocumentParser.Template0.ValueTypes.PdfText:
                                         {
-                                            FloatingAnchorId = m0.FloatingAnchorId,
-                                            Rectangle = m0.Rectangle,
-                                            Text = v0.Text,
-                                        };
-                                        m = v;
-                                        break;
-                                    }
-                                case PdfDocumentParser.Template0.ValueTypes.OcrText:
-                                    {
-                                        PdfDocumentParser.Template0.Mark.OcrTextValue v0 = (PdfDocumentParser.Template0.Mark.OcrTextValue)m0.Value;
-                                        PdfDocumentParser.Template.Mark.OcrText v = new PdfDocumentParser.Template.Mark.OcrText
+                                            PdfDocumentParser.Template0.FloatingAnchor.PdfTextValue v0 = (PdfDocumentParser.Template0.FloatingAnchor.PdfTextValue)fa0.Value;
+                                            PdfDocumentParser.Template.FloatingAnchor.PdfText v = new PdfDocumentParser.Template.FloatingAnchor.PdfText
+                                            {
+                                                Id = fa0.Id,
+                                                PositionDeviation = fa0.PositionDeviation,
+                                                PositionDeviationIsAbsolute = v0.PositionDeviationIsAbsolute,
+                                                SearchRectangleMargin = v0.SearchRectangleMargin,
+                                                CharBoxs = v0.CharBoxs,
+                                            };
+                                            fa = v;
+                                            break;
+                                        }
+                                    case PdfDocumentParser.Template0.ValueTypes.OcrText:
                                         {
-                                            FloatingAnchorId = m0.FloatingAnchorId,
-                                            Rectangle = m0.Rectangle,
-                                            Text = v0.Text,
-                                        };
-                                        m = v;
-                                        break;
-                                    }
-                                case PdfDocumentParser.Template0.ValueTypes.ImageData:
-                                    {
-                                        PdfDocumentParser.Template0.Mark.ImageDataValue v0 = (PdfDocumentParser.Template0.Mark.ImageDataValue)m0.Value;
-                                        PdfDocumentParser.Template.Mark.ImageData v = new PdfDocumentParser.Template.Mark.ImageData
+                                            PdfDocumentParser.Template0.FloatingAnchor.OcrTextValue v0 = (PdfDocumentParser.Template0.FloatingAnchor.OcrTextValue)fa0.Value;
+                                            PdfDocumentParser.Template.FloatingAnchor.OcrText v = new PdfDocumentParser.Template.FloatingAnchor.OcrText
+                                            {
+                                                Id = fa0.Id,
+                                                PositionDeviation = fa0.PositionDeviation,
+                                                PositionDeviationIsAbsolute = v0.PositionDeviationIsAbsolute,
+                                                SearchRectangleMargin = v0.SearchRectangleMargin,
+                                                CharBoxs = v0.CharBoxs,
+                                            };
+                                            fa = v;
+                                            break;
+                                        }
+                                    case PdfDocumentParser.Template0.ValueTypes.ImageData:
                                         {
-                                            FloatingAnchorId = m0.FloatingAnchorId,
-                                            Rectangle = m0.Rectangle,
-                                            BrightnessTolerance = v0.BrightnessTolerance,
-                                            DifferentPixelNumberTolerance = v0.DifferentPixelNumberTolerance,
-                                            FindBestImageMatch = v0.FindBestImageMatch,
-                                            ImageData_ = v0.ImageData,
-                                        };
-                                        m = v;
-                                        break;
-                                    }
-                                default: throw new Exception("12");
+                                            PdfDocumentParser.Template0.FloatingAnchor.ImageDataValue v0 = (PdfDocumentParser.Template0.FloatingAnchor.ImageDataValue)fa0.Value;
+                                            PdfDocumentParser.Template.FloatingAnchor.ImageData v = new PdfDocumentParser.Template.FloatingAnchor.ImageData
+                                            {
+                                                Id = fa0.Id,
+                                                PositionDeviation = fa0.PositionDeviation,
+                                                PositionDeviationIsAbsolute = v0.PositionDeviationIsAbsolute,
+                                                SearchRectangleMargin = v0.SearchRectangleMargin,
+                                                BrightnessTolerance = v0.BrightnessTolerance,
+                                                DifferentPixelNumberTolerance = v0.DifferentPixelNumberTolerance,
+                                                FindBestImageMatch = v0.FindBestImageMatch,
+                                                ImageBoxs = v0.ImageBoxs,
+                                            };
+                                            fa = v;
+                                            break;
+                                        }
+                                    default: throw new Exception("1");
+                                }
+                                t.Base.FloatingAnchors.Add(fa);
                             }
-                            t.Base.DocumentFirstPageRecognitionMarks.Add(m);
-                        }
 
-                        foreach (PdfDocumentParser.Template0.Field f0 in t0.Fields)
-                        {
-                            PdfDocumentParser.Template.Field f;
-                            switch (f0.Type)
+                            foreach (PdfDocumentParser.Template0.Mark m0 in t0.DocumentFirstPageRecognitionMarks)
                             {
-                                case PdfDocumentParser.Template0.ValueTypes.PdfText:
-                                    {
-                                        PdfDocumentParser.Template.Field.PdfText v = new PdfDocumentParser.Template.Field.PdfText
+                                PdfDocumentParser.Template.Mark m;
+                                switch (m0.Type)
+                                {
+                                    case PdfDocumentParser.Template0.ValueTypes.PdfText:
                                         {
-                                            FloatingAnchorId = f0.FloatingAnchorId,
-                                            Rectangle = f0.Rectangle,
-                                             Name=f0.Name,
-                                        };
-                                        f = v;
-                                        break;
-                                    }
-                                case PdfDocumentParser.Template0.ValueTypes.OcrText:
-                                    {
-                                        PdfDocumentParser.Template.Field.OcrText v = new PdfDocumentParser.Template.Field.OcrText
-                                        { 
-                                            FloatingAnchorId = f0.FloatingAnchorId,
-                                            Rectangle = f0.Rectangle,
-                                            Name = f0.Name,
-                                        };
-                                        f = v;
-                                        break;
-                                    }
-                                case PdfDocumentParser.Template0.ValueTypes.ImageData:
-                                    {
-                                        throw new Exception("1233");
-                                    }
-                                default: throw new Exception("124");
+                                            PdfDocumentParser.Template0.Mark.PdfTextValue v0 = (PdfDocumentParser.Template0.Mark.PdfTextValue)m0.Value;
+                                            PdfDocumentParser.Template.Mark.PdfText v = new PdfDocumentParser.Template.Mark.PdfText
+                                            {
+                                                FloatingAnchorId = m0.FloatingAnchorId,
+                                                Rectangle = m0.Rectangle,
+                                            };
+                                            if (v0 != null)
+                                            {
+                                                v.Text = v0.Text;
+                                            }
+                                            m = v;
+                                            break;
+                                        }
+                                    case PdfDocumentParser.Template0.ValueTypes.OcrText:
+                                        {
+                                            PdfDocumentParser.Template0.Mark.OcrTextValue v0 = (PdfDocumentParser.Template0.Mark.OcrTextValue)m0.Value;
+                                            PdfDocumentParser.Template.Mark.OcrText v = new PdfDocumentParser.Template.Mark.OcrText
+                                            {
+                                                FloatingAnchorId = m0.FloatingAnchorId,
+                                                Rectangle = m0.Rectangle,
+                                            };
+                                            if (v0 != null)
+                                            {
+                                                v.Text = v0.Text;
+                                            }
+                                            m = v;
+                                            break;
+                                        }
+                                    case PdfDocumentParser.Template0.ValueTypes.ImageData:
+                                        {
+                                            PdfDocumentParser.Template0.Mark.ImageDataValue v0 = (PdfDocumentParser.Template0.Mark.ImageDataValue)m0.Value;
+                                            PdfDocumentParser.Template.Mark.ImageData v = new PdfDocumentParser.Template.Mark.ImageData
+                                            {
+                                                FloatingAnchorId = m0.FloatingAnchorId,
+                                                Rectangle = m0.Rectangle,
+                                            };
+                                            if (v0 != null)
+                                            {
+                                                v.BrightnessTolerance = v0.BrightnessTolerance;
+                                                v.DifferentPixelNumberTolerance = v0.DifferentPixelNumberTolerance;
+                                                v.FindBestImageMatch = v0.FindBestImageMatch;
+                                                v.ImageData_ = v0.ImageData;
+                                            }
+                                            m = v;
+                                            break;
+                                        }
+                                    default: throw new Exception("12");
+                                }
+                                t.Base.DocumentFirstPageRecognitionMarks.Add(m);
                             }
-                            t.Base.Fields.Add(f);
-                        }
 
-                        Templates.Add(t);
+                            foreach (PdfDocumentParser.Template0.Field f0 in t0.Fields)
+                            {
+                                PdfDocumentParser.Template.Field f;
+                                switch (f0.Type)
+                                {
+                                    case PdfDocumentParser.Template0.ValueTypes.PdfText:
+                                        {
+                                            PdfDocumentParser.Template.Field.PdfText v = new PdfDocumentParser.Template.Field.PdfText
+                                            {
+                                                FloatingAnchorId = f0.FloatingAnchorId,
+                                                Rectangle = f0.Rectangle,
+                                                Name = f0.Name,
+                                            };
+                                            f = v;
+                                            break;
+                                        }
+                                    case PdfDocumentParser.Template0.ValueTypes.OcrText:
+                                        {
+                                            PdfDocumentParser.Template.Field.OcrText v = new PdfDocumentParser.Template.Field.OcrText
+                                            {
+                                                FloatingAnchorId = f0.FloatingAnchorId,
+                                                Rectangle = f0.Rectangle,
+                                                Name = f0.Name,
+                                            };
+                                            f = v;
+                                            break;
+                                        }
+                                    case PdfDocumentParser.Template0.ValueTypes.ImageData:
+                                        {
+                                            throw new Exception("1233");
+                                        }
+                                    default: throw new Exception("124");
+                                }
+                                t.Base.Fields.Add(f);
+                            }
+
+                            Templates.Add(t);
+                        }
+                        Save();
+                        Reload();
                     }
-                    Save();
-                    Reload();
+                }
+                catch (Exception e)
+                {
+                    Message.Error(e);
                 }
             }
 
@@ -241,7 +256,7 @@ namespace Cliver.InvoiceParser
 
             public Template CreateInitialTemplate()
             {
-                if (InitialTemplate != null)
+                if (InitialTemplate != null && InitialTemplate.Base != null)
                 {
                     string ts = SerializationRoutines.Json.Serialize(InitialTemplate);
                     Template t = SerializationRoutines.Json.Deserialize<Template>(ts);

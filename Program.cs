@@ -27,7 +27,7 @@ namespace Cliver.PdfDocumentParser
 
             Message.TopMost = true;
 
-            Config.Reload();
+            //Config.Reload();//must be called from the entry projects
 
             LogMessage.DisableStumblingDialogs = false;
             Log.ShowDeleteOldLogsDialog = false;

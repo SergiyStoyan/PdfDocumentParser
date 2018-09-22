@@ -251,16 +251,15 @@ namespace Cliver.InvoiceParser
                     try
                     {
                         int i = templates.Rows.Add();
-                        DataGridViewRow r2 = templates.Rows[i];
-                        r2.Selected = true;
+                        r = templates.Rows[i];
                         Template t = Settings.Templates.CreateInitialTemplate();
-                        r2.Cells["Active"].Value = t.Active;
-                        r2.Cells["Group"].Value = t.Group;
-                        r2.Cells["OrderWeight"].Value = t.OrderWeight;
-                        r2.Cells["DetectingTemplateLastPageNumber"].Value = t.DetectingTemplateLastPageNumber;
-                        r2.Cells["FileFilterRegex"].Value = t.FileFilterRegex;
-                        r2.Tag = t;
-                        r2.Selected = false;
+                        r.Tag = t;
+                        r.Cells["Active"].Value = t.Active;
+                        r.Cells["Group"].Value = t.Group;
+                        r.Cells["OrderWeight"].Value = t.OrderWeight;
+                        r.Cells["DetectingTemplateLastPageNumber"].Value = t.DetectingTemplateLastPageNumber;
+                        r.Cells["FileFilterRegex"].Value = t.FileFilterRegex;
+                        r.Selected = true;
                     }
                     catch { }
                 }
@@ -279,13 +278,13 @@ namespace Cliver.InvoiceParser
                         t2.Base.Editor.TestFile = null;
                         int i = templates.Rows.Add(new DataGridViewRow());
                         DataGridViewRow r2 = templates.Rows[i];
+                        r2.Tag = t2;
                         r2.Cells["Name_"].Value = t2.Base.Name.Trim();
                         r2.Cells["Active"].Value = t2.Active;
                         r2.Cells["Group"].Value = t2.Group;
                         r2.Cells["OrderWeight"].Value = t2.OrderWeight;
                         r2.Cells["DetectingTemplateLastPageNumber"].Value = t2.DetectingTemplateLastPageNumber;
                         r2.Cells["FileFilterRegex"].Value = t2.FileFilterRegex;
-                        r2.Tag = t2;
                         editTemplate(r2);
                         break;
                     case "Edit2":
@@ -333,6 +332,7 @@ namespace Cliver.InvoiceParser
                 t = Settings.Templates.CreateInitialTemplate();
                 if (!string.IsNullOrWhiteSpace((string)r.Cells["Name_"].Value))
                     t.Base.Name = (string)r.Cells["Name_"].Value;
+                r.Tag = t;
             }
             string lastTestFile = null;
             if (t.Base.Name != null)

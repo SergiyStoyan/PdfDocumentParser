@@ -54,6 +54,9 @@ namespace Cliver.PdfDocumentParser
             if (floatingAnchorId == null)
                 return null;
 
+            if (pages == null)
+                return null;
+
             pages.ActiveTemplate = getTemplateFromUI(false);
 
             Template.FloatingAnchor fa = pages.ActiveTemplate.FloatingAnchors.Where(a => a.Id == (int)floatingAnchorId).FirstOrDefault();

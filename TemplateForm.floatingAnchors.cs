@@ -36,22 +36,18 @@ namespace Cliver.PdfDocumentParser
 
             floatingAnchors.RowsAdded += delegate (object sender, DataGridViewRowsAddedEventArgs e)
             {
-                DataGridViewRow row = floatingAnchors.Rows[e.RowIndex];
-                Template.FloatingAnchor fa = (Template.FloatingAnchor)row.Tag;
-                if (fa == null)
-                    fa = new Template.FloatingAnchor.PdfText();
-                row.Cells["Type3"].Value = fa.Type;
+                onFloatingAnchorsChanged();
             };
 
             floatingAnchors.DataError += delegate (object sender, DataGridViewDataErrorEventArgs e)
             {
                 DataGridViewRow r = floatingAnchors.Rows[e.RowIndex];
-                Message.Error("FloatingAnchor[" + r.Cells["Id3"].Value + "] has unacceptable value of " + floatingAnchors.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message);
+                Message.Error("FloatingAnchor[Id=" + r.Cells["Id3"].Value + "] has unacceptable value of " + floatingAnchors.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message);
             };
 
             floatingAnchors.UserDeletedRow += delegate (object sender, DataGridViewRowEventArgs e)
             {
-                onFloatingAnchorsChanged(null);
+                onFloatingAnchorsChanged();
             };
 
             floatingAnchors.CurrentCellDirtyStateChanged += delegate
@@ -130,7 +126,12 @@ namespace Cliver.PdfDocumentParser
                     if (row.IsNewRow)//hacky forcing commit a newly added row and display the blank row
                     {
                         int i = floatingAnchors.Rows.Add();
-                        floatingAnchors.Rows[i].Selected = true;
+                        row = floatingAnchors.Rows[i];
+                        Template.FloatingAnchor fa = new Template.FloatingAnchor.PdfText();
+                        fa.Id = -1;
+                        row.Tag = fa;
+                        row.Cells["Type3"].Value = fa.Type;
+                        row.Selected = true;
                         return;
                     }
                     setFloatingAnchorControl(row);
@@ -188,26 +189,24 @@ namespace Cliver.PdfDocumentParser
                 return;
             //if (v0 == SerializationRoutines.Json.Serialize(value))
             //    return;
-            int? fai = (int?)row.Cells["Id3"].Value;
-            onFloatingAnchorsChanged(fai);
             setFloatingAnchorControl(row);
             if (row.Selected)
-                findAndDrawFloatingAnchor(fai);
+                findAndDrawFloatingAnchor(fa.Id);
         }
         //Dictionary<DataGridViewRow, string> rows2valueString = new Dictionary<DataGridViewRow, string>();
 
         void setFloatingAnchorControl(DataGridViewRow row)
         {
-            if (row == null || floatingAnchors.CurrentCell == null || row.Index != floatingAnchors.CurrentCell.RowIndex || row.IsNewRow || !floatingAnchors.Rows.Contains(row))
+            if (row == null || floatingAnchors.CurrentCell == null || row.Index != floatingAnchors.CurrentCell.RowIndex || row.Tag==null || row.IsNewRow || !floatingAnchors.Rows.Contains(row))
             {
                 currentFloatingAnchorRow = null;
                 currentFloatingAnchorControl = null;
                 return;
             }
             currentFloatingAnchorRow = row;
-            Template.Types valueType = (Template.Types)row.Cells["Type3"].Value;
             Control c = currentFloatingAnchorControl;
-            switch (valueType)
+            Template.Types t = ((Template.FloatingAnchor)row.Tag).Type;
+            switch (t)
             {
                 case Template.Types.PdfText:
                     {
@@ -231,7 +230,7 @@ namespace Cliver.PdfDocumentParser
                     }
                     break;
                 default:
-                    throw new Exception("Unknown option: " + valueType);
+                    throw new Exception("Unknown option: " + t);
             }
             currentFloatingAnchorControl = c;
         }
@@ -277,15 +276,15 @@ namespace Cliver.PdfDocumentParser
             setFloatingAnchorRow(currentFloatingAnchorRow, fa);
         }
 
-        void onFloatingAnchorsChanged(int? updatedFloatingAnchorId)
+        void onFloatingAnchorsChanged()
         {
             SortedSet<int> fais = new SortedSet<int>();
-            foreach (DataGridViewRow rr in floatingAnchors.Rows)
-                if (rr.Cells["Id3"].Value != null)
-                    fais.Add((int)rr.Cells["Id3"].Value);
+            foreach (DataGridViewRow r in floatingAnchors.Rows)
+                if (r.Tag != null && ((Template.FloatingAnchor)r.Tag).Id > 0)
+                    fais.Add(((Template.FloatingAnchor)r.Tag).Id);
 
-            foreach (DataGridViewRow rr in floatingAnchors.Rows)
-                if (rr.Cells["Id3"].Value == null && rr.Tag != null && rr.Cells["Type3"].Value != null)
+            foreach (DataGridViewRow r in floatingAnchors.Rows)
+                if (r.Tag != null && ((Template.FloatingAnchor)r.Tag).Id <= 0)
                 {
                     int fai = 1;
                     //if (fais.Count > 0)
@@ -298,34 +297,31 @@ namespace Cliver.PdfDocumentParser
                             fai++;
                     }
                     fais.Add(fai);
-                    rr.Cells["Id3"].Value = fai;
+                    r.Cells["Id3"].Value = fai;
                 }
 
             foreach (DataGridViewRow r in documentFirstPageRecognitionMarks.Rows)
             {
-                int? i = (int?)r.Cells["FloatingAnchorId2"].Value;
-                if (i != null && !fais.Contains((int)i))
+                if (r.Tag == null)
+                    continue;
+                Template.Mark m = (Template.Mark)r.Tag;
+                if (m.FloatingAnchorId != null && !fais.Contains((int)m.FloatingAnchorId))
                 {
                     r.Cells["FloatingAnchorId2"].Value = null;
                     setMarkRectangle(r, null);
                 }
-                //if (updatedFloatingAnchorId != null && i == updatedFloatingAnchorId)
-                //    setMarkRectangle(r, null);
             }
             foreach (DataGridViewRow r in fields.Rows)
             {
-                int? i = (int?)r.Cells["FloatingAnchorId"].Value;
-                if (i != null && !fais.Contains((int)i))
+                if (r.Tag == null)
+                    continue;
+                Template.Field f = (Template.Field)r.Tag;
+                if (f.FloatingAnchorId != null && !fais.Contains((int)f.FloatingAnchorId))
                 {
                     r.Cells["FloatingAnchorId"].Value = null;
                     r.Cells["Rectangle"].Value = null;
                     r.Cells["Value"].Value = null;
                 }
-                //if (updatedFloatingAnchorId != null && i == updatedFloatingAnchorId)
-                //{
-                //    r.Cells["Rectangle"].Value = null;
-                //    r.Cells["Value"].Value = null;
-                //}
             }
 
             List<dynamic> fais_ = fais.Select(f => new { Id = f, Name = f.ToString() }).ToList<dynamic>();

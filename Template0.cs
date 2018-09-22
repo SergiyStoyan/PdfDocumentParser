@@ -19,13 +19,7 @@ namespace Cliver.PdfDocumentParser
     /// //OLD FORMAT,TO BE REMOVED
     public class Template0
     {
-        public class EditorSettings
-        {
-            public bool ExtractFieldsAutomaticallyWhenPageChanged = true;
-            public string TestFile;
-            public decimal TestPictureScale = 1.2m;
-        }
-        public EditorSettings Editor;
+        public Template.EditorSettings Editor;
 
         public string Name;
 
@@ -169,7 +163,7 @@ namespace Cliver.PdfDocumentParser
             //serialize
             public int Id;
             //serialize
-            public ValueTypes Type = ValueTypes.PdfText;
+            public ValueTypes ValueType = ValueTypes.PdfText;
             //serialize
             public float PositionDeviation = 0.1f;//to be removed after update
             //serialize
@@ -179,7 +173,7 @@ namespace Cliver.PdfDocumentParser
                 {
                     if (Value == null)
                         return null;
-                    switch (Type)
+                    switch (ValueType)
                     {
                         case ValueTypes.PdfText:
                             return SerializationRoutines.Json.Serialize(Value, false);
@@ -190,7 +184,7 @@ namespace Cliver.PdfDocumentParser
                             //s = SerializationRoutines.Json.Serialize(bs, false);
                             return SerializationRoutines.Json.Serialize(Value, false);
                         default:
-                            throw new Exception("Unknown option: " + Type);
+                            throw new Exception("Unknown option: " + ValueType);
                     }
                 }
                 set
@@ -200,7 +194,7 @@ namespace Cliver.PdfDocumentParser
                         Value = null;
                         return;
                     }
-                    switch (Type)
+                    switch (ValueType)
                     {
                         case ValueTypes.PdfText:
                             Value = SerializationRoutines.Json.Deserialize<PdfTextValue>(value);
@@ -214,7 +208,7 @@ namespace Cliver.PdfDocumentParser
                             Value = SerializationRoutines.Json.Deserialize<ImageDataValue>(value);
                             break;
                         default:
-                            throw new Exception("Unknown option: " + Type);
+                            throw new Exception("Unknown option: " + ValueType);
                     }
                 }
             }

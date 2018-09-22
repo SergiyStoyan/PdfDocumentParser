@@ -96,7 +96,7 @@ namespace Cliver.InvoiceParser
                     FloatingAnchors = new List<Template0.FloatingAnchor>(),
                     DocumentFirstPageRecognitionMarks = new List<Template0.Mark>(),
                     PagesRotation = PdfDocumentParser.Template.PageRotations.NONE,
-                    Editor = new PdfDocumentParser.Template0.EditorSettings
+                    Editor = new PdfDocumentParser.Template.EditorSettings
                     {
                         TestPictureScale = 1.2m,
                         TestFile = "",

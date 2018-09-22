@@ -34,6 +34,16 @@ namespace Cliver.PdfDocumentParser
 
             fields.EnableHeadersVisualStyles = false;//needed to set row headers
 
+            fields.DataError += delegate (object sender, DataGridViewDataErrorEventArgs e)
+            {
+                DataGridViewRow r = fields.Rows[e.RowIndex];
+                Message.Error("fields[" + r.Index + "] has unacceptable value of " + fields.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message);
+            };
+
+            fields.RowsAdded += delegate (object sender, DataGridViewRowsAddedEventArgs e)
+            {
+            };
+
             fields.CellValueChanged += delegate (object sender, DataGridViewCellEventArgs e)
             {
                 try
@@ -176,15 +186,18 @@ namespace Cliver.PdfDocumentParser
                     documentFirstPageRecognitionMarks.ClearSelection();
                     documentFirstPageRecognitionMarks.CurrentCell = null;
                     DataGridViewRow row = fields.SelectedRows[0];
-                    int i = row.Index;
 
-                    if (fields.Rows[i].IsNewRow)//hacky forcing commit a newly added row and display the blank row
+                    if (row.IsNewRow)//hacky forcing commit a newly added row and display the blank row
                     {
-                        int j = fields.Rows.Add();
-                        fields.Rows[j].Selected = true;
+                        int i = fields.Rows.Add();
+                        row = fields.Rows[i];
+                        Template.Field f = new Template.Field.PdfText();
+                        row.Tag = f;
+                        row.Cells["Ocr"].Value = f.Type == Template.Types.PdfText ? false : true;
+                        row.Selected = true;
                         return;
                     }
-                    var cs = fields.Rows[i].Cells;
+                    var cs = row.Cells;
 
                     var vt = Convert.ToBoolean(cs["Ocr"].Value) ? Template.Types.OcrText : Template.Types.PdfText;
                     int? fai = (int?)cs["FloatingAnchorId"].Value;

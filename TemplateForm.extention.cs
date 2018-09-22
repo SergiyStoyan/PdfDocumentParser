@@ -77,12 +77,10 @@ namespace Cliver.PdfDocumentParser
                     {
                         int i = floatingAnchors.Rows.Add();
                         var row = floatingAnchors.Rows[i];
-                        var cs = row.Cells;
-                        cs["Id3"].Value = fa.Id;
-                        cs["Type3"].Value = fa.Type;
                         row.Tag = fa;
+                        row.Cells["Id3"].Value = fa.Id;
+                        row.Cells["Type3"].Value = fa.Type;
                     }
-                    //onFloatingAnchorsChanged(null);
                 }
 
                 documentFirstPageRecognitionMarks.Rows.Clear();
@@ -212,9 +210,15 @@ namespace Cliver.PdfDocumentParser
                 if (saving)
                     throw new Exception("Name is empty!");
 
-            if (documentFirstPageRecognitionMarks.Rows.Count < 2)
-                if (saving)
+            if (saving)
+            {
+                int c = 0;
+                foreach (DataGridViewRow r in documentFirstPageRecognitionMarks.Rows)
+                    if (r.Tag != null)
+                        c++;
+                if (c < 1)
                     throw new Exception("DocumentFirstPageRecognitionMarks is empty!");
+            }
 
             t.Name = name.Text.Trim();
 
