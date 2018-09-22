@@ -22,29 +22,31 @@ namespace Cliver.PdfDocumentParser
             InitializeComponent();
         }
 
-        public Template.Mark.ImageDataValue Value
+        public Template.Mark.ImageData Mark
         {
             get
             {
-                _value.FindBestImageMatch = findBestImageMatch.Checked;
-                _value.BrightnessTolerance = (float)brightnessTolerance.Value;
-                _value.DifferentPixelNumberTolerance = (float)differentPixelNumberTolerance.Value;
-                return _value;
+                if (mark == null)
+                    mark = new Template.Mark.ImageData();
+                mark.FindBestImageMatch = findBestImageMatch.Checked;
+                mark.BrightnessTolerance = (float)brightnessTolerance.Value;
+                mark.DifferentPixelNumberTolerance = (float)differentPixelNumberTolerance.Value;
+                return mark;
             }
             set
             {
                 if (value == null)
-                    value = new Template.Mark.ImageDataValue();
-                _value = value;
+                    value = new Template.Mark.ImageData();
+                mark = value;
                 findBestImageMatch.Checked = value.FindBestImageMatch;
                 brightnessTolerance.Value = (decimal)value.BrightnessTolerance;
                 differentPixelNumberTolerance.Value = (decimal)value.DifferentPixelNumberTolerance;
-                if (value.ImageData != null)
-                    picture.Image = value.ImageData.GetImage();
+                if (value.ImageData_ != null)
+                    picture.Image = value.ImageData_.GetImage();
                 rectangle.Text = SerializationRoutines.Json.Serialize(value.Rectangle);
             }
         }
-        Template.Mark.ImageDataValue _value;
+        Template.Mark.ImageData mark;
 
         public bool FindBestImageMatch
         {

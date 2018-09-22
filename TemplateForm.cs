@@ -29,7 +29,6 @@ namespace Cliver.PdfDocumentParser
         public abstract class TemplateManager
         {
             public Template Template;
-            abstract public Template New();
             abstract public void ReplaceWith(Template newTemplate);
             abstract public void SaveAsInitialTemplate(Template template);
             public string LastTestFile;
@@ -55,7 +54,9 @@ namespace Cliver.PdfDocumentParser
 
             this.templateManager = templateManager;
 
-            setTableHandlers();
+            initializeFloatingAnchorsTable();
+            initializeMarksTable();
+            initializeFieldsTable();
 
             picture.MouseDown += delegate (object sender, MouseEventArgs e)
             {
@@ -128,51 +129,42 @@ namespace Cliver.PdfDocumentParser
                                     break;
 
                                 RectangleF selectedR = new RectangleF(selectionBoxPoint1, new SizeF(selectionBoxPoint2.X - selectionBoxPoint1.X, selectionBoxPoint2.Y - selectionBoxPoint1.Y));
-                                Template.ValueTypes vt = (Template.ValueTypes)floatingAnchors.SelectedRows[0].Cells["ValueType3"].Value;
+                                Template.Types vt = (Template.Types)floatingAnchors.SelectedRows[0].Cells["Type3"].Value;
                                 switch (vt)
                                 {
-                                    case Template.ValueTypes.PdfText:
+                                    case Template.Types.PdfText:
                                         if (selectedPdfCharBoxs == null/* || (ModifierKeys & Keys.Control) != Keys.Control*/)
                                             selectedPdfCharBoxs = new List<Pdf.CharBox>();
                                         selectedPdfCharBoxs.AddRange(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPage].PdfCharBoxs, selectedR, true));
                                         break;
-                                    case Template.ValueTypes.OcrText:
+                                    case Template.Types.OcrText:
                                         //{
                                         //    if (selectedOcrTextValue == null)
-                                        //        selectedOcrTextValue = new Settings.Template.FloatingAnchor.OcrTextValue
+                                        //        selectedOcrTextValue = new Settings.Template.FloatingAnchor.OcrText
                                         //        {
-                                        //            TextBoxs = new List<Settings.Template.FloatingAnchor.OcrTextValue.TextBox>()
+                                        //            TextBoxs = new List<Settings.Template.FloatingAnchor.OcrText.TextBox>()
                                         //        };
                                         //    string error;
                                         //    pages.ActiveTemplate = getTemplateFromUI(false);
-                                        //    selectedOcrTextValue.TextBoxs.Add(new Settings.Template.FloatingAnchor.OcrTextValue.TextBox
+                                        //    selectedOcrTextValue.TextBoxs.Add(new Settings.Template.FloatingAnchor.OcrText.TextBox
                                         //    {
                                         //        Rectangle = Settings.Template.RectangleF.GetFromSystemRectangleF(selectedR),
-                                        //        Text = (string)pages[currentPage].GetValue(null, Settings.Template.RectangleF.GetFromSystemRectangleF(selectedR), Settings.Template.ValueTypes.OcrText, out error)
+                                        //        Text = (string)pages[currentPage].GetValue(null, Settings.Template.RectangleF.GetFromSystemRectangleF(selectedR), Settings.Template.Types.OcrText, out error)
                                         //    });
                                         //}
                                         if (selectedOcrCharBoxs == null/* || (ModifierKeys & Keys.Control) != Keys.Control*/)
                                             selectedOcrCharBoxs = new List<Ocr.CharBox>();
                                         selectedOcrCharBoxs.AddRange(PdfDocumentParser.Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPage].ActiveTemplateOcrCharBoxs, selectedR));
                                         break;
-                                    case Template.ValueTypes.ImageData:
+                                    case Template.Types.ImageData:
                                         {
-                                            if (selectedImageDataValue == null)
-                                            {
-                                                selectedImageDataValue = new Template.FloatingAnchor.ImageDataValue();
-                                                //if (currentFloatingAnchorControl!=null)
-                                                {
-                                                    FloatingAnchorImageDataControl c = (FloatingAnchorImageDataControl)currentFloatingAnchorControl;
-                                                    selectedImageDataValue.FindBestImageMatch = c.FindBestImageMatch.Checked;
-                                                    selectedImageDataValue.BrightnessTolerance = (float)c.BrightnessTolerance.Value;
-                                                    selectedImageDataValue.DifferentPixelNumberTolerance = (float)c.DifferentPixelNumberTolerance.Value;
-                                                }
-                                            }
+                                            if (selectedImageBoxs == null)
+                                                selectedImageBoxs = new List<Template.FloatingAnchor.ImageData.ImageBox>();
                                             string error;
-                                            selectedImageDataValue.ImageBoxs.Add(new Template.FloatingAnchor.ImageDataValue.ImageBox
+                                            selectedImageBoxs.Add(new Template.FloatingAnchor.ImageData.ImageBox
                                             {
                                                 Rectangle = Template.RectangleF.GetFromSystemRectangleF(selectedR),
-                                                ImageData = (ImageData)pages[currentPage].GetValue(null, Template.RectangleF.GetFromSystemRectangleF(selectedR), Template.ValueTypes.ImageData, out error)
+                                                ImageData = (ImageData)pages[currentPage].GetValue(null, Template.RectangleF.GetFromSystemRectangleF(selectedR), Template.Types.ImageData, out error)
                                             });
                                         }
                                         break;

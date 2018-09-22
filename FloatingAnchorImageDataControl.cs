@@ -22,23 +22,25 @@ namespace Cliver.PdfDocumentParser
             InitializeComponent();
         }
 
-        public Template.FloatingAnchor.ImageDataValue Value
+        public Template.FloatingAnchor.ImageData FloatingAnchor
         {
             get
             {
-                _value.FindBestImageMatch = FindBestImageMatch.Checked;
-                _value.BrightnessTolerance = (float)BrightnessTolerance.Value;
-                _value.DifferentPixelNumberTolerance = (float)DifferentPixelNumberTolerance.Value;
+                if (floatingAnchor == null)
+                    floatingAnchor = new Template.FloatingAnchor.ImageData();
+                floatingAnchor.FindBestImageMatch = FindBestImageMatch.Checked;
+                floatingAnchor.BrightnessTolerance = (float)BrightnessTolerance.Value;
+                floatingAnchor.DifferentPixelNumberTolerance = (float)DifferentPixelNumberTolerance.Value;
                 //_value.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
-                _value.PositionDeviation = (float)PositionDeviation.Value;
-                _value.SearchRectangleMargin = (int)SearchRectangleMargin.Value;
-                return _value;
+                floatingAnchor.PositionDeviation = (float)PositionDeviation.Value;
+                floatingAnchor.SearchRectangleMargin = (int)SearchRectangleMargin.Value;
+                return floatingAnchor;
             }
             set
             {
                 if (value == null)
-                    value = new Template.FloatingAnchor.ImageDataValue();
-                _value = value;
+                    value = new Template.FloatingAnchor.ImageData();
+                floatingAnchor = value;
                 FindBestImageMatch.Checked = value.FindBestImageMatch;
                 BrightnessTolerance.Value = (decimal)value.BrightnessTolerance;
                 DifferentPixelNumberTolerance.Value = (decimal)value.DifferentPixelNumberTolerance;
@@ -49,10 +51,10 @@ namespace Cliver.PdfDocumentParser
                     PositionDeviation.Value = (decimal)value.PositionDeviation;
                 }
                 catch { }
-                SearchRectangleMargin.Value = _value.SearchRectangleMargin;
+                SearchRectangleMargin.Value = floatingAnchor.SearchRectangleMargin;
             }
         }
-        Template.FloatingAnchor.ImageDataValue _value;
+        Template.FloatingAnchor.ImageData floatingAnchor;
 
         //public bool FindBestImageMatch
         //{

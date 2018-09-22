@@ -180,6 +180,7 @@
     </Compile>
     <Compile Include="Settings\Synchronization.cs" />
     <Compile Include="Settings\General.cs" />
+    <Compile Include="Settings\Templates0.cs" />
     <Compile Include="Settings\Templates2.cs" />
     <Compile Include="Settings\Templates.cs" />
     <Compile Include="Settings\TestFiles.cs" />

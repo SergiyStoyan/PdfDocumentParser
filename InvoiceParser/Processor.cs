@@ -70,15 +70,15 @@ namespace Cliver.InvoiceParser
 
             List<string> orderedOutputFieldNames = OutputConfigForm.GetOrderedOutputFieldNames();
 
-            List<string> headers = active_templates[0].Fields.Select(x => x.Name).ToList();
+            List<string> headers = active_templates[0].Base.Fields.Select(x => x.Name).ToList();
             List<string> hs0 = headers.OrderBy(a => a).ToList();
             for (int i = 1; i < active_templates.Count; i++)
             {
                 Template t = active_templates[i];
-                List<string> hs = t.Fields.Select(x => x.Name).ToList();
+                List<string> hs = t.Base.Fields.Select(x => x.Name).ToList();
                 if (!hs.OrderBy(a => a).SequenceEqual(hs0))
                 {
-                    if (!LogMessage.AskYesNo("Templates '" + active_templates[0].Name + "' and '" + active_templates[i].Name + "' have different headers!\r\nProceed?", true))
+                    if (!LogMessage.AskYesNo("Templates '" + active_templates[0].Base.Name + "' and '" + active_templates[i].Base.Name + "' have different headers!\r\nProceed?", true))
                         return;
                 }
             }

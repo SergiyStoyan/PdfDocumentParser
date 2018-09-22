@@ -56,352 +56,6 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        void setFloatingAnchorValue(DataGridViewRow row, Template.FloatingAnchor.BaseValue value)
-        {
-            //string v0;
-            //rows2valueString.TryGetValue(row, out v0);
-            //rows2valueString[row] = SerializationRoutines.Json.Serialize(value);
-            row.Tag = value;
-            if (loadingTemplate)
-                return;
-            //if (v0 == SerializationRoutines.Json.Serialize(value))
-            //    return;
-            int? fai = (int?)row.Cells["Id3"].Value;
-            onFloatingAnchorsChanged(fai);
-            setFloatingAnchorControl(row);
-            if (row.Selected)
-                findAndDrawFloatingAnchor(fai);
-        }
-        //Dictionary<DataGridViewRow, string> rows2valueString = new Dictionary<DataGridViewRow, string>();
-
-        void setFloatingAnchorControl(DataGridViewRow row)
-        {
-            if (row == null || floatingAnchors.CurrentCell == null || row.Index != floatingAnchors.CurrentCell.RowIndex || row.IsNewRow || !floatingAnchors.Rows.Contains(row))
-            {
-                currentFloatingAnchorRow = null;
-                currentFloatingAnchorControl = null;
-                return;
-            }
-            currentFloatingAnchorRow = row;
-            Template.ValueTypes valueType = (Template.ValueTypes)row.Cells["ValueType3"].Value;
-            Control c = currentFloatingAnchorControl;
-            switch (valueType)
-            {
-                case Template.ValueTypes.PdfText:
-                    {
-                        if (c == null || !(c is FloatingAnchorPdfTextControl))
-                            c = new FloatingAnchorPdfTextControl();
-                        ((FloatingAnchorPdfTextControl)c).Value = (Template.FloatingAnchor.PdfTextValue)row.Tag;
-                    }
-                    break;
-                case Template.ValueTypes.OcrText:
-                    {
-                        if (c == null || !(c is FloatingAnchorOcrTextControl))
-                            c = new FloatingAnchorOcrTextControl();
-                        ((FloatingAnchorOcrTextControl)c).Value = (Template.FloatingAnchor.OcrTextValue)row.Tag;
-                    }
-                    break;
-                case Template.ValueTypes.ImageData:
-                    {
-                        if (c == null || !(c is FloatingAnchorImageDataControl))
-                            c = new FloatingAnchorImageDataControl();
-                        ((FloatingAnchorImageDataControl)c).Value = (Template.FloatingAnchor.ImageDataValue)row.Tag;
-                    }
-                    break;
-                default:
-                    throw new Exception("Unknown option: " + valueType);
-            }
-            currentFloatingAnchorControl = c;
-        }
-        Control currentFloatingAnchorControl
-        {
-            get
-            {
-                if (anchorControl.Controls.Count < 1)
-                    return null;
-                return anchorControl.Controls[0];
-            }
-            set
-            {
-                anchorControl.Controls.Clear();
-                if (value == null)
-                    return;
-                anchorControl.Controls.Add(value);
-                value.Dock = DockStyle.Fill;
-            }
-        }
-        DataGridViewRow currentFloatingAnchorRow = null;
-        void setCurrentFloatingAnchorValueFromControl()
-        {
-            if (currentFloatingAnchorRow == null || currentFloatingAnchorRow.Index < 0)//removed row
-                return;
-            Template.FloatingAnchor.BaseValue value = null;
-            Template.ValueTypes valueType = (Template.ValueTypes)currentFloatingAnchorRow.Cells["ValueType3"].Value;
-            switch (valueType)
-            {
-                case Template.ValueTypes.PdfText:
-                    value = ((FloatingAnchorPdfTextControl)currentFloatingAnchorControl).Value;
-                    break;
-                case Template.ValueTypes.OcrText:
-                    value = ((FloatingAnchorOcrTextControl)currentFloatingAnchorControl).Value;
-                    break;
-                case Template.ValueTypes.ImageData:
-                    value = ((FloatingAnchorImageDataControl)currentFloatingAnchorControl).Value;
-                    break;
-                default:
-                    throw new Exception("Unknown option: " + valueType);
-            }
-            setFloatingAnchorValue(currentFloatingAnchorRow, value);
-        }
-
-        void setMarkValue(DataGridViewRow row, Template.Mark.BaseValue value)
-        {
-            //string v0;
-            //rows2valueString.TryGetValue(row, out v0);
-            //rows2valueString[row] = SerializationRoutines.Json.Serialize(value);
-            row.Tag = value;
-            if (loadingTemplate)
-                return;
-            //if (v0 == SerializationRoutines.Json.Serialize(value))
-            //    return;
-
-            setMarkControl(row);
-            //if (row.Selected)
-            //    if (isMarkFound(row, true))
-            //        setRowStatus(statuses.SUCCESS, row, "Found");
-            //    else
-            //        setRowStatus(statuses.ERROR, row, "Not found");
-        }
-        void setMarkControl(DataGridViewRow row)
-        {
-            if (row == null || !row.Selected || row.IsNewRow || !documentFirstPageRecognitionMarks.Rows.Contains(row))
-            {
-                currentMarkRow = null;
-                currentMarkControl = null;
-                return;
-            }
-            currentMarkRow = row;
-            Template.ValueTypes valueType = (Template.ValueTypes)row.Cells["ValueType2"].Value;
-            Control c = currentMarkControl;
-            switch (valueType)
-            {
-                case Template.ValueTypes.PdfText:
-                    {
-                        if (c == null || !(c is MarkPdfTextControl))
-                            c = new MarkPdfTextControl();
-                        ((MarkPdfTextControl)c).Value = (Template.Mark.PdfTextValue)row.Tag;
-                    }
-                    break;
-                case Template.ValueTypes.OcrText:
-                    {
-                        if (c == null || !(c is MarkOcrTextControl))
-                            c = new MarkOcrTextControl();
-                        ((MarkOcrTextControl)c).Value = (Template.Mark.OcrTextValue)row.Tag;
-                    }
-                    break;
-                case Template.ValueTypes.ImageData:
-                    {
-                        if (c == null || !(c is MarkImageDataControl))
-                            c = new MarkImageDataControl();
-                        ((MarkImageDataControl)c).Value = (Template.Mark.ImageDataValue)row.Tag;
-                    }
-                    break;
-                default:
-                    throw new Exception("Unknown option: " + valueType);
-            }
-            currentMarkControl = c;
-        }
-        Control currentMarkControl
-        {
-            get
-            {
-                if (markControl.Controls.Count < 1)
-                    return null;
-                return markControl.Controls[0];
-            }
-            set
-            {
-                markControl.Controls.Clear();
-                if (value == null)
-                    return;
-                markControl.Controls.Add(value);
-                value.Dock = DockStyle.Fill;
-            }
-        }
-        DataGridViewRow currentMarkRow = null;
-        void setCurrentMarkValueFromControl()
-        {
-            if (currentMarkRow == null || currentMarkRow.Index < 0)//removed row
-                return;
-            //    var cs = currentfloatingAnchorRow.Cells;
-            Template.Mark.BaseValue value = null;
-            Template.ValueTypes valueType = (Template.ValueTypes)currentMarkRow.Cells["ValueType2"].Value;
-            switch (valueType)
-            {
-                case Template.ValueTypes.PdfText:
-                    value = ((MarkPdfTextControl)currentMarkControl).Value;
-                    break;
-                case Template.ValueTypes.OcrText:
-                    value = ((MarkOcrTextControl)currentMarkControl).Value;
-                    break;
-                case Template.ValueTypes.ImageData:
-                    value = ((MarkImageDataControl)currentMarkControl).Value;
-                    break;
-                default:
-                    throw new Exception("Unknown option: " + valueType);
-            }
-            if (currentMarkRow.Cells["FloatingAnchorId2"].Value == null && value.Rectangle == null)
-                setRowStatus(statuses.WARNING, currentMarkRow, "Not set");
-            setMarkValue(currentMarkRow, value);
-        }
-
-        void onFloatingAnchorsChanged(int? updatedFloatingAnchorId)
-        {
-            SortedSet<int> fais = new SortedSet<int>();
-            foreach (DataGridViewRow rr in floatingAnchors.Rows)
-                if (rr.Cells["Id3"].Value != null)
-                    fais.Add((int)rr.Cells["Id3"].Value);
-
-            foreach (DataGridViewRow rr in floatingAnchors.Rows)
-                if (rr.Cells["Id3"].Value == null && rr.Tag != null && rr.Cells["ValueType3"].Value != null)
-                {
-                    int fai = 1;
-                    //if (fais.Count > 0)
-                    //    fai = fais.Max() + 1;                    
-                    foreach (int i in fais)
-                    {
-                        if (fai < i)
-                            break;
-                        if (fai == i)
-                            fai++;
-                    }
-                    fais.Add(fai);
-                    rr.Cells["Id3"].Value = fai;
-                }
-
-            foreach (DataGridViewRow r in documentFirstPageRecognitionMarks.Rows)
-            {
-                int? i = (int?)r.Cells["FloatingAnchorId2"].Value;
-                if (i != null && !fais.Contains((int)i))
-                {
-                    r.Cells["FloatingAnchorId2"].Value = null;
-                    setMarkRectangle(r, null);
-                }
-                //if (updatedFloatingAnchorId != null && i == updatedFloatingAnchorId)
-                //    setMarkRectangle(r, null);
-            }
-            foreach (DataGridViewRow r in fields.Rows)
-            {
-                int? i = (int?)r.Cells["FloatingAnchorId"].Value;
-                if (i != null && !fais.Contains((int)i))
-                {
-                    r.Cells["FloatingAnchorId"].Value = null;
-                    r.Cells["Rectangle"].Value = null;
-                    r.Cells["Value"].Value = null;
-                }
-                //if (updatedFloatingAnchorId != null && i == updatedFloatingAnchorId)
-                //{
-                //    r.Cells["Rectangle"].Value = null;
-                //    r.Cells["Value"].Value = null;
-                //}
-            }
-
-            List<dynamic> fais_ = fais.Select(f => new { Id = f, Name = f.ToString() }).ToList<dynamic>();
-            fais_.Insert(0, new { Id = -1, Name = string.Empty });//commbobox returns value null for -1 (and throws an unclear expection if Id=null)
-            FloatingAnchorId2.DataSource = fais_;
-            FloatingAnchorId.DataSource = fais_;
-        }
-
-        void setFloatingAnchorFromSelectedElements()
-        {
-            try
-            {
-                if (floatingAnchors.SelectedRows.Count < 1)
-                    return;
-
-                DataGridViewRow row = floatingAnchors.SelectedRows[0];
-                var vt = (Template.ValueTypes)row.Cells["ValueType3"].Value;
-                switch (vt)
-                {
-                    case Template.ValueTypes.PdfText:
-                        {
-                            List<Pdf.Line> lines = Pdf.RemoveDuplicatesAndGetLines(selectedPdfCharBoxs, false);
-                            if (lines.Count < 1)
-                            {
-                                setFloatingAnchorValue(row, null);
-                                return;
-                            }
-                            Template.FloatingAnchor.PdfTextValue pte = new Template.FloatingAnchor.PdfTextValue { CharBoxs = new List<Template.FloatingAnchor.PdfTextValue.CharBox>() };
-                            foreach (Pdf.Line l in lines)
-                                foreach (Pdf.CharBox cb in l.CharBoxes)
-                                    pte.CharBoxs.Add(new Template.FloatingAnchor.PdfTextValue.CharBox
-                                    {
-                                        Char = cb.Char,
-                                        Rectangle = new Template.RectangleF(cb.R.X, cb.R.Y, cb.R.Width, cb.R.Height),
-                                    });
-                            if (pte.CharBoxs.Count < 1)
-                            {
-                                setFloatingAnchorValue(row, null);
-                                return;
-                            }
-                            setFloatingAnchorValue(row, pte);
-                        }
-                        break;
-                    case Template.ValueTypes.OcrText:
-                        {
-                            List<Ocr.Line> lines = PdfDocumentParser.Ocr.GetLines(selectedOcrCharBoxs);
-                            if (lines.Count < 1)
-                            {
-                                setFloatingAnchorValue(row, null);
-                                return;
-                            }
-                            Template.FloatingAnchor.OcrTextValue ote = new Template.FloatingAnchor.OcrTextValue { CharBoxs = new List<Template.FloatingAnchor.OcrTextValue.CharBox>() };
-                            foreach (Ocr.Line l in lines)
-                                foreach (Ocr.CharBox cb in l.CharBoxes)
-                                    ote.CharBoxs.Add(new Template.FloatingAnchor.OcrTextValue.CharBox
-                                    {
-                                        Char = cb.Char,
-                                        Rectangle = new Template.RectangleF(cb.R.X, cb.R.Y, cb.R.Width, cb.R.Height),
-                                    });
-                            if (ote.CharBoxs.Count < 1)
-                            {
-                                setFloatingAnchorValue(row, null);
-                                return;
-                            }
-                            setFloatingAnchorValue(row, ote);
-                        }
-                        break;
-                    case Template.ValueTypes.ImageData:
-                        {
-                            if (selectedImageDataValue.ImageBoxs.Count < 1)
-                            {
-                                setFloatingAnchorValue(row, null);
-                                return;
-                            }
-                            if (selectedImageDataValue.ImageBoxs.Where(x => x.ImageData == null).FirstOrDefault() != null)
-                            {
-                                setFloatingAnchorValue(row, null);
-                                return;
-                            }
-                            setFloatingAnchorValue(row, selectedImageDataValue);
-                        }
-                        break;
-                    default:
-                        throw new Exception("Unknown option: " + vt);
-                }
-            }
-            finally
-            {
-                floatingAnchors.EndEdit();
-                selectedPdfCharBoxs = null;
-                selectedOcrCharBoxs = null;
-                selectedImageDataValue = null;
-            }
-        }
-        List<Pdf.CharBox> selectedPdfCharBoxs;
-        List<Ocr.CharBox> selectedOcrCharBoxs;
-        Template.FloatingAnchor.ImageDataValue selectedImageDataValue;
-
         void setUIFromTemplate(Template t)
         {
             try
@@ -422,12 +76,13 @@ namespace Cliver.PdfDocumentParser
                     foreach (Template.FloatingAnchor fa in t.FloatingAnchors)
                     {
                         int i = floatingAnchors.Rows.Add();
-                        var cs = floatingAnchors.Rows[i].Cells;
+                        var row = floatingAnchors.Rows[i];
+                        var cs = row.Cells;
                         cs["Id3"].Value = fa.Id;
-                        cs["ValueType3"].Value = fa.ValueType;
-                        setFloatingAnchorValue(floatingAnchors.Rows[i], fa.Value);
+                        cs["Type3"].Value = fa.Type;
+                        row.Tag = fa;
                     }
-                    onFloatingAnchorsChanged(null);
+                    //onFloatingAnchorsChanged(null);
                 }
 
                 documentFirstPageRecognitionMarks.Rows.Clear();
@@ -438,9 +93,9 @@ namespace Cliver.PdfDocumentParser
                         int i = documentFirstPageRecognitionMarks.Rows.Add();
                         var row = documentFirstPageRecognitionMarks.Rows[i];
                         var cs = row.Cells;
-                        cs["ValueType2"].Value = m.ValueType;
+                        cs["Type2"].Value = m.Type;
                         cs["FloatingAnchorId2"].Value = m.FloatingAnchorId;
-                        setMarkValue(row, m.Value);
+                        row.Tag = m;
                     }
                 }
 
@@ -450,11 +105,13 @@ namespace Cliver.PdfDocumentParser
                     foreach (Template.Field f in t.Fields)
                     {
                         int i = fields.Rows.Add();
-                        var cs = fields.Rows[i].Cells;
+                        var row = fields.Rows[i];
+                        var cs = row.Cells;
                         cs["Name_"].Value = f.Name;
                         cs["Rectangle"].Value = f.Rectangle == null ? null : SerializationRoutines.Json.Serialize(f.Rectangle);
-                        cs["Ocr"].Value = f.ValueType == Template.ValueTypes.PdfText ? false : true;
+                        cs["Ocr"].Value = f.Type == Template.Types.PdfText ? false : true;
                         cs["FloatingAnchorId"].Value = f.FloatingAnchorId;
+                        row.Tag = f;
                     }
                 }
 
@@ -549,11 +206,7 @@ namespace Cliver.PdfDocumentParser
 
         Template getTemplateFromUI(bool saving)
         {
-            Template t;
-            if (saving)
-                t = templateManager.New();
-            else
-                t = new Template();
+            Template t = new Template();
 
             if (string.IsNullOrWhiteSpace(name.Text))
                 if (saving)
@@ -572,34 +225,32 @@ namespace Cliver.PdfDocumentParser
             bool? removeNotLinkedAnchors = null;
             t.FloatingAnchors = new List<Template.FloatingAnchor>();
             foreach (DataGridViewRow r in floatingAnchors.Rows)
-                if (r.Cells["Id3"].Value != null)
+            {
+                Template.FloatingAnchor fa = (Template.FloatingAnchor)r.Tag;
+                if (fa != null && fa.Id>0)
                 {
-                    int floatingAnchorId = (int)r.Cells["Id3"].Value;
-
                     if (saving)
                     {
                         bool linked = false;
                         foreach (DataGridViewRow rr in documentFirstPageRecognitionMarks.Rows)
-                            if (rr.Cells["FloatingAnchorId2"].Value != null)
+                        {
+                            Template.Mark m = (Template.Mark)rr.Tag;
+                            if (m != null && m.FloatingAnchorId == fa.Id)
                             {
-                                int fai = (int)rr.Cells["FloatingAnchorId2"].Value;
-                                if (fai == floatingAnchorId)
+                                linked = true;
+                                break;
+                            }
+                        }
+                        if (!linked)
+                            foreach (DataGridViewRow rr in fields.Rows)
+                            {
+                                Template.Field m = (Template.Field)rr.Tag;
+                                if (m != null && m.FloatingAnchorId == fa.Id)
                                 {
                                     linked = true;
                                     break;
                                 }
                             }
-                        if (!linked)
-                            foreach (DataGridViewRow rr in fields.Rows)
-                                if (rr.Cells["FloatingAnchorId"].Value != null)
-                                {
-                                    int fai = (int)rr.Cells["FloatingAnchorId"].Value;
-                                    if (fai == floatingAnchorId)
-                                    {
-                                        linked = true;
-                                        break;
-                                    }
-                                }
                         if (!linked)
                         {
                             if (removeNotLinkedAnchors == null)
@@ -609,60 +260,29 @@ namespace Cliver.PdfDocumentParser
                         }
                     }
 
-                    Template.FloatingAnchor fa = new Template.FloatingAnchor
-                    {
-                        Id = floatingAnchorId,
-                        ValueType = (Template.ValueTypes)r.Cells["ValueType3"].Value,
-                        Value = (Template.FloatingAnchor.BaseValue)r.Tag,
-                    };
-                    //if (fa.GetValue() == null)
-                    //    throw new Exception("FloatingAnchor[" + fa.Id + "] is not set.");
-                    //if (fa.ValueType == Template.ValueTypes.ImageData)
-                    //{
-                    //    var v = (Template.FloatingAnchor.ImageDataValue)fa.GetValue();
-                    //    if (v.ImageBoxs.Count < 1)
-                    //        throw new Exception("FloatingAnchor[" + fa.Id + "] is malformed.");
-                    //    if (v.ImageBoxs.Where(x => x.ImageData == null).FirstOrDefault() != null)
-                    //        throw new Exception("FloatingAnchor[" + fa.Id + "] is malformed.");
-                    //}
                     t.FloatingAnchors.Add(fa);
                 }
+            }
             t.FloatingAnchors = t.FloatingAnchors.OrderBy(a => a.Id).ToList();
 
             t.DocumentFirstPageRecognitionMarks = new List<Template.Mark>();
             foreach (DataGridViewRow r in documentFirstPageRecognitionMarks.Rows)
-                if (r.Tag != null || r.Cells["FloatingAnchorId2"].Value != null)
+            {
+                Template.Mark m = (Template.Mark)r.Tag;
+                if (m != null && (m.FloatingAnchorId != null || m.Rectangle != null))
                 {
-                    Template.Mark m = new Template.Mark
-                    {
-                        FloatingAnchorId = (int?)r.Cells["FloatingAnchorId2"].Value,
-                        ValueType = (Template.ValueTypes)r.Cells["ValueType2"].Value,
-                        Value = (Template.Mark.BaseValue)r.Tag,
-                    };
                     if (m.FloatingAnchorId != null && t.FloatingAnchors.FirstOrDefault(x => x.Id == m.FloatingAnchorId) == null)
                         throw new Exception("There is no FloatingAnchor with Id=" + m.FloatingAnchorId);
                     t.DocumentFirstPageRecognitionMarks.Add(m);
                 }
+            }
 
             t.Fields = new List<Template.Field>();
             foreach (DataGridViewRow r in fields.Rows)
             {
-                string name = (string)r.Cells["Name_"].Value;
-                if (!string.IsNullOrWhiteSpace(name))
+                Template.Field f = (Template.Field)r.Tag;
+                if (f!=null&& f.Rectangle != null)
                 {
-                    //if (r.Cells["Rectangle"].Value == null)
-                    //{
-                    //    if (saving)
-                    //        throw new Exception("Field '" + name + "' is not set!");
-                    //    continue;
-                    //}
-                    Template.Field f = new Template.Field
-                    {
-                        Name = name.Trim(),
-                        Rectangle = r.Cells["Rectangle"].Value == null ? null : SerializationRoutines.Json.Deserialize<Template.RectangleF>((string)r.Cells["Rectangle"].Value),
-                        ValueType = Convert.ToBoolean(r.Cells["Ocr"].Value) ? Template.ValueTypes.OcrText : Template.ValueTypes.PdfText,
-                        FloatingAnchorId = (int?)r.Cells["FloatingAnchorId"].Value
-                    };
                     if (f.FloatingAnchorId != null && t.FloatingAnchors.FirstOrDefault(x => x.Id == f.FloatingAnchorId) == null)
                         throw new Exception("There is no FloatingAnchor with Id=" + f.FloatingAnchorId);
                     t.Fields.Add(f);

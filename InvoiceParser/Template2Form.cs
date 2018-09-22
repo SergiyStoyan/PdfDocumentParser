@@ -23,7 +23,7 @@ namespace Cliver.InvoiceParser
             InitializeComponent();
 
             this.Icon = AssemblyRoutines.GetAppIcon();
-            Text = Application.ProductName + ": additional properties of '" + t.Name + "'";
+            Text = Application.ProductName + ": additional properties of '" + t.Base.Name + "'";
 
             template = t;
 
@@ -44,7 +44,7 @@ namespace Cliver.InvoiceParser
         {
             try
             {
-                string d = string.IsNullOrWhiteSpace(template.Editor.TestFile) ? Settings.General.InputFolder : PathRoutines.GetDirFromPath(template.Editor.TestFile);
+                string d = string.IsNullOrWhiteSpace(template.Base.Editor.TestFile) ? Settings.General.InputFolder : PathRoutines.GetDirFromPath(template.Base.Editor.TestFile);
                 FileFilterForm f = new FileFilterForm(d, SerializationRoutines.Json.Deserialize<Regex>(FileFilterRegex.Text));
                 f.ShowDialog();
             }

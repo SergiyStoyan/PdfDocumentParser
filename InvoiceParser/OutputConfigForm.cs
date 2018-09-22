@@ -31,7 +31,7 @@ namespace Cliver.InvoiceParser
             foreach (string fn in fns2)
             {
                 int i = outputHeaders.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = fn, DefaultCellStyle = new DataGridViewCellStyle { WrapMode = DataGridViewTriState.True, Alignment = DataGridViewContentAlignment.TopLeft, }, SortMode = DataGridViewColumnSortMode.NotSortable });
-                templateNames.Add(string.Join("\r\n", Settings.Templates.Templates.Where(x => x.Active && x.Fields.Where(f => f.Name == fn).FirstOrDefault() != null).Select(x => x.Name)));
+                templateNames.Add(string.Join("\r\n", Settings.Templates.Templates.Where(x => x.Active && x.Base.Fields.Where(f => f.Name == fn).FirstOrDefault() != null).Select(x => x.Base.Name)));
             }
             if (fns2.Count > 0)
             {
@@ -47,7 +47,7 @@ namespace Cliver.InvoiceParser
 
             List<string> fns = new List<string>();
             foreach (Template t in ts)
-                foreach (Template.Field f in t.Fields)
+                foreach (PdfDocumentParser.Template.Field f in t.Base.Fields)
                     if (!fns.Contains(f.Name))
                         fns.Add(f.Name);
 

@@ -35,7 +35,7 @@
             this.tablesContainer = new System.Windows.Forms.SplitContainer();
             this.floatingAnchors = new System.Windows.Forms.DataGridView();
             this.Id3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ValueType3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Type3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.label10 = new System.Windows.Forms.Label();
             this.documentFirstPageRecognitionMarks = new System.Windows.Forms.DataGridView();
             this.label4 = new System.Windows.Forms.Label();
@@ -90,7 +90,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.About = new System.Windows.Forms.LinkLabel();
             this.FloatingAnchorId2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.ValueType2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Type2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -233,7 +233,7 @@
             this.floatingAnchors.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.floatingAnchors.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Id3,
-            this.ValueType3});
+            this.Type3});
             this.floatingAnchors.Dock = System.Windows.Forms.DockStyle.Fill;
             this.floatingAnchors.Location = new System.Drawing.Point(0, 13);
             this.floatingAnchors.MultiSelect = false;
@@ -250,12 +250,12 @@
             this.Id3.ReadOnly = true;
             this.Id3.Width = 41;
             // 
-            // ValueType3
+            // Type3
             // 
-            this.ValueType3.HeaderText = "Type";
-            this.ValueType3.Name = "ValueType3";
-            this.ValueType3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ValueType3.Width = 70;
+            this.Type3.HeaderText = "Type";
+            this.Type3.Name = "Type3";
+            this.Type3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Type3.Width = 70;
             // 
             // label10
             // 
@@ -271,7 +271,7 @@
             this.documentFirstPageRecognitionMarks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.documentFirstPageRecognitionMarks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.FloatingAnchorId2,
-            this.ValueType2});
+            this.Type2});
             this.documentFirstPageRecognitionMarks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.documentFirstPageRecognitionMarks.Location = new System.Drawing.Point(0, 13);
             this.documentFirstPageRecognitionMarks.MultiSelect = false;
@@ -848,12 +848,12 @@
             this.FloatingAnchorId2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             this.FloatingAnchorId2.Width = 50;
             // 
-            // ValueType2
+            // Type2
             // 
-            this.ValueType2.HeaderText = "Type";
-            this.ValueType2.Name = "ValueType2";
-            this.ValueType2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ValueType2.Width = 70;
+            this.Type2.HeaderText = "Type";
+            this.Type2.Name = "Type2";
+            this.Type2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Type2.Width = 70;
             // 
             // TemplateForm
             // 
@@ -966,10 +966,10 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.LinkLabel About;
         private System.Windows.Forms.DataGridViewTextBoxColumn Id3;
-        private System.Windows.Forms.DataGridViewComboBoxColumn ValueType3;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Type3;
         private System.Windows.Forms.GroupBox anchorControl;
         private System.Windows.Forms.GroupBox markControl;
         private System.Windows.Forms.DataGridViewComboBoxColumn FloatingAnchorId2;
-        private System.Windows.Forms.DataGridViewComboBoxColumn ValueType2;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Type2;
     }
 }

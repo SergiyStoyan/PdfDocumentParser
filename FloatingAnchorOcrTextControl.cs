@@ -22,20 +22,22 @@ namespace Cliver.PdfDocumentParser
             InitializeComponent();
         }
 
-        public Template.FloatingAnchor.OcrTextValue Value
+        public Template.FloatingAnchor.OcrText FloatingAnchor
         {
             get
             {
-                _value.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
-                _value.PositionDeviation = (float)PositionDeviation.Value;
-                _value.SearchRectangleMargin = (int)SearchRectangleMargin.Value;
-                return _value;
+                if (floatingAnchor == null)
+                    floatingAnchor = new Template.FloatingAnchor.OcrText();
+                floatingAnchor.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
+                floatingAnchor.PositionDeviation = (float)PositionDeviation.Value;
+                floatingAnchor.SearchRectangleMargin = (int)SearchRectangleMargin.Value;
+                return floatingAnchor;
             }
             set
             {
                 if (value == null)
-                    value = new Template.FloatingAnchor.OcrTextValue();
-                _value = value;
+                    value = new Template.FloatingAnchor.OcrText();
+                floatingAnchor = value;
                 StringBuilder sb = new StringBuilder();
                 foreach (var l in Ocr.GetLines(value.CharBoxs.Select(x => new Ocr.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() })))
                 {
@@ -50,9 +52,9 @@ namespace Cliver.PdfDocumentParser
                     PositionDeviation.Value = (decimal)value.PositionDeviation;
                 }
                 catch { }
-                SearchRectangleMargin.Value = _value.SearchRectangleMargin;
+                SearchRectangleMargin.Value = floatingAnchor.SearchRectangleMargin;
             }
         }
-        Template.FloatingAnchor.OcrTextValue _value;
+        Template.FloatingAnchor.OcrText floatingAnchor;
     }
 }

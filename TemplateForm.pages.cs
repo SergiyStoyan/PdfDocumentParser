@@ -70,7 +70,7 @@ namespace Cliver.PdfDocumentParser
             if (row == null)
                 throw new Exception("FloatingAnchor[Id=" + fa.Id + "] does not exist.");
 
-            if (fa.Value == null)
+            if (fa == null)
             {
                 setRowStatus(statuses.WARNING, row, "Not set");
                 clearPicture(renewImage);
@@ -92,7 +92,7 @@ namespace Cliver.PdfDocumentParser
             return new PointF(rs[0].X, rs[0].Y);
         }
 
-        object extractValueAndDrawSelectionBox(int? floatingAnchorId, Template.RectangleF r, Template.ValueTypes valueType, bool renewImage = true)
+        object extractValueAndDrawSelectionBox(int? floatingAnchorId, Template.RectangleF r, Template.Types valueType, bool renewImage = true)
         {
             try
             {
@@ -126,11 +126,11 @@ namespace Cliver.PdfDocumentParser
                 object v = pages[currentPage].GetValue(null, new Template.RectangleF(x, y, r.Width, r.Height), valueType, out error);
                 switch (valueType)
                 {
-                    case Template.ValueTypes.PdfText:
+                    case Template.Types.PdfText:
                         return Page.NormalizeText((string)v);
-                    case Template.ValueTypes.OcrText:
+                    case Template.Types.OcrText:
                         return Page.NormalizeText((string)v);
-                    case Template.ValueTypes.ImageData:
+                    case Template.Types.ImageData:
                         return v;
                     default:
                         throw new Exception("Unknown option: " + valueType);
@@ -230,7 +230,7 @@ namespace Cliver.PdfDocumentParser
                     {
                         if (row.IsNewRow)
                             continue;
-                        var vt = Convert.ToBoolean(row.Cells["Ocr"].Value) ? Template.ValueTypes.OcrText : Template.ValueTypes.PdfText;
+                        var vt = Convert.ToBoolean(row.Cells["Ocr"].Value) ? Template.Types.OcrText : Template.Types.PdfText;
                         int? fai = (int?)row.Cells["FloatingAnchorId"].Value;
                         string rs = (string)row.Cells["Rectangle"].Value;
                         if (rs != null)

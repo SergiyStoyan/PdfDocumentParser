@@ -142,10 +142,10 @@ namespace Cliver.InvoiceParser
                         break;
                     foreach (Template t in ts2)
                     {
-                        cp.Pages.ActiveTemplate = t;
+                        cp.Pages.ActiveTemplate = t.Base;
                         if (cp.Pages[page_i].IsDocumentFirstPage())
                         {
-                            Log.Main.Inform("Applying to file '" + inputPdf + "' template '" + t.Name + "'\r\nStamped file: '" + stampedPdf);
+                            Log.Main.Inform("Applying to file '" + inputPdf + "' template '" + t.Base.Name + "'\r\nStamped file: '" + stampedPdf);
                             //cp.pageBitmaps.RememberConverted = true;
                             cp.process(page_i, stampedPdf, record);
                             return true;
@@ -160,7 +160,7 @@ namespace Cliver.InvoiceParser
         {
             ps = new PdfStamper(Pages.PdfReader, new FileStream(stampedPdf, FileMode.Create, FileAccess.Write, FileShare.None));
 
-            foreach (Template.Field f in Pages.ActiveTemplate.Fields)
+            foreach (PdfDocumentParser.Template.Field f in Pages.ActiveTemplate.Fields)
                 setFieldText(Pages[documentFirstPageI], f);
             for (int page_i = documentFirstPageI + 1; page_i <= Pages.PdfReader.NumberOfPages; page_i++)
             {
@@ -171,19 +171,19 @@ namespace Cliver.InvoiceParser
                     fieldNames2texts.Clear();
                     documentFirstPageI = page_i;
                 }
-                foreach (Template.Field f in Pages.ActiveTemplate.Fields)
+                foreach (PdfDocumentParser. Template.Field f in Pages.ActiveTemplate.Fields)
                     setFieldText(Pages[page_i], f);
             }
             record(Pages.ActiveTemplate.Name, documentFirstPageI, fieldNames2texts);
             stampInvoicePages(documentFirstPageI, Pages.PdfReader.NumberOfPages);
         }
 
-        void setFieldText(Page p, Template.Field field)
+        void setFieldText(Page p, PdfDocumentParser.Template.Field field)
         {
             if (field.Rectangle == null)
                 return;
             string error;
-            object v = p.GetValue(field.FloatingAnchorId, field.Rectangle, field.ValueType, out error);
+            object v = p.GetValue(field.FloatingAnchorId, field.Rectangle, field.Type, out error);
             if (v is ImageData)
             {
                 if (!fieldNames2texts.ContainsKey(field.Name))

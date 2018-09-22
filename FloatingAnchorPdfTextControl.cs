@@ -22,20 +22,22 @@ namespace Cliver.PdfDocumentParser
             InitializeComponent();
         }
 
-        public Template.FloatingAnchor.PdfTextValue Value
+        public Template.FloatingAnchor.PdfText FloatingAnchor
         {
             get
             {
-                _value.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
-                _value.PositionDeviation = (float)PositionDeviation.Value;
-                _value.SearchRectangleMargin = (int)SearchRectangleMargin.Value;
-                return _value;
+                if (floatingAnchor == null)
+                    floatingAnchor = new Template.FloatingAnchor.PdfText();
+                floatingAnchor.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
+                floatingAnchor.PositionDeviation = (float)PositionDeviation.Value;
+                floatingAnchor.SearchRectangleMargin = (int)SearchRectangleMargin.Value;
+                return floatingAnchor;
             }
             set
             {
                 if (value == null)
-                    value = new Template.FloatingAnchor.PdfTextValue();
-                _value = value;
+                    value = new Template.FloatingAnchor.PdfText();
+                floatingAnchor = value;
                 StringBuilder sb = new StringBuilder();
                 foreach (var l in Pdf.RemoveDuplicatesAndGetLines(value.CharBoxs.Select(x => new Pdf.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() }), true))
                 {
@@ -54,7 +56,7 @@ namespace Cliver.PdfDocumentParser
                 SearchRectangleMargin.Value = value.SearchRectangleMargin;
             }
         }
-        Template.FloatingAnchor.PdfTextValue _value;
+        Template.FloatingAnchor.PdfText floatingAnchor;
 
         //public bool Text
         //{

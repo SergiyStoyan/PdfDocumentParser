@@ -198,15 +198,15 @@ namespace Cliver.PdfDocumentParser
 
         List<RectangleF> findFloatingAnchor(Template.FloatingAnchor fa)
         {
-            if (fa == null || fa.Value == null)
+            if (fa == null)
                 return null;
 
-            switch (fa.ValueType)
+            switch (fa.Type)
             {
-                case Template.ValueTypes.PdfText:
+                case Template.Types.PdfText:
                     {
-                        Template.FloatingAnchor.PdfTextValue ptv = (Template.FloatingAnchor.PdfTextValue)fa.Value;
-                        List<Template.FloatingAnchor.PdfTextValue.CharBox> faes = ptv.CharBoxs;
+                        Template.FloatingAnchor.PdfText ptv = (Template.FloatingAnchor.PdfText)fa;
+                        List<Template.FloatingAnchor.PdfText.CharBox> faes = ptv.CharBoxs;
                         if (faes.Count < 1)
                             return null;
                         IEnumerable<Pdf.CharBox> bt0s;
@@ -214,7 +214,7 @@ namespace Cliver.PdfDocumentParser
                             bt0s = PdfCharBoxs.Where(a => a.Char == faes[0].Char);
                         else
                         {
-                            RectangleF sr = Template.FloatingAnchor.BaseValue.GetSearchRectangle(faes[0].Rectangle, ptv.SearchRectangleMargin);
+                            RectangleF sr = Template.FloatingAnchor.GetSearchRectangle(faes[0].Rectangle, ptv.SearchRectangleMargin);
                             bt0s = PdfCharBoxs.Where(a => a.Char == faes[0].Char && sr.Contains(a.R));
                         }
                         List<Pdf.CharBox> bts = new List<Pdf.CharBox>();
@@ -249,10 +249,10 @@ namespace Cliver.PdfDocumentParser
                         }
                     }
                     return null;
-                case Template.ValueTypes.OcrText:
+                case Template.Types.OcrText:
                     {
-                        Template.FloatingAnchor.OcrTextValue otv = (Template.FloatingAnchor.OcrTextValue)fa.Value;
-                        List<Template.FloatingAnchor.OcrTextValue.CharBox> faes = otv.CharBoxs;
+                        Template.FloatingAnchor.OcrText otv = (Template.FloatingAnchor.OcrText)fa;
+                        List<Template.FloatingAnchor.OcrText.CharBox> faes = otv.CharBoxs;
                         if (faes.Count < 1)
                             return null;
                         IEnumerable<Ocr.CharBox> bt0s;
@@ -260,7 +260,7 @@ namespace Cliver.PdfDocumentParser
                             bt0s = ActiveTemplateOcrCharBoxs.Where(a => a.Char == faes[0].Char);
                         else
                         {
-                            RectangleF sr = Template.FloatingAnchor.BaseValue.GetSearchRectangle(faes[0].Rectangle, otv.SearchRectangleMargin);
+                            RectangleF sr = Template.FloatingAnchor.GetSearchRectangle(faes[0].Rectangle, otv.SearchRectangleMargin);
                             bt0s = ActiveTemplateOcrCharBoxs.Where(a => a.Char == faes[0].Char && sr.Contains(a.R));
                         }
                         List<Ocr.CharBox> bts = new List<Ocr.CharBox>();
@@ -295,10 +295,10 @@ namespace Cliver.PdfDocumentParser
                         }
                     }
                     return null;
-                case Template.ValueTypes.ImageData:
+                case Template.Types.ImageData:
                     {
-                        Template.FloatingAnchor.ImageDataValue idv = (Template.FloatingAnchor.ImageDataValue)fa.Value;
-                        List<Template.FloatingAnchor.ImageDataValue.ImageBox> ibs = idv.ImageBoxs;
+                        Template.FloatingAnchor.ImageData idv = (Template.FloatingAnchor.ImageData)fa;
+                        List<Template.FloatingAnchor.ImageData.ImageBox> ibs = idv.ImageBoxs;
                         if (ibs.Count < 1)
                             return null;
                         Point shift;
@@ -310,7 +310,7 @@ namespace Cliver.PdfDocumentParser
                         }
                         else
                         {
-                            RectangleF sr = Template.FloatingAnchor.BaseValue.GetSearchRectangle(ibs[0].Rectangle, idv.SearchRectangleMargin);
+                            RectangleF sr = Template.FloatingAnchor.GetSearchRectangle(ibs[0].Rectangle, idv.SearchRectangleMargin);
                             id0 = new ImageData(getRectangleFromActiveTemplateBitmap(sr.X / Settings.ImageProcessing.Image2PdfResolutionRatio, sr.Y / Settings.ImageProcessing.Image2PdfResolutionRatio, sr.Width / Settings.ImageProcessing.Image2PdfResolutionRatio, sr.Height / Settings.ImageProcessing.Image2PdfResolutionRatio));
                             shift = new Point(sr.X < 0 ? 0 : (int)sr.X, sr.Y < 0 ? 0 : (int)sr.Y);
                         }
@@ -352,7 +352,7 @@ namespace Cliver.PdfDocumentParser
                         return bestRs;
                     }
                 default:
-                    throw new Exception("Unknown option: " + fa.ValueType);
+                    throw new Exception("Unknown option: " + fa.Type);
             }
         }
 
@@ -406,7 +406,7 @@ namespace Cliver.PdfDocumentParser
             }
             foreach (Template.Mark m in pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks)
             {
-                if (m.FloatingAnchorId != null && m.Value == null)
+                if (m.FloatingAnchorId != null)
                 {
                     PointF? p0 = GetFloatingAnchorPoint0((int)m.FloatingAnchorId);
                     if (p0 == null)
@@ -416,14 +416,14 @@ namespace Cliver.PdfDocumentParser
                     }
                     continue;
                 }
-                object v2 = GetValue(m.FloatingAnchorId, m.Value.Rectangle, m.ValueType, out error);
+                object v2 = GetValue(m.FloatingAnchorId, m.Rectangle, m.Type, out error);
                 if (v2 == null)
                     return false;
-                switch (m.ValueType)
+                switch (m.Type)
                 {
-                    case Template.ValueTypes.PdfText:
+                    case Template.Types.PdfText:
                         {
-                            Template.Mark.PdfTextValue ptv1 = (Template.Mark.PdfTextValue)m.Value;
+                            Template.Mark.PdfText ptv1 = (Template.Mark.PdfText)m;
                             string t1 = ptv1.Text;//it is expected the text is saved normalized
                             string t2 = NormalizeText((string)v2);
                             if (t1 == t2)
@@ -431,9 +431,9 @@ namespace Cliver.PdfDocumentParser
                             error = "documentFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
                             return false;
                         }
-                    case Template.ValueTypes.OcrText:
+                    case Template.Types.OcrText:
                         {
-                            Template.Mark.OcrTextValue otv1 = (Template.Mark.OcrTextValue)m.Value;
+                            Template.Mark.OcrText otv1 = (Template.Mark.OcrText)m;
                             string t1 = otv1.Text;//it is expected the text is saved normalized
                             string t2 = NormalizeText((string)v2);
                             if (t1 == t2)
@@ -441,16 +441,16 @@ namespace Cliver.PdfDocumentParser
                             error = "documentFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
                             return false;
                         }
-                    case Template.ValueTypes.ImageData:
+                    case Template.Types.ImageData:
                         {
-                            Template.Mark.ImageDataValue idv1 = (Template.Mark.ImageDataValue)m.Value;
-                            if (idv1.ImageData.ImageIsSimilar((ImageData)v2, idv1.BrightnessTolerance, idv1.DifferentPixelNumberTolerance))
+                            Template.Mark.ImageData idv1 = (Template.Mark.ImageData)m;
+                            if (idv1.ImageData_.ImageIsSimilar((ImageData)v2, idv1.BrightnessTolerance, idv1.DifferentPixelNumberTolerance))
                                 continue;
                             error = "documentFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.IndexOf(m) + "]: image is not similar.";
                             return false;
                         }
                     default:
-                        throw new Exception("Unknown option: " + m.ValueType);
+                        throw new Exception("Unknown option: " + m.Type);
                 }
             }
             error = null;
@@ -476,11 +476,11 @@ namespace Cliver.PdfDocumentParser
         //                    }
         //                    continue;
         //                }
-        //                switch (m.ValueType)
+        //                switch (m.Type)
         //                {
-        //                    case Template.ValueTypes.PdfText:
+        //                    case Template.Types.PdfText:
         //                        {
-        //                            List<Template.Mark.FloatingAnchor.PdfTextValue.CharBox> ses = ((Template.FloatingAnchor.PdfTextValue)fa.GetValue()).CharBoxs;
+        //                            List<Template.Mark.FloatingAnchor.PdfText.CharBox> ses = ((Template.FloatingAnchor.PdfText)fa.GetValue()).CharBoxs;
         //                        if (ses.Count< 1)
         //                            return null;
         //                        List<Pdf.CharBox> bts = new List<Pdf.CharBox>();
@@ -508,9 +508,9 @@ namespace Cliver.PdfDocumentParser
         //                        }
         //                    }
         //                    return null;
-        //                case Template.ValueTypes.OcrText:
+        //                case Template.Types.OcrText:
         //                    {
-        //                        List<Template.FloatingAnchor.OcrTextValue.CharBox> ses = ((Template.FloatingAnchor.OcrTextValue)fa.GetValue()).CharBoxs;
+        //                        List<Template.FloatingAnchor.OcrText.CharBox> ses = ((Template.FloatingAnchor.OcrText)fa.GetValue()).CharBoxs;
         //                        if (ses.Count< 1)
         //                            return null;
         //                        List<Ocr.CharBox> bts = new List<Ocr.CharBox>();
@@ -538,8 +538,8 @@ namespace Cliver.PdfDocumentParser
         //                        }
         //                    }
         //                    return null;
-        //                case Template.ValueTypes.ImageData:
-        //                    List<Template.FloatingAnchor.ImageDataValue.ImageBox> ibs = ((Template.FloatingAnchor.ImageDataValue)fa.GetValue()).ImageBoxs;
+        //                case Template.Types.ImageData:
+        //                    List<Template.FloatingAnchor.ImageData.ImageBox> ibs = ((Template.FloatingAnchor.ImageData)fa.GetValue()).ImageBoxs;
         //                    if (ibs.Count< 1)
         //                        return null;
         //                    List<RectangleF> bestRs = null;
@@ -578,11 +578,11 @@ namespace Cliver.PdfDocumentParser
         //                    });
         //                    return bestRs;
         //                default:
-        //                    throw new Exception("Unknown option: " + fa.ValueType);
+        //                    throw new Exception("Unknown option: " + fa.Type);
         //            }
         //    }
 
-        public object GetValue(int? floatingAnchorId, Template.RectangleF r_, Template.ValueTypes valueType, out string error)
+        public object GetValue(int? floatingAnchorId, Template.RectangleF r_, Template.Types valueType, out string error)
         {
             //try
             //{
@@ -612,12 +612,12 @@ namespace Cliver.PdfDocumentParser
             error = null;
             switch (valueType)
             {
-                case Template.ValueTypes.PdfText:
+                case Template.Types.PdfText:
                     return Pdf.GetTextByTopLeftCoordinates(PdfCharBoxs, r.GetSystemRectangleF());
-                case Template.ValueTypes.OcrText:
+                case Template.Types.OcrText:
                     //return Ocr.GetTextByTopLeftCoordinates(ActiveTemplateOcrCharBoxs, r.GetSystemRectangleF());//for unknown reason tesseract often parses a whole page much worse than a fragment and so ActiveTemplateOcrCharBoxs give not reliable result.
                     return Ocr.This.GetText(ActiveTemplateBitmap, r.GetSystemRectangleF());
-                case Template.ValueTypes.ImageData:
+                case Template.Types.ImageData:
                     using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Y / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height / Settings.ImageProcessing.Image2PdfResolutionRatio))
                     {
                         return new ImageData(rb);

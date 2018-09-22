@@ -112,6 +112,9 @@
     <Reference Include="Magick.NET-Q16-AnyCPU, Version=7.4.6.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
       <HintPath>packages\Magick.NET-Q16-AnyCPU.7.4.6\lib\net40\Magick.NET-Q16-AnyCPU.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>InvoiceParser\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System">
@@ -216,7 +219,14 @@
     <Compile Include="Settings\ImageProcessing.cs" />
     <Compile Include="Settings\Appearance.cs" />
     <Compile Include="ImageData.cs" />
-    <Compile Include="TemplateForm.tables.cs">
+    <Compile Include="Template.cs" />
+    <Compile Include="TemplateForm.floatingAnchors.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TemplateForm.marks.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TemplateForm.fields.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="TemplateForm.cs">
@@ -232,7 +242,7 @@
       <DependentUpon>FileFilterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Ocr.cs" />
-    <Compile Include="Template.cs" />
+    <Compile Include="Template0.cs" />
     <Compile Include="TemplateForm.pages.cs">
       <SubType>Form</SubType>
     </Compile>

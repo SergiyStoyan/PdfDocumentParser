@@ -92,6 +92,7 @@
             this.ModifiedTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Comment = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DetectingTemplateLastPageNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FileFilterRegex = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.templates)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
@@ -219,7 +220,8 @@
             this.OrderWeight,
             this.ModifiedTime,
             this.Comment,
-            this.DetectingTemplateLastPageNumber});
+            this.DetectingTemplateLastPageNumber,
+            this.FileFilterRegex});
             this.templates.Location = new System.Drawing.Point(15, 73);
             this.templates.MultiSelect = false;
             this.templates.Name = "templates";
@@ -752,6 +754,12 @@
             this.DetectingTemplateLastPageNumber.ToolTipText = "Detecting template last pdf page number";
             this.DetectingTemplateLastPageNumber.Width = 78;
             // 
+            // FileFilterRegex
+            // 
+            this.FileFilterRegex.HeaderText = "Filter";
+            this.FileFilterRegex.Name = "FileFilterRegex";
+            this.FileFilterRegex.ReadOnly = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -854,5 +862,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ModifiedTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn Comment;
         private System.Windows.Forms.DataGridViewTextBoxColumn DetectingTemplateLastPageNumber;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FileFilterRegex;
     }
 }

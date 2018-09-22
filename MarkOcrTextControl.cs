@@ -22,7 +22,7 @@ namespace Cliver.PdfDocumentParser
             InitializeComponent();
         }
 
-        public Template.Mark.OcrTextValue Value
+        public Template.Mark.OcrText Mark
         {
             get
             {
@@ -31,12 +31,12 @@ namespace Cliver.PdfDocumentParser
             set
             {
                 if (value == null)
-                    value = new Template.Mark.OcrTextValue();
+                    value = new Template.Mark.OcrText();
                 _value = value;
                 text.Text = value.Text;
                 rectangle.Text = SerializationRoutines.Json.Serialize(value.Rectangle);
             }
         }
-        Template.Mark.OcrTextValue _value;
+        Template.Mark.OcrText _value;
     }
 }

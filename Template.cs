@@ -16,7 +16,7 @@ namespace Cliver.PdfDocumentParser
     /// <summary>
     /// parsing rules corresponding to certain pdf document layout
     /// </summary>
-    public partial class Template
+    public class Template
     {
         public class EditorSettings
         {
@@ -92,222 +92,80 @@ namespace Cliver.PdfDocumentParser
             public float Height;
         }
 
-        public class Mark
+        public abstract class Mark
         {
-            //serialize
             public int? FloatingAnchorId;//when set, Rectangle.X,Y are bound to location of the anchor as to zero point
-            //serialize
-            public RectangleF Rectangle;//to be removed in next update
-            //serialize
-            public ValueTypes ValueType = ValueTypes.PdfText;
-            //serialize
-            public string ValueAsString
-            {
-                get
-                {
-                    if (Value == null)
-                        return null;
-                    switch (ValueType)
-                    {
-                        case ValueTypes.PdfText:
-                            return SerializationRoutines.Json.Serialize(Value, false);
-                        case ValueTypes.OcrText:
-                            return SerializationRoutines.Json.Serialize(Value, false);
-                        case ValueTypes.ImageData:
-                            return SerializationRoutines.Json.Serialize(Value, false);
-                        default:
-                            throw new Exception("Unknown option: " + ValueType);
-                    }
-                }
-                set
-                {
-                    if (value == null)
-                    {
-                        Value = null;
-                        return;
-                    }
-                    switch (ValueType)
-                    {
-                        case ValueTypes.PdfText:
-                            Value = SerializationRoutines.Json.Deserialize<PdfTextValue>(value);
-                            break;
-                        case ValueTypes.OcrText:
-                            Value = SerializationRoutines.Json.Deserialize<OcrTextValue>(value);
-                            break;
-                        case ValueTypes.ImageData:
-                            Value = SerializationRoutines.Json.Deserialize<ImageDataValue>(value);
-                            break;
-                        default:
-                            throw new Exception("Unknown option: " + ValueType);
-                    }
+            public RectangleF Rectangle;
 
-                    //TEMPORARY: trasferring to a new version
-                    switch (ValueType)
-                    {
-                        case ValueTypes.PdfText:
-                            if (this.Rectangle != null)
-                            {
-                                var ptv = (PdfTextValue)Value;
-                                ptv.Rectangle = this.Rectangle;
-                                this.Rectangle = null;
-                            }
-                            break;
-                        case ValueTypes.OcrText:
-                            if (this.Rectangle != null)
-                            {
-                                var otv = (OcrTextValue)Value;
-                                otv.Rectangle = this.Rectangle;
-                                this.Rectangle = null;
-                            }
-                            break;
-                        case ValueTypes.ImageData:
-                            if (this.Rectangle != null)
-                            {
-                                var idv = (ImageDataValue)Value;
-                                idv.Rectangle = this.Rectangle;
-                                this.Rectangle = null;
-                            }
-                            break;
-                        default:
-                            throw new Exception("Unknown option: " + ValueType);
-                    }
-                }
-            }
-            
-            //not to serialize!
-            internal BaseValue Value { get; set; }
-
-            public abstract class BaseValue
+            public Mark()
             {
-                public RectangleF Rectangle;
+                if (this is PdfText)
+                    Type = Types.PdfText;
+                else if (this is OcrText)
+                    Type = Types.OcrText;
+                else if (this is ImageData)
+                    Type = Types.ImageData;
+                else
+                    throw new Exception("Unknown type: " + this.GetType());
             }
-            public class PdfTextValue: BaseValue
+            [Newtonsoft.Json.JsonIgnore]
+            public readonly Types Type;
+
+            public class PdfText : Mark
             {
                 public string Text;
             }
-            public class OcrTextValue: BaseValue
+
+            public class OcrText : Mark
             {
                 public string Text;
             }
-            public class ImageDataValue: BaseValue
+
+            public class ImageData : Mark
             {
-                public ImageData ImageData;
+                public PdfDocumentParser.ImageData ImageData_;
                 public float BrightnessTolerance = 0.4f;
                 public float DifferentPixelNumberTolerance = 0.02f;
                 public bool FindBestImageMatch = false;
             }
         }
 
-        public enum ValueTypes
+        public enum Types
         {
             PdfText,
             OcrText,
             ImageData
         }
 
-        public class Field
+        public abstract class FloatingAnchor
         {
-            public int? FloatingAnchorId;//when set, Rectangle.X,Y are bound to location of the anchor as to zero point
-            public string Name;
-            public RectangleF Rectangle;//when FloatingAnchor is set, Rectangle.X,Y are bound to location of the anchor as to zero point
-            public ValueTypes ValueType = ValueTypes.PdfText;
-        }
-        
-        public partial class FloatingAnchor
-        {
-            //serialize
             public int Id;
-            //serialize
-            public ValueTypes ValueType = ValueTypes.PdfText;
-            //serialize
-            public float PositionDeviation = 0.1f;//to be removed after update
-            //serialize
-            public string ValueAsString
-            {
-                get
-                {
-                    if (Value == null)
-                        return null;
-                    switch (ValueType)
-                    {
-                        case ValueTypes.PdfText:
-                            return SerializationRoutines.Json.Serialize(Value, false);
-                        case ValueTypes.OcrText:
-                            return SerializationRoutines.Json.Serialize(Value, false);
-                        case ValueTypes.ImageData:
-                            //byte[] bs = SerializationRoutines.Binary.Serialize(value);//more compact
-                            //s = SerializationRoutines.Json.Serialize(bs, false);
-                            return SerializationRoutines.Json.Serialize(Value, false);
-                        default:
-                            throw new Exception("Unknown option: " + ValueType);
-                    }
-                }
-                set
-                {
-                    if (value == null)
-                    {
-                        Value = null;
-                        return;
-                    }
-                    switch (ValueType)
-                    {
-                        case ValueTypes.PdfText:
-                            Value = SerializationRoutines.Json.Deserialize<PdfTextValue>(value);
-                            break;
-                        case ValueTypes.OcrText:
-                            Value = SerializationRoutines.Json.Deserialize<OcrTextValue>(value);
-                            break;
-                        case ValueTypes.ImageData:
-                            //byte[] bs = SerializationRoutines.Json.Deserialize<byte[]>(value);
-                            //this.value = SerializationRoutines.Binary.Deserialize<ImageDataValue>(bs);
-                            Value = SerializationRoutines.Json.Deserialize<ImageDataValue>(value);
-                            break;
-                        default:
-                            throw new Exception("Unknown option: " + ValueType);
-                    }
+            public int SearchRectangleMargin = -1;//px
+            public float PositionDeviation = 0.1f;
+            public bool PositionDeviationIsAbsolute = true;
 
-                    //TEMPORARY: transferring to a new version
-                    switch (ValueType)
-                    {
-                        case ValueTypes.PdfText:
-                            var ptv = (PdfTextValue)this.Value;
-                            if (this.PositionDeviation > 0)
-                                ptv.PositionDeviation = this.PositionDeviation;
-                            break;
-                        case ValueTypes.OcrText:
-                            var otv = (OcrTextValue)this.Value;
-                            if (this.PositionDeviation > 0)
-                                otv.PositionDeviation = this.PositionDeviation;
-                            break;
-                        case ValueTypes.ImageData:
-                            var idv = (ImageDataValue)this.Value;
-                            if (this.PositionDeviation > 0)
-                                idv.PositionDeviation = this.PositionDeviation;
-                            break;
-                        default:
-                            throw new Exception("Unknown option: " + ValueType);
-                    }
-                    this.PositionDeviation = -1;
-                }
+            public FloatingAnchor()
+            {
+                if (this is PdfText)
+                    Type = Types.PdfText;
+                else if (this is OcrText)
+                    Type = Types.OcrText;
+                else if (this is ImageData)
+                    Type = Types.ImageData;
+                else
+                    throw new Exception("Unknown type: " + this.GetType());
+            }
+            [Newtonsoft.Json.JsonIgnore]
+            public readonly Types Type;
+
+            public static System.Drawing.RectangleF GetSearchRectangle(RectangleF rectangle0, int margin/*, System.Drawing.RectangleF pageRectangle*/)
+            {
+                System.Drawing.RectangleF r = new System.Drawing.RectangleF(rectangle0.X - margin, rectangle0.Y - margin, rectangle0.Width + 2 * margin, rectangle0.Height + 2 * margin);
+                //r.Intersect(pageRectangle);
+                return r;
             }
 
-            //not to serialize!
-            internal BaseValue Value { get; set; }
-
-            public abstract class BaseValue
-            {
-                public int SearchRectangleMargin = -1;//px
-                public float PositionDeviation = 0.1f;
-                public bool PositionDeviationIsAbsolute = true;
-
-                public static System.Drawing.RectangleF GetSearchRectangle(RectangleF rectangle0, int margin/*, System.Drawing.RectangleF pageRectangle*/)
-                {
-                    System.Drawing.RectangleF r = new System.Drawing.RectangleF(rectangle0.X - margin, rectangle0.Y - margin, rectangle0.Width + 2 * margin, rectangle0.Height + 2 * margin);
-                    //r.Intersect(pageRectangle);
-                    return r;
-                }
-            }
-            public class PdfTextValue: BaseValue
+            public class PdfText : FloatingAnchor
             {
                 public List<CharBox> CharBoxs = new List<CharBox>();
                 public class CharBox
@@ -316,7 +174,8 @@ namespace Cliver.PdfDocumentParser
                     public RectangleF Rectangle;
                 }
             }
-            public class OcrTextValue: BaseValue
+
+            public class OcrText : FloatingAnchor
             {
                 public List<CharBox> CharBoxs = new List<CharBox>();
                 public class CharBox
@@ -325,18 +184,52 @@ namespace Cliver.PdfDocumentParser
                     public RectangleF Rectangle;
                 }
             }
-            public class ImageDataValue: BaseValue
+
+            public class ImageData : FloatingAnchor
             {
                 public List<ImageBox> ImageBoxs = new List<ImageBox>();
                 public class ImageBox
                 {
-                    public ImageData ImageData;
+                    public PdfDocumentParser.ImageData ImageData;
                     public RectangleF Rectangle;
                 }
 
                 public float BrightnessTolerance = 0.20f;
                 public float DifferentPixelNumberTolerance = 0.15f;
                 public bool FindBestImageMatch = false;
+            }
+        }
+
+        public abstract class Field
+        {
+            public int? FloatingAnchorId;//when set, Rectangle.X,Y are bound to location of the anchor as to zero point
+            public string Name;
+            public RectangleF Rectangle;//when FloatingAnchor is set, Rectangle.X,Y are bound to location of the anchor as to zero point
+
+            public Field()
+            {
+                if (this is PdfText)
+                    Type = Types.PdfText;
+                else if (this is OcrText)
+                    Type = Types.OcrText;
+                else if (this is ImageData)
+                    Type = Types.ImageData;
+                else
+                    throw new Exception("Unknown type: " + this.GetType());
+            }
+            [Newtonsoft.Json.JsonIgnore]
+            public readonly Types Type;
+
+            public class PdfText : Field
+            {
+            }
+
+            public class OcrText : Field
+            {
+            }
+
+            public class ImageData : Field
+            {
             }
         }
     }
