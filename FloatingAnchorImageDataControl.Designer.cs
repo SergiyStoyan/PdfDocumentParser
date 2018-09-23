@@ -1,6 +1,6 @@
 ﻿namespace Cliver.PdfDocumentParser
 {
-    partial class FloatingAnchorImageDataControl
+    partial class AnchorImageDataControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -240,7 +240,7 @@
             0,
             -2147483648});
             // 
-            // FloatingAnchorImageDataControl
+            // AnchorImageDataControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -257,7 +257,7 @@
             this.Controls.Add(this.FindBestImageMatch);
             this.Controls.Add(this.BrightnessTolerance);
             this.Controls.Add(this.DifferentPixelNumberTolerance);
-            this.Name = "FloatingAnchorImageDataControl";
+            this.Name = "AnchorImageDataControl";
             this.Size = new System.Drawing.Size(218, 214);
             ((System.ComponentModel.ISupportInitialize)(this.picture)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.BrightnessTolerance)).EndInit();

@@ -33,12 +33,12 @@
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.tablesContainer = new System.Windows.Forms.SplitContainer();
-            this.floatingAnchors = new System.Windows.Forms.DataGridView();
+            this.anchors = new System.Windows.Forms.DataGridView();
             this.Id3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Type3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.label10 = new System.Windows.Forms.Label();
             this.marks = new System.Windows.Forms.DataGridView();
-            this.FloatingAnchorId2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.AnchorId2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Type2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.label4 = new System.Windows.Forms.Label();
             this.tableControlsContainer = new System.Windows.Forms.SplitContainer();
@@ -72,7 +72,7 @@
             this.lTotalPages = new System.Windows.Forms.Label();
             this.fields = new System.Windows.Forms.DataGridView();
             this.Name_ = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FloatingAnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.AnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Rectangle = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Ocr = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -108,7 +108,7 @@
             this.tablesContainer.Panel1.SuspendLayout();
             this.tablesContainer.Panel2.SuspendLayout();
             this.tablesContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.floatingAnchors)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.anchors)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.marks)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tableControlsContainer)).BeginInit();
             this.tableControlsContainer.Panel1.SuspendLayout();
@@ -217,7 +217,7 @@
             // 
             // tablesContainer.Panel1
             // 
-            this.tablesContainer.Panel1.Controls.Add(this.floatingAnchors);
+            this.tablesContainer.Panel1.Controls.Add(this.anchors);
             this.tablesContainer.Panel1.Controls.Add(this.label10);
             // 
             // tablesContainer.Panel2
@@ -228,19 +228,19 @@
             this.tablesContainer.SplitterDistance = 188;
             this.tablesContainer.TabIndex = 52;
             // 
-            // floatingAnchors
+            // anchors
             // 
-            this.floatingAnchors.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.floatingAnchors.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.anchors.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.anchors.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Id3,
             this.Type3});
-            this.floatingAnchors.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.floatingAnchors.Location = new System.Drawing.Point(0, 13);
-            this.floatingAnchors.MultiSelect = false;
-            this.floatingAnchors.Name = "floatingAnchors";
-            this.floatingAnchors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.floatingAnchors.Size = new System.Drawing.Size(169, 175);
-            this.floatingAnchors.TabIndex = 50;
+            this.anchors.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.anchors.Location = new System.Drawing.Point(0, 13);
+            this.anchors.MultiSelect = false;
+            this.anchors.Name = "anchors";
+            this.anchors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.anchors.Size = new System.Drawing.Size(169, 175);
+            this.anchors.TabIndex = 50;
             // 
             // Id3
             // 
@@ -270,7 +270,7 @@
             // 
             this.marks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.marks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.FloatingAnchorId2,
+            this.AnchorId2,
             this.Type2});
             this.marks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.marks.Location = new System.Drawing.Point(0, 13);
@@ -280,13 +280,13 @@
             this.marks.Size = new System.Drawing.Size(169, 99);
             this.marks.TabIndex = 29;
             // 
-            // FloatingAnchorId2
+            // AnchorId2
             // 
-            this.FloatingAnchorId2.HeaderText = "Anchor";
-            this.FloatingAnchorId2.Name = "FloatingAnchorId2";
-            this.FloatingAnchorId2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.FloatingAnchorId2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.FloatingAnchorId2.Width = 50;
+            this.AnchorId2.HeaderText = "Anchor";
+            this.AnchorId2.Name = "AnchorId2";
+            this.AnchorId2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.AnchorId2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.AnchorId2.Width = 50;
             // 
             // Type2
             // 
@@ -649,7 +649,7 @@
             this.fields.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.fields.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Name_,
-            this.FloatingAnchorId,
+            this.AnchorId,
             this.Rectangle,
             this.Ocr,
             this.Value});
@@ -667,13 +667,13 @@
             this.Name_.Name = "Name_";
             this.Name_.Width = 60;
             // 
-            // FloatingAnchorId
+            // AnchorId
             // 
-            this.FloatingAnchorId.HeaderText = "Anchor";
-            this.FloatingAnchorId.Name = "FloatingAnchorId";
-            this.FloatingAnchorId.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.FloatingAnchorId.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.FloatingAnchorId.Width = 50;
+            this.AnchorId.HeaderText = "Anchor";
+            this.AnchorId.Name = "AnchorId";
+            this.AnchorId.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.AnchorId.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.AnchorId.Width = 50;
             // 
             // Rectangle
             // 
@@ -884,7 +884,7 @@
             this.tablesContainer.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tablesContainer)).EndInit();
             this.tablesContainer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.floatingAnchors)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.anchors)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.marks)).EndInit();
             this.tableControlsContainer.Panel1.ResumeLayout(false);
             this.tableControlsContainer.Panel2.ResumeLayout(false);
@@ -930,7 +930,7 @@
         private System.Windows.Forms.ComboBox pageRotation;
         private System.Windows.Forms.CheckBox autoDeskew;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.DataGridView floatingAnchors;
+        private System.Windows.Forms.DataGridView anchors;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.NumericUpDown autoDeskewThreshold;
@@ -942,7 +942,7 @@
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.LinkLabel IsDocumentFirstPage;
         private System.Windows.Forms.DataGridViewTextBoxColumn Name_;
-        private System.Windows.Forms.DataGridViewComboBoxColumn FloatingAnchorId;
+        private System.Windows.Forms.DataGridViewComboBoxColumn AnchorId;
         private System.Windows.Forms.DataGridViewTextBoxColumn Rectangle;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Ocr;
         private System.Windows.Forms.DataGridViewTextBoxColumn Value;
@@ -969,7 +969,7 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn Type3;
         private System.Windows.Forms.GroupBox anchorControl;
         private System.Windows.Forms.GroupBox markControl;
-        private System.Windows.Forms.DataGridViewComboBoxColumn FloatingAnchorId2;
+        private System.Windows.Forms.DataGridViewComboBoxColumn AnchorId2;
         private System.Windows.Forms.DataGridViewComboBoxColumn Type2;
     }
 }

@@ -33,7 +33,7 @@ namespace Cliver.PdfDocumentParser
             Log.ShowDeleteOldLogsDialog = false;
             Log.Initialize(Log.Mode.ONLY_LOG, Log.CompanyCommonDataDir, true);
 
-            //Settings.test.template2s.Add(new Template2 { DocumentFirstPageRecognitionMarks = new System.Collections.Generic.List<Template2.Mark> { new Template2.Mark.PdfText(), new Template2.Mark.OcrText(), new Template2.Mark.ImageData(), } });
+            //Settings.test.template2s.Add(new Template2 { Marks = new System.Collections.Generic.List<Template2.Mark> { new Template2.Mark.PdfText(), new Template2.Mark.OcrText(), new Template2.Mark.ImageData(), } });
             //Settings.test.Save();
         }
 

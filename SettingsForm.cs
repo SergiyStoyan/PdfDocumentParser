@@ -30,8 +30,8 @@ namespace Cliver.PdfDocumentParser
 
         void load_settings()
         {
-            FloatingAnchorMasterBoxColor.ForeColor = Settings.Appearance.FloatingAnchorMasterBoxColor;
-            FloatingAnchorSecondaryBoxColor.ForeColor = Settings.Appearance.FloatingAnchorSecondaryBoxColor;
+            AnchorMasterBoxColor.ForeColor = Settings.Appearance.AnchorMasterBoxColor;
+            AnchorSecondaryBoxColor.ForeColor = Settings.Appearance.AnchorSecondaryBoxColor;
             SelectionBoxColor.ForeColor = Settings.Appearance.SelectionBoxColor;
 
             PdfPageImageResolution.Value = Settings.ImageProcessing.PdfPageImageResolution;
@@ -47,8 +47,8 @@ namespace Cliver.PdfDocumentParser
         {
             try
             {
-                Settings.Appearance.FloatingAnchorMasterBoxColor = FloatingAnchorMasterBoxColor.ForeColor;
-                Settings.Appearance.FloatingAnchorSecondaryBoxColor = FloatingAnchorSecondaryBoxColor.ForeColor;
+                Settings.Appearance.AnchorMasterBoxColor = AnchorMasterBoxColor.ForeColor;
+                Settings.Appearance.AnchorSecondaryBoxColor = AnchorSecondaryBoxColor.ForeColor;
                 Settings.Appearance.SelectionBoxColor = SelectionBoxColor.ForeColor;
 
                 Settings.Appearance.Save();
@@ -89,20 +89,20 @@ namespace Cliver.PdfDocumentParser
                 SelectionBoxColor.ForeColor = cd.Color;
         }
 
-        private void FloatingAnchorMasterBoxColor_Click(object sender, EventArgs e)
+        private void AnchorMasterBoxColor_Click(object sender, EventArgs e)
         {
             ColorDialog cd = new ColorDialog();
-            cd.Color = Settings.Appearance.FloatingAnchorMasterBoxColor;
+            cd.Color = Settings.Appearance.AnchorMasterBoxColor;
             if (cd.ShowDialog() == DialogResult.OK)
-                FloatingAnchorMasterBoxColor.ForeColor = cd.Color;
+                AnchorMasterBoxColor.ForeColor = cd.Color;
         }
 
-        private void FloatingAnchorSecondaryBoxColor_Click(object sender, EventArgs e)
+        private void AnchorSecondaryBoxColor_Click(object sender, EventArgs e)
         {
             ColorDialog cd = new ColorDialog();
-            cd.Color = Settings.Appearance.FloatingAnchorSecondaryBoxColor;
+            cd.Color = Settings.Appearance.AnchorSecondaryBoxColor;
             if (cd.ShowDialog() == DialogResult.OK)
-                FloatingAnchorSecondaryBoxColor.ForeColor = cd.Color;
+                AnchorSecondaryBoxColor.ForeColor = cd.Color;
 
         }
     }

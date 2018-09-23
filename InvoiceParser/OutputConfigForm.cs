@@ -31,7 +31,7 @@ namespace Cliver.InvoiceParser
             foreach (string fn in fns2)
             {
                 int i = outputHeaders.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = fn, DefaultCellStyle = new DataGridViewCellStyle { WrapMode = DataGridViewTriState.True, Alignment = DataGridViewContentAlignment.TopLeft, }, SortMode = DataGridViewColumnSortMode.NotSortable });
-                templateNames.Add(string.Join("\r\n", Settings.Templates.Templates.Where(x => x.Active && x.Base.Fields.Where(f => f.Name == fn).FirstOrDefault() != null).Select(x => x.Base.Name)));
+                templateNames.Add(string.Join("\r\n", Settings.Template2s.Template2s.Where(x => x.Active && x.Template.Fields.Where(f => f.Name == fn).FirstOrDefault() != null).Select(x => x.Template.Name)));
             }
             if (fns2.Count > 0)
             {
@@ -43,11 +43,11 @@ namespace Cliver.InvoiceParser
 
         public static List<string> GetOrderedOutputFieldNames()
         {
-            List<Template> ts = Settings.Templates.Templates.Where(x => x.Active).ToList();
+            List<Template2> ts = Settings.Template2s.Template2s.Where(x => x.Active).ToList();
 
             List<string> fns = new List<string>();
-            foreach (Template t in ts)
-                foreach (PdfDocumentParser.Template.Field f in t.Base.Fields)
+            foreach (Template2 t in ts)
+                foreach (PdfDocumentParser.Template.Field f in t.Template.Fields)
                     if (!fns.Contains(f.Name))
                         fns.Add(f.Name);
 

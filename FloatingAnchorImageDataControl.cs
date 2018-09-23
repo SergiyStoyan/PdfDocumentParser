@@ -15,32 +15,32 @@ using System.Windows.Forms;
 
 namespace Cliver.PdfDocumentParser
 {
-    public partial class FloatingAnchorImageDataControl : UserControl
+    public partial class AnchorImageDataControl : UserControl
     {
-        public FloatingAnchorImageDataControl()
+        public AnchorImageDataControl()
         {
             InitializeComponent();
         }
 
-        public Template.FloatingAnchor.ImageData FloatingAnchor
+        public Template.Anchor.ImageData Anchor
         {
             get
             {
-                if (floatingAnchor == null)
-                    floatingAnchor = new Template.FloatingAnchor.ImageData();
-                floatingAnchor.FindBestImageMatch = FindBestImageMatch.Checked;
-                floatingAnchor.BrightnessTolerance = (float)BrightnessTolerance.Value;
-                floatingAnchor.DifferentPixelNumberTolerance = (float)DifferentPixelNumberTolerance.Value;
+                if (anchor == null)
+                    anchor = new Template.Anchor.ImageData();
+                anchor.FindBestImageMatch = FindBestImageMatch.Checked;
+                anchor.BrightnessTolerance = (float)BrightnessTolerance.Value;
+                anchor.DifferentPixelNumberTolerance = (float)DifferentPixelNumberTolerance.Value;
                 //_value.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
-                floatingAnchor.PositionDeviation = (float)PositionDeviation.Value;
-                floatingAnchor.SearchRectangleMargin = (int)SearchRectangleMargin.Value;
-                return floatingAnchor;
+                anchor.PositionDeviation = (float)PositionDeviation.Value;
+                anchor.SearchRectangleMargin = (int)SearchRectangleMargin.Value;
+                return anchor;
             }
             set
             {
                 if (value == null)
-                    value = new Template.FloatingAnchor.ImageData();
-                floatingAnchor = value;
+                    value = new Template.Anchor.ImageData();
+                anchor = value;
                 FindBestImageMatch.Checked = value.FindBestImageMatch;
                 BrightnessTolerance.Value = (decimal)value.BrightnessTolerance;
                 DifferentPixelNumberTolerance.Value = (decimal)value.DifferentPixelNumberTolerance;
@@ -51,10 +51,10 @@ namespace Cliver.PdfDocumentParser
                     PositionDeviation.Value = (decimal)value.PositionDeviation;
                 }
                 catch { }
-                SearchRectangleMargin.Value = floatingAnchor.SearchRectangleMargin;
+                SearchRectangleMargin.Value = anchor.SearchRectangleMargin;
             }
         }
-        Template.FloatingAnchor.ImageData floatingAnchor;
+        Template.Anchor.ImageData anchor;
 
         //public bool FindBestImageMatch
         //{

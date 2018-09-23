@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Cliver.PdfDocumentParser
 {
-    public partial class FloatingAnchorForm : Form
+    public partial class AnchorForm : Form
     {
-        public FloatingAnchorForm()
+        public AnchorForm()
         {
             InitializeComponent();
         }

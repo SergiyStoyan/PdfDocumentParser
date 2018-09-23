@@ -70,22 +70,22 @@ namespace Cliver.PdfDocumentParser
                 autoDeskew.Checked = t.AutoDeskew;
                 autoDeskewThreshold.Value = t.AutoDeskewThreshold;
 
-                floatingAnchors.Rows.Clear();
-                if (t.FloatingAnchors != null)
+                anchors.Rows.Clear();
+                if (t.Anchors != null)
                 {
-                    foreach (Template.FloatingAnchor fa in t.FloatingAnchors)
+                    foreach (Template.Anchor fa in t.Anchors)
                     {
-                        int i = floatingAnchors.Rows.Add();
-                        var row = floatingAnchors.Rows[i];
-                        setFloatingAnchorRow(row, fa);
+                        int i = anchors.Rows.Add();
+                        var row = anchors.Rows[i];
+                        setAnchorRow(row, fa);
                     }
-                    onFloatingAnchorsChanged();
+                    onAnchorsChanged();
                 }
 
                 marks.Rows.Clear();
-                if (t.DocumentFirstPageRecognitionMarks != null)
+                if (t.Marks != null)
                 {
-                    foreach (Template.Mark m in t.DocumentFirstPageRecognitionMarks)
+                    foreach (Template.Mark m in t.Marks)
                     {
                         int i = marks.Rows.Add();
                         var row = marks.Rows[i];
@@ -208,23 +208,23 @@ namespace Cliver.PdfDocumentParser
             t.AutoDeskewThreshold = (int)autoDeskewThreshold.Value;
 
             bool? removeNotLinkedAnchors = null;
-            t.FloatingAnchors = new List<Template.FloatingAnchor>();
-            foreach (DataGridViewRow r in floatingAnchors.Rows)
+            t.Anchors = new List<Template.Anchor>();
+            foreach (DataGridViewRow r in anchors.Rows)
             {
-                Template.FloatingAnchor fa = (Template.FloatingAnchor)r.Tag;
+                Template.Anchor fa = (Template.Anchor)r.Tag;
                 if (fa == null)
                     continue;
 
                 if (saving)
                 {
                     if (!fa.IsSet())
-                        throw new Exception("FloatingAnchor[Id=" + fa.Id + "] is not set!");
+                        throw new Exception("Anchor[Id=" + fa.Id + "] is not set!");
 
                     bool linked = false;
                     foreach (DataGridViewRow rr in marks.Rows)
                     {
                         Template.Mark m = (Template.Mark)rr.Tag;
-                        if (m != null && m.FloatingAnchorId == fa.Id)
+                        if (m != null && m.AnchorId == fa.Id)
                         {
                             linked = true;
                             break;
@@ -234,7 +234,7 @@ namespace Cliver.PdfDocumentParser
                         foreach (DataGridViewRow rr in fields.Rows)
                         {
                             Template.Field m = (Template.Field)rr.Tag;
-                            if (m != null && m.FloatingAnchorId == fa.Id)
+                            if (m != null && m.AnchorId == fa.Id)
                             {
                                 linked = true;
                                 break;
@@ -249,24 +249,24 @@ namespace Cliver.PdfDocumentParser
                     }
                 }
 
-                t.FloatingAnchors.Add(fa);
+                t.Anchors.Add(fa);
             }
-            t.FloatingAnchors = t.FloatingAnchors.OrderBy(a => a.Id).ToList();
+            t.Anchors = t.Anchors.OrderBy(a => a.Id).ToList();
 
-            t.DocumentFirstPageRecognitionMarks = new List<Template.Mark>();
+            t.Marks = new List<Template.Mark>();
             foreach (DataGridViewRow r in marks.Rows)
             {
                 Template.Mark m = (Template.Mark)r.Tag;
                 if (m == null)
                     continue;
                 if (saving && !m.IsSet())
-                    throw new Exception("DocumentFirstPageRecognitionMark[" + r.Index + "] is not set!");
-                if (m.FloatingAnchorId != null && t.FloatingAnchors.FirstOrDefault(x => x.Id == m.FloatingAnchorId) == null)
-                    throw new Exception("There is no FloatingAnchor with Id=" + m.FloatingAnchorId);
-                t.DocumentFirstPageRecognitionMarks.Add(m);
+                    throw new Exception("Mark[" + r.Index + "] is not set!");
+                if (m.AnchorId != null && t.Anchors.FirstOrDefault(x => x.Id == m.AnchorId) == null)
+                    throw new Exception("There is no Anchor with Id=" + m.AnchorId);
+                t.Marks.Add(m);
             }
-            if (saving && t.DocumentFirstPageRecognitionMarks.Count < 1)
-                throw new Exception("DocumentFirstPageRecognitionMarks is empty!");
+            if (saving && t.Marks.Count < 1)
+                throw new Exception("Marks is empty!");
 
             t.Fields = new List<Template.Field>();
             foreach (DataGridViewRow r in fields.Rows)
@@ -276,8 +276,8 @@ namespace Cliver.PdfDocumentParser
                     continue;
                 if (saving && !f.IsSet())
                     throw new Exception("Field[" + r.Index + "] is not set!");
-                if (f.FloatingAnchorId != null && t.FloatingAnchors.FirstOrDefault(x => x.Id == f.FloatingAnchorId) == null)
-                    throw new Exception("There is no FloatingAnchor with Id=" + f.FloatingAnchorId);
+                if (f.AnchorId != null && t.Anchors.FirstOrDefault(x => x.Id == f.AnchorId) == null)
+                    throw new Exception("There is no Anchor with Id=" + f.AnchorId);
                 t.Fields.Add(f);
             }
             if (saving && t.Fields.Count < 1)

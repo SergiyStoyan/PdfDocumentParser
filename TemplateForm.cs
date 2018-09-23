@@ -54,7 +54,7 @@ namespace Cliver.PdfDocumentParser
 
             this.templateManager = templateManager;
 
-            initializeFloatingAnchorsTable();
+            initializeAnchorsTable();
             initializeMarksTable();
             initializeFieldsTable();
 
@@ -123,13 +123,13 @@ namespace Cliver.PdfDocumentParser
 
                     switch (mode)
                     {
-                        case Modes.SetFloatingAnchor:
+                        case Modes.SetAnchor:
                             {
-                                if (floatingAnchors.SelectedRows.Count < 1)
+                                if (anchors.SelectedRows.Count < 1)
                                     break;
 
                                 RectangleF selectedR = new RectangleF(selectionBoxPoint1, new SizeF(selectionBoxPoint2.X - selectionBoxPoint1.X, selectionBoxPoint2.Y - selectionBoxPoint1.Y));
-                                Template.FloatingAnchor fa = (Template.FloatingAnchor)floatingAnchors.SelectedRows[0].Tag;
+                                Template.Anchor fa = (Template.Anchor)anchors.SelectedRows[0].Tag;
                                 switch (fa.Type)
                                 {
                                     case Template.Types.PdfText:
@@ -140,13 +140,13 @@ namespace Cliver.PdfDocumentParser
                                     case Template.Types.OcrText:
                                         //{
                                         //    if (selectedOcrTextValue == null)
-                                        //        selectedOcrTextValue = new Settings.Template.FloatingAnchor.OcrText
+                                        //        selectedOcrTextValue = new Settings.Template.Anchor.OcrText
                                         //        {
-                                        //            TextBoxs = new List<Settings.Template.FloatingAnchor.OcrText.TextBox>()
+                                        //            TextBoxs = new List<Settings.Template.Anchor.OcrText.TextBox>()
                                         //        };
                                         //    string error;
                                         //    pages.ActiveTemplate = getTemplateFromUI(false);
-                                        //    selectedOcrTextValue.TextBoxs.Add(new Settings.Template.FloatingAnchor.OcrText.TextBox
+                                        //    selectedOcrTextValue.TextBoxs.Add(new Settings.Template.Anchor.OcrText.TextBox
                                         //    {
                                         //        Rectangle = Settings.Template.RectangleF.GetFromSystemRectangleF(selectedR),
                                         //        Text = (string)pages[currentPage].GetValue(null, Settings.Template.RectangleF.GetFromSystemRectangleF(selectedR), Settings.Template.Types.OcrText, out error)
@@ -159,9 +159,9 @@ namespace Cliver.PdfDocumentParser
                                     case Template.Types.ImageData:
                                         {
                                             if (selectedImageBoxs == null)
-                                                selectedImageBoxs = new List<Template.FloatingAnchor.ImageData.ImageBox>();
+                                                selectedImageBoxs = new List<Template.Anchor.ImageData.ImageBox>();
                                             string error;
-                                            selectedImageBoxs.Add(new Template.FloatingAnchor.ImageData.ImageBox
+                                            selectedImageBoxs.Add(new Template.Anchor.ImageData.ImageBox
                                             {
                                                 Rectangle = Template.RectangleF.GetFromSystemRectangleF(selectedR),
                                                 ImageData = (ImageData)pages[currentPage].GetValue(null, Template.RectangleF.GetFromSystemRectangleF(selectedR), Template.Types.ImageData, out error)
@@ -173,7 +173,7 @@ namespace Cliver.PdfDocumentParser
                                 }
 
                                 if ((ModifierKeys & Keys.Control) != Keys.Control)
-                                    setFloatingAnchorFromSelectedElements();
+                                    setAnchorFromSelectedElements();
                             }
                             break;
                         case Modes.SetDocumentFirstPageRecognitionTextMark:
@@ -182,12 +182,12 @@ namespace Cliver.PdfDocumentParser
                                     break;
                                 DataGridViewRow row = marks.SelectedRows[0];
                                 Template.Mark m = (Template.Mark)row.Tag;
-                                if (m.FloatingAnchorId != null)
+                                if (m.AnchorId != null)
                                 {
                                     pages.ActiveTemplate = getTemplateFromUI(false);
-                                    PointF? p = pages[currentPage].GetFloatingAnchorPoint0((int)m.FloatingAnchorId);
+                                    PointF? p = pages[currentPage].GetAnchorPoint0((int)m.AnchorId);
                                     if (p == null)
-                                        throw new Exception("Could not find FloatingAnchor[" + m.FloatingAnchorId + "] in the page");
+                                        throw new Exception("Could not find Anchor[" + m.AnchorId + "] in the page");
                                     r.X -= ((PointF)p).X;
                                     r.Y -= ((PointF)p).Y;
                                 }
@@ -200,12 +200,12 @@ namespace Cliver.PdfDocumentParser
                                     break;
                                 var row = fields.SelectedRows[0];
                                 Template.Field f = (Template.Field)row.Tag;
-                                if (f.FloatingAnchorId != null)
+                                if (f.AnchorId != null)
                                 {
                                     pages.ActiveTemplate = getTemplateFromUI(false);
-                                    PointF? p = pages[currentPage].GetFloatingAnchorPoint0((int)f.FloatingAnchorId);
+                                    PointF? p = pages[currentPage].GetAnchorPoint0((int)f.AnchorId);
                                     if (p == null)
-                                        throw new Exception("Could not find FloatingAnchor[" + f.FloatingAnchorId + "] in the page");
+                                        throw new Exception("Could not find Anchor[" + f.AnchorId + "] in the page");
                                     r.X -= ((PointF)p).X;
                                     r.Y -= ((PointF)p).Y;
                                 }
@@ -352,7 +352,7 @@ namespace Cliver.PdfDocumentParser
         enum Modes
         {
             NULL,
-            SetFloatingAnchor,
+            SetAnchor,
             SetDocumentFirstPageRecognitionTextMark,
             SetField,
         }
@@ -360,8 +360,8 @@ namespace Cliver.PdfDocumentParser
         {
             get
             {
-                if (floatingAnchors.SelectedRows.Count > 0)
-                    return Modes.SetFloatingAnchor;
+                if (anchors.SelectedRows.Count > 0)
+                    return Modes.SetAnchor;
                 if (marks.SelectedRows.Count > 0)
                     return Modes.SetDocumentFirstPageRecognitionTextMark;
                 if (fields.SelectedRows.Count > 0)

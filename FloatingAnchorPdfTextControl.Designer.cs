@@ -1,6 +1,6 @@
 ﻿namespace Cliver.PdfDocumentParser
 {
-    partial class FloatingAnchorPdfTextControl
+    partial class AnchorPdfTextControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -137,7 +137,7 @@
             0,
             -2147483648});
             // 
-            // FloatingAnchorPdfTextControl
+            // AnchorPdfTextControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -148,7 +148,7 @@
             this.Controls.Add(this.PositionDeviation);
             this.Controls.Add(this.PositionDeviationIsAbsolute);
             this.Controls.Add(this.text);
-            this.Name = "FloatingAnchorPdfTextControl";
+            this.Name = "AnchorPdfTextControl";
             this.Size = new System.Drawing.Size(204, 152);
             ((System.ComponentModel.ISupportInitialize)(this.PositionDeviation)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.SearchRectangleMargin)).EndInit();

@@ -49,12 +49,12 @@ namespace Cliver.PdfDocumentParser
         }
         Bitmap scaledCurrentPageBitmap;
 
-        PointF? findAndDrawFloatingAnchor(int floatingAnchorId, bool renewImage = true)
+        PointF? findAndDrawAnchor(int anchorId, bool renewImage = true)
         {
             DataGridViewRow row;
-            Template.FloatingAnchor fa = getFloatingAnchor(floatingAnchorId, out row);
+            Template.Anchor fa = getAnchor(anchorId, out row);
             if (fa == null || row == null)
-                throw new Exception("FloatingAnchor[Id=" + floatingAnchorId + "] does not exist.");
+                throw new Exception("Anchor[Id=" + anchorId + "] does not exist.");
 
             if (!fa.IsSet())
             {
@@ -67,11 +67,11 @@ namespace Cliver.PdfDocumentParser
 
             pages.ActiveTemplate = getTemplateFromUI(false);
 
-            fa = pages.ActiveTemplate.FloatingAnchors.Where(a => a.Id == (int)floatingAnchorId).FirstOrDefault();
+            fa = pages.ActiveTemplate.Anchors.Where(a => a.Id == (int)anchorId).FirstOrDefault();
             if (fa == null)
-                throw new Exception("FloatingAnchor[Id=" + fa.Id + "] is not defined.");
+                throw new Exception("Anchor[Id=" + fa.Id + "] is not defined.");
 
-            List<RectangleF> rs = pages[currentPage].GetFloatingAnchorRectangles(fa);
+            List<RectangleF> rs = pages[currentPage].GetAnchorRectangles(fa);
             if (rs == null || rs.Count < 1)
             {
                 setRowStatus(statuses.ERROR, row, "Not found");
@@ -80,13 +80,13 @@ namespace Cliver.PdfDocumentParser
             }
             setRowStatus(statuses.SUCCESS, row, "Found");
 
-            drawBoxes(Settings.Appearance.FloatingAnchorMasterBoxColor, new List<System.Drawing.RectangleF> { rs[0] }, renewImage);
+            drawBoxes(Settings.Appearance.AnchorMasterBoxColor, new List<System.Drawing.RectangleF> { rs[0] }, renewImage);
             if (rs.Count > 1)
-                drawBoxes(Settings.Appearance.FloatingAnchorSecondaryBoxColor, rs.GetRange(1, rs.Count - 1), false);
+                drawBoxes(Settings.Appearance.AnchorSecondaryBoxColor, rs.GetRange(1, rs.Count - 1), false);
             return new PointF(rs[0].X, rs[0].Y);
         }
 
-        object extractValueAndDrawSelectionBox(int? floatingAnchorId, Template.RectangleF r, Template.Types valueType, bool renewImage = true)
+        object extractValueAndDrawSelectionBox(int? anchorId, Template.RectangleF r, Template.Types valueType, bool renewImage = true)
         {
             try
             {
@@ -97,9 +97,9 @@ namespace Cliver.PdfDocumentParser
 
                 float x = 0;
                 float y = 0;
-                if (floatingAnchorId != null)
+                if (anchorId != null)
                 {
-                    PointF? p0_ = findAndDrawFloatingAnchor((int)floatingAnchorId);
+                    PointF? p0_ = findAndDrawAnchor((int)anchorId);
                     if (p0_ == null)
                         return null;
                     PointF p0 = (PointF)p0_;
@@ -210,7 +210,7 @@ namespace Cliver.PdfDocumentParser
                 enableNavigationButtons();
 
                 //loadingTemplate = true;
-                setCurrentFloatingAnchorRow(null, true);
+                setCurrentAnchorRow(null, true);
                 setCurrentMarkRow(null);
                 setCurrentFieldRow(null);
                 loadingTemplate = false;
@@ -224,7 +224,7 @@ namespace Cliver.PdfDocumentParser
                             continue;
                         if (f.IsSet())
                         {
-                            row.Cells["Value"].Value = extractValueAndDrawSelectionBox(f.FloatingAnchorId, f.Rectangle, f.Type);
+                            row.Cells["Value"].Value = extractValueAndDrawSelectionBox(f.AnchorId, f.Rectangle, f.Type);
                             if (row.Cells["Value"].Value != null)
                                 setRowStatus(statuses.SUCCESS, row, "Found");
                             else

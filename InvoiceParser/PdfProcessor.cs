@@ -115,12 +115,12 @@ namespace Cliver.InvoiceParser
 
         Dictionary<string, string> fieldNames2texts = new Dictionary<string, string>();
 
-        static public bool? Process(string inputPdf, List<Template> templates, string stampedPdf, Action<string, int, Dictionary<string, string>> record)
+        static public bool? Process(string inputPdf, List<Template2> template2s, string stampedPdf, Action<string, int, Dictionary<string, string>> record)
         {
             if (File.Exists(stampedPdf))
                 File.Delete(stampedPdf);
 
-            var ts = templates.Where(x => x.FileFilterRegex == null || x.FileFilterRegex.IsMatch(inputPdf)).ToList();
+            var ts = template2s.Where(x => x.FileFilterRegex == null || x.FileFilterRegex.IsMatch(inputPdf)).ToList();
             if (ts.Count < 1)
             {
                 Log.Main.Warning("No template matched to file path '" + inputPdf + "'");
@@ -140,12 +140,12 @@ namespace Cliver.InvoiceParser
                     var ts2 = ts.Where(x => x.DetectingTemplateLastPageNumber >= page_i).ToList();
                     if (ts2.Count < 1)
                         break;
-                    foreach (Template t in ts2)
+                    foreach (Template2 t in ts2)
                     {
-                        cp.Pages.ActiveTemplate = t.Base;
+                        cp.Pages.ActiveTemplate = t.Template;
                         if (cp.Pages[page_i].IsDocumentFirstPage())
                         {
-                            Log.Main.Inform("Applying to file '" + inputPdf + "' template '" + t.Base.Name + "'\r\nStamped file: '" + stampedPdf);
+                            Log.Main.Inform("Applying to file '" + inputPdf + "' template '" + t.Template.Name + "'\r\nStamped file: '" + stampedPdf);
                             //cp.pageBitmaps.RememberConverted = true;
                             cp.process(page_i, stampedPdf, record);
                             return true;
@@ -183,7 +183,7 @@ namespace Cliver.InvoiceParser
             if (field.Rectangle == null)
                 return;
             string error;
-            object v = p.GetValue(field.FloatingAnchorId, field.Rectangle, field.Type, out error);
+            object v = p.GetValue(field.AnchorId, field.Rectangle, field.Type, out error);
             if (v is ImageData)
             {
                 if (!fieldNames2texts.ContainsKey(field.Name))

@@ -1,6 +1,6 @@
 ﻿namespace Cliver.PdfDocumentParser
 {
-    partial class FloatingAnchorForm
+    partial class AnchorForm
     {
         /// <summary>
         /// Required designer variable.
@@ -48,15 +48,15 @@
             this.textBox1.Size = new System.Drawing.Size(100, 20);
             this.textBox1.TabIndex = 1;
             // 
-            // FloatingAnchorForm
+            // AnchorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(265, 141);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label1);
-            this.Name = "FloatingAnchorForm";
-            this.Text = "FloatingAnchorForm";
+            this.Name = "AnchorForm";
+            this.Text = "AnchorForm";
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -15,29 +15,29 @@ using System.Windows.Forms;
 
 namespace Cliver.PdfDocumentParser
 {
-    public partial class FloatingAnchorOcrTextControl : UserControl
+    public partial class AnchorOcrTextControl : UserControl
     {
-        public FloatingAnchorOcrTextControl()
+        public AnchorOcrTextControl()
         {
             InitializeComponent();
         }
 
-        public Template.FloatingAnchor.OcrText FloatingAnchor
+        public Template.Anchor.OcrText Anchor
         {
             get
             {
-                if (floatingAnchor == null)
-                    floatingAnchor = new Template.FloatingAnchor.OcrText();
-                floatingAnchor.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
-                floatingAnchor.PositionDeviation = (float)PositionDeviation.Value;
-                floatingAnchor.SearchRectangleMargin = (int)SearchRectangleMargin.Value;
-                return floatingAnchor;
+                if (anchor == null)
+                    anchor = new Template.Anchor.OcrText();
+                anchor.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
+                anchor.PositionDeviation = (float)PositionDeviation.Value;
+                anchor.SearchRectangleMargin = (int)SearchRectangleMargin.Value;
+                return anchor;
             }
             set
             {
                 if (value == null)
-                    value = new Template.FloatingAnchor.OcrText();
-                floatingAnchor = value;
+                    value = new Template.Anchor.OcrText();
+                anchor = value;
                 StringBuilder sb = new StringBuilder();
                 foreach (var l in Ocr.GetLines(value.CharBoxs.Select(x => new Ocr.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() })))
                 {
@@ -52,9 +52,9 @@ namespace Cliver.PdfDocumentParser
                     PositionDeviation.Value = (decimal)value.PositionDeviation;
                 }
                 catch { }
-                SearchRectangleMargin.Value = floatingAnchor.SearchRectangleMargin;
+                SearchRectangleMargin.Value = anchor.SearchRectangleMargin;
             }
         }
-        Template.FloatingAnchor.OcrText floatingAnchor;
+        Template.Anchor.OcrText anchor;
     }
 }

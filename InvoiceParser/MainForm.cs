@@ -56,11 +56,11 @@ namespace Cliver.InvoiceParser
             DetectingTemplateLastPageNumber.ValueType = typeof(uint);
             FileFilterRegex.ValueType = typeof(Regex);
 
-            Settings.Templates.TouchedChanged += delegate
+            Settings.Template2s.TouchedChanged += delegate
             {
                 this.BeginInvoke(() =>
                 {
-                    saveTemplates.Enabled = Settings.Templates.IsTouched();
+                    saveTemplates.Enabled = Settings.Template2s.IsTouched();
                 });
             };
             saveTemplates.Enabled = false;
@@ -75,14 +75,14 @@ namespace Cliver.InvoiceParser
                       e.Cancel = true;
               };
 
-            templates.CellValidating += delegate (object sender, DataGridViewCellValidatingEventArgs e)
+            template2s.CellValidating += delegate (object sender, DataGridViewCellValidatingEventArgs e)
             {
                 try
                 {
-                    DataGridViewRow r = templates.Rows[e.RowIndex];
-                    Template t = (Template)r.Tag;
+                    DataGridViewRow r = template2s.Rows[e.RowIndex];
+                    Template2 t = (Template2)r.Tag;
 
-                    switch (templates.Columns[e.ColumnIndex].Name)
+                    switch (template2s.Columns[e.ColumnIndex].Name)
                     {
                         case "Name_":
                             {
@@ -93,7 +93,7 @@ namespace Cliver.InvoiceParser
                                     return;
                                 }
                                 string name2 = ((string)e.FormattedValue).Trim();
-                                foreach (DataGridViewRow rr in templates.Rows)
+                                foreach (DataGridViewRow rr in template2s.Rows)
                                 {
                                     if (rr.Index != e.RowIndex && name2 == (string)rr.Cells["Name_"].Value)
                                         throw new Exception("Name '" + name2 + "' is duplicated!");
@@ -123,14 +123,14 @@ namespace Cliver.InvoiceParser
                 }
             };
 
-            templates.DataError += delegate (object sender, DataGridViewDataErrorEventArgs e)
+            template2s.DataError += delegate (object sender, DataGridViewDataErrorEventArgs e)
             {
                 try
                 {
-                    DataGridViewRow r = templates.Rows[e.RowIndex];
-                    Template t = (Template)r.Tag;
+                    DataGridViewRow r = template2s.Rows[e.RowIndex];
+                    Template2 t = (Template2)r.Tag;
 
-                    switch (templates.Columns[e.ColumnIndex].Name)
+                    switch (template2s.Columns[e.ColumnIndex].Name)
                     {
                         case "OrderWeight":
                             throw new Exception("Order must be a float number:\r\n" + e.Exception.Message);
@@ -146,46 +146,46 @@ namespace Cliver.InvoiceParser
                 }
             };
 
-            templates.CellValueChanged += delegate (object sender, DataGridViewCellEventArgs e)
+            template2s.CellValueChanged += delegate (object sender, DataGridViewCellEventArgs e)
             {
                 try
                 {
-                    DataGridViewRow r = templates.Rows[e.RowIndex];
-                    Template t = (Template)r.Tag;
+                    DataGridViewRow r = template2s.Rows[e.RowIndex];
+                    Template2 t = (Template2)r.Tag;
                     if (t == null)
                         return;
                     if (e.ColumnIndex < 0)//row's header
                         return;
 
-                    switch (templates.Columns[e.ColumnIndex].Name)
+                    switch (template2s.Columns[e.ColumnIndex].Name)
                     {
                         case "Name_":
-                            t.Base.Name = (string)r.Cells["Name_"].Value;
-                            Settings.Templates.Touch();
+                            t.Template.Name = (string)r.Cells["Name_"].Value;
+                            Settings.Template2s.Touch();
                             return;
                         case "Active":
                             t.Active = (bool)r.Cells["Active"].Value;
-                            Settings.Templates.Touch();
+                            Settings.Template2s.Touch();
                             return;
                         case "Comment":
                             t.Comment = (string)r.Cells["Comment"].Value;
-                            Settings.Templates.Touch();
+                            Settings.Template2s.Touch();
                             return;
                         case "Group":
                             t.Group = (string)r.Cells["Group"].Value;
-                            Settings.Templates.Touch();
+                            Settings.Template2s.Touch();
                             return;
                         case "OrderWeight":
                             t.OrderWeight = (float)r.Cells["OrderWeight"].Value;
-                            Settings.Templates.Touch();
+                            Settings.Template2s.Touch();
                             return;
                         case "DetectingTemplateLastPageNumber":
                             t.DetectingTemplateLastPageNumber = (uint)r.Cells["DetectingTemplateLastPageNumber"].Value;
-                            Settings.Templates.Touch();
+                            Settings.Template2s.Touch();
                             return;
                         case "FileFilterRegex":
                             t.FileFilterRegex = (Regex)r.Cells["FileFilterRegex"].Value;
-                            Settings.Templates.Touch();
+                            Settings.Template2s.Touch();
                             return;
                     }
                 }
@@ -195,7 +195,7 @@ namespace Cliver.InvoiceParser
                 }
             };
 
-            templates.UserDeletingRow += delegate (object sender, DataGridViewRowCancelEventArgs e)
+            template2s.UserDeletingRow += delegate (object sender, DataGridViewRowCancelEventArgs e)
             {
                 try
                 {
@@ -213,14 +213,14 @@ namespace Cliver.InvoiceParser
                 }
             };
 
-            templates.UserDeletedRow += delegate (object sender, DataGridViewRowEventArgs e)
+            template2s.UserDeletedRow += delegate (object sender, DataGridViewRowEventArgs e)
             {
-                Settings.Templates.Touch();
+                Settings.Template2s.Touch();
             };
 
-            TemplateManager.Templates = templates;
+            TemplateManager.Templates = template2s;
 
-            templates.SelectionChanged += delegate (object sender, EventArgs e)
+            template2s.SelectionChanged += delegate (object sender, EventArgs e)
             {
                 //if (templates.SelectedRows.Count < 1)
                 //    return;
@@ -238,11 +238,11 @@ namespace Cliver.InvoiceParser
                 //}
             };
 
-            templates.CellClick += delegate (object sender, DataGridViewCellEventArgs e)
+            template2s.CellClick += delegate (object sender, DataGridViewCellEventArgs e)
             {
                 if (e.RowIndex < 0)
                     return;
-                DataGridViewRow r = templates.Rows[e.RowIndex];
+                DataGridViewRow r = template2s.Rows[e.RowIndex];
                 if (e.ColumnIndex < 0)//row's header
                     return;
 
@@ -250,9 +250,9 @@ namespace Cliver.InvoiceParser
                 {
                     try
                     {
-                        int i = templates.Rows.Add();
-                        r = templates.Rows[i];
-                        Template t = Settings.Templates.CreateInitialTemplate();
+                        int i = template2s.Rows.Add();
+                        r = template2s.Rows[i];
+                        Template2 t = Settings.Template2s.CreateInitialTemplate();
                         r.Tag = t;
                         r.Cells["Active"].Value = t.Active;
                         r.Cells["Group"].Value = t.Group;
@@ -264,22 +264,22 @@ namespace Cliver.InvoiceParser
                     catch { }
                 }
 
-                switch (templates.Columns[e.ColumnIndex].Name)
+                switch (template2s.Columns[e.ColumnIndex].Name)
                 {
                     case "Edit":
                         editTemplate(r);
                         break;
                     case "Copy":
-                        Template t = (Template)r.Tag;
+                        Template2 t = (Template2)r.Tag;
                         if (t == null)
                             return;
-                        Template t2 = SerializationRoutines.Json.Deserialize<Template>(SerializationRoutines.Json.Serialize(t));
-                        t2.Base.Name = "";
-                        t2.Base.Editor.TestFile = null;
-                        int i = templates.Rows.Add(new DataGridViewRow());
-                        DataGridViewRow r2 = templates.Rows[i];
+                        Template2 t2 = SerializationRoutines.Json.Deserialize<Template2>(SerializationRoutines.Json.Serialize(t));
+                        t2.Template.Name = "";
+                        t2.Template.Editor.TestFile = null;
+                        int i = template2s.Rows.Add(new DataGridViewRow());
+                        DataGridViewRow r2 = template2s.Rows[i];
                         r2.Tag = t2;
-                        r2.Cells["Name_"].Value = t2.Base.Name.Trim();
+                        r2.Cells["Name_"].Value = t2.Template.Name.Trim();
                         r2.Cells["Active"].Value = t2.Active;
                         r2.Cells["Group"].Value = t2.Group;
                         r2.Cells["OrderWeight"].Value = t2.OrderWeight;
@@ -301,7 +301,7 @@ namespace Cliver.InvoiceParser
 
         void edit2Template(DataGridViewRow r)
         {
-            Template t = (Template)r.Tag;
+            Template2 t = (Template2)r.Tag;
             if (t == null)
                 return;
 
@@ -326,25 +326,25 @@ namespace Cliver.InvoiceParser
                 return;
             }
 
-            Template t = (Template)r.Tag;
+            Template2 t = (Template2)r.Tag;
             if (t == null)
             {
-                t = Settings.Templates.CreateInitialTemplate();
+                t = Settings.Template2s.CreateInitialTemplate();
                 if (!string.IsNullOrWhiteSpace((string)r.Cells["Name_"].Value))
-                    t.Base.Name = (string)r.Cells["Name_"].Value;
+                    t.Template.Name = (string)r.Cells["Name_"].Value;
                 r.Tag = t;
             }
             string lastTestFile = null;
-            if (t.Base.Name != null)
-                Settings.TestFiles.TemplateNames2TestFile.TryGetValue(t.Base.Name, out lastTestFile);
-            TemplateManager tm = new TemplateManager { Template = t.Base, LastTestFile = lastTestFile, Row = r };
+            if (t.Template.Name != null)
+                Settings.TestFiles.TemplateNames2TestFile.TryGetValue(t.Template.Name, out lastTestFile);
+            TemplateManager tm = new TemplateManager { Template = t.Template, LastTestFile = lastTestFile, Row = r };
             tf = new TemplateForm(tm, Settings.General.InputFolder);
             tf.FormClosed += delegate
             {
                 if (tm.LastTestFile != null)//the customer asked for this
                 {
                     Settings.TestFiles.TemplateNames2TestFile[tm.Template.Name] = tm.LastTestFile;
-                    var deletedNs = Settings.TestFiles.TemplateNames2TestFile.Keys.Where(n => Settings.Templates.Templates.Where(a => a.Base.Name == n).FirstOrDefault() == null).ToList();
+                    var deletedNs = Settings.TestFiles.TemplateNames2TestFile.Keys.Where(n => Settings.Template2s.Template2s.Where(a => a.Template.Name == n).FirstOrDefault() == null).ToList();
                     foreach (string n in deletedNs)
                         Settings.TestFiles.TemplateNames2TestFile.Remove(n);
                     Settings.TestFiles.Save();
@@ -362,19 +362,19 @@ namespace Cliver.InvoiceParser
 
             override public void ReplaceWith(PdfDocumentParser.Template newTemplate)
             {
-                Template t = (Template)Row.Tag;
-                if (Settings.Templates.Templates.Where(a => a != t && a.Base.Name == newTemplate.Name).FirstOrDefault() != null)
+                Template2 t = (Template2)Row.Tag;
+                if (Settings.Template2s.Template2s.Where(a => a != t && a.Template.Name == newTemplate.Name).FirstOrDefault() != null)
                     throw new Exception("Template '" + newTemplate.Name + "' already exists.");
 
-                t.Base = newTemplate;
+                t.Template = newTemplate;
                 t.ModifiedTime = DateTime.Now;
 
-                if (!Settings.Templates.Templates.Contains(t))
-                    Settings.Templates.Templates.Add(t);
+                if (!Settings.Template2s.Template2s.Contains(t))
+                    Settings.Template2s.Template2s.Add(t);
 
-                Settings.Templates.Touch();
+                Settings.Template2s.Touch();
 
-                Row.Cells["Name_"].Value = t.Base.Name;
+                Row.Cells["Name_"].Value = t.Template.Name;
                 Row.Cells["ModifiedTime"].Value = t.GetModifiedTimeAsString();
 
                 Template = newTemplate;
@@ -382,9 +382,9 @@ namespace Cliver.InvoiceParser
 
             override public void SaveAsInitialTemplate(PdfDocumentParser.Template template)
             {
-                Settings.Templates.InitialTemplate = Settings.Templates.CreateInitialTemplate();
-                Settings.Templates.InitialTemplate.Base = template;
-                Settings.Templates.Touch();
+                Settings.Template2s.InitialTemplate2 = Settings.Template2s.CreateInitialTemplate();
+                Settings.Template2s.InitialTemplate2.Template = template;
+                Settings.Template2s.Touch();
             }
         }
 
@@ -392,26 +392,26 @@ namespace Cliver.InvoiceParser
         {
             try
             {
-                if (!Settings.Templates.IsTouched())
+                if (!Settings.Template2s.IsTouched())
                     return true;
 
                 if (!Message.YesNo("Save the recent changes to templates?"))
                     return trueIfDeclined || false;
 
-                templates.EndEdit();//needed to set checkbox values
+                template2s.EndEdit();//needed to set checkbox values
 
-                Settings.Templates.Templates.Clear();
-                foreach (DataGridViewRow r in templates.Rows)
+                Settings.Template2s.Template2s.Clear();
+                foreach (DataGridViewRow r in template2s.Rows)
                 {
-                    Template t = (Template)r.Tag;
+                    Template2 t = (Template2)r.Tag;
                     if (t == null)
                         continue;
 
-                    if (Settings.Templates.Templates.Where(a => a.Base.Name == t.Base.Name).FirstOrDefault() != null)
-                        throw new Exception("Template name '" + t.Base.Name + "' is duplicated!");
-                    Settings.Templates.Templates.Add(t);
+                    if (Settings.Template2s.Template2s.Where(a => a.Template.Name == t.Template.Name).FirstOrDefault() != null)
+                        throw new Exception("Template name '" + t.Template.Name + "' is duplicated!");
+                    Settings.Template2s.Template2s.Add(t);
                 }
-                Settings.Templates.Save();
+                Settings.Template2s.Save();
                 return true;
             }
             catch (Exception e)
@@ -425,14 +425,14 @@ namespace Cliver.InvoiceParser
         {
             try
             {
-                templates.Rows.Clear();
-                foreach (Template t in Settings.Templates.Templates)
+                template2s.Rows.Clear();
+                foreach (Template2 t in Settings.Template2s.Template2s)
                 {
-                    if (string.IsNullOrWhiteSpace(t.Base.Name))
+                    if (string.IsNullOrWhiteSpace(t.Template.Name))
                         continue;
-                    int i = templates.Rows.Add(new DataGridViewRow());
-                    DataGridViewRow r = templates.Rows[i];
-                    r.Cells["Name_"].Value = t.Base.Name.Trim();
+                    int i = template2s.Rows.Add(new DataGridViewRow());
+                    DataGridViewRow r = template2s.Rows[i];
+                    r.Cells["Name_"].Value = t.Template.Name.Trim();
                     r.Cells["Active"].Value = t.Active;
                     r.Cells["Group"].Value = t.Group;
                     r.Cells["ModifiedTime"].Value = t.GetModifiedTimeAsString();
@@ -645,13 +645,13 @@ namespace Cliver.InvoiceParser
                 float orderWeight1 = (float)orderWeightPattern1.Value;
                 float orderWeight2 = (float)orderWeightPattern2.Value;
                 int count = 0;
-                foreach (DataGridViewRow r in templates.Rows)
+                foreach (DataGridViewRow r in template2s.Rows)
                 {
-                    Template t = (Template)r.Tag;
+                    Template2 t = (Template2)r.Tag;
                     if (t == null)
                         continue;
                     bool s = (!activePattern.Enabled || (t.Active == activePattern.Checked))
-                         && (!namePattern.Enabled || (string.IsNullOrEmpty(namePattern.Text) ? string.IsNullOrEmpty(t.Base.Name) : Regex.IsMatch(t.Base.Name, namePattern.Text, RegexOptions.IgnoreCase)))
+                         && (!namePattern.Enabled || (string.IsNullOrEmpty(namePattern.Text) ? string.IsNullOrEmpty(t.Template.Name) : Regex.IsMatch(t.Template.Name, namePattern.Text, RegexOptions.IgnoreCase)))
                          && (!groupPattern.Enabled || (string.IsNullOrEmpty(groupPattern.Text) ? string.IsNullOrEmpty(t.Group) : Regex.IsMatch(t.Group, groupPattern.Text, RegexOptions.IgnoreCase)))
                          && (!commentPattern.Enabled || (string.IsNullOrEmpty(commentPattern.Text) ? string.IsNullOrEmpty(t.Comment) : Regex.IsMatch(t.Comment, commentPattern.Text, RegexOptions.IgnoreCase)))
                          && (!orderWeightPattern2.Enabled || (orderWeight1 <= t.OrderWeight && t.OrderWeight <= orderWeight2));
@@ -660,7 +660,7 @@ namespace Cliver.InvoiceParser
                         count++;
                 }
                 if (sortSelectedUp.Checked)
-                    templates.Sort(templates.Columns["Selected"], ListSortDirection.Descending);
+                    template2s.Sort(template2s.Columns["Selected"], ListSortDirection.Descending);
 
                 selectedTemplatesCount.Text = "Selected: " + count + " templates.";
 
@@ -691,21 +691,21 @@ namespace Cliver.InvoiceParser
 
             selectAll.Click += delegate
             {
-                foreach (DataGridViewRow r in templates.Rows)
+                foreach (DataGridViewRow r in template2s.Rows)
                 {
                     r.Cells["Selected"].Value = true;
                 }
             };
             selectNothing.Click += delegate
             {
-                foreach (DataGridViewRow r in templates.Rows)
+                foreach (DataGridViewRow r in template2s.Rows)
                 {
                     r.Cells["Selected"].Value = false;
                 }
             };
             selectInvertion.Click += delegate
             {
-                foreach (DataGridViewRow r in templates.Rows)
+                foreach (DataGridViewRow r in template2s.Rows)
                 {
                     r.Cells["Selected"].Value = !getBoolValue(r, "Selected");
                 }
@@ -713,24 +713,24 @@ namespace Cliver.InvoiceParser
 
             applyActiveChange.Click += delegate
             {
-                foreach (DataGridViewRow r in templates.Rows)
+                foreach (DataGridViewRow r in template2s.Rows)
                     if (getBoolValue(r, "Selected"))
                         r.Cells["Active"].Value = activeChange.Checked;
-                Settings.Templates.Touch();
+                Settings.Template2s.Touch();
             };
             applyGroupChange.Click += delegate
             {
-                foreach (DataGridViewRow r in templates.Rows)
+                foreach (DataGridViewRow r in template2s.Rows)
                     if (getBoolValue(r, "Selected"))
                         r.Cells["Group"].Value = groupChange.Text;
-                Settings.Templates.Touch();
+                Settings.Template2s.Touch();
             };
             applyOrderWeightChange.Click += delegate
             {
-                foreach (DataGridViewRow r in templates.Rows)
+                foreach (DataGridViewRow r in template2s.Rows)
                     if (getBoolValue(r, "Selected"))
                         r.Cells["OrderWeight"].Value = (float)orderWeightChange.Value;
-                Settings.Templates.Touch();
+                Settings.Template2s.Touch();
             };
         }
     }

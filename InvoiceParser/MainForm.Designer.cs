@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.bAbout = new System.Windows.Forms.Button();
             this.bInputFolder = new System.Windows.Forms.Button();
             this.bOutputFolder = new System.Windows.Forms.Button();
@@ -39,7 +39,7 @@
             this.progress = new System.Windows.Forms.ProgressBar();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.templates = new System.Windows.Forms.DataGridView();
+            this.template2s = new System.Windows.Forms.DataGridView();
             this.bLog = new System.Windows.Forms.Button();
             this.bOutput = new System.Windows.Forms.Button();
             this.bSettings = new System.Windows.Forms.Button();
@@ -93,7 +93,7 @@
             this.Comment = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DetectingTemplateLastPageNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FileFilterRegex = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.templates)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.template2s)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -203,13 +203,13 @@
             this.label2.TabIndex = 9;
             this.label2.Text = "Output Folder:";
             // 
-            // templates
+            // template2s
             // 
-            this.templates.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.template2s.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.templates.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.templates.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.template2s.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.template2s.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Selected,
             this.Edit,
             this.Copy,
@@ -222,12 +222,12 @@
             this.Comment,
             this.DetectingTemplateLastPageNumber,
             this.FileFilterRegex});
-            this.templates.Location = new System.Drawing.Point(15, 73);
-            this.templates.MultiSelect = false;
-            this.templates.Name = "templates";
-            this.templates.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.templates.Size = new System.Drawing.Size(643, 404);
-            this.templates.TabIndex = 4;
+            this.template2s.Location = new System.Drawing.Point(15, 73);
+            this.template2s.MultiSelect = false;
+            this.template2s.Name = "template2s";
+            this.template2s.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.template2s.Size = new System.Drawing.Size(643, 404);
+            this.template2s.TabIndex = 4;
             // 
             // bLog
             // 
@@ -712,8 +712,8 @@
             // Name_
             // 
             this.Name_.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            this.Name_.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            this.Name_.DefaultCellStyle = dataGridViewCellStyle2;
             this.Name_.HeaderText = "Name";
             this.Name_.Name = "Name_";
             this.Name_.Width = 60;
@@ -769,7 +769,7 @@
             this.Controls.Add(this.flowLayoutPanel2);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.lProgress);
-            this.Controls.Add(this.templates);
+            this.Controls.Add(this.template2s);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.progress);
@@ -782,7 +782,7 @@
             this.MinimumSize = new System.Drawing.Size(785, 567);
             this.Name = "MainForm";
             this.Text = "MainForm";
-            ((System.ComponentModel.ISupportInitialize)(this.templates)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.template2s)).EndInit();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel2.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
@@ -809,7 +809,7 @@
         private System.Windows.Forms.ProgressBar progress;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.DataGridView templates;
+        private System.Windows.Forms.DataGridView template2s;
         private System.Windows.Forms.Button bLog;
         private System.Windows.Forms.Button bOutput;
         private System.Windows.Forms.Button bSettings;

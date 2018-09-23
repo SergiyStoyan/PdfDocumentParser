@@ -230,15 +230,15 @@ namespace Cliver.PdfDocumentParser
             }
             public class PdfTextValue: BaseValue
             {
-                public List<Template.FloatingAnchor.PdfText.CharBox> CharBoxs = new List<Template.FloatingAnchor.PdfText.CharBox>();
+                public List<Template.Anchor.PdfText.CharBox> CharBoxs = new List<Template.Anchor.PdfText.CharBox>();
             }
             public class OcrTextValue: BaseValue
             {
-                public List<Template.FloatingAnchor.OcrText.CharBox> CharBoxs = new List<Template.FloatingAnchor.OcrText.CharBox>();
+                public List<Template.Anchor.OcrText.CharBox> CharBoxs = new List<Template.Anchor.OcrText.CharBox>();
             }
             public class ImageDataValue: BaseValue
             {
-                public List<Template.FloatingAnchor.ImageData.ImageBox> ImageBoxs = new List<Template.FloatingAnchor.ImageData.ImageBox>();
+                public List<Template.Anchor.ImageData.ImageBox> ImageBoxs = new List<Template.Anchor.ImageData.ImageBox>();
 
                 public float BrightnessTolerance = 0.20f;
                 public float DifferentPixelNumberTolerance = 0.15f;

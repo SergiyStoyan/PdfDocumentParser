@@ -61,7 +61,7 @@ namespace Cliver.InvoiceParser
             if (File.Exists(output_records_file))
                 File.Delete(output_records_file);
             Excel xls = new Excel(output_records_file, DateTime.Now.ToString());
-            List<Template> active_templates = Settings.Templates.Templates.Where(x => x.Active).OrderBy(x => x.OrderWeight).ToList();
+            List<Template2> active_templates = Settings.Template2s.Template2s.Where(x => x.Active).OrderBy(x => x.OrderWeight).ToList();
             if (active_templates.Count < 1)
             {
                 LogMessage.Error("There is no active template!");
@@ -70,15 +70,15 @@ namespace Cliver.InvoiceParser
 
             List<string> orderedOutputFieldNames = OutputConfigForm.GetOrderedOutputFieldNames();
 
-            List<string> headers = active_templates[0].Base.Fields.Select(x => x.Name).ToList();
+            List<string> headers = active_templates[0].Template.Fields.Select(x => x.Name).ToList();
             List<string> hs0 = headers.OrderBy(a => a).ToList();
             for (int i = 1; i < active_templates.Count; i++)
             {
-                Template t = active_templates[i];
-                List<string> hs = t.Base.Fields.Select(x => x.Name).ToList();
+                Template2 t = active_templates[i];
+                List<string> hs = t.Template.Fields.Select(x => x.Name).ToList();
                 if (!hs.OrderBy(a => a).SequenceEqual(hs0))
                 {
-                    if (!LogMessage.AskYesNo("Templates '" + active_templates[0].Base.Name + "' and '" + active_templates[i].Base.Name + "' have different headers!\r\nProceed?", true))
+                    if (!LogMessage.AskYesNo("Templates '" + active_templates[0].Template.Name + "' and '" + active_templates[i].Template.Name + "' have different headers!\r\nProceed?", true))
                         return;
                 }
             }

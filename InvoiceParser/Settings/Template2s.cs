@@ -18,12 +18,12 @@ namespace Cliver.InvoiceParser
     public partial class Settings
     {
         [Cliver.Settings.Obligatory]
-        public static readonly TemplatesSettings Templates;
+        public static readonly Templates2Settings Template2s;
 
-        public class TemplatesSettings : Cliver.Settings
+        public class Templates2Settings : Cliver.Settings
         {
-            public Template InitialTemplate;
-            public List<Template> Templates = new List<Template>();
+            public Template2 InitialTemplate2;
+            public List<Template2> Template2s = new List<Template2>();
 
             public override void Loaded()
             {
@@ -32,14 +32,13 @@ namespace Cliver.InvoiceParser
                     __Indented = false;
 
                     //TEMPORARY: conversion to new format
-                    if (Templates.Count > 0 && Templates[0].Base == null)
+                    if (Template2s.Count < 1)
                     {
-                        FileSystemRoutines.CopyFile(__File, Config.StorageDir + "\\Templates0.Cliver.InvoiceParser.Settings+Templates0Settings.json", true);
-                        Settings.Templates0.Reload();
-                        Templates.Clear();
-                        foreach (Template0 t0 in Settings.Templates0.Templates)
+                        if (Settings.Templates == null)
+                            Config.ReloadField( "Templates" );
+                        foreach (Template0 t0 in Settings.Templates.Templates)
                         {
-                            Template t = new Template
+                            Template2 t = new Template2
                             {
                                 CanShareFileWithAnotherTemplates = t0.CanShareFileWithAnotherTemplates,
                                 Comment = t0.Comment,
@@ -49,29 +48,29 @@ namespace Cliver.InvoiceParser
                                 OrderWeight = t0.OrderWeight,
                                 Active = t0.Active,
                                 Group = t0.Group,
-                                Base = new PdfDocumentParser.Template
+                                Template = new PdfDocumentParser.Template
                                 {
                                     Name = t0.Name,
                                     AutoDeskew = t0.AutoDeskew,
                                     AutoDeskewThreshold = t0.AutoDeskewThreshold,
                                     AutoPagesRotation = t0.AutoPagesRotation,
                                     PagesRotation = t0.PagesRotation,
-                                    FloatingAnchors = new List<PdfDocumentParser.Template.FloatingAnchor>(),
-                                    DocumentFirstPageRecognitionMarks = new List<PdfDocumentParser.Template.Mark>(),
+                                    Anchors = new List<PdfDocumentParser.Template.Anchor>(),
+                                    Marks = new List<PdfDocumentParser.Template.Mark>(),
                                     Fields = new List<PdfDocumentParser.Template.Field>(),
                                 },
                             };
-                            t.Base.Editor = t0.Editor;
+                            t.Template.Editor = t0.Editor;
 
                             foreach (PdfDocumentParser.Template0.FloatingAnchor fa0 in t0.FloatingAnchors)
                             {
-                                PdfDocumentParser.Template.FloatingAnchor fa;
+                                PdfDocumentParser.Template.Anchor fa;
                                 switch (fa0.ValueType)
                                 {
                                     case PdfDocumentParser.Template0.ValueTypes.PdfText:
                                         {
                                             PdfDocumentParser.Template0.FloatingAnchor.PdfTextValue v0 = (PdfDocumentParser.Template0.FloatingAnchor.PdfTextValue)fa0.Value;
-                                            PdfDocumentParser.Template.FloatingAnchor.PdfText v = new PdfDocumentParser.Template.FloatingAnchor.PdfText
+                                            PdfDocumentParser.Template.Anchor.PdfText v = new PdfDocumentParser.Template.Anchor.PdfText
                                             {
                                                 Id = fa0.Id,
                                                 PositionDeviation = fa0.PositionDeviation,
@@ -85,7 +84,7 @@ namespace Cliver.InvoiceParser
                                     case PdfDocumentParser.Template0.ValueTypes.OcrText:
                                         {
                                             PdfDocumentParser.Template0.FloatingAnchor.OcrTextValue v0 = (PdfDocumentParser.Template0.FloatingAnchor.OcrTextValue)fa0.Value;
-                                            PdfDocumentParser.Template.FloatingAnchor.OcrText v = new PdfDocumentParser.Template.FloatingAnchor.OcrText
+                                            PdfDocumentParser.Template.Anchor.OcrText v = new PdfDocumentParser.Template.Anchor.OcrText
                                             {
                                                 Id = fa0.Id,
                                                 PositionDeviation = fa0.PositionDeviation,
@@ -99,7 +98,7 @@ namespace Cliver.InvoiceParser
                                     case PdfDocumentParser.Template0.ValueTypes.ImageData:
                                         {
                                             PdfDocumentParser.Template0.FloatingAnchor.ImageDataValue v0 = (PdfDocumentParser.Template0.FloatingAnchor.ImageDataValue)fa0.Value;
-                                            PdfDocumentParser.Template.FloatingAnchor.ImageData v = new PdfDocumentParser.Template.FloatingAnchor.ImageData
+                                            PdfDocumentParser.Template.Anchor.ImageData v = new PdfDocumentParser.Template.Anchor.ImageData
                                             {
                                                 Id = fa0.Id,
                                                 PositionDeviation = fa0.PositionDeviation,
@@ -115,7 +114,7 @@ namespace Cliver.InvoiceParser
                                         }
                                     default: throw new Exception("1");
                                 }
-                                t.Base.FloatingAnchors.Add(fa);
+                                t.Template.Anchors.Add(fa);
                             }
 
                             foreach (PdfDocumentParser.Template0.Mark m0 in t0.DocumentFirstPageRecognitionMarks)
@@ -128,7 +127,7 @@ namespace Cliver.InvoiceParser
                                             PdfDocumentParser.Template0.Mark.PdfTextValue v0 = (PdfDocumentParser.Template0.Mark.PdfTextValue)m0.Value;
                                             PdfDocumentParser.Template.Mark.PdfText v = new PdfDocumentParser.Template.Mark.PdfText
                                             {
-                                                FloatingAnchorId = m0.FloatingAnchorId,
+                                                AnchorId = m0.FloatingAnchorId,
                                                 Rectangle = m0.Rectangle,
                                             };
                                             if (v0 != null)
@@ -143,7 +142,7 @@ namespace Cliver.InvoiceParser
                                             PdfDocumentParser.Template0.Mark.OcrTextValue v0 = (PdfDocumentParser.Template0.Mark.OcrTextValue)m0.Value;
                                             PdfDocumentParser.Template.Mark.OcrText v = new PdfDocumentParser.Template.Mark.OcrText
                                             {
-                                                FloatingAnchorId = m0.FloatingAnchorId,
+                                                AnchorId = m0.FloatingAnchorId,
                                                 Rectangle = m0.Rectangle,
                                             };
                                             if (v0 != null)
@@ -158,7 +157,7 @@ namespace Cliver.InvoiceParser
                                             PdfDocumentParser.Template0.Mark.ImageDataValue v0 = (PdfDocumentParser.Template0.Mark.ImageDataValue)m0.Value;
                                             PdfDocumentParser.Template.Mark.ImageData v = new PdfDocumentParser.Template.Mark.ImageData
                                             {
-                                                FloatingAnchorId = m0.FloatingAnchorId,
+                                                AnchorId = m0.FloatingAnchorId,
                                                 Rectangle = m0.Rectangle,
                                             };
                                             if (v0 != null)
@@ -173,7 +172,7 @@ namespace Cliver.InvoiceParser
                                         }
                                     default: throw new Exception("12");
                                 }
-                                t.Base.DocumentFirstPageRecognitionMarks.Add(m);
+                                t.Template.Marks.Add(m);
                             }
 
                             foreach (PdfDocumentParser.Template0.Field f0 in t0.Fields)
@@ -185,7 +184,7 @@ namespace Cliver.InvoiceParser
                                         {
                                             PdfDocumentParser.Template.Field.PdfText v = new PdfDocumentParser.Template.Field.PdfText
                                             {
-                                                FloatingAnchorId = f0.FloatingAnchorId,
+                                                AnchorId = f0.FloatingAnchorId,
                                                 Rectangle = f0.Rectangle,
                                                 Name = f0.Name,
                                             };
@@ -196,7 +195,7 @@ namespace Cliver.InvoiceParser
                                         {
                                             PdfDocumentParser.Template.Field.OcrText v = new PdfDocumentParser.Template.Field.OcrText
                                             {
-                                                FloatingAnchorId = f0.FloatingAnchorId,
+                                                AnchorId = f0.FloatingAnchorId,
                                                 Rectangle = f0.Rectangle,
                                                 Name = f0.Name,
                                             };
@@ -209,13 +208,15 @@ namespace Cliver.InvoiceParser
                                         }
                                     default: throw new Exception("124");
                                 }
-                                t.Base.Fields.Add(f);
+                                t.Template.Fields.Add(f);
                             }
 
-                            Templates.Add(t);
+                            Template2s.Add(t);
                         }
                         Save();
                         Reload();
+                        if (Template2s.Count > 0)
+                            System.IO.File.Delete(Settings.Templates.__File);
                     }
                 }
                 catch (Exception e)
@@ -226,7 +227,7 @@ namespace Cliver.InvoiceParser
 
             public override void Saving()
             {
-                Templates.RemoveAll(x => string.IsNullOrWhiteSpace(x.Base.Name));
+                Template2s.RemoveAll(x => string.IsNullOrWhiteSpace(x.Template.Name));
             }
 
             //public void SaveIfTouched()
@@ -256,19 +257,19 @@ namespace Cliver.InvoiceParser
                 Settings.SynchronizationSettings.SynchronizeUploadFile(this.__File);
             }
 
-            public Template CreateInitialTemplate()
+            public Template2 CreateInitialTemplate()
             {
-                if (InitialTemplate != null && InitialTemplate.Base != null)
+                if (InitialTemplate2 != null && InitialTemplate2.Template != null)
                 {
-                    string ts = SerializationRoutines.Json.Serialize(InitialTemplate);
-                    Template t = SerializationRoutines.Json.Deserialize<Template>(ts);
-                    t.Base.Name = "";
+                    string ts = SerializationRoutines.Json.Serialize(InitialTemplate2);
+                    Template2 t = SerializationRoutines.Json.Deserialize<Template2>(ts);
+                    t.Template.Name = "";
                     return t;
                 }
-                return new Template
+                return new Template2
                 {
                     FileFilterRegex = new Regex(@"\.pdf$", RegexOptions.IgnoreCase),
-                    Base = new PdfDocumentParser.Template
+                    Template = new PdfDocumentParser.Template
                     {
                         AutoDeskew = false,
                         Fields = new List<PdfDocumentParser.Template.Field> {
@@ -278,8 +279,8 @@ namespace Cliver.InvoiceParser
                         new PdfDocumentParser.Template.Field.PdfText { Name = "COST" , Rectangle=new PdfDocumentParser.Template.RectangleF(0,0,10,10)},
                     },
                         Name = "",
-                        FloatingAnchors = new List<PdfDocumentParser.Template.FloatingAnchor>(),
-                        DocumentFirstPageRecognitionMarks = new List<PdfDocumentParser.Template.Mark>(),
+                        Anchors = new List<PdfDocumentParser.Template.Anchor>(),
+                        Marks = new List<PdfDocumentParser.Template.Mark>(),
                         PagesRotation = PdfDocumentParser.Template.PageRotations.NONE,
                         Editor = new PdfDocumentParser.Template.EditorSettings
                         {
@@ -293,9 +294,9 @@ namespace Cliver.InvoiceParser
         }
     }
 
-    public class Template
+    public class Template2
     {
-        public PdfDocumentParser.Template Base;
+        public PdfDocumentParser.Template Template;
 
         public bool Active = true;
         public string Group;

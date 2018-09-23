@@ -180,9 +180,8 @@
     </Compile>
     <Compile Include="Settings\Synchronization.cs" />
     <Compile Include="Settings\General.cs" />
-    <Compile Include="Settings\Templates0.cs" />
-    <Compile Include="Settings\Templates2.cs" />
-    <Compile Include="Settings\Templates.cs" />
+    <Compile Include="Settings\Template0s.cs" />
+    <Compile Include="Settings\Template2s.cs" />
     <Compile Include="Settings\TestFiles.cs" />
     <Compile Include="Template2Form.cs">
       <SubType>Form</SubType>

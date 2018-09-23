@@ -31,9 +31,9 @@ namespace Cliver.PdfDocumentParser
             Type2.ValueType = typeof(Template.Types);
             Type2.DataSource = Enum.GetValues(typeof(Template.Types));
 
-            FloatingAnchorId2.ValueType = typeof(int);
-            FloatingAnchorId2.ValueMember = "Id";
-            FloatingAnchorId2.DisplayMember = "Name";
+            AnchorId2.ValueType = typeof(int);
+            AnchorId2.ValueMember = "Id";
+            AnchorId2.DisplayMember = "Name";
 
             marks.EnableHeadersVisualStyles = false;//needed to set row headers
 
@@ -97,18 +97,18 @@ namespace Cliver.PdfDocumentParser
                                     default:
                                         throw new Exception("Unknown option: " + t2);
                                 }
-                                m2.FloatingAnchorId = m.FloatingAnchorId;
+                                m2.AnchorId = m.AnchorId;
                                 m2.Rectangle = m.Rectangle;
                                 m = m2;
                                 currentMarkControl = null;
                             }
                             break;
-                        case "FloatingAnchorId2":
-                            m.FloatingAnchorId = (int?)cs["FloatingAnchorId2"].Value;
+                        case "AnchorId2":
+                            m.AnchorId = (int?)cs["AnchorId2"].Value;
                             //setRowStatus(statuses.WARNING, row, "Changed");
                             break;
                     }
-                    object v = extractValueAndDrawSelectionBox(m.FloatingAnchorId, m.Rectangle, m.Type);
+                    object v = extractValueAndDrawSelectionBox(m.AnchorId, m.Rectangle, m.Type);
                     if (v != null)
                     {
                         switch (m.Type)
@@ -182,14 +182,14 @@ namespace Cliver.PdfDocumentParser
         {
             Template.Mark m = (Template.Mark)row.Tag;
             if (pointAnchor_renewImage)
-                setCurrentFloatingAnchorRow(m.FloatingAnchorId, true);
+                setCurrentAnchorRow(m.AnchorId, true);
             if (!m.IsSet())
             {
                 setRowStatus(statuses.WARNING, row, "Not set");
                 return false;
             }
             DataGridViewRow r;
-            Template.FloatingAnchor fa = getFloatingAnchor(m.FloatingAnchorId, out r);
+            Template.Anchor fa = getAnchor(m.AnchorId, out r);
             if (fa != null && !fa.IsSet())
             {
                 setRowStatus(statuses.ERROR, row, "Error");
@@ -202,7 +202,7 @@ namespace Cliver.PdfDocumentParser
                     case Template.Types.PdfText:
                         {
                             Template.Mark.PdfText ptv1 = (Template.Mark.PdfText)row.Tag;
-                            string t2 = (string)extractValueAndDrawSelectionBox(m.FloatingAnchorId, m.Rectangle, m.Type, pointAnchor_renewImage);
+                            string t2 = (string)extractValueAndDrawSelectionBox(m.AnchorId, m.Rectangle, m.Type, pointAnchor_renewImage);
                             if (ptv1.Text != t2)
                             {
                                 setRowStatus(statuses.ERROR, row, "Not found:!'" + t2 + "'");
@@ -214,7 +214,7 @@ namespace Cliver.PdfDocumentParser
                     case Template.Types.OcrText:
                         {
                             Template.Mark.OcrText otv1 = (Template.Mark.OcrText)row.Tag;
-                            string t2 = (string)extractValueAndDrawSelectionBox(m.FloatingAnchorId, m.Rectangle, m.Type, pointAnchor_renewImage);
+                            string t2 = (string)extractValueAndDrawSelectionBox(m.AnchorId, m.Rectangle, m.Type, pointAnchor_renewImage);
                             if (otv1.Text != t2)
                             {
                                 setRowStatus(statuses.ERROR, row, "Not found:!'" + t2 + "'");
@@ -226,7 +226,7 @@ namespace Cliver.PdfDocumentParser
                     case Template.Types.ImageData:
                         {
                             Template.Mark.ImageData idv1 = (Template.Mark.ImageData)row.Tag;
-                            ImageData id2 = (ImageData)extractValueAndDrawSelectionBox(m.FloatingAnchorId, m.Rectangle, m.Type, pointAnchor_renewImage);
+                            ImageData id2 = (ImageData)extractValueAndDrawSelectionBox(m.AnchorId, m.Rectangle, m.Type, pointAnchor_renewImage);
                             if (!idv1.ImageData_.ImageIsSimilar(id2, idv1.BrightnessTolerance, idv1.DifferentPixelNumberTolerance))
                             {
                                 setRowStatus(statuses.ERROR, row, "Not found");
@@ -239,9 +239,9 @@ namespace Cliver.PdfDocumentParser
                         throw new Exception("Unknown option: " + m.Type);
                 }
             }
-            if (m.FloatingAnchorId != null)
+            if (m.AnchorId != null)
             {
-                if (null != findAndDrawFloatingAnchor((int)m.FloatingAnchorId, pointAnchor_renewImage))
+                if (null != findAndDrawAnchor((int)m.AnchorId, pointAnchor_renewImage))
                 {
                     setRowStatus(statuses.SUCCESS, row, "Found");
                     return true;
@@ -277,7 +277,7 @@ namespace Cliver.PdfDocumentParser
 
                 marks.CurrentCell = marks[0, row.Index];
                 Template.Mark m = (Template.Mark)row.Tag;
-                setCurrentFloatingAnchorRow(m.FloatingAnchorId, true);
+                setCurrentAnchorRow(m.AnchorId, true);
 
                 Control c = currentMarkControl;
                 switch (m.Type)
@@ -361,7 +361,7 @@ namespace Cliver.PdfDocumentParser
             Template.Mark m = (Template.Mark)row.Tag;
             if (m == null)
                 return;
-            object v = extractValueAndDrawSelectionBox(m.FloatingAnchorId, r, m.Type);
+            object v = extractValueAndDrawSelectionBox(m.AnchorId, r, m.Type);
             if (v == null)
             {
                 setRowStatus(statuses.ERROR, row, "Not found");
@@ -398,7 +398,7 @@ namespace Cliver.PdfDocumentParser
         {
             row.Tag = m;
             row.Cells["Type2"].Value = m.Type;
-            row.Cells["FloatingAnchorId2"].Value = m.FloatingAnchorId;
+            row.Cells["AnchorId2"].Value = m.AnchorId;
 
             if (loadingTemplate)
                 return;

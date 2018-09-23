@@ -15,29 +15,29 @@ using System.Windows.Forms;
 
 namespace Cliver.PdfDocumentParser
 {
-    public partial class FloatingAnchorPdfTextControl : UserControl
+    public partial class AnchorPdfTextControl : UserControl
     {
-        public FloatingAnchorPdfTextControl()
+        public AnchorPdfTextControl()
         {
             InitializeComponent();
         }
 
-        public Template.FloatingAnchor.PdfText FloatingAnchor
+        public Template.Anchor.PdfText Anchor
         {
             get
             {
-                if (floatingAnchor == null)
-                    floatingAnchor = new Template.FloatingAnchor.PdfText();
-                floatingAnchor.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
-                floatingAnchor.PositionDeviation = (float)PositionDeviation.Value;
-                floatingAnchor.SearchRectangleMargin = (int)SearchRectangleMargin.Value;
-                return floatingAnchor;
+                if (anchor == null)
+                    anchor = new Template.Anchor.PdfText();
+                anchor.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
+                anchor.PositionDeviation = (float)PositionDeviation.Value;
+                anchor.SearchRectangleMargin = (int)SearchRectangleMargin.Value;
+                return anchor;
             }
             set
             {
                 if (value == null)
-                    value = new Template.FloatingAnchor.PdfText();
-                floatingAnchor = value;
+                    value = new Template.Anchor.PdfText();
+                anchor = value;
                 StringBuilder sb = new StringBuilder();
                 foreach (var l in Pdf.RemoveDuplicatesAndGetLines(value.CharBoxs.Select(x => new Pdf.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() }), true))
                 {
@@ -56,7 +56,7 @@ namespace Cliver.PdfDocumentParser
                 SearchRectangleMargin.Value = value.SearchRectangleMargin;
             }
         }
-        Template.FloatingAnchor.PdfText floatingAnchor;
+        Template.Anchor.PdfText anchor;
 
         //public bool Text
         //{

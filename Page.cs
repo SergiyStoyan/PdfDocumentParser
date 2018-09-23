@@ -96,11 +96,11 @@ namespace Cliver.PdfDocumentParser
                 if (_activeTemplateOcrCharBoxs != null)
                     _activeTemplateOcrCharBoxs = null;
 
-                floatingAnchorHashes2rectangles.Clear();
+                anchorHashes2rectangles.Clear();
             }
 
             //if (pageCollection.ActiveTemplate.Name != newTemplate.Name)
-            //    floatingAnchorValueStrings2rectangles.Clear();
+            //    anchorValueStrings2rectangles.Clear();
         }
 
         Bitmap getRectangleFromActiveTemplateBitmap(float x, float y, float w, float h)
@@ -174,29 +174,29 @@ namespace Cliver.PdfDocumentParser
 
         Bitmap _activeTemplateBitmap = null;
 
-        internal PointF? GetFloatingAnchorPoint0(int floatingAnchorId)
+        internal PointF? GetAnchorPoint0(int anchorId)
         {
-            Template.FloatingAnchor fa = pageCollection.ActiveTemplate.FloatingAnchors.Find(a => a.Id == floatingAnchorId);
-            List<RectangleF> rs = GetFloatingAnchorRectangles(fa);
+            Template.Anchor fa = pageCollection.ActiveTemplate.Anchors.Find(a => a.Id == anchorId);
+            List<RectangleF> rs = GetAnchorRectangles(fa);
             if (rs == null || rs.Count < 1)
                 return null;
             return new PointF(rs[0].X, rs[0].Y);
         }
 
-        internal List<RectangleF> GetFloatingAnchorRectangles(Template.FloatingAnchor fa)
+        internal List<RectangleF> GetAnchorRectangles(Template.Anchor fa)
         {
             List<RectangleF> rs;
             string fas = SerializationRoutines.Json.Serialize(fa);
-            if (!floatingAnchorHashes2rectangles.TryGetValue(fas, out rs))
+            if (!anchorHashes2rectangles.TryGetValue(fas, out rs))
             {
-                rs = findFloatingAnchor(fa);
-                floatingAnchorHashes2rectangles[fas] = rs;
+                rs = findAnchor(fa);
+                anchorHashes2rectangles[fas] = rs;
             }
             return rs;
         }
-        Dictionary<string, List<RectangleF>> floatingAnchorHashes2rectangles = new Dictionary<string, List<RectangleF>>();
+        Dictionary<string, List<RectangleF>> anchorHashes2rectangles = new Dictionary<string, List<RectangleF>>();
 
-        List<RectangleF> findFloatingAnchor(Template.FloatingAnchor fa)
+        List<RectangleF> findAnchor(Template.Anchor fa)
         {
             if (fa == null)
                 return null;
@@ -205,8 +205,8 @@ namespace Cliver.PdfDocumentParser
             {
                 case Template.Types.PdfText:
                     {
-                        Template.FloatingAnchor.PdfText ptv = (Template.FloatingAnchor.PdfText)fa;
-                        List<Template.FloatingAnchor.PdfText.CharBox> faes = ptv.CharBoxs;
+                        Template.Anchor.PdfText ptv = (Template.Anchor.PdfText)fa;
+                        List<Template.Anchor.PdfText.CharBox> faes = ptv.CharBoxs;
                         if (faes.Count < 1)
                             return null;
                         IEnumerable<Pdf.CharBox> bt0s;
@@ -214,7 +214,7 @@ namespace Cliver.PdfDocumentParser
                             bt0s = PdfCharBoxs.Where(a => a.Char == faes[0].Char);
                         else
                         {
-                            RectangleF sr = Template.FloatingAnchor.GetSearchRectangle(faes[0].Rectangle, ptv.SearchRectangleMargin);
+                            RectangleF sr = Template.Anchor.GetSearchRectangle(faes[0].Rectangle, ptv.SearchRectangleMargin);
                             bt0s = PdfCharBoxs.Where(a => a.Char == faes[0].Char && sr.Contains(a.R));
                         }
                         List<Pdf.CharBox> bts = new List<Pdf.CharBox>();
@@ -251,8 +251,8 @@ namespace Cliver.PdfDocumentParser
                     return null;
                 case Template.Types.OcrText:
                     {
-                        Template.FloatingAnchor.OcrText otv = (Template.FloatingAnchor.OcrText)fa;
-                        List<Template.FloatingAnchor.OcrText.CharBox> faes = otv.CharBoxs;
+                        Template.Anchor.OcrText otv = (Template.Anchor.OcrText)fa;
+                        List<Template.Anchor.OcrText.CharBox> faes = otv.CharBoxs;
                         if (faes.Count < 1)
                             return null;
                         IEnumerable<Ocr.CharBox> bt0s;
@@ -260,7 +260,7 @@ namespace Cliver.PdfDocumentParser
                             bt0s = ActiveTemplateOcrCharBoxs.Where(a => a.Char == faes[0].Char);
                         else
                         {
-                            RectangleF sr = Template.FloatingAnchor.GetSearchRectangle(faes[0].Rectangle, otv.SearchRectangleMargin);
+                            RectangleF sr = Template.Anchor.GetSearchRectangle(faes[0].Rectangle, otv.SearchRectangleMargin);
                             bt0s = ActiveTemplateOcrCharBoxs.Where(a => a.Char == faes[0].Char && sr.Contains(a.R));
                         }
                         List<Ocr.CharBox> bts = new List<Ocr.CharBox>();
@@ -297,8 +297,8 @@ namespace Cliver.PdfDocumentParser
                     return null;
                 case Template.Types.ImageData:
                     {
-                        Template.FloatingAnchor.ImageData idv = (Template.FloatingAnchor.ImageData)fa;
-                        List<Template.FloatingAnchor.ImageData.ImageBox> ibs = idv.ImageBoxs;
+                        Template.Anchor.ImageData idv = (Template.Anchor.ImageData)fa;
+                        List<Template.Anchor.ImageData.ImageBox> ibs = idv.ImageBoxs;
                         if (ibs.Count < 1)
                             return null;
                         Point shift;
@@ -310,7 +310,7 @@ namespace Cliver.PdfDocumentParser
                         }
                         else
                         {
-                            RectangleF sr = Template.FloatingAnchor.GetSearchRectangle(ibs[0].Rectangle, idv.SearchRectangleMargin);
+                            RectangleF sr = Template.Anchor.GetSearchRectangle(ibs[0].Rectangle, idv.SearchRectangleMargin);
                             id0 = new ImageData(getRectangleFromActiveTemplateBitmap(sr.X / Settings.ImageProcessing.Image2PdfResolutionRatio, sr.Y / Settings.ImageProcessing.Image2PdfResolutionRatio, sr.Width / Settings.ImageProcessing.Image2PdfResolutionRatio, sr.Height / Settings.ImageProcessing.Image2PdfResolutionRatio));
                             shift = new Point(sr.X < 0 ? 0 : (int)sr.X, sr.Y < 0 ? 0 : (int)sr.Y);
                         }
@@ -399,24 +399,24 @@ namespace Cliver.PdfDocumentParser
 
         public bool IsDocumentFirstPage(out string error)
         {
-            if (pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks == null || pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.Count < 1)
+            if (pageCollection.ActiveTemplate.Marks == null || pageCollection.ActiveTemplate.Marks.Count < 1)
             {
-                error = "Template '" + pageCollection.ActiveTemplate.Name + "' has no DocumentFirstPageRecognitionMarks defined.";
+                error = "Template '" + pageCollection.ActiveTemplate.Name + "' has no Marks defined.";
                 return false;
             }
-            foreach (Template.Mark m in pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks)
+            foreach (Template.Mark m in pageCollection.ActiveTemplate.Marks)
             {
-                if (m.FloatingAnchorId != null)
+                if (m.AnchorId != null)
                 {
-                    PointF? p0 = GetFloatingAnchorPoint0((int)m.FloatingAnchorId);
+                    PointF? p0 = GetAnchorPoint0((int)m.AnchorId);
                     if (p0 == null)
                     {
-                        error = "FloatingAnchor[" + m.FloatingAnchorId + "] not found.";
+                        error = "Anchor[" + m.AnchorId + "] not found.";
                         return false;
                     }
                     continue;
                 }
-                object v2 = GetValue(m.FloatingAnchorId, m.Rectangle, m.Type, out error);
+                object v2 = GetValue(m.AnchorId, m.Rectangle, m.Type, out error);
                 if (v2 == null)
                     return false;
                 switch (m.Type)
@@ -428,7 +428,7 @@ namespace Cliver.PdfDocumentParser
                             string t2 = NormalizeText((string)v2);
                             if (t1 == t2)
                                 continue;
-                            error = "marks[" + pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
+                            error = "marks[" + pageCollection.ActiveTemplate.Marks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
                             return false;
                         }
                     case Template.Types.OcrText:
@@ -438,7 +438,7 @@ namespace Cliver.PdfDocumentParser
                             string t2 = NormalizeText((string)v2);
                             if (t1 == t2)
                                 continue;
-                            error = "marks[" + pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
+                            error = "marks[" + pageCollection.ActiveTemplate.Marks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
                             return false;
                         }
                     case Template.Types.ImageData:
@@ -446,7 +446,7 @@ namespace Cliver.PdfDocumentParser
                             Template.Mark.ImageData idv1 = (Template.Mark.ImageData)m;
                             if (idv1.ImageData_.ImageIsSimilar((ImageData)v2, idv1.BrightnessTolerance, idv1.DifferentPixelNumberTolerance))
                                 continue;
-                            error = "marks[" + pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.IndexOf(m) + "]: image is not similar.";
+                            error = "marks[" + pageCollection.ActiveTemplate.Marks.IndexOf(m) + "]: image is not similar.";
                             return false;
                         }
                     default:
@@ -459,19 +459,19 @@ namespace Cliver.PdfDocumentParser
 
         //        public bool IsDocumentFirstPage(out string error)
         //        {
-        //            if (pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks == null || pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.Count < 1)
+        //            if (pageCollection.ActiveTemplate.Marks == null || pageCollection.ActiveTemplate.Marks.Count < 1)
         //            {
-        //                error = "Template '" + pageCollection.ActiveTemplate.Name + "' has no DocumentFirstPageRecognitionMarks defined.";
+        //                error = "Template '" + pageCollection.ActiveTemplate.Name + "' has no Marks defined.";
         //                return false;
         //            }
-        //            foreach (Template.Mark m in pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks)
+        //            foreach (Template.Mark m in pageCollection.ActiveTemplate.Marks)
         //            {
-        //                if (m.FloatingAnchorId != null && m.GetValue() == null)
+        //                if (m.AnchorId != null && m.GetValue() == null)
         //                {
-        //                    PointF? p0 = GetFloatingAnchorPoint0((int)m.FloatingAnchorId);
+        //                    PointF? p0 = GetAnchorPoint0((int)m.AnchorId);
         //                    if (p0 == null)
         //                    {
-        //                        error = "FloatingAnchor[" + m.FloatingAnchorId + "] not found.";
+        //                        error = "Anchor[" + m.AnchorId + "] not found.";
         //                        return false;
         //                    }
         //                    continue;
@@ -480,7 +480,7 @@ namespace Cliver.PdfDocumentParser
         //                {
         //                    case Template.Types.PdfText:
         //                        {
-        //                            List<Template.Mark.FloatingAnchor.PdfText.CharBox> ses = ((Template.FloatingAnchor.PdfText)fa.GetValue()).CharBoxs;
+        //                            List<Template.Mark.Anchor.PdfText.CharBox> ses = ((Template.Anchor.PdfText)fa.GetValue()).CharBoxs;
         //                        if (ses.Count< 1)
         //                            return null;
         //                        List<Pdf.CharBox> bts = new List<Pdf.CharBox>();
@@ -510,7 +510,7 @@ namespace Cliver.PdfDocumentParser
         //                    return null;
         //                case Template.Types.OcrText:
         //                    {
-        //                        List<Template.FloatingAnchor.OcrText.CharBox> ses = ((Template.FloatingAnchor.OcrText)fa.GetValue()).CharBoxs;
+        //                        List<Template.Anchor.OcrText.CharBox> ses = ((Template.Anchor.OcrText)fa.GetValue()).CharBoxs;
         //                        if (ses.Count< 1)
         //                            return null;
         //                        List<Ocr.CharBox> bts = new List<Ocr.CharBox>();
@@ -539,7 +539,7 @@ namespace Cliver.PdfDocumentParser
         //                    }
         //                    return null;
         //                case Template.Types.ImageData:
-        //                    List<Template.FloatingAnchor.ImageData.ImageBox> ibs = ((Template.FloatingAnchor.ImageData)fa.GetValue()).ImageBoxs;
+        //                    List<Template.Anchor.ImageData.ImageBox> ibs = ((Template.Anchor.ImageData)fa.GetValue()).ImageBoxs;
         //                    if (ibs.Count< 1)
         //                        return null;
         //                    List<RectangleF> bestRs = null;
@@ -582,7 +582,7 @@ namespace Cliver.PdfDocumentParser
         //            }
         //    }
 
-        public object GetValue(int? floatingAnchorId, Template.RectangleF r_, Template.Types valueType, out string error)
+        public object GetValue(int? anchorId, Template.RectangleF r_, Template.Types valueType, out string error)
         {
             //try
             //{
@@ -597,13 +597,13 @@ namespace Cliver.PdfDocumentParser
                 return null;
             }
             PointF point0 = new PointF(0, 0);
-            if (floatingAnchorId != null)
+            if (anchorId != null)
             {
                 PointF? p0;
-                p0 = GetFloatingAnchorPoint0((int)floatingAnchorId);
+                p0 = GetAnchorPoint0((int)anchorId);
                 if (p0 == null)
                 {
-                    error = "FloatingAnchor[" + floatingAnchorId + "] is not found.";
+                    error = "Anchor[" + anchorId + "] is not found.";
                     return null;
                 }
                 point0 = (PointF)p0;

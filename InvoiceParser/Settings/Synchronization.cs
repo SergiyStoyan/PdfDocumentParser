@@ -29,7 +29,7 @@ namespace Cliver.InvoiceParser
         {
             public string SynchronizationFolder = null;
             public bool Synchronize = false;
-            public Regex SynchronizeFileFilter = new Regex(@"Templates");
+            public Regex SynchronizeFileFilter = new Regex(@"Template2s");
 
             public override void Loaded()
             {
@@ -131,7 +131,7 @@ namespace Cliver.InvoiceParser
                     if (PathRoutines.ArePathsEqual(file2, Config.StorageDir + @"\Templates.Cliver.InvoiceParser.Settings+TemplatesSettings.json"))
                     {
                         Message.Inform("A newer templates have been downloaded from the remote storage. Upon closing this message they will be updated in the application.");
-                        Settings.Templates.Reload();
+                        Settings.Template2s.Reload();
                         MainForm.This.BeginInvoke(() => { MainForm.This.LoadTemplates(); });
                     }
                 }

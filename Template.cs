@@ -43,9 +43,9 @@ namespace Cliver.PdfDocumentParser
         public bool AutoDeskew = false;
         public int AutoDeskewThreshold = 100;
 
-        public List<FloatingAnchor> FloatingAnchors;
+        public List<Anchor> Anchors;
 
-        public List<Mark> DocumentFirstPageRecognitionMarks;
+        public List<Mark> Marks;
 
         public List<Field> Fields;
 
@@ -94,7 +94,7 @@ namespace Cliver.PdfDocumentParser
 
         public abstract class Mark
         {
-            public int? FloatingAnchorId;//when set, Rectangle.X,Y are bound to location of the anchor as to zero point
+            public int? AnchorId;//when set, Rectangle.X,Y are bound to location of the anchor as to zero point
             public RectangleF Rectangle;
 
             public Mark()
@@ -113,7 +113,7 @@ namespace Cliver.PdfDocumentParser
 
             public bool IsSet()
             {
-                return FloatingAnchorId != null || Rectangle != null;
+                return AnchorId != null || Rectangle != null;
             }
 
             public class PdfText : Mark
@@ -142,14 +142,14 @@ namespace Cliver.PdfDocumentParser
             ImageData
         }
 
-        public abstract class FloatingAnchor
+        public abstract class Anchor
         {
             public int Id;
             public int SearchRectangleMargin = -1;//px
             public float PositionDeviation = 0.1f;
             public bool PositionDeviationIsAbsolute = true;
 
-            public FloatingAnchor()
+            public Anchor()
             {
                 if (this is PdfText)
                     Type = Types.PdfText;
@@ -175,7 +175,7 @@ namespace Cliver.PdfDocumentParser
                 return r;
             }
 
-            public class PdfText : FloatingAnchor
+            public class PdfText : Anchor
             {
                 public List<CharBox> CharBoxs = new List<CharBox>();
                 public class CharBox
@@ -190,7 +190,7 @@ namespace Cliver.PdfDocumentParser
                 }
             }
 
-            public class OcrText : FloatingAnchor
+            public class OcrText : Anchor
             {
                 public List<CharBox> CharBoxs = new List<CharBox>();
                 public class CharBox
@@ -205,7 +205,7 @@ namespace Cliver.PdfDocumentParser
                 }
             }
 
-            public class ImageData : FloatingAnchor
+            public class ImageData : Anchor
             {
                 public List<ImageBox> ImageBoxs = new List<ImageBox>();
                 public class ImageBox
@@ -227,9 +227,9 @@ namespace Cliver.PdfDocumentParser
 
         public abstract class Field
         {
-            public int? FloatingAnchorId;//when set, Rectangle.X,Y are bound to location of the anchor as to zero point
+            public int? AnchorId;//when set, Rectangle.X,Y are bound to location of the anchor as to zero point
             public string Name;
-            public RectangleF Rectangle;//when FloatingAnchor is set, Rectangle.X,Y are bound to location of the anchor as to zero point
+            public RectangleF Rectangle;//when Anchor is set, Rectangle.X,Y are bound to location of the anchor as to zero point
 
             public Field()
             {

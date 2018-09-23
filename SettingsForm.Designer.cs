@@ -38,9 +38,9 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label4 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.FloatingAnchorSecondaryBoxColor = new System.Windows.Forms.Button();
+            this.AnchorSecondaryBoxColor = new System.Windows.Forms.Button();
             this.SelectionBoxColor = new System.Windows.Forms.Button();
-            this.FloatingAnchorMasterBoxColor = new System.Windows.Forms.Button();
+            this.AnchorMasterBoxColor = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
@@ -168,26 +168,26 @@
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.White;
-            this.panel2.Controls.Add(this.FloatingAnchorSecondaryBoxColor);
+            this.panel2.Controls.Add(this.AnchorSecondaryBoxColor);
             this.panel2.Controls.Add(this.SelectionBoxColor);
-            this.panel2.Controls.Add(this.FloatingAnchorMasterBoxColor);
+            this.panel2.Controls.Add(this.AnchorMasterBoxColor);
             this.panel2.Location = new System.Drawing.Point(240, 15);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(63, 93);
             this.panel2.TabIndex = 54;
             // 
-            // FloatingAnchorSecondaryBoxColor
+            // AnchorSecondaryBoxColor
             // 
-            this.FloatingAnchorSecondaryBoxColor.BackColor = System.Drawing.Color.White;
-            this.FloatingAnchorSecondaryBoxColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.FloatingAnchorSecondaryBoxColor.ForeColor = System.Drawing.Color.Maroon;
-            this.FloatingAnchorSecondaryBoxColor.Location = new System.Drawing.Point(6, 63);
-            this.FloatingAnchorSecondaryBoxColor.Name = "FloatingAnchorSecondaryBoxColor";
-            this.FloatingAnchorSecondaryBoxColor.Size = new System.Drawing.Size(49, 22);
-            this.FloatingAnchorSecondaryBoxColor.TabIndex = 57;
-            this.FloatingAnchorSecondaryBoxColor.Text = "...";
-            this.FloatingAnchorSecondaryBoxColor.UseVisualStyleBackColor = false;
-            this.FloatingAnchorSecondaryBoxColor.Click += new System.EventHandler(this.FloatingAnchorSecondaryBoxColor_Click);
+            this.AnchorSecondaryBoxColor.BackColor = System.Drawing.Color.White;
+            this.AnchorSecondaryBoxColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.AnchorSecondaryBoxColor.ForeColor = System.Drawing.Color.Maroon;
+            this.AnchorSecondaryBoxColor.Location = new System.Drawing.Point(6, 63);
+            this.AnchorSecondaryBoxColor.Name = "AnchorSecondaryBoxColor";
+            this.AnchorSecondaryBoxColor.Size = new System.Drawing.Size(49, 22);
+            this.AnchorSecondaryBoxColor.TabIndex = 57;
+            this.AnchorSecondaryBoxColor.Text = "...";
+            this.AnchorSecondaryBoxColor.UseVisualStyleBackColor = false;
+            this.AnchorSecondaryBoxColor.Click += new System.EventHandler(this.AnchorSecondaryBoxColor_Click);
             // 
             // SelectionBoxColor
             // 
@@ -202,18 +202,18 @@
             this.SelectionBoxColor.UseVisualStyleBackColor = false;
             this.SelectionBoxColor.Click += new System.EventHandler(this.SelectionBoxColor_Click);
             // 
-            // FloatingAnchorMasterBoxColor
+            // AnchorMasterBoxColor
             // 
-            this.FloatingAnchorMasterBoxColor.BackColor = System.Drawing.Color.White;
-            this.FloatingAnchorMasterBoxColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.FloatingAnchorMasterBoxColor.ForeColor = System.Drawing.Color.Maroon;
-            this.FloatingAnchorMasterBoxColor.Location = new System.Drawing.Point(6, 35);
-            this.FloatingAnchorMasterBoxColor.Name = "FloatingAnchorMasterBoxColor";
-            this.FloatingAnchorMasterBoxColor.Size = new System.Drawing.Size(49, 22);
-            this.FloatingAnchorMasterBoxColor.TabIndex = 55;
-            this.FloatingAnchorMasterBoxColor.Text = "...";
-            this.FloatingAnchorMasterBoxColor.UseVisualStyleBackColor = false;
-            this.FloatingAnchorMasterBoxColor.Click += new System.EventHandler(this.FloatingAnchorMasterBoxColor_Click);
+            this.AnchorMasterBoxColor.BackColor = System.Drawing.Color.White;
+            this.AnchorMasterBoxColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.AnchorMasterBoxColor.ForeColor = System.Drawing.Color.Maroon;
+            this.AnchorMasterBoxColor.Location = new System.Drawing.Point(6, 35);
+            this.AnchorMasterBoxColor.Name = "AnchorMasterBoxColor";
+            this.AnchorMasterBoxColor.Size = new System.Drawing.Size(49, 22);
+            this.AnchorMasterBoxColor.TabIndex = 55;
+            this.AnchorMasterBoxColor.Text = "...";
+            this.AnchorMasterBoxColor.UseVisualStyleBackColor = false;
+            this.AnchorMasterBoxColor.Click += new System.EventHandler(this.AnchorMasterBoxColor_Click);
             // 
             // label1
             // 
@@ -319,8 +319,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button SelectionBoxColor;
-        private System.Windows.Forms.Button FloatingAnchorMasterBoxColor;
+        private System.Windows.Forms.Button AnchorMasterBoxColor;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button FloatingAnchorSecondaryBoxColor;
+        private System.Windows.Forms.Button AnchorSecondaryBoxColor;
     }
 }

@@ -18,14 +18,14 @@ namespace Cliver.InvoiceParser
 {
     public partial class Template2Form : Form
     {
-        public Template2Form(Template t)
+        public Template2Form(Template2 t)
         {
             InitializeComponent();
 
             this.Icon = AssemblyRoutines.GetAppIcon();
-            Text = Application.ProductName + ": additional properties of '" + t.Base.Name + "'";
+            Text = Application.ProductName + ": additional properties of '" + t.Template.Name + "'";
 
-            template = t;
+            template2 = t;
 
             Active.Checked = t.Active;
             Group.Text = t.Group;
@@ -38,13 +38,13 @@ namespace Cliver.InvoiceParser
                 FileFilterRegex.Text = "";
             CanShareFileWithAnotherTemplates.Checked = t.CanShareFileWithAnotherTemplates;
         }
-        Template template;
+        Template2 template2;
 
         private void bTestFileFilterRegex_Click(object sender, EventArgs e)
         {
             try
             {
-                string d = string.IsNullOrWhiteSpace(template.Base.Editor.TestFile) ? Settings.General.InputFolder : PathRoutines.GetDirFromPath(template.Base.Editor.TestFile);
+                string d = string.IsNullOrWhiteSpace(template2.Template.Editor.TestFile) ? Settings.General.InputFolder : PathRoutines.GetDirFromPath(template2.Template.Editor.TestFile);
                 FileFilterForm f = new FileFilterForm(d, SerializationRoutines.Json.Deserialize<Regex>(FileFilterRegex.Text));
                 f.ShowDialog();
             }
@@ -58,13 +58,13 @@ namespace Cliver.InvoiceParser
         {
             try
             {
-                template.Active = Active.Checked;
-                template.Group = Group.Text;
-                template.Comment = Comment.Text;
-                template.OrderWeight = (float)OrderWeight.Value;
-                template.DetectingTemplateLastPageNumber = (uint)DetectingTemplateLastPageNumber.Value;
-                template.FileFilterRegex = SerializationRoutines.Json.Deserialize<Regex>(FileFilterRegex.Text);
-                template.CanShareFileWithAnotherTemplates = CanShareFileWithAnotherTemplates.Checked;
+                template2.Active = Active.Checked;
+                template2.Group = Group.Text;
+                template2.Comment = Comment.Text;
+                template2.OrderWeight = (float)OrderWeight.Value;
+                template2.DetectingTemplateLastPageNumber = (uint)DetectingTemplateLastPageNumber.Value;
+                template2.FileFilterRegex = SerializationRoutines.Json.Deserialize<Regex>(FileFilterRegex.Text);
+                template2.CanShareFileWithAnotherTemplates = CanShareFileWithAnotherTemplates.Checked;
 
                 Close();
                 DialogResult = DialogResult.OK;
