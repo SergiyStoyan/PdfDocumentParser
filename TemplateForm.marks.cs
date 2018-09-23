@@ -99,21 +99,15 @@ namespace Cliver.PdfDocumentParser
                                 m2.Rectangle = m.Rectangle;
                                 m = m2;
 
-                                if (m.FloatingAnchorId == null && m.Rectangle == null)
-                                {
-                                    setRowStatus(statuses.NEUTRAL, row, "");
-                                    setMarkRow(row, m);
+                                setMarkRow(row, m);
+                                if (!m.IsSet())
                                     return;
-                                }
                                 object v = extractValueAndDrawSelectionBox(m.FloatingAnchorId, m.Rectangle, t);
                                 if (v == null)
                                 {
                                     setRowStatus(statuses.ERROR, row, "Not found");
-                                    setMarkRow(row, m);
                                     return;
                                 }
-                                else
-                                    setRowStatus(statuses.SUCCESS, row, "Set");
                                 switch (t)
                                 {
                                     case Template.Types.PdfText:
@@ -267,19 +261,13 @@ namespace Cliver.PdfDocumentParser
             Template.Mark m = (Template.Mark)row.Tag;
             if (m == null)
                 return;
-            if (!m.IsSet())
+            object v = extractValueAndDrawSelectionBox(m.FloatingAnchorId, r, m.Type);
+            if (v == null)
             {
-                setRowStatus(statuses.WARNING, row, "Not set");
-                setMarkRow(row, null);
+                setRowStatus(statuses.ERROR, row, "Not found");
                 return;
             }
-            Template.Types vt = (Template.Types)row.Cells["Type2"].Value;
-            object v = extractValueAndDrawSelectionBox(m.FloatingAnchorId, r, vt);
-            if (v == null)
-                setRowStatus(statuses.ERROR, row, "Not found");
-            else
-                setRowStatus(statuses.SUCCESS, row, "Set");
-            switch (vt)
+            switch (m.Type)
             {
                 case Template.Types.PdfText:
                     {
@@ -312,7 +300,7 @@ namespace Cliver.PdfDocumentParser
                     }
                     break;
                 default:
-                    throw new Exception("Unknown option: " + vt);
+                    throw new Exception("Unknown option: " + m.Type);
             }
         }
 
@@ -333,6 +321,10 @@ namespace Cliver.PdfDocumentParser
             //        setRowStatus(statuses.SUCCESS, row, "Found");
             //    else
             //        setRowStatus(statuses.ERROR, row, "Not found");
+            if (m.IsSet())
+                setRowStatus(statuses.SUCCESS, currentMarkRow, "Set");
+            else
+                setRowStatus(statuses.WARNING, currentMarkRow, "Not set");
         }
 
         void setMarkControl(DataGridViewRow row)
@@ -414,8 +406,6 @@ namespace Cliver.PdfDocumentParser
                 default:
                     throw new Exception("Unknown option: " + m.Type);
             }
-            if (!m2.IsSet())
-                setRowStatus(statuses.WARNING, currentMarkRow, "Not set");
             setMarkRow(currentMarkRow, m2);
         }
     }
