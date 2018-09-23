@@ -35,7 +35,7 @@ namespace Cliver.InvoiceParser
                     if (Template2s.Count < 1)
                     {
                         if (Settings.Templates == null)
-                            Config.ReloadField( "Templates" );
+                            Config.ReloadField("Templates");
                         foreach (Template0 t0 in Settings.Templates.Templates)
                         {
                             Template2 t = new Template2
@@ -216,7 +216,8 @@ namespace Cliver.InvoiceParser
                         Save();
                         Reload();
                         if (Template2s.Count > 0)
-                            System.IO.File.Delete(Settings.Templates.__File);
+                            if (System.IO.File.Exists(Settings.Templates.__File))
+                                System.IO.File.Delete(Settings.Templates.__File);
                     }
                 }
                 catch (Exception e)

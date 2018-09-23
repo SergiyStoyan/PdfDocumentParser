@@ -128,7 +128,9 @@ namespace Cliver.InvoiceParser
                         return;
                     copy(file, file2);
                     //if (file2 == Settings.Templates.__File)//in the start it is null
-                    if (PathRoutines.ArePathsEqual(file2, Config.StorageDir + @"\Templates.Cliver.InvoiceParser.Settings+TemplatesSettings.json"))
+                    if (Settings.Template2s.__File == null)
+                        return;
+                    if (PathRoutines.ArePathsEqual(file2, Settings.Template2s.__File))
                     {
                         Message.Inform("A newer templates have been downloaded from the remote storage. Upon closing this message they will be updated in the application.");
                         Settings.Template2s.Reload();
