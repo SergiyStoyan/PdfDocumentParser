@@ -129,8 +129,8 @@ namespace Cliver.PdfDocumentParser
                                     break;
 
                                 RectangleF selectedR = new RectangleF(selectionBoxPoint1, new SizeF(selectionBoxPoint2.X - selectionBoxPoint1.X, selectionBoxPoint2.Y - selectionBoxPoint1.Y));
-                                Template.Types type = (Template.Types)floatingAnchors.SelectedRows[0].Cells["Type3"].Value;
-                                switch (type)
+                                Template.FloatingAnchor fa = (Template.FloatingAnchor)floatingAnchors.SelectedRows[0].Tag;
+                                switch (fa.Type)
                                 {
                                     case Template.Types.PdfText:
                                         if (selectedPdfCharBoxs == null/* || (ModifierKeys & Keys.Control) != Keys.Control*/)
@@ -169,49 +169,47 @@ namespace Cliver.PdfDocumentParser
                                         }
                                         break;
                                     default:
-                                        throw new Exception("Unknown option: " + type);
+                                        throw new Exception("Unknown option: " + fa.Type);
                                 }
 
                                 if ((ModifierKeys & Keys.Control) != Keys.Control)
                                     setFloatingAnchorFromSelectedElements();
                             }
                             break;
-                        case Modes.SetDocumentFirstPageRecognitionTextMarks:
+                        case Modes.SetDocumentFirstPageRecognitionTextMark:
                             {
-                                if (documentFirstPageRecognitionMarks.SelectedRows.Count < 1)
+                                if (marks.SelectedRows.Count < 1)
                                     break;
-                             DataGridViewRow row=   documentFirstPageRecognitionMarks.SelectedRows[0];
-                                var cs = row.Cells;
-                                int? fai = (int?)cs["FloatingAnchorId2"].Value;
-                                if (fai != null)
+                                DataGridViewRow row = marks.SelectedRows[0];
+                                Template.Mark m = (Template.Mark)row.Tag;
+                                if (m.FloatingAnchorId != null)
                                 {
                                     pages.ActiveTemplate = getTemplateFromUI(false);
-                                    PointF? p = pages[currentPage].GetFloatingAnchorPoint0((int)fai);
+                                    PointF? p = pages[currentPage].GetFloatingAnchorPoint0((int)m.FloatingAnchorId);
                                     if (p == null)
-                                        throw new Exception("Could not find FloatingAnchor[" + fai + "] in the page");
+                                        throw new Exception("Could not find FloatingAnchor[" + m.FloatingAnchorId + "] in the page");
                                     r.X -= ((PointF)p).X;
                                     r.Y -= ((PointF)p).Y;
                                 }
                                 setMarkRectangle(row, r);
                             }
                             break;
-                        case Modes.SetFieldRectangle:
+                        case Modes.SetField:
                             {
                                 if (fields.SelectedRows.Count < 1)
                                     break;
-                                var cs = fields.SelectedRows[0].Cells;
-                                int? fai = (int?)cs["FloatingAnchorId"].Value;
-                                if (fai != null)
+                                var row = fields.SelectedRows[0];
+                                Template.Field f = (Template.Field)row.Tag;
+                                if (f.FloatingAnchorId != null)
                                 {
                                     pages.ActiveTemplate = getTemplateFromUI(false);
-                                    PointF? p = pages[currentPage].GetFloatingAnchorPoint0((int)fai);
+                                    PointF? p = pages[currentPage].GetFloatingAnchorPoint0((int)f.FloatingAnchorId);
                                     if (p == null)
-                                        throw new Exception("Could not find FloatingAnchor[" + fai + "] in the page");
+                                        throw new Exception("Could not find FloatingAnchor[" + f.FloatingAnchorId + "] in the page");
                                     r.X -= ((PointF)p).X;
                                     r.Y -= ((PointF)p).Y;
                                 }
-                                cs["Rectangle"].Value = SerializationRoutines.Json.Serialize(r);
-                                //fields.EndEdit();
+                                setFieldRectangle(row, r);
                             }
                             break;
                         default:
@@ -323,8 +321,8 @@ namespace Cliver.PdfDocumentParser
 
             Load += delegate
             {
-                //if (documentFirstPageRecognitionMarks.Rows.Count > 0 && !documentFirstPageRecognitionMarks.Rows[0].IsNewRow)
-                //    documentFirstPageRecognitionMarks.Rows[0].Selected = true;
+                //if (marks.Rows.Count > 0 && !marks.Rows[0].IsNewRow)
+                //    marks.Rows[0].Selected = true;
             };
 
             save.Click += Save_Click;
@@ -355,8 +353,8 @@ namespace Cliver.PdfDocumentParser
         {
             NULL,
             SetFloatingAnchor,
-            SetDocumentFirstPageRecognitionTextMarks,
-            SetFieldRectangle,
+            SetDocumentFirstPageRecognitionTextMark,
+            SetField,
         }
         Modes mode
         {
@@ -364,10 +362,10 @@ namespace Cliver.PdfDocumentParser
             {
                 if (floatingAnchors.SelectedRows.Count > 0)
                     return Modes.SetFloatingAnchor;
-                if (documentFirstPageRecognitionMarks.SelectedRows.Count > 0)
-                    return Modes.SetDocumentFirstPageRecognitionTextMarks;
+                if (marks.SelectedRows.Count > 0)
+                    return Modes.SetDocumentFirstPageRecognitionTextMark;
                 if (fields.SelectedRows.Count > 0)
-                    return Modes.SetFieldRectangle;
+                    return Modes.SetField;
                 //foreach (DataGridViewRow r in fields.Rows)
                 //{
                 //    if ((bool?)r.Cells["cPageRecognitionTextMarks"].Value == true)

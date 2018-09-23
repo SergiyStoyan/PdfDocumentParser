@@ -37,7 +37,7 @@
             this.Id3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Type3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.label10 = new System.Windows.Forms.Label();
-            this.documentFirstPageRecognitionMarks = new System.Windows.Forms.DataGridView();
+            this.marks = new System.Windows.Forms.DataGridView();
             this.label4 = new System.Windows.Forms.Label();
             this.tableControlsContainer = new System.Windows.Forms.SplitContainer();
             this.anchorControl = new System.Windows.Forms.GroupBox();
@@ -109,7 +109,7 @@
             this.tablesContainer.Panel2.SuspendLayout();
             this.tablesContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.floatingAnchors)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.documentFirstPageRecognitionMarks)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.marks)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tableControlsContainer)).BeginInit();
             this.tableControlsContainer.Panel1.SuspendLayout();
             this.tableControlsContainer.Panel2.SuspendLayout();
@@ -222,7 +222,7 @@
             // 
             // tablesContainer.Panel2
             // 
-            this.tablesContainer.Panel2.Controls.Add(this.documentFirstPageRecognitionMarks);
+            this.tablesContainer.Panel2.Controls.Add(this.marks);
             this.tablesContainer.Panel2.Controls.Add(this.label4);
             this.tablesContainer.Size = new System.Drawing.Size(169, 304);
             this.tablesContainer.SplitterDistance = 188;
@@ -266,19 +266,19 @@
             this.label10.TabIndex = 49;
             this.label10.Text = "Floating Anchors:";
             // 
-            // documentFirstPageRecognitionMarks
+            // marks
             // 
-            this.documentFirstPageRecognitionMarks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.documentFirstPageRecognitionMarks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.marks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.marks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.FloatingAnchorId2,
             this.Type2});
-            this.documentFirstPageRecognitionMarks.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.documentFirstPageRecognitionMarks.Location = new System.Drawing.Point(0, 13);
-            this.documentFirstPageRecognitionMarks.MultiSelect = false;
-            this.documentFirstPageRecognitionMarks.Name = "documentFirstPageRecognitionMarks";
-            this.documentFirstPageRecognitionMarks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.documentFirstPageRecognitionMarks.Size = new System.Drawing.Size(169, 99);
-            this.documentFirstPageRecognitionMarks.TabIndex = 29;
+            this.marks.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.marks.Location = new System.Drawing.Point(0, 13);
+            this.marks.MultiSelect = false;
+            this.marks.Name = "marks";
+            this.marks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.marks.Size = new System.Drawing.Size(169, 99);
+            this.marks.TabIndex = 29;
             // 
             // label4
             // 
@@ -885,7 +885,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.tablesContainer)).EndInit();
             this.tablesContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.floatingAnchors)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.documentFirstPageRecognitionMarks)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.marks)).EndInit();
             this.tableControlsContainer.Panel1.ResumeLayout(false);
             this.tableControlsContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.tableControlsContainer)).EndInit();
@@ -917,7 +917,7 @@
         private System.Windows.Forms.Button bNextPage;
         private System.Windows.Forms.Button bPrevPage;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.DataGridView documentFirstPageRecognitionMarks;
+        private System.Windows.Forms.DataGridView marks;
         private System.Windows.Forms.Label selectionCoordinates;
         private System.Windows.Forms.Label lTotalPages;
         private System.Windows.Forms.Label label6;

@@ -29,6 +29,8 @@ namespace Cliver.InvoiceParser
             {
                 try
                 {
+                    __Indented = false;
+
                     //TEMPORARY: conversion to new format
                     if (Templates.Count > 0 && Templates[0].Base == null)
                     {

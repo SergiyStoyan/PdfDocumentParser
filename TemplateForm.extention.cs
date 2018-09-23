@@ -77,24 +77,19 @@ namespace Cliver.PdfDocumentParser
                     {
                         int i = floatingAnchors.Rows.Add();
                         var row = floatingAnchors.Rows[i];
-                        row.Tag = fa;
-                        row.Cells["Id3"].Value = fa.Id;
-                        row.Cells["Type3"].Value = fa.Type;
+                        setFloatingAnchorRow(row, fa);
                     }
                     onFloatingAnchorsChanged();
                 }
 
-                documentFirstPageRecognitionMarks.Rows.Clear();
+                marks.Rows.Clear();
                 if (t.DocumentFirstPageRecognitionMarks != null)
                 {
                     foreach (Template.Mark m in t.DocumentFirstPageRecognitionMarks)
                     {
-                        int i = documentFirstPageRecognitionMarks.Rows.Add();
-                        var row = documentFirstPageRecognitionMarks.Rows[i];
-                        var cs = row.Cells;
-                        cs["Type2"].Value = m.Type;
-                        cs["FloatingAnchorId2"].Value = m.FloatingAnchorId;
-                        row.Tag = m;
+                        int i = marks.Rows.Add();
+                        var row = marks.Rows[i];
+                        setMarkRow(row, m);
                     }
                 }
 
@@ -105,12 +100,7 @@ namespace Cliver.PdfDocumentParser
                     {
                         int i = fields.Rows.Add();
                         var row = fields.Rows[i];
-                        var cs = row.Cells;
-                        cs["Name_"].Value = f.Name;
-                        cs["Rectangle"].Value = f.Rectangle == null ? null : SerializationRoutines.Json.Serialize(f.Rectangle);
-                        cs["Ocr"].Value = f.Type == Template.Types.PdfText ? false : true;
-                        cs["FloatingAnchorId"].Value = f.FloatingAnchorId;
-                        row.Tag = f;
+                        setFieldRow(row, f);
                     }
                 }
 
@@ -227,7 +217,7 @@ namespace Cliver.PdfDocumentParser
                     if (saving)
                     {
                         bool linked = false;
-                        foreach (DataGridViewRow rr in documentFirstPageRecognitionMarks.Rows)
+                        foreach (DataGridViewRow rr in marks.Rows)
                         {
                             Template.Mark m = (Template.Mark)rr.Tag;
                             if (m != null && m.FloatingAnchorId == fa.Id)
@@ -264,7 +254,7 @@ namespace Cliver.PdfDocumentParser
             t.FloatingAnchors = t.FloatingAnchors.OrderBy(a => a.Id).ToList();
 
             t.DocumentFirstPageRecognitionMarks = new List<Template.Mark>();
-            foreach (DataGridViewRow r in documentFirstPageRecognitionMarks.Rows)
+            foreach (DataGridViewRow r in marks.Rows)
             {
                 Template.Mark m = (Template.Mark)r.Tag;
                 if (m != null)

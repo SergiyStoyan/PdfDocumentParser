@@ -428,7 +428,7 @@ namespace Cliver.PdfDocumentParser
                             string t2 = NormalizeText((string)v2);
                             if (t1 == t2)
                                 continue;
-                            error = "documentFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
+                            error = "marks[" + pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
                             return false;
                         }
                     case Template.Types.OcrText:
@@ -438,7 +438,7 @@ namespace Cliver.PdfDocumentParser
                             string t2 = NormalizeText((string)v2);
                             if (t1 == t2)
                                 continue;
-                            error = "documentFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
+                            error = "marks[" + pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.IndexOf(m) + "]:\r\n" + t2 + "\r\n <> \r\n" + t1;
                             return false;
                         }
                     case Template.Types.ImageData:
@@ -446,7 +446,7 @@ namespace Cliver.PdfDocumentParser
                             Template.Mark.ImageData idv1 = (Template.Mark.ImageData)m;
                             if (idv1.ImageData_.ImageIsSimilar((ImageData)v2, idv1.BrightnessTolerance, idv1.DifferentPixelNumberTolerance))
                                 continue;
-                            error = "documentFirstPageRecognitionMark[" + pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.IndexOf(m) + "]: image is not similar.";
+                            error = "marks[" + pageCollection.ActiveTemplate.DocumentFirstPageRecognitionMarks.IndexOf(m) + "]: image is not similar.";
                             return false;
                         }
                     default:

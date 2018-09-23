@@ -49,25 +49,10 @@ namespace Cliver.PdfDocumentParser
         }
         Bitmap scaledCurrentPageBitmap;
 
-        PointF? findAndDrawFloatingAnchor(int? floatingAnchorId, bool renewImage = true)
+        PointF? findAndDrawFloatingAnchor(int floatingAnchorId, bool renewImage = true)
         {
-            if (floatingAnchorId == null)
-                return null;
-
-            if (pages == null)
-                return null;
-            Template.FloatingAnchor fa = null;
-            DataGridViewRow row = null;
-            foreach (DataGridViewRow r in floatingAnchors.Rows)
-                if (r.Tag != null)
-                {
-                    fa = (Template.FloatingAnchor)r.Tag;
-                    if (fa.Id == floatingAnchorId)
-                    {
-                        row = r;
-                        break;
-                    }
-                }
+            DataGridViewRow row;
+            Template.FloatingAnchor fa = getFloatingAnchor(floatingAnchorId, out row);
             if (fa == null || row == null)
                 throw new Exception("FloatingAnchor[Id=" + floatingAnchorId + "] does not exist.");
 
@@ -77,6 +62,8 @@ namespace Cliver.PdfDocumentParser
                 clearPicture(renewImage);
                 return null;
             }
+            if (pages == null)
+                return null;
 
             pages.ActiveTemplate = getTemplateFromUI(false);
 
@@ -112,7 +99,7 @@ namespace Cliver.PdfDocumentParser
                 float y = 0;
                 if (floatingAnchorId != null)
                 {
-                    PointF? p0_ = findAndDrawFloatingAnchor(floatingAnchorId);
+                    PointF? p0_ = findAndDrawFloatingAnchor((int)floatingAnchorId);
                     if (p0_ == null)
                         return null;
                     PointF p0 = (PointF)p0_;
@@ -216,8 +203,8 @@ namespace Cliver.PdfDocumentParser
 
                 floatingAnchors.ClearSelection();
                 floatingAnchors.CurrentCell = null;
-                documentFirstPageRecognitionMarks.ClearSelection();
-                documentFirstPageRecognitionMarks.CurrentCell = null;
+                marks.ClearSelection();
+                marks.CurrentCell = null;
                 fields.ClearSelection();
                 fields.CurrentCell = null;
 
@@ -235,14 +222,12 @@ namespace Cliver.PdfDocumentParser
                 {
                     foreach (DataGridViewRow row in fields.Rows)
                     {
-                        if (row.IsNewRow)
+                        Template.Field f = (Template.Field)row.Tag;
+                        if (f == null)
                             continue;
-                        var vt = Convert.ToBoolean(row.Cells["Ocr"].Value) ? Template.Types.OcrText : Template.Types.PdfText;
-                        int? fai = (int?)row.Cells["FloatingAnchorId"].Value;
-                        string rs = (string)row.Cells["Rectangle"].Value;
-                        if (rs != null)
+                        if (f.IsSet())
                         {
-                            row.Cells["Value"].Value = extractValueAndDrawSelectionBox(fai, SerializationRoutines.Json.Deserialize<Template.RectangleF>(rs), vt);
+                            row.Cells["Value"].Value = extractValueAndDrawSelectionBox(f.FloatingAnchorId, f.Rectangle, f.Type);
                             if (row.Cells["Value"].Value != null)
                                 setRowStatus(statuses.SUCCESS, row, "Found");
                             else
@@ -283,31 +268,31 @@ namespace Cliver.PdfDocumentParser
         {
             try
             {
-                if (documentFirstPageRecognitionMarks.Rows.Count < 2)
+                if (marks.Rows.Count < 2)
                 {
                     Message.Warning("No condition of first page of document is specified!");
                     return null;
                 }
 
                 bool failed = false;
-                foreach (DataGridViewRow r in documentFirstPageRecognitionMarks.Rows)
-                    if (!r.IsNewRow && !isMarkFound(r, false))
+                foreach (DataGridViewRow r in marks.Rows)
+                    if (r.Tag != null && !isMarkFound(r, false))
                         failed = true;
-                //documentFirstPageRecognitionMarks.ClearSelection();
+                //marks.ClearSelection();
                 //Template t = getTemplateFromUI(false);
                 //pages.ActiveTemplate = t;
                 //string error;
                 //if (!pages[currentPage].IsDocumentFirstPage(out error))
                 //{
-                //    documentFirstPageRecognitionMarks.BackgroundColor = Color.LightPink;
+                //    marks.BackgroundColor = Color.LightPink;
                 //    return false;
                 //}
                 if (failed)
                 {
-                    documentFirstPageRecognitionMarks.BackgroundColor = Color.LightPink;
+                    marks.BackgroundColor = Color.LightPink;
                     return false;
                 }
-                documentFirstPageRecognitionMarks.BackgroundColor = Color.LightGreen;
+                marks.BackgroundColor = Color.LightGreen;
                 return true;
             }
             catch (Exception ex)

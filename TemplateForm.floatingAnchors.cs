@@ -62,39 +62,44 @@ namespace Cliver.PdfDocumentParser
                 if (e.ColumnIndex < 0)//row's header
                     return;
                 var row = floatingAnchors.Rows[e.RowIndex];
-                int? fai = (int?)row.Cells["Id3"].Value;
+                Template.FloatingAnchor fa = (Template.FloatingAnchor)row.Tag;
                 switch (floatingAnchors.Columns[e.ColumnIndex].Name)
                 {
-                    case "Id3":
-                        {
-                            if (fai == null)
-                                break;
-                            Template.FloatingAnchor fa = (Template.FloatingAnchor)row.Tag;
-                            fa.Id = (int)fai;
-                            setFloatingAnchorRow(row, fa);
-                            break;
-                        }
+                    //case "Id3":
+                    //    {
+                    //        int? fai = (int?)row.Cells["Id3"].Value;
+                    //        if (fai == null)
+                    //            break;
+                    //        Template.FloatingAnchor fa = (Template.FloatingAnchor)row.Tag;
+                    //        fa.Id = (int)fai;
+                    //        setFloatingAnchorRow(row, fa);
+                    //        break;
+                    //    }
                     case "Type3":
                         {
-                            Template.FloatingAnchor fa;
-                            switch ((Template.Types)row.Cells["Type3"].Value)
+                            Template.Types t2 = (Template.Types)row.Cells["Type3"].Value;
+                            if (t2 == fa.Type)
+                                break;
+                            Template.FloatingAnchor fa2;
+                            switch (t2)
                             {
                                 case Template.Types.PdfText:
-                                    fa = new Template.FloatingAnchor.PdfText();
+                                    fa2 = new Template.FloatingAnchor.PdfText();
                                     break;
                                 case Template.Types.OcrText:
-                                    fa = new Template.FloatingAnchor.OcrText();
+                                    fa2 = new Template.FloatingAnchor.OcrText();
                                     break;
                                 case Template.Types.ImageData:
-                                    fa = new Template.FloatingAnchor.ImageData();
+                                    fa2 = new Template.FloatingAnchor.ImageData();
                                     break;
                                 default:
-                                    throw new Exception("Unknown option: " + (Template.Types)row.Cells["Type3"].Value);
+                                    throw new Exception("Unknown option: " + t2);
                             }
-                            setFloatingAnchorRow(row, fa);
+                            fa = fa2;
                             break;
                         }
                 }
+                setFloatingAnchorRow(row, fa);
             };
 
             floatingAnchors.SelectionChanged += delegate (object sender, EventArgs e)
@@ -106,17 +111,15 @@ namespace Cliver.PdfDocumentParser
 
                     if (settingCurrentFloatingAnchorRow)
                         return;
-
-                    setCurrentFloatingAnchorFromControl();
-
+                    
                     if (floatingAnchors.SelectedRows.Count < 1)
                     {
-                        setFloatingAnchorControl(null);
+                        setCurrentFloatingAnchorRow(null);
                         return;
                     }
 
-                    documentFirstPageRecognitionMarks.ClearSelection();
-                    documentFirstPageRecognitionMarks.CurrentCell = null;
+                    marks.ClearSelection();
+                    marks.CurrentCell = null;
                     fields.ClearSelection();
                     fields.CurrentCell = null;
 
@@ -134,8 +137,7 @@ namespace Cliver.PdfDocumentParser
                         row.Selected = true;
                         return;
                     }
-                    setFloatingAnchorControl(row);
-                    findAndDrawFloatingAnchor(fa.Id);
+                    setCurrentFloatingAnchorRow(fa.Id);
                 }
                 catch (Exception ex)
                 {
@@ -144,96 +146,63 @@ namespace Cliver.PdfDocumentParser
             };
         }
 
-        void setCurrentFloatingAnchorRow(int? fai, bool unselectMark_SelectField)
+        void setCurrentFloatingAnchorRow(int? fai/*, bool unselectMark_SelectField*/)
         {
             try
             {
-                floatingAnchors.ClearSelection();
+                setCurrentFloatingAnchorFromControl();
+                    floatingAnchors.ClearSelection();
                 if (fai == null)
                 {
                     floatingAnchors.CurrentCell = null;
+                    currentFloatingAnchorControl = null;
                     return;
                 }
-                DataGridViewRow row = null;
-                foreach (DataGridViewRow ar in floatingAnchors.Rows)
-                    if ((int?)ar.Cells["Id3"].Value == fai)
-                    {
-                        row = ar;
-                        break;
-                    }
-                if (row == null)
+                DataGridViewRow row;
+                Template.FloatingAnchor fa = getFloatingAnchor(fai, out row);
+                if (row == null || fa == null)
                     throw new Exception("FloatingAnchor[Id=" + fai + "] does not exist.");
                 settingCurrentFloatingAnchorRow = true;
                 floatingAnchors.CurrentCell = floatingAnchors[0, row.Index];
-                //floatingAnchors.CurrentCell = row.HeaderCell;
-                //row.HeaderCell.Selected = true;
-                floatingAnchors.ClearSelection();
                 settingCurrentFloatingAnchorRow = false;
+                
+                Control c = currentFloatingAnchorControl;
+                Template.Types t = ((Template.FloatingAnchor)row.Tag).Type;
+                switch (t)
+                {
+                    case Template.Types.PdfText:
+                        {
+                            if (c == null || !(c is FloatingAnchorPdfTextControl))
+                                c = new FloatingAnchorPdfTextControl();
+                            ((FloatingAnchorPdfTextControl)c).FloatingAnchor = (Template.FloatingAnchor.PdfText)row.Tag;
+                        }
+                        break;
+                    case Template.Types.OcrText:
+                        {
+                            if (c == null || !(c is FloatingAnchorOcrTextControl))
+                                c = new FloatingAnchorOcrTextControl();
+                            ((FloatingAnchorOcrTextControl)c).FloatingAnchor = (Template.FloatingAnchor.OcrText)row.Tag;
+                        }
+                        break;
+                    case Template.Types.ImageData:
+                        {
+                            if (c == null || !(c is FloatingAnchorImageDataControl))
+                                c = new FloatingAnchorImageDataControl();
+                            ((FloatingAnchorImageDataControl)c).FloatingAnchor = (Template.FloatingAnchor.ImageData)row.Tag;
+                        }
+                        break;
+                    default:
+                        throw new Exception("Unknown option: " + t);
+                }
+                currentFloatingAnchorControl = c;
 
-                setFloatingAnchorControl(row);
-                findAndDrawFloatingAnchor((int?)row.Cells["Id3"].Value);
+                findAndDrawFloatingAnchor(fa.Id);
             }
             finally
             {
             }
         }
         bool settingCurrentFloatingAnchorRow = false;
-
-        void setFloatingAnchorRow(DataGridViewRow row, Template.FloatingAnchor fa)
-        {
-            //string v0;
-            //rows2valueString.TryGetValue(row, out v0);
-            //rows2valueString[row] = SerializationRoutines.Json.Serialize(value);
-            row.Tag = fa;
-            if (loadingTemplate)
-                return;
-            //if (v0 == SerializationRoutines.Json.Serialize(value))
-            //    return;
-            setFloatingAnchorControl(row);
-            if (row.Selected)
-                findAndDrawFloatingAnchor(fa.Id);
-        }
-        //Dictionary<DataGridViewRow, string> rows2valueString = new Dictionary<DataGridViewRow, string>();
-
-        void setFloatingAnchorControl(DataGridViewRow row)
-        {
-            if (row == null || floatingAnchors.CurrentCell == null || row.Index != floatingAnchors.CurrentCell.RowIndex || row.Tag==null || row.IsNewRow || !floatingAnchors.Rows.Contains(row))
-            {
-                currentFloatingAnchorRow = null;
-                currentFloatingAnchorControl = null;
-                return;
-            }
-            currentFloatingAnchorRow = row;
-            Control c = currentFloatingAnchorControl;
-            Template.Types t = ((Template.FloatingAnchor)row.Tag).Type;
-            switch (t)
-            {
-                case Template.Types.PdfText:
-                    {
-                        if (c == null || !(c is FloatingAnchorPdfTextControl))
-                            c = new FloatingAnchorPdfTextControl();
-                        ((FloatingAnchorPdfTextControl)c).FloatingAnchor = (Template.FloatingAnchor.PdfText)row.Tag;
-                    }
-                    break;
-                case Template.Types.OcrText:
-                    {
-                        if (c == null || !(c is FloatingAnchorOcrTextControl))
-                            c = new FloatingAnchorOcrTextControl();
-                        ((FloatingAnchorOcrTextControl)c).FloatingAnchor = (Template.FloatingAnchor.OcrText)row.Tag;
-                    }
-                    break;
-                case Template.Types.ImageData:
-                    {
-                        if (c == null || !(c is FloatingAnchorImageDataControl))
-                            c = new FloatingAnchorImageDataControl();
-                        ((FloatingAnchorImageDataControl)c).FloatingAnchor = (Template.FloatingAnchor.ImageData)row.Tag;
-                    }
-                    break;
-                default:
-                    throw new Exception("Unknown option: " + t);
-            }
-            currentFloatingAnchorControl = c;
-        }
         Control currentFloatingAnchorControl
         {
             get
@@ -251,15 +220,36 @@ namespace Cliver.PdfDocumentParser
                 value.Dock = DockStyle.Fill;
             }
         }
-        DataGridViewRow currentFloatingAnchorRow = null;
+
+        DataGridViewRow getCurrentFloatingAnchorRow()
+        {
+            if (floatingAnchors.CurrentCell == null)
+                return null;
+            if (floatingAnchors.CurrentCell.RowIndex < 0)
+                return null;
+            return floatingAnchors.Rows[floatingAnchors.CurrentCell.RowIndex];
+        }
+
+        void setFloatingAnchorRow(DataGridViewRow row, Template.FloatingAnchor fa)
+        {
+            row.Tag = fa;
+            row.Cells["Id3"].Value = fa.Id;
+            row.Cells["Type3"].Value = fa.Type;
+
+            if (loadingTemplate)
+                return;
+
+            //if (row == getCurrentFloatingAnchorRow())
+            findAndDrawFloatingAnchor(fa.Id);
+        }
 
         void setCurrentFloatingAnchorFromControl()
         {
-            if (currentFloatingAnchorRow == null || currentFloatingAnchorRow.Index < 0)//removed row
+            var row = getCurrentFloatingAnchorRow();
+            if (row == null)
                 return;
-            Template.FloatingAnchor fa = (Template.FloatingAnchor)currentFloatingAnchorRow.Tag;
-            Template.Types valueType = (Template.Types)currentFloatingAnchorRow.Cells["Type3"].Value;
-            switch (valueType)
+            Template.FloatingAnchor fa = (Template.FloatingAnchor)row.Tag;
+            switch (fa.Type)
             {
                 case Template.Types.PdfText:
                     fa = ((FloatingAnchorPdfTextControl)currentFloatingAnchorControl).FloatingAnchor;
@@ -271,36 +261,41 @@ namespace Cliver.PdfDocumentParser
                     fa = ((FloatingAnchorImageDataControl)currentFloatingAnchorControl).FloatingAnchor;
                     break;
                 default:
-                    throw new Exception("Unknown option: " + valueType);
+                    throw new Exception("Unknown option: " + fa.Type);
             }
-            setFloatingAnchorRow(currentFloatingAnchorRow, fa);
+            setFloatingAnchorRow(row, fa);
         }
 
         void onFloatingAnchorsChanged()
         {
             SortedSet<int> fais = new SortedSet<int>();
             foreach (DataGridViewRow r in floatingAnchors.Rows)
-                if (r.Tag != null && ((Template.FloatingAnchor)r.Tag).IsSet())
+                if (r.Tag != null && ((Template.FloatingAnchor)r.Tag).Id > 0)
                     fais.Add(((Template.FloatingAnchor)r.Tag).Id);
 
             foreach (DataGridViewRow r in floatingAnchors.Rows)
-                if (r.Tag != null && !((Template.FloatingAnchor)r.Tag).IsSet())
+            {
+                if (r.Tag == null)
+                    continue;
+                Template.FloatingAnchor fa = (Template.FloatingAnchor)r.Tag;
+                if (/*fa.IsSet() &&*/ fa.Id <= 0)
                 {
-                    int fai = 1;
+                    fa.Id = 1;
                     //if (fais.Count > 0)
                     //    fai = fais.Max() + 1;                    
                     foreach (int i in fais)
                     {
-                        if (fai < i)
+                        if (fa.Id < i)
                             break;
-                        if (fai == i)
-                            fai++;
+                        if (fa.Id == i)
+                            fa.Id++;
                     }
-                    fais.Add(fai);
-                    r.Cells["Id3"].Value = fai;
+                    fais.Add(fa.Id);
+                    r.Cells["Id3"].Value = fa.Id;
                 }
+            }
 
-            foreach (DataGridViewRow r in documentFirstPageRecognitionMarks.Rows)
+            foreach (DataGridViewRow r in marks.Rows)
             {
                 if (r.Tag == null)
                     continue;
@@ -319,8 +314,8 @@ namespace Cliver.PdfDocumentParser
                 if (f.FloatingAnchorId != null && !fais.Contains((int)f.FloatingAnchorId))
                 {
                     r.Cells["FloatingAnchorId"].Value = null;
-                    r.Cells["Rectangle"].Value = null;
                     r.Cells["Value"].Value = null;
+                    setFieldRectangle(r, null);
                 }
             }
 
@@ -334,29 +329,19 @@ namespace Cliver.PdfDocumentParser
         {
             try
             {
-                if (floatingAnchors.SelectedRows.Count < 1)
+                DataGridViewRow row = getCurrentFloatingAnchorRow();
+                if (row == null)
                     return;
-
-                setCurrentFloatingAnchorFromControl();
-                DataGridViewRow row = floatingAnchors.SelectedRows[0];
-                var t = (Template.Types)row.Cells["Type3"].Value;
-                switch (t)
+                Template.FloatingAnchor fa = (Template.FloatingAnchor)row.Tag;
+                switch (fa.Type)
                 {
                     case Template.Types.PdfText:
                         {
-                            Template.FloatingAnchor.PdfText pt = (Template.FloatingAnchor.PdfText)row.Tag;
-                            if (pt == null)
-                            {
-                                pt = new Template.FloatingAnchor.PdfText();
-                                row.Tag = pt;
-                            }
+                            Template.FloatingAnchor.PdfText pt = (Template.FloatingAnchor.PdfText)fa;
                             pt.CharBoxs = new List<Template.FloatingAnchor.PdfText.CharBox>();
                             List<Pdf.Line> lines = Pdf.RemoveDuplicatesAndGetLines(selectedPdfCharBoxs, false);
                             if (lines.Count < 1)
-                            {
-                                setFloatingAnchorRow(row, pt);
-                                return;
-                            }
+                                break;
                             foreach (Pdf.Line l in lines)
                                 foreach (Pdf.CharBox cb in l.CharBoxes)
                                     pt.CharBoxs.Add(new Template.FloatingAnchor.PdfText.CharBox
@@ -364,30 +349,15 @@ namespace Cliver.PdfDocumentParser
                                         Char = cb.Char,
                                         Rectangle = new Template.RectangleF(cb.R.X, cb.R.Y, cb.R.Width, cb.R.Height),
                                     });
-                            if (pt.CharBoxs.Count < 1)
-                            {
-                                setFloatingAnchorRow(row, null);
-                                return;
-                            }
-                            setFloatingAnchorRow(row, pt);
                         }
                         break;
                     case Template.Types.OcrText:
                         {
-                            Template.FloatingAnchor.OcrText ot = (Template.FloatingAnchor.OcrText)row.Tag;
-                            if (ot == null)
-                            {
-                                ot = new Template.FloatingAnchor.OcrText();
-                                row.Tag = ot;
-                            }
+                            Template.FloatingAnchor.OcrText ot = (Template.FloatingAnchor.OcrText)fa;
                             ot.CharBoxs = new List<Template.FloatingAnchor.OcrText.CharBox>();
-
                             List<Ocr.Line> lines = PdfDocumentParser.Ocr.GetLines(selectedOcrCharBoxs);
                             if (lines.Count < 1)
-                            {
-                                setFloatingAnchorRow(row, ot);
-                                return;
-                            }
+                                break;
                             foreach (Ocr.Line l in lines)
                                 foreach (Ocr.CharBox cb in l.CharBoxes)
                                     ot.CharBoxs.Add(new Template.FloatingAnchor.OcrText.CharBox
@@ -395,41 +365,23 @@ namespace Cliver.PdfDocumentParser
                                         Char = cb.Char,
                                         Rectangle = new Template.RectangleF(cb.R.X, cb.R.Y, cb.R.Width, cb.R.Height),
                                     });
-                            if (ot.CharBoxs.Count < 1)
-                            {
-                                setFloatingAnchorRow(row, null);
-                                return;
-                            }
-                            setFloatingAnchorRow(row, ot);
                         }
                         break;
                     case Template.Types.ImageData:
                         {
-                            Template.FloatingAnchor.ImageData id = (Template.FloatingAnchor.ImageData)row.Tag;
-                            if (id == null)
-                            {
-                                id = new Template.FloatingAnchor.ImageData();
-                                row.Tag = id;
-                            }
+                            Template.FloatingAnchor.ImageData id = (Template.FloatingAnchor.ImageData)fa;
                             id.ImageBoxs = new List<Template.FloatingAnchor.ImageData.ImageBox>();
-
                             if (selectedImageBoxs.Count < 1)
-                            {
-                                setFloatingAnchorRow(row, id);
-                                return;
-                            }
+                                break;
                             if (selectedImageBoxs.Where(x => x.ImageData == null).FirstOrDefault() != null)
-                            {
-                                setFloatingAnchorRow(row, id);
-                                return;
-                            }
+                                break;
                             id.ImageBoxs = selectedImageBoxs;
-                            setFloatingAnchorRow(row, id);
                         }
                         break;
                     default:
-                        throw new Exception("Unknown option: " + t);
+                        throw new Exception("Unknown option: " + fa.Type);
                 }
+                setFloatingAnchorRow(row, fa);
             }
             finally
             {
@@ -442,5 +394,21 @@ namespace Cliver.PdfDocumentParser
         List<Pdf.CharBox> selectedPdfCharBoxs;
         List<Ocr.CharBox> selectedOcrCharBoxs;
         List<Template.FloatingAnchor.ImageData.ImageBox> selectedImageBoxs;
+
+        Template.FloatingAnchor getFloatingAnchor(int? floatingAnchorId, out DataGridViewRow row)
+        {
+            if (floatingAnchorId != null)
+                foreach (DataGridViewRow r in floatingAnchors.Rows)
+                {
+                    Template.FloatingAnchor fa = (Template.FloatingAnchor)r.Tag;
+                    if (fa != null && fa.Id == floatingAnchorId)
+                    {
+                        row = r;
+                        return fa;
+                    }
+                }
+            row = null;
+            return null;
+        }
     }
 }
