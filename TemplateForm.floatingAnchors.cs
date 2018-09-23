@@ -36,7 +36,6 @@ namespace Cliver.PdfDocumentParser
 
             floatingAnchors.RowsAdded += delegate (object sender, DataGridViewRowsAddedEventArgs e)
             {
-                onFloatingAnchorsChanged();
             };
 
             floatingAnchors.DataError += delegate (object sender, DataGridViewDataErrorEventArgs e)
@@ -122,20 +121,22 @@ namespace Cliver.PdfDocumentParser
                     fields.CurrentCell = null;
 
                     var row = floatingAnchors.SelectedRows[0];
+                    Template.FloatingAnchor fa = (Template.FloatingAnchor)row.Tag;
 
                     if (row.IsNewRow)//hacky forcing commit a newly added row and display the blank row
                     {
                         int i = floatingAnchors.Rows.Add();
                         row = floatingAnchors.Rows[i];
-                        Template.FloatingAnchor fa = new Template.FloatingAnchor.PdfText();
+                        fa = new Template.FloatingAnchor.PdfText();
                         fa.Id = -1;
                         row.Tag = fa;
+                        onFloatingAnchorsChanged();
                         row.Cells["Type3"].Value = fa.Type;
                         row.Selected = true;
                         return;
                     }
                     setFloatingAnchorControl(row);
-                    findAndDrawFloatingAnchor((int?)row.Cells["Id3"].Value);
+                    findAndDrawFloatingAnchor(fa.Id);
                 }
                 catch (Exception ex)
                 {
@@ -257,7 +258,7 @@ namespace Cliver.PdfDocumentParser
         {
             if (currentFloatingAnchorRow == null || currentFloatingAnchorRow.Index < 0)//removed row
                 return;
-            Template.FloatingAnchor fa = null;
+            Template.FloatingAnchor fa = (Template.FloatingAnchor)currentFloatingAnchorRow.Tag;
             Template.Types valueType = (Template.Types)currentFloatingAnchorRow.Cells["Type3"].Value;
             switch (valueType)
             {

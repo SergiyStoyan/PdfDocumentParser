@@ -267,7 +267,7 @@ namespace Cliver.PdfDocumentParser
             Template.Mark m = (Template.Mark)row.Tag;
             if (m == null)
                 return;
-            if (m.FloatingAnchorId == null && m.Rectangle == null)
+            if (!m.IsSet())
             {
                 setRowStatus(statuses.WARNING, row, "Not set");
                 setMarkRow(row, null);
@@ -414,7 +414,7 @@ namespace Cliver.PdfDocumentParser
                 default:
                     throw new Exception("Unknown option: " + m.Type);
             }
-            if (currentMarkRow.Cells["FloatingAnchorId2"].Value == null && m2.Rectangle == null)
+            if (!m2.IsSet())
                 setRowStatus(statuses.WARNING, currentMarkRow, "Not set");
             setMarkRow(currentMarkRow, m2);
         }

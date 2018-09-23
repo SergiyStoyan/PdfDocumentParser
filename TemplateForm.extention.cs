@@ -81,6 +81,7 @@ namespace Cliver.PdfDocumentParser
                         row.Cells["Id3"].Value = fa.Id;
                         row.Cells["Type3"].Value = fa.Type;
                     }
+                    onFloatingAnchorsChanged();
                 }
 
                 documentFirstPageRecognitionMarks.Rows.Clear();
@@ -209,17 +210,7 @@ namespace Cliver.PdfDocumentParser
             if (string.IsNullOrWhiteSpace(name.Text))
                 if (saving)
                     throw new Exception("Name is empty!");
-
-            if (saving)
-            {
-                int c = 0;
-                foreach (DataGridViewRow r in documentFirstPageRecognitionMarks.Rows)
-                    if (r.Tag != null)
-                        c++;
-                if (c < 1)
-                    throw new Exception("DocumentFirstPageRecognitionMarks is empty!");
-            }
-
+            
             t.Name = name.Text.Trim();
 
             t.PagesRotation = (Template.PageRotations)pageRotation.SelectedIndex;
@@ -231,7 +222,7 @@ namespace Cliver.PdfDocumentParser
             foreach (DataGridViewRow r in floatingAnchors.Rows)
             {
                 Template.FloatingAnchor fa = (Template.FloatingAnchor)r.Tag;
-                if (fa != null && fa.Id>0)
+                if (fa != null)
                 {
                     if (saving)
                     {
@@ -262,6 +253,9 @@ namespace Cliver.PdfDocumentParser
                             if (removeNotLinkedAnchors == true)
                                 continue;
                         }
+
+                        if (!fa.IsSet())
+                            throw new Exception("FloatingAnchor[Id=" + fa.Id + "] is not set!");
                     }
 
                     t.FloatingAnchors.Add(fa);
@@ -273,25 +267,33 @@ namespace Cliver.PdfDocumentParser
             foreach (DataGridViewRow r in documentFirstPageRecognitionMarks.Rows)
             {
                 Template.Mark m = (Template.Mark)r.Tag;
-                if (m != null && (m.FloatingAnchorId != null || m.Rectangle != null))
+                if (m != null)
                 {
+                    if (!m.IsSet())
+                        throw new Exception("DocumentFirstPageRecognitionMark[" + r.Index + "] is not set!");
                     if (m.FloatingAnchorId != null && t.FloatingAnchors.FirstOrDefault(x => x.Id == m.FloatingAnchorId) == null)
                         throw new Exception("There is no FloatingAnchor with Id=" + m.FloatingAnchorId);
                     t.DocumentFirstPageRecognitionMarks.Add(m);
                 }
             }
+            if (saving && t.DocumentFirstPageRecognitionMarks.Count < 1)
+                throw new Exception("DocumentFirstPageRecognitionMarks is empty!");
 
             t.Fields = new List<Template.Field>();
             foreach (DataGridViewRow r in fields.Rows)
             {
                 Template.Field f = (Template.Field)r.Tag;
-                if (f!=null&& f.Rectangle != null)
+                if (f != null)
                 {
+                    if (!f.IsSet())
+                        throw new Exception("Field[" + r.Index + "] is not set!");
                     if (f.FloatingAnchorId != null && t.FloatingAnchors.FirstOrDefault(x => x.Id == f.FloatingAnchorId) == null)
                         throw new Exception("There is no FloatingAnchor with Id=" + f.FloatingAnchorId);
                     t.Fields.Add(f);
                 }
             }
+            if (saving && t.Fields.Count < 1)
+                throw new Exception("Fields is empty!");
 
             if (saving)
             {

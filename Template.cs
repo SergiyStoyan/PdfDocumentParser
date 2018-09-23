@@ -111,6 +111,11 @@ namespace Cliver.PdfDocumentParser
             [Newtonsoft.Json.JsonIgnore]
             public readonly Types Type;
 
+            public bool IsSet()
+            {
+                return FloatingAnchorId != null || Rectangle != null;
+            }
+
             public class PdfText : Mark
             {
                 public string Text;
@@ -158,6 +163,11 @@ namespace Cliver.PdfDocumentParser
             [Newtonsoft.Json.JsonIgnore]
             public readonly Types Type;
 
+          virtual  public bool IsSet()
+            {
+                return Id > 0;
+            }
+
             public static System.Drawing.RectangleF GetSearchRectangle(RectangleF rectangle0, int margin/*, System.Drawing.RectangleF pageRectangle*/)
             {
                 System.Drawing.RectangleF r = new System.Drawing.RectangleF(rectangle0.X - margin, rectangle0.Y - margin, rectangle0.Width + 2 * margin, rectangle0.Height + 2 * margin);
@@ -173,6 +183,11 @@ namespace Cliver.PdfDocumentParser
                     public string Char;
                     public RectangleF Rectangle;
                 }
+
+                override public bool IsSet()
+                {
+                    return base.IsSet() && CharBoxs.Count > 0;
+                }
             }
 
             public class OcrText : FloatingAnchor
@@ -182,6 +197,11 @@ namespace Cliver.PdfDocumentParser
                 {
                     public string Char;
                     public RectangleF Rectangle;
+                }
+
+                override public bool IsSet()
+                {
+                    return base.IsSet() && CharBoxs.Count > 0;
                 }
             }
 
@@ -197,6 +217,11 @@ namespace Cliver.PdfDocumentParser
                 public float BrightnessTolerance = 0.20f;
                 public float DifferentPixelNumberTolerance = 0.15f;
                 public bool FindBestImageMatch = false;
+
+                override public bool IsSet()
+                {
+                    return base.IsSet() && ImageBoxs.Count > 0;
+                }
             }
         }
 
@@ -219,6 +244,11 @@ namespace Cliver.PdfDocumentParser
             }
             [Newtonsoft.Json.JsonIgnore]
             public readonly Types Type;
+
+            public bool IsSet()
+            {
+                return Rectangle != null;
+            }
 
             public class PdfText : Field
             {

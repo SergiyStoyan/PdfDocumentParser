@@ -186,12 +186,13 @@ namespace Cliver.PdfDocumentParser
                     documentFirstPageRecognitionMarks.ClearSelection();
                     documentFirstPageRecognitionMarks.CurrentCell = null;
                     DataGridViewRow row = fields.SelectedRows[0];
+                    Template.Field f = (Template.Field)row.Tag;
 
                     if (row.IsNewRow)//hacky forcing commit a newly added row and display the blank row
                     {
                         int i = fields.Rows.Add();
                         row = fields.Rows[i];
-                        Template.Field f = new Template.Field.PdfText();
+                        f = new Template.Field.PdfText();
                         row.Tag = f;
                         row.Cells["Ocr"].Value = f.Type == Template.Types.PdfText ? false : true;
                         row.Selected = true;
@@ -199,13 +200,10 @@ namespace Cliver.PdfDocumentParser
                     }
                     var cs = row.Cells;
 
-                    var vt = Convert.ToBoolean(cs["Ocr"].Value) ? Template.Types.OcrText : Template.Types.PdfText;
-                    int? fai = (int?)cs["FloatingAnchorId"].Value;
-                    setCurrentFloatingAnchorRow(fai, true);
-                    string rs = (string)cs["Rectangle"].Value;
-                    if (rs != null)
+                    setCurrentFloatingAnchorRow(f.FloatingAnchorId, true);
+                    if (f.Rectangle != null)
                     {
-                        cs["Value"].Value = extractValueAndDrawSelectionBox(fai, SerializationRoutines.Json.Deserialize<Template.RectangleF>(rs), vt);
+                        cs["Value"].Value = extractValueAndDrawSelectionBox(f.FloatingAnchorId, f.Rectangle, f.Type);
                         if (cs["Value"].Value != null)
                             setRowStatus(statuses.SUCCESS, row, "Found");
                         else

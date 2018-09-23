@@ -56,29 +56,33 @@ namespace Cliver.PdfDocumentParser
 
             if (pages == null)
                 return null;
-
-            pages.ActiveTemplate = getTemplateFromUI(false);
-
-            Template.FloatingAnchor fa = pages.ActiveTemplate.FloatingAnchors.Where(a => a.Id == (int)floatingAnchorId).FirstOrDefault();
-            if (fa == null)
-                throw new Exception("FloatingAnchor[Id=" + fa.Id + "] is not defined.");
-
+            Template.FloatingAnchor fa = null;
             DataGridViewRow row = null;
             foreach (DataGridViewRow r in floatingAnchors.Rows)
-                if ((int?)r.Cells["Id3"].Value == fa.Id)
+                if (r.Tag != null)
                 {
-                    row = r;
-                    break;
+                    fa = (Template.FloatingAnchor)r.Tag;
+                    if (fa.Id == floatingAnchorId)
+                    {
+                        row = r;
+                        break;
+                    }
                 }
-            if (row == null)
-                throw new Exception("FloatingAnchor[Id=" + fa.Id + "] does not exist.");
+            if (fa == null || row == null)
+                throw new Exception("FloatingAnchor[Id=" + floatingAnchorId + "] does not exist.");
 
-            if (fa == null)
+            if (!fa.IsSet())
             {
                 setRowStatus(statuses.WARNING, row, "Not set");
                 clearPicture(renewImage);
                 return null;
             }
+
+            pages.ActiveTemplate = getTemplateFromUI(false);
+
+            fa = pages.ActiveTemplate.FloatingAnchors.Where(a => a.Id == (int)floatingAnchorId).FirstOrDefault();
+            if (fa == null)
+                throw new Exception("FloatingAnchor[Id=" + fa.Id + "] is not defined.");
 
             List<RectangleF> rs = pages[currentPage].GetFloatingAnchorRectangles(fa);
             if (rs == null || rs.Count < 1)
