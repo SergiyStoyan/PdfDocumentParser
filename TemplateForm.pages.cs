@@ -199,12 +199,6 @@ namespace Cliver.PdfDocumentParser
                 if (string.IsNullOrWhiteSpace(testFile.Text) || 0 >= page_i || totalPageNumber < page_i)
                     return;
 
-                //loadingTemplate = true;
-                setCurrentFloatingAnchorRow(null, true);
-                setCurrentMarkRow(null);
-                setCurrentFieldRow(null);
-                loadingTemplate = false;
-
                 foreach (DataGridViewRow r in fields.Rows)
                     r.Cells["Value"].Value = null;
 
@@ -214,6 +208,12 @@ namespace Cliver.PdfDocumentParser
                 pages.ActiveTemplate = getTemplateFromUI(false);
                 setScaledImage();
                 enableNavigationButtons();
+
+                //loadingTemplate = true;
+                setCurrentFloatingAnchorRow(null, true);
+                setCurrentMarkRow(null);
+                setCurrentFieldRow(null);
+                loadingTemplate = false;
 
                 if (ExtractFieldsAutomaticallyWhenPageChanged.Checked)
                 {

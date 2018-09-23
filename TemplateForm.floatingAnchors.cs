@@ -262,11 +262,8 @@ namespace Cliver.PdfDocumentParser
             if (loadingTemplate)
                 return;
 
-            if(row == currentFloatingAnchorRow)
+            if (row == currentFloatingAnchorRow)
                 setCurrentFloatingAnchorRow(fa.Id, false);
-
-            //if (row == getCurrentFloatingAnchorRow())
-            findAndDrawFloatingAnchor(fa.Id);
         }
 
         void onFloatingAnchorsChanged()

@@ -208,6 +208,7 @@ namespace Cliver.PdfDocumentParser
             {
                 settingCurrentFieldRow = true;
 
+                currentFieldRow = row;
                 setCurrentMarkRow(null);
 
                 if (row == null)
@@ -238,6 +239,7 @@ namespace Cliver.PdfDocumentParser
             }
         }
         bool settingCurrentFieldRow = false;
+        DataGridViewRow currentFieldRow = null;
 
         void setFieldRectangle(DataGridViewRow row, Template.RectangleF r)
         {
@@ -260,17 +262,8 @@ namespace Cliver.PdfDocumentParser
             if (loadingTemplate)
                 return;
 
-            if (f.IsSet())
-            {
-                DataGridViewRow rr;
-                Template.FloatingAnchor fa = getFloatingAnchor(f.FloatingAnchorId, out rr);
-                if (fa != null && !fa.IsSet())
-                    setRowStatus(statuses.ERROR, row, "Error");
-                else
-                    setRowStatus(statuses.SUCCESS, row, "Set");
-            }
-            else
-                setRowStatus(statuses.WARNING, row, "Not set");
+            if (row == currentFieldRow)
+                setCurrentFieldRow(row);
         }
     }
 }

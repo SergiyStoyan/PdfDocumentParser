@@ -183,6 +183,18 @@ namespace Cliver.PdfDocumentParser
             Template.Mark m = (Template.Mark)row.Tag;
             if (pointAnchor_renewImage)
                 setCurrentFloatingAnchorRow(m.FloatingAnchorId, true);
+            if (!m.IsSet())
+            {
+                setRowStatus(statuses.WARNING, row, "Not set");
+                return false;
+            }
+            DataGridViewRow r;
+            Template.FloatingAnchor fa = getFloatingAnchor(m.FloatingAnchorId, out r);
+            if (fa != null && !fa.IsSet())
+            {
+                setRowStatus(statuses.ERROR, row, "Error");
+                return false;
+            }
             if (m.Rectangle != null)
             {
                 switch (m.Type)
@@ -227,21 +239,18 @@ namespace Cliver.PdfDocumentParser
                         throw new Exception("Unknown option: " + m.Type);
                 }
             }
-            else
+            if (m.FloatingAnchorId != null)
             {
-                if (m.FloatingAnchorId != null)
+                if (null != findAndDrawFloatingAnchor((int)m.FloatingAnchorId, pointAnchor_renewImage))
                 {
-                    if (null != findAndDrawFloatingAnchor((int)m.FloatingAnchorId))
-                    {
-                        setRowStatus(statuses.SUCCESS, row, "Found");
-                        return true;
-                    }
-                    setRowStatus(statuses.ERROR, row, "Not found");
-                    return false;
+                    setRowStatus(statuses.SUCCESS, row, "Found");
+                    return true;
                 }
-                setRowStatus(statuses.WARNING, row, "Not set");
-                return true;
+                setRowStatus(statuses.ERROR, row, "Not found");
+                return false;
             }
+            setRowStatus(statuses.WARNING, row, "Not set");
+            return false;
         }
 
         void setCurrentMarkRow(DataGridViewRow row)
