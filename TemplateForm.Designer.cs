@@ -38,6 +38,8 @@
             this.Type3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.label10 = new System.Windows.Forms.Label();
             this.marks = new System.Windows.Forms.DataGridView();
+            this.FloatingAnchorId2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Type2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.label4 = new System.Windows.Forms.Label();
             this.tableControlsContainer = new System.Windows.Forms.SplitContainer();
             this.anchorControl = new System.Windows.Forms.GroupBox();
@@ -89,8 +91,6 @@
             this.Help = new System.Windows.Forms.LinkLabel();
             this.label3 = new System.Windows.Forms.Label();
             this.About = new System.Windows.Forms.LinkLabel();
-            this.FloatingAnchorId2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Type2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -279,6 +279,21 @@
             this.marks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.marks.Size = new System.Drawing.Size(169, 99);
             this.marks.TabIndex = 29;
+            // 
+            // FloatingAnchorId2
+            // 
+            this.FloatingAnchorId2.HeaderText = "Anchor";
+            this.FloatingAnchorId2.Name = "FloatingAnchorId2";
+            this.FloatingAnchorId2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.FloatingAnchorId2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.FloatingAnchorId2.Width = 50;
+            // 
+            // Type2
+            // 
+            this.Type2.HeaderText = "Type";
+            this.Type2.Name = "Type2";
+            this.Type2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Type2.Width = 70;
             // 
             // label4
             // 
@@ -839,21 +854,6 @@
             this.About.TabStop = true;
             this.About.Text = "About";
             this.About.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // FloatingAnchorId2
-            // 
-            this.FloatingAnchorId2.HeaderText = "Anchor";
-            this.FloatingAnchorId2.Name = "FloatingAnchorId2";
-            this.FloatingAnchorId2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.FloatingAnchorId2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.FloatingAnchorId2.Width = 50;
-            // 
-            // Type2
-            // 
-            this.Type2.HeaderText = "Type";
-            this.Type2.Name = "Type2";
-            this.Type2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Type2.Width = 70;
             // 
             // TemplateForm
             // 

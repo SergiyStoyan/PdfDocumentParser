@@ -69,19 +69,13 @@ namespace Cliver.PdfDocumentParser
                                     break;
                                 Template.Field f2;
                                 if (ocr)
-                                {
                                     f2 = new Template.Field.OcrText();
-                                    ((Template.Field.OcrText)f2).FloatingAnchorId = ((Template.Field.PdfText)f).FloatingAnchorId;
-                                    ((Template.Field.OcrText)f2).Rectangle = ((Template.Field.PdfText)f).Rectangle;
-                                    ((Template.Field.OcrText)f2).Name = ((Template.Field.PdfText)f).Name;
-                                }
                                 else
-                                {
                                     f2 = new Template.Field.PdfText();
-                                    ((Template.Field.PdfText)f2).FloatingAnchorId = ((Template.Field.OcrText)f).FloatingAnchorId;
-                                    ((Template.Field.PdfText)f2).Rectangle = ((Template.Field.OcrText)f).Rectangle;
-                                    ((Template.Field.PdfText)f2).Name = ((Template.Field.OcrText)f).Name;
-                                }
+                                f2.Name = f.Name;
+                                f2.FloatingAnchorId = f.FloatingAnchorId;
+                                f2.Rectangle = f.Rectangle;
+                                f = f2;
                                 break;
                             }
                         case "FloatingAnchorId":
@@ -181,34 +175,23 @@ namespace Cliver.PdfDocumentParser
                     if (loadingTemplate)
                         return;
 
+                    if (settingCurrentFieldRow)
+                        return;
+
                     if (fields.SelectedRows.Count < 1)
                         return;
                     DataGridViewRow row = fields.SelectedRows[0];
-                    setCurrentFieldRow(row);
                     Template.Field f = (Template.Field)row.Tag;
-
-                    if (row.IsNewRow)//hacky forcing commit a newly added row and display the blank row
+                    if (f == null)//hacky forcing commit a newly added row and display the blank row
                     {
                         int i = fields.Rows.Add();
                         row = fields.Rows[i];
                         f = new Template.Field.PdfText();
-                        row.Tag = f;
-                        row.Cells["Ocr"].Value = f.Type == Template.Types.PdfText ? false : true;
+                        setFieldRow(row, f);
                         row.Selected = true;
                         return;
                     }
-                    var cs = row.Cells;
-
-                    if (f.Rectangle != null)
-                    {
-                        cs["Value"].Value = extractValueAndDrawSelectionBox(f.FloatingAnchorId, f.Rectangle, f.Type);
-                        if (cs["Value"].Value != null)
-                            setRowStatus(statuses.SUCCESS, row, "Found");
-                        else
-                            setRowStatus(statuses.ERROR, row, "Error");
-                    }
-                    else
-                        setRowStatus(statuses.WARNING, row, "Not set");
+                    setCurrentFieldRow(row);
                 }
                 catch (Exception ex)
                 {
@@ -219,23 +202,42 @@ namespace Cliver.PdfDocumentParser
 
         void setCurrentFieldRow(DataGridViewRow row)
         {
+            if (settingCurrentFieldRow)
+                return;
             try
             {
-                fields.ClearSelection();
+                settingCurrentFieldRow = true;
+
                 setCurrentMarkRow(null);
 
                 if (row == null)
                 {
+                    fields.ClearSelection();
                     fields.CurrentCell = null;
-                    setCurrentFloatingAnchorRow(null);
                     return;
                 }
+
                 fields.CurrentCell = fields[0, row.Index];
+                Template.Field f = (Template.Field)row.Tag;
+                setCurrentFloatingAnchorRow(f.FloatingAnchorId, true);
+
+                if (f.Rectangle != null)
+                {
+                    row.Cells["Value"].Value = extractValueAndDrawSelectionBox(f.FloatingAnchorId, f.Rectangle, f.Type);
+                    if (row.Cells["Value"].Value != null)
+                        setRowStatus(statuses.SUCCESS, row, "Found");
+                    else
+                        setRowStatus(statuses.ERROR, row, "Error");
+                }
+                else
+                    setRowStatus(statuses.WARNING, row, "Not set");
             }
             finally
             {
+                settingCurrentFieldRow = false;
             }
         }
+        bool settingCurrentFieldRow = false;
 
         void setFieldRectangle(DataGridViewRow row, Template.RectangleF r)
         {

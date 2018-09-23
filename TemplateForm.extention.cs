@@ -200,7 +200,7 @@ namespace Cliver.PdfDocumentParser
             if (string.IsNullOrWhiteSpace(name.Text))
                 if (saving)
                     throw new Exception("Name is empty!");
-            
+
             t.Name = name.Text.Trim();
 
             t.PagesRotation = (Template.PageRotations)pageRotation.SelectedIndex;
@@ -212,44 +212,44 @@ namespace Cliver.PdfDocumentParser
             foreach (DataGridViewRow r in floatingAnchors.Rows)
             {
                 Template.FloatingAnchor fa = (Template.FloatingAnchor)r.Tag;
-                if (fa != null)
+                if (fa == null)
+                    continue;
+
+                if (saving)
                 {
-                    if (saving)
+                    if (!fa.IsSet())
+                        throw new Exception("FloatingAnchor[Id=" + fa.Id + "] is not set!");
+
+                    bool linked = false;
+                    foreach (DataGridViewRow rr in marks.Rows)
                     {
-                        bool linked = false;
-                        foreach (DataGridViewRow rr in marks.Rows)
+                        Template.Mark m = (Template.Mark)rr.Tag;
+                        if (m != null && m.FloatingAnchorId == fa.Id)
                         {
-                            Template.Mark m = (Template.Mark)rr.Tag;
+                            linked = true;
+                            break;
+                        }
+                    }
+                    if (!linked)
+                        foreach (DataGridViewRow rr in fields.Rows)
+                        {
+                            Template.Field m = (Template.Field)rr.Tag;
                             if (m != null && m.FloatingAnchorId == fa.Id)
                             {
                                 linked = true;
                                 break;
                             }
                         }
-                        if (!linked)
-                            foreach (DataGridViewRow rr in fields.Rows)
-                            {
-                                Template.Field m = (Template.Field)rr.Tag;
-                                if (m != null && m.FloatingAnchorId == fa.Id)
-                                {
-                                    linked = true;
-                                    break;
-                                }
-                            }
-                        if (!linked)
-                        {
-                            if (removeNotLinkedAnchors == null)
-                                removeNotLinkedAnchors = Message.YesNo("The template contains not linked anchor[s]. Should they be removed?");
-                            if (removeNotLinkedAnchors == true)
-                                continue;
-                        }
-
-                        if (!fa.IsSet())
-                            throw new Exception("FloatingAnchor[Id=" + fa.Id + "] is not set!");
+                    if (!linked)
+                    {
+                        if (removeNotLinkedAnchors == null)
+                            removeNotLinkedAnchors = Message.YesNo("The template contains not linked anchor[s]. Should they be removed?");
+                        if (removeNotLinkedAnchors == true)
+                            continue;
                     }
-
-                    t.FloatingAnchors.Add(fa);
                 }
+
+                t.FloatingAnchors.Add(fa);
             }
             t.FloatingAnchors = t.FloatingAnchors.OrderBy(a => a.Id).ToList();
 
@@ -257,14 +257,13 @@ namespace Cliver.PdfDocumentParser
             foreach (DataGridViewRow r in marks.Rows)
             {
                 Template.Mark m = (Template.Mark)r.Tag;
-                if (m != null)
-                {
-                    if (!m.IsSet())
-                        throw new Exception("DocumentFirstPageRecognitionMark[" + r.Index + "] is not set!");
-                    if (m.FloatingAnchorId != null && t.FloatingAnchors.FirstOrDefault(x => x.Id == m.FloatingAnchorId) == null)
-                        throw new Exception("There is no FloatingAnchor with Id=" + m.FloatingAnchorId);
-                    t.DocumentFirstPageRecognitionMarks.Add(m);
-                }
+                if (m == null)
+                    continue;
+                if (saving && !m.IsSet())
+                    throw new Exception("DocumentFirstPageRecognitionMark[" + r.Index + "] is not set!");
+                if (m.FloatingAnchorId != null && t.FloatingAnchors.FirstOrDefault(x => x.Id == m.FloatingAnchorId) == null)
+                    throw new Exception("There is no FloatingAnchor with Id=" + m.FloatingAnchorId);
+                t.DocumentFirstPageRecognitionMarks.Add(m);
             }
             if (saving && t.DocumentFirstPageRecognitionMarks.Count < 1)
                 throw new Exception("DocumentFirstPageRecognitionMarks is empty!");
@@ -273,14 +272,13 @@ namespace Cliver.PdfDocumentParser
             foreach (DataGridViewRow r in fields.Rows)
             {
                 Template.Field f = (Template.Field)r.Tag;
-                if (f != null)
-                {
-                    if (!f.IsSet())
-                        throw new Exception("Field[" + r.Index + "] is not set!");
-                    if (f.FloatingAnchorId != null && t.FloatingAnchors.FirstOrDefault(x => x.Id == f.FloatingAnchorId) == null)
-                        throw new Exception("There is no FloatingAnchor with Id=" + f.FloatingAnchorId);
-                    t.Fields.Add(f);
-                }
+                if (f == null)
+                    continue;
+                if (saving && !f.IsSet())
+                    throw new Exception("Field[" + r.Index + "] is not set!");
+                if (f.FloatingAnchorId != null && t.FloatingAnchors.FirstOrDefault(x => x.Id == f.FloatingAnchorId) == null)
+                    throw new Exception("There is no FloatingAnchor with Id=" + f.FloatingAnchorId);
+                t.Fields.Add(f);
             }
             if (saving && t.Fields.Count < 1)
                 throw new Exception("Fields is empty!");

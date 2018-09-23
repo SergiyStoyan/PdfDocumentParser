@@ -199,14 +199,11 @@ namespace Cliver.PdfDocumentParser
                 if (string.IsNullOrWhiteSpace(testFile.Text) || 0 >= page_i || totalPageNumber < page_i)
                     return;
 
+                //loadingTemplate = true;
+                setCurrentFloatingAnchorRow(null, true);
+                setCurrentMarkRow(null);
+                setCurrentFieldRow(null);
                 loadingTemplate = false;
-
-                floatingAnchors.ClearSelection();
-                floatingAnchors.CurrentCell = null;
-                marks.ClearSelection();
-                marks.CurrentCell = null;
-                fields.ClearSelection();
-                fields.CurrentCell = null;
 
                 foreach (DataGridViewRow r in fields.Rows)
                     r.Cells["Value"].Value = null;
@@ -275,6 +272,7 @@ namespace Cliver.PdfDocumentParser
                 }
 
                 bool failed = false;
+                drawBoxes(Color.Black, new List<RectangleF> { }, true);
                 foreach (DataGridViewRow r in marks.Rows)
                     if (r.Tag != null && !isMarkFound(r, false))
                         failed = true;
