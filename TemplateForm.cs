@@ -129,8 +129,8 @@ namespace Cliver.PdfDocumentParser
                                     break;
 
                                 RectangleF selectedR = new RectangleF(selectionBoxPoint1, new SizeF(selectionBoxPoint2.X - selectionBoxPoint1.X, selectionBoxPoint2.Y - selectionBoxPoint1.Y));
-                                Template.Types vt = (Template.Types)floatingAnchors.SelectedRows[0].Cells["Type3"].Value;
-                                switch (vt)
+                                Template.Types type = (Template.Types)floatingAnchors.SelectedRows[0].Cells["Type3"].Value;
+                                switch (type)
                                 {
                                     case Template.Types.PdfText:
                                         if (selectedPdfCharBoxs == null/* || (ModifierKeys & Keys.Control) != Keys.Control*/)
@@ -169,7 +169,7 @@ namespace Cliver.PdfDocumentParser
                                         }
                                         break;
                                     default:
-                                        throw new Exception("Unknown option: " + vt);
+                                        throw new Exception("Unknown option: " + type);
                                 }
 
                                 if ((ModifierKeys & Keys.Control) != Keys.Control)

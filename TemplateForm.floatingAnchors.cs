@@ -128,7 +128,6 @@ namespace Cliver.PdfDocumentParser
                         int i = floatingAnchors.Rows.Add();
                         row = floatingAnchors.Rows[i];
                         fa = new Template.FloatingAnchor.PdfText();
-                        fa.Id = -1;
                         row.Tag = fa;
                         onFloatingAnchorsChanged();
                         row.Cells["Type3"].Value = fa.Type;
@@ -281,11 +280,11 @@ namespace Cliver.PdfDocumentParser
         {
             SortedSet<int> fais = new SortedSet<int>();
             foreach (DataGridViewRow r in floatingAnchors.Rows)
-                if (r.Tag != null && ((Template.FloatingAnchor)r.Tag).Id > 0)
+                if (r.Tag != null && ((Template.FloatingAnchor)r.Tag).IsSet())
                     fais.Add(((Template.FloatingAnchor)r.Tag).Id);
 
             foreach (DataGridViewRow r in floatingAnchors.Rows)
-                if (r.Tag != null && ((Template.FloatingAnchor)r.Tag).Id <= 0)
+                if (r.Tag != null && !((Template.FloatingAnchor)r.Tag).IsSet())
                 {
                     int fai = 1;
                     //if (fais.Count > 0)
@@ -346,6 +345,11 @@ namespace Cliver.PdfDocumentParser
                     case Template.Types.PdfText:
                         {
                             Template.FloatingAnchor.PdfText pt = (Template.FloatingAnchor.PdfText)row.Tag;
+                            if (pt == null)
+                            {
+                                pt = new Template.FloatingAnchor.PdfText();
+                                row.Tag = pt;
+                            }
                             pt.CharBoxs = new List<Template.FloatingAnchor.PdfText.CharBox>();
                             List<Pdf.Line> lines = Pdf.RemoveDuplicatesAndGetLines(selectedPdfCharBoxs, false);
                             if (lines.Count < 1)
@@ -371,6 +375,11 @@ namespace Cliver.PdfDocumentParser
                     case Template.Types.OcrText:
                         {
                             Template.FloatingAnchor.OcrText ot = (Template.FloatingAnchor.OcrText)row.Tag;
+                            if (ot == null)
+                            {
+                                ot = new Template.FloatingAnchor.OcrText();
+                                row.Tag = ot;
+                            }
                             ot.CharBoxs = new List<Template.FloatingAnchor.OcrText.CharBox>();
 
                             List<Ocr.Line> lines = PdfDocumentParser.Ocr.GetLines(selectedOcrCharBoxs);
@@ -397,6 +406,11 @@ namespace Cliver.PdfDocumentParser
                     case Template.Types.ImageData:
                         {
                             Template.FloatingAnchor.ImageData id = (Template.FloatingAnchor.ImageData)row.Tag;
+                            if (id == null)
+                            {
+                                id = new Template.FloatingAnchor.ImageData();
+                                row.Tag = id;
+                            }
                             id.ImageBoxs = new List<Template.FloatingAnchor.ImageData.ImageBox>();
 
                             if (selectedImageBoxs.Count < 1)

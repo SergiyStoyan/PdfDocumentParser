@@ -163,10 +163,10 @@ namespace Cliver.PdfDocumentParser
             [Newtonsoft.Json.JsonIgnore]
             public readonly Types Type;
 
-          virtual  public bool IsSet()
-            {
-                return Id > 0;
-            }
+            abstract public bool IsSet();
+            //{
+            //    return Id > 0;
+            //}
 
             public static System.Drawing.RectangleF GetSearchRectangle(RectangleF rectangle0, int margin/*, System.Drawing.RectangleF pageRectangle*/)
             {
@@ -186,7 +186,7 @@ namespace Cliver.PdfDocumentParser
 
                 override public bool IsSet()
                 {
-                    return base.IsSet() && CharBoxs.Count > 0;
+                    return CharBoxs.Count > 0;
                 }
             }
 
@@ -201,7 +201,7 @@ namespace Cliver.PdfDocumentParser
 
                 override public bool IsSet()
                 {
-                    return base.IsSet() && CharBoxs.Count > 0;
+                    return CharBoxs.Count > 0;
                 }
             }
 
@@ -220,7 +220,7 @@ namespace Cliver.PdfDocumentParser
 
                 override public bool IsSet()
                 {
-                    return base.IsSet() && ImageBoxs.Count > 0;
+                    return ImageBoxs.Count > 0;
                 }
             }
         }
