@@ -127,8 +127,7 @@ namespace Cliver.InvoiceParser
                     if (downloadLWT <= File.GetLastWriteTime(file2))
                         return;
                     copy(file, file2);
-                    //if (file2 == Settings.Templates.__File)//in the start it is null
-                    if (Settings.Template2s.__File == null)
+                    if (Settings.Template2s.__File == null)//at the start it is null
                         return;
                     if (PathRoutines.ArePathsEqual(file2, Settings.Template2s.__File))
                     {

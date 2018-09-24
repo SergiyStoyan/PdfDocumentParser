@@ -18,9 +18,9 @@ namespace Cliver.InvoiceParser
     public partial class Settings
     {
         [Cliver.Settings.Obligatory]
-        public static readonly Templates2Settings Template2s;
+        public static readonly Template2sSettings Template2s;
 
-        public class Templates2Settings : Cliver.Settings
+        public class Template2sSettings : Cliver.Settings
         {
             public Template2 InitialTemplate2;
             public List<Template2> Template2s = new List<Template2>();
