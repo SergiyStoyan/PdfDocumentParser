@@ -13,9 +13,8 @@ namespace Cliver.InvoiceParser
 {
     /*
  TBD:
- - implement image recognition by sum of brightness deltas
-  - record UsedTime to a separate table
- - ? Template not enherited but embedded
+ - tune image recognition by checking brightness deltas
+ - record UsedTime to a separate table
  - detect page rotation by tesseract
  - implement image recognition by brightness delta
 
@@ -23,7 +22,6 @@ namespace Cliver.InvoiceParser
 - ? store each template in separate file;
 
 - switch to Tesseract.4
-
      */
     class Program
     {

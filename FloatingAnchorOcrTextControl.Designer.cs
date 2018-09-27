@@ -35,6 +35,7 @@
             this.text = new System.Windows.Forms.RichTextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.SearchRectangleMargin = new System.Windows.Forms.NumericUpDown();
+            this.cSearchRectangleMargin = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.PositionDeviation)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SearchRectangleMargin)).BeginInit();
             this.SuspendLayout();
@@ -137,10 +138,20 @@
             0,
             -2147483648});
             // 
+            // cSearchRectangleMargin
+            // 
+            this.cSearchRectangleMargin.AutoSize = true;
+            this.cSearchRectangleMargin.Location = new System.Drawing.Point(138, 43);
+            this.cSearchRectangleMargin.Name = "cSearchRectangleMargin";
+            this.cSearchRectangleMargin.Size = new System.Drawing.Size(15, 14);
+            this.cSearchRectangleMargin.TabIndex = 83;
+            this.cSearchRectangleMargin.UseVisualStyleBackColor = true;
+            // 
             // AnchorOcrTextControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.cSearchRectangleMargin);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.SearchRectangleMargin);
             this.Controls.Add(this.label2);
@@ -166,5 +177,6 @@
         private System.Windows.Forms.RichTextBox text;
         private System.Windows.Forms.Label label3;
         public System.Windows.Forms.NumericUpDown SearchRectangleMargin;
+        private System.Windows.Forms.CheckBox cSearchRectangleMargin;
     }
 }

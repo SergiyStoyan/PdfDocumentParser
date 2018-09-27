@@ -47,6 +47,16 @@ namespace Cliver.PdfDocumentParser
         }
         Tesseract.TesseractEngine _engine = null;
 
+        public Orientation DetectOrientation(Bitmap b, out float confidence)
+        {
+            using (var page = engine.Process(b, PageSegMode.OsdOnly))
+            {
+                Orientation o;
+                page.DetectBestOrientation(out o, out confidence);
+                return o;
+            }
+        }
+
         public string GetText(Bitmap b, RectangleF r)
         {
             r = new RectangleF(r.X / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Y / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height / Settings.ImageProcessing.Image2PdfResolutionRatio);

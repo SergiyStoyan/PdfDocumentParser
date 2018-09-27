@@ -259,25 +259,25 @@ namespace Cliver.PdfDocumentParser
                 return;
             try
             {
+                if (row == currentMarkRow)
+                    return;
                 settingCurrentMarkRow = true;
 
-                setCurrentFieldRow(null);
+                setCurrentMarkFromControl();
 
                 if (row == null)
                 {
-                setCurrentMarkFromControl();
                     marks.ClearSelection();
                     marks.CurrentCell = null;
                     currentMarkControl = null;
                     return;
                 }
 
-                if(row!=currentMarkRow)
-                    setCurrentMarkFromControl();
+                setCurrentFieldRow(null);
 
                 marks.CurrentCell = marks[0, row.Index];
                 Template.Mark m = (Template.Mark)row.Tag;
-                setCurrentAnchorRow(m.AnchorId, true);
+                //setCurrentAnchorRow(m.AnchorId, true);
 
                 Control c = currentMarkControl;
                 switch (m.Type)

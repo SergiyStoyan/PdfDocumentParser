@@ -41,6 +41,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.SearchRectangleMargin = new System.Windows.Forms.NumericUpDown();
+            this.cSearchRectangleMargin = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BrightnessTolerance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DifferentPixelNumberTolerance)).BeginInit();
@@ -71,7 +72,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(3, 39);
+            this.label13.Location = new System.Drawing.Point(3, 40);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(163, 13);
             this.label13.TabIndex = 63;
@@ -80,7 +81,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(3, 17);
+            this.label11.Location = new System.Drawing.Point(3, 20);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(110, 13);
             this.label11.TabIndex = 61;
@@ -165,7 +166,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 61);
+            this.label1.Location = new System.Drawing.Point(3, 60);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(95, 13);
             this.label1.TabIndex = 69;
@@ -203,7 +204,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Enabled = false;
-            this.label2.Location = new System.Drawing.Point(3, 81);
+            this.label2.Location = new System.Drawing.Point(3, 80);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(150, 13);
             this.label2.TabIndex = 71;
@@ -212,7 +213,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 98);
+            this.label3.Location = new System.Drawing.Point(3, 100);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(131, 13);
             this.label3.TabIndex = 72;
@@ -240,10 +241,20 @@
             0,
             -2147483648});
             // 
+            // cSearchRectangleMargin
+            // 
+            this.cSearchRectangleMargin.AutoSize = true;
+            this.cSearchRectangleMargin.Location = new System.Drawing.Point(151, 99);
+            this.cSearchRectangleMargin.Name = "cSearchRectangleMargin";
+            this.cSearchRectangleMargin.Size = new System.Drawing.Size(15, 14);
+            this.cSearchRectangleMargin.TabIndex = 74;
+            this.cSearchRectangleMargin.UseVisualStyleBackColor = true;
+            // 
             // AnchorImageDataControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.cSearchRectangleMargin);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.SearchRectangleMargin);
             this.Controls.Add(this.label2);
@@ -284,5 +295,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         public System.Windows.Forms.NumericUpDown SearchRectangleMargin;
+        private System.Windows.Forms.CheckBox cSearchRectangleMargin;
     }
 }

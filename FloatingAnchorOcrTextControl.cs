@@ -20,6 +20,8 @@ namespace Cliver.PdfDocumentParser
         public AnchorOcrTextControl()
         {
             InitializeComponent();
+
+            cSearchRectangleMargin.CheckedChanged += delegate { SearchRectangleMargin.Value = cSearchRectangleMargin.Checked ? 100 : -1; SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked; };
         }
 
         public Template.Anchor.OcrText Anchor
@@ -53,6 +55,9 @@ namespace Cliver.PdfDocumentParser
                 }
                 catch { }
                 SearchRectangleMargin.Value = anchor.SearchRectangleMargin;
+
+                cSearchRectangleMargin.Checked = SearchRectangleMargin.Value >= 0;
+                SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked;
             }
         }
         Template.Anchor.OcrText anchor;

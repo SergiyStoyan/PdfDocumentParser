@@ -67,11 +67,11 @@ namespace Cliver.PdfDocumentParser
                 {
                     //case "Id3":
                     //    {
-                    //        int? fai = (int?)row.Cells["Id3"].Value;
-                    //        if (fai == null)
+                    //        int? anchorId = (int?)row.Cells["Id3"].Value;
+                    //        if (anchorId == null)
                     //            break;
                     //        Template.Anchor fa = (Template.Anchor)row.Tag;
-                    //        fa.Id = (int)fai;
+                    //        fa.Id = (int)anchorId;
                     //        setAnchorRow(row, fa);
                     //        break;
                     //    }
@@ -132,6 +132,7 @@ namespace Cliver.PdfDocumentParser
                         return;
                     }
                     setCurrentAnchorRow(fa.Id, false);
+                    findAndDrawAnchor(fa.Id);
                 }
                 catch (Exception ex)
                 {
@@ -140,7 +141,7 @@ namespace Cliver.PdfDocumentParser
             };
         }
 
-        void setCurrentAnchorRow(int? fai, bool clearSelection)
+        void setCurrentAnchorRow(int? anchorId, bool clearSelection)
         {
             if (settingCurrentAnchorRow)
                 return;
@@ -148,24 +149,12 @@ namespace Cliver.PdfDocumentParser
             {
                 settingCurrentAnchorRow = true;
 
-                if (fai == null)
-                {
-                setCurrentAnchorFromControl();
-                    anchors.ClearSelection();
-                    anchors.CurrentCell = null;
-                    currentAnchorRow = null;
-                    currentAnchorControl = null;
+                if (anchorId == currentAnchorId)
                     return;
-                }
-                DataGridViewRow row;
-                Template.Anchor fa = getAnchor(fai, out row);
-                if (row == null || fa == null)
-                    throw new Exception("Anchor[Id=" + fai + "] does not exist.");
+                currentAnchorId = anchorId;
 
-                if (row != currentAnchorRow)
-                    setCurrentAnchorFromControl();
+                setCurrentAnchorFromControl();
 
-                anchors.CurrentCell = anchors[0, row.Index];
                 if (clearSelection)
                     anchors.ClearSelection();
                 else
@@ -173,6 +162,21 @@ namespace Cliver.PdfDocumentParser
                     setCurrentFieldRow(null);
                     setCurrentMarkRow(null);
                 }
+
+                if (anchorId == null)
+                {
+                    anchors.ClearSelection();
+                    anchors.CurrentCell = null;
+                    currentAnchorRow = null;
+                    currentAnchorControl = null;
+                    return;
+                }
+
+                DataGridViewRow row;
+                Template.Anchor fa = getAnchor(anchorId, out row);
+                if (row == null || fa == null)
+                    throw new Exception("Anchor[Id=" + anchorId + "] does not exist.");
+                anchors.CurrentCell = anchors[0, row.Index];
 
                 Control c = currentAnchorControl;
                 Template.Types t = ((Template.Anchor)row.Tag).Type;
@@ -204,8 +208,6 @@ namespace Cliver.PdfDocumentParser
                 }
                 currentAnchorControl = c;
                 currentAnchorRow = row;
-
-                findAndDrawAnchor(fa.Id);
             }
             finally
             {
@@ -214,6 +216,7 @@ namespace Cliver.PdfDocumentParser
         }
         bool settingCurrentAnchorRow = false;
         DataGridViewRow currentAnchorRow = null;
+        int? currentAnchorId = null;
         Control currentAnchorControl
         {
             get
@@ -282,7 +285,7 @@ namespace Cliver.PdfDocumentParser
                 {
                     fa.Id = 1;
                     //if (fais.Count > 0)
-                    //    fai = fais.Max() + 1;                    
+                    //    anchorId = fais.Max() + 1;                    
                     foreach (int i in fais)
                     {
                         if (fa.Id < i)

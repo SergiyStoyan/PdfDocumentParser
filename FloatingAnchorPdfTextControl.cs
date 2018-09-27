@@ -20,7 +20,10 @@ namespace Cliver.PdfDocumentParser
         public AnchorPdfTextControl()
         {
             InitializeComponent();
+
+            cSearchRectangleMargin.CheckedChanged += delegate { SearchRectangleMargin.Value = cSearchRectangleMargin.Checked ? 100 : -1; SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked; };
         }
+        EventHandler cSearchRectangleMarginChecked;
 
         public Template.Anchor.PdfText Anchor
         {
@@ -53,7 +56,11 @@ namespace Cliver.PdfDocumentParser
                     PositionDeviation.Value = (decimal)value.PositionDeviation;
                 }
                 catch { }
+
                 SearchRectangleMargin.Value = value.SearchRectangleMargin;
+
+                cSearchRectangleMargin.Checked = SearchRectangleMargin.Value >= 0;
+                SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked;
             }
         }
         Template.Anchor.PdfText anchor;

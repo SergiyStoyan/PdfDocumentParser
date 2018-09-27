@@ -208,8 +208,9 @@ namespace Cliver.PdfDocumentParser
             {
                 settingCurrentFieldRow = true;
 
+                if (row == currentFieldRow)
+                    return;
                 currentFieldRow = row;
-                setCurrentMarkRow(null);
 
                 if (row == null)
                 {
@@ -217,6 +218,8 @@ namespace Cliver.PdfDocumentParser
                     fields.CurrentCell = null;
                     return;
                 }
+
+                setCurrentMarkRow(null);
 
                 fields.CurrentCell = fields[0, row.Index];
                 Template.Field f = (Template.Field)row.Tag;
