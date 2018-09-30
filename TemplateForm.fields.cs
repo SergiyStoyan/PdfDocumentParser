@@ -91,9 +91,12 @@ namespace Cliver.PdfDocumentParser
                                     else
                                     {
                                         setRowStatus(statuses.SUCCESS, row, "Anchor found");
-                                        f.Rectangle.X -= ((PointF)p).X;
-                                        f.Rectangle.Y -= ((PointF)p).Y;
-                                        setFieldRectangle(row, f.Rectangle);
+                                        if (f.Rectangle != null)
+                                        {
+                                            f.Rectangle.X -= ((PointF)p).X;
+                                            f.Rectangle.Y -= ((PointF)p).Y;
+                                            setFieldRectangle(row, f.Rectangle);
+                                        }
                                         return;
                                     }
                                 }
