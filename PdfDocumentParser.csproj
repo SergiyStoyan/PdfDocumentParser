@@ -220,7 +220,7 @@
     <Compile Include="Settings\Appearance.cs" />
     <Compile Include="ImageData.cs" />
     <Compile Include="Template.cs" />
-    <Compile Include="TemplateForm.floatingAnchors.cs">
+    <Compile Include="TemplateForm.anchors.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="TemplateForm.marks.cs">

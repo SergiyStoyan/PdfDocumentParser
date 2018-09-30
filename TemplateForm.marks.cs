@@ -310,7 +310,7 @@ namespace Cliver.PdfDocumentParser
         }
         void setCurrentMarkFromControl()
         {
-            if (currentMarkRow == null || currentMarkControl == null)
+            if (currentMarkRow == null || currentMarkRow.Index < 0 || currentMarkControl == null)
                 return;
             Template.Mark m = (Template.Mark)currentMarkRow.Tag;
             switch (m.Type)

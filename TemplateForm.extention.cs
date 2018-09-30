@@ -133,8 +133,8 @@ namespace Cliver.PdfDocumentParser
         {
             try
             {
-                Template t = getTemplateFromUI(true);
-                templateManager.SaveAsInitialTemplate(t);
+                templateManager.Template = getTemplateFromUI(true);
+                templateManager.SaveAsInitialTemplate();
                 Message.Inform("Saved");
             }
             catch (Exception ex)
@@ -182,8 +182,8 @@ namespace Cliver.PdfDocumentParser
             try
             {
                 //NewTemplate = getTemplateFromUI(true);
-                Template t = getTemplateFromUI(true);
-                templateManager.ReplaceWith(t);
+                templateManager.Template = getTemplateFromUI(true);
+                templateManager.Save();
                 DialogResult = DialogResult.OK;
                 Close();
             }
@@ -197,9 +197,8 @@ namespace Cliver.PdfDocumentParser
         {
             Template t = new Template();
 
-            if (string.IsNullOrWhiteSpace(name.Text))
-                if (saving)
-                    throw new Exception("Name is empty!");
+            if (saving && string.IsNullOrWhiteSpace(name.Text))
+                throw new Exception("Name is empty!");
 
             t.Name = name.Text.Trim();
 
@@ -285,11 +284,12 @@ namespace Cliver.PdfDocumentParser
 
             if (saving)
             {
-                if (t.Editor == null)
-                    t.Editor = new Template.EditorSettings();
-                t.Editor.TestFile = testFile.Text;
-                t.Editor.TestPictureScale = pictureScale.Value;
-                t.Editor.ExtractFieldsAutomaticallyWhenPageChanged = ExtractFieldsAutomaticallyWhenPageChanged.Checked;
+                t.Editor = new Template.EditorSettings
+                {
+                    TestFile = testFile.Text,
+                    TestPictureScale = pictureScale.Value,
+                    ExtractFieldsAutomaticallyWhenPageChanged = ExtractFieldsAutomaticallyWhenPageChanged.Checked,                     
+                };
             }
 
             return t;

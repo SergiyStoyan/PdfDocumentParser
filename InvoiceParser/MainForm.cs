@@ -337,7 +337,7 @@ namespace Cliver.InvoiceParser
             string lastTestFile = null;
             if (t.Template.Name != null)
                 Settings.TestFiles.TemplateNames2TestFile.TryGetValue(t.Template.Name, out lastTestFile);
-            TemplateManager tm = new TemplateManager { Template = t.Template, LastTestFile = lastTestFile, Row = r };
+            TemplateManager tm = new TemplateManager { Template = SerializationRoutines.Json.Clone<Template>(t.Template), LastTestFile = lastTestFile, Row = r };
             tf = new TemplateForm(tm, Settings.General.InputFolder);
             tf.FormClosed += delegate
             {
@@ -360,13 +360,13 @@ namespace Cliver.InvoiceParser
             static internal DataGridView Templates;
             internal DataGridViewRow Row;
 
-            override public void ReplaceWith(PdfDocumentParser.Template newTemplate)
+            override public void Save()
             {
                 Template2 t = (Template2)Row.Tag;
-                if (Settings.Template2s.Template2s.Where(a => a != t && a.Template.Name == newTemplate.Name).FirstOrDefault() != null)
-                    throw new Exception("Template '" + newTemplate.Name + "' already exists.");
+                if (Settings.Template2s.Template2s.Where(a => a != t && a.Template.Name == Template.Name).FirstOrDefault() != null)
+                    throw new Exception("Template '" + Template.Name + "' already exists.");
 
-                t.Template = newTemplate;
+                t.Template = Template;
                 t.ModifiedTime = DateTime.Now;
 
                 if (!Settings.Template2s.Template2s.Contains(t))
@@ -376,14 +376,12 @@ namespace Cliver.InvoiceParser
 
                 Row.Cells["Name_"].Value = t.Template.Name;
                 Row.Cells["ModifiedTime"].Value = t.GetModifiedTimeAsString();
-
-                Template = newTemplate;
             }
 
-            override public void SaveAsInitialTemplate(PdfDocumentParser.Template template)
+            override public void SaveAsInitialTemplate()
             {
                 Settings.Template2s.InitialTemplate2 = Settings.Template2s.CreateInitialTemplate();
-                Settings.Template2s.InitialTemplate2.Template = template;
+                Settings.Template2s.InitialTemplate2.Template = Template;
                 Settings.Template2s.Touch();
             }
         }

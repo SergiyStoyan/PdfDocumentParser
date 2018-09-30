@@ -21,6 +21,11 @@ namespace Cliver.PdfDocumentParser
         {
             InitializeComponent();
 
+            LostFocus += delegate
+            {
+
+            };
+
             cSearchRectangleMargin.CheckedChanged += delegate { SearchRectangleMargin.Value = cSearchRectangleMargin.Checked ? 100 : -1; SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked; };
         }
 

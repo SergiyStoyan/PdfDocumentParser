@@ -29,8 +29,8 @@ namespace Cliver.PdfDocumentParser
         public abstract class TemplateManager
         {
             public Template Template;
-            abstract public void ReplaceWith(Template newTemplate);
-            abstract public void SaveAsInitialTemplate(Template template);
+            abstract public void Save();
+            abstract public void SaveAsInitialTemplate();
             public string LastTestFile;
             public void HelpRequest()
             {

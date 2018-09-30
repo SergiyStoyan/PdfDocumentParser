@@ -236,7 +236,7 @@ namespace Cliver.PdfDocumentParser
         }
         void setCurrentAnchorFromControl()
         {
-            if (currentAnchorRow == null || currentAnchorControl == null)
+            if (currentAnchorRow == null || currentAnchorRow.Index < 0 || currentAnchorControl == null)
                 return;
             Template.Anchor fa = (Template.Anchor)currentAnchorRow.Tag;
             switch (fa.Type)
