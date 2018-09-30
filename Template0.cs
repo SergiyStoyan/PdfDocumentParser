@@ -44,7 +44,7 @@ namespace Cliver.PdfDocumentParser
             //serialize
             public Template.RectangleF Rectangle;//to be removed in next update
             //serialize
-            public ValueTypes Type = ValueTypes.PdfText;
+            public ValueTypes ValueType = ValueTypes.PdfText;
             //serialize
             public string ValueAsString
             {
@@ -52,7 +52,7 @@ namespace Cliver.PdfDocumentParser
                 {
                     if (Value == null)
                         return null;
-                    switch (Type)
+                    switch (ValueType)
                     {
                         case ValueTypes.PdfText:
                             return SerializationRoutines.Json.Serialize(Value, false);
@@ -61,7 +61,7 @@ namespace Cliver.PdfDocumentParser
                         case ValueTypes.ImageData:
                             return SerializationRoutines.Json.Serialize(Value, false);
                         default:
-                            throw new Exception("Unknown option: " + Type);
+                            throw new Exception("Unknown option: " + ValueType);
                     }
                 }
                 set
@@ -71,7 +71,7 @@ namespace Cliver.PdfDocumentParser
                         Value = null;
                         return;
                     }
-                    switch (Type)
+                    switch (ValueType)
                     {
                         case ValueTypes.PdfText:
                             Value = SerializationRoutines.Json.Deserialize<PdfTextValue>(value);
@@ -83,7 +83,7 @@ namespace Cliver.PdfDocumentParser
                             Value = SerializationRoutines.Json.Deserialize<ImageDataValue>(value);
                             break;
                         default:
-                            throw new Exception("Unknown option: " + Type);
+                            throw new Exception("Unknown option: " + ValueType);
                     }
 
                     ////TEMPORARY: trasferring to a new version
@@ -155,7 +155,7 @@ namespace Cliver.PdfDocumentParser
             public int? FloatingAnchorId;//when set, Rectangle.X,Y are bound to location of the anchor as to zero point
             public string Name;
             public Template.RectangleF Rectangle;//when FloatingAnchor is set, Rectangle.X,Y are bound to location of the anchor as to zero point
-            public ValueTypes Type = ValueTypes.PdfText;
+            public ValueTypes ValueType = ValueTypes.PdfText;
         }
         
         public partial class FloatingAnchor

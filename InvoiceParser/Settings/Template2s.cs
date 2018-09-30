@@ -120,7 +120,7 @@ namespace Cliver.InvoiceParser
                             foreach (PdfDocumentParser.Template0.Mark m0 in t0.DocumentFirstPageRecognitionMarks)
                             {
                                 PdfDocumentParser.Template.Mark m;
-                                switch (m0.Type)
+                                switch (m0.ValueType)
                                 {
                                     case PdfDocumentParser.Template0.ValueTypes.PdfText:
                                         {
@@ -178,7 +178,7 @@ namespace Cliver.InvoiceParser
                             foreach (PdfDocumentParser.Template0.Field f0 in t0.Fields)
                             {
                                 PdfDocumentParser.Template.Field f;
-                                switch (f0.Type)
+                                switch (f0.ValueType)
                                 {
                                     case PdfDocumentParser.Template0.ValueTypes.PdfText:
                                         {
