@@ -177,6 +177,18 @@
     <Compile Include="AnchorPdfTextControl.Designer.cs">
       <DependentUpon>AnchorPdfTextControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="AnchorControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AnchorControl.Designer.cs">
+      <DependentUpon>AnchorControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MarkControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MarkControl.Designer.cs">
+      <DependentUpon>MarkControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="PageCollection.cs" />
     <Compile Include="Page.cs" />
     <Compile Include="Program.cs" />
@@ -213,6 +225,12 @@
     <Compile Include="Settings\ImageProcessing.cs" />
     <Compile Include="Settings\Appearance.cs" />
     <Compile Include="ImageData.cs" />
+    <Compile Include="TableRowControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TableRowControl.Designer.cs">
+      <DependentUpon>TableRowControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Template.cs" />
     <Compile Include="TemplateForm.anchors.cs">
       <SubType>Form</SubType>

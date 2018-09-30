@@ -234,9 +234,6 @@ namespace Cliver.PdfDocumentParser
             try
             {
                 settingCurrentMarkRow = true;
-                //if (row == currentMarkRow)
-                //    return;
-                setCurrentMarkFromControl();
 
                 currentMarkRow = row;
 
@@ -308,27 +305,6 @@ namespace Cliver.PdfDocumentParser
                 value.Dock = DockStyle.Fill;
             }
         }
-        void setCurrentMarkFromControl()
-        {
-            if (currentMarkRow == null || currentMarkRow.Index < 0 || currentMarkControl == null)
-                return;
-            Template.Mark m = (Template.Mark)currentMarkRow.Tag;
-            switch (m.Type)
-            {
-                case Template.Types.PdfText:
-                    m = ((MarkPdfTextControl)currentMarkControl).Mark;
-                    break;
-                case Template.Types.OcrText:
-                    m = ((MarkOcrTextControl)currentMarkControl).Mark;
-                    break;
-                case Template.Types.ImageData:
-                    m = ((MarkImageDataControl)currentMarkControl).Mark;
-                    break;
-                default:
-                    throw new Exception("Unknown option: " + m.Type);
-            }
-            setMarkRow(currentMarkRow, m);
-        }
 
         void setMarkRectangle(DataGridViewRow row, Template.RectangleF r)
         {
@@ -379,7 +355,7 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        void setMarkRow(DataGridViewRow row, Template.Mark m)
+       public void setMarkRow(DataGridViewRow row, Template.Mark m)
         {
             row.Tag = m;
             row.Cells["Type2"].Value = m.Type;

@@ -15,13 +15,18 @@ using System.Windows.Forms;
 
 namespace Cliver.PdfDocumentParser
 {
-    public partial class AnchorOcrTextControl : UserControl
+    public partial class AnchorOcrTextControl : AnchorControl
     {
         public AnchorOcrTextControl()
         {
             InitializeComponent();
 
             cSearchRectangleMargin.CheckedChanged += delegate { SearchRectangleMargin.Value = cSearchRectangleMargin.Checked ? 100 : -1; SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked; };
+        }
+
+        override public Template.Anchor GetAnchor()
+        {
+            return Anchor;
         }
 
         public Template.Anchor.OcrText Anchor

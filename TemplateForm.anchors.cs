@@ -149,17 +149,11 @@ namespace Cliver.PdfDocumentParser
             try
             {
                 settingCurrentAnchorRow = true;
-                //if (anchorId == currentAnchorId)
-                //    return;
-                setCurrentAnchorFromControl();
-
-                currentAnchorId = anchorId;
 
                 if (anchorId == null)
                 {
                     anchors.ClearSelection();
                     anchors.CurrentCell = null;
-                    currentAnchorRow = null;
                     currentAnchorControl = null;
                     return;
                 }
@@ -178,7 +172,7 @@ namespace Cliver.PdfDocumentParser
                     setCurrentMarkRow(null);
                 }
 
-                Control c = currentAnchorControl;
+                AnchorControl c = currentAnchorControl;
                 Template.Types t = ((Template.Anchor)row.Tag).Type;
                 switch (t)
                 {
@@ -207,7 +201,7 @@ namespace Cliver.PdfDocumentParser
                         throw new Exception("Unknown option: " + t);
                 }
                 currentAnchorControl = c;
-                currentAnchorRow = row;
+                currentAnchorControl.Initialize(row, this);
             }
             finally
             {
@@ -215,15 +209,13 @@ namespace Cliver.PdfDocumentParser
             }
         }
         bool settingCurrentAnchorRow = false;
-        DataGridViewRow currentAnchorRow = null;
-        int? currentAnchorId = null;
-        Control currentAnchorControl
+        AnchorControl currentAnchorControl
         {
             get
             {
                 if (anchorControl.Controls.Count < 1)
                     return null;
-                return anchorControl.Controls[0];
+                return (AnchorControl)anchorControl.Controls[0];
             }
             set
             {
@@ -234,29 +226,8 @@ namespace Cliver.PdfDocumentParser
                 value.Dock = DockStyle.Fill;
             }
         }
-        void setCurrentAnchorFromControl()
-        {
-            if (currentAnchorRow == null || currentAnchorRow.Index < 0 || currentAnchorControl == null)
-                return;
-            Template.Anchor fa = (Template.Anchor)currentAnchorRow.Tag;
-            switch (fa.Type)
-            {
-                case Template.Types.PdfText:
-                    fa = ((AnchorPdfTextControl)currentAnchorControl).Anchor;
-                    break;
-                case Template.Types.OcrText:
-                    fa = ((AnchorOcrTextControl)currentAnchorControl).Anchor;
-                    break;
-                case Template.Types.ImageData:
-                    fa = ((AnchorImageDataControl)currentAnchorControl).Anchor;
-                    break;
-                default:
-                    throw new Exception("Unknown option: " + fa.Type);
-            }
-            setAnchorRow(currentAnchorRow, fa);
-        }
 
-        void setAnchorRow(DataGridViewRow row, Template.Anchor fa)
+        public void setAnchorRow(DataGridViewRow row, Template.Anchor fa)
         {
             row.Tag = fa;
             row.Cells["Id3"].Value = fa.Id;
@@ -265,7 +236,7 @@ namespace Cliver.PdfDocumentParser
             if (loadingTemplate)
                 return;
 
-            if (row == currentAnchorRow)
+            if (currentAnchorControl != null && row == currentAnchorControl.Row)
                 setCurrentAnchorRow(fa.Id, false);
         }
 
@@ -332,9 +303,9 @@ namespace Cliver.PdfDocumentParser
         {
             try
             {
-                if (currentAnchorRow == null)
+                if (currentAnchorControl == null)
                     return;
-                Template.Anchor fa = (Template.Anchor)currentAnchorRow.Tag;
+                Template.Anchor fa = (Template.Anchor)currentAnchorControl.Row.Tag;
                 switch (fa.Type)
                 {
                     case Template.Types.PdfText:
@@ -383,7 +354,7 @@ namespace Cliver.PdfDocumentParser
                     default:
                         throw new Exception("Unknown option: " + fa.Type);
                 }
-                setAnchorRow(currentAnchorRow, fa);
+                setAnchorRow(currentAnchorControl.Row, fa);
                 findAndDrawAnchor(fa.Id);
             }
             finally

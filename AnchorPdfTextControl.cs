@@ -15,7 +15,7 @@ using System.Windows.Forms;
 
 namespace Cliver.PdfDocumentParser
 {
-    public partial class AnchorPdfTextControl : UserControl
+    public partial class AnchorPdfTextControl : AnchorControl
     {
         public AnchorPdfTextControl()
         {
@@ -23,7 +23,11 @@ namespace Cliver.PdfDocumentParser
 
             cSearchRectangleMargin.CheckedChanged += delegate { SearchRectangleMargin.Value = cSearchRectangleMargin.Checked ? 100 : -1; SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked; };
         }
-        EventHandler cSearchRectangleMarginChecked;
+
+        override public Template.Anchor GetAnchor()
+        {
+            return Anchor;
+        }
 
         public Template.Anchor.PdfText Anchor
         {

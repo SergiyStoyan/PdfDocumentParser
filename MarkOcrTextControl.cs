@@ -15,11 +15,16 @@ using System.Windows.Forms;
 
 namespace Cliver.PdfDocumentParser
 {
-    public partial class MarkOcrTextControl : UserControl
+    public partial class MarkOcrTextControl : MarkControl
     {
         public MarkOcrTextControl()
         {
             InitializeComponent();
+        }
+
+        override public Template.Mark GetMark()
+        {
+            return Mark;
         }
 
         public Template.Mark.OcrText Mark

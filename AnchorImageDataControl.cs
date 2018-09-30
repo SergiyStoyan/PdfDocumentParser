@@ -15,22 +15,18 @@ using System.Windows.Forms;
 
 namespace Cliver.PdfDocumentParser
 {
-    public partial class AnchorImageDataControl : UserControl
+    public partial class AnchorImageDataControl : AnchorControl
     {
         public AnchorImageDataControl()
         {
             InitializeComponent();
 
-            LostFocus += delegate
-            {
-
-            };
-            Leave+= delegate
-            {
-
-            };
-
             cSearchRectangleMargin.CheckedChanged += delegate { SearchRectangleMargin.Value = cSearchRectangleMargin.Checked ? 100 : -1; SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked; };
+        }
+
+        override public Template.Anchor GetAnchor()
+        {
+            return Anchor;
         }
 
         public Template.Anchor.ImageData Anchor
