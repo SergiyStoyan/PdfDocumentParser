@@ -151,9 +151,9 @@ namespace Cliver.PdfDocumentParser
                 settingCurrentAnchorRow = true;
                 //if (anchorId == currentAnchorId)
                 //    return;
-                currentAnchorId = anchorId;
-
                 setCurrentAnchorFromControl();
+
+                currentAnchorId = anchorId;
 
                 if (anchorId == null)
                 {

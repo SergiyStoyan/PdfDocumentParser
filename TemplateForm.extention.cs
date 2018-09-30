@@ -195,6 +195,9 @@ namespace Cliver.PdfDocumentParser
 
         Template getTemplateFromUI(bool saving)
         {
+            setCurrentAnchorFromControl();
+            setCurrentMarkFromControl();
+
             Template t = new Template();
 
             if (saving && string.IsNullOrWhiteSpace(name.Text))

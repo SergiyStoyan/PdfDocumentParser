@@ -236,9 +236,9 @@ namespace Cliver.PdfDocumentParser
                 settingCurrentMarkRow = true;
                 //if (row == currentMarkRow)
                 //    return;
-                currentMarkRow = row;
-
                 setCurrentMarkFromControl();
+
+                currentMarkRow = row;
 
                 if (row == null)
                 {
