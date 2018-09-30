@@ -337,7 +337,7 @@ namespace Cliver.InvoiceParser
             string lastTestFile = null;
             if (t.Template.Name != null)
                 Settings.TestFiles.TemplateNames2TestFile.TryGetValue(t.Template.Name, out lastTestFile);
-            TemplateManager tm = new TemplateManager { Template = SerializationRoutines.Json.Clone<Template>(t.Template), LastTestFile = lastTestFile, Row = r };
+            TemplateManager tm = new TemplateManager { Template = SerializationRoutines.Json.Clone(t.Template), LastTestFile = lastTestFile, Row = r };
             tf = new TemplateForm(tm, Settings.General.InputFolder);
             tf.FormClosed += delegate
             {

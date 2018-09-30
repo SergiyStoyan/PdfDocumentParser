@@ -262,28 +262,27 @@ namespace Cliver.InvoiceParser
             {
                 if (InitialTemplate2 != null && InitialTemplate2.Template != null)
                 {
-                    string ts = SerializationRoutines.Json.Serialize(InitialTemplate2);
-                    Template2 t = SerializationRoutines.Json.Deserialize<Template2>(ts);
+                    Template2 t = SerializationRoutines.Json.Clone(InitialTemplate2);
                     t.Template.Name = "";
                     return t;
                 }
                 return new Template2
                 {
                     FileFilterRegex = new Regex(@"\.pdf$", RegexOptions.IgnoreCase),
-                    Template = new PdfDocumentParser.Template
+                    Template = new Template
                     {
                         AutoDeskew = false,
-                        Fields = new List<PdfDocumentParser.Template.Field> {
-                        new PdfDocumentParser.Template.Field.PdfText { Name = "INVOICE#" , Rectangle=new PdfDocumentParser.Template.RectangleF(0,0,10,10)},
-                        new PdfDocumentParser.Template.Field.PdfText { Name = "JOB#", Rectangle=new PdfDocumentParser.Template.RectangleF(0,0,10,10) },
-                        new PdfDocumentParser.Template.Field.PdfText { Name = "PO#", Rectangle=new PdfDocumentParser.Template.RectangleF(0,0,10,10) },
-                        new PdfDocumentParser.Template.Field.PdfText { Name = "COST" , Rectangle=new PdfDocumentParser.Template.RectangleF(0,0,10,10)},
+                        Fields = new List<Template.Field> {
+                        new Template.Field.PdfText { Name = "INVOICE#" , Rectangle=new Template.RectangleF(0,0,10,10)},
+                        new Template.Field.PdfText { Name = "JOB#", Rectangle=new Template.RectangleF(0,0,10,10) },
+                        new Template.Field.PdfText { Name = "PO#", Rectangle=new Template.RectangleF(0,0,10,10) },
+                        new Template.Field.PdfText { Name = "COST" , Rectangle=new Template.RectangleF(0,0,10,10)},
                     },
                         Name = "",
-                        Anchors = new List<PdfDocumentParser.Template.Anchor>(),
-                        Marks = new List<PdfDocumentParser.Template.Mark>(),
+                        Anchors = new List<Template.Anchor>(),
+                        Marks = new List<Template.Mark>(),
                         PagesRotation = PdfDocumentParser.Template.PageRotations.NONE,
-                        Editor = new PdfDocumentParser.Template.EditorSettings
+                        Editor = new Template.EditorSettings
                         {
                             TestPictureScale = 1.2m,
                             TestFile = "",
@@ -297,7 +296,7 @@ namespace Cliver.InvoiceParser
 
     public class Template2
     {
-        public PdfDocumentParser.Template Template;
+        public Template Template;
 
         public bool Active = true;
         public string Group;
