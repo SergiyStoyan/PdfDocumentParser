@@ -76,6 +76,7 @@ namespace Cliver.PdfDocumentParser
                                 f2.AnchorId = f.AnchorId;
                                 f2.Rectangle = f.Rectangle;
                                 f = f2;
+                                setFieldRow(row, f);
                                 break;
                             }
                         case "AnchorId":
@@ -93,6 +94,7 @@ namespace Cliver.PdfDocumentParser
                                         f.Rectangle.X -= ((PointF)p).X;
                                         f.Rectangle.Y -= ((PointF)p).Y;
                                         setFieldRectangle(row, f.Rectangle);
+                                        return;
                                     }
                                 }
                                 else//anchor deselected
@@ -100,13 +102,13 @@ namespace Cliver.PdfDocumentParser
                                     setRowStatus(statuses.WARNING, row, "Changed");
                                     cs["Value"].Value = extractValueAndDrawSelectionBox(f.AnchorId, f.Rectangle, f.Type);
                                 }
+                                setFieldRow(row, f);
                                 break;
                             }
                         case "Name_":
                             f.Name = (string)row.Cells["Name_"].Value;
                             break;
                     }
-                    setFieldRow(row, f);
                     //cs["Value"].Value = extractValueAndDrawSelectionBox(f.AnchorId, f.Rectangle, f.Type);
                     //if (cs["Value"].Value == null)
                     //    setRowStatus(statuses.WARNING, row, "Not found");
@@ -207,9 +209,8 @@ namespace Cliver.PdfDocumentParser
             try
             {
                 settingCurrentFieldRow = true;
-
-                if (row == currentFieldRow)
-                    return;
+                //if (row == currentFieldRow)
+                //    return;
                 currentFieldRow = row;
 
                 if (row == null)
@@ -251,7 +252,9 @@ namespace Cliver.PdfDocumentParser
                 return;
             f.Rectangle = r;
             row.Cells["Rectangle"].Value = SerializationRoutines.Json.Serialize(r);
-            setFieldRow(row, f);
+
+            if (row == currentFieldRow)
+                setCurrentFieldRow(row);
         }
 
         void setFieldRow(DataGridViewRow row, Template.Field f)

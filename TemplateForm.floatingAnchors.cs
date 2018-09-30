@@ -102,6 +102,7 @@ namespace Cliver.PdfDocumentParser
                         }
                 }
                 setAnchorRow(row, fa);
+                findAndDrawAnchor(fa.Id);
             };
 
             anchors.SelectionChanged += delegate (object sender, EventArgs e)
@@ -148,20 +149,11 @@ namespace Cliver.PdfDocumentParser
             try
             {
                 settingCurrentAnchorRow = true;
-
-                if (anchorId == currentAnchorId)
-                    return;
+                //if (anchorId == currentAnchorId)
+                //    return;
                 currentAnchorId = anchorId;
 
                 setCurrentAnchorFromControl();
-
-                if (clearSelection)
-                    anchors.ClearSelection();
-                else
-                {
-                    setCurrentFieldRow(null);
-                    setCurrentMarkRow(null);
-                }
 
                 if (anchorId == null)
                 {
@@ -177,6 +169,14 @@ namespace Cliver.PdfDocumentParser
                 if (row == null || fa == null)
                     throw new Exception("Anchor[Id=" + anchorId + "] does not exist.");
                 anchors.CurrentCell = anchors[0, row.Index];
+
+                if (clearSelection)
+                    anchors.ClearSelection();
+                else
+                {
+                    setCurrentFieldRow(null);
+                    setCurrentMarkRow(null);
+                }
 
                 Control c = currentAnchorControl;
                 Template.Types t = ((Template.Anchor)row.Tag).Type;
@@ -384,6 +384,7 @@ namespace Cliver.PdfDocumentParser
                         throw new Exception("Unknown option: " + fa.Type);
                 }
                 setAnchorRow(currentAnchorRow, fa);
+                findAndDrawAnchor(fa.Id);
             }
             finally
             {

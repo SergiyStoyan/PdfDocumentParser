@@ -101,39 +101,13 @@ namespace Cliver.PdfDocumentParser
                                 m2.Rectangle = m.Rectangle;
                                 m = m2;
                                 currentMarkControl = null;
+                                find_setMarkValue(row);
                             }
                             break;
                         case "AnchorId2":
                             m.AnchorId = (int?)cs["AnchorId2"].Value;
                             //setRowStatus(statuses.WARNING, row, "Changed");
                             break;
-                    }
-                    object v = extractValueAndDrawSelectionBox(m.AnchorId, m.Rectangle, m.Type);
-                    if (v != null)
-                    {
-                        switch (m.Type)
-                        {
-                            case Template.Types.PdfText:
-                                {
-                                    Template.Mark.PdfText ptv = (Template.Mark.PdfText)m;
-                                    ptv.Text = (string)v;
-                                }
-                                break;
-                            case Template.Types.OcrText:
-                                {
-                                    Template.Mark.OcrText otv = (Template.Mark.OcrText)m;
-                                    otv.Text = (string)v;
-                                }
-                                break;
-                            case Template.Types.ImageData:
-                                {
-                                    Template.Mark.ImageData idv = (Template.Mark.ImageData)m;
-                                    idv.ImageData_ = (ImageData)v;
-                                }
-                                break;
-                            default:
-                                throw new Exception("Unknown option: " + m.Type);
-                        }
                     }
                     setMarkRow(row, m);
                 }
@@ -259,9 +233,10 @@ namespace Cliver.PdfDocumentParser
                 return;
             try
             {
-                if (row == currentMarkRow)
-                    return;
                 settingCurrentMarkRow = true;
+                //if (row == currentMarkRow)
+                //    return;
+                currentMarkRow = row;
 
                 setCurrentMarkFromControl();
 
@@ -307,7 +282,6 @@ namespace Cliver.PdfDocumentParser
                         throw new Exception("Unknown option: " + m.Type);
                 }
                 currentMarkControl = c;
-                currentMarkRow = row;
                 isMarkFound(row, true);
             }
             finally
@@ -361,13 +335,25 @@ namespace Cliver.PdfDocumentParser
             Template.Mark m = (Template.Mark)row.Tag;
             if (m == null)
                 return;
-            object v = extractValueAndDrawSelectionBox(m.AnchorId, r, m.Type);
-            if (v == null)
-            {
-                setRowStatus(statuses.ERROR, row, "Not found");
-                return;
-            }
             m.Rectangle = r;
+
+            find_setMarkValue(row);
+
+            if (row == currentMarkRow)
+                setCurrentMarkRow(row);
+        }
+
+        void find_setMarkValue(DataGridViewRow row)
+        {
+            Template.Mark m = (Template.Mark)row.Tag;
+            if (m == null)
+                return;
+            row.Tag = m;
+            object v = extractValueAndDrawSelectionBox(m.AnchorId, m.Rectangle, m.Type);
+            if (v == null)
+                setRowStatus(statuses.ERROR, row, "Not set");
+            else
+                setRowStatus(statuses.SUCCESS, row, "Set");
             switch (m.Type)
             {
                 case Template.Types.PdfText:
@@ -391,7 +377,6 @@ namespace Cliver.PdfDocumentParser
                 default:
                     throw new Exception("Unknown option: " + m.Type);
             }
-            setMarkRow(row, m);
         }
 
         void setMarkRow(DataGridViewRow row, Template.Mark m)
