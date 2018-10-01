@@ -100,7 +100,7 @@ namespace Cliver.PdfDocumentParser
                                 m2.AnchorId = m.AnchorId;
                                 m2.Rectangle = m.Rectangle;
                                 m = m2;
-                                currentMarkControl = null;
+                                //currentMarkControl = null;
                                 find_setMarkValue(row);
                             }
                             break;
@@ -251,7 +251,7 @@ namespace Cliver.PdfDocumentParser
                 Template.Mark m = (Template.Mark)row.Tag;
                 //setCurrentAnchorRow(m.AnchorId, true);
 
-                Control c = currentMarkControl;
+                MarkControl c = currentMarkControl;
                 switch (m.Type)
                 {
                     case Template.Types.PdfText:
@@ -278,6 +278,7 @@ namespace Cliver.PdfDocumentParser
                     default:
                         throw new Exception("Unknown option: " + m.Type);
                 }
+                c.Initialize(row);
                 currentMarkControl = c;
                 isMarkFound(row, true);
             }
@@ -288,13 +289,13 @@ namespace Cliver.PdfDocumentParser
         }
         bool settingCurrentMarkRow = false;
         DataGridViewRow currentMarkRow = null;
-        Control currentMarkControl
+        MarkControl currentMarkControl
         {
             get
             {
                 if (markControl.Controls.Count < 1)
                     return null;
-                return markControl.Controls[0];
+                return (MarkControl)markControl.Controls[0];
             }
             set
             {
@@ -355,7 +356,7 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-       public void setMarkRow(DataGridViewRow row, Template.Mark m)
+        void setMarkRow(DataGridViewRow row, Template.Mark m)
         {
             row.Tag = m;
             row.Cells["Type2"].Value = m.Type;

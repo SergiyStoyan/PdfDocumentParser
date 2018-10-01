@@ -18,7 +18,7 @@ namespace Cliver.PdfDocumentParser
 
             Leave += delegate (object sender, EventArgs e)
             {
-                templateForm.setAnchorRow(Row, GetAnchor());
+                Row.Tag = GetAnchor();
             };
         }
 

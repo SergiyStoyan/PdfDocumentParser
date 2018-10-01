@@ -97,7 +97,7 @@ namespace Cliver.PdfDocumentParser
                             }
                             fa2.Id = fa.Id;
                             fa = fa2;
-                            currentAnchorControl = null;
+                            //currentAnchorControl = null;
                             break;
                         }
                 }
@@ -200,8 +200,8 @@ namespace Cliver.PdfDocumentParser
                     default:
                         throw new Exception("Unknown option: " + t);
                 }
+                c.Initialize(row);
                 currentAnchorControl = c;
-                currentAnchorControl.Initialize(row, this);
             }
             finally
             {
@@ -227,7 +227,7 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public void setAnchorRow(DataGridViewRow row, Template.Anchor fa)
+        void setAnchorRow(DataGridViewRow row, Template.Anchor fa)
         {
             row.Tag = fa;
             row.Cells["Id3"].Value = fa.Id;

@@ -17,12 +17,12 @@ namespace Cliver.PdfDocumentParser
             InitializeComponent();
         }
         public DataGridViewRow Row;
-        protected TemplateForm templateForm;
+        //protected TemplateForm templateForm;
 
-        public void Initialize(DataGridViewRow row, TemplateForm templateForm)
+        public void Initialize(DataGridViewRow row/*, TemplateForm templateForm*/)
         {
             Row = row;
-            this.templateForm = templateForm;
+            //this.templateForm = templateForm;
         }
     }
 }
