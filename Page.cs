@@ -214,7 +214,7 @@ namespace Cliver.PdfDocumentParser
                             bt0s = PdfCharBoxs.Where(a => a.Char == faes[0].Char);
                         else
                         {
-                            RectangleF sr = Template.Anchor.GetSearchRectangle(faes[0].Rectangle, ptv.SearchRectangleMargin);
+                            RectangleF sr = getSearchRectangle(faes[0].Rectangle, ptv.SearchRectangleMargin);
                             bt0s = PdfCharBoxs.Where(a => a.Char == faes[0].Char && sr.Contains(a.R));
                         }
                         List<Pdf.CharBox> bts = new List<Pdf.CharBox>();
@@ -254,7 +254,7 @@ namespace Cliver.PdfDocumentParser
                             bt0s = ActiveTemplateOcrCharBoxs.Where(a => a.Char == faes[0].Char);
                         else
                         {
-                            RectangleF sr = Template.Anchor.GetSearchRectangle(faes[0].Rectangle, otv.SearchRectangleMargin);
+                            RectangleF sr = getSearchRectangle(faes[0].Rectangle, otv.SearchRectangleMargin);
                             bt0s = ActiveTemplateOcrCharBoxs.Where(a => a.Char == faes[0].Char && sr.Contains(a.R));
                         }
                         List<Ocr.CharBox> bts = new List<Ocr.CharBox>();
@@ -298,7 +298,7 @@ namespace Cliver.PdfDocumentParser
                         }
                         else
                         {
-                            RectangleF sr = Template.Anchor.GetSearchRectangle(ibs[0].Rectangle, idv.SearchRectangleMargin);
+                            RectangleF sr = getSearchRectangle(ibs[0].Rectangle, idv.SearchRectangleMargin);
                             id0 = new ImageData(getRectangleFromActiveTemplateBitmap(sr.X / Settings.ImageProcessing.Image2PdfResolutionRatio, sr.Y / Settings.ImageProcessing.Image2PdfResolutionRatio, sr.Width / Settings.ImageProcessing.Image2PdfResolutionRatio, sr.Height / Settings.ImageProcessing.Image2PdfResolutionRatio));
                             shift = new Point(sr.X < 0 ? 0 : (int)sr.X, sr.Y < 0 ? 0 : (int)sr.Y);
                         }
@@ -340,6 +340,12 @@ namespace Cliver.PdfDocumentParser
                 default:
                     throw new Exception("Unknown option: " + fa.Type);
             }
+        }
+        RectangleF getSearchRectangle(Template.RectangleF rectangle0, int margin/*, System.Drawing.RectangleF pageRectangle*/)
+        {
+            RectangleF r = new RectangleF(rectangle0.X - margin, rectangle0.Y - margin, rectangle0.Width + 2 * margin, rectangle0.Height + 2 * margin);
+            //r.Intersect(pageRectangle);
+            return r;
         }
 
         internal ImageData ActiveTemplateImageData

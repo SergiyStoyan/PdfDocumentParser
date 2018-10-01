@@ -168,13 +168,6 @@ namespace Cliver.PdfDocumentParser
             //    return Id > 0;
             //}
 
-            public static System.Drawing.RectangleF GetSearchRectangle(RectangleF rectangle0, int margin/*, System.Drawing.RectangleF pageRectangle*/)
-            {
-                System.Drawing.RectangleF r = new System.Drawing.RectangleF(rectangle0.X - margin, rectangle0.Y - margin, rectangle0.Width + 2 * margin, rectangle0.Height + 2 * margin);
-                //r.Intersect(pageRectangle);
-                return r;
-            }
-
             public class PdfText : Anchor
             {
                 public List<CharBox> CharBoxs = new List<CharBox>();
