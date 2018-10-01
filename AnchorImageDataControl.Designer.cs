@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.picture = new System.Windows.Forms.PictureBox();
             this.label20 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
@@ -42,23 +41,12 @@
             this.label3 = new System.Windows.Forms.Label();
             this.SearchRectangleMargin = new System.Windows.Forms.NumericUpDown();
             this.cSearchRectangleMargin = new System.Windows.Forms.CheckBox();
-            ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
+            this.pictures = new System.Windows.Forms.FlowLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.BrightnessTolerance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DifferentPixelNumberTolerance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PositionDeviation)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SearchRectangleMargin)).BeginInit();
             this.SuspendLayout();
-            // 
-            // picture
-            // 
-            this.picture.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.picture.Location = new System.Drawing.Point(0, 122);
-            this.picture.Name = "picture";
-            this.picture.Size = new System.Drawing.Size(218, 92);
-            this.picture.TabIndex = 67;
-            this.picture.TabStop = false;
             // 
             // label20
             // 
@@ -156,7 +144,6 @@
             // PositionDeviationIsAbsolute
             // 
             this.PositionDeviationIsAbsolute.AutoSize = true;
-            this.PositionDeviationIsAbsolute.Enabled = false;
             this.PositionDeviationIsAbsolute.Location = new System.Drawing.Point(168, 81);
             this.PositionDeviationIsAbsolute.Name = "PositionDeviationIsAbsolute";
             this.PositionDeviationIsAbsolute.Size = new System.Drawing.Size(15, 14);
@@ -203,7 +190,6 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Enabled = false;
             this.label2.Location = new System.Drawing.Point(3, 80);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(150, 13);
@@ -250,10 +236,21 @@
             this.cSearchRectangleMargin.TabIndex = 74;
             this.cSearchRectangleMargin.UseVisualStyleBackColor = true;
             // 
+            // pictures
+            // 
+            this.pictures.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictures.AutoSize = true;
+            this.pictures.Location = new System.Drawing.Point(0, 119);
+            this.pictures.Name = "pictures";
+            this.pictures.Size = new System.Drawing.Size(215, 27);
+            this.pictures.TabIndex = 75;
+            // 
             // AnchorImageDataControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.pictures);
             this.Controls.Add(this.cSearchRectangleMargin);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.SearchRectangleMargin);
@@ -261,7 +258,6 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.PositionDeviation);
             this.Controls.Add(this.PositionDeviationIsAbsolute);
-            this.Controls.Add(this.picture);
             this.Controls.Add(this.label20);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.label11);
@@ -269,8 +265,7 @@
             this.Controls.Add(this.BrightnessTolerance);
             this.Controls.Add(this.DifferentPixelNumberTolerance);
             this.Name = "AnchorImageDataControl";
-            this.Size = new System.Drawing.Size(218, 214);
-            ((System.ComponentModel.ISupportInitialize)(this.picture)).EndInit();
+            this.Size = new System.Drawing.Size(218, 149);
             ((System.ComponentModel.ISupportInitialize)(this.BrightnessTolerance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DifferentPixelNumberTolerance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PositionDeviation)).EndInit();
@@ -281,8 +276,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.PictureBox picture;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label11;
@@ -296,5 +289,6 @@
         private System.Windows.Forms.Label label3;
         public System.Windows.Forms.NumericUpDown SearchRectangleMargin;
         private System.Windows.Forms.CheckBox cSearchRectangleMargin;
+        private System.Windows.Forms.FlowLayoutPanel pictures;
     }
 }

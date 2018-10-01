@@ -24,61 +24,46 @@ namespace Cliver.PdfDocumentParser
             cSearchRectangleMargin.CheckedChanged += delegate { SearchRectangleMargin.Value = cSearchRectangleMargin.Checked ? 100 : -1; SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked; };
         }
 
-        override public Template.Anchor GetAnchor()
+        override protected object getObject()
         {
-            return Anchor;
+            if (_object == null)
+                _object = new Template.Anchor.PdfText();
+            _object.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
+            _object.PositionDeviation = (float)PositionDeviation.Value;
+            _object.SearchRectangleMargin = (int)SearchRectangleMargin.Value;
+            return _object;
+
         }
 
-        public Template.Anchor.PdfText Anchor
+        public override void Initialize(DataGridViewRow row)
         {
-            get
+            base.Initialize(row);
+
+            _object = (Template.Anchor.PdfText)row.Tag;
+            if (_object == null)
+                _object = new Template.Anchor.PdfText();
+            StringBuilder sb = new StringBuilder();
+            foreach (var l in Pdf.RemoveDuplicatesAndGetLines(_object.CharBoxs.Select(x => new Pdf.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() }), true))
             {
-                if (anchor == null)
-                    anchor = new Template.Anchor.PdfText();
-                anchor.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
-                anchor.PositionDeviation = (float)PositionDeviation.Value;
-                anchor.SearchRectangleMargin = (int)SearchRectangleMargin.Value;
-                return anchor;
+                foreach (var cb in l.CharBoxes)
+                    sb.Append(cb.Char);
+                sb.Append("\r\n");
             }
-            set
+            text.Text = sb.ToString();
+
+            PositionDeviationIsAbsolute.Checked = _object.PositionDeviationIsAbsolute;
+            try
             {
-                if (value == null)
-                    value = new Template.Anchor.PdfText();
-                anchor = value;
-                StringBuilder sb = new StringBuilder();
-                foreach (var l in Pdf.RemoveDuplicatesAndGetLines(value.CharBoxs.Select(x => new Pdf.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() }), true))
-                {
-                    foreach (var cb in l.CharBoxes)
-                        sb.Append(cb.Char);
-                    sb.Append("\r\n");
-                }
-                text.Text = sb.ToString();
-
-                PositionDeviationIsAbsolute.Checked = value.PositionDeviationIsAbsolute;
-                try
-                {
-                    PositionDeviation.Value = (decimal)value.PositionDeviation;
-                }
-                catch { }
-
-                SearchRectangleMargin.Value = value.SearchRectangleMargin;
-
-                cSearchRectangleMargin.Checked = SearchRectangleMargin.Value >= 0;
-                SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked;
+                PositionDeviation.Value = (decimal)_object.PositionDeviation;
             }
+            catch { }
+
+            SearchRectangleMargin.Value = _object.SearchRectangleMargin;
+
+            cSearchRectangleMargin.Checked = SearchRectangleMargin.Value >= 0;
+            SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked;
         }
-        Template.Anchor.PdfText anchor;
 
-        //public bool Text
-        //{
-        //    get
-        //    {
-        //        return findBestImageMatch.Checked;
-        //    }
-        //    set
-        //    {
-        //        findBestImageMatch.Checked = value;
-        //    }
-        //}
+        Template.Anchor.PdfText _object;
     }
 }

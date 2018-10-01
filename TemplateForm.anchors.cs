@@ -97,7 +97,6 @@ namespace Cliver.PdfDocumentParser
                             }
                             fa2.Id = fa.Id;
                             fa = fa2;
-                            //currentAnchorControl = null;
                             break;
                         }
                 }
@@ -172,36 +171,31 @@ namespace Cliver.PdfDocumentParser
                     setCurrentMarkRow(null);
                 }
 
-                AnchorControl c = currentAnchorControl;
                 Template.Types t = ((Template.Anchor)row.Tag).Type;
                 switch (t)
                 {
                     case Template.Types.PdfText:
                         {
-                            if (c == null || !(c is AnchorPdfTextControl))
-                                c = new AnchorPdfTextControl();
-                            ((AnchorPdfTextControl)c).Anchor = (Template.Anchor.PdfText)row.Tag;
+                            if (currentAnchorControl == null || !(currentAnchorControl is AnchorPdfTextControl))
+                                currentAnchorControl = new AnchorPdfTextControl();
                         }
                         break;
                     case Template.Types.OcrText:
                         {
-                            if (c == null || !(c is AnchorOcrTextControl))
-                                c = new AnchorOcrTextControl();
-                            ((AnchorOcrTextControl)c).Anchor = (Template.Anchor.OcrText)row.Tag;
+                            if (currentAnchorControl == null || !(currentAnchorControl is AnchorOcrTextControl))
+                                currentAnchorControl = new AnchorOcrTextControl();
                         }
                         break;
                     case Template.Types.ImageData:
                         {
-                            if (c == null || !(c is AnchorImageDataControl))
-                                c = new AnchorImageDataControl();
-                            ((AnchorImageDataControl)c).Anchor = (Template.Anchor.ImageData)row.Tag;
+                            if (currentAnchorControl == null || !(currentAnchorControl is AnchorImageDataControl))
+                                currentAnchorControl = new AnchorImageDataControl();
                         }
                         break;
                     default:
                         throw new Exception("Unknown option: " + t);
                 }
-                c.Initialize(row);
-                currentAnchorControl = c;
+                currentAnchorControl.Initialize(row);
             }
             finally
             {

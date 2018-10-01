@@ -22,83 +22,31 @@ namespace Cliver.PdfDocumentParser
             InitializeComponent();
         }
 
-        override public Template.Mark GetMark()
+        override protected object getObject()
         {
-            return Mark;
+            if (_object == null)
+                _object = new Template.Mark.ImageData();
+            _object.FindBestImageMatch = findBestImageMatch.Checked;
+            _object.BrightnessTolerance = (float)brightnessTolerance.Value;
+            _object.DifferentPixelNumberTolerance = (float)differentPixelNumberTolerance.Value;
+            return _object;
         }
 
-        public Template.Mark.ImageData Mark
+        public override void Initialize(DataGridViewRow row)
         {
-            get
-            {
-                if (mark == null)
-                    mark = new Template.Mark.ImageData();
-                mark.FindBestImageMatch = findBestImageMatch.Checked;
-                mark.BrightnessTolerance = (float)brightnessTolerance.Value;
-                mark.DifferentPixelNumberTolerance = (float)differentPixelNumberTolerance.Value;
-                return mark;
-            }
-            set
-            {
-                if (value == null)
-                    value = new Template.Mark.ImageData();
-                mark = value;
-                findBestImageMatch.Checked = value.FindBestImageMatch;
-                brightnessTolerance.Value = (decimal)value.BrightnessTolerance;
-                differentPixelNumberTolerance.Value = (decimal)value.DifferentPixelNumberTolerance;
-                if (value.ImageData_ != null)
-                    picture.Image = value.ImageData_.GetImage();
-                rectangle.Text = SerializationRoutines.Json.Serialize(value.Rectangle);
-            }
-        }
-        Template.Mark.ImageData mark;
+            base.Initialize(row);
 
-        public bool FindBestImageMatch
-        {
-            get
-            {
-                return findBestImageMatch.Checked;
-            }
-            //set
-            //{
-            //    findBestImageMatch.Checked = value;
-            //}
+            _object = (Template.Mark.ImageData)row.Tag;
+            if (_object == null)
+                _object = new Template.Mark.ImageData();
+            findBestImageMatch.Checked = _object.FindBestImageMatch;
+            brightnessTolerance.Value = (decimal)_object.BrightnessTolerance;
+            differentPixelNumberTolerance.Value = (decimal)_object.DifferentPixelNumberTolerance;
+            if (_object.ImageData_ != null)
+                picture.Image = _object.ImageData_.GetImage();
+            rectangle.Text = SerializationRoutines.Json.Serialize(_object.Rectangle);
         }
 
-        public float BrightnessTolerance
-        {
-            get
-            {
-                return (float)brightnessTolerance.Value;
-            }
-            //set
-            //{
-            //    brightnessTolerance.Value = (decimal)value;
-            //}
-        }
-
-        public float DifferentPixelNumberTolerance
-        {
-            get
-            {
-                return (float)differentPixelNumberTolerance.Value;
-            }
-            //set
-            //{
-            //    differentPixelNumberTolerance.Value = (decimal)value;
-            //}
-        }
-
-        //public Image Image
-        //{
-        //    get
-        //    {
-        //        return picture.Image;
-        //    }
-        //    //set
-        //    //{
-        //    //    picture.Image = value;
-        //    //}
-        //}
+        Template.Mark.ImageData _object;
     }
 }

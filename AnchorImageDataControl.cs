@@ -24,94 +24,50 @@ namespace Cliver.PdfDocumentParser
             cSearchRectangleMargin.CheckedChanged += delegate { SearchRectangleMargin.Value = cSearchRectangleMargin.Checked ? 100 : -1; SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked; };
         }
 
-        override public Template.Anchor GetAnchor()
+        override protected object getObject()
         {
-            return Anchor;
+            if (_object == null)
+                _object = new Template.Anchor.ImageData();
+            _object.FindBestImageMatch = FindBestImageMatch.Checked;
+            _object.BrightnessTolerance = (float)BrightnessTolerance.Value;
+            _object.DifferentPixelNumberTolerance = (float)DifferentPixelNumberTolerance.Value;
+            _object.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
+            _object.PositionDeviation = (float)PositionDeviation.Value;
+            _object.SearchRectangleMargin = (int)SearchRectangleMargin.Value;
+            return _object;
         }
 
-        public Template.Anchor.ImageData Anchor
+        public override void Initialize(DataGridViewRow row)
         {
-            get
-            {
-                if (anchor == null)
-                    anchor = new Template.Anchor.ImageData();
-                anchor.FindBestImageMatch = FindBestImageMatch.Checked;
-                anchor.BrightnessTolerance = (float)BrightnessTolerance.Value;
-                anchor.DifferentPixelNumberTolerance = (float)DifferentPixelNumberTolerance.Value;
-                //_value.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
-                anchor.PositionDeviation = (float)PositionDeviation.Value;
-                anchor.SearchRectangleMargin = (int)SearchRectangleMargin.Value;
-                return anchor;
-            }
-            set
-            {
-                if (value == null)
-                    value = new Template.Anchor.ImageData();
-                anchor = value;
-                FindBestImageMatch.Checked = value.FindBestImageMatch;
-                BrightnessTolerance.Value = (decimal)value.BrightnessTolerance;
-                DifferentPixelNumberTolerance.Value = (decimal)value.DifferentPixelNumberTolerance;
-                if (value.ImageBoxs != null && value.ImageBoxs.Count > 0)
-                    picture.Image = value.ImageBoxs[0].ImageData.GetImage();
-                try
+            base.Initialize(row);
+
+            _object = (Template.Anchor.ImageData)row.Tag;
+            if (_object == null)
+                _object = new Template.Anchor.ImageData();
+            FindBestImageMatch.Checked = _object.FindBestImageMatch;
+            BrightnessTolerance.Value = (decimal)_object.BrightnessTolerance;
+            DifferentPixelNumberTolerance.Value = (decimal)_object.DifferentPixelNumberTolerance;
+            pictures.Controls.Clear();
+            if (_object.ImageBoxs != null)
+                foreach (Template.Anchor.ImageData.ImageBox id in _object.ImageBoxs)
                 {
-                    PositionDeviation.Value = (decimal)value.PositionDeviation;
+                    PictureBox p = new PictureBox();
+                    p.SizeMode = PictureBoxSizeMode.AutoSize;
+                    p.Image = id.ImageData.GetImage();
+                    pictures.Controls.Add(p);
                 }
-                catch { }
-                SearchRectangleMargin.Value = anchor.SearchRectangleMargin;
-
-                cSearchRectangleMargin.Checked = SearchRectangleMargin.Value >= 0;
-                SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked;
+            PositionDeviationIsAbsolute.Checked = _object.PositionDeviationIsAbsolute;
+            try
+            {
+                PositionDeviation.Value = (decimal)_object.PositionDeviation;
             }
+            catch { }
+            SearchRectangleMargin.Value = _object.SearchRectangleMargin;
+
+            cSearchRectangleMargin.Checked = SearchRectangleMargin.Value >= 0;
+            SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked;
         }
-        Template.Anchor.ImageData anchor;
 
-        //public bool FindBestImageMatch
-        //{
-        //    get
-        //    {
-        //        return findBestImageMatch.Checked;
-        //    }
-        //    //set
-        //    //{
-        //    //    findBestImageMatch.Checked = value;
-        //    //}
-        //}
-
-        //public float BrightnessTolerance
-        //{
-        //    get
-        //    {
-        //        return (float)brightnessTolerance.Value;
-        //    }
-        //    //set
-        //    //{
-        //    //    brightnessTolerance.Value = (decimal)value;
-        //    //}
-        //}
-
-        //public float DifferentPixelNumberTolerance
-        //{
-        //    get
-        //    {
-        //        return (float)differentPixelNumberTolerance.Value;
-        //    }
-        //    //set
-        //    //{
-        //    //    differentPixelNumberTolerance.Value = (decimal)value;
-        //    //}
-        //}
-
-        //public Image Image
-        //{
-        //    get
-        //    {
-        //        return picture.Image;
-        //    }
-        //    //set
-        //    //{
-        //    //    picture.Image = value;
-        //    //}
-        //}
+        Template.Anchor.ImageData _object;
     }
 }

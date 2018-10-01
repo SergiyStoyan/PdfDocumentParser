@@ -224,19 +224,13 @@ namespace Cliver.PdfDocumentParser
                             bts.Add(bt0);
                             for (int i = 1; i < faes.Count; i++)
                             {
-                                float x, y;
+                                PointF p;
                                 if (ptv.PositionDeviationIsAbsolute)
-                                {
-                                    x = bt0.R.X + faes[i].Rectangle.X - faes[0].Rectangle.X;
-                                    y = bt0.R.Y + faes[i].Rectangle.Y - faes[0].Rectangle.Y;
-                                }
+                                    p = new PointF(bt0.R.X + faes[i].Rectangle.X - faes[0].Rectangle.X, bt0.R.Y + faes[i].Rectangle.Y - faes[0].Rectangle.Y);
                                 else
-                                {
-                                    x = bts[i - 1].R.X + faes[i].Rectangle.X - faes[i - 1].Rectangle.X;
-                                    y = bts[i - 1].R.Y + faes[i].Rectangle.Y - faes[i - 1].Rectangle.Y;
-                                }
+                                    p = new PointF(bts[i - 1].R.X + faes[i].Rectangle.X - faes[i - 1].Rectangle.X, bts[i - 1].R.Y + faes[i].Rectangle.Y - faes[i - 1].Rectangle.Y);
                                 foreach (Pdf.CharBox bt in PdfCharBoxs.Where(a => a.Char == faes[i].Char))
-                                    if (Math.Abs(bt.R.X - x) <= ptv.PositionDeviation && Math.Abs(bt.R.Y - y) <= ptv.PositionDeviation)
+                                    if (Math.Abs(bt.R.X - p.X) <= ptv.PositionDeviation && Math.Abs(bt.R.Y - p.Y) <= ptv.PositionDeviation)
                                     {
                                         bts.Add(bt);
                                         break;
@@ -270,19 +264,13 @@ namespace Cliver.PdfDocumentParser
                             bts.Add(bt0);
                             for (int i = 1; i < faes.Count; i++)
                             {
-                                float x, y;
+                                PointF p;
                                 if (otv.PositionDeviationIsAbsolute)
-                                {
-                                    x = bt0.R.X + faes[i].Rectangle.X - faes[0].Rectangle.X;
-                                    y = bt0.R.Y + faes[i].Rectangle.Y - faes[0].Rectangle.Y;
-                                }
+                                    p = new PointF(bt0.R.X + faes[i].Rectangle.X - faes[0].Rectangle.X, bt0.R.Y + faes[i].Rectangle.Y - faes[0].Rectangle.Y);
                                 else
-                                {
-                                    x = bts[i - 1].R.X + faes[i].Rectangle.X - faes[i - 1].Rectangle.X;
-                                    y = bts[i - 1].R.Y + faes[i].Rectangle.Y - faes[i - 1].Rectangle.Y;
-                                }
+                                    p = new PointF(bts[i - 1].R.X + faes[i].Rectangle.X - faes[i - 1].Rectangle.X, bts[i - 1].R.Y + faes[i].Rectangle.Y - faes[i - 1].Rectangle.Y);
                                 foreach (Ocr.CharBox bt in ActiveTemplateOcrCharBoxs.Where(a => a.Char == faes[i].Char))
-                                    if (Math.Abs(bt.R.X - x) <= otv.PositionDeviation && Math.Abs(bt.R.Y - y) <= otv.PositionDeviation)
+                                    if (Math.Abs(bt.R.X - p.X) <= otv.PositionDeviation && Math.Abs(bt.R.Y - p.Y) <= otv.PositionDeviation)
                                     {
                                         bts.Add(bt);
                                         break;
@@ -315,7 +303,7 @@ namespace Cliver.PdfDocumentParser
                             shift = new Point(sr.X < 0 ? 0 : (int)sr.X, sr.Y < 0 ? 0 : (int)sr.Y);
                         }
                         List<RectangleF> bestRs = null;
-                        float minDeviation = 1;
+                        float minDeviation = float.MaxValue;
                         ibs[0].ImageData.FindWithinImage(id0, idv.BrightnessTolerance, idv.DifferentPixelNumberTolerance, (Point point0, float deviation) =>
                         {
                             point0 = new Point(shift.X + point0.X, shift.Y + point0.Y);
@@ -323,13 +311,11 @@ namespace Cliver.PdfDocumentParser
                             rs.Add(new RectangleF(point0, new SizeF(ibs[0].Rectangle.Width, ibs[0].Rectangle.Height)));
                             for (int i = 1; i < ibs.Count; i++)
                             {
-                                //Template.RectangleF r = new Template.RectangleF(point0.X + ibs[i].Rectangle.X - ibs[0].Rectangle.X, point0.Y + ibs[i].Rectangle.Y - ibs[0].Rectangle.Y, ibs[i].Rectangle.Width, ibs[i].Rectangle.Height);
-                                //using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Y / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height / Settings.ImageProcessing.Image2PdfResolutionRatio))
-                                //{
-                                //    if (!ibs[i].ImageData.ImageIsSimilar(new ImageData(rb), pageCollection.ActiveTemplate.BrightnessTolerance, pageCollection.ActiveTemplate.DifferentPixelNumberTolerance))
-                                //        return true;
-                                //}
-                                Template.RectangleF r = new Template.RectangleF(point0.X + ibs[i].Rectangle.X - ibs[0].Rectangle.X - idv.PositionDeviation, point0.Y + ibs[i].Rectangle.Y - ibs[0].Rectangle.Y - idv.PositionDeviation, ibs[i].Rectangle.Width + idv.PositionDeviation, ibs[i].Rectangle.Height + idv.PositionDeviation);
+                                Template.RectangleF r;
+                                if (idv.PositionDeviationIsAbsolute)
+                                    r = new Template.RectangleF(point0.X + ibs[i].Rectangle.X - ibs[0].Rectangle.X - idv.PositionDeviation, point0.Y + ibs[i].Rectangle.Y - ibs[0].Rectangle.Y - idv.PositionDeviation, ibs[i].Rectangle.Width + 2 * idv.PositionDeviation, ibs[i].Rectangle.Height + 2 * idv.PositionDeviation);
+                                else
+                                    r = new Template.RectangleF(rs[i - 1].X + ibs[i].Rectangle.X - ibs[i - 1].Rectangle.X - idv.PositionDeviation, rs[i - 1].Y + ibs[i].Rectangle.Y - ibs[i - 1].Rectangle.Y - idv.PositionDeviation, ibs[i].Rectangle.Width + 2 * idv.PositionDeviation, ibs[i].Rectangle.Height + 2 * idv.PositionDeviation);
                                 using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Y / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height / Settings.ImageProcessing.Image2PdfResolutionRatio))
                                 {
                                     if (null == ibs[i].ImageData.FindWithinImage(new ImageData(rb), idv.BrightnessTolerance, idv.DifferentPixelNumberTolerance, false))

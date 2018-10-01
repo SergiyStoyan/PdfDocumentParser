@@ -36,9 +36,8 @@
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(1, 42);
+            this.label1.Location = new System.Drawing.Point(1, 2);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(59, 13);
             this.label1.TabIndex = 71;
@@ -49,17 +48,17 @@
             this.text.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.text.Location = new System.Drawing.Point(-2, 13);
+            this.text.Location = new System.Drawing.Point(0, 55);
             this.text.Name = "text";
             this.text.ReadOnly = true;
-            this.text.Size = new System.Drawing.Size(162, 26);
+            this.text.Size = new System.Drawing.Size(163, 23);
             this.text.TabIndex = 70;
             this.text.Text = "";
             // 
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(1, 0);
+            this.label20.Location = new System.Drawing.Point(1, 39);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(31, 13);
             this.label20.TabIndex = 69;
@@ -67,9 +66,7 @@
             // 
             // rectangle
             // 
-            this.rectangle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.rectangle.Location = new System.Drawing.Point(0, 58);
+            this.rectangle.Location = new System.Drawing.Point(0, 16);
             this.rectangle.Name = "rectangle";
             this.rectangle.ReadOnly = true;
             this.rectangle.Size = new System.Drawing.Size(160, 20);
@@ -79,12 +76,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Controls.Add(this.rectangle);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.text);
             this.Controls.Add(this.label20);
             this.Name = "MarkOcrTextControl";
-            this.Size = new System.Drawing.Size(160, 79);
+            this.Size = new System.Drawing.Size(163, 81);
             this.ResumeLayout(false);
             this.PerformLayout();
 

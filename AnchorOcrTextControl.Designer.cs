@@ -97,13 +97,10 @@
             // 
             // text
             // 
-            this.text.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.text.Location = new System.Drawing.Point(0, 66);
             this.text.Name = "text";
             this.text.ReadOnly = true;
-            this.text.Size = new System.Drawing.Size(201, 66);
+            this.text.Size = new System.Drawing.Size(201, 50);
             this.text.TabIndex = 76;
             this.text.Text = "";
             // 
@@ -151,6 +148,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Controls.Add(this.cSearchRectangleMargin);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.SearchRectangleMargin);
@@ -160,7 +158,7 @@
             this.Controls.Add(this.PositionDeviationIsAbsolute);
             this.Controls.Add(this.text);
             this.Name = "AnchorOcrTextControl";
-            this.Size = new System.Drawing.Size(201, 132);
+            this.Size = new System.Drawing.Size(204, 119);
             ((System.ComponentModel.ISupportInitialize)(this.PositionDeviation)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.SearchRectangleMargin)).EndInit();
             this.ResumeLayout(false);

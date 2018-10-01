@@ -15,16 +15,6 @@ namespace Cliver.PdfDocumentParser
         public MarkControl()
         {
             InitializeComponent();
-
-            Leave += delegate (object sender, EventArgs e)
-            {
-                Row.Tag = GetMark();
-            };
-        }
-
-        virtual public Template.Mark GetMark()
-        {
-            throw new Exception("Not overrrided!");
         }
     }
 }

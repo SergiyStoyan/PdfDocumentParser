@@ -15,16 +15,6 @@ namespace Cliver.PdfDocumentParser
         public AnchorControl()
         {
             InitializeComponent();
-
-            Leave += delegate (object sender, EventArgs e)
-            {
-                Row.Tag = GetAnchor();
-            };
-        }
-
-        virtual public Template.Anchor GetAnchor()
-        {
-            throw new Exception("Not overrrided!");
         }
     }
 }

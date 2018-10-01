@@ -15,14 +15,24 @@ namespace Cliver.PdfDocumentParser
         public TableRowControl()
         {
             InitializeComponent();
+
+            Leave += delegate (object sender, EventArgs e)
+            {
+                Row.Tag = getObject();
+            };
         }
         public DataGridViewRow Row;
         //protected TemplateForm templateForm;
 
-        public void Initialize(DataGridViewRow row/*, TemplateForm templateForm*/)
+        public virtual void Initialize(DataGridViewRow row/*, TemplateForm templateForm*/)
         {
             Row = row;
             //this.templateForm = templateForm;
+        }
+
+        virtual protected object getObject()
+        {
+            throw new Exception("Not overrrided!");
         }
     }
 }

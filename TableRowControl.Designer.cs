@@ -28,8 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
+            this.SuspendLayout();
+            // 
+            // TableRowControl
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
+            this.AutoSize = true;
+            this.MinimumSize = new System.Drawing.Size(30, 30);
+            this.Name = "TableRowControl";
+            this.Size = new System.Drawing.Size(30, 30);
+            this.ResumeLayout(false);
+
         }
 
         #endregion

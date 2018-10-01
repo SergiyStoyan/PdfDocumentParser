@@ -100,7 +100,6 @@ namespace Cliver.PdfDocumentParser
                                 m2.AnchorId = m.AnchorId;
                                 m2.Rectangle = m.Rectangle;
                                 m = m2;
-                                //currentMarkControl = null;
                                 find_setMarkValue(row);
                             }
                             break;
@@ -235,8 +234,6 @@ namespace Cliver.PdfDocumentParser
             {
                 settingCurrentMarkRow = true;
 
-                currentMarkRow = row;
-
                 if (row == null)
                 {
                     marks.ClearSelection();
@@ -251,35 +248,30 @@ namespace Cliver.PdfDocumentParser
                 Template.Mark m = (Template.Mark)row.Tag;
                 //setCurrentAnchorRow(m.AnchorId, true);
 
-                MarkControl c = currentMarkControl;
                 switch (m.Type)
                 {
                     case Template.Types.PdfText:
                         {
-                            if (c == null || !(c is MarkPdfTextControl))
-                                c = new MarkPdfTextControl();
-                            ((MarkPdfTextControl)c).Mark = (Template.Mark.PdfText)row.Tag;
+                            if (currentMarkControl == null || !(currentMarkControl is MarkPdfTextControl))
+                                currentMarkControl = new MarkPdfTextControl();
                         }
                         break;
                     case Template.Types.OcrText:
                         {
-                            if (c == null || !(c is MarkOcrTextControl))
-                                c = new MarkOcrTextControl();
-                            ((MarkOcrTextControl)c).Mark = (Template.Mark.OcrText)row.Tag;
+                            if (currentMarkControl == null || !(currentMarkControl is MarkOcrTextControl))
+                                currentMarkControl = new MarkOcrTextControl();
                         }
                         break;
                     case Template.Types.ImageData:
                         {
-                            if (c == null || !(c is MarkImageDataControl))
-                                c = new MarkImageDataControl();
-                            ((MarkImageDataControl)c).Mark = (Template.Mark.ImageData)row.Tag;
+                            if (currentMarkControl == null || !(currentMarkControl is MarkImageDataControl))
+                                currentMarkControl = new MarkImageDataControl();
                         }
                         break;
                     default:
                         throw new Exception("Unknown option: " + m.Type);
                 }
-                c.Initialize(row);
-                currentMarkControl = c;
+                currentMarkControl.Initialize(row);
                 isMarkFound(row, true);
             }
             finally
@@ -288,7 +280,6 @@ namespace Cliver.PdfDocumentParser
             }
         }
         bool settingCurrentMarkRow = false;
-        DataGridViewRow currentMarkRow = null;
         MarkControl currentMarkControl
         {
             get
@@ -316,7 +307,7 @@ namespace Cliver.PdfDocumentParser
 
             find_setMarkValue(row);
 
-            if (row == currentMarkRow)
+            if (currentMarkControl != null && row == currentMarkControl.Row)
                 setCurrentMarkRow(row);
         }
 
@@ -365,7 +356,7 @@ namespace Cliver.PdfDocumentParser
             if (loadingTemplate)
                 return;
 
-            if (row == currentMarkRow)
+            if (currentMarkControl != null && row == currentMarkControl.Row)
                 setCurrentMarkRow(row);
         }
     }

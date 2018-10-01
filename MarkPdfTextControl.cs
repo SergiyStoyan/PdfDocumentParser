@@ -22,28 +22,24 @@ namespace Cliver.PdfDocumentParser
             InitializeComponent();
         }
 
-        override public Template.Mark GetMark()
+        override protected object getObject()
         {
-            return Mark;
+            if (_object == null)
+                _object = new Template.Mark.PdfText();
+            return _object;
         }
 
-        public Template.Mark.PdfText Mark
+        public override void Initialize(DataGridViewRow row)
         {
-            get
-            {
-                if (mark == null)
-                    mark = new Template.Mark.PdfText();
-                return mark;
-            }
-            set
-            {
-                if (value == null)
-                    value = new Template.Mark.PdfText();
-                mark = value;
-                text.Text = value.Text;
-                rectangle.Text = SerializationRoutines.Json.Serialize(value.Rectangle);
-            }
+            base.Initialize(row);
+
+            _object = (Template.Mark.PdfText)row.Tag;
+            if (_object == null)
+                _object = new Template.Mark.PdfText();
+            text.Text = _object.Text;
+            rectangle.Text = SerializationRoutines.Json.Serialize(_object.Rectangle);
         }
-        Template.Mark.PdfText mark;
+
+        Template.Mark.PdfText _object;
     }
 }

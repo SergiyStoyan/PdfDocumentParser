@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.picture = new System.Windows.Forms.PictureBox();
             this.label20 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
@@ -37,21 +36,11 @@
             this.differentPixelNumberTolerance = new System.Windows.Forms.NumericUpDown();
             this.rectangle = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
+            this.picture = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.brightnessTolerance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.differentPixelNumberTolerance)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             this.SuspendLayout();
-            // 
-            // picture
-            // 
-            this.picture.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.picture.Location = new System.Drawing.Point(0, 89);
-            this.picture.Name = "picture";
-            this.picture.Size = new System.Drawing.Size(215, 98);
-            this.picture.TabIndex = 81;
-            this.picture.TabStop = false;
             // 
             // label20
             // 
@@ -148,13 +137,12 @@
             // 
             // rectangle
             // 
-            this.rectangle.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.rectangle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.rectangle.Location = new System.Drawing.Point(65, 64);
             this.rectangle.Name = "rectangle";
             this.rectangle.ReadOnly = true;
-            this.rectangle.Size = new System.Drawing.Size(150, 20);
+            this.rectangle.Size = new System.Drawing.Size(274, 20);
             this.rectangle.TabIndex = 83;
             // 
             // label1
@@ -166,10 +154,20 @@
             this.label1.TabIndex = 82;
             this.label1.Text = "Rectangle:";
             // 
+            // picture
+            // 
+            this.picture.Location = new System.Drawing.Point(0, 86);
+            this.picture.Name = "picture";
+            this.picture.Size = new System.Drawing.Size(177, 35);
+            this.picture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.picture.TabIndex = 81;
+            this.picture.TabStop = false;
+            // 
             // MarkImageDataControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Controls.Add(this.rectangle);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.picture);
@@ -180,18 +178,16 @@
             this.Controls.Add(this.brightnessTolerance);
             this.Controls.Add(this.differentPixelNumberTolerance);
             this.Name = "MarkImageDataControl";
-            this.Size = new System.Drawing.Size(218, 190);
-            ((System.ComponentModel.ISupportInitialize)(this.picture)).EndInit();
+            this.Size = new System.Drawing.Size(216, 124);
             ((System.ComponentModel.ISupportInitialize)(this.brightnessTolerance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.differentPixelNumberTolerance)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picture)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.PictureBox picture;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label11;
@@ -200,5 +196,6 @@
         private System.Windows.Forms.NumericUpDown differentPixelNumberTolerance;
         private System.Windows.Forms.TextBox rectangle;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.PictureBox picture;
     }
 }
