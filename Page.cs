@@ -406,7 +406,8 @@ namespace Cliver.PdfDocumentParser
                         error = "Anchor[" + m.AnchorId + "] not found.";
                         return false;
                     }
-                    continue;
+                    if (m.Rectangle == null)
+                        continue;
                 }
                 object v2 = GetValue(m.AnchorId, m.Rectangle, m.Type, out error);
                 if (v2 == null)
