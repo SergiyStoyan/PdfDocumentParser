@@ -27,10 +27,13 @@ namespace Cliver.PdfDocumentParser
 
         public void Dispose()
         {
-            if (_engine != null)
+            lock (this)
             {
-                _engine.Dispose();
-                _engine = null;
+                if (_engine != null)
+                {
+                    _engine.Dispose();
+                    _engine = null;
+                }
             }
         }
 

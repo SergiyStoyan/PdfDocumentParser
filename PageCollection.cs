@@ -35,8 +35,12 @@ namespace Cliver.PdfDocumentParser
 
         public override void Dispose()
         {
-            base.Dispose();
-            PdfReader.Dispose();
+            lock (this)
+            {
+                if (PdfReader != null)
+                    PdfReader.Dispose();
+                base.Dispose();
+            }
         }
 
         public Template ActiveTemplate
