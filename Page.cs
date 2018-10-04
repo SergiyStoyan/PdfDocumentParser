@@ -126,25 +126,41 @@ namespace Cliver.PdfDocumentParser
                     //...change one random pixel to a random color on the clone... seems to trigger a copy of all pixel data from the original.
                     Bitmap b = Bitmap.Clone(new Rectangle(0, 0, Bitmap.Width, Bitmap.Height), System.Drawing.Imaging.PixelFormat.Undefined);
 
-                    if (pageCollection.ActiveTemplate.PagesRotation != Template.PageRotations.NONE)
+                    switch (pageCollection.ActiveTemplate.PagesRotation)
                     {
-                        //b = ImageRoutines.GetCopy(Bitmap);
-                        switch (pageCollection.ActiveTemplate.PagesRotation)
-                        {
-                            case Template.PageRotations.NONE:
-                                break;
-                            case Template.PageRotations.Clockwise90:
-                                b.RotateFlip(RotateFlipType.Rotate90FlipNone);
-                                break;
-                            case Template.PageRotations.Clockwise180:
-                                b.RotateFlip(RotateFlipType.Rotate180FlipNone);
-                                break;
-                            case Template.PageRotations.Clockwise270:
-                                b.RotateFlip(RotateFlipType.Rotate270FlipNone);
-                                break;
-                            default:
-                                throw new Exception("Unknown option: " + pageCollection.ActiveTemplate.PagesRotation);
-                        }
+                        case Template.PageRotations.NONE:
+                            break;
+                        case Template.PageRotations.Clockwise90:
+                            b.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                            break;
+                        case Template.PageRotations.Clockwise180:
+                            b.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                            break;
+                        case Template.PageRotations.Clockwise270:
+                            b.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                            break;
+                        case Template.PageRotations.AutoDetection:
+                            float confidence;
+                            Tesseract.Orientation o = Ocr.This.DetectOrientation(b, out confidence);
+                            switch (o)
+                            {
+                                case Tesseract.Orientation.PageUp:
+                                    break;
+                                case Tesseract.Orientation.PageRight:
+                                    b.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                                    break;
+                                case Tesseract.Orientation.PageDown:
+                                    b.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                                    break;
+                                case Tesseract.Orientation.PageLeft:
+                                    b.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                                    break;
+                                default:
+                                    throw new Exception("Unknown option: " + o);
+                            }
+                            break;
+                        default:
+                            throw new Exception("Unknown option: " + pageCollection.ActiveTemplate.PagesRotation);
                     }
 
                     if (pageCollection.ActiveTemplate.AutoDeskew)

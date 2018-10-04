@@ -30,14 +30,14 @@ namespace Cliver.PdfDocumentParser
 
         //public int ImageResolution = 300;//tesseract requires at least 300
 
-        public bool AutoPagesRotation = false;//!!!not implemented!!! to do by tesseract
-        public PageRotations PagesRotation = 0;
+        public PageRotations PagesRotation = PageRotations.NONE;
         public enum PageRotations
         {
             NONE,
             Clockwise90,
             Clockwise180,
             Clockwise270,
+            AutoDetection
         }
 
         public bool AutoDeskew = false;

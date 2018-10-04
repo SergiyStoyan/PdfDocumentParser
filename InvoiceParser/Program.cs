@@ -14,7 +14,6 @@ namespace Cliver.InvoiceParser
     /*
  TBD:
  - tune image recognition by checking brightness deltas
- - detect page rotation by tesseract
 
  - MainForm to WPF;
 - ? store each template in separate file;
