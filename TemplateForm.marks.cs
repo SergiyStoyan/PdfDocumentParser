@@ -200,7 +200,7 @@ namespace Cliver.PdfDocumentParser
                         {
                             Template.Mark.ImageData idv1 = (Template.Mark.ImageData)row.Tag;
                             ImageData id2 = (ImageData)extractValueAndDrawSelectionBox(m.AnchorId, m.Rectangle, m.Type, pointAnchor_renewImage);
-                            if (!idv1.ImageData_.ImageIsSimilar(id2, idv1.BrightnessTolerance, idv1.DifferentPixelNumberTolerance))
+                            if (!idv1.ImageData_.IsSimilarTo(id2, idv1.BrightnessTolerance, idv1.DifferentPixelNumberTolerance))
                             {
                                 setRowStatus(statuses.ERROR, row, "Not found");
                                 return false;

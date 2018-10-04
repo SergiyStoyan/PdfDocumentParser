@@ -437,7 +437,7 @@ namespace Cliver.PdfDocumentParser
                     case Template.Types.ImageData:
                         {
                             Template.Mark.ImageData idv1 = (Template.Mark.ImageData)m;
-                            if (idv1.ImageData_.ImageIsSimilar((ImageData)v2, idv1.BrightnessTolerance, idv1.DifferentPixelNumberTolerance))
+                            if (idv1.ImageData_.IsSimilarTo((ImageData)v2, idv1.BrightnessTolerance, idv1.DifferentPixelNumberTolerance))
                                 continue;
                             error = "marks[" + pageCollection.ActiveTemplate.Marks.IndexOf(m) + "]: image is not similar.";
                             return false;

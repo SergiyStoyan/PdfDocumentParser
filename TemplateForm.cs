@@ -28,6 +28,9 @@ namespace Cliver.PdfDocumentParser
     {
         public abstract class TemplateManager
         {
+            /// <summary>
+            /// this object is a buffer and can be changed unpredictably, so it should not be referenced from outside
+            /// </summary>
             public Template Template;
             abstract public void Save();
             abstract public void SaveAsInitialTemplate();
