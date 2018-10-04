@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.bAbout = new System.Windows.Forms.Button();
             this.bInputFolder = new System.Windows.Forms.Button();
             this.bOutputFolder = new System.Windows.Forms.Button();
@@ -51,6 +51,15 @@
             this.saveTemplates = new System.Windows.Forms.Button();
             this.namePattern = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.selectedTemplatesCount = new System.Windows.Forms.Label();
+            this.orderWeightPattern2 = new System.Windows.Forms.NumericUpDown();
+            this.orderWeightPattern1 = new System.Windows.Forms.NumericUpDown();
+            this.commentPattern = new System.Windows.Forms.TextBox();
+            this.useOrderWeightPattern = new System.Windows.Forms.CheckBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.useCommentPattern = new System.Windows.Forms.CheckBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.sortSelectedUp = new System.Windows.Forms.CheckBox();
             this.useNamePattern = new System.Windows.Forms.CheckBox();
             this.useGroupPattern = new System.Windows.Forms.CheckBox();
@@ -65,22 +74,13 @@
             this.groupPattern = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.orderWeightChange = new System.Windows.Forms.NumericUpDown();
+            this.applyOrderWeightChange = new System.Windows.Forms.Button();
             this.applyActiveChange = new System.Windows.Forms.Button();
             this.applyGroupChange = new System.Windows.Forms.Button();
             this.activeChange = new System.Windows.Forms.CheckBox();
             this.groupChange = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.applyOrderWeightChange = new System.Windows.Forms.Button();
-            this.orderWeightChange = new System.Windows.Forms.NumericUpDown();
-            this.useCommentPattern = new System.Windows.Forms.CheckBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.commentPattern = new System.Windows.Forms.TextBox();
-            this.useOrderWeightPattern = new System.Windows.Forms.CheckBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.orderWeightPattern1 = new System.Windows.Forms.NumericUpDown();
-            this.orderWeightPattern2 = new System.Windows.Forms.NumericUpDown();
-            this.selectedTemplatesCount = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
             this.Selected = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Edit = new System.Windows.Forms.DataGridViewButtonColumn();
             this.Copy = new System.Windows.Forms.DataGridViewButtonColumn();
@@ -93,14 +93,15 @@
             this.Comment = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DetectingTemplateLastPageNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FileFilterRegex = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.UsedTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.template2s)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.orderWeightPattern2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.orderWeightPattern1)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.orderWeightChange)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.orderWeightPattern1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.orderWeightPattern2)).BeginInit();
             this.SuspendLayout();
             // 
             // bAbout
@@ -221,7 +222,8 @@
             this.ModifiedTime,
             this.Comment,
             this.DetectingTemplateLastPageNumber,
-            this.FileFilterRegex});
+            this.FileFilterRegex,
+            this.UsedTime});
             this.template2s.Location = new System.Drawing.Point(15, 73);
             this.template2s.MultiSelect = false;
             this.template2s.Name = "template2s";
@@ -370,6 +372,97 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select";
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(149, 151);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(10, 13);
+            this.label10.TabIndex = 50;
+            this.label10.Text = "-";
+            // 
+            // selectedTemplatesCount
+            // 
+            this.selectedTemplatesCount.AutoSize = true;
+            this.selectedTemplatesCount.Location = new System.Drawing.Point(14, 263);
+            this.selectedTemplatesCount.Name = "selectedTemplatesCount";
+            this.selectedTemplatesCount.Size = new System.Drawing.Size(16, 13);
+            this.selectedTemplatesCount.TabIndex = 49;
+            this.selectedTemplatesCount.Text = "...";
+            // 
+            // orderWeightPattern2
+            // 
+            this.orderWeightPattern2.DecimalPlaces = 1;
+            this.orderWeightPattern2.Location = new System.Drawing.Point(163, 149);
+            this.orderWeightPattern2.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.orderWeightPattern2.Name = "orderWeightPattern2";
+            this.orderWeightPattern2.Size = new System.Drawing.Size(63, 20);
+            this.orderWeightPattern2.TabIndex = 48;
+            // 
+            // orderWeightPattern1
+            // 
+            this.orderWeightPattern1.DecimalPlaces = 1;
+            this.orderWeightPattern1.Location = new System.Drawing.Point(83, 149);
+            this.orderWeightPattern1.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.orderWeightPattern1.Name = "orderWeightPattern1";
+            this.orderWeightPattern1.Size = new System.Drawing.Size(63, 20);
+            this.orderWeightPattern1.TabIndex = 47;
+            // 
+            // commentPattern
+            // 
+            this.commentPattern.Location = new System.Drawing.Point(82, 118);
+            this.commentPattern.Name = "commentPattern";
+            this.commentPattern.Size = new System.Drawing.Size(145, 20);
+            this.commentPattern.TabIndex = 41;
+            // 
+            // useOrderWeightPattern
+            // 
+            this.useOrderWeightPattern.AutoSize = true;
+            this.useOrderWeightPattern.Checked = true;
+            this.useOrderWeightPattern.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.useOrderWeightPattern.Location = new System.Drawing.Point(17, 151);
+            this.useOrderWeightPattern.Name = "useOrderWeightPattern";
+            this.useOrderWeightPattern.Size = new System.Drawing.Size(15, 14);
+            this.useOrderWeightPattern.TabIndex = 46;
+            this.useOrderWeightPattern.UseVisualStyleBackColor = true;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(32, 151);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(36, 13);
+            this.label7.TabIndex = 45;
+            this.label7.Text = "Order:";
+            // 
+            // useCommentPattern
+            // 
+            this.useCommentPattern.AutoSize = true;
+            this.useCommentPattern.Checked = true;
+            this.useCommentPattern.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.useCommentPattern.Location = new System.Drawing.Point(16, 121);
+            this.useCommentPattern.Name = "useCommentPattern";
+            this.useCommentPattern.Size = new System.Drawing.Size(15, 14);
+            this.useCommentPattern.TabIndex = 43;
+            this.useCommentPattern.UseVisualStyleBackColor = true;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(31, 121);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(54, 13);
+            this.label6.TabIndex = 42;
+            this.label6.Text = "Comment:";
+            // 
             // sortSelectedUp
             // 
             this.sortSelectedUp.AutoSize = true;
@@ -508,6 +601,28 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Change Selected";
             // 
+            // orderWeightChange
+            // 
+            this.orderWeightChange.DecimalPlaces = 1;
+            this.orderWeightChange.Location = new System.Drawing.Point(81, 98);
+            this.orderWeightChange.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.orderWeightChange.Name = "orderWeightChange";
+            this.orderWeightChange.Size = new System.Drawing.Size(61, 20);
+            this.orderWeightChange.TabIndex = 33;
+            // 
+            // applyOrderWeightChange
+            // 
+            this.applyOrderWeightChange.Location = new System.Drawing.Point(14, 98);
+            this.applyOrderWeightChange.Name = "applyOrderWeightChange";
+            this.applyOrderWeightChange.Size = new System.Drawing.Size(60, 23);
+            this.applyOrderWeightChange.TabIndex = 31;
+            this.applyOrderWeightChange.Text = "Order =";
+            this.applyOrderWeightChange.UseVisualStyleBackColor = true;
+            // 
             // applyActiveChange
             // 
             this.applyActiveChange.Location = new System.Drawing.Point(14, 28);
@@ -552,119 +667,6 @@
             this.label9.Size = new System.Drawing.Size(214, 29);
             this.label9.TabIndex = 32;
             this.label9.Text = "You will be reminded if you forgot to save templates to disk!";
-            // 
-            // applyOrderWeightChange
-            // 
-            this.applyOrderWeightChange.Location = new System.Drawing.Point(14, 98);
-            this.applyOrderWeightChange.Name = "applyOrderWeightChange";
-            this.applyOrderWeightChange.Size = new System.Drawing.Size(60, 23);
-            this.applyOrderWeightChange.TabIndex = 31;
-            this.applyOrderWeightChange.Text = "Order =";
-            this.applyOrderWeightChange.UseVisualStyleBackColor = true;
-            // 
-            // orderWeightChange
-            // 
-            this.orderWeightChange.DecimalPlaces = 1;
-            this.orderWeightChange.Location = new System.Drawing.Point(81, 98);
-            this.orderWeightChange.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.orderWeightChange.Name = "orderWeightChange";
-            this.orderWeightChange.Size = new System.Drawing.Size(61, 20);
-            this.orderWeightChange.TabIndex = 33;
-            // 
-            // useCommentPattern
-            // 
-            this.useCommentPattern.AutoSize = true;
-            this.useCommentPattern.Checked = true;
-            this.useCommentPattern.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.useCommentPattern.Location = new System.Drawing.Point(16, 121);
-            this.useCommentPattern.Name = "useCommentPattern";
-            this.useCommentPattern.Size = new System.Drawing.Size(15, 14);
-            this.useCommentPattern.TabIndex = 43;
-            this.useCommentPattern.UseVisualStyleBackColor = true;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(31, 121);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(54, 13);
-            this.label6.TabIndex = 42;
-            this.label6.Text = "Comment:";
-            // 
-            // commentPattern
-            // 
-            this.commentPattern.Location = new System.Drawing.Point(82, 118);
-            this.commentPattern.Name = "commentPattern";
-            this.commentPattern.Size = new System.Drawing.Size(145, 20);
-            this.commentPattern.TabIndex = 41;
-            // 
-            // useOrderWeightPattern
-            // 
-            this.useOrderWeightPattern.AutoSize = true;
-            this.useOrderWeightPattern.Checked = true;
-            this.useOrderWeightPattern.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.useOrderWeightPattern.Location = new System.Drawing.Point(17, 151);
-            this.useOrderWeightPattern.Name = "useOrderWeightPattern";
-            this.useOrderWeightPattern.Size = new System.Drawing.Size(15, 14);
-            this.useOrderWeightPattern.TabIndex = 46;
-            this.useOrderWeightPattern.UseVisualStyleBackColor = true;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(32, 151);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(36, 13);
-            this.label7.TabIndex = 45;
-            this.label7.Text = "Order:";
-            // 
-            // orderWeightPattern1
-            // 
-            this.orderWeightPattern1.DecimalPlaces = 1;
-            this.orderWeightPattern1.Location = new System.Drawing.Point(83, 149);
-            this.orderWeightPattern1.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.orderWeightPattern1.Name = "orderWeightPattern1";
-            this.orderWeightPattern1.Size = new System.Drawing.Size(63, 20);
-            this.orderWeightPattern1.TabIndex = 47;
-            // 
-            // orderWeightPattern2
-            // 
-            this.orderWeightPattern2.DecimalPlaces = 1;
-            this.orderWeightPattern2.Location = new System.Drawing.Point(163, 149);
-            this.orderWeightPattern2.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.orderWeightPattern2.Name = "orderWeightPattern2";
-            this.orderWeightPattern2.Size = new System.Drawing.Size(63, 20);
-            this.orderWeightPattern2.TabIndex = 48;
-            // 
-            // selectedTemplatesCount
-            // 
-            this.selectedTemplatesCount.AutoSize = true;
-            this.selectedTemplatesCount.Location = new System.Drawing.Point(14, 263);
-            this.selectedTemplatesCount.Name = "selectedTemplatesCount";
-            this.selectedTemplatesCount.Size = new System.Drawing.Size(16, 13);
-            this.selectedTemplatesCount.TabIndex = 49;
-            this.selectedTemplatesCount.Text = "...";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(149, 151);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(10, 13);
-            this.label10.TabIndex = 50;
-            this.label10.Text = "-";
             // 
             // Selected
             // 
@@ -712,8 +714,8 @@
             // Name_
             // 
             this.Name_.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            this.Name_.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            this.Name_.DefaultCellStyle = dataGridViewCellStyle1;
             this.Name_.HeaderText = "Name";
             this.Name_.Name = "Name_";
             this.Name_.Width = 60;
@@ -760,6 +762,14 @@
             this.FileFilterRegex.Name = "FileFilterRegex";
             this.FileFilterRegex.ReadOnly = true;
             // 
+            // UsedTime
+            // 
+            this.UsedTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.UsedTime.HeaderText = "Used";
+            this.UsedTime.Name = "UsedTime";
+            this.UsedTime.ReadOnly = true;
+            this.UsedTime.Width = 57;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -787,11 +797,11 @@
             this.flowLayoutPanel2.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.orderWeightPattern2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.orderWeightPattern1)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.orderWeightChange)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.orderWeightPattern1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.orderWeightPattern2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -863,5 +873,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Comment;
         private System.Windows.Forms.DataGridViewTextBoxColumn DetectingTemplateLastPageNumber;
         private System.Windows.Forms.DataGridViewTextBoxColumn FileFilterRegex;
+        private System.Windows.Forms.DataGridViewTextBoxColumn UsedTime;
     }
 }

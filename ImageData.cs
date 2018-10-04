@@ -175,6 +175,13 @@ namespace Cliver.PdfDocumentParser
                     int differentPixelNumber;
                     if (isHashMatchOf(imageData, x, y, brightnessMaxDifference, differentPixelMaxNumber, out differentPixelNumber))
                     {
+                        //!!!still works bad
+                        //if (absolutizedImageData == null)
+                        //    absolutizedImageData = getAbsolutizedImageData(0, 0, Width, Height);
+                        //ImageData absolutizedImageData2 = imageData.getAbsolutizedImageData(x, y, Width, Height);
+                        //if (!absolutizedImageData.IsSimilarTo(absolutizedImageData2, brightnessTolerance / 10, differentPixelNumberTolerance))
+                        //    continue;
+
                         if (!onFound(new Point(x, y), differentPixelMaxNumber == 0 ? 0 : (float)differentPixelNumber / differentPixelMaxNumber))
                             return;
                     }
@@ -193,51 +200,17 @@ namespace Cliver.PdfDocumentParser
             return true;
         }
 
-        #region    with taking image brightness to account (needs further work as optimums of a fragment too differ from those of a whole image)
+        #region    with taking image brightness to account
 
-        bool isEvenBrightnessHashMatchTo(ImageData imageData, int x, int y, int brightnessMaxDifference, int differentPixelMaxNumber)
-        {
-            int differentPixelNumber = 0;
-            for (int i = 0; i < Width; i++)
-                for (int j = 0; j < Height; j++)
-                {
-                    if (Math.Abs(imageData.Hash[x + i, y + j] - Hash[i, j]) > brightnessMaxDifference)
-                        if (++differentPixelNumber > differentPixelMaxNumber)
-                            return false;
-                }
-            return true;
-        }
-        public bool ImageIsSimilar2(ImageData imageData, float brightnessTolerance, float differentPixelNumberTolerance)
-        {
-            if (Width != imageData.Width || Height != imageData.Height)
-                throw new Exception("Images have different sizes.");
-            if (absolutizedID == null)
-                absolutizedID = getAbsolutizedImageData();
-            if (imageData.absolutizedID == null)
-                imageData.absolutizedID = getAbsolutizedImageData();
-            int differentPixelNumber;
-            return absolutizedID.isHashMatchOf(imageData.absolutizedID, 0, 0, (int)(brightnessTolerance * 255), (int)(Hash.Length * differentPixelNumberTolerance), out differentPixelNumber);
-        }
-        public System.Drawing.Point? FindWithinImage2(ImageData imageData, float brightnessTolerance, float differentPixelNumberTolerance, bool findBestMatch)
-        {
-            return FindWithinImage2(imageData, brightnessTolerance, differentPixelNumberTolerance, findBestMatch);
-        }
-        public void FindWithinImage2(ImageData imageData, float brightnessTolerance, float differentPixelNumberTolerance, Func<Point, float, bool> onFound)
-        {
-            if (absolutizedID == null)
-                absolutizedID = getAbsolutizedImageData();
-            if (imageData.absolutizedID == null)
-                imageData.absolutizedID = imageData.getAbsolutizedImageData();
-            absolutizedID.FindWithinImage(imageData.absolutizedID, brightnessTolerance, differentPixelNumberTolerance, onFound);
-        }
-        ImageData absolutizedID = null;
-        void getMinMaxBrightnessOptimums(out byte min, out byte max)
+        ImageData absolutizedImageData = null;
+
+        void getMinMaxBrightnessOptimums(int x, int y, int width, int height, out byte min, out byte max)
         {
             int[] brightnesses2pointCount = new int[256];
-            for (int x = 0; x < Width; x++)
+            for (int i = 0; i < width; i++)
             {
-                for (int y = 0; y < Height; y++)
-                    brightnesses2pointCount[Hash[x, y]] = brightnesses2pointCount[Hash[x, y]] + 1;
+                for (int j = 0; j < height; j++)
+                    brightnesses2pointCount[Hash[x + i, y + j]] = brightnesses2pointCount[Hash[x + i, y + j]] + 1;
             }
             List<int> count_optimums = new List<int>();
             int minBrightnessPointCount = 0;
@@ -257,28 +230,29 @@ namespace Cliver.PdfDocumentParser
                     max = i;
                 }
         }
-        ImageData getAbsolutizedImageData()
+
+        ImageData getAbsolutizedImageData(int x, int y, int width, int height)
         {
             ImageData aid = new ImageData(null);
-            aid.Width = Width;
-            aid.Height = Height;
+            aid.Width = width;
+            aid.Height = height;
 
             byte minOptimum = 0;
             byte maxOptimum = 255;
-            getMinMaxBrightnessOptimums(out minOptimum, out maxOptimum);
+            getMinMaxBrightnessOptimums(x, y, width, height, out minOptimum, out maxOptimum);
             float brightnessFactor = (float)255 / (maxOptimum - minOptimum);
 
-            aid.Hash = new byte[Width, Height];
-            for (int x = 0; x < Width; x++)
+            aid.Hash = new byte[width, height];
+            for (int i = 0; i < width; i++)
             {
-                for (int y = 0; y < Height; y++)
+                for (int j = 0; j < height; j++)
                 {
-                    if (Hash[x, y] <= minOptimum)
-                        aid.Hash[x, y] = 0;
-                    else if (Hash[x, y] < maxOptimum)
-                        aid.Hash[x, y] = (byte)(brightnessFactor * (aid.Hash[x, y] - minOptimum));
+                    if (Hash[x + i, y + j] <= minOptimum)
+                        aid.Hash[i, j] = 0;
+                    else if (Hash[x + i, y + j] < maxOptimum)
+                        aid.Hash[i, j] = (byte)(brightnessFactor * (aid.Hash[i, j] - minOptimum));
                     else
-                        aid.Hash[x, y] = 255;
+                        aid.Hash[i, j] = 255;
                 }
             }
             return aid;

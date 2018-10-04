@@ -14,7 +14,6 @@ namespace Cliver.InvoiceParser
     /*
  TBD:
  - tune image recognition by checking brightness deltas
- - record UsedTime to a separate table
  - detect page rotation by tesseract
 
  - MainForm to WPF;

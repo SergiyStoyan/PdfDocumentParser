@@ -181,6 +181,7 @@
     <Compile Include="Settings\Synchronization.cs" />
     <Compile Include="Settings\General.cs" />
     <Compile Include="Settings\Template2s.cs" />
+    <Compile Include="Settings\TemplateLocalInfo.cs" />
     <Compile Include="Settings\TestFiles.cs" />
     <Compile Include="Template2Form.cs">
       <SubType>Form</SubType>

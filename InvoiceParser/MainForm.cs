@@ -70,10 +70,11 @@ namespace Cliver.InvoiceParser
             };
 
             FormClosing += delegate (object sender, FormClosingEventArgs e)
-              {
-                  if (!saveTemplatesFromTableIfTouched(true))
-                      e.Cancel = true;
-              };
+            {
+                Settings.TemplateLocalInfo.Clear_Save();
+                if (!saveTemplatesFromTableIfTouched(true))
+                    e.Cancel = true;
+            };
 
             template2s.CellValidating += delegate (object sender, DataGridViewCellValidatingEventArgs e)
             {
@@ -334,21 +335,15 @@ namespace Cliver.InvoiceParser
                     t.Template.Name = (string)r.Cells["Name_"].Value;
                 r.Tag = t;
             }
-            string lastTestFile = null;
+            Settings.TemplateLocalInfoSettings.Info tai = null;
             if (t.Template.Name != null)
-                Settings.TestFiles.TemplateNames2TestFile.TryGetValue(t.Template.Name, out lastTestFile);
-            TemplateManager tm = new TemplateManager { Template = SerializationRoutines.Json.Clone(t.Template), LastTestFile = lastTestFile, Row = r };
+                tai = Settings.TemplateLocalInfo.GetInfo(t.Template.Name, false);
+            TemplateManager tm = new TemplateManager { Template = SerializationRoutines.Json.Clone(t.Template), LastTestFile = tai == null ? null : tai.LastTestFile, Row = r };
             tf = new TemplateForm(tm, Settings.General.InputFolder);
             tf.FormClosed += delegate
             {
-                if (tm.LastTestFile != null)//the customer asked for this
-                {
-                    Settings.TestFiles.TemplateNames2TestFile[tm.Template.Name] = tm.LastTestFile;
-                    var deletedNs = Settings.TestFiles.TemplateNames2TestFile.Keys.Where(n => Settings.Template2s.Template2s.Where(a => a.Template.Name == n).FirstOrDefault() == null).ToList();
-                    foreach (string n in deletedNs)
-                        Settings.TestFiles.TemplateNames2TestFile.Remove(n);
-                    Settings.TestFiles.Save();
-                }
+                if (tm.LastTestFile != null)
+                    Settings.TemplateLocalInfo.SetLastTestFile(tm.Template.Name, tm.LastTestFile);
             };
             tf.Show();
             rows2TemplateForm[r] = tf;
@@ -438,6 +433,9 @@ namespace Cliver.InvoiceParser
                     r.Cells["OrderWeight"].Value = t.OrderWeight;
                     r.Cells["DetectingTemplateLastPageNumber"].Value = t.DetectingTemplateLastPageNumber;
                     r.Cells["FileFilterRegex"].Value = t.FileFilterRegex;
+                    Settings.TemplateLocalInfoSettings.Info   tai = Settings.TemplateLocalInfo.GetInfo(t.Template.Name, false);
+                    if (tai != null)
+                        r.Cells["UsedTime"].Value = tai.GetUsedTimeAsString();
                     r.Tag = t;
                 }
                 //templates.Columns["Name_"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;

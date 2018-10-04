@@ -18,13 +18,13 @@ using Cliver.PdfDocumentParser;
 namespace Cliver.InvoiceParser
 {
     public partial class Settings
-    {
-        [Cliver.Settings.Obligatory]
+    {//!!!TO BE REMOVED AFTER UPGRADE
+        
         public static readonly TestFilesSettings TestFiles;
 
         public class TestFilesSettings : Cliver.Settings
         {
-            public Dictionary<string,string> TemplateNames2TestFile;//the customer asked this
+            public Dictionary<string,string> TemplateNames2TestFile;
 
             public override void Loaded()
             {

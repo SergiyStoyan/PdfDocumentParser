@@ -29,7 +29,7 @@ namespace Cliver.InvoiceParser
         {
             public string SynchronizationFolder = null;
             public bool Synchronize = false;
-            Regex SynchronizeFileFilter = new Regex(@"Template2s");
+            Regex SynchronizeFileFilter = new Regex(@"Template2s|TemplateLocalInfo");
 
             public override void Loaded()
             {

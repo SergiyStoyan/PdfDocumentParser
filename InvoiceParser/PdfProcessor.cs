@@ -146,7 +146,7 @@ namespace Cliver.InvoiceParser
                         if (cp.Pages[page_i].IsDocumentFirstPage())
                         {
                             Log.Main.Inform("Applying to file '" + inputPdf + "' template '" + t.Template.Name + "'\r\nStamped file: '" + stampedPdf);
-                            //cp.pageBitmaps.RememberConverted = true;
+                            Settings.TemplateLocalInfo.SetUsedTime(t.Template.Name);
                             cp.process(page_i, stampedPdf, record);
                             return true;
                         }

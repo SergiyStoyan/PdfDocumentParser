@@ -61,7 +61,14 @@ namespace Cliver.InvoiceParser
             if (File.Exists(output_records_file))
                 File.Delete(output_records_file);
             Excel xls = new Excel(output_records_file, DateTime.Now.ToString());
-            List<Template2> active_templates = Settings.Template2s.Template2s.Where(x => x.Active).OrderBy(x => x.OrderWeight).ToList();
+
+            List<Template2> active_templates = Settings.Template2s.Template2s.Where(x => x.Active).OrderBy(x => x.OrderWeight).ThenByDescending(x =>
+            {
+                Settings.TemplateLocalInfoSettings.Info i = Settings.TemplateLocalInfo.GetInfo(x.Template.Name, false);
+                if (i == null)
+                    return DateTime.MinValue;
+                return i.UsedTime;
+            }).ToList();
             if (active_templates.Count < 1)
             {
                 LogMessage.Error("There is no active template!");
