@@ -247,14 +247,7 @@
     <Compile Include="TemplateForm.Designer.cs">
       <DependentUpon>TemplateForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="FileFilterForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FileFilterForm.Designer.cs">
-      <DependentUpon>FileFilterForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Ocr.cs" />
-    <Compile Include="Template0.cs" />
     <Compile Include="TemplateForm.pages.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -353,9 +346,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TemplateForm.resx">
       <DependentUpon>TemplateForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FileFilterForm.resx">
-      <DependentUpon>FileFilterForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TextForm.resx">
       <DependentUpon>TextForm.cs</DependentUpon>

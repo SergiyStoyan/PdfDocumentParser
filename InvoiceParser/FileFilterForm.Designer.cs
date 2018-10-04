@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.files = new Cliver.PdfDocumentParser.ReadOnlyListBox();
+            this.files = new ReadOnlyListBox();
             this.SuspendLayout();
             // 
             // files
@@ -58,6 +58,6 @@
 
         #endregion
 
-        private Cliver.PdfDocumentParser.ReadOnlyListBox files;
+        private ReadOnlyListBox files;
     }
 }

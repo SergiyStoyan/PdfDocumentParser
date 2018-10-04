@@ -41,12 +41,7 @@ namespace Cliver.InvoiceParser
 
     public class ReadOnlyListBox : ListBox
     {
-        private bool _readOnly = false;
-        public bool ReadOnly
-        {
-            get { return _readOnly; }
-            set { _readOnly = value; }
-        }
+        public bool ReadOnly = false;
 
         protected override void DefWndProc(ref System.Windows.Forms.Message m)
         {
@@ -54,7 +49,7 @@ namespace Cliver.InvoiceParser
             // to the selection area from the mouse or keyboard. 
             // Let all other messages pass through to the 
             // Windows default implementation of DefWndProc.
-            if (!_readOnly || ((m.Msg <= 0x0200 || m.Msg >= 0x020E)
+            if (!ReadOnly || ((m.Msg <= 0x0200 || m.Msg >= 0x020E)
             && (m.Msg <= 0x0100 || m.Msg >= 0x0109)
             && m.Msg != 0x2111
             && m.Msg != 0x87))
