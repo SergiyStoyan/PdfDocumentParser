@@ -89,11 +89,11 @@
             this.Name_ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Group = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.OrderWeight = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ModifiedTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.UsedTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Comment = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DetectingTemplateLastPageNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ModifiedTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FileFilterRegex = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.UsedTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.template2s)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
@@ -219,11 +219,11 @@
             this.Name_,
             this.Group,
             this.OrderWeight,
-            this.ModifiedTime,
+            this.UsedTime,
             this.Comment,
             this.DetectingTemplateLastPageNumber,
-            this.FileFilterRegex,
-            this.UsedTime});
+            this.ModifiedTime,
+            this.FileFilterRegex});
             this.template2s.Location = new System.Drawing.Point(15, 73);
             this.template2s.MultiSelect = false;
             this.template2s.Name = "template2s";
@@ -735,13 +735,13 @@
             this.OrderWeight.Name = "OrderWeight";
             this.OrderWeight.Width = 58;
             // 
-            // ModifiedTime
+            // UsedTime
             // 
-            this.ModifiedTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            this.ModifiedTime.HeaderText = "Modified";
-            this.ModifiedTime.Name = "ModifiedTime";
-            this.ModifiedTime.ReadOnly = true;
-            this.ModifiedTime.Width = 72;
+            this.UsedTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.UsedTime.HeaderText = "Used";
+            this.UsedTime.Name = "UsedTime";
+            this.UsedTime.ReadOnly = true;
+            this.UsedTime.Width = 57;
             // 
             // Comment
             // 
@@ -756,19 +756,19 @@
             this.DetectingTemplateLastPageNumber.ToolTipText = "Detecting template last pdf page number";
             this.DetectingTemplateLastPageNumber.Width = 78;
             // 
+            // ModifiedTime
+            // 
+            this.ModifiedTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.ModifiedTime.HeaderText = "Modified";
+            this.ModifiedTime.Name = "ModifiedTime";
+            this.ModifiedTime.ReadOnly = true;
+            this.ModifiedTime.Width = 72;
+            // 
             // FileFilterRegex
             // 
             this.FileFilterRegex.HeaderText = "Filter";
             this.FileFilterRegex.Name = "FileFilterRegex";
             this.FileFilterRegex.ReadOnly = true;
-            // 
-            // UsedTime
-            // 
-            this.UsedTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            this.UsedTime.HeaderText = "Used";
-            this.UsedTime.Name = "UsedTime";
-            this.UsedTime.ReadOnly = true;
-            this.UsedTime.Width = 57;
             // 
             // MainForm
             // 
@@ -869,10 +869,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Name_;
         private System.Windows.Forms.DataGridViewTextBoxColumn Group;
         private System.Windows.Forms.DataGridViewTextBoxColumn OrderWeight;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ModifiedTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn UsedTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn Comment;
         private System.Windows.Forms.DataGridViewTextBoxColumn DetectingTemplateLastPageNumber;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ModifiedTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn FileFilterRegex;
-        private System.Windows.Forms.DataGridViewTextBoxColumn UsedTime;
     }
 }

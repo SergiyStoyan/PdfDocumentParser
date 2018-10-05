@@ -335,10 +335,7 @@ namespace Cliver.InvoiceParser
                     t.Template.Name = (string)r.Cells["Name_"].Value;
                 r.Tag = t;
             }
-            Settings.TemplateLocalInfoSettings.Info tai = null;
-            if (t.Template.Name != null)
-                tai = Settings.TemplateLocalInfo.GetInfo(t.Template.Name, false);
-            TemplateManager tm = new TemplateManager { Template = SerializationRoutines.Json.Clone(t.Template), LastTestFile = tai == null ? null : tai.LastTestFile, Row = r };
+            TemplateManager tm = new TemplateManager { Template = SerializationRoutines.Json.Clone(t.Template), LastTestFile = Settings.TemplateLocalInfo.GetInfo(t.Template.Name).LastTestFile, Row = r };
             tf = new TemplateForm(tm, Settings.General.InputFolder);
             tf.FormClosed += delegate
             {
@@ -433,9 +430,7 @@ namespace Cliver.InvoiceParser
                     r.Cells["OrderWeight"].Value = t.OrderWeight;
                     r.Cells["DetectingTemplateLastPageNumber"].Value = t.DetectingTemplateLastPageNumber;
                     r.Cells["FileFilterRegex"].Value = t.FileFilterRegex;
-                    Settings.TemplateLocalInfoSettings.Info   tai = Settings.TemplateLocalInfo.GetInfo(t.Template.Name, false);
-                    if (tai != null)
-                        r.Cells["UsedTime"].Value = tai.GetUsedTimeAsString();
+                    r.Cells["UsedTime"].Value = Settings.TemplateLocalInfo.GetInfo(t.Template.Name).GetUsedTimeAsString();
                     r.Tag = t;
                 }
                 //templates.Columns["Name_"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;

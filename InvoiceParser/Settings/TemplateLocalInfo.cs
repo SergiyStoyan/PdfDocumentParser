@@ -40,21 +40,18 @@ namespace Cliver.InvoiceParser
 
             public void SetLastTestFile(string templateName, string lastTestFile)
             {
-                Info i = GetInfo(templateName, true);
-                if (i.LastTestFile == lastTestFile)
-                    return;
-                i.LastTestFile = lastTestFile;
+                GetInfo(templateName).LastTestFile = lastTestFile;
             }
 
             public void SetUsedTime(string templateName)
             {
-                GetInfo(templateName, true).UsedTime = DateTime.Now;
+                GetInfo(templateName).UsedTime = DateTime.Now;
             }
 
-            public Info GetInfo(string templateName, bool createIfNotExists)
+            public Info GetInfo(string templateName)
             {
-                if (templateName == null)
-                    return null;
+                //if (templateName == null)
+                //    return null;
                 Info tai;
                 if (!TemplateNames2Info.TryGetValue(templateName, out tai))
                 {

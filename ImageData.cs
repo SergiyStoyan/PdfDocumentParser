@@ -136,7 +136,8 @@ namespace Cliver.PdfDocumentParser
             if (Width != imageData.Width || Height != imageData.Height)
                 throw new Exception("Images have different sizes.");
             int differentPixelNumber;
-            return isHashMatchOf(imageData, 0, 0, (int)(brightnessTolerance * 255), (int)(Hash.Length * differentPixelNumberTolerance), out differentPixelNumber);
+            //return isAbsolutizedBrightnessMatchOf(imageData, 0, 0, (int)(brightnessTolerance * 255* absolutizedBrightnessToleranceFactor), (int)(Hash.Length * differentPixelNumberTolerance), out differentPixelNumber);
+            return isMatchOf(imageData, 0, 0, (int)(brightnessTolerance * 255), (int)(Hash.Length * differentPixelNumberTolerance), out differentPixelNumber);
         }
 
         /*!!!ATTENTION!!!
@@ -163,7 +164,7 @@ namespace Cliver.PdfDocumentParser
             return bestP;
         }
 
-        public void FindWithinImage(ImageData imageData, float brightnessTolerance, float differentPixelNumberTolerance, Func<Point, float, bool> onFound)
+        public void FindWithinImage(ImageData imageData, float brightnessTolerance, float differentPixelNumberTolerance, Func<Point, float, bool> proceedOnFound)
         {
             int brightnessMaxDifference = (int)(brightnessTolerance * 255);
             int differentPixelMaxNumber = (int)(Hash.Length * differentPixelNumberTolerance);
@@ -173,21 +174,17 @@ namespace Cliver.PdfDocumentParser
                 for (int y = 0; y <= bh; y++)
                 {
                     int differentPixelNumber;
-                    if (isHashMatchOf(imageData, x, y, brightnessMaxDifference, differentPixelMaxNumber, out differentPixelNumber))
+                    if (isMatchOf(imageData, x, y, brightnessMaxDifference, differentPixelMaxNumber, out differentPixelNumber))
                     {
-                        //!!!still works bad
-                        //if (absolutizedImageData == null)
-                        //    absolutizedImageData = getAbsolutizedImageData(0, 0, Width, Height);
-                        //ImageData absolutizedImageData2 = imageData.getAbsolutizedImageData(x, y, Width, Height);
-                        //if (!absolutizedImageData.IsSimilarTo(absolutizedImageData2, brightnessTolerance / 10, differentPixelNumberTolerance))
+                        //int absolutizedBrightnessMaxDifference = (int)(brightnessTolerance * 255 * absolutizedBrightnessToleranceFactor);
+                        //if (!isAbsolutizedBrightnessMatchOf(imageData, x, y, absolutizedBrightnessMaxDifference, differentPixelMaxNumber, out differentPixelNumber))
                         //    continue;
-
-                        if (!onFound(new Point(x, y), differentPixelMaxNumber == 0 ? 0 : (float)differentPixelNumber / differentPixelMaxNumber))
+                        if (!proceedOnFound(new Point(x, y), differentPixelMaxNumber == 0 ? 0 : (float)differentPixelNumber / differentPixelMaxNumber))
                             return;
                     }
                 }
         }
-        bool isHashMatchOf(ImageData imageData, int x, int y, int brightnessMaxDifference, int differentPixelMaxNumber, out int differentPixelNumber)
+        bool isMatchOf(ImageData imageData, int x, int y, int brightnessMaxDifference, int differentPixelMaxNumber, out int differentPixelNumber)
         {
             differentPixelNumber = 0;
             for (int i = 0; i < Width; i++)
@@ -202,9 +199,19 @@ namespace Cliver.PdfDocumentParser
 
         #region    with taking image brightness to account
 
-        ImageData absolutizedImageData = null;
+        ImageData absolutizedBrightnessImageData = null;
+        float absolutizedBrightnessToleranceFactor = 0.1f;
 
-        void getMinMaxBrightnessOptimums(int x, int y, int width, int height, out byte min, out byte max)
+        bool isAbsolutizedBrightnessMatchOf(ImageData imageData, int x, int y,int brightnessMaxDifference,int differentPixelMaxNumber, out int differentPixelNumber)
+        {
+            //!!!still works bad
+            if (absolutizedBrightnessImageData == null)
+                absolutizedBrightnessImageData = getAbsolutizedImageData(0, 0, Width, Height);
+            ImageData absolutizedBrightnessImageData2 = imageData.getAbsolutizedImageData(x, y, Width, Height);
+            return absolutizedBrightnessImageData.isMatchOf(absolutizedBrightnessImageData2, 0, 0, brightnessMaxDifference, differentPixelMaxNumber, out differentPixelNumber);
+        }
+
+        void getMinMaxBrightnessOptimums(int x, int y, int width, int height, out byte minBrightness, out byte maxBrightness)
         {
             int[] brightnesses2pointCount = new int[256];
             for (int i = 0; i < width; i++)
@@ -212,22 +219,35 @@ namespace Cliver.PdfDocumentParser
                 for (int j = 0; j < height; j++)
                     brightnesses2pointCount[Hash[x + i, y + j]] = brightnesses2pointCount[Hash[x + i, y + j]] + 1;
             }
-            List<int> count_optimums = new List<int>();
-            int minBrightnessPointCount = 0;
-            min = 0;
-            for (byte i = 0; i < 128; i++)
-                if (minBrightnessPointCount < brightnesses2pointCount[i])
+            //int minBrightnessPointCount = 0;
+            //minBrightness = 0;
+            //for (byte i = 0; i < 128; i++)
+            //    if (minBrightnessPointCount < brightnesses2pointCount[i])
+            //    {
+            //        minBrightnessPointCount = brightnesses2pointCount[i];
+            //        minBrightness = i;
+            //    }
+            //int maxBrightnessPointCount = 0;
+            //maxBrightness = 255;
+            //for (byte i = 127; 127 <= i; i++)
+            //    if (maxBrightnessPointCount < brightnesses2pointCount[i])
+            //    {
+            //        maxBrightnessPointCount = brightnesses2pointCount[i];
+            //        maxBrightness = i;
+            //    } int minBrightnessPointCount = 0;
+            minBrightness = 0;
+            for (byte i = 0; i < brightnesses2pointCount.Length - 1; i++)
+                if (brightnesses2pointCount[i] > brightnesses2pointCount[i + 1])
                 {
-                    minBrightnessPointCount = brightnesses2pointCount[i];
-                    min = i;
+                    minBrightness = i;
+                    break;
                 }
-            int maxBrightnessPointCount = 0;
-            max = 255;
-            for (byte i = 127; 127 <= i; i++)
-                if (maxBrightnessPointCount < brightnesses2pointCount[i])
+            maxBrightness = 255;
+            for (byte i = (byte)(brightnesses2pointCount.Length - 1); i > 0; i--)
+                if (brightnesses2pointCount[i] > brightnesses2pointCount[i - 1])
                 {
-                    maxBrightnessPointCount = brightnesses2pointCount[i];
-                    max = i;
+                    maxBrightness = i;
+                    break;
                 }
         }
 

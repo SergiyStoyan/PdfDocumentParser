@@ -66,7 +66,7 @@ namespace Cliver.PdfDocumentParser
 
                 //imageResolution.Value = template.ImageResolution;
 
-                pageRotation.SelectedIndex = (int)t.PagesRotation;
+                pageRotation.SelectedIndex = (int)t.PageRotation;
                 autoDeskew.Checked = t.AutoDeskew;
                 autoDeskewThreshold.Value = t.AutoDeskewThreshold;
 
@@ -202,7 +202,7 @@ namespace Cliver.PdfDocumentParser
 
             t.Name = name.Text.Trim();
 
-            t.PagesRotation = (Template.PageRotations)pageRotation.SelectedIndex;
+            t.PageRotation = (Template.PageRotations)pageRotation.SelectedIndex;
             t.AutoDeskew = autoDeskew.Checked;
             t.AutoDeskewThreshold = (int)autoDeskewThreshold.Value;
 

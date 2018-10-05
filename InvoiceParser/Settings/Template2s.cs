@@ -85,7 +85,7 @@ namespace Cliver.InvoiceParser
                         Name = "",
                         Anchors = new List<Template.Anchor>(),
                         Marks = new List<Template.Mark>(),
-                        PagesRotation = PdfDocumentParser.Template.PageRotations.NONE,
+                        PageRotation = PdfDocumentParser.Template.PageRotations.NONE,
                         Editor = new Template.EditorSettings
                         {
                             TestPictureScale = 1.2m,

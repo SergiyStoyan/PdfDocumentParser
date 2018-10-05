@@ -64,10 +64,7 @@ namespace Cliver.InvoiceParser
 
             List<Template2> active_templates = Settings.Template2s.Template2s.Where(x => x.Active).OrderBy(x => x.OrderWeight).ThenByDescending(x =>
             {
-                Settings.TemplateLocalInfoSettings.Info i = Settings.TemplateLocalInfo.GetInfo(x.Template.Name, false);
-                if (i == null)
-                    return DateTime.MinValue;
-                return i.UsedTime;
+                return Settings.TemplateLocalInfo.GetInfo(x.Template.Name).UsedTime;
             }).ToList();
             if (active_templates.Count < 1)
             {

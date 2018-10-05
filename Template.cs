@@ -30,7 +30,7 @@ namespace Cliver.PdfDocumentParser
 
         //public int ImageResolution = 300;//tesseract requires at least 300
 
-        public PageRotations PagesRotation = PageRotations.NONE;
+        public PageRotations PageRotation = PageRotations.NONE;
         public enum PageRotations
         {
             NONE,

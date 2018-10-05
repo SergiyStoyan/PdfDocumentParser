@@ -491,7 +491,7 @@
             "↻ 90°",
             "↻ 180°",
             "↺ 90°",
-            "Detect"});
+            "Auto"});
             this.pageRotation.Location = new System.Drawing.Point(84, 22);
             this.pageRotation.Name = "pageRotation";
             this.pageRotation.Size = new System.Drawing.Size(52, 21);

@@ -81,7 +81,7 @@ namespace Cliver.PdfDocumentParser
             if (pageCollection.ActiveTemplate == null)
                 return;
 
-            if (newTemplate.PagesRotation != pageCollection.ActiveTemplate.PagesRotation || newTemplate.AutoDeskew != pageCollection.ActiveTemplate.AutoDeskew)
+            if (newTemplate.PageRotation != pageCollection.ActiveTemplate.PageRotation || newTemplate.AutoDeskew != pageCollection.ActiveTemplate.AutoDeskew)
             {
                 if (_activeTemplateImageData != null)
                 {
@@ -126,7 +126,7 @@ namespace Cliver.PdfDocumentParser
                     //...change one random pixel to a random color on the clone... seems to trigger a copy of all pixel data from the original.
                     Bitmap b = Bitmap.Clone(new Rectangle(0, 0, Bitmap.Width, Bitmap.Height), System.Drawing.Imaging.PixelFormat.Undefined);
 
-                    switch (pageCollection.ActiveTemplate.PagesRotation)
+                    switch (pageCollection.ActiveTemplate.PageRotation)
                     {
                         case Template.PageRotations.NONE:
                             break;
@@ -160,7 +160,7 @@ namespace Cliver.PdfDocumentParser
                             }
                             break;
                         default:
-                            throw new Exception("Unknown option: " + pageCollection.ActiveTemplate.PagesRotation);
+                            throw new Exception("Unknown option: " + pageCollection.ActiveTemplate.PageRotation);
                     }
 
                     if (pageCollection.ActiveTemplate.AutoDeskew)
