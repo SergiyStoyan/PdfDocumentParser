@@ -13,12 +13,12 @@ namespace Cliver.InvoiceParser
 {
     /*
  TBD:
+- switch to Tesseract.4
  - tune image recognition by checking brightness deltas
 
  - MainForm to WPF;
 - ? store each template in separate file;
 
-- switch to Tesseract.4
      */
     class Program
     {

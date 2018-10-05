@@ -136,7 +136,7 @@ namespace Cliver.PdfDocumentParser
             if (Width != imageData.Width || Height != imageData.Height)
                 throw new Exception("Images have different sizes.");
             int differentPixelNumber;
-            //return isAbsolutizedBrightnessMatchOf(imageData, 0, 0, (int)(brightnessTolerance * 255* absolutizedBrightnessToleranceFactor), (int)(Hash.Length * differentPixelNumberTolerance), out differentPixelNumber);
+            //return isAbsolutizedBrightnessMatchOf(imageData, 0, 0, (int)(brightnessTolerance * 255 * absolutizedBrightnessToleranceFactor), (int)(Hash.Length * differentPixelNumberTolerance), out differentPixelNumber);
             return isMatchOf(imageData, 0, 0, (int)(brightnessTolerance * 255), (int)(Hash.Length * differentPixelNumberTolerance), out differentPixelNumber);
         }
 
@@ -200,9 +200,10 @@ namespace Cliver.PdfDocumentParser
         #region    with taking image brightness to account
 
         ImageData absolutizedBrightnessImageData = null;
-        float absolutizedBrightnessToleranceFactor = 0.1f;
+        float absolutizedBrightnessToleranceFactor = 0.3f;
+        //float brightnessOptimumThreashold = 0.02f;
 
-        bool isAbsolutizedBrightnessMatchOf(ImageData imageData, int x, int y,int brightnessMaxDifference,int differentPixelMaxNumber, out int differentPixelNumber)
+        bool isAbsolutizedBrightnessMatchOf(ImageData imageData, int x, int y, int brightnessMaxDifference, int differentPixelMaxNumber, out int differentPixelNumber)
         {
             //!!!still works bad
             if (absolutizedBrightnessImageData == null)
@@ -234,7 +235,24 @@ namespace Cliver.PdfDocumentParser
             //    {
             //        maxBrightnessPointCount = brightnesses2pointCount[i];
             //        maxBrightness = i;
-            //    } int minBrightnessPointCount = 0;
+            //    }
+
+            //float brightnessOptimumThreasholdCount = brightnessOptimumThreashold * width * height;
+            //minBrightness = 0;
+            //for (byte i = 0; i < brightnesses2pointCount.Length - 1; i++)
+            //    if (brightnesses2pointCount[i] > brightnessOptimumThreasholdCount)
+            //    {
+            //        minBrightness = i;
+            //        break;
+            //    }
+            //maxBrightness = 255;
+            //for (byte i = (byte)(brightnesses2pointCount.Length - 1); i > 0; i--)
+            //    if (brightnesses2pointCount[i] > brightnessOptimumThreasholdCount)
+            //    {
+            //        maxBrightness = i;
+            //        break;
+            //    }
+
             minBrightness = 0;
             for (byte i = 0; i < brightnesses2pointCount.Length - 1; i++)
                 if (brightnesses2pointCount[i] > brightnesses2pointCount[i + 1])
@@ -270,7 +288,7 @@ namespace Cliver.PdfDocumentParser
                     if (Hash[x + i, y + j] <= minOptimum)
                         aid.Hash[i, j] = 0;
                     else if (Hash[x + i, y + j] < maxOptimum)
-                        aid.Hash[i, j] = (byte)(brightnessFactor * (aid.Hash[i, j] - minOptimum));
+                        aid.Hash[i, j] = (byte)(brightnessFactor * (Hash[x + i, y + j] - minOptimum));
                     else
                         aid.Hash[i, j] = 255;
                 }
