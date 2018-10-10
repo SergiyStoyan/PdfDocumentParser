@@ -73,24 +73,6 @@ namespace Cliver.InvoiceParser
             {
                 if (TemplateNames2Info == null)
                     TemplateNames2Info = new Dictionary<string, Info>();
-
-                //!!!TO BE REMOVED AFTER UPGRADE
-                if (TemplateNames2Info.Count < 1)
-                {
-                    if (Settings.TestFiles == null)
-                        Config.ReloadField("TestFiles");
-                    foreach (string tm in Settings.TestFiles.TemplateNames2TestFile.Keys)
-                        TemplateNames2Info[tm] = new Info
-                        {
-                            LastTestFile = Settings.TestFiles.TemplateNames2TestFile[tm],
-                            UsedTime = DateTime.MinValue,
-                        };
-                    Save();
-                    Reload();
-                    if (TemplateNames2Info.Count > 0)
-                        if (System.IO.File.Exists(Settings.TestFiles.__File))
-                            System.IO.File.Delete(Settings.TestFiles.__File);
-                }
             }
 
             public override void Saving()
