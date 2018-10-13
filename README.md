@@ -6,10 +6,10 @@ Once I needed to parse bunches of invoices issued by different companies and pro
 ### Overview
 PdfDocumentParser is a parsing engine designed to extract text/images from PDF documents conforming to a predefined graphic layout - such as invoices and the like. The main approach of parsing is based on finding certain text or image fragments in page and then extracting text/images located relatively to those fragments.
 
-Within this scope PdfDocumentParser is capable to use the following approaches:
+Within this scope PdfDocumentParser implements the following strategies:
 - PDF entity processing (the main way to operate with text in PdfDocumentParser);
 - OCR (intended for scanned documents);
-- image comparison (used either in native and scanned PDF files);
+- image search (used either in native and scanned PDF files);
 
 PdfDocumentParser was developed as a set of parsing tools that can be incorporated into a custom application hopefully without need of change. It provides:
 - Template Editor where a PDF file can be open and a parsing template created or debugged;
