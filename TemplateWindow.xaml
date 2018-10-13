@@ -49,7 +49,7 @@
             <Label Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="4" Name="selectionCoordinates">selection coordinates</Label>
                 
             <Label Grid.Row="1" Grid.Column="0">Scale:</Label>
-            <xctk:DecimalUpDown Grid.Row="1" Grid.Column="1" Name="pictureScale"  Value="1.3" Increment=".1" Maximum="10" Minimum="0.1"/>
+            <!--xctk:DecimalUpDown Grid.Row="1" Grid.Column="1" Name="pictureScale"  Value="1.3" Increment=".1" Maximum="10" Minimum="0.1"/-->
             <Label Grid.Row="1" Grid.Column="2">Page:</Label>
             <TextBox Grid.Row="1" Grid.Column="3" Name="tCurrentPage" Text="{Binding currentPage}" />
             <Label Grid.Row="1" Grid.Column="4" Name="tTotalPages">totalPages</Label>
