@@ -17,12 +17,12 @@ document.write('\
 <a href="http://cliversoft.com" title="CliverSoft.com">\
     <TABLE cellSpacing="1" class="copyright">\
 		<TR>\
-			<TD bgcolor=#ff9966 id="copyright_td1"></TD>\
-			<TD bgcolor=#999988 id="copyright_td2"></TD>\
+			<TD id="copyright_td1"></TD>\
+			<TD id="copyright_td2"></TD>\
 		</TR>\
 		<TR>\
-			<TD bgcolor=#ddddcc id="copyright_td3"></TD>\
-			<TD bgcolor=#bb99dd id="copyright_td4"></TD>\
+			<TD id="copyright_td3"></TD>\
+			<TD id="copyright_td4"></TD>\
 		</TR>\
 	</TABLE>\
  </a>\
