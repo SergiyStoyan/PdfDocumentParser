@@ -6,16 +6,17 @@
 <h1>Pdf Document Parser</h1>
 <h2>Overview</h2>
 <p>PdfDocumentParser is a parsing engine designed to extract text/images from PDF documents that conform to a predefined graphic layout - such as invoices and the like. The main approach of parsing is based on finding certain text or image fragments in page and then extracting text/images located relatively to those fragments.
-<p>Within this scope PdfDocumentParser implements the following options:
+<p>Within this scope PdfDocumentParser implements the following strategies:
 <ul>
 <li>PDF entities processing (the main way to operate with text in PdfDocumentParser);</li>
-<li>OCR processing (intended for scanned documents);</li>
-<li>Image processing (used either in native and scanned PDF files);</li>
+<li>OCR (intended for scanned documents);</li>
+<li>image search (used either in native and scanned PDF files);</li>
 </ul> 
+
 <p>PdfDocumentParser was developed as a set of parsing tools that can be incorporated into a custom application hopefully without need of change. It provides:
 <ul>
 <li>Template Editor where a PDF file can be open and a parsing template created or debugged;</li>
-<li>parsing engine API that can be called from a custom application;</li>
+<li>parsing engine API that can be used by a custom application: the engine accepts a PDF file and returns parsed data back to the calling code;</li>
 </ul> 
 
 <h2>Assumptions</h2>
