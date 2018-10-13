@@ -236,9 +236,9 @@ namespace Cliver.PdfDocumentParser
             for (int i = 0; i < bs.Count; i++)
                 for (int j = bs.Count - 1; j > i; j--)
                 {
-                    if (Math.Abs(bs[i].R.X - bs[j].R.X) > Settings.ImageProcessing.CoordinateDeviationMargin)//some symbols are duplicated in [almost] same position
+                    if (Math.Abs(bs[i].R.X - bs[j].R.X) > Settings.Constants.CoordinateDeviationMargin)//some symbols are duplicated in [almost] same position
                         continue;
-                    if (Math.Abs(bs[i].R.Y - bs[j].R.Y) > Settings.ImageProcessing.CoordinateDeviationMargin)//some symbols are duplicated in [almost] same position
+                    if (Math.Abs(bs[i].R.Y - bs[j].R.Y) > Settings.Constants.CoordinateDeviationMargin)//some symbols are duplicated in [almost] same position
                         continue;
                     if (bs[i].Char != bs[j].Char)
                         continue;
@@ -267,7 +267,7 @@ namespace Cliver.PdfDocumentParser
                         if (spaceAutoInsert && cb.Char != " " && lines[i].CharBoxes.Count > 0)
                         {
                             CharBox cb0 = lines[i].CharBoxes[lines[i].CharBoxes.Count - 1];
-                            if (cb0.Char != " " && cb.R.Left - cb0.R.Right > (cb.R.Width + cb.R.Height) / 5)
+                            if (cb0.Char != " " && cb.R.Left - cb0.R.Right > (cb.R.Width + cb.R.Height) / Settings.Constants.TextAutoInsertSpaceThreshold)
                                 lines[i].CharBoxes.Add(new CharBox { Char = " ", R = new System.Drawing.RectangleF((cb.R.Left + cb0.R.Right) / 2, 0, 0, 0) });
                         }
                         lines[i].CharBoxes.Add(cb);

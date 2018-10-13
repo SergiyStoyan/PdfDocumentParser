@@ -13,7 +13,7 @@
 <img src='1.png'/>
 
 <h2>2. Create an invoice first page recognition marks</h2>
-<p>Any template needs at least one mark that will certainly identify type of document and distinguish it from the rest documents you may want to parse. Such a mark should be targeted to some fragment of a document that is unique to its type. Usually it is a logo of a company issued the document.
+<p>Any template needs at least one mark that will certainly identify type of document and distinguish it from the rest documents you may want to parse. Such a mark should be targeted to some fragment of a document that is unique to its type. Usually it is logo of company issued the document.
 <p class='screenshot_title'>To create such a mark, first we need to create an anchor that will capture the logo. Then we create a mark and link it to the anchor:
 <img src='2.png'/>
 <p>How do those anchor and mark work inside Parser? In every page Parser looks for the fragment defined by the anchor. Depending on its type it can be either PDF text, OCR'ed text, or image. Each of types is processed by its own very different way and so choosing the right type is crucial in successful and robust parsing. The logo in our example document is an image that is why we set anchor's type to ImageData. This means that Parser will look for the image we selected while creating the anchor. 

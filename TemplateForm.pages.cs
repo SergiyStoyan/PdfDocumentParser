@@ -42,7 +42,7 @@ namespace Cliver.PdfDocumentParser
                 return;
             if (scaledCurrentPageBitmap != null)
                 scaledCurrentPageBitmap.Dispose();
-            scaledCurrentPageBitmap = ImageRoutines.GetScaled(pages[currentPage].ActiveTemplateBitmap, (float)pictureScale.Value * Settings.ImageProcessing.Image2PdfResolutionRatio);
+            scaledCurrentPageBitmap = ImageRoutines.GetScaled(pages[currentPage].ActiveTemplateBitmap, (float)pictureScale.Value * Settings.Constants.Image2PdfResolutionRatio);
             if (picture.Image != null)
                 picture.Image.Dispose();
             picture.Image = new Bitmap(scaledCurrentPageBitmap);

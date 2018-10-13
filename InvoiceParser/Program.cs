@@ -13,6 +13,7 @@ namespace Cliver.InvoiceParser
 {
     /*
  TBD:
+ - implement chaining Anchors and remove Marks
 - switch to Tesseract.4
  - tune image recognition by checking brightness deltas
 

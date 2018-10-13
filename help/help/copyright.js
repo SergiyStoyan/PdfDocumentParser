@@ -1,13 +1,28 @@
+{
+    var css = '\
+table.copyright { margin:0; align-self:center; }\
+table.copyright, table.copyright td {border:none; }\
+table.copyright td {margin:0; padding:0; width:6px; height:6px;}',
+        head = document.head || document.getElementsByTagName('head')[0],
+        style = document.createElement('style');
+    style.type = 'text/css';
+    if (style.styleSheet)// This is required for IE8 and below.
+      style.styleSheet.cssText = css;
+    else 
+      style.appendChild(document.createTextNode(css));
+    head.appendChild(style);
+}
+
 document.write('\
 <a href="http://cliversoft.com" title="CliverSoft.com">\
-    <TABLE cellSpacing="1" cellPadding="0" border="0" style="align-self: center;">\
+    <TABLE cellSpacing="1" class="copyright">\
 		<TR>\
-			<TD bgcolor=#ff9966 width="5px" height="5px" id="copyright_td1"></TD>\
-			<TD bgcolor=#999988 width="5px" height="5px"  id="copyright_td2"></TD>\
+			<TD bgcolor=#ff9966 id="copyright_td1"></TD>\
+			<TD bgcolor=#999988 id="copyright_td2"></TD>\
 		</TR>\
 		<TR>\
-			<TD bgcolor=#ddddcc width="5px" height="5px"  id="copyright_td3"></TD>\
-			<TD bgcolor=#bb99dd width="5px" height="5px"  id="copyright_td4"></TD>\
+			<TD bgcolor=#ddddcc id="copyright_td3"></TD>\
+			<TD bgcolor=#bb99dd id="copyright_td4"></TD>\
 		</TR>\
 	</TABLE>\
  </a>\

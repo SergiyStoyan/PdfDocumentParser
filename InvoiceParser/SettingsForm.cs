@@ -99,7 +99,7 @@ namespace Cliver.InvoiceParser
             Settings.General.Reset();
             Settings.Synchronization.Reset();
             PdfDocumentParser.Settings.Appearance.Reset();
-            PdfDocumentParser.Settings.ImageProcessing.Reset();
+            PdfDocumentParser.Settings.Constants.Reset();
             load_settings();
         }
 

@@ -24,9 +24,16 @@ namespace Cliver.PdfDocumentParser
         public class ConstantsSettings : Cliver.Settings
         {
             public string HelpFile = @"help\index.html";
+            public float TextAutoInsertSpaceThreshold = 6;
+            public int PdfPageImageResolution = 300;//tesseract requires at least 300
+            public float CoordinateDeviationMargin = 1f;
+
+            [Newtonsoft.Json.JsonIgnore]
+            public float Image2PdfResolutionRatio { get; private set; }
 
             public override void Loaded()
             {
+                Image2PdfResolutionRatio = (float)72 / PdfPageImageResolution;//72 is resolution of the most pdf's
             }
 
             public override void Saving()

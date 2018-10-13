@@ -46,12 +46,17 @@
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.CoordinateDeviationMargin = new System.Windows.Forms.NumericUpDown();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.TextAutoInsertSpaceThreshold = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.PdfPageImageResolution)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.panel2.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CoordinateDeviationMargin)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TextAutoInsertSpaceThreshold)).BeginInit();
             this.SuspendLayout();
             // 
             // PdfPageImageResolution
@@ -126,7 +131,7 @@
             this.flowLayoutPanel1.Controls.Add(this.About);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 255);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 345);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(353, 31);
             this.flowLayoutPanel1.TabIndex = 51;
@@ -280,11 +285,50 @@
             0,
             196608});
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.label6);
+            this.groupBox1.Controls.Add(this.TextAutoInsertSpaceThreshold);
+            this.groupBox1.Location = new System.Drawing.Point(12, 259);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(328, 68);
+            this.groupBox1.TabIndex = 61;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Text Processing";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(16, 35);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(151, 13);
+            this.label6.TabIndex = 46;
+            this.label6.Text = "Auto Insert Space Threashold:";
+            // 
+            // TextAutoInsertSpaceThreshold
+            // 
+            this.TextAutoInsertSpaceThreshold.DecimalPlaces = 1;
+            this.TextAutoInsertSpaceThreshold.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.TextAutoInsertSpaceThreshold.Location = new System.Drawing.Point(234, 33);
+            this.TextAutoInsertSpaceThreshold.Name = "TextAutoInsertSpaceThreshold";
+            this.TextAutoInsertSpaceThreshold.Size = new System.Drawing.Size(69, 20);
+            this.TextAutoInsertSpaceThreshold.TabIndex = 47;
+            this.TextAutoInsertSpaceThreshold.Value = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(353, 286);
+            this.ClientSize = new System.Drawing.Size(353, 376);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.flowLayoutPanel1);
@@ -298,6 +342,9 @@
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CoordinateDeviationMargin)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TextAutoInsertSpaceThreshold)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -322,5 +369,8 @@
         private System.Windows.Forms.Button AnchorMasterBoxColor;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button AnchorSecondaryBoxColor;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.NumericUpDown TextAutoInsertSpaceThreshold;
     }
 }

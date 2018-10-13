@@ -62,9 +62,9 @@ namespace Cliver.PdfDocumentParser
 
         public string GetText(Bitmap b, RectangleF r)
         {
-            r = new RectangleF(r.X / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Y / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width / Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height / Settings.ImageProcessing.Image2PdfResolutionRatio);
+            r = new RectangleF(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio);
             r.Intersect(new Rectangle(0, 0, b.Width, b.Height));
-            if (Math.Abs(r.Width) < Settings.ImageProcessing.CoordinateDeviationMargin || Math.Abs(r.Height) < Settings.ImageProcessing.CoordinateDeviationMargin)
+            if (Math.Abs(r.Width) < Settings.Constants.CoordinateDeviationMargin || Math.Abs(r.Height) < Settings.Constants.CoordinateDeviationMargin)
                 return null;
             using (var page = engine.Process(b, new Rect((int)r.X, (int)r.Y, (int)r.Width, (int)r.Height), PageSegMode.SingleBlock))
             {
@@ -160,20 +160,20 @@ namespace Cliver.PdfDocumentParser
                                 //    {
                                 //        Char = "\r\n",
                                 //        AutoInserted = true,
-                                //        R = new RectangleF(r.X1 * Settings.ImageProcessing.Image2PdfResolutionRatio - Settings.ImageProcessing.CoordinateDeviationMargin * 2, r.Y1 * Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width * Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height * Settings.ImageProcessing.Image2PdfResolutionRatio)
+                                //        R = new RectangleF(r.X1 * Settings.Constants.Image2PdfResolutionRatio - Settings.Constants.CoordinateDeviationMargin * 2, r.Y1 * Settings.Constants.Image2PdfResolutionRatio, r.Width * Settings.Constants.Image2PdfResolutionRatio, r.Height * Settings.Constants.Image2PdfResolutionRatio)
                                 //    });
                                 //}//seems to work not well
                                 cbs.Add(new CharBox
                                 {
                                     Char = " ",
                                     AutoInserted = true,
-                                    R = new RectangleF(r.X1 * Settings.ImageProcessing.Image2PdfResolutionRatio - Settings.ImageProcessing.CoordinateDeviationMargin * 2, r.Y1 * Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width * Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height * Settings.ImageProcessing.Image2PdfResolutionRatio)
+                                    R = new RectangleF(r.X1 * Settings.Constants.Image2PdfResolutionRatio - Settings.Constants.CoordinateDeviationMargin * 2, r.Y1 * Settings.Constants.Image2PdfResolutionRatio, r.Width * Settings.Constants.Image2PdfResolutionRatio, r.Height * Settings.Constants.Image2PdfResolutionRatio)
                                 });
                             }
                             cbs.Add(new CharBox
                             {
                                 Char = i.GetText(PageIteratorLevel.Symbol),
-                                R = new RectangleF(r.X1 * Settings.ImageProcessing.Image2PdfResolutionRatio, r.Y1 * Settings.ImageProcessing.Image2PdfResolutionRatio, r.Width * Settings.ImageProcessing.Image2PdfResolutionRatio, r.Height * Settings.ImageProcessing.Image2PdfResolutionRatio)
+                                R = new RectangleF(r.X1 * Settings.Constants.Image2PdfResolutionRatio, r.Y1 * Settings.Constants.Image2PdfResolutionRatio, r.Width * Settings.Constants.Image2PdfResolutionRatio, r.Height * Settings.Constants.Image2PdfResolutionRatio)
                             });
                         }
                     } while (i.Next(PageIteratorLevel.Symbol));

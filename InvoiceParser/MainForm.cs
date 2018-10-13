@@ -653,7 +653,7 @@ namespace Cliver.InvoiceParser
                 if (sortSelectedUp.Checked)
                     template2s.Sort(template2s.Columns["Selected"], ListSortDirection.Descending);
 
-                selectedTemplatesCount.Text = "Selected: " + count + " templates.";
+                selectedTemplatesCount.Text = "Selected: " + count + " templates";
 
                 Settings.General.UseActiveSelectPattern = useActivePattern.Checked;
                 Settings.General.UseNameSelectPattern = useNamePattern.Checked;

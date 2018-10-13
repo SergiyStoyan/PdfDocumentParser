@@ -34,8 +34,10 @@ namespace Cliver.PdfDocumentParser
             AnchorSecondaryBoxColor.ForeColor = Settings.Appearance.AnchorSecondaryBoxColor;
             SelectionBoxColor.ForeColor = Settings.Appearance.SelectionBoxColor;
 
-            PdfPageImageResolution.Value = Settings.ImageProcessing.PdfPageImageResolution;
-            CoordinateDeviationMargin.Value = (decimal)Settings.ImageProcessing.CoordinateDeviationMargin;
+            PdfPageImageResolution.Value = Settings.Constants.PdfPageImageResolution;
+            CoordinateDeviationMargin.Value = (decimal)Settings.Constants.CoordinateDeviationMargin;
+
+            TextAutoInsertSpaceThreshold.Value = (decimal)Settings.Constants.TextAutoInsertSpaceThreshold;
         }
 
         private void bCancel_Click(object sender, EventArgs e)
@@ -54,11 +56,13 @@ namespace Cliver.PdfDocumentParser
                 Settings.Appearance.Save();
                 Settings.Appearance.Reload();
 
-                Settings.ImageProcessing.PdfPageImageResolution = (int)PdfPageImageResolution.Value;
-                Settings.ImageProcessing.CoordinateDeviationMargin = (float)CoordinateDeviationMargin.Value;
+                Settings.Constants.PdfPageImageResolution = (int)PdfPageImageResolution.Value;
+                Settings.Constants.CoordinateDeviationMargin = (float)CoordinateDeviationMargin.Value;
 
-                Settings.ImageProcessing.Save();
-                Settings.ImageProcessing.Reload();
+                Settings.Constants.TextAutoInsertSpaceThreshold = (float)TextAutoInsertSpaceThreshold.Value;
+
+                Settings.Constants.Save();
+                Settings.Constants.Reload();
 
                 Close();
             }
@@ -71,7 +75,7 @@ namespace Cliver.PdfDocumentParser
         private void bReset_Click(object sender, EventArgs e)
         {
             Settings.Appearance.Reset();
-            Settings.ImageProcessing.Reset();
+            Settings.Constants.Reset();
             load_settings();
         }
 
