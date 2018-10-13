@@ -13,12 +13,12 @@ Within this scope PdfDocumentParser implements the following strategies:
 - image search (used either in native and scanned PDF files);
 
 PdfDocumentParser was developed as a set of parsing tools that can be incorporated into a custom application hopefully without need of change. It provides:
-- Template Editor where parsing templates can be created or debugged in an easy manner;
-- parsing API that can be used by a custom application: the engine processes a PDF file and returns parsed data back to the calling code;
+- Template Editor where parsing templates can be created and debugged in an easy manner;
+- a parsing engine API that can be used by custom applications: the engine processes a PDF file and returns parsed data back to the calling code;
 
 ### Assumptions
-- A PDF file can consist of multiple documents (e.g. multiple invoices).
-- A document (e.g. invoice) can consist of multiple pages.
+- a PDF file can consist of multiple documents (e.g. multiple invoices);
+- a document (e.g. invoice) can consist of multiple pages;
 
 ### InvoiceParser
 [Invoice Parser](https://github.com/sergeystoyan/PdfDocumentParser/tree/lib%2Bcustomization/InvoiceParser) is a custom desktop application based on the leverages provided by [PdfDocumentParser](https://github.com/sergeystoyan/PdfDocumentParser) and developed for certain needs. Most likely it will not fit your needs from scratch but can be used as a sample.
