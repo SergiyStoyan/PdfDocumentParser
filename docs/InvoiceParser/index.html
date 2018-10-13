@@ -1,0 +1,60 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../main.css">
+</head>
+<body>
+<h1>Invoice Parser</h1>
+<h2>Overview</h2>
+<p>InvoiceParser is a custom desktop application based on the leverages provided by PdfDocumentParser and developed for certain needs. It can be used as a sample or adapted though.
+<p>Generally, it does the following:
+<ul>
+<li>processes PDF files along the custom needs;</li>
+<li>keeps and manages templates;</li>
+<li>enhances PdfDocumentParser::Template with some properties that are not related to parsing;</li>
+</ul>
+
+<img src='2_1.png'/>
+
+<h2>Assumptions</h2>
+<ul>
+<li>A PDF file can contain only documents of the same type.</li>
+<li>Once detected, a document is considered continued until next document begins or the file ends.</li>
+</ul>
+<p>These assumptions is not something deep rooted in the code and can be easily modified.
+
+
+<h2>Additional Template Parameters</h2>
+<table>
+<tr><th class='title_column'>Parameter</th><th>Description</th></tr>
+<tr><td class='title_column'>Active</td>
+<td>Inactive template is not ignored while parsing.</td></tr>
+<tr><td class='title_column'>Group</td>
+<td>An optional mark that can be helpful for managing templates.</td></tr>
+<tr><td class='title_column'>Order</td>
+<td>A weight indicating template's order in check line. It is intended to reduce processing time. Templates with the less order are tried first.</td></tr>
+<tr><td class='title_column'>DTLPage</td>
+<td>The last page in PDF files that is to be checked for this template. It is intended to reduce processing time.</td></tr>
+<tr><td class='title_column'>Filter</td>
+<td>It is a Regex applied to PDF file path to recognize the proper template. Optional. It is intended to reduce processing time.</td></tr>
+</table>
+
+<h2>Considerations</h2>
+<p>When processing documents InvoiceParser applies every active template to every new document to recognize a proper template. So, if you have 50 templates and 1000 files evenly distributed for templates, InvoiceParser will do on average 1000/2 *50 = 25,000 template tries. It may take a considerable time especially with templates using OCR. You can decrease processing time by the following ways:
+<ul> 
+<li> specify file filters for templates. If it can be done then the tips below are not needed;
+<li> specify template orders so that templates that require longer time for recognition have higher order. E.g. templates that use auto-deskew should be checked in the last place;
+<li> keep templates that are known as not corresponding to the files to be processed right now, inactive so that PdfDocumentParser will have to choose the right templates from a lesser collection;
+<li> as every template is checked for matching its recognition marks to document pages, avoid using OCR'ed text type in marks and their anchors because this type requires an essential time to build an OCR cache of page (being built it is very fast then). This tip makes sense only when the most of templates use Image type in marks which usually happens. Otherwise, if marks of the most of templates can use OCR'ed text then it may give a faster parsing;
+</ul>
+<br>
+<br>
+<br>
+<br>
+
+<hr>
+<div class="footer">
+        <script src="../copyright.js"></script>
+        &nbsp;2018,&nbsp;&nbsp;<a href="mailto:sergey.stoyan@gmail.com?Subject=PdfDocumentParser request" target="_top">Sergey Stoyan</a>
+</div>
+</body>
+</html>
