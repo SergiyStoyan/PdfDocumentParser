@@ -1,9 +1,9 @@
 
 h1 {color:#347; text-align: center;}
 h2 {color:#702; text-indent: 20px; margin-top:50}
-h3 {color:#069; margin-top:40}
-h4 {color:#053; text-indent: 10px; margin-top:20; margin-bottom:10}
-h5 {color:#000; text-indent: 20px; margin-top:10; margin-bottom:10}
+h3 {color:#069; text-indent: 10px; margin-top:40}
+h4 {color:#073; text-indent: 5px; margin-top:20; margin-bottom:10}
+h5 {color:#000; text-indent: 5px; margin-top:10; margin-bottom:10}
 p {   margin1: 0;    margin-top:10;    padding1: 0;}
 table { margin-top:20; margin-bottom:10; border-collapse: collapse; border-color: grey; }
 table, th, td {border: 1px solid grey; }
