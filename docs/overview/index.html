@@ -75,7 +75,7 @@ Elements of such an anchor is PDF character boxes which together present a text 
 </table>
 
 <h4>OcrText Anchor</h4>
-It is similar to PdfText type except for the difference that character boxes are provided by OCR engine instead of PDF text data. 
+It is similar to PdfText type except for that difference that character boxes are gotten from OCR engine instead of PDF entities. 
 
 <h4>ImageData Anchor</h4>
 Elements of such an anchor is images which are page fragments picked by the selection box.
@@ -134,11 +134,11 @@ It is an image that must be a match to that is surrounded by the mark's rectangu
 <p>But when you know that every document consists only of a single page and the field is always located in the same position on page then there is no need to link it to a floating anchor.
 
 <h2>Text/image operation types</h2>
-<p>PdfDocumentParser provides the following options to operate with text and images:
+<p>PdfDocumentParser implements the following strategies to operate with text and images:
 <ul>
 <li>Extracting text directly from PDF structure. This way is based on native text presentation inside PDF files. It is the main way to operate with text in PdfDocumentParser as it is the most robust and fast.</li>
-<li>Getting text from image by OCR technology provided by Tesseract engine incorporated into PdfDocumentParser. This option must be chosen only when PDF processing does not work. It usually happens when documents you  want to parse consist completely or partially of images such as scanned documents, photos etc. This way cannot not give 100% accuracy against PDF processing and will acceptably work only for images with resolution not less than 300dpi. Also this way is much slower.</li>
-<li>Image comparison. This way is used for seeking and comparing images in documents. It is usually used in document recognition marks but also can be used in floating anchors. This way is slower than PDF processing and so must be declined when possible. Also, it may not provide 100% accuracy on scanned documents if they have essential discrepancy in size, contrast, brightness, orientation etc.</li>
+<li>Getting text from image by OCR technology provided by Tesseract engine incorporated into PdfDocumentParser. This option must be chosen only when PDF processing does not work. It is usually needed when documents you want to parse consist completely or partially of images such as scanned documents, photos etc. This way cannot not give 100% accuracy against PDF processing and will acceptably work only for images with resolution not less than 300dpi. Also this way is much slower.</li>
+<li>Image search. This way is used for seeking and comparing page fragments as images. This way is slower than PDF processing and so must be avoided when possible. Also, it may not provide 100% accuracy on scanned documents if they have essential discrepancy in size, contrast, brightness, orientation etc.</li>
 </ul>
 
 <h2>Scanned documents</h2>
