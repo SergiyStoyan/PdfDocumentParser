@@ -32,26 +32,26 @@
 
 
 <h2>Template</h2>
-<p>Each template is desinged for documents complying with certain layout (e.g. for invoices issued by the same company). It contains information which text/image are to be extracted and how. Applying it to documents with another layout is mistake.
+<p>Each template is desinged for documents complying with certain layout (e.g. for invoices issued by the same company). It contains information about which text/image are to be extracted and how. Applying it to documents with another layout is mistake.
 <p>When you want to parse a document with a new layout, open Template Editor (how it is done depends on the custom application). Select a sample PDF file to be parsed and when it is displayed in the editor you will go through the following steps:
 <ul>
 <li> optionally create <a href="#floating_anchor">floating anchors</a>;</li>
 <li> create <a href="#mark">document recognition marks</a>;</li>
 <li> create <a href="#field">fields</a>;</li>
 <li> select each created element and see in the status box if it works as expected;</li>
-<li> optionally define <a href="#file_filter">file filter</a>;</li>
 <li> save the template;</li>
 </ul>
+See <a href="../tutorial/index.html">tutorial</a> for more details.
 
 
 <h3><a name="floating_anchor">Floating Anchor</a></h3>
-<p>Floating anchor is a fragment of either text or image that PdfDocumentParser will look for in every page of a document. Then if found, the anchor is used to locate in the page Marks or/and Fields that are linked to this anchor. While the idea of floating anchors is detecting points in page that can be used as absolute coordinate zero, it serves for multiple tasks:
+<p>Floating anchor is a fragment of either text or image that PdfDocumentParser will look for in every page of a PDF file. Then, if found, the anchor is used to locate in the page Marks or/and Fields that are linked to this anchor. While the idea of floating anchors is detecting points in page that can be used as absolute coordinate zero, it serves for multiple tasks:
 <ul>
 <li> finding marks/fields whose position in the page may vary e.g. finding value of 'total amount' in the bottom of invoice table;</li> 
 <li> recognizing marks/fields which may be met only in one page of a multipage document;</li>
 <li> detecting page zero position in scanned documents that usually have their margins vary;</li>
 </ul>
-<p>To create a Floating anchor, select a new row in the floating anchors table and chose its type which can be one of the following:
+<p>To create a Floating anchor, select a new row in the floating anchors table and choose its type which can be one of the following:
 <ul>
 <li>PDF text;</li>
 <li>OCR text;</li>
@@ -133,7 +133,7 @@ It is an image that must be a match to that is surrounded by the mark's rectangu
 <p>Every field is looked for in every page. This means that if a field has no anchor, it will be extracted from every page and only the value from the last page of a document will be recorded which may be wrong. To detect the correct page a floating anchor is used. E.g. if you want to extract invoice number then create a floating anchor pointing to something like "Invoice #:" and then link the field to it. Now PdfDocumentParser will extract this field only when "Invoice #:" is found. 
 <p>But when you know that every document consists only of a single page and the field is always located in the same position on page then there is no need to link it to a floating anchor.
 
-<h2>Text/image operation types</h2>
+<h2>Text/image operation strategies</h2>
 <p>PdfDocumentParser implements the following strategies to operate with text and images:
 <ul>
 <li>Extracting text directly from PDF structure. This way is based on native text presentation inside PDF files. It is the main way to operate with text in PdfDocumentParser as it is the most robust and fast.</li>
@@ -142,7 +142,7 @@ It is an image that must be a match to that is surrounded by the mark's rectangu
 </ul>
 
 <h2>Scanned documents</h2>
-<p>Scanned documents are not the first subject for PdfDocumentParser but they are supported on a basic level. Usually such documents need to be preprocessed before feeding them to OCR engine. Such preprocessing includes auto-deskew, image rotation options. 
+<p>Scanned documents are not the first subject for PdfDocumentParser but they are supported. PdfDocumentParser provides auto-deskew and page rotation options which are frequently required for scanned documents. 
 <p>Because of quality deviations in scanned documents the image comparison tolerance parameters may need to be tuned.
 <p>The image resolution in PdfDocumentParser must be set to not less than 300dpi, otherwise OCR will not work. On the other hand, increasing resolution increases processing time. Also, setting resolution in PdfDocumentParser higher than the resolution of original images will not make sense. Image resolution parameter is common for all templates and can be changed in the settings window. 
 
