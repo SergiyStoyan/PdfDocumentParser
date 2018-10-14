@@ -14,7 +14,12 @@ PdfDocumentParser is a .NET library that can be incorporated into a custom appli
 
 The main goal of PdfDocumentParser is to be used in applications that do periodic parsing bunches of PDF files. 
 
-### Technology
+PdfDocumentParser's workflow when processing a PDF file is: 
+- choose the right parsing template from template collection;
+- apply the chosen template to the file;
+- return the parsed data as a dictionary;
+
+### Approach
 The main approach of parsing is based on finding certain text or image fragments in PDF pages and then extracting text/images located relatively to those fragments.
 
 Within this scope PdfDocumentParser implements the following strategies:
@@ -23,7 +28,7 @@ Within this scope PdfDocumentParser implements the following strategies:
 - image search (used either in native and scanned PDF documents);
 
 ### InvoiceParser
-[Invoice Parser](https://github.com/sergeystoyan/PdfDocumentParser/tree/lib%2Bcustomization/InvoiceParser) is a custom desktop application based on the leverages provided by [PdfDocumentParser](https://github.com/sergeystoyan/PdfDocumentParser). To keep PdfDocumentParser as flexible as possible, some important but restrictive features like keeping and managing templates are left in InvoiceParser. Most likely it will not fit your needs as is but can be used as a framework or sample.
+[Invoice Parser](https://github.com/sergeystoyan/PdfDocumentParser/tree/lib%2Bcustomization/InvoiceParser) is a custom desktop application based on the leverages provided by [PdfDocumentParser](https://github.com/sergeystoyan/PdfDocumentParser). To keep PdfDocumentParser as flexible as possible, some important but restrictive features like keeping and managing templates are left in InvoiceParser. While most likely it as is would not fit anybody's needs, it still can be used as a framework or sample.
 
 ### Support
 Contact me through github if you want me to upgrade PdfDocumentParser or develop a custom application based on it.
