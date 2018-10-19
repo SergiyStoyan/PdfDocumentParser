@@ -1,7 +1,7 @@
 ## PdfDocumentParser
 
 ### Prehistory
-Once I needed to parse bunches of invoices issued by different companies and provided in PDF files. Invoices had predictable layouts so having a parsing template programmed for every layout they could be parsed very well. In the next phase a GUI template editor was developed to allow creating and debugging templates just with a mouse. 
+Once I needed to parse bunches of invoices issued by different companies and provided as PDF files. Invoices had predictable layouts so having parsing templates programmed for every layout they could be parsed very well. In the next phase a GUI template editor was developed to allow creating and debugging templates just with a mouse. 
 
 Later, the entire application was split onto a versatile set of PDF parsing routines (PdfDocumentParser) and a desktop application (InvoiceParser) that implements a custom processing routine. The main idea is that anybody who would use PdfDocumentParser, should not look much into PdfDocumentParser itself, but learn its usage from InvoiceParser instead.
 
