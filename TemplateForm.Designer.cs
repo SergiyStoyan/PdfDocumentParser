@@ -34,8 +34,6 @@
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.tablesContainer = new System.Windows.Forms.SplitContainer();
             this.anchors = new System.Windows.Forms.DataGridView();
-            this.Id3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Type3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.label10 = new System.Windows.Forms.Label();
             this.marks = new System.Windows.Forms.DataGridView();
             this.AnchorId2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
@@ -91,6 +89,10 @@
             this.Help = new System.Windows.Forms.LinkLabel();
             this.label3 = new System.Windows.Forms.Label();
             this.About = new System.Windows.Forms.LinkLabel();
+            this.Id3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Type3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.ParentAnchorId3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Group3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -233,7 +235,9 @@
             this.anchors.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.anchors.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Id3,
-            this.Type3});
+            this.Type3,
+            this.ParentAnchorId3,
+            this.Group3});
             this.anchors.Dock = System.Windows.Forms.DockStyle.Fill;
             this.anchors.Location = new System.Drawing.Point(0, 13);
             this.anchors.MultiSelect = false;
@@ -241,21 +245,6 @@
             this.anchors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.anchors.Size = new System.Drawing.Size(169, 175);
             this.anchors.TabIndex = 50;
-            // 
-            // Id3
-            // 
-            this.Id3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Id3.HeaderText = "Id";
-            this.Id3.Name = "Id3";
-            this.Id3.ReadOnly = true;
-            this.Id3.Width = 41;
-            // 
-            // Type3
-            // 
-            this.Type3.HeaderText = "Type";
-            this.Type3.Name = "Type3";
-            this.Type3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Type3.Width = 70;
             // 
             // label10
             // 
@@ -856,6 +845,37 @@
             this.About.Text = "About";
             this.About.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // Id3
+            // 
+            this.Id3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Id3.HeaderText = "Id";
+            this.Id3.Name = "Id3";
+            this.Id3.ReadOnly = true;
+            this.Id3.Width = 41;
+            // 
+            // Type3
+            // 
+            this.Type3.HeaderText = "Type";
+            this.Type3.Name = "Type3";
+            this.Type3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Type3.Width = 70;
+            // 
+            // ParentAnchorId3
+            // 
+            this.ParentAnchorId3.HeaderText = "Parent Id";
+            this.ParentAnchorId3.Name = "ParentAnchorId3";
+            this.ParentAnchorId3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.ParentAnchorId3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.ParentAnchorId3.Width = 75;
+            // 
+            // Group3
+            // 
+            this.Group3.HeaderText = "Group";
+            this.Group3.Name = "Group3";
+            this.Group3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Group3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.Group3.Width = 61;
+            // 
             // TemplateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -966,11 +986,13 @@
         private System.Windows.Forms.LinkLabel Help;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.LinkLabel About;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Id3;
-        private System.Windows.Forms.DataGridViewComboBoxColumn Type3;
         private System.Windows.Forms.GroupBox anchorControl;
         private System.Windows.Forms.GroupBox markControl;
         private System.Windows.Forms.DataGridViewComboBoxColumn AnchorId2;
         private System.Windows.Forms.DataGridViewComboBoxColumn Type2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Id3;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Type3;
+        private System.Windows.Forms.DataGridViewComboBoxColumn ParentAnchorId3;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Group3;
     }
 }

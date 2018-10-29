@@ -166,9 +166,8 @@ namespace Cliver.PdfDocumentParser
             public readonly Types Type;
 
             abstract public bool IsSet();
-            //{
-            //    return Id > 0;
-            //}
+
+            abstract public System.Drawing.RectangleF MainElementInitialRectangle();
 
             public class PdfText : Anchor
             {
@@ -182,6 +181,13 @@ namespace Cliver.PdfDocumentParser
                 override public bool IsSet()
                 {
                     return CharBoxs.Count > 0;
+                }
+
+                override public System.Drawing.RectangleF MainElementInitialRectangle()
+                {
+                    if (CharBoxs == null || CharBoxs.Count < 1)
+                        return new System.Drawing.RectangleF();
+                    return CharBoxs[0].Rectangle.GetSystemRectangleF();
                 }
             }
 
@@ -197,6 +203,13 @@ namespace Cliver.PdfDocumentParser
                 override public bool IsSet()
                 {
                     return CharBoxs.Count > 0;
+                }
+
+                override public System.Drawing.RectangleF MainElementInitialRectangle()
+                {
+                    if (CharBoxs == null || CharBoxs.Count < 1)
+                        return new System.Drawing.RectangleF();
+                    return CharBoxs[0].Rectangle.GetSystemRectangleF();
                 }
             }
 
@@ -216,6 +229,13 @@ namespace Cliver.PdfDocumentParser
                 override public bool IsSet()
                 {
                     return ImageBoxs.Count > 0;
+                }
+
+                override public System.Drawing.RectangleF MainElementInitialRectangle()
+                {
+                    if (ImageBoxs == null || ImageBoxs.Count < 1)
+                        return new System.Drawing.RectangleF();
+                    return ImageBoxs[0].Rectangle.GetSystemRectangleF();
                 }
             }
         }

@@ -14,6 +14,7 @@ namespace Cliver.InvoiceParser
     /*
  TBD:
  - implement chaining Anchors and remove Marks
+ - change fields OCR to Types
 - switch to Tesseract.4
  - tune image recognition by checking brightness deltas
 

@@ -31,6 +31,11 @@ namespace Cliver.PdfDocumentParser
             Id3.ValueType = typeof(int);
             Type3.ValueType = typeof(Template.Types);
             Type3.DataSource = Enum.GetValues(typeof(Template.Types));
+            ParentAnchorId3.ValueType = typeof(int);
+            ParentAnchorId3.ValueMember = "Id";
+            ParentAnchorId3.DisplayMember = "Name";
+            Group3.ValueType = typeof(Template.Types);
+            Group3.DataSource = templateManager.AnchorGroups;
 
             anchors.EnableHeadersVisualStyles = false;//needed to set row headers
 
@@ -97,6 +102,16 @@ namespace Cliver.PdfDocumentParser
                             }
                             fa2.Id = fa.Id;
                             fa = fa2;
+                            break;
+                        }
+                    case "ParentAnchorId3":
+                        {
+                            fa.ParentAnchorId = (int?)row.Cells["ParentAnchorId3"].Value;
+                            break;
+                        }
+                    case "Group3":
+                        {
+                            fa.Group = (string)row.Cells["Group3"].Value;
                             break;
                         }
                 }
@@ -226,6 +241,8 @@ namespace Cliver.PdfDocumentParser
             row.Tag = fa;
             row.Cells["Id3"].Value = fa.Id;
             row.Cells["Type3"].Value = fa.Type;
+            row.Cells["ParentAnchorId3"].Value = fa.ParentAnchorId;
+            row.Cells["Group3"].Value = fa.Group;
 
             if (loadingTemplate)
                 return;
@@ -236,39 +253,63 @@ namespace Cliver.PdfDocumentParser
 
         void onAnchorsChanged()
         {
-            SortedSet<int> fais = new SortedSet<int>();
+            SortedSet<int> ais = new SortedSet<int>();
             foreach (DataGridViewRow r in anchors.Rows)
                 if (r.Tag != null && ((Template.Anchor)r.Tag).Id > 0)
-                    fais.Add(((Template.Anchor)r.Tag).Id);
+                    ais.Add(((Template.Anchor)r.Tag).Id);
 
             foreach (DataGridViewRow r in anchors.Rows)
             {
                 if (r.Tag == null)
                     continue;
-                Template.Anchor fa = (Template.Anchor)r.Tag;
-                if (/*fa.IsSet() &&*/ fa.Id <= 0)
+                Template.Anchor a = (Template.Anchor)r.Tag;
+                if (/*a.IsSet() &&*/ a.Id <= 0)
                 {
-                    fa.Id = 1;
-                    //if (fais.Count > 0)
-                    //    anchorId = fais.Max() + 1;                    
-                    foreach (int i in fais)
+                    a.Id = 1;
+                    //if (ais.Count > 0)
+                    //    anchorId = ais.Max() + 1;                    
+                    foreach (int i in ais)
                     {
-                        if (fa.Id < i)
+                        if (a.Id < i)
                             break;
-                        if (fa.Id == i)
-                            fa.Id++;
+                        if (a.Id == i)
+                            a.Id++;
                     }
-                    fais.Add(fa.Id);
-                    r.Cells["Id3"].Value = fa.Id;
+                    ais.Add(a.Id);
+                    r.Cells["Id3"].Value = a.Id;
                 }
             }
+
+            foreach (DataGridViewRow r in anchors.Rows)
+            {
+                if (r.Tag == null)
+                    continue;
+                Template.Anchor a = (Template.Anchor)r.Tag;
+                if (a.ParentAnchorId == null)
+                    continue;
+                if (!ais.Contains((int)a.ParentAnchorId))
+                    r.Cells["ParentAnchorId3"].Value = null;
+            }
+
+            foreach (DataGridViewRow r in anchors.Rows)
+            {
+                if (r.Tag == null)
+                    continue;
+                if (r == anchors.CurrentRow)
+                    continue;
+                Template.Anchor a = (Template.Anchor)r.Tag;
+                DataGridViewComboBoxCell c = anchors["ParentAnchorId3", r.Index] as DataGridViewComboBoxCell;
+                List<dynamic> ais_ = ais.Where(x => x != a.Id).Select(x => new { Id = x, Name = x.ToString() }).ToList<dynamic>();
+                ais_.Insert(0, new { Id = -1, Name = string.Empty });//commbobox returns value null for -1 (and throws an unclear expection if Id=null)
+                c.DataSource = ais_;
+            };
 
             foreach (DataGridViewRow r in marks.Rows)
             {
                 if (r.Tag == null)
                     continue;
                 Template.Mark m = (Template.Mark)r.Tag;
-                if (m.AnchorId != null && !fais.Contains((int)m.AnchorId))
+                if (m.AnchorId != null && !ais.Contains((int)m.AnchorId))
                 {
                     r.Cells["AnchorId2"].Value = null;
                     setMarkRectangle(r, null);
@@ -279,7 +320,7 @@ namespace Cliver.PdfDocumentParser
                 if (r.Tag == null)
                     continue;
                 Template.Field f = (Template.Field)r.Tag;
-                if (f.AnchorId != null && !fais.Contains((int)f.AnchorId))
+                if (f.AnchorId != null && !ais.Contains((int)f.AnchorId))
                 {
                     r.Cells["AnchorId"].Value = null;
                     r.Cells["Value"].Value = null;
@@ -287,10 +328,12 @@ namespace Cliver.PdfDocumentParser
                 }
             }
 
-            List<dynamic> fais_ = fais.Select(f => new { Id = f, Name = f.ToString() }).ToList<dynamic>();
-            fais_.Insert(0, new { Id = -1, Name = string.Empty });//commbobox returns value null for -1 (and throws an unclear expection if Id=null)
-            AnchorId2.DataSource = fais_;
-            AnchorId.DataSource = fais_;
+            {
+                List<dynamic> ais_ = ais.Select(x => new { Id = x, Name = x.ToString() }).ToList<dynamic>();
+                ais_.Insert(0, new { Id = -1, Name = string.Empty });//commbobox returns value null for -1 (and throws an unclear expection if Id=null)
+                AnchorId2.DataSource = ais_;
+                AnchorId.DataSource = ais_;
+            }
         }
 
         void setAnchorFromSelectedElements()

@@ -21,7 +21,10 @@ namespace Cliver.PdfDocumentParser
         {
             InitializeComponent();
 
-            cSearchRectangleMargin.CheckedChanged += delegate { SearchRectangleMargin.Value = cSearchRectangleMargin.Checked ? 100 : -1; SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked; };
+            cSearchRectangleMargin.CheckedChanged += delegate
+            {
+                SearchRectangleMargin.Value = cSearchRectangleMargin.Checked ? ((_object == null || _object.ParentAnchorId != null) ? (decimal)Settings.Constants.CoordinateDeviationMargin : 100) : -1; SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked;
+            };
         }
 
         override protected object getObject()

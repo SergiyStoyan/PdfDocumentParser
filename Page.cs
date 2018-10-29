@@ -222,13 +222,19 @@ namespace Cliver.PdfDocumentParser
             if (a == null)
                 return null;
 
-            PointF? parentAnchorPoint0 = null;
+            RectangleF searchRectangle;
+            RectangleF initialRectangle0 = a.MainElementInitialRectangle();
             if (a.ParentAnchorId != null)
             {
-                parentAnchorPoint0 = GetAnchorPoint0((int)a.ParentAnchorId);
-                if (parentAnchorPoint0 == null)
+                Template.Anchor pa = pageCollection.ActiveTemplate.Anchors.Find(x => x.Id == a.ParentAnchorId);
+                List<RectangleF> rs = GetAnchorRectangles(pa);
+                if (rs == null || rs.Count < 1)
                     return null;
+                RectangleF paInitialRectangle = pa.MainElementInitialRectangle();
+                searchRectangle = getSearchRectangle(new RectangleF(initialRectangle0.X + paInitialRectangle.X - rs[0].X, initialRectangle0.Y + paInitialRectangle.Y - rs[0].Y, initialRectangle0.Width, initialRectangle0.Height), a.SearchRectangleMargin);
             }
+            else
+                searchRectangle = getSearchRectangle(initialRectangle0, a.SearchRectangleMargin);
 
             switch (a.Type)
             {
@@ -242,14 +248,7 @@ namespace Cliver.PdfDocumentParser
                         if (ptv.SearchRectangleMargin < 0)
                             bt0s = PdfCharBoxs.Where(x => x.Char == aes[0].Char);
                         else
-                        {
-                            RectangleF sr;
-                            if (parentAnchorPoint0 == null)
-                                sr = getSearchRectangle(aes[0].Rectangle, ptv.SearchRectangleMargin);
-                            else
-                                sr = getSearchRectangle(new Template.RectangleF(((PointF)parentAnchorPoint0).X, ((PointF)parentAnchorPoint0).Y, aes[0].Rectangle.Width, aes[0].Rectangle.Height), ptv.SearchRectangleMargin);
-                            bt0s = PdfCharBoxs.Where(x => x.Char == aes[0].Char && sr.Contains(x.R));
-                        }
+                            bt0s = PdfCharBoxs.Where(x => x.Char == aes[0].Char && searchRectangle.Contains(x.R));
                         List<Pdf.CharBox> bts = new List<Pdf.CharBox>();
                         foreach (Pdf.CharBox bt0 in bt0s)
                         {
@@ -286,14 +285,7 @@ namespace Cliver.PdfDocumentParser
                         if (otv.SearchRectangleMargin < 0)
                             bt0s = ActiveTemplateOcrCharBoxs.Where(x => x.Char == aes[0].Char);
                         else
-                        {
-                            RectangleF sr;
-                            if (parentAnchorPoint0 == null)
-                                sr = getSearchRectangle(aes[0].Rectangle, otv.SearchRectangleMargin);
-                            else
-                                sr = getSearchRectangle(new Template.RectangleF(((PointF)parentAnchorPoint0).X, ((PointF)parentAnchorPoint0).Y, aes[0].Rectangle.Width, aes[0].Rectangle.Height), otv.SearchRectangleMargin);
-                            bt0s = ActiveTemplateOcrCharBoxs.Where(x => x.Char == aes[0].Char && sr.Contains(x.R));
-                        }
+                            bt0s = ActiveTemplateOcrCharBoxs.Where(x => x.Char == aes[0].Char && searchRectangle.Contains(x.R));
                         List<Ocr.CharBox> bts = new List<Ocr.CharBox>();
                         foreach (Ocr.CharBox bt0 in bt0s)
                         {
@@ -335,13 +327,8 @@ namespace Cliver.PdfDocumentParser
                         }
                         else
                         {
-                            RectangleF sr;
-                            if (parentAnchorPoint0 == null)
-                                sr = getSearchRectangle(ibs[0].Rectangle, idv.SearchRectangleMargin);
-                            else
-                                sr = getSearchRectangle(new Template.RectangleF(((PointF)parentAnchorPoint0).X, ((PointF)parentAnchorPoint0).Y, ibs[0].Rectangle.Width, ibs[0].Rectangle.Height), idv.SearchRectangleMargin);
-                            id0 = new ImageData(getRectangleFromActiveTemplateBitmap(sr.X / Settings.Constants.Image2PdfResolutionRatio, sr.Y / Settings.Constants.Image2PdfResolutionRatio, (sr.Width + ibs[0].Rectangle.Width) / Settings.Constants.Image2PdfResolutionRatio, (sr.Height + ibs[0].Rectangle.Height) / Settings.Constants.Image2PdfResolutionRatio));
-                            shift = new Point(sr.X < 0 ? 0 : (int)sr.X, sr.Y < 0 ? 0 : (int)sr.Y);
+                            id0 = new ImageData(getRectangleFromActiveTemplateBitmap(searchRectangle.X / Settings.Constants.Image2PdfResolutionRatio, searchRectangle.Y / Settings.Constants.Image2PdfResolutionRatio, searchRectangle.Width / Settings.Constants.Image2PdfResolutionRatio, searchRectangle.Height / Settings.Constants.Image2PdfResolutionRatio));
+                            shift = new Point(searchRectangle.X < 0 ? 0 : (int)searchRectangle.X, searchRectangle.Y < 0 ? 0 : (int)searchRectangle.Y);
                         }
                         List<RectangleF> bestRs = null;
                         float minDeviation = float.MaxValue;
@@ -382,7 +369,7 @@ namespace Cliver.PdfDocumentParser
                     throw new Exception("Unknown option: " + a.Type);
             }
         }
-        RectangleF getSearchRectangle(Template.RectangleF rectangle0, int margin/*, System.Drawing.RectangleF pageRectangle*/)
+        RectangleF getSearchRectangle(RectangleF rectangle0, int margin/*, System.Drawing.RectangleF pageRectangle*/)
         {
             RectangleF r = new RectangleF(rectangle0.X - margin, rectangle0.Y - margin, rectangle0.Width + 2 * margin, rectangle0.Height + 2 * margin);
             //r.Intersect(pageRectangle);
