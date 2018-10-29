@@ -148,6 +148,8 @@ namespace Cliver.PdfDocumentParser
             public int SearchRectangleMargin = -1;//px
             public float PositionDeviation = 0.1f;
             public bool PositionDeviationIsAbsolute = true;
+            public int? ParentAnchorId = null;//not used now
+            public string Group = null;//not used now
 
             public Anchor()
             {
