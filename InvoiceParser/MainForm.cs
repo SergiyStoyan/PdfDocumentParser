@@ -335,7 +335,13 @@ namespace Cliver.InvoiceParser
                     t.Template.Name = (string)r.Cells["Name_"].Value;
                 r.Tag = t;
             }
-            TemplateManager tm = new TemplateManager { Template = SerializationRoutines.Json.Clone(t.Template), LastTestFile = Settings.TemplateLocalInfo.GetInfo(t.Template.Name).LastTestFile, Row = r };
+            TemplateManager tm = new TemplateManager
+            {
+                Template = SerializationRoutines.Json.Clone(t.Template),
+                LastTestFile = Settings.TemplateLocalInfo.GetInfo(t.Template.Name).LastTestFile,
+                Row = r,
+                AnchorGroups = new List<string> { PdfProcessor.AnchorGroups.DocumentFirstPage }
+            };
             tf = new TemplateForm(tm, Settings.General.InputFolder);
             tf.FormClosed += delegate
             {

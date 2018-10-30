@@ -34,7 +34,7 @@ namespace Cliver.PdfDocumentParser
             ParentAnchorId3.ValueType = typeof(int);
             ParentAnchorId3.ValueMember = "Id";
             ParentAnchorId3.DisplayMember = "Name";
-            Group3.ValueType = typeof(Template.Types);
+            Group3.ValueType = typeof(string);
             Group3.DataSource = templateManager.AnchorGroups;
 
             anchors.EnableHeadersVisualStyles = false;//needed to set row headers

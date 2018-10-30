@@ -19,6 +19,11 @@ namespace Cliver.InvoiceParser
 {
     class PdfProcessor : IDisposable
     {
+        public class AnchorGroups
+        {
+            public const string DocumentFirstPage = "DocumentFirstPage";
+        }
+
         PdfProcessor(string inputPdf)
         {
             Pages = new PageCollection(inputPdf);
@@ -143,7 +148,7 @@ namespace Cliver.InvoiceParser
                     foreach (Template2 t in ts2)
                     {
                         cp.Pages.ActiveTemplate = t.Template;
-                        if (cp.Pages[page_i].IsDocumentFirstPage())
+                        if (cp.isDocumentFirstPage(cp.Pages[page_i]))
                         {
                             Log.Main.Inform("Applying to file '" + inputPdf + "' template '" + t.Template.Name + "'\r\nStamped file: '" + stampedPdf);
                             Settings.TemplateLocalInfo.SetUsedTime(t.Template.Name);
@@ -164,14 +169,14 @@ namespace Cliver.InvoiceParser
                 setFieldText(Pages[documentFirstPageI], f);
             for (int page_i = documentFirstPageI + 1; page_i <= Pages.PdfReader.NumberOfPages; page_i++)
             {
-                if (Pages[page_i].IsDocumentFirstPage())
+                if (isDocumentFirstPage(Pages[page_i]))
                 {
                     record(Pages.ActiveTemplate.Name, documentFirstPageI, fieldNames2texts);
                     stampInvoicePages(documentFirstPageI, page_i - 1);
                     fieldNames2texts.Clear();
                     documentFirstPageI = page_i;
                 }
-                foreach (PdfDocumentParser. Template.Field f in Pages.ActiveTemplate.Fields)
+                foreach (PdfDocumentParser.Template.Field f in Pages.ActiveTemplate.Fields)
                     setFieldText(Pages[page_i], f);
             }
             record(Pages.ActiveTemplate.Name, documentFirstPageI, fieldNames2texts);
@@ -192,6 +197,13 @@ namespace Cliver.InvoiceParser
             }
             if (v != null)
                 fieldNames2texts[field.Name] = Page.NormalizeText((string)v);
+        }
+
+        bool isDocumentFirstPage(Page p)
+        {
+            if (Pages.ActiveTemplate.Anchors.Where(x => x.Group == AnchorGroups.DocumentFirstPage).FirstOrDefault() == null)
+                return p.IsDocumentFirstPage();//for compatibility with the old format
+            return p.IsAnchorGroupFound(AnchorGroups.DocumentFirstPage);
         }
     }
 }
