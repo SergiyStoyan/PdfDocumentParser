@@ -36,7 +36,10 @@ namespace Cliver.InvoiceParser
                 FileFilterRegex.Text = SerializationRoutines.Json.Serialize(t.FileFilterRegex);
             else
                 FileFilterRegex.Text = "";
-            CanShareFileWithAnotherTemplates.Checked = t.CanShareFileWithAnotherTemplates;
+            if (t.SharedFileTemplateNamesRegex != null)
+                SharedFileTemplateNamesRegex.Text = SerializationRoutines.Json.Serialize(t.SharedFileTemplateNamesRegex);
+            else
+                SharedFileTemplateNamesRegex.Text = "";
         }
         Template2 template2;
 
@@ -63,8 +66,14 @@ namespace Cliver.InvoiceParser
                 template2.Comment = Comment.Text;
                 template2.OrderWeight = (float)OrderWeight.Value;
                 template2.DetectingTemplateLastPageNumber = (uint)DetectingTemplateLastPageNumber.Value;
-                template2.FileFilterRegex = SerializationRoutines.Json.Deserialize<Regex>(FileFilterRegex.Text);
-                template2.CanShareFileWithAnotherTemplates = CanShareFileWithAnotherTemplates.Checked;
+                if (FileFilterRegex.Text.Length > 0)
+                    template2.FileFilterRegex = SerializationRoutines.Json.Deserialize<Regex>(FileFilterRegex.Text);
+                else
+                    template2.FileFilterRegex = null;
+                if (SharedFileTemplateNamesRegex.Text.Length > 0)
+                    template2.SharedFileTemplateNamesRegex = SerializationRoutines.Json.Deserialize<Regex>(SharedFileTemplateNamesRegex.Text);
+                else
+                    template2.SharedFileTemplateNamesRegex = null;
 
                 Close();
                 DialogResult = DialogResult.OK;

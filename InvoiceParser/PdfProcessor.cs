@@ -22,6 +22,7 @@ namespace Cliver.InvoiceParser
         public class AnchorGroups
         {
             public const string DocumentFirstPage = "DocumentFirstPage";
+            public const string DocumentLastPage = "DocumentLastPage";
         }
 
         PdfProcessor(string inputPdf)
@@ -142,16 +143,17 @@ namespace Cliver.InvoiceParser
 
                 for (int page_i = 1; page_i <= cp.Pages.PdfReader.NumberOfPages; page_i++)
                 {
-                    var ts2 = ts.Where(x => x.DetectingTemplateLastPageNumber >= page_i).ToList();
-                    if (ts2.Count < 1)
+                    var t2s = ts.Where(x => x.DetectingTemplateLastPageNumber >= page_i).ToList();
+                    if (t2s.Count < 1)
                         break;
-                    foreach (Template2 t in ts2)
+                    foreach (Template2 t2 in t2s)
                     {
-                        cp.Pages.ActiveTemplate = t.Template;
+                        cp.Pages.ActiveTemplate = t2.Template;
                         if (cp.isDocumentFirstPage(cp.Pages[page_i]))
                         {
-                            Log.Main.Inform("Applying to file '" + inputPdf + "' template '" + t.Template.Name + "'\r\nStamped file: '" + stampedPdf);
-                            Settings.TemplateLocalInfo.SetUsedTime(t.Template.Name);
+                            Log.Main.Inform("Applying to file '" + inputPdf + "' template '" + t2.Template.Name + "'\r\nStamped file: '" + stampedPdf);
+                            Settings.TemplateLocalInfo.SetUsedTime(t2.Template.Name);
+                            cp.currentTemplate2 = t2;
                             cp.process(page_i, stampedPdf, record);
                             return true;
                         }
@@ -161,6 +163,7 @@ namespace Cliver.InvoiceParser
             Log.Main.Warning("No template found for file '" + inputPdf + "'");
             return false;
         }
+        Template2 currentTemplate2;
         void process(int documentFirstPageI, string stampedPdf, Action<string, int, Dictionary<string, string>> record)
         {
             ps = new PdfStamper(Pages.PdfReader, new FileStream(stampedPdf, FileMode.Create, FileAccess.Write, FileShare.None));
@@ -176,7 +179,11 @@ namespace Cliver.InvoiceParser
                     fieldNames2texts.Clear();
                     documentFirstPageI = page_i;
                 }
-                foreach (PdfDocumentParser.Template.Field f in Pages.ActiveTemplate.Fields)
+                if(currentTemplate2.SharedFileTemplateNamesRegex != null)
+                {
+                    //1
+                }
+                foreach (Template.Field f in Pages.ActiveTemplate.Fields)
                     setFieldText(Pages[page_i], f);
             }
             record(Pages.ActiveTemplate.Name, documentFirstPageI, fieldNames2texts);
@@ -204,6 +211,11 @@ namespace Cliver.InvoiceParser
             if (Pages.ActiveTemplate.Anchors.Where(x => x.Group == AnchorGroups.DocumentFirstPage).FirstOrDefault() == null)
                 return p.IsDocumentFirstPage();//for compatibility with the old format
             return p.IsAnchorGroupFound(AnchorGroups.DocumentFirstPage);
+        }
+
+        bool isDocumentLastPage(Page p)
+        {
+            return p.IsAnchorGroupFound(AnchorGroups.DocumentLastPage);
         }
     }
 }

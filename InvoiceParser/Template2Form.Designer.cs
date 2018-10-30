@@ -44,8 +44,8 @@
             this.FileFilterRegex = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.bTestFileFilterRegex = new System.Windows.Forms.Button();
-            this.CanShareFileWithAnotherTemplates = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.SharedFileTemplateNamesRegex = new System.Windows.Forms.TextBox();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.OrderWeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DetectingTemplateLastPageNumber)).BeginInit();
@@ -66,7 +66,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Comment.Location = new System.Drawing.Point(72, 69);
             this.Comment.Name = "Comment";
-            this.Comment.Size = new System.Drawing.Size(371, 20);
+            this.Comment.Size = new System.Drawing.Size(388, 20);
             this.Comment.TabIndex = 1;
             // 
             // label2
@@ -81,7 +81,7 @@
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bCancel.Location = new System.Drawing.Point(380, 3);
+            this.bCancel.Location = new System.Drawing.Point(397, 3);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 50;
@@ -92,7 +92,7 @@
             // bOK
             // 
             this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bOK.Location = new System.Drawing.Point(299, 3);
+            this.bOK.Location = new System.Drawing.Point(316, 3);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(75, 23);
             this.bOK.TabIndex = 49;
@@ -108,7 +108,7 @@
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 227);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(458, 31);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(475, 31);
             this.flowLayoutPanel1.TabIndex = 60;
             // 
             // Active
@@ -126,7 +126,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Group.Location = new System.Drawing.Point(72, 39);
             this.Group.Name = "Group";
-            this.Group.Size = new System.Drawing.Size(371, 20);
+            this.Group.Size = new System.Drawing.Size(388, 20);
             this.Group.TabIndex = 64;
             // 
             // label3
@@ -197,7 +197,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.FileFilterRegex.Location = new System.Drawing.Point(72, 159);
             this.FileFilterRegex.Name = "FileFilterRegex";
-            this.FileFilterRegex.Size = new System.Drawing.Size(318, 20);
+            this.FileFilterRegex.Size = new System.Drawing.Size(335, 20);
             this.FileFilterRegex.TabIndex = 69;
             // 
             // label5
@@ -212,7 +212,7 @@
             // bTestFileFilterRegex
             // 
             this.bTestFileFilterRegex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bTestFileFilterRegex.Location = new System.Drawing.Point(396, 156);
+            this.bTestFileFilterRegex.Location = new System.Drawing.Point(413, 156);
             this.bTestFileFilterRegex.Name = "bTestFileFilterRegex";
             this.bTestFileFilterRegex.Size = new System.Drawing.Size(47, 23);
             this.bTestFileFilterRegex.TabIndex = 70;
@@ -220,32 +220,31 @@
             this.bTestFileFilterRegex.UseVisualStyleBackColor = true;
             this.bTestFileFilterRegex.Click += new System.EventHandler(this.bTestFileFilterRegex_Click);
             // 
-            // CanShareFileWithAnotherTemplates
-            // 
-            this.CanShareFileWithAnotherTemplates.AutoSize = true;
-            this.CanShareFileWithAnotherTemplates.Enabled = false;
-            this.CanShareFileWithAnotherTemplates.Location = new System.Drawing.Point(214, 192);
-            this.CanShareFileWithAnotherTemplates.Name = "CanShareFileWithAnotherTemplates";
-            this.CanShareFileWithAnotherTemplates.Size = new System.Drawing.Size(15, 14);
-            this.CanShareFileWithAnotherTemplates.TabIndex = 72;
-            this.CanShareFileWithAnotherTemplates.UseVisualStyleBackColor = true;
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Enabled = false;
             this.label6.Location = new System.Drawing.Point(12, 192);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(196, 13);
+            this.label6.Size = new System.Drawing.Size(149, 13);
             this.label6.TabIndex = 73;
-            this.label6.Text = "Can Share File With Another Templates:";
+            this.label6.Text = "Shared File Templates Regex:";
+            // 
+            // SharedFileTemplateNamesRegex
+            // 
+            this.SharedFileTemplateNamesRegex.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.SharedFileTemplateNamesRegex.Location = new System.Drawing.Point(167, 189);
+            this.SharedFileTemplateNamesRegex.Name = "SharedFileTemplateNamesRegex";
+            this.SharedFileTemplateNamesRegex.Size = new System.Drawing.Size(293, 20);
+            this.SharedFileTemplateNamesRegex.TabIndex = 74;
             // 
             // Template2Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(458, 258);
-            this.Controls.Add(this.CanShareFileWithAnotherTemplates);
+            this.ClientSize = new System.Drawing.Size(475, 258);
+            this.Controls.Add(this.SharedFileTemplateNamesRegex);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.FileFilterRegex);
             this.Controls.Add(this.label5);
@@ -289,7 +288,7 @@
         private System.Windows.Forms.TextBox FileFilterRegex;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button bTestFileFilterRegex;
-        private System.Windows.Forms.CheckBox CanShareFileWithAnotherTemplates;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox SharedFileTemplateNamesRegex;
     }
 }
