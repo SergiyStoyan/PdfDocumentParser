@@ -46,7 +46,8 @@ namespace Cliver.PdfDocumentParser
                     LogMessage.Error(ex);
                 }
             }
-            public List<string> AnchorGroups;//not used yet
+            public List<string> AnchorGroups;
+            //public List<string> FieldNames;
         }
 
         public TemplateForm(TemplateManager templateManager, string testFileDefaultFolder)

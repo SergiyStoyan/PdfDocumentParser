@@ -73,6 +73,7 @@ namespace Cliver.InvoiceParser
                 return new Template2
                 {
                     FileFilterRegex = new Regex(@"\.pdf$", RegexOptions.IgnoreCase),
+                    //SharedFileTemplateNamesRegex = new Regex(@"\@", RegexOptions.IgnoreCase),
                     Template = new Template
                     {
                         AutoDeskew = false,

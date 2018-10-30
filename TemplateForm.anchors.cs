@@ -254,9 +254,15 @@ namespace Cliver.PdfDocumentParser
         void onAnchorsChanged()
         {
             SortedSet<int> ais = new SortedSet<int>();
+            List<Template.Anchor> as_ = new List<Template.Anchor>();
             foreach (DataGridViewRow r in anchors.Rows)
-                if (r.Tag != null && ((Template.Anchor)r.Tag).Id > 0)
-                    ais.Add(((Template.Anchor)r.Tag).Id);
+                if (r.Tag != null)
+                {
+                    Template.Anchor a = (Template.Anchor)r.Tag;
+                    as_.Add(a);
+                    if (a.Id > 0)
+                        ais.Add(a.Id);
+                }
 
             foreach (DataGridViewRow r in anchors.Rows)
             {
@@ -295,13 +301,16 @@ namespace Cliver.PdfDocumentParser
             {
                 if (r.Tag == null)
                     continue;
-                if (r == anchors.CurrentRow)
-                    continue;
-                Template.Anchor a = (Template.Anchor)r.Tag;
-                DataGridViewComboBoxCell c = anchors["ParentAnchorId3", r.Index] as DataGridViewComboBoxCell;
-                List<dynamic> ais_ = ais.Where(x => x != a.Id).Select(x => new { Id = x, Name = x.ToString() }).ToList<dynamic>();
+                DataGridViewComboBoxCell c = r.Cells["ParentAnchorId3"] as DataGridViewComboBoxCell;
+                SortedSet<int> ais2 = SerializationRoutines.Json.Clone(ais);
+                for (Template.Anchor a = (Template.Anchor)r.Tag; a.ParentAnchorId != null; a = as_.First(x => x.Id == a.ParentAnchorId))
+                    ais2.Remove(a.Id);
+                List<dynamic> ais_ = ais2.Select(x => new { Id = x, Name = x.ToString() }).ToList<dynamic>();
                 ais_.Insert(0, new { Id = -1, Name = string.Empty });//commbobox returns value null for -1 (and throws an unclear expection if Id=null)
                 c.DataSource = ais_;
+                //c.FlatStyle = FlatStyle.Flat;
+                //c.Style.BackColor = Color.Violet;
+                //c.Style.ForeColor = Color.Red;
             };
 
             foreach (DataGridViewRow r in marks.Rows)

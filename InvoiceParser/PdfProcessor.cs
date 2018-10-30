@@ -126,8 +126,10 @@ namespace Cliver.InvoiceParser
             if (File.Exists(stampedPdf))
                 File.Delete(stampedPdf);
 
-            var ts = template2s.Where(x => x.FileFilterRegex == null || x.FileFilterRegex.IsMatch(inputPdf)).ToList();
-            if (ts.Count < 1)
+            Log.Main.Inform(">>>\r\nProcessing file '" + inputPdf + "'\r\nStamped file: '" + stampedPdf + "'");
+
+            var t2s = template2s.Where(x => x.FileFilterRegex == null || x.FileFilterRegex.IsMatch(inputPdf)).ToList();
+            if (t2s.Count < 1)
             {
                 Log.Main.Warning("No template matched to file path '" + inputPdf + "'");
                 return false;
@@ -143,18 +145,16 @@ namespace Cliver.InvoiceParser
 
                 for (int page_i = 1; page_i <= cp.Pages.PdfReader.NumberOfPages; page_i++)
                 {
-                    var t2s = ts.Where(x => x.DetectingTemplateLastPageNumber >= page_i).ToList();
-                    if (t2s.Count < 1)
+                    var t2s_ = t2s.Where(x => x.DetectingTemplateLastPageNumber >= page_i).ToList();
+                    if (t2s_.Count < 1)
                         break;
-                    foreach (Template2 t2 in t2s)
+                    foreach (Template2 t2 in t2s_)
                     {
                         cp.Pages.ActiveTemplate = t2.Template;
                         if (cp.isDocumentFirstPage(cp.Pages[page_i]))
                         {
-                            Log.Main.Inform("Applying to file '" + inputPdf + "' template '" + t2.Template.Name + "'\r\nStamped file: '" + stampedPdf);
                             Settings.TemplateLocalInfo.SetUsedTime(t2.Template.Name);
-                            cp.currentTemplate2 = t2;
-                            cp.process(page_i, stampedPdf, record);
+                            cp.process(page_i, stampedPdf, record, t2, t2s);
                             return true;
                         }
                     }
@@ -163,34 +163,53 @@ namespace Cliver.InvoiceParser
             Log.Main.Warning("No template found for file '" + inputPdf + "'");
             return false;
         }
-        Template2 currentTemplate2;
-        void process(int documentFirstPageI, string stampedPdf, Action<string, int, Dictionary<string, string>> record)
+        void process(int documentFirstPageI, string stampedPdf, Action<string, int, Dictionary<string, string>> record, Template2 currentTemplate2, List<Template2> template2s)
         {
+            int documentCount = 0;
+            Log.Main.Inform("Document #" + (++documentCount) + " detected with template '" + currentTemplate2.Template.Name + "'");
+
             ps = new PdfStamper(Pages.PdfReader, new FileStream(stampedPdf, FileMode.Create, FileAccess.Write, FileShare.None));
 
-            foreach (PdfDocumentParser.Template.Field f in Pages.ActiveTemplate.Fields)
-                setFieldText(Pages[documentFirstPageI], f);
+            foreach (Template.Field f in Pages.ActiveTemplate.Fields)
+                extractFieldText(Pages[documentFirstPageI], f);
             for (int page_i = documentFirstPageI + 1; page_i <= Pages.PdfReader.NumberOfPages; page_i++)
             {
+                bool documentFirstPage = false;
                 if (isDocumentFirstPage(Pages[page_i]))
+                    documentFirstPage = true;
+                else if (currentTemplate2.SharedFileTemplateNamesRegex != null)
                 {
+                    foreach (Template2 t2 in template2s)
+                    {
+                        if (currentTemplate2.Template.Name == t2.Template.Name)
+                            continue;
+                        if (!currentTemplate2.SharedFileTemplateNamesRegex.IsMatch(t2.Template.Name))
+                            continue;
+                        Pages.ActiveTemplate = t2.Template;
+                        if (isDocumentFirstPage(Pages[page_i]))
+                        {
+                            Settings.TemplateLocalInfo.SetUsedTime(t2.Template.Name);
+                            currentTemplate2 = t2;
+                            documentFirstPage = true;
+                        }
+                    }
+                }
+                if (documentFirstPage)
+                {
+                    Log.Main.Inform("Document #" + (++documentCount) + " detected with template '" + currentTemplate2.Template.Name + "'");
                     record(Pages.ActiveTemplate.Name, documentFirstPageI, fieldNames2texts);
                     stampInvoicePages(documentFirstPageI, page_i - 1);
                     fieldNames2texts.Clear();
                     documentFirstPageI = page_i;
                 }
-                if(currentTemplate2.SharedFileTemplateNamesRegex != null)
-                {
-                    //1
-                }
                 foreach (Template.Field f in Pages.ActiveTemplate.Fields)
-                    setFieldText(Pages[page_i], f);
+                    extractFieldText(Pages[page_i], f);
             }
             record(Pages.ActiveTemplate.Name, documentFirstPageI, fieldNames2texts);
             stampInvoicePages(documentFirstPageI, Pages.PdfReader.NumberOfPages);
         }
 
-        void setFieldText(Page p, PdfDocumentParser.Template.Field field)
+        void extractFieldText(Page p, PdfDocumentParser.Template.Field field)
         {
             if (field.Rectangle == null)
                 return;

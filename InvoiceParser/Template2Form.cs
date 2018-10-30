@@ -33,11 +33,11 @@ namespace Cliver.InvoiceParser
             OrderWeight.Value = (decimal)t.OrderWeight;
             DetectingTemplateLastPageNumber.Value = t.DetectingTemplateLastPageNumber;
             if (t.FileFilterRegex != null)
-                FileFilterRegex.Text = SerializationRoutines.Json.Serialize(t.FileFilterRegex);
+                FileFilterRegex.Text = SerializationRoutines.Json.Serialize(t.FileFilterRegex, false);
             else
                 FileFilterRegex.Text = "";
             if (t.SharedFileTemplateNamesRegex != null)
-                SharedFileTemplateNamesRegex.Text = SerializationRoutines.Json.Serialize(t.SharedFileTemplateNamesRegex);
+                SharedFileTemplateNamesRegex.Text = SerializationRoutines.Json.Serialize(t.SharedFileTemplateNamesRegex, false);
             else
                 SharedFileTemplateNamesRegex.Text = "";
         }

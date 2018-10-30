@@ -203,7 +203,7 @@ namespace Cliver.PdfDocumentParser
             {
                 Template.Anchor pa = pageCollection.ActiveTemplate.Anchors.Find(x => x.Id == id);
                 if (a == pa)
-                    throw new Exception("Anchor[Id=" + a.Id + "] has ParentAnchorId == Id");
+                    throw new Exception("Anchor[Id=" + a.Id + "] is referenced by an ancestor anchor.");
                 sb.Append(SerializationRoutines.Json.Serialize(pa));
                 id = pa.ParentAnchorId;
             }
