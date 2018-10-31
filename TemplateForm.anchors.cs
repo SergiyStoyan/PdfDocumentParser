@@ -29,18 +29,25 @@ namespace Cliver.PdfDocumentParser
         void initializeAnchorsTable()
         {
             Id3.ValueType = typeof(int);
+
             Type3.ValueType = typeof(Template.Types);
             Type3.DataSource = Enum.GetValues(typeof(Template.Types));
+
             ParentAnchorId3.ValueType = typeof(int);
             ParentAnchorId3.ValueMember = "Id";
             ParentAnchorId3.DisplayMember = "Name";
+
             Group3.ValueType = typeof(string);
+            if (!templateManager.AnchorGroups.Contains(string.Empty))
+                templateManager.AnchorGroups.Insert(0, string.Empty);
             Group3.DataSource = templateManager.AnchorGroups;
 
             anchors.EnableHeadersVisualStyles = false;//needed to set row headers
 
             anchors.CellBeginEdit += delegate (object sender, DataGridViewCellCancelEventArgs e)
             {
+                if (anchors.Columns[e.ColumnIndex].Name != "ParentAnchorId3")
+                    return;
                 Template.Anchor currentRowAnchor = (Template.Anchor)anchors.Rows[e.RowIndex].Tag;
                 if (currentRowAnchor == null)
                     return;
@@ -99,7 +106,7 @@ namespace Cliver.PdfDocumentParser
                 if (e.ColumnIndex < 0)//row's header
                     return;
                 var row = anchors.Rows[e.RowIndex];
-                Template.Anchor fa = (Template.Anchor)row.Tag;
+                Template.Anchor a = (Template.Anchor)row.Tag;
                 switch (anchors.Columns[e.ColumnIndex].Name)
                 {
                     //case "Id3":
@@ -107,15 +114,15 @@ namespace Cliver.PdfDocumentParser
                     //        int? anchorId = (int?)row.Cells["Id3"].Value;
                     //        if (anchorId == null)
                     //            break;
-                    //        Template.Anchor fa = (Template.Anchor)row.Tag;
-                    //        fa.Id = (int)anchorId;
-                    //        setAnchorRow(row, fa);
+                    //        Template.Anchor a = (Template.Anchor)row.Tag;
+                    //        a.Id = (int)anchorId;
+                    //        setAnchorRow(row, a);
                     //        break;
                     //    }
                     case "Type3":
                         {
                             Template.Types t2 = (Template.Types)row.Cells["Type3"].Value;
-                            if (t2 == fa.Type)
+                            if (t2 == a.Type)
                                 break;
                             Template.Anchor fa2;
                             switch (t2)
@@ -132,23 +139,23 @@ namespace Cliver.PdfDocumentParser
                                 default:
                                     throw new Exception("Unknown option: " + t2);
                             }
-                            fa2.Id = fa.Id;
-                            fa = fa2;
+                            fa2.Id = a.Id;
+                            a = fa2;
                             break;
                         }
                     case "ParentAnchorId3":
                         {
-                            fa.ParentAnchorId = (int?)row.Cells["ParentAnchorId3"].Value;
+                            a.ParentAnchorId = (int?)row.Cells["ParentAnchorId3"].Value;
                             break;
                         }
                     case "Group3":
                         {
-                            fa.Group = (string)row.Cells["Group3"].Value;
+                            a.Group = (string)row.Cells["Group3"].Value;
                             break;
                         }
                 }
-                setAnchorRow(row, fa);
-                findAndDrawAnchor(fa.Id);
+                setAnchorRow(row, a);
+                findAndDrawAnchor(a.Id);
             };
 
             anchors.SelectionChanged += delegate (object sender, EventArgs e)
@@ -167,19 +174,19 @@ namespace Cliver.PdfDocumentParser
                         return;
                     }
                     var row = anchors.SelectedRows[0];
-                    Template.Anchor fa = (Template.Anchor)row.Tag;
-                    if (fa == null)//hacky forcing commit a newly added row and display the blank row
+                    Template.Anchor a = (Template.Anchor)row.Tag;
+                    if (a == null)//hacky forcing commit a newly added row and display the blank row
                     {
                         int i = anchors.Rows.Add();
                         row = anchors.Rows[i];
-                        fa = new Template.Anchor.PdfText();
-                        setAnchorRow(row, fa);
+                        a = new Template.Anchor.PdfText();
+                        setAnchorRow(row, a);
                         onAnchorsChanged();
                         row.Selected = true;
                         return;
                     }
-                    setCurrentAnchorRow(fa.Id, false);
-                    findAndDrawAnchor(fa.Id);
+                    setCurrentAnchorRow(a.Id, false);
+                    findAndDrawAnchor(a.Id);
                 }
                 catch (Exception ex)
                 {
@@ -205,8 +212,8 @@ namespace Cliver.PdfDocumentParser
                 }
 
                 DataGridViewRow row;
-                Template.Anchor fa = getAnchor(anchorId, out row);
-                if (row == null || fa == null)
+                Template.Anchor a = getAnchor(anchorId, out row);
+                if (row == null || a == null)
                     throw new Exception("Anchor[Id=" + anchorId + "] does not exist.");
                 anchors.CurrentCell = anchors[0, row.Index];
 
@@ -268,19 +275,19 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        void setAnchorRow(DataGridViewRow row, Template.Anchor fa)
+        void setAnchorRow(DataGridViewRow row, Template.Anchor a)
         {
-            row.Tag = fa;
-            row.Cells["Id3"].Value = fa.Id;
-            row.Cells["Type3"].Value = fa.Type;
-            row.Cells["ParentAnchorId3"].Value = fa.ParentAnchorId;
-            row.Cells["Group3"].Value = fa.Group;
+            row.Tag = a;
+            row.Cells["Id3"].Value = a.Id;
+            row.Cells["Type3"].Value = a.Type;
+            row.Cells["ParentAnchorId3"].Value = a.ParentAnchorId;
+            row.Cells["Group3"].Value = a.Group;
 
             if (loadingTemplate)
                 return;
 
             if (currentAnchorControl != null && row == currentAnchorControl.Row)
-                setCurrentAnchorRow(fa.Id, false);
+                setCurrentAnchorRow(a.Id, false);
         }
 
         void onAnchorsChanged()
@@ -367,12 +374,12 @@ namespace Cliver.PdfDocumentParser
             {
                 if (currentAnchorControl == null)
                     return;
-                Template.Anchor fa = (Template.Anchor)currentAnchorControl.Row.Tag;
-                switch (fa.Type)
+                Template.Anchor a = (Template.Anchor)currentAnchorControl.Row.Tag;
+                switch (a.Type)
                 {
                     case Template.Types.PdfText:
                         {
-                            Template.Anchor.PdfText pt = (Template.Anchor.PdfText)fa;
+                            Template.Anchor.PdfText pt = (Template.Anchor.PdfText)a;
                             pt.CharBoxs = new List<Template.Anchor.PdfText.CharBox>();
                             List<Pdf.Line> lines = Pdf.RemoveDuplicatesAndGetLines(selectedPdfCharBoxs, false);
                             if (lines.Count < 1)
@@ -388,7 +395,7 @@ namespace Cliver.PdfDocumentParser
                         break;
                     case Template.Types.OcrText:
                         {
-                            Template.Anchor.OcrText ot = (Template.Anchor.OcrText)fa;
+                            Template.Anchor.OcrText ot = (Template.Anchor.OcrText)a;
                             ot.CharBoxs = new List<Template.Anchor.OcrText.CharBox>();
                             List<Ocr.Line> lines = PdfDocumentParser.Ocr.GetLines(selectedOcrCharBoxs);
                             if (lines.Count < 1)
@@ -404,7 +411,7 @@ namespace Cliver.PdfDocumentParser
                         break;
                     case Template.Types.ImageData:
                         {
-                            Template.Anchor.ImageData id = (Template.Anchor.ImageData)fa;
+                            Template.Anchor.ImageData id = (Template.Anchor.ImageData)a;
                             id.ImageBoxs = new List<Template.Anchor.ImageData.ImageBox>();
                             if (selectedImageBoxs.Count < 1)
                                 break;
@@ -414,10 +421,10 @@ namespace Cliver.PdfDocumentParser
                         }
                         break;
                     default:
-                        throw new Exception("Unknown option: " + fa.Type);
+                        throw new Exception("Unknown option: " + a.Type);
                 }
-                setAnchorRow(currentAnchorControl.Row, fa);
-                findAndDrawAnchor(fa.Id);
+                setAnchorRow(currentAnchorControl.Row, a);
+                findAndDrawAnchor(a.Id);
             }
             finally
             {
@@ -436,11 +443,11 @@ namespace Cliver.PdfDocumentParser
             if (anchorId != null)
                 foreach (DataGridViewRow r in anchors.Rows)
                 {
-                    Template.Anchor fa = (Template.Anchor)r.Tag;
-                    if (fa != null && fa.Id == anchorId)
+                    Template.Anchor a = (Template.Anchor)r.Tag;
+                    if (a != null && a.Id == anchorId)
                     {
                         row = r;
-                        return fa;
+                        return a;
                     }
                 }
             row = null;
