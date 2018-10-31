@@ -13,8 +13,7 @@ namespace Cliver.InvoiceParser
 {
     /*
  TBD:
- - implement chaining Anchors and remove Marks
- - set field relatively linking to anchor (requires updating templates)
+ - fix displaying deviation rs
  - change fields OCR to Types
 - switch to Tesseract.4
  - tune image recognition by checking brightness deltas

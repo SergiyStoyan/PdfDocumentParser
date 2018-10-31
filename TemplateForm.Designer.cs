@@ -83,6 +83,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.About = new System.Windows.Forms.LinkLabel();
             this.ExtractFieldsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -161,6 +163,7 @@
             this.splitContainer2.Panel1.Controls.Add(this.selectionCoordinates);
             this.splitContainer2.Panel1.Controls.Add(this.lTotalPages);
             this.splitContainer2.Panel1.Controls.Add(this.label10);
+            this.splitContainer2.Panel1.Controls.Add(this.label4);
             // 
             // splitContainer2.Panel2
             // 
@@ -168,8 +171,9 @@
             this.splitContainer2.Panel2.Controls.Add(this.label1);
             this.splitContainer2.Panel2.Controls.Add(this.panel1);
             this.splitContainer2.Panel2.Controls.Add(this.ExtractFieldsAutomaticallyWhenPageChanged);
+            this.splitContainer2.Panel2.Controls.Add(this.label5);
             this.splitContainer2.Size = new System.Drawing.Size(429, 629);
-            this.splitContainer2.SplitterDistance = 421;
+            this.splitContainer2.SplitterDistance = 425;
             this.splitContainer2.TabIndex = 32;
             // 
             // label10
@@ -191,7 +195,7 @@
             // anchorsContainer.Panel1
             // 
             this.anchorsContainer.Panel1.Controls.Add(this.anchors);
-            this.anchorsContainer.Size = new System.Drawing.Size(429, 241);
+            this.anchorsContainer.Size = new System.Drawing.Size(429, 245);
             this.anchorsContainer.SplitterDistance = 256;
             this.anchorsContainer.TabIndex = 52;
             // 
@@ -208,7 +212,7 @@
             this.anchors.MultiSelect = false;
             this.anchors.Name = "anchors";
             this.anchors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.anchors.Size = new System.Drawing.Size(256, 241);
+            this.anchors.Size = new System.Drawing.Size(256, 245);
             this.anchors.TabIndex = 50;
             // 
             // Id3
@@ -246,9 +250,9 @@
             this.CheckAnchorGroupsAutomaticallyWhenPageChanged.AutoSize = true;
             this.CheckAnchorGroupsAutomaticallyWhenPageChanged.Location = new System.Drawing.Point(112, 167);
             this.CheckAnchorGroupsAutomaticallyWhenPageChanged.Name = "CheckAnchorGroupsAutomaticallyWhenPageChanged";
-            this.CheckAnchorGroupsAutomaticallyWhenPageChanged.Size = new System.Drawing.Size(237, 17);
+            this.CheckAnchorGroupsAutomaticallyWhenPageChanged.Size = new System.Drawing.Size(240, 17);
             this.CheckAnchorGroupsAutomaticallyWhenPageChanged.TabIndex = 57;
-            this.CheckAnchorGroupsAutomaticallyWhenPageChanged.Text = "Check Anchor Groups When Page Changed";
+            this.CheckAnchorGroupsAutomaticallyWhenPageChanged.Text = "Check Anchor Groups When Page Changed]";
             this.CheckAnchorGroupsAutomaticallyWhenPageChanged.UseVisualStyleBackColor = true;
             // 
             // flowLayoutPanel4
@@ -303,7 +307,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.name.Location = new System.Drawing.Point(51, 2);
             this.name.Name = "name";
-            this.name.Size = new System.Drawing.Size(156, 20);
+            this.name.Size = new System.Drawing.Size(259, 20);
             this.name.TabIndex = 39;
             // 
             // label6
@@ -463,13 +467,14 @@
             // 
             // pictureScale
             // 
+            this.pictureScale.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureScale.DecimalPlaces = 1;
             this.pictureScale.Increment = new decimal(new int[] {
             1,
             0,
             0,
             65536});
-            this.pictureScale.Location = new System.Drawing.Point(51, 28);
+            this.pictureScale.Location = new System.Drawing.Point(374, 2);
             this.pictureScale.Maximum = new decimal(new int[] {
             10,
             0,
@@ -502,8 +507,9 @@
             // 
             // label7
             // 
+            this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(-2, 30);
+            this.label7.Location = new System.Drawing.Point(329, 5);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(37, 13);
             this.label7.TabIndex = 41;
@@ -511,9 +517,8 @@
             // 
             // selectionCoordinates
             // 
-            this.selectionCoordinates.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.selectionCoordinates.AutoSize = true;
-            this.selectionCoordinates.Location = new System.Drawing.Point(218, 5);
+            this.selectionCoordinates.Location = new System.Drawing.Point(14, 32);
             this.selectionCoordinates.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.selectionCoordinates.Name = "selectionCoordinates";
             this.selectionCoordinates.Size = new System.Drawing.Size(119, 13);
@@ -540,11 +545,11 @@
             this.Ocr,
             this.Value});
             this.fields.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fields.Location = new System.Drawing.Point(0, 13);
+            this.fields.Location = new System.Drawing.Point(0, 18);
             this.fields.MultiSelect = false;
             this.fields.Name = "fields";
             this.fields.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.fields.Size = new System.Drawing.Size(429, 160);
+            this.fields.Size = new System.Drawing.Size(429, 151);
             this.fields.TabIndex = 30;
             // 
             // Name_
@@ -588,7 +593,8 @@
             this.label1.Dock = System.Windows.Forms.DockStyle.Top;
             this.label1.Location = new System.Drawing.Point(0, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(37, 13);
+            this.label1.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
+            this.label1.Size = new System.Drawing.Size(37, 18);
             this.label1.TabIndex = 55;
             this.label1.Text = "Fields:";
             // 
@@ -598,7 +604,7 @@
             this.panel1.Controls.Add(this.flowLayoutPanel1);
             this.panel1.Controls.Add(this.flowLayoutPanel3);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 173);
+            this.panel1.Location = new System.Drawing.Point(0, 169);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(429, 31);
             this.panel1.TabIndex = 29;
@@ -725,12 +731,30 @@
             // ExtractFieldsAutomaticallyWhenPageChanged
             // 
             this.ExtractFieldsAutomaticallyWhenPageChanged.AutoSize = true;
-            this.ExtractFieldsAutomaticallyWhenPageChanged.Location = new System.Drawing.Point(112, -1);
+            this.ExtractFieldsAutomaticallyWhenPageChanged.Location = new System.Drawing.Point(112, 4);
             this.ExtractFieldsAutomaticallyWhenPageChanged.Name = "ExtractFieldsAutomaticallyWhenPageChanged";
-            this.ExtractFieldsAutomaticallyWhenPageChanged.Size = new System.Drawing.Size(195, 17);
+            this.ExtractFieldsAutomaticallyWhenPageChanged.Size = new System.Drawing.Size(198, 17);
             this.ExtractFieldsAutomaticallyWhenPageChanged.TabIndex = 56;
-            this.ExtractFieldsAutomaticallyWhenPageChanged.Text = "Extract Fields When Page Changed";
+            this.ExtractFieldsAutomaticallyWhenPageChanged.Text = "Extract Fields When Page Changed]";
             this.ExtractFieldsAutomaticallyWhenPageChanged.UseVisualStyleBackColor = true;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(104, 168);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(10, 13);
+            this.label4.TabIndex = 58;
+            this.label4.Text = "[";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(104, 5);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(10, 13);
+            this.label5.TabIndex = 59;
+            this.label5.Text = "[";
             // 
             // TemplateForm
             // 
@@ -829,5 +853,7 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn ParentAnchorId3;
         private System.Windows.Forms.DataGridViewComboBoxColumn Group3;
         private System.Windows.Forms.CheckBox CheckAnchorGroupsAutomaticallyWhenPageChanged;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
     }
 }
