@@ -23,7 +23,10 @@ namespace Cliver.PdfDocumentParser
 
             cSearchRectangleMargin.CheckedChanged += delegate
             {
-                SearchRectangleMargin.Value = cSearchRectangleMargin.Checked ? ((_object == null || _object.ParentAnchorId != null) ? (decimal)Settings.Constants.CoordinateDeviationMargin : 100) : -1; SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked;
+                SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked;
+                if (SearchRectangleMargin.Value >= 0)
+                    return;
+                SearchRectangleMargin.Value = cSearchRectangleMargin.Checked ? ((_object == null || _object.ParentAnchorId != null) ? (decimal)Settings.Constants.CoordinateDeviationMargin : 100) : -1;
             };
         }
 
@@ -58,10 +61,10 @@ namespace Cliver.PdfDocumentParser
                 PositionDeviation.Value = (decimal)_object.PositionDeviation;
             }
             catch { }
-            SearchRectangleMargin.Value = _object.SearchRectangleMargin;
 
-            cSearchRectangleMargin.Checked = SearchRectangleMargin.Value >= 0;
+            SearchRectangleMargin.Value = _object.SearchRectangleMargin;
             SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked;
+            cSearchRectangleMargin.Checked = SearchRectangleMargin.Value >= 0;
         }
 
         Template.Anchor.OcrText _object;

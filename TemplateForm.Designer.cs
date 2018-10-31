@@ -50,8 +50,6 @@
             this.ShowPdfText = new System.Windows.Forms.LinkLabel();
             this.label17 = new System.Windows.Forms.Label();
             this.ShowOcrText = new System.Windows.Forms.LinkLabel();
-            this.label18 = new System.Windows.Forms.Label();
-            this.IsDocumentFirstPage = new System.Windows.Forms.LinkLabel();
             this.name = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -369,8 +367,6 @@
             this.flowLayoutPanel4.Controls.Add(this.ShowPdfText);
             this.flowLayoutPanel4.Controls.Add(this.label17);
             this.flowLayoutPanel4.Controls.Add(this.ShowOcrText);
-            this.flowLayoutPanel4.Controls.Add(this.label18);
-            this.flowLayoutPanel4.Controls.Add(this.IsDocumentFirstPage);
             this.flowLayoutPanel4.Location = new System.Drawing.Point(1, 81);
             this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel4.Name = "flowLayoutPanel4";
@@ -410,27 +406,6 @@
             this.ShowOcrText.Text = "Show Ocr Text";
             this.ShowOcrText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.ShowOcrText.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ShowOcrText_LinkClicked);
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(185, 5);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(9, 13);
-            this.label18.TabIndex = 26;
-            this.label18.Text = "|";
-            // 
-            // IsDocumentFirstPage
-            // 
-            this.IsDocumentFirstPage.AutoSize = true;
-            this.IsDocumentFirstPage.Location = new System.Drawing.Point(200, 5);
-            this.IsDocumentFirstPage.Name = "IsDocumentFirstPage";
-            this.IsDocumentFirstPage.Size = new System.Drawing.Size(123, 13);
-            this.IsDocumentFirstPage.TabIndex = 23;
-            this.IsDocumentFirstPage.TabStop = true;
-            this.IsDocumentFirstPage.Text = "Is Document First Page?";
-            this.IsDocumentFirstPage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.IsDocumentFirstPage.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.IsDocumentFirstPage_LinkClicked);
             // 
             // name
             // 
@@ -960,8 +935,6 @@
         private System.Windows.Forms.LinkLabel ShowPdfText;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.LinkLabel ShowOcrText;
-        private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.LinkLabel IsDocumentFirstPage;
         private System.Windows.Forms.DataGridViewTextBoxColumn Name_;
         private System.Windows.Forms.DataGridViewComboBoxColumn AnchorId;
         private System.Windows.Forms.DataGridViewTextBoxColumn Rectangle;

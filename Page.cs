@@ -222,8 +222,8 @@ namespace Cliver.PdfDocumentParser
             if (a == null)
                 return null;
 
-            RectangleF searchRectangle;
-            RectangleF initialRectangle0 = a.MainElementInitialRectangle();
+            RectangleF mainElementSearchRectangle;
+            RectangleF mainElementInitialRectangle = a.MainElementInitialRectangle();
             if (a.ParentAnchorId != null)
             {
                 Template.Anchor pa = pageCollection.ActiveTemplate.Anchors.Find(x => x.Id == a.ParentAnchorId);
@@ -231,10 +231,10 @@ namespace Cliver.PdfDocumentParser
                 if (rs == null || rs.Count < 1)
                     return null;
                 RectangleF paInitialRectangle = pa.MainElementInitialRectangle();
-                searchRectangle = getSearchRectangle(new RectangleF(initialRectangle0.X + paInitialRectangle.X - rs[0].X, initialRectangle0.Y + paInitialRectangle.Y - rs[0].Y, initialRectangle0.Width, initialRectangle0.Height), a.SearchRectangleMargin);
+                mainElementSearchRectangle = getSearchRectangle(new RectangleF(mainElementInitialRectangle.X + paInitialRectangle.X - rs[0].X, mainElementInitialRectangle.Y + paInitialRectangle.Y - rs[0].Y, mainElementInitialRectangle.Width, mainElementInitialRectangle.Height), a.SearchRectangleMargin);
             }
             else
-                searchRectangle = getSearchRectangle(initialRectangle0, a.SearchRectangleMargin);
+                mainElementSearchRectangle = getSearchRectangle(mainElementInitialRectangle, a.SearchRectangleMargin);
 
             switch (a.Type)
             {
@@ -248,7 +248,7 @@ namespace Cliver.PdfDocumentParser
                         if (ptv.SearchRectangleMargin < 0)
                             bt0s = PdfCharBoxs.Where(x => x.Char == aes[0].Char);
                         else
-                            bt0s = PdfCharBoxs.Where(x => x.Char == aes[0].Char && searchRectangle.Contains(x.R));
+                            bt0s = PdfCharBoxs.Where(x => x.Char == aes[0].Char && mainElementSearchRectangle.Contains(x.R));
                         List<Pdf.CharBox> bts = new List<Pdf.CharBox>();
                         foreach (Pdf.CharBox bt0 in bt0s)
                         {
@@ -281,11 +281,22 @@ namespace Cliver.PdfDocumentParser
                         List<Template.Anchor.OcrText.CharBox> aes = otv.CharBoxs;
                         if (aes.Count < 1)
                             return null;
+                        //List<Ocr.CharBox> contaningOcrCharBoxs;//does not work properly because Tesseract recongnizes a big fragment and a small fragment differently!
                         IEnumerable<Ocr.CharBox> bt0s;
                         if (otv.SearchRectangleMargin < 0)
+                        {
+                            //contaningOcrCharBoxs = ActiveTemplateOcrCharBoxs;
                             bt0s = ActiveTemplateOcrCharBoxs.Where(x => x.Char == aes[0].Char);
+                        }
                         else
-                            bt0s = ActiveTemplateOcrCharBoxs.Where(x => x.Char == aes[0].Char && searchRectangle.Contains(x.R));
+                        {
+                            //RectangleF contaningRectangle = mainElementSearchRectangle;
+                            //for (int i = 1; i < otv.CharBoxs.Count; i++)
+                            //    contaningRectangle = RectangleF.Union(contaningRectangle, getSearchRectangle(otv.CharBoxs[i].Rectangle.GetSystemRectangleF(), a.SearchRectangleMargin));
+                            //contaningOcrCharBoxs = Ocr.This.GetCharBoxs(getRectangleFromActiveTemplateBitmap(contaningRectangle.X / Settings.Constants.Image2PdfResolutionRatio, contaningRectangle.Y / Settings.Constants.Image2PdfResolutionRatio, contaningRectangle.Width / Settings.Constants.Image2PdfResolutionRatio, contaningRectangle.Height / Settings.Constants.Image2PdfResolutionRatio));
+                            //bt0s = contaningOcrCharBoxs.Where(x => x.Char == aes[0].Char && mainElementSearchRectangle.Contains(x.R));
+                            bt0s = ActiveTemplateOcrCharBoxs.Where(x => x.Char == aes[0].Char && mainElementSearchRectangle.Contains(x.R));
+                        }
                         List<Ocr.CharBox> bts = new List<Ocr.CharBox>();
                         foreach (Ocr.CharBox bt0 in bt0s)
                         {
@@ -298,7 +309,7 @@ namespace Cliver.PdfDocumentParser
                                     p = new PointF(bt0.R.X + aes[i].Rectangle.X - aes[0].Rectangle.X, bt0.R.Y + aes[i].Rectangle.Y - aes[0].Rectangle.Y);
                                 else
                                     p = new PointF(bts[i - 1].R.X + aes[i].Rectangle.X - aes[i - 1].Rectangle.X, bts[i - 1].R.Y + aes[i].Rectangle.Y - aes[i - 1].Rectangle.Y);
-                                foreach (Ocr.CharBox bt in ActiveTemplateOcrCharBoxs.Where(x => x.Char == aes[i].Char))
+                                foreach (Ocr.CharBox bt in /*contaningOcrCharBoxs*/ActiveTemplateOcrCharBoxs.Where(x => x.Char == aes[i].Char))
                                     if (Math.Abs(bt.R.X - p.X) <= otv.PositionDeviation && Math.Abs(bt.R.Y - p.Y) <= otv.PositionDeviation)
                                     {
                                         bts.Add(bt);
@@ -327,8 +338,8 @@ namespace Cliver.PdfDocumentParser
                         }
                         else
                         {
-                            id0 = new ImageData(getRectangleFromActiveTemplateBitmap(searchRectangle.X / Settings.Constants.Image2PdfResolutionRatio, searchRectangle.Y / Settings.Constants.Image2PdfResolutionRatio, searchRectangle.Width / Settings.Constants.Image2PdfResolutionRatio, searchRectangle.Height / Settings.Constants.Image2PdfResolutionRatio));
-                            shift = new Point(searchRectangle.X < 0 ? 0 : (int)searchRectangle.X, searchRectangle.Y < 0 ? 0 : (int)searchRectangle.Y);
+                            id0 = new ImageData(getRectangleFromActiveTemplateBitmap(mainElementSearchRectangle.X / Settings.Constants.Image2PdfResolutionRatio, mainElementSearchRectangle.Y / Settings.Constants.Image2PdfResolutionRatio, mainElementSearchRectangle.Width / Settings.Constants.Image2PdfResolutionRatio, mainElementSearchRectangle.Height / Settings.Constants.Image2PdfResolutionRatio));
+                            shift = new Point(mainElementSearchRectangle.X < 0 ? 0 : (int)mainElementSearchRectangle.X, mainElementSearchRectangle.Y < 0 ? 0 : (int)mainElementSearchRectangle.Y);
                         }
                         List<RectangleF> bestRs = null;
                         float minDeviation = float.MaxValue;

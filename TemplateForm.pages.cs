@@ -58,17 +58,10 @@ namespace Cliver.PdfDocumentParser
             if (a == null || row == null)
                 throw new Exception("Anchor[Id=" + anchorId + "] does not exist.");
 
-            if (!a.IsSet())
-            {
-                setRowStatus(statuses.WARNING, row, "Not set");
-                clearPicture(renewImage);
-                return null;
-            }
             if (pages == null)
                 return null;
 
             pages.ActiveTemplate = getTemplateFromUI(false);
-
             a = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == anchorId);
             if (a == null)
                 throw new Exception("Anchor[Id=" + a.Id + "] is not defined.");
@@ -76,17 +69,29 @@ namespace Cliver.PdfDocumentParser
             PointF? p0 = null;
             for (Template.Anchor a_ = a; a_ != null; a_ = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == a_.ParentAnchorId))
             {
-                List<RectangleF> rs = pages[currentPage].GetAnchorRectangles(a_);
-                if (a == a_)
+                DataGridViewRow r;
+                getAnchor(a_.Id, out r);
+                if (!a_.IsSet())
                 {
-                    if (rs == null || rs.Count < 1)
+                    setRowStatus(statuses.WARNING, r, "Not set");
+                    if (a == a_)
                     {
-                        setRowStatus(statuses.ERROR, row, "Not found");
                         clearPicture(renewImage);
                         return null;
                     }
-                    setRowStatus(statuses.SUCCESS, row, "Found");
+                    continue;
                 }
+                List<RectangleF> rs = pages[currentPage].GetAnchorRectangles(a_);
+                if (rs == null || rs.Count < 1)
+                {
+                    setRowStatus(statuses.ERROR, r, "Not found");
+                    if (a == a_)
+                    {
+                        clearPicture(renewImage);
+                        return null;
+                    }
+                }
+                setRowStatus(statuses.SUCCESS, r, "Found");
 
                 drawBoxes(Settings.Appearance.AnchorMasterBoxColor, new List<System.Drawing.RectangleF> { rs[0] }, a == a_ ? renewImage : false);
                 if (rs.Count > 1)
@@ -252,7 +257,6 @@ namespace Cliver.PdfDocumentParser
                     }
                 }
 
-                checkIfCurrentPageIsDocumentFirstPage();
                 setAnchorGroupStatuses();
             }
             catch (Exception e)
@@ -279,45 +283,6 @@ namespace Cliver.PdfDocumentParser
             bNextPage.Enabled = currentPage < totalPageNumber;
         }
 
-        bool? checkIfCurrentPageIsDocumentFirstPage()
-        {
-            try
-            {
-                if (marks.Rows.Count < 2)
-                {
-                    Message.Warning("No condition of first page of document is specified!");
-                    return null;
-                }
-
-                bool failed = false;
-                drawBoxes(Color.Black, new List<RectangleF> { }, true);
-                foreach (DataGridViewRow r in marks.Rows)
-                    if (r.Tag != null && !isMarkFound(r, false))
-                        failed = true;
-                //marks.ClearSelection();
-                //Template t = getTemplateFromUI(false);
-                //pages.ActiveTemplate = t;
-                //string error;
-                //if (!pages[currentPage].IsDocumentFirstPage(out error))
-                //{
-                //    marks.BackgroundColor = Color.LightPink;
-                //    return false;
-                //}
-                if (failed)
-                {
-                    marks.BackgroundColor = Color.LightPink;
-                    return false;
-                }
-                marks.BackgroundColor = Color.LightGreen;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                LogMessage.Error(ex);
-            }
-            return false;
-        }
-
         private void tCurrentPage_Leave(object sender, EventArgs e)
         {
             changeCurrentPage();
@@ -342,11 +307,6 @@ namespace Cliver.PdfDocumentParser
         {
             if (e.KeyCode == Keys.Enter)
                 changeCurrentPage();
-        }
-
-        private void IsDocumentFirstPage_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            checkIfCurrentPageIsDocumentFirstPage();
         }
     }
 }

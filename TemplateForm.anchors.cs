@@ -306,11 +306,12 @@ namespace Cliver.PdfDocumentParser
                     if (string.IsNullOrWhiteSpace(a.Group))
                         c.Style.BackColor = SystemColors.Control;
                     else
-                    {
+                    {                        
                         if (pages[currentPage].IsAnchorGroupFound(a.Group))
                             c.Style.BackColor = Color.LightGreen;
                         else
                             c.Style.BackColor = Color.Pink;
+                        findAndDrawAnchor(a.Id);//to set anchor status
                     }
                 }
         }
