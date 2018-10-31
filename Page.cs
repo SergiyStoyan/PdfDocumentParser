@@ -480,7 +480,10 @@ namespace Cliver.PdfDocumentParser
 
         public bool IsAnchorGroupFound(string group)//to be used instead of IsDocumentFirstPage
         {
-            foreach (Template.Anchor a in pageCollection.ActiveTemplate.Anchors.Where(a=>a.Group == group))
+            List<Template.Anchor> as_ = pageCollection.ActiveTemplate.Anchors.Where(a => a.Group == group).ToList();
+            if (as_.Count < 1)
+                return false;
+            foreach (Template.Anchor a in as_)
                 if (GetAnchorRectangles(a) == null)
                     return false;
             return true;
