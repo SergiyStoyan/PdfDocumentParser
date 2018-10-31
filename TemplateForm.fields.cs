@@ -177,7 +177,7 @@ namespace Cliver.PdfDocumentParser
                     {
                         int i = fields.Rows.Add();
                         row = fields.Rows[i];
-                        f = new Template.Field.PdfText();
+                        f = templateManager.CreateDefaultField();
                         setFieldRow(row, f);
                         row.Selected = true;
                         return;

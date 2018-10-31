@@ -29,9 +29,9 @@ namespace Cliver.PdfDocumentParser
             return _object;
         }
 
-        public override void Initialize(DataGridViewRow row)
+        public override void Initialize(DataGridViewRow row, Action onLeft)
         {
-            base.Initialize(row);
+            base.Initialize(row, onLeft);
 
             _object = (Template.Mark.PdfText)row.Tag;
             if (_object == null)

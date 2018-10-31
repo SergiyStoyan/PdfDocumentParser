@@ -19,15 +19,18 @@ namespace Cliver.PdfDocumentParser
             Leave += delegate (object sender, EventArgs e)
             {
                 Row.Tag = getObject();
+                onLeft?.Invoke();
             };
         }
         public DataGridViewRow Row;
         //protected TemplateForm templateForm;
+        Action onLeft = null;
 
-        public virtual void Initialize(DataGridViewRow row/*, TemplateForm templateForm*/)
+        public virtual void Initialize(DataGridViewRow row/*, TemplateForm templateForm*/, Action onLeft)
         {
             Row = row;
             //this.templateForm = templateForm;
+            this.onLeft = onLeft;
         }
 
         virtual protected object getObject()

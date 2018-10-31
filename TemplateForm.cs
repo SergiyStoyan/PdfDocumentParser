@@ -47,7 +47,14 @@ namespace Cliver.PdfDocumentParser
                 }
             }
             public List<string> AnchorGroups;
-            //public List<string> FieldNames;
+            public Template.Anchor CreateDefaultAnchor()
+            {
+                return new Template.Anchor.PdfText { PositionDeviation = 1, PositionDeviationIsAbsolute = false, SearchRectangleMargin = -1 };
+            }
+            public Template.Field CreateDefaultField()
+            {
+                return new Template.Field.PdfText { };
+            }
         }
 
         public TemplateForm(TemplateManager templateManager, string testFileDefaultFolder)

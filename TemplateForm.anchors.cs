@@ -153,7 +153,7 @@ namespace Cliver.PdfDocumentParser
                     {
                         int i = anchors.Rows.Add();
                         row = anchors.Rows[i];
-                        a = new Template.Anchor.PdfText();
+                        a = templateManager.CreateDefaultAnchor();
                         setAnchorRow(row, a);
                         onAnchorsChanged();
                         row.Selected = true;
@@ -252,7 +252,7 @@ namespace Cliver.PdfDocumentParser
                     default:
                         throw new Exception("Unknown option: " + t);
                 }
-                currentAnchorControl.Initialize(row);
+                currentAnchorControl.Initialize(row, setAnchorGroupStatuses);
             }
             finally
             {
@@ -297,6 +297,8 @@ namespace Cliver.PdfDocumentParser
 
         void setAnchorGroupStatuses()
         {
+            if (pages == null)
+                return;
             pages.ActiveTemplate = getTemplateFromUI(false);
             foreach (DataGridViewRow r in anchors.Rows)
                 if (r.Tag != null)

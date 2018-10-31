@@ -271,7 +271,7 @@ namespace Cliver.PdfDocumentParser
                     default:
                         throw new Exception("Unknown option: " + m.Type);
                 }
-                currentMarkControl.Initialize(row);
+                currentMarkControl.Initialize(row, null);
                 isMarkFound(row, true);
             }
             finally
