@@ -195,13 +195,15 @@ namespace Cliver.InvoiceParser
                     }
                 }
                 if (currentTemplate2 == null)
-                {
-                    Log.Main.Warning("No template found");
-                    return false;
-                }
+                    continue;
                 Pages.ActiveTemplate = currentTemplate2.Template;
                 foreach (Template.Field f in Pages.ActiveTemplate.Fields)
                     extractFieldText(Pages[page_i], f);
+            }
+            if (currentTemplate2 == null)
+            {
+                Log.Main.Warning("No template found");
+                return false;
             }
             record(Pages.ActiveTemplate.Name, documentFirstPageI, fieldNames2text);
             stampInvoicePages(documentFirstPageI, Pages.PdfReader.NumberOfPages);
