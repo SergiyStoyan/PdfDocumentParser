@@ -637,11 +637,21 @@ namespace Cliver.InvoiceParser
             useOrderWeightPattern.Checked = Settings.General.UseOrderWeightPattern;
             sortSelectedUp.Checked = Settings.General.SortSelectedUp;
 
+            Action showSelectedCount = delegate
+            {
+                int count = 0;
+                foreach (DataGridViewRow r in template2s.Rows)
+                {
+                    if (getBoolValue(r, "Selected"))
+                        count++;
+                }
+                selectedTemplatesCount.Text = "Selected: " + count + " templates";
+            };
+
             EventHandler select_by_filter = delegate
             {
                 float orderWeight1 = (float)orderWeightPattern1.Value;
                 float orderWeight2 = (float)orderWeightPattern2.Value;
-                int count = 0;
                 foreach (DataGridViewRow r in template2s.Rows)
                 {
                     Template2 t = (Template2)r.Tag;
@@ -653,13 +663,11 @@ namespace Cliver.InvoiceParser
                          && (!commentPattern.Enabled || (string.IsNullOrEmpty(commentPattern.Text) ? string.IsNullOrEmpty(t.Comment) : Regex.IsMatch(t.Comment, commentPattern.Text, RegexOptions.IgnoreCase)))
                          && (!orderWeightPattern2.Enabled || (orderWeight1 <= t.OrderWeight && t.OrderWeight <= orderWeight2));
                     r.Cells["Selected"].Value = s;
-                    if (s)
-                        count++;
                 }
                 if (sortSelectedUp.Checked)
                     template2s.Sort(template2s.Columns["Selected"], ListSortDirection.Descending);
 
-                selectedTemplatesCount.Text = "Selected: " + count + " templates";
+                showSelectedCount();
 
                 Settings.General.UseActiveSelectPattern = useActivePattern.Checked;
                 Settings.General.UseNameSelectPattern = useNamePattern.Checked;
@@ -692,6 +700,7 @@ namespace Cliver.InvoiceParser
                 {
                     r.Cells["Selected"].Value = true;
                 }
+                showSelectedCount();
             };
             selectNothing.Click += delegate
             {
@@ -699,6 +708,7 @@ namespace Cliver.InvoiceParser
                 {
                     r.Cells["Selected"].Value = false;
                 }
+                showSelectedCount();
             };
             selectInvertion.Click += delegate
             {
@@ -706,6 +716,7 @@ namespace Cliver.InvoiceParser
                 {
                     r.Cells["Selected"].Value = !getBoolValue(r, "Selected");
                 }
+                showSelectedCount();
             };
 
             applyActiveChange.Click += delegate
