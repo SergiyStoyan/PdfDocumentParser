@@ -288,6 +288,32 @@ namespace Cliver.PdfDocumentParser
 
             if (currentAnchorControl != null && row == currentAnchorControl.Row)
                 setCurrentAnchorRow(a.Id, false);
+
+            //foreach (string g in templateManager.AnchorGroups)
+            //{
+            //    bool found = true;
+            //    foreach (DataGridViewRow r in anchors.Rows)
+            //        if (r.Tag != null)
+            //        {
+            //            Template.Anchor an = (Template.Anchor)r.Tag;
+            //            if (an.Group == g)
+            //                if (!pages[currentPage].IsAnchorGroupFound(g))
+            //                {
+            //                    found = false;
+            //                    break;
+            //                }
+            //        }
+            //    foreach (DataGridViewRow r in anchors.Rows)
+            //        if (r.Tag != null)
+            //        {
+            //            Template.Anchor an = (Template.Anchor)r.Tag;
+            //            if (an.Group == g)
+            //                if (found)
+            //                    setRowStatus(statuses.SUCCESS, r, "");
+            //                else
+            //                    setRowStatus(statuses.ERROR, r, "");
+            //        }
+            //}
         }
 
         void onAnchorsChanged()
