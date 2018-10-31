@@ -329,22 +329,6 @@ namespace Cliver.PdfDocumentParser
                     r.Cells["ParentAnchorId3"].Value = null;
             }
 
-            //foreach (DataGridViewRow r in anchors.Rows)
-            //{
-            //    if (r.Tag == null)
-            //        continue;
-            //    DataGridViewComboBoxCell c = r.Cells["ParentAnchorId3"] as DataGridViewComboBoxCell;
-            //    SortedSet<int> ais2 = SerializationRoutines.Json.Clone(ais);
-            //    for (Template.Anchor a = (Template.Anchor)r.Tag; a.ParentAnchorId != null; a = as_.First(x => x.Id == a.ParentAnchorId))
-            //        ais2.Remove(a.Id);
-            //    List<dynamic> ais_ = ais2.Select(x => new { Id = x, Name = x.ToString() }).ToList<dynamic>();
-            //    ais_.Insert(0, new { Id = -1, Name = string.Empty });//commbobox returns value null for -1 (and throws an unclear expection if Id=null)
-            //    c.DataSource = ais_;
-            //    //c.FlatStyle = FlatStyle.Flat;
-            //    //c.Style.BackColor = Color.Violet;
-            //    //c.Style.ForeColor = Color.Red;
-            //};
-
             foreach (DataGridViewRow r in marks.Rows)
             {
                 if (r.Tag == null)

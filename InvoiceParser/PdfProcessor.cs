@@ -182,6 +182,11 @@ namespace Cliver.InvoiceParser
                             stampInvoicePages(documentFirstPageI, page_i - 1);
                         }
                         fieldNames2text.Clear();
+                        if (pdfStamper == null)
+                        {
+                            Log.Main.Inform("Stamped file: '" + stampedPdf + "'");
+                            pdfStamper = new PdfStamper(Pages.PdfReader, new FileStream(stampedPdf, FileMode.Create, FileAccess.Write, FileShare.None));
+                        }
                         currentTemplate2 = t2;
                         documentFirstPageI = page_i;
                         Log.Main.Inform("Document #" + (++documentCount) + " detected at page " + documentFirstPageI + " with template '" + currentTemplate2.Template.Name + "'");
@@ -193,11 +198,6 @@ namespace Cliver.InvoiceParser
                 {
                     Log.Main.Warning("No template found");
                     return false;
-                }
-                if (pdfStamper == null)
-                {
-                    Log.Main.Inform("Stamped file: '" + stampedPdf + "'");
-                    pdfStamper = new PdfStamper(Pages.PdfReader, new FileStream(stampedPdf, FileMode.Create, FileAccess.Write, FileShare.None));
                 }
                 Pages.ActiveTemplate = currentTemplate2.Template;
                 foreach (Template.Field f in Pages.ActiveTemplate.Fields)
