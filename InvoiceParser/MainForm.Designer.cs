@@ -778,6 +778,7 @@
             this.SharedFileTemplateNamesRegex.HeaderText = "SFTRegex";
             this.SharedFileTemplateNamesRegex.Name = "SharedFileTemplateNamesRegex";
             this.SharedFileTemplateNamesRegex.ReadOnly = true;
+            this.SharedFileTemplateNamesRegex.ToolTipText = "Shared file template names regex";
             // 
             // MainForm
             // 

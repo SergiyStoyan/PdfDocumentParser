@@ -13,7 +13,6 @@ namespace Cliver.InvoiceParser
 {
     /*
  TBD:
- - back color in groups
  - fix displaying deviation rs
  - change fields OCR to Types
 - switch to Tesseract.4
