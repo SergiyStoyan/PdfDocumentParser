@@ -92,7 +92,7 @@ namespace Cliver.PdfDocumentParser
                 if (_activeTemplateOcrCharBoxs != null)
                     _activeTemplateOcrCharBoxs = null;
 
-                anchorHashes2rectangles.Clear();
+                anchorHashes2anchorRectangles.Clear();
             }
 
             //if (pageCollection.ActiveTemplate.Name != newTemplate.Name)
@@ -208,14 +208,14 @@ namespace Cliver.PdfDocumentParser
                 id = pa.ParentAnchorId;
             }
             string sa = sb.ToString();
-            if (!anchorHashes2rectangles.TryGetValue(sa, out rs))
+            if (!anchorHashes2anchorRectangles.TryGetValue(sa, out rs))
             {
                 rs = findAnchor(a);
-                anchorHashes2rectangles[sa] = rs;
+                anchorHashes2anchorRectangles[sa] = rs;
             }
             return rs;
         }
-        Dictionary<string, List<RectangleF>> anchorHashes2rectangles = new Dictionary<string, List<RectangleF>>();
+        Dictionary<string, List<RectangleF>> anchorHashes2anchorRectangles = new Dictionary<string, List<RectangleF>>();
 
         List<RectangleF> findAnchor(Template.Anchor a)
         {

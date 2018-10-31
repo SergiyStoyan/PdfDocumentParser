@@ -48,31 +48,7 @@ namespace Cliver.PdfDocumentParser
             {
                 if (anchors.Columns[e.ColumnIndex].Name != "ParentAnchorId3")
                     return;
-                Template.Anchor currentRowAnchor = (Template.Anchor)anchors.Rows[e.RowIndex].Tag;
-                if (currentRowAnchor == null)
-                    return;
-                SortedSet<int> ais = new SortedSet<int>();
-                List<Template.Anchor> as_ = new List<Template.Anchor>();
-                foreach (DataGridViewRow r in anchors.Rows)
-                    if (r.Tag != null)
-                    {
-                        Template.Anchor a = (Template.Anchor)r.Tag;
-                        if (a.Id < 1)
-                            continue;
-                        as_.Add(a);
-                        ais.Add(a.Id);
-                    }
-                foreach (Template.Anchor a_ in as_)
-                    for (Template.Anchor a = a_; a != null; a = as_.FirstOrDefault(x => x.Id == a.ParentAnchorId))
-                        if (a.Id == currentRowAnchor.Id)
-                        {
-                            ais.Remove(a_.Id);
-                            break;
-                        }
-                List<dynamic> ais_ = ais.Select(x => new { Id = x, Name = x.ToString() }).ToList<dynamic>();
-                ais_.Insert(0, new { Id = -1, Name = string.Empty });//commbobox returns value null for -1 (and throws an unclear expection if Id=null)
-                DataGridViewComboBoxCell c = anchors[e.ColumnIndex, e.RowIndex] as DataGridViewComboBoxCell;
-                c.DataSource = ais_;
+                setAnchorParentAnchorIdList(anchors.Rows[e.RowIndex]);
             };
 
             anchors.RowsAdded += delegate (object sender, DataGridViewRowsAddedEventArgs e)
@@ -190,6 +166,35 @@ namespace Cliver.PdfDocumentParser
                     Message.Error2(ex);
                 }
             };
+        }
+
+        void setAnchorParentAnchorIdList(DataGridViewRow row)
+        {
+            Template.Anchor currentRowAnchor = (Template.Anchor)row.Tag;
+            if (currentRowAnchor == null)
+                return;
+            SortedSet<int> ais = new SortedSet<int>();
+            List<Template.Anchor> as_ = new List<Template.Anchor>();
+            foreach (DataGridViewRow r in anchors.Rows)
+                if (r.Tag != null)
+                {
+                    Template.Anchor a = (Template.Anchor)r.Tag;
+                    if (a.Id < 1)
+                        continue;
+                    as_.Add(a);
+                    ais.Add(a.Id);
+                }
+            foreach (Template.Anchor a_ in as_)
+                for (Template.Anchor a = a_; a != null; a = as_.FirstOrDefault(x => x.Id == a.ParentAnchorId))
+                    if (a.Id == currentRowAnchor.Id)
+                    {
+                        ais.Remove(a_.Id);
+                        break;
+                    }
+            List<dynamic> ais_ = ais.Select(x => new { Id = x, Name = x.ToString() }).ToList<dynamic>();
+            ais_.Insert(0, new { Id = -1, Name = string.Empty });//commbobox returns value null for -1 (and throws an unclear expection if Id=null)
+            DataGridViewComboBoxCell c = row.Cells[anchors.Columns["ParentAnchorId3"].Index] as DataGridViewComboBoxCell;
+            c.DataSource = ais_;
         }
 
         void setCurrentAnchorRow(int? anchorId, bool clearSelection)

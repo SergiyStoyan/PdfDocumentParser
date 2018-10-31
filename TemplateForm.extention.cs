@@ -80,6 +80,9 @@ namespace Cliver.PdfDocumentParser
                         setAnchorRow(row, fa);
                     }
                     onAnchorsChanged();
+
+                    foreach (DataGridViewRow r in anchors.Rows)
+                        setAnchorParentAnchorIdList(r);
                 }
 
                 marks.Rows.Clear();

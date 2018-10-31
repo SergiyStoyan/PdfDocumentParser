@@ -54,11 +54,11 @@ namespace Cliver.PdfDocumentParser
         PointF? findAndDrawAnchor(int anchorId, bool renewImage = true)
         {
             DataGridViewRow row;
-            Template.Anchor fa = getAnchor(anchorId, out row);
-            if (fa == null || row == null)
+            Template.Anchor a = getAnchor(anchorId, out row);
+            if (a == null || row == null)
                 throw new Exception("Anchor[Id=" + anchorId + "] does not exist.");
 
-            if (!fa.IsSet())
+            if (!a.IsSet())
             {
                 setRowStatus(statuses.WARNING, row, "Not set");
                 clearPicture(renewImage);
@@ -69,23 +69,33 @@ namespace Cliver.PdfDocumentParser
 
             pages.ActiveTemplate = getTemplateFromUI(false);
 
-            fa = pages.ActiveTemplate.Anchors.Where(a => a.Id == anchorId).FirstOrDefault();
-            if (fa == null)
-                throw new Exception("Anchor[Id=" + fa.Id + "] is not defined.");
+            a = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == anchorId);
+            if (a == null)
+                throw new Exception("Anchor[Id=" + a.Id + "] is not defined.");
 
-            List<RectangleF> rs = pages[currentPage].GetAnchorRectangles(fa);
-            if (rs == null || rs.Count < 1)
+            PointF? p0 = null;
+            for (Template.Anchor a_ = a; a_ != null; a_ = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == a_.ParentAnchorId))
             {
-                setRowStatus(statuses.ERROR, row, "Not found");
-                clearPicture(renewImage);
-                return null;
-            }
-            setRowStatus(statuses.SUCCESS, row, "Found");
+                List<RectangleF> rs = pages[currentPage].GetAnchorRectangles(a);
+                if (a == a_)
+                {
+                    if (rs == null || rs.Count < 1)
+                    {
+                        setRowStatus(statuses.ERROR, row, "Not found");
+                        clearPicture(renewImage);
+                        return null;
+                    }
+                    setRowStatus(statuses.SUCCESS, row, "Found");
+                }
 
-            drawBoxes(Settings.Appearance.AnchorMasterBoxColor, new List<System.Drawing.RectangleF> { rs[0] }, renewImage);
-            if (rs.Count > 1)
-                drawBoxes(Settings.Appearance.AnchorSecondaryBoxColor, rs.GetRange(1, rs.Count - 1), false);
-            return new PointF(rs[0].X, rs[0].Y);
+                drawBoxes(Settings.Appearance.AnchorMasterBoxColor, new List<System.Drawing.RectangleF> { rs[0] }, a == a_ ? renewImage : false);
+                if (rs.Count > 1)
+                    drawBoxes(Settings.Appearance.AnchorSecondaryBoxColor, rs.GetRange(1, rs.Count - 1), false);
+
+                if (a == a_)
+                    p0 = new PointF(rs[0].X, rs[0].Y);
+            }
+            return p0;
         }
 
         object extractValueAndDrawSelectionBox(int? anchorId, Template.RectangleF r, Template.Types valueType, bool renewImage = true)
