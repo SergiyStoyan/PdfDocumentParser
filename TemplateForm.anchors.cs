@@ -225,7 +225,6 @@ namespace Cliver.PdfDocumentParser
                 else
                 {
                     setCurrentFieldRow(null);
-                    setCurrentMarkRow(null);
                 }
 
                 Template.Types t = ((Template.Anchor)row.Tag).Type;
@@ -264,16 +263,16 @@ namespace Cliver.PdfDocumentParser
         {
             get
             {
-                if (anchorControl.Controls.Count < 1)
+                if (anchorsContainer.Panel2.Controls.Count < 1)
                     return null;
-                return (AnchorControl)anchorControl.Controls[0];
+                return (AnchorControl)anchorsContainer.Panel2.Controls[0];
             }
             set
             {
-                anchorControl.Controls.Clear();
+                anchorsContainer.Panel2.Controls.Clear();
                 if (value == null)
                     return;
-                anchorControl.Controls.Add(value);
+                anchorsContainer.Panel2.Controls.Add(value);
                 value.Dock = DockStyle.Fill;
             }
         }
@@ -364,17 +363,6 @@ namespace Cliver.PdfDocumentParser
                     r.Cells["ParentAnchorId3"].Value = null;
             }
 
-            foreach (DataGridViewRow r in marks.Rows)
-            {
-                if (r.Tag == null)
-                    continue;
-                Template.Mark m = (Template.Mark)r.Tag;
-                if (m.AnchorId != null && !ais.Contains((int)m.AnchorId))
-                {
-                    r.Cells["AnchorId2"].Value = null;
-                    setMarkRectangle(r, null);
-                }
-            }
             foreach (DataGridViewRow r in fields.Rows)
             {
                 if (r.Tag == null)
@@ -391,7 +379,6 @@ namespace Cliver.PdfDocumentParser
             {
                 List<dynamic> ais_ = ais.Select(x => new { Id = x, Name = x.ToString() }).ToList<dynamic>();
                 ais_.Insert(0, new { Id = -1, Name = string.Empty });//commbobox returns value null for -1 (and throws an unclear expection if Id=null)
-                AnchorId2.DataSource = ais_;
                 AnchorId.DataSource = ais_;
             }
         }

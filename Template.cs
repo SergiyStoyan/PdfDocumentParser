@@ -21,6 +21,7 @@ namespace Cliver.PdfDocumentParser
         public class EditorSettings
         {
             public bool ExtractFieldsAutomaticallyWhenPageChanged = true;
+            public bool CheckAnchorGroupsAutomaticallyWhenPageChanged = true;
             public string TestFile;
             public decimal TestPictureScale = 1.2m;
         }
@@ -44,8 +45,6 @@ namespace Cliver.PdfDocumentParser
         public int AutoDeskewThreshold = 100;
 
         public List<Anchor> Anchors;
-
-        public List<Mark> Marks;
 
         public List<Field> Fields;
 
@@ -90,49 +89,6 @@ namespace Cliver.PdfDocumentParser
         {
             public float Width;
             public float Height;
-        }
-
-        public abstract class Mark
-        {
-            public int? AnchorId;//when set, Rectangle.X,Y are bound to location of the anchor as to zero point
-            public RectangleF Rectangle;
-
-            public Mark()
-            {
-                if (this is PdfText)
-                    Type = Types.PdfText;
-                else if (this is OcrText)
-                    Type = Types.OcrText;
-                else if (this is ImageData)
-                    Type = Types.ImageData;
-                else
-                    throw new Exception("Unknown type: " + this.GetType());
-            }
-            [Newtonsoft.Json.JsonIgnore]
-            public readonly Types Type;
-
-            public bool IsSet()
-            {
-                return AnchorId != null || Rectangle != null;
-            }
-
-            public class PdfText : Mark
-            {
-                public string Text;
-            }
-
-            public class OcrText : Mark
-            {
-                public string Text;
-            }
-
-            public class ImageData : Mark
-            {
-                public PdfDocumentParser.ImageData ImageData_;
-                public float BrightnessTolerance = 0.4f;
-                public float DifferentPixelNumberTolerance = 0.02f;
-                public bool FindBestImageMatch = false;
-            }
         }
 
         public enum Types

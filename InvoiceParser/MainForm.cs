@@ -55,6 +55,7 @@ namespace Cliver.InvoiceParser
             OrderWeight.ValueType = typeof(float);
             DetectingTemplateLastPageNumber.ValueType = typeof(uint);
             FileFilterRegex.ValueType = typeof(Regex);
+            SharedFileTemplateNamesRegex.ValueType = typeof(Regex);
 
             Settings.Template2s.TouchedChanged += delegate
             {
@@ -103,18 +104,6 @@ namespace Cliver.InvoiceParser
                                     r.Cells["Name_"].Value = name2;
                             }
                             return;
-                        //case "OrderWeight":
-                        //    if(!(e.FormattedValue is float))
-                        //        throw new Exception("Order must be a float number.");
-                        //    return;
-                        //case "DetectingTemplateLastPageNumber":
-                        //    if (!(e.FormattedValue is uint))
-                        //        throw new Exception("DetectingTemplateLastPageNumber must be a uint number.");
-                        //    return;
-                        //case "FileFilterRegex":
-                        //    if (!(e.FormattedValue is Regex))
-                        //        throw new Exception("FileFilterRegex must be a regex.");
-                        //    return;
                     }
                 }
                 catch (Exception ex)
@@ -139,6 +128,8 @@ namespace Cliver.InvoiceParser
                             throw new Exception("DetectingTemplateLastPageNumber must be a uint number:\r\n" + e.Exception.Message);
                         case "FileFilterRegex":
                             throw new Exception("FileFilterRegex must be a regex.");
+                        case "SharedFileTemplateNamesRegex":
+                            throw new Exception("SharedFileTemplateNamesRegex must be a regex.");
                     }
                 }
                 catch (Exception ex)
@@ -186,6 +177,10 @@ namespace Cliver.InvoiceParser
                             return;
                         case "FileFilterRegex":
                             t.FileFilterRegex = (Regex)r.Cells["FileFilterRegex"].Value;
+                            Settings.Template2s.Touch();
+                            return;
+                        case "SharedFileTemplateNamesRegex":
+                            t.SharedFileTemplateNamesRegex = (Regex)r.Cells["SharedFileTemplateNamesRegex"].Value;
                             Settings.Template2s.Touch();
                             return;
                     }
@@ -260,6 +255,7 @@ namespace Cliver.InvoiceParser
                         r.Cells["OrderWeight"].Value = t.OrderWeight;
                         r.Cells["DetectingTemplateLastPageNumber"].Value = t.DetectingTemplateLastPageNumber;
                         r.Cells["FileFilterRegex"].Value = t.FileFilterRegex;
+                        r.Cells["SharedFileTemplateNamesRegex"].Value = t.SharedFileTemplateNamesRegex;
                         r.Selected = true;
                     }
                     catch { }
@@ -286,6 +282,7 @@ namespace Cliver.InvoiceParser
                         r2.Cells["OrderWeight"].Value = t2.OrderWeight;
                         r2.Cells["DetectingTemplateLastPageNumber"].Value = t2.DetectingTemplateLastPageNumber;
                         r2.Cells["FileFilterRegex"].Value = t2.FileFilterRegex;
+                        r2.Cells["SharedFileTemplateNamesRegex"].Value = t2.SharedFileTemplateNamesRegex;
                         editTemplate(r2);
                         break;
                     case "Edit2":
@@ -315,6 +312,7 @@ namespace Cliver.InvoiceParser
             r.Cells["OrderWeight"].Value = t.OrderWeight;
             r.Cells["DetectingTemplateLastPageNumber"].Value = t.DetectingTemplateLastPageNumber;
             r.Cells["FileFilterRegex"].Value = t.FileFilterRegex;
+            r.Cells["SharedFileTemplateNamesRegex"].Value = t.SharedFileTemplateNamesRegex;
         }
 
         void editTemplate(DataGridViewRow r)
@@ -457,6 +455,7 @@ namespace Cliver.InvoiceParser
                     r.Cells["DetectingTemplateLastPageNumber"].Value = t.DetectingTemplateLastPageNumber;
                     r.Cells["FileFilterRegex"].Value = t.FileFilterRegex;
                     r.Cells["UsedTime"].Value = Settings.TemplateLocalInfo.GetInfo(t.Template.Name).GetUsedTimeAsString();
+                    r.Cells["SharedFileTemplateNamesRegex"].Value = t.SharedFileTemplateNamesRegex;
                     r.Tag = t;
                 }
                 //templates.Columns["Name_"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;

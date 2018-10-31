@@ -228,10 +228,8 @@ namespace Cliver.PdfDocumentParser
                 enableNavigationButtons();
 
                 anchors.CurrentCell = null;//1-st row is autoselected
-                marks.CurrentCell = null;//1-st row is autoselected
                 fields.CurrentCell = null;//1-st row is autoselected
                 anchors.ClearSelection();//1-st row is autoselected
-                marks.ClearSelection();//1-st row is autoselected
                 fields.ClearSelection();//1-st row is autoselected
                 //setCurrentAnchorRow(null, true);
                 //setCurrentMarkRow(null);
@@ -258,7 +256,8 @@ namespace Cliver.PdfDocumentParser
                     }
                 }
 
-                setAnchorGroupStatuses();
+                if (CheckAnchorGroupsAutomaticallyWhenPageChanged.Checked)
+                    setAnchorGroupStatuses();
             }
             catch (Exception e)
             {

@@ -85,17 +85,6 @@ namespace Cliver.PdfDocumentParser
                         setAnchorParentAnchorIdList(r);
                 }
 
-                marks.Rows.Clear();
-                if (t.Marks != null)
-                {
-                    foreach (Template.Mark m in t.Marks)
-                    {
-                        int i = marks.Rows.Add();
-                        var row = marks.Rows[i];
-                        setMarkRow(row, m);
-                    }
-                }
-
                 fields.Rows.Clear();
                 if (t.Fields != null)
                 {
@@ -110,6 +99,7 @@ namespace Cliver.PdfDocumentParser
                 pictureScale.Value = t.Editor.TestPictureScale > 0 ? t.Editor.TestPictureScale : 1;
 
                 ExtractFieldsAutomaticallyWhenPageChanged.Checked = t.Editor.ExtractFieldsAutomaticallyWhenPageChanged;
+                CheckAnchorGroupsAutomaticallyWhenPageChanged.Checked = t.Editor.CheckAnchorGroupsAutomaticallyWhenPageChanged;
 
                 if (t.Editor.TestFile != null && File.Exists(t.Editor.TestFile))
                     testFile.Text = t.Editor.TestFile;
@@ -297,6 +287,7 @@ namespace Cliver.PdfDocumentParser
                     TestFile = testFile.Text,
                     TestPictureScale = pictureScale.Value,
                     ExtractFieldsAutomaticallyWhenPageChanged = ExtractFieldsAutomaticallyWhenPageChanged.Checked,
+                    CheckAnchorGroupsAutomaticallyWhenPageChanged = CheckAnchorGroupsAutomaticallyWhenPageChanged.Checked,
                 };
             }
 

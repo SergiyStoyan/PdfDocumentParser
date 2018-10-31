@@ -96,7 +96,6 @@ namespace Cliver.InvoiceParser
                     },
                         Name = "",
                         Anchors = new List<Template.Anchor>(),
-                        Marks = new List<Template.Mark>(),
                         PageRotation = PdfDocumentParser.Template.PageRotations.NONE,
                         Editor = new Template.EditorSettings
                         {

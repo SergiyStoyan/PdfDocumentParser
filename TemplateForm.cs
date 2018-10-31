@@ -67,7 +67,6 @@ namespace Cliver.PdfDocumentParser
             this.templateManager = templateManager;
 
             initializeAnchorsTable();
-            initializeMarksTable();
             initializeFieldsTable();
 
             picture.MouseDown += delegate (object sender, MouseEventArgs e)
@@ -186,24 +185,6 @@ namespace Cliver.PdfDocumentParser
 
                                 if ((ModifierKeys & Keys.Control) != Keys.Control)
                                     setAnchorFromSelectedElements();
-                            }
-                            break;
-                        case Modes.SetDocumentFirstPageRecognitionTextMark:
-                            {
-                                if (marks.SelectedRows.Count < 1)
-                                    break;
-                                DataGridViewRow row = marks.SelectedRows[0];
-                                Template.Mark m = (Template.Mark)row.Tag;
-                                if (m.AnchorId != null)
-                                {
-                                    pages.ActiveTemplate = getTemplateFromUI(false);
-                                    PointF? p = pages[currentPage].GetAnchorPoint0((int)m.AnchorId);
-                                    if (p == null)
-                                        throw new Exception("Could not find Anchor[" + m.AnchorId + "] in the page");
-                                    r.X -= ((PointF)p).X;
-                                    r.Y -= ((PointF)p).Y;
-                                }
-                                setMarkRectangle(row, r);
                             }
                             break;
                         case Modes.SetField:
@@ -366,15 +347,8 @@ namespace Cliver.PdfDocumentParser
             {
                 if (anchors.SelectedRows.Count > 0)
                     return Modes.SetAnchor;
-                if (marks.SelectedRows.Count > 0)
-                    return Modes.SetDocumentFirstPageRecognitionTextMark;
                 if (fields.SelectedRows.Count > 0)
                     return Modes.SetField;
-                //foreach (DataGridViewRow r in fields.Rows)
-                //{
-                //    if ((bool?)r.Cells["cPageRecognitionTextMarks"].Value == true)
-                //        return Modes.SetPageRecognitionTextMarks;
-                //}
                 return Modes.NULL;
             }
         }

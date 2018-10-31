@@ -228,8 +228,6 @@ namespace Cliver.InvoiceParser
 
         bool isDocumentFirstPage(Page p)
         {
-            if (Pages.ActiveTemplate.Anchors.Where(x => x.Group == AnchorGroups.DocumentFirstPage).FirstOrDefault() == null)
-                return p.IsDocumentFirstPage();//for compatibility with the old format
             return p.IsAnchorGroupFound(AnchorGroups.DocumentFirstPage);
         }
 
