@@ -33,6 +33,7 @@ namespace Cliver.PdfDocumentParser
             if (pages == null)
                 return;
             pages.Clear();
+            pages.ActiveTemplate = getTemplateFromUI(false);
             showPage(currentPage);
         }
 
