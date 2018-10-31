@@ -126,7 +126,7 @@ namespace Cliver.InvoiceParser
             if (File.Exists(stampedPdf))
                 File.Delete(stampedPdf);
 
-            Log.Main.Inform(">>>\r\nProcessing file '" + inputPdf + "'\r\nStamped file: '" + stampedPdf + "'");
+            Log.Main.Inform(">>> Processing file '" + inputPdf + "'");
 
             var t2s = template2s.Where(x => x.FileFilterRegex == null || x.FileFilterRegex.IsMatch(inputPdf)).ToList();
             if (t2s.Count < 1)
@@ -153,7 +153,7 @@ namespace Cliver.InvoiceParser
                         cp.Pages.ActiveTemplate = t2.Template;
                         if (cp.isDocumentFirstPage(cp.Pages[page_i]))
                         {
-                            Settings.TemplateLocalInfo.SetUsedTime(t2.Template.Name);
+                            Log.Main.Inform("Stamped file: '" + stampedPdf + "'");
                             cp.process(page_i, stampedPdf, record, t2, t2s);
                             return true;
                         }
@@ -166,7 +166,8 @@ namespace Cliver.InvoiceParser
         void process(int documentFirstPageI, string stampedPdf, Action<string, int, Dictionary<string, string>> record, Template2 currentTemplate2, List<Template2> template2s)
         {
             int documentCount = 0;
-            Log.Main.Inform("Document #" + (++documentCount) + " detected with template '" + currentTemplate2.Template.Name + "'");
+            Log.Main.Inform("Document #" + (++documentCount) + " detected at page " + documentFirstPageI + " with template '" + currentTemplate2.Template.Name + "'");
+            Settings.TemplateLocalInfo.SetUsedTime(currentTemplate2.Template.Name);
 
             ps = new PdfStamper(Pages.PdfReader, new FileStream(stampedPdf, FileMode.Create, FileAccess.Write, FileShare.None));
 
@@ -174,33 +175,32 @@ namespace Cliver.InvoiceParser
                 extractFieldText(Pages[documentFirstPageI], f);
             for (int page_i = documentFirstPageI + 1; page_i <= Pages.PdfReader.NumberOfPages; page_i++)
             {
-                bool documentFirstPage = false;
-                if (isDocumentFirstPage(Pages[page_i]))
-                    documentFirstPage = true;
-                else if (currentTemplate2.SharedFileTemplateNamesRegex != null)
+                List<Template2> possibleTemplate2s = new List<Template2> { currentTemplate2 };
+                if (currentTemplate2.SharedFileTemplateNamesRegex != null)
                 {
                     foreach (Template2 t2 in template2s)
                     {
-                        if (currentTemplate2.Template.Name == t2.Template.Name)
-                            continue;
                         if (!currentTemplate2.SharedFileTemplateNamesRegex.IsMatch(t2.Template.Name))
                             continue;
-                        Pages.ActiveTemplate = t2.Template;
-                        if (isDocumentFirstPage(Pages[page_i]))
-                        {
-                            Settings.TemplateLocalInfo.SetUsedTime(t2.Template.Name);
-                            currentTemplate2 = t2;
-                            documentFirstPage = true;
-                        }
+                        if (possibleTemplate2s.Contains(t2))
+                            continue;
+                        possibleTemplate2s.Add(t2);
                     }
                 }
-                if (documentFirstPage)
+                foreach (Template2 t2 in possibleTemplate2s)
                 {
-                    Log.Main.Inform("Document #" + (++documentCount) + " detected with template '" + currentTemplate2.Template.Name + "'");
-                    record(Pages.ActiveTemplate.Name, documentFirstPageI, fieldNames2texts);
-                    stampInvoicePages(documentFirstPageI, page_i - 1);
-                    fieldNames2texts.Clear();
-                    documentFirstPageI = page_i;
+                    Pages.ActiveTemplate = t2.Template;
+                    if (isDocumentFirstPage(Pages[page_i]))
+                    {
+                        record(Pages.ActiveTemplate.Name, documentFirstPageI, fieldNames2texts);
+                        stampInvoicePages(documentFirstPageI, page_i - 1);
+                        fieldNames2texts.Clear();
+                        currentTemplate2 = t2;
+                        documentFirstPageI = page_i;
+                        Log.Main.Inform("Document #" + (++documentCount) + " detected at page " + documentFirstPageI + " with template '" + currentTemplate2.Template.Name + "'");
+                        Settings.TemplateLocalInfo.SetUsedTime(currentTemplate2.Template.Name);
+                        break;
+                    }
                 }
                 foreach (Template.Field f in Pages.ActiveTemplate.Fields)
                     extractFieldText(Pages[page_i], f);
