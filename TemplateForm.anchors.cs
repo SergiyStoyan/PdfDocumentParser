@@ -44,31 +44,30 @@ namespace Cliver.PdfDocumentParser
 
             anchors.CellPainting += delegate (object sender, DataGridViewCellPaintingEventArgs e)//to make backcolor visible
             {
-                 if (e.RowIndex < 0 || e.ColumnIndex < 0)
-                     return;
-                 var c = anchors[e.ColumnIndex, e.RowIndex] as DataGridViewComboBoxCell;
-                 if (c == null)
-                     return;
+                if (e.RowIndex < 0 || e.ColumnIndex < 0)
+                    return;
+                if (e.ColumnIndex != anchors.Columns["Group3"].Index)
+                    return;
+                var c = anchors[e.ColumnIndex, e.RowIndex] as DataGridViewComboBoxCell;
+                if (c == null)
+                    return;
+                if (c.Style.BackColor == SystemColors.Control)
+                    return;
 
-                 if (c.Style.BackColor == SystemColors.Control)
-                     return;
-                 
-                 using (Brush forebrush = new SolidBrush(c.Style.ForeColor))
-                 using (Brush backbrush = new SolidBrush(c.Style.BackColor))
-                 using (StringFormat format = new StringFormat())
-                 {
-                     e.Paint(e.ClipBounds, DataGridViewPaintParts.Background);
-                     e.Paint(e.ClipBounds, DataGridViewPaintParts.Border);
-                     e.Paint(e.ClipBounds, DataGridViewPaintParts.ContentBackground);
-                     Rectangle r = new Rectangle(e.CellBounds.X + 2, e.CellBounds.Y + 2, e.CellBounds.Width - 25, e.CellBounds.Height - 5);
-                     e.Graphics.FillRectangle(backbrush, r);
-                     e.Paint(e.ClipBounds, DataGridViewPaintParts.ErrorIcon);
-                     e.Paint(e.ClipBounds, DataGridViewPaintParts.Focus);
-                     e.Paint(e.ClipBounds, DataGridViewPaintParts.SelectionBackground);
-                     e.Paint(e.ClipBounds, DataGridViewPaintParts.ContentForeground);
-                 }
-                 e.Handled = true;
-             };
+                using (Brush backbrush = new SolidBrush(c.Style.BackColor))
+                {
+                    e.Paint(e.ClipBounds, DataGridViewPaintParts.Background);
+                    e.Paint(e.ClipBounds, DataGridViewPaintParts.Border);
+                    e.Paint(e.ClipBounds, DataGridViewPaintParts.ContentBackground);
+                    Rectangle r = new Rectangle(e.CellBounds.X + c.ContentBounds.X + 2, e.CellBounds.Y + c.ContentBounds.Y, c.ContentBounds.Width, c.ContentBounds.Height);
+                    e.Graphics.FillRectangle(backbrush, r);
+                    e.Paint(e.ClipBounds, DataGridViewPaintParts.ErrorIcon);
+                    e.Paint(e.ClipBounds, DataGridViewPaintParts.Focus);
+                    e.Paint(e.ClipBounds, DataGridViewPaintParts.SelectionBackground);
+                    e.Paint(e.ClipBounds, DataGridViewPaintParts.ContentForeground);
+                }
+                e.Handled = true;
+            };
 
             anchors.CellBeginEdit += delegate (object sender, DataGridViewCellCancelEventArgs e)
             {
