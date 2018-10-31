@@ -101,6 +101,8 @@ namespace Cliver.InvoiceParser
 
     public class Template2
     {
+        //internal static List<string> FieldNames = new List<string> { "INVOICE#", "JOB#", "PO#", "COST" };
+
         public Template Template;
 
         public bool Active = true;

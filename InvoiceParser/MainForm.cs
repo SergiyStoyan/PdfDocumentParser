@@ -335,13 +335,25 @@ namespace Cliver.InvoiceParser
                     t.Template.Name = (string)r.Cells["Name_"].Value;
                 r.Tag = t;
             }
+
             TemplateManager tm = new TemplateManager
             {
                 Template = SerializationRoutines.Json.Clone(t.Template),
                 LastTestFile = Settings.TemplateLocalInfo.GetInfo(t.Template.Name).LastTestFile,
                 Row = r,
-                AnchorGroups = new List<string> { PdfProcessor.AnchorGroups.DocumentFirstPage }
+                AnchorGroups = new List<string> { PdfProcessor.AnchorGroups.DocumentFirstPage },
             };
+            Template2 it = Settings.Template2s.CreateInitialTemplate();
+            foreach (Template.Field f in tm.Template.Fields)
+            {
+                int i = it.Template.Fields.FindIndex(x => x.Name == f.Name);
+                if (i >= 0)
+                    it.Template.Fields[i] = f;
+                else
+                    it.Template.Fields.Add(f);
+            }
+            tm.Template.Fields = it.Template.Fields;
+
             tf = new TemplateForm(tm, Settings.General.InputFolder);
             tf.FormClosed += delegate
             {
@@ -364,8 +376,13 @@ namespace Cliver.InvoiceParser
                 if (Settings.Template2s.Template2s.Where(a => a != t && a.Template.Name == Template.Name).FirstOrDefault() != null)
                     throw new Exception("Template '" + Template.Name + "' already exists.");
 
-                if (t.Template.Anchors.FirstOrDefault(x => !string.IsNullOrWhiteSpace( x.Group)) == null)
-                    throw new Exception("Template '" + Template.Name + "' does no have any anchor group specified.");
+                if (Template.Anchors.FirstOrDefault(x => !string.IsNullOrWhiteSpace(x.Group)) == null)
+                    throw new Exception("The template does not have any anchor group specified.");
+
+                Template2 it = Settings.Template2s.CreateInitialTemplate();
+                foreach (Template.Field f in it.Template.Fields)
+                    if (Template.Fields.FirstOrDefault(x => x.Name == f.Name) == null)
+                        throw new Exception("The template does not have obligatory field '" + f.Name + "'.");
 
                 t.Template = Template;
                 t.ModifiedTime = DateTime.Now;
