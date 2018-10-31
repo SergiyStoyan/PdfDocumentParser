@@ -30,7 +30,7 @@ namespace Cliver.InvoiceParser
             Pages = new PageCollection(inputPdf);
         }
         PageCollection Pages;
-        PdfStamper ps;
+        PdfStamper pdfStamper;
 
         ~PdfProcessor()
         {
@@ -41,10 +41,10 @@ namespace Cliver.InvoiceParser
         {
             lock (this)
             {
-                if (ps != null)
+                if (pdfStamper != null)
                 {
-                    ps.Close();
-                    ps = null;
+                    pdfStamper.Close();
+                    pdfStamper = null;
                 }
                 if (Pages != null)
                 {
@@ -64,7 +64,7 @@ namespace Cliver.InvoiceParser
         void stampInvoicePage(int page_i)
         {
             BaseColor color = new BaseColor(Settings.General.StampColor);
-            PdfContentByte pcb = ps.GetOverContent(page_i);
+            PdfContentByte pcb = pdfStamper.GetOverContent(page_i);
             PdfGState gs = new PdfGState();
             //gs.FillOpacity = Settings.General.StampOpacity;
             gs.StrokeOpacity = stampOpacity;
@@ -83,7 +83,7 @@ namespace Cliver.InvoiceParser
             //BaseFont font = BaseFont.CreateFont(); // Helvetica, WinAnsiEncoding
             BaseFont font = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED);
 
-            PdfContentByte oc = ps.GetOverContent(page_i);
+            PdfContentByte oc = pdfStamper.GetOverContent(page_i);
             oc.SaveState();
             oc.BeginText();
             gs.FillOpacity = stampOpacity;
@@ -114,12 +114,12 @@ namespace Cliver.InvoiceParser
         string getStampValue(string fieldName)
         {
             string v;
-            if (fieldNames2texts.TryGetValue(fieldName, out v) && v != null)
+            if (fieldNames2text.TryGetValue(fieldName, out v) && v != null)
                 return Regex.Replace(v, @"\-", "");
             return "";
         }
 
-        Dictionary<string, string> fieldNames2texts = new Dictionary<string, string>();
+        Dictionary<string, string> fieldNames2text = new Dictionary<string, string>();
 
         static public bool? Process(string inputPdf, List<Template2> template2s, string stampedPdf, Action<string, int, Dictionary<string, string>> record)
         {
@@ -131,7 +131,7 @@ namespace Cliver.InvoiceParser
             var t2s = template2s.Where(x => x.FileFilterRegex == null || x.FileFilterRegex.IsMatch(inputPdf)).ToList();
             if (t2s.Count < 1)
             {
-                Log.Main.Warning("No template matched to file path '" + inputPdf + "'");
+                Log.Main.Warning("No template matched to the file path.");
                 return false;
             }
 
@@ -139,52 +139,36 @@ namespace Cliver.InvoiceParser
             {
                 if (cp.Pages.PdfReader.NumberOfPages < 1)
                 {
-                    Log.Main.Warning("File path '" + inputPdf + "' has no page.");
+                    Log.Main.Warning("The file has no page.");
                     return false;
                 }
-
-                for (int page_i = 1; page_i <= cp.Pages.PdfReader.NumberOfPages; page_i++)
-                {
-                    var t2s_ = t2s.Where(x => x.DetectingTemplateLastPageNumber >= page_i).ToList();
-                    if (t2s_.Count < 1)
-                        break;
-                    foreach (Template2 t2 in t2s_)
-                    {
-                        cp.Pages.ActiveTemplate = t2.Template;
-                        if (cp.isDocumentFirstPage(cp.Pages[page_i]))
-                        {
-                            Log.Main.Inform("Stamped file: '" + stampedPdf + "'");
-                            cp.process(page_i, stampedPdf, record, t2, t2s);
-                            return true;
-                        }
-                    }
-                }
+                return cp.process(stampedPdf, record, t2s);
             }
-            Log.Main.Warning("No template found for file '" + inputPdf + "'");
-            return false;
         }
-        void process(int documentFirstPageI, string stampedPdf, Action<string, int, Dictionary<string, string>> record, Template2 currentTemplate2, List<Template2> template2s)
+        bool process(string stampedPdf, Action<string, int, Dictionary<string, string>> record, List<Template2> template2s)
         {
+            Template2 currentTemplate2 = null;
+            int documentFirstPageI = 0;
             int documentCount = 0;
-            Log.Main.Inform("Document #" + (++documentCount) + " detected at page " + documentFirstPageI + " with template '" + currentTemplate2.Template.Name + "'");
-            Settings.TemplateLocalInfo.SetUsedTime(currentTemplate2.Template.Name);
 
-            ps = new PdfStamper(Pages.PdfReader, new FileStream(stampedPdf, FileMode.Create, FileAccess.Write, FileShare.None));
-
-            foreach (Template.Field f in Pages.ActiveTemplate.Fields)
-                extractFieldText(Pages[documentFirstPageI], f);
-            for (int page_i = documentFirstPageI + 1; page_i <= Pages.PdfReader.NumberOfPages; page_i++)
+            for (int page_i = 1; page_i <= Pages.PdfReader.NumberOfPages; page_i++)
             {
-                List<Template2> possibleTemplate2s = new List<Template2> { currentTemplate2 };
-                if (currentTemplate2.SharedFileTemplateNamesRegex != null)
+                List<Template2> possibleTemplate2s;
+                if (currentTemplate2 == null)
+                    possibleTemplate2s = template2s.Where(x => x.DetectingTemplateLastPageNumber >= page_i).ToList();
+                else
                 {
-                    foreach (Template2 t2 in template2s)
+                    possibleTemplate2s = new List<Template2> { currentTemplate2 };
+                    if (currentTemplate2.SharedFileTemplateNamesRegex != null)
                     {
-                        if (!currentTemplate2.SharedFileTemplateNamesRegex.IsMatch(t2.Template.Name))
-                            continue;
-                        if (possibleTemplate2s.Contains(t2))
-                            continue;
-                        possibleTemplate2s.Add(t2);
+                        foreach (Template2 t2 in template2s)
+                        {
+                            if (!currentTemplate2.SharedFileTemplateNamesRegex.IsMatch(t2.Template.Name))
+                                continue;
+                            if (possibleTemplate2s.Contains(t2))
+                                continue;
+                            possibleTemplate2s.Add(t2);
+                        }
                     }
                 }
                 foreach (Template2 t2 in possibleTemplate2s)
@@ -192,9 +176,12 @@ namespace Cliver.InvoiceParser
                     Pages.ActiveTemplate = t2.Template;
                     if (isDocumentFirstPage(Pages[page_i]))
                     {
-                        record(Pages.ActiveTemplate.Name, documentFirstPageI, fieldNames2texts);
-                        stampInvoicePages(documentFirstPageI, page_i - 1);
-                        fieldNames2texts.Clear();
+                        if (documentFirstPageI > 0)
+                        {
+                            record(currentTemplate2.Template.Name, documentFirstPageI, fieldNames2text);
+                            stampInvoicePages(documentFirstPageI, page_i - 1);
+                        }
+                        fieldNames2text.Clear();
                         currentTemplate2 = t2;
                         documentFirstPageI = page_i;
                         Log.Main.Inform("Document #" + (++documentCount) + " detected at page " + documentFirstPageI + " with template '" + currentTemplate2.Template.Name + "'");
@@ -202,14 +189,26 @@ namespace Cliver.InvoiceParser
                         break;
                     }
                 }
+                if (currentTemplate2 == null)
+                {
+                    Log.Main.Warning("No template found");
+                    return false;
+                }
+                if (pdfStamper == null)
+                {
+                    Log.Main.Inform("Stamped file: '" + stampedPdf + "'");
+                    pdfStamper = new PdfStamper(Pages.PdfReader, new FileStream(stampedPdf, FileMode.Create, FileAccess.Write, FileShare.None));
+                }
+                Pages.ActiveTemplate = currentTemplate2.Template;
                 foreach (Template.Field f in Pages.ActiveTemplate.Fields)
                     extractFieldText(Pages[page_i], f);
             }
-            record(Pages.ActiveTemplate.Name, documentFirstPageI, fieldNames2texts);
+            record(Pages.ActiveTemplate.Name, documentFirstPageI, fieldNames2text);
             stampInvoicePages(documentFirstPageI, Pages.PdfReader.NumberOfPages);
+            return true;
         }
 
-        void extractFieldText(Page p, PdfDocumentParser.Template.Field field)
+        void extractFieldText(Page p, Template.Field field)
         {
             if (field.Rectangle == null)
                 return;
@@ -217,12 +216,12 @@ namespace Cliver.InvoiceParser
             object v = p.GetValue(field.AnchorId, field.Rectangle, field.Type, out error);
             if (v is ImageData)
             {
-                if (!fieldNames2texts.ContainsKey(field.Name))
-                    fieldNames2texts[field.Name] = "--image--";
+                if (!fieldNames2text.ContainsKey(field.Name))
+                    fieldNames2text[field.Name] = "--image--";
                 return;
             }
             if (v != null)
-                fieldNames2texts[field.Name] = Page.NormalizeText((string)v);
+                fieldNames2text[field.Name] = Page.NormalizeText((string)v);
         }
 
         bool isDocumentFirstPage(Page p)
