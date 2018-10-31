@@ -39,6 +39,38 @@ namespace Cliver.PdfDocumentParser
 
             anchors.EnableHeadersVisualStyles = false;//needed to set row headers
 
+            anchors.CellBeginEdit += delegate (object sender, DataGridViewCellCancelEventArgs e)
+            {
+                Template.Anchor currentRowAnchor = (Template.Anchor)anchors.Rows[e.RowIndex].Tag;
+                if (currentRowAnchor == null)
+                    return;
+                SortedSet<int> ais = new SortedSet<int>();
+                List<Template.Anchor> as_ = new List<Template.Anchor>();
+                foreach (DataGridViewRow r in anchors.Rows)
+                    if (r.Tag != null)
+                    {
+                        Template.Anchor a = (Template.Anchor)r.Tag;
+                        if (a.Id < 1)
+                            continue;
+                        as_.Add(a);
+                        ais.Add(a.Id);
+                    }
+                foreach (Template.Anchor a_ in as_)
+                    for (Template.Anchor a = a_; a != null; a = as_.FirstOrDefault(x => x.Id == a.ParentAnchorId))
+                        if (a.Id == currentRowAnchor.Id)
+                        {
+                            ais.Remove(a_.Id);
+                            break;
+                        }
+                List<dynamic> ais_ = ais.Select(x => new { Id = x, Name = x.ToString() }).ToList<dynamic>();
+                ais_.Insert(0, new { Id = -1, Name = string.Empty });//commbobox returns value null for -1 (and throws an unclear expection if Id=null)
+                DataGridViewComboBoxCell c = anchors[e.ColumnIndex, e.RowIndex] as DataGridViewComboBoxCell;
+                c.DataSource = ais_;
+                //c.FlatStyle = FlatStyle.Flat;
+                //c.Style.BackColor = Color.Violet;
+                //c.Style.ForeColor = Color.Red;
+            };
+
             anchors.RowsAdded += delegate (object sender, DataGridViewRowsAddedEventArgs e)
             {
             };
@@ -297,21 +329,21 @@ namespace Cliver.PdfDocumentParser
                     r.Cells["ParentAnchorId3"].Value = null;
             }
 
-            foreach (DataGridViewRow r in anchors.Rows)
-            {
-                if (r.Tag == null)
-                    continue;
-                DataGridViewComboBoxCell c = r.Cells["ParentAnchorId3"] as DataGridViewComboBoxCell;
-                SortedSet<int> ais2 = SerializationRoutines.Json.Clone(ais);
-                for (Template.Anchor a = (Template.Anchor)r.Tag; a.ParentAnchorId != null; a = as_.First(x => x.Id == a.ParentAnchorId))
-                    ais2.Remove(a.Id);
-                List<dynamic> ais_ = ais2.Select(x => new { Id = x, Name = x.ToString() }).ToList<dynamic>();
-                ais_.Insert(0, new { Id = -1, Name = string.Empty });//commbobox returns value null for -1 (and throws an unclear expection if Id=null)
-                c.DataSource = ais_;
-                //c.FlatStyle = FlatStyle.Flat;
-                //c.Style.BackColor = Color.Violet;
-                //c.Style.ForeColor = Color.Red;
-            };
+            //foreach (DataGridViewRow r in anchors.Rows)
+            //{
+            //    if (r.Tag == null)
+            //        continue;
+            //    DataGridViewComboBoxCell c = r.Cells["ParentAnchorId3"] as DataGridViewComboBoxCell;
+            //    SortedSet<int> ais2 = SerializationRoutines.Json.Clone(ais);
+            //    for (Template.Anchor a = (Template.Anchor)r.Tag; a.ParentAnchorId != null; a = as_.First(x => x.Id == a.ParentAnchorId))
+            //        ais2.Remove(a.Id);
+            //    List<dynamic> ais_ = ais2.Select(x => new { Id = x, Name = x.ToString() }).ToList<dynamic>();
+            //    ais_.Insert(0, new { Id = -1, Name = string.Empty });//commbobox returns value null for -1 (and throws an unclear expection if Id=null)
+            //    c.DataSource = ais_;
+            //    //c.FlatStyle = FlatStyle.Flat;
+            //    //c.Style.BackColor = Color.Violet;
+            //    //c.Style.ForeColor = Color.Red;
+            //};
 
             foreach (DataGridViewRow r in marks.Rows)
             {
