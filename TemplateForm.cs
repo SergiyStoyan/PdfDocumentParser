@@ -205,16 +205,8 @@ namespace Cliver.PdfDocumentParser
                                     break;
                                 var row = fields.SelectedRows[0];
                                 Template.Field f = (Template.Field)row.Tag;
-                                if (f.AnchorId != null)
-                                {
-                                    pages.ActiveTemplate = getTemplateFromUI(false);
-                                    PointF? p = pages[currentPage].GetAnchorPoint0((int)f.AnchorId);
-                                    if (p == null)
-                                        throw new Exception("Could not find Anchor[" + f.AnchorId + "] in the page");
-                                    r.X -= ((PointF)p).X;
-                                    r.Y -= ((PointF)p).Y;
-                                }
-                                setFieldRectangle(row, r);
+                                f.Rectangle = r;
+                                setFieldRow(row, f);
                             }
                             break;
                         default:

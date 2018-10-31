@@ -28,6 +28,17 @@ namespace Cliver.InvoiceParser
             public override void Loaded()
             {
                 __Indented = false;
+
+                ////conversion from the old format
+                //foreach (Template2 t2 in Template2s)
+                //    foreach (Template.Field f in t2.Template.Fields)
+                //        if (f.AnchorId != null)
+                //        {
+                //            Template.Anchor a = t2.Template.Anchors.First(x => x.Id == f.AnchorId);
+                //            f.Rectangle.X += a.MainElementInitialRectangle().X;
+                //            f.Rectangle.Y += a.MainElementInitialRectangle().Y;
+                //        }
+
             }
 
             public override void Saving()

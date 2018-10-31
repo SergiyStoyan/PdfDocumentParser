@@ -73,11 +73,11 @@ namespace Cliver.PdfDocumentParser
                 anchors.Rows.Clear();
                 if (t.Anchors != null)
                 {
-                    foreach (Template.Anchor fa in t.Anchors)
+                    foreach (Template.Anchor a in t.Anchors)
                     {
                         int i = anchors.Rows.Add();
                         var row = anchors.Rows[i];
-                        setAnchorRow(row, fa);
+                        setAnchorRow(row, a);
                     }
                     onAnchorsChanged();
 
@@ -213,36 +213,41 @@ namespace Cliver.PdfDocumentParser
             t.Anchors = new List<Template.Anchor>();
             foreach (DataGridViewRow r in anchors.Rows)
             {
-                Template.Anchor fa = (Template.Anchor)r.Tag;
-                if (fa == null)
+                Template.Anchor a = (Template.Anchor)r.Tag;
+                if (a == null)
                     continue;
 
                 if (saving)
                 {
-                    if (!fa.IsSet())
-                        throw new Exception("Anchor[Id=" + fa.Id + "] is not set!");
+                    if (!a.IsSet())
+                        throw new Exception("Anchor[Id=" + a.Id + "] is not set!");
 
-                    bool linked = false;
-                    foreach (DataGridViewRow rr in marks.Rows)
-                    {
-                        Template.Mark m = (Template.Mark)rr.Tag;
-                        if (m != null && m.AnchorId == fa.Id)
+                    bool engaged = false;
+                    if (!string.IsNullOrWhiteSpace(a.Group))
+                        engaged = true;
+                    if (!engaged)
+                        foreach (DataGridViewRow rr in anchors.Rows)
                         {
-                            linked = true;
-                            break;
-                        }
-                    }
-                    if (!linked)
-                        foreach (DataGridViewRow rr in fields.Rows)
-                        {
-                            Template.Field m = (Template.Field)rr.Tag;
-                            if (m != null && m.AnchorId == fa.Id)
+                            Template.Anchor a_ = (Template.Anchor)rr.Tag;
+                            if (a_ == null)
+                                continue;
+                            if (a_.ParentAnchorId == a.Id)
                             {
-                                linked = true;
+                                engaged = true;
                                 break;
                             }
                         }
-                    if (!linked)
+                    if (!engaged)
+                        foreach (DataGridViewRow rr in fields.Rows)
+                        {
+                            Template.Field m = (Template.Field)rr.Tag;
+                            if (m != null && m.AnchorId == a.Id)
+                            {
+                                engaged = true;
+                                break;
+                            }
+                        }
+                    if (!engaged)
                     {
                         if (removeNotLinkedAnchors == null)
                             removeNotLinkedAnchors = Message.YesNo("The template contains not linked anchor[s]. Should they be removed?");
@@ -251,24 +256,24 @@ namespace Cliver.PdfDocumentParser
                     }
                 }
 
-                t.Anchors.Add(fa);
+                t.Anchors.Add(a);
             }
             t.Anchors = t.Anchors.OrderBy(a => a.Id).ToList();
 
-            t.Marks = new List<Template.Mark>();
-            foreach (DataGridViewRow r in marks.Rows)
-            {
-                Template.Mark m = (Template.Mark)r.Tag;
-                if (m == null)
-                    continue;
-                if (saving && !m.IsSet())
-                    throw new Exception("Mark[" + r.Index + "] is not set!");
-                if (m.AnchorId != null && t.Anchors.FirstOrDefault(x => x.Id == m.AnchorId) == null)
-                    throw new Exception("There is no Anchor with Id=" + m.AnchorId);
-                t.Marks.Add(m);
-            }
-            if (saving && t.Marks.Count < 1)
-                throw new Exception("Marks is empty!");
+            //t.Marks = new List<Template.Mark>();
+            //foreach (DataGridViewRow r in marks.Rows)
+            //{
+            //    Template.Mark m = (Template.Mark)r.Tag;
+            //    if (m == null)
+            //        continue;
+            //    if (saving && !m.IsSet())
+            //        throw new Exception("Mark[" + r.Index + "] is not set!");
+            //    if (m.AnchorId != null && t.Anchors.FirstOrDefault(x => x.Id == m.AnchorId) == null)
+            //        throw new Exception("There is no Anchor with Id=" + m.AnchorId);
+            //    t.Marks.Add(m);
+            //}
+            //if (saving && t.Marks.Count < 1)
+            //    throw new Exception("Marks is empty!");
 
             t.Fields = new List<Template.Field>();
             foreach (DataGridViewRow r in fields.Rows)
@@ -291,7 +296,7 @@ namespace Cliver.PdfDocumentParser
                 {
                     TestFile = testFile.Text,
                     TestPictureScale = pictureScale.Value,
-                    ExtractFieldsAutomaticallyWhenPageChanged = ExtractFieldsAutomaticallyWhenPageChanged.Checked,                     
+                    ExtractFieldsAutomaticallyWhenPageChanged = ExtractFieldsAutomaticallyWhenPageChanged.Checked,
                 };
             }
 

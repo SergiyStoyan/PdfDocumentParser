@@ -41,6 +41,7 @@ namespace Cliver.PdfDocumentParser
             if (!templateManager.AnchorGroups.Contains(string.Empty))
                 templateManager.AnchorGroups.Insert(0, string.Empty);
             Group3.DataSource = templateManager.AnchorGroups;
+            Group3.FlatStyle = FlatStyle.Flat;//to make backcolor visible
 
             anchors.EnableHeadersVisualStyles = false;//needed to set row headers
 
@@ -297,26 +298,21 @@ namespace Cliver.PdfDocumentParser
         void setAnchorGroupStatuses()
         {
             pages.ActiveTemplate = getTemplateFromUI(false);
-            foreach (string g in templateManager.AnchorGroups)
-            {
-                if (string.IsNullOrWhiteSpace(g))
-                    continue;
-                bool anchorGroupFound = pages[currentPage].IsAnchorGroupFound(g);
-                foreach (DataGridViewRow r in anchors.Rows)
-                    if (r.Tag != null)
+            foreach (DataGridViewRow r in anchors.Rows)
+                if (r.Tag != null)
+                {
+                    DataGridViewComboBoxCell c = r.Cells["Group3"] as DataGridViewComboBoxCell;
+                    Template.Anchor a = (Template.Anchor)r.Tag;
+                    if (string.IsNullOrWhiteSpace(a.Group))
+                        c.Style.BackColor = SystemColors.Control;
+                    else
                     {
-                        Template.Anchor an = (Template.Anchor)r.Tag;
-                        if (an.Group == g)
-                        {
-                            DataGridViewComboBoxCell c = r.Cells["Group3"] as DataGridViewComboBoxCell;
-                            c.FlatStyle = FlatStyle.Flat;//to make backcolor visible
-                            if (anchorGroupFound)
-                                c.Style.BackColor = Color.LightGreen;
-                            else
-                                c.Style.BackColor = Color.Pink;
-                        }
+                        if (pages[currentPage].IsAnchorGroupFound(a.Group))
+                            c.Style.BackColor = Color.LightGreen;
+                        else
+                            c.Style.BackColor = Color.Pink;
                     }
-            }
+                }
         }
 
         void onAnchorsChanged()
@@ -384,8 +380,8 @@ namespace Cliver.PdfDocumentParser
                 if (f.AnchorId != null && !ais.Contains((int)f.AnchorId))
                 {
                     r.Cells["AnchorId"].Value = null;
-                    r.Cells["Value"].Value = null;
-                    setFieldRectangle(r, null);
+                    //r.Cells["Value"].Value = null;
+                    //setFieldRectangle(r, null);
                 }
             }
 

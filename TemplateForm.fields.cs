@@ -82,29 +82,15 @@ namespace Cliver.PdfDocumentParser
                         case "AnchorId":
                             {
                                 f.AnchorId = (int?)cs["AnchorId"].Value;
-                                if (f.AnchorId != null)
-                                {
-                                    pages.ActiveTemplate = getTemplateFromUI(false);
-                                    PointF? p = pages[currentPage].GetAnchorPoint0((int)f.AnchorId);
-                                    if (p == null)
-                                        setRowStatus(statuses.ERROR, row, "Anchor not found");
-                                    else
-                                    {
-                                        setRowStatus(statuses.SUCCESS, row, "Anchor found");
-                                        if (f.Rectangle != null)
-                                        {
-                                            f.Rectangle.X -= ((PointF)p).X;
-                                            f.Rectangle.Y -= ((PointF)p).Y;
-                                            setFieldRectangle(row, f.Rectangle);
-                                        }
-                                        return;
-                                    }
-                                }
-                                else//anchor deselected
-                                {
-                                    setRowStatus(statuses.WARNING, row, "Changed");
-                                    cs["Value"].Value = extractValueAndDrawSelectionBox(f.AnchorId, f.Rectangle, f.Type);
-                                }
+                                //if (f.AnchorId != null)
+                                //{
+                                //    pages.ActiveTemplate = getTemplateFromUI(false);
+                                //    PointF? p = pages[currentPage].GetAnchorPoint0((int)f.AnchorId);
+                                //    if (p == null)
+                                //        setRowStatus(statuses.ERROR, row, "Anchor not found");
+                                //    else
+                                //        setRowStatus(statuses.SUCCESS, row, "Anchor found");
+                                //}
                                 setFieldRow(row, f);
                                 break;
                             }
@@ -247,18 +233,6 @@ namespace Cliver.PdfDocumentParser
         }
         bool settingCurrentFieldRow = false;
         DataGridViewRow currentFieldRow = null;
-
-        void setFieldRectangle(DataGridViewRow row, Template.RectangleF r)
-        {
-            Template.Field f = (Template.Field)row.Tag;
-            if (f == null)
-                return;
-            f.Rectangle = r;
-            row.Cells["Rectangle"].Value = SerializationRoutines.Json.Serialize(r);
-
-            if (row == currentFieldRow)
-                setCurrentFieldRow(row);
-        }
 
         void setFieldRow(DataGridViewRow row, Template.Field f)
         {

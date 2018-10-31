@@ -491,33 +491,33 @@ namespace Cliver.PdfDocumentParser
             return true;
         }
 
-        public object GetValue(int? anchorId, Template.RectangleF r_, Template.Types valueType, out string error)
+        public object GetValue(int? anchorId, Template.RectangleF r, Template.Types valueType, out string error)
         {
-            //try
-            //{
-            if (r_ == null)
+            if (r == null)
             {
                 error = "Rectangular is not defined.";
                 return null;
             }
-            if (r_.Width <= Settings.Constants.CoordinateDeviationMargin || r_.Height <= Settings.Constants.CoordinateDeviationMargin)
+            if (r.Width <= Settings.Constants.CoordinateDeviationMargin || r.Height <= Settings.Constants.CoordinateDeviationMargin)
             {
                 error = "Rectangular is malformed.";
                 return null;
             }
-            PointF point0 = new PointF(0, 0);
             if (anchorId != null)
             {
-                PointF? p0;
-                p0 = GetAnchorPoint0((int)anchorId);
-                if (p0 == null)
+                PointF? p0_;
+                p0_ = GetAnchorPoint0((int)anchorId);
+                if (p0_ == null)
                 {
                     error = "Anchor[" + anchorId + "] is not found.";
                     return null;
                 }
-                point0 = (PointF)p0;
+                PointF p0 = (PointF)p0_;
+                Template.Anchor a = pageCollection.ActiveTemplate.Anchors.Find(x => x.Id == anchorId);
+                RectangleF air = a.MainElementInitialRectangle();
+                r.X += p0.X - air.X;
+                r.Y += p0.Y - air.Y;
             }
-            Template.RectangleF r = new Template.RectangleF(r_.X + point0.X, r_.Y + point0.Y, r_.Width, r_.Height);
             error = null;
             switch (valueType)
             {

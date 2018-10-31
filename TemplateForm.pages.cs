@@ -76,7 +76,7 @@ namespace Cliver.PdfDocumentParser
             PointF? p0 = null;
             for (Template.Anchor a_ = a; a_ != null; a_ = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == a_.ParentAnchorId))
             {
-                List<RectangleF> rs = pages[currentPage].GetAnchorRectangles(a);
+                List<RectangleF> rs = pages[currentPage].GetAnchorRectangles(a_);
                 if (a == a_)
                 {
                     if (rs == null || rs.Count < 1)
@@ -104,29 +104,30 @@ namespace Cliver.PdfDocumentParser
             {
                 if (pages == null)
                     return null;
-
                 pages.ActiveTemplate = getTemplateFromUI(false);
 
-                float x = 0;
-                float y = 0;
+                float x = r.X;
+                float y = r.Y;
                 if (anchorId != null)
                 {
                     PointF? p0_ = findAndDrawAnchor((int)anchorId);
                     if (p0_ == null)
                         return null;
                     PointF p0 = (PointF)p0_;
-                    x = p0.X;
-                    y = p0.Y;
+                    DataGridViewRow row;
+                    Template.Anchor a = getAnchor(anchorId, out row);
+                    RectangleF air = a.MainElementInitialRectangle();
+                    x += p0.X - air.X;
+                    y += p0.Y - air.Y;
+
                     renewImage = false;
                 }
 
                 if (r == null)
                     return null;
 
-                x += r.X;
-                y += r.Y;
                 RectangleF r_ = new RectangleF(x, y, r.Width, r.Height);
-                drawBoxes(Settings.Appearance.SelectionBoxColor, new List<System.Drawing.RectangleF> { r_ }, renewImage);
+                drawBoxes(Settings.Appearance.SelectionBoxColor, new List<RectangleF> { r_ }, renewImage);
 
                 string error;
                 object v = pages[currentPage].GetValue(null, new Template.RectangleF(x, y, r.Width, r.Height), valueType, out error);
