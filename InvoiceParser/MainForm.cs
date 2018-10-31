@@ -364,6 +364,9 @@ namespace Cliver.InvoiceParser
                 if (Settings.Template2s.Template2s.Where(a => a != t && a.Template.Name == Template.Name).FirstOrDefault() != null)
                     throw new Exception("Template '" + Template.Name + "' already exists.");
 
+                if (t.Template.Anchors.FirstOrDefault(x => !string.IsNullOrWhiteSpace( x.Group)) == null)
+                    throw new Exception("Template '" + Template.Name + "' does no have any anchor group specified.");
+
                 t.Template = Template;
                 t.ModifiedTime = DateTime.Now;
 

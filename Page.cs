@@ -478,9 +478,11 @@ namespace Cliver.PdfDocumentParser
             return true;
         }
 
-        public bool IsAnchorGroupFound(string group)//to be used instead of IsDocumentFirstPage
+        public bool IsAnchorGroupFound(string anchorGroup)//to be used instead of IsDocumentFirstPage
         {
-            List<Template.Anchor> as_ = pageCollection.ActiveTemplate.Anchors.Where(a => a.Group == group).ToList();
+            if (string.IsNullOrWhiteSpace(anchorGroup))
+                return false;
+            List<Template.Anchor> as_ = pageCollection.ActiveTemplate.Anchors.Where(a => a.Group == anchorGroup).ToList();
             if (as_.Count < 1)
                 return false;
             foreach (Template.Anchor a in as_)

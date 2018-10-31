@@ -73,9 +73,6 @@ namespace Cliver.PdfDocumentParser
                 ais_.Insert(0, new { Id = -1, Name = string.Empty });//commbobox returns value null for -1 (and throws an unclear expection if Id=null)
                 DataGridViewComboBoxCell c = anchors[e.ColumnIndex, e.RowIndex] as DataGridViewComboBoxCell;
                 c.DataSource = ais_;
-                //c.FlatStyle = FlatStyle.Flat;
-                //c.Style.BackColor = Color.Violet;
-                //c.Style.ForeColor = Color.Red;
             };
 
             anchors.RowsAdded += delegate (object sender, DataGridViewRowsAddedEventArgs e)
@@ -289,31 +286,32 @@ namespace Cliver.PdfDocumentParser
             if (currentAnchorControl != null && row == currentAnchorControl.Row)
                 setCurrentAnchorRow(a.Id, false);
 
-            //foreach (string g in templateManager.AnchorGroups)
-            //{
-            //    bool found = true;
-            //    foreach (DataGridViewRow r in anchors.Rows)
-            //        if (r.Tag != null)
-            //        {
-            //            Template.Anchor an = (Template.Anchor)r.Tag;
-            //            if (an.Group == g)
-            //                if (!pages[currentPage].IsAnchorGroupFound(g))
-            //                {
-            //                    found = false;
-            //                    break;
-            //                }
-            //        }
-            //    foreach (DataGridViewRow r in anchors.Rows)
-            //        if (r.Tag != null)
-            //        {
-            //            Template.Anchor an = (Template.Anchor)r.Tag;
-            //            if (an.Group == g)
-            //                if (found)
-            //                    setRowStatus(statuses.SUCCESS, r, "");
-            //                else
-            //                    setRowStatus(statuses.ERROR, r, "");
-            //        }
-            //}
+            setAnchorGroupStatuses();
+        }
+
+        void setAnchorGroupStatuses()
+        {
+            pages.ActiveTemplate = getTemplateFromUI(false);
+            foreach (string g in templateManager.AnchorGroups)
+            {
+                if (string.IsNullOrWhiteSpace(g))
+                    continue;
+                bool anchorGroupFound = pages[currentPage].IsAnchorGroupFound(g);
+                foreach (DataGridViewRow r in anchors.Rows)
+                    if (r.Tag != null)
+                    {
+                        Template.Anchor an = (Template.Anchor)r.Tag;
+                        if (an.Group == g)
+                        {
+                            DataGridViewComboBoxCell c = r.Cells["Group3"] as DataGridViewComboBoxCell;
+                            c.FlatStyle = FlatStyle.Flat;//to make backcolor visible
+                            if (anchorGroupFound)
+                                c.Style.BackColor = Color.LightGreen;
+                            else
+                                c.Style.BackColor = Color.Pink;
+                        }
+                    }
+            }
         }
 
         void onAnchorsChanged()

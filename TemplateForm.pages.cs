@@ -42,6 +42,8 @@ namespace Cliver.PdfDocumentParser
                 return;
             if (scaledCurrentPageBitmap != null)
                 scaledCurrentPageBitmap.Dispose();
+            if(pages[currentPage].ActiveTemplateBitmap == null)
+                pages.ActiveTemplate = getTemplateFromUI(false);
             scaledCurrentPageBitmap = ImageRoutines.GetScaled(pages[currentPage].ActiveTemplateBitmap, (float)pictureScale.Value * Settings.Constants.Image2PdfResolutionRatio);
             if (picture.Image != null)
                 picture.Image.Dispose();
@@ -205,7 +207,6 @@ namespace Cliver.PdfDocumentParser
                 currentPage = page_i;
                 tCurrentPage.Text = currentPage.ToString();
 
-                pages.ActiveTemplate = getTemplateFromUI(false);
                 setScaledImage();
                 enableNavigationButtons();
 
@@ -241,6 +242,7 @@ namespace Cliver.PdfDocumentParser
                 }
 
                 checkIfCurrentPageIsDocumentFirstPage();
+                setAnchorGroupStatuses();
             }
             catch (Exception e)
             {
