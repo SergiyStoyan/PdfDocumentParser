@@ -339,7 +339,7 @@ namespace Cliver.InvoiceParser
                 Template = SerializationRoutines.Json.Clone(t.Template),
                 LastTestFile = Settings.TemplateLocalInfo.GetInfo(t.Template.Name).LastTestFile,
                 Row = r,
-                AnchorGroups = new List<string> { PdfProcessor.AnchorGroups.DocumentFirstPage },
+                Conditions = new List<string> { PdfProcessor.Conditions.DocumentFirstPage },
             };
             Template2 it = Settings.Template2s.CreateInitialTemplate();
             foreach (Template.Field f in tm.Template.Fields)
@@ -374,7 +374,7 @@ namespace Cliver.InvoiceParser
                 if (Settings.Template2s.Template2s.Where(a => a != t && a.Template.Name == Template.Name).FirstOrDefault() != null)
                     throw new Exception("Template '" + Template.Name + "' already exists.");
 
-                if (Template.Anchors.FirstOrDefault(x => !string.IsNullOrWhiteSpace(x.Group)) == null)
+                if (Template.Anchors.FirstOrDefault(x => !string.IsNullOrWhiteSpace(x.Condition)) == null)
                     throw new Exception("The template does not have any anchor group specified.");
 
                 Template2 it = Settings.Template2s.CreateInitialTemplate();

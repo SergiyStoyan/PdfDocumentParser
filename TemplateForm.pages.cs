@@ -256,8 +256,8 @@ namespace Cliver.PdfDocumentParser
                     }
                 }
 
-                if (CheckAnchorGroupsAutomaticallyWhenPageChanged.Checked)
-                    setAnchorGroupStatuses();
+                if (CheckConditionsAutomaticallyWhenPageChanged.Checked)
+                    setConditionStatuses();
             }
             catch (Exception e)
             {

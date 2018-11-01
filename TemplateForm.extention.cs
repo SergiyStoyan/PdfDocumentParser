@@ -99,7 +99,7 @@ namespace Cliver.PdfDocumentParser
                 pictureScale.Value = t.Editor.TestPictureScale > 0 ? t.Editor.TestPictureScale : 1;
 
                 ExtractFieldsAutomaticallyWhenPageChanged.Checked = t.Editor.ExtractFieldsAutomaticallyWhenPageChanged;
-                CheckAnchorGroupsAutomaticallyWhenPageChanged.Checked = t.Editor.CheckAnchorGroupsAutomaticallyWhenPageChanged;
+                CheckConditionsAutomaticallyWhenPageChanged.Checked = t.Editor.CheckConditionsAutomaticallyWhenPageChanged;
 
                 if (t.Editor.TestFile != null && File.Exists(t.Editor.TestFile))
                     testFile.Text = t.Editor.TestFile;
@@ -213,7 +213,7 @@ namespace Cliver.PdfDocumentParser
                         throw new Exception("Anchor[Id=" + a.Id + "] is not set!");
 
                     bool engaged = false;
-                    if (!string.IsNullOrWhiteSpace(a.Group))
+                    if (!string.IsNullOrWhiteSpace(a.Condition))
                         engaged = true;
                     if (!engaged)
                         foreach (DataGridViewRow rr in anchors.Rows)
@@ -287,7 +287,7 @@ namespace Cliver.PdfDocumentParser
                     TestFile = testFile.Text,
                     TestPictureScale = pictureScale.Value,
                     ExtractFieldsAutomaticallyWhenPageChanged = ExtractFieldsAutomaticallyWhenPageChanged.Checked,
-                    CheckAnchorGroupsAutomaticallyWhenPageChanged = CheckAnchorGroupsAutomaticallyWhenPageChanged.Checked,
+                    CheckConditionsAutomaticallyWhenPageChanged = CheckConditionsAutomaticallyWhenPageChanged.Checked,
                 };
             }
 

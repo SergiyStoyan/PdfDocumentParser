@@ -422,11 +422,11 @@ namespace Cliver.PdfDocumentParser
         }
         List<Ocr.CharBox> _activeTemplateOcrCharBoxs;
 
-        public bool IsAnchorGroupFound(string anchorGroup)//to be used instead of IsDocumentFirstPage
+        public bool IsCondition(string condition)
         {
-            if (string.IsNullOrWhiteSpace(anchorGroup))
+            if (string.IsNullOrWhiteSpace(condition))
                 return false;
-            List<Template.Anchor> as_ = pageCollection.ActiveTemplate.Anchors.Where(a => a.Group == anchorGroup).ToList();
+            List<Template.Anchor> as_ = pageCollection.ActiveTemplate.Anchors.Where(a => a.Condition == condition).ToList();
             if (as_.Count < 1)
                 return false;
             foreach (Template.Anchor a in as_)

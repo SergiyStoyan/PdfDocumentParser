@@ -46,7 +46,7 @@ namespace Cliver.PdfDocumentParser
                     LogMessage.Error(ex);
                 }
             }
-            public List<string> AnchorGroups;
+            public List<string> Conditions;
             public Template.Anchor CreateDefaultAnchor()
             {
                 return new Template.Anchor.PdfText { PositionDeviation = 1, PositionDeviationIsAbsolute = false, SearchRectangleMargin = -1 };

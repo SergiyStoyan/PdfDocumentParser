@@ -21,7 +21,7 @@ namespace Cliver.PdfDocumentParser
         public class EditorSettings
         {
             public bool ExtractFieldsAutomaticallyWhenPageChanged = true;
-            public bool CheckAnchorGroupsAutomaticallyWhenPageChanged = true;
+            public bool CheckConditionsAutomaticallyWhenPageChanged = true;
             public string TestFile;
             public decimal TestPictureScale = 1.2m;
         }
@@ -105,7 +105,7 @@ namespace Cliver.PdfDocumentParser
             public float PositionDeviation = 0.1f;
             public bool PositionDeviationIsAbsolute = true;
             public int? ParentAnchorId = null;//not used now
-            public string Group = null;//not used now
+            public string Condition = null;//not used now
 
             public Anchor()
             {

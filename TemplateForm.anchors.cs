@@ -34,11 +34,11 @@ namespace Cliver.PdfDocumentParser
             ParentAnchorId3.ValueMember = "Id";
             ParentAnchorId3.DisplayMember = "Name";
 
-            Group3.ValueType = typeof(string);
-            if (!templateManager.AnchorGroups.Contains(string.Empty))
-                templateManager.AnchorGroups.Insert(0, string.Empty);
-            Group3.DataSource = templateManager.AnchorGroups;
-            //Group3.FlatStyle = FlatStyle.Flat;//to make backcolor visible
+            Condition3.ValueType = typeof(string);
+            if (!templateManager.Conditions.Contains(string.Empty))
+                templateManager.Conditions.Insert(0, string.Empty);
+            Condition3.DataSource = templateManager.Conditions;
+            //Condition3.FlatStyle = FlatStyle.Flat;//to make backcolor visible
 
             anchors.EnableHeadersVisualStyles = false;//needed to set row headers
 
@@ -46,7 +46,7 @@ namespace Cliver.PdfDocumentParser
             {
                 if (e.RowIndex < 0 || e.ColumnIndex < 0)
                     return;
-                if (e.ColumnIndex != anchors.Columns["Group3"].Index)
+                if (e.ColumnIndex != anchors.Columns["Condition3"].Index)
                     return;
                 var c = anchors[e.ColumnIndex, e.RowIndex] as DataGridViewComboBoxCell;
                 if (c == null)
@@ -146,9 +146,9 @@ namespace Cliver.PdfDocumentParser
                             a.ParentAnchorId = (int?)row.Cells["ParentAnchorId3"].Value;
                             break;
                         }
-                    case "Group3":
+                    case "Condition3":
                         {
-                            a.Group = (string)row.Cells["Group3"].Value;
+                            a.Condition = (string)row.Cells["Condition3"].Value;
                             break;
                         }
                 }
@@ -275,7 +275,7 @@ namespace Cliver.PdfDocumentParser
                     default:
                         throw new Exception("Unknown option: " + t);
                 }
-                currentAnchorControl.Initialize(row, setAnchorGroupStatuses);
+                currentAnchorControl.Initialize(row, setConditionStatuses);
             }
             finally
             {
@@ -307,7 +307,7 @@ namespace Cliver.PdfDocumentParser
             row.Cells["Id3"].Value = a.Id;
             row.Cells["Type3"].Value = a.Type;
             row.Cells["ParentAnchorId3"].Value = a.ParentAnchorId;
-            row.Cells["Group3"].Value = a.Group;
+            row.Cells["Condition3"].Value = a.Condition;
 
             if (loadingTemplate)
                 return;
@@ -315,10 +315,10 @@ namespace Cliver.PdfDocumentParser
             if (currentAnchorControl != null && row == currentAnchorControl.Row)
                 setCurrentAnchorRow(a.Id, false);
 
-            setAnchorGroupStatuses();
+            setConditionStatuses();
         }
 
-        void setAnchorGroupStatuses()
+        void setConditionStatuses()
         {
             if (pages == null)
                 return;
@@ -326,13 +326,13 @@ namespace Cliver.PdfDocumentParser
             foreach (DataGridViewRow r in anchors.Rows)
                 if (r.Tag != null)
                 {
-                    DataGridViewComboBoxCell c = r.Cells["Group3"] as DataGridViewComboBoxCell;
+                    DataGridViewComboBoxCell c = r.Cells["Condition3"] as DataGridViewComboBoxCell;
                     Template.Anchor a = (Template.Anchor)r.Tag;
-                    if (string.IsNullOrWhiteSpace(a.Group))
+                    if (string.IsNullOrWhiteSpace(a.Condition))
                         c.Style.BackColor = SystemColors.Control;
                     else
                     {                        
-                        if (pages[currentPage].IsAnchorGroupFound(a.Group))
+                        if (pages[currentPage].IsCondition(a.Condition))
                             c.Style.BackColor = Color.LightGreen;
                         else
                             c.Style.BackColor = Color.Pink;

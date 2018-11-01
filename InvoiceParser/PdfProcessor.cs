@@ -19,7 +19,7 @@ namespace Cliver.InvoiceParser
 {
     class PdfProcessor : IDisposable
     {
-        public class AnchorGroups
+        public class Conditions
         {
             public const string DocumentFirstPage = "DocumentFirstPage";
             public const string DocumentLastPage = "DocumentLastPage";
@@ -174,7 +174,7 @@ namespace Cliver.InvoiceParser
                 foreach (Template2 t2 in possibleTemplate2s)
                 {
                     Pages.ActiveTemplate = t2.Template;
-                    if (isDocumentFirstPage(Pages[page_i]))
+                    if (Pages[page_i].IsCondition(Conditions.DocumentFirstPage))
                     {
                         if (documentFirstPageI > 0)
                         {
@@ -224,16 +224,6 @@ namespace Cliver.InvoiceParser
             }
             if (v != null)
                 fieldNames2text[field.Name] = Page.NormalizeText((string)v);
-        }
-
-        bool isDocumentFirstPage(Page p)
-        {
-            return p.IsAnchorGroupFound(AnchorGroups.DocumentFirstPage);
-        }
-
-        bool isDocumentLastPage(Page p)
-        {
-            return p.IsAnchorGroupFound(AnchorGroups.DocumentLastPage);
         }
     }
 }
