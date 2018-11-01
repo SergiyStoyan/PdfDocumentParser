@@ -133,12 +133,13 @@ namespace Cliver.PdfDocumentParser
                     {
                         case Modes.SetAnchor:
                             {
-                                if (anchors.SelectedRows.Count < 1)
+                                if (currentAnchorControl == null)
                                     break;
-
+                                
                                 RectangleF selectedR = new RectangleF(selectionBoxPoint1, new SizeF(selectionBoxPoint2.X - selectionBoxPoint1.X, selectionBoxPoint2.Y - selectionBoxPoint1.Y));
-                                Template.Anchor fa = (Template.Anchor)anchors.SelectedRows[0].Tag;
-                                switch (fa.Type)
+                                currentAnchorControl.SetTagFromControl();
+                                Template.Anchor a = (Template.Anchor)currentAnchorControl.Row.Tag;
+                                switch (a.Type)
                                 {
                                     case Template.Types.PdfText:
                                         if (selectedPdfCharBoxs == null/* || (ModifierKeys & Keys.Control) != Keys.Control*/)
@@ -146,23 +147,20 @@ namespace Cliver.PdfDocumentParser
                                         selectedPdfCharBoxs.AddRange(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPage].PdfCharBoxs, selectedR, true));
                                         break;
                                     case Template.Types.OcrText:
-                                        //{
-                                        //    if (selectedOcrTextValue == null)
-                                        //        selectedOcrTextValue = new Settings.Template.Anchor.OcrText
-                                        //        {
-                                        //            TextBoxs = new List<Settings.Template.Anchor.OcrText.TextBox>()
-                                        //        };
-                                        //    string error;
-                                        //    pages.ActiveTemplate = getTemplateFromUI(false);
-                                        //    selectedOcrTextValue.TextBoxs.Add(new Settings.Template.Anchor.OcrText.TextBox
-                                        //    {
-                                        //        Rectangle = Settings.Template.RectangleF.GetFromSystemRectangleF(selectedR),
-                                        //        Text = (string)pages[currentPage].GetValue(null, Settings.Template.RectangleF.GetFromSystemRectangleF(selectedR), Settings.Template.Types.OcrText, out error)
-                                        //    });
-                                        //}
                                         if (selectedOcrCharBoxs == null/* || (ModifierKeys & Keys.Control) != Keys.Control*/)
                                             selectedOcrCharBoxs = new List<Ocr.CharBox>();
-                                        selectedOcrCharBoxs.AddRange(PdfDocumentParser.Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPage].ActiveTemplateOcrCharBoxs, selectedR));
+                                        Template.Anchor.OcrText ot = a as Template.Anchor.OcrText;
+                                        if (ot.OcrEntirePage)
+                                            selectedOcrCharBoxs.AddRange(PdfDocumentParser.Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPage].ActiveTemplateOcrCharBoxs, selectedR));
+                                        else
+                                        {
+                                            foreach (Ocr.CharBox cb in PdfDocumentParser.Ocr.This.GetCharBoxs(pages[currentPage].GetRectangleFromActiveTemplateBitmap(selectedR.X / Settings.Constants.Image2PdfResolutionRatio, selectedR.Y / Settings.Constants.Image2PdfResolutionRatio, selectedR.Width / Settings.Constants.Image2PdfResolutionRatio, selectedR.Height / Settings.Constants.Image2PdfResolutionRatio)))
+                                            {
+                                                cb.R.X += selectedR.X;
+                                                cb.R.Y += selectedR.Y;
+                                                selectedOcrCharBoxs.Add(cb);
+                                            }
+                                        }
                                         break;
                                     case Template.Types.ImageData:
                                         {
@@ -177,7 +175,7 @@ namespace Cliver.PdfDocumentParser
                                         }
                                         break;
                                     default:
-                                        throw new Exception("Unknown option: " + fa.Type);
+                                        throw new Exception("Unknown option: " + a.Type);
                                 }
 
                                 if ((ModifierKeys & Keys.Control) != Keys.Control)

@@ -37,6 +37,7 @@ namespace Cliver.PdfDocumentParser
             _object.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
             _object.PositionDeviation = (float)PositionDeviation.Value;
             _object.SearchRectangleMargin = (int)SearchRectangleMargin.Value;
+            _object.OcrEntirePage = OcrEntirePage.Checked;
             return _object;
         }
 
@@ -65,6 +66,8 @@ namespace Cliver.PdfDocumentParser
             SearchRectangleMargin.Value = _object.SearchRectangleMargin;
             SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked;
             cSearchRectangleMargin.Checked = SearchRectangleMargin.Value >= 0;
+
+            OcrEntirePage.Checked = _object.OcrEntirePage;
         }
 
         Template.Anchor.OcrText _object;

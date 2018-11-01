@@ -149,6 +149,7 @@ namespace Cliver.PdfDocumentParser
 
             public class OcrText : Anchor
             {
+                public bool OcrEntirePage = false;//Tesseract recongnition of a big fragment and a small one gives different results!
                 public List<CharBox> CharBoxs = new List<CharBox>();
                 public class CharBox
                 {

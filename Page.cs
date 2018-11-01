@@ -99,7 +99,7 @@ namespace Cliver.PdfDocumentParser
             //    anchorValueStrings2rectangles.Clear();
         }
 
-        Bitmap getRectangleFromActiveTemplateBitmap(float x, float y, float w, float h)
+        internal Bitmap GetRectangleFromActiveTemplateBitmap(float x, float y, float w, float h)
         {
             Rectangle r = new Rectangle(0, 0, ActiveTemplateBitmap.Width, ActiveTemplateBitmap.Height);
             r.Intersect(new Rectangle((int)x, (int)y, (int)w, (int)h));
@@ -277,25 +277,35 @@ namespace Cliver.PdfDocumentParser
                     return null;
                 case Template.Types.OcrText:
                     {
-                        Template.Anchor.OcrText otv = (Template.Anchor.OcrText)a;
-                        List<Template.Anchor.OcrText.CharBox> aes = otv.CharBoxs;
+                        Template.Anchor.OcrText ot = (Template.Anchor.OcrText)a;
+                        List<Template.Anchor.OcrText.CharBox> aes = ot.CharBoxs;
                         if (aes.Count < 1)
                             return null;
-                        //List<Ocr.CharBox> contaningOcrCharBoxs;//does not work properly because Tesseract recongnizes a big fragment and a small fragment differently!
+                        List<Ocr.CharBox> contaningOcrCharBoxs;
+                        PointF shift = new PointF(0, 0);
                         IEnumerable<Ocr.CharBox> bt0s;
-                        if (otv.SearchRectangleMargin < 0)
+                        if (ot.OcrEntirePage)
                         {
-                            //contaningOcrCharBoxs = ActiveTemplateOcrCharBoxs;
+                            contaningOcrCharBoxs = ActiveTemplateOcrCharBoxs;
+                            if (ot.SearchRectangleMargin < 0)
+                                bt0s = contaningOcrCharBoxs.Where(x => x.Char == aes[0].Char);
+                            else
+                                bt0s = contaningOcrCharBoxs.Where(x => x.Char == aes[0].Char && mainElementSearchRectangle.Contains(x.R));
+                        }
+                        else
+                        if (ot.SearchRectangleMargin < 0)
+                        {
+                            contaningOcrCharBoxs = ActiveTemplateOcrCharBoxs;
                             bt0s = ActiveTemplateOcrCharBoxs.Where(x => x.Char == aes[0].Char);
                         }
                         else
                         {
-                            //RectangleF contaningRectangle = mainElementSearchRectangle;
-                            //for (int i = 1; i < otv.CharBoxs.Count; i++)
-                            //    contaningRectangle = RectangleF.Union(contaningRectangle, getSearchRectangle(otv.CharBoxs[i].Rectangle.GetSystemRectangleF(), a.SearchRectangleMargin));
-                            //contaningOcrCharBoxs = Ocr.This.GetCharBoxs(getRectangleFromActiveTemplateBitmap(contaningRectangle.X / Settings.Constants.Image2PdfResolutionRatio, contaningRectangle.Y / Settings.Constants.Image2PdfResolutionRatio, contaningRectangle.Width / Settings.Constants.Image2PdfResolutionRatio, contaningRectangle.Height / Settings.Constants.Image2PdfResolutionRatio));
-                            //bt0s = contaningOcrCharBoxs.Where(x => x.Char == aes[0].Char && mainElementSearchRectangle.Contains(x.R));
-                            bt0s = ActiveTemplateOcrCharBoxs.Where(x => x.Char == aes[0].Char && mainElementSearchRectangle.Contains(x.R));
+                            RectangleF contaningRectangle = mainElementSearchRectangle;
+                            for (int i = 1; i < ot.CharBoxs.Count; i++)
+                                contaningRectangle = RectangleF.Union(contaningRectangle, getSearchRectangle(ot.CharBoxs[i].Rectangle.GetSystemRectangleF(), a.SearchRectangleMargin));
+                            shift = new PointF(contaningRectangle.X < 0 ? 0 : contaningRectangle.X, contaningRectangle.Y < 0 ? 0 : contaningRectangle.Y);
+                            contaningOcrCharBoxs = Ocr.This.GetCharBoxs(GetRectangleFromActiveTemplateBitmap(contaningRectangle.X / Settings.Constants.Image2PdfResolutionRatio, contaningRectangle.Y / Settings.Constants.Image2PdfResolutionRatio, contaningRectangle.Width / Settings.Constants.Image2PdfResolutionRatio, contaningRectangle.Height / Settings.Constants.Image2PdfResolutionRatio));
+                            bt0s = contaningOcrCharBoxs.Where(x => x.Char == aes[0].Char && mainElementSearchRectangle.Contains(x.R));
                         }
                         List<Ocr.CharBox> bts = new List<Ocr.CharBox>();
                         foreach (Ocr.CharBox bt0 in bt0s)
@@ -305,12 +315,12 @@ namespace Cliver.PdfDocumentParser
                             for (int i = 1; i < aes.Count; i++)
                             {
                                 PointF p;
-                                if (otv.PositionDeviationIsAbsolute)
+                                if (ot.PositionDeviationIsAbsolute)
                                     p = new PointF(bt0.R.X + aes[i].Rectangle.X - aes[0].Rectangle.X, bt0.R.Y + aes[i].Rectangle.Y - aes[0].Rectangle.Y);
                                 else
                                     p = new PointF(bts[i - 1].R.X + aes[i].Rectangle.X - aes[i - 1].Rectangle.X, bts[i - 1].R.Y + aes[i].Rectangle.Y - aes[i - 1].Rectangle.Y);
-                                foreach (Ocr.CharBox bt in /*contaningOcrCharBoxs*/ActiveTemplateOcrCharBoxs.Where(x => x.Char == aes[i].Char))
-                                    if (Math.Abs(bt.R.X - p.X) <= otv.PositionDeviation && Math.Abs(bt.R.Y - p.Y) <= otv.PositionDeviation)
+                                foreach (Ocr.CharBox bt in contaningOcrCharBoxs.Where(x => x.Char == aes[i].Char))
+                                    if (Math.Abs(bt.R.X - p.X) <= ot.PositionDeviation && Math.Abs(bt.R.Y - p.Y) <= ot.PositionDeviation)
                                     {
                                         bts.Add(bt);
                                         break;
@@ -319,7 +329,7 @@ namespace Cliver.PdfDocumentParser
                                     break;
                             }
                             if (bts.Count == aes.Count)
-                                return bts.Select(x => x.R).ToList();
+                                return bts.Select(x => { x.R.X += shift.X; x.R.Y += shift.Y; return x.R; }).ToList();
                         }
                     }
                     return null;
@@ -338,7 +348,7 @@ namespace Cliver.PdfDocumentParser
                         }
                         else
                         {
-                            id0 = new ImageData(getRectangleFromActiveTemplateBitmap(mainElementSearchRectangle.X / Settings.Constants.Image2PdfResolutionRatio, mainElementSearchRectangle.Y / Settings.Constants.Image2PdfResolutionRatio, mainElementSearchRectangle.Width / Settings.Constants.Image2PdfResolutionRatio, mainElementSearchRectangle.Height / Settings.Constants.Image2PdfResolutionRatio));
+                            id0 = new ImageData(GetRectangleFromActiveTemplateBitmap(mainElementSearchRectangle.X / Settings.Constants.Image2PdfResolutionRatio, mainElementSearchRectangle.Y / Settings.Constants.Image2PdfResolutionRatio, mainElementSearchRectangle.Width / Settings.Constants.Image2PdfResolutionRatio, mainElementSearchRectangle.Height / Settings.Constants.Image2PdfResolutionRatio));
                             shift = new Point(mainElementSearchRectangle.X < 0 ? 0 : (int)mainElementSearchRectangle.X, mainElementSearchRectangle.Y < 0 ? 0 : (int)mainElementSearchRectangle.Y);
                         }
                         List<RectangleF> bestRs = null;
@@ -356,7 +366,7 @@ namespace Cliver.PdfDocumentParser
                                 else
                                     r = new RectangleF(rs[i - 1].X + ibs[i].Rectangle.X - ibs[i - 1].Rectangle.X - idv.PositionDeviation, rs[i - 1].Y + ibs[i].Rectangle.Y - ibs[i - 1].Rectangle.Y - idv.PositionDeviation, ibs[i].Rectangle.Width + 2 * idv.PositionDeviation, ibs[i].Rectangle.Height + 2 * idv.PositionDeviation);
                                 Point p;
-                                using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
+                                using (Bitmap rb = GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
                                 {
                                     Point? p_ = ibs[i].ImageData.FindWithinImage(new ImageData(rb), idv.BrightnessTolerance, idv.DifferentPixelNumberTolerance, false);
                                     if (p_ == null)
@@ -474,7 +484,7 @@ namespace Cliver.PdfDocumentParser
                     //return Ocr.GetTextByTopLeftCoordinates(ActiveTemplateOcrCharBoxs, r.GetSystemRectangleF());//for unknown reason tesseract often parses a whole page much worse than a fragment and so ActiveTemplateOcrCharBoxs give not reliable result.
                     return Ocr.This.GetText(ActiveTemplateBitmap, r.GetSystemRectangleF());
                 case Template.Types.ImageData:
-                    using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
+                    using (Bitmap rb = GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
                     {
                         return new ImageData(rb);
                     }
