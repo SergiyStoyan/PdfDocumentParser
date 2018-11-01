@@ -14,6 +14,7 @@ namespace Cliver.InvoiceParser
     /*
  TBD:
  - fix displaying deviation rs
+ - parse OcrText from a smaller box
  - change fields OCR to Types
 - switch to Tesseract.4
  - tune image recognition by checking brightness deltas

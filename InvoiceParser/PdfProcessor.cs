@@ -21,8 +21,8 @@ namespace Cliver.InvoiceParser
     {
         public class Conditions
         {
-            public const string DocumentFirstPage = "DocumentFirstPage";
-            public const string DocumentLastPage = "DocumentLastPage";
+            public const string DocumentFirstPage = "FirstPageOfDocument";
+            public const string DocumentLastPage = "LastPageOfDocument";
         }
 
         PdfProcessor(string inputPdf)
