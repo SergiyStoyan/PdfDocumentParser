@@ -32,12 +32,12 @@
             this.label1 = new System.Windows.Forms.Label();
             this.PositionDeviation = new System.Windows.Forms.NumericUpDown();
             this.PositionDeviationIsAbsolute = new System.Windows.Forms.CheckBox();
-            this.text = new System.Windows.Forms.RichTextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.SearchRectangleMargin = new System.Windows.Forms.NumericUpDown();
             this.cSearchRectangleMargin = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.OcrEntirePage = new System.Windows.Forms.CheckBox();
+            this.text = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.PositionDeviation)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SearchRectangleMargin)).BeginInit();
             this.SuspendLayout();
@@ -97,15 +97,6 @@
             this.PositionDeviationIsAbsolute.TabIndex = 77;
             this.PositionDeviationIsAbsolute.UseVisualStyleBackColor = true;
             // 
-            // text
-            // 
-            this.text.Location = new System.Drawing.Point(0, 81);
-            this.text.Name = "text";
-            this.text.ReadOnly = true;
-            this.text.Size = new System.Drawing.Size(201, 67);
-            this.text.TabIndex = 76;
-            this.text.Text = "";
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -164,11 +155,24 @@
             this.OcrEntirePage.TabIndex = 84;
             this.OcrEntirePage.UseVisualStyleBackColor = true;
             // 
+            // text
+            // 
+            this.text.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.text.Location = new System.Drawing.Point(6, 81);
+            this.text.Multiline = true;
+            this.text.Name = "text";
+            this.text.ReadOnly = true;
+            this.text.Size = new System.Drawing.Size(195, 47);
+            this.text.TabIndex = 87;
+            // 
             // AnchorOcrTextControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.Controls.Add(this.text);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.OcrEntirePage);
             this.Controls.Add(this.cSearchRectangleMargin);
@@ -178,9 +182,8 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.PositionDeviation);
             this.Controls.Add(this.PositionDeviationIsAbsolute);
-            this.Controls.Add(this.text);
             this.Name = "AnchorOcrTextControl";
-            this.Size = new System.Drawing.Size(204, 151);
+            this.Size = new System.Drawing.Size(204, 130);
             ((System.ComponentModel.ISupportInitialize)(this.PositionDeviation)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.SearchRectangleMargin)).EndInit();
             this.ResumeLayout(false);
@@ -194,11 +197,11 @@
         private System.Windows.Forms.Label label1;
         public System.Windows.Forms.NumericUpDown PositionDeviation;
         public System.Windows.Forms.CheckBox PositionDeviationIsAbsolute;
-        private System.Windows.Forms.RichTextBox text;
         private System.Windows.Forms.Label label3;
         public System.Windows.Forms.NumericUpDown SearchRectangleMargin;
         private System.Windows.Forms.CheckBox cSearchRectangleMargin;
         private System.Windows.Forms.Label label4;
         public System.Windows.Forms.CheckBox OcrEntirePage;
+        private System.Windows.Forms.TextBox text;
     }
 }
