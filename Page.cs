@@ -448,18 +448,19 @@ namespace Cliver.PdfDocumentParser
             return true;
         }
 
-        public object GetValue(int? anchorId, Template.RectangleF r, Template.Types valueType, out string error)
+        public object GetValue(int? anchorId, Template.RectangleF r_, Template.Types valueType, out string error)
         {
-            if (r == null)
+            if (r_ == null)
             {
                 error = "Rectangular is not defined.";
                 return null;
             }
-            if (r.Width <= Settings.Constants.CoordinateDeviationMargin || r.Height <= Settings.Constants.CoordinateDeviationMargin)
+            if (r_.Width <= Settings.Constants.CoordinateDeviationMargin || r_.Height <= Settings.Constants.CoordinateDeviationMargin)
             {
                 error = "Rectangular is malformed.";
                 return null;
             }
+            RectangleF r = r_.GetSystemRectangleF();
             if (anchorId != null)
             {
                 PointF? p0_;
@@ -479,10 +480,10 @@ namespace Cliver.PdfDocumentParser
             switch (valueType)
             {
                 case Template.Types.PdfText:
-                    return Pdf.GetTextByTopLeftCoordinates(PdfCharBoxs, r.GetSystemRectangleF());
+                    return Pdf.GetTextByTopLeftCoordinates(PdfCharBoxs, r);
                 case Template.Types.OcrText:
                     //return Ocr.GetTextByTopLeftCoordinates(ActiveTemplateOcrCharBoxs, r.GetSystemRectangleF());//for unknown reason tesseract often parses a whole page much worse than a fragment and so ActiveTemplateOcrCharBoxs give not reliable result.
-                    return Ocr.This.GetText(ActiveTemplateBitmap, r.GetSystemRectangleF());
+                    return Ocr.This.GetText(ActiveTemplateBitmap, r);
                 case Template.Types.ImageData:
                     using (Bitmap rb = GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
                     {
