@@ -230,8 +230,8 @@ namespace Cliver.PdfDocumentParser
                 List<RectangleF> rs = GetAnchorRectangles(pa);
                 if (rs == null || rs.Count < 1)
                     return null;
-                RectangleF paInitialRectangle = pa.MainElementInitialRectangle();
-                mainElementSearchRectangle = getSearchRectangle(new RectangleF(mainElementInitialRectangle.X + paInitialRectangle.X - rs[0].X, mainElementInitialRectangle.Y + paInitialRectangle.Y - rs[0].Y, mainElementInitialRectangle.Width, mainElementInitialRectangle.Height), a.SearchRectangleMargin);
+                RectangleF pameir = pa.MainElementInitialRectangle();
+                mainElementSearchRectangle = getSearchRectangle(new RectangleF(mainElementInitialRectangle.X + pameir.X - rs[0].X, mainElementInitialRectangle.Y + pameir.Y - rs[0].Y, mainElementInitialRectangle.Width, mainElementInitialRectangle.Height), a.SearchRectangleMargin);
             }
             else
                 mainElementSearchRectangle = getSearchRectangle(mainElementInitialRectangle, a.SearchRectangleMargin);
@@ -350,17 +350,20 @@ namespace Cliver.PdfDocumentParser
                             rs.Add(new RectangleF(point0, new SizeF(ibs[0].Rectangle.Width, ibs[0].Rectangle.Height)));
                             for (int i = 1; i < ibs.Count; i++)
                             {
-                                Template.RectangleF r;
+                                RectangleF r;
                                 if (idv.PositionDeviationIsAbsolute)
-                                    r = new Template.RectangleF(point0.X + ibs[i].Rectangle.X - ibs[0].Rectangle.X - idv.PositionDeviation, point0.Y + ibs[i].Rectangle.Y - ibs[0].Rectangle.Y - idv.PositionDeviation, ibs[i].Rectangle.Width + 2 * idv.PositionDeviation, ibs[i].Rectangle.Height + 2 * idv.PositionDeviation);
+                                    r = new RectangleF(point0.X + ibs[i].Rectangle.X - ibs[0].Rectangle.X - idv.PositionDeviation, point0.Y + ibs[i].Rectangle.Y - ibs[0].Rectangle.Y - idv.PositionDeviation, ibs[i].Rectangle.Width + 2 * idv.PositionDeviation, ibs[i].Rectangle.Height + 2 * idv.PositionDeviation);
                                 else
-                                    r = new Template.RectangleF(rs[i - 1].X + ibs[i].Rectangle.X - ibs[i - 1].Rectangle.X - idv.PositionDeviation, rs[i - 1].Y + ibs[i].Rectangle.Y - ibs[i - 1].Rectangle.Y - idv.PositionDeviation, ibs[i].Rectangle.Width + 2 * idv.PositionDeviation, ibs[i].Rectangle.Height + 2 * idv.PositionDeviation);
+                                    r = new RectangleF(rs[i - 1].X + ibs[i].Rectangle.X - ibs[i - 1].Rectangle.X - idv.PositionDeviation, rs[i - 1].Y + ibs[i].Rectangle.Y - ibs[i - 1].Rectangle.Y - idv.PositionDeviation, ibs[i].Rectangle.Width + 2 * idv.PositionDeviation, ibs[i].Rectangle.Height + 2 * idv.PositionDeviation);
+                                Point p;
                                 using (Bitmap rb = getRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
                                 {
-                                    if (null == ibs[i].ImageData.FindWithinImage(new ImageData(rb), idv.BrightnessTolerance, idv.DifferentPixelNumberTolerance, false))
+                                    Point? p_ = ibs[i].ImageData.FindWithinImage(new ImageData(rb), idv.BrightnessTolerance, idv.DifferentPixelNumberTolerance, false);
+                                    if (p_ == null)
                                         return true;
+                                    p = (Point)p_;
                                 }
-                                rs.Add(r.GetSystemRectangleF());
+                                rs.Add(new RectangleF(new PointF(r.X + p.X, r.Y + p.Y), new SizeF(ibs[i].Rectangle.Width, ibs[i].Rectangle.Height)));
                             }
                             if (!idv.FindBestImageMatch)
                             {

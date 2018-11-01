@@ -14,9 +14,6 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Diagnostics;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using iTextSharp.text.pdf.parser;
 using System.IO;
 
 namespace Cliver.PdfDocumentParser
