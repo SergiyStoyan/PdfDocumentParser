@@ -292,20 +292,20 @@ namespace Cliver.PdfDocumentParser
                             else
                                 bt0s = contaningOcrCharBoxs.Where(x => x.Char == aes[0].Char && mainElementSearchRectangle.Contains(x.R));
                         }
-                        else
-                        if (ot.SearchRectangleMargin < 0)
+                        else if (ot.SearchRectangleMargin < 0)
                         {
                             contaningOcrCharBoxs = ActiveTemplateOcrCharBoxs;
-                            bt0s = ActiveTemplateOcrCharBoxs.Where(x => x.Char == aes[0].Char);
+                            bt0s = contaningOcrCharBoxs.Where(x => x.Char == aes[0].Char);
                         }
                         else
                         {
                             RectangleF contaningRectangle = mainElementSearchRectangle;
                             for (int i = 1; i < ot.CharBoxs.Count; i++)
                                 contaningRectangle = RectangleF.Union(contaningRectangle, getSearchRectangle(ot.CharBoxs[i].Rectangle.GetSystemRectangleF(), a.SearchRectangleMargin));
-                            shift = new PointF(contaningRectangle.X < 0 ? 0 : contaningRectangle.X, contaningRectangle.Y < 0 ? 0 : contaningRectangle.Y);
                             contaningOcrCharBoxs = Ocr.This.GetCharBoxs(GetRectangleFromActiveTemplateBitmap(contaningRectangle.X / Settings.Constants.Image2PdfResolutionRatio, contaningRectangle.Y / Settings.Constants.Image2PdfResolutionRatio, contaningRectangle.Width / Settings.Constants.Image2PdfResolutionRatio, contaningRectangle.Height / Settings.Constants.Image2PdfResolutionRatio));
-                            bt0s = contaningOcrCharBoxs.Where(x => x.Char == aes[0].Char && mainElementSearchRectangle.Contains(x.R));
+                            shift = new PointF(contaningRectangle.X < 0 ? 0 : contaningRectangle.X, contaningRectangle.Y < 0 ? 0 : contaningRectangle.Y);
+                            RectangleF unshiftedMainElementSearchRectangle = new RectangleF(mainElementSearchRectangle.X - shift.X, mainElementSearchRectangle.Y - shift.Y, mainElementSearchRectangle.Width, mainElementSearchRectangle.Height);
+                            bt0s = contaningOcrCharBoxs.Where(x => x.Char == aes[0].Char && unshiftedMainElementSearchRectangle.Contains(x.R));
                         }
                         List<Ocr.CharBox> bts = new List<Ocr.CharBox>();
                         foreach (Ocr.CharBox bt0 in bt0s)
