@@ -18,9 +18,9 @@ namespace Cliver.InvoiceParser
     public partial class Settings
     {
         [Cliver.Settings.Obligatory]
-        public static readonly Template2sSettings Template2s;
+        public static readonly Template2sSettings2 Template2s;
 
-        public class Template2sSettings : Cliver.Settings
+        public class Template2sSettings2 : Cliver.Settings
         {
             public Template2 InitialTemplate2;
             public List<Template2> Template2s = new List<Template2>();
@@ -28,17 +28,6 @@ namespace Cliver.InvoiceParser
             public override void Loaded()
             {
                 __Indented = false;
-
-                ////conversion from the old format
-                //foreach (Template2 t2 in Template2s)
-                //    foreach (Template.Field f in t2.Template.Fields)
-                //        if (f.AnchorId != null)
-                //        {
-                //            Template.Anchor a = t2.Template.Anchors.First(x => x.Id == f.AnchorId);
-                //            f.Rectangle.X += a.MainElementInitialRectangle().X;
-                //            f.Rectangle.Y += a.MainElementInitialRectangle().Y;
-                //        }
-
             }
 
             public override void Saving()
@@ -88,12 +77,13 @@ namespace Cliver.InvoiceParser
                     Template = new Template
                     {
                         AutoDeskew = false,
-                        Fields = new List<Template.Field> {
-                        new Template.Field.PdfText { Name = "INVOICE#" , Rectangle=new Template.RectangleF(0,0,10,10)},
-                        new Template.Field.PdfText { Name = "JOB#", Rectangle=new Template.RectangleF(0,0,10,10) },
-                        new Template.Field.PdfText { Name = "PO#", Rectangle=new Template.RectangleF(0,0,10,10) },
-                        new Template.Field.PdfText { Name = "COST" , Rectangle=new Template.RectangleF(0,0,10,10)},
-                    },
+                        Fields = new List<Template.Field>
+                        {
+                            new Template.Field.PdfText { Name = "INVOICE#" , Rectangle=new Template.RectangleF(0,0,10,10)},
+                            new Template.Field.PdfText { Name = "JOB#", Rectangle=new Template.RectangleF(0,0,10,10) },
+                            new Template.Field.PdfText { Name = "PO#", Rectangle=new Template.RectangleF(0,0,10,10) },
+                            new Template.Field.PdfText { Name = "COST" , Rectangle=new Template.RectangleF(0,0,10,10)},
+                        },
                         Name = "",
                         Anchors = new List<Template.Anchor>(),
                         PageRotation = PdfDocumentParser.Template.PageRotations.NONE,
