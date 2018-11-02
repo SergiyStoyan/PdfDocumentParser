@@ -308,8 +308,6 @@ namespace Cliver.PdfDocumentParser
 
             Load += delegate
             {
-                //if (marks.Rows.Count > 0 && !marks.Rows[0].IsNewRow)
-                //    marks.Rows[0].Selected = true;
             };
 
             save.Click += Save_Click;
@@ -339,7 +337,6 @@ namespace Cliver.PdfDocumentParser
         {
             NULL,
             SetAnchor,
-            SetDocumentFirstPageRecognitionTextMark,
             SetField,
         }
         Modes mode
