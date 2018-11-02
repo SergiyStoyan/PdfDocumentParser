@@ -280,7 +280,7 @@ namespace Cliver.PdfDocumentParser
                     continue;
                 if (saving && !f.IsSet())
                     throw new Exception("Field[" + r.Index + "] is not set!");
-                if (f.AnchorId != null && t.Anchors.FirstOrDefault(x => x.Id == f.AnchorId) == null)
+                if (saving && f.AnchorId != null && t.Anchors.FirstOrDefault(x => x.Id == f.AnchorId) == null)
                     throw new Exception("There is no Anchor with Id=" + f.AnchorId);
                 t.Fields.Add(f);
             }

@@ -264,7 +264,7 @@ namespace Cliver.PdfDocumentParser
                     default:
                         throw new Exception("Unknown option: " + t);
                 }
-                currentAnchorControl.Initialize(row, setConditionsStatuses);
+                currentAnchorControl.Initialize(row, setConditionsStatus);
             }
             finally
             {
@@ -303,7 +303,7 @@ namespace Cliver.PdfDocumentParser
             if (currentAnchorControl != null && row == currentAnchorControl.Row)
                 setCurrentAnchorRow(a.Id, false);
 
-            setConditionsStatuses();
+            setConditionsStatus();
         }
 
         void onAnchorsChanged()
@@ -360,6 +360,8 @@ namespace Cliver.PdfDocumentParser
                 if (f.AnchorId != null && !ais.Contains((int)f.AnchorId))
                     r.Cells["AnchorId"].Value = null;
             }
+
+            setConditionsStatus();
 
             {
                 List<dynamic> ais_ = ais.Select(x => new { Id = x, Name = x.ToString() }).ToList<dynamic>();

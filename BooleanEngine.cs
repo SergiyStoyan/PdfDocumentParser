@@ -33,34 +33,39 @@ namespace Cliver.PdfDocumentParser
             BooleanEngine be = new BooleanEngine();
             be.expression = Regex.Replace(expression, @"\s", "", RegexOptions.Singleline);
             if (Regex.IsMatch(be.expression, @"[^TF\(\)\&\|\!]", RegexOptions.IgnoreCase))
-                throw new Exception("Expression '" + expression + "' contains unacceptable symbols.");
+                throw new Exception("Expression contains unacceptable symbols.");
             be.move2NextToken();
-            return be.parse();
+            bool r = be.parse();
+            if(!be.isEOS)
+                throw new Exception("Expression could not be parsed to the end.");
+            return r;
         }
         int position = -1;
         string expression;
         char currentToken;
-        bool isEOS = true;
+        bool isEOS { get { return currentToken == '_'; } }
 
         void move2NextToken()
         {
             position++;
             if (position >= expression.Length)
             {
-                isEOS = true;
+                currentToken = '_';
                 return;
             }
             currentToken = expression[position];
-            isEOS = false;
         }
 
         bool parse()
         {
             while (!isEOS)
             {
-                var isNegated = currentToken == '!';
-                if (isNegated)
+                var isNegated = false;
+                while (currentToken == '!')
+                {
+                    isNegated = !isNegated;
                     move2NextToken();
+                }
 
                 var boolean = parseBoolean();
                 if (isNegated)

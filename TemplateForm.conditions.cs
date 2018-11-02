@@ -51,7 +51,7 @@ namespace Cliver.PdfDocumentParser
                             break;
                         }
                 }
-                setConditionsStatuses();
+                setConditionsStatus();
             };
 
             conditions.SelectionChanged += delegate (object sender, EventArgs e)
@@ -66,7 +66,7 @@ namespace Cliver.PdfDocumentParser
             };
         }
 
-        void setConditionsStatuses()
+        void setConditionsStatus()
         {
             if (pages == null)
                 return;

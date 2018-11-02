@@ -22,13 +22,13 @@ namespace Cliver.InvoiceParser
 
         public class Template2sSettings2 : Cliver.Settings
         {
-            public Template2 InitialTemplate2;
             public List<Template2> Template2s = new List<Template2>();
 
             public override void Loaded()
             {
                 __Indented = false;
 
+                //to covert from the older format
                 foreach (Template2 t in Template2s)
                     if (t.Template.Conditions == null || t.Template.Conditions.Count < 1)
                     {
@@ -84,12 +84,6 @@ namespace Cliver.InvoiceParser
 
             public Template2 CreateInitialTemplate()
             {
-                if (InitialTemplate2 != null && InitialTemplate2.Template != null)
-                {
-                    Template2 t = SerializationRoutines.Json.Clone(InitialTemplate2);
-                    t.Template.Name = "";
-                    return t;
-                }
                 return new Template2
                 {
                     FileFilterRegex = new Regex(@"\.pdf$", RegexOptions.IgnoreCase),
