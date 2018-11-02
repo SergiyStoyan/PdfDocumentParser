@@ -437,13 +437,13 @@ namespace Cliver.PdfDocumentParser
         }
         List<Ocr.CharBox> _activeTemplateOcrCharBoxs;
 
-        public bool IsCondition(string condition)
+        public bool IsCondition(string conditionName)
         {
-            if (string.IsNullOrWhiteSpace(condition))
-                throw new Exception("Condition is empty.");
-            var c = pageCollection.ActiveTemplate.Conditions.FirstOrDefault(a => a.Key == condition);
+            if (string.IsNullOrWhiteSpace(conditionName))
+                throw new Exception("Condition name is not specified.");
+            var c = pageCollection.ActiveTemplate.Conditions.FirstOrDefault(a => a.Name == conditionName);
             if (string.IsNullOrWhiteSpace(c.Value))
-                throw new Exception("Condition '" + condition + "' is not defined.");
+                throw new Exception("Condition '" + conditionName + "' is not defined.");
             return BooleanEngine.Parse(c.Value, this);
         }
 

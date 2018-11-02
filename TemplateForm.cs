@@ -31,7 +31,7 @@ namespace Cliver.PdfDocumentParser
             public Template Template;
             abstract public void Save();
             public string LastTestFile;
-            public void HelpRequest()
+          virtual  public void HelpRequest()
             {
                 try
                 {
@@ -42,11 +42,15 @@ namespace Cliver.PdfDocumentParser
                     LogMessage.Error(ex);
                 }
             }
-            public Template.Anchor CreateDefaultAnchor()
+            virtual public Template.Anchor CreateDefaultAnchor()
             {
                 return new Template.Anchor.PdfText { };
             }
-            public Template.Field CreateDefaultField()
+            virtual public Template.Condition CreateDefaultCondition()
+            {
+                return new Template.Condition { };
+            }
+            virtual public Template.Field CreateDefaultField()
             {
                 return new Template.Field.PdfText { };
             }

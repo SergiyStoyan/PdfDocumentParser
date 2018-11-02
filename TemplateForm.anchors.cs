@@ -237,6 +237,7 @@ namespace Cliver.PdfDocumentParser
                     anchors.ClearSelection();
                 else
                 {
+                    setCurrentConditionRow(null);
                     setCurrentFieldRow(null);
                 }
 
@@ -264,7 +265,7 @@ namespace Cliver.PdfDocumentParser
                     default:
                         throw new Exception("Unknown option: " + t);
                 }
-                currentAnchorControl.Initialize(row, setConditionsStatus);
+                currentAnchorControl.Initialize(row, setConditionStatus);
             }
             finally
             {

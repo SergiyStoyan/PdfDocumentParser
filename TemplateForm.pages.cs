@@ -225,11 +225,13 @@ namespace Cliver.PdfDocumentParser
                 enableNavigationButtons();
 
                 anchors.CurrentCell = null;//1-st row is autoselected
+                conditions.CurrentCell = null;//1-st row is autoselected
                 fields.CurrentCell = null;//1-st row is autoselected
                 anchors.ClearSelection();//1-st row is autoselected
+                conditions.ClearSelection();//1-st row is autoselected
                 fields.ClearSelection();//1-st row is autoselected
                 //setCurrentAnchorRow(null, true);
-                //setCurrentMarkRow(null);
+                //setCurrentConditionRow(null);
                 //setCurrentFieldRow(null);
                 loadingTemplate = false;
 

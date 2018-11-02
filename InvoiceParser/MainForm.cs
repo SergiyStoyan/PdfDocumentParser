@@ -377,9 +377,9 @@ namespace Cliver.InvoiceParser
                     throw new Exception("The template does not have any anchor group specified.");
 
                 Template2 it = Settings.Template2s.CreateInitialTemplate();
-                foreach (string c in it.Template.Conditions.Keys)
-                    if (!Template.Conditions.ContainsKey(c))
-                        throw new Exception("The template does not have obligatory condition '" + c + "'.");
+                foreach (Template.Condition c in it.Template.Conditions)
+                    if (Template.Conditions.FirstOrDefault(x => x.Name == c.Name) == null)
+                        throw new Exception("The template does not have obligatory condition '" + c.Name + "'.");
 
                 foreach (Template.Field f in it.Template.Fields)
                     if (Template.Fields.FirstOrDefault(x => x.Name == f.Name) == null)

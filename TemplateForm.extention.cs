@@ -90,12 +90,11 @@ namespace Cliver.PdfDocumentParser
                 }
 
                 conditions.Rows.Clear();
-                foreach (string cn in t.Conditions.Keys)
+                foreach (Template.Condition c in t.Conditions)
                 {
                     int i = conditions.Rows.Add();
                     var row = conditions.Rows[i];
-                    row.Cells["Condition2"].Value = cn;
-                    row.Cells["Expression2"].Value = t.Conditions[cn];
+                    setConditionRow(row, c);
                 }
 
                 fields.Rows.Clear();
@@ -206,10 +205,10 @@ namespace Cliver.PdfDocumentParser
                 conditionAnchorIds = new List<int>();
                 foreach (DataGridViewRow r in conditions.Rows)
                 {
-                    if (r.IsNewRow)
+                    Template.Condition c = (Template.Condition)r.Tag;
+                    if (c == null)
                         continue;
-                    string e = (string)r.Cells["Expression2"].Value;
-                    conditionAnchorIds.AddRange(BooleanEngine.GetAnchorIds(e));
+                    conditionAnchorIds.AddRange(BooleanEngine.GetAnchorIds(c.Value));
                 }
                 conditionAnchorIds = conditionAnchorIds.Distinct().ToList();
             }
@@ -262,18 +261,19 @@ namespace Cliver.PdfDocumentParser
             }
             t.Anchors = t.Anchors.OrderBy(a => a.Id).ToList();
 
-            t.Conditions = new Dictionary<string, string>();
+            t.Conditions = new List<Template.Condition>();
             foreach (DataGridViewRow r in conditions.Rows)
             {
-                if (r.IsNewRow)
+                Template.Condition c = (Template.Condition)r.Tag;
+                if (c == null)
                     continue;
-                string c = (string)r.Cells["Condition2"].Value;
-                if (saving && string.IsNullOrWhiteSpace(c))
-                    throw new Exception("Condition['" + r.Index + "'] has empty name!");
-                string e = (string)r.Cells["Expression2"].Value;
-                if(saving)
-                    BooleanEngine.CheckSyntax(e);
-                t.Conditions[c] = e;
+                if (saving)
+                {
+                    if (!c.IsSet())
+                        throw new Exception("Condition['" + r.Index + "'] is not set!");
+                    c.Value = BooleanEngine.CheckAndFormat(c.Value, t.Anchors.Select(x => x.Id));
+                }
+                t.Conditions.Add(c);
             }
 
             t.Fields = new List<Template.Field>();

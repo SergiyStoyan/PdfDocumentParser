@@ -44,9 +44,9 @@ namespace Cliver.InvoiceParser
                             ce.Add(a.Id.ToString());
 
                         }
-                        t.Template.Conditions = new Dictionary<string, string>();
+                        t.Template.Conditions = new List<Template.Condition>();
                         foreach (string cn in cns2ce.Keys)
-                            t.Template.Conditions[cn] = string.Join(" & ", cns2ce[cn]);
+                            t.Template.Conditions.Add(new Template.Condition { Name = cn, Value = string.Join(" & ", cns2ce[cn]) });
                     }
             }
 
@@ -93,7 +93,7 @@ namespace Cliver.InvoiceParser
                         PageRotation = PdfDocumentParser.Template.PageRotations.NONE,
                         AutoDeskew = false,
                         Anchors = new List<Template.Anchor>(),
-                        Conditions = new Dictionary<string, string> { { Template2.ConditionNames.DocumentFirstPage, "" } },
+                        Conditions = new List<Template.Condition> { new Template.Condition { Name = Template2.ConditionNames.DocumentFirstPage } },
                         Fields = new List<Template.Field>
                         {
                             new Template.Field.PdfText { Name =Template2.FieldNames.INVOICE , Rectangle=new Template.RectangleF(0,0,10,10)},

@@ -46,7 +46,7 @@ namespace Cliver.PdfDocumentParser
 
         public List<Anchor> Anchors;
 
-        public Dictionary<string, string> Conditions;//to be used instead of Field.Condition
+        public List<Condition> Conditions;
 
         public List<Field> Fields;
 
@@ -107,7 +107,7 @@ namespace Cliver.PdfDocumentParser
             public float PositionDeviation = 1f;
             public bool PositionDeviationIsAbsolute = false;
             public int? ParentAnchorId = null;
-            public string Condition = null;
+            public string Condition = null;//to be removed in the next release
 
             public Anchor()
             {
@@ -196,6 +196,17 @@ namespace Cliver.PdfDocumentParser
                         return new System.Drawing.RectangleF();
                     return ImageBoxs[0].Rectangle.GetSystemRectangleF();
                 }
+            }
+        }
+
+        public class Condition
+        {
+            public string Name;
+            public string Value;
+
+            public bool IsSet()
+            {
+                return !string.IsNullOrWhiteSpace(Name) && !string.IsNullOrWhiteSpace(Value);
             }
         }
 

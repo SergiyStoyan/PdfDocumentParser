@@ -39,25 +39,50 @@ namespace Cliver.PdfDocumentParser
                     return;
                 if (e.ColumnIndex < 0)//row's header
                     return;
-                var row = anchors.Rows[e.RowIndex];
+                DataGridViewRow row = conditions.Rows[e.RowIndex];
+                var cs = row.Cells;
+                Template.Condition c = (Template.Condition)row.Tag;
                 switch (conditions.Columns[e.ColumnIndex].Name)
                 {
-                    case "Condition2":
+                    case "Name2":
                         {
+                            c.Name = (string)row.Cells["Name2"].Value;
                             break;
                         }
-                    case "Expression2":
+                    case "Value2":
                         {
+                            c.Value = (string)row.Cells["Value2"].Value;
                             break;
                         }
                 }
-                setConditionsStatus();
+                setConditionRow(row, c);
+                setConditionStatus(row);
             };
 
             conditions.SelectionChanged += delegate (object sender, EventArgs e)
             {
                 try
                 {
+                    if (loadingTemplate)
+                        return;
+
+                    if (settingCurrentConditionRow)
+                        return;
+
+                    if (conditions.SelectedRows.Count < 1)
+                        return;
+                    DataGridViewRow row = conditions.SelectedRows[0];
+                    Template.Condition c = (Template.Condition)row.Tag;
+                    if (c == null)//hacky forcing commit a newly added row and display the blank row
+                    {
+                        int i = conditions.Rows.Add();
+                        row = conditions.Rows[i];
+                        c = templateManager.CreateDefaultCondition();
+                        setConditionRow(row, c);
+                        row.Selected = true;
+                        return;
+                    }
+                    setCurrentConditionRow(row);
                 }
                 catch (Exception ex)
                 {
@@ -66,50 +91,73 @@ namespace Cliver.PdfDocumentParser
             };
         }
 
+        void setCurrentConditionRow(DataGridViewRow row)
+        {
+            if (settingCurrentConditionRow)
+                return;
+            try
+            {
+                settingCurrentConditionRow = true;
+
+                currentConditionRow = row;
+
+                if (row == null)
+                {
+                    conditions.ClearSelection();
+                    conditions.CurrentCell = null;
+                    return;
+                }
+
+                conditions.CurrentCell = conditions[0, row.Index];
+
+                setCurrentAnchorRow(null, true);
+                setCurrentFieldRow(null);
+            }
+            finally
+            {
+                settingCurrentConditionRow = false;
+            }
+        }
+        bool settingCurrentConditionRow = false;
+        DataGridViewRow currentConditionRow = null;
+
+        void setConditionRow(DataGridViewRow row, Template.Condition c)
+        {
+            row.Tag = c;
+            row.Cells["Name2"].Value = c.Name;
+            row.Cells["Value2"].Value = c.Value;
+
+            if (loadingTemplate)
+                return;
+
+            if (row == currentConditionRow)
+                setCurrentConditionRow(row);
+        }
+
         void setConditionsStatus()
         {
             if (pages == null)
                 return;
             pages.ActiveTemplate = getTemplateFromUI(false);
             foreach (DataGridViewRow r in conditions.Rows)
-            {
-                if (r.IsNewRow)
-                    continue;
-                if (string.IsNullOrWhiteSpace((string)r.Cells["Expression2"].Value))
-                {
-                    setRowStatus(statuses.NEUTRAL, r, "");
-                    continue;
-                }
-                try
-                {
-                    if (pages[currentPage].IsCondition((string)r.Cells["Condition2"].Value))
-                        setRowStatus(statuses.SUCCESS, r, "Match");
-                    else
-                        setRowStatus(statuses.ERROR, r, "Not match");
-                }
-                catch (Exception e)
-                {
-                    setRowStatus(statuses.WRONG, r, e.Message);
-                }
-            }
+                setConditionStatus(r);
 
             List<int> conditionAnchorIds = new List<int>();
-                foreach (DataGridViewRow r in conditions.Rows)
-                {
-                    if (r.IsNewRow)
-                        continue;
-                    string e = (string)r.Cells["Expression2"].Value;
-                    conditionAnchorIds.AddRange(BooleanEngine.GetAnchorIds(e));
-                }
+            foreach (DataGridViewRow r in conditions.Rows)
+            {
+                Template.Condition c = (Template.Condition)r.Tag;
+                if (c != null && c.IsSet())
+                    conditionAnchorIds.AddRange(BooleanEngine.GetAnchorIds(c.Value));
+            }
             foreach (int anchorId in conditionAnchorIds.Distinct())
-                setAnchorStatus(anchorId);
+                _setAnchorStatus(anchorId);
         }
-        void setAnchorStatus(int anchorId)
+        void _setAnchorStatus(int anchorId)
         {
             DataGridViewRow row;
             Template.Anchor a = getAnchor(anchorId, out row);
             if (a == null || row == null)
-                throw new Exception("Anchor[Id=" + anchorId + "] does not exist.");
+                return;
 
             if (pages == null)
                 return;
@@ -119,17 +167,40 @@ namespace Cliver.PdfDocumentParser
             if (a == null)
                 throw new Exception("Anchor[Id=" + a.Id + "] is not defined.");
 
-            for (Template.Anchor a_ = a; a_ != null; a_ = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == a_.ParentAnchorId))
+            for (; a != null; a = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == a.ParentAnchorId))
             {
                 DataGridViewRow r;
-                getAnchor(a_.Id, out r);
-                if (!a_.IsSet())
+                getAnchor(a.Id, out r);
+                if (!a.IsSet())
                     setRowStatus(statuses.WARNING, r, "Not set");
-                List<RectangleF> rs = pages[currentPage].GetAnchorRectangles(a_);
+                List<RectangleF> rs = pages[currentPage].GetAnchorRectangles(a);
                 if (rs == null || rs.Count < 1)
                     setRowStatus(statuses.ERROR, r, "Not found");
                 else
                     setRowStatus(statuses.SUCCESS, r, "Found");
+            }
+        }
+
+        void setConditionStatus(DataGridViewRow r)
+        {
+            Template.Condition c = (Template.Condition)r.Tag;
+            if (c == null)
+                return;
+            if (!c.IsSet())
+            {
+                setRowStatus(statuses.NEUTRAL, r, "");
+                return;
+            }
+            try
+            {
+                if (pages[currentPage].IsCondition(c.Name))
+                    setRowStatus(statuses.SUCCESS, r, "Match");
+                else
+                    setRowStatus(statuses.ERROR, r, "Not match");
+            }
+            catch (Exception e)
+            {
+                setRowStatus(statuses.WRONG, r, e.Message);
             }
         }
     }

@@ -219,6 +219,7 @@ namespace Cliver.PdfDocumentParser
                 fields.CurrentCell = fields[0, row.Index];
                 Template.Field f = (Template.Field)row.Tag;
                 setCurrentAnchorRow(f.AnchorId, true);
+                setCurrentConditionRow(null);
                 setFieldRowValue(row, false);
             }
             finally

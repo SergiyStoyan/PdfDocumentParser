@@ -43,7 +43,7 @@ namespace Cliver.PdfDocumentParser
             return _object;
         }
 
-        public override void Initialize(DataGridViewRow row, Action onLeft)
+        public override void Initialize(DataGridViewRow row, Action<DataGridViewRow> onLeft)
         {
             base.Initialize(row, onLeft);
 

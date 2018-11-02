@@ -17,13 +17,17 @@ namespace Cliver.PdfDocumentParser
             return anchorIds;
         }
 
-        static public void CheckSyntax(string expression)
+        static public string CheckAndFormat(string expression, IEnumerable<int> anchorIds)
         {
             expression = Regex.Replace(expression, @"\d+", (Match m) =>
-            {
+            { int ai = int.Parse(m.Value);
+                if (!anchorIds.Contains(ai))
+                    throw new Exception("Anchor[id=" + ai + "] does not exist.");
                 return "T";
             });
             parseSubstituted(expression);
+            expression = Regex.Replace(expression, @"\s", "", RegexOptions.Singleline);
+            return Regex.Replace(expression, @"[^\d]|\d+", " ", RegexOptions.Singleline);
         }
 
         //Sample expression: "1 | (2 & 3)"

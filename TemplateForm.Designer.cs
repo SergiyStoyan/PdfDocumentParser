@@ -33,11 +33,15 @@
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.anchorsContainer = new System.Windows.Forms.SplitContainer();
             this.anchors = new System.Windows.Forms.DataGridView();
+            this.Id3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Type3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.ParentAnchorId3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.conditions = new System.Windows.Forms.DataGridView();
+            this.CheckConditionsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.selectionCoordinates = new System.Windows.Forms.Label();
-            this.CheckConditionsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
             this.bNextPage = new System.Windows.Forms.Button();
             this.lTotalPages = new System.Windows.Forms.Label();
             this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
@@ -62,7 +66,6 @@
             this.pictureScale = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.fields = new System.Windows.Forms.DataGridView();
             this.Name_ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.AnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
@@ -82,11 +85,8 @@
             this.About = new System.Windows.Forms.LinkLabel();
             this.ExtractFieldsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.Id3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Type3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.ParentAnchorId3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Condition2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Expression2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Name2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Value2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -215,6 +215,29 @@
             this.anchors.Size = new System.Drawing.Size(228, 245);
             this.anchors.TabIndex = 50;
             // 
+            // Id3
+            // 
+            this.Id3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Id3.HeaderText = "Id";
+            this.Id3.Name = "Id3";
+            this.Id3.ReadOnly = true;
+            this.Id3.Width = 41;
+            // 
+            // Type3
+            // 
+            this.Type3.HeaderText = "Type";
+            this.Type3.Name = "Type3";
+            this.Type3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Type3.Width = 70;
+            // 
+            // ParentAnchorId3
+            // 
+            this.ParentAnchorId3.HeaderText = "Parent Id";
+            this.ParentAnchorId3.Name = "ParentAnchorId3";
+            this.ParentAnchorId3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.ParentAnchorId3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.ParentAnchorId3.Width = 75;
+            // 
             // splitContainer3
             // 
             this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -236,13 +259,32 @@
             // 
             this.conditions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.conditions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Condition2,
-            this.Expression2});
+            this.Name2,
+            this.Value2});
             this.conditions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.conditions.Location = new System.Drawing.Point(0, 13);
             this.conditions.Name = "conditions";
             this.conditions.Size = new System.Drawing.Size(197, 70);
             this.conditions.TabIndex = 0;
+            // 
+            // CheckConditionsAutomaticallyWhenPageChanged
+            // 
+            this.CheckConditionsAutomaticallyWhenPageChanged.AutoSize = true;
+            this.CheckConditionsAutomaticallyWhenPageChanged.Location = new System.Drawing.Point(69, -1);
+            this.CheckConditionsAutomaticallyWhenPageChanged.Name = "CheckConditionsAutomaticallyWhenPageChanged";
+            this.CheckConditionsAutomaticallyWhenPageChanged.Size = new System.Drawing.Size(166, 17);
+            this.CheckConditionsAutomaticallyWhenPageChanged.TabIndex = 57;
+            this.CheckConditionsAutomaticallyWhenPageChanged.Text = "Check When Page Changed]";
+            this.CheckConditionsAutomaticallyWhenPageChanged.UseVisualStyleBackColor = true;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(62, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(10, 13);
+            this.label4.TabIndex = 58;
+            this.label4.Text = "[";
             // 
             // label11
             // 
@@ -263,16 +305,6 @@
             this.selectionCoordinates.Size = new System.Drawing.Size(119, 13);
             this.selectionCoordinates.TabIndex = 32;
             this.selectionCoordinates.Text = "<selection coordinates>";
-            // 
-            // CheckConditionsAutomaticallyWhenPageChanged
-            // 
-            this.CheckConditionsAutomaticallyWhenPageChanged.AutoSize = true;
-            this.CheckConditionsAutomaticallyWhenPageChanged.Location = new System.Drawing.Point(69, -1);
-            this.CheckConditionsAutomaticallyWhenPageChanged.Name = "CheckConditionsAutomaticallyWhenPageChanged";
-            this.CheckConditionsAutomaticallyWhenPageChanged.Size = new System.Drawing.Size(166, 17);
-            this.CheckConditionsAutomaticallyWhenPageChanged.TabIndex = 57;
-            this.CheckConditionsAutomaticallyWhenPageChanged.Text = "Check When Page Changed]";
-            this.CheckConditionsAutomaticallyWhenPageChanged.UseVisualStyleBackColor = true;
             // 
             // bNextPage
             // 
@@ -550,15 +582,6 @@
             this.label10.TabIndex = 49;
             this.label10.Text = "Anchors:";
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(62, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(10, 13);
-            this.label4.TabIndex = 58;
-            this.label4.Text = "[";
-            // 
             // fields
             // 
             this.fields.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -749,40 +772,17 @@
             this.label5.TabIndex = 59;
             this.label5.Text = "[";
             // 
-            // Id3
+            // Name2
             // 
-            this.Id3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Id3.HeaderText = "Id";
-            this.Id3.Name = "Id3";
-            this.Id3.ReadOnly = true;
-            this.Id3.Width = 41;
+            this.Name2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Name2.HeaderText = "Condition";
+            this.Name2.Name = "Name2";
+            this.Name2.Width = 76;
             // 
-            // Type3
+            // Value2
             // 
-            this.Type3.HeaderText = "Type";
-            this.Type3.Name = "Type3";
-            this.Type3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Type3.Width = 70;
-            // 
-            // ParentAnchorId3
-            // 
-            this.ParentAnchorId3.HeaderText = "Parent Id";
-            this.ParentAnchorId3.Name = "ParentAnchorId3";
-            this.ParentAnchorId3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ParentAnchorId3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.ParentAnchorId3.Width = 75;
-            // 
-            // Condition2
-            // 
-            this.Condition2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Condition2.HeaderText = "Condition";
-            this.Condition2.Name = "Condition2";
-            this.Condition2.Width = 76;
-            // 
-            // Expression2
-            // 
-            this.Expression2.HeaderText = "Expression";
-            this.Expression2.Name = "Expression2";
+            this.Value2.HeaderText = "Expression";
+            this.Value2.Name = "Value2";
             // 
             // TemplateForm
             // 
@@ -889,7 +889,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Id3;
         private System.Windows.Forms.DataGridViewComboBoxColumn Type3;
         private System.Windows.Forms.DataGridViewComboBoxColumn ParentAnchorId3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Condition2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Expression2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Name2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Value2;
     }
 }

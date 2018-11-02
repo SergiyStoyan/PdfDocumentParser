@@ -23,9 +23,9 @@ namespace Cliver.PdfDocumentParser
         }
         public DataGridViewRow Row;
         //protected TemplateForm templateForm;
-        protected Action onLeft = null;
+        protected Action<DataGridViewRow> onLeft = null;
 
-        public virtual void Initialize(DataGridViewRow row/*, TemplateForm templateForm*/, Action onLeft)
+        public virtual void Initialize(DataGridViewRow row/*, TemplateForm templateForm*/, Action<DataGridViewRow> onLeft)
         {
             Row = row;
             //this.templateForm = templateForm;
@@ -40,7 +40,7 @@ namespace Cliver.PdfDocumentParser
         virtual public void SetTagFromControl()
         {
             Row.Tag = getObject();
-            onLeft?.Invoke();
+            onLeft?.Invoke(Row);
         }
     }
 }
