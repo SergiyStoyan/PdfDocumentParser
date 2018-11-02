@@ -90,17 +90,12 @@ namespace Cliver.PdfDocumentParser
                 }
 
                 conditions.Rows.Clear();
-                if (templateManager.Conditions != null)
+                foreach (string cn in t.Conditions.Keys)
                 {
-                    foreach (string cn in templateManager.Conditions)
-                    {
-                        int i = conditions.Rows.Add();
-                        var row = conditions.Rows[i];
-                        row.Cells["Condition2"].Value = cn;
-                        string ce;
-                        if (t.Conditions.TryGetValue(cn, out ce))
-                            row.Cells["Expression2"].Value = ce;
-                    }
+                    int i = conditions.Rows.Add();
+                    var row = conditions.Rows[i];
+                    row.Cells["Condition2"].Value = cn;
+                    row.Cells["Expression2"].Value = t.Conditions[cn];
                 }
 
                 fields.Rows.Clear();
@@ -205,6 +200,19 @@ namespace Cliver.PdfDocumentParser
 
             bool? removeNotLinkedAnchors = null;
             t.Anchors = new List<Template.Anchor>();
+            List<int> conditionAnchorIds = null;
+            if (saving)
+            {
+                conditionAnchorIds = new List<int>();
+                foreach (DataGridViewRow r in conditions.Rows)
+                {
+                    if (r.IsNewRow)
+                        continue;
+                    string e = (string)r.Cells["Expression2"].Value;
+                    conditionAnchorIds.AddRange(BooleanEngine.GetAnchorIds(e));
+                }
+                conditionAnchorIds = conditionAnchorIds.Distinct().ToList();
+            }
             foreach (DataGridViewRow r in anchors.Rows)
             {
                 Template.Anchor a = (Template.Anchor)r.Tag;
@@ -217,7 +225,7 @@ namespace Cliver.PdfDocumentParser
                         throw new Exception("Anchor[Id=" + a.Id + "] is not set!");
 
                     bool engaged = false;
-                    if (!string.IsNullOrWhiteSpace(a.Condition))
+                    if (conditionAnchorIds.Contains(a.Id))
                         engaged = true;
                     if (!engaged)
                         foreach (DataGridViewRow rr in anchors.Rows)
@@ -255,22 +263,18 @@ namespace Cliver.PdfDocumentParser
             t.Anchors = t.Anchors.OrderBy(a => a.Id).ToList();
 
             t.Conditions = new Dictionary<string, string>();
-            List<string> neededConditions = SerializationRoutines.Json.Clone(templateManager.Conditions);
             foreach (DataGridViewRow r in conditions.Rows)
             {
                 if (r.IsNewRow)
                     continue;
                 string c = (string)r.Cells["Condition2"].Value;
-                if (string.IsNullOrWhiteSpace(c))
+                if (saving && string.IsNullOrWhiteSpace(c))
                     throw new Exception("Condition['" + r.Index + "'] has empty name!");
                 string e = (string)r.Cells["Expression2"].Value;
                 if(saving)
                     BooleanEngine.CheckSyntax(e);
                 t.Conditions[c] = e;
-                neededConditions.Remove(c);
             }
-            if (saving && neededConditions.Count > 0)
-                throw new Exception("The following conditions are missing: '" + string.Join("', '", neededConditions) + "'");
 
             t.Fields = new List<Template.Field>();
             foreach (DataGridViewRow r in fields.Rows)

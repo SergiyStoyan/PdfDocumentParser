@@ -87,25 +87,25 @@ namespace Cliver.InvoiceParser
                 return new Template2
                 {
                     FileFilterRegex = new Regex(@"\.pdf$", RegexOptions.IgnoreCase),
-                    //SharedFileTemplateNamesRegex = new Regex(@"\@", RegexOptions.IgnoreCase),
                     Template = new Template
                     {
+                        Name = "",
+                        PageRotation = PdfDocumentParser.Template.PageRotations.NONE,
                         AutoDeskew = false,
+                        Anchors = new List<Template.Anchor>(),
+                        Conditions = new Dictionary<string, string> { { Template2.ConditionNames.DocumentFirstPage, "" } },
                         Fields = new List<Template.Field>
                         {
-                            new Template.Field.PdfText { Name = "INVOICE#" , Rectangle=new Template.RectangleF(0,0,10,10)},
-                            new Template.Field.PdfText { Name = "JOB#", Rectangle=new Template.RectangleF(0,0,10,10) },
-                            new Template.Field.PdfText { Name = "PO#", Rectangle=new Template.RectangleF(0,0,10,10) },
-                            new Template.Field.PdfText { Name = "COST" , Rectangle=new Template.RectangleF(0,0,10,10)},
+                            new Template.Field.PdfText { Name =Template2.FieldNames.INVOICE , Rectangle=new Template.RectangleF(0,0,10,10)},
+                            new Template.Field.PdfText { Name = Template2.FieldNames.JOB, Rectangle=new Template.RectangleF(0,0,10,10) },
+                            new Template.Field.PdfText { Name = Template2.FieldNames.PO, Rectangle=new Template.RectangleF(0,0,10,10) },
+                            new Template.Field.PdfText { Name = Template2.FieldNames.COST, Rectangle=new Template.RectangleF(0,0,10,10)},
                         },
-                        Name = "",
-                        Anchors = new List<Template.Anchor>(),
-                        Conditions = new Dictionary<string, string>(),
-                        PageRotation = PdfDocumentParser.Template.PageRotations.NONE,
                         Editor = new Template.EditorSettings
                         {
                             TestPictureScale = 1.2m,
                             TestFile = "",
+                            CheckConditionsAutomaticallyWhenPageChanged = true,
                             ExtractFieldsAutomaticallyWhenPageChanged = true,
                         },
                     },
@@ -116,7 +116,19 @@ namespace Cliver.InvoiceParser
 
     public class Template2
     {
-        //internal static List<string> FieldNames = new List<string> { "INVOICE#", "JOB#", "PO#", "COST" };
+        public class ConditionNames
+        {
+            public const string DocumentFirstPage = "FirstPageOfDocument";
+            public const string DocumentLastPage = "LastPageOfDocument";
+        }
+
+        public class FieldNames
+        {
+            public const string INVOICE = "INVOICE#";
+            public const string JOB = "JOB#";
+            public const string PO = "PO#";
+            public const string COST = "COST";
+        }
 
         public Template Template;
 

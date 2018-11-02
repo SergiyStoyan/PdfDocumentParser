@@ -42,7 +42,6 @@ namespace Cliver.PdfDocumentParser
                     LogMessage.Error(ex);
                 }
             }
-            public List<string> Conditions;
             public Template.Anchor CreateDefaultAnchor()
             {
                 return new Template.Anchor.PdfText { };

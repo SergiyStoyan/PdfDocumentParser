@@ -339,7 +339,6 @@ namespace Cliver.InvoiceParser
                 Template = SerializationRoutines.Json.Clone(t.Template),
                 LastTestFile = Settings.TemplateLocalInfo.GetInfo(t.Template.Name).LastTestFile,
                 Row = r,
-                Conditions = new List<string> { PdfProcessor.Conditions.DocumentFirstPage },
             };
             Template2 it = Settings.Template2s.CreateInitialTemplate();
             foreach (Template.Field f in tm.Template.Fields)
@@ -378,6 +377,10 @@ namespace Cliver.InvoiceParser
                     throw new Exception("The template does not have any anchor group specified.");
 
                 Template2 it = Settings.Template2s.CreateInitialTemplate();
+                foreach (string c in it.Template.Conditions.Keys)
+                    if (!Template.Conditions.ContainsKey(c))
+                        throw new Exception("The template does not have obligatory condition '" + c + "'.");
+
                 foreach (Template.Field f in it.Template.Fields)
                     if (Template.Fields.FirstOrDefault(x => x.Name == f.Name) == null)
                         throw new Exception("The template does not have obligatory field '" + f.Name + "'.");

@@ -127,7 +127,7 @@ namespace Cliver.InvoiceParser
                         int j = xls.WriteLine(values);
                         xls.SetLink(j, 1, new Uri(f, UriKind.Absolute));
                         xls.SetLink(j, 2, new Uri(of, UriKind.Relative));
-                        int i = orderedOutputFieldNames.IndexOf("INVOICE#");
+                        int i = orderedOutputFieldNames.IndexOf(Template2.FieldNames.INVOICE);
                         if (i >= 0)
                             xls.SetLink(j, 2 + i + 1, new Uri(f, UriKind.Absolute));
                     });

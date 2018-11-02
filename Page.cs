@@ -437,19 +437,6 @@ namespace Cliver.PdfDocumentParser
         }
         List<Ocr.CharBox> _activeTemplateOcrCharBoxs;
 
-        public bool IsCondition1(string condition)
-        {
-            if (string.IsNullOrWhiteSpace(condition))
-                throw new Exception("Condition is empty.");
-            List<Template.Anchor> as_ = pageCollection.ActiveTemplate.Anchors.Where(a => a.Condition == condition).ToList();
-            if (as_.Count < 1)
-                return false;
-            foreach (Template.Anchor a in as_)
-                if (GetAnchorRectangles(a) == null)
-                    return false;
-            return true;
-        }
-
         public bool IsCondition(string condition)
         {
             if (string.IsNullOrWhiteSpace(condition))

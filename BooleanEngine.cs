@@ -9,6 +9,14 @@ namespace Cliver.PdfDocumentParser
 {
     public class BooleanEngine
     {
+        static public List<int> GetAnchorIds(string expression)
+        {
+            List<int> anchorIds = new List<int>();
+            foreach (Match m in Regex.Matches(expression, @"\d+"))
+                anchorIds.Add(int.Parse(m.Value));
+            return anchorIds;
+        }
+
         static public void CheckSyntax(string expression)
         {
             expression = Regex.Replace(expression, @"\d+", (Match m) =>

@@ -86,12 +86,50 @@ namespace Cliver.PdfDocumentParser
                         setRowStatus(statuses.SUCCESS, r, "Match");
                     else
                         setRowStatus(statuses.ERROR, r, "Not match");
-                    //findAndDrawAnchor(a.Id);//to set anchor status
                 }
                 catch (Exception e)
                 {
                     setRowStatus(statuses.WRONG, r, e.Message);
                 }
+            }
+
+            List<int> conditionAnchorIds = new List<int>();
+                foreach (DataGridViewRow r in conditions.Rows)
+                {
+                    if (r.IsNewRow)
+                        continue;
+                    string e = (string)r.Cells["Expression2"].Value;
+                    conditionAnchorIds.AddRange(BooleanEngine.GetAnchorIds(e));
+                }
+            foreach (int anchorId in conditionAnchorIds.Distinct())
+                setAnchorStatus(anchorId);
+        }
+        void setAnchorStatus(int anchorId)
+        {
+            DataGridViewRow row;
+            Template.Anchor a = getAnchor(anchorId, out row);
+            if (a == null || row == null)
+                throw new Exception("Anchor[Id=" + anchorId + "] does not exist.");
+
+            if (pages == null)
+                return;
+
+            pages.ActiveTemplate = getTemplateFromUI(false);
+            a = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == anchorId);
+            if (a == null)
+                throw new Exception("Anchor[Id=" + a.Id + "] is not defined.");
+
+            for (Template.Anchor a_ = a; a_ != null; a_ = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == a_.ParentAnchorId))
+            {
+                DataGridViewRow r;
+                getAnchor(a_.Id, out r);
+                if (!a_.IsSet())
+                    setRowStatus(statuses.WARNING, r, "Not set");
+                List<RectangleF> rs = pages[currentPage].GetAnchorRectangles(a_);
+                if (rs == null || rs.Count < 1)
+                    setRowStatus(statuses.ERROR, r, "Not found");
+                else
+                    setRowStatus(statuses.SUCCESS, r, "Found");
             }
         }
     }

@@ -19,12 +19,6 @@ namespace Cliver.InvoiceParser
 {
     class PdfProcessor : IDisposable
     {
-        public class Conditions
-        {
-            public const string DocumentFirstPage = "FirstPageOfDocument";
-            public const string DocumentLastPage = "LastPageOfDocument";
-        }
-
         PdfProcessor(string inputPdf)
         {
             Pages = new PageCollection(inputPdf);
@@ -97,17 +91,17 @@ namespace Cliver.InvoiceParser
             oc.SetTextMatrix(x, y);
             oc.ShowText("INVOICE");
             oc.SetTextMatrix(x + d, y);
-            oc.ShowText("#: " + getStampValue("INVOICE#"));
+            oc.ShowText("#: " + getStampValue(Template2.FieldNames.INVOICE));
             y -= s;
             oc.SetTextMatrix(x, y);
             oc.ShowText("JOB");
             oc.SetTextMatrix(x + d, y);
-            oc.ShowText("#: " + getStampValue("JOB#"));
+            oc.ShowText("#: " + getStampValue(Template2.FieldNames.JOB));
             y -= s;
             oc.SetTextMatrix(x, y);
             oc.ShowText("PO");
             oc.SetTextMatrix(x + d, y);
-            oc.ShowText("#: " + getStampValue("PO#"));
+            oc.ShowText("#: " + getStampValue(Template2.FieldNames.PO));
             oc.EndText();
             oc.RestoreState();
         }
@@ -174,7 +168,7 @@ namespace Cliver.InvoiceParser
                 foreach (Template2 t2 in possibleTemplate2s)
                 {
                     Pages.ActiveTemplate = t2.Template;
-                    if (Pages[page_i].IsCondition(Conditions.DocumentFirstPage))
+                    if (Pages[page_i].IsCondition(Template2.ConditionNames.DocumentFirstPage))
                     {
                         if (documentFirstPageI > 0)
                         {
