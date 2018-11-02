@@ -450,9 +450,9 @@ namespace Cliver.PdfDocumentParser
         public object GetValue(Template.Field field)
         {
             if (field.Rectangle == null)
-                throw new Exception("Rectangular is not defined.");
+                throw new Exception("Rectangle is not defined.");
             if (field.Rectangle.Width <= Settings.Constants.CoordinateDeviationMargin || field.Rectangle.Height <= Settings.Constants.CoordinateDeviationMargin)
-                throw new Exception("Rectangular is malformed.");
+                throw new Exception("Rectangle is malformed.");
             RectangleF r = field.Rectangle.GetSystemRectangleF();
             if (field.AnchorId != null)
             {
