@@ -393,13 +393,6 @@ namespace Cliver.InvoiceParser
                 Row.Cells["Name_"].Value = t.Template.Name;
                 Row.Cells["ModifiedTime"].Value = t.GetModifiedTimeAsString();
             }
-
-            override public void SaveAsInitialTemplate()
-            {
-                Settings.Template2s.InitialTemplate2 = Settings.Template2s.CreateInitialTemplate();
-                Settings.Template2s.InitialTemplate2.Template = Template;
-                Settings.Template2s.Touch();
-            }
         }
 
         bool saveTemplatesFromTableIfTouched(bool trueIfDeclined)

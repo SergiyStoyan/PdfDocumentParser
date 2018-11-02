@@ -240,7 +240,7 @@ namespace Cliver.PdfDocumentParser
                 }
 
                 if (CheckConditionsAutomaticallyWhenPageChanged.Checked)
-                    setConditionStatuses();
+                    setConditionsStatuses();
             }
             catch (Exception e)
             {

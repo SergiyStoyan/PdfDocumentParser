@@ -32,6 +32,7 @@ namespace Cliver.PdfDocumentParser
             NEUTRAL,
             WARNING,
             ERROR,
+            WRONG
         }
 
         void setRowStatus(statuses s, DataGridViewRow r, string m)
@@ -44,6 +45,9 @@ namespace Cliver.PdfDocumentParser
                     break;
                 case statuses.ERROR:
                     r.HeaderCell.Style.BackColor = Color.Pink;
+                    break;
+                case statuses.WRONG:
+                    r.HeaderCell.Style.BackColor = Color.Black;
                     break;
                 case statuses.WARNING:
                     r.HeaderCell.Style.BackColor = Color.Yellow;
@@ -85,6 +89,20 @@ namespace Cliver.PdfDocumentParser
                         setAnchorParentAnchorIdList(r);
                 }
 
+                conditions.Rows.Clear();
+                if (templateManager.Conditions != null)
+                {
+                    foreach (string cn in templateManager.Conditions)
+                    {
+                        int i = conditions.Rows.Add();
+                        var row = conditions.Rows[i];
+                        row.Cells["Condition2"].Value = cn;
+                        string ce;
+                        if (t.Conditions.TryGetValue(cn, out ce))
+                            row.Cells["Expression2"].Value = ce;
+                    }
+                }
+
                 fields.Rows.Clear();
                 if (t.Fields != null)
                 {
@@ -120,20 +138,6 @@ namespace Cliver.PdfDocumentParser
         {
             DialogResult = DialogResult.Cancel;
             Close();
-        }
-
-        private void SaveAsInitialTemplate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            try
-            {
-                templateManager.Template = getTemplateFromUI(true);
-                templateManager.SaveAsInitialTemplate();
-                Message.Inform("Saved");
-            }
-            catch (Exception ex)
-            {
-                Message.Error2(ex);
-            }
         }
 
         private void About_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -250,20 +254,23 @@ namespace Cliver.PdfDocumentParser
             }
             t.Anchors = t.Anchors.OrderBy(a => a.Id).ToList();
 
-            //t.Marks = new List<Template.Mark>();
-            //foreach (DataGridViewRow r in marks.Rows)
-            //{
-            //    Template.Mark m = (Template.Mark)r.Tag;
-            //    if (m == null)
-            //        continue;
-            //    if (saving && !m.IsSet())
-            //        throw new Exception("Mark[" + r.Index + "] is not set!");
-            //    if (m.AnchorId != null && t.Anchors.FirstOrDefault(x => x.Id == m.AnchorId) == null)
-            //        throw new Exception("There is no Anchor with Id=" + m.AnchorId);
-            //    t.Marks.Add(m);
-            //}
-            //if (saving && t.Marks.Count < 1)
-            //    throw new Exception("Marks is empty!");
+            t.Conditions = new Dictionary<string, string>();
+            List<string> neededConditions = SerializationRoutines.Json.Clone(templateManager.Conditions);
+            foreach (DataGridViewRow r in conditions.Rows)
+            {
+                if (r.IsNewRow)
+                    continue;
+                string c = (string)r.Cells["Condition2"].Value;
+                if (string.IsNullOrWhiteSpace(c))
+                    throw new Exception("Condition['" + r.Index + "'] has empty name!");
+                string e = (string)r.Cells["Expression2"].Value;
+                if(saving)
+                    BooleanEngine.CheckSyntax(e);
+                t.Conditions[c] = e;
+                neededConditions.Remove(c);
+            }
+            if (saving && neededConditions.Count > 0)
+                throw new Exception("The following conditions are missing: '" + string.Join("', '", neededConditions) + "'");
 
             t.Fields = new List<Template.Field>();
             foreach (DataGridViewRow r in fields.Rows)

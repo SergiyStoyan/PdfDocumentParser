@@ -189,6 +189,8 @@ namespace Cliver.PdfDocumentParser
         internal PointF? GetAnchorPoint0(int anchorId)
         {
             Template.Anchor a = pageCollection.ActiveTemplate.Anchors.Find(x => x.Id == anchorId);
+            if (a == null)
+                throw new Exception("Anchor[id=" + anchorId + "] does not exist.");
             List<RectangleF> rs = GetAnchorRectangles(a);
             if (rs == null || rs.Count < 1)
                 return null;
@@ -435,10 +437,10 @@ namespace Cliver.PdfDocumentParser
         }
         List<Ocr.CharBox> _activeTemplateOcrCharBoxs;
 
-        public bool IsCondition(string condition)
+        public bool IsCondition1(string condition)
         {
             if (string.IsNullOrWhiteSpace(condition))
-                return false;
+                throw new Exception("Condition is empty.");
             List<Template.Anchor> as_ = pageCollection.ActiveTemplate.Anchors.Where(a => a.Condition == condition).ToList();
             if (as_.Count < 1)
                 return false;
@@ -446,6 +448,16 @@ namespace Cliver.PdfDocumentParser
                 if (GetAnchorRectangles(a) == null)
                     return false;
             return true;
+        }
+
+        public bool IsCondition(string condition)
+        {
+            if (string.IsNullOrWhiteSpace(condition))
+                throw new Exception("Condition is empty.");
+            var c = pageCollection.ActiveTemplate.Conditions.FirstOrDefault(a => a.Key == condition);
+            if (string.IsNullOrWhiteSpace(c.Value))
+                throw new Exception("Condition '" + condition + "' is not defined.");
+            return BooleanEngine.Parse(c.Value, this);
         }
 
         public object GetValue(int? anchorId, Template.RectangleF r_, Template.Types valueType, out string error)

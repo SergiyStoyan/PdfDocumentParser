@@ -9,15 +9,31 @@ namespace Cliver.PdfDocumentParser
 {
     public class BooleanEngine
     {
+        static public void CheckSyntax(string expression)
+        {
+            expression = Regex.Replace(expression, @"\d+", (Match m) =>
+            {
+                return "T";
+            });
+            parseSubstituted(expression);
+        }
+
         //Sample expression: "1 | (2 & 3)"
         static public bool Parse(string expression, Page p)
         {
-            BooleanEngine be = new BooleanEngine();
             expression = Regex.Replace(expression, @"\d+", (Match m) =>
             {
                 return p.GetAnchorPoint0(int.Parse(m.Value)) != null ? "T" : "F";
             });
+            return parseSubstituted(expression);
+        }
+
+        static bool parseSubstituted(string expression)
+        {
+            BooleanEngine be = new BooleanEngine();
             be.expression = Regex.Replace(expression, @"\s", "", RegexOptions.Singleline);
+            if (Regex.IsMatch(be.expression, @"[^TF\(\)\&\|\!]", RegexOptions.IgnoreCase))
+                throw new Exception("Expression '" + expression + "' contains unacceptable symbols.");
             be.move2NextToken();
             return be.parse();
         }

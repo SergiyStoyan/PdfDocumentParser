@@ -46,6 +46,8 @@ namespace Cliver.PdfDocumentParser
 
         public List<Anchor> Anchors;
 
+        public Dictionary<string, string> Conditions;//to be used instead of Field.Condition
+
         public List<Field> Fields;
 
         public class RectangleF

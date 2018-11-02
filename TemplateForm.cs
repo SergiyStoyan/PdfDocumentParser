@@ -30,7 +30,6 @@ namespace Cliver.PdfDocumentParser
             /// </summary>
             public Template Template;
             abstract public void Save();
-            abstract public void SaveAsInitialTemplate();
             public string LastTestFile;
             public void HelpRequest()
             {
@@ -64,6 +63,7 @@ namespace Cliver.PdfDocumentParser
             this.templateManager = templateManager;
 
             initializeAnchorsTable();
+            initializeConditionsTable();
             initializeFieldsTable();
 
             picture.MouseDown += delegate (object sender, MouseEventArgs e)
@@ -311,7 +311,6 @@ namespace Cliver.PdfDocumentParser
 
             save.Click += Save_Click;
             Help.LinkClicked += Help_LinkClicked;
-            SaveAsInitialTemplate.LinkClicked += SaveAsInitialTemplate_LinkClicked;
             Configure.LinkClicked += Configure_LinkClicked;
             cancel.Click += delegate { Close(); };
 

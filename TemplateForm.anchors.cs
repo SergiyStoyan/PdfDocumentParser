@@ -34,40 +34,34 @@ namespace Cliver.PdfDocumentParser
             ParentAnchorId3.ValueMember = "Id";
             ParentAnchorId3.DisplayMember = "Name";
 
-            Condition3.ValueType = typeof(string);
-            if (!templateManager.Conditions.Contains(string.Empty))
-                templateManager.Conditions.Insert(0, string.Empty);
-            Condition3.DataSource = templateManager.Conditions;
-            //Condition3.FlatStyle = FlatStyle.Flat;//to make backcolor visible
-
             anchors.EnableHeadersVisualStyles = false;//needed to set row headers
 
-            anchors.CellPainting += delegate (object sender, DataGridViewCellPaintingEventArgs e)//to make backcolor visible
-            {
-                if (e.RowIndex < 0 || e.ColumnIndex < 0)
-                    return;
-                if (e.ColumnIndex != anchors.Columns["Condition3"].Index)
-                    return;
-                var c = anchors[e.ColumnIndex, e.RowIndex] as DataGridViewComboBoxCell;
-                if (c == null)
-                    return;
-                if (c.Style.BackColor == SystemColors.Control)
-                    return;
+            //anchors.CellPainting += delegate (object sender, DataGridViewCellPaintingEventArgs e)//to make backcolor visible
+            //{
+            //    if (e.RowIndex < 0 || e.ColumnIndex < 0)
+            //        return;
+            //    if (e.ColumnIndex != anchors.Columns["Condition3"].Index)
+            //        return;
+            //    var c = anchors[e.ColumnIndex, e.RowIndex] as DataGridViewComboBoxCell;
+            //    if (c == null)
+            //        return;
+            //    if (c.Style.BackColor == SystemColors.Control)
+            //        return;
 
-                using (Brush backbrush = new SolidBrush(c.Style.BackColor))
-                {
-                    e.Paint(e.ClipBounds, DataGridViewPaintParts.Background);
-                    e.Paint(e.ClipBounds, DataGridViewPaintParts.Border);
-                    e.Paint(e.ClipBounds, DataGridViewPaintParts.ContentBackground);
-                    Rectangle r = new Rectangle(e.CellBounds.X + c.ContentBounds.X + 2, e.CellBounds.Y + c.ContentBounds.Y, c.ContentBounds.Width, c.ContentBounds.Height);
-                    e.Graphics.FillRectangle(backbrush, r);
-                    e.Paint(e.ClipBounds, DataGridViewPaintParts.ErrorIcon);
-                    e.Paint(e.ClipBounds, DataGridViewPaintParts.Focus);
-                    e.Paint(e.ClipBounds, DataGridViewPaintParts.SelectionBackground);
-                    e.Paint(e.ClipBounds, DataGridViewPaintParts.ContentForeground);
-                }
-                e.Handled = true;
-            };
+            //    using (Brush backbrush = new SolidBrush(c.Style.BackColor))
+            //    {
+            //        e.Paint(e.ClipBounds, DataGridViewPaintParts.Background);
+            //        e.Paint(e.ClipBounds, DataGridViewPaintParts.Border);
+            //        e.Paint(e.ClipBounds, DataGridViewPaintParts.ContentBackground);
+            //        Rectangle r = new Rectangle(e.CellBounds.X + c.ContentBounds.X + 2, e.CellBounds.Y + c.ContentBounds.Y, c.ContentBounds.Width, c.ContentBounds.Height);
+            //        e.Graphics.FillRectangle(backbrush, r);
+            //        e.Paint(e.ClipBounds, DataGridViewPaintParts.ErrorIcon);
+            //        e.Paint(e.ClipBounds, DataGridViewPaintParts.Focus);
+            //        e.Paint(e.ClipBounds, DataGridViewPaintParts.SelectionBackground);
+            //        e.Paint(e.ClipBounds, DataGridViewPaintParts.ContentForeground);
+            //    }
+            //    e.Handled = true;
+            //};
 
             anchors.CellBeginEdit += delegate (object sender, DataGridViewCellCancelEventArgs e)
             {
@@ -144,11 +138,6 @@ namespace Cliver.PdfDocumentParser
                     case "ParentAnchorId3":
                         {
                             a.ParentAnchorId = (int?)row.Cells["ParentAnchorId3"].Value;
-                            break;
-                        }
-                    case "Condition3":
-                        {
-                            a.Condition = (string)row.Cells["Condition3"].Value;
                             break;
                         }
                 }
@@ -275,7 +264,7 @@ namespace Cliver.PdfDocumentParser
                     default:
                         throw new Exception("Unknown option: " + t);
                 }
-                currentAnchorControl.Initialize(row, setConditionStatuses);
+                currentAnchorControl.Initialize(row, setConditionsStatuses);
             }
             finally
             {
@@ -287,16 +276,16 @@ namespace Cliver.PdfDocumentParser
         {
             get
             {
-                if (anchorsContainer.Panel2.Controls.Count < 1)
+                if (splitContainer3.Panel1.Controls.Count < 1)
                     return null;
-                return (AnchorControl)anchorsContainer.Panel2.Controls[0];
+                return (AnchorControl)splitContainer3.Panel1.Controls[0];
             }
             set
             {
-                anchorsContainer.Panel2.Controls.Clear();
+                splitContainer3.Panel1.Controls.Clear();
                 if (value == null)
                     return;
-                anchorsContainer.Panel2.Controls.Add(value);
+                splitContainer3.Panel1.Controls.Add(value);
                 value.Dock = DockStyle.Fill;
             }
         }
@@ -307,7 +296,6 @@ namespace Cliver.PdfDocumentParser
             row.Cells["Id3"].Value = a.Id;
             row.Cells["Type3"].Value = a.Type;
             row.Cells["ParentAnchorId3"].Value = a.ParentAnchorId;
-            row.Cells["Condition3"].Value = a.Condition;
 
             if (loadingTemplate)
                 return;
@@ -315,30 +303,7 @@ namespace Cliver.PdfDocumentParser
             if (currentAnchorControl != null && row == currentAnchorControl.Row)
                 setCurrentAnchorRow(a.Id, false);
 
-            setConditionStatuses();
-        }
-
-        void setConditionStatuses()
-        {
-            if (pages == null)
-                return;
-            pages.ActiveTemplate = getTemplateFromUI(false);
-            foreach (DataGridViewRow r in anchors.Rows)
-                if (r.Tag != null)
-                {
-                    DataGridViewComboBoxCell c = r.Cells["Condition3"] as DataGridViewComboBoxCell;
-                    Template.Anchor a = (Template.Anchor)r.Tag;
-                    if (string.IsNullOrWhiteSpace(a.Condition))
-                        c.Style.BackColor = SystemColors.Control;
-                    else
-                    {                        
-                        if (pages[currentPage].IsCondition(a.Condition))
-                            c.Style.BackColor = Color.LightGreen;
-                        else
-                            c.Style.BackColor = Color.Pink;
-                        findAndDrawAnchor(a.Id);//to set anchor status
-                    }
-                }
+            setConditionsStatuses();
         }
 
         void onAnchorsChanged()
