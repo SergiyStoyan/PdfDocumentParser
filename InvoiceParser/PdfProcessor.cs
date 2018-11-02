@@ -208,8 +208,7 @@ namespace Cliver.InvoiceParser
         {
             if (field.Rectangle == null)
                 return;
-            string error;
-            object v = p.GetValue(field.AnchorId, field.Rectangle, field.Type, out error);
+            object v = p.GetValue(field);
             if (v is ImageData)
             {
                 if (!fieldNames2text.ContainsKey(field.Name))

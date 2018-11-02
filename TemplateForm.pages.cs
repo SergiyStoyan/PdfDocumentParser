@@ -129,19 +129,19 @@ namespace Cliver.PdfDocumentParser
                 if (field.Rectangle == null)
                     return null;
 
-                RectangleF r_ = new RectangleF(field.Rectangle.X + shift.X, field.Rectangle.Y + shift.Y, field.Rectangle.Width, field.Rectangle.Height);
-                drawBoxes(Settings.Appearance.SelectionBoxColor, new List<RectangleF> { r_ }, renewImage);
-
-                string error;
-                object v = pages[currentPage].GetValue(null, new Template.RectangleF( r_.X, r_.Y, r_.Width, r_.Height), field.Type, out error);
+                RectangleF r = new RectangleF(field.Rectangle.X + shift.X, field.Rectangle.Y + shift.Y, field.Rectangle.Width, field.Rectangle.Height);
+                drawBoxes(Settings.Appearance.SelectionBoxColor, new List<RectangleF> { r }, renewImage);
                 switch (field.Type)
                 {
                     case Template.Types.PdfText:
-                        return Page.NormalizeText((string)v);
+                        return Page.NormalizeText(Pdf.GetTextByTopLeftCoordinates(pages[currentPage].PdfCharBoxs, r));
                     case Template.Types.OcrText:
-                        return Page.NormalizeText((string)v);
+                        return Page.NormalizeText(Ocr.This.GetText(pages[currentPage].ActiveTemplateBitmap, r));
                     case Template.Types.ImageData:
-                        return v;
+                        using (Bitmap rb = pages[currentPage].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
+                        {
+                            return ImageData.GetScaled(rb, Settings.Constants.Image2PdfResolutionRatio);
+                        }
                     default:
                         throw new Exception("Unknown option: " + field.Type);
                 }

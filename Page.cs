@@ -447,41 +447,30 @@ namespace Cliver.PdfDocumentParser
             return BooleanEngine.Parse(c.Value, this);
         }
 
-        public object GetValue(int? anchorId, Template.RectangleF r_, Template.Types valueType, out string error)
+        public object GetValue(Template.Field field)
         {
-            if (r_ == null)
-            {
-                error = "Rectangular is not defined.";
-                return null;
-            }
-            if (r_.Width <= Settings.Constants.CoordinateDeviationMargin || r_.Height <= Settings.Constants.CoordinateDeviationMargin)
-            {
-                error = "Rectangular is malformed.";
-                return null;
-            }
-            RectangleF r = r_.GetSystemRectangleF();
-            if (anchorId != null)
+            if (field.Rectangle == null)
+                throw new Exception("Rectangular is not defined.");
+            if (field.Rectangle.Width <= Settings.Constants.CoordinateDeviationMargin || field.Rectangle.Height <= Settings.Constants.CoordinateDeviationMargin)
+                throw new Exception("Rectangular is malformed.");
+            RectangleF r = field.Rectangle.GetSystemRectangleF();
+            if (field.AnchorId != null)
             {
                 PointF? p0_;
-                p0_ = GetAnchorPoint0((int)anchorId);
+                p0_ = GetAnchorPoint0((int)field.AnchorId);
                 if (p0_ == null)
-                {
-                    error = "Anchor[" + anchorId + "] is not found.";
                     return null;
-                }
                 PointF p0 = (PointF)p0_;
-                Template.Anchor a = pageCollection.ActiveTemplate.Anchors.Find(x => x.Id == anchorId);
+                Template.Anchor a = pageCollection.ActiveTemplate.Anchors.Find(x => x.Id == field.AnchorId);
                 RectangleF air = a.MainElementInitialRectangle();
                 r.X += p0.X - air.X;
                 r.Y += p0.Y - air.Y;
             }
-            error = null;
-            switch (valueType)
+            switch (field.Type)
             {
                 case Template.Types.PdfText:
                     return Pdf.GetTextByTopLeftCoordinates(PdfCharBoxs, r);
                 case Template.Types.OcrText:
-                    //return Ocr.GetTextByTopLeftCoordinates(ActiveTemplateOcrCharBoxs, r.GetSystemRectangleF());//for unknown reason tesseract often parses a whole page much worse than a fragment and so ActiveTemplateOcrCharBoxs give not reliable result.
                     return Ocr.This.GetText(ActiveTemplateBitmap, r);
                 case Template.Types.ImageData:
                     using (Bitmap rb = GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
@@ -489,18 +478,9 @@ namespace Cliver.PdfDocumentParser
                         return ImageData.GetScaled(rb, Settings.Constants.Image2PdfResolutionRatio);
                     }
                 default:
-                    throw new Exception("Unknown option: " + valueType);
+                    throw new Exception("Unknown option: " + field.Type);
             }
-            //}
-            //catch(Exception e)
-            //{
-            //    error = Log.GetExceptionMessage(e);
-            //}
-            //return null;
         }
-        static Dictionary<Bitmap, ImageData> bs2id = new Dictionary<Bitmap, ImageData>();
-
-        Dictionary<string, string> fieldNames2texts = new Dictionary<string, string>();
 
         public static string NormalizeText(string value)
         {
