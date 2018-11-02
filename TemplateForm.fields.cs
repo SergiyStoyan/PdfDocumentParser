@@ -248,7 +248,7 @@ namespace Cliver.PdfDocumentParser
                 setRowStatus(statuses.NEUTRAL, row, "");
                 return;
             }
-            object v = extractValueAndDrawSelectionBox(f.AnchorId, f.Rectangle, f.Type);
+            object v = extractFieldAndDrawSelectionBox(f);
             if (f.Type == Template.Types.ImageData)
             {
                 if (!(c is DataGridViewImageCell))
@@ -257,7 +257,6 @@ namespace Cliver.PdfDocumentParser
                     c = new DataGridViewImageCell();
                     row.Cells["Value"] = c;
                 }
-                c.Value = ((ImageData)v).GetImage();
             }
             else
             {
@@ -267,8 +266,8 @@ namespace Cliver.PdfDocumentParser
                     c = new DataGridViewTextBoxCell();
                     row.Cells["Value"] = c;
                 }
-                c.Value = v;
             }
+            c.Value = v;
             if (c.Value != null)
                 setRowStatus(statuses.SUCCESS, row, "Found");
             else

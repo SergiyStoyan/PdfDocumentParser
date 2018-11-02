@@ -9,11 +9,14 @@ namespace Cliver.PdfDocumentParser
 {
     public class BooleanEngine
     {
-        //Sample: "1 | (2 & 3)"
-        static public bool Parse(string expression)
+        //Sample expression: "1 | (2 & 3)"
+        static public bool Parse(string expression, Page p)
         {
             BooleanEngine be = new BooleanEngine();
-            expression = Regex.Replace(expression, @"\d+", (Match m) => { return int.Parse(m.Value) <= 4 ? "T" : "F"; });
+            expression = Regex.Replace(expression, @"\d+", (Match m) =>
+            {
+                return p.GetAnchorPoint0(int.Parse(m.Value)) != null ? "T" : "F";
+            });
             be.expression = Regex.Replace(expression, @"\s", "", RegexOptions.Singleline);
             be.move2NextToken();
             return be.parse();

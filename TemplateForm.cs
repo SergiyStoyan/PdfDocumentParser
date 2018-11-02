@@ -167,10 +167,14 @@ namespace Cliver.PdfDocumentParser
                                             if (selectedImageBoxs == null)
                                                 selectedImageBoxs = new List<Template.Anchor.ImageData.ImageBox>();
                                             string error;
+                                            ImageData id;
+                                            using (Bitmap b = (Bitmap)pages[currentPage].GetValue(null, Template.RectangleF.GetFromSystemRectangleF(selectedR), Template.Types.ImageData, out error))
+                                                id = new ImageData(b, false);
+                                            //id = (ImageData)pages[currentPage].GetValue(null, Template.RectangleF.GetFromSystemRectangleF(selectedR), Template.Types.ImageData, out error);
                                             selectedImageBoxs.Add(new Template.Anchor.ImageData.ImageBox
                                             {
                                                 Rectangle = Template.RectangleF.GetFromSystemRectangleF(selectedR),
-                                                ImageData = (ImageData)pages[currentPage].GetValue(null, Template.RectangleF.GetFromSystemRectangleF(selectedR), Template.Types.ImageData, out error)
+                                                ImageData = id
                                             });
                                         }
                                         break;

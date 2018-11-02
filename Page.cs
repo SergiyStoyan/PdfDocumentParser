@@ -487,7 +487,7 @@ namespace Cliver.PdfDocumentParser
                 case Template.Types.ImageData:
                     using (Bitmap rb = GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
                     {
-                        return new ImageData(rb);
+                        return ImageData.GetScaled(rb, Settings.Constants.Image2PdfResolutionRatio);
                     }
                 default:
                     throw new Exception("Unknown option: " + valueType);

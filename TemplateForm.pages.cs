@@ -101,40 +101,40 @@ namespace Cliver.PdfDocumentParser
             return p0;
         }
 
-        object extractValueAndDrawSelectionBox(int? anchorId, Template.RectangleF r, Template.Types valueType, bool renewImage = true)
+        object extractFieldAndDrawSelectionBox(Template.Field field, bool renewImage = true)
         {
             try
             {
                 if (pages == null)
                     return null;
+
                 pages.ActiveTemplate = getTemplateFromUI(false);
 
-                float x = r.X;
-                float y = r.Y;
-                if (anchorId != null)
+                PointF shift = new PointF(0, 0);
+                if (field.AnchorId != null)
                 {
-                    PointF? p0_ = findAndDrawAnchor((int)anchorId);
+                    PointF? p0_ = findAndDrawAnchor((int)field.AnchorId);
                     if (p0_ == null)
                         return null;
                     PointF p0 = (PointF)p0_;
                     DataGridViewRow row;
-                    Template.Anchor a = getAnchor(anchorId, out row);
+                    Template.Anchor a = getAnchor(field.AnchorId, out row);
                     RectangleF air = a.MainElementInitialRectangle();
-                    x += p0.X - air.X;
-                    y += p0.Y - air.Y;
+                    shift.X += p0.X - air.X;
+                    shift.Y += p0.Y - air.Y;
 
                     renewImage = false;
                 }
 
-                if (r == null)
+                if (field.Rectangle == null)
                     return null;
 
-                RectangleF r_ = new RectangleF(x, y, r.Width, r.Height);
+                RectangleF r_ = new RectangleF(field.Rectangle.X + shift.X, field.Rectangle.Y + shift.Y, field.Rectangle.Width, field.Rectangle.Height);
                 drawBoxes(Settings.Appearance.SelectionBoxColor, new List<RectangleF> { r_ }, renewImage);
 
                 string error;
-                object v = pages[currentPage].GetValue(null, new Template.RectangleF(x, y, r.Width, r.Height), valueType, out error);
-                switch (valueType)
+                object v = pages[currentPage].GetValue(null, new Template.RectangleF( r_.X, r_.Y, r_.Width, r_.Height), field.Type, out error);
+                switch (field.Type)
                 {
                     case Template.Types.PdfText:
                         return Page.NormalizeText((string)v);
@@ -143,7 +143,7 @@ namespace Cliver.PdfDocumentParser
                     case Template.Types.ImageData:
                         return v;
                     default:
-                        throw new Exception("Unknown option: " + valueType);
+                        throw new Exception("Unknown option: " + field.Type);
                 }
             }
             catch (Exception ex)
