@@ -19,6 +19,8 @@ namespace Cliver.PdfDocumentParser
 
         static public string GetFormatted(string expression)
         {
+            if (expression == null)
+                return null;
             expression = Regex.Replace(expression, @"\s", "", RegexOptions.Singleline);
             return Regex.Replace(expression, @"[\&\|]", " $0 ");
         }

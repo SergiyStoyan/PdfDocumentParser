@@ -206,9 +206,8 @@ namespace Cliver.PdfDocumentParser
                 foreach (DataGridViewRow r in conditions.Rows)
                 {
                     Template.Condition c = (Template.Condition)r.Tag;
-                    if (c == null)
-                        continue;
-                    conditionAnchorIds.AddRange(BooleanEngine.GetAnchorIds(c.Value));
+                    if (c != null && c.IsSet())
+                        conditionAnchorIds.AddRange(BooleanEngine.GetAnchorIds(c.Value));
                 }
                 conditionAnchorIds = conditionAnchorIds.Distinct().ToList();
             }
@@ -270,10 +269,16 @@ namespace Cliver.PdfDocumentParser
                 if (saving)
                 {
                     if (!c.IsSet())
-                        throw new Exception("Condition['" + r.Index + "'] is not set!");
+                        throw new Exception("Condition[row=" + (r.Index + 1) + "] is not set!");
                     BooleanEngine.Check(c.Value, t.Anchors.Select(x => x.Id));
                 }
                 t.Conditions.Add(c);
+            }
+            if (saving)
+            {
+                var dcs = t.Conditions.GroupBy(x => x.Name).Where(x => x.Count() > 1).FirstOrDefault();
+                if (dcs != null)
+                    throw new Exception("Condition '" + dcs.First().Name + "' is duplicated!");
             }
 
             t.Fields = new List<Template.Field>();
@@ -285,11 +290,17 @@ namespace Cliver.PdfDocumentParser
                 if (saving && !f.IsSet())
                     throw new Exception("Field[" + r.Index + "] is not set!");
                 if (saving && f.AnchorId != null && t.Anchors.FirstOrDefault(x => x.Id == f.AnchorId) == null)
-                    throw new Exception("There is no Anchor with Id=" + f.AnchorId);
+                    throw new Exception("Anchor[Id=" + f.AnchorId + " does not exist.");
                 t.Fields.Add(f);
             }
-            if (saving && t.Fields.Count < 1)
-                throw new Exception("Fields is empty!");
+            if (saving)
+            {
+                if (t.Fields.Count < 1)
+                    throw new Exception("Fields is empty!");
+                var dfs = t.Fields.GroupBy(x => x.Name).Where(x => x.Count() > 1).FirstOrDefault();
+                if (dfs != null)
+                    throw new Exception("Field '" + dfs.First().Name + "' is duplicated!");
+            }
 
             if (saving)
             {

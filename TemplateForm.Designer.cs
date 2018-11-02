@@ -38,6 +38,8 @@
             this.ParentAnchorId3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.conditions = new System.Windows.Forms.DataGridView();
+            this.Name2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Value2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CheckConditionsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
@@ -85,8 +87,6 @@
             this.About = new System.Windows.Forms.LinkLabel();
             this.ExtractFieldsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.Name2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Value2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -263,9 +263,23 @@
             this.Value2});
             this.conditions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.conditions.Location = new System.Drawing.Point(0, 13);
+            this.conditions.MultiSelect = false;
             this.conditions.Name = "conditions";
+            this.conditions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.conditions.Size = new System.Drawing.Size(197, 70);
             this.conditions.TabIndex = 0;
+            // 
+            // Name2
+            // 
+            this.Name2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Name2.HeaderText = "Condition";
+            this.Name2.Name = "Name2";
+            this.Name2.Width = 76;
+            // 
+            // Value2
+            // 
+            this.Value2.HeaderText = "Expression";
+            this.Value2.Name = "Value2";
             // 
             // CheckConditionsAutomaticallyWhenPageChanged
             // 
@@ -771,18 +785,6 @@
             this.label5.Size = new System.Drawing.Size(10, 13);
             this.label5.TabIndex = 59;
             this.label5.Text = "[";
-            // 
-            // Name2
-            // 
-            this.Name2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Name2.HeaderText = "Condition";
-            this.Name2.Name = "Name2";
-            this.Name2.Width = 76;
-            // 
-            // Value2
-            // 
-            this.Value2.HeaderText = "Expression";
-            this.Value2.Name = "Value2";
             // 
             // TemplateForm
             // 
