@@ -65,11 +65,6 @@
             this.label10 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.fields = new System.Windows.Forms.DataGridView();
-            this.Name_ = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Rectangle = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Ocr = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
@@ -85,6 +80,11 @@
             this.About = new System.Windows.Forms.LinkLabel();
             this.ExtractFieldsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.Name_ = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Rectangle = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Type = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -550,7 +550,7 @@
             this.Name_,
             this.AnchorId,
             this.Rectangle,
-            this.Ocr,
+            this.Type,
             this.Value});
             this.fields.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fields.Location = new System.Drawing.Point(0, 18);
@@ -559,41 +559,6 @@
             this.fields.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.fields.Size = new System.Drawing.Size(429, 151);
             this.fields.TabIndex = 30;
-            // 
-            // Name_
-            // 
-            this.Name_.HeaderText = "Name";
-            this.Name_.Name = "Name_";
-            this.Name_.Width = 60;
-            // 
-            // AnchorId
-            // 
-            this.AnchorId.HeaderText = "Anchor";
-            this.AnchorId.Name = "AnchorId";
-            this.AnchorId.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.AnchorId.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.AnchorId.Width = 50;
-            // 
-            // Rectangle
-            // 
-            this.Rectangle.HeaderText = "Rectangle";
-            this.Rectangle.Name = "Rectangle";
-            this.Rectangle.ReadOnly = true;
-            this.Rectangle.Width = 81;
-            // 
-            // Ocr
-            // 
-            this.Ocr.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Ocr.HeaderText = "OCR";
-            this.Ocr.Name = "Ocr";
-            this.Ocr.Width = 36;
-            // 
-            // Value
-            // 
-            this.Value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Value.HeaderText = "Value";
-            this.Value.Name = "Value";
-            this.Value.ReadOnly = true;
             // 
             // label1
             // 
@@ -755,6 +720,41 @@
             this.label5.TabIndex = 59;
             this.label5.Text = "[";
             // 
+            // Name_
+            // 
+            this.Name_.HeaderText = "Name";
+            this.Name_.Name = "Name_";
+            this.Name_.Width = 60;
+            // 
+            // AnchorId
+            // 
+            this.AnchorId.HeaderText = "Anchor";
+            this.AnchorId.Name = "AnchorId";
+            this.AnchorId.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.AnchorId.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.AnchorId.Width = 50;
+            // 
+            // Rectangle
+            // 
+            this.Rectangle.HeaderText = "Rectangle";
+            this.Rectangle.Name = "Rectangle";
+            this.Rectangle.ReadOnly = true;
+            this.Rectangle.Width = 60;
+            // 
+            // Type
+            // 
+            this.Type.HeaderText = "Type";
+            this.Type.Name = "Type";
+            this.Type.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Type.Width = 70;
+            // 
+            // Value
+            // 
+            this.Value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Value.HeaderText = "Value";
+            this.Value.Name = "Value";
+            this.Value.ReadOnly = true;
+            // 
             // TemplateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -826,11 +826,6 @@
         private System.Windows.Forms.LinkLabel ShowPdfText;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.LinkLabel ShowOcrText;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Name_;
-        private System.Windows.Forms.DataGridViewComboBoxColumn AnchorId;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Rectangle;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn Ocr;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Value;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.SplitContainer anchorsContainer;
         private System.Windows.Forms.CheckBox ExtractFieldsAutomaticallyWhenPageChanged;
@@ -854,5 +849,10 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn Type3;
         private System.Windows.Forms.DataGridViewComboBoxColumn ParentAnchorId3;
         private System.Windows.Forms.DataGridViewComboBoxColumn Condition3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Name_;
+        private System.Windows.Forms.DataGridViewComboBoxColumn AnchorId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Rectangle;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Type;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Value;
     }
 }

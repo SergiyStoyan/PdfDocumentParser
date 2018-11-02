@@ -29,6 +29,9 @@ namespace Cliver.PdfDocumentParser
             AnchorId.ValueMember = "Id";
             AnchorId.DisplayMember = "Name";
 
+            Type.ValueType = typeof(Template.Types);
+            Type.DataSource = Enum.GetValues(typeof(Template.Types));
+
             fields.EnableHeadersVisualStyles = false;//needed to set row headers
 
             fields.DataError += delegate (object sender, DataGridViewDataErrorEventArgs e)
@@ -59,16 +62,26 @@ namespace Cliver.PdfDocumentParser
                         //        cs["Value"].Value = extractValueAndDrawSelectionBox(f.AnchorId, f.Rectangle, f.Type);
                         //        break;
                         //    }
-                        case "Ocr":
+                        case "Type":
                             {
-                                bool ocr = Convert.ToBoolean(cs["Ocr"].Value);
-                                if (ocr == (f.Type != Template.Types.PdfText))
+                                Template.Types t2 = (Template.Types)row.Cells["Type"].Value;
+                                if (t2 == f.Type)
                                     break;
                                 Template.Field f2;
-                                if (ocr)
-                                    f2 = new Template.Field.OcrText();
-                                else
-                                    f2 = new Template.Field.PdfText();
+                                switch (t2)
+                                {
+                                    case Template.Types.PdfText:
+                                        f2 = new Template.Field.PdfText();
+                                        break;
+                                    case Template.Types.OcrText:
+                                        f2 = new Template.Field.OcrText();
+                                        break;
+                                    case Template.Types.ImageData:
+                                        f2 = new Template.Field.ImageData();
+                                        break;
+                                    default:
+                                        throw new Exception("Unknown option: " + t2);
+                                }
                                 f2.Name = f.Name;
                                 f2.AnchorId = f.AnchorId;
                                 f2.Rectangle = f.Rectangle;
@@ -95,9 +108,6 @@ namespace Cliver.PdfDocumentParser
                             f.Name = (string)row.Cells["Name_"].Value;
                             break;
                     }
-                    //cs["Value"].Value = extractValueAndDrawSelectionBox(f.AnchorId, f.Rectangle, f.Type);
-                    //if (cs["Value"].Value == null)
-                    //    setRowStatus(statuses.WARNING, row, "Not found");
                 }
                 catch (Exception ex)
                 {
@@ -209,17 +219,7 @@ namespace Cliver.PdfDocumentParser
                 fields.CurrentCell = fields[0, row.Index];
                 Template.Field f = (Template.Field)row.Tag;
                 setCurrentAnchorRow(f.AnchorId, true);
-
-                if (f.Rectangle != null)
-                {
-                    row.Cells["Value"].Value = extractValueAndDrawSelectionBox(f.AnchorId, f.Rectangle, f.Type);
-                    if (row.Cells["Value"].Value != null)
-                        setRowStatus(statuses.SUCCESS, row, "Found");
-                    else
-                        setRowStatus(statuses.ERROR, row, "Error");
-                }
-                else
-                    setRowStatus(statuses.WARNING, row, "Not set");
+                setFieldRowValue(row, false);
             }
             finally
             {
@@ -229,12 +229,71 @@ namespace Cliver.PdfDocumentParser
         bool settingCurrentFieldRow = false;
         DataGridViewRow currentFieldRow = null;
 
+        void setFieldRowValue(DataGridViewRow row, bool setEmpty)
+        {
+            Template.Field f = (Template.Field)row.Tag;
+            if (f == null)
+                return;
+            if (!f.IsSet())
+            {
+                setRowStatus(statuses.WARNING, row, "Not set");
+                return;
+            }
+            DataGridViewCell c = row.Cells["Value"];
+            if (c is DataGridViewImageCell && c.Value != null)
+                ((Bitmap)c.Value).Dispose();
+            if (setEmpty)
+            {
+                c.Value = null;
+                setRowStatus(statuses.NEUTRAL, row, "");
+                return;
+            }
+            object v = extractValueAndDrawSelectionBox(f.AnchorId, f.Rectangle, f.Type);
+            if (f.Type == Template.Types.ImageData)
+            {
+                if (!(c is DataGridViewImageCell))
+                {
+                    c.Dispose();
+                    c = new DataGridViewImageCell();
+                    row.Cells["Value"] = c;
+                }
+                c.Value = ((ImageData)v).GetImage();
+            }
+            else
+            {
+                if (c is DataGridViewImageCell)
+                {
+                    c.Dispose();
+                    c = new DataGridViewTextBoxCell();
+                    row.Cells["Value"] = c;
+                }
+                c.Value = v;
+            }
+            if (c.Value != null)
+                setRowStatus(statuses.SUCCESS, row, "Found");
+            else
+                setRowStatus(statuses.ERROR, row, "Error");
+        }
+
         void setFieldRow(DataGridViewRow row, Template.Field f)
         {
             row.Tag = f;
             row.Cells["Name_"].Value = f.Name;
             row.Cells["Rectangle"].Value = SerializationRoutines.Json.Serialize(f.Rectangle);
-            row.Cells["Ocr"].Value = f.Type == Template.Types.PdfText ? false : true;
+            switch (f.Type)
+            {
+                case Template.Types.PdfText:
+                    row.Cells["Type"].Value = Template.Types.PdfText;
+                    break;
+                case Template.Types.OcrText:
+                    row.Cells["Type"].Value = Template.Types.OcrText;
+                    break;
+                case Template.Types.ImageData:
+                    row.Cells["Type"].Value = Template.Types.ImageData;
+                    break;
+                default:
+                    throw new Exception("Unknown option: " + f.Type);
+            }
             row.Cells["AnchorId"].Value = f.AnchorId;
 
             if (loadingTemplate)

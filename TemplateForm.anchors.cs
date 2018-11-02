@@ -393,11 +393,7 @@ namespace Cliver.PdfDocumentParser
                     continue;
                 Template.Field f = (Template.Field)r.Tag;
                 if (f.AnchorId != null && !ais.Contains((int)f.AnchorId))
-                {
                     r.Cells["AnchorId"].Value = null;
-                    //r.Cells["Value"].Value = null;
-                    //setFieldRectangle(r, null);
-                }
             }
 
             {

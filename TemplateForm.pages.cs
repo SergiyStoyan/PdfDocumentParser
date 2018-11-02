@@ -216,7 +216,7 @@ namespace Cliver.PdfDocumentParser
                     return;
 
                 foreach (DataGridViewRow r in fields.Rows)
-                    r.Cells["Value"].Value = null;
+                    setFieldRowValue(r, true);
 
                 currentPage = page_i;
                 tCurrentPage.Text = currentPage.ToString();
@@ -236,21 +236,7 @@ namespace Cliver.PdfDocumentParser
                 if (ExtractFieldsAutomaticallyWhenPageChanged.Checked)
                 {
                     foreach (DataGridViewRow row in fields.Rows)
-                    {
-                        Template.Field f = (Template.Field)row.Tag;
-                        if (f == null)
-                            continue;
-                        if (f.IsSet())
-                        {
-                            row.Cells["Value"].Value = extractValueAndDrawSelectionBox(f.AnchorId, f.Rectangle, f.Type);
-                            if (row.Cells["Value"].Value != null)
-                                setRowStatus(statuses.SUCCESS, row, "Found");
-                            else
-                                setRowStatus(statuses.ERROR, row, "Not found");
-                        }
-                        else
-                            setRowStatus(statuses.WARNING, row, "Not set");
-                    }
+                        setFieldRowValue(row, false);
                 }
 
                 if (CheckConditionsAutomaticallyWhenPageChanged.Checked)
