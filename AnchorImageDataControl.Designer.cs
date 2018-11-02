@@ -42,6 +42,7 @@
             this.SearchRectangleMargin = new System.Windows.Forms.NumericUpDown();
             this.cSearchRectangleMargin = new System.Windows.Forms.CheckBox();
             this.pictures = new System.Windows.Forms.FlowLayoutPanel();
+            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.BrightnessTolerance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DifferentPixelNumberTolerance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PositionDeviation)).BeginInit();
@@ -241,15 +242,25 @@
             this.pictures.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictures.AutoSize = true;
-            this.pictures.Location = new System.Drawing.Point(0, 119);
+            this.pictures.Location = new System.Drawing.Point(0, 134);
             this.pictures.Name = "pictures";
-            this.pictures.Size = new System.Drawing.Size(215, 27);
+            this.pictures.Size = new System.Drawing.Size(215, 41);
             this.pictures.TabIndex = 75;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(3, 118);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(44, 13);
+            this.label4.TabIndex = 76;
+            this.label4.Text = "Pattern:";
             // 
             // AnchorImageDataControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.pictures);
             this.Controls.Add(this.cSearchRectangleMargin);
             this.Controls.Add(this.label3);
@@ -265,7 +276,7 @@
             this.Controls.Add(this.BrightnessTolerance);
             this.Controls.Add(this.DifferentPixelNumberTolerance);
             this.Name = "AnchorImageDataControl";
-            this.Size = new System.Drawing.Size(218, 149);
+            this.Size = new System.Drawing.Size(218, 178);
             ((System.ComponentModel.ISupportInitialize)(this.BrightnessTolerance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DifferentPixelNumberTolerance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PositionDeviation)).EndInit();
@@ -290,5 +301,6 @@
         public System.Windows.Forms.NumericUpDown SearchRectangleMargin;
         private System.Windows.Forms.CheckBox cSearchRectangleMargin;
         private System.Windows.Forms.FlowLayoutPanel pictures;
+        private System.Windows.Forms.Label label4;
     }
 }

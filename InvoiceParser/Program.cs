@@ -13,7 +13,6 @@ namespace Cliver.InvoiceParser
 {
     /*
  TBD:
- - anchor conditions as expressions
 - switch to Tesseract.4
  - tune image recognition by checking brightness deltas
 

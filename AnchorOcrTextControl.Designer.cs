@@ -38,6 +38,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.OcrEntirePage = new System.Windows.Forms.CheckBox();
             this.text = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.PositionDeviation)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SearchRectangleMargin)).BeginInit();
             this.SuspendLayout();
@@ -100,7 +101,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 42);
+            this.label3.Location = new System.Drawing.Point(3, 41);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(131, 13);
             this.label3.TabIndex = 81;
@@ -160,18 +161,28 @@
             this.text.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.text.Location = new System.Drawing.Point(6, 81);
+            this.text.Location = new System.Drawing.Point(6, 94);
             this.text.Multiline = true;
             this.text.Name = "text";
             this.text.ReadOnly = true;
-            this.text.Size = new System.Drawing.Size(195, 47);
+            this.text.Size = new System.Drawing.Size(195, 54);
             this.text.TabIndex = 87;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(3, 78);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(44, 13);
+            this.label5.TabIndex = 88;
+            this.label5.Text = "Pattern:";
             // 
             // AnchorOcrTextControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.text);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.OcrEntirePage);
@@ -183,7 +194,7 @@
             this.Controls.Add(this.PositionDeviation);
             this.Controls.Add(this.PositionDeviationIsAbsolute);
             this.Name = "AnchorOcrTextControl";
-            this.Size = new System.Drawing.Size(204, 130);
+            this.Size = new System.Drawing.Size(204, 154);
             ((System.ComponentModel.ISupportInitialize)(this.PositionDeviation)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.SearchRectangleMargin)).EndInit();
             this.ResumeLayout(false);
@@ -203,5 +214,6 @@
         private System.Windows.Forms.Label label4;
         public System.Windows.Forms.CheckBox OcrEntirePage;
         private System.Windows.Forms.TextBox text;
+        private System.Windows.Forms.Label label5;
     }
 }

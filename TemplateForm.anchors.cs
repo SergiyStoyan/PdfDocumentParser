@@ -265,7 +265,7 @@ namespace Cliver.PdfDocumentParser
                     default:
                         throw new Exception("Unknown option: " + t);
                 }
-                currentAnchorControl.Initialize(row, setConditionStatus);
+                currentAnchorControl.Initialize(row, null);
             }
             finally
             {

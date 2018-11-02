@@ -36,6 +36,7 @@
             this.SearchRectangleMargin = new System.Windows.Forms.NumericUpDown();
             this.cSearchRectangleMargin = new System.Windows.Forms.CheckBox();
             this.text = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.PositionDeviation)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SearchRectangleMargin)).BeginInit();
             this.SuspendLayout();
@@ -89,7 +90,7 @@
             // PositionDeviationIsAbsolute
             // 
             this.PositionDeviationIsAbsolute.AutoSize = true;
-            this.PositionDeviationIsAbsolute.Location = new System.Drawing.Point(154, 25);
+            this.PositionDeviationIsAbsolute.Location = new System.Drawing.Point(154, 26);
             this.PositionDeviationIsAbsolute.Name = "PositionDeviationIsAbsolute";
             this.PositionDeviationIsAbsolute.Size = new System.Drawing.Size(15, 14);
             this.PositionDeviationIsAbsolute.TabIndex = 72;
@@ -140,18 +141,28 @@
             this.text.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.text.Location = new System.Drawing.Point(6, 65);
+            this.text.Location = new System.Drawing.Point(6, 79);
             this.text.Multiline = true;
             this.text.Name = "text";
             this.text.ReadOnly = true;
-            this.text.Size = new System.Drawing.Size(195, 92);
+            this.text.Size = new System.Drawing.Size(195, 93);
             this.text.TabIndex = 86;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(3, 63);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(44, 13);
+            this.label5.TabIndex = 89;
+            this.label5.Text = "Pattern:";
             // 
             // AnchorPdfTextControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.text);
             this.Controls.Add(this.cSearchRectangleMargin);
             this.Controls.Add(this.label3);
@@ -161,7 +172,7 @@
             this.Controls.Add(this.PositionDeviation);
             this.Controls.Add(this.PositionDeviationIsAbsolute);
             this.Name = "AnchorPdfTextControl";
-            this.Size = new System.Drawing.Size(208, 159);
+            this.Size = new System.Drawing.Size(208, 175);
             ((System.ComponentModel.ISupportInitialize)(this.PositionDeviation)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.SearchRectangleMargin)).EndInit();
             this.ResumeLayout(false);
@@ -178,5 +189,6 @@
         public System.Windows.Forms.NumericUpDown SearchRectangleMargin;
         private System.Windows.Forms.CheckBox cSearchRectangleMargin;
         private System.Windows.Forms.TextBox text;
+        private System.Windows.Forms.Label label5;
     }
 }
