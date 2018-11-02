@@ -124,6 +124,7 @@ namespace Cliver.PdfDocumentParser
         void setConditionRow(DataGridViewRow row, Template.Condition c)
         {
             row.Tag = c;
+            c.Value = BooleanEngine.GetFormatted(c.Value);
             row.Cells["Name2"].Value = c.Name;
             row.Cells["Value2"].Value = c.Value;
 

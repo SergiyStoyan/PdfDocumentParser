@@ -271,7 +271,7 @@ namespace Cliver.PdfDocumentParser
                 {
                     if (!c.IsSet())
                         throw new Exception("Condition['" + r.Index + "'] is not set!");
-                    c.Value = BooleanEngine.CheckAndFormat(c.Value, t.Anchors.Select(x => x.Id));
+                    BooleanEngine.Check(c.Value, t.Anchors.Select(x => x.Id));
                 }
                 t.Conditions.Add(c);
             }
