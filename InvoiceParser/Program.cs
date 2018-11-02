@@ -52,7 +52,7 @@ namespace Cliver.InvoiceParser
 
                 //PdfDocumentParser.TemplateWindow tw = new PdfDocumentParser.TemplateWindow();
                 //tw.ShowDialog();
-                
+
                 Application.Run(MainForm.This);
             }
             catch (Exception e)

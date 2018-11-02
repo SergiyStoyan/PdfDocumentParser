@@ -183,6 +183,7 @@
     <Compile Include="AnchorControl.Designer.cs">
       <DependentUpon>AnchorControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="BooleanEngine.cs" />
     <Compile Include="PageCollection.cs" />
     <Compile Include="Page.cs" />
     <Compile Include="Program.cs" />
