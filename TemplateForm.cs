@@ -236,9 +236,7 @@ namespace Cliver.PdfDocumentParser
                 SplitContainer s = c as SplitContainer;
                 if (s != null)
                 {
-                    s.Panel1.BackColor = Color.Blue;
-                    s.Panel2.BackColor = Color.Blue;
-                    s.BackColor = Color.DarkGray;
+                    s.BackColor = Color.FromArgb(20, 10, 0);
                     s.SplitterWidth = 2;
                     s.Panel1.BackColor = SystemColors.Control;
                     s.Panel2.BackColor = SystemColors.Control;

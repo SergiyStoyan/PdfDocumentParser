@@ -37,6 +37,7 @@
             this.cSearchRectangleMargin = new System.Windows.Forms.CheckBox();
             this.text = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.PositionDeviation)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SearchRectangleMargin)).BeginInit();
             this.SuspendLayout();
@@ -44,11 +45,11 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 25);
+            this.label2.Location = new System.Drawing.Point(93, 5);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(150, 13);
+            this.label2.Size = new System.Drawing.Size(53, 13);
             this.label2.TabIndex = 75;
-            this.label2.Text = "Position Deviation Is Absolute:";
+            this.label2.Text = "(absolute:";
             // 
             // label1
             // 
@@ -62,12 +63,7 @@
             // PositionDeviation
             // 
             this.PositionDeviation.DecimalPlaces = 1;
-            this.PositionDeviation.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.PositionDeviation.Location = new System.Drawing.Point(154, 3);
+            this.PositionDeviation.Location = new System.Drawing.Point(166, 3);
             this.PositionDeviation.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -85,12 +81,12 @@
             1,
             0,
             0,
-            65536});
+            0});
             // 
             // PositionDeviationIsAbsolute
             // 
             this.PositionDeviationIsAbsolute.AutoSize = true;
-            this.PositionDeviationIsAbsolute.Location = new System.Drawing.Point(154, 26);
+            this.PositionDeviationIsAbsolute.Location = new System.Drawing.Point(144, 5);
             this.PositionDeviationIsAbsolute.Name = "PositionDeviationIsAbsolute";
             this.PositionDeviationIsAbsolute.Size = new System.Drawing.Size(15, 14);
             this.PositionDeviationIsAbsolute.TabIndex = 72;
@@ -99,7 +95,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 44);
+            this.label3.Location = new System.Drawing.Point(3, 27);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(131, 13);
             this.label3.TabIndex = 83;
@@ -107,7 +103,7 @@
             // 
             // SearchRectangleMargin
             // 
-            this.SearchRectangleMargin.Location = new System.Drawing.Point(154, 42);
+            this.SearchRectangleMargin.Location = new System.Drawing.Point(166, 25);
             this.SearchRectangleMargin.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -130,7 +126,7 @@
             // cSearchRectangleMargin
             // 
             this.cSearchRectangleMargin.AutoSize = true;
-            this.cSearchRectangleMargin.Location = new System.Drawing.Point(138, 45);
+            this.cSearchRectangleMargin.Location = new System.Drawing.Point(144, 27);
             this.cSearchRectangleMargin.Name = "cSearchRectangleMargin";
             this.cSearchRectangleMargin.Size = new System.Drawing.Size(15, 14);
             this.cSearchRectangleMargin.TabIndex = 85;
@@ -141,27 +137,38 @@
             this.text.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.text.Location = new System.Drawing.Point(6, 79);
+            this.text.Location = new System.Drawing.Point(6, 65);
             this.text.Multiline = true;
             this.text.Name = "text";
             this.text.ReadOnly = true;
-            this.text.Size = new System.Drawing.Size(195, 93);
+            this.text.Size = new System.Drawing.Size(207, 99);
             this.text.TabIndex = 86;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(3, 63);
+            this.label5.Location = new System.Drawing.Point(3, 49);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(44, 13);
             this.label5.TabIndex = 89;
             this.label5.Text = "Pattern:";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(156, 5);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(10, 13);
+            this.label4.TabIndex = 90;
+            this.label4.Text = ")";
             // 
             // AnchorPdfTextControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.Controls.Add(this.PositionDeviationIsAbsolute);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.text);
             this.Controls.Add(this.cSearchRectangleMargin);
@@ -170,9 +177,8 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.PositionDeviation);
-            this.Controls.Add(this.PositionDeviationIsAbsolute);
             this.Name = "AnchorPdfTextControl";
-            this.Size = new System.Drawing.Size(208, 175);
+            this.Size = new System.Drawing.Size(216, 167);
             ((System.ComponentModel.ISupportInitialize)(this.PositionDeviation)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.SearchRectangleMargin)).EndInit();
             this.ResumeLayout(false);
@@ -190,5 +196,6 @@
         private System.Windows.Forms.CheckBox cSearchRectangleMargin;
         private System.Windows.Forms.TextBox text;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
     }
 }
