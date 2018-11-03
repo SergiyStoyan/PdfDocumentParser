@@ -112,7 +112,6 @@ namespace Cliver.PdfDocumentParser
                 setCurrentFieldRow(null);
 
                 conditions.CurrentCell = conditions[0, row.Index];
-             var v =   row.HeaderCell.Value;
 
                 Template.Condition c = (Template.Condition)row.Tag;
                 bool renewImage = true;

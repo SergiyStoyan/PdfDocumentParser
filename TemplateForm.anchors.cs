@@ -63,6 +63,17 @@ namespace Cliver.PdfDocumentParser
             //    e.Handled = true;
             //};
 
+            //anchors.CellPainting += delegate (object sender, DataGridViewCellPaintingEventArgs e)
+            //{
+            //    if (e.ColumnIndex != -1)
+            //        return;
+
+            //    Image img = Image.FromFile("3RINGS~1.ICO");
+            //    e.Paint(e.CellBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.ContentForeground);
+            //    e.Graphics.DrawImage(img, new Rectangle(e.CellBounds.X, e.CellBounds.Y, e.CellBounds.Width / 3, e.CellBounds.Height / 3));
+            //    e.Handled = true;
+            //};
+
             anchors.CellBeginEdit += delegate (object sender, DataGridViewCellCancelEventArgs e)
             {
                 if (anchors.Columns[e.ColumnIndex].Name != "ParentAnchorId3")
