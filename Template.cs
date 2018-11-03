@@ -107,7 +107,7 @@ namespace Cliver.PdfDocumentParser
             public float PositionDeviation = 1f;
             public bool PositionDeviationIsAbsolute = false;
             public int? ParentAnchorId = null;
-            public string Condition = null;//to be removed in the next release
+            //public string Condition = null;//to be removed in the next release
 
             public Anchor()
             {

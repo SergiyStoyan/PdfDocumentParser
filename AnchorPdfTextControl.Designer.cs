@@ -45,7 +45,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(93, 5);
+            this.label2.Location = new System.Drawing.Point(98, 5);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(53, 13);
             this.label2.TabIndex = 75;
@@ -63,7 +63,7 @@
             // PositionDeviation
             // 
             this.PositionDeviation.DecimalPlaces = 1;
-            this.PositionDeviation.Location = new System.Drawing.Point(166, 3);
+            this.PositionDeviation.Location = new System.Drawing.Point(175, 3);
             this.PositionDeviation.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -86,7 +86,7 @@
             // PositionDeviationIsAbsolute
             // 
             this.PositionDeviationIsAbsolute.AutoSize = true;
-            this.PositionDeviationIsAbsolute.Location = new System.Drawing.Point(144, 5);
+            this.PositionDeviationIsAbsolute.Location = new System.Drawing.Point(151, 5);
             this.PositionDeviationIsAbsolute.Name = "PositionDeviationIsAbsolute";
             this.PositionDeviationIsAbsolute.Size = new System.Drawing.Size(15, 14);
             this.PositionDeviationIsAbsolute.TabIndex = 72;
@@ -103,7 +103,7 @@
             // 
             // SearchRectangleMargin
             // 
-            this.SearchRectangleMargin.Location = new System.Drawing.Point(166, 25);
+            this.SearchRectangleMargin.Location = new System.Drawing.Point(175, 25);
             this.SearchRectangleMargin.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -126,7 +126,7 @@
             // cSearchRectangleMargin
             // 
             this.cSearchRectangleMargin.AutoSize = true;
-            this.cSearchRectangleMargin.Location = new System.Drawing.Point(144, 27);
+            this.cSearchRectangleMargin.Location = new System.Drawing.Point(151, 27);
             this.cSearchRectangleMargin.Name = "cSearchRectangleMargin";
             this.cSearchRectangleMargin.Size = new System.Drawing.Size(15, 14);
             this.cSearchRectangleMargin.TabIndex = 85;
@@ -141,7 +141,7 @@
             this.text.Multiline = true;
             this.text.Name = "text";
             this.text.ReadOnly = true;
-            this.text.Size = new System.Drawing.Size(207, 99);
+            this.text.Size = new System.Drawing.Size(216, 99);
             this.text.TabIndex = 86;
             // 
             // label5
@@ -156,7 +156,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(156, 5);
+            this.label4.Location = new System.Drawing.Point(163, 5);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(10, 13);
             this.label4.TabIndex = 90;
@@ -178,7 +178,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.PositionDeviation);
             this.Name = "AnchorPdfTextControl";
-            this.Size = new System.Drawing.Size(216, 167);
+            this.Size = new System.Drawing.Size(225, 167);
             ((System.ComponentModel.ISupportInitialize)(this.PositionDeviation)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.SearchRectangleMargin)).EndInit();
             this.ResumeLayout(false);

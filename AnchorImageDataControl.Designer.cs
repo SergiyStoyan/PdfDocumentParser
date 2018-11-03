@@ -53,7 +53,7 @@
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(3, 0);
+            this.label20.Location = new System.Drawing.Point(3, 1);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(119, 13);
             this.label20.TabIndex = 66;
@@ -62,7 +62,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(3, 40);
+            this.label13.Location = new System.Drawing.Point(3, 43);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(163, 13);
             this.label13.TabIndex = 63;
@@ -71,7 +71,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(3, 20);
+            this.label11.Location = new System.Drawing.Point(3, 22);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(110, 13);
             this.label11.TabIndex = 61;
@@ -81,7 +81,7 @@
             // 
             this.FindBestImageMatch.AutoSize = true;
             this.FindBestImageMatch.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.FindBestImageMatch.Location = new System.Drawing.Point(167, 0);
+            this.FindBestImageMatch.Location = new System.Drawing.Point(174, 1);
             this.FindBestImageMatch.Name = "FindBestImageMatch";
             this.FindBestImageMatch.Size = new System.Drawing.Size(15, 14);
             this.FindBestImageMatch.TabIndex = 65;
@@ -95,7 +95,7 @@
             0,
             0,
             131072});
-            this.BrightnessTolerance.Location = new System.Drawing.Point(168, 15);
+            this.BrightnessTolerance.Location = new System.Drawing.Point(175, 18);
             this.BrightnessTolerance.Maximum = new decimal(new int[] {
             1,
             0,
@@ -123,7 +123,7 @@
             0,
             0,
             131072});
-            this.DifferentPixelNumberTolerance.Location = new System.Drawing.Point(168, 37);
+            this.DifferentPixelNumberTolerance.Location = new System.Drawing.Point(175, 40);
             this.DifferentPixelNumberTolerance.Maximum = new decimal(new int[] {
             1,
             0,
@@ -148,15 +148,15 @@
             this.pictures.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictures.AutoSize = true;
-            this.pictures.Location = new System.Drawing.Point(0, 119);
+            this.pictures.Location = new System.Drawing.Point(0, 122);
             this.pictures.Name = "pictures";
-            this.pictures.Size = new System.Drawing.Size(215, 56);
+            this.pictures.Size = new System.Drawing.Size(223, 53);
             this.pictures.TabIndex = 75;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 103);
+            this.label4.Location = new System.Drawing.Point(3, 106);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(44, 13);
             this.label4.TabIndex = 76;
@@ -165,7 +165,7 @@
             // PositionDeviationIsAbsolute
             // 
             this.PositionDeviationIsAbsolute.AutoSize = true;
-            this.PositionDeviationIsAbsolute.Location = new System.Drawing.Point(146, 61);
+            this.PositionDeviationIsAbsolute.Location = new System.Drawing.Point(151, 64);
             this.PositionDeviationIsAbsolute.Name = "PositionDeviationIsAbsolute";
             this.PositionDeviationIsAbsolute.Size = new System.Drawing.Size(15, 14);
             this.PositionDeviationIsAbsolute.TabIndex = 91;
@@ -174,7 +174,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(158, 61);
+            this.label1.Location = new System.Drawing.Point(163, 64);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(10, 13);
             this.label1.TabIndex = 98;
@@ -183,7 +183,7 @@
             // cSearchRectangleMargin
             // 
             this.cSearchRectangleMargin.AutoSize = true;
-            this.cSearchRectangleMargin.Location = new System.Drawing.Point(146, 83);
+            this.cSearchRectangleMargin.Location = new System.Drawing.Point(151, 86);
             this.cSearchRectangleMargin.Name = "cSearchRectangleMargin";
             this.cSearchRectangleMargin.Size = new System.Drawing.Size(15, 14);
             this.cSearchRectangleMargin.TabIndex = 97;
@@ -192,7 +192,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 82);
+            this.label3.Location = new System.Drawing.Point(3, 85);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(131, 13);
             this.label3.TabIndex = 95;
@@ -200,7 +200,7 @@
             // 
             // SearchRectangleMargin
             // 
-            this.SearchRectangleMargin.Location = new System.Drawing.Point(168, 81);
+            this.SearchRectangleMargin.Location = new System.Drawing.Point(175, 84);
             this.SearchRectangleMargin.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -223,7 +223,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(95, 61);
+            this.label2.Location = new System.Drawing.Point(98, 64);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(53, 13);
             this.label2.TabIndex = 94;
@@ -232,7 +232,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(3, 61);
+            this.label5.Location = new System.Drawing.Point(3, 64);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(95, 13);
             this.label5.TabIndex = 92;
@@ -241,7 +241,7 @@
             // PositionDeviation
             // 
             this.PositionDeviation.DecimalPlaces = 1;
-            this.PositionDeviation.Location = new System.Drawing.Point(168, 59);
+            this.PositionDeviation.Location = new System.Drawing.Point(175, 62);
             this.PositionDeviation.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -282,7 +282,7 @@
             this.Controls.Add(this.BrightnessTolerance);
             this.Controls.Add(this.DifferentPixelNumberTolerance);
             this.Name = "AnchorImageDataControl";
-            this.Size = new System.Drawing.Size(218, 178);
+            this.Size = new System.Drawing.Size(226, 178);
             ((System.ComponentModel.ISupportInitialize)(this.BrightnessTolerance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DifferentPixelNumberTolerance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.SearchRectangleMargin)).EndInit();

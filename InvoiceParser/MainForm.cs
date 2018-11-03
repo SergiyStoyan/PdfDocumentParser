@@ -373,9 +373,6 @@ namespace Cliver.InvoiceParser
                 if (Settings.Template2s.Template2s.Where(a => a != t && a.Template.Name == Template.Name).FirstOrDefault() != null)
                     throw new Exception("Template '" + Template.Name + "' already exists.");
 
-                if (Template.Anchors.FirstOrDefault(x => !string.IsNullOrWhiteSpace(x.Condition)) == null)
-                    throw new Exception("The template does not have any anchor group specified.");
-
                 Template2 it = Settings.Template2s.CreateInitialTemplate();
                 foreach (Template.Condition c in it.Template.Conditions)
                     if (Template.Conditions.FirstOrDefault(x => x.Name == c.Name) == null)
