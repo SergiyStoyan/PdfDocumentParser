@@ -69,6 +69,8 @@ namespace Cliver.PdfDocumentParser
             {
                 DataGridViewRow r;
                 getAnchor(a_.Id, out r);
+                if (a != a_)
+                    showAnchorRowAs(a_.Id, rowStates.Parent, false);
                 if (!a_.IsSet())
                 {
                     setRowStatus(statuses.WARNING, r, "Not set");
@@ -113,7 +115,8 @@ namespace Cliver.PdfDocumentParser
                 PointF shift = new PointF(0, 0);
                 if (field.AnchorId != null)
                 {
-                    PointF? p0_ = findAndDrawAnchor((int)field.AnchorId);
+                    showAnchorRowAs((int)field.AnchorId, rowStates.Linked, true);
+                    PointF? p0_ = findAndDrawAnchor((int)field.AnchorId, renewImage);
                     if (p0_ == null)
                         return null;
                     PointF p0 = (PointF)p0_;

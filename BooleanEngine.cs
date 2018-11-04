@@ -11,6 +11,8 @@ namespace Cliver.PdfDocumentParser
     {
         static public List<int> GetAnchorIds(string expression)
         {
+            if (expression == null)
+                return new List<int>();
             List<int> anchorIds = new List<int>();
             foreach (Match m in Regex.Matches(expression, @"\d+"))
                 anchorIds.Add(int.Parse(m.Value));
@@ -27,6 +29,8 @@ namespace Cliver.PdfDocumentParser
 
         static public void Check(string expression, IEnumerable<int> anchorIds)
         {
+            if (string.IsNullOrWhiteSpace(expression))
+                throw new Exception("Expression is empty.");
             expression = Regex.Replace(expression, @"\d+", (Match m) =>
             {
                 int ai = int.Parse(m.Value);

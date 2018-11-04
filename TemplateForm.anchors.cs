@@ -63,16 +63,37 @@ namespace Cliver.PdfDocumentParser
             //    e.Handled = true;
             //};
 
-            //anchors.CellPainting += delegate (object sender, DataGridViewCellPaintingEventArgs e)
-            //{
-            //    if (e.ColumnIndex != -1)
-            //        return;
+            anchors.CellPainting += delegate (object sender, DataGridViewCellPaintingEventArgs e)
+            {
+                if (e.RowIndex < 0)
+                    return;
+                if (e.ColumnIndex != -1)
+                    return;
+                rowStates? rowState = anchors.Rows[e.RowIndex].HeaderCell.Tag as rowStates?;
+                if (rowState == null || rowState == rowStates.NULL)
+                    return;
+                string s;
+                switch (rowState)
+                {
+                    case rowStates.Selected:
+                        return;
+                    case rowStates.Parent:
+                        s = "●";
+                        break;
+                    case rowStates.Condition:
+                        s = "▶";
+                        break;
+                    case rowStates.Linked:
+                        return;
+                    default:
+                        throw new Exception("Unknown option: " + rowState);
+                }
+                Rectangle r = e.CellBounds;
+                r.X += 2;
+                TextRenderer.DrawText(e.Graphics, s, e.CellStyle.Font, r, Color.Black, TextFormatFlags.VerticalCenter | TextFormatFlags.Left);
 
-            //    Image img = Image.FromFile("3RINGS~1.ICO");
-            //    e.Paint(e.CellBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.ContentForeground);
-            //    e.Graphics.DrawImage(img, new Rectangle(e.CellBounds.X, e.CellBounds.Y, e.CellBounds.Width / 3, e.CellBounds.Height / 3));
-            //    e.Handled = true;
-            //};
+                e.Handled = true;
+            };
 
             anchors.CellBeginEdit += delegate (object sender, DataGridViewCellCancelEventArgs e)
             {
@@ -127,23 +148,23 @@ namespace Cliver.PdfDocumentParser
                             Template.Types t2 = (Template.Types)row.Cells["Type3"].Value;
                             if (t2 == a.Type)
                                 break;
-                            Template.Anchor fa2;
+                            Template.Anchor a2;
                             switch (t2)
                             {
                                 case Template.Types.PdfText:
-                                    fa2 = new Template.Anchor.PdfText();
+                                    a2 = new Template.Anchor.PdfText();
                                     break;
                                 case Template.Types.OcrText:
-                                    fa2 = new Template.Anchor.OcrText();
+                                    a2 = new Template.Anchor.OcrText();
                                     break;
                                 case Template.Types.ImageData:
-                                    fa2 = new Template.Anchor.ImageData();
+                                    a2 = new Template.Anchor.ImageData();
                                     break;
                                 default:
                                     throw new Exception("Unknown option: " + t2);
                             }
-                            fa2.Id = a.Id;
-                            a = fa2;
+                            a2.Id = a.Id;
+                            a = a2;
                             break;
                         }
                     case "ParentAnchorId3":
@@ -184,6 +205,7 @@ namespace Cliver.PdfDocumentParser
                         return;
                     }
                     setCurrentAnchorRow(a.Id, false);
+                    showAnchorRowAs(a.Id, rowStates.Selected, true);
                     findAndDrawAnchor(a.Id);
                 }
                 catch (Exception ex)
@@ -235,6 +257,7 @@ namespace Cliver.PdfDocumentParser
                     anchors.ClearSelection();
                     anchors.CurrentCell = null;
                     currentAnchorControl = null;
+
                     return;
                 }
 
@@ -284,6 +307,7 @@ namespace Cliver.PdfDocumentParser
             }
         }
         bool settingCurrentAnchorRow = false;
+        
         AnchorControl currentAnchorControl
         {
             get
@@ -300,6 +324,15 @@ namespace Cliver.PdfDocumentParser
                 splitContainer3.Panel1.Controls.Add(value);
                 value.Dock = DockStyle.Fill;
             }
+        }
+
+        enum rowStates
+        {
+            NULL,
+            Selected,
+            Parent,
+            Condition,
+            Linked,
         }
 
         void setAnchorRow(DataGridViewRow row, Template.Anchor a)
@@ -451,6 +484,26 @@ namespace Cliver.PdfDocumentParser
         List<Pdf.CharBox> selectedPdfCharBoxs;
         List<Ocr.CharBox> selectedOcrCharBoxs;
         List<Template.Anchor.ImageData.ImageBox> selectedImageBoxs;
+
+        void showAnchorRowAs(int? anchorId, rowStates rowState, bool resetRows)
+        {
+            if (resetRows)
+                foreach (DataGridViewRow r in anchors.Rows)
+                {
+                    if (r.HeaderCell.Tag as rowStates? == rowStates.NULL)
+                        continue;
+                    r.HeaderCell.Tag = rowStates.NULL;
+                    anchors.InvalidateCell(r.HeaderCell);
+                }
+            if (anchorId == null)
+                return;
+            DataGridViewRow row;
+            Template.Anchor a = getAnchor(anchorId, out row);
+            if (row.HeaderCell.Tag as rowStates? == rowState)
+                return;
+            row.HeaderCell.Tag = rowState;
+            anchors.InvalidateCell(row.HeaderCell);
+        }
 
         Template.Anchor getAnchor(int? anchorId, out DataGridViewRow row)
         {

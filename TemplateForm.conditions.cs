@@ -108,18 +108,29 @@ namespace Cliver.PdfDocumentParser
                     return;
                 }
 
-                setCurrentAnchorRow(null, true);
-                setCurrentFieldRow(null);
-
                 conditions.CurrentCell = conditions[0, row.Index];
 
                 Template.Condition c = (Template.Condition)row.Tag;
-                bool renewImage = true;
+                bool firstAnchor = true;
                 foreach (int ai in BooleanEngine.GetAnchorIds(c.Value))
                 {
-                    findAndDrawAnchor(ai, renewImage);
-                    renewImage = false;
+                    if (firstAnchor)
+                    {
+                        showAnchorRowAs(ai, rowStates.NULL, true);
+                        setCurrentAnchorRow(ai, true);
+                    }
+                    else
+                        showAnchorRowAs(ai, rowStates.Condition, false);
+                    findAndDrawAnchor(ai, firstAnchor);
+                    firstAnchor = false;
                 }
+                if (firstAnchor)
+                {
+                    showAnchorRowAs(null, rowStates.NULL, true);
+                    setCurrentAnchorRow(null, true);
+                }
+
+                    setCurrentFieldRow(null);
             }
             finally
             {
