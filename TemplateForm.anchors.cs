@@ -36,33 +36,6 @@ namespace Cliver.PdfDocumentParser
 
             anchors.EnableHeadersVisualStyles = false;//needed to set row headers
 
-            //anchors.CellPainting += delegate (object sender, DataGridViewCellPaintingEventArgs e)//to make backcolor visible
-            //{
-            //    if (e.RowIndex < 0 || e.ColumnIndex < 0)
-            //        return;
-            //    if (e.ColumnIndex != anchors.Columns["Condition3"].Index)
-            //        return;
-            //    var c = anchors[e.ColumnIndex, e.RowIndex] as DataGridViewComboBoxCell;
-            //    if (c == null)
-            //        return;
-            //    if (c.Style.BackColor == SystemColors.Control)
-            //        return;
-
-            //    using (Brush backbrush = new SolidBrush(c.Style.BackColor))
-            //    {
-            //        e.Paint(e.ClipBounds, DataGridViewPaintParts.Background);
-            //        e.Paint(e.ClipBounds, DataGridViewPaintParts.Border);
-            //        e.Paint(e.ClipBounds, DataGridViewPaintParts.ContentBackground);
-            //        Rectangle r = new Rectangle(e.CellBounds.X + c.ContentBounds.X + 2, e.CellBounds.Y + c.ContentBounds.Y, c.ContentBounds.Width, c.ContentBounds.Height);
-            //        e.Graphics.FillRectangle(backbrush, r);
-            //        e.Paint(e.ClipBounds, DataGridViewPaintParts.ErrorIcon);
-            //        e.Paint(e.ClipBounds, DataGridViewPaintParts.Focus);
-            //        e.Paint(e.ClipBounds, DataGridViewPaintParts.SelectionBackground);
-            //        e.Paint(e.ClipBounds, DataGridViewPaintParts.ContentForeground);
-            //    }
-            //    e.Handled = true;
-            //};
-
             anchors.CellPainting += delegate (object sender, DataGridViewCellPaintingEventArgs e)
             {
                 if (e.RowIndex < 0)
