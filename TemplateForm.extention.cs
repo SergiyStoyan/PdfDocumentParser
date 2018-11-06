@@ -139,7 +139,7 @@ namespace Cliver.PdfDocumentParser
             AboutBox ab = new AboutBox();
             ab.ShowDialog();
         }
-
+        
         private void Configure_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             SettingsForm sf = new SettingsForm();

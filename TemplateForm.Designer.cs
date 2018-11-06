@@ -756,6 +756,7 @@
             this.About.TabStop = true;
             this.About.Text = "About";
             this.About.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.About.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.About_LinkClicked);
             // 
             // ExtractFieldsAutomaticallyWhenPageChanged
             // 
