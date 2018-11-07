@@ -47,9 +47,9 @@ function setVisible(item, visible){
     }
 }
         
-function onclickHeader(e){
+function onclickMenuItem(e){
     for(id in items)
-        if(items[id]['menuItem'] == this){
+        if(items[id]['menuItem'] == e){
             setVisible(items[id], true);
             items[id]['menuItem'].classList.add('current');
         }
@@ -70,7 +70,7 @@ function createMenuElement(){
         e.classList.add('nobreak');
         e.classList.add('h' + level);
         e.setAttribute('_id', id);
-        e.addEventListener('click', onclickHeader);
+        e.addEventListener('click', function(){ return onclickMenuItem(this); });
         e.innerHTML = items[id]['header'].innerHTML; 
         menu.appendChild(e);
         items[id]['menuItem'] = e;
@@ -89,5 +89,43 @@ content.parentNode.insertBefore(section, content);
 //section.appendChild(content);
 section.getElementsByTagName('td')[0].appendChild(menu);
 section.getElementsByTagName('td')[1].appendChild(content);
-for(i in items)
-    setVisible(items[i], false);
+
+for(id in items)
+    setVisible(items[id], false);
+    
+function listenLocalAnchorClicks(){
+    var move2LocalAnchor = function(item, e, href){
+        var anchorName = href.replace(/^.*#/, '');
+        var as = e.getElementsByTagName('a');
+        for(var i = 0; i < as.length; i++)
+            if(as[i].name == anchorName){  console.log(anchorName, as[i], item['menuItem']);
+                onclickMenuItem(item['menuItem']);
+                //as[i].scrollIntoView();
+                return true;
+            }
+        return false;
+    };
+    
+    var currentPath = window.location.href.replace(/#.*/, '');
+    var as = content.getElementsByTagName('a');
+    for(var i = 0; i < as.length; i++){//console.log(currentPath, as[i].href.replace(/#.*/, ''));
+        if(currentPath != as[i].href.replace(/#.*/, ''))
+            continue;
+        as[i].addEventListener('click', function(event){//alert(this.href);
+            for(var id in items){
+                if(move2LocalAnchor(items[id], items[id]['header'], this.href)){
+                    event.preventDefault();
+                    return false;
+                }
+                for(var ic in items[id]['content'])
+                    if(move2LocalAnchor(items[id], items[id]['content'][ic], this.href)){
+                        event.preventDefault();
+                        return false;
+                    }
+            }
+            return true;
+        }, false);
+    }
+}
+listenLocalAnchorClicks();
+//alert(1);
