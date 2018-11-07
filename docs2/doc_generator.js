@@ -47,46 +47,47 @@ function setVisible(item, visible){
     }
 }
         
-function onclickHeader(id){
-    for(i in items)
-        setVisible(items[i], false);
-    setVisible(items[id], true);
-    var as = menu.getElementsByTagName('a');
-    var r = new RegExp('#' + id + '$');
-    for(i in as){
-        if(!as[i].classList)
-            continue;
-        if(as[i].href.match(r)){//alert(1);
-            as[i].classList.add("current");}
-        else
-            as[i].classList.remove("current");
-    }
+function onclickHeader(e){
+    for(id in items)
+        if(items[id]['menuItem'] == this){
+            setVisible(items[id], true);
+            items[id]['menuItem'].classList.add('current');
+        }
+        else{
+            setVisible(items[id], false);//console.log(id);
+            items[id]['menuItem'].classList.remove('current');
+        }
     return false;
 }
     
-function getMenuInnerHTML(items){
-    var html = '';
+function createMenuElement(){
+    var menu = document.createElement('div');
+    menu.classList.add("menu");
     for(id in items){
-        //var indent = '';
         var level = id.match(/_/ig).length + 1;//alert(level);
-        //for(i = 1; i < level; i++)
-        //    indent += '&nbsp;&nbsp;&nbsp;&nbsp;';
-        html += '<br><span class="nobreak h' + level + '">' + '<a href="#' + id + '" onclick="return onclickHeader(\'' + id + '\');">' + items[id]['header'].innerHTML + '</a></span>';
+        var e = document.createElement('span');
+        e.classList.add('menuItem');
+        e.classList.add('nobreak');
+        e.classList.add('h' + level);
+        e.setAttribute('_id', id);
+        e.addEventListener('click', onclickHeader);
+        e.innerHTML = items[id]['header'].innerHTML; 
+        menu.appendChild(e);
+        items[id]['menuItem'] = e;
+        menu.appendChild(document.createElement('br'));
     }
-    return html;
+    return menu;
 }
-var menu = document.createElement('div');
-menu.classList.add("menu");
-menu.innerHTML = getMenuInnerHTML(items, 2);
-//var section = document.createElement('table');
-//section.innerHTML = '<tr><td></td><td></td></tr>';
-var section = document.createElement('section');
+var menu = createMenuElement();
+var section = document.createElement('table');
+section.innerHTML = '<tr><td class="menuTd"></td><td class="contentTd"></td></tr>';
+//var section = document.createElement('section');
 section.classList.add("section");
 var content = document.getElementById('content');
 content.parentNode.insertBefore(section, content);
-section.appendChild(menu);
-section.appendChild(content);
-//section.getElementsByTagName('td')[0].appendChild(menu);
-//section.getElementsByTagName('td')[1].appendChild(content);
+//section.appendChild(menu);
+//section.appendChild(content);
+section.getElementsByTagName('td')[0].appendChild(menu);
+section.getElementsByTagName('td')[1].appendChild(content);
 for(i in items)
     setVisible(items[i], false);

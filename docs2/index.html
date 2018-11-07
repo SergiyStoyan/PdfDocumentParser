@@ -10,6 +10,256 @@
 
 <div id='content'>
 <h2>Overview</h2>
+<p>PdfDocumentParser is a parsing engine designed to extract text/images from PDF documents that conform to a predefined graphic layout - such as invoices and the like. The main parsing approach is based on finding certain text or image fragments in page and then extracting text/images located relatively to those fragments.
+<p>Within this scope PdfDocumentParser implements the following strategies:
+<ul>
+<li>processing PDF entities which is the main way to operate with text in PdfDocumentParser;</li>
+<li>OCR (intended for scanned documents);</li>
+<li>image search/comparison which can be used in either native and scanned PDF files;</li>
+</ul> 
+
+<p>PdfDocumentParser was developed as a set of parsing tools that can be incorporated into a custom application hopefully without need of change. It provides:
+<ul>
+<li>Template Editor where parsing templates can be created or debugged in an easy manner;</li>
+<li>a parsing engine API that can be used by custom applications: the engine accepts a PDF file and returns parsed data back to the calling code;</li>
+</ul> 
+
+<h2>Assumptions</h2>
+<ul>
+<li>a PDF file can consist of multiple documents (e.g. multiple invoices);</li>
+<li>a document (e.g. invoice) can consist of multiple pages;</li>
+</ul>
+
+
+<h2>InvoiceParser</h2>
+<a href='../InvoiceParser/index.html'>Invoice Parser</a> is a custom desktop application based on PdfDocumentParser. It can be used as a sample or framework while incorporating PdfDocumentParser into a custom code.  
+
+
+<h2>Template</h2>
+<p>A template is desinged for documents that comply with certain layout (e.g. for invoices issued by the same company). It contains information about which data is to be harvested and how. Applying a template to documents with layout different from that it was designed for obviously brings to mistakes.
+<p>When you want to parse a document with a new layout, open Template Editor (how it is done depends on the custom application). Select a sample PDF file to be parsed and having it displayed in the editor you go through the following steps:
+<ul>
+<li> create <a href="#anchor">anchors</a>;</li>
+<li> create <a href="#condition">conditions</a>;</li>
+<li> create <a href="#field">fields</a>;</li>
+<li> select each created element and see in the status box if it works as expected;</li>
+<li> save the template;</li>
+</ul>
+See <a href="../tutorial/index.html">tutorial</a> for more details.
+
+
+<h3><a name="anchor">Anchor</a></h3>
+<p>Anchor is a fragment of either text or image that PdfDocumentParser will look for in every page of a PDF file. Then, if found, the anchor is used to locate in the page Marks or/and Fields that are linked to this anchor. While the idea of anchors is detecting points in page that can be used as absolute coordinate zero, it serves for multiple tasks:
+<ul>
+<li> finding marks/fields whose position in the page may vary e.g. finding value of 'total amount' in the bottom of invoice table;</li> 
+<li> recognizing marks/fields which may be met only in one page of a multipage document;</li>
+<li> detecting page zero position in scanned documents that usually have their margins vary;</li>
+</ul>
+<p>To create a anchor, select a new row in the anchors table and choose its type which can be one of the following:
+<ul>
+<li>PDF text;</li>
+<li>OCR text;</li>
+<li>Image data;</li>
+</ul>
+<p>Then select with mouse a rectangle in the document page. The text or image within the selection box will be a fragment that PdfDocumentParser will look for.
+<p>If you keep Ctrl pressed while selecting, you can select more than 1 element for the same anchor. To stop selecting, you have to release Ctrl before releasing mouse button.
+<p>Upon creating a anchor you can create either document recognition marks or fields and link them to the anchor. Linking means that mark's or field's coordinates become relative to the anchor they are linked to. That's PdfDocumentParser first will look for the anchor and if it is found, it will then locate on the page the linked marks/fields depending on the location of their anchor.
+A anchor consists of single or many elements of the same type where the first element is master and the rest ones are secondary. Position of the master element is position of anchor itself. Secondary elements are searched relatively to the master element's position just like linked Marks or Fields are.  
+
+<h4>PdfText Anchor</h4>
+Elements of such an anchor is PDF character boxes which together present a text to be found in page. Every character is a separate anchor element.
+<table>
+<tr><th class='title_column'>Parameter</th><th>Description</th></tr>
+<tr><td class='title_column'>Position deviation</td>
+<td>It allows to loose bonds between master element and secondary elements in a anchor when for some reason they can be shifted relatively to each other. It is measured in pixels and must be a positive float number, non-zero even for identical documents due to internal image re-scaling. It makes no sense when anchor contains no secondary element.</td></tr>
+<tr><td class='title_column'>Position deviation is absolute</td>
+<td>If set then position of each element is compared to the master element's position, otherwise, with the previous element's position.</td></tr>
+<td class='title_column'>Search rectangular margin</td>
+<td>By default, area where a anchor is looked for is the whole page. But it can be narrowed by setting search rectangular margin which specifies the area around the rectangular where the anchor is located while creating. It is measured in pixels. It helps to avoid undesired matching.</td></tr>
+</table>
+
+<h4>OcrText Anchor</h4>
+It is similar to PdfText type except for that difference that character boxes are gotten from OCR engine instead of PDF entities. 
+
+<h4>ImageData Anchor</h4>
+Elements of such an anchor is images which are page fragments picked by the selection box.
+<p><span class='attention'>NOTE: </span> even if an image fragment is looked for within the same page where it was extracted from, it cannot be found without a non-zero tolerance. It happens because maps produced when resizing an entire image and a fragment do not coincide due to pixel interpolation preformed. 
+<table>
+<tr><th class='title_column'>Parameter</th><th>Description</th></tr>
+<tr><td class='title_column'>Position deviation</td>
+<td>See PdfText.</td></tr>
+<tr><td class='title_column'>Position deviation is absolute</td>
+<td>See PdfText.</td></tr>
+<td class='title_column'>Search rectangular margin</td>
+<td>See PdfText. It reduces search time and helps to avoid undesired matching.</td></tr>
+<tr><td class='title_column'>Brightness tolerance</td>
+<td>While for native PDF documents it can be 0.1 - 0.2, scanned documents which have brightness discrepancy may need it higher. A higher tolerance brings to a less certain result.</td></tr>
+<tr><td class='title_column'>Different pixel number tolerance</td>
+<td>While for native PDF documents it can be 0.1 - 0.2, scanned documents which have brightness discrepancy may need it higher. A higher tolerance brings to a less certain result.</td></tr>
+<tr><td class='title_column'>Find best match</td>
+<td>If set, looks for the match with the least difference, otherwise returns the first match within the tolerance specified.</td></tr>
+</table>
+
+<h3><a name="condition">Condition</a></h3>
+<p>Condition is a fragment of either text or image that PdfDocumentParser will look in a document. One or more such marks is used by PdfDocumentParser to detect which template corresponds to the processed document. For this reason every template should have at least one document recognition mark defined. It is obviously that such marks must be unique enough to identify the document they belong to with a high confidence. It works the following way: PdfDocumentParser finds a mark in page and compares the found content with the stored mark's content. 
+<p>If all marks of a template are found in one page then this template is chosen for further processing of all the pages of the whole file and no more template recognition is done. However, presence of marks is checked for every page to detect beginning of a new document.
+
+<h4>PdfText Mark</h4>
+It is a text that must be a match to that is surrounded by the mark's rectangular. Text is retrieved from PDF text data.
+<h4>OcrText Mark</h4>
+It is a text that must be a match to that is surrounded by the mark's rectangular. Text is recognized by OCR engine.
+<h4>ImageData Mark</h4>
+It is an image that must be a match to that is surrounded by the mark's rectangular.
+<span class='attention'>NOTE: </span> even an image fragment extracted from the same page where then it is looked for, will not be found without a non-zero tolerance. It is because of differences in the maps produced when resizing an entire image and its fragment. 
+<table>
+<tr><th class='title_column'>Parameter</th><th>Description</th></tr>
+<tr><td class='title_column'>Brightness tolerance</td>
+<td>See Anchor description.</td></tr>
+<tr><td class='title_column'>Different pixel number tolerance</td>
+<td>See Anchor description.</td></tr>
+<tr><td class='title_column'>Find best match</td>
+<td>See Anchor description.</td></tr>
+</table>
+
+
+<p>To create a document recognition mark, select a new row in the marks. Then the new mark can be defined in 3 ways: 
+<ul>
+<li> link the mark to a anchor by choosing its ID and it finish on that leaving the mark itself empty. In this case, PdfDocumentParser will look for the anchor and when it is found, the document recognition mark is considered found as well;
+<li> select with mouse a rectangle in the page whose content is unique for this document type. E.g. for invoice it will be a company name or logo printed in the top of page. If you are sure that this mark always is located in the same position within page then no need to link the mark to a anchor. It this case, PdfDocumentParser will locate mark's rectangle in page and compare its content with mark's content: when they are the same then the mark is considered found;
+<li> otherwise, usually when parsing scanned documents, you have to link the mark to an anchor. It this case, PdfDocumentParser will find the anchor, then locate mark's rectangle relatively to the anchor and then compare its content to the stored mark's content.
+</ul>
+<p><span class='attention'>NOTE: </span>In the future Marks will be replaced with chained Anchors.
+
+<h3><a name="field">Field</a></h3>
+<p>Field defines certain text that you want extract from document. Like with document recognition marks it can either be linked to an anchor or retain absolute position in page. 
+<p>To create a field, select a new row in the fields table and select the area in page were text for this field must be extracted. 
+<p>For conventional PDF documents you should never use OCR option but for scanned documents it is the only way to get text in digital form that can be recorded in a file or database, indexed, searched and so on.
+<p>Every field is looked for in every page. This means that if a field has no anchor, it will be extracted from every page and only the value from the last page of a document will be recorded which may be wrong. To detect the correct page a anchor is used. E.g. if you want to extract invoice number then create a anchor pointing to something like "Invoice #:" and then link the field to it. Now PdfDocumentParser will extract this field only when "Invoice #:" is found. 
+<p>But when you know that every document consists only of a single page and the field is always located in the same position on page then there is no need to link it to a anchor.
+
+<h2>Text/image operation strategies</h2>
+<p>PdfDocumentParser implements the following strategies to operate with text and images:
+<ul>
+<li>Extracting text directly from PDF structure. This way is based on native text presentation inside PDF files. It is the main way to operate with text in PdfDocumentParser as it is the most robust and fast.</li>
+<li>Getting text from image by OCR technology provided by Tesseract engine incorporated into PdfDocumentParser. This option must be chosen only when PDF processing does not work. It is usually needed when documents you want to parse consist completely or partially of images such as scanned documents, photos etc. This way cannot not give 100% accuracy against PDF processing and will acceptably work only for images with resolution not less than 300dpi. Also this way is much slower.</li>
+<li>Image search. This way is used for seeking and comparing page fragments as images. This way is slower than PDF processing and so must be avoided when possible. Also, it may not provide 100% accuracy on scanned documents if they have essential discrepancy in size, contrast, brightness, orientation etc.</li>
+</ul>
+
+<h2>Scanned documents</h2>
+<p>Scanned documents are not the first subject for PdfDocumentParser but they are supported. PdfDocumentParser provides auto-deskew and page rotation options which are frequently required for scanned documents. 
+<p>Because of quality deviations in scanned documents the image comparison tolerance parameters may need to be tuned.
+<p>The image resolution in PdfDocumentParser must be set to not less than 300dpi, otherwise OCR will not work. On the other hand, increasing resolution increases processing time. Also, setting resolution in PdfDocumentParser higher than the resolution of original images will not make sense. Image resolution parameter is common for all templates and can be changed in the settings window. 
+
+
+<h2>To be done</h2>
+<p>While PDF mode just works as expected, OCR and Image modes due to their subjective nature have room for enhancement:
+<ul> 
+<li> Tesseract sometimes recognizes text for a page fragment better than for an entire page. Why is it? Need: switching to a newer Tesseract, probably Tesseract tuning and/or some effective image preprocessing;
+<li> Image search implementation is straight. On the one hand, it is open to development, on the other hand, it may be worth to switch to an advanced graphic processing package;
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2>Overview</h2>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+Overview Overview Overview
+<br>
+
+
 <h2>Anchors</h2>
 <h3>PdfText</h3>
 <h3>OcrText</h3>
@@ -25,12 +275,6 @@
 </div>
 <script src="doc_generator.js"></script>
 
-<br>
-<br>
-<br>
-<br>
-
-<hr>
 <div class="footer">
         <script src="copyright.js"></script>
         &nbsp;2018,&nbsp;&nbsp;<a href="mailto:sergey.stoyan@gmail.com?Subject=PdfDocumentParser request" target="_top">Sergey Stoyan</a>

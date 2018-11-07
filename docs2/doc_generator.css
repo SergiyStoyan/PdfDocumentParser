@@ -1,7 +1,7 @@
-span.h2 {margin:10 0 0 0;font-size1: 21px;display:inline-block;}
-span.h3 {margin:5 0 0 20;font-size1: 19px;display:inline-block;}
-span.h4 {margin:2 0 0 40;font-size1: 17px;display:inline-block;}
-span.h5 {margin:0 0 0 60;font-size1: 15px;display:inline-block;}
+span.h2 {margin:20 0 0 0; font-size1:21px; display:inline-block;}
+span.h3 {margin:10 0 0 20; font-size1:19px; display:inline-block;}
+span.h4 {margin:5 0 0 40; font-size1:17px; display:inline-block;}
+span.h5 {margin:0 0 0 60; font-size1:15px; display:inline-block;}
 
 span.nobreak {
   overflow: hidden;
@@ -17,39 +17,43 @@ span.nobreak {
 #content{
     vertical-align:top;
     display:inline-block;
+    padding: 0 50 0 50;
+}
+
+.contentTd{
+    width:100%;
+    vertical-align:top;
+    text-align:left;
+}
+
+.menuTd{
+    vertical-align:top;
+    text-align:left;
+    background-color: #eee; 
 }
 
 .menu {
-    height1: 100%; 
-    width1: 100; 
-    position1: fixed; 
-    left1: 0;
-    background-color: #fff; 
+    padding: 0 20 20 20;
     overflow-x: hidden; 
-    padding-top: 20px; 
-    padding-left: 20px; 
-    padding-right: 20px; 
-    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */    
-    margin-left:10;
-    margin-right:20;
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */  
     float1:left;
     display:inline-block;
-    border-right: 5px solid grey;
+    border-right1: 5px solid grey;
 }
 
-/* The navigation menu links */
-.menu a {
+.menuItem {
     text-decoration: none;
-    font-size1: 15px;
+    font-size1: 18px;
     color: #000;
     display1: block;
     transition: 0.3s;
+    cursor: pointer;
 }
 
-.menu a:hover {
+.menuItem:hover {
     color: #900;
 }
-.menu a.current {
+.menuItem.current {
     color: #d00;
     font-weight1: bold;
 }

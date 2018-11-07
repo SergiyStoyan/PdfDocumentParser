@@ -11,7 +11,7 @@ th {color:#000; font-style:italic;}
 th, td {margin:5; padding:5;}
 img {max-width: 1200px; max-height: 700px; margin-top:20; margin-bottom:30;display:block;}
 
-.footer {margin-top:auto;margin-bottom:auto;text-align:center;align-content:center;display:flex;justify-content:center;}
+.footer {margin-top:30;margin-bottom:40;text-align:center;align-content:center;display:flex;justify-content:center;}
 .attention{font-style:italic;font-weight:bold;color1:#503;}
 .screenshot_title{}
 .title_column{white-space: nowrap;font-weight:bold;}
