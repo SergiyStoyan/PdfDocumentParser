@@ -1,5 +1,4 @@
-            
-function getItems(e){
+var getItems = function (e){
     var items = {};
     var ids = [0, 0];
     while(e){//alert(e);
@@ -37,30 +36,19 @@ function getItems(e){
         e = e.nextSibling;
     }
     return items;
-}
+};
 var items = getItems(document.getElementById('content').childNodes[0]);
-
-function setVisible(item, visible){
-    item['header'].style.display = visible ? 'block': 'none';
-    for(ic in item['content']){
-        item['content'][ic].style.display = visible ? 'block': 'none';
-    }
-}
-        
-function onclickMenuItem(e){
-    for(id in items)
-        if(items[id]['menuItem'] == e){
-            setVisible(items[id], true);
-            items[id]['menuItem'].classList.add('current');
-        }
-        else{
-            setVisible(items[id], false);//console.log(id);
-            items[id]['menuItem'].classList.remove('current');
-        }
-    return false;
-}
+     
+(function(){       
+    var onclickMenuItem = function(){
+        for(id in items)
+            if(items[id]['menuItem'] == this){
+                window.location.href = window.location.href.replace(/#.*/, '') + '#' + id;
+                return false;
+            }
+        return false;
+    };
     
-function createMenuElement(){
     var menu = document.createElement('div');
     menu.classList.add("menu");
     for(id in items){
@@ -70,62 +58,81 @@ function createMenuElement(){
         e.classList.add('nobreak');
         e.classList.add('h' + level);
         e.setAttribute('_id', id);
-        e.addEventListener('click', function(){ return onclickMenuItem(this); });
+        e.addEventListener('click', onclickMenuItem);
         e.innerHTML = items[id]['header'].innerHTML; 
         menu.appendChild(e);
         items[id]['menuItem'] = e;
         menu.appendChild(document.createElement('br'));
     }
-    return menu;
-}
-var menu = createMenuElement();
-var section = document.createElement('table');
-section.innerHTML = '<tr><td class="menuTd"></td><td class="contentTd"></td></tr>';
-//var section = document.createElement('section');
-section.classList.add("section");
-var content = document.getElementById('content');
-content.parentNode.insertBefore(section, content);
-//section.appendChild(menu);
-//section.appendChild(content);
-section.getElementsByTagName('td')[0].appendChild(menu);
-section.getElementsByTagName('td')[1].appendChild(content);
-
-for(id in items)
-    setVisible(items[id], false);
     
-function listenLocalAnchorClicks(){
-    var move2LocalAnchor = function(item, e, href){
-        var anchorName = href.replace(/^.*#/, '');
+    var section = document.createElement('table');
+    section.innerHTML = '<tr><td class="menuTd"></td><td class="contentTd"></td></tr>';
+    //var section = document.createElement('section');
+    section.classList.add("section");
+    var content = document.getElementById('content');
+    content.parentNode.insertBefore(section, content);
+    //section.appendChild(menu);
+    //section.appendChild(content);
+    section.getElementsByTagName('td')[0].appendChild(menu);
+    section.getElementsByTagName('td')[1].appendChild(content);
+})();
+
+var navigate2anchor = function(anchorName){
+    //alert(window.location.href);
+    var setVisible = function(item, visible){
+        item['header'].style.display = visible ? 'block': 'none';
+        for(ic in item['content']){
+            item['content'][ic].style.display = visible ? 'block': 'none';
+        }
+    };
+
+    var openItem = function(item){
+        for(id in items)
+            if(items[id] != item){
+                setVisible(items[id], false);//console.log(id);
+                items[id]['menuItem'].classList.remove('current');
+            }
+        setVisible(item, true);
+        item['menuItem'].classList.add('current');
+        window.scrollTo(0, 0);
+    };
+    
+    var move2LocalAnchor = function(item, e, anchorName, isHeader){
         var as = e.getElementsByTagName('a');
         for(var i = 0; i < as.length; i++)
-            if(as[i].name == anchorName){  console.log(anchorName, as[i], item['menuItem']);
-                onclickMenuItem(item['menuItem']);
-                //as[i].scrollIntoView();
+            if(as[i].name == anchorName){  //console.log(anchorName, as[i], item['menuItem']);
+                openItem(item);
+                if(!isHeader)
+                    as[i].scrollIntoView();
                 return true;
             }
         return false;
-    };
+    }; 
     
-    var currentPath = window.location.href.replace(/#.*/, '');
-    var as = content.getElementsByTagName('a');
-    for(var i = 0; i < as.length; i++){//console.log(currentPath, as[i].href.replace(/#.*/, ''));
-        if(currentPath != as[i].href.replace(/#.*/, ''))
-            continue;
-        as[i].addEventListener('click', function(event){//alert(this.href);
-            for(var id in items){
-                if(move2LocalAnchor(items[id], items[id]['header'], this.href)){
-                    event.preventDefault();
-                    return false;
-                }
-                for(var ic in items[id]['content'])
-                    if(move2LocalAnchor(items[id], items[id]['content'][ic], this.href)){
-                        event.preventDefault();
-                        return false;
-                    }
-            }
-            return true;
-        }, false);
+    if(!anchorName){
+        for(id in items)
+            setVisible(items[id], false);
+        return;
     }
+    if(items[anchorName]){
+        openItem(items[anchorName]);
+        return true;
+    }
+    for(var id in items){
+        if(move2LocalAnchor(items[id], items[id]['header'], anchorName, true))
+            return true;
+        for(var ic in items[id]['content'])
+            if(move2LocalAnchor(items[id], items[id]['content'][ic], anchorName, false))
+                return true;
+    }
+};
+var onHashchange = function(event){
+    if(!navigate2anchor(window.location.href.replace(/^.*#/, '')))
+        return true;
+    event.preventDefault();
+    return false;
 }
-listenLocalAnchorClicks();
+window.addEventListener("hashchange", onHashchange, true);
+
+navigate2anchor(window.location.href.replace(/^.*#/, ''));
 //alert(1);
