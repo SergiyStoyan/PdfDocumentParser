@@ -26,13 +26,6 @@ var getItems = function (e){
                 continue;
             }
         }
-        //console.log(e);//
-            /*if(!e.style){//text node
-                var s = document.createElement('span');//alert(e);
-                e.parentNode.insertBefore(s, e.nextSibling);
-                s.appendChild(e);            
-                e = s;
-            }*/
         var item = items[ids.join('_')];
         if(item){
             item['content'].appendChild(e); 
@@ -84,19 +77,21 @@ var addMenu2Page = function(){
 
 var navigate2currentAnchor = function(){
     //alert(window.location.href);
-    var setVisible = function(item, visible){
+    var setItemVisible = function(item, visible){
         item['header'].style.display = visible ? 'block': 'none';
         item['content'].style.display = visible ? 'block': 'none';
     };
-
+    
     var openItem = function(item){
         for(id in items)
             if(items[id] != item){
-                setVisible(items[id], false);//console.log(id);
+                setItemVisible(items[id], false);//console.log(id);
                 items[id]['menuItem'].classList.remove('current');
             }
-        setVisible(item, true);
-        item['menuItem'].classList.add('current');
+        if(item){
+            setItemVisible(item, true);
+            item['menuItem'].classList.add('current');
+        }
         window.scrollTo(0, 0);
     };
     
@@ -112,10 +107,10 @@ var navigate2currentAnchor = function(){
         return false;
     }; 
     
-    var anchorName = window.location.href.replace(/^.*#(_localAnchor_)?/, '');//'_localAnchor_' was added to prevent browser from unpleasant page jerking when navigating to a hidden anchor
+    var anchorName = window.location.href.replace(/[^#]*#?(_localAnchor_)?/, '');//'_localAnchor_' was added to prevent browser from unpleasant page jerking when navigating to a hidden anchor
+    //alert(anchorName);
     if(!anchorName){
-        for(id in items)
-            setVisible(items[id], false);
+        openItem(false);
         return;
     }
     if(items[anchorName]){

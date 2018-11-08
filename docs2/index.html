@@ -49,7 +49,7 @@
 <h2>Template Editor</h2>
 
 <h3>Tutorial</h3>
-<h4>Create a template</h4>
+<h4>Create template</h4>
 <p>A parsing template can be created from scratch or copied from an existing one. Usually copying saves time because you can adapt existing settings instead of creating new ones. However, in this tutorial we'll see how to set up a template from scratch and so, let's remove all the anchors and marks if any. At the same time take for granted that fields INVOICE, JOB#, PO# and COST are expected in any template so they should not be removed. If they are absent, create them.
 <p class='screenshot_title'>Open a test PDF file in the template editor and specify the template's name. As an example, we will parse a PDF consisting of 2 invoices:
 <img src='img/tutorial1.png'/>
@@ -76,7 +76,7 @@
 <p>And one more difference: while all the marks must be met on the same page, fields should not necessary do so. In every page Parser tries to capture all the fields and only the last captures are remembered and recorded when the end of PDF file or a new document is reached.
 <p><span class='attention'>NOTE: </span>the same anchor can be linked by multiple marks and fields.
 
-<h4>Check the template</h4>
+<h4>Check template</h4>
 <p>When all the fields are set, it's time to walk through the PDF file and see how the template works on every page.
 <p class='screenshot_title'>The page #2 is a new invoice and the marks in our template recognized it properly:
 <img src='img/tutorial5.png'/>
@@ -115,7 +115,7 @@ For an alive example of using PdfDocumentParser in a custom application refer <a
 
 
 <h3>Pseudo-code</h3>
-A basic algoritm of processing a PDF file with PdfDocumentParser follows:
+Some basic algoritm of processing a PDF file with PdfDocumentParser would look like the following:
 <pre><code>
 foreach(page in pdf)
 {
@@ -125,17 +125,17 @@ foreach(page in pdf)
         if(PdfDocumentParser.IsCondition(page, 'itIsDocumentFirstPage'))
         {
             object value1 = PdfDocumentParser.GetValue('field1Name');
-            <do something with value1>
+            do something with value1
             object value2 = PdfDocumentParser.GetValue('field2Name');
-            <do something with value2>
+            do something with value2
             ...
         }
         else if(PdfDocumentParser.IsCondition(page, 'itIsDocumentLastPage'))
         {
             object value1 = PdfDocumentParser.GetValue('field1Name');
-            <do something with value1>
+            do something with value1
             object value2 = PdfDocumentParser.GetValue('field2Name');
-            <do something with value2>
+            do something with value2
             ...
         }
         ...
@@ -143,7 +143,7 @@ foreach(page in pdf)
 }
 </code></pre>
 
-The main idea is that certain operations are performed depending on conditions defined in templates.
+The main idea is that custom operations are performed depending on conditions defined in templates.
 
 
 
@@ -190,11 +190,11 @@ Elements of such an anchor is PDF character boxes which together present a text 
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'>Position deviation</td>
-<td>It allows to loose bonds between master element and secondary elements in a anchor when for some reason they can be shifted relatively to each other. It is measured in pixels and must be a positive float number, non-zero even for identical documents due to internal image re-scaling. It makes no sense when anchor contains no secondary element.</td></tr>
+<td>It allows to loose bonds between master element and secondary elements in a anchor when for some reason they can shift relatively to each other. It is measured in pixels and must be a positive float number, non-zero even for identical documents bacause of discrepancy reasoned by internal image re-scaling.</td></tr>
 <tr><td class='title_column'>Position deviation is absolute</td>
-<td>If set then position of each element is compared to the master element's position, otherwise, with the previous element's position.</td></tr>
+<td>If set then position of each element is compared to the master element's position, otherwise, with the previous element's position. It makes no sense when anchor contains no secondary element.</td></tr>
 <td class='title_column'>Search rectangular margin</td>
-<td>By default, area where a anchor is looked for is the whole page. But it can be narrowed by setting search rectangular margin which specifies the area around the rectangular where the anchor is located while creating. It is measured in pixels. It helps to avoid undesired matching.</td></tr>
+<td>By default, area where an anchor is looked for is the entire page. But it can be narrowed by setting search rectangular margin that specifies the area around the rectangular where the anchor was located while creating. It is measured in pixels. It helps to avoid undesired matching and speed up processing.</td></tr>
 </table>
 
 <h4>OcrText</h4>
