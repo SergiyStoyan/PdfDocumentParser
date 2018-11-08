@@ -48,43 +48,40 @@
 
 <h2>Template Editor</h2>
 
-<h3>Tutorial</h3>
-<h4>Create template</h4>
+<h3><a name='tutorial'>Tutorial: Configuring Template</a></h3>
 <p>A parsing template can be created from scratch or copied from an existing one. Usually copying saves time because you can adapt existing settings instead of creating new ones. A template can be pre-filled with initial data which can be modified as needed. 
-<p>But here we start with a blank template.
-<p><span class='attention'>NOTE: </span>Names in Name column of Conditions and Fields tables are predefined by logic of the custom application that uses PdfDocumentParser and so must not be changed. That means that condition FirstPageOfDocument and fields INVOICE, JOB#, PO# and COST are valid only for this tutorial while another application can predefine and expect another conditions and fields. 
-<p>Open a test PDF file in the template editor and specify the template's name. In this tutorial we will parse a PDF consisting of 2 invoices.
+<p>But in the tutorial we'll start with a blank template.
+<p class='screenshot_title'>Open a test PDF file in the template editor window:
+<img src='img/tutorial0.png'/>
 
 <h4>Create anchors</h4>
-<p>Any template needs at least one anchor that will certainly identify type of document and distinguish it from the rest documents you may want to parse. Such an anchor should be targeted to some fragment of a document that is unique to its type. Usually it is logo of company issued the document.
+<p>Any template needs at least one anchor that will certainly identify type of document and distinguish it from the rest documents you may want to parse. Such an anchor should be targeted to some fragment of a document that is unique to its type. Usually it is a logo of company which issued the document.
 <p class='screenshot_title'>Create an anchor that captures the logo and thus detects if the page corresponds to the template:
 <img src='img/tutorial1.png'/>
 
 <p>In addition to the first anchor which is a must for any template, one more anchor is usually needed that checks if the page is first page of a document. It is necessary when parsing a multi-document PDF file: when Parser finds this anchor, all the previously extracted fields are recorded and reset.
-<p class='screenshot_title'>So let's create a first page recognition mark:
-<img src='img/tutorial1.png'/>
 <p class='screenshot_title'>Create an anchor that checks document's number and thus detects if the page is document's first page:
 <img src='img/tutorial2.png'/>
 
 <p><span class='attention'>NOTE: </span>when you select a line in either table, PdfDocumentParser processes it on the current page and the result is displayed in the page viewer and in Status.
 
 <h4>Specify conditions</h4>
-<p>To allow the custom application detect if a page corresponds to the template and is the first page of a document at the same time, we have to define condition FirstPageOfDocument. It is done by entering a boolean expression that relates on anchors #1 and #2 and when they both are found then this template should be chosen to process the document. 
-<p class='screenshot_title'>Enter expression "1 & 2" that will make PdfDocumentParser check both anchors at the same time:
+<p>Generally conditions can be any that are dictated by the logic of the appication. But usually the application needs to detect if a page at the same time corresponds to the template and is the first page of a document. If this condition is met then this template is chosen to process the document. In the tutorial this condtion has name FirstPageOfDocument. FirstPageOfDocument should be defined by entering a boolean expression that relates on anchors #1 and #2.  
+<p class='screenshot_title'>Enter expression "1 & 2" which is true only when both anchors are found together:
 <img src='img/tutorial3.png'/>
 
-<p>While in our example condition FirstPageOfDocument is quite good with 2 anchors and it is so for the most layouts, sometimes more anchors can be required: for instance when we need to parse different type documents issued by the same company and so have to distinguish document types.
+<p>While in our example FirstPageOfDocument is quite good with 2 anchors and it is so for the most documents, sometimes more anchors are required: for instance when we need to parse different type documents issued by the same company and so have to distinguish document types.
 
 
 
 <h4>Set fields</h4>
-<p>A field is usually linked an anchor so that when a field's anchor is found, PdfDocumentParser locates the field's rectangle relatively to the anchor's position and extracts text surrounded by the rectangle. But a field can have no anchor in which case its selecting rectangle remains in prefixed location.
+<p>A field is usually linked an anchor so that when a field's anchor is found, PdfDocumentParser locates the field's rectangle relatively to the anchor's position and extracts text surrounded by it. But a field might have no anchor in which case its selecting rectangle remains in a prefixed location.
 <p class='screenshot_title'>Set INVOICE# field.:
 <img src='img/tutorial4.png'/>
 <p><span class='attention'>NOTE: </span>the same anchor can be linked by multiple marks and fields.
 
-In the same way as above create anchors for each of the fields and link the fields to them.
-<p class='screenshot_title'>Set COST field:
+<p>In the same way as above create anchors for each of the fields and link the fields to them.
+<p class='screenshot_title'>Setting COST field:
 <img src='img/tutorial5.png'/>
 
 
@@ -113,18 +110,18 @@ In the same way as above create anchors for each of the fields and link the fiel
 
 
 
-<h2>API</h2>
+<h2><a name='api'>API</a></h2>
 For an alive example of using PdfDocumentParser in a custom application refer <a href='#InvoiceParser'>InvoiceParser</a>.
 
 <h3>Methods</h3>
 <table>
 <tr><th class='title_column'>Method</th><th>Description</th></tr>
 <tr><td class='title_column'>Cliver.PdfDocumentParser.PageCollection::ActiveTemplate</td>
-<td>Assign a template to PdfDocumentParser.</td></tr>
+<td>Set an active template in PdfDocumentParser.</td></tr>
 <tr><td class='title_column'>Cliver.PdfDocumentParser.Page::IsCondition</td>
-<td>Checks if a condition defined by active template is met in the page.</td></tr>
+<td>Checks if a condition defined by active template is met in page.</td></tr>
 <tr><td class='title_column'>Cliver.PdfDocumentParser.Page::GetValue</td>
-<td>Extracts value for a field defined by active template.</td></tr>
+<td>Extracts a field defined by active template from page.</td></tr>
 </table>
 
 
@@ -177,30 +174,39 @@ The main idea is that custom operations are performed depending on conditions de
 <li> select each created element and see in the status box if it works as expected;</li>
 <li> save the template;</li>
 </ul>
-See <a href="../tutorial/index.html">tutorial</a> for more details.
+See <a href="#tutorial">tutorial</a> for more details.
 
 
 
 <h3><a name="anchor">Anchor</a></h3>
-<p>Anchor is a fragment of either text or image that PdfDocumentParser will look for in every page of a PDF file. Then, if found, the anchor is used to locate in the page Marks or/and Fields that are linked to this anchor. While the idea of anchors is detecting points in page that can be used as absolute coordinate zero, it serves for multiple tasks:
+<p>Anchor is a fragment of either text or image that PdfDocumentParser will look for in PDF page. If found, the anchor is then used by conditions or fields. A not engaged anchor itself is useless. Anchor can be used in the following ways:
 <ul>
-<li> finding marks/fields whose position in the page may vary e.g. finding value of 'total amount' in the bottom of invoice table;</li> 
-<li> recognizing marks/fields which may be met only in one page of a multipage document;</li>
-<li> detecting page zero position in scanned documents that usually have their margins vary;</li>
+<li> it can be linked by fields whose positions in page may vary like 'total amount' field whose position usually depends on size of invoice's content;</li> 
+<li> it can be engaged in conditions that needs to detect if a certain pattern exists in PDF page;</li>
+<li> it can be linked by another anchor so that the latter becomes valid only when the former is found;</li>
 </ul>
+<p>While native PDF documents in some cases can be parsed without anchors, scanned documents that usually have their margins vary should be processed only with anchors.
+
+<p>Linking to acnhor means that coordinates of a linked field or anchor become relative to the anchor they are linked to. That's PdfDocumentParser first will look for the anchor and if it is found, it will locate the linked fields or anchors depending on the location of their anchor.
+
+<h4>General structure of anchor</h4>
+<p>An anchor consists of a single or many elements of the same type where the first element is master and the rest are secondary. Position of the master element is considered position of the anchor itself. Secondary elements are searched relatively to the master element's position.  
+<p>When an anchor is linked to another anchor, its master element is treated like a secondary element of the linking anchor.
+
+
+<h4>Anchor creation</h4>
 <p>To create a anchor, select a new row in the anchors table and choose its type which can be one of the following:
 <ul>
 <li>PDF text;</li>
 <li>OCR text;</li>
 <li>Image data;</li>
 </ul>
+<p> Each of types is processed by its own very different way and so choosing the right type is crucial in successful and robust parsing.
 <p>Then select with mouse a rectangle in the document page. The text or image within the selection box will be a fragment that PdfDocumentParser will look for.
 <p>If you keep Ctrl pressed while selecting, you can select more than 1 element for the same anchor. To stop selecting, you have to release Ctrl before releasing mouse button.
-<p>Upon creating a anchor you can create either document recognition marks or fields and link them to the anchor. Linking means that mark's or field's coordinates become relative to the anchor they are linked to. That's PdfDocumentParser first will look for the anchor and if it is found, it will then locate on the page the linked marks/fields depending on the location of their anchor.
-A anchor consists of single or many elements of the same type where the first element is master and the rest ones are secondary. Position of the master element is position of anchor itself. Secondary elements are searched relatively to the master element's position just like linked Marks or Fields are.  
 
-<h4>PdfText</h4>
-Elements of such an anchor is PDF character boxes which together present a text to be found in page. Every character is a separate anchor element.
+<h4><a name='anchorPdfText'>PdfText</a></h4>
+Elements of this type anchor is PDF character boxes which together present a text to be found in page. Every character is separate anchor element.
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'>Position deviation</td>
@@ -212,19 +218,32 @@ Elements of such an anchor is PDF character boxes which together present a text 
 </table>
 
 <h4>OcrText</h4>
-It is similar to PdfText type except for that difference that character boxes are gotten from OCR engine instead of PDF entities. 
-
-<h4>ImageData</h4>
-Elements of such an anchor is images which are page fragments picked by the selection box.
-<p><span class='attention'>NOTE: </span> even if an image fragment is looked for within the same page where it was extracted from, it cannot be found without a non-zero tolerance. It happens because maps produced when resizing an entire image and a fragment do not coincide due to pixel interpolation preformed. 
+It is strctured and treated similarly to <a href='#anchorPdfText'>PdfText</a> type except that difference that character boxes are provided by OCR engine instead of PDF entities. 
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'>Position deviation</td>
-<td>See PdfText.</td></tr>
+<td>See <a href='#anchorPdfText'>PdfText</a>.</td></tr>
 <tr><td class='title_column'>Position deviation is absolute</td>
-<td>See PdfText.</td></tr>
+<td>See <a href='#anchorPdfText'>PdfText</a>.</td></tr>
 <td class='title_column'>Search rectangular margin</td>
-<td>See PdfText. It reduces search time and helps to avoid undesired matching.</td></tr>
+<td>See <a href='#anchorPdfText'>PdfText</a>.</td></tr>
+<tr><td class='title_column'>OCR entire page</td>
+<td><span class='attention'>NOTE: </span>This switch can completely change parsing. It is because OCR by Tesseract of a larger image and a smaller fragment can give different recognition of the same text. 
+<br>Which is better? Sometimes OCR of entire page gives more correct results, sometimes otherwise. But it always takes considerably longer time than OCR of a smaller fragment defined by Search rectangular margin. 
+<br>This switch makes sense only when Search rectangular margin is checked, otherwise the entire page is OCR'ed anyway.</td></tr>
+</table>
+
+<h4>ImageData</h4>
+Elements of this type anchor is images which are page fragments picked by the selection box.
+<p><span class='attention'>NOTE: </span> even if an image fragment is looked for within the same page where it was extracted from, it cannot be found without a non-zero tolerance. It happens because maps produced after downsizing an entire image and a fragment do not coincide due to different results in pixel interpolation. 
+<table>
+<tr><th class='title_column'>Parameter</th><th>Description</th></tr>
+<tr><td class='title_column'>Position deviation</td>
+<td>See <a href='#anchorPdfText'>PdfText</a>.</td></tr>
+<tr><td class='title_column'>Position deviation is absolute</td>
+<td>See <a href='#anchorPdfText'>PdfText</a>.</td></tr>
+<td class='title_column'>Search rectangular margin</td>
+<td>See <a href='#anchorPdfText'>PdfText</a>. It reduces search time and helps to avoid undesired matching.</td></tr>
 <tr><td class='title_column'>Brightness tolerance</td>
 <td>While for native PDF documents it can be 0.1 - 0.2, scanned documents which have brightness discrepancy may need it higher. A higher tolerance brings to a less certain result.</td></tr>
 <tr><td class='title_column'>Different pixel number tolerance</td>
@@ -237,9 +256,20 @@ Elements of such an anchor is images which are page fragments picked by the sele
 
 
 
-<h3><a name="condition">Condition</a></h3>
-<p>Condition is a fragment of either text or image that PdfDocumentParser will look in a document. One or more such marks is used by PdfDocumentParser to detect which template corresponds to the processed document. For this reason every template should have at least one document recognition mark defined. It is obviously that such marks must be unique enough to identify the document they belong to with a high confidence. It works the following way: PdfDocumentParser finds a mark in page and compares the found content with the stored mark's content. 
-<p>If all marks of a template are found in one page then this template is chosen for further processing of all the pages of the whole file and no more template recognition is done. However, presence of marks is checked for every page to detect beginning of a new document.
+<h3><a name="condition">Condition</a></h3> 
+<p>Condition is a boolean expression that depends on anchors and can be differently defined in every template.
+<p>Condition can have meaning True or False which depends on the pair [PDF page, template]. It can be checked by <a href='#api'>PdfDocumentParser API</a> method IsCondition(<condition name>). 
+<p>Conditions are identified by their names. They are dictated by logic of custom application and so their names are predefined within its scope and are the same for all templates.
+<p>While condition collection can vary, the following conditons highly likely are required in any application:
+
+<ul>
+<li>condition that tells whether document corresponds to this template or not. It is obviously that this condtion must identify its document type with a high confidence;</li>
+<li>also, if processed PDF files are multi-document then one more condition that detects first page of documents is required</li>
+</ul>
+However, usually a single condition is used that serves for both those tasks at the same time.
+
+<h4>Boolean expression</h4>
+Condition's expression can be composed of the following symbols: &lt;anchor id&gt;, '!', '&', '|', '(', ')'. When anchor referenced by &lt;anchor id&gt; is found then it is treated as True, otherwise False. Boolean result of expression is meaning of its condition. 
 
 
 
@@ -248,18 +278,19 @@ Elements of such an anchor is images which are page fragments picked by the sele
 
 
 <h3><a name="field">Field</a></h3>
-<p>Field defines certain text that you want extract from document. Like with document recognition marks it can either be linked to an anchor or retain absolute position in page. 
-<p>To create a field, select a new row in the fields table and select the area in page were text for this field must be extracted. 
+<p>Field defines certain text or image that is to be extracted from PDF file. It can either be linked to an anchor or retain absolute position in page. 
+<p>Fields are identified by their names. They are dictated by logic of custom application and so their names are predefined within its scope and are the same for all templates.
+<p>To create a field, select a new row in the fields table and select the area in page were text for this field must be extracted. If the field may have different location in page then it must be linked to an anchor that will detect its proper location for every page. If anchor of a linked field is not found then this field is not found as well. 
+<p>When it is known that the field is always has the same position in every document then there is no need to link it to an anchor.
 
 <h4>PdfText</h4>
-It is a text that must be a match to that is surrounded by the mark's rectangular. Text is retrieved from PDF text data.
+It is a text surrounded by field's rectangle and is retrieved from PDF text data.
 <h4>OcrText</h4>
-It is a text that must be a match to that is surrounded by the mark's rectangular. Text is recognized by OCR engine.
+It is a text surrounded by field's rectangle and is recognized by OCR engine.
+<p>For conventional PDF documents this type should never be used. But for scanned documents it is the only way to get text in digital form that can be recorded in a file or database, indexed, searched and so on.
 <h4>ImageData</h4>
-
-<p>For conventional PDF documents you should never use OCR option but for scanned documents it is the only way to get text in digital form that can be recorded in a file or database, indexed, searched and so on.
-<p>Every field is looked for in every page. This means that if a field has no anchor, it will be extracted from every page and only the value from the last page of a document will be recorded which may be wrong. To detect the correct page a anchor is used. E.g. if you want to extract invoice number then create a anchor pointing to something like "Invoice #:" and then link the field to it. Now PdfDocumentParser will extract this field only when "Invoice #:" is found. 
-<p>But when you know that every document consists only of a single page and the field is always located in the same position on page then there is no need to link it to a anchor.
+It is a System.Drawing.Bitmap that is fragment of page surrounded by field's rectangle. 
+<p>It can be used when image required rather than text or when OCR is not reliable.
 
 
 
@@ -268,7 +299,7 @@ It is a text that must be a match to that is surrounded by the mark's rectangula
 
 
 <h2>Scanned documents</h2>
-<p>Scanned documents are not the first subject for PdfDocumentParser but they are supported. PdfDocumentParser provides auto-deskew and page rotation options which are frequently required for scanned documents. 
+<p>Scanned documents are not the first subject for PdfDocumentParser but they are supported. PdfDocumentParser provides auto-deskew and page rotation options which are usually required for scanned documents. 
 <p>Because of quality deviations in scanned documents the image comparison tolerance parameters may need to be tuned.
 <p>The image resolution in PdfDocumentParser must be set to not less than 300dpi, otherwise OCR will not work. On the other hand, increasing resolution increases processing time. Also, setting resolution in PdfDocumentParser higher than the resolution of original images will not make sense. Image resolution parameter is common for all templates and can be changed in the settings window. 
 
@@ -282,14 +313,14 @@ It is a text that must be a match to that is surrounded by the mark's rectangula
 
 
 <h2><a name='InvoiceParser'></a>InvoiceParser</h2>
-Invoice Parser is a custom desktop application based on PdfDocumentParser. It can be used as a sample or framework while incorporating PdfDocumentParser into a custom code. 
+Invoice Parser is a custom desktop application based on PdfDocumentParser. It can be used as a framwork or sample of incorporating PdfDocumentParser into custom code. Actually its custom specificity lays only in a way how PDF files are parsed while the rest code can be used unchanged as a framework in a new application.
 <p>Generally, it does the following:
 <ul>
-<li>enhances PdfDocumentParser::Template with custom properties that are not related to parsing;</li>
+<li>enhances PdfDocumentParser.Template with custom properties that are not related to parsing;</li>
 <li>keeps and manages templates;</li>
+<li>defines PdfDocumentParser.TemplateForm.TemplateManager and calls PdfDocumentParser.TemplateForm for editing templates;</li>
 <li>processes PDF files along the custom needs;</li>
 </ul>
-
 <img src='img/invoiceparser2_1.png'/>
 
 <h3>Assumptions</h3>

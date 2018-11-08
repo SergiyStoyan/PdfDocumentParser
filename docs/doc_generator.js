@@ -14,14 +14,15 @@ var getItems = function (e){
                     while(ids.length < level)
                         ids.push(0);
                 }
-                else if(ids.length > level){
+                else{
                     while(ids.length > level)
                         ids.pop();
                 }
                 ids[ids.length - 1] += 1;//alert(ids.join('_'));                                
                 var content = document.createElement('div');
                 e.parentNode.insertBefore(content, e.nextSibling);
-                items[ids.join('_')] = {'header': e, 'content': content};
+                var id = ids.join('_');
+                items[id] = {'header': e, 'content': content, 'id': id};
                 e = content.nextSibling;
                 continue;
             }
@@ -91,6 +92,25 @@ var navigate2currentAnchor = function(){
         if(item){
             setItemVisible(item, true);
             item['menuItem'].classList.add('current');
+            {//display also children until something is not empty
+                var id = item['id'];
+                var childIds = [id];
+                var childId = id;
+                while(!/\S/.test(items[childId]['content'].innerHTML)){
+                    childIds.push(1);
+                    childId = childIds.join('_');
+                    while(!items[childId]){
+                        childIds.pop();
+                        if(childIds.length == 1)
+                            break;
+                        childIds[childIds.length - 1] += 1;
+                        childId = childIds.join('_');
+                    }
+                    if(!items[childId])
+                        break;
+                    setItemVisible(items[childId], true);
+                }
+            }
         }
         window.scrollTo(0, 0);
     };
