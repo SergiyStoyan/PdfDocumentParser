@@ -47,7 +47,7 @@ namespace Cliver.PdfDocumentParser
                     r.HeaderCell.Style.BackColor = Color.Pink;
                     break;
                 case statuses.WRONG:
-                    r.HeaderCell.Style.BackColor = Color.Black;
+                    r.HeaderCell.Style.BackColor = Color.Red;
                     break;
                 case statuses.WARNING:
                     r.HeaderCell.Style.BackColor = Color.Yellow;

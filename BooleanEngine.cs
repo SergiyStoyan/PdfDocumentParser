@@ -56,7 +56,7 @@ namespace Cliver.PdfDocumentParser
             BooleanEngine be = new BooleanEngine();
             be.expression = Regex.Replace(expression, @"\s", "", RegexOptions.Singleline);
             if (Regex.IsMatch(be.expression, @"[^TF\(\)\&\|\!]", RegexOptions.IgnoreCase))
-                throw new Exception("Expression contains unacceptable symbols.");
+                throw new Exception("Expression contains unacceptable symbols. Expected symbols: <anchor id>, '!', '&', '|', '(', ')'");
             be.move2NextToken();
             bool r = be.parse();
             if(!be.isEOS)
