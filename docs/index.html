@@ -76,11 +76,10 @@
 
 <h4>Set fields</h4>
 <p>A field is usually linked an anchor so that when a field's anchor is found, PdfDocumentParser locates the field's rectangle relatively to the anchor's position and extracts text surrounded by it. But a field might have no anchor in which case its selecting rectangle remains in a prefixed location.
-<p class='screenshot_title'>Set INVOICE# field.:
+<p class='screenshot_title'>Set INVOICE# field:
 <img src='img/tutorial4.png'/>
-<p><span class='attention'>NOTE: </span>the same anchor can be linked by multiple marks and fields.
 
-<p>In the same way as above create anchors for each of the fields and link the fields to them.
+<p>In the same way as above create anchors for the rest fields and link the fields to them.
 <p class='screenshot_title'>Setting COST field:
 <img src='img/tutorial5.png'/>
 
@@ -117,7 +116,7 @@ For an alive example of using PdfDocumentParser in a custom application refer <a
 <table>
 <tr><th class='title_column'>Method</th><th>Description</th></tr>
 <tr><td class='title_column'>Cliver.PdfDocumentParser.PageCollection::ActiveTemplate</td>
-<td>Set an active template in PdfDocumentParser.</td></tr>
+<td>Set active template in PdfDocumentParser.</td></tr>
 <tr><td class='title_column'>Cliver.PdfDocumentParser.Page::IsCondition</td>
 <td>Checks if a condition defined by active template is met in page.</td></tr>
 <tr><td class='title_column'>Cliver.PdfDocumentParser.Page::GetValue</td>
@@ -188,6 +187,7 @@ See <a href="#tutorial">tutorial</a> for more details.
 <p>While native PDF documents in some cases can be parsed without anchors, scanned documents that usually have their margins vary should be processed only with anchors.
 
 <p>Linking to acnhor means that coordinates of a linked field or anchor become relative to the anchor they are linked to. That's PdfDocumentParser first will look for the anchor and if it is found, it will locate the linked fields or anchors depending on the location of their anchor.
+<p>The same anchor can be used by multiple conditions and fields.
 
 <h4>General structure of anchor</h4>
 <p>An anchor consists of a single or many elements of the same type where the first element is master and the rest are secondary. Position of the master element is considered position of the anchor itself. Secondary elements are searched relatively to the master element's position.  
@@ -195,7 +195,7 @@ See <a href="#tutorial">tutorial</a> for more details.
 
 
 <h4>Anchor creation</h4>
-<p>To create a anchor, select a new row in the anchors table and choose its type which can be one of the following:
+<p>To create an anchor, select a new row in the anchors table and choose its type which can be one of the following:
 <ul>
 <li>PDF text;</li>
 <li>OCR text;</li>
@@ -214,7 +214,7 @@ Elements of this type anchor is PDF character boxes which together present a tex
 <tr><td class='title_column'>Position deviation is absolute</td>
 <td>If set then position of each element is compared to the master element's position, otherwise, with the previous element's position. It makes no sense when anchor contains no secondary element.</td></tr>
 <td class='title_column'>Search rectangular margin</td>
-<td>By default, area where an anchor is looked for is the entire page. But it can be narrowed by setting search rectangular margin that specifies the area around the rectangular where the anchor was located while creating. It is measured in pixels. It helps to avoid undesired matching and speed up processing.</td></tr>
+<td>By default, area where an anchor is looked for is entire page. But when it is known that the anchor is always located in a cetain part of page then its searched area can be narrowed by setting Search rectangular margin. This parameter specifies an area around the rectangular where the anchor was located while creating. It is measured in pixels. It helps to avoid undesired matching and speed up processing.</td></tr>
 </table>
 
 <h4>OcrText</h4>
@@ -269,7 +269,7 @@ Elements of this type anchor is images which are page fragments picked by the se
 However, usually a single condition is used that serves for both those tasks at the same time.
 
 <h4>Boolean expression</h4>
-Condition's expression can be composed of the following symbols: &lt;anchor id&gt;, '!', '&', '|', '(', ')'. When anchor referenced by &lt;anchor id&gt; is found then it is treated as True, otherwise False. Boolean result of expression is meaning of its condition. 
+Condition's expression should be composed of the following symbols: &lt;anchor id&gt;, '!', '&', '|', '(', ')'. When anchor referenced by &lt;anchor id&gt; is found then it is treated as True, otherwise False. Boolean result of expression is meaning of its condition. 
 
 
 
@@ -289,7 +289,7 @@ It is a text surrounded by field's rectangle and is retrieved from PDF text data
 It is a text surrounded by field's rectangle and is recognized by OCR engine.
 <p>For conventional PDF documents this type should never be used. But for scanned documents it is the only way to get text in digital form that can be recorded in a file or database, indexed, searched and so on.
 <h4>ImageData</h4>
-It is a System.Drawing.Bitmap that is fragment of page surrounded by field's rectangle. 
+It is a System.Drawing.Bitmap object that contains fragment of page surrounded by field's rectangle. 
 <p>It can be used when image required rather than text or when OCR is not reliable.
 
 
@@ -352,7 +352,7 @@ Invoice Parser is a custom desktop application based on PdfDocumentParser. It ca
 <li> specify file filters for templates. If it can be done then the tips below are not needed;
 <li> specify template orders so that templates that require longer time for recognition have higher order. E.g. templates that use auto-deskew should be checked in the last place;
 <li> keep templates that are known as not corresponding to the files to be processed right now, inactive so that PdfDocumentParser will have to choose the right templates from a lesser collection;
-<li> as every template is checked for matching its recognition marks to document pages, avoid using OCR'ed text type in marks and their anchors because this type requires an essential time to build an OCR cache of page (being built it is very fast then). This tip makes sense only when the most of templates use Image type in marks which usually happens. Otherwise, if marks of the most of templates can use OCR'ed text then it may give a faster parsing;
+<li> as every template is checked for condtion FirstPageOfDocument, avoid using OCR text type in its anchors because this type requires essential time to build an OCR cache of page (being built it is very fast though). This tip makes sense only when the most of templates use Image type in anchors which usually happens. Otherwise, if anchors of the most of templates can use OCR'ed text then it may give a faster parsing;
 </ul>
 
 
