@@ -183,7 +183,7 @@ Elements of such an anchor is images which are page fragments picked by the sele
 
 
 
-<h3>Condition</h3>
+<h3><a name="condition">Condition</a></h3>
 <p>Condition is a fragment of either text or image that PdfDocumentParser will look in a document. One or more such marks is used by PdfDocumentParser to detect which template corresponds to the processed document. For this reason every template should have at least one document recognition mark defined. It is obviously that such marks must be unique enough to identify the document they belong to with a high confidence. It works the following way: PdfDocumentParser finds a mark in page and compares the found content with the stored mark's content. 
 <p>If all marks of a template are found in one page then this template is chosen for further processing of all the pages of the whole file and no more template recognition is done. However, presence of marks is checked for every page to detect beginning of a new document.
 

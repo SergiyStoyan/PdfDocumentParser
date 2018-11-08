@@ -2,10 +2,9 @@ var getItems = function (e){
     var items = {};
     var ids = [0, 0];
     while(e){//alert(e);
-        var m = false;
         if(e.tagName)
         {
-            m = e.tagName.match(/H(\d+)/i);
+            var m = e.tagName.match(/H(\d+)/i);
             if(m)
             {
                 var level = parseInt(m[1]);//alert(level);
@@ -19,27 +18,33 @@ var getItems = function (e){
                     while(ids.length > level)
                         ids.pop();
                 }
-                ids[ids.length - 1] += 1;//alert(ids.join('_'));
-                items[ids.join('_')] = {'header': e, 'content': []};
+                ids[ids.length - 1] += 1;//alert(ids.join('_'));                                
+                var content = document.createElement('div');
+                e.parentNode.insertBefore(content, e.nextSibling);
+                items[ids.join('_')] = {'header': e, 'content': content};
+                e = content.nextSibling;
+                continue;
             }
         }
-        if(!m){//console.log(e);//
-            if(!e.style){//text node
+        //console.log(e);//
+            /*if(!e.style){//text node
                 var s = document.createElement('span');//alert(e);
                 e.parentNode.insertBefore(s, e.nextSibling);
                 s.appendChild(e);            
                 e = s;
-            }
-            if(items[ids.join('_')])
-                items[ids.join('_')]['content'].push(e); 
+            }*/
+        var item = items[ids.join('_')];
+        if(item){
+            item['content'].appendChild(e); 
+            e = item['content'].nextSibling;
+            continue;
         }
         e = e.nextSibling;
     }
     return items;
 };
-var items = getItems(document.getElementById('content').childNodes[0]);
      
-(function(){       
+var addMenu2Page = function(){       
     var onclickMenuItem = function(){
         for(id in items)
             if(items[id]['menuItem'] == this){
@@ -62,7 +67,7 @@ var items = getItems(document.getElementById('content').childNodes[0]);
         e.innerHTML = items[id]['header'].innerHTML; 
         menu.appendChild(e);
         items[id]['menuItem'] = e;
-        menu.appendChild(document.createElement('br'));
+        //menu.appendChild(document.createElement('br'));
     }
     
     var section = document.createElement('table');
@@ -75,15 +80,13 @@ var items = getItems(document.getElementById('content').childNodes[0]);
     //section.appendChild(content);
     section.getElementsByTagName('td')[0].appendChild(menu);
     section.getElementsByTagName('td')[1].appendChild(content);
-})();
+}
 
-var navigate2anchor = function(anchorName){
+var navigate2currentAnchor = function(){
     //alert(window.location.href);
     var setVisible = function(item, visible){
         item['header'].style.display = visible ? 'block': 'none';
-        for(ic in item['content']){
-            item['content'][ic].style.display = visible ? 'block': 'none';
-        }
+        item['content'].style.display = visible ? 'block': 'none';
     };
 
     var openItem = function(item){
@@ -109,6 +112,7 @@ var navigate2anchor = function(anchorName){
         return false;
     }; 
     
+    var anchorName = window.location.href.replace(/^.*#(_localAnchor_)?/, '');//'_localAnchor_' was added to prevent browser from unpleasant page jerking when navigating to a hidden anchor
     if(!anchorName){
         for(id in items)
             setVisible(items[id], false);
@@ -121,18 +125,34 @@ var navigate2anchor = function(anchorName){
     for(var id in items){
         if(move2LocalAnchor(items[id], items[id]['header'], anchorName, true))
             return true;
-        for(var ic in items[id]['content'])
-            if(move2LocalAnchor(items[id], items[id]['content'][ic], anchorName, false))
-                return true;
+        if(move2LocalAnchor(items[id], items[id]['content'], anchorName, false))
+            return true;
     }
 };
+
+
+var items = getItems(document.getElementById('content').childNodes[0]);
+addMenu2Page();
+
 var onHashchange = function(event){
-    if(!navigate2anchor(window.location.href.replace(/^.*#/, '')))
+    if(!navigate2currentAnchor())
         return true;
     event.preventDefault();
     return false;
-}
+};
 window.addEventListener("hashchange", onHashchange, true);
 
-navigate2anchor(window.location.href.replace(/^.*#/, ''));
+navigate2currentAnchor();
+
+//it is only to prevent browser from unpleasant page jerking when navigating to a hidden anchor
+var localPath = window.location.href.replace(/#.*/, '');
+var as = content.getElementsByTagName('a');
+for(var i = 0; i < as.length; i++){
+    if(localPath != as[i].href.replace(/#.*/, ''))
+        continue;
+    var anchorName = as[i].href.replace(/^.*#/, '')
+    if(!anchorName)
+        continue;
+    as[i].href = '#_localAnchor_' + anchorName;//this anchor does not really exists in the page
+}       
 //alert(1);
