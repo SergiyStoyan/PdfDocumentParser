@@ -29,8 +29,8 @@
 <h3>Text/image operations</h3>
 <p>PdfDocumentParser implements the following strategies to operate with text and images:
 <ul>
-<li>Extracting text directly from PDF structure. This way is based on native text presentation inside PDF files. It is the main way to operate with text in PdfDocumentParser as it is the most robust and fast.</li>
-<li>Getting text from image by OCR technology provided by Tesseract engine incorporated into PdfDocumentParser. This option must be chosen only when PDF processing does not work. It is usually needed when documents you want to parse consist completely or partially of images such as scanned documents, photos etc. This way cannot not give 100% accuracy against PDF processing and will acceptably work only for images with resolution not less than 300dpi. Also this way is much slower.</li>
+<li>Extracting text directly from PDF structure. This way is based on native text presentation inside PDF files and should be used whenever possible since it is the most robust and fast.</li>
+<li>Getting text from image by OCR technology incorporated into PdfDocumentParser. This option should be chosen only when direct PDF processing does not work. It is usually needed when pdf file consists completely or partially of images such as scanned documents, photos etc. This way cannot not give 100% accuracy against PDF processing and will acceptably work only for images with resolution not less than 300dpi. Also this way is slower.</li>
 <li>Image search. This way is used for seeking and comparing page fragments as images. This way is slower than PDF processing and so must be avoided when possible. Also, it may not provide 100% accuracy on scanned documents if they have essential discrepancy in size, contrast, brightness, orientation etc.</li>
 </ul>
 
@@ -49,7 +49,7 @@
 <h2>Template Editor</h2>
 
 <h3>Tutorial</h3>
-<h4>Create a new template</h4>
+<h4>Create a template</h4>
 <p>A parsing template can be created from scratch or copied from an existing one. Usually copying saves time because you can adapt existing settings instead of creating new ones. However, in this tutorial we'll see how to set up a template from scratch and so, let's remove all the anchors and marks if any. At the same time take for granted that fields INVOICE, JOB#, PO# and COST are expected in any template so they should not be removed. If they are absent, create them.
 <p class='screenshot_title'>Open a test PDF file in the template editor and specify the template's name. As an example, we will parse a PDF consisting of 2 invoices:
 <img src='img/tutorial1.png'/>
@@ -100,7 +100,7 @@
 
 
 <h2>API</h2>
-Review <a href='#InvoiceParser'>InvoiceParser</a> as a sample of using PdfDocumentParser.
+For an alive example of using PdfDocumentParser in a custom application refer <a href='#InvoiceParser'>InvoiceParser</a>.
 
 <h3>Methods</h3>
 <table>
@@ -143,7 +143,7 @@ foreach(page in pdf)
 }
 </code></pre>
 
-The main idea is that certain operations are performed depending on whether conditions defined in templates are met in the page or not.
+The main idea is that certain operations are performed depending on conditions defined in templates.
 
 
 

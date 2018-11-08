@@ -1,7 +1,7 @@
 {
     var css = '\
 div.copyright { border1: 1px solid grey; margin:0; align-self:center; }\
-table.copyright { margin:1; align-self:center; }\
+table.copyright { margin:0; align-self:center; }\
 table.copyright, table.copyright td {border:none; }\
 table.copyright td {margin:0; padding:0; width:6px; height:6px;}',
         head = document.head || document.getElementsByTagName('head')[0],

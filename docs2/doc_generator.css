@@ -55,9 +55,11 @@ span.inline{
 
 .menuItem:hover {
     color: #900;
+    background-color: #ddd;
 }
 .menuItem.current {
     color: #d00;
+    background-color: #ddd;
     font-weight1: bold;
 }
 
