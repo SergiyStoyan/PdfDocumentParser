@@ -103,7 +103,7 @@ namespace Cliver.PdfDocumentParser
         public abstract class Anchor
         {
             public int Id;
-            public int SearchRectangleMargin = 100;//px
+            public int SearchRectangleMargin = -1;//px
             public float PositionDeviation = 1f;
             public bool PositionDeviationIsAbsolute = false;
             public int? ParentAnchorId = null;

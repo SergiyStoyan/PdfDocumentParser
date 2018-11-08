@@ -40,6 +40,12 @@ namespace Cliver.PdfDocumentParser
                 Message.Error("fields[" + r.Index + "] has unacceptable value of " + fields.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message);
             };
 
+            fields.UserDeletingRow += delegate (object sender, DataGridViewRowCancelEventArgs e)
+            {
+                if (fields.Rows.Count < 3 && fields.SelectedRows.Count > 0)
+                    fields.SelectedRows[0].Selected = false;//to avoid auto-creating row
+            };
+
             fields.RowsAdded += delegate (object sender, DataGridViewRowsAddedEventArgs e)
             {
             };

@@ -39,7 +39,7 @@ namespace Cliver.PdfDocumentParser
             _object.DifferentPixelNumberTolerance = (float)DifferentPixelNumberTolerance.Value;
             _object.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
             _object.PositionDeviation = (float)PositionDeviation.Value;
-            _object.SearchRectangleMargin = (int)SearchRectangleMargin.Value;
+            _object.SearchRectangleMargin = SearchRectangleMargin.Enabled ? (int)SearchRectangleMargin.Value : -1;
             return _object;
         }
 

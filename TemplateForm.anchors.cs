@@ -90,6 +90,12 @@ namespace Cliver.PdfDocumentParser
                 onAnchorsChanged();
             };
 
+            anchors.UserDeletingRow += delegate (object sender, DataGridViewRowCancelEventArgs e)
+            {
+                if (anchors.Rows.Count < 3 && anchors.SelectedRows.Count > 0)
+                    anchors.SelectedRows[0].Selected = false;//to avoid auto-creating row
+            };
+
             anchors.CurrentCellDirtyStateChanged += delegate
             {
                 if (anchors.IsCurrentCellDirty)
@@ -458,7 +464,7 @@ namespace Cliver.PdfDocumentParser
         List<Ocr.CharBox> selectedOcrCharBoxs;
         List<Template.Anchor.ImageData.ImageBox> selectedImageBoxs;
 
-        void showAnchorRowAs(int? anchorId, rowStates rowState, bool resetRows)
+        void showAnchorRowAs(int? anchorId, rowStates rowState, bool resetRows, bool ignoreNoAnchor = false)
         {
             if (resetRows)
                 foreach (DataGridViewRow r in anchors.Rows)
@@ -472,6 +478,8 @@ namespace Cliver.PdfDocumentParser
                 return;
             DataGridViewRow row;
             Template.Anchor a = getAnchor(anchorId, out row);
+            if (ignoreNoAnchor && row == null)
+                return;
             if (row.HeaderCell.Tag as rowStates? == rowState)
                 return;
             row.HeaderCell.Tag = rowState;

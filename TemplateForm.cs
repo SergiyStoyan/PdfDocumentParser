@@ -23,39 +23,6 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class TemplateForm : Form
     {
-        public abstract class TemplateManager
-        {
-            /// <summary>
-            /// this object is a buffer and can be changed unpredictably, so it should not be referenced from outside
-            /// </summary>
-            public Template Template;
-            abstract public void Save();
-            public string LastTestFile;
-            virtual public void HelpRequest()
-            {
-                try
-                {
-                    System.Diagnostics.Process.Start(Settings.Constants.HelpFile);
-                }
-                catch (Exception ex)
-                {
-                    LogMessage.Error(ex);
-                }
-            }
-            virtual public Template.Anchor CreateDefaultAnchor()
-            {
-                return new Template.Anchor.PdfText { };
-            }
-            virtual public Template.Condition CreateDefaultCondition()
-            {
-                return new Template.Condition { };
-            }
-            virtual public Template.Field CreateDefaultField()
-            {
-                return new Template.Field.PdfText { };
-            }
-        }
-
         public TemplateForm(TemplateManager templateManager, string testFileDefaultFolder)
         {
             InitializeComponent();

@@ -33,6 +33,12 @@ namespace Cliver.PdfDocumentParser
                 Message.Error("Condition[" + r.Index + "] has unacceptable value of " + conditions.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message);
             };
 
+            conditions.UserDeletingRow += delegate (object sender, DataGridViewRowCancelEventArgs e)
+            {
+                if (conditions.Rows.Count < 3 && conditions.SelectedRows.Count > 0)
+                    conditions.SelectedRows[0].Selected = false;//to avoid auto-creating row
+            };
+
             conditions.CellValueChanged += delegate (object sender, DataGridViewCellEventArgs e)
             {
                 if (loadingTemplate)
@@ -116,21 +122,21 @@ namespace Cliver.PdfDocumentParser
                 {
                     if (firstAnchor)
                     {
-                        showAnchorRowAs(ai, rowStates.NULL, true);
+                        showAnchorRowAs(ai, rowStates.NULL, true, true);
                         setCurrentAnchorRow(ai, true);
                     }
                     else
-                        showAnchorRowAs(ai, rowStates.Condition, false);
+                        showAnchorRowAs(ai, rowStates.Condition, false, true);
                     findAndDrawAnchor(ai, firstAnchor);
                     firstAnchor = false;
                 }
                 if (firstAnchor)
                 {
-                    showAnchorRowAs(null, rowStates.NULL, true);
+                    showAnchorRowAs(null, rowStates.NULL, true, true);
                     setCurrentAnchorRow(null, true);
                 }
 
-                    setCurrentFieldRow(null);
+                setCurrentFieldRow(null);
             }
             finally
             {
