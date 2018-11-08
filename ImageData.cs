@@ -22,7 +22,6 @@ using System.IO.Compression;
 
 namespace Cliver.PdfDocumentParser
 {
-    [Serializable]
     public class ImageData
     {
         public byte[,] Hash;

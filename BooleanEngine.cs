@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace Cliver.PdfDocumentParser
 {
-    public class BooleanEngine
+    internal class BooleanEngine
     {
         static public List<int> GetAnchorIds(string expression)
         {

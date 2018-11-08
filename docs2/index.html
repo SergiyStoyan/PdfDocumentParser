@@ -49,12 +49,14 @@
 <h2>Template Editor</h2>
 
 <h3>Tutorial</h3>
-<h4>1. Create a blank template</h4>
+<h4>Create a new template</h4>
 <p>A parsing template can be created from scratch or copied from an existing one. Usually copying saves time because you can adapt existing settings instead of creating new ones. However, in this tutorial we'll see how to set up a template from scratch and so, let's remove all the anchors and marks if any. At the same time take for granted that fields INVOICE, JOB#, PO# and COST are expected in any template so they should not be removed. If they are absent, create them.
 <p class='screenshot_title'>Open a test PDF file in the template editor and specify the template's name. As an example, we will parse a PDF consisting of 2 invoices:
 <img src='img/tutorial1.png'/>
 
-<h4>2. Create invoice first page condition</h4>
+<h4>Create anchors</h4>
+
+<h4>Specify conditions</h4>
 <p>Any template needs at least one mark that will certainly identify type of document and distinguish it from the rest documents you may want to parse. Such a mark should be targeted to some fragment of a document that is unique to its type. Usually it is logo of company issued the document.
 <p class='screenshot_title'>To create such a mark, first we need to create an anchor that will capture the logo. Then we create a mark and link it to the anchor:
 <img src='img/tutorial2.png'/>
@@ -67,14 +69,14 @@
 <p>Now our template has 2 marks that can recognize type and first page of document. Sometimes more mark is required: for instance when we need to parse different type documents issued by the same company. In our example 2 marks we created are sufficient though. 
 <p><span class='attention'>NOTE: </span>when you select a line in either table, Parser processes it on the current page and the result is displayed in the page viewer and in Status.
 
-<h4>3. Set fields</h4>
+<h4>Set fields</h4>
 <p class='screenshot_title'>Let's create fields. Click on the blank line and fill names if they are not preset. In the same way as above create anchors for the fields and link the fields to them:
 <img src='img/tutorial4.png'/>
 <p>How does Parser process fields? The likeness between a field and a mark is that each has a selecting rectangle (well, a mark might not have but a field always does). And like with a mark, when a field's anchor is found, Parser locates the field's rectangle relatively to the anchor's position and extracts text surrounded by the rectangle. But further the difference between marks and fields comes out: while in a case of mark the captured text is compared with the mark's predefined text, in a case of field the captured text is recorded as a field value. 
 <p>And one more difference: while all the marks must be met on the same page, fields should not necessary do so. In every page Parser tries to capture all the fields and only the last captures are remembered and recorded when the end of PDF file or a new document is reached.
 <p><span class='attention'>NOTE: </span>the same anchor can be linked by multiple marks and fields.
 
-<h4>4. Check the template</h4>
+<h4>Check the template</h4>
 <p>When all the fields are set, it's time to walk through the PDF file and see how the template works on every page.
 <p class='screenshot_title'>The page #2 is a new invoice and the marks in our template recognized it properly:
 <img src='img/tutorial5.png'/>
@@ -100,10 +102,48 @@
 <h2>API</h2>
 Review <a href='#InvoiceParser'>InvoiceParser</a> as a sample of using PdfDocumentParser.
 
+<h3>Methods</h3>
+<table>
+<tr><th class='title_column'>Method</th><th>Description</th></tr>
+<tr><td class='title_column'>Cliver.PdfDocumentParser.PageCollection::ActiveTemplate</td>
+<td>Assign a template to PdfDocumentParser.</td></tr>
+<tr><td class='title_column'>Cliver.PdfDocumentParser.Page::IsCondition</td>
+<td>Checks if a condition defined by active template is met in the page.</td></tr>
+<tr><td class='title_column'>Cliver.PdfDocumentParser.Page::GetValue</td>
+<td>Extracts value for a field defined by active template.</td></tr>
+</table>
+
 
 <h3>Pseudo-code</h3>
+A basic algoritm of processing a PDF file with PdfDocumentParser follows:
+<pre><code>
+foreach(page in pdf)
+{
+    foreach(template in templates)
+    {
+        PdfDocumentParser.ActiveTemplate = template;
+        if(PdfDocumentParser.IsCondition(page, 'itIsDocumentFirstPage'))
+        {
+            object value1 = PdfDocumentParser.GetValue('field1Name');
+            <do something with value1>
+            object value2 = PdfDocumentParser.GetValue('field2Name');
+            <do something with value2>
+            ...
+        }
+        else if(PdfDocumentParser.IsCondition(page, 'itIsDocumentLastPage'))
+        {
+            object value1 = PdfDocumentParser.GetValue('field1Name');
+            <do something with value1>
+            object value2 = PdfDocumentParser.GetValue('field2Name');
+            <do something with value2>
+            ...
+        }
+        ...
+    }
+}
+</code></pre>
 
-
+The main idea is that certain operations are performed depending on whether conditions defined in templates are met in the page or not.
 
 
 
