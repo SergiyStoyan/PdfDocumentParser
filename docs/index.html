@@ -2,38 +2,360 @@
 <head>
 
 <link rel="stylesheet" type="text/css" href="main.css">
+<link rel="stylesheet" type="text/css" href="doc_generator.css">
 
 </head>
 <body>
-
 <h1>Pdf Document Parser</h1>
+
+<div id='content'>
+<h2>Overview</h2>
+<p>PdfDocumentParser is a parsing engine designed to extract text/images from PDF documents that conform to a predefined graphic layout - such as invoices and the like. The main parsing approach is based on finding certain text or image fragments in page and then extracting text/images located relatively to those fragments.
+<p>Within this scope PdfDocumentParser implements the following strategies:
 <ul>
-<li>
-<h3><a href='overview/index.html'>Overview</a></h3>
-<p>PdfDocumentParser is a framework designed to extract text/images from PDF documents that conform to a predefined graphic layout - such as invoices and the like. 
-</li>
+<li>processing PDF entities (the main way to operate with text in PdfDocumentParser);</li>
+<li>processing OCR'ed text (intended for scanned documents);</li>
+<li>image search/comparison (can be used in either native and scanned PDF files);</li>
+</ul> 
 
-<li>
-<h3><a href='tutorial/index.html'>Tutorial</a></h3>
-<p>Creating a parsing template.
-</li>
+<p>PdfDocumentParser has been developed as a set of parsing tools that can be incorporated into a custom application hopefully without need of change. 
+<p>PdfDocumentParser's API which is exposed to a third-part code, includes:
+<ul>
+<li>Template Editor where parsing templates can be created or debugged in an easy manner;</li>
+<li>a parsing engine API that can be used by custom applications: the engine accepts a PDF file and returns parsed data back to the calling code;</li>
+</ul> 
 
-<li>
-<h3><a href='InvoiceParser/index.html'>Invoice Parser</a></h3>
-InvoiceParser is a custom desktop application based on the leverages provided by PdfDocumentParser. 
-</li>
+
+<h3>Text/image operations</h3>
+<p>PdfDocumentParser implements the following strategies to operate with text and images:
+<ul>
+<li>Extracting text directly from PDF structure. This way is based on native text presentation inside PDF files and should be used whenever possible since it is the most robust and fast.</li>
+<li>Getting text from image by OCR technology incorporated into PdfDocumentParser. This option should be chosen only when direct PDF processing does not work. It is usually needed when pdf file consists completely or partially of images such as scanned documents, photos etc. This way cannot not give 100% accuracy against PDF processing and will acceptably work only for images with resolution not less than 300dpi. Also this way is slower.</li>
+<li>Image search. This way is used for seeking and comparing page fragments as images. This way is slower than PDF processing and so must be avoided when possible. Also, it may not provide 100% accuracy on scanned documents if they have essential discrepancy in size, contrast, brightness, orientation etc.</li>
 </ul>
 
 
-<br>
-<br>
-<br>
-<br>
 
-<hr>
+
+
+<h3>Assumptions</h3>
+<ul>
+<li>a PDF file can consist of multiple documents (e.g. multiple invoices);</li>
+<li>a document (e.g. invoice) can consist of multiple pages;</li>
+</ul>
+
+
+
+<h2>Template Editor</h2>
+
+<h3>Tutorial</h3>
+<h4>Create template</h4>
+<p>A parsing template can be created from scratch or copied from an existing one. Usually copying saves time because you can adapt existing settings instead of creating new ones. A template can be pre-filled with initial data which can be modified as needed. 
+<p>But here we start with a blank template.
+<p><span class='attention'>NOTE: </span>Names in Name column of Conditions and Fields tables are predefined by logic of the custom application that uses PdfDocumentParser and so must not be changed. That means that condition FirstPageOfDocument and fields INVOICE, JOB#, PO# and COST are valid only for this tutorial while another application can predefine and expect another conditions and fields. 
+<p>Open a test PDF file in the template editor and specify the template's name. In this tutorial we will parse a PDF consisting of 2 invoices.
+
+<h4>Create anchors</h4>
+<p>Any template needs at least one anchor that will certainly identify type of document and distinguish it from the rest documents you may want to parse. Such an anchor should be targeted to some fragment of a document that is unique to its type. Usually it is logo of company issued the document.
+<p class='screenshot_title'>Create an anchor that captures the logo and thus detects if the page corresponds to the template:
+<img src='img/tutorial1.png'/>
+
+<p>In addition to the first anchor which is a must for any template, one more anchor is usually needed that checks if the page is first page of a document. It is necessary when parsing a multi-document PDF file: when Parser finds this anchor, all the previously extracted fields are recorded and reset.
+<p class='screenshot_title'>So let's create a first page recognition mark:
+<img src='img/tutorial1.png'/>
+<p class='screenshot_title'>Create an anchor that checks document's number and thus detects if the page is document's first page:
+<img src='img/tutorial2.png'/>
+
+<p><span class='attention'>NOTE: </span>when you select a line in either table, PdfDocumentParser processes it on the current page and the result is displayed in the page viewer and in Status.
+
+<h4>Specify conditions</h4>
+<p>To allow the custom application detect if a page corresponds to the template and is the first page of a document at the same time, we have to define condition FirstPageOfDocument. It is done by entering a boolean expression that relates on anchors #1 and #2 and when they both are found then this template should be chosen to process the document. 
+<p class='screenshot_title'>Enter expression "1 & 2" that will make PdfDocumentParser check both anchors at the same time:
+<img src='img/tutorial3.png'/>
+
+<p>While in our example condition FirstPageOfDocument is quite good with 2 anchors and it is so for the most layouts, sometimes more anchors can be required: for instance when we need to parse different type documents issued by the same company and so have to distinguish document types.
+
+
+
+<h4>Set fields</h4>
+<p>A field is usually linked an anchor so that when a field's anchor is found, PdfDocumentParser locates the field's rectangle relatively to the anchor's position and extracts text surrounded by the rectangle. But a field can have no anchor in which case its selecting rectangle remains in prefixed location.
+<p class='screenshot_title'>Set INVOICE# field.:
+<img src='img/tutorial4.png'/>
+<p><span class='attention'>NOTE: </span>the same anchor can be linked by multiple marks and fields.
+
+In the same way as above create anchors for each of the fields and link the fields to them.
+<p class='screenshot_title'>Set COST field:
+<img src='img/tutorial5.png'/>
+
+
+
+
+<h4>Check template</h4>
+<p>When all the conditions and the fields are configured, it's time to walk through the PDF file and see how the template works on every page.
+<p class='screenshot_title'>The page #2 begins a new invoice:
+<img src='img/tutorial6.png'/>
+<p class='screenshot_title'>The page #3 continues and ends an invoice: 
+<img src='img/tutorial7.png'/>
+<p>The template worked properly on the test file. Click OK to save it.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2>API</h2>
+For an alive example of using PdfDocumentParser in a custom application refer <a href='#InvoiceParser'>InvoiceParser</a>.
+
+<h3>Methods</h3>
+<table>
+<tr><th class='title_column'>Method</th><th>Description</th></tr>
+<tr><td class='title_column'>Cliver.PdfDocumentParser.PageCollection::ActiveTemplate</td>
+<td>Assign a template to PdfDocumentParser.</td></tr>
+<tr><td class='title_column'>Cliver.PdfDocumentParser.Page::IsCondition</td>
+<td>Checks if a condition defined by active template is met in the page.</td></tr>
+<tr><td class='title_column'>Cliver.PdfDocumentParser.Page::GetValue</td>
+<td>Extracts value for a field defined by active template.</td></tr>
+</table>
+
+
+<h3>Pseudo-code</h3>
+Some basic algoritm of processing a PDF file with PdfDocumentParser would look like the following:
+<pre><code>
+foreach(page in pdf)
+{
+    foreach(template in templates)
+    {
+        PdfDocumentParser.ActiveTemplate = template;
+        if(PdfDocumentParser.IsCondition(page, 'itIsDocumentFirstPage'))
+        {
+            object value1 = PdfDocumentParser.GetValue('field1Name');
+            do something with value1
+            object value2 = PdfDocumentParser.GetValue('field2Name');
+            do something with value2
+            ...
+        }
+        else if(PdfDocumentParser.IsCondition(page, 'itIsDocumentLastPage'))
+        {
+            object value1 = PdfDocumentParser.GetValue('field1Name');
+            do something with value1
+            object value2 = PdfDocumentParser.GetValue('field2Name');
+            do something with value2
+            ...
+        }
+        ...
+    }
+}
+</code></pre>
+
+The main idea is that custom operations are performed depending on conditions defined in templates.
+
+
+
+
+
+
+
+
+
+<h2>Template</h2>
+<p>A template is desinged for documents that comply with certain layout (e.g. for invoices issued by the same company). It contains information about which data is to be harvested and how. Applying a template to documents with layout different from that it was designed for obviously brings to mistakes.
+<p>When you want to parse a document with a new layout, open Template Editor (how it is done depends on the custom application). Select a sample PDF file to be parsed and having it displayed in the editor you go through the following steps:
+<ul>
+<li> create <a href="#anchor">anchors</a>;</li>
+<li> create <a href="#condition">conditions</a>;</li>
+<li> create <a href="#field">fields</a>;</li>
+<li> select each created element and see in the status box if it works as expected;</li>
+<li> save the template;</li>
+</ul>
+See <a href="../tutorial/index.html">tutorial</a> for more details.
+
+
+
+<h3><a name="anchor">Anchor</a></h3>
+<p>Anchor is a fragment of either text or image that PdfDocumentParser will look for in every page of a PDF file. Then, if found, the anchor is used to locate in the page Marks or/and Fields that are linked to this anchor. While the idea of anchors is detecting points in page that can be used as absolute coordinate zero, it serves for multiple tasks:
+<ul>
+<li> finding marks/fields whose position in the page may vary e.g. finding value of 'total amount' in the bottom of invoice table;</li> 
+<li> recognizing marks/fields which may be met only in one page of a multipage document;</li>
+<li> detecting page zero position in scanned documents that usually have their margins vary;</li>
+</ul>
+<p>To create a anchor, select a new row in the anchors table and choose its type which can be one of the following:
+<ul>
+<li>PDF text;</li>
+<li>OCR text;</li>
+<li>Image data;</li>
+</ul>
+<p>Then select with mouse a rectangle in the document page. The text or image within the selection box will be a fragment that PdfDocumentParser will look for.
+<p>If you keep Ctrl pressed while selecting, you can select more than 1 element for the same anchor. To stop selecting, you have to release Ctrl before releasing mouse button.
+<p>Upon creating a anchor you can create either document recognition marks or fields and link them to the anchor. Linking means that mark's or field's coordinates become relative to the anchor they are linked to. That's PdfDocumentParser first will look for the anchor and if it is found, it will then locate on the page the linked marks/fields depending on the location of their anchor.
+A anchor consists of single or many elements of the same type where the first element is master and the rest ones are secondary. Position of the master element is position of anchor itself. Secondary elements are searched relatively to the master element's position just like linked Marks or Fields are.  
+
+<h4>PdfText</h4>
+Elements of such an anchor is PDF character boxes which together present a text to be found in page. Every character is a separate anchor element.
+<table>
+<tr><th class='title_column'>Parameter</th><th>Description</th></tr>
+<tr><td class='title_column'>Position deviation</td>
+<td>It allows to loose bonds between master element and secondary elements in a anchor when for some reason they can shift relatively to each other. It is measured in pixels and must be a positive float number, non-zero even for identical documents bacause of discrepancy reasoned by internal image re-scaling.</td></tr>
+<tr><td class='title_column'>Position deviation is absolute</td>
+<td>If set then position of each element is compared to the master element's position, otherwise, with the previous element's position. It makes no sense when anchor contains no secondary element.</td></tr>
+<td class='title_column'>Search rectangular margin</td>
+<td>By default, area where an anchor is looked for is the entire page. But it can be narrowed by setting search rectangular margin that specifies the area around the rectangular where the anchor was located while creating. It is measured in pixels. It helps to avoid undesired matching and speed up processing.</td></tr>
+</table>
+
+<h4>OcrText</h4>
+It is similar to PdfText type except for that difference that character boxes are gotten from OCR engine instead of PDF entities. 
+
+<h4>ImageData</h4>
+Elements of such an anchor is images which are page fragments picked by the selection box.
+<p><span class='attention'>NOTE: </span> even if an image fragment is looked for within the same page where it was extracted from, it cannot be found without a non-zero tolerance. It happens because maps produced when resizing an entire image and a fragment do not coincide due to pixel interpolation preformed. 
+<table>
+<tr><th class='title_column'>Parameter</th><th>Description</th></tr>
+<tr><td class='title_column'>Position deviation</td>
+<td>See PdfText.</td></tr>
+<tr><td class='title_column'>Position deviation is absolute</td>
+<td>See PdfText.</td></tr>
+<td class='title_column'>Search rectangular margin</td>
+<td>See PdfText. It reduces search time and helps to avoid undesired matching.</td></tr>
+<tr><td class='title_column'>Brightness tolerance</td>
+<td>While for native PDF documents it can be 0.1 - 0.2, scanned documents which have brightness discrepancy may need it higher. A higher tolerance brings to a less certain result.</td></tr>
+<tr><td class='title_column'>Different pixel number tolerance</td>
+<td>While for native PDF documents it can be 0.1 - 0.2, scanned documents which have brightness discrepancy may need it higher. A higher tolerance brings to a less certain result.</td></tr>
+<tr><td class='title_column'>Find best match</td>
+<td>If set, looks for the match with the least difference, otherwise returns the first match within the tolerance specified.</td></tr>
+</table>
+
+
+
+
+
+<h3><a name="condition">Condition</a></h3>
+<p>Condition is a fragment of either text or image that PdfDocumentParser will look in a document. One or more such marks is used by PdfDocumentParser to detect which template corresponds to the processed document. For this reason every template should have at least one document recognition mark defined. It is obviously that such marks must be unique enough to identify the document they belong to with a high confidence. It works the following way: PdfDocumentParser finds a mark in page and compares the found content with the stored mark's content. 
+<p>If all marks of a template are found in one page then this template is chosen for further processing of all the pages of the whole file and no more template recognition is done. However, presence of marks is checked for every page to detect beginning of a new document.
+
+
+
+
+
+
+
+<h3><a name="field">Field</a></h3>
+<p>Field defines certain text that you want extract from document. Like with document recognition marks it can either be linked to an anchor or retain absolute position in page. 
+<p>To create a field, select a new row in the fields table and select the area in page were text for this field must be extracted. 
+
+<h4>PdfText</h4>
+It is a text that must be a match to that is surrounded by the mark's rectangular. Text is retrieved from PDF text data.
+<h4>OcrText</h4>
+It is a text that must be a match to that is surrounded by the mark's rectangular. Text is recognized by OCR engine.
+<h4>ImageData</h4>
+
+<p>For conventional PDF documents you should never use OCR option but for scanned documents it is the only way to get text in digital form that can be recorded in a file or database, indexed, searched and so on.
+<p>Every field is looked for in every page. This means that if a field has no anchor, it will be extracted from every page and only the value from the last page of a document will be recorded which may be wrong. To detect the correct page a anchor is used. E.g. if you want to extract invoice number then create a anchor pointing to something like "Invoice #:" and then link the field to it. Now PdfDocumentParser will extract this field only when "Invoice #:" is found. 
+<p>But when you know that every document consists only of a single page and the field is always located in the same position on page then there is no need to link it to a anchor.
+
+
+
+
+
+
+
+<h2>Scanned documents</h2>
+<p>Scanned documents are not the first subject for PdfDocumentParser but they are supported. PdfDocumentParser provides auto-deskew and page rotation options which are frequently required for scanned documents. 
+<p>Because of quality deviations in scanned documents the image comparison tolerance parameters may need to be tuned.
+<p>The image resolution in PdfDocumentParser must be set to not less than 300dpi, otherwise OCR will not work. On the other hand, increasing resolution increases processing time. Also, setting resolution in PdfDocumentParser higher than the resolution of original images will not make sense. Image resolution parameter is common for all templates and can be changed in the settings window. 
+
+
+
+
+
+
+
+
+
+
+<h2><a name='InvoiceParser'></a>InvoiceParser</h2>
+Invoice Parser is a custom desktop application based on PdfDocumentParser. It can be used as a sample or framework while incorporating PdfDocumentParser into a custom code. 
+<p>Generally, it does the following:
+<ul>
+<li>enhances PdfDocumentParser::Template with custom properties that are not related to parsing;</li>
+<li>keeps and manages templates;</li>
+<li>processes PDF files along the custom needs;</li>
+</ul>
+
+<img src='img/invoiceparser2_1.png'/>
+
+<h3>Assumptions</h3>
+<ul>
+<li>by default, a PDF file can contain only documents of the same type and it can be tuned for every template separately;</li>
+<li>once detected, a document is considered continued until next document begins or the file ends;</li>
+</ul>
+<p>These assumptions is not something deep rooted in the code and can be easily modified.
+
+
+<h3>Additional Template Parameters</h3>
+<table>
+<tr><th class='title_column'>Parameter</th><th>Description</th></tr>
+<tr><td class='title_column'>Active</td>
+<td>Inactive template is not ignored while parsing.</td></tr>
+<tr><td class='title_column'>Group</td>
+<td>An optional mark that can be helpful for managing templates.</td></tr>
+<tr><td class='title_column'>Order</td>
+<td>A weight indicating template's order in check line. It is intended to reduce processing time. Templates with the less order are tried first.</td></tr>
+<tr><td class='title_column'>DTLPage</td>
+<td>The last page in PDF files that is to be checked for this template. It is intended to reduce processing time.</td></tr>
+<tr><td class='title_column'>Filter</td>
+<td>It is a Regex applied to PDF file path to recognize the proper template. Optional. It is intended to reduce processing time.</td></tr>
+</table>
+
+<h3>Considerations</h3>
+<p>When processing documents InvoiceParser applies every active template to every new document to recognize a proper template. So, if you have 50 templates and 1000 files evenly distributed for templates, InvoiceParser will do on average 1000/2 *50 = 25,000 template tries. It may take a considerable time especially with templates using OCR. You can decrease processing time by the following ways:
+<ul> 
+<li> specify file filters for templates. If it can be done then the tips below are not needed;
+<li> specify template orders so that templates that require longer time for recognition have higher order. E.g. templates that use auto-deskew should be checked in the last place;
+<li> keep templates that are known as not corresponding to the files to be processed right now, inactive so that PdfDocumentParser will have to choose the right templates from a lesser collection;
+<li> as every template is checked for matching its recognition marks to document pages, avoid using OCR'ed text type in marks and their anchors because this type requires an essential time to build an OCR cache of page (being built it is very fast then). This tip makes sense only when the most of templates use Image type in marks which usually happens. Otherwise, if marks of the most of templates can use OCR'ed text then it may give a faster parsing;
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+<script src="doc_generator.js"></script>
+
 <div class="footer">
         <script src="copyright.js"></script>
         &nbsp;2018,&nbsp;&nbsp;<a href="mailto:sergey.stoyan@gmail.com?Subject=PdfDocumentParser request" target="_top">Sergey Stoyan</a>
 </div>
+
+</script>
 </body>
 </html>

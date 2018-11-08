@@ -1,0 +1,65 @@
+span.h2 {margin:10 0 0 0; font-size1:21px; }
+span.h3 {margin:5 0 0 20; font-size1:19px;}
+span.h4 {margin:2 0 0 40; font-size1:17px; }
+span.h5 {margin:0 0 0 60; font-size1:15px; }
+
+span.nobreak {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+span.inline{
+    display: inline;
+}
+
+.section{
+    width:100%;
+    background1: aqua;
+}
+
+#content{
+    vertical-align:top;
+    display:inline-block;
+    padding: 0 50 0 50;
+}
+
+.contentTd{
+    width:100%;
+    vertical-align:top;
+    text-align:left;
+}
+
+.menuTd{
+    vertical-align:top;
+    text-align:left;
+    background-color: #eee; 
+}
+
+.menu {
+    padding: 0 20 20 20;
+    overflow-x: hidden; 
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */  
+    display:inline-block;
+    border-right1: 5px solid grey;
+}
+
+.menuItem {
+    text-decoration: none;
+    font-size1: 18px;
+    color: #000;
+    display: block;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.menuItem:hover {
+    color: #900;
+    background-color: #ddd;
+}
+.menuItem.current {
+    color: #d00;
+    background-color: #ddd;
+    font-weight1: bold;
+}
+

@@ -1,5 +1,6 @@
 {
     var css = '\
+div.copyright { border1: 1px solid grey; margin:0; align-self:center; }\
 table.copyright { margin:0; align-self:center; }\
 table.copyright, table.copyright td {border:none; }\
 table.copyright td {margin:0; padding:0; width:6px; height:6px;}',
@@ -14,18 +15,20 @@ table.copyright td {margin:0; padding:0; width:6px; height:6px;}',
 }
 
 document.write('\
-<a href="http://cliversoft.com" title="CliverSoft.com">\
-    <TABLE cellSpacing="1" class="copyright">\
-		<TR>\
-			<TD id="copyright_td1"></TD>\
-			<TD id="copyright_td2"></TD>\
-		</TR>\
-		<TR>\
-			<TD id="copyright_td3"></TD>\
-			<TD id="copyright_td4"></TD>\
-		</TR>\
-	</TABLE>\
- </a>\
+<div class="copyright">\
+    <a href="http://cliversoft.com" title="cliversoft.com">\
+        <TABLE class="copyright">\
+            <TR>\
+                <TD id="copyright_td1"></TD>\
+                <TD id="copyright_td2"></TD>\
+            </TR>\
+            <TR>\
+                <TD id="copyright_td3"></TD>\
+                <TD id="copyright_td4"></TD>\
+            </TR>\
+        </TABLE>\
+     </a>\
+ </div>\
 ');
 
 var copyright = {		
@@ -53,7 +56,7 @@ var copyright = {
 
     play: function(){
         var t = document.getElementById("copyright_td" + (this.get_random(4) + 1));
-        var r = this.random_color(180, 255, 150, 230, 150, 255);
+        var r = this.random_color(120, 230, 120, 230, 120, 230);
         t.style.backgroundColor = r;
         var this_ = this;
         setTimeout(function(){this_.play()}, 500);
