@@ -214,8 +214,8 @@ Elements of this type anchor is PDF character boxes which together present a tex
 <tr><td class='title_column'>Position deviation is absolute</td>
 <td>If set then position of each element is compared to the master element's position, otherwise, with the previous element's position. It makes no sense when anchor contains no secondary element.</td></tr>
 <td class='title_column'>Search rectangular margin</td>
-<td>By default, area where an anchor is looked for is entire page. But when it is known that the anchor is always located in a cetain part of page then its searched area can be narrowed by setting Search rectangular margin. This parameter specifies an area around the rectangular where the anchor was located while creating. It is measured in pixels. It helps to avoid undesired matching and speed up processing.</td></tr>
-</table>
+<td>When set, area where an anchor is looked for is entire page. Otherwise, the searched area is restricted by Search rectangular margin that specifies an area around the rectangle where the anchor was located while creating. It is measured in pixels. It should be set only when it is known that the anchor is always belongs to a cetain part of page. It helps to avoid undesired matching and speed up processing.</td></tr>
+</table>k
 
 <h4>OcrText</h4>
 It is strctured and treated similarly to <a href='#anchorPdfText'>PdfText</a> type except that difference that character boxes are provided by OCR engine instead of PDF entities. 
