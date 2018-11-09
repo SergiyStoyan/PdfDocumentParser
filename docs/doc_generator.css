@@ -52,7 +52,6 @@ span.inline{
     transition: 0.3s;
     cursor: pointer;
 }
-
 .menuItem:hover {
     color: #900;
     background-color: #ddd;
@@ -61,5 +60,9 @@ span.inline{
     color: #d00;
     background-color: #ddd;
     font-weight1: bold;
+}
+
+.switchLink{
+    font-size: 12px;    
 }
 
