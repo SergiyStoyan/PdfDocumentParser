@@ -48,7 +48,7 @@
 
 <h2>Template Editor</h2>
 
-<h3><a name='tutorial'>Tutorial: Configuring Template</a></h3>
+<h3><a name='tutorial'>Tutorial</a></h3>
 <p>A parsing template can be created from scratch or copied from an existing one. Usually copying saves time because you can adapt existing settings instead of creating new ones. A template can be pre-filled with initial data which can be modified as needed. 
 <p>But in the tutorial we'll start with a blank template.
 <p class='screenshot_title'>Open a test PDF file in the template editor window:
@@ -194,18 +194,15 @@ See <a href="#tutorial">tutorial</a> for more details.
 <p>When an anchor is linked to another anchor, its master element is treated like a secondary element of the linking anchor.
 
 
-<h4>Anchor creation</h4>
+<h4>Create anchor</h4>
 <p>To create an anchor, select a new row in the anchors table and choose its type which can be one of the following:
-<ul>
-<li>PDF text;</li>
-<li>OCR text;</li>
-<li>Image data;</li>
-</ul>
+
 <p> Each of types is processed by its own very different way and so choosing the right type is crucial in successful and robust parsing.
 <p>Then select with mouse a rectangle in the document page. The text or image within the selection box will be a fragment that PdfDocumentParser will look for.
 <p>If you keep Ctrl pressed while selecting, you can select more than 1 element for the same anchor. To stop selecting, you have to release Ctrl before releasing mouse button.
 
-<h4><a name='anchorPdfText'>PdfText</a></h4>
+<h4><a name='anchorPdfText'>Anchor types</a></h4>
+<h5><a name='anchorPdfText'>PdfText</a></h5>
 Elements of this type anchor is PDF character boxes which together present a text to be found in page. Every character is separate anchor element.
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
@@ -215,9 +212,9 @@ Elements of this type anchor is PDF character boxes which together present a tex
 <td>If set then position of each element is compared to the master element's position, otherwise, with the previous element's position. It makes no sense when anchor contains no secondary element.</td></tr>
 <td class='title_column'>Search rectangular margin</td>
 <td>When set, area where an anchor is looked for is entire page. Otherwise, the searched area is restricted by Search rectangular margin that specifies an area around the rectangle where the anchor was located while creating. It is measured in pixels. It should be set only when it is known that the anchor is always belongs to a cetain part of page. It helps to avoid undesired matching and speed up processing.</td></tr>
-</table>k
+</table>
 
-<h4>OcrText</h4>
+<h5>OcrText</h5>
 It is strctured and treated similarly to <a href='#anchorPdfText'>PdfText</a> type except that difference that character boxes are provided by OCR engine instead of PDF entities. 
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
@@ -233,9 +230,9 @@ It is strctured and treated similarly to <a href='#anchorPdfText'>PdfText</a> ty
 <br>This switch makes sense only when Search rectangular margin is checked, otherwise the entire page is OCR'ed anyway.</td></tr>
 </table>
 
-<h4>ImageData</h4>
+<h5>ImageData</h5>
 Elements of this type anchor is images which are page fragments picked by the selection box.
-<p><span class='attention'>NOTE: </span> even if an image fragment is looked for within the same page where it was extracted from, it cannot be found without a non-zero tolerance. It happens because maps produced after downsizing an entire image and a fragment do not coincide due to different results in pixel interpolation. 
+<p><span class='attention'>NOTE: </span> even if an image fragment is looked for within the same page where it was extracted from, it cannot be found without a non-zero tolerance. It happens since hash maps produced after downsizing image and thus results of their pixel interpolation differ for entire image and a fragment. 
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'>Position deviation</td>
@@ -257,16 +254,17 @@ Elements of this type anchor is images which are page fragments picked by the se
 
 
 <h3><a name="condition">Condition</a></h3> 
-<p>Condition is a boolean expression that depends on anchors and can be differently defined in every template.
+<p>Condition is a boolean expression that depends on anchors and is configured in every template.
 <p>Condition can have meaning True or False which depends on the pair [PDF page, template]. It can be checked by <a href='#api'>PdfDocumentParser API</a> method IsCondition(<condition name>). 
-<p>Conditions are identified by their names. They are dictated by logic of custom application and so their names are predefined within its scope and are the same for all templates.
-<p>While condition collection can vary, the following conditons highly likely are required in any application:
+<p>Conditions are identified by their names. Their name collection is dictated by logic of custom application and thus is predefined within its scope and is the same for all templates.
 
+<h4>Mostly used condition</h4>
+<p>While condition collection can vary, the following conditons highly likely are required in any application:
 <ul>
 <li>condition that tells whether document corresponds to this template or not. It is obviously that this condtion must identify its document type with a high confidence;</li>
-<li>also, if processed PDF files are multi-document then one more condition that detects first page of documents is required</li>
+<li>also, if processed PDF files are multi-document then one more condition that detects first page of documents is required;</li>
 </ul>
-However, usually a single condition is used that serves for both those tasks at the same time.
+Usually both of these tasks are united into a single condition, though.
 
 <h4>Boolean expression</h4>
 Condition's expression should be composed of the following symbols: &lt;anchor id&gt;, '!', '&', '|', '(', ')'. When anchor referenced by &lt;anchor id&gt; is found then it is treated as True, otherwise False. Boolean result of expression is meaning of its condition. 
@@ -278,8 +276,8 @@ Condition's expression should be composed of the following symbols: &lt;anchor i
 
 
 <h3><a name="field">Field</a></h3>
-<p>Field defines certain text or image that is to be extracted from PDF file. It can either be linked to an anchor or retain absolute position in page. 
-<p>Fields are identified by their names. They are dictated by logic of custom application and so their names are predefined within its scope and are the same for all templates.
+<p>Field defines certain text or image that is to be extracted from PDF file. It is configured in every template and can either be linked to an anchor or retain absolute position in page. 
+<p>Fields are identified by their names. Their name collection is dictated by logic of custom application and thus is predefined within its scope and is the same for all templates. 
 <p>To create a field, select a new row in the fields table and select the area in page were text for this field must be extracted. If the field may have different location in page then it must be linked to an anchor that will detect its proper location for every page. If anchor of a linked field is not found then this field is not found as well. 
 <p>When it is known that the field is always has the same position in every document then there is no need to link it to an anchor.
 
@@ -331,7 +329,7 @@ Invoice Parser is a custom desktop application based on PdfDocumentParser. It ca
 <p>These assumptions is not something deep rooted in the code and can be easily modified.
 
 
-<h3>Additional Template Parameters</h3>
+<h3>Custom template parameters</h3>
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'>Active</td>
