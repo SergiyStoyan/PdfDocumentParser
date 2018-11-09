@@ -595,14 +595,9 @@ namespace Cliver.InvoiceParser
 
         private void help_Click(object sender, EventArgs e)
         {
-            helpRequest();
-        }
-
-        void helpRequest()
-        {
             try
             {
-                System.Diagnostics.Process.Start(PdfDocumentParser.Settings.Constants.HelpFile);
+                System.Diagnostics.Process.Start("file:///" + Log.AppDir + Settings.General.HelpFile);//anchor is ignored unfortunately
             }
             catch (Exception ex)
             {
