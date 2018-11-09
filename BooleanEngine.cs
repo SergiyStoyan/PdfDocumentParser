@@ -1,4 +1,9 @@
-﻿using System;
+﻿//********************************************************************************************
+//Author: Sergey Stoyan
+//        sergey.stoyan@gmail.com
+//        http://www.cliversoft.com
+//********************************************************************************************
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,6 +36,11 @@ namespace Cliver.PdfDocumentParser
         {
             if (string.IsNullOrWhiteSpace(expression))
                 throw new Exception("Expression is empty.");
+            {
+                Match m = Regex.Match(expression, @"[^\s\d\(\)\&\|\!]", RegexOptions.IgnoreCase);
+                if (m.Success)
+                    throw new Exception("Expression contains unacceptable symbol: '" + m.Value + "'. Expected symbols: <anchor id>, '!', '&', '|', '(', ')'");
+            }
             expression = Regex.Replace(expression, @"\d+", (Match m) =>
             {
                 int ai = int.Parse(m.Value);
@@ -38,7 +48,7 @@ namespace Cliver.PdfDocumentParser
                     throw new Exception("Anchor[id=" + ai + "] does not exist.");
                 return "T";
             });
-            parseSubstituted(expression);
+            parseWithSubstitutedAnchorIds(expression);
         }
 
         //Sample expression: "1 | (2 & 3)"
@@ -48,15 +58,13 @@ namespace Cliver.PdfDocumentParser
             {
                 return p.GetAnchorPoint0(int.Parse(m.Value)) != null ? "T" : "F";
             });
-            return parseSubstituted(expression);
+            return parseWithSubstitutedAnchorIds(expression);
         }
 
-        static bool parseSubstituted(string expression)
+        static bool parseWithSubstitutedAnchorIds(string expression)
         {
             BooleanEngine be = new BooleanEngine();
             be.expression = Regex.Replace(expression, @"\s", "", RegexOptions.Singleline);
-            if (Regex.IsMatch(be.expression, @"[^TF\(\)\&\|\!]", RegexOptions.IgnoreCase))
-                throw new Exception("Expression contains unacceptable symbols. Expected symbols: <anchor id>, '!', '&', '|', '(', ')'");
             be.move2NextToken();
             bool r = be.parse();
             if(!be.isEOS)
@@ -116,25 +124,24 @@ namespace Cliver.PdfDocumentParser
         {
             if (currentToken == 'T' || currentToken == 'F')
             {
-                var current = currentToken;
+                bool value = currentToken == 'T';
                 move2NextToken();
-                return current == 'T';
+                return value;
             }
             if (currentToken == '(')
             {
                 move2NextToken();
-                var expInPars = parse();
+                bool value = parse();
                 if (currentToken != ')')
                     throw new Exception("Closing parenthesis expected.");
                 move2NextToken();
-                return expInPars;
+                return value;
             }
             if (currentToken == ')')
                 throw new Exception("Unexpected closing parenthesis.");
 
-            // since its not a BooleanConstant or Expression in parenthesis, it must be a expression again
-            var val = parse();
-            return val;
+            // since its not a BooleanConstant or Expression in parenthesis, it must be an expression again
+            return parse();
         }
     }
 }
