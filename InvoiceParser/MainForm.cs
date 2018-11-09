@@ -597,7 +597,7 @@ namespace Cliver.InvoiceParser
         {
             try
             {
-                System.Diagnostics.Process.Start("file:///" + Log.AppDir + Settings.General.HelpFile);//anchor is ignored unfortunately
+                System.Diagnostics.Process.Start(Settings.General.HelpFile);
             }
             catch (Exception ex)
             {

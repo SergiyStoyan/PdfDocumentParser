@@ -29,7 +29,8 @@ namespace Cliver.InvoiceParser
         public class GeneralSettings : Cliver.Settings
         {
             [Newtonsoft.Json.JsonIgnore]
-            public readonly string HelpFile = @"docs\index.html#0_6";
+            //public readonly string HelpFile = @"docs\index.html#0_6";//anchor is ignored unfortunately
+            public readonly string HelpFile = @"docs\index_InvoiceParser.html";
 
             public string InputFolder = @"d:\_d\_projects\PdfDocumentParser\_test_files";
             public string OutputFolder;
