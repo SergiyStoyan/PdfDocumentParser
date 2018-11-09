@@ -65,83 +65,90 @@ namespace Cliver.PdfDocumentParser
         {
             BooleanEngine be = new BooleanEngine();
             be.expression = Regex.Replace(expression, @"\s", "", RegexOptions.Singleline);
-            be.move2NextToken();
-            bool r = be.parse();
-            if(!be.isEOS)
-                throw new Exception("Expression could not be parsed to the end.");
-            return r;
+            be.move2NextToken(false);
+            return be.parse(true);
         }
-        int position = -1;
         string expression;
-        char currentToken;
-        bool isEOS { get { return currentToken == '_'; } }
 
-        void move2NextToken()
+        void move2NextToken(bool endOfExpressionIsPossible)
         {
             position++;
             if (position >= expression.Length)
             {
+                if (!endOfExpressionIsPossible)
+                    throw new Exception("Unexpected end of expression");
                 currentToken = '_';
                 return;
             }
             currentToken = expression[position];
         }
+        int position = -1;
+        char currentToken;
+        bool isEndOfExpression { get { return currentToken == '_'; } }
 
-        bool parse()
+        private bool parse(bool globalScope)
         {
-            while (!isEOS)
+            bool? value = null;
+            char operand = ' ';
+            while ((globalScope && !isEndOfExpression) || (!globalScope && currentToken != ')'))
             {
-                var isNegated = false;
+                if (value != null)
+                {
+                    if (currentToken == '&' || currentToken == '|')
+                        operand = currentToken;
+                    else
+                    {
+                        if (globalScope)
+                            throw new Exception("End of expression or operand '&' or '|' is expected instead of '" + currentToken + "'");
+                        throw new Exception("Closing parenthesis or operand '&' or '|' is expected instead of '" + currentToken + "'");
+                    }
+                    move2NextToken(false);
+                }
+
+                bool isNegated = false;
                 while (currentToken == '!')
                 {
                     isNegated = !isNegated;
-                    move2NextToken();
+                    move2NextToken(false);
                 }
 
-                var boolean = parseBoolean();
-                if (isNegated)
-                    boolean = !boolean;
-
-                while (currentToken == '|' || currentToken == '&')
+                bool value2;
+                if (currentToken == 'T' || currentToken == 'F')
+                    value2 = currentToken == 'T';
+                else if (currentToken == '(')
                 {
-                    var operand = currentToken;
-                    move2NextToken();
-                    if (isEOS)
-                        throw new Exception("Missing expression after operand");
-                    var nextBoolean = parseBoolean();
-
-                    if (operand == '&')
-                        boolean = boolean && nextBoolean;
-                    else
-                        boolean = boolean || nextBoolean;
+                    move2NextToken(false);
+                    value2 = parse(false);
+                    if (currentToken != ')')
+                        throw new Exception("Closing parenthesis is expected instead of '" + currentToken + "'");
                 }
-                return boolean;
-            }
-            throw new Exception("Empty expression");
-        }
+                else
+                {
+                    if (isEndOfExpression)
+                        throw new Exception("Unexpected end of expression.");
+                    throw new Exception("Unexpected symbol: '" + currentToken + "'");
+                }
+                if (isNegated)
+                    value2 = !value2;
 
-        private bool parseBoolean()
-        {
-            if (currentToken == 'T' || currentToken == 'F')
-            {
-                bool value = currentToken == 'T';
-                move2NextToken();
-                return value;
-            }
-            if (currentToken == '(')
-            {
-                move2NextToken();
-                bool value = parse();
-                if (currentToken != ')')
-                    throw new Exception("Closing parenthesis expected.");
-                move2NextToken();
-                return value;
-            }
-            if (currentToken == ')')
-                throw new Exception("Unexpected closing parenthesis.");
+                if (value == null)
+                    value = value2;
+                else
+                {
+                    if (operand == '&')
+                        value = (bool)value && value2;
+                    else
+                        value = (bool)value || value2;
+                }
 
-            // since its not a BooleanConstant or Expression in parenthesis, it must be an expression again
-            return parse();
+                move2NextToken(true);
+            }
+            if (value == null)
+                if (globalScope)
+                    throw new Exception("Expression is empty.");
+                else
+                    throw new Exception("Some parentheses are empty.");
+            return (bool)value;
         }
     }
 }

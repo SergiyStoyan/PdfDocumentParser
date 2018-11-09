@@ -13,7 +13,6 @@ namespace Cliver.InvoiceParser
 {
     /*
  TBD:
- -BooleanEngine gets overflow with (?) "1 & k2"
 - switch to Tesseract.4
  - tune image recognition by checking brightness deltas
 
@@ -49,7 +48,7 @@ namespace Cliver.InvoiceParser
             try
             {
                 PdfDocumentParser.Program.Initialize();
-
+                
                 Application.Run(MainForm.This);
             }
             catch (Exception e)
