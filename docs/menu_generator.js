@@ -78,11 +78,11 @@ var convert = function(){
         contentContainer.appendChild(content);       
         contentContainer.style.marginLeft = menuContainer.offsetWidth;
         
-        var getMarginHeight = function(e){
+        var getOuterHeight = function(e){
             var ss = window.getComputedStyle(e);
-            return parseInt(ss['marginTop']) + parseInt(ss['marginBottom']);
+            return e.offsetHeight + parseInt(ss['marginTop']) + parseInt(ss['marginBottom']);
         };        
-        contentContainer.style.minHeight = window.innerHeight - document.getElementsByClassName('content')[0].getBoundingClientRect().top - document.getElementsByClassName('content')[0].style.marginBottom - document.getElementsByClassName('footer')[0].offsetHeight - getMarginHeight(document.getElementsByClassName('footer')[0]);
+        contentContainer.style.minHeight = window.innerHeight - getOuterHeight(document.getElementsByClassName('footer')[0]);
     }
 
     var navigate2currentAnchor = function(){
@@ -121,7 +121,8 @@ var convert = function(){
                     }
                 }
             }
-            window.scrollTo(0, 0);
+            //window.scrollTo(0, 0);
+            document.getElementsByClassName('content')[0].scrollIntoView();
         };
         
         var move2LocalAnchor = function(item, e, anchorName, isHeader){

@@ -19,6 +19,8 @@ span.inline{
     padding: 0 50 0 50;
     vertical-align:top;
     text-align:left;
+    border-top1: 2px solid grey;
+    width:auto;
 }
 
 .menuContainer{
