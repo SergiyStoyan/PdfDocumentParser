@@ -30,7 +30,7 @@
 <p>PdfDocumentParser implements the following strategies to operate with text and images:
 <ul>
 <li>Extracting text directly from PDF structure. This way is based on native text presentation inside PDF files and should be used whenever possible since it is the most robust and fast.</li>
-<li>Getting text from image by OCR technology incorporated into PdfDocumentParser. This option should be chosen only when direct PDF processing does not work. It is usually needed when pdf file consists completely or partially of images such as scanned documents, photos etc. This way cannot not give 100% accuracy against PDF processing and will acceptably work only for images with resolution not less than 300dpi. Also this way is slower.</li>
+<li>Getting text from image by OCR technology incorporated into PdfDocumentParser. This option should be chosen only when direct PDF processing does not work. It is usually needed when PDF file consists completely or partially of images such as scanned documents, photos etc. This way cannot not give 100% accuracy against PDF processing and will acceptably work only for images with resolution not less than 300dpi. Also this way is slower.</li>
 <li>Image search. This way is used for seeking and comparing page fragments as images. This way is slower than PDF processing and so must be avoided when possible. Also, it may not provide 100% accuracy on scanned documents if they have essential discrepancy in size, contrast, brightness, orientation etc.</li>
 </ul>
 
@@ -56,39 +56,44 @@ Template Editor is a GUI object that is to be called from a desktop application 
 <img src='img/tutorial0.png'/>
 
 <h4>Create anchors</h4>
-<p>Any template needs at least one anchor that will certainly identify type of document and distinguish it from the rest documents you may want to parse. Such an anchor should be targeted to some fragment of a document that is unique to its type. Usually it is a logo of company that issued the document.
+<p>Any template needs at least one <a href='#anchor'>anchor</a> that will certainly identify type of document and distinguish it from the rest documents you may want to parse. Such an anchor should be targeted to some fragment of a document that is unique to its type. Usually a logo of company that issued the document can well serve this goal.
 <p class='screenshot_title'>Create an anchor that captures the logo and thus detects if the page corresponds to the template:
 <img src='img/tutorial1.png'/>
 
-<p>In addition to the first anchor which is a must for any template, one more anchor is usually needed that checks if the page is first page of a document. It is necessary when parsing a multi-document PDF file: when Parser finds this anchor, all the previously extracted fields are recorded and reset.
-<p class='screenshot_title'>Create an anchor that checks document's number and thus detects if the page is document's first page:
+<p>In addition to the first anchor which is a must, one more anchor is usually needed to check if page is first page of document. It is necessary while parsing a multi-document PDF file - when application finds this anchor, it knows that the current document if exists should be closed and a new document should be started.
+<p class='screenshot_title'>Create an anchor that checks if the page is document's first page:
 <img src='img/tutorial2.png'/>
 
-<p><span class='attention'>NOTE: </span>when you select a line in either table, PdfDocumentParser processes it on the current page and the result is displayed in the page viewer and in Status.
+<p><span class='attention'>NOTE: </span>when you select a row in either table: anchors, conditions or fields, its status is updated in the head cell and the captured place is displayed in the page viewer.
 
 <h4>Specify conditions</h4>
-<p>Generally conditions can be any that are dictated by the logic of the appication. But usually the application needs to detect if a page at the same time corresponds to the template and is the first page of a document. If this condition is met then this template is chosen to process the document. In the tutorial this condtion has name FirstPageOfDocument. FirstPageOfDocument should be defined by entering a boolean expression that relates on anchors #1 and #2.  
-<p class='screenshot_title'>Enter expression "1 & 2" which is true only when both anchors are found together:
+<p>Generally, <a href='#condition'>conditions</a> can be any predefined by custom application. In this tutorial a condition is used that is highly likely required in any application. In the tutorial this condition has name FirstPageOfDocument. Every PDF page should be examined with it for the following:
+<ul>
+<li>does this page belong to a document that this template was created for?</li>
+<li>if it does, is the page the first page of a document?</li>
+</ul>
+If this condition is met then this template is chosen to process the page. 
+<p class='screenshot_title'>FirstPageOfDocument must relate on anchors #1 and #2 created above. Fill it with boolean expression "1 & 2" which is true only when both anchors are found together:
 <img src='img/tutorial3.png'/>
 
-<p>While in our example FirstPageOfDocument is quite good with 2 anchors and it is so for the most documents, sometimes more anchors are required: for instance when we need to parse different type documents issued by the same company and so have to distinguish document types.
+<p>While FirstPageOfDocument configured with 2 anchors is quite good for the example, sometimes more anchors are required: for instance when there are different type documents issued by the same company and thus company's logo recognition is not sufficient to distinguish between them.
 
 
 
 <h4>Set fields</h4>
-<p>A field is usually linked an anchor so that when a field's anchor is found, PdfDocumentParser locates the field's rectangle relatively to the anchor's position and extracts text surrounded by it. But a field might have no anchor in which case its selecting rectangle remains in a prefixed location.
-<p class='screenshot_title'>Set INVOICE# field:
+<p>Though some <a href='#field'>fields</a> may remain not linked to anchors, it is advisable to always link them. So done in this tutorial.
+<p class='screenshot_title'>Set <a href='#field'>field</a> INVOICE#:
 <img src='img/tutorial4.png'/>
 
-<p>In the same way as above create anchors for the rest fields and link the fields to them.
-<p class='screenshot_title'>Setting COST field:
+<p>In the same way as above set the rest fields and create anchors for them. 
+<p class='screenshot_title'>Set field COST :
 <img src='img/tutorial5.png'/>
 
 
 
 
 <h4>Check template</h4>
-<p>When all the conditions and the fields are configured, it's time to walk through the PDF file and see how the template works on every page.
+<p>When all the conditions and fields are set, it's time to walk through the file and see how the template works on every page.
 <p class='screenshot_title'>The page #2 begins a new invoice:
 <img src='img/tutorial6.png'/>
 <p class='screenshot_title'>The page #3 continues and ends an invoice: 
@@ -119,42 +124,41 @@ Refer <a href='#InvoiceParser'>InvoiceParser</a> for an alive example of using P
 <tr><td class='title_column'>Cliver.PdfDocumentParser.PageCollection::ActiveTemplate</td>
 <td>Set active template in PdfDocumentParser.</td></tr>
 <tr><td class='title_column'>Cliver.PdfDocumentParser.Page::IsCondition</td>
-<td>Checks if a condition defined by active template is met in page.</td></tr>
+<td>Checks if a condition is met in page.</td></tr>
 <tr><td class='title_column'>Cliver.PdfDocumentParser.Page::GetValue</td>
-<td>Extracts a field defined by active template from page.</td></tr>
+<td>Extracts a field from page.</td></tr>
 </table>
 
 
 <h3>Pseudo-code</h3>
-Some basic algoritm of processing a PDF file with PdfDocumentParser would look like the following:
+A basic algorithm of processing a PDF file with PdfDocumentParser would look like the following:
 <pre><code>
-foreach(page in pdf)
+forech(page in PDF)
 {
-    foreach(template in templates)
+    if(PdfDocumentParser.ActiveTemplate == null)
     {
-        PdfDocumentParser.ActiveTemplate = template;
-        if(PdfDocumentParser.IsCondition(page, 'itIsDocumentFirstPage'))
+        foreach(template in templates)
         {
-            object value1 = PdfDocumentParser.GetValue('field1Name');
-            do something with value1
-            object value2 = PdfDocumentParser.GetValue('field2Name');
-            do something with value2
-            ...
+            PdfDocumentParser.ActiveTemplate = template;
+            if(PdfDocumentParser.IsCondition(page, 'DocumentFirstPage'))
+                break;
+            PdfDocumentParser.ActiveTemplate = null;
         }
-        else if(PdfDocumentParser.IsCondition(page, 'itIsDocumentLastPage'))
-        {
-            object value1 = PdfDocumentParser.GetValue('field1Name');
-            do something with value1
-            object value2 = PdfDocumentParser.GetValue('field2Name');
-            do something with value2
-            ...
-        }
+    }
+    if(PdfDocumentParser.ActiveTemplate != null)
+    {      
+        object value1 = PdfDocumentParser.GetValue(page, 'field1');
+        do something with value1
+        object value2 = PdfDocumentParser.GetValue(page, 'field2');
+        do something with value2
         ...
+        if(PdfDocumentParser.IsCondition(page, 'DocumentLastPage'))
+            PdfDocumentParser.ActiveTemplate = null;
     }
 }
 </code></pre>
 
-The main idea is that custom operations are performed depending on conditions defined in templates.
+The main idea is that custom operations are performed depending on conditions.
 
 
 
@@ -164,17 +168,17 @@ The main idea is that custom operations are performed depending on conditions de
 
 
 
-<h2><a name="template">Template</a></h2>
-<p>A template is desinged for documents that comply with certain layout (e.g. for invoices issued by the same company). It contains information about which data is to be harvested and how. Applying a template to documents with layout different from that it was designed for obviously brings to mistakes.
-<p>When you want to parse a document with a new layout, open Template Editor (how it is done depends on the custom application). Select a sample PDF file to be parsed and having it displayed in the editor you go through the following steps:
+<h2><a name="template">Parsing template</a></h2>
+<p>To parse documents that comply with a certain layout (e.g. invoices issued by the same company) a parsing template is configured. It contains information about which data is to be extracted and how. Applying a template to documents with layout different from that it was designed for brings obviously to wrong parsing.
+<p>Configuring a template is done in <a href='#templateEditor'>Template Editor<a/> and consists of the following steps:
 <ul>
-<li> create <a href="#anchor">anchors</a>;</li>
-<li> create <a href="#condition">conditions</a>;</li>
-<li> create <a href="#field">fields</a>;</li>
-<li> select each created element and see in the status box if it works as expected;</li>
-<li> save the template;</li>
+<li> create <a href="#anchor">anchors</a> required for <a href="#condition">conditions</a>;</li>
+<li> define <a href="#condition">conditions</a> using created anchors;</li>
+<li> set <a href="#field">fields</a>;</li>
+<li> create <a href="#anchor">anchors</a> for fields that need it and link those fields to them;</li>
+<li> test the template on the rest pages of the file;</li>
 </ul>
-See <a href="#tutorial">tutorial</a> for more details.
+Refer <a href="#tutorial">the tutorial</a> for more details.
 
 
 
@@ -208,15 +212,15 @@ Elements of this type anchor is PDF character boxes which together present a tex
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'>Position deviation</td>
-<td>It allows to loose bonds between master element and secondary elements in a anchor when for some reason they can shift relatively to each other. It is measured in pixels and must be a positive float number, non-zero even for identical documents bacause of discrepancy reasoned by internal image re-scaling.</td></tr>
+<td>It allows to loose bonds between master element and secondary elements in a anchor when for some reason they can shift relatively to each other. It is measured in pixels and must be a positive float number, non-zero even for identical documents because of discrepancy reasoned by internal image re-scaling.</td></tr>
 <tr><td class='title_column'>Position deviation is absolute</td>
 <td>If set then position of each element is compared to the master element's position, otherwise, with the previous element's position. It makes no sense when anchor contains no secondary element.</td></tr>
 <td class='title_column'>Search rectangular margin</td>
-<td>When set, area where an anchor is looked for is entire page. Otherwise, the searched area is restricted by Search rectangular margin that specifies an area around the rectangle where the anchor was located while creating. It is measured in pixels. It should be set only when it is known that the anchor is always belongs to a cetain part of page. It helps to avoid undesired matching and speed up processing.</td></tr>
+<td>When set, area where an anchor is looked for is entire page. Otherwise, the searched area is restricted by Search rectangular margin that specifies an area around the rectangle where the anchor was located while creating. It is measured in pixels. It should be set only when it is known that the anchor is always belongs to a certain part of page. It helps to avoid undesired matching and speed up processing.</td></tr>
 </table>
 
 <h5>OcrText</h5>
-It is strctured and treated similarly to <a href='#anchorPdfText'>PdfText</a> type except that difference that character boxes are provided by OCR engine instead of PDF entities. 
+It works similarly to <a href='#anchorPdfText'>PdfText</a> type except that difference that character boxes are provided by OCR engine instead of PDF entities. 
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'>Position deviation</td>
@@ -262,7 +266,7 @@ Elements of this type anchor is images which are page fragments picked by the se
 <h4>Mostly used condition</h4>
 <p>While condition collection can vary, the following conditons highly likely are required in any application:
 <ul>
-<li>condition that tells whether document corresponds to this template or not. It is obviously that this condtion must identify its document type with a high confidence;</li>
+<li>condition that tells whether document corresponds to this template or not. It is obviously that this condition must identify its document type with a high confidence;</li>
 <li>also, if processed PDF files are multi-document then one more condition that detects first page of documents is required;</li>
 </ul>
 Usually both of these tasks are united into a single condition, though.
@@ -281,8 +285,9 @@ Condition's expression is composed of the following symbols: &lt;anchor id&gt;, 
 
 
 <h3><a name="field">Field</a></h3>
-<p>Field defines certain text or image that is to be extracted from PDF file. It is configured in every template and can either be linked to an anchor or retain absolute position in page. 
+<p>Field defines certain text or image that is to be extracted from PDF file. 
 <p>Fields are identified by their names. Their name collection is dictated by logic of custom application and thus is predefined within its scope and is the same for all templates. 
+<p>A field can be linked to an anchor or not. When a field has no anchor, its selecting rectangle retains absolute position which was its position during creation. When a field has anchor, PdfDocumentParser locates the field's rectangle relatively to actual anchor's position that is if the anchor shifts in page, the field shifts together with it. It is advisable to always link fields to anchors.  
 <p>To create a field, select a new row in the fields table and select the area in page were text for this field must be extracted. If the field may have different location in page then it must be linked to an anchor that will detect its proper location for every page. If anchor of a linked field is not found then this field is not found as well. 
 <p>When it is known that the field is always has the same position in every document then there is no need to link it to an anchor.
 
@@ -317,7 +322,7 @@ It is used when image is required rather than text or when OCR is not reliable.
 
 
 <h2><a name='InvoiceParser'></a>InvoiceParser</h2>
-Invoice Parser is a custom desktop application based on PdfDocumentParser. It can be used as a framwork or sample of incorporating PdfDocumentParser into custom code. Actually its custom specificity lays only in a way how PDF files are parsed while the rest code can be used unchanged as a framework in a new application.
+Invoice Parser is a custom desktop application based on PdfDocumentParser. It can be used as a framework or sample of incorporating PdfDocumentParser into custom code. Actually its custom specificity lays only in a way how PDF files are parsed while the rest code can be used unchanged as a framework in a new application.
 <p>Generally, it does the following:
 <ul>
 <li>enhances PdfDocumentParser.Template with custom properties that are not related to parsing;</li>
@@ -356,7 +361,7 @@ Invoice Parser is a custom desktop application based on PdfDocumentParser. It ca
 <li> specify file filters for templates. If it can be done then the tips below are not needed;
 <li> specify template orders so that templates that require longer time for recognition have higher order. E.g. templates that use auto-deskew should be checked in the last place;
 <li> keep templates that are known as not corresponding to the files to be processed right now, inactive so that PdfDocumentParser will have to choose the right templates from a lesser collection;
-<li> as every template is checked for condtion FirstPageOfDocument, avoid using OCR text type in its anchors because this type requires essential time to build an OCR cache of page (being built it is very fast though). This tip makes sense only when the most of templates use Image type in anchors which usually happens. Otherwise, if anchors of the most of templates can use OCR'ed text then it may give a faster parsing;
+<li> as every template is checked for condition FirstPageOfDocument, avoid using OCR text type in its anchors because this type requires essential time to build an OCR cache of page (being built it is very fast though). This tip makes sense only when the most of templates use Image type in anchors which usually happens. Otherwise, if anchors of the most of templates can use OCR'ed text then it may give a faster parsing;
 </ul>
 
 

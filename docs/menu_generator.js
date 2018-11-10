@@ -60,7 +60,7 @@ var convert = function(){
             e.classList.add('h' + level);
             e.setAttribute('_id', id);
             e.addEventListener('click', onclickMenuItem);
-            e.innerHTML = items[id]['header'].innerHTML; 
+            e.innerHTML = items[id]['header'].innerText; 
             menu.appendChild(e);
             items[id]['menuItem'] = e;
             //menu.appendChild(document.createElement('br'));

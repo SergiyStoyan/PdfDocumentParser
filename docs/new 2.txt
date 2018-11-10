@@ -1,9 +1,0 @@
-
-How do those anchor and mark work inside Parser? In every page Parser looks for the fragment defined by anchor. Depending on its type it can be either PDF text, OCR'ed text, or image. Each of types is processed by its own very different way and so choosing the right type is crucial in successful and robust parsing. The logo in our example document is not text but image that is why we set the anchor's type to ImageData. This means that Parser will look for the image we selected while creating the anchor. 
-<p>An anchor can be found anywhere on page. In a general way, having found an anchor, Parser takes the selecting rectangle specified by a mark linked to this anchor and locates it relatively to the anchor's position in page. Then Parser compares a text surrounded by the rectangle with the text defined in the mark and when they are equal, the mark is considered found. 
-<p>But a mark does not obligatory have a selecting rectangle specified. In such a simpler case it is considered found just when its anchor found. 
-<br><br>
-
-
-<p>How does Parser process fields? The likeness between a field and a mark is that each has a selecting rectangle (well, a mark might not have but a field always does). And like with a mark, when a field's anchor is found, Parser locates the field's rectangle relatively to the anchor's position and extracts text surrounded by the rectangle. But further the difference between marks and fields comes out: while in a case of mark the captured text is compared with the mark's predefined text, in a case of field the captured text is recorded as a field value. 
-<p>And one more difference: while all the marks must be met on the same page, fields should not necessary do so. In every page Parser tries to capture all the fields and only the last captures are remembered and recorded when the end of PDF file or a new document is reached.
