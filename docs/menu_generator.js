@@ -9,14 +9,12 @@ var convert = function(){
                 var m = e.tagName.match(/H(\d+)/i);
                 if(m)
                 {
-                    var level = parseInt(m[1]);//alert(level);
-                    if(ids.length == level){
-                    }
-                    else if(ids.length < level){
+                    var level = parseInt(m[1]) + 1;//alert(level);
+                    if(ids.length < level){
                         while(ids.length < level)
                             ids.push(0);
                     }
-                    else{
+                    else if(ids.length > level){
                         while(ids.length > level)
                             ids.pop();
                     }
