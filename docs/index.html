@@ -47,9 +47,19 @@
 
 
 <h2><a name="templateEditor">Template Editor</a></h2>
-Template Editor is a GUI object that is to be called from a desktop application whenever creating or editing <a href="#template">parsing template</a> is required. 
+Template Editor is a GUI object that is to be called from a desktop application whenever editing <a href="#template">template</a> is required. 
 
-<h3><a name='tutorial'>Tutorial: set template</a></h3>
+<h3><a name='templateEditorApi'>Template Editor API</a></h3>
+<table>
+<tr><th class='title_column'>Object</th><th>Description</th></tr>
+<tr><td class='title_column'>Cliver.PdfDocumentParser.TemplateForm</td>
+<td>WebForm class that provides editing capabilities.</td></tr>
+<tr><td class='title_column'>Cliver.PdfDocumentParser.TemplateManager</td>
+<td>Defines custom behaviour. Passed to TemplateForm as a parameter.</td></tr>
+</table>
+<p>Refer <a href='#InvoiceParser'>InvoiceParser</a> as a sample of use.
+
+<h3><a name='tutorial'>Tutorial: configuring template</a></h3>
 <p><a href="#template">A parsing template</a> can be created from scratch or copied from an existing one and modified as needed. 
 <p>This tutorial starts with a blank template.
 <p class='screenshot_title'>Open a test PDF file in the template editor window:
@@ -115,7 +125,7 @@ If this condition is met then this template is chosen to process the page.
 
 
 
-<h2><a name='api'>API</a></h2>
+<h2><a name='api'>Parsing API</a></h2>
 Refer <a href='#InvoiceParser'>InvoiceParser</a> for an alive example of using PdfDocumentParser in a custom application.
 
 <h3>Methods</h3>
@@ -126,7 +136,7 @@ Refer <a href='#InvoiceParser'>InvoiceParser</a> for an alive example of using P
 <tr><td class='title_column'>Cliver.PdfDocumentParser.Page::IsCondition</td>
 <td>Checks if a condition is met in page.</td></tr>
 <tr><td class='title_column'>Cliver.PdfDocumentParser.Page::GetValue</td>
-<td>Extracts a field from page.</td></tr>
+<td>Extracts a field from page. If anchor of the field was not found, NULL is returned.</td></tr>
 </table>
 
 
@@ -272,11 +282,11 @@ Elements of this type anchor is images which are page fragments picked by the se
 Usually both of these tasks are united into a single condition, though.
 
 <h4>Boolean expression</h4>
-Condition's expression is composed of the following symbols: &lt;anchor id&gt;, '!', '&', '|', '(', ')'. When anchor referenced by &lt;anchor id&gt; is found then it is treated as True, otherwise False. Boolean result of expression is meaning of its condition. 
-<p><span class='attention'>NOTE: </span>Operands '&' and '|' are processed consequently meaning that for instance "1 | 2 & 3" and "2 & 3 | 1" are not equivalent. Therefore parentheses should be used to manage precedence of operations.
+Condition expressions are composed of the following symbols: &lt;anchor id&gt;, '!', '&', '|', '(', ')'. When anchor referenced by &lt;anchor id&gt; is found then it is treated as True, otherwise False. Meaning of a condition is the boolean result of its expression. 
+<p><span class='attention'>NOTE: </span>Operands '&' and '|' are processed consequently, therefore for instance "1 | 2 & 3" and "2 & 3 | 1" are not equivalent. Parentheses should be used to manage precedence of operations.
 <p>Sample expressions:
 <br> "1"
-<br> "1 | (2 & 3)"
+<br> "!2 | (2 & 3)"
 
 
 
@@ -287,7 +297,7 @@ Condition's expression is composed of the following symbols: &lt;anchor id&gt;, 
 <h3><a name="field">Field</a></h3>
 <p>Field defines certain text or image that is to be extracted from PDF file. 
 <p>Fields are identified by their names. Their name collection is dictated by logic of custom application and thus is predefined within its scope and is the same for all templates. 
-<p>A field can be linked to an anchor or not. When a field has no anchor, its selecting rectangle retains absolute position which was its position during creation. When a field has anchor, PdfDocumentParser locates the field's rectangle relatively to actual anchor's position that is if the anchor shifts in page, the field shifts together with it. It is advisable to always link fields to anchors.  
+<p>A field optionally can be linked to an anchor. When a field has no anchor, its selecting rectangle retains absolute position which was its position during creation. When a field has anchor, PdfDocumentParser locates the field's rectangle relatively to its anchor's actual position so that if in some page the anchor shifts, the field shifts together with it. It is advisable always to link fields to anchors thus drastically decreasing probability of incorrect parsing.  
 <p>To create a field, select a new row in the fields table and select the area in page were text for this field must be extracted. If the field may have different location in page then it must be linked to an anchor that will detect its proper location for every page. If anchor of a linked field is not found then this field is not found as well. 
 <p>When it is known that the field is always has the same position in every document then there is no need to link it to an anchor.
 

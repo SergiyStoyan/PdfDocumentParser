@@ -14,14 +14,14 @@ namespace Cliver.PdfDocumentParser
 {
     internal class BooleanEngine
     {
-        static public List<int> GetAnchorIds(string expression)
+        static public IEnumerable<int> GetAnchorIds(string expression)
         {
             if (expression == null)
                 return new List<int>();
             List<int> anchorIds = new List<int>();
             foreach (Match m in Regex.Matches(expression, @"\d+"))
                 anchorIds.Add(int.Parse(m.Value));
-            return anchorIds;
+            return anchorIds.Distinct();
         }
 
         static public string GetFormatted(string expression)
