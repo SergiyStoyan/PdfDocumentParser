@@ -120,19 +120,23 @@ namespace Cliver.PdfDocumentParser
                 bool firstAnchor = true;
                 foreach (int ai in BooleanEngine.GetAnchorIds(c.Value))
                 {
+                    DataGridViewRow r;
+                    Template.Anchor a = getAnchor(ai, out r);
+                    if (r == null)
+                        continue;
                     if (firstAnchor)
                     {
-                        showAnchorRowAs(ai, rowStates.NULL, true, true);
+                        firstAnchor = false;
+                        showAnchorRowAs(ai, rowStates.Linked, true);
                         setCurrentAnchorRow(ai, true);
                     }
                     else
-                        showAnchorRowAs(ai, rowStates.Condition, false, true);
+                        showAnchorRowAs(ai, rowStates.Condition, false);
                     findAndDrawAnchor(ai, firstAnchor);
-                    firstAnchor = false;
                 }
                 if (firstAnchor)
                 {
-                    showAnchorRowAs(null, rowStates.NULL, true, true);
+                    showAnchorRowAs(null, rowStates.NULL, true);
                     setCurrentAnchorRow(null, true);
                 }
 

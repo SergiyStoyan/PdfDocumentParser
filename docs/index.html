@@ -2,7 +2,7 @@
 <head>
 
 <link rel="stylesheet" type="text/css" href="main.css">
-<link rel="stylesheet" type="text/css" href="doc_generator.css">
+<link rel="stylesheet" type="text/css" href="menu_generator.css">
 
 </head>
 <body>
@@ -11,18 +11,18 @@
 <div id='content'>
 <h2>Overview</h2>
 <p>PdfDocumentParser is a parsing engine designed to extract text/images from PDF documents that conform to a predefined graphic layout - such as invoices and the like. The main parsing approach is based on finding certain text or image fragments in page and then extracting text/images located relatively to those fragments.
-<p>Within this scope PdfDocumentParser implements the following strategies:
+<p>Within this scope PdfDocumentParser is capable of the following:
 <ul>
-<li>processing PDF entities (the main way to operate with text in PdfDocumentParser);</li>
-<li>processing OCR'ed text (intended for scanned documents);</li>
-<li>image search/comparison (can be used in either native and scanned PDF files);</li>
+<li>processing PDF entities (used for native PDF files);</li>
+<li>processing OCR'ed text (used for scanned PDF files);</li>
+<li>image search/comparison (used for either native or scanned PDF files);</li>
 </ul> 
 
-<p>PdfDocumentParser has been developed as a set of parsing tools that can be incorporated into a custom application hopefully without need of change. 
-<p>PdfDocumentParser's API which is exposed to a third-part code, includes:
+<p>PdfDocumentParser has been developed to be incorporated into a custom application hopefully without need of change. 
+<p>PdfDocumentParser API consists of:
 <ul>
-<li>Template Editor where parsing templates can be created or debugged in an easy manner;</li>
-<li>a parsing engine API that can be used by custom applications: the engine accepts a PDF file and returns parsed data back to the calling code;</li>
+<li><a href="#templateEditor">Template Editor</a> where parsing templates can be created or debugged in an easy manner;</li>
+<li><a href="#api">Parsing API</a> that allows custom applications to parse PDF files in a custom manner with little effort required;</li>
 </ul> 
 
 
@@ -46,16 +46,17 @@
 
 
 
-<h2>Template Editor</h2>
+<h2><a name="templateEditor">Template Editor</a></h2>
+Template Editor is a GUI object that is to be called from a desktop application whenever creating or editing <a href="#template">parsing template</a> is required. 
 
-<h3><a name='tutorial'>Tutorial</a></h3>
-<p>A parsing template can be created from scratch or copied from an existing one. Usually copying saves time because you can adapt existing settings instead of creating new ones. A template can be pre-filled with initial data which can be modified as needed. 
-<p>But in the tutorial we'll start with a blank template.
+<h3><a name='tutorial'>Tutorial: set template</a></h3>
+<p><a href="#template">A parsing template</a> can be created from scratch or copied from an existing one and modified as needed. 
+<p>This tutorial starts with a blank template.
 <p class='screenshot_title'>Open a test PDF file in the template editor window:
 <img src='img/tutorial0.png'/>
 
 <h4>Create anchors</h4>
-<p>Any template needs at least one anchor that will certainly identify type of document and distinguish it from the rest documents you may want to parse. Such an anchor should be targeted to some fragment of a document that is unique to its type. Usually it is a logo of company which issued the document.
+<p>Any template needs at least one anchor that will certainly identify type of document and distinguish it from the rest documents you may want to parse. Such an anchor should be targeted to some fragment of a document that is unique to its type. Usually it is a logo of company that issued the document.
 <p class='screenshot_title'>Create an anchor that captures the logo and thus detects if the page corresponds to the template:
 <img src='img/tutorial1.png'/>
 
@@ -163,7 +164,7 @@ The main idea is that custom operations are performed depending on conditions de
 
 
 
-<h2>Template</h2>
+<h2><a name="template">Template</a></h2>
 <p>A template is desinged for documents that comply with certain layout (e.g. for invoices issued by the same company). It contains information about which data is to be harvested and how. Applying a template to documents with layout different from that it was designed for obviously brings to mistakes.
 <p>When you want to parse a document with a new layout, open Template Editor (how it is done depends on the custom application). Select a sample PDF file to be parsed and having it displayed in the editor you go through the following steps:
 <ul>
@@ -267,7 +268,8 @@ Elements of this type anchor is images which are page fragments picked by the se
 Usually both of these tasks are united into a single condition, though.
 
 <h4>Boolean expression</h4>
-Condition's expression should be composed of the following symbols: &lt;anchor id&gt;, '!', '&', '|', '(', ')'. When anchor referenced by &lt;anchor id&gt; is found then it is treated as True, otherwise False. Boolean result of expression is meaning of its condition. 
+Condition's expression is composed of the following symbols: &lt;anchor id&gt;, '!', '&', '|', '(', ')'. When anchor referenced by &lt;anchor id&gt; is found then it is treated as True, otherwise False. Boolean result of expression is meaning of its condition. 
+<p><span class='attention'>NOTE: </span>Operands '&' and '|' are processed consequently meaning that for instance "1 | 2 & 3" and "2 & 3 | 1" are not equivalent. Therefore parentheses should be used to manage precedence of operations.
 <p>Sample expressions:
 <br> "1"
 <br> "1 | (2 & 3)"
@@ -289,7 +291,7 @@ Condition's expression should be composed of the following symbols: &lt;anchor i
 Its value is a text surrounded by field's rectangle. It is obtained from PDF text entities.
 <h5>OcrText</h5>
 Its value is a text surrounded by field's rectangle. It is recognized by OCR engine.
-<p>For conventional PDF documents this type should never be used. But for scanned documents it is the only way to get text in digital form that can be recorded in a file or database, indexed, searched and so on.
+<p>For native PDF documents this type should never be used. But for scanned documents it is the only way to get text in digital form that can be recorded in a file or database, indexed, searched and so on.
 <h5>ImageData</h5>
 Its value is a System.Drawing.Bitmap object that contains fragment of page surrounded by field's rectangle. 
 It is used when image is required rather than text or when OCR is not reliable.
@@ -382,7 +384,7 @@ Invoice Parser is a custom desktop application based on PdfDocumentParser. It ca
 
 
 </div>
-<script src="doc_generator.js"></script>
+<script src="menu_generator.js"></script>
 
 <div class="footer">
         <script src="copyright.js"></script>

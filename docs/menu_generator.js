@@ -67,7 +67,7 @@ var convert = function(){
         }
         
         var section = document.createElement('table');
-        section.innerHTML = '<tr><td class="menuTd"><a class="switchLink" href="#_plainHtml" title="If the page is not displayed properly, switch to the plain html.">Plain mode</a></td><td class="contentTd"></td></tr>';
+        section.innerHTML = '<tr><td class="menuTd"><a class="switchLink" href="#_plainHtml" title="If the page is not displayed properly, switch to the plain html.">plain mode</a></td><td class="contentTd"></td></tr>';
         //var section = document.createElement('section');
         section.classList.add("section");
         var content = document.getElementById('content');
@@ -189,7 +189,7 @@ else{
         location.reload();
         return false;
     };
-    anchorDiv.innerHTML = '<a class="switchLink" href="#" onclick="loadInMenuMode();" title="To get menu, switch to javascript generated document.">Menu mode</a>';
+    anchorDiv.innerHTML = '<a class="switchLink" href="#" onclick="loadInMenuMode();" title="Switch to javascript generated document.">menu mode</a>';
     var body = document.getElementsByTagName('body')[0];
     body.insertBefore(anchorDiv, body.childNodes[0]);
 }
