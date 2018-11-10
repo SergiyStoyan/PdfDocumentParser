@@ -1,8 +1,8 @@
 h1.mainHeader {font-size: 2em;  color:#444; margin-top:10; margin-bottom:30;}
-h1 {color:#348; font-size: 1.8em; text-indent: 30px; margin-top:20; margin-bottom:10;}
-h2 {color:#702; font-size: 1.6em; text-indent: 20px; margin-top:20; margin-bottom:10;}
-h3 {color:#069; font-size: 1.4em; text-indent: 10px; margin-top:20; margin-bottom:10;}
-h4 {color:#073; font-size: 1.2em; text-indent: 5px; margin-top:20; margin-bottom:10}
+h1 {color:#348; font-size: 1.8em; text-indent: 100px; margin-top:50; margin-bottom:10;}
+h2 {color:#702; font-size: 1.6em; text-indent: 70px; margin-top:40; margin-bottom:10;}
+h3 {color:#069; font-size: 1.4em; text-indent: 30px; margin-top:30; margin-bottom:10;}
+h4 {color:#073; font-size: 1.2em; text-indent: 10px; margin-top:20; margin-bottom:10}
 h5 {color:#600; font-size: 1em; text-indent: 5px; margin-top:10; margin-bottom:10}
 p {   margin1: 0;    margin-top:10;    padding1: 0;}
 table { margin-top:20; margin-bottom:10; border-collapse: collapse; border-color: grey; }
