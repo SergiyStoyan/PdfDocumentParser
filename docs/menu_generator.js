@@ -1,9 +1,10 @@
 
 var convert = function(){
-    var getItems = function (e){
+    var getItems = function(){
         var items = {};
         var ids = [0, 0];
-        while(e){//alert(e);
+        var e = document.getElementsByClassName('content')[0].childNodes[0];
+        while(e){//if(e.nodeType == Node.COMMENT_NODE)console.log(e.data);
             if(e.tagName)
             {
                 var m = e.tagName.match(/H(\d+)/i);
@@ -64,16 +65,24 @@ var convert = function(){
             //menu.appendChild(document.createElement('br'));
         }
         
-        var section = document.createElement('table');
-        section.innerHTML = '<tr><td class="menuTd"><a class="switchLink" href="#_plainHtml" title="If the page is not displayed properly, switch to the plain html.">plain mode</a></td><td class="contentTd"></td></tr>';
-        //var section = document.createElement('section');
-        section.classList.add("section");
-        var content = document.getElementById('content');
-        content.parentNode.insertBefore(section, content);
-        //section.appendChild(menu);
-        //section.appendChild(content);
-        section.getElementsByTagName('td')[0].appendChild(menu);
-        section.getElementsByTagName('td')[1].appendChild(content);
+        var menuContainer = document.createElement('div');
+        menuContainer.classList.add("menuContainer");
+        menuContainer.innerHTML = '<a class="switchLink" href="#_plainHtml" title="If the page is not displayed properly, switch to the plain html.">plain mode</a>';
+        menuContainer.appendChild(menu);
+        var content = document.getElementsByClassName('content')[0];
+        content.parentNode.insertBefore(menuContainer, content);
+        
+        var contentContainer = document.createElement('div');
+        contentContainer.classList.add("contentContainer");
+        content.parentNode.insertBefore(contentContainer, content);
+        contentContainer.appendChild(content);       
+        contentContainer.style.marginLeft = menuContainer.offsetWidth;
+        
+        var getMarginHeight = function(e){
+            var ss = window.getComputedStyle(e);
+            return parseInt(ss['marginTop']) + parseInt(ss['marginBottom']);
+        };        
+        contentContainer.style.minHeight = window.innerHeight - document.getElementsByClassName('content')[0].getBoundingClientRect().top - document.getElementsByClassName('content')[0].style.marginBottom - document.getElementsByClassName('footer')[0].offsetHeight - getMarginHeight(document.getElementsByClassName('footer')[0]);
     }
 
     var navigate2currentAnchor = function(){
@@ -150,7 +159,7 @@ var convert = function(){
         return false;
     };
 
-    var items = getItems(document.getElementById('content').childNodes[0]);
+    var items = getItems();
     addMenu2Page();
 
     var onHashchange = function(event){
@@ -165,7 +174,7 @@ var convert = function(){
 
     //it is only to prevent browser from unpleasant page jerking when navigating to an anchor which is hidden
     var localPath = window.location.href.replace(/#.*/, '');
-    var as = content.getElementsByTagName('a');
+    var as = document.getElementsByTagName('a');
     for(var i = 0; i < as.length; i++){
         if(localPath != as[i].href.replace(/#.*/, ''))
             continue;

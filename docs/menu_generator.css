@@ -13,35 +13,30 @@ span.inline{
     display: inline;
 }
 
-.section{
-    width:100%;
-    background1: aqua;
-}
-
-#content{
+.contentContainer{
     vertical-align:top;
     display:inline-block;
     padding: 0 50 0 50;
-}
-
-.contentTd{
-    width:100%;
     vertical-align:top;
     text-align:left;
 }
 
-.menuTd{
+.menuContainer{
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    position: fixed;
+    overflow: auto;     
     vertical-align:top;
     text-align:left;
-    background-color: #eee; 
+    background-color: #fafafa; 
 }
 
 .menu {
     padding: 0 20 20 20;
     overflow-x: hidden; 
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */  
-    display:inline-block;
-    border-right1: 5px solid grey;
+    display:block;
 }
 
 .menuItem {
