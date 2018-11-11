@@ -3,23 +3,17 @@ span.h3 {margin:5 0 0 20; font-size1:19px;}
 span.h4 {margin:2 0 0 40; font-size1:17px; }
 span.h5 {margin:0 0 0 60; font-size1:15px; }
 
-span.nobreak {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 span.inline{
     display: inline;
 }
 
-.contentContainer{border-top:2px solid #ccc;
+.contentContainer{
+    border-top:2px solid #ccc;
     vertical-align:top;
     display1:inline-block;
     padding: 0 50 0 50;
     vertical-align:top;
     text-align:left;
-    border-top1: 2px solid grey;
     width:auto;
 }
 

@@ -7,7 +7,7 @@
 </head>
 <body>
 <div class='header'>
-<h1 class='mainHeader'>Pdf Document Parser</h1>
+<div class='mainHeader'>Pdf Document Parser</div>
 </div>
 
 <div class='content'>
@@ -218,7 +218,7 @@ Refer <a href="#tutorial">the tutorial</a> for more details.
 <p>Then select with mouse a rectangle in the document page. The text or image within the selection box will be a fragment that PdfDocumentParser will look for.
 <p>If you keep Ctrl pressed while selecting, you can select more than 1 element for the same anchor. To stop selecting, you have to release Ctrl before releasing mouse button.
 
-<h3><a name='anchorPdfText'>Anchor types:</a></h3>
+<h3><a name='anchorPdfText'>Anchor types</a></h3>
 <h4><a name='anchorPdfText'>PdfText</a></h4>
 Elements of this type anchor is PDF character boxes which together present a text to be found in page. Every character is separate anchor element.
 <table>
@@ -303,7 +303,7 @@ Condition expressions are composed of the following symbols: &lt;anchor id&gt;, 
 <p>To create a field, select a new row in the fields table and select the area in page were text for this field must be extracted. If the field may have different location in page then it must be linked to an anchor that will detect its proper location for every page. If anchor of a linked field is not found then this field is not found as well. 
 <p>When it is known that the field is always has the same position in every document then there is no need to link it to an anchor.
 
-<h3><a name='anchorPdfText'>Field types:</a></h3>
+<h3><a name='anchorPdfText'>Field types</a></h3>
 <h4>PdfText</h4>
 Its value is a text surrounded by field's rectangle. It is obtained from PDF text entities.
 <h4>OcrText</h4>
