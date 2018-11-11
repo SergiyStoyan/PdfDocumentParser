@@ -1,4 +1,21 @@
+/*by Sergey Stoyan, 2018
 
+This vanilla javascipt generates a dynamic menu from a html. 
+It was designed to work both online and locally. 
+Tested on Chrome and IE.
+
+REQUIREMENTS:
+Html body must have: 
+- 1 <div class='header'>;
+- 1 <div class='content'>;
+- 1 <div class='footer'>;
+ Only <div class='content'> is parsed while building menu. 
+ Every <h1>, <h2>... tag becomes an item.
+ 
+ USAGE:
+ This script must be embedded in the end of html.
+ Also menu_generator.css must be linked.
+*/
 var convert = function(mode){
     var getItems = function(){
         var items = {};
