@@ -1,5 +1,5 @@
 
-var convert = function(){
+var convert = function(mode){
     var getItems = function(){
         var items = {};
         var ids = [0, 0];
@@ -38,6 +38,11 @@ var convert = function(){
         }
         return items;
     };
+    
+    var setModeSwithers = function(){//alert(mode+(mode == '_collapsedContent'));
+        var switcherContainer = document.getElementsByClassName('switcherContainer')[0];
+        switcherContainer.innerHTML = '<a class="switchLink" href="#_plainHtml" title="If the page is not displayed properly, switch to the plain html.">plain html</a>&nbsp;|&nbsp;' + (mode == '_collapsedContent' ? '<a class="switchLink" href="#_entireContent" title="Switch to the entire content mode.">entire content</a>' : '<a class="switchLink" href="#_collapsedContent" title="Switch to the collapsed content mode.">collapsed content</a>');
+    };
          
     var addMenu2Page = function(){       
         var onclickMenuItem = function(){
@@ -67,10 +72,13 @@ var convert = function(){
         
         var menuContainer = document.createElement('div');
         menuContainer.classList.add("menuContainer");
-        menuContainer.innerHTML = '<a class="switchLink" href="#_plainHtml" title="If the page is not displayed properly, switch to the plain html.">plain mode</a>';
+        var switcherContainer = document.createElement('div');
+        switcherContainer.classList.add('switcherContainer');
+        menuContainer.appendChild(switcherContainer);
         menuContainer.appendChild(menu);
         var content = document.getElementsByClassName('content')[0];
         content.parentNode.insertBefore(menuContainer, content);
+        setModeSwithers();
         
         var contentContainer = document.createElement('div');
         contentContainer.classList.add("contentContainer");
@@ -84,7 +92,7 @@ var convert = function(){
             var ss = window.getComputedStyle(e);
             return e.offsetHeight + parseInt(ss['marginTop']) + parseInt(ss['marginBottom']);
         };        
-        contentContainer.style.minHeight = window.innerHeight - getOuterHeight(document.getElementsByClassName('footer')[0]);
+        contentContainer.style.minHeight = window.innerHeight + getOuterHeight(document.getElementsByClassName('header')[0]) - getOuterHeight(document.getElementsByClassName('footer')[0]);
     }
 
     var navigate2currentAnchor = function(){
@@ -97,7 +105,8 @@ var convert = function(){
         var openItem = function(item){
             for(id in items)
                 if(items[id] != item){
-                    setItemVisible(items[id], false);//console.log(id);
+                    if(mode == '_collapsedContent')
+                        setItemVisible(items[id], false);//console.log(id);
                     items[id]['menuItem'].classList.remove('current');
                 }
             if(item){
@@ -122,9 +131,10 @@ var convert = function(){
                         setItemVisible(items[childId], true);
                     }
                 }
+                item['header'].scrollIntoView();
             }
             //window.scrollTo(0, 0);
-            document.getElementsByClassName('content')[0].scrollIntoView();
+            //document.getElementsByClassName('content')[0].scrollIntoView();
         };
         
         var move2LocalAnchor = function(item, e, anchorName, isHeader){
@@ -140,14 +150,30 @@ var convert = function(){
         }; 
         
         var anchorName = window.location.href.replace(/[^#]*#?(_localAnchor_)?/, '');//'_localAnchor_' was added to prevent browser from unpleasant page jerking when navigating to a hidden anchor
-        //alert(anchorName);
         if(!anchorName){
             openItem(false);
             return true;
         }
-        if(anchorName == '_plainHtml'){
-            location.reload();
+        switch(anchorName){
+            case '_plainHtml':
+                location.reload();
             return true;
+            case '_entireContent':
+                mode = '_entireContent';
+                setModeSwithers();
+                for(id in items){
+                    setItemVisible(items[id], true);
+                    items[id]['menuItem'].classList.remove('current');
+                }
+            break;
+            case '_collapsedContent':
+                mode = '_collapsedContent';
+                setModeSwithers();
+                for(id in items){
+                    setItemVisible(items[id], false);
+                    items[id]['menuItem'].classList.remove('current');
+                }
+            break;
         }
         if(items[anchorName]){
             openItem(items[anchorName]);
@@ -188,19 +214,25 @@ var convert = function(){
     }  
 };
 
-var anchorName = window.location.href.replace(/[^#]*#?(_localAnchor_)?/, '');
-if(anchorName != '_plainHtml')  
-    convert();
-else{
-    var anchorDiv = document.createElement('div');
-    var loadInMenuMode = function(){
-        var localPath = window.location.href.replace(/#.*/, '');
-        window.location.href = localPath;
-        location.reload();
-        return false;
-    };
-    anchorDiv.innerHTML = '<a class="switchLink" href="#" onclick="loadInMenuMode();" title="Switch to javascript generated document.">menu mode</a>';
-    var body = document.getElementsByTagName('body')[0];
-    body.insertBefore(anchorDiv, body.childNodes[0]);
+var anchorName = window.location.href.replace(/[^#]*#?(_localAnchor_)?/, '');//alert(anchorName);
+switch(anchorName){
+    case '_plainHtml':
+        var anchorDiv = document.createElement('div');
+        var loadInMenuMode = function(){
+            var localPath = window.location.href.replace(/#.*/, '');
+            window.location.href = localPath;
+            location.reload();
+            return false;
+        };
+        anchorDiv.innerHTML = '<a class="switchLink" href="#" onclick="loadInMenuMode();" title="Switch to javascript generated document.">menu mode</a>';
+        var body = document.getElementsByTagName('body')[0];
+        body.insertBefore(anchorDiv, body.childNodes[0]);
+    break;
+    case '_entireContent':
+        convert('_entireContent');
+    break;
+    default:
+        convert('_collapsedContent');
+    break;
 }
 //alert(1);
