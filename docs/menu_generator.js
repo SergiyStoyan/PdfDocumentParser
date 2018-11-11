@@ -13,7 +13,7 @@ Html body must have:
  Every <h1>, <h2>... tag becomes an item.
  
  USAGE:
- This script must be embedded in the end of html.
+ This script must be embedded in the end of html body.
  Also menu_generator.css must be linked.
 */
 var convert = function(mode){
