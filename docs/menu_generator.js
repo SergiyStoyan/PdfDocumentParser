@@ -55,7 +55,7 @@ var convert = function(){
             var level = id.match(/_/ig).length + 1;//alert(level);
             var e = document.createElement('span');
             e.classList.add('menuItem');
-            e.classList.add('nobreak');
+            //e.classList.add('nobreak');
             e.classList.add('h' + level);
             e.setAttribute('_id', id);
             e.addEventListener('click', onclickMenuItem);
@@ -75,7 +75,9 @@ var convert = function(){
         var contentContainer = document.createElement('div');
         contentContainer.classList.add("contentContainer");
         content.parentNode.insertBefore(contentContainer, content);
+        //contentContainer.appendChild(document.getElementsByClassName('header')[0]);       
         contentContainer.appendChild(content);       
+        //contentContainer.appendChild(document.getElementsByClassName('footer')[0]);       
         contentContainer.style.marginLeft = menuContainer.offsetWidth;
         
         var getOuterHeight = function(e){

@@ -13,9 +13,9 @@ span.inline{
     display: inline;
 }
 
-.contentContainer{
+.contentContainer{border-top:2px solid #ccc;
     vertical-align:top;
-    display:inline-block;
+    display1:inline-block;
     padding: 0 50 0 50;
     vertical-align:top;
     text-align:left;
@@ -24,6 +24,7 @@ span.inline{
 }
 
 .menuContainer{
+    max-width: 30%;
     height: 100%;
     top: 0px;
     left: 0px;
@@ -32,13 +33,15 @@ span.inline{
     vertical-align:top;
     text-align:left;
     background-color: #fafafa; 
+    display:block;
 }
 
 .menu {
     padding: 0 20 20 20;
-    overflow-x: hidden; 
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */  
     display:block;
+    overflow: auto; 
+    white-space: nowrap;
 }
 
 .menuItem {
