@@ -125,6 +125,8 @@ var convert = function(mode){
                 if(items[id] != item){
                     if(mode == '_collapsedContent')
                         setItemVisible(items[id], false);//console.log(id);
+                    else
+                        setItemVisible(items[id], true);//console.log(id);
                     items[id]['menuItem'].classList.remove('current');
                 }
             if(item){
@@ -177,29 +179,16 @@ var convert = function(mode){
                 location.reload();
             return true;
             case '_entireContent':
-                mode = '_entireContent';
-                setModeSwithers();
-                var currentItem;
-                for(id in items){
-                    if(items[id]['menuItem'].classList.contains('current'))
-                        currentItem = items[id];
-                    setItemVisible(items[id], true);
-                }
-                if(currentItem)
-                    currentItem['header'].scrollIntoView();
-            return true;
             case '_collapsedContent':
-                mode = '_collapsedContent';
+                mode = anchorName;
                 setModeSwithers();
-                for(id in items){
+                for(id in items)
                     if(items[id]['menuItem'].classList.contains('current')){
-                        setItemVisible(items[id], true);
-                        currentItem = items[id];
-                    }else
-                        setItemVisible(items[id], false);
-                }
-                if(currentItem)
-                    currentItem['header'].scrollIntoView();
+                        window.location.href = window.location.href.replace(/#.*/, '#' + id);
+                        return true;
+                    }
+                    alert(window.location.href);
+                window.location.href = window.location.href.replace(/#.*/, '#');
             return true;
         }
         if(items[anchorName]){
