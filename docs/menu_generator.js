@@ -161,19 +161,28 @@ var convert = function(mode){
             case '_entireContent':
                 mode = '_entireContent';
                 setModeSwithers();
+                var currentItem;
                 for(id in items){
+                    if(items[id]['menuItem'].classList.contains('current'))
+                        currentItem = items[id];
                     setItemVisible(items[id], true);
-                    items[id]['menuItem'].classList.remove('current');
                 }
-            break;
+                if(currentItem)
+                    currentItem['header'].scrollIntoView();
+            return true;
             case '_collapsedContent':
                 mode = '_collapsedContent';
                 setModeSwithers();
                 for(id in items){
-                    setItemVisible(items[id], false);
-                    items[id]['menuItem'].classList.remove('current');
+                    if(items[id]['menuItem'].classList.contains('current')){
+                        setItemVisible(items[id], true);
+                        currentItem = items[id];
+                    }else
+                        setItemVisible(items[id], false);
                 }
-            break;
+                if(currentItem)
+                    currentItem['header'].scrollIntoView();
+            return true;
         }
         if(items[anchorName]){
             openItem(items[anchorName]);
