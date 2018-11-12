@@ -278,7 +278,7 @@ namespace Cliver.PdfDocumentParser
                     default:
                         throw new Exception("Unknown option: " + t);
                 }
-                currentAnchorControl.Initialize(row, null);
+                currentAnchorControl.Initialize(row, (DataGridViewRow r)=> { setAnchorRow(r, a); });
             }
             finally
             {

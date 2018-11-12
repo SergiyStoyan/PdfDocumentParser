@@ -1,7 +1,7 @@
 /************************************************************************
 by Sergey Stoyan, 2018
 
-This vanilla javascipt generates a dynamic menu from a html. 
+This vanilla javascript generates a dynamic menu from content of the hosting html file.
 It was designed to work both online and locally. 
 Tested on Chrome and IE.
 

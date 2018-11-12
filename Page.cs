@@ -233,7 +233,7 @@ namespace Cliver.PdfDocumentParser
                 if (rs == null || rs.Count < 1)
                     return null;
                 RectangleF pameir = pa.MainElementInitialRectangle();
-                mainElementSearchRectangle = getSearchRectangle(new RectangleF(mainElementInitialRectangle.X + pameir.X - rs[0].X, mainElementInitialRectangle.Y + pameir.Y - rs[0].Y, mainElementInitialRectangle.Width, mainElementInitialRectangle.Height), a.SearchRectangleMargin);
+                mainElementSearchRectangle = getSearchRectangle(new RectangleF(mainElementInitialRectangle.X + rs[0].X - pameir.X, mainElementInitialRectangle.Y + rs[0].Y - pameir.Y, mainElementInitialRectangle.Width, mainElementInitialRectangle.Height), a.SearchRectangleMargin);
             }
             else
                 mainElementSearchRectangle = getSearchRectangle(mainElementInitialRectangle, a.SearchRectangleMargin);
