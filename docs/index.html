@@ -287,11 +287,16 @@ Usually both of these tasks are united into a single condition, though.
 Condition expressions are composed of the following symbols: &lt;anchor id&gt;, '!', '&', '|', '(', ')'. When anchor referenced by &lt;anchor id&gt; is found then it is treated as True, otherwise False. Meaning of a condition is the boolean result of its expression. 
 <p><span class='attention'>NOTE: </span>Operands '&' and '|' are processed consequently, therefore for instance "1 | 2 & 3" and "2 & 3 | 1" are not equivalent. Parentheses should be used to manage precedence of operations.
 <p>Sample expressions:
-<br> "1"
-<br>"(1 | 7 | 8) & 2"
-<br> "!2 | (2 & 3)"
 
-
+<table>
+<tr><th class='title_column'>Expression</th><th>Description</th></tr>
+<tr><td class='title_column'>1</td>
+<td>The simplest expression which is True when anchor #1 is found.</td></tr>
+<tr><td class='title_column'>(1 | 7 | 8) & 2</td>
+<td>Such kind of expression is useful for instance when a company can use different logos for documents of the same structure. In such a case, instead of creating several separate templates, a single template can be configured that expects more than 1 logo image.</td></tr>
+<td class='title_column'>!2 | (2 & 3)</td>
+<td></td></tr>
+</table>
 
 
 
