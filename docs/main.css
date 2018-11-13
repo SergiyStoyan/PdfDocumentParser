@@ -25,4 +25,5 @@ img {max-width: 1200px; max-height: 700px; margin-top:20; margin-bottom:30;displ
 .attention{font-style:italic;font-weight:bold;color1:#503;}
 .screenshot_title{}
 .title_column{white-space: nowrap;font-weight:bold;}
+.title_column_center{white-space: nowrap;font-weight:bold;text-align:center;}
 
