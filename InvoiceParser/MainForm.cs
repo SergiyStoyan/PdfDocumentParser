@@ -334,12 +334,12 @@ namespace Cliver.InvoiceParser
                 r.Tag = t;
             }
 
-            TemplateManager tm = new TemplateManager
-            {
-                Template = SerializationRoutines.Json.Clone(t.Template),
-                LastTestFile = Settings.TemplateLocalInfo.GetInfo(t.Template.Name).LastTestFile,
-                Row = r,
-            };
+            TemplateManager tm = new TemplateManager(
+                r,
+                SerializationRoutines.Json.Clone(t.Template),
+                Settings.TemplateLocalInfo.GetInfo(t.Template.Name).LastTestFile,
+                Settings.General.InputFolder
+                );
             Template2 it = Settings.Template2s.CreateInitialTemplate();
             foreach (Template.Field f in tm.Template.Fields)
             {
@@ -351,7 +351,7 @@ namespace Cliver.InvoiceParser
             }
             tm.Template.Fields = it.Template.Fields;
 
-            tf = new TemplateForm(tm, Settings.General.InputFolder);
+            tf = new TemplateForm(tm);
             tf.FormClosed += delegate
             {
                 if (tm.LastTestFile != null)
@@ -364,6 +364,11 @@ namespace Cliver.InvoiceParser
 
         public class TemplateManager : TemplateForm.TemplateManager
         {
+            public TemplateManager(DataGridViewRow row, Template template, string lastTestFile, string testFileDefaultFolder) : base(template, lastTestFile, testFileDefaultFolder)
+            {
+                Row = row;
+            }
+
             static internal DataGridView Templates;
             internal DataGridViewRow Row;
 

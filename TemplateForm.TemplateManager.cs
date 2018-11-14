@@ -20,14 +20,13 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class TemplateForm
     {
+        /// <summary>
+        /// Defines custom routines while editing a template.
+        /// </summary>
         public abstract class TemplateManager
         {
-            /// <summary>
-            /// !!!Attention: it can be changed unpredictably, so it should not be a reference to an outside object.
-            /// </summary>
-            public Template Template;
             abstract public void Save();
-            public string LastTestFile;
+            
             virtual public void HelpRequest()
             {
                 try
@@ -39,18 +38,36 @@ namespace Cliver.PdfDocumentParser
                     LogMessage.Error(ex);
                 }
             }
+
             virtual public Template.Anchor CreateDefaultAnchor()
             {
                 return new Template.Anchor.PdfText { };
             }
+
             virtual public Template.Condition CreateDefaultCondition()
             {
                 return new Template.Condition { };
             }
+
             virtual public Template.Field CreateDefaultField()
             {
                 return new Template.Field.PdfText { };
             }
+
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="template">!!!Attention: it can be changed unpredictably, so it should not be a reference to an outside object that will be used later.</param>
+            /// <param name="testFileDefaultFolder"></param>
+            public TemplateManager(Template template, string lastTestFile, string testFileDefaultFolder)
+            {
+                Template = template;
+                LastTestFile = lastTestFile;
+                TestFileDefaultFolder = testFileDefaultFolder;
+            }
+            public Template Template { get; internal set; }
+            public string LastTestFile { get; internal set; }
+            internal string TestFileDefaultFolder;
         }
     }
 }

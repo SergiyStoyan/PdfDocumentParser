@@ -54,10 +54,10 @@ Template Editor is a GUI object that can be called from a desktop application wh
 <h2><a name='templateEditorApi'>Template Editor API</a></h2>
 <table>
 <tr><th class='title_column'>Object</th><th>Description</th></tr>
-<tr><td class='title_column'>Cliver.PdfDocumentParser.TemplateForm</td>
-<td>.NET WinForm class that provides editing capabilities.</td></tr>
-<tr><td class='title_column'>Cliver.PdfDocumentParser.TemplateManager</td>
-<td>Defines custom behaviour. Passed to TemplateForm as a parameter.</td></tr>
+<tr><td class='title_column'><code>Cliver.PdfDocumentParser.TemplateForm</code></td>
+<td>.NET Windows Form that provides abilities of editing/debugging a template. Create <code>TemplateForm</code> with a defined <code>TemplateManager</code> and call <code>Show()</code> or <code>ShowDialog()</code> on it.</td></tr>
+<tr><td class='title_column'><code>Cliver.PdfDocumentParser.TemplateManager</code></td>
+<td>Abstract class that must be defined with custom routines. Passed to <code>TemplateForm()</code> as a parameter.</td></tr>
 </table>
 <p>Refer <a href='#InvoiceParser'>InvoiceParser</a> as a sample of use.
 
@@ -144,7 +144,7 @@ Refer <a href='#InvoiceParser'>InvoiceParser</a> for an alive example of using P
 
 <h2>Pseudo-code</h2>
 A basic algorithm of processing a PDF file with PdfDocumentParser would look like the following:
-<pre><code>
+<pre>
 forech(page in PDF)
 {
     if(PdfDocumentParser.ActiveTemplate == null)
@@ -168,7 +168,7 @@ forech(page in PDF)
             PdfDocumentParser.ActiveTemplate = null;
     }
 }
-</code></pre>
+</pre>
 
 The main idea is that custom operations are performed depending on conditions.
 

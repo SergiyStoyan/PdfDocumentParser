@@ -303,7 +303,7 @@
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(151, 13);
             this.label6.TabIndex = 46;
-            this.label6.Text = "Auto Insert Space Threashold:";
+            this.label6.Text = "Space Auto-Insert Threashold:";
             // 
             // TextAutoInsertSpaceThreshold
             // 

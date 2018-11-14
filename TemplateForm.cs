@@ -23,7 +23,7 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class TemplateForm : Form
     {
-        public TemplateForm(TemplateManager templateManager, string testFileDefaultFolder)
+        public TemplateForm(TemplateManager templateManager)
         {
             InitializeComponent();
 
@@ -286,8 +286,8 @@ namespace Cliver.PdfDocumentParser
              if (!string.IsNullOrWhiteSpace(testFile.Text))
                  d.InitialDirectory = PathRoutines.GetDirFromPath(testFile.Text);
              else
-                if (!string.IsNullOrWhiteSpace(testFileDefaultFolder))
-                 d.InitialDirectory = testFileDefaultFolder;
+                if (!string.IsNullOrWhiteSpace(templateManager.TestFileDefaultFolder))
+                 d.InitialDirectory = templateManager.TestFileDefaultFolder;
 
              d.Filter = "PDF|*.pdf|"
                 + "All files (*.*)|*.*";

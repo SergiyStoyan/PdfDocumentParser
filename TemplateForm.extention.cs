@@ -172,7 +172,6 @@ namespace Cliver.PdfDocumentParser
         {
             try
             {
-                //NewTemplate = getTemplateFromUI(true);
                 templateManager.Template = getTemplateFromUI(true);
                 templateManager.Save();
                 DialogResult = DialogResult.OK;
