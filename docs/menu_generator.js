@@ -11,7 +11,7 @@ Html body must have:
 - one <div class='content'>;
 - one <div class='footer'>;
  Only <div class='content'> is parsed while building menu. 
- Every <h1>, <h2>... tag becomes items.
+ Every <h1>, <h2>... tag becomes an item.
  
  USAGE:
  This script should be embedded in the end of html body.
