@@ -7,15 +7,15 @@ Tested on Chrome and IE.
 
 REQUIREMENTS:
 Html body must have: 
-- 1 <div class='header'>;
-- 1 <div class='content'>;
-- 1 <div class='footer'>;
+- one <div class='header'>;
+- one <div class='content'>;
+- one <div class='footer'>;
  Only <div class='content'> is parsed while building menu. 
- Every <h1>, <h2>... tag becomes an item.
+ Every <h1>, <h2>... tag becomes items.
  
  USAGE:
- This script must be embedded in the end of html body.
- Also menu_generator.css must be linked.
+ This script should be embedded in the end of html body.
+ Also menu_generator.css should be linked.
 ************************************************************************/
 var convert = function(mode){
     var getItems = function(){
@@ -58,8 +58,8 @@ var convert = function(mode){
     };
     
     var setModeSwithers = function(){//alert(mode+(mode == '_collapsedContent'));
-        var switcherContainer = document.getElementsByClassName('switcherContainer')[0];
-        switcherContainer.innerHTML = '<a class="switchLink" href="#_plainHtml" title="If the page is not displayed properly, switch to the plain html.">plain html</a>&nbsp;|&nbsp;' + (mode == '_collapsedContent' ? '<a class="switchLink" href="#_entireContent" title="Switch to the entire content mode.">entire content</a>' : '<a class="switchLink" href="#_collapsedContent" title="Switch to the collapsed content mode.">collapsed content</a>');
+        var switchContainer = document.getElementsByClassName('switchContainer')[0];
+        switchContainer.innerHTML = '<a class="switchLink" href="#_plainHtml" title="If the page is not displayed properly, switch to the plain html.">plain html</a>&nbsp;|&nbsp;' + (mode == '_collapsedContent' ? '<a class="switchLink" href="#_entireContent" title="Switch to the entire content mode.">entire content</a>' : '<a class="switchLink" href="#_collapsedContent" title="Switch to the collapsed content mode.">collapsed content</a>');
     };
          
     var addMenu2Page = function(){       
@@ -90,9 +90,9 @@ var convert = function(mode){
         
         var menuContainer = document.createElement('div');
         menuContainer.classList.add("menuContainer");
-        var switcherContainer = document.createElement('div');
-        switcherContainer.classList.add('switcherContainer');
-        menuContainer.appendChild(switcherContainer);
+        var switchContainer = document.createElement('div');
+        switchContainer.classList.add('switchContainer');
+        menuContainer.appendChild(switchContainer);
         menuContainer.appendChild(menu);
         var content = document.getElementsByClassName('content')[0];
         content.parentNode.insertBefore(menuContainer, content);
