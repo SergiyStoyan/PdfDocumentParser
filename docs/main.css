@@ -1,18 +1,23 @@
 .mainHeader {font-size: 2em; color:#348; margin-top:10; margin-bottom:30; text-align:center; font-weight:bold;}
 
-h1 {color:#c25; font-size: 1.6em; text-indent: 300px; margin-top:100; margin-bottom:10; text-decoration1:underline;}
-h2 {color:#a17; font-size: 1.4em; text-indent: 200px; margin-top:80; margin-bottom:10; text-decoration1:underline;}
-h3 {color:#903; font-size: 1.2em; text-indent: 100px; margin-top:40; margin-bottom:10; text-decoration1:underline;}
-h4 {color:#802; font-size: 1.1em; text-indent: 10px; margin-top:30; margin-bottom:10; text-decoration1:underline;}
+h1 {color:#c20; font-size: 1.6em; text-indent: 300px; margin-top:100; margin-bottom:10; text-decoration1:underline;}
+h2 {color:#06a; font-size: 1.4em; text-indent: 200px; margin-top:80; margin-bottom:10; text-decoration1:underline;}
+h3 {color:#c05; font-size: 1.2em; text-indent: 100px; margin-top:40; margin-bottom:10; text-decoration1:underline;}
+h4 {color:#089; font-size: 1.1em; text-indent: 10px; margin-top:30; margin-bottom:10; text-decoration1:underline;}
 h5 {color:#b06; font-size: 1em; text-indent: 5px; margin-top:20; margin-bottom:10; text-decoration1:underline;}
 
-/*
-h1:before{content: '\25FE';  margin:0 10px;} h1:after{content: '\25FE';  margin:0 10px;}
-h2:before{content: '\25FE';  margin:0 10px;} h2:after{content: '\25FE';  margin:0 10px;}
-h3:before{content: '\25FE';  margin:0 10px;} h3:after{content: '\25FE';  margin:0 10px;}
-h4:before{content: '\25FE';  margin:0 10px;} h4:after{content: '\25FE';  margin:0 10px;}
-h5:before{content: '\25FE';  margin:0 10px;} h5:after{content: '\25FE';  margin:0 10px;}
-*/
+
+/*h1:before{content: '\25FE';  margin:0 10px;} h1:after{content: '\25FE';  margin:0 10px;}
+h2:before{content: '\25FE\25FE';  margin:0 10px;} h2:after{content: '\25FE\25FE';  margin:0 10px;}
+h3:before{content: '\25FE\25FE\25FE';  margin:0 10px;} h3:after{content: '\25FE\25FE\25FE';  margin:0 10px;}
+h4:before{content: '\25FE\25FE\25FE\25FE';  margin:0 10px;} h4:after{content: '\25FE\25FE\25FE\25FE';  margin:0 10px;}
+h5:before{content: '\25FE\25FE\25FE\25FE\25FE';  margin:0 10px;} h5:after{content: '\25FE\25FE\25FE\25FE\25FE';  margin:0 10px;}*/
+h1:before{content: '\2013\2013\2013\2013';  margin:0 10px;} h1:after{content: '\2013\2013\2013\2013';  margin:0 10px;}
+h2:before{content: '\2013\2013\2013';  margin:0 10px;} h2:after{content: '\2013\2013\2013';  margin:0 10px;}
+h3:before{content: '\2013\2013';  margin:0 10px;} h3:after{content: '\2013\2013';  margin:0 10px;}
+h4:before{content: '\2013';  margin:0 10px;} h4:after{content: '\2013';  margin:0 10px;}
+h5:before{content: '\2013\2013\2013\2013\2013';  margin:0 10px;} h5:after{content: '\2013\2013\2013\2013\2013';  margin:0 10px;}
+
 
 p {   margin1: 0;    margin-top:10;    padding1: 0;}
 table { margin-top:20; margin-bottom:10; border-collapse: collapse; border-color: grey; }
