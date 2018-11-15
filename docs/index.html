@@ -43,23 +43,24 @@ Template Editor is a GUI object that can be called from a desktop application wh
 <p>Refer to <a href='#InvoiceParser'>InvoiceParser</a> as a sample of use.
 
 <h2><a name='tutorial'>Tutorial: configuring template</a></h2>
-As PdfDocumentParser can only be used from within a custom application developed for a certain parsing task, in this tutorial <a href='#InvoiceParser'>InvoiceParser</a> is used as a custom application. InvoiceParser was designed to parse invoices and extract the following fields from them:
+Because PdfDocumentParser can only be used from within a custom application developed for a certain parsing task, <a href='#InvoiceParser'>InvoiceParser</a> is used as a custom application in this tutorial. 
+<p>InvoiceParser was designed to parse PDF files containing invoices and extract the following <a href='#field'>fields</a> from them:
 <ul>
 <li>INVOICE#</li>
 <li>JOB#</li>
 <li>PO#</li>
 <li>COST</li>
 </ul>
-It implies that any template in InvoiceParser has these fields.
+It means that any template in InvoiceParser has these fields.
 
 <h3>Assumptions</h3>
-PdfDocumentParser does not impose any requirement for PDF files except that that they must conform to some recognizable layout. However, as a custom application, InvoiceParser was desinged with the following assumptions about PDF files:
+PdfDocumentParser does not impose any requirement for PDF files except that that they must conform to some recognizable layout. On the other hand, InvoiceParser, as a custom application, was desinged with the following assumptions about PDF files made:
 <ul>
 <li>a PDF file can consist of multiple documents (which are invoices);</li>
 <li>a document can consist of multiple pages;</li>
 <li>any page in a PDF file is a part of a document;</li>
 </ul>
-<p>These assumptions allows to keep thing simple and dictate which template conditions are required as it will be shown later.
+<p>These assumptions allow to keep things simple and predefine the <a href='#condition'>condition</a> collection as it will be expalined later.
 
 <h3>Open Template Editor</h3>
 <p>A <a href="#template">template</a> can be created from scratch or copied from an existing one and then modified as needed. 
@@ -69,12 +70,12 @@ PdfDocumentParser does not impose any requirement for PDF files except that that
 <img src='img/tutorial0.png'/>
 
 <h3><a name='tutorialAnchor'>Create anchors</a></h3>
-<p>Any template needs at least one <a href='#anchor'>anchor</a> that will certainly identify type of document and distinguish it from the rest documents you may want to parse. Such an anchor should be targeted to some fragment of a document that is unique to its type. Obviously, that this fragment must identify the document type with a high confidence. Usually a logo of company that issued the document can serve well this goal.
+<p>Any template needs at least one <a href='#anchor'>anchor</a> intended to certainly identify the type of a document and distinguish it from the rest documents that may be parsed. Such an anchor should be targeted to some fragment of a document that is unique to its type. Obviously, this fragment must identify the document type with a high confidence. Usually a logo of company that issued the document can serve well this goal.
 <p class='screenshot_title'>Create an anchor that captures the logo and thus detects if the page corresponds to the template:
 <img src='img/tutorial1.png'/>
 
-<p>In addition to the first anchor, one more anchor is usually needed to check if a page is the first page of document. 
-<p class='screenshot_title'>Create an anchor that checks if the page is document's first page:
+<p>Next, from the assumptions made above follows that an invoice can be multi-page. Therefore, InvoiceParser should be capable to detect the beginning page of a document. 
+<p class='screenshot_title'>Create an anchor that checks if a page is the first page of a document:
 <img src='img/tutorial2.png'/>
 
 <p><span class='attention'>NOTE: </span>when you select a row in either table: anchors, conditions or fields, its status is updated in the head cell and the captured place is displayed in the page viewer.
