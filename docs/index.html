@@ -334,7 +334,7 @@ Its value is a <code>System.Drawing.Bitmap</code> object that contains a fragmen
 
 <h1>Scanned documents</h1>
 <p>Scanned documents are not the first subject for PdfDocumentParser but they are supported. PdfDocumentParser provides auto-deskew and page rotation options which are usually needed for scanned documents. 
-<p>Because of quality deviations in scanned documents the image comparison tolerance parameters may need to be tuned.
+<p>Because of quality deviations in scanned documents the image comparison tolerance parameters may need to be tuned for every anchor.
 <p>The image resolution in PdfDocumentParser must be set to not less than 300dpi, otherwise OCR will not work properly. The higher the resolution, the better OCR is. On the other hand, increasing resolution increases processing time. Also, setting resolution in PdfDocumentParser higher than the resolution of original images will not make sense. Image resolution parameter is common for all templates and is set in the configuration window. 
 
 
