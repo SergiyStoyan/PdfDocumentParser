@@ -159,10 +159,16 @@ forech(page in PDF)
     }
     if(PdfDocumentParser.ActiveTemplate != null)
     {      
-        object value1 = PdfDocumentParser.GetValue(page, 'field1');
-        do something with value1
-        object value2 = PdfDocumentParser.GetValue(page, 'field2');
-        do something with value2
+        if(PdfDocumentParser.IsCondition(page, 'Field1Page'))
+        {
+            object value1 = PdfDocumentParser.GetValue(page, 'field1');
+            do something with value1
+        }
+        if(PdfDocumentParser.IsCondition(page, 'Field2Page'))
+        {
+            object value2 = PdfDocumentParser.GetValue(page, 'field2');
+            do something with value2
+        }
         ...
         if(PdfDocumentParser.IsCondition(page, 'DocumentLastPage'))
             PdfDocumentParser.ActiveTemplate = null;
@@ -272,16 +278,16 @@ Elements of this type anchor is images which are page fragments picked by the se
 
 <h2><a name="condition">Condition</a></h2> 
 <p>Condition is a boolean expression that depends on anchors and is configured in every template.
-<p>Condition can have meaning True or False which depends on the pair [PDF page, template]. It can be checked by <a href='#api'>PdfDocumentParser API</a> method IsCondition(<condition name>). 
+<p>Condition can have meaning True or False which depends on pair [PDF page, template]. It is checked by <a href='#api'>PdfDocumentParser API</a> method <code>IsCondition(<condition name>)</code>. 
 <p>Conditions are identified by their names. Their name collection is dictated by logic of custom application and thus is predefined within its scope and is the same for all templates.
 
 <h3>Mostly used condition</h3>
 <p>While condition collection can vary, the following checks highly likely are needed in any application:
 <ul>
 <li>does a document correspond to the template?</li>
-<li>is a page the first page of a document? (Obviously, it is only required when the PDF files that are to be parsed can be multi-document.)</li>
+<li>is a page the first page of a document?</li>
 </ul>
-Usually these checks are united in a single condition which thus allows choosing the right template while parsing a PDF file page by page consequently.
+Usually these checks are combined into a single condition which thus allows choosing the right template while parsing a PDF file page by page consequently.
 <p>Depending on the parsing task, more conditions may be required: for instance that one that can detect the last page of a document.
 
 <h3>Boolean expression</h3>
