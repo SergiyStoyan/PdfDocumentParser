@@ -210,12 +210,12 @@ Refer <a href="#tutorial">the tutorial</a> for more details.
 <p>While native PDF documents in some cases can be parsed without anchors, scanned documents that usually have their margins vary should be processed only with anchors.
 
 <p>Linking to anchor means that coordinates of a linked field or anchor become relative to the anchor they are linked to. That's PdfDocumentParser first will look for the anchor and if it is found, it will locate the linked fields or anchors depending on the location of their anchor.
-<p>The same anchor can be used by multiple conditions and fields.
+<p>The same anchor can be used by multiple conditions, fields and anchors.
 
 <h3>General structure of anchor</h3>
 <p>An anchor consists of a single or many elements of the same type where the first element is master and the rest are secondary. Position of the master element is considered position of the anchor itself. Secondary elements are searched relatively to the master element's position.  
 <a>Rectangle where an anchor was located on the page while creating, is named 'initial rectangle'.
-<p>When an anchor is linked to another anchor, its master element is treated like a secondary element of the linking anchor. A linked anchor is named 'parent' to the linking one which is named 'child'.
+<p>When an anchor is linked to another anchor, its master element is treated like a secondary element of the linking anchor. A linked anchor is named 'child' of the linking one which is named 'parent'.
 
 
 <h3>Create anchor</h3>
@@ -224,8 +224,10 @@ Refer <a href="#tutorial">the tutorial</a> for more details.
 
 <h3><a name='anchorTypes'>Anchor types</a></h3>
 <p>Each of types is processed by its own very different way therefore choosing the right type is crucial in successful and robust parsing.
+
 <h4><a name='anchorPdfText'>PdfText</a></h4>
-Elements of this type anchor are PDF character boxes which together present a text to be found in page. Every character is a separate anchor element.
+<p>Elements of this type are character boxes extracted from PDF entities which together present a text to be found in page. Every character is a separate anchor element.
+<p>This type is preferable for parsing native PDF files. It is most reliable and fast.
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'>Position deviation</td>
@@ -237,7 +239,8 @@ Elements of this type anchor are PDF character boxes which together present a te
 </table>
 
 <h4>OcrText</h4>
-It works similarly to <a href='#anchorPdfText'>PdfText</a> type except that difference that character boxes are provided by OCR engine instead of native PDF entities. 
+<p>It works similarly to <a href='#anchorPdfText'>PdfText</a> type except that difference that character boxes are provided by OCR engine instead of native PDF entities. 
+<p>It should be used only when PdfText type does not work which happens on scanned documents.
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'>Position deviation</td>
@@ -253,8 +256,9 @@ It works similarly to <a href='#anchorPdfText'>PdfText</a> type except that diff
 </table>
 
 <h4>ImageData</h4>
-Elements of this type anchor is images which are page fragments picked by the selection box.
-<p><span class='attention'>NOTE: </span> even if an image fragment is looked for within the same page where it was extracted from, it cannot be found without a non-zero tolerance. It happens since hash maps produced after downsizing image and thus results of their pixel interpolation differ for entire image and a fragment. 
+<p>Elements of this type are images which are fragments of page selected while creating an anchor.
+<p>It should be used when anchoring not to text but to images is required.
+<p><span class='attention'>NOTE: </span> even when an image fragment is sought within the same page where it was extracted from, it cannot be found without a non-zero tolerance. It happens because the search hash is produced after downsizing an image and thus results of pixel interpolation differ for entire image and for a fragment. 
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'>Position deviation</td>
