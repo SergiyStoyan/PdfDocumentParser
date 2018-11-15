@@ -226,8 +226,8 @@ Refer <a href="#tutorial">the tutorial</a> for more details.
 <p>Each of types is processed by its own very different way therefore choosing the right type is crucial in successful and robust parsing.
 
 <h4><a name='anchorPdfText'>PdfText</a></h4>
-<p>Elements of this type are character boxes extracted from PDF entities which together present a text to be found in page. Every character is a separate anchor element.
 <p>This type is preferable for parsing native PDF files. It is most reliable and fast.
+<p>Elements of this type are character boxes extracted from PDF entities which together present a text to be found in page. Every character is a separate anchor element.
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'>Position deviation</td>
@@ -239,8 +239,8 @@ Refer <a href="#tutorial">the tutorial</a> for more details.
 </table>
 
 <h4>OcrText</h4>
-<p>It works similarly to <a href='#anchorPdfText'>PdfText</a> type except that difference that character boxes are provided by OCR engine instead of native PDF entities. 
 <p>It should be used only when PdfText type does not work which happens on scanned documents.
+<p>It works similarly to <a href='#anchorPdfText'>PdfText</a> type except that difference that character boxes are provided by OCR engine instead of native PDF entities. 
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'>Position deviation</td>
@@ -256,8 +256,8 @@ Refer <a href="#tutorial">the tutorial</a> for more details.
 </table>
 
 <h4>ImageData</h4>
-<p>Elements of this type are images which are fragments of page selected while creating an anchor.
 <p>It should be used when anchoring not to text but to images is required.
+<p>Elements of this type are images which are fragments of page selected while creating an anchor.
 <p><span class='attention'>NOTE: </span> even when an image fragment is sought within the same page where it was extracted from, it cannot be found without a non-zero tolerance. It happens because the search hash is produced after downsizing an image and thus results of pixel interpolation differ for entire image and for a fragment. 
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
