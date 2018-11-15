@@ -60,28 +60,28 @@ PdfDocumentParser does not impose any requirement for PDF files except that that
 <li>a document can consist of multiple pages;</li>
 <li>any page in a PDF file is a part of a document;</li>
 </ul>
-<p>These assumptions allow to keep things simple and predefine the <a href='#condition'>condition</a> collection as it will be expalined later.
+<p>These assumptions predefine the <a href='#condition'>condition</a> collection as it will be expalined later.
 
 <h3>Open Template Editor</h3>
 <p>A <a href="#template">template</a> can be created from scratch or copied from an existing one and then modified as needed. 
 <p>This tutorial starts with a blank template.
-<p>Template Editor is open in a custom application, so the way of doing this depends on the application. In <a href='#InvoiceParser'>InvoiceParser</a> click the blank row in the table and then click button Edit.
+<p>Template Editor is open in a custom application, so the way of doing this depends on the application. In a case of <a href='#InvoiceParser'>InvoiceParser</a> click the blank row in the table and then click button Edit.
 <p class='screenshot_title'>Open a test PDF file in Template Editor:
 <img src='img/tutorial0.png'/>
 
 <h3><a name='tutorialAnchor'>Create anchors</a></h3>
-<p>Any template needs at least one <a href='#anchor'>anchor</a> intended to certainly identify the type of a document and distinguish it from the rest documents that may be parsed. Such an anchor should be targeted to some fragment of a document that is unique to its type. Obviously, this fragment must identify the document type with a high confidence. Usually a logo of company that issued the document can serve well this goal.
+<p>Any template needs at least one <a href='#anchor'>anchor</a> intended to certainly identify the type of a document and distinguish it from the rest documents. Such an anchor should be targeted to some fragment of a document that is unique to its type. Obviously, this fragment must identify the document type with a high confidence. Usually the logo of a company that issued a document can serve well this goal.
 <p class='screenshot_title'>Create an anchor that captures the logo and thus detects if the page corresponds to the template:
 <img src='img/tutorial1.png'/>
 
-<p>Next, from the assumptions made above follows that an invoice can be multi-page. Therefore, InvoiceParser should be capable to detect the beginning page of a document. 
+<p>Next, as it was assumed above that an invoice can be multi-page, InvoiceParser should be capable to detect the beginning page of a document. 
 <p class='screenshot_title'>Create an anchor that checks if a page is the first page of a document:
 <img src='img/tutorial2.png'/>
 
 <p><span class='attention'>NOTE: </span>when you select a row in either table: anchors, conditions or fields, its status is updated in the head cell and the captured place is displayed in the page viewer.
 
-<h3><a name='tutorialCondition'>Specify conditions</a></h3>
-<p>In general, <a href='#condition'>condition</a> collection can be any that is predefined by a custom application. In InvoiceParser, a single condition named FirstPageOfDocument is predefined. Yet not only InvoiceParser, but any application highly likely requires a condition like that as it would need to examine every PDF page for the following:
+<h3><a name='tutorialCondition'>Specify condition</a></h3>
+<p>In general, <a href='#condition'>condition</a> collection can be any that is predefined by a custom application. In InvoiceParser, a single condition named FirstPageOfDocument is predefined. Yet not only InvoiceParser, but any application highly likely requires such a condition as it would need to examine every PDF page for the following:
 <ul>
 <li>does a page belong to a document that this template was created for?</li>
 <li>if it does, is the page the first page of a document?</li>
