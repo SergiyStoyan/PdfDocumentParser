@@ -43,13 +43,13 @@ Template Editor is a GUI object that can be called from a desktop application wh
 <p>Refer <a href='#InvoiceParser'>InvoiceParser</a> as a sample of use.
 
 <h2><a name='tutorial'>Tutorial: configuring template</a></h2>
-In general there is no certain requirement for PDF files that can be parsed by PdfDocumentParser except that that they must conform to some recognizable layout. However, to keep this tutorial clear and simple, the following assumptions are made in it:
+In general there is no certain requirement for PDF files that can be parsed by PdfDocumentParser except that that they must conform to some recognizable layout. However, to keep this tutorial clear and simple, here the following assumptions are made:
 <ul>
 <li>a PDF file can consist of multiple documents (e.g. multiple invoices);</li>
 <li>a document (e.g. invoice) can consist of multiple pages;</li>
-<li>any page in a PDF file belong to some document;</li>
+<li>any page in a PDF file is a part of a document;</li>
 </ul>
-<p>A tempate will be built keeping those assumptions in mind.
+<p>A tempate will be built keeping these assumptions in mind.
 
 <h3>Open Template Editor</h3>
 <p>Template Editor is open in a custom application, so the way doing this depends on the application. See <a href='#InvoiceParser'>InvoiceParser</a> as a sample.
@@ -177,7 +177,7 @@ The main idea is that custom operations are performed depending on conditions.
 
 
 
-<h1><a name="template">Parsing template</a></h1>
+<h1><a name="template">Template</a></h1>
 <p>To parse documents that comply with a certain layout (e.g. invoices issued by the same company) a parsing template is configured. It contains information about which data is to be extracted and how. Obviously, applying a template to documents with layout different from that it was designed for, brings to incorrect parsing.
 <p>Configuring a template is done in <a href='#templateEditor'>Template Editor<a/> and consists of the following steps:
 <ul>
