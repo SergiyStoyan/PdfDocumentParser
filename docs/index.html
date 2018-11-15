@@ -221,31 +221,31 @@ Refer <a href="#tutorial">the tutorial</a> for more details.
 
 <h3><a name='anchorPdfText'>Anchor types</a></h3>
 <h4><a name='anchorPdfText'>PdfText</a></h4>
-Elements of this type anchor is PDF character boxes which together present a text to be found in page. Every character is separate anchor element.
+Elements of this type anchor are PDF character boxes which together present a text to be found in page. Every character is a separate anchor element.
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'>Position deviation</td>
 <td>It allows to loose bonds between master element and secondary elements in a anchor when for some reason they can shift relatively to each other. It is measured in pixels and must be a positive float number, non-zero even for identical documents because of discrepancy reasoned by internal image re-scaling.</td></tr>
 <tr><td class='title_column'>Position deviation is absolute</td>
-<td>If set then position of each element is compared to the master element's position, otherwise, with the previous element's position. It makes no sense when anchor contains no secondary element.</td></tr>
-<td class='title_column'>Search rectangular margin</td>
-<td>When set, area where an anchor is looked for is entire page. Otherwise, the searched area is restricted by Search rectangular margin that specifies an area around the rectangle where the anchor was located while creating. It is measured in pixels. It should be set only when it is known that the anchor is always belongs to a certain part of page. It helps to avoid undesired matching and speed up processing.</td></tr>
+<td>If set then position of each element is compared to the master element's position, otherwise, with the previous element's position. It makes no sense if the anchor contains no secondary element.</td></tr>
+<td class='title_column'>Search rectangle margin</td>
+<td>When set, area where the anchor is looked for is the entire page. Otherwise, the searched area is restricted by Search rectangle margin that specifies a rectangular area around the anchor's initial rectangle which is where the anchor was located while creating. It is measured in pixels. It should be set only when it is known that the anchor is always belongs to a certain part of page. It helps to avoid undesired matching and speed up processing.</td></tr>
 </table>
 
 <h4>OcrText</h4>
-It works similarly to <a href='#anchorPdfText'>PdfText</a> type except that difference that character boxes are provided by OCR engine instead of PDF entities. 
+It works similarly to <a href='#anchorPdfText'>PdfText</a> type except that difference that character boxes are provided by OCR engine instead of native PDF entities. 
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'>Position deviation</td>
 <td>See <a href='#anchorPdfText'>PdfText</a>.</td></tr>
 <tr><td class='title_column'>Position deviation is absolute</td>
 <td>See <a href='#anchorPdfText'>PdfText</a>.</td></tr>
-<td class='title_column'>Search rectangular margin</td>
+<td class='title_column'>Search rectangle margin</td>
 <td>See <a href='#anchorPdfText'>PdfText</a>.</td></tr>
 <tr><td class='title_column'>OCR entire page</td>
 <td><span class='attention'>NOTE: </span>This switch can completely change parsing. It is because OCR by Tesseract of a larger image and a smaller fragment can give different recognition of the same text. 
-<br>Which is better? Sometimes OCR of entire page gives more correct results, sometimes otherwise. But it always takes considerably longer time than OCR of a smaller fragment defined by Search rectangular margin. 
-<br>This switch makes sense only when Search rectangular margin is checked, otherwise the entire page is OCR'ed anyway.</td></tr>
+<br>Which is better? OCR of entire page gives sometimes more correct results, sometimes otherwise. But it always takes considerably longer time than OCR of a smaller fragment defined by Search rectangle margin. 
+<br>This switch makes sense only if Search rectangle margin is set, otherwise the entire page is OCR'ed anyway.</td></tr>
 </table>
 
 <h4>ImageData</h4>
@@ -257,7 +257,7 @@ Elements of this type anchor is images which are page fragments picked by the se
 <td>See <a href='#anchorPdfText'>PdfText</a>.</td></tr>
 <tr><td class='title_column'>Position deviation is absolute</td>
 <td>See <a href='#anchorPdfText'>PdfText</a>.</td></tr>
-<td class='title_column'>Search rectangular margin</td>
+<td class='title_column'>Search rectangle margin</td>
 <td>See <a href='#anchorPdfText'>PdfText</a>. It reduces search time and helps to avoid undesired matching.</td></tr>
 <tr><td class='title_column'>Brightness tolerance</td>
 <td>While for native PDF documents it can be 0.1 - 0.2, scanned documents which have brightness discrepancy may need it higher. A higher tolerance brings to a less certain result.</td></tr>
@@ -280,7 +280,7 @@ Elements of this type anchor is images which are page fragments picked by the se
 <p>While condition collection can vary, the following checks highly likely are needed in any application:
 <ul>
 <li>does a document correspond to the template?</li>
-<li>also, - if the PDF files to be parsed can be multi-document - is a page the first page of a document?</li>
+<li>is a page the first page of a document? (Obviously, it is only required when the PDF files that are to be parsed can be multi-document.)</li>
 </ul>
 Usually these checks are united in a single condition which thus allows choosing the right template while parsing a PDF file page by page consequently.
 <p>Depending on the parsing task, more conditions may be required: for instance that one that can detect the last page of a document.
