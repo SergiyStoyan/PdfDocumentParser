@@ -15,10 +15,11 @@
 <p>PdfDocumentParser is a parsing engine intended to extract of text/images from PDF documents that conform to a predefined graphic layout - such as invoices and the like. The main parsing approach is based on finding certain text or image fragments in page and then extracting text/images located relatively to those fragments.
 <p>Within this scope PdfDocumentParser is capable of the following:
 <ul>
-<li>processing PDF entities (used for native PDF files);</li>
-<li>processing OCR'ed text (used for scanned PDF files);</li>
-<li>image search/comparison (used for either native or scanned PDF files);</li>
+<li>operating with text represented by PDF entities (meant for native PDF files);</li>
+<li>processing OCR'ed text (meant for scanned PDF files);</li>
+<li>image search/comparison/extraction (meant for either native or scanned PDF files);</li>
 </ul> 
+For more details see <a href='anchorTypes'>anchor types</a> and <a href='fieldTypes'>field types</a>.
 
 <p>PdfDocumentParser was designed to be incorporated into custom applications hopefully without need of change. 
 <p>PdfDocumentParser API consists of:
@@ -27,26 +28,6 @@
 <li><a href="#api">Parsing API</a> that allows custom applications to parse PDF files in a custom manner with little effort required;</li>
 </ul> 
 <p>It is developed in .NET.
-
-<h2>Text/image operations</h2>
-<p>PdfDocumentParser implements the following strategies to operate with text and images:
-<ul>
-<li>Extracting text directly from PDF structure. This way is based on native text presentation inside PDF files and should be used whenever possible since it is the most robust and fast.</li>
-<li>Getting text from image by OCR technology incorporated into PdfDocumentParser. This option should be chosen only when direct PDF processing does not work. It is usually needed when PDF file consists completely or partially of images such as scanned documents, photos etc. This way cannot not give 100% accuracy against PDF processing and will acceptably work only for images with resolution not less than 300dpi. Also this way is slower.</li>
-<li>Seeking and comparing page fragments as images. This strategy is slower than PDF processing and so must be avoided when possible. Also, it may not provide 100% accuracy on scanned documents if they have essential discrepancy in size, contrast, brightness, orientation etc.</li>
-</ul>
-
-
- 
-
-
-<h2>Assumptions</h2>
-<ul>
-<li>a PDF file can consist of multiple documents (e.g. multiple invoices);</li>
-<li>a document (e.g. invoice) can consist of multiple pages;</li>
-</ul>
-
-
 
 <h1><a name="templateEditor">Template Editor</a></h1>
 Template Editor is a GUI object that can be called from a desktop application whenever editing <a href="#template">template</a> is required. 
@@ -62,9 +43,19 @@ Template Editor is a GUI object that can be called from a desktop application wh
 <p>Refer <a href='#InvoiceParser'>InvoiceParser</a> as a sample of use.
 
 <h2><a name='tutorial'>Tutorial: configuring template</a></h2>
-<p>A parsing <a href="#template">template</a> can be created from scratch or copied from an existing one and modified as needed. 
+In general there is no certain requirement for PDF files that can be parsed by PdfDocumentParser except that that they must conform to some recognizable layout. However, to keep this tutorial clear and simple, the following assumptions are made in it:
+<ul>
+<li>a PDF file can consist of multiple documents (e.g. multiple invoices);</li>
+<li>a document (e.g. invoice) can consist of multiple pages;</li>
+<li>any page in a PDF file belong to some document;</li>
+</ul>
+<p>A tempate will be built keeping those assumptions in mind.
+
+<h3>Open Template Editor</h3>
+<p>Template Editor is open in a custom application, so the way doing this depends on the application. See <a href='#InvoiceParser'>InvoiceParser</a> as a sample.
+<p>A parsing <a href="#template">template</a> can be created from scratch or copied from an existing one and then modified as needed. 
 <p>This tutorial starts with a blank template.
-<p class='screenshot_title'>Open a test PDF file in the template editor window:
+<p class='screenshot_title'>Open a test PDF file in Template Editor:
 <img src='img/tutorial0.png'/>
 
 <h3>Create anchors</h3>
@@ -130,12 +121,12 @@ If this condition is met then this template is chosen to process this page and t
 <h1><a name='api'>API</a></h1>
 Refer <a href='#InvoiceParser'>InvoiceParser</a> as an alive example of using PdfDocumentParser in a custom application.
 
-<h2>Methods</h2>
+<h2>Methods&properties</h2>
 <table>
-<tr><th class='title_column'>Method</th><th>Description</th></tr>
+<tr><th class='title_column'>Method | property</th><th>Description</th></tr>
 <tr><td class='title_column'><code>Cliver.PdfDocumentParser.PageCollection::ActiveTemplate</code></td>
 <td>Set active template in PdfDocumentParser.</td></tr>
-<tr><td class='title_column'><code>Cliver.PdfDocumentParser.Page::IsCondition()</code></td>
+<tr><td class='title_column'><a name='IsCondition'><code>Cliver.PdfDocumentParser.Page::IsCondition()</code></a></td>
 <td>Checks if a condition is met in page.</td></tr>
 <tr><td class='title_column'><code>Cliver.PdfDocumentParser.Page::GetValue()</code></td>
 <td>Extracts a field from page. If anchor of the field was not found, NULL is returned.</td></tr>
@@ -145,32 +136,32 @@ Refer <a href='#InvoiceParser'>InvoiceParser</a> as an alive example of using Pd
 <h2>Pseudo-code</h2>
 A basic algorithm of processing a PDF file with PdfDocumentParser would look like the following:
 <pre>
-forech(page in PDF)
+foreach(page in PdfFile)
 {
     if(PdfDocumentParser.ActiveTemplate == null)
     {
         foreach(template in templates)
         {
             PdfDocumentParser.ActiveTemplate = template;
-            if(PdfDocumentParser.IsCondition(page, 'DocumentFirstPage'))
+            if(PdfDocumentParser.IsCondition(page, "DocumentFirstPage"))
                 break;
             PdfDocumentParser.ActiveTemplate = null;
         }
     }
     if(PdfDocumentParser.ActiveTemplate != null)
     {      
-        if(PdfDocumentParser.IsCondition(page, 'Field1Page'))
+        if(PdfDocumentParser.IsCondition(page, "Field1Page"))
         {
-            object value1 = PdfDocumentParser.GetValue(page, 'field1');
-            do something with value1
+            object value1 = PdfDocumentParser.GetValue(page, "field1");
+            ...do something with value1...
         }
-        if(PdfDocumentParser.IsCondition(page, 'Field2Page'))
+        if(PdfDocumentParser.IsCondition(page, "Field2Page"))
         {
-            object value2 = PdfDocumentParser.GetValue(page, 'field2');
-            do something with value2
+            object value2 = PdfDocumentParser.GetValue(page, "field2");
+            ...do something with value2...
         }
         ...
-        if(PdfDocumentParser.IsCondition(page, 'DocumentLastPage'))
+        if(PdfDocumentParser.IsCondition(page, "DocumentLastPage"))
             PdfDocumentParser.ActiveTemplate = null;
     }
 }
@@ -226,8 +217,9 @@ Refer <a href="#tutorial">the tutorial</a> for more details.
 <p>Each of types is processed by its own very different way therefore choosing the right type is crucial in successful and robust parsing.
 
 <h4><a name='anchorPdfText'>PdfText</a></h4>
-<p>This type is preferable for parsing native PDF files. It is most reliable and fast.
-<p>Elements of this type are character boxes extracted from PDF entities which together present a text to be found in page. Every character is a separate anchor element.
+<p>This type is based on native text presentation inside a PDF file. Elements of this type are character boxes extracted from PDF entities which together present a text to be found in page. Every character is a separate anchor element.
+<p>It should be used whenever possible because it is most robust and fast. 
+
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'>Position deviation</td>
@@ -239,8 +231,8 @@ Refer <a href="#tutorial">the tutorial</a> for more details.
 </table>
 
 <h4>OcrText</h4>
-<p>It should be used only when PdfText type does not work which happens on scanned or mixed documents.
-<p>It works similarly to <a href='#anchorPdfText'>PdfText</a> type except that difference that character boxes are provided by OCR engine instead of native PDF entities. 
+<p>This type works similarly to <a href='#anchorPdfText'>PdfText</a> type except that difference that character boxes are provided by OCR engine instead of native PDF entities.
+<p>It should be used only when PdfText type does not work which happens on scanned or mixed documents. It cannot not give 100% accuracy like PdfText type does and will acceptably work only for images with resolution not less than 300dpi. Also, its perfomance is slower than that of PdfText type. 
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'>Position deviation</td>
@@ -256,8 +248,8 @@ Refer <a href="#tutorial">the tutorial</a> for more details.
 </table>
 
 <h4>ImageData</h4>
-<p>It should be used when anchoring to images, not to text, is required.
 <p>Elements of this type are images which are fragments of page selected while creating an anchor.
+<p>This type should be used when anchoring to images, not to text, is required. Its perfomance is slower than that of PdfText type. Also, it may not provide 100% accuracy on scanned documents if they have essential discrepancy in size, contrast, brightness, orientation etc. In such cases, OcrText type may work better.
 <p><span class='attention'>NOTE: </span> even when an image fragment is sought within the same page where it was extracted from, it cannot be found without a non-zero tolerance. It happens because the search hash is produced after downsizing an image and thus pixel interpolation while restoring to the initial size gives different results for an entire image and for its fragment. 
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
@@ -280,9 +272,9 @@ Refer <a href="#tutorial">the tutorial</a> for more details.
 
 
 <h2><a name="condition">Condition</a></h2> 
-<p>Condition is a boolean expression that depends on anchors and is configured in every template.
-<p>Condition can have meaning True or False which depends on pair [PDF page, template]. It is checked by <a href='#api'>PdfDocumentParser API</a> method <code>IsCondition(<condition name>)</code>. 
-<p>Conditions are identified by their names. Their name collection is dictated by logic of custom application and thus is predefined within its scope and is the same for all templates.
+<p>A condition is a boolean expression that depends on anchors and is configured individually in every template.
+<p>A condition can have meaning True or False which depends on pair [PDF page, template]. In the custom code it is checked by PdfDocumentParser <a href='#api'>API</a> method <a href='#IsCondition'><code>IsCondition(<condition name>)</code></a>. 
+<p>Conditions are identified by their names. The needed conditions are dictated by logic of a custom application, therefore their names are predefined within the application's scope and are the same for all templates that belong to it.
 
 <h3>Mostly used condition</h3>
 <p>While condition collection can vary, the following checks highly likely are needed in any application:
