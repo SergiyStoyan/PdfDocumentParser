@@ -347,7 +347,7 @@ Its value is a <code>System.Drawing.Bitmap</code> object that contains a fragmen
 
 
 <h1><a name='InvoiceParser'></a>InvoiceParser</h1>
-Invoice Parser is a custom desktop application based on PdfDocumentParser. It can be used as a sample of incorporating PdfDocumentParser into a custom code. Actually its custom specificity lays only in a way how PDF files are parsed while the rest code can be used unchanged as a framework in a new application.
+Invoice Parser is a custom desktop application based on PdfDocumentParser. It can be used as an example of incorporating PdfDocumentParser into a custom code. Also, its custom specificity lays only in a way how PDF files are parsed, therefore the rest code can be used unchanged as a framework in a new application.
 <p>Generally, it does the following:
 <ul>
 <li>enhances <code>PdfDocumentParser.Template</code> with custom properties that are not related to parsing;</li>
@@ -359,7 +359,7 @@ Invoice Parser is a custom desktop application based on PdfDocumentParser. It ca
 
 <h2>Assumptions</h2>
 <ul>
-<li>by default, a PDF file can contain documents of the same type only but it can be tuned for every template separately;</li>
+<li>by default, a PDF file can contain documents of the same type only. However, it can be tuned for every template separately;</li>
 <li>once detected, a document is considered continued until the next document begins or the file ends;</li>
 </ul>
 <p>These assumptions is not something deep rooted in the code and can be easily modified.
@@ -369,7 +369,7 @@ Invoice Parser is a custom desktop application based on PdfDocumentParser. It ca
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'>Active</td>
-<td>Inactive template is not ignored while parsing.</td></tr>
+<td>Inactive template is ignored while parsing.</td></tr>
 <tr><td class='title_column'>Group</td>
 <td>An optional mark that can be helpful for managing templates.</td></tr>
 <tr><td class='title_column'>Order</td>
@@ -385,9 +385,9 @@ Invoice Parser is a custom desktop application based on PdfDocumentParser. It ca
 </table>
 
 <h2>Considerations</h2>
-<p>When processing documents InvoiceParser applies every active template to every new document to recognize a proper template. So, if you have 50 templates and 1000 files evenly distributed for templates, InvoiceParser will do on average 1000/2 *50 = 25,000 template tries. It may take a considerable time when templates use OCR. Processing time can be reduced by the following ways:
+<p>When processing documents InvoiceParser applies every active template to every new document to recognize a proper template. So, if you have 50 templates and 1000 files evenly distributed for templates, InvoiceParser will do on average 1000/2 *50 = 25,000 template tries. It may take a considerable time especially when templates use OCR. Processing time can be reduced by the following ways:
 <ul> 
-<li> specify file filters for templates. If it can be done then the tips below are not needed;
+<li> specify file filters for templates. If it can be done then the other tips are not needed;
 <li> specify template orders so that templates that require a longer time for recognition have a higher order. E.g. templates that use auto-deskew should be checked in the last place;
 <li> keep templates that are known as not corresponding to the files to be processed right now, inactive;
 </ul>
