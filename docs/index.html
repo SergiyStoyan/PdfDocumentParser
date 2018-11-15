@@ -68,7 +68,7 @@ Template Editor is a GUI object that can be called from a desktop application wh
 <img src='img/tutorial0.png'/>
 
 <h3>Create anchors</h3>
-<p>Any template needs at least one <a href='#anchor'>anchor</a> that will certainly identify type of document and distinguish it from the rest documents you may want to parse. Such an anchor should be targeted to some fragment of a document that is unique to its type. Obviously, that this fragement must identify the document type with a high confidence. Usually a logo of company that issued the document can serve well this goal.
+<p>Any template needs at least one <a href='#anchor'>anchor</a> that will certainly identify type of document and distinguish it from the rest documents you may want to parse. Such an anchor should be targeted to some fragment of a document that is unique to its type. Obviously, that this fragment must identify the document type with a high confidence. Usually a logo of company that issued the document can serve well this goal.
 <p class='screenshot_title'>Create an anchor that captures the logo and thus detects if the page corresponds to the template:
 <img src='img/tutorial1.png'/>
 
@@ -94,7 +94,7 @@ If this condition is met then this template is chosen to process this page and t
 
 
 <h3>Set fields</h3>
-<p>Though some of the <a href='#field'>fields</a> in this sample seem not to need linking to anchors, it is advisable to always link fields to acnhors to drastically reduce the probability of mistaken parsing. It will be done so in this tutorial.
+<p>Though some of the <a href='#field'>fields</a> in this sample seem not to need linking to anchors, it is advisable to always link fields to anchors to drastically reduce the probability of mistaken parsing. It will be done so in this tutorial.
 <p class='screenshot_title'>Set <a href='#field'>field</a> INVOICE#:
 <img src='img/tutorial4.png'/>
 
@@ -201,30 +201,29 @@ Refer <a href="#tutorial">the tutorial</a> for more details.
 
 
 <h2><a name="anchor">Anchor</a></h2>
-<p>Anchor is a fragment of either text or image that PdfDocumentParser will look for in PDF page. If found, the anchor is then used by conditions or fields. A not engaged anchor itself is useless. Anchor can be used in the following ways:
+<p>Anchor is a fragment of either text or image that PdfDocumentParser will look for in a PDF page. If found, the anchor is then used by conditions or fields. A not engaged anchor itself is useless. Anchor can be used in the following ways:
 <ul>
 <li> it can be linked by fields whose positions in page may vary like 'total amount' field whose position usually depends on size of invoice's content;</li> 
-<li> it can be engaged in conditions that needs to detect if a certain pattern exists in PDF page;</li>
+<li> it can be engaged in <a href="condition">conditions</a> that need to detect if a certain pattern exists in a PDF page;</li>
 <li> it can be linked by another anchor so that the latter becomes valid only when the former is found;</li>
 </ul>
 <p>While native PDF documents in some cases can be parsed without anchors, scanned documents that usually have their margins vary should be processed only with anchors.
 
-<p>Linking to acnhor means that coordinates of a linked field or anchor become relative to the anchor they are linked to. That's PdfDocumentParser first will look for the anchor and if it is found, it will locate the linked fields or anchors depending on the location of their anchor.
+<p>Linking to anchor means that coordinates of a linked field or anchor become relative to the anchor they are linked to. That's PdfDocumentParser first will look for the anchor and if it is found, it will locate the linked fields or anchors depending on the location of their anchor.
 <p>The same anchor can be used by multiple conditions and fields.
 
 <h3>General structure of anchor</h3>
 <p>An anchor consists of a single or many elements of the same type where the first element is master and the rest are secondary. Position of the master element is considered position of the anchor itself. Secondary elements are searched relatively to the master element's position.  
-<p>When an anchor is linked to another anchor, its master element is treated like a secondary element of the linking anchor.
+<a>Rectangle where an anchor was located on the page while creating, is named 'initial rectangle'.
+<p>When an anchor is linked to another anchor, its master element is treated like a secondary element of the linking anchor. A linked anchor is named 'parent' to the linking one which is named 'child'.
 
 
 <h3>Create anchor</h3>
-<p>To create an anchor, select a new row in the anchors table and choose its type which can be one of the following:
+<p>To create an anchor, click the blank row in anchors table and choose its <a href='#anchorTypes'>type</a>. Then select with mouse a rectangle in the document page. The text or image within the selection box will be a fragment that PdfDocumentParser will look for.
+<p>If you keep Ctrl pressed while selecting, you can select more than 1 element for the same anchor. To stop selecting, you have to release Ctrl before releasing the mouse button.
 
-<p> Each of types is processed by its own very different way and so choosing the right type is crucial in successful and robust parsing.
-<p>Then select with mouse a rectangle in the document page. The text or image within the selection box will be a fragment that PdfDocumentParser will look for.
-<p>If you keep Ctrl pressed while selecting, you can select more than 1 element for the same anchor. To stop selecting, you have to release Ctrl before releasing mouse button.
-
-<h3><a name='anchorPdfText'>Anchor types</a></h3>
+<h3><a name='anchorTypes'>Anchor types</a></h3>
+<p>Each of types is processed by its own very different way therefore choosing the right type is crucial in successful and robust parsing.
 <h4><a name='anchorPdfText'>PdfText</a></h4>
 Elements of this type anchor are PDF character boxes which together present a text to be found in page. Every character is a separate anchor element.
 <table>
@@ -234,7 +233,7 @@ Elements of this type anchor are PDF character boxes which together present a te
 <tr><td class='title_column'>Position deviation is absolute</td>
 <td>If set then position of each element is compared to the master element's position, otherwise, with the previous element's position. It makes no sense if the anchor contains no secondary element.</td></tr>
 <td class='title_column'>Search rectangle margin</td>
-<td>When set, area where the anchor is looked for is the entire page. Otherwise, the searched area is restricted by Search rectangle margin that specifies a rectangular area around the anchor's initial rectangle which is where the anchor was located while creating. It is measured in pixels. It should be set only when it is known that the anchor is always belongs to a certain part of page. It helps to avoid undesired matching and speed up processing.</td></tr>
+<td>When set, area where the anchor is looked for is the entire page. Otherwise, the searched area is restricted by Search rectangle margin that specifies a rectangular area around the anchor's initial rectangle. It is measured in pixels. It should be set only when it is known that the anchor is always belongs to a certain part of page. It helps to avoid undesired matching and speed up processing.</td></tr>
 </table>
 
 <h4>OcrText</h4>
