@@ -258,7 +258,7 @@ Refer <a href="#tutorial">the tutorial</a> for more details.
 <h4>ImageData</h4>
 <p>It should be used when anchoring to images, not to text, is required.
 <p>Elements of this type are images which are fragments of page selected while creating an anchor.
-<p><span class='attention'>NOTE: </span> even when an image fragment is sought within the same page where it was extracted from, it cannot be found without a non-zero tolerance. It happens because the search hash is produced after downsizing an image and thus results of pixel interpolation differ for entire image and for a fragment. 
+<p><span class='attention'>NOTE: </span> even when an image fragment is sought within the same page where it was extracted from, it cannot be found without a non-zero tolerance. It happens because the search hash is produced after downsizing an image and thus pixel interpolation while restoring to the initial size gives different results for entire image and for a fragment. 
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'>Position deviation</td>
