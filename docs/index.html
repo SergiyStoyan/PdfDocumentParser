@@ -19,7 +19,7 @@
 <li>processing OCR'ed text (meant for scanned PDF files);</li>
 <li>image search/comparison/extraction (meant for either native or scanned PDF files);</li>
 </ul> 
-For more details see <a href='anchorTypes'>anchor types</a> and <a href='fieldTypes'>field types</a>.
+For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#fieldTypes'>field types</a>.
 
 <p>PdfDocumentParser was designed to be incorporated into custom applications hopefully without need of change. 
 <p>PdfDocumentParser API consists of:
@@ -313,7 +313,7 @@ Condition expressions are composed of the following symbols: &lt;anchor id&gt;, 
 
 <h3><a name='fieldTypes'>Field types</a></h3>
 <h4><a name='fieldPdfText'>PdfText</a></h4>
-Its value is a text surrounded by field's rectangle. It is obtained from PDF text entities.
+Its value is a text surrounded by field's rectangle. It is obtained from PDF entities.
 <h4>OcrText</h4>
 Its value is a text surrounded by field's rectangle. It is recognized by OCR engine.
 <p>For native PDF documents this type should never be used. But for scanned documents it is the only way to get text in the digital form which can be recorded in a file or database, indexed, searched and so on.
