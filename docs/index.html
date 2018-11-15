@@ -40,7 +40,7 @@ Template Editor is a GUI object that can be called from a desktop application wh
 <tr><td class='title_column'><code>Cliver.PdfDocumentParser.TemplateManager</code></td>
 <td>Abstract class that must be defined with custom routines. Passed to <code>TemplateForm()</code> as a parameter.</td></tr>
 </table>
-<p>Refer <a href='#InvoiceParser'>InvoiceParser</a> as a sample of use.
+<p>Refer to <a href='#InvoiceParser'>InvoiceParser</a> as a sample of use.
 
 <h2><a name='tutorial'>Tutorial: configuring template</a></h2>
 In general there is no certain requirement for PDF files that can be parsed by PdfDocumentParser except that that they must conform to some recognizable layout. However, to keep this tutorial clear and simple, here the following assumptions are made:
@@ -58,7 +58,7 @@ In general there is no certain requirement for PDF files that can be parsed by P
 <p class='screenshot_title'>Open a test PDF file in Template Editor:
 <img src='img/tutorial0.png'/>
 
-<h3>Create anchors</h3>
+<h3><a name='tutorialAnchor'>Create anchors</a></h3>
 <p>Any template needs at least one <a href='#anchor'>anchor</a> that will certainly identify type of document and distinguish it from the rest documents you may want to parse. Such an anchor should be targeted to some fragment of a document that is unique to its type. Obviously, that this fragment must identify the document type with a high confidence. Usually a logo of company that issued the document can serve well this goal.
 <p class='screenshot_title'>Create an anchor that captures the logo and thus detects if the page corresponds to the template:
 <img src='img/tutorial1.png'/>
@@ -69,7 +69,7 @@ In general there is no certain requirement for PDF files that can be parsed by P
 
 <p><span class='attention'>NOTE: </span>when you select a row in either table: anchors, conditions or fields, its status is updated in the head cell and the captured place is displayed in the page viewer.
 
-<h3>Specify conditions</h3>
+<h3><a name='tutorialCondition'>Specify conditions</a></h3>
 <p>Generally, <a href='#condition'>condition</a> collection can be any being predefined by a custom application. In this tutorial only one condition named FirstPageOfDocument is used which is highly likely suitable for any application. Each PDF page is to be examined with it to check the following:
 <ul>
 <li>does a page belong to a document that this template was created for?</li>
@@ -84,7 +84,7 @@ If this condition is met then this template is chosen to process this page and t
 
 
 
-<h3>Set fields</h3>
+<h3><a name='tutorialField'>Set fields</a></h3>
 <p>Though some of the <a href='#field'>fields</a> in this sample seem not to need linking to anchors, it is advisable to always link fields to anchors to drastically reduce the probability of mistaken parsing. It will be done so in this tutorial.
 <p class='screenshot_title'>Set <a href='#field'>field</a> INVOICE#:
 <img src='img/tutorial4.png'/>
@@ -119,7 +119,7 @@ If this condition is met then this template is chosen to process this page and t
 
 
 <h1><a name='api'>API</a></h1>
-Refer <a href='#InvoiceParser'>InvoiceParser</a> as an alive example of using PdfDocumentParser in a custom application.
+Refer to <a href='#InvoiceParser'>InvoiceParser</a> as an alive example of using PdfDocumentParser in a custom application.
 
 <h2>Methods&properties</h2>
 <table>
@@ -187,30 +187,34 @@ The main idea is that custom operations are performed depending on conditions.
 <li>create <a href="#anchor">anchors</a> for fields that need it and link those fields to them;</li>
 <li>test the template on the rest pages of the file;</li>
 </ul>
-Refer <a href="#tutorial">the tutorial</a> for more details.
+Refer to <a href="#tutorial">the tutorial</a> for more details.
 
 
 
 <h2><a name="anchor">Anchor</a></h2>
-<p>Anchor is a fragment of either text or image that PdfDocumentParser will look for in a PDF page. If found, the anchor is then used by conditions or fields. A not engaged anchor itself is useless. Anchor can be used in the following ways:
+<p>An anchor is a fragment of either text or image that PdfDocumentParser will look for in a PDF page. If found, the anchor is then used by conditions or fields. A not engaged anchor itself is useless. Anchor can be used in the following ways:
 <ul>
 <li> it can be linked by fields whose positions in page may vary like 'total amount' field whose position usually depends on size of invoice's content;</li> 
 <li> it can be engaged in <a href="condition">conditions</a> that need to detect if a certain pattern exists in a PDF page;</li>
 <li> it can be linked by another anchor so that the latter becomes valid only when the former is found;</li>
 </ul>
-<p>While native PDF documents in some cases can be parsed without anchors, scanned documents that usually have their margins vary should be processed only with anchors.
+<p>While native PDF documents in some cases can be parsed without anchors, scanned documents which usually have their margins vary should be processed only with anchors.
 
-<p>Linking to anchor means that coordinates of a linked field or anchor become relative to the anchor they are linked to. That's PdfDocumentParser first will look for the anchor and if it is found, it will locate the linked fields or anchors depending on the location of their anchor.
+<p>Linking to an anchor means that coordinates of a linked field or anchor become relative to the anchor they are linked to. That's PdfDocumentParser first will look for the anchor and then, if it is found, it will locate the linked fields or anchors depending on the location of their anchor.
 <p>The same anchor can be used by multiple conditions, fields and anchors.
 
 <h3>General structure of anchor</h3>
-<p>An anchor consists of a single or many elements of the same type where the first element is master and the rest are secondary. Position of the master element is considered position of the anchor itself. Secondary elements are searched relatively to the master element's position.  
-<a>Rectangle where an anchor was located on the page while creating, is named 'initial rectangle'.
-<p>When an anchor is linked to another anchor, its master element is treated like a secondary element of the linking anchor. A linked anchor is named 'child' of the linking one which is named 'parent'.
+<p>An anchor consists of a single or many elements of the same type where the first element is master and the rest are secondary. Position of the master element is considered the position of the anchor itself. Secondary elements are searched relatively to the master element's position. 
+<p>If some of an anchor's elements is not found then the anchor itself is not found.
+<p>The rectangle where an anchor was located on the page while creating, is named 'initial rectangle' and contains all the anchor's elements.
+
+<h3>Anchor linked to an anchor</h3>
+<p>When an anchor is linked to another anchor, its master element is treated like a secondary element of the linking anchor. <p>A linked anchor is named 'child' of the linking one which is named 'parent'. Being a parent does not impose any restriction to an anchor. 
+<p>The number of anchors consistently linked in a chain can be any.
 
 
 <h3>Create anchor</h3>
-<p>To create an anchor, click the blank row in anchors table and choose its <a href='#anchorTypes'>type</a>. Then select with mouse a rectangle in the document page. The text or image within the selection box will be a fragment that PdfDocumentParser will look for.
+<p>To create an anchor, click the blank row in anchors table and choose its <a href='#anchorTypes'>type</a>. Then select with mouse a rectangle in the document page. The text or image within the selection box will be a fragment that PdfDocumentParser will look for. For more details refer to <a href='#tutorialAnchor'>the tutorial</a>.
 <p>If you keep Ctrl pressed while selecting, you can select more than 1 element for the same anchor. To stop selecting, you have to release Ctrl before releasing the mouse button.
 
 <h3><a name='anchorTypes'>Anchor types</a></h3>
@@ -274,7 +278,7 @@ Refer <a href="#tutorial">the tutorial</a> for more details.
 <h2><a name="condition">Condition</a></h2> 
 <p>A condition is a boolean expression that depends on anchors and is configured individually in every template.
 <p>A condition can have meaning True or False which depends on pair [PDF page, template]. In the custom code it is checked by PdfDocumentParser <a href='#api'>API</a> method <a href='#IsCondition'><code>IsCondition(<condition name>)</code></a>. 
-<p>Conditions are identified by their names. The needed conditions are dictated by logic of a custom application, therefore their names are predefined within the application's scope and are the same for all templates that belong to it.
+<p>Conditions are identified by their names. A condition collection is dictated by the logic of a custom application, therefore condition names are predefined within the application's scope and are the same for all templates that belong to it.
 
 <h3>Mostly used condition</h3>
 <p>While condition collection can vary, the following checks highly likely are needed in any application:
@@ -300,16 +304,20 @@ Condition expressions are composed of the following symbols: &lt;anchor id&gt;, 
 <td>This expression could be used for instance for a decision whether a certain field should be parsed or passed off.</td></tr>
 </table>
 
+For more details refer to <a href='#tutorialCondition'>the tutorial</a>.
+
 
 
 
 
 <h2><a name="field">Field</a></h2>
-<p>Field defines certain text or image that is to be extracted from PDF file. 
-<p>Fields are identified by their names. Their name collection is dictated by logic of custom application and thus is predefined within its scope and is the same for all templates. 
-<p>A field optionally can be linked to an anchor. When a field has no anchor, its selecting rectangle retains absolute position which was its position during creation. When a field has anchor, PdfDocumentParser locates the field's rectangle relatively to its anchor's actual position so that if on some page the anchor shifts, the field shifts together with it. It is advisable always to link fields to anchors thus drastically decreasing probability of incorrect parsing.  
-<p>To set a field, select the respective row in fields table, choose its <a href='#fieldTypes'>type</a> and then select in the page view a rectangle from where text or image must be extracted. Then, if a field has a variable position then it must be linked to an anchor that will detect its proper location on a page. If the anchor of a linked field is not found then this field is not found too. 
-<p>When it is known that a field is always has the same position and appears on every page then there is no need to link it to an anchor.
+<p>A field defines certain text or image that is to be extracted from a PDF page. 
+<p>Fields are identified by their names. A field collection is dictated by the logic of a custom application and thus their names are predefined within its scope and are the same for all templates that belong to it. 
+<p>A field optionally can be linked to an anchor. When a field has no anchor, its selecting rectangle retains the initial position which was its position during creation. When a field has anchor, PdfDocumentParser locates the field's rectangle relatively to its anchor's actual position so that if on some page the anchor shifts, the field shifts together with it. It is advisable always to link fields to anchors thus drastically decreasing probability of incorrect parsing.
+<p>When it is definitely known that a field appears on every page and always keeps the same position then there is no need to link it to an anchor.
+
+<h3>Set field</h3>  
+<p>To set a field, select the respective row in fields table, choose its <a href='#fieldTypes'>type</a> and then select in the PDF view a rectangle from where text or image must be extracted. Then, if a field has a variable position then it must be linked to an anchor that will detect its proper location on a page. If the anchor of a linked field is not found then this field is not found too. For more details refer to <a href='#tutorialField'>the tutorial</a>.
 
 <h3><a name='fieldTypes'>Field types</a></h3>
 <h4><a name='fieldPdfText'>PdfText</a></h4>
