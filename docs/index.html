@@ -43,29 +43,26 @@ Template Editor is a GUI object that can be called from a desktop application wh
 <p>Refer to <a href='#InvoiceParser'>InvoiceParser</a> as a sample of use.
 
 <h2><a name='tutorial'>Tutorial: configuring template</a></h2>
-Because PdfDocumentParser can only be used from within a custom application developed for a certain parsing task, <a href='#InvoiceParser'>InvoiceParser</a> is used as a custom application in this tutorial. 
-<p>InvoiceParser was designed to parse PDF files containing invoices and extract the following <a href='#field'>fields</a> from them:
+Because PdfDocumentParser can only be used from within a custom application developed for a certain parsing task, this tutorial uses <a href='#InvoiceParser'>InvoiceParser</a> as a custom application. The aim of InvoiceParser is to parse PDF files containing invoices and extract the following <a href='#field'>fields</a> from them:
 <ul>
 <li>INVOICE#</li>
 <li>JOB#</li>
 <li>PO#</li>
 <li>COST</li>
 </ul>
-It means that any template in InvoiceParser has these fields.
+It means that templates in InvoiceParser are prefilled with these fields.
 
 <h3>Assumptions</h3>
 PdfDocumentParser does not impose any requirement for PDF files except that that they must conform to some recognizable layout. On the other hand, InvoiceParser, as a custom application, was desinged with the following assumptions about PDF files made:
 <ul>
 <li>a PDF file can consist of multiple documents (which are invoices);</li>
 <li>a document can consist of multiple pages;</li>
-<li>any page in a PDF file is a part of a document;</li>
+<li>any page in a PDF file participates in a document;</li>
 </ul>
 <p>These assumptions predefine the <a href='#condition'>condition</a> collection as it will be expalined later.
 
 <h3>Open Template Editor</h3>
-<p>A <a href="#template">template</a> can be created from scratch or copied from an existing one and then modified as needed. 
-<p>This tutorial starts with a blank template.
-<p>Template Editor is open in a custom application, so the way of doing this depends on the application. In a case of <a href='#InvoiceParser'>InvoiceParser</a> click the blank row in the table and then click button Edit.
+<p>In <a href='#InvoiceParser'>InvoiceParser</a> a <a href="#template">template</a> can be created from scratch or copied from an existing one and then modified as needed. Let's start with a blank template: click the blank row in the table in the main window of InvoiceParser and then click button Edit.
 <p class='screenshot_title'>Open a test PDF file in Template Editor:
 <img src='img/tutorial0.png'/>
 
