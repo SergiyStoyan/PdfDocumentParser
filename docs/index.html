@@ -43,18 +43,28 @@ Template Editor is a GUI object that can be called from a desktop application wh
 <p>Refer to <a href='#InvoiceParser'>InvoiceParser</a> as a sample of use.
 
 <h2><a name='tutorial'>Tutorial: configuring template</a></h2>
-In general there is no certain requirement for PDF files that can be parsed by PdfDocumentParser except that that they must conform to some recognizable layout. However, to keep this tutorial clear and simple, here the following assumptions are made:
+As PdfDocumentParser can only be used from within a custom application developed for a certain parsing task, in this tutorial <a href='#InvoiceParser'>InvoiceParser</a> is used as a custom application. InvoiceParser was designed to parse invoices and extract the following fields from them:
 <ul>
-<li>a PDF file can consist of multiple documents (e.g. multiple invoices);</li>
-<li>a document (e.g. invoice) can consist of multiple pages;</li>
+<li>INVOICE#</li>
+<li>JOB#</li>
+<li>PO#</li>
+<li>COST</li>
+</ul>
+It implies that any template in InvoiceParser has these fields.
+
+<h3>Assumptions</h3>
+PdfDocumentParser does not impose any requirement for PDF files except that that they must conform to some recognizable layout. However, as a custom application, InvoiceParser was desinged with the following assumptions about PDF files:
+<ul>
+<li>a PDF file can consist of multiple documents (which are invoices);</li>
+<li>a document can consist of multiple pages;</li>
 <li>any page in a PDF file is a part of a document;</li>
 </ul>
-<p>A tempate will be built keeping these assumptions in mind.
+<p>These assumptions allows to keep thing simple and dictate which template conditions are required as it will be shown later.
 
 <h3>Open Template Editor</h3>
-<p>Template Editor is open in a custom application, so the way doing this depends on the application. See <a href='#InvoiceParser'>InvoiceParser</a> as a sample.
-<p>A parsing <a href="#template">template</a> can be created from scratch or copied from an existing one and then modified as needed. 
+<p>A <a href="#template">template</a> can be created from scratch or copied from an existing one and then modified as needed. 
 <p>This tutorial starts with a blank template.
+<p>Template Editor is open in a custom application, so the way of doing this depends on the application. In <a href='#InvoiceParser'>InvoiceParser</a> click the blank row in the table and then click button Edit.
 <p class='screenshot_title'>Open a test PDF file in Template Editor:
 <img src='img/tutorial0.png'/>
 
@@ -63,21 +73,22 @@ In general there is no certain requirement for PDF files that can be parsed by P
 <p class='screenshot_title'>Create an anchor that captures the logo and thus detects if the page corresponds to the template:
 <img src='img/tutorial1.png'/>
 
-<p>In addition to the first anchor which is a must, one more anchor is usually needed to check if page is first page of document. It is necessary while parsing a multi-document PDF file - when application finds this anchor, it knows that the current document if exists should be closed and a new document should be started.
+<p>In addition to the first anchor, one more anchor is usually needed to check if a page is the first page of document. 
 <p class='screenshot_title'>Create an anchor that checks if the page is document's first page:
 <img src='img/tutorial2.png'/>
 
 <p><span class='attention'>NOTE: </span>when you select a row in either table: anchors, conditions or fields, its status is updated in the head cell and the captured place is displayed in the page viewer.
 
 <h3><a name='tutorialCondition'>Specify conditions</a></h3>
-<p>Generally, <a href='#condition'>condition</a> collection can be any being predefined by a custom application. In this tutorial only one condition named FirstPageOfDocument is used which is highly likely suitable for any application. Each PDF page is to be examined with it to check the following:
+<p>In general, <a href='#condition'>condition</a> collection can be any that is predefined by a custom application. In InvoiceParser, a single condition named FirstPageOfDocument is predefined. Yet not only InvoiceParser, but any application highly likely requires a condition like that as it would need to examine every PDF page for the following:
 <ul>
 <li>does a page belong to a document that this template was created for?</li>
 <li>if it does, is the page the first page of a document?</li>
 </ul>
-If this condition is met then this template is chosen to process this page and the next ones until a new document beginning is detected. 
-<p>Sometimes one more condition that checks if a page is the last page of a document is required but the necessity of it depends on what is known about PDF files to be parsed with it. In this sample it is considered redundant.
-<p class='screenshot_title'>FirstPageOfDocument must relate on anchors #1 and #2 created above. Fill it with boolean expression "1 & 2" which is true only when both anchors are found together:
+According to the assumptions declared in the beginning, if condition FirstPageOfDocument is met on a page then this template has to be chosen to process the page and the next ones until a new document beginning is detected. 
+<p>Sometimes one more condition that checks if a page is the last page of a document may be required but the necessity of it depends on what is known about PDF files to be parsed. Within the assumptions made, this condition would be redundant.
+
+<p class='screenshot_title'>FirstPageOfDocument must relate on anchors #1 and #2 created before exactly for it. Configure it with boolean expression "1 & 2" which is True only when both anchors are found together:
 <img src='img/tutorial3.png'/>
 
 <p>While in this sample FirstPageOfDocument is quite good with 2 anchors, sometimes more anchors may be needed: for instance when the same company issues documents of different types and thus company's logo is not sufficient to detect the type.
