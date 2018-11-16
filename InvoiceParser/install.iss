@@ -9,7 +9,7 @@ end;
 
 function Version(Param: String): String;
 begin
-  Result := '3.01';
+  Result := '3.02';
 end;
 
 [Setup]                         

@@ -253,7 +253,7 @@ switch(anchorName){
         var internalAnchorNames = [];
         for(var i = 0; i < as.length; i++){
             if(as[i].href){
-                var m = as[i].href.match(/#(.*)/);
+                var m = as[i].href.match(/^\s*#(.*)/);
                 if(m)
                     internalLinks.push(m[1]);
             }
