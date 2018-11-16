@@ -27,97 +27,7 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 <li><a href="#templateEditor">Template Editor</a> where parsing templates can be created or debugged in an easy manner;</li>
 <li><a href="#api">Parsing API</a> that allows custom applications to parse PDF files in a custom manner with little effort required;</li>
 </ul> 
-<p>It is developed in .NET.
-
-<h1><a name="templateEditor">Template Editor</a></h1>
-Template Editor is a GUI object that can be called from a desktop application whenever editing <a href="#template">template</a> is required. 
-
-<h2><a name='templateEditorApi'>Template Editor API</a></h2>
-<table>
-<tr><th class='title_column'>Object</th><th>Description</th></tr>
-<tr><td class='title_column'><code>Cliver.PdfDocumentParser.TemplateForm</code></td>
-<td>.NET Windows Form that provides abilities of editing/debugging a template. Create <code>TemplateForm</code> with a <code>TemplateManager</code> instance as a parameter and call <code>Show()</code> or <code>ShowDialog()</code> on it.</td></tr>
-<tr><td class='title_column'><code>Cliver.PdfDocumentParser.TemplateManager</code></td>
-<td>Abstract class that must be defined with custom routines. Passed to <code>TemplateForm()</code> as a parameter.</td></tr>
-</table>
-<p>Refer to <a href='#InvoiceParser'>InvoiceParser</a> as a sample of use.
-
-<h2><a name='tutorial'>Tutorial: configuring template</a></h2>
-Because PdfDocumentParser can only be used from within a custom application developed for a certain parsing task, this tutorial uses <a href='#InvoiceParser'>InvoiceParser</a> as a custom application. The aim of InvoiceParser is to parse PDF files containing invoices and extract the following <a href='#field'>fields</a> from them:
-<ul>
-<li>INVOICE#</li>
-<li>JOB#</li>
-<li>PO#</li>
-<li>COST</li>
-</ul>
-It means that templates in InvoiceParser are prefilled with these fields.
-
-<h3>Assumptions</h3>
-PdfDocumentParser does not impose any requirement for PDF files except that that they must conform to some recognizable layout. On the other hand, InvoiceParser, as a custom application, was desinged with the following assumptions about PDF files made:
-<ul>
-<li>a PDF file can consist of multiple documents (which are invoices);</li>
-<li>a document can consist of multiple pages;</li>
-<li>any page in a PDF file participates in a document;</li>
-</ul>
-<p>These assumptions predefine the <a href='#condition'>condition</a> collection as it will be expalined later.
-
-<h3>Open Template Editor</h3>
-<p>In <a href='#InvoiceParser'>InvoiceParser</a> a <a href="#template">template</a> can be created from scratch or copied from an existing one and then modified as needed. Let's start with a blank template: click the blank row in the table in the main window of InvoiceParser and then click button Edit.
-<p class='screenshot_title'>Open a test PDF file in Template Editor:
-<img src='img/tutorial0.png'/>
-
-<h3><a name='tutorialAnchor'>Create anchors</a></h3>
-<p>Any template needs at least one <a href='#anchor'>anchor</a> intended to certainly identify the type of a document and distinguish it from the rest documents. Such an anchor should be targeted to some fragment of a document that is unique to its type. Obviously, this fragment must identify the document type with a high confidence. Usually the logo of a company that issued a document can serve well this goal.
-<p class='screenshot_title'>Create an anchor that captures the logo and thus detects if the page corresponds to the template:
-<img src='img/tutorial1.png'/>
-
-<p>Next, as it was assumed above that an invoice can be multi-page, InvoiceParser should be capable to detect the beginning page of a document. 
-<p class='screenshot_title'>Create an anchor that checks if a page is the first page of a document:
-<img src='img/tutorial2.png'/>
-
-<p><span class='attention'>NOTE: </span>when you select a row in either table: anchors, conditions or fields, its status is updated in the head cell and the captured place is displayed in the page viewer.
-
-<h3><a name='tutorialCondition'>Specify condition</a></h3>
-<p>In general, <a href='#condition'>condition</a> collection can be any that is predefined by a custom application. In InvoiceParser, a single condition named FirstPageOfDocument is predefined. Yet not only InvoiceParser, but any application highly likely requires such a condition as it would need to examine every PDF page for the following:
-<ul>
-<li>does a page belong to a document that this template was created for?</li>
-<li>if it does, is the page the first page of a document?</li>
-</ul>
-According to the assumptions declared in the beginning, if condition FirstPageOfDocument is met on a page then this template has to be chosen to process the page and the next ones until a new document beginning is detected. 
-<p>Sometimes one more condition that checks if a page is the last page of a document may be required but the necessity of it depends on what is known about PDF files to be parsed. Within the assumptions made, this condition would be redundant.
-
-<p class='screenshot_title'>FirstPageOfDocument must relate on anchors #1 and #2 created before exactly for it. Configure it with boolean expression "1 & 2" which is True only when both anchors are found together:
-<img src='img/tutorial3.png'/>
-
-<p>While in this sample FirstPageOfDocument is quite good with 2 anchors, sometimes more anchors may be needed: for instance when the same company issues documents of different types and thus company's logo is not sufficient to detect the type.
-
-
-
-<h3><a name='tutorialField'>Set fields</a></h3>
-<p>Though some of the <a href='#field'>fields</a> in this sample seem not to need linking to anchors, it is advisable to always link fields to anchors to drastically reduce the probability of mistaken parsing. It will be done so in this tutorial.
-<p class='screenshot_title'>Set <a href='#field'>field</a> INVOICE#:
-<img src='img/tutorial4.png'/>
-
-<p class='screenshot_title'>In the same way as above set the rest fields and create anchors for them:
-<img src='img/tutorial5.png'/>
-
-
-
-
-<h3>Check template</h3>
-<p>When all the conditions and fields are set, it's time to walk through the file and see how the template works on every page.
-<p class='screenshot_title'>The page #2 begins a new invoice:
-<img src='img/tutorial6.png'/>
-<p class='screenshot_title'>The page #3 continues and ends an invoice: 
-<img src='img/tutorial7.png'/>
-<p>The template worked properly on the test file. Click OK to save it.
-
-
-
-
-
-
-
+<p>PdfDocumentParser is a .NET DLL.
 
 
 
@@ -130,20 +40,20 @@ According to the assumptions declared in the beginning, if condition FirstPageOf
 <h1><a name='api'>API</a></h1>
 Refer to <a href='#InvoiceParser'>InvoiceParser</a> as an alive example of using PdfDocumentParser in a custom application.
 
-<h2>Methods&properties</h2>
+<h2>Methods</h2>
 <table>
-<tr><th class='title_column'>Method | property</th><th>Description</th></tr>
+<tr><th class='title_column'>Method | Property</th><th>Description</th></tr>
 <tr><td class='title_column'><code>Cliver.PdfDocumentParser.PageCollection::ActiveTemplate</code></td>
 <td>Set active template in PdfDocumentParser.</td></tr>
 <tr><td class='title_column'><a name='IsCondition'><code>Cliver.PdfDocumentParser.Page::IsCondition()</code></a></td>
-<td>Checks if a condition is met in page.</td></tr>
+<td>Check if a condition is met in page.</td></tr>
 <tr><td class='title_column'><code>Cliver.PdfDocumentParser.Page::GetValue()</code></td>
-<td>Extracts a field from page. If anchor of the field was not found, NULL is returned.</td></tr>
+<td>Extract a field from page. If anchor of the field was not found, NULL is returned.</td></tr>
 </table>
 
 
 <h2>Pseudo-code</h2>
-A basic algorithm of processing a PDF file with PdfDocumentParser would look like the following:
+The main idea of using PdfDocumentParser in a custom application is that custom operations are performed depending on custom <a href='#condition'>conditions</a>. Thus, some basic algorithm of processing a PDF file would look like the following:
 <pre>
 foreach(page in PdfFile)
 {
@@ -175,9 +85,145 @@ foreach(page in PdfFile)
     }
 }
 </pre>
+<p>Notice that the above algorithm implies that only one template can be applied to a PDF page while it is not mandatory in general. 
+<p>Because of the fact that conditions are predefined by a custom application, it is impossible to outline 'the most general algorithm' of using PdfDocumentParser.
 
-The main idea is that custom operations are performed depending on conditions.
 
+
+
+
+
+<h2><a name='tutorialApi'>Tutorial: custom application</a></h2>
+PdfDocumentParser itself does not impose any requirement for PDF files except that that they must conform to some recognizable layout. On the other hand, PdfDocumentParser can only be called from within a custom application, developed for a certain parsing task. 
+<p>Such a task will predetermine the <a href='#condition'>condition</a> and <a href='#field'>field</a> collections in an application developed for it. 
+
+<h3>Task</h3>
+<p>The parsing task, considered in this tutorial, follows:
+<p>There are PDF files that consist of invoices issued by different companies. Values INVOICE#, JOB#, PO#, COST should be parsed from every invoice.
+<p>It is known that the PDF files to be parsed comply with the following:
+<ul>
+<li>a file can consist of multiple invoices;</li>
+<li>an invoice can consist of multiple pages;</li>
+<li>any page in a file participates in an invoice;</li>
+</ul>
+<p><a href='#InvoiceParser'>InvoiceParser</a> is a custom application developed for this task so it can be referred to while learning this tutorial.
+
+<h3><a name='customConfiguration'>Configuration<a/></h3>
+<p>It is obvious that the <a href='#field'>field</a> collection predefined in our application should be: INVOICE#, JOB#, PO#, COST.
+<p>Now let's define which <a href='#condition'>conditions</a> are needed. 
+<p>Because the invoices are issued by different companies and hence have different layouts, there will be needed as many parsing templates as many layouts are. Therefore, our application has to <b>A)</b>recognize the layout of a PDF page in order to apply the right template to it. 
+<p>Additionaly, as an invoice can be multi-page, our application has to <b>B)</b>detect the fisrt page of an invoice. 
+<p>(A) and (B) can be joined into one <a href='#condition'>condition</a>. Let's name it 'FirstPageOfDocument'. When a template has its FirstPageOfDocument met on a PDF page, it has to be chosen for the page and the next ones until the first page of a new invoice is detected. Thus, templates in our application should have only condition FirstPageOfDocument.
+
+
+<h3>Algorithm</h3>
+Now, summing up the said above, the algorithm of processing a PDF file in our application should be the following:
+<pre>
+object INVOICE#, JOB#, PO#, COST;
+Template currentTemplate;
+foreach(page in PdfFile)
+{ 
+    foreach(template in templates)
+    {
+        PdfDocumentParser.ActiveTemplate = template;
+        if(PdfDocumentParser.IsCondition(page, "DocumentFirstPage"))
+        {
+            if(INVOICE# != null)
+            {
+                ...do something with INVOICE#, JOB#, PO#, COST extracted from the previous invoice...
+                INVOICE# = null;
+            }
+            currentTemplate = PdfDocumentParser.ActiveTemplate;
+            break;
+        }
+    }
+    if(currentTemplate != null)
+    {  
+        PdfDocumentParser.ActiveTemplate = currentTemplate;
+        object INVOICE# = PdfDocumentParser.GetValue(page, "INVOICE#");
+        object JOB#, = PdfDocumentParser.GetValue(page, "JOB#");
+        object PO# = PdfDocumentParser.GetValue(page, "PO#");
+        object COST = PdfDocumentParser.GetValue(page, "COST");
+    }
+}
+</pre>
+
+Refer to <a href='#InvoiceParser'>InvoiceParser</a> as a real code.
+
+
+
+
+
+
+
+
+
+
+<h1><a name="templateEditor">Template Editor</a></h1>
+Template Editor is a GUI object that should be called from a desktop application whenever editing <a href="#template">template</a> is required. 
+
+<h2><a name='templateEditorApi'>Template Editor API</a></h2>
+<table>
+<tr><th class='title_column'>Object</th><th>Description</th></tr>
+<tr><td class='title_column'><code>Cliver.PdfDocumentParser.TemplateForm</code></td>
+<td>.NET Windows Form that provides abilities of editing/debugging a template. Create <code>TemplateForm</code> with a <code>TemplateManager</code> instance as a parameter and call <code>Show()</code> or <code>ShowDialog()</code> on it.</td></tr>
+<tr><td class='title_column'><code>Cliver.PdfDocumentParser.TemplateManager</code></td>
+<td>Abstract class that must be defined with custom routines. Passed to <code>TemplateForm()</code> as a parameter.</td></tr>
+</table>
+<p>Refer to <a href='#InvoiceParser'>InvoiceParser</a> as a sample of use.
+
+
+
+
+<h2><a name='tutorialTemplateEditor'>Tutorial: configuring template</a></h2>
+This tutorial proceeds with the sample considered in <a href='#tutorialApi'>the tutorial of custom application</a> so <a href='#InvoiceParser'>InvoiceParser</a> can be referred to as a custom application.
+
+<h3>Open Template Editor</h3>
+<p>Template Editor is open in a custom application, so the way of doing this depends on the application. In <a href='#InvoiceParser'>InvoiceParser</a> a <a href="#template">template</a> can be created from scratch or copied from an existing one and then modified as needed. Let's start with a blank template: click the blank row in the table in the main window of InvoiceParser and then click button Edit.
+<p class='screenshot_title'>Open a test PDF file in Template Editor:
+<img src='img/tutorial0.png'/>
+
+<h3><a name='tutorialAnchor'>Create anchors</a></h3>
+<p>Templates in our sample custom application (which is InvoiceParser) as follows from <a href='#customConfiguration'>the configuration</a> have 1 condition and 4 fields. So the template we configure needs <a href='#anchor'>anchors</a> that will be used by the condition and the fields. 
+<p>Let's create anchors for condition FirstPageOfDocument. As this condition is intended to identify the type of a document, it needs an anchor targeted to some fragment of a document that is unique to its type. Obviously, such a fragment must identify the document type with a high confidence. Usually the logo of a company that issued a document can serve well this goal.
+<p class='screenshot_title'>Create an anchor that captures the logo and thus detects if a page corresponds to the template:
+<img src='img/tutorial1.png'/>
+
+<p>In addition, as FirstPageOfDocument must be capable to detect the beginning page of a document, it needs an anchor that will do it.
+<p class='screenshot_title'>Create an anchor that checks if a page is the first page of a document:
+<img src='img/tutorial2.png'/>
+
+<p>Anchors for the fields will be created later.
+
+<p><span class='attention'>NOTE: </span>when you select a row in either table: anchors, conditions or fields, its status is updated in the head cell and the captured place is displayed in the page viewer.
+
+<h3><a name='tutorialCondition'>Specify condition</a></h3>
+We already have created anchors #1 and #2 that are needed to specify FirstPageOfDocument's expression. It must be True only when the anchors are found together on a page.
+
+<p class='screenshot_title'>Set condition FirstPageOfDocument with boolean expression "1 & 2":
+<img src='img/tutorial3.png'/>
+
+<p>While in this sample FirstPageOfDocument is quite good with 2 anchors, sometimes more anchors may be needed: for instance when the same company issues documents of different types and thus company's logo is not sufficient to detect the type.
+
+<p>Some tasks might require one more condition to check if a page is the last page of a document may be required but the necessity of it depends on what is known about PDF files to be parsed. However for the sample task, this condition would be redundant.
+
+
+<h3><a name='tutorialField'>Set fields</a></h3>
+<p>Though <a href='#field'>fields</a> INVOICE#, JOB#, PO# seem not to need linking to anchors, it is advisable to always link fields to anchors to reduce the probability of mistaken parsing. It will be done so in this tutorial.
+<p class='screenshot_title'>Set <a href='#field'>field</a> INVOICE#:
+<img src='img/tutorial4.png'/>
+
+<p class='screenshot_title'>In the same way as above set the rest fields and create anchors for them:
+<img src='img/tutorial5.png'/>
+
+
+<h3>Check template</h3>
+<p>When all the conditions and fields are set, it's time to walk through the file and see how the template works on every page.
+<p class='screenshot_title'>The page #2 begins a new invoice:
+<img src='img/tutorial6.png'/>
+<p class='screenshot_title'>The page #3 continues and ends an invoice: 
+<img src='img/tutorial7.png'/>
+<p>The template worked properly on the test file. Click OK to save it.
 
 
 
@@ -192,15 +238,15 @@ The main idea is that custom operations are performed depending on conditions.
 <ul>
 <li>create <a href="#anchor">anchors</a> required for <a href="#condition">conditions</a>;</li>
 <li>define <a href="#condition">conditions</a> using created anchors;</li>
-<li>set <a href="#field">fields</a>;</li>
-<li>create <a href="#anchor">anchors</a> for fields that need it and link those fields to them;</li>
+<li>set <a href='#field'>fields</a>;</li>
+<li>create <a href='#anchor'>anchors</a> for fields that need it and link those fields to them;</li>
 <li>test the template on the rest pages of the file;</li>
 </ul>
-Refer to <a href="#tutorial">the tutorial</a> for more details.
+Refer to <a href='#tutorialTemplateEditor'>the tutorial of setting template</a> for more details.
 
 
 
-<h2><a name="anchor">Anchor</a></h2>
+<h2><a name='anchor'>Anchor</a></h2>
 <p>An anchor is a fragment of either text or image that PdfDocumentParser will look for in a PDF page. If found, the anchor is then used by conditions or fields. A not engaged anchor itself is useless. Anchor can be used in the following ways:
 <ul>
 <li> it can be linked by fields whose positions in page may vary like 'total amount' field whose position usually depends on size of invoice's content;</li> 
@@ -227,7 +273,8 @@ Refer to <a href="#tutorial">the tutorial</a> for more details.
 <p>If you keep Ctrl pressed while selecting, you can select more than 1 element for the same anchor. To stop selecting, you have to release Ctrl before releasing the mouse button.
 
 <h3><a name='anchorTypes'>Anchor types</a></h3>
-<p>Each of types is processed by its own very different way therefore choosing the right type is crucial in successful and robust parsing.
+<p>Each of types is processed by its own very different way therefore choosing the right type is crucial in successful and robust parsing. 
+<p>While using OcrText and ImageData types be familiar with <a name='scannedDocuments'>scanned document treatment</a>.
 
 <h4><a name='anchorPdfText'>PdfText</a></h4>
 <p>This type is based on native text presentation inside a PDF file. Elements of this type are character boxes extracted from PDF entities which together present a text to be found in page. Every character is a separate anchor element.
@@ -286,8 +333,8 @@ Refer to <a href="#tutorial">the tutorial</a> for more details.
 
 <h2><a name="condition">Condition</a></h2> 
 <p>A condition is a boolean expression that depends on anchors and is configured individually in every template.
-<p>A condition can have meaning True or False which depends on pair [PDF page, template]. In the custom code it is checked by PdfDocumentParser <a href='#api'>API</a> method <a href='#IsCondition'><code>IsCondition(<condition name>)</code></a>. 
-<p>Conditions are identified by their names. A condition collection is dictated by the logic of a custom application, therefore condition names are predefined within the application's scope and are the same for all templates that belong to it.
+<p>A condition can have meaning True or False which depends on pair [PDF page, template]. In a custom code it should be checked by PdfDocumentParser <a href='#api'>API</a> method <a href='#IsCondition'><code>IsCondition(<condition name>)</code></a>. 
+<p>Conditions are identified by their names. The condition collection is dictated by the logic of a custom application, therefore condition names are predefined within the application's scope and are the same for all templates that belong to it.
 
 <h3>Mostly used condition</h3>
 <p>While condition collection can vary, the following checks highly likely are needed in any application:
@@ -329,6 +376,8 @@ For more details refer to <a href='#tutorialCondition'>the tutorial</a>.
 <p>To set a field, select the respective row in fields table, choose its <a href='#fieldTypes'>type</a> and then select in the PDF view a rectangle from where text or image must be extracted. Then, if a field has a variable position then it must be linked to an anchor that will detect its proper location on a page. If the anchor of a linked field is not found then this field is not found too. For more details refer to <a href='#tutorialField'>the tutorial</a>.
 
 <h3><a name='fieldTypes'>Field types</a></h3>
+<p>While using OcrText and ImageData types be familiar with <a name='scannedDocuments'>scanned document treatment</a>.
+
 <h4><a name='fieldPdfText'>PdfText</a></h4>
 Its value is a text surrounded by field's rectangle. It is obtained from PDF entities.
 <h4>OcrText</h4>
@@ -344,10 +393,10 @@ Its value is a <code>System.Drawing.Bitmap</code> object that contains a fragmen
 
 
 
-<h1>Scanned documents</h1>
+<h1><a name='scannedDocuments'>Scanned documents</a></h1>
 <p>Scanned documents are not the first subject for PdfDocumentParser but they are supported. PdfDocumentParser provides auto-deskew and page rotation options which are usually needed for scanned documents. 
-<p>Because of quality deviations in scanned documents the image comparison tolerance parameters may need to be tuned for every anchor.
-<p>The image resolution in PdfDocumentParser must be set to not less than 300dpi, otherwise OCR will not work properly. The higher the resolution, the better OCR is. On the other hand, increasing resolution increases processing time. Also, setting resolution in PdfDocumentParser higher than the resolution of original images will not make sense. Image resolution parameter is common for all templates and is set in the configuration window. 
+<p>Because of quality deviations in scanned documents the image comparison tolerance parameters in anchors of ImageData type may need to be tuned for every anchor.
+<p>The image resolution in PdfDocumentParser is a resolution with which a PDF page is converted into image to be then passed to the OCR engine. It must be set to not less than 300dpi, otherwise OCR will not work properly. The higher the resolution, the better quality of OCR is. On the other hand, increasing the resolution increases processing time. Also, setting the resolution in PdfDocumentParser higher than the resolution of original images will not make sense. Image resolution parameter is the same within application's scope and can be set in the configuration window invoked from Template Editor. 
 
 
 
@@ -359,7 +408,7 @@ Its value is a <code>System.Drawing.Bitmap</code> object that contains a fragmen
 
 
 <h1><a name='InvoiceParser'></a>InvoiceParser</h1>
-Invoice Parser is a custom desktop application based on PdfDocumentParser. It can be used as an example of incorporating PdfDocumentParser into a custom code. Also, its custom specificity lays only in a way how PDF files are parsed, therefore the rest code can be used unchanged as a framework in a new application.
+Invoice Parser is a custom desktop application based on PdfDocumentParser. It can be used as an example of incorporating PdfDocumentParser into a custom code. Also, as its custom specificity lays only in a way how PDF files are parsed, the rest code can be used unchanged as a framework in a new application.
 <p>Generally, it does the following:
 <ul>
 <li>enhances <code>PdfDocumentParser.Template</code> with custom properties that are not related to parsing;</li>

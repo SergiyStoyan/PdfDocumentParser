@@ -16,6 +16,9 @@ Html body must have:
  USAGE:
  This script should be embedded in the end of html body.
  Also menu_generator.css should be linked.
+ 
+ AUXILIARY:
+ Open a containing html file with anchor '_checkInternalLinks' to check it for broken internal links.
 ************************************************************************/
 var convert = function(mode){
     var getItems = function(){
@@ -243,6 +246,31 @@ switch(anchorName){
         anchorDiv.innerHTML = '<a class="switchLink" href="#" onclick="loadInMenuMode();" title="Switch to javascript generated document.">menu mode</a>';
         var body = document.getElementsByTagName('body')[0];
         body.insertBefore(anchorDiv, body.childNodes[0]);
+    break;
+    case '_checkInternalLinks':
+        var as = document.getElementsByTagName('a');
+        var internalLinks = [];
+        var internalAnchorNames = [];
+        for(var i = 0; i < as.length; i++){
+            if(as[i].href){
+                var m = as[i].href.match(/#(.*)/);
+                if(m)
+                    internalLinks.push(m[1]);
+            }
+            if(as[i].name){
+                internalAnchorNames.push(as[i].name);
+            }            
+        }
+        var brokenLinks = [];
+        for(var i = 0; i < internalLinks.length; i++){
+            if(internalAnchorNames.indexOf(internalLinks[i]) < 0)
+                brokenLinks.push(internalLinks[i]);
+        }
+        if(brokenLinks.length){
+            alert('There are broken internal links. They have been printed out on the console.');
+            console.log('Broken links:\r\n' + brokenLinks.join('\r\n'));
+        }else
+            alert('No broken internal link was found.');
     break;
     case '_entireContent':
         convert('_entireContent');
