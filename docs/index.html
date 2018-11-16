@@ -12,7 +12,7 @@
 
 <div class='content'>
 <h1><a name='overview'>Overview</a></h1>
-<p>PdfDocumentParser is a parsing engine intended to extract of text/images from PDF documents that conform to a predefined graphic layout - such as invoices and the like. The main parsing approach is based on finding certain text or image fragments in page and then extracting text/images located relatively to those fragments.
+<p>PdfDocumentParser is a parsing engine intended to extract of text/images from PDF documents that conform to a recognizable graphic layout - such as invoices and the like. The main parsing approach is based on finding certain text or image fragments in page and then extracting text/images located relatively to those fragments.
 <p>Within this scope PdfDocumentParser is capable of the following:
 <ul>
 <li>operating with text represented by PDF entities (meant for native PDF files);</li>
@@ -130,7 +130,7 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 <h2><a name="condition">Condition</a></h2> 
 <p>A condition is a boolean expression that depends on anchors and is configured individually in every template.
 <p>A condition can have meaning True or False which depends on pair [PDF page, template]. In a custom code it should be checked by PdfDocumentParser <a href='#api'>API</a> method <a href='#IsCondition'><code>IsCondition(<condition name>)</code></a>. 
-<p>Conditions are identified by their names. The condition collection is dictated by the logic of a custom application, therefore condition names are predefined within the application's scope and are the same for all templates that belong to it.
+<p>Conditions are identified by their names. The condition collection is dictated by the logic of a custom application, therefore condition names are predetermined within the application's scope and are the same for all templates that belong to it.
 
 <h3>Mostly expected condition</h3>
 <p>While the condition collection depends on custom application, the following one is unavoidable in any application that operates with more than one template: is this template appropriate for this page?
@@ -159,7 +159,7 @@ For more details refer to <a href='#tutorialCondition'>the tutorial</a>.
 
 <h2><a name="field">Field</a></h2>
 <p>A field defines certain text or image that is to be extracted from a PDF page. 
-<p>Fields are identified by their names. A field collection is dictated by the logic of a custom application and thus their names are predefined within its scope and are the same for all templates that belong to it. 
+<p>Fields are identified by their names. A field collection is dictated by the logic of a custom application and thus their names are predetermined within its scope and are the same for all templates that belong to it. 
 <p>A field optionally can be linked to an anchor. When a field has no anchor, its selecting rectangle retains the initial position which was its position during creation. When a field has anchor, PdfDocumentParser locates the field's rectangle relatively to its anchor's actual position so that if on some page the anchor shifts, the field shifts together with it. It is advisable always to link fields to anchors thus drastically decreasing probability of incorrect parsing.
 <p>When it is definitely known that a field appears on every page and always keeps the same position then there is no need to link it to an anchor.
 <p>In scanned documents whose margins vary, fields cannot have constant positions and so always should be processed with anchors.
@@ -210,7 +210,8 @@ Refer to <a href='#InvoiceParser'>InvoiceParser</a> as an alive example of using
 
 
 <h2>Pseudo-code</h2>
-The main idea of using PdfDocumentParser in a custom application is that custom operations are performed depending on custom <a href='#condition'>conditions</a>. Thus, some basic algorithm of processing a PDF file would look like the following:
+The main idea of using PdfDocumentParser in a custom application is that custom operations are performed depending on custom <a href='#condition'>conditions</a>. 
+<p>Because of the fact that the collection of <a href='#condition'>conditions</a> is determined by a custom application, it is impossible to outline 'the most common algorithm' of using PdfDocumentParser. But some basic algorithm of processing a PDF file would look like the following:
 <pre>
 foreach(page in PdfFile)
 {
@@ -243,7 +244,6 @@ foreach(page in PdfFile)
 }
 </pre>
 <p>Notice that the above algorithm implies that only one template can be applied to a PDF page while it is not mandatory in general. 
-<p>Because of the fact that <a href='#condition'>conditions</a> are introduced by a custom application, it is impossible to outline 'the most common algorithm' of using PdfDocumentParser.
 
 
 
@@ -265,9 +265,9 @@ PdfDocumentParser itself does not impose any requirement for PDF files except th
 <p><a href='#InvoiceParser'>InvoiceParser</a> is an application developed for this task so it can be referred to while learning this tutorial.
 
 <h3><a name='customConfiguration'>Custom configuration<a/></h3>
-<p>As is obvious from the task requirements, the <a href='#field'>field</a> collection predefined in our application should be: INVOICE#, JOB#, PO#, COST.
-<p>Now let's define which <a href='#condition'>conditions</a> are needed. 
-<p>Because the invoices are issued by different companies and hence have different layouts, there will be needed as many parsing templates as many layouts can be met in the files. Therefore, our application has to <b>A)</b>recognize which template should be applied to a PDF page in order to properly parse it. 
+<p>As is obvious from the task requirements, the <a href='#field'>field</a> collection predetermined in our application should be: INVOICE#, JOB#, PO#, COST.
+<p>Now let's decide which <a href='#condition'>conditions</a> are needed i our applcation. 
+<p>Because the invoices are issued by different companies and hence have different layouts, there will be needed as many parsing templates as many layouts can be met in the files. Therefore, our application has to <b>A)</b>recognize which template should be applied to a PDF page. 
 <p>Additionaly, as invoice can be multi-page, our application has to <b>B)</b>detect the first page of invoice. 
 <p>(A) and (B) can be joined into one <a href='#condition'>condition</a>. Let's name it 'FirstPageOfDocument'. 
 <p>When a template has its FirstPageOfDocument met on a PDF page, it has to be chosen for processing this page and the next ones until the first page of a new invoice is detected. And when a new invoice starts, the previously captured fields are to be processed and cleaned.
@@ -424,7 +424,7 @@ Invoice Parser is a custom desktop application based on <a href='#overview'>PdfD
 <ul>
 <li>enhances <code>PdfDocumentParser.Template</code> with auxiliary properties that are not related to parsing;</li>
 <li>stores and manages templates;</li>
-<li>defines the <a href='#condition'>condition</a> and <a href='#field'>field</a> collections;</li>
+<li>predetermines the <a href='#condition'>condition</a> and <a href='#field'>field</a> collections;</li>
 <li>defines <code>PdfDocumentParser.TemplateForm.TemplateManager</code> and calls <code>PdfDocumentParser.TemplateForm</code> for template editing;</li>
 <li>processes PDF files in accordance with custom needs;</li>
 </ul>
