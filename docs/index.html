@@ -36,16 +36,7 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 
 <h1><a name="template">Template</a></h1>
 <p>To parse documents that comply with a certain layout (e.g. invoices issued by the same company) a parsing template is to be configured. It contains information about which data should be extracted and how. Obviously, applying a template to documents with layout different from that it was designed for, brings to incorrect parsing.
-<p>Configuring a template is done in <a href='#templateEditor'>Template Editor<a/> and consists of the following steps:
-<ul>
-<li>in Template Editor, open a PDF file that is to be parsed;</li>
-<li>create <a href="#anchor">anchors</a> required for <a href="#condition">conditions</a>;</li>
-<li>configure <a href="#condition">conditions</a> with the created anchors;</li>
-<li>set <a href='#field'>fields</a>;</li>
-<li>create <a href='#anchor'>anchors</a> required for fields and link fields to them;</li>
-<li>test the template on another appropriate PDF pages;</li>
-</ul>
-Refer to <a href='#tutorialTemplateEditor'>the tutorial of setting template</a> for more details.
+<p>Configuring a template is done in <a href='#templateEditor'>Template Editor<a/>
 
 
 
@@ -327,7 +318,18 @@ Refer to <a href='#InvoiceParser'>InvoiceParser</a> as a real code.
 
 
 <h1><a name="templateEditor">Template Editor</a></h1>
-Template Editor is a GUI object that should be called from a desktop application whenever editing <a href="#template">template</a> is required. 
+Template Editor is a GUI object that is called in a desktop application whenever configuring <a href="#template">a template</a> is required. 
+
+<p>Configuring a template consists of the following steps:
+<ul>
+<li>open a PDF file that is to be parsed;</li>
+<li>create <a href="#anchor">anchors</a> required for <a href="#condition">conditions</a>;</li>
+<li>configure <a href="#condition">conditions</a> with the created anchors;</li>
+<li>set <a href='#field'>fields</a>;</li>
+<li>create <a href='#anchor'>anchors</a> required for fields and link fields to them;</li>
+<li>test the template on another appropriate PDF pages;</li>
+</ul>
+See <a href='#tutorialTemplateEditor'>the tutorial of setting template</a> for more details.
 
 <h2><a name='templateEditorApi'>Template Editor API</a></h2>
 <table>
@@ -343,7 +345,8 @@ Template Editor is a GUI object that should be called from a desktop application
 
 
 <h2><a name='tutorialTemplateEditor'>Tutorial: setting template</a></h2>
-This tutorial proceeds with the sample considered in <a href='#tutorialApi'>the tutorial of custom application</a> and <a href='#InvoiceParser'>InvoiceParser</a> is referred to as the sample's custom application.
+This tutorial proceeds with the sample considered in <a href='#tutorialApi'>the tutorial of custom application</a>.
+<p>Refer to <a href='#InvoiceParser'>InvoiceParser</a> as the sample's custom application.
 
 <h3>Open Template Editor</h3>
 <p>Template Editor is open in a custom application, so the way of doing this depends on it. In <a href='#InvoiceParser'>InvoiceParser</a> a <a href="#template">template</a> can be created from scratch or copied from an existing one and then modified as needed. Let's start with a blank template: click the blank row in the table in the main window of InvoiceParser and then click button Edit.
