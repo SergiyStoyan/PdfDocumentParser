@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
@@ -60,6 +61,19 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
+        class conditionComparer : IEqualityComparer<Template.Condition>
+        {
+            bool IEqualityComparer<Template.Condition>.Equals(Template.Condition x, Template.Condition y)
+            {
+                return x.Name == y.Name;
+            }
+
+            int IEqualityComparer<Template.Condition>.GetHashCode(Template.Condition obj)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         void setUIFromTemplate(Template t)
         {
             try
@@ -89,6 +103,12 @@ namespace Cliver.PdfDocumentParser
                         setAnchorParentAnchorIdList(r);
                 }
 
+                for (int i = 0; i < t.Conditions.Count; i++)
+                {
+                    for (int j = i + 1; j < t.Conditions.Count; j++)
+                        if (t.Conditions[i].Name == t.Conditions[j].Name)
+                            t.Conditions.RemoveAt(j);
+                }
                 conditions.Rows.Clear();
                 foreach (Template.Condition c in t.Conditions)
                 {
@@ -97,6 +117,12 @@ namespace Cliver.PdfDocumentParser
                     setConditionRow(row, c);
                 }
 
+                for (int i = 0; i < t.Fields.Count; i++)
+                {
+                    for (int j = i + 1; j < t.Fields.Count; j++)
+                        if (t.Fields[i].Name == t.Fields[j].Name)
+                            t.Fields.RemoveAt(j);
+                }
                 fields.Rows.Clear();
                 if (t.Fields != null)
                 {

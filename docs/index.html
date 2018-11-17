@@ -35,21 +35,20 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 
 
 <h1><a name="template">Template</a></h1>
-<p>To parse documents that comply with a certain layout (e.g. invoices issued by the same company) a parsing template is to be configured. It contains information about which data should be extracted and how. Obviously, applying a template to documents with layout different from that it was designed for, brings to incorrect parsing.
-<p>Configuring a template is done in <a href='#templateEditor'>Template Editor<a/>
+<p>To parse documents that comply with a certain layout (e.g. invoices issued by the same company) a parsing template is to be configured. It contains information what data should be extracted and how. 
+<p>Obviously, applying a template to documents with layout different from that it was designed for, would bring to incorrect parsing.
+<p>Configuring a template is done by <a href='#templateEditor'>Template Editor<a/>
 
 
 
 <h2><a name='anchor'>Anchor</a></h2>
-<p>An anchor is a fragment of either text or image that PdfDocumentParser will look for in a PDF page. If found, the anchor is then used by conditions or fields. A not engaged anchor itself is useless. Anchor can be used in the following ways:
+<p>An anchor is a fragment of either text or image extracted from a test PDF page in order to be looked for on any PDF page when needed afterwards. An anchor can be used in the following ways:
 <ul>
-<li> it can be linked by fields;</li> 
+<li> it can be linked by <a href="field">fields</a>;</li> 
 <li> it can be engaged in <a href="condition">conditions</a>;</li>
-<li> it can be linked by another anchor;</li>
+<li> it can be linked by another <a name='anchor'>anchor</a>;</li>
 </ul>
-<p>The same anchor can be used by multiple conditions, fields and anchors.
-<p>Being used does not impose any restriction to an anchor.
-<p>Linking to an anchor means that coordinates of a linked field or anchor become relative to the anchor they are linked to. That's PdfDocumentParser first will look for the anchor and then, if it is found, it will locate the linked fields or anchors depending on the location of their anchor.
+<p>Being used does not impose any restriction to an anchor. Thus, an anchor can be used in many ways at the same time.
  
 
 <h3>General structure of anchor</h3>
@@ -59,9 +58,9 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 
 <h3>Anchor linked to anchor</h3>
 <p>A linked anchor is named 'child' of the linking one which is named 'parent'. 
-<p>When an anchor is linked to another anchor, its search area (if it is not the entire page) is defined relatively to the position of the parent anchor. 
-<p>When a parent anchor is not found, its child anchors are set not found as well.
-<p>Number of anchors consistently linked in a chain can be any.
+<p>When an anchor is linked to another anchor, its search area (when it is not the entire page) is defined depending on its parent anchor's position 
+<p>When a parent anchor is not found, its child anchors are set not found too.
+<p>Number of anchors linked successively in a chain can be any.
 
 
 <h3>Create anchor</h3>
@@ -128,17 +127,17 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 
 
 <h2><a name="condition">Condition</a></h2> 
-<p>A condition is a boolean expression that depends on anchors and is configured individually in every template.
-<p>A condition can have meaning True or False which depends on pair [PDF page, template]. In a custom code it should be checked by PdfDocumentParser <a href='#api'>API</a> method <a href='#IsCondition'><code>IsCondition(<condition name>)</code></a>. 
+<p>A condition is a boolean expression that depends on anchors and is set individually in every template.
+<p>The meaning of a condition can be True or False and depends on pair [PDF page, template]. It can be checked by PdfDocumentParser <a href='#api'>API</a> method <a href='#IsCondition'><code>IsCondition(<condition name>)</code></a>. 
 <p>Conditions are identified by their names. The condition collection is dictated by the logic of a custom application, therefore condition names are predetermined within the application's scope and are the same for all templates that belong to it.
 
 <h3>Mostly expected condition</h3>
-<p>While the condition collection depends on custom application, the following one is unavoidable in any application that operates with more than one template: is this template appropriate for this page?
+<p>While the condition collection depends on custom application, the following one is unavoidable in any application that operates with more than one template: "is this template appropriate for this page"?
 <p>Depending on parsing task, this condition may include additional checks.
 
 <h3>Boolean expression</h3>
-Condition expressions are composed of the following symbols: &lt;anchor id&gt;, '!', '&', '|', '(', ')'. When an anchor referenced by &lt;anchor id&gt; is found then it is treated as True, otherwise False. Meaning of a condition is the boolean result of its expression. 
-<p><span class='attention'>NOTE: </span>Operands '&' and '|' are processed consequently, therefore, for instance, "1 | 2 & 3" and "2 & 3 | 1" are not equivalent. Parentheses should be used to manage precedence of operations.
+Condition expressions are composed of the following symbols: &lt;anchor id&gt;, '!', '&', '|', '(', ')'. When an anchor referenced by &lt;anchor id&gt; is found then it is treated as True, otherwise False. The meaning of a condition is the boolean result of its expression. 
+<p><span class='attention'>NOTE: </span>Operands '&' and '|' are processed successively, therefore, for instance, "1 | 2 & 3" and "2 & 3 | 1" are not equivalent. Parentheses should be used to manage precedence of operations.
 <p>Sample expressions:
 
 <table>
