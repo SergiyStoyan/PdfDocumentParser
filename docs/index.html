@@ -44,32 +44,29 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 <h2><a name='anchor'>Anchor</a></h2>
 <p>An anchor is a fragment of either text or image extracted from a test PDF page in order to be looked for on any PDF page when needed afterwards. An anchor can be used in the following ways:
 <ul>
-<li> it can be linked by <a href="field">fields</a>;</li> 
-<li> it can be engaged in <a href="condition">conditions</a>;</li>
-<li> it can be linked by another <a name='anchor'>anchor</a>;</li>
+<li>can be linked by <a href="#field">fields</a>;</li> 
+<li>can be engaged in <a href="#condition">conditions</a>;</li>
+<li>can be linked by <a href='#anchor'>anchors</a>;</li>
 </ul>
 <p>Being used does not impose any restriction to an anchor. Thus, an anchor can be used in many ways at the same time.
  
 
 <h3>General structure of anchor</h3>
-<p>An anchor consists of a single or many elements of the same type where the first element is master and the rest are secondary. Position of the master element is considered the position of the anchor itself. Secondary elements are searched relatively to the master element's position. 
-<p>If some of an anchor's elements is not found then the anchor itself is not found.
+<p>An anchor consists of a single or many elements of the same type where the first element is 'master' and the rest are 'secondary'. Position of the master element is considered the position of the anchor itself. Secondary elements are searched in relation to the master element's position. 
+<p>If some of an anchor's elements is not found, the anchor itself is set not found too.
 <p>The rectangle where an anchor was located on the page while creating, is named 'initial rectangle' and contains all the anchor's elements.
 
 <h3>Anchor linked to anchor</h3>
 <p>A linked anchor is named 'child' of the linking one which is named 'parent'. 
-<p>When an anchor is linked to another anchor, its search area (when it is not the entire page) is defined depending on its parent anchor's position 
+<p>When an anchor is linked to another anchor, its search area (when it is not the entire page) becomes related to its parent anchor's position.
 <p>When a parent anchor is not found, its child anchors are set not found too.
 <p>Number of anchors linked successively in a chain can be any.
 
 
-<h3>Create anchor</h3>
-<p>To create an anchor, click the blank row in anchors table and choose its <a href='#anchorTypes'>type</a>. Then select with mouse a rectangle in the document page. The text or image within the selection box will be a fragment that PdfDocumentParser will look for. For more details refer to <a href='#tutorialAnchor'>the tutorial</a>.
-<p>If you keep Ctrl pressed while selecting, you can select more than 1 element for the same anchor. To stop selecting, you have to release Ctrl before releasing the mouse button.
 
 <h3><a name='anchorTypes'>Anchor types</a></h3>
 <p>Each of types is processed by its own very different way therefore choosing the right type is crucial in successful and robust parsing. 
-<p>While using OcrText and ImageData types be familiar with <a name='scannedDocuments'>scanned document treatment</a>.
+<p>When using OcrText and ImageData types, be acquainted with <a href='#scannedDocuments'>scanned document treatment</a>.
 
 <h4><a name='anchorPdfText'>PdfText</a></h4>
 <p>This type is based on native text presentation inside a PDF file. Elements of this type are character boxes extracted from PDF entities which together present a text to be found in page. Every character is a separate anchor element.
@@ -123,6 +120,11 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 </table>
 
 
+<h3>Create anchor</h3>
+<p>How to create anchors, see in <a href='#tutorialAnchor'>the tutorial</a>.
+
+
+
 
 
 
@@ -139,7 +141,6 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 Condition expressions are composed of the following symbols: &lt;anchor id&gt;, '!', '&', '|', '(', ')'. When an anchor referenced by &lt;anchor id&gt; is found then it is treated as True, otherwise False. The meaning of a condition is the boolean result of its expression. 
 <p><span class='attention'>NOTE: </span>Operands '&' and '|' are processed successively, therefore, for instance, "1 | 2 & 3" and "2 & 3 | 1" are not equivalent. Parentheses should be used to manage precedence of operations.
 <p>Sample expressions:
-
 <table>
 <tr><th class='title_column_center'>Expression</th><th>Description</th></tr>
 <tr><td class='title_column_center'>1</td>
@@ -153,21 +154,26 @@ Condition expressions are composed of the following symbols: &lt;anchor id&gt;, 
 For more details refer to <a href='#tutorialCondition'>the tutorial</a>.
 
 
+<h3>Set condition</h3>
+<p><p>How to set conditions, see in <a href='#tutorialCondition'>the tutorial</a>.
 
 
 
 <h2><a name="field">Field</a></h2>
 <p>A field defines certain text or image that is to be extracted from a PDF page. 
 <p>Fields are identified by their names. A field collection is dictated by the logic of a custom application and thus their names are predetermined within its scope and are the same for all templates that belong to it. 
-<p>A field optionally can be linked to an anchor. When a field has no anchor, its selecting rectangle retains the initial position which was its position during creation. When a field has anchor, PdfDocumentParser locates the field's rectangle relatively to its anchor's actual position so that if on some page the anchor shifts, the field shifts together with it. It is advisable always to link fields to anchors thus drastically decreasing probability of incorrect parsing.
-<p>When it is definitely known that a field appears on every page and always keeps the same position then there is no need to link it to an anchor.
-<p>In scanned documents whose margins vary, fields cannot have constant positions and so always should be processed with anchors.
 
-<h3>Set field</h3>  
-<p>To set a field, select the respective row in fields table, choose its <a href='#fieldTypes'>type</a> and then select in the PDF view a rectangle from where text or image must be extracted. Then, if a field has a variable position then it must be linked to an anchor that will detect its proper location on a page. If the anchor of a linked field is not found then this field is not found too. For more details refer to <a href='#tutorialField'>the tutorial</a>.
+<h3>Anchoring</h3>  
+<p>A field optionally can be linked to an anchor.
+<p>When a field has no anchor, its selecting rectangle retains the initial position which was its position during creation.
+<p>When a field has anchor, PdfDocumentParser locates the field's rectangle depending on its anchor's actual position so that if on some page the anchor shifts, the field shifts together with it. 
+<p>When it is known definitely about a field that it appears on every page and always keeps the same position then there is no need to link it to an anchor.
+<p>In scanned documents whose margins vary, fields cannot have constant positions and so always must be processed with anchors.
+<p>It is advisable always to link fields to anchors thus minimizing probability of mistaken parsing.
+
 
 <h3><a name='fieldTypes'>Field types</a></h3>
-<p>While using OcrText and ImageData types be familiar with <a name='scannedDocuments'>scanned document treatment</a>.
+<p>When using OcrText and ImageData types, be acquainted with <a href='#scannedDocuments'>scanned document treatment</a>.
 
 <h4><a name='fieldPdfText'>PdfText</a></h4>
 Its value is a text surrounded by field's rectangle. It is obtained from PDF entities.
@@ -179,6 +185,8 @@ Its value is a <code>System.Drawing.Bitmap</code> object that contains a fragmen
 <p>It is used when image is required rather than text or when OCR is not reliable.
 
 
+<h3>Set field</h3> 
+<p>How to set fields, see in <a href='#tutorialField'>the tutorial</a>.
 
 
 
@@ -366,6 +374,8 @@ This tutorial proceeds with the sample considered in <a href='#tutorialApi'>the 
 
 <p><span class='attention'>NOTE: </span>when you select a row in either table: anchors, conditions or fields, its status is updated in the head cell and the captured place is displayed in the page viewer.
 
+<p><span class='attention'>NOTE: </span>while setting an anchor, if you keep Ctrl pressed, you can select more than 1 element on a PDF page for the same anchor. In that case, to stop selecting and make the anchor set, you have to release Ctrl before releasing the mouse button.
+
 <h3><a name='tutorialCondition'>Specify condition</a></h3>
 We already have created anchors #1 and #2 that are needed to specify FirstPageOfDocument's expression. It must be True only when the anchors are found together on a page.
 
@@ -378,13 +388,13 @@ We already have created anchors #1 and #2 that are needed to specify FirstPageOf
 
 
 <h3><a name='tutorialField'>Set fields</a></h3>
-<p>Though <a href='#field'>fields</a> INVOICE#, JOB#, PO# seem not to need linking to anchors, it is advisable to always link fields to anchors to reduce the probability of mistaken parsing. It will be done so in this tutorial.
 <p class='screenshot_title'>Set <a href='#field'>field</a> INVOICE#:
 <img src='img/tutorial4.png'/>
 
 <p class='screenshot_title'>In the same way as above set the rest fields and create anchors for them:
 <img src='img/tutorial5.png'/>
 
+<p>Though <a href='#field'>fields</a> INVOICE#, JOB#, PO# seem not to need linking to anchors, they were anchored just in case to minimize the probability of mistaken parsing in the future when the layout may change.
 
 <h3>Check template</h3>
 <p>When all the conditions and fields are set, it's time to walk through the file and see how the template works on every page.
