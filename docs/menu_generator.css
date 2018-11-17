@@ -1,7 +1,9 @@
-span.h2 {margin:10 0 0 0; font-size1:21px; }
-span.h3 {margin:5 0 0 20; font-size1:19px;}
-span.h4 {margin:2 0 0 40; font-size1:17px; }
-span.h5 {margin:0 0 0 60; font-size1:15px; }
+span.h1 {margin:15 0 0 0; font-size1:21px; }
+span.h2 {margin:10 0 0 20; font-size1:19px;}
+span.h3 {margin:6 0 0 40; font-size1:17px; }
+span.h4 {margin:4 0 0 60; font-size1:15px; }
+span.h5 {margin:2 0 0 80; font-size1:15px; }
+span.h6 {margin:0 0 0 100; font-size1:15px; }
 
 span.inline{
     display: inline;

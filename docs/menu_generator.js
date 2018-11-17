@@ -21,15 +21,15 @@ AUXILIARY:
 Open a containing html file with anchor '#_checkInternalLinks' to check it for broken internal links.
 ************************************************************************/
 var convert = function(mode){
-    var getItemsFromContent = function(){
+    var getItemsFromContent = function(orderedItemIds){
         var items = {};
-        var ids = [0, 0];
+        var ids = [0];
         var e = document.getElementsByClassName('content')[0].childNodes[0];
         while(e){//if(e.nodeType == Node.COMMENT_NODE)
             if(e.tagName){
                 var m = e.tagName.match(/H(\d+)/i);
                 if(m){
-                    var level = parseInt(m[1]) + 1;
+                    var level = parseInt(m[1]);
                     if(ids.length < level){
                         while(ids.length < level)
                             ids.push(0);
@@ -43,6 +43,7 @@ var convert = function(mode){
                     e.parentNode.insertBefore(content, e.nextSibling);
                     var id = ids.join('_');
                     items[id] = {'header': e, 'content': content, 'id': id};
+                    orderedItemIds.push(id);
                     e = content.nextSibling;
                     continue;
                 }
@@ -64,7 +65,7 @@ var convert = function(mode){
     };
          
     var addMenu2Page = function(){       
-        var onclickMenuItem = function(){
+        var onClickMenuItem = function(){
             for(id in items)
                 if(items[id]['menuItem'] == this){
                     window.location.href = window.location.href.replace(/#.*/, '') + '#' + id;
@@ -75,13 +76,14 @@ var convert = function(mode){
         
         var menu = document.createElement('div');
         menu.classList.add("menu");
-        for(id in items){
-            var level = id.match(/_/ig).length + 1;
+        for(var i = 0; i < orderedItemIds.length; i++){
+            var id = orderedItemIds[i];
             var e = document.createElement('span');
             e.classList.add('menuItem');
+            var level = (id.match(/_/ig) || []).length + 1;
             e.classList.add('h' + level);
             e.setAttribute('_id', id);
-            e.addEventListener('click', onclickMenuItem);
+            e.addEventListener('click', onClickMenuItem);
             e.innerHTML = items[id]['header'].innerText; 
             menu.appendChild(e);
             items[id]['menuItem'] = e;
@@ -217,7 +219,8 @@ var convert = function(mode){
         return false;
     };
 
-    var items = getItemsFromContent();
+    var orderedItemIds = [];
+    var items = getItemsFromContent(orderedItemIds);
     addMenu2Page();
 
     var onHashchange = function(event){
