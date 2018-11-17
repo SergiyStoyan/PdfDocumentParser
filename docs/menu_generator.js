@@ -79,11 +79,15 @@ var convert = function(mode){
         for(var i = 0; i < orderedItemIds.length; i++){
             var id = orderedItemIds[i];
             var e = document.createElement('span');
-            e.classList.add('menuItem');
+            if(/\S/.test(items[id]['content'].innerText)){
+                e.classList.add('menuItem');
+                e.addEventListener('click', onClickMenuItem);
+            }
+            else
+                e.classList.add('menuNoclickItem');
             var level = (id.match(/_/ig) || []).length + 1;
             e.classList.add('h' + level);
             e.setAttribute('_id', id);
-            e.addEventListener('click', onClickMenuItem);
             e.innerHTML = items[id]['header'].innerText; 
             menu.appendChild(e);
             items[id]['menuItem'] = e;
@@ -165,22 +169,13 @@ var convert = function(mode){
                 }                
                 
                 {//display also children until some one is not empty
-                    var id = item['id'];
-                    var childIds = [id];
-                    var childId = id;
-                    while(!/\S/.test(items[childId]['content'].innerText)){
-                        childIds.push(1);
-                        childId = childIds.join('_');
-                        while(!items[childId]){
-                            childIds.pop();
-                            if(childIds.length == 1)
-                                break;
-                            childIds[childIds.length - 1] += 1;
-                            childId = childIds.join('_');
-                        }
-                        if(!items[childId])
+                    //var level = (item['id'].match(/_/ig) || []).length + 1;
+                    var i = orderedItemIds.indexOf(item['id']);
+                    while(!/\S/.test(items[orderedItemIds[i]]['content'].innerText)){
+                        i++;
+                        if(i >= orderedItemIds.length)// || level >= (item['id'].match(/_/ig) || []).length + 1)
                             break;
-                        setItemVisible(items[childId], true);
+                        setItemVisible(items[orderedItemIds[i]], true);
                     }
                 }
                 item['header'].scrollIntoView();

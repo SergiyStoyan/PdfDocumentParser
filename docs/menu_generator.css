@@ -42,7 +42,6 @@ span.inline{
 
 .menuItem {
     text-decoration: none;
-    font-size1: 18px;
     color: #000;
     display: block;
     transition: 0.3s;
@@ -56,6 +55,12 @@ span.inline{
     color: #d00;
     background-color: #ddd;
     font-weight1: bold;
+}
+.menuNoclickItem {
+    text-decoration: none;
+    color: #000;
+    display: block;
+    transition: 0.3s;
 }
 
 .switchContainer{
