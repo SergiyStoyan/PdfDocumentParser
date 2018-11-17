@@ -26,11 +26,9 @@ var convert = function(mode){
         var ids = [0, 0];
         var e = document.getElementsByClassName('content')[0].childNodes[0];
         while(e){//if(e.nodeType == Node.COMMENT_NODE)
-            if(e.tagName)
-            {
+            if(e.tagName){
                 var m = e.tagName.match(/H(\d+)/i);
-                if(m)
-                {
+                if(m){
                     var level = parseInt(m[1]) + 1;
                     if(ids.length < level){
                         while(ids.length < level)
@@ -140,9 +138,9 @@ var convert = function(mode){
                     //if(r.top < 0 || r.bottom > pr.bottom)
                     //    item['menuItem'].scrollIntoView();
                     if(r.top < 0)
-                        menuContainer.scrollTop += r.top;
+                        menuContainer.scrollTop += r.top - 10;
                     else if(r.bottom > pr.bottom)
-                        menuContainer.scrollTop += r.bottom - pr.bottom;
+                        menuContainer.scrollTop += r.bottom - pr.bottom + 10;
                     if(r.left < 0)
                         menuContainer.scrollLeft += r.left;
                     else if(r.right > pr.right)
@@ -232,17 +230,18 @@ var convert = function(mode){
 
     navigate2currentAnchor();
 
-    //it is only to prevent browser from unpleasant page jerking when navigating to an anchor which is hidden
-    var localPath = window.location.href.replace(/#.*/, '');
-    var as = document.getElementsByTagName('a');
-    for(var i = 0; i < as.length; i++){
-        if(localPath != as[i].href.replace(/#.*/, ''))
-            continue;
-        var anchorName = as[i].href.replace(/^.*#/, '')
-        if(!anchorName)
-            continue;
-        as[i].href = '#_localAnchor_' + anchorName;//this anchor does not really exists in the page and so browser will not try to go there
-    }  
+    {//it is only to prevent browser from unpleasant page jerking when navigating to an anchor which is hidden
+        var localPath = window.location.href.replace(/#.*/, '');
+        var as = document.getElementsByTagName('a');
+        for(var i = 0; i < as.length; i++){
+            if(localPath != as[i].href.replace(/#.*/, ''))
+                continue;
+            var anchorName = as[i].href.replace(/^.*#/, '')
+            if(!anchorName)
+                continue;
+            as[i].href = '#_localAnchor_' + anchorName;//this anchor does not really exists in the page and so browser will not try to go there
+        }
+    }    
 };
 
 var anchorName = window.location.href.replace(/[^#]*#?(_localAnchor_)?/, '');
