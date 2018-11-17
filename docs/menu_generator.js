@@ -134,19 +134,34 @@ var convert = function(mode){
                 item['menuItem'].classList.add('current');               
                 
                 {//scroll the menu to get the current menu item visible
-                    var r = item['menuItem'].getBoundingClientRect();
                     var menuContainer = document.getElementsByClassName('menuContainer')[0];
-                    var pr = menuContainer.getBoundingClientRect();                
-                    //if(r.top < 0 || r.bottom > pr.bottom)
-                    //    item['menuItem'].scrollIntoView();
-                    if(r.top < 0)
-                        menuContainer.scrollTop += r.top - 10;
-                    else if(r.bottom > pr.bottom)
-                        menuContainer.scrollTop += r.bottom - pr.bottom + 10;
-                    if(r.left < 0)
-                        menuContainer.scrollLeft += r.left;
-                    else if(r.right > pr.right)
-                        menuContainer.scrollLeft += r.right - pr.right;
+                    var menuContainerRect = menuContainer.getBoundingClientRect();                
+                    
+                    var itemPosition = orderedItemIds.indexOf(item['id']);                    
+                    var upperItem;
+                    if(itemPosition > 0)
+                        upperItem = items[orderedItemIds[itemPosition - 1]];
+                    else
+                        upperItem = item;
+                    var upperItemRect = upperItem['menuItem'].getBoundingClientRect();
+                    if(upperItemRect.top < 0)
+                        menuContainer.scrollTop += upperItemRect.top;
+                    else{
+                        var lowerItem;
+                        if(itemPosition + 1 < orderedItemIds.length)
+                            lowerItem = items[orderedItemIds[itemPosition + 1]];
+                        else
+                            lowerItem = item;
+                        var lowerItemRect = lowerItem['menuItem'].getBoundingClientRect();
+                        if(lowerItemRect.bottom > menuContainerRect.bottom)
+                            menuContainer.scrollTop += lowerItemRect.bottom - menuContainerRect.bottom;
+                    }
+                    
+                    var itemRect = item['menuItem'].getBoundingClientRect();
+                    if(itemRect.left < 0)
+                        menuContainer.scrollLeft += itemRect.left;
+                    else if(itemRect.right > menuContainerRect.right)
+                        menuContainer.scrollLeft += itemRect.right - menuContainerRect.right;
                 }                
                 
                 {//display also children until some one is not empty
