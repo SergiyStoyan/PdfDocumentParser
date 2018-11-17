@@ -57,7 +57,8 @@ span.inline{
     font-weight1: bold;
 }
 .menuNoclickItem {
-    text-decoration: none;
+    text-decoration1: underline;
+    font-style: italic;
     color: #000;
     display: block;
     transition: 0.3s;

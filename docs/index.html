@@ -161,7 +161,7 @@ For more details refer to <a href='#tutorialCondition'>the tutorial</a>.
 
 <h2><a name="field">Field</a></h2>
 <p>A field defines certain text or image that is to be extracted from a PDF page. 
-<p>Fields are identified by their names. A field collection is dictated by the logic of a custom application and thus their names are predetermined within its scope and are the same for all templates that belong to it. 
+<p>Fields are identified by their names. The field collection is dictated by the logic of a custom application and thus their names are predetermined within its scope and are the same for all templates that belong to it. 
 
 <h3>Anchoring</h3>  
 <p>A field optionally can be linked to an anchor.
@@ -258,7 +258,7 @@ foreach(page in PdfFile)
 
 
 <h2><a name='tutorialApi'>Tutorial: custom application</a></h2>
-PdfDocumentParser itself does not impose any requirement for PDF files except that that they must conform to some recognizable layout. On the other hand, PdfDocumentParser can only be called from within a custom application that was developed for a certain parsing task. And such a task predetermines the <a href='#condition'>condition</a> and <a href='#field'>field</a> collections in the application. 
+<p>PdfDocumentParser can only be called from within an application developed for a certain parsing task. Therefore, in this tutorial we'll consider a sample task and an application developed for it.
 
 <h3>Custom task</h3>
 <p>The parsing task, that is considered in this tutorial, follows:
@@ -273,12 +273,12 @@ PdfDocumentParser itself does not impose any requirement for PDF files except th
 
 <h3><a name='customConfiguration'>Custom configuration<a/></h3>
 <p>As is obvious from the task requirements, the <a href='#field'>field</a> collection predetermined in our application should be: INVOICE#, JOB#, PO#, COST.
-<p>Now let's decide which <a href='#condition'>conditions</a> are needed i our applcation. 
-<p>Because the invoices are issued by different companies and hence have different layouts, there will be needed as many parsing templates as many layouts can be met in the files. Therefore, our application has to <b>A)</b>recognize which template should be applied to a PDF page. 
+<p>Now let's decide which <a href='#condition'>conditions</a> are needed in our applcation. 
+<p>Because the invoices are issued by different companies and hence have different layouts, there will be needed as many parsing templates as many layouts are. Therefore, our application has to <b>A)</b>recognize which template should be applied to a PDF page. 
 <p>Additionaly, as invoice can be multi-page, our application has to <b>B)</b>detect the first page of invoice. 
 <p>(A) and (B) can be joined into one <a href='#condition'>condition</a>. Let's name it 'FirstPageOfDocument'. 
-<p>When a template has its FirstPageOfDocument met on a PDF page, it has to be chosen for processing this page and the next ones until the first page of a new invoice is detected. And when a new invoice starts, the previously captured fields are to be processed and cleaned.
-<p>Thus, the condition collection in our application will consist of only condition FirstPageOfDocument which is sufficient for the task.
+<p>When a template has its FirstPageOfDocument satisfied on a PDF page, it must be chosen for processing that page and the next ones until the first page of a new invoice is detected. And when a new invoice starts, the previously captured fields are to be processed and cleaned.
+<p>So, the condition collection in our application should consist of only condition FirstPageOfDocument which is sufficient for the task.
 
 
 <h3>Custom algorithm</h3>
@@ -327,16 +327,7 @@ Refer to <a href='#InvoiceParser'>InvoiceParser</a> as a real code.
 <h1><a name="templateEditor">Template Editor</a></h1>
 Template Editor is a GUI object that is called in a desktop application whenever configuring <a href="#template">a template</a> is required. 
 
-<p>Configuring a template consists of the following steps:
-<ul>
-<li>open a PDF file that is to be parsed;</li>
-<li>create <a href="#anchor">anchors</a> required for <a href="#condition">conditions</a>;</li>
-<li>configure <a href="#condition">conditions</a> with the created anchors;</li>
-<li>set <a href='#field'>fields</a>;</li>
-<li>create <a href='#anchor'>anchors</a> required for fields and link fields to them;</li>
-<li>test the template on another appropriate PDF pages;</li>
-</ul>
-See <a href='#tutorialTemplateEditor'>the tutorial of setting template</a> for more details.
+<p>How to configure a template, see in <a href='#tutorialTemplateEditor'>the tutorial of setting template</a>.
 
 <h2><a name='templateEditorApi'>Template Editor API</a></h2>
 <table>
@@ -355,14 +346,15 @@ See <a href='#tutorialTemplateEditor'>the tutorial of setting template</a> for m
 This tutorial proceeds with the sample considered in <a href='#tutorialApi'>the tutorial of custom application</a>.
 <p>Refer to <a href='#InvoiceParser'>InvoiceParser</a> as the sample's custom application.
 
+
 <h3>Open Template Editor</h3>
-<p>Template Editor is open in a custom application, so the way of doing this depends on it. In <a href='#InvoiceParser'>InvoiceParser</a> a <a href="#template">template</a> can be created from scratch or copied from an existing one and then modified as needed. Let's start with a blank template: click the blank row in the table in the main window of InvoiceParser and then click button Edit.
+<p>The way of opening Template Editor depends on a custom application. In <a href='#InvoiceParser'>InvoiceParser</a> a <a href="#template">template</a> can be created from scratch or copied from an existing one and then modified as needed. Let's start with a blank template: click the blank row in the table in the main window of InvoiceParser and then click button Edit.
 <p class='screenshot_title'>Open a test PDF file in Template Editor:
 <img src='img/tutorial0.png'/>
 
 <h3><a name='tutorialAnchor'>Create anchors</a></h3>
 <p>Templates in our custom application have 1 condition and 4 fields (see <a href='#customConfiguration'>the configuration</a>). 
-<p>Let's first create anchors for the condition. As FirstPageOfDocument is intended to identify the type of a document, it needs an anchor targeted to some fragment of a document that is unique to its type. Obviously, such a fragment must identify the document type with a high confidence. Usually the logo of a company that issued a document can serve well this goal.
+<p>Let's first create anchors for the condition. As FirstPageOfDocument is intended to identify the type of a document, it needs an anchor targeted to some fragment of a document that is unique to its type. Obviously, such a fragment must identify the document type with a high confidence. Usually the logo of a company that issued the document can serve well this goal.
 <p class='screenshot_title'>Create an anchor that captures the logo and thus detects if a page corresponds to the template:
 <img src='img/tutorial1.png'/>
 
