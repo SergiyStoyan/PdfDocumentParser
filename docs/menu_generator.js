@@ -18,7 +18,8 @@ Embed SCRIPT tag with menu_generator.js into the very end of HTML body.
 Additionaly, link menu_generator.css
  
 AUXILIARY:
-Open a containing html file with anchor '#_checkInternalLinks' to check it for broken internal links.
+When scrolling, to set the respective menu item, click on a header in the content view.
+To check a containing html file for broken internal links, open it in browser with anchor '#_checkInternalLinks'.
 ************************************************************************/
 var convert = function(mode){
     var getItemsFromContent = function(orderedItemIds){
@@ -66,8 +67,16 @@ var convert = function(mode){
          
     var addMenu2Page = function(){       
         var onClickMenuItem = function(){
+            var id = this.getAttribute('_id');
+            if(!id)
+                return false;
+            window.location.href = window.location.href.replace(/#.*/, '') + '#' + id;
+            return false;
+        };      
+        
+        var onClickItemHeader = function(){
             for(id in items)
-                if(items[id]['menuItem'] == this){
+                if(items[id]['header'] == this){
                     window.location.href = window.location.href.replace(/#.*/, '') + '#' + id;
                     return false;
                 }
@@ -91,6 +100,8 @@ var convert = function(mode){
             e.innerHTML = items[id]['header'].innerText; 
             menu.appendChild(e);
             items[id]['menuItem'] = e;
+            
+            items[id]['header'].addEventListener('click', onClickItemHeader);
         }
         
         var menuContainer = document.createElement('div');
