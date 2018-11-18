@@ -112,41 +112,60 @@ var convert = function(mode){
         menuContainer.appendChild(switchContainer);
         menuContainer.appendChild(menu);
         var content = document.getElementsByClassName('content')[0];
+        content.classList.add('topBorder');
         content.parentNode.insertBefore(menuContainer, content);
         setModeSwithers();
         
         var contentContainer = document.createElement('div');
         contentContainer.classList.add("contentContainer");
         content.parentNode.insertBefore(contentContainer, content);
-        //contentContainer.appendChild(document.getElementsByClassName('header')[0]);       
+        var script;
+        if(document.currentScript)
+            script = document.currentScript;
+        else{
+            var ss = document.getElementsByTagName('script'); 
+            script = ss[ss.length - 1];
+        }
+        
+        if(script.getAttribute('shiftHeaderbyMenuWidth')
+            || window.getComputedStyle(document.body).getPropertyValue('--shift-header-by-menu-width') != 0)
+            contentContainer.appendChild(document.getElementsByClassName('header')[0]);       
+        
         contentContainer.appendChild(content);       
-        //contentContainer.appendChild(document.getElementsByClassName('footer')[0]);       
+        
+        if(script.getAttribute('shiftFooterbyMenuWidth')
+            || window.getComputedStyle(document.body).getPropertyValue('--shift-footer-by-menu-width') != 0)
+            contentContainer.appendChild(document.getElementsByClassName('footer')[0]);       
         contentContainer.style.marginLeft = menuContainer.offsetWidth;
         
-        var getOuterHeight = function(e){
-            var ss = window.getComputedStyle(e);
-            return e.offsetHeight + parseInt(ss['marginTop']) + parseInt(ss['marginBottom']);
-        };        
-        contentContainer.style.minHeight = window.innerHeight + getOuterHeight(document.getElementsByClassName('header')[0]) - getOuterHeight(document.getElementsByClassName('footer')[0]);
+        {//set the window to display the footer at the bottom
+            var cr = content.getBoundingClientRect();
+            var br = document.documentElement.getBoundingClientRect();
+            content.style.minHeight = window.innerHeight + cr.top - br.top + cr.height - br.height;
+        }
     }
 
     var navigate2currentAnchor = function(){
-        var setItemVisible = function(item, visible){
+        var setItemVisibleInContent = function(item, visible){
+            if(mode == '_collapsedContent')
+                item['header'].classList.add('noTopMargin');
+            else
+                item['header'].classList.remove('noTopMargin');
             item['header'].style.display = visible ? 'block': 'none';
-            item['content'].style.display = visible ? 'block': 'none';
+            item['content'].style.display = visible ? 'block': 'none';            
         };
         
         var openItem = function(item){
             for(id in items)
                 if(items[id] != item){
                     if(mode == '_collapsedContent')
-                        setItemVisible(items[id], false);
+                        setItemVisibleInContent(items[id], false);
                     else
-                        setItemVisible(items[id], true);
+                        setItemVisibleInContent(items[id], true);
                     items[id]['menuItem'].classList.remove('current');
                 }
             if(item){
-                setItemVisible(item, true);
+                setItemVisibleInContent(item, true);
                 item['menuItem'].classList.add('current');               
                 
                 {//scroll the menu to get the current menu item visible
@@ -187,7 +206,7 @@ var convert = function(mode){
                         i++;
                         if(i >= orderedItemIds.length)// || level >= (item['id'].match(/_/ig) || []).length + 1)
                             break;
-                        setItemVisible(items[orderedItemIds[i]], true);
+                        setItemVisibleInContent(items[orderedItemIds[i]], true);
                     }
                 }
                 item['header'].scrollIntoView();

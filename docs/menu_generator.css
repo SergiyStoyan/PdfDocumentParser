@@ -1,16 +1,30 @@
-span.h1 {margin:15 0 0 0; font-size1:21px; }
-span.h2 {margin:10 0 0 20; font-size1:19px;}
-span.h3 {margin:6 0 0 40; font-size1:17px; }
-span.h4 {margin:4 0 0 60; font-size1:15px; }
-span.h5 {margin:2 0 0 80; font-size1:15px; }
-span.h6 {margin:0 0 0 100; font-size1:15px; }
+/*span.h1 {margin:15 0 0 0; font-size:1.25em; }
+span.h2 {margin:10 0 0 20; font-size:1.2em;}
+span.h3 {margin:6 0 0 40; font-size:1.15em; }
+span.h4 {margin:4 0 0 60; font-size:1.1em; }
+span.h5 {margin:2 0 0 80; font-size:1.05em; }
+span.h6 {margin:0 0 0 100; font-size:1em; }*/
+span.h1 {margin:5 0 0 0;}
+span.h2 {margin:5 0 0 20;}
+span.h3 {margin:5 0 0 40;}
+span.h4 {margin:5 0 0 60;}
+span.h5 {margin:5 0 0 80;}
+span.h6 {margin:5 0 0 100;}
 
-span.inline{
-    display: inline;
+.noTopMargin{
+    margin-top: 0;
+}
+
+:root {/*not supported by older browsers like IE11 so as an alternative, use the custom parameters in script tag*/
+    --shift-header-by-menu-width: 0;
+    --shift-footer-by-menu-width: 0;
+}
+
+.topBorder{
+    border-top:2px solid #ccc;
 }
 
 .contentContainer{
-    border-top:2px solid #ccc;
     vertical-align:top;
     display1:inline-block;
     padding: 0 50 0 50;
@@ -69,6 +83,6 @@ span.inline{
 }
 
 .switchLink{
-    font-size: 12px;    
+    font-size: 0.8em;    
 }
 
