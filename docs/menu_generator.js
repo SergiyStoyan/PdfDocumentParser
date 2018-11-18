@@ -182,7 +182,7 @@ var convert = function(mode){
                     if(itemPosition > 0)
                         top = items[orderedItemIds[itemPosition - 1]]['menuItem'].getBoundingClientRect().top;
                     else
-                        top = item['menuItem'].parentElement.getBoundingClientRect().top;
+                        top = - menuContainer.scrollTop;
                     if(top < 0)
                         menuContainer.scrollTop += top;
                     else{
@@ -190,7 +190,7 @@ var convert = function(mode){
                         if(itemPosition + 1 < orderedItemIds.length)
                             bottom = items[orderedItemIds[itemPosition + 1]]['menuItem'].getBoundingClientRect().bottom;
                         else
-                            bottom = item['menuItem'].parentElement.getBoundingClientRect().bottom;
+                            bottom = - menuContainer.scrollTop + menuContainer.scrollHeight + menuContainerRect.bottom;
                         if(bottom > menuContainerRect.bottom)
                             menuContainer.scrollTop += bottom - menuContainerRect.bottom;
                     }
