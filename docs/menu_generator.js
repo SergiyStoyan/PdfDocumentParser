@@ -29,8 +29,7 @@ To check a containing html file for broken internal links, open it in browser wi
 By default the header and the footer retain their initial positions but can be shifted right together with the content by setting a non-zero shiftHeaderbyMenuWidth and shiftFooterbyMenuWidth attributs in the SCRIPT tag or in :root in menu_generator.css
 ************************************************************************/
 var convert = function(mode){
-    var getItemsFromContent = function(orderedItemIds){
-        var items = {};
+    var parseItemsFromContent = function(items, orderedItemIds){
         var ids = [0];
         var e = document.getElementsByClassName('content')[0].childNodes[0];
         while(e){//if(e.nodeType == Node.COMMENT_NODE)
@@ -261,11 +260,13 @@ var convert = function(mode){
             if(openLocalAnchor(items[id], items[id]['content'], anchorName, false))
                 return true;
         }
+        openItem();
         return false;
     };
 
+    var items = {};
     var orderedItemIds = [];
-    var items = getItemsFromContent(orderedItemIds);
+    parseItemsFromContent(items, orderedItemIds);
     addMenu2Page();
 
     var onHashchange = function(event){
