@@ -179,23 +179,21 @@ var convert = function(mode){
                     var menuContainerRect = menuContainer.getBoundingClientRect();                
                     
                     var itemPosition = orderedItemIds.indexOf(item['id']);                    
-                    var upperItem;
+                    var top;
                     if(itemPosition > 0)
-                        upperItem = items[orderedItemIds[itemPosition - 1]];
+                        top = items[orderedItemIds[itemPosition - 1]]['menuItem'].getBoundingClientRect().top;
                     else
-                        upperItem = item;
-                    var upperItemRect = upperItem['menuItem'].getBoundingClientRect();
-                    if(upperItemRect.top < 0)
-                        menuContainer.scrollTop += upperItemRect.top;
+                        top = item['menuItem'].parentElement.getBoundingClientRect().top;
+                    if(top < 0)
+                        menuContainer.scrollTop += top;
                     else{
-                        var lowerItem;
+                        var bottom;
                         if(itemPosition + 1 < orderedItemIds.length)
-                            lowerItem = items[orderedItemIds[itemPosition + 1]];
+                            bottom = items[orderedItemIds[itemPosition + 1]]['menuItem'].getBoundingClientRect().bottom;
                         else
-                            lowerItem = item;
-                        var lowerItemRect = lowerItem['menuItem'].getBoundingClientRect();
-                        if(lowerItemRect.bottom > menuContainerRect.bottom)
-                            menuContainer.scrollTop += lowerItemRect.bottom - menuContainerRect.bottom;
+                            bottom = item['menuItem'].parentElement.getBoundingClientRect().bottom;
+                        if(bottom > menuContainerRect.bottom)
+                            menuContainer.scrollTop += bottom - menuContainerRect.bottom;
                     }
                     
                     var itemRect = item['menuItem'].getBoundingClientRect();
