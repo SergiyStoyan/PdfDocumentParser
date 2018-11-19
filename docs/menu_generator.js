@@ -159,19 +159,19 @@ var convert = function(mode){
                 window.onscroll = function(){//move menuContainer when scrolling at header or footer
                     var hr = header.getBoundingClientRect();
                     if(hr.bottom > 0){
-                        //menuContainer.style.height = window.innerHeight - hr.bottom;
-                        //menuContainer.scrollTop -= menuContainer.getBoundingClientRect().top - hr.bottom;
+                        //menuContainer.scrollTop -= menuContainer.getBoundingClientRect().top - hr.bottom;//jerks!
+                        menuContainer.style.height = window.innerHeight - hr.bottom;
                         menuContainer.style.top = hr.bottom;
                     }
                     else{                        
                         var fr = footer.getBoundingClientRect();
                         if(fr.top < window.innerHeight){                            
-                            menuContainer.style.top = fr.top - window.innerHeight;
-                            //menuContainer.style.top = 0;
-                            //menuContainer.style.height = fr.top;
+                            //menuContainer.style.top = fr.top - window.innerHeight;
+                            menuContainer.style.top = 0;
+                            menuContainer.style.height = fr.top;
                         }else{
                             menuContainer.style.top = 0;
-                            //menuContainer.style.height = window.innerHeight;
+                            menuContainer.style.height = window.innerHeight;
                         }
                     }
                 };
@@ -204,8 +204,7 @@ var convert = function(mode){
                 item['menuItem'].classList.add('current');               
                 
                 {//scroll the menu to get the current menu item visible
-                    var menuContainerRect = menuContainer.getBoundingClientRect();                
-                    
+                    var menuContainerRect = menuContainer.getBoundingClientRect();   
                     var itemPosition = orderedItemIds.indexOf(item['id']);                    
                     var top;
                     if(itemPosition > 0)
