@@ -159,17 +159,19 @@ var convert = function(mode){
                 window.onscroll = function(){//move menuContainer when scrolling at header or footer
                     var hr = header.getBoundingClientRect();
                     if(hr.bottom > 0){
-                        menuContainer.style.top = hr.bottom;
                         //menuContainer.style.height = window.innerHeight - hr.bottom;
+                        //menuContainer.scrollTop -= menuContainer.getBoundingClientRect().top - hr.bottom;
+                        menuContainer.style.top = hr.bottom;
                     }
                     else{                        
                         var fr = footer.getBoundingClientRect();
                         if(fr.top < window.innerHeight){                            
                             menuContainer.style.top = fr.top - window.innerHeight;
-                            //menuContainer.style.height = window.innerHeight + cr.bottom - window.innerHeight;
+                            //menuContainer.style.top = 0;
+                            //menuContainer.style.height = fr.top;
                         }else{
                             menuContainer.style.top = 0;
-                            //menuContainer.style.height = '100%';
+                            //menuContainer.style.height = window.innerHeight;
                         }
                     }
                 };
@@ -240,9 +242,11 @@ var convert = function(mode){
                     }
                 }
                 item['header'].scrollIntoView();
-            }else
-                //document.getElementsByClassName('content')[0].scrollIntoView();
+            }else{//no item to open
+                document.getElementsByClassName('content')[0].scrollIntoView();//to trigger onScroll and set menu position
                 window.scrollTo(0, 0);
+                menuContainer.scrollTop = 0;
+            }
         };
         
         var openLocalAnchor = function(item, e, anchorName, isHeader){
