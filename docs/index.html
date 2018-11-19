@@ -12,7 +12,7 @@
 
 <div class='content'>
 <h1><a name='overview'>Overview</a></h1>
-<p>PdfDocumentParser is a parsing engine intended to extract of text/images from PDF documents that conform to a recognizable graphic layout - such as invoices and the like. The main parsing approach is based on finding certain text or image fragments in page and then extracting text/images located relatively to those fragments.
+<p>PdfDocumentParser is a parsing engine intended to extract text/images from PDF documents that conform to a recognizable graphic layout - such as invoices and the like. The main parsing approach is based on finding certain text or image fragments in page and then extracting text/images located relatively to those fragments.
 <p>Within this scope PdfDocumentParser is capable of the following:
 <ul>
 <li>operating with text represented by PDF entities (meant for native PDF files);</li>
@@ -35,56 +35,58 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 
 
 <h1><a name="template">Template</a></h1>
-<p>To parse documents that comply with a certain layout (e.g. invoices issued by the same company) a parsing template is to be configured. It contains information what data should be extracted and how. 
-<p>Obviously, applying a template to documents with layout different from that it was designed for, would bring to incorrect parsing.
+<p>A parsing template is used to to parse documents that comply with the same layout (e.g. invoices issued by the same company). It contains information what data should be extracted, where and how. 
+<p>Obviously, applying a template to documents with layouts different from that it was designed for, brings to incorrect parsing.
 <p>Configuring a template is done by <a href='#templateEditor'>Template Editor<a/>
 
 
 
 <h2><a name='anchor'>Anchor</a></h2>
-<p>An anchor is a fragment of either text or image extracted from a test PDF page in order to be looked for on any PDF page when needed afterwards. An anchor can be used in the following ways:
+<p>An anchor is a fragment of either text or image extracted from a PDF page in order to be looked for on any needed page afterwards. An anchor can be used in the following ways:
 <ul>
-<li>can be linked by <a href="#field">fields</a>;</li> 
-<li>can be engaged in <a href="#condition">conditions</a>;</li>
-<li>can be linked by <a href='#anchor'>anchors</a>;</li>
+<li>be linked by <a href="#field">fields</a>;</li> 
+<li>be engaged in <a href="#condition">conditions</a>;</li>
+<li>be linked by <a href='#anchor'>anchors</a>;</li>
 </ul>
-<p>Being used does not impose any restriction to an anchor. Thus, an anchor can be used in many ways at the same time.
+<p>Being used does not impose any restriction on the anchor. Thus, an anchor can be used in many ways at the same time.
  
 
 <h3>General structure of anchor</h3>
-<p>An anchor consists of a single or many elements of the same type where the first element is 'master' and the rest are 'secondary'. Position of the master element is considered the position of the anchor itself. Secondary elements are searched in relation to the master element's position. 
-<p>If some of an anchor's elements is not found, the anchor itself is set not found too.
-<p>The rectangle where an anchor was located on the page while creating, is named 'initial rectangle' and contains all the anchor's elements.
+<p>An anchor consists of a single or many elements of the same type which can be either text characters or images. The first element is 'master' and the rest are 'secondary'. Position of its master element is position of the anchor itself. 
+<p>When an anchor is searched on a page, its master element is searched first and, if found, then its secondary elements are checked being bonded to the master position. Anchor is set found only when all its elements are found. 
+<p>The rectangle where an anchor was located on PDF page while creating, is named 'initial rectangle' and contains all the anchor's elements.
 
 <h3>Anchor linked to anchor</h3>
 <p>A linked anchor is named 'child' of the linking one which is named 'parent'. 
-<p>When an anchor is linked to another anchor, its search area (when it is not the entire page) becomes related to its parent anchor's position.
+<p>When an anchor is linked to another anchor, its search area (if it is a rectange and not entire page) becomes related to its parent anchor's position.
 <p>When a parent anchor is not found, its child anchors are set not found too.
 <p>Number of anchors linked successively in a chain can be any.
 
 
 
 <h3><a name='anchorTypes'>Anchor types</a></h3>
-<p>Each of types is processed by its own very different way therefore choosing the right type is crucial in successful and robust parsing. 
+<p>Each of types is processed by its own very different way, therefore choosing the right type is crucial in successful and robust parsing. 
 <p>When using OcrText and ImageData types, be acquainted with <a href='#scannedDocuments'>scanned document treatment</a>.
 
 <h4><a name='anchorPdfText'>PdfText</a></h4>
-<p>This type is based on native text presentation inside a PDF file. Elements of this type are character boxes extracted from PDF entities which together present a text to be found in page. Every character is a separate anchor element.
-<p>It should be used whenever possible because it is most robust and fast. 
+<p>This type can only be used to anchor to text. It should be used whenever possible because it is most robust and fast. 
+<p>It is based on the native text presentation inside a PDF file. Elements of this type are character boxes extracted from PDF entities. Every character is a separate anchor element. Together they present a text fragment to be found in page.
 
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'>Position deviation</td>
-<td>It allows to loose bonds between master element and secondary elements in a anchor when for some reason they can shift relatively to each other. It is measured in pixels and must be a positive float number, non-zero even for identical documents because of discrepancy reasoned by internal image re-scaling.</td></tr>
+<td>It allows to loose bonds between master element and secondary elements in an anchor when for some reason they can shift relative to each other. It is measured in pixels and must be a positive float number, non-zero even for identical documents because of discrepancy reasoned by internal image re-scaling.
+<br>It makes no sense for an anchor having no secondary element.</td></tr>
 <tr><td class='title_column'>Position deviation is absolute</td>
-<td>If set then position of each element is compared to the master element's position, otherwise, with the previous element's position. It makes no sense if the anchor contains no secondary element.</td></tr>
+<td>If True, position deviation of every secondary element is measured by the master element's position, otherwise, by position of the previous element. The latter is looser than the former.</td></tr>
 <td class='title_column'>Search rectangle margin</td>
-<td>When set, area where the anchor is looked for is the entire page. Otherwise, the searched area is restricted by Search rectangle margin that specifies a rectangular area around the anchor's initial rectangle. It is measured in pixels. It should be set only when it is known that the anchor is always belongs to a certain part of page. It helps to avoid undesired matching and speed up processing.</td></tr>
+<td>When set, the area where the anchor is searched is the entire page. Otherwise, the search area is restricted by Search rectangle margin that specifies a rectangular area around the anchor's initial rectangle. It is measured in pixels. It should be used only when it is known definitely that the anchor is always located in a certain part of page. It helps to avoid undesired matching and speed up processing.</td></tr>
 </table>
 
 <h4>OcrText</h4>
-<p>This type works similarly to <a href='#anchorPdfText'>PdfText</a> type except that difference that character boxes are provided by OCR engine instead of native PDF entities.
-<p>It should be used only when PdfText type does not work which happens on scanned or mixed documents. It cannot not give 100% accuracy like PdfText type does and will acceptably work only for images with resolution not less than 300dpi. Also, its perfomance is slower than that of PdfText type. 
+<p>This type can only be used to anchor to text. It should be used only when PdfText does not work which happens on scanned or mixed documents. 
+<p>It works similarly to <a href='#anchorPdfText'>PdfText</a> type except that difference that character boxes are provided by OCR engine instead of native PDF entities.
+<p>In contrast to PdfText, OcrText type cannot secure 100% accuracy and can acceptably work only with images with resolution not less than 300dpi. Its perfomance is slower than that of PdfText type. 
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'>Position deviation</td>
@@ -94,15 +96,17 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 <td class='title_column'>Search rectangle margin</td>
 <td>See <a href='#anchorPdfText'>PdfText</a>.</td></tr>
 <tr><td class='title_column'>OCR entire page</td>
-<td><span class='attention'>NOTE: </span>This switch can completely change parsing. It is because OCR by Tesseract of a larger image and a smaller fragment can give different recognition of the same text. 
+<td><span class='attention'>NOTE: </span>This switch can completely change parsing. It is because OCR by Tesseract of a larger and a smaller fragments can give different recognition of the same text. 
 <br>Which is better? OCR of entire page gives sometimes more correct results, sometimes otherwise. But it always takes considerably longer time than OCR of a smaller fragment defined by Search rectangle margin. 
 <br>This switch makes sense only if Search rectangle margin is set, otherwise the entire page is OCR'ed anyway.</td></tr>
 </table>
 
 <h4>ImageData</h4>
-<p>Elements of this type are images which are fragments of page selected while creating an anchor.
-<p>This type should be used when anchoring to images, not to text, is required. Its perfomance is slower than that of PdfText type. Also, it may not provide 100% accuracy on scanned documents if they have essential discrepancy in size, contrast, brightness, orientation etc. In such cases, OcrText type may work better.
-<p><span class='attention'>NOTE: </span> even when an image fragment is sought within the same page where it was extracted from, it cannot be found without a non-zero tolerance. It happens because the search hash is produced after downsizing an image and thus pixel interpolation while restoring to the initial size gives different results for an entire image and for its fragment. 
+<p>This type is used to anchor to images. 
+<p>Elements of an ImageData anchor are images that were selected on PDF page while creating the anchor.
+<p>For native PDF documents where images are without discrepancy in quality, ImageData type works quite well. 
+<p>When anchoring to a text which is presented by image which happens in scanned or mixed documents, there is a choice between ImageData and OcrText types. Which one to choose? If images do not change much and look the same in all documents (it does not matter how poor their quality is), ImageData is more reliable and fast. However, if images have essential discrepancy in size, contrast, brightness, orientation etc., as can happen in scanned documents, OcrText may work better.
+<p><span class='attention'>NOTE: </span> even when an image fragment is searched within the same page where it was extracted from, it cannot be found without a non-zero tolerance. It happens because search hashes of a whole page image and a fragment are produced after downsizing them, and then, when restoring from the hashes, pixel interpolation gives different results for the entire page and the fragment. 
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'>Position deviation</td>
@@ -110,13 +114,13 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 <tr><td class='title_column'>Position deviation is absolute</td>
 <td>See <a href='#anchorPdfText'>PdfText</a>.</td></tr>
 <td class='title_column'>Search rectangle margin</td>
-<td>See <a href='#anchorPdfText'>PdfText</a>. It reduces search time and helps to avoid undesired matching.</td></tr>
+<td>See <a href='#anchorPdfText'>PdfText</a>.</td></tr>
 <tr><td class='title_column'>Brightness tolerance</td>
-<td>While for native PDF documents it can be 0.1 - 0.2, scanned documents which have brightness discrepancy may need it higher. A higher tolerance brings to a less certain result.</td></tr>
+<td>While for native PDF documents it can be 0.1 - 0.2, scanned documents which have brightness discrepancy may need it higher. A higher tolerance gives a less accuracy.</td></tr>
 <tr><td class='title_column'>Different pixel number tolerance</td>
-<td>While for native PDF documents it can be 0.1 - 0.2, scanned documents which have brightness discrepancy may need it higher. A higher tolerance brings to a less certain result.</td></tr>
+<td>While for native PDF documents it can be 0.1 - 0.2, scanned documents which have brightness discrepancy may need it higher. A higher tolerance gives a less accuracy.</td></tr>
 <tr><td class='title_column'>Find best match</td>
-<td>If set, looks for the match with the least difference, otherwise returns the first match within the tolerance specified.</td></tr>
+<td>If True, looks for the match with the least difference, otherwise returns the first match within the tolerance specified.</td></tr>
 </table>
 
 
@@ -132,10 +136,6 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 <p>A condition is a boolean expression that depends on anchors and is set individually in every template.
 <p>The meaning of a condition can be True or False and depends on pair [PDF page, template]. It can be checked by PdfDocumentParser <a href='#api'>API</a> method <a href='#IsCondition'><code>IsCondition(<condition name>)</code></a>. 
 <p>Conditions are identified by their names. The condition collection is dictated by the logic of a custom application, therefore condition names are predetermined within the application's scope and are the same for all templates that belong to it.
-
-<h3>Mostly expected condition</h3>
-<p>While the condition collection depends on custom application, the following one is unavoidable in any application that operates with more than one template: "is this template appropriate for this page"?
-<p>Depending on parsing task, this condition may include additional checks.
 
 <h3>Boolean expression</h3>
 Condition expressions are composed of the following symbols: &lt;anchor id&gt;, '!', '&', '|', '(', ')'. When an anchor referenced by &lt;anchor id&gt; is found then it is treated as True, otherwise False. The meaning of a condition is the boolean result of its expression. 
@@ -161,14 +161,14 @@ For more details refer to <a href='#tutorialCondition'>the tutorial</a>.
 
 <h2><a name="field">Field</a></h2>
 <p>A field defines certain text or image that is to be extracted from a PDF page. 
-<p>Fields are identified by their names. The field collection is dictated by the logic of a custom application and thus their names are predetermined within its scope and are the same for all templates that belong to it. 
+<p>Fields are identified by their names. The field collection is dictated by the logic of a custom application, and thus their names are predetermined within its scope and are the same for all templates that belong to it. 
 
 <h3>Anchoring</h3>  
 <p>A field optionally can be linked to an anchor.
 <p>When a field has no anchor, its selecting rectangle retains the initial position which was its position during creation.
-<p>When a field has anchor, PdfDocumentParser locates the field's rectangle depending on its anchor's actual position so that if on some page the anchor shifts, the field shifts together with it. 
-<p>When it is known definitely about a field that it appears on every page and always keeps the same position then there is no need to link it to an anchor.
-<p>In scanned documents whose margins vary, fields cannot have constant positions and so always must be processed with anchors.
+<p>When a field is linked to an anchor, its rectangle is bonded to its anchor's actual position so that if on some page the anchor shifts, the field shifts together with it. 
+<p>When it is known definitely that a field appears on every page and always keeps the same position then there is no need to link it to an anchor.
+<p>In scanned documents whose margins vary, fields cannot retain constant positions and so always must be processed with anchors.
 <p>It is advisable always to link fields to anchors thus minimizing probability of mistaken parsing.
 
 
@@ -176,13 +176,13 @@ For more details refer to <a href='#tutorialCondition'>the tutorial</a>.
 <p>When using OcrText and ImageData types, be acquainted with <a href='#scannedDocuments'>scanned document treatment</a>.
 
 <h4><a name='fieldPdfText'>PdfText</a></h4>
-Its value is a text surrounded by field's rectangle. It is obtained from PDF entities.
+Its value is a text surrounded by field's rectangle. It is obtained from native PDF entities. So it does not work on images.
 <h4>OcrText</h4>
 Its value is a text surrounded by field's rectangle. It is recognized by OCR engine.
-<p>For native PDF documents this type should never be used. But for scanned documents it is the only way to get text in the digital form which can be recorded in a file or database, indexed, searched and so on.
+<p>For native PDF documents, this type should never be used. But for scanned documents, it is the only way to get text in digital form which can be recorded to a file or database, indexed, searched and so on.
 <h4>ImageData</h4>
 Its value is a <code>System.Drawing.Bitmap</code> object that contains a fragment of page surrounded by the field's rectangle. 
-<p>It is used when image is required rather than text or when OCR is not reliable.
+<p>It is used when image is required rather than text or when OcrText type is not reliable.
 
 
 <h3>Set field</h3> 
@@ -202,7 +202,7 @@ Its value is a <code>System.Drawing.Bitmap</code> object that contains a fragmen
 
 
 <h1><a name='api'>API</a></h1>
-Refer to <a href='#InvoiceParser'>InvoiceParser</a> as an alive example of using PdfDocumentParser in a custom application.
+Refer to <a href='#InvoiceParser'>InvoiceParser</a> as an live example of using PdfDocumentParser in a custom application.
 
 <h2>Methods</h2>
 <table>
@@ -217,7 +217,7 @@ Refer to <a href='#InvoiceParser'>InvoiceParser</a> as an alive example of using
 
 
 <h2>Pseudo-code</h2>
-The main idea of using PdfDocumentParser in a custom application is that custom operations are performed depending on custom <a href='#condition'>conditions</a>. 
+The main idea of using PdfDocumentParser in an application is that custom operations are performed depending on custom <a href='#condition'>conditions</a>. 
 <p>Because of the fact that the collection of <a href='#condition'>conditions</a> is determined by a custom application, it is impossible to outline 'the most common algorithm' of using PdfDocumentParser. But some basic algorithm of processing a PDF file would look like the following:
 <pre>
 foreach(page in PdfFile)
@@ -344,7 +344,7 @@ Template Editor is a GUI object that is called in a desktop application whenever
 
 <h2><a name='tutorialTemplateEditor'>Tutorial: setting template</a></h2>
 This tutorial proceeds with the sample considered in <a href='#tutorialApi'>the tutorial of custom application</a>.
-<p>Refer to <a href='#InvoiceParser'>InvoiceParser</a> as the sample's custom application.
+<p><a href='#InvoiceParser'>InvoiceParser</a> is used as a sample application.
 
 
 <h3>Open Template Editor</h3>
