@@ -1,3 +1,7 @@
+:root {/*not supported by older browsers like IE11 so as an alternative, use the custom parameters in script tag*/
+    --shift-header-and-footer-by-menu-width: 0;
+}
+
 /*span.h1 {margin:15 0 0 0; font-size:1.25em; }
 span.h2 {margin:10 0 0 20; font-size:1.2em;}
 span.h3 {margin:6 0 0 40; font-size:1.15em; }
@@ -15,25 +19,18 @@ span.h6 {margin:5 0 0 100;}
     margin-top: 0;
 }
 
-:root {/*not supported by older browsers like IE11 so as an alternative, use the custom parameters in script tag*/
-    --shift-header-by-menu-width: 0;
-    --shift-footer-by-menu-width: 0;
-}
-
-.topBorder{
-    border-top:2px solid #ccc;
-}
-
 .contentContainer{
     vertical-align:top;
     padding: 0 0 0 0;
     vertical-align:top;
     text-align:left;
     width:auto;
+    overflow:auto;/*removes gaps appearing between block elements due to margin of their childs!*/
 }
 
 .menuContainer{
     max-width: 30%;
+    max-height1: 100%;
     height: 100%;
     top: 0px;
     left: 0px;

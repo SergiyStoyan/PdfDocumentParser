@@ -62,9 +62,10 @@ var convert = function(mode){
                 continue;
             }
             e = e.nextSibling;
-        }
-        return items;
+        };
     };
+    
+    var menuContainer;
     
     var setModeSwithers = function(){
         var switchContainer = document.getElementsByClassName('switchContainer')[0];
@@ -110,44 +111,70 @@ var convert = function(mode){
             items[id]['header'].addEventListener('click', onClickItemHeader);
         }
         
-        var menuContainer = document.createElement('div');
+        menuContainer = document.createElement('div');
         menuContainer.classList.add('menuContainer');
         var switchContainer = document.createElement('div');
         switchContainer.classList.add('switchContainer');
         menuContainer.appendChild(switchContainer);
         menuContainer.appendChild(menu);
         var content = document.getElementsByClassName('content')[0];
-        content.classList.add('topBorder');
         content.parentNode.insertBefore(menuContainer, content);
         setModeSwithers();
         
         var contentContainer = document.createElement('div');
-        contentContainer.classList.add("contentContainer");
+        contentContainer.classList.add("contentContainer");        
+        contentContainer.style.marginLeft = menuContainer.offsetWidth;
         content.parentNode.insertBefore(contentContainer, content);
         
-        var script;
-        if(document.currentScript)
-            script = document.currentScript;
-        else{
-            var ss = document.getElementsByTagName('script'); 
-            script = ss[ss.length - 1];
+        {//get headerAndFooterAreInContentContainer
+            var headerAndFooterAreInContentContainer;
+            var script;
+            if(document.currentScript)
+                script = document.currentScript;
+            else{
+                var ss = document.getElementsByTagName('script'); 
+                script = ss[ss.length - 1];
+            }
+            headerAndFooterAreInContentContainer = parseInt(script.getAttribute('shiftHeaderAndFooterToContentView'))
+                || parseInt(window.getComputedStyle(document.body).getPropertyValue('--shift-header-and-footer-by-menu-width'));
         }
-        if(parseInt(script.getAttribute('shiftHeaderbyMenuWidth'))
-            || parseInt(window.getComputedStyle(document.body).getPropertyValue('--shift-header-by-menu-width')))
-            contentContainer.appendChild(document.getElementsByClassName('header')[0]);       
+        
+        var header = document.getElementsByClassName('header')[0];
+        var footer = document.getElementsByClassName('footer')[0];
+        
+        if(headerAndFooterAreInContentContainer)
+            contentContainer.appendChild(header);       
         
         contentContainer.appendChild(content);       
         
-        if(parseInt(script.getAttribute('shiftFooterbyMenuWidth'))
-            || parseInt(window.getComputedStyle(document.body).getPropertyValue('--shift-footer-by-menu-width')))
-            contentContainer.appendChild(document.getElementsByClassName('footer')[0]);       
-        contentContainer.style.marginLeft = menuContainer.offsetWidth;
+        if(headerAndFooterAreInContentContainer)
+            contentContainer.appendChild(footer);
         
-        {//set the window to display the footer at the bottom
-            var cr = content.getBoundingClientRect();
-            var br = document.documentElement.getBoundingClientRect();
-            content.style.minHeight = window.innerHeight + cr.top - br.top + cr.height - br.height;
-        }
+        {//manage content.style.minHeight
+            if(headerAndFooterAreInContentContainer){//set the content minHeight to display the footer at the bottom
+                content.style.minHeight = window.innerHeight + header.offsetTop - header.offsetHeight - footer.offsetHeight; 
+            }
+            else{   
+                content.style.minHeight = window.innerHeight;                
+                window.onscroll = function(){//move menuContainer when scrolling at header or footer
+                    var hr = header.getBoundingClientRect();
+                    if(hr.bottom > 0){
+                        menuContainer.style.top = hr.bottom;
+                        //menuContainer.style.height = window.innerHeight - hr.bottom;
+                    }
+                    else{                        
+                        var fr = footer.getBoundingClientRect();
+                        if(fr.top < window.innerHeight){                            
+                            menuContainer.style.top = fr.top - window.innerHeight;
+                            //menuContainer.style.height = window.innerHeight + cr.bottom - window.innerHeight;
+                        }else{
+                            menuContainer.style.top = 0;
+                            //menuContainer.style.height = '100%';
+                        }
+                    }
+                };
+            }
+        }         
     }
 
     var navigate2currentAnchor = function(){
@@ -161,6 +188,7 @@ var convert = function(mode){
         };
         
         var openItem = function(item){
+            menuContainer.style.top = 0;
             for(id in items)
                 if(items[id] != item){
                     if(mode == '_collapsedContent')
@@ -174,7 +202,6 @@ var convert = function(mode){
                 item['menuItem'].classList.add('current');               
                 
                 {//scroll the menu to get the current menu item visible
-                    var menuContainer = document.getElementsByClassName('menuContainer')[0];
                     var menuContainerRect = menuContainer.getBoundingClientRect();                
                     
                     var itemPosition = orderedItemIds.indexOf(item['id']);                    
@@ -213,7 +240,9 @@ var convert = function(mode){
                     }
                 }
                 item['header'].scrollIntoView();
-            }
+            }else
+                //document.getElementsByClassName('content')[0].scrollIntoView();
+                window.scrollTo(0, 0);
         };
         
         var openLocalAnchor = function(item, e, anchorName, isHeader){
@@ -260,7 +289,7 @@ var convert = function(mode){
             if(openLocalAnchor(items[id], items[id]['content'], anchorName, false))
                 return true;
         }
-        openItem();
+        openItem(false);
         return false;
     };
 
