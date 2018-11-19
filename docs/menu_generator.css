@@ -1,5 +1,5 @@
 :root {/*not supported by older browsers like IE11 so as an alternative, use the custom parameters in script tag*/
-    --shift-header-and-footer-by-menu-width: 0;
+    --shift-header-and-footer-to-content-view: 0;
 }
 
 /*span.h1 {margin:15 0 0 0; font-size:1.25em; }

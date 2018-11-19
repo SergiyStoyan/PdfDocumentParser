@@ -26,7 +26,7 @@ When scrolling the content, to find the currently visible item in the menu, clic
 
 To check a containing html file for broken internal links, open it in browser with anchor '#_checkInternalLinks'.
 
-By default the header and the footer retain their initial positions but can be shifted right together with the content by setting a non-zero shiftHeaderbyMenuWidth and shiftFooterbyMenuWidth attributs in the SCRIPT tag or in :root in menu_generator.css
+By default the header and the footer retain their initial positions but can be moved to the content view by setting attribute shiftHeaderAndFooterToContentView in the SCRIPT tag or property --shift-header-and-footer-to-content-view in key :root in menu_generator.css to a non-zero.
 ************************************************************************/
 var convert = function(mode){
     var parseItemsFromContent = function(items, orderedItemIds){
@@ -136,7 +136,7 @@ var convert = function(mode){
                 script = ss[ss.length - 1];
             }
             headerAndFooterAreInContentContainer = parseInt(script.getAttribute('shiftHeaderAndFooterToContentView'))
-                || parseInt(window.getComputedStyle(document.body).getPropertyValue('--shift-header-and-footer-by-menu-width'));
+                || parseInt(window.getComputedStyle(document.body).getPropertyValue('--shift-header-and-footer-to-content-view'));
         }
         
         var header = document.getElementsByClassName('header')[0];
