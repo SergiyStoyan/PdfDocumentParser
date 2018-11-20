@@ -161,7 +161,7 @@ For more details refer to <a href='#tutorialCondition'>the tutorial</a>.
 
 
 <h2><a name="field">Field</a></h2>
-<p>A field defines certain text or image that is to be extracted from a PDF page. 
+<p>A field defines certain text or image that is to be extracted from a PDF page. It can be retrieved by PdfDocumentParser <a href='#api'>API</a> method <a href='#GetValue'><code>GetValue()</code></a>.
 <p>Fields are identified by their names. The field collection is dictated by the logic of a custom application, and thus is predetermined within its scope and is the same for all templates that belong to it. 
 
 <h3>Anchoring</h3>  
@@ -212,7 +212,7 @@ Refer to <a href='#InvoiceParser'>InvoiceParser</a> as an live example of using 
 <td>Set active template in PdfDocumentParser.</td></tr>
 <tr><td class='title_column'><a name='IsCondition'><code>Cliver.PdfDocumentParser.Page::IsCondition()</code></a></td>
 <td>Check if a condition is met in page.</td></tr>
-<tr><td class='title_column'><code>Cliver.PdfDocumentParser.Page::GetValue()</code></td>
+<tr><td class='title_column'><a name='GetValue'><code>Cliver.PdfDocumentParser.Page::GetValue()</code></a></td>
 <td>Extract a field from page. If anchor of the field was not found, NULL is returned.</td></tr>
 </table>
 

@@ -342,25 +342,29 @@ switch(anchorName){
     case '_checkInternalLinks':
         var as = document.getElementsByTagName('a');
         var internalLinks = [];
-        var internalAnchorNames = [];
+        var internalAnchors = [];
         for(var i = 0; i < as.length; i++){
             if(as[i].href){
-                var m = as[i].href.match(/^\s*#(.*)/);
+                var m = as[i].href.match(/.*#(.*)/);
                 if(m)
                     internalLinks.push(m[1]);
             }
             if(as[i].name){
-                internalAnchorNames.push(as[i].name);
+                internalAnchors.push(as[i].name);
             }            
         }
+        internalLinks = internalLinks.filter(function (value, index, self){ return self.indexOf(value) === index; });
         var brokenLinks = [];
         for(var i = 0; i < internalLinks.length; i++){
-            if(internalAnchorNames.indexOf(internalLinks[i]) < 0)
+            if(internalAnchors.indexOf(internalLinks[i]) < 0)
                 brokenLinks.push(internalLinks[i]);
         }
+        console.log('internalAnchors:', internalAnchors);
+        console.log('internalLinks:', internalLinks);
+        console.log('brokenLinks:', brokenLinks);
         if(brokenLinks.length){
             alert('There are broken internal links. They have been printed out on the console.');
-            console.log('Broken links:\r\n' + brokenLinks.join('\r\n'));
+            //console.log('Broken links:\r\n' + brokenLinks.join('\r\n'));
         }else
             alert('No broken internal link was found.');
     break;
