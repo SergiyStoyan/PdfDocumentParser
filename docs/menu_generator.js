@@ -158,7 +158,8 @@ var convert = function(mode){
                 content.style.minHeight = window.innerHeight;   
 
                 var isIE = /*@cc_on!@*/false || !!document.documentMode;
-                if(!isIE)//works smoothly on Chrome
+                var isEdge = !isIE && !!window.StyleMedia;
+                if(!isIE && !isEdge)//works smoothly on Chrome
                     window.onscroll = function(){//move menuContainer when scrolling at header or footer
                         var hr = header.getBoundingClientRect();
                         if(hr.bottom >= 0){
