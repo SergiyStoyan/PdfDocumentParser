@@ -84,6 +84,8 @@ namespace Cliver.PdfDocumentParser
 
                 //imageResolution.Value = template.ImageResolution;
 
+                textAutoInsertSpaceThreshold.Value = (decimal)t.TextAutoInsertSpaceThreshold;
+
                 pageRotation.SelectedIndex = (int)t.PageRotation;
                 autoDeskew.Checked = t.AutoDeskew;
                 autoDeskewThreshold.Value = t.AutoDeskewThreshold;
@@ -217,6 +219,8 @@ namespace Cliver.PdfDocumentParser
                 throw new Exception("Name is empty!");
 
             t.Name = name.Text.Trim();
+
+            t.TextAutoInsertSpaceThreshold = (float)textAutoInsertSpaceThreshold.Value;
 
             t.PageRotation = (Template.PageRotations)pageRotation.SelectedIndex;
             t.AutoDeskew = autoDeskew.Checked;

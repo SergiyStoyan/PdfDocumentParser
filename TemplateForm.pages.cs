@@ -137,7 +137,7 @@ namespace Cliver.PdfDocumentParser
                 switch (field.Type)
                 {
                     case Template.Types.PdfText:
-                        return Page.NormalizeText(Pdf.GetTextByTopLeftCoordinates(pages[currentPage].PdfCharBoxs, r));
+                        return Page.NormalizeText(Pdf.GetTextByTopLeftCoordinates(pages[currentPage].PdfCharBoxs, r, pages.ActiveTemplate.TextAutoInsertSpaceThreshold));
                     case Template.Types.OcrText:
                         return Page.NormalizeText(Ocr.This.GetText(pages[currentPage].ActiveTemplateBitmap, r));
                     case Template.Types.ImageData:

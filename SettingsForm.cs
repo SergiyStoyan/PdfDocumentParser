@@ -36,8 +36,6 @@ namespace Cliver.PdfDocumentParser
 
             PdfPageImageResolution.Value = Settings.Constants.PdfPageImageResolution;
             CoordinateDeviationMargin.Value = (decimal)Settings.Constants.CoordinateDeviationMargin;
-
-            TextAutoInsertSpaceThreshold.Value = (decimal)Settings.Constants.TextAutoInsertSpaceThreshold;
         }
 
         private void bCancel_Click(object sender, EventArgs e)
@@ -58,8 +56,6 @@ namespace Cliver.PdfDocumentParser
 
                 Settings.Constants.PdfPageImageResolution = (int)PdfPageImageResolution.Value;
                 Settings.Constants.CoordinateDeviationMargin = (float)CoordinateDeviationMargin.Value;
-
-                Settings.Constants.TextAutoInsertSpaceThreshold = (float)TextAutoInsertSpaceThreshold.Value;
 
                 Settings.Constants.Save();
                 Settings.Constants.Reload();

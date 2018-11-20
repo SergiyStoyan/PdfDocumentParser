@@ -41,6 +41,7 @@ namespace Cliver.PdfDocumentParser
             AutoDetection
         }
 
+        public float TextAutoInsertSpaceThreshold = 6;
         public bool AutoDeskew = false;
         public int AutoDeskewThreshold = 100;
 

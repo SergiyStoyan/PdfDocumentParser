@@ -26,7 +26,6 @@ namespace Cliver.PdfDocumentParser
             [Newtonsoft.Json.JsonIgnore]
             public readonly string HelpFile = @"docs\index.html";
 
-            public float TextAutoInsertSpaceThreshold = 6;
             public int PdfPageImageResolution = 300;//tesseract requires at least 300
             public float CoordinateDeviationMargin = 1f;
 

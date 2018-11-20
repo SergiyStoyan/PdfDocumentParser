@@ -260,7 +260,7 @@ namespace Cliver.PdfDocumentParser
                     case Template.Types.PdfText:
                         {
                             if (currentAnchorControl == null || !(currentAnchorControl is AnchorPdfTextControl))
-                                currentAnchorControl = new AnchorPdfTextControl();
+                                currentAnchorControl = new AnchorPdfTextControl((float)textAutoInsertSpaceThreshold.Value);
                         }
                         break;
                     case Template.Types.OcrText:
@@ -407,7 +407,7 @@ namespace Cliver.PdfDocumentParser
                         {
                             Template.Anchor.PdfText pt = (Template.Anchor.PdfText)a;
                             pt.CharBoxs = new List<Template.Anchor.PdfText.CharBox>();
-                            List<Pdf.Line> lines = Pdf.RemoveDuplicatesAndGetLines(selectedPdfCharBoxs, false);
+                            List<Pdf.Line> lines = Pdf.RemoveDuplicatesAndGetLines(selectedPdfCharBoxs, -1);
                             if (lines.Count < 1)
                                 break;
                             foreach (Pdf.Line l in lines)

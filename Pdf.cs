@@ -199,12 +199,12 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public static string GetTextByTopLeftCoordinates(List<CharBox> cbs, System.Drawing.RectangleF r)
+        public static string GetTextByTopLeftCoordinates(List<CharBox> cbs, System.Drawing.RectangleF r, float textAutoInsertSpaceThreshold)
         {
             cbs = removeDuplicates(cbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)));
             cbs = cbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)).ToList();
             List<string> ls = new List<string>();
-            foreach (Line l in getLines(cbs, true))
+            foreach (Line l in getLines(cbs, textAutoInsertSpaceThreshold))
             {
                 StringBuilder sb = new StringBuilder();
                 foreach (CharBox cb in l.CharBoxes)
@@ -225,9 +225,9 @@ namespace Cliver.PdfDocumentParser
             return bts_.ToList();
         }
 
-        public static List<Line> RemoveDuplicatesAndGetLines(IEnumerable<CharBox> cbs, bool spaceAutoInsert)
+        public static List<Line> RemoveDuplicatesAndGetLines(IEnumerable<CharBox> cbs, float textAutoInsertSpaceThreshold)
         {
-            return getLines(removeDuplicates(cbs), spaceAutoInsert);
+            return getLines(removeDuplicates(cbs), textAutoInsertSpaceThreshold);
         }
 
         static List<CharBox> removeDuplicates(IEnumerable<CharBox> cbs)
@@ -247,8 +247,9 @@ namespace Cliver.PdfDocumentParser
             return bs;
         }
 
-        static List<Line> getLines(IEnumerable<CharBox> cbs, bool spaceAutoInsert)
+        static List<Line> getLines(IEnumerable<CharBox> cbs, float textAutoInsertSpaceThreshold)
         {
+            bool spaceAutoInsert = textAutoInsertSpaceThreshold > 0;
             cbs = cbs.OrderBy(a => a.R.X).ToList();
             List<Line> lines = new List<Line>();
             foreach (CharBox cb in cbs)
@@ -267,7 +268,7 @@ namespace Cliver.PdfDocumentParser
                         if (spaceAutoInsert && cb.Char != " " && lines[i].CharBoxes.Count > 0)
                         {
                             CharBox cb0 = lines[i].CharBoxes[lines[i].CharBoxes.Count - 1];
-                            if (cb0.Char != " " && cb.R.Left - cb0.R.Right > (cb.R.Width + cb.R.Height) / Settings.Constants.TextAutoInsertSpaceThreshold)
+                            if (cb0.Char != " " && cb.R.Left - cb0.R.Right > (cb.R.Width + cb.R.Height) / textAutoInsertSpaceThreshold)
                                 lines[i].CharBoxes.Add(new CharBox { Char = " ", R = new System.Drawing.RectangleF((cb.R.Left + cb0.R.Right) / 2, 0, 0, 0) });
                         }
                         lines[i].CharBoxes.Add(cb);

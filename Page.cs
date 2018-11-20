@@ -469,7 +469,7 @@ namespace Cliver.PdfDocumentParser
             switch (field.Type)
             {
                 case Template.Types.PdfText:
-                    return Pdf.GetTextByTopLeftCoordinates(PdfCharBoxs, r);
+                    return Pdf.GetTextByTopLeftCoordinates(PdfCharBoxs, r, pageCollection.ActiveTemplate.TextAutoInsertSpaceThreshold);
                 case Template.Types.OcrText:
                     return Ocr.This.GetText(ActiveTemplateBitmap, r);
                 case Template.Types.ImageData:
