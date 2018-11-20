@@ -31,6 +31,8 @@ namespace Cliver.PdfDocumentParser
 
         //public int ImageResolution = 300;//tesseract requires at least 300
 
+        public float TextAutoInsertSpaceThreshold = 6;
+
         public PageRotations PageRotation = PageRotations.NONE;
         public enum PageRotations
         {
@@ -41,7 +43,6 @@ namespace Cliver.PdfDocumentParser
             AutoDetection
         }
 
-        public float TextAutoInsertSpaceThreshold = 6;
         public bool AutoDeskew = false;
         public int AutoDeskewThreshold = 100;
 

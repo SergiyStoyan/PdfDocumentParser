@@ -55,6 +55,7 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 <p>Anchors are identified by a number assigned automatically.
 <p>An anchor consists of a single or many elements of the same type which can be either text characters or images. The first element is 'master' and the rest are 'secondary'. Position of its master element is position of the anchor itself. 
 <p>When an anchor is searched on a page, its master element is searched first and, if found, then its secondary elements are checked being bonded to the master position. Anchor is set found only when all its elements are found. 
+<p><span class='attention'>NOTE: </span>Only the first match on page is used to locate the anchor. No further match is searched.
 <p>The rectangle where an anchor was located on PDF page while creating, is named 'initial rectangle' and contains all the anchor's elements.
 
 <h3>Anchor linked to anchor</h3>
@@ -62,6 +63,7 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 <p>When an anchor is linked to another anchor, its search area (if it is a rectange and not entire page) becomes related to its parent anchor's position.
 <p>When a parent anchor is not found, its child anchors are set not found too.
 <p>Number of anchors linked successively in a chain can be any.
+<p><span class='attention'>NOTE: </span>A parent anchor is searched as usual, meaning that only the first match is considered. Even if a proper match for a parent and its child exists on a page but it is not the first match for the parent, the child is set not found.
 
 
 
@@ -194,13 +196,19 @@ Its value is a <code>System.Drawing.Bitmap</code> object that contains a fragmen
 
 
 
-<h2><a name='scannedDocumentSettings'>Scanned document options</a></h2>
+<h2><a name='templateSettings'>Settings</a></h2>
 
-<p>In a template configured for scanned documents, it is always advisable to activate the page auto-deskew option. 
-<p>Also, if pages have wrong orientation, the page rotation option must be used to get OctText type working properly.
-
-
-
+<table>
+<tr><th class='title_column'>Parameter</th><th>Description</th></tr>
+<tr><td class='title_column'><a name='AutoDeskew'>Auto-Deskew</a></td>
+<td>It is used for scanned documents. It is always advisable to keep it active in templates targeted to scanned documents. </td></tr>
+<tr><td class='title_column'><a name='PageRotation'>Rotate Pages</a></td>
+<td>It is used mostly for scanned documents. A page must be correctly oriented to get OCR working properly on it.</td></tr>
+<tr><td class='title_column'><a name='TextAutoInsertSpaceThreshold'>Space Auto-Insert Threshold</a></td>
+<td>It is used while splitting text, captured for PdfText field, onto words.
+<br>Also, it is used when displaying PdfText anchor's patterns but has no influence on parsing here. 
+<br>When needed, it should be tuned experimentally.</td></tr>
+</table>
 
 
 
@@ -427,9 +435,6 @@ PdfDocumentParser has parameters that are the same within application's scope an
 <tr><td class='title_column'><a name='CoordinateDeviationMargin'>CoordinateDeviationMargin</a></td>
 <td>It is a zero threshold when comparing pixel coordinates which may have slight discrepancy because of conversions. 
 <p>Usually there is no need to touch it.</td></tr>
-<tr><td class='title_column'><a name='TextAutoInsertSpaceThreshold'>TextAutoInsertSpaceThreshold</a></td>
-<td>It is used to split captured text in PdfText fields onto words. Also, it is used when displaying PdfText anchor's patterns but has no influence on parsing. 
-<p>When needed, it should be tuned experimentally.</td></tr>
 </table>
 
 

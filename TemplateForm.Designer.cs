@@ -31,6 +31,8 @@
             this.picture = new System.Windows.Forms.PictureBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.textAutoInsertSpaceThreshold = new System.Windows.Forms.NumericUpDown();
+            this.label12 = new System.Windows.Forms.Label();
             this.anchorsContainer = new System.Windows.Forms.SplitContainer();
             this.anchors = new System.Windows.Forms.DataGridView();
             this.Id3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -87,8 +89,6 @@
             this.About = new System.Windows.Forms.LinkLabel();
             this.ExtractFieldsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.textAutoInsertSpaceThreshold = new System.Windows.Forms.NumericUpDown();
-            this.label12 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -98,6 +98,7 @@
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.anchorsContainer)).BeginInit();
             this.anchorsContainer.Panel1.SuspendLayout();
             this.anchorsContainer.Panel2.SuspendLayout();
@@ -115,7 +116,6 @@
             this.panel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).BeginInit();
             this.SuspendLayout();
             // 
             // picture
@@ -187,6 +187,33 @@
             this.splitContainer2.Size = new System.Drawing.Size(429, 629);
             this.splitContainer2.SplitterDistance = 425;
             this.splitContainer2.TabIndex = 32;
+            // 
+            // textAutoInsertSpaceThreshold
+            // 
+            this.textAutoInsertSpaceThreshold.DecimalPlaces = 2;
+            this.textAutoInsertSpaceThreshold.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.textAutoInsertSpaceThreshold.Location = new System.Drawing.Point(367, 84);
+            this.textAutoInsertSpaceThreshold.Name = "textAutoInsertSpaceThreshold";
+            this.textAutoInsertSpaceThreshold.Size = new System.Drawing.Size(52, 20);
+            this.textAutoInsertSpaceThreshold.TabIndex = 64;
+            this.textAutoInsertSpaceThreshold.Value = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(221, 86);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(145, 13);
+            this.label12.TabIndex = 65;
+            this.label12.Text = "Space Auto-Insert Threshold:";
             // 
             // anchorsContainer
             // 
@@ -512,18 +539,18 @@
             this.label21.AutoSize = true;
             this.label21.Location = new System.Drawing.Point(143, 26);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(72, 13);
+            this.label21.Size = new System.Drawing.Size(74, 13);
             this.label21.TabIndex = 63;
-            this.label21.Text = "Auto-deskew:";
+            this.label21.Text = "Auto-Deskew:";
             // 
             // label14
             // 
             this.label14.AutoSize = true;
             this.label14.Location = new System.Drawing.Point(244, 26);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(122, 13);
+            this.label14.Size = new System.Drawing.Size(124, 13);
             this.label14.TabIndex = 61;
-            this.label14.Text = "Auto-deskew Threshold:";
+            this.label14.Text = "Auto-Deskew Threshold:";
             // 
             // label9
             // 
@@ -802,33 +829,6 @@
             this.label5.TabIndex = 59;
             this.label5.Text = "[";
             // 
-            // textAutoInsertSpaceThreshold
-            // 
-            this.textAutoInsertSpaceThreshold.DecimalPlaces = 2;
-            this.textAutoInsertSpaceThreshold.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.textAutoInsertSpaceThreshold.Location = new System.Drawing.Point(367, 84);
-            this.textAutoInsertSpaceThreshold.Name = "textAutoInsertSpaceThreshold";
-            this.textAutoInsertSpaceThreshold.Size = new System.Drawing.Size(52, 20);
-            this.textAutoInsertSpaceThreshold.TabIndex = 64;
-            this.textAutoInsertSpaceThreshold.Value = new decimal(new int[] {
-            6,
-            0,
-            0,
-            0});
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(221, 86);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(145, 13);
-            this.label12.TabIndex = 65;
-            this.label12.Text = "Space Auto-Insert Threshold:";
-            // 
             // TemplateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -849,6 +849,7 @@
             this.splitContainer2.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).EndInit();
             this.anchorsContainer.Panel1.ResumeLayout(false);
             this.anchorsContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.anchorsContainer)).EndInit();
@@ -871,7 +872,6 @@
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel3.ResumeLayout(false);
             this.flowLayoutPanel3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).EndInit();
             this.ResumeLayout(false);
 
         }

@@ -168,7 +168,7 @@ namespace Cliver.PdfDocumentParser
                             break;
                         default:
                             break;
-                    }
+                    } 
                 }
                 catch (Exception ex)
                 {
