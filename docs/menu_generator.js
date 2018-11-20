@@ -71,6 +71,8 @@ var convert = function(mode){
         var switchContainer = document.getElementsByClassName('switchContainer')[0];
         switchContainer.innerHTML = '<a class="switchLink" href="#_plainHtml" title="If the page is not displayed properly, switch to the plain html.">plain html</a>&nbsp;|&nbsp;' + (mode == '_collapsedContent' ? '<a class="switchLink" href="#_entireContent" title="Switch to the entire content mode.">entire content</a>' : '<a class="switchLink" href="#_collapsedContent" title="Switch to the collapsed content mode.">collapsed content</a>');
     };
+    
+    var setMenuContainerLocation;
          
     var addMenu2Page = function(){       
         var onClickMenuItem = function(){
@@ -150,7 +152,7 @@ var convert = function(mode){
         if(headerAndFooterAreInContentContainer)
             contentContainer.appendChild(footer);
         
-        {//manage content.style.minHeight
+        {//manage content.style.minHeight and arrange menu while scrolling
             if(headerAndFooterAreInContentContainer){//set the content minHeight to display the footer at the bottom
                 content.style.minHeight = window.innerHeight + header.offsetTop - header.offsetHeight - footer.offsetHeight; 
             }
@@ -160,7 +162,7 @@ var convert = function(mode){
                 var isIE = /*@cc_on!@*/false || !!document.documentMode;
                 var isEdge = !isIE && !!window.StyleMedia;
                 if(!isIE && !isEdge)//works smoothly on Chrome
-                    window.onscroll = function(){//move menuContainer when scrolling at header or footer
+                    setMenuContainerLocation = function(){//move menuContainer when scrolling at header or footer
                         var hr = header.getBoundingClientRect();
                         if(hr.bottom >= 0){
                             menuContainer.scrollTop -= menuContainer.getBoundingClientRect().top - hr.bottom;
@@ -182,7 +184,7 @@ var convert = function(mode){
                         }
                     };
                 else   //for IE, scrolling is simplified to avoid jerking             
-                    window.onscroll = function(){//move menuContainer when scrolling at header or footer
+                    setMenuContainerLocation = function(){//move menuContainer when scrolling at header or footer
                         var hr = header.getBoundingClientRect();
                         if(hr.bottom >= 0){
                             //menuContainer.scrollTop -= menuContainer.getBoundingClientRect().top - hr.bottom;
@@ -200,6 +202,8 @@ var convert = function(mode){
                             }
                         }
                     };
+                window.onresize = setMenuContainerLocation;
+                window.onscroll = setMenuContainerLocation;
             }
         }         
     }
@@ -267,7 +271,9 @@ var convert = function(mode){
                 }
                 item['header'].scrollIntoView();
             }else{//no item to open
-                document.getElementsByClassName('content')[0].scrollIntoView();//to trigger onScroll and set menu position
+                //document.getElementsByClassName('content')[0].scrollIntoView();//to trigger onScroll and set menu position
+                if(setMenuContainerLocation)
+                    setMenuContainerLocation();
                 window.scrollTo(0, 0);
                 menuContainer.scrollTop = 0;
             }
