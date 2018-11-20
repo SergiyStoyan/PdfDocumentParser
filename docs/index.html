@@ -166,10 +166,10 @@ For more details refer to <a href='#tutorialCondition'>the tutorial</a>.
 
 <h3>Anchoring</h3>  
 <p>A field optionally can be linked to an anchor.
-<p>When a field has no anchor, its selecting rectangle retains the initial position which was its position during creation.
-<p>When a field is linked to an anchor, its rectangle is bonded to its anchor's actual position so that if on some page the anchor shifts, the field shifts together with it. 
+When a field has no anchor, its selecting rectangle retains the initial position which was its position during creation.
+When a field is linked to an anchor, its rectangle is bonded to its anchor's actual position so that if on some page the anchor shifts, the field shifts together with it. 
 <p>When it is known definitely that a field appears on every page and always keeps the same position then there is no need to link it to an anchor.
-<p>In scanned documents whose margins vary, fields cannot retain constant positions and so always must be processed with anchors.
+<p>In scanned documents whose margins vary, fields cannot retain constant positions and so always should be processed with anchors.
 <p>It is advisable always to link fields to anchors thus minimizing probability of mistaken parsing.
 
 
@@ -286,7 +286,7 @@ foreach(page in PdfFile)
 <p>As is obvious from the task requirements, the <a href='#field'>field</a> collection predetermined in our application should be: INVOICE#, JOB#, PO#, COST.
 <p>Now let's decide which <a href='#condition'>conditions</a> are needed in our applcation. 
 <p>Since the invoices are issued by different companies, they have different layouts. Every layout will have its own parsing template. Therefore, our application has to <b>A)</b>recognize layout of a PDF page to know which template should be applied. 
-<p>Additionaly, as invoices can be multi-page, our application should be able to <b>B)</b>detect the first page of them. 
+<p>Additionaly, as invoices can be multi-page, our application has to be able to <b>B)</b>detect the first page of them. 
 <p>Checks (A) and (B) can be joined into one <a href='#condition'>condition</a>. Let's name it 'FirstPageOfDocument'. 
 <p>It will work in the following manner: when a template has its FirstPageOfDocument satisfied on a PDF page, it is chosen for processing that page and the next ones until the first page of a new invoice is detected. And when a new invoice starts, the previously captured fields are processed and cleaned.
 <p>Thus, the condition collection in our application should consist of only condition FirstPageOfDocument which is sufficient for the task.
