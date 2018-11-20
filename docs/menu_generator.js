@@ -155,26 +155,50 @@ var convert = function(mode){
                 content.style.minHeight = window.innerHeight + header.offsetTop - header.offsetHeight - footer.offsetHeight; 
             }
             else{   
-                content.style.minHeight = window.innerHeight;                
-                window.onscroll = function(){//move menuContainer when scrolling at header or footer
-                    var hr = header.getBoundingClientRect();
-                    if(hr.bottom > 0){
-                        //menuContainer.scrollTop -= menuContainer.getBoundingClientRect().top - hr.bottom;//jerks!
-                        menuContainer.style.height = window.innerHeight - hr.bottom;
-                        menuContainer.style.top = hr.bottom;
-                    }
-                    else{                        
-                        var fr = footer.getBoundingClientRect();
-                        if(fr.top < window.innerHeight){                            
-                            //menuContainer.style.top = fr.top - window.innerHeight;
-                            menuContainer.style.top = 0;
-                            menuContainer.style.height = fr.top;
-                        }else{
-                            menuContainer.style.top = 0;
-                            menuContainer.style.height = window.innerHeight;
+                content.style.minHeight = window.innerHeight;   
+
+                var isIE = /*@cc_on!@*/false || !!document.documentMode;
+                if(!isIE)
+                    window.onscroll = function(){//move menuContainer when scrolling at header or footer
+                        var hr = header.getBoundingClientRect();
+                        if(hr.bottom >= 0){
+                            menuContainer.scrollTop -= menuContainer.getBoundingClientRect().top - hr.bottom;
+                            menuContainer.style.top = hr.bottom;
+                            menuContainer.style.height = window.innerHeight - hr.bottom;
                         }
-                    }
-                };
+                        else{                        
+                            var fr = footer.getBoundingClientRect();
+                            if(fr.top < window.innerHeight){                            
+                                //menuContainer.style.top = fr.top - window.innerHeight;
+                                menuContainer.scrollTop -= menuContainer.getBoundingClientRect().top;
+                                menuContainer.style.top = 0;
+                                menuContainer.style.height = fr.top;
+                            }else{
+                                menuContainer.scrollTop -= menuContainer.getBoundingClientRect().top;
+                                menuContainer.style.top = 0;
+                                menuContainer.style.height = window.innerHeight;
+                            }
+                        }
+                    };
+                else   //for IE, it scrolling is simplified to avoid jerking             
+                    window.onscroll = function(){//move menuContainer when scrolling at header or footer
+                        var hr = header.getBoundingClientRect();
+                        if(hr.bottom >= 0){
+                            //menuContainer.scrollTop -= menuContainer.getBoundingClientRect().top - hr.bottom;
+                            menuContainer.style.top = hr.bottom;
+                            menuContainer.style.height = window.innerHeight - hr.bottom;
+                        }
+                        else{                        
+                            var fr = footer.getBoundingClientRect();
+                            if(fr.top < window.innerHeight){                            
+                                menuContainer.style.top = 0;
+                                menuContainer.style.height = fr.top;
+                            }else{
+                                menuContainer.style.top = 0;
+                                menuContainer.style.height = window.innerHeight;
+                            }
+                        }
+                    };
             }
         }         
     }
@@ -353,7 +377,7 @@ switch(anchorName){
                 internalAnchors.push(as[i].name);
             }            
         }
-        internalLinks = internalLinks.filter(function (value, index, self){ return self.indexOf(value) === index; });
+        internalLinks = internalLinks.filter(function(value, index, self){ return self.indexOf(value) === index; });
         var brokenLinks = [];
         for(var i = 0; i < internalLinks.length; i++){
             if(internalAnchors.indexOf(internalLinks[i]) < 0)
