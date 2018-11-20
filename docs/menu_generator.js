@@ -159,7 +159,7 @@ var convert = function(mode){
 
                 var isIE = /*@cc_on!@*/false || !!document.documentMode;
                 var isEdge = !isIE && !!window.StyleMedia;
-                if(!isIE /*&& !isEdge*/)//works smoothly on Chrome
+                if(!isIE && !isEdge)//works smoothly on Chrome
                     window.onscroll = function(){//move menuContainer when scrolling at header or footer
                         var hr = header.getBoundingClientRect();
                         if(hr.bottom >= 0){
