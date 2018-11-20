@@ -71,8 +71,8 @@ var convert = function(mode){
         var switchContainer = document.getElementsByClassName('switchContainer')[0];
         switchContainer.innerHTML = '<a class="switchLink" href="#_plainHtml" title="If the page is not displayed properly, switch to the plain html.">plain html</a>&nbsp;|&nbsp;' + (mode == '_collapsedContent' ? '<a class="switchLink" href="#_entireContent" title="Switch to the entire content mode.">entire content</a>' : '<a class="switchLink" href="#_collapsedContent" title="Switch to the collapsed content mode.">collapsed content</a>');
     };
-    
-    var setMenuContainerLocation;
+
+    var setMenuContainerLocation; 
          
     var addMenu2Page = function(){       
         var onClickMenuItem = function(){
@@ -152,13 +152,13 @@ var convert = function(mode){
         if(headerAndFooterAreInContentContainer)
             contentContainer.appendChild(footer);
         
-        {//manage content.style.minHeight and arrange menu while scrolling
+        {//manage content.style.minHeight and set menu location while scrolling
             if(headerAndFooterAreInContentContainer){//set the content minHeight to display the footer at the bottom
-                content.style.minHeight = window.innerHeight + header.offsetTop - header.offsetHeight - footer.offsetHeight; 
+                window.onresize = function(){
+                    content.style.minHeight = window.innerHeight + header.offsetTop - header.offsetHeight - footer.offsetHeight; 
+                }
             }
-            else{   
-                content.style.minHeight = window.innerHeight;   
-
+            else{     
                 var isIE = /*@cc_on!@*/false || !!document.documentMode;
                 var isEdge = !isIE && !!window.StyleMedia;
                 if(!isIE && !isEdge)//works smoothly on Chrome
@@ -171,8 +171,7 @@ var convert = function(mode){
                         }
                         else{                        
                             var fr = footer.getBoundingClientRect();
-                            if(fr.top < window.innerHeight){                            
-                                //menuContainer.style.top = fr.top - window.innerHeight;
+                            if(fr.top < window.innerHeight){                           
                                 menuContainer.scrollTop -= menuContainer.getBoundingClientRect().top;
                                 menuContainer.style.top = 0;
                                 menuContainer.style.height = fr.top;
@@ -187,7 +186,6 @@ var convert = function(mode){
                     setMenuContainerLocation = function(){//move menuContainer when scrolling at header or footer
                         var hr = header.getBoundingClientRect();
                         if(hr.bottom >= 0){
-                            //menuContainer.scrollTop -= menuContainer.getBoundingClientRect().top - hr.bottom;
                             menuContainer.style.top = hr.bottom;
                             menuContainer.style.height = window.innerHeight - hr.bottom;
                         }
@@ -202,9 +200,15 @@ var convert = function(mode){
                             }
                         }
                     };
-                window.onresize = setMenuContainerLocation;
-                window.onscroll = setMenuContainerLocation;
+                window.onresize = function(){
+                    content.style.minHeight = window.innerHeight; 
+                    setMenuContainerLocation();
+                }
+                window.onscroll = function(){
+                    setMenuContainerLocation();
+                }
             }
+            window.onresize();
         }         
     }
 
@@ -230,34 +234,38 @@ var convert = function(mode){
                 }
             if(item){
                 setItemVisibleInContent(item, true);
-                item['menuItem'].classList.add('current');               
+                item['menuItem'].classList.add('current');
                 
                 {//scroll the menu to get the current menu item visible
+                    var itemRect = item['menuItem'].getBoundingClientRect();
+                    
                     var menuContainerRect = menuContainer.getBoundingClientRect();   
                     var itemPosition = orderedItemIds.indexOf(item['id']);                    
                     var top;
+                    var menuContainerRect = menuContainer.getBoundingClientRect();
                     if(itemPosition > 0)
                         top = items[orderedItemIds[itemPosition - 1]]['menuItem'].getBoundingClientRect().top;
                     else
-                        top = - menuContainer.scrollTop;
-                    if(top < 0)
-                        menuContainer.scrollTop += top;
+                        //top = itemRect.top - itemRect.height;
+                        top = menuContainerRect.top - menuContainer.scrollTop;
+                    if(top <= menuContainerRect.top)
+                        menuContainer.scrollTop += top - menuContainerRect.top;
                     else{
                         var bottom;
                         if(itemPosition + 1 < orderedItemIds.length)
                             bottom = items[orderedItemIds[itemPosition + 1]]['menuItem'].getBoundingClientRect().bottom;
                         else
-                            bottom = - menuContainer.scrollTop + menuContainer.scrollHeight + menuContainerRect.bottom;
-                        if(bottom > menuContainerRect.bottom)
+                            //bottom = itemRect.bottom + itemRect.height;
+                            bottom = menuContainerRect.bottom - menuContainer.scrollTop + menuContainer.scrollHeight;
+                        if(bottom >= menuContainerRect.bottom)
                             menuContainer.scrollTop += bottom - menuContainerRect.bottom;
                     }
                     
-                    var itemRect = item['menuItem'].getBoundingClientRect();
                     if(itemRect.left < 0)
                         menuContainer.scrollLeft += itemRect.left;
                     else if(itemRect.right > menuContainerRect.right)
                         menuContainer.scrollLeft += itemRect.right - menuContainerRect.right;
-                }                
+                }                 
                 
                 {//display also children until some one is not empty
                     //var level = (item['id'].match(/_/ig) || []).length + 1;
@@ -271,7 +279,6 @@ var convert = function(mode){
                 }
                 item['header'].scrollIntoView();
             }else{//no item to open
-                //document.getElementsByClassName('content')[0].scrollIntoView();//to trigger onScroll and set menu position
                 if(setMenuContainerLocation)
                     setMenuContainerLocation();
                 window.scrollTo(0, 0);
@@ -309,7 +316,6 @@ var convert = function(mode){
                         window.location.href = window.location.href.replace(/#.*/, '#' + id);
                         return true;
                     }
-                    alert(window.location.href);
                 window.location.href = window.location.href.replace(/#.*/, '#');
             return true;
         }
@@ -406,4 +412,3 @@ switch(anchorName){
         convert('_collapsedContent');
     break;
 }
-//alert(1);
