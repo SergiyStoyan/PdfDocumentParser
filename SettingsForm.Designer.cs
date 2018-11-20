@@ -258,9 +258,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(16, 63);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(144, 13);
+            this.label2.Size = new System.Drawing.Size(164, 13);
             this.label2.TabIndex = 55;
-            this.label2.Text = "Coordinate Deviation Margin:";
+            this.label2.Text = "Coordinate Deviation Margin (px):";
             // 
             // CoordinateDeviationMargin
             // 
@@ -301,9 +301,9 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(16, 35);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(151, 13);
+            this.label6.Size = new System.Drawing.Size(145, 13);
             this.label6.TabIndex = 46;
-            this.label6.Text = "Space Auto-Insert Threashold:";
+            this.label6.Text = "Space Auto-Insert Threshold:";
             // 
             // TextAutoInsertSpaceThreshold
             // 
