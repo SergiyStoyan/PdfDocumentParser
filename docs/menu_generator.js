@@ -158,7 +158,7 @@ var convert = function(mode){
                 content.style.minHeight = window.innerHeight;   
 
                 var isIE = /*@cc_on!@*/false || !!document.documentMode;
-                if(!isIE)
+                if(!isIE)//works smoothly on Chrome
                     window.onscroll = function(){//move menuContainer when scrolling at header or footer
                         var hr = header.getBoundingClientRect();
                         if(hr.bottom >= 0){
@@ -180,7 +180,7 @@ var convert = function(mode){
                             }
                         }
                     };
-                else   //for IE, it scrolling is simplified to avoid jerking             
+                else   //for IE, scrolling is simplified to avoid jerking             
                     window.onscroll = function(){//move menuContainer when scrolling at header or footer
                         var hr = header.getBoundingClientRect();
                         if(hr.bottom >= 0){
