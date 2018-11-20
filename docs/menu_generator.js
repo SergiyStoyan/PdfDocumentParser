@@ -235,7 +235,6 @@ var convert = function(mode){
             if(item){
                 setItemVisibleInContent(item, true);
                 item['menuItem'].classList.add('current');
-                
                 {//scroll the menu to get the current menu item visible
                     var itemRect = item['menuItem'].getBoundingClientRect();
                     
@@ -291,8 +290,13 @@ var convert = function(mode){
             for(var i = 0; i < as.length; i++)
                 if(as[i].name == anchorName){  
                     openItem(item);
-                    if(!isHeader)
-                        as[i].scrollIntoView();
+                    if(!isHeader){
+                        var ar = as[i].getBoundingClientRect();
+                        var hr = document.getElementsByClassName('header')[0].getBoundingClientRect(); 
+                        var fr = document.getElementsByClassName('footer')[0].getBoundingClientRect(); 
+                        var m = Math.min(hr.height + (fr.top - hr.bottom - window.innerHeight), ar.top);
+                        window.scrollTo(ar.left, m);//scroll until displaying footer 
+                    }
                     return true;
                 }
             return false;
