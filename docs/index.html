@@ -52,6 +52,7 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
  
 
 <h3>General structure of anchor</h3>
+<p>Anchors are identified by a number assigned automatically.
 <p>An anchor consists of a single or many elements of the same type which can be either text characters or images. The first element is 'master' and the rest are 'secondary'. Position of its master element is position of the anchor itself. 
 <p>When an anchor is searched on a page, its master element is searched first and, if found, then its secondary elements are checked being bonded to the master position. Anchor is set found only when all its elements are found. 
 <p>The rectangle where an anchor was located on PDF page while creating, is named 'initial rectangle' and contains all the anchor's elements.
@@ -133,12 +134,12 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 
 
 <h2><a name="condition">Condition</a></h2> 
-<p>A condition is a boolean expression that depends on anchors and is set individually in every template.
-<p>The meaning of a condition can be True or False and depends on pair [PDF page, template]. It can be checked by PdfDocumentParser <a href='#api'>API</a> method <a href='#IsCondition'><code>IsCondition(<condition name>)</code></a>. 
-<p>Conditions are identified by their names. The condition collection is dictated by the logic of a custom application, therefore condition names are predetermined within the application's scope and are the same for all templates that belong to it.
+<p>A condition is a named boolean expression that depends on anchors. It is used by a custom application to decide which actions should be performed on a PDF page. It can be checked by PdfDocumentParser <a href='#api'>API</a> method <a href='#IsCondition'><code>IsCondition(<condition name>)</code></a>.
+<p>Conditions are identified by their names. The condition collection is dictated by the logic of a custom application, and thus is predetermined within the application's scope and is the same for all templates that belong to it.
+
 
 <h3>Boolean expression</h3>
-Condition expressions are composed of the following symbols: &lt;anchor id&gt;, '!', '&', '|', '(', ')'. When an anchor referenced by &lt;anchor id&gt; is found then it is treated as True, otherwise False. The meaning of a condition is the boolean result of its expression. 
+Condition expressions are composed of the following symbols: &lt;anchor id&gt;, '!', '&', '|', '(', ')', 'T', 'F'. When an anchor referenced by &lt;anchor id&gt; is found then it is treated as True, otherwise False. The meaning of a condition is the boolean result of its expression which, being a function of anchors, depends on pair [PDF page, template].  
 <p><span class='attention'>NOTE: </span>Operands '&' and '|' are processed successively, therefore, for instance, "1 | 2 & 3" and "2 & 3 | 1" are not equivalent. Parentheses should be used to manage precedence of operations.
 <p>Sample expressions:
 <table>
@@ -161,7 +162,7 @@ For more details refer to <a href='#tutorialCondition'>the tutorial</a>.
 
 <h2><a name="field">Field</a></h2>
 <p>A field defines certain text or image that is to be extracted from a PDF page. 
-<p>Fields are identified by their names. The field collection is dictated by the logic of a custom application, and thus their names are predetermined within its scope and are the same for all templates that belong to it. 
+<p>Fields are identified by their names. The field collection is dictated by the logic of a custom application, and thus is predetermined within its scope and is the same for all templates that belong to it. 
 
 <h3>Anchoring</h3>  
 <p>A field optionally can be linked to an anchor.

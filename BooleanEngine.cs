@@ -37,9 +37,9 @@ namespace Cliver.PdfDocumentParser
             if (string.IsNullOrWhiteSpace(expression))
                 throw new Exception("Expression is empty.");
             {
-                Match m = Regex.Match(expression, @"[^\s\d\(\)\&\|\!]", RegexOptions.IgnoreCase);
+                Match m = Regex.Match(expression, @"[^\s\d\(\)\&\|\!TF]");
                 if (m.Success)
-                    throw new Exception("Expression contains unacceptable symbol: '" + m.Value + "'. Expected symbols: <anchor id>, '!', '&', '|', '(', ')'");
+                    throw new Exception("Expression contains unacceptable symbol: '" + m.Value + "'. Expected symbols: <anchor id>, '!', '&', '|', '(', ')', 'T', 'F'");
             }
             expression = Regex.Replace(expression, @"\d+", (Match m) =>
             {
