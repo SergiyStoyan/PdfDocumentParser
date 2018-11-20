@@ -87,7 +87,7 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 <h4>OcrText</h4>
 <p>This type can only be used to anchor to text. It should be used only when PdfText does not work which happens on scanned or mixed documents. 
 <p>It works similarly to <a href='#anchorPdfText'>PdfText</a> type except that difference that character boxes are provided by OCR engine instead of native PDF entities.
-<p>In contrast to PdfText, OcrText type cannot secure 100% accuracy and can acceptably work only with images with resolution not less than 300dpi (see <a href='#PdfPageImageResolution'>PdfPageImageResolution parameter</a>). Its perfomance is slower than that of PdfText type. 
+<p>In contrast to PdfText, OcrText type cannot secure 100% accuracy and can acceptably work only with images with resolution not less than 300dpi (see <a href='#PdfPageImageResolution'>PdfPageImageResolution</a> parameter). Its perfomance is slower than that of PdfText type. 
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'>Position deviation</td>
@@ -181,7 +181,7 @@ Its value is a text surrounded by field's rectangle. It is obtained from native 
 <h4>OcrText</h4>
 Its value is a text surrounded by field's rectangle. It is recognized by OCR engine.
 <p>For native PDF documents, this type should never be used. But for scanned documents, it is the only way to get text in digital form which can be recorded to a file or database, indexed, searched and so on.
-<p>In contrast to PdfText, OcrText type cannot secure 100% accuracy and can acceptably work only with images with resolution not less than 300dpi (see <a href='#PdfPageImageResolution'>PdfPageImageResolution parameter</a>). 
+<p>In contrast to PdfText, OcrText type cannot secure 100% accuracy and can acceptably work only with images with resolution not less than 300dpi (see <a href='#PdfPageImageResolution'>PdfPageImageResolution</a> parameter). 
 
 <h4>ImageData</h4>
 Its value is a <code>System.Drawing.Bitmap</code> object that contains a fragment of page surrounded by the field's rectangle. 
@@ -197,7 +197,7 @@ Its value is a <code>System.Drawing.Bitmap</code> object that contains a fragmen
 <h2><a name='scannedDocumentSettings'>Scanned document options</a></h2>
 
 <p>In a template configured for scanned documents, it is always advisable to activate the page auto-deskew option. 
-<p>Also, if pages can have wrong orientation, the page rotation option must be set respectively.
+<p>Also, if pages have wrong orientation, the page rotation option must be used to get OctText type working properly.
 
 
 
@@ -421,13 +421,12 @@ PdfDocumentParser has parameters that are the same within application's scope an
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'><a name='PdfPageImageResolution'>PdfPageImageResolution</a></td>
-<td>The image resolution in PdfDocumentParser is a resolution with which a PDF page is converted into image. The quality of PDF view in Template Editor depends on it. 
-<p>What is more important, it also impacts on processing of OctText type in acnhors and fields. It must be set to not less than 300dpi (and it must be so even if the resolution of input documents is lower), otherwise OCR will not work properly. The higher the resolution, the better quality of OCR is.
-<p>On the other hand, increasing the resolution increases processing time.  </td></tr>
+<td>It is the resolution with which PdfDocumentParser converts PDF pages into images. It influences on the quality of PDF view in Template Editor. 
+<p>What is more important, it also impacts on work of OctText acnhors and fields. It must be not less than 300dpi (even if the resolution of input documents is lower), otherwise OCR will not work properly. The higher the resolution, the better quality of OCR is. On the other hand, increasing the resolution increases processing time.</td></tr>
 <tr><td class='title_column'><a name='CoordinateDeviationMargin'>CoordinateDeviationMargin</a></td>
 <td>It is a zero threshold when comparing pixel coordinates which may have slight discrepancy because of conversions. Usually there is no need to touch it.</td></tr>
 <tr><td class='title_column'><a name='TextAutoInsertSpaceThreshold'>TextAutoInsertSpaceThreshold</a></td>
-<td>It is used only to show PdfText anchor text split onto words. It has no enfluence on parsing results.</td></tr>
+<td>It is used to split captured text in PdfText fields onto words. Also, it is used when displaying PdfText anchor's patterns but has no influence on parsing. When needed, it should be tuned experimentally.</td></tr>
 </table>
 
 

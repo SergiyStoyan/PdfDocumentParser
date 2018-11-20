@@ -13,6 +13,7 @@ namespace Cliver.InvoiceParser
 {
     /*
  TBD:
+ -move TextAutoInsertSpaceThreshold to template (and fields?)
 - switch to Tesseract.4
  - tune image recognition by checking brightness deltas
 
