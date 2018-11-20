@@ -89,7 +89,7 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 <h4>OcrText</h4>
 <p>This type can only be used to anchor to text. It should be used only when PdfText does not work which happens on scanned or mixed documents. 
 <p>It works similarly to <a href='#anchorPdfText'>PdfText</a> type except that difference that character boxes are provided by OCR engine instead of native PDF entities.
-<p>In contrast to PdfText, OcrText type cannot secure 100% accuracy and can acceptably work only with images of resolution not less than 300dpi (see <a href='#PdfPageImageResolution'>PdfPageImageResolution</a> parameter). Its perfomance is slower than that of PdfText type. 
+<p>In contrast to PdfText, OcrText type does not guarantee 100% accuracy and can acceptably work only with images of resolution not less than 300dpi (see <a href='#PdfPageImageResolution'>PdfPageImageResolution</a> parameter). 
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'>Position deviation</td>
@@ -108,7 +108,7 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 <p>This type is used to anchor to images. 
 <p>Elements of an ImageData anchor are images that were selected on PDF page while creating the anchor.
 <p>For native PDF documents where images are without discrepancy in quality, ImageData type works quite well. 
-<p>When anchoring to a text which is presented by image which happens in scanned or mixed documents, there is a choice between ImageData and OcrText types. Which one to choose? If images do not change much and look the same in all documents (it does not matter how poor their quality is), ImageData is more reliable and fast. However, if images have essential discrepancy in size, contrast, brightness, orientation etc., as can happen in scanned documents, OcrText may work better.
+<p>When anchoring to a text which is presented by image as happens in scanned or mixed documents, there is a choice between ImageData and OcrText types. Which one to choose? If a target image do not change much from document to document and looks the same (no matter how poor its quality is), ImageData is more reliable and fast. However, if a target image has essential discrepancy in size, contrast, brightness, orientation etc. in documents, OcrText may work better.
 <p><span class='attention'>NOTE: </span> even when an image fragment is searched within the same page where it was extracted from, it cannot be found without a non-zero tolerance. It happens because search hashes of a whole page image and a fragment are produced after downsizing them, and then, when restoring from the hashes, pixel interpolation gives different results for the entire page and the fragment. 
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
@@ -183,7 +183,7 @@ Its value is a text surrounded by field's rectangle. It is obtained from native 
 <h4>OcrText</h4>
 Its value is a text surrounded by field's rectangle. It is recognized by OCR engine.
 <p>For native PDF documents, this type should never be used. But for scanned documents, it is the only way to get text in digital form which can be recorded to a file or database, indexed, searched and so on.
-<p>In contrast to PdfText, OcrText type cannot secure 100% accuracy and can acceptably work only with images of resolution not less than 300dpi (see <a href='#PdfPageImageResolution'>PdfPageImageResolution</a> parameter). 
+<p>In contrast to PdfText, OcrText type does not guarantee 100% accuracy and can acceptably work only with images of resolution not less than 300dpi (see <a href='#PdfPageImageResolution'>PdfPageImageResolution</a> parameter). 
 
 <h4>ImageData</h4>
 Its value is a <code>System.Drawing.Bitmap</code> object that contains a fragment of page surrounded by the field's rectangle. 
