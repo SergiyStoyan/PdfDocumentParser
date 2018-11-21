@@ -49,18 +49,15 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 <li>be linked by <a href='#anchor'>anchors</a>;</li>
 </ul>
 <p>Being used does not impose any restriction on the anchor. Thus, an anchor can be used in many ways at the same time.
- 
 
-<h3>General structure of anchor</h3>
-<p>Anchors are identified by a number assigned automatically.
+<p>Anchors are identified by their numbers assigned automatically.
 <p>An anchor consists of a single or many elements of the same type which can be either text characters or images. The first element is 'master' and the rest are 'secondary'. Position of its master element is position of the anchor itself. 
 <p>When an anchor is searched on a page, its master element is searched first and, if found, then its secondary elements are checked being bonded to the master position. Anchor is set found only when all its elements are found. 
-<p><span class='attention'>NOTE: </span>Only the first match on page is used to locate the anchor. No further match is searched.
-<p>The rectangle where an anchor was located on PDF page while creating, is named 'initial rectangle' and contains all the anchor's elements.
+<p><span class='attention'>NOTE: </span>Only the first match on page is used to locate anchor. No further match is searched.
+
 
 <h3>Anchor linked to anchor</h3>
-<p>A linked anchor is named 'child' of the linking one which is named 'parent'. 
-<p>When an anchor is linked to another anchor, its search area (if it is a rectange and not entire page) becomes related to its parent anchor's position.
+<p>A linked anchor is named 'child' of the linking one which is named 'parent'. When an anchor is linked to another anchor, its search area (if it is a rectange and not entire page) becomes related to its parent anchor's position.
 <p>When a parent anchor is not found, its child anchors are set not found too.
 <p>Number of anchors linked successively in a chain can be any.
 <p><span class='attention'>NOTE: </span>A parent anchor is searched as usual, meaning that only the first match is considered. Even if a proper match for a parent and its child exists on a page but it is not the first match for the parent, the child is set not found.
@@ -83,7 +80,7 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 <tr><td class='title_column'>Position deviation is absolute</td>
 <td>If True, position deviation of every secondary element is measured by the master element's position, otherwise, by position of the previous element. The latter is looser than the former.</td></tr>
 <td class='title_column'>Search rectangle margin</td>
-<td>When set, the area where the anchor is searched is the entire page. Otherwise, the search area is restricted by Search rectangle margin that specifies a rectangular area around the anchor's initial rectangle. It is measured in pixels. It should be used only when it is known definitely that the anchor is always located in a certain part of page. It helps to avoid undesired matching and speed up processing.</td></tr>
+<td>When set, the area where the anchor is searched is the entire page. Otherwise, the search area is restricted by Search rectangle margin that specifies a rectangular area around the anchor's initial rectangle which is the rectangle where the anchor was located on page while creating. It is measured in pixels. It should be used only when it is known definitely that the anchor is always located in a certain part of page. It helps to avoid undesired matching and speed up processing.</td></tr>
 </table>
 
 <h4>OcrText</h4>
@@ -424,7 +421,7 @@ We already have created anchors #1 and #2 that are needed to specify FirstPageOf
 
 
 
-<h1><a name='generalSettings'>General settings</a></h1>
+<h1><a name='generalSettings'>Clobal settings</a></h1>
 PdfDocumentParser has parameters that are the same within application's scope and can be modified in the configuration dialog invoked from Template Editor.
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
