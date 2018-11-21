@@ -19,7 +19,7 @@ using ImageMagick;
 namespace Cliver.PdfDocumentParser
 {
     /// <summary>
-    /// Auxiliary pdf routines
+    /// PDF routines
     /// </summary>
     internal static partial class Pdf
     {

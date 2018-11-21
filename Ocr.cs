@@ -14,7 +14,7 @@ using Tesseract;
 namespace Cliver.PdfDocumentParser
 {
     /// <summary>
-    /// Auxiliary OCR routines
+    /// OCR routines
     /// </summary>
     internal class Ocr : IDisposable
     {

@@ -159,30 +159,30 @@ var convert = function(mode){
                 }
             }
             else{     
-                var isIE = /*@cc_on!@*/false || !!document.documentMode;
-                var isEdge = !isIE && !!window.StyleMedia;
-                if(!isIE && !isEdge)//works smoothly on Chrome
-                    setMenuContainerLocation = function(){//move menuContainer when scrolling at header or footer
-                        var hr = header.getBoundingClientRect();
-                        if(hr.bottom >= 0){
-                            menuContainer.scrollTop -= menuContainer.getBoundingClientRect().top - hr.bottom;
-                            menuContainer.style.top = hr.bottom;
-                            menuContainer.style.height = window.innerHeight - hr.bottom;
-                        }
-                        else{                        
-                            var fr = footer.getBoundingClientRect();
-                            if(fr.top < window.innerHeight){                           
-                                menuContainer.scrollTop -= menuContainer.getBoundingClientRect().top;
-                                menuContainer.style.top = 0;
-                                menuContainer.style.height = fr.top;
-                            }else{
-                                menuContainer.scrollTop -= menuContainer.getBoundingClientRect().top;
-                                menuContainer.style.top = 0;
-                                menuContainer.style.height = window.innerHeight;
-                            }
-                        }
-                    };
-                else   //for IE, scrolling is simplified to avoid jerking             
+                // var isIE = /*@cc_on!@*/false || !!document.documentMode;
+                // var isEdge = !isIE && !!window.StyleMedia;
+                // if(!isIE && !isEdge)//works smoothly on Chrome
+                    // setMenuContainerLocation = function(){//move menuContainer when scrolling at header or footer
+                        // var hr = header.getBoundingClientRect();
+                        // if(hr.bottom >= 0){
+                            // menuContainer.scrollTop -= menuContainer.getBoundingClientRect().top - hr.bottom;
+                            // menuContainer.style.top = hr.bottom;
+                            // menuContainer.style.height = window.innerHeight - hr.bottom;
+                        // }
+                        // else{                        
+                            // var fr = footer.getBoundingClientRect();
+                            // if(fr.top < window.innerHeight){                           
+                                // menuContainer.scrollTop -= menuContainer.getBoundingClientRect().top;
+                                // menuContainer.style.top = 0;
+                                // menuContainer.style.height = fr.top;
+                            // }else{
+                                // menuContainer.scrollTop -= menuContainer.getBoundingClientRect().top;
+                                // menuContainer.style.top = 0;
+                                // menuContainer.style.height = window.innerHeight;
+                            // }
+                        // }
+                    // };
+                // else   //for IE, scrolling is simplified to avoid jerking             
                     setMenuContainerLocation = function(){//move menuContainer when scrolling at header or footer
                         var hr = header.getBoundingClientRect();
                         if(hr.bottom >= 0){
@@ -278,10 +278,10 @@ var convert = function(mode){
                 }
                 item['header'].scrollIntoView();
             }else{//no item to open
-                if(setMenuContainerLocation)
-                    setMenuContainerLocation();
                 window.scrollTo(0, 0);
                 menuContainer.scrollTop = 0;
+                if(setMenuContainerLocation)
+                    setMenuContainerLocation();
             }
         };
         
