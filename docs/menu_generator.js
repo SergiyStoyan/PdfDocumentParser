@@ -104,7 +104,7 @@ var convert = function(mode){
                 e.addEventListener('click', onClickMenuItem);
             }
             else
-                e.classList.add('noclick');
+                e.classList.add('empty');
             var level = (id.match(/_/ig) || []).length + 1;
             e.classList.add('h' + level);
             e.setAttribute('_id', id);
@@ -225,7 +225,6 @@ var convert = function(mode){
         };
                 
         var openItem = function(item, anchor){
-            menuContainer.style.top = 0;
             for(id in items)
                 if(items[id] != item){
                     if(mode == '_collapsedContent')
@@ -236,7 +235,8 @@ var convert = function(mode){
                 }
             if(item){
                 setItemVisibleInContent(item, true);
-                item['menuItem'].classList.add('current');
+                item['menuItem'].classList.add('current'); 
+                
                 {//scroll the menu to get the current menu item visible
                     var itemRect = item['menuItem'].getBoundingClientRect();
                     
@@ -277,7 +277,7 @@ var convert = function(mode){
                             break;
                         setItemVisibleInContent(items[orderedItemIds[i]], true);
                     }
-                }   
+                }  
 
                 { //scroll window only until displaying footer            
                     var hr = header.getBoundingClientRect(); 
@@ -297,9 +297,9 @@ var convert = function(mode){
                 }
             }else{//no item to open
                 window.scrollTo(0, 0);
-                menuContainer.scrollTop = 0;
                 if(setMenuContainerLocation)
                     setMenuContainerLocation();
+                menuContainer.scrollTop = 0;
             }
         };
         

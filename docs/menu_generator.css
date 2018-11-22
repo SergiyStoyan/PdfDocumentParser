@@ -69,7 +69,7 @@ span.h6 {margin:5 0 0 100;}
     transition: 0.3s;
     cursor: pointer;
 }
-.menuItem:not(.noclick):hover {
+.menuItem:not(.empty):hover {
     color: #900;
     background-color: #ddd;
 }
@@ -78,7 +78,7 @@ span.h6 {margin:5 0 0 100;}
     background-color: #ddd;
     font-weight1: bold;
 }
-.menuItem.noclick {
+.menuItem.empty {
     text-decoration1: underline;
     font-style: italic;
     color: #000;
