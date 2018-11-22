@@ -67,11 +67,11 @@ span.h6 {margin:5 0 0 100;}
     color: #000;
     display: block;
     transition: 0.3s;
-    cursor: pointer;
 }
 .menuItem:not(.empty):hover {
     color: #900;
     background-color: #ddd;
+    cursor: pointer;
 }
 .menuItem.current {
     color: #d00;
@@ -79,12 +79,7 @@ span.h6 {margin:5 0 0 100;}
     font-weight1: bold;
 }
 .menuItem.empty {
-    text-decoration1: underline;
     font-style: italic;
-    color: #000;
-    display: block;
-    transition: 0.3s;
-    cursor: arrow;
 }
 
 .switchContainer{
