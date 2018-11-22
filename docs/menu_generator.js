@@ -76,20 +76,27 @@ var convert = function(mode){
     };
 
     var setMenuContainerLocation; 
-         
+                  
     var addMenu2Page = function(){       
+        var setWindowLocationHref = function(id){
+            var href2 = window.location.href.replace(/#.*/, '') + '#' + id;
+            if(window.location.href == href2)
+                navigate2currentAnchor();//since it will not be triggered
+            else
+                window.location.href = href2;
+        };
+        
         var onClickMenuItem = function(){
             var id = this.getAttribute('_id');
-            if(!id)
-                return false;
-            window.location.href = window.location.href.replace(/#.*/, '') + '#' + id;
+            if(id)
+                setWindowLocationHref(id);
             return false;
         };      
         
         var onClickItemHeader = function(){
             for(id in items)
                 if(items[id]['header'] == this){
-                    window.location.href = window.location.href.replace(/#.*/, '') + '#' + id;
+                    setWindowLocationHref(id);
                     return false;
                 }
             return false;
@@ -224,7 +231,7 @@ var convert = function(mode){
             item['header'].style.display = visible ? 'block': 'none';
             item['content'].style.display = visible ? 'block': 'none';            
         };
-                
+        
         var openItem = function(item, anchor){
             for(id in items)
                 if(items[id] != item){
@@ -280,15 +287,15 @@ var convert = function(mode){
                     }
                 }  
 
-                { //scroll window only until displaying footer  
+                { //scroll window only until displaying footer 
                     var left, top;
                     if(anchor){
                         var ar = anchor.getBoundingClientRect();   
                         left = ar.left;                     
                         top = ar.top;
                     }else{
-                        left = 0;          
-                        top = content.getBoundingClientRect().top;
+                        left = 0;           
+                        top = (mode == '_collapsedContent' ? content : item['header']).getBoundingClientRect().top;
                     }
                     top = Math.min(footer.getBoundingClientRect().top - window.innerHeight, top);
                     window.scrollTo(window.pageXOffset + left, window.pageYOffset + top);
@@ -333,7 +340,7 @@ var convert = function(mode){
             openItem(items[anchorName]);
             return true;
         }
-        for(var id in items){//try to open as a real internal anchor
+        for(var id in items){//try to open as a real internal link
             var a = findLocalAnchor(items[id]['header'], anchorName);
             if(!a)
                 a = findLocalAnchor(items[id]['content'], anchorName);
