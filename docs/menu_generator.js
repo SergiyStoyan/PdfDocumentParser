@@ -66,6 +66,8 @@ var convert = function(mode){
     };
     
     var menuContainer;
+    var header;
+    var footer;
     
     var setModeSwithers = function(){
         var switchContainer = document.getElementsByClassName('switchContainer')[0];
@@ -141,8 +143,8 @@ var convert = function(mode){
                 || parseInt(window.getComputedStyle(document.body).getPropertyValue('--shift-header-and-footer-to-content-view'));
         }
         
-        var header = document.getElementsByClassName('header')[0];
-        var footer = document.getElementsByClassName('footer')[0];
+        header = document.getElementsByClassName('header')[0];
+        footer = document.getElementsByClassName('footer')[0];
         
         if(headerAndFooterAreInContentContainer)
             contentContainer.appendChild(header);       
@@ -221,8 +223,8 @@ var convert = function(mode){
             item['header'].style.display = visible ? 'block': 'none';
             item['content'].style.display = visible ? 'block': 'none';            
         };
-        
-        var openItem = function(item){
+                
+        var openItem = function(item, anchor){
             menuContainer.style.top = 0;
             for(id in items)
                 if(items[id] != item){
@@ -275,8 +277,24 @@ var convert = function(mode){
                             break;
                         setItemVisibleInContent(items[orderedItemIds[i]], true);
                     }
+                }   
+
+                { //scroll window only until displaying footer            
+                    var hr = header.getBoundingClientRect(); 
+                    var fr = footer.getBoundingClientRect(); 
+                    var left;
+                    var top;
+                    if(anchor){
+                        var ar = anchor.getBoundingClientRect();   
+                        left = ar.left;                     
+                        top = ar.top;
+                    }else{
+                        left = 0;
+                        top = hr.height;
+                    }
+                    top = Math.min(hr.height + (fr.top - hr.bottom - window.innerHeight), top);
+                    window.scrollTo(left, top);
                 }
-                item['header'].scrollIntoView();
             }else{//no item to open
                 window.scrollTo(0, 0);
                 menuContainer.scrollTop = 0;
@@ -285,21 +303,11 @@ var convert = function(mode){
             }
         };
         
-        var openLocalAnchor = function(item, e, anchorName, isHeader){
+        var findLocalAnchor = function(e, anchorName){
             var as = e.getElementsByTagName('a');
             for(var i = 0; i < as.length; i++)
-                if(as[i].name == anchorName){  
-                    openItem(item);
-                    if(!isHeader){
-                        var ar = as[i].getBoundingClientRect();
-                        var hr = document.getElementsByClassName('header')[0].getBoundingClientRect(); 
-                        var fr = document.getElementsByClassName('footer')[0].getBoundingClientRect(); 
-                        var m = Math.min(hr.height + (fr.top - hr.bottom - window.innerHeight), ar.top);
-                        window.scrollTo(ar.left, m);//scroll until displaying footer 
-                    }
-                    return true;
-                }
-            return false;
+                if(as[i].name == anchorName)  
+                    return as[i];
         }; 
         
         var anchorName = window.location.href.replace(/[^#]*#?(_localAnchor_)?/, '');//'_localAnchor_' was added to prevent browser from unpleasant page jerking when navigating to a hidden anchor
@@ -327,11 +335,14 @@ var convert = function(mode){
             openItem(items[anchorName]);
             return true;
         }
-        for(var id in items){
-            if(openLocalAnchor(items[id], items[id]['header'], anchorName, true))
+        for(var id in items){//try to open as a real internal anchor
+            var a = findLocalAnchor(items[id]['header'], anchorName);
+            if(!a)
+                a = findLocalAnchor(items[id]['content'], anchorName);
+            if(a){
+                openItem(items[id], a);
                 return true;
-            if(openLocalAnchor(items[id], items[id]['content'], anchorName, false))
-                return true;
+            }
         }
         openItem(false);
         return false;
