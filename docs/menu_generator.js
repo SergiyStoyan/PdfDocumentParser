@@ -67,6 +67,7 @@ var convert = function(mode){
     
     var menuContainer;
     var header;
+    var content;
     var footer;
     
     var setModeSwithers = function(){
@@ -121,7 +122,7 @@ var convert = function(mode){
         switchContainer.classList.add('switchContainer');
         menuContainer.appendChild(switchContainer);
         menuContainer.appendChild(menu);
-        var content = document.getElementsByClassName('content')[0];
+        content = document.getElementsByClassName('content')[0];
         content.parentNode.insertBefore(menuContainer, content);
         setModeSwithers();
         
@@ -279,21 +280,18 @@ var convert = function(mode){
                     }
                 }  
 
-                { //scroll window only until displaying footer            
-                    var hr = header.getBoundingClientRect(); 
-                    var fr = footer.getBoundingClientRect(); 
-                    var left;
-                    var top;
+                { //scroll window only until displaying footer  
+                    var left, top;
                     if(anchor){
                         var ar = anchor.getBoundingClientRect();   
                         left = ar.left;                     
                         top = ar.top;
                     }else{
-                        left = 0;
-                        top = hr.height;
+                        left = 0;          
+                        top = content.getBoundingClientRect().top;
                     }
-                    top = Math.min(hr.height + (fr.top - hr.bottom - window.innerHeight), top);
-                    window.scrollTo(left, top);
+                    top = Math.min(footer.getBoundingClientRect().top - window.innerHeight, top);
+                    window.scrollTo(window.pageXOffset + left, window.pageYOffset + top);
                 }
             }else{//no item to open
                 window.scrollTo(0, 0);
