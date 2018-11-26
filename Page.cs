@@ -200,13 +200,13 @@ namespace Cliver.PdfDocumentParser
         internal List<RectangleF> GetAnchorRectangles(Template.Anchor a)
         {
             List<RectangleF> rs;
-            StringBuilder sb = new StringBuilder(SerializationRoutines.Json.Serialize(a));
+            StringBuilder sb = new StringBuilder(SerializationRoutines.Json.Serialize(a, false));
             for (int? id = a.ParentAnchorId; id != null;)
             {
                 Template.Anchor pa = pageCollection.ActiveTemplate.Anchors.Find(x => x.Id == id);
                 if (a == pa)
                     throw new Exception("Anchor[Id=" + a.Id + "] is referenced by an ancestor anchor.");
-                sb.Append(SerializationRoutines.Json.Serialize(pa));
+                sb.Append(SerializationRoutines.Json.Serialize(pa, false));
                 id = pa.ParentAnchorId;
             }
             string sa = sb.ToString();

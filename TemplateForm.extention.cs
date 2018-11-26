@@ -191,6 +191,13 @@ namespace Cliver.PdfDocumentParser
             tf.ShowDialog();
         }
 
+        private void showJson_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Template t = getTemplateFromUI(false);
+            TextForm tf = new TextForm("Template JSON object", SerializationRoutines.Json.Serialize(t), false);
+            tf.ShowDialog();
+        }
+
         private void Help_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             templateManager.HelpRequest();
