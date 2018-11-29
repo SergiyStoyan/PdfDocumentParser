@@ -42,11 +42,11 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 
 
 <h2><a name='anchor'>Anchor</a></h2>
-<p>An anchor is a fragment of either text or image extracted from a PDF page in order to be looked for on any needed page afterwards. An anchor can be used in the following ways:
+<p>An anchor is a fragment of either text or image extracted from a PDF page in order to be searched on any page needed. An anchor can be used in the following ways:
 <ul>
-<li>be linked by <a href="#field">fields</a>;</li> 
+<li><a href="#field">fields</a>;</li> 
 <li>be engaged in <a href="#condition">conditions</a>;</li>
-<li>be linked by <a href='#anchor'>anchors</a>;</li>
+<li>other <a href='#anchor'>anchors can be linked to it</a>;</li>
 </ul>
 <p>Being used does not impose any restriction on the anchor. Thus, an anchor can be used in many ways at the same time.
 
@@ -57,10 +57,10 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 
 
 <h3>Anchor linked to anchor</h3>
-<p>A linked anchor is named 'child' of the linking one which is named 'parent'. When an anchor is linked to another anchor, its search area (if it is a rectange and not entire page) becomes related to its parent anchor's position.
+<p>A linked anchor is named 'child' of the linking one which is named 'parent'. When an anchor is linked to another anchor, its search area (when it is set to not the entire page) becomes related to its parent anchor's position. That is, a parent anchor is searched until a match (if exists) is found that satisfies to the child anchor search conditions.
+<p><span class='attention'>NOTE: </span>When a child anchor has <a href='#anchorPdfText'>Search Rectangle Margin</a> set, postion of its parent anchor and postion of this anchor but searched separately may differ. It happens because the latter position is the first match that satisfies to the anchor itself while the former position is the first match that satisfies to both the parent and the child anchors together. The same consideration is true for anchor itself and anchor as a child.
 <p>When a parent anchor is not found, its child anchors are set not found too.
 <p>Number of anchors linked successively in a chain can be any.
-<p><span class='attention'>NOTE: </span>A parent anchor is searched as usual, meaning that only the first match is considered. Even if a proper match for a parent and its child exists on a page but it is not the first match for the parent, the child is set not found.
 
 
 

@@ -213,24 +213,19 @@ namespace Cliver.PdfDocumentParser
             List<List<RectangleF>> anchorRectangless;
             if (!anchorHashes2anchorRectangless.TryGetValue(sa, out anchorRectangless))
             {
-                anchorRectangless = findAnchorRectangless(a);
+                anchorRectangless = new List<List<RectangleF>>();
+                findAnchor(a, (IEnumerable<RectangleF> rs) =>
+                {
+                    anchorRectangless.Add(rs.ToList());
+                    return false;
+                }, anchorRectangless);
+
                 anchorHashes2anchorRectangless[sa] = anchorRectangless;
             }
             return anchorRectangless;
         }
         Dictionary<string, List<List<RectangleF>>> anchorHashes2anchorRectangless = new Dictionary<string, List<List<RectangleF>>>();
-
-        List<List<RectangleF>> findAnchorRectangless(Template.Anchor a)
-        {
-            List<List<RectangleF>> anchorRectangless = new List<List<RectangleF>>();
-            findAnchor(a, (IEnumerable<RectangleF> rs) =>
-            {
-                anchorRectangless.Add(rs.ToList());
-                return false;
-            }, anchorRectangless);
-            return anchorRectangless;
-        }
-
+        
         void findAnchor(Template.Anchor a, Func<IEnumerable<RectangleF>, bool> proceedOnFound, List<List<RectangleF>> anchorRectangless)
         {
             if (a.ParentAnchorId != null)
@@ -319,7 +314,7 @@ namespace Cliver.PdfDocumentParser
                         if (aes.Count < 1)
                             return false;
                         List<Ocr.CharBox> contaningOcrCharBoxs;
-                        PointF shiftInPage = new PointF(0, 0);
+                        PointF searchRectanglePosition = new PointF(0, 0);
                         IEnumerable<Ocr.CharBox> bt0s;
                         if (ot.OcrEntirePage)
                         {
@@ -340,8 +335,8 @@ namespace Cliver.PdfDocumentParser
                             for (int i = 1; i < ot.CharBoxs.Count; i++)
                                 contaningRectangle = RectangleF.Union(contaningRectangle, getSearchRectangle(ot.CharBoxs[i].Rectangle.GetSystemRectangleF(), a.SearchRectangleMargin));
                             contaningOcrCharBoxs = Ocr.This.GetCharBoxs(GetRectangleFromActiveTemplateBitmap(contaningRectangle.X / Settings.Constants.Image2PdfResolutionRatio, contaningRectangle.Y / Settings.Constants.Image2PdfResolutionRatio, contaningRectangle.Width / Settings.Constants.Image2PdfResolutionRatio, contaningRectangle.Height / Settings.Constants.Image2PdfResolutionRatio));
-                            shiftInPage = new PointF(contaningRectangle.X < 0 ? 0 : contaningRectangle.X, contaningRectangle.Y < 0 ? 0 : contaningRectangle.Y);
-                            RectangleF unshiftedMainElementSearchRectangle = new RectangleF(mainElementSearchRectangle.X - shiftInPage.X, mainElementSearchRectangle.Y - shiftInPage.Y, mainElementSearchRectangle.Width, mainElementSearchRectangle.Height);
+                            searchRectanglePosition = new PointF(contaningRectangle.X < 0 ? 0 : contaningRectangle.X, contaningRectangle.Y < 0 ? 0 : contaningRectangle.Y);
+                            RectangleF unshiftedMainElementSearchRectangle = new RectangleF(mainElementSearchRectangle.X - searchRectanglePosition.X, mainElementSearchRectangle.Y - searchRectanglePosition.Y, mainElementSearchRectangle.Width, mainElementSearchRectangle.Height);
                             bt0s = contaningOcrCharBoxs.Where(x => x.Char == aes[0].Char && unshiftedMainElementSearchRectangle.Contains(x.R));
                         }
                         List<Ocr.CharBox> bts = new List<Ocr.CharBox>();
@@ -366,7 +361,7 @@ namespace Cliver.PdfDocumentParser
                                     break;
                             }
                             if (bts.Count == aes.Count)
-                                if (!proceedOnFound(bts.Select(x => { x.R.X += shiftInPage.X; x.R.Y += shiftInPage.Y; return x.R; })))
+                                if (!proceedOnFound(bts.Select(x => { x.R.X += searchRectanglePosition.X; x.R.Y += searchRectanglePosition.Y; return x.R; })))
                                     return true;
                         }
                     }
@@ -377,23 +372,23 @@ namespace Cliver.PdfDocumentParser
                         List<Template.Anchor.ImageData.ImageBox> ibs = idv.ImageBoxs;
                         if (ibs.Count < 1)
                             return false;
-                        Point shiftInPage;
+                        Point searchRectanglePosition;
                         ImageData id0;
                         if (idv.SearchRectangleMargin < 0)
                         {
                             id0 = ActiveTemplateImageData;
-                            shiftInPage = new Point(0, 0);
+                            searchRectanglePosition = new Point(0, 0);
                         }
                         else
                         {
                             id0 = new ImageData(GetRectangleFromActiveTemplateBitmap(mainElementSearchRectangle.X / Settings.Constants.Image2PdfResolutionRatio, mainElementSearchRectangle.Y / Settings.Constants.Image2PdfResolutionRatio, mainElementSearchRectangle.Width / Settings.Constants.Image2PdfResolutionRatio, mainElementSearchRectangle.Height / Settings.Constants.Image2PdfResolutionRatio));
-                            shiftInPage = new Point(mainElementSearchRectangle.X < 0 ? 0 : (int)mainElementSearchRectangle.X, mainElementSearchRectangle.Y < 0 ? 0 : (int)mainElementSearchRectangle.Y);
+                            searchRectanglePosition = new Point(mainElementSearchRectangle.X < 0 ? 0 : (int)mainElementSearchRectangle.X, mainElementSearchRectangle.Y < 0 ? 0 : (int)mainElementSearchRectangle.Y);
                         }
                         List<RectangleF> bestRs = null;
                         float minDeviation = float.MaxValue;
                         ibs[0].ImageData.FindWithinImage(id0, idv.BrightnessTolerance, idv.DifferentPixelNumberTolerance, (Point point0, float deviation) =>
                         {
-                            point0 = new Point(shiftInPage.X + point0.X, shiftInPage.Y + point0.Y);
+                            point0 = new Point(searchRectanglePosition.X + point0.X, searchRectanglePosition.Y + point0.Y);
                             List<RectangleF> rs = new List<RectangleF>();
                             rs.Add(new RectangleF(point0, new SizeF(ibs[0].Rectangle.Width, ibs[0].Rectangle.Height)));
                             for (int i = 1; i < ibs.Count; i++)
@@ -415,6 +410,8 @@ namespace Cliver.PdfDocumentParser
                             }
                             if (!idv.FindBestImageMatch)
                             {
+                                if (proceedOnFound(rs))
+                                    return true;
                                 bestRs = rs;
                                 return false;
                             }
@@ -425,7 +422,7 @@ namespace Cliver.PdfDocumentParser
                             }
                             return true;
                         });
-                        if (!proceedOnFound(bestRs))
+                        if (bestRs != null && !proceedOnFound(bestRs))
                             return true;
                         return false;
                     }
