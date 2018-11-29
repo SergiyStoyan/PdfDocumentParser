@@ -367,6 +367,8 @@ var convert = function(mode){
     window.addEventListener("hashchange", onHashchange, true);
 
     navigate2currentAnchor();
+    //if(mode == '_collapsedContent') //show the header when opening first time       
+    //    window.scrollTo(0, 0);
 
     {//it is only to prevent browser from unpleasant page jerking when navigating to an anchor which is hidden
         var localPath = window.location.href.replace(/#.*/, '');
