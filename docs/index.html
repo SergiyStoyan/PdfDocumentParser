@@ -4,15 +4,18 @@
 <link rel="stylesheet" type="text/css" href="main.css">
 <link rel="stylesheet" type="text/css" href="menu_generator.css">
 
+<link href="prism.css" rel="stylesheet" />
+
 </head>
 <body>
+<script src="prism.js"></script>
 <div class='header'>
 <div class='mainHeader'>Pdf Document Parser</div>
 </div>
 
 <div class='content'>
 <h1><a name='overview'>Overview</a></h1>
-<p>PdfDocumentParser is a parsing engine intended to extract text/images from PDF documents that conform to a recognizable graphic layout - such as invoices and the like. The main parsing approach is based on finding certain text or image fragments in page and then extracting text/images located relatively to those fragments.
+<p>PdfDocumentParser is a parsing engine intended to extract text/images from PDF documents that conform to a recognizable graphic layout - such as invoices and the like. The main parsing approach is based on finding certain text or image fragments on a page and then extracting text/images located relatively to those fragments.
 <p>Within this scope PdfDocumentParser is capable of the following:
 <ul>
 <li>operating with text represented by PDF entities (meant for native PDF files);</li>
@@ -58,7 +61,7 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 
 <h3>Anchor linked to anchor</h3>
 <p>A linked anchor is named 'child' of the linking one which is named 'parent'. When an anchor is linked to another anchor, its search area (when it is set to not the entire page) becomes related to its parent anchor's position. That is, a parent anchor is searched until a match (if exists) is found that satisfies to the child anchor search conditions.
-<p><span class='attention'>NOTE: </span>When a child anchor has <a href='#anchorPdfText'>Search Rectangle Margin</a> set, postion of its parent anchor and postion of this anchor but searched separately may differ. It happens because the latter position is the first match that satisfies to the anchor itself while the former position is the first match that satisfies to both the parent and the child anchors together. The same consideration is true for anchor itself and anchor as a child.
+<p><span class='attention'>NOTE: </span>When a child anchor has <a href='#anchorPdfText'>Search Rectangle Margin</a> set, position of its parent anchor and position of this very anchor searched separately may differ. It happens because the latter position is the first match that satisfies to the anchor itself while the former position is the first match that satisfies to both the parent and the child anchors together. The same consideration is true for anchor itself and anchor as a child.
 <p>When a parent anchor is not found, its child anchors are set not found too.
 <p>Number of anchors linked successively in a chain can be any.
 
@@ -70,7 +73,7 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 
 <h4><a name='anchorPdfText'>PdfText</a></h4>
 <p>This type can only be used to anchor to text. It should be used whenever possible because it is most robust and fast. 
-<p>It is based on the native text presentation inside a PDF file. Elements of this type are character boxes extracted from PDF entities. Every character is a separate anchor element. Together they present a text fragment to be found in page.
+<p>It is based on the native text presentation inside a PDF file. Elements of this type are character boxes extracted from PDF entities. Every character is a separate anchor element. Together they present a text fragment to be found on page.
 
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
@@ -225,9 +228,9 @@ A template has the following settings that influence on parsing:
 <tr><td class='title_column'><code>Cliver.PdfDocumentParser.PageCollection::ActiveTemplate</code></td>
 <td>Set active template in PdfDocumentParser.</td></tr>
 <tr><td class='title_column'><a name='IsCondition'><code>Cliver.PdfDocumentParser.Page::IsCondition()</code></a></td>
-<td>Check if a condition is met in page.</td></tr>
+<td>Check if a condition is met on the page.</td></tr>
 <tr><td class='title_column'><a name='GetValue'><code>Cliver.PdfDocumentParser.Page::GetValue()</code></a></td>
-<td>Extract a field from page. If anchor of the field was not found, NULL is returned.</td></tr>
+<td>Extract a field from the page. If anchor of the field was not found, NULL is returned.</td></tr>
 </table>
 Refer to <a href='#InvoiceParser'>InvoiceParser</a> as an live example of using PdfDocumentParser in a custom application.
 
@@ -236,6 +239,7 @@ Refer to <a href='#InvoiceParser'>InvoiceParser</a> as an live example of using 
 The main idea of using PdfDocumentParser in an application is that custom operations are performed depending on custom <a href='#condition'>conditions</a>. 
 <p>Because of the fact that the collection of <a href='#condition'>conditions</a> is determined by a custom application, it is impossible to outline 'the most common algorithm' of using PdfDocumentParser. But some basic algorithm of processing a PDF file would look like the following:
 <pre>
+<code class="language-csharp">
 foreach(page in PdfFile)
 {
     if(PdfDocumentParser.ActiveTemplate == null)
@@ -253,18 +257,21 @@ foreach(page in PdfFile)
         if(PdfDocumentParser.IsCondition(page, "Field1Page"))
         {
             object value1 = PdfDocumentParser.GetValue(page, "field1");
-            ...do something with value1...
+            //doing something with value1...
+            <...>
         }
         if(PdfDocumentParser.IsCondition(page, "Field2Page"))
         {
             object value2 = PdfDocumentParser.GetValue(page, "field2");
-            ...do something with value2...
+            //doing something with value2...
+            <...>
         }
-        ...
+        <...>
         if(PdfDocumentParser.IsCondition(page, "DocumentLastPage"))
             PdfDocumentParser.ActiveTemplate = null;
     }
 }
+</code>
 </pre>
 <p>Notice that the above algorithm implies that only one template can be applied to a PDF page while it is not mandatory in general. 
 
@@ -290,16 +297,17 @@ foreach(page in PdfFile)
 <h3><a name='customConfiguration'>Custom configuration<a/></h3>
 <p>As is obvious from the task requirements, the <a href='#field'>field</a> collection predetermined in our application should be: INVOICE#, JOB#, PO#, COST.
 <p>Now let's decide which <a href='#condition'>conditions</a> are needed in our applcation. 
-<p>Since the invoices are issued by different companies, they have different layouts. Every layout will have its own parsing template. Therefore, our application has to <b>A)</b>recognize layout of a PDF page to know which template should be applied. 
-<p>Additionaly, as invoices can be multi-page, our application has to be able to <b>B)</b>detect the first page of them. 
-<p>Checks (A) and (B) can be joined into one <a href='#condition'>condition</a>. Let's name it 'FirstPageOfDocument'. 
-<p>It will work in the following manner: when a template has its FirstPageOfDocument satisfied on a PDF page, it is chosen for processing that page and the next ones until the first page of a new invoice is detected. And when a new invoice starts, the previously captured fields are processed and cleaned.
-<p>Thus, the condition collection in our application should consist of only condition FirstPageOfDocument which is sufficient for the task.
+<p>Since the invoices are issued by different companies, they have different layouts. Every layout requires its own parsing template. Therefore, our application should be able to <b>A)</b>recognize layout of a PDF page in order to know which template should be applied. 
+<p>Additionaly, as invoices can be multi-page, our application has to <b>B)</b>detect the first page of every invoice. 
+<p>Checkings (A) and (B) can be joined into one <a href='#condition'>condition</a>. Let's name it 'FirstPageOfDocument'. 
+<p>It will work in the following manner: when a template has its FirstPageOfDocument satisfied on a PDF page, it will be chosen for processing of this page and the next ones until the first page of a new invoice is detected. And when a new invoice starts, the previously captured fields should be processed/recorded and cleaned.
+<p>Thus, the condition collection in our application will consist of only condition FirstPageOfDocument which is sufficient for the task.
 
 
 <h3>Custom algorithm</h3>
 Now, summing up the said above, the algorithm of processing a PDF file in our application should be the following:
 <pre>
+<code class="language-csharp">
 object INVOICE#, JOB#, PO#, COST;
 Template currentTemplate;
 foreach(page in PdfFile)
@@ -311,7 +319,8 @@ foreach(page in PdfFile)
         {
             if(INVOICE# != null)
             {
-                ...do something with INVOICE#, JOB#, PO#, COST extracted from the previous invoice...
+                //do something with INVOICE#, JOB#, PO#, COST extracted from the previous invoice...
+                <...>
                 INVOICE# = null;
             }
             currentTemplate = PdfDocumentParser.ActiveTemplate;
@@ -327,9 +336,10 @@ foreach(page in PdfFile)
         object COST = PdfDocumentParser.GetValue(page, "COST");
     }
 }
+</code>
 </pre>
 
-Refer to <a href='#InvoiceParser'>InvoiceParser</a> as a real code.
+Refer to <a href='#InvoiceParser'>InvoiceParser</a> as a live code.
 
 
 
