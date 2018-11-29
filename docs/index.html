@@ -239,8 +239,7 @@ Refer to <a href='#InvoiceParser'>InvoiceParser</a> as an live example of using 
 The main idea of using PdfDocumentParser in an application is that custom operations are performed depending on custom <a href='#condition'>conditions</a>. 
 <p>Because of the fact that the collection of <a href='#condition'>conditions</a> is determined by a custom application, it is impossible to outline 'the most common algorithm' of using PdfDocumentParser. But some basic algorithm of processing a PDF file would look like the following:
 <pre>
-<code class="language-csharp">
-foreach(page in PdfFile)
+<code class="language-csharp">foreach(page in PdfFile)
 {
     if(PdfDocumentParser.ActiveTemplate == null)
     {
@@ -270,8 +269,7 @@ foreach(page in PdfFile)
         if(PdfDocumentParser.IsCondition(page, "DocumentLastPage"))
             PdfDocumentParser.ActiveTemplate = null;
     }
-}
-</code>
+}</code>
 </pre>
 <p>Notice that the above algorithm implies that only one template can be applied to a PDF page while it is not mandatory in general. 
 
@@ -307,8 +305,7 @@ foreach(page in PdfFile)
 <h3>Custom algorithm</h3>
 Now, summing up the said above, the algorithm of processing a PDF file in our application should be the following:
 <pre>
-<code class="language-csharp">
-object INVOICE#, JOB#, PO#, COST;
+<code class="language-csharp">object INVOICE#, JOB#, PO#, COST;
 Template currentTemplate;
 foreach(page in PdfFile)
 { 
@@ -335,11 +332,10 @@ foreach(page in PdfFile)
         object PO# = PdfDocumentParser.GetValue(page, "PO#");
         object COST = PdfDocumentParser.GetValue(page, "COST");
     }
-}
-</code>
+}</code>
 </pre>
 
-Refer to <a href='#InvoiceParser'>InvoiceParser</a> as a live code.
+Refer to <a href='#InvoiceParser'>InvoiceParser</a> as live code.
 
 
 
