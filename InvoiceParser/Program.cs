@@ -13,13 +13,11 @@ namespace Cliver.InvoiceParser
 {
     /*
  TBD:
- - change anchor id->name
  - fix marking in anchors table
- - search linked anchors together
 - switch to Tesseract.4
  - tune image recognition by checking brightness deltas
-
  - MainForm to WPF;
+ - ?change anchor id->name (involves condition expressions)
 - ? store each template in separate file;
 
      */
