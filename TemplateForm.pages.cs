@@ -64,40 +64,44 @@ namespace Cliver.PdfDocumentParser
             if (a == null)
                 throw new Exception("Anchor[Id=" + a.Id + "] is not defined.");
 
-            PointF? p0 = null;
+            bool set = true;
             for (Template.Anchor a_ = a; a_ != null; a_ = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == a_.ParentAnchorId))
             {
-                DataGridViewRow r;
-                getAnchor(a_.Id, out r);
                 if (a != a_)
                     showAnchorRowAs(a_.Id, rowStates.Parent, false);
                 if (!a_.IsSet())
                 {
-                    setRowStatus(statuses.WARNING, r, "Not set");
-                    if (a == a_)
-                    {
-                        clearPicture(renewImage);
-                        return null;
-                    }
-                    continue;
+                    set = false;
+                    DataGridViewRow r_;
+                    getAnchor(a_.Id, out r_);
+                    setRowStatus(statuses.WARNING, r_, "Not set");
                 }
-                List<RectangleF> rs = pages[currentPage].GetAnchorRectangles(a_);
-                if (rs == null || rs.Count < 1)
-                {
-                    setRowStatus(statuses.ERROR, r, "Not found");
-                    if (a == a_)
-                    {
-                        clearPicture(renewImage);
-                        return null;
-                    }
-                }
-                setRowStatus(statuses.SUCCESS, r, "Found");
+            }
+            if (!set)
+            {
+                clearPicture(renewImage);
+                return null;
+            }
+            List<List<RectangleF>> rss = pages[currentPage].GetAnchorRectangless(a);
+            DataGridViewRow r;
+            getAnchor(a.Id, out r);
+            if (rss == null || rss.Count < 1)
+            {
+                setRowStatus(statuses.ERROR, r, "Not found");
+                clearPicture(renewImage);
+                return null;
+            }
+            setRowStatus(statuses.SUCCESS, r, "Found");
 
-                drawBoxes(Settings.Appearance.AnchorMasterBoxColor, new List<System.Drawing.RectangleF> { rs[0] }, a == a_ ? renewImage : false);
+            PointF? p0 = null;
+            for (int i = rss.Count - 1; i >= 0; i--)
+            {
+                List<RectangleF> rs = rss[i];
+                drawBoxes(Settings.Appearance.AnchorMasterBoxColor, new List<System.Drawing.RectangleF> { rs[0] }, i == rss.Count - 1 ? renewImage : false);
                 if (rs.Count > 1)
                     drawBoxes(Settings.Appearance.AnchorSecondaryBoxColor, rs.GetRange(1, rs.Count - 1), false);
 
-                if (a == a_)
+                if (i == rss.Count - 1)
                     p0 = new PointF(rs[0].X, rs[0].Y);
             }
             return p0;

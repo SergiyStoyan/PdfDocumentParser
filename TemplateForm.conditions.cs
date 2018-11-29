@@ -197,18 +197,24 @@ namespace Cliver.PdfDocumentParser
             if (a == null)
                 throw new Exception("Anchor[Id=" + a.Id + "] is not defined.");
 
-            for (; a != null; a = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == a.ParentAnchorId))
-            {
-                DataGridViewRow r;
-                getAnchor(a.Id, out r);
-                if (!a.IsSet())
-                    setRowStatus(statuses.WARNING, r, "Not set");
-                List<RectangleF> rs = pages[currentPage].GetAnchorRectangles(a);
-                if (rs == null || rs.Count < 1)
-                    setRowStatus(statuses.ERROR, r, "Not found");
-                else
-                    setRowStatus(statuses.SUCCESS, r, "Found");
-            }
+            bool set = true;
+            for (Template.Anchor a_ = a; a_ != null; a_ = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == a_.ParentAnchorId))
+                if (!a_.IsSet())
+                {
+                    set = false;
+                    DataGridViewRow r_;
+                    getAnchor(a_.Id, out r_);
+                    setRowStatus(statuses.WARNING, r_, "Not set");
+                }
+            if (!set)
+                return;
+            List<List<RectangleF>> rss = pages[currentPage].GetAnchorRectangless(a);
+            DataGridViewRow r;
+            getAnchor(a.Id, out r);
+            if (rss == null || rss.Count < 1)
+                setRowStatus(statuses.ERROR, r, "Not found");
+            else
+                setRowStatus(statuses.SUCCESS, r, "Found");
         }
 
         void setConditionStatus(DataGridViewRow r)
