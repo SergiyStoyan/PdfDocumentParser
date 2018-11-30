@@ -92,7 +92,7 @@ namespace Cliver.PdfDocumentParser
                 if (_activeTemplateOcrCharBoxs != null)
                     _activeTemplateOcrCharBoxs = null;
 
-                anchorHashes2anchorRectangles.Clear();
+                anchorHashes2anchorRectangless.Clear();
             }
 
             //if (pageCollection.ActiveTemplate.Name != newTemplate.Name)
@@ -191,15 +191,15 @@ namespace Cliver.PdfDocumentParser
             Template.Anchor a = pageCollection.ActiveTemplate.Anchors.Find(x => x.Id == anchorId);
             if (a == null)
                 throw new Exception("Anchor[id=" + anchorId + "] does not exist.");
-            List<RectangleF> rs = GetAnchorRectangles(a);
-            if (rs == null || rs.Count < 1)
+            List<List<RectangleF>> rss = GetAnchorRectangless(a);
+            if (rss == null || rss.Count < 1)
                 return null;
-            return new PointF(rs[0].X, rs[0].Y);
+            RectangleF r = rss[rss.Count - 1][0];
+            return new PointF(r.X, r.Y);
         }
 
-        internal List<RectangleF> GetAnchorRectangles(Template.Anchor a)
+        internal List<List<RectangleF>> GetAnchorRectangless(Template.Anchor a)
         {
-            List<RectangleF> rs;
             StringBuilder sb = new StringBuilder(SerializationRoutines.Json.Serialize(a, false));
             for (int? id = a.ParentAnchorId; id != null;)
             {
@@ -210,33 +210,62 @@ namespace Cliver.PdfDocumentParser
                 id = pa.ParentAnchorId;
             }
             string sa = sb.ToString();
-            if (!anchorHashes2anchorRectangles.TryGetValue(sa, out rs))
+            List<List<RectangleF>> anchorRectangless;
+            if (!anchorHashes2anchorRectangless.TryGetValue(sa, out anchorRectangless))
             {
-                rs = findAnchor(a);
-                anchorHashes2anchorRectangles[sa] = rs;
+                anchorRectangless = new List<List<RectangleF>>();
+                findAnchor(a, (IEnumerable<RectangleF> rs) =>
+                {
+                    anchorRectangless.Add(rs.ToList());
+                    return false;
+                }, anchorRectangless);
+
+                anchorHashes2anchorRectangless[sa] = anchorRectangless;
             }
-            return rs;
+            return anchorRectangless;
         }
-        Dictionary<string, List<RectangleF>> anchorHashes2anchorRectangles = new Dictionary<string, List<RectangleF>>();
-
-        List<RectangleF> findAnchor(Template.Anchor a)
+        Dictionary<string, List<List<RectangleF>>> anchorHashes2anchorRectangless = new Dictionary<string, List<List<RectangleF>>>();
+        
+        void findAnchor(Template.Anchor a, Func<IEnumerable<RectangleF>, bool> proceedOnFound, List<List<RectangleF>> anchorRectangless)
         {
-            if (a == null)
-                return null;
-
-            RectangleF mainElementSearchRectangle;
-            RectangleF mainElementInitialRectangle = a.MainElementInitialRectangle();
             if (a.ParentAnchorId != null)
             {
                 Template.Anchor pa = pageCollection.ActiveTemplate.Anchors.Find(x => x.Id == a.ParentAnchorId);
-                List<RectangleF> rs = GetAnchorRectangles(pa);
-                if (rs == null || rs.Count < 1)
-                    return null;
-                RectangleF pameir = pa.MainElementInitialRectangle();
-                mainElementSearchRectangle = getSearchRectangle(new RectangleF(mainElementInitialRectangle.X + rs[0].X - pameir.X, mainElementInitialRectangle.Y + rs[0].Y - pameir.Y, mainElementInitialRectangle.Width, mainElementInitialRectangle.Height), a.SearchRectangleMargin);
+                findAnchor(pa, (IEnumerable<RectangleF> prs) =>
+                 {
+                     if (_findAnchor(a, prs.First().Location, proceedOnFound))
+                     {
+                         anchorRectangless.Insert(0, prs.ToList());
+                         return false;
+                     }
+                     return true;
+                 }, anchorRectangless);
+                return;
             }
-            else
-                mainElementSearchRectangle = getSearchRectangle(mainElementInitialRectangle, a.SearchRectangleMargin);
+            _findAnchor(a, new PointF(), proceedOnFound);
+        }
+
+        bool _findAnchor(Template.Anchor a, PointF parentAnchorPoint0, Func<IEnumerable<RectangleF>, bool> proceedOnFound)
+        {
+            if (a == null)
+                return false;
+
+            RectangleF mainElementSearchRectangle;
+            {
+                RectangleF mainElementInitialRectangle = a.MainElementInitialRectangle();
+                if (a.ParentAnchorId != null)
+                {
+                    RectangleF pameir = pageCollection.ActiveTemplate.Anchors.Find(x => x.Id == a.ParentAnchorId).MainElementInitialRectangle();
+                    if (a.SearchRectangleMargin >= 0)
+                        mainElementSearchRectangle = getSearchRectangle(new RectangleF(mainElementInitialRectangle.X + parentAnchorPoint0.X - pameir.X, mainElementInitialRectangle.Y + parentAnchorPoint0.Y - pameir.Y, mainElementInitialRectangle.Width, mainElementInitialRectangle.Height), a.SearchRectangleMargin);
+                    else
+                        mainElementSearchRectangle = new RectangleF();
+                }
+                else if (a.SearchRectangleMargin >= 0)
+                    mainElementSearchRectangle = getSearchRectangle(mainElementInitialRectangle, a.SearchRectangleMargin);
+                else
+                    mainElementSearchRectangle = new RectangleF();
+            }
 
             switch (a.Type)
             {
@@ -245,7 +274,7 @@ namespace Cliver.PdfDocumentParser
                         Template.Anchor.PdfText ptv = (Template.Anchor.PdfText)a;
                         List<Template.Anchor.PdfText.CharBox> aes = ptv.CharBoxs;
                         if (aes.Count < 1)
-                            return null;
+                            return false;
                         IEnumerable<Pdf.CharBox> bt0s;
                         if (ptv.SearchRectangleMargin < 0)
                             bt0s = PdfCharBoxs.Where(x => x.Char == aes[0].Char);
@@ -273,18 +302,19 @@ namespace Cliver.PdfDocumentParser
                                     break;
                             }
                             if (bts.Count == aes.Count)
-                                return bts.Select(x => x.R).ToList();
+                                if (!proceedOnFound(bts.Select(x => x.R)))
+                                    return true;
                         }
                     }
-                    return null;
+                    return false;
                 case Template.Types.OcrText:
                     {
                         Template.Anchor.OcrText ot = (Template.Anchor.OcrText)a;
                         List<Template.Anchor.OcrText.CharBox> aes = ot.CharBoxs;
                         if (aes.Count < 1)
-                            return null;
+                            return false;
                         List<Ocr.CharBox> contaningOcrCharBoxs;
-                        PointF shiftInPage = new PointF(0, 0);
+                        PointF searchRectanglePosition = new PointF(0, 0);
                         IEnumerable<Ocr.CharBox> bt0s;
                         if (ot.OcrEntirePage)
                         {
@@ -305,8 +335,8 @@ namespace Cliver.PdfDocumentParser
                             for (int i = 1; i < ot.CharBoxs.Count; i++)
                                 contaningRectangle = RectangleF.Union(contaningRectangle, getSearchRectangle(ot.CharBoxs[i].Rectangle.GetSystemRectangleF(), a.SearchRectangleMargin));
                             contaningOcrCharBoxs = Ocr.This.GetCharBoxs(GetRectangleFromActiveTemplateBitmap(contaningRectangle.X / Settings.Constants.Image2PdfResolutionRatio, contaningRectangle.Y / Settings.Constants.Image2PdfResolutionRatio, contaningRectangle.Width / Settings.Constants.Image2PdfResolutionRatio, contaningRectangle.Height / Settings.Constants.Image2PdfResolutionRatio));
-                            shiftInPage = new PointF(contaningRectangle.X < 0 ? 0 : contaningRectangle.X, contaningRectangle.Y < 0 ? 0 : contaningRectangle.Y);
-                            RectangleF unshiftedMainElementSearchRectangle = new RectangleF(mainElementSearchRectangle.X - shiftInPage.X, mainElementSearchRectangle.Y - shiftInPage.Y, mainElementSearchRectangle.Width, mainElementSearchRectangle.Height);
+                            searchRectanglePosition = new PointF(contaningRectangle.X < 0 ? 0 : contaningRectangle.X, contaningRectangle.Y < 0 ? 0 : contaningRectangle.Y);
+                            RectangleF unshiftedMainElementSearchRectangle = new RectangleF(mainElementSearchRectangle.X - searchRectanglePosition.X, mainElementSearchRectangle.Y - searchRectanglePosition.Y, mainElementSearchRectangle.Width, mainElementSearchRectangle.Height);
                             bt0s = contaningOcrCharBoxs.Where(x => x.Char == aes[0].Char && unshiftedMainElementSearchRectangle.Contains(x.R));
                         }
                         List<Ocr.CharBox> bts = new List<Ocr.CharBox>();
@@ -331,33 +361,34 @@ namespace Cliver.PdfDocumentParser
                                     break;
                             }
                             if (bts.Count == aes.Count)
-                                return bts.Select(x => { x.R.X += shiftInPage.X; x.R.Y += shiftInPage.Y; return x.R; }).ToList();
+                                if (!proceedOnFound(bts.Select(x => { x.R.X += searchRectanglePosition.X; x.R.Y += searchRectanglePosition.Y; return x.R; })))
+                                    return true;
                         }
                     }
-                    return null;
+                    return false;
                 case Template.Types.ImageData:
                     {
                         Template.Anchor.ImageData idv = (Template.Anchor.ImageData)a;
                         List<Template.Anchor.ImageData.ImageBox> ibs = idv.ImageBoxs;
                         if (ibs.Count < 1)
-                            return null;
-                        Point shiftInPage;
+                            return false;
+                        Point searchRectanglePosition;
                         ImageData id0;
                         if (idv.SearchRectangleMargin < 0)
                         {
                             id0 = ActiveTemplateImageData;
-                            shiftInPage = new Point(0, 0);
+                            searchRectanglePosition = new Point(0, 0);
                         }
                         else
                         {
                             id0 = new ImageData(GetRectangleFromActiveTemplateBitmap(mainElementSearchRectangle.X / Settings.Constants.Image2PdfResolutionRatio, mainElementSearchRectangle.Y / Settings.Constants.Image2PdfResolutionRatio, mainElementSearchRectangle.Width / Settings.Constants.Image2PdfResolutionRatio, mainElementSearchRectangle.Height / Settings.Constants.Image2PdfResolutionRatio));
-                            shiftInPage = new Point(mainElementSearchRectangle.X < 0 ? 0 : (int)mainElementSearchRectangle.X, mainElementSearchRectangle.Y < 0 ? 0 : (int)mainElementSearchRectangle.Y);
+                            searchRectanglePosition = new Point(mainElementSearchRectangle.X < 0 ? 0 : (int)mainElementSearchRectangle.X, mainElementSearchRectangle.Y < 0 ? 0 : (int)mainElementSearchRectangle.Y);
                         }
                         List<RectangleF> bestRs = null;
                         float minDeviation = float.MaxValue;
                         ibs[0].ImageData.FindWithinImage(id0, idv.BrightnessTolerance, idv.DifferentPixelNumberTolerance, (Point point0, float deviation) =>
                         {
-                            point0 = new Point(shiftInPage.X + point0.X, shiftInPage.Y + point0.Y);
+                            point0 = new Point(searchRectanglePosition.X + point0.X, searchRectanglePosition.Y + point0.Y);
                             List<RectangleF> rs = new List<RectangleF>();
                             rs.Add(new RectangleF(point0, new SizeF(ibs[0].Rectangle.Width, ibs[0].Rectangle.Height)));
                             for (int i = 1; i < ibs.Count; i++)
@@ -379,6 +410,8 @@ namespace Cliver.PdfDocumentParser
                             }
                             if (!idv.FindBestImageMatch)
                             {
+                                if (proceedOnFound(rs))
+                                    return true;
                                 bestRs = rs;
                                 return false;
                             }
@@ -389,7 +422,9 @@ namespace Cliver.PdfDocumentParser
                             }
                             return true;
                         });
-                        return bestRs;
+                        if (bestRs != null && !proceedOnFound(bestRs))
+                            return true;
+                        return false;
                     }
                 default:
                     throw new Exception("Unknown option: " + a.Type);

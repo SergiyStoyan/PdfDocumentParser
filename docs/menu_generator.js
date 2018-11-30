@@ -74,6 +74,49 @@ var convert = function(mode){
         var switchContainer = document.getElementsByClassName('switchContainer')[0];
         switchContainer.innerHTML = '<a class="switchLink" href="#_plainHtml" title="If the page is not displayed properly, switch to the plain html.">plain html</a>&nbsp;|&nbsp;' + (mode == '_collapsedContent' ? '<a class="switchLink" href="#_entireContent" title="Switch to the entire content mode.">entire content</a>' : '<a class="switchLink" href="#_collapsedContent" title="Switch to the collapsed content mode.">collapsed content</a>');
     };
+    
+    var scrollMenuToCurrentItem = function(item)
+    {//scroll the menu to get the current menu item visible
+        if(!item){
+            for(id in items)
+                if(items[id]['menuItem'].classList.contains('current')){
+                    item = items[id];
+                    break;
+                }                    
+            if(!item)
+                return;
+        }
+        
+        var itemRect = item['menuItem'].getBoundingClientRect();
+        
+        var menuContainerRect = menuContainer.getBoundingClientRect();   
+        var itemPosition = orderedItemIds.indexOf(item['id']);                    
+        var top;
+        var menuContainerRect = menuContainer.getBoundingClientRect();
+        if(itemPosition > 0)
+            top = items[orderedItemIds[itemPosition - 1]]['menuItem'].getBoundingClientRect().top;
+        else
+            //top = itemRect.top - itemRect.height;
+            top = menuContainerRect.top - menuContainer.scrollTop;
+        if(top <= menuContainerRect.top)
+            menuContainer.scrollTop += top - menuContainerRect.top;
+        else{
+            var bottom;
+            if(itemPosition + 1 < orderedItemIds.length)
+                bottom = items[orderedItemIds[itemPosition + 1]]['menuItem'].getBoundingClientRect().bottom;
+            else
+                //bottom = itemRect.bottom + itemRect.height;
+                bottom = menuContainerRect.bottom - menuContainer.scrollTop + menuContainer.scrollHeight;
+            if(bottom >= menuContainerRect.bottom)
+                menuContainer.scrollTop += bottom - menuContainerRect.bottom;
+        }
+        
+        if(itemRect.left < 0)
+            menuContainer.scrollLeft += itemRect.left;
+        else if(itemRect.right > menuContainerRect.right)
+            menuContainer.scrollLeft += itemRect.right - menuContainerRect.right;
+    };
+                
 
     var setMenuContainerLocation; 
                   
@@ -213,9 +256,11 @@ var convert = function(mode){
                 window.onresize = function(){
                     content.style.minHeight = window.innerHeight; 
                     setMenuContainerLocation();
+                    //scrollMenuToCurrentItem();//need to cure wrong shifting
                 }
                 window.onscroll = function(){
                     setMenuContainerLocation();
+                    //scrollMenuToCurrentItem();//need to cure wrong shifting
                 }
             }
             window.onresize();
@@ -245,37 +290,6 @@ var convert = function(mode){
                 setItemVisibleInContent(item, true);
                 item['menuItem'].classList.add('current'); 
                 
-                {//scroll the menu to get the current menu item visible
-                    var itemRect = item['menuItem'].getBoundingClientRect();
-                    
-                    var menuContainerRect = menuContainer.getBoundingClientRect();   
-                    var itemPosition = orderedItemIds.indexOf(item['id']);                    
-                    var top;
-                    var menuContainerRect = menuContainer.getBoundingClientRect();
-                    if(itemPosition > 0)
-                        top = items[orderedItemIds[itemPosition - 1]]['menuItem'].getBoundingClientRect().top;
-                    else
-                        //top = itemRect.top - itemRect.height;
-                        top = menuContainerRect.top - menuContainer.scrollTop;
-                    if(top <= menuContainerRect.top)
-                        menuContainer.scrollTop += top - menuContainerRect.top;
-                    else{
-                        var bottom;
-                        if(itemPosition + 1 < orderedItemIds.length)
-                            bottom = items[orderedItemIds[itemPosition + 1]]['menuItem'].getBoundingClientRect().bottom;
-                        else
-                            //bottom = itemRect.bottom + itemRect.height;
-                            bottom = menuContainerRect.bottom - menuContainer.scrollTop + menuContainer.scrollHeight;
-                        if(bottom >= menuContainerRect.bottom)
-                            menuContainer.scrollTop += bottom - menuContainerRect.bottom;
-                    }
-                    
-                    if(itemRect.left < 0)
-                        menuContainer.scrollLeft += itemRect.left;
-                    else if(itemRect.right > menuContainerRect.right)
-                        menuContainer.scrollLeft += itemRect.right - menuContainerRect.right;
-                }                 
-                
                 {//display also children until some one is not empty
                     //var level = (item['id'].match(/_/ig) || []).length + 1;
                     var i = orderedItemIds.indexOf(item['id']);
@@ -286,7 +300,9 @@ var convert = function(mode){
                         setItemVisibleInContent(items[orderedItemIds[i]], true);
                     }
                 }  
-
+                
+                scrollMenuToCurrentItem(item);
+                
                 { //scroll window only until displaying footer 
                     var left, top;
                     if(anchor){
@@ -367,6 +383,8 @@ var convert = function(mode){
     window.addEventListener("hashchange", onHashchange, true);
 
     navigate2currentAnchor();
+    //if(mode == '_collapsedContent') //show the header when opening first time       
+    //    window.scrollTo(0, 0);
 
     {//it is only to prevent browser from unpleasant page jerking when navigating to an anchor which is hidden
         var localPath = window.location.href.replace(/#.*/, '');
