@@ -328,7 +328,7 @@ foreach(page in PdfFile)
     {  
         PdfDocumentParser.ActiveTemplate = currentTemplate;
         object INVOICE# = PdfDocumentParser.GetValue(page, "INVOICE#");
-        object JOB#, = PdfDocumentParser.GetValue(page, "JOB#");
+        object JOB# = PdfDocumentParser.GetValue(page, "JOB#");
         object PO# = PdfDocumentParser.GetValue(page, "PO#");
         object COST = PdfDocumentParser.GetValue(page, "COST");
     }

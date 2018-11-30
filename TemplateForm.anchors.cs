@@ -45,6 +45,7 @@ namespace Cliver.PdfDocumentParser
                 rowStates? rowState = anchors.Rows[e.RowIndex].HeaderCell.Tag as rowStates?;
                 if (rowState == null || rowState == rowStates.NULL)
                     return;
+                e.Paint(e.ClipBounds, DataGridViewPaintParts.All);
                 string s;
                 switch (rowState)
                 {
@@ -320,6 +321,35 @@ namespace Cliver.PdfDocumentParser
             row.Cells["Id3"].Value = a.Id;
             row.Cells["Type3"].Value = a.Type;
             row.Cells["ParentAnchorId3"].Value = a.ParentAnchorId;
+
+            Template.RectangleF r = null;
+            switch (a.Type)
+            {
+                case Template.Types.PdfText:
+                    {
+                        Template.Anchor.PdfText pt = (Template.Anchor.PdfText)a;
+                        if (pt.CharBoxs.Count > 0)
+                            r = pt.CharBoxs[0].Rectangle;
+                    }
+                    break;
+                case Template.Types.OcrText:
+                    {
+                        Template.Anchor.OcrText ot = (Template.Anchor.OcrText)a;
+                        if (ot.CharBoxs.Count > 0)
+                            r = ot.CharBoxs[0].Rectangle;
+                    }
+                    break;
+                case Template.Types.ImageData:
+                    {
+                        Template.Anchor.ImageData id = (Template.Anchor.ImageData)a;
+                        if (id.ImageBoxs.Count > 0)
+                            r = id.ImageBoxs[0].Rectangle;
+                    }
+                    break;
+                default:
+                    throw new Exception("Unknown option: " + a.Type);
+            }
+            row.Cells["Point03"].Value = SerializationRoutines.Json.Serialize(new { r.X, r.Y });
 
             if (loadingTemplate)
                 return;
