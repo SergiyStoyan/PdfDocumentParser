@@ -45,11 +45,11 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 
 
 <h2><a name='anchor'>Anchor</a></h2>
-<p>An anchor is a fragment of either text or image extracted from a PDF page in order to be searched on any page needed. An anchor can be used in the following ways:
+<p>An anchor is a fragment of either text or image captured on a PDF page in order to be searched on any page needed afterwards. An anchor can be used in the following ways:
 <ul>
-<li><a href="#field">fields</a>;</li> 
-<li>be engaged in <a href="#condition">conditions</a>;</li>
-<li>other <a href='#anchor'>anchors can be linked to it</a>;</li>
+<li><a href="#field">fields</a> can be linked to it;</li> 
+<li>it can be engaged in <a href="#condition">conditions</a>;</li>
+<li>other <a href='#anchor'>anchors</a> can be linked to it;</li>
 </ul>
 <p>Being used does not impose any restriction on the anchor. Thus, an anchor can be used in many ways at the same time.
 
@@ -60,10 +60,13 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 
 
 <h3>Anchor linked to anchor</h3>
-<p>A linked anchor is named 'child' of the linking one which is named 'parent'. When an anchor is linked to another anchor, its search area (when it is set to not the entire page) becomes related to its parent anchor's position. That is, a parent anchor is searched until a match (if exists) is found that satisfies to the child anchor search conditions.
-<p><span class='attention'>NOTE: </span>When a child anchor has <a href='#anchorPdfText'>Search Rectangle Margin</a> set, position of its parent anchor and position of this very anchor searched separately may differ. It happens because the latter position is the first match that satisfies to the anchor itself while the former position is the first match that satisfies to both the parent and the child anchors together. The same consideration is true for anchor itself and anchor as a child.
+<p>A linked anchor is named 'child' of the linking one which is named 'parent'. 
+<p>When an anchor is linked to another anchor, its search area (when it is set to not entire page) becomes related to its parent anchor's position. That means that a parent anchor is searched not until its first match found as done for a stand-alone anchor, but until a match found that satisfies to the child anchor as well. 
+<br>More specifically, when a child anchor has <a href='#anchorPdfText'>Search Rectangle Margin</a> set to not entire page, the  position of its parent anchor searched as parent may differ from the position of the same very anchor searched as stand-alone anchor. 
+<br>The same consideration is true for child anchors: an anchor, whose search area is set to not entire page, may change its position after linking to another anchor. 
+<br><span class='attention'>NOTE: </span>An anchor acting stand-alone and the same anchor acting in linkage should be considered different anchors.
 <p>When a parent anchor is not found, its child anchors are set not found too.
-<p>Number of anchors linked successively in a chain can be any.
+<p>Number of anchors linked successively in a chain can be any. Although, it should be taken to account that processing time of recursive compound search increases exponentially.
 
 
 
