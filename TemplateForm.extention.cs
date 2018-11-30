@@ -100,7 +100,7 @@ namespace Cliver.PdfDocumentParser
                         if (a.ParentAnchorId != null)
                         {
                             DataGridViewComboBoxCell c = row.Cells[anchors.Columns["ParentAnchorId3"].Index] as DataGridViewComboBoxCell;
-                            c.DataSource = new List<dynamic> { new { Id = a.ParentAnchorId, Name = a.ParentAnchorId.ToString() } };//to avoid error message
+                            c.DataSource = new List<dynamic> { new { Id = a.ParentAnchorId, Name = a.ParentAnchorId.ToString() } };//to avoid validation error
                         }
                         setAnchorRow(row, a);
                     }
