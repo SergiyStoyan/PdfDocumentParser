@@ -15,7 +15,7 @@ PdfDocumentParser API consists of:
 
 PdfDocumentParser is a .NET DLL.
 
-[More details...](https://sergeystoyan.github.io/PdfDocumentParser/)
+[More details...](https://sergeystoyan.github.io/PdfDocumentParser/#1)
 
 ## InvoiceParser
 [Invoice Parser](https://github.com/sergeystoyan/PdfDocumentParser/tree/lib%2Bcustomization/InvoiceParser) is a custom desktop application based on [PdfDocumentParser](https://github.com/sergeystoyan/PdfDocumentParser). While it was developed for custom needs, it can be used as a framework or example of incorporating PdfDocumentParser into a custom code.
