@@ -220,18 +220,18 @@ var convert = function(mode){
                         if(hr.bottom >= 0){
                             menuContainer.scrollTop -= menuContainer.getBoundingClientRect().top - hr.bottom;
                             menuContainer.style.top = hr.bottom;
-                            menuContainer.style.height = window.innerHeight - hr.bottom;
+                            menuContainer.style.height = document.body.clientHeight/*window.innerHeight*/ - hr.bottom;//!!!window.innerHeight includes scrollbar if shown
                         }
                         else{                        
                             var fr = footer.getBoundingClientRect();
-                            if(fr.top < window.innerHeight){                           
+                            if(fr.top < document.body.clientHeight/*window.innerHeight*/){                           
                                 menuContainer.scrollTop -= menuContainer.getBoundingClientRect().top;
                                 menuContainer.style.top = 0;
                                 menuContainer.style.height = fr.top;
                             }else{
                                 menuContainer.scrollTop -= menuContainer.getBoundingClientRect().top;
                                 menuContainer.style.top = 0;
-                                menuContainer.style.height = window.innerHeight;
+                                menuContainer.style.height = document.body.clientHeight;//window.innerHeight;
                             }
                         }
                     };
@@ -240,16 +240,16 @@ var convert = function(mode){
                         var hr = header.getBoundingClientRect();
                         if(hr.bottom >= 0){
                             menuContainer.style.top = hr.bottom;
-                            menuContainer.style.height = window.innerHeight - hr.bottom;
+                            menuContainer.style.height = document.body.clientHeight/*window.innerHeight*/ - hr.bottom;
                         }
                         else{                        
                             var fr = footer.getBoundingClientRect();
-                            if(fr.top < window.innerHeight){                            
+                            if(fr.top < document.body.clientHeight/*window.innerHeight*/){      
                                 menuContainer.style.top = 0;
                                 menuContainer.style.height = fr.top;
                             }else{
                                 menuContainer.style.top = 0;
-                                menuContainer.style.height = window.innerHeight;
+                                menuContainer.style.height = document.body.clientHeight;//window.innerHeight;
                             }
                         }
                     };
@@ -411,8 +411,7 @@ switch(anchorName){
             return false;
         };
         anchorDiv.innerHTML = '<a class="switchLink" href="#" onclick="loadInMenuMode();" title="Switch to javascript generated document.">menu mode</a>';
-        var body = document.getElementsByTagName('body')[0];
-        body.insertBefore(anchorDiv, body.childNodes[0]);
+        body.insertBefore(anchorDiv, document.body.childNodes[0]);
     break;
     case '_checkInternalLinks':
         var as = document.getElementsByTagName('a');

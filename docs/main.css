@@ -44,7 +44,7 @@ h6:before{content: '\002D\0020\002D\0020\002D\0020\002D\0020\002D';  margin:0 10
     
 .content{
     margin:0 50 0 50;
-    overflow:auto;/*removes gaps appearing between block elements due to margin of their childs!*/
+    overflow1:auto;/*off to allow window horizontal scrollbar*//*removes gaps appearing between block elements due to margin of their childs!*/
 }
 
 .footer {

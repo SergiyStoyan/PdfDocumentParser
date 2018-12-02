@@ -37,7 +37,7 @@ span.h6 {margin:5 0 0 100;}
     vertical-align:top;
     text-align:left;
     width:auto;
-    overflow:auto;/*removes gaps appearing between block elements due to margin of their childs!*/
+    overflow1:auto;/*off to allow window horizontal scrollbar*//*removes gaps appearing between block elements due to margin of their childs!*/
 }
 
 .menuContainer{
