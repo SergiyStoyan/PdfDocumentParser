@@ -97,11 +97,8 @@ namespace Cliver.PdfDocumentParser
                     {
                         int i = anchors.Rows.Add();
                         var row = anchors.Rows[i];
-                        if (a.ParentAnchorId != null)
-                        {
-                            DataGridViewComboBoxCell c = row.Cells[anchors.Columns["ParentAnchorId3"].Index] as DataGridViewComboBoxCell;
-                            c.DataSource = new List<dynamic> { new { Id = a.ParentAnchorId, Name = a.ParentAnchorId.ToString() } };//to avoid validation error
-                        }
+                        if (a.ParentAnchorId != null)//to avoid validation error
+                            ((DataGridViewComboBoxCell)row.Cells[anchors.Columns["ParentAnchorId3"].Index]).DataSource = new List<dynamic> { new { Id = a.ParentAnchorId, Name = a.ParentAnchorId.ToString() } };
                         setAnchorRow(row, a);
                     }
                     onAnchorsChanged();
