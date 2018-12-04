@@ -59,14 +59,15 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 <p><span class='attention'>NOTE: </span>Only the first match on page is used to locate anchor. No further match is searched.
 
 
-<h3>Anchor linked to anchor</h3>
-<p>A linked anchor is named 'child' of the linking one which is named 'parent'. 
-<p>When an anchor is linked to another anchor, its search area (when it is set to not entire page) becomes related to its parent anchor's position. That means that a parent anchor is searched not until its first match found as done for a stand-alone anchor, but until a match found that satisfies to the child anchor as well. 
+<h3>Compound anchor</h3>
+<p>A compound anchor is a chain of successively linked anchors. It is represented by the last anchor in the chain which gives one's position to it. 
+<p>Usage of compound anchors and simple anchors is the same.
+<p>A linked anchor is named 'child' of the linking one which is named 'parent'. When an anchor is linked to another anchor, its search area (when it is set to not entire page) becomes related to its parent anchor's position. That means that a parent anchor is searched not until its first match found as done for a stand-alone anchor, but until a match found that satisfies to the child anchor as well. 
 <br>More specifically, when a child anchor has <a href='#anchorPdfText'>Search Rectangle Margin</a> set to not entire page,  position of its parent anchor, while searching as parent, may differ from position of the very same anchor, while searching stand-alone. 
 <br>The same consideration is true for child anchors: an anchor, whose search area is set to not entire page, may change its position after linking to another anchor. 
-<br><span class='attention'>NOTE: </span>An anchor acting stand-alone and the same anchor acting in linkage should be considered different anchors.
-<p>When a parent anchor is not found, its child anchors are set not found too.
-<p>Number of anchors linked successively in a chain can be any. Although, it should be taken to account that processing time of recursive compound search increases exponentially.
+<br><span class='attention'>NOTE: </span>An anchor acting stand-alone and the same anchor acting in a compound anchor should be considered different anchors.
+<p>A compound anchor is set not found when some of its anchors is not found.
+<p>Number of anchors in a compound anchor can be any. Although, it should be taken to account that processing time of recursive compound search increases exponentially.
 
 
 
@@ -285,8 +286,7 @@ The main idea of using PdfDocumentParser in an application is that custom operat
 <p>PdfDocumentParser can only be called from within an application developed for a certain parsing task. Therefore, this tutorial is based on a sample task and an application developed for it.
 
 <h3>Custom task</h3>
-<p>The parsing task, that is considered in this tutorial:
-<p>There are PDF files that consist of invoices issued by different companies. Values INVOICE#, JOB#, PO#, COST should be parsed from every invoice.
+<p>The parsing task, that is considered in this tutorial: there are PDF files that consist of invoices issued by different companies. Values INVOICE#, JOB#, PO#, COST should be parsed from every invoice.
 <p>It is known that the PDF files to be parsed comply with the following:
 <ul>
 <li>a file can consist of multiple invoices;</li>
