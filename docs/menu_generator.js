@@ -252,7 +252,25 @@ var convert = function(mode){
                                 menuContainer.style.height = document.body.clientHeight;//window.innerHeight;
                             }
                         }
-                    };
+                    };            
+                    // setMenuContainerLocation = function(){//move menuContainer when scrolling at header or footer
+                        // var hr = header.getBoundingClientRect();
+                        // if(hr.bottom >= 0){
+                            // menuContainer.style.top = hr.bottom;
+                            // menuContainer.style.height = document.body.clientHeight/*window.innerHeight*/ - hr.bottom;
+                        // }
+                        // else{                        
+                            // var fr = footer.getBoundingClientRect();
+                            // if(fr.top < document.body.clientHeight/*window.innerHeight*/){ 
+                                // menuContainer.scrollTop -= fr.top - document.body.clientHeight;    
+                                // menuContainer.style.top = 0;
+                                // menuContainer.style.height = fr.top;
+                            // }else{
+                                // menuContainer.style.top = 0;
+                                // menuContainer.style.height = document.body.clientHeight;//window.innerHeight;
+                            // }
+                        // }
+                    // };
                 window.onresize = function(){
                     content.style.minHeight = window.innerHeight; 
                     setMenuContainerLocation();
