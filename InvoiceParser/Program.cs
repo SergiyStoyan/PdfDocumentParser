@@ -13,6 +13,7 @@ namespace Cliver.InvoiceParser
 {
     /*
  TBD:
+ - !!!in page.cs::_findAnchor() in case Template.Types.ImageData: images are not searched recursively (if a secondary image search failed then search stops). It should be done like it is done for linked anchors;
  - switch to Tesseract.4
  - MainForm and TemplateForm to WPF;
  - tune image recognition by checking brightness deltas
