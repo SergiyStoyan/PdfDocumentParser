@@ -1,6 +1,7 @@
 <html>
 <head>
 <title>Pdf Document Parser</title>
+ 
 <link rel="stylesheet" type="text/css" href="main.css">
 <link rel="stylesheet" type="text/css" href="menu_generator.css">
 
@@ -15,26 +16,27 @@
 
 <div class='content'>
 <h1><a name='overview'>Overview</a></h1>
-<p>PdfDocumentParser is a parsing engine intended to extract text/images from PDF documents that conform to a recognizable graphic layout - such as invoices and the like. The main parsing approach is based on finding certain text or image fragments on a page and then extracting text/images located relatively to those fragments.
+<p>PdfDocumentParser is a parsing engine intended to extract text/images from PDF documents that conform to a recognizable graphic layout - such as invoices and the like. PdfDocumentParser was designed to be incorporated into a custom application, thus, drastically reducing efforts of building a PDF parser/extractor/scraper/indexer. 
+
+<p>PdfDocumentParser is a .NET DLL that provides the following API's:
+<ul>
+<li>GUI named <a href="#templateEditor">Template Editor</a> where parsing templates can be created or debugged in an easy manner;</li>
+<li><a href="#api">Parsing API</a> that allows custom applications to parse PDF files in a custom manner with a little effort required;</li>
+</ul> 
+
+<h2><a name='approach'>Approach</a></h2>
+<p>The main approach of parsing by PdfDocumentParser is based on finding certain text or image fragments on a page and then extracting text/images located relatively to those fragments.
 <p>Within this scope PdfDocumentParser is capable of the following:
 <ul>
-<li>operating with text represented by PDF entities (meant for native PDF files);</li>
-<li>processing OCR'ed text (meant for scanned PDF files);</li>
-<li>image search/comparison/extraction (meant for either native or scanned PDF files);</li>
+<li>search/extract text represented by PDF entities - meant for native PDF files;</li>
+<li>search/extract text obtained by OCR - meant for scanned PDF files;</li>
+<li>search/compare/extract page fragments as images - meant for either native or scanned PDF files;</li>
 </ul> 
 For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#fieldTypes'>field types</a>.
 
-<p>PdfDocumentParser was designed to be incorporated into custom applications hopefully without need of change. 
-<p>PdfDocumentParser API consists of:
-<ul>
-<li><a href="#templateEditor">Template Editor</a> where parsing templates can be created or debugged in an easy manner;</li>
-<li><a href="#api">Parsing API</a> that allows custom applications to parse PDF files in a custom manner with little effort required;</li>
-</ul> 
-<p>PdfDocumentParser is a .NET DLL.
 
-
-
-
+<h2><a name='approach'>Getting started</a></h2>
+To get a feel what can be done with PdfDocumentParser review <a href='#tutorialApi'>the tutorial of bulding a custom application</a> and then <a href='#tutorialTemplateEditor'>the tutorial of setting template</a>. To conceive the idea in details, read the chapters consecutively as they were ordered trying to make learning easy. 
 
 
 <h1><a name="template">Template</a></h1>
@@ -51,7 +53,7 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 <li>it can be engaged in <a href="#condition">conditions</a>;</li>
 <li>other <a href='#anchor'>anchors</a> can be linked to it;</li>
 </ul>
-<p>Being used does not impose any restriction on the anchor. Thus, an anchor can be used in many ways at the same time.
+<p>Being used does not impose any restriction on an anchor. Thus, an anchor can be used in many ways at the same time.
 
 <p>Anchors are identified by their numbers assigned automatically.
 <p>An anchor consists of a single or many elements of the same type which can be either text characters or images. The first element is 'master' and the rest are 'secondary'. Position of its master element is position of the anchor itself. 
@@ -275,7 +277,7 @@ The main idea of using PdfDocumentParser in an application is that custom operat
     }
 }</code>
 </pre>
-<p>Notice that the above algorithm implies that only one template can be applied to a PDF page while it is not mandatory in general. 
+<p>Notice that the above algorithm assumes that only one template can be applied to a PDF page while it is not mandatory in general. 
 
 
 
@@ -283,17 +285,17 @@ The main idea of using PdfDocumentParser in an application is that custom operat
 
 
 <h2><a name='tutorialApi'>Tutorial: custom application</a></h2>
-<p>PdfDocumentParser can only be called from within an application developed for a certain parsing task. Therefore, this tutorial is based on a sample task and an application developed for it.
+<p>PdfDocumentParser can only be called from within an application developed for a certain parsing task, so in this tutorial we'll consider a sample task and an application developed for it.
 
-<h3>Custom task</h3>
-<p>The parsing task, that is considered in this tutorial: there are PDF files that consist of invoices issued by different companies. Values INVOICE#, JOB#, PO#, COST should be parsed from every invoice.
+<h3>Custom task & application</h3>
+<p>The parsing task considered in this tutorial follows: there are PDF files that consist of invoices issued by different companies. Values INVOICE#, JOB#, PO#, COST should be parsed from every invoice.
 <p>It is known that the PDF files to be parsed comply with the following:
 <ul>
 <li>a file can consist of multiple invoices;</li>
 <li>an invoice can consist of multiple pages;</li>
 <li>any page in a file participates in an invoice;</li>
 </ul>
-<p><a href='#InvoiceParser'>InvoiceParser</a> is an application developed for this task and is referred to by this tutorial.
+<p><a href='#InvoiceParser'>InvoiceParser</a> is an application developed for this task and is referred to during the tutorial.
 
 <h3><a name='customConfiguration'>Custom configuration<a/></h3>
 <p>As is obvious from the task requirements, the <a href='#field'>field</a> collection predetermined in our application should be: INVOICE#, JOB#, PO#, COST.
@@ -532,6 +534,12 @@ Invoice Parser is a custom desktop application based on <a href='#overview'>PdfD
         &nbsp;2018,&nbsp;&nbsp;<a href='mailto:sergey.stoyan@gmail.com?Subject=PdfDocumentParser request' target='_top'>Sergey Stoyan</a>
 </div>
 
+<script>
+if(!window.location.href.match(/\#/ig)){
+    window.location.href += '#1';
+    location.reload();
+}
+</script>
 <script src='menu_generator.js' shiftHeaderAndFooterToContentView=''></script>
 
 </body>

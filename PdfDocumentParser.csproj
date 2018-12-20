@@ -319,18 +319,17 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\CLIVER\CliverBot\CliverRoutines\CliverRoutines.csproj">
-      <Project>{aca94788-bed1-4b8e-94ef-e54293e8d139}</Project>
-      <Name>CliverRoutines</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Page Include="TemplateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\CLIVER\CliverRoutines\CliverRoutines.csproj">
+      <Project>{aca94788-bed1-4b8e-94ef-e54293e8d139}</Project>
+      <Name>CliverRoutines</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
