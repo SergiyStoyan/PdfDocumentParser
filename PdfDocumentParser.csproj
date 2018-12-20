@@ -7,7 +7,8 @@
     <ProjectGuid>{B1D7BA69-35AA-45BD-B1D0-D84FD2BC47A0}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ApplicationIcon>computers308.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>PdfDocumentParser</AssemblyName>
@@ -112,8 +113,8 @@
     <Reference Include="Magick.NET-Q16-AnyCPU, Version=7.8.0.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
       <HintPath>InvoiceParser\packages\Magick.NET-Q16-AnyCPU.7.8.0\lib\net40\Magick.NET-Q16-AnyCPU.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>InvoiceParser\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>InvoiceParser\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />

@@ -35,6 +35,10 @@
             this.label12 = new System.Windows.Forms.Label();
             this.anchorsContainer = new System.Windows.Forms.SplitContainer();
             this.anchors = new System.Windows.Forms.DataGridView();
+            this.Id3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ParentAnchorId3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Type3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Point03 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.conditions = new System.Windows.Forms.DataGridView();
             this.Name2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -70,6 +74,11 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.fields = new System.Windows.Forms.DataGridView();
+            this.Name_ = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Type = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Rectangle = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
@@ -83,15 +92,6 @@
             this.About = new System.Windows.Forms.LinkLabel();
             this.ExtractFieldsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.Name_ = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Type = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Rectangle = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Id3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ParentAnchorId3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Type3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Point03 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -252,6 +252,37 @@
             this.anchors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.anchors.Size = new System.Drawing.Size(228, 249);
             this.anchors.TabIndex = 50;
+            // 
+            // Id3
+            // 
+            this.Id3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Id3.HeaderText = "Id";
+            this.Id3.Name = "Id3";
+            this.Id3.ReadOnly = true;
+            this.Id3.Width = 41;
+            // 
+            // ParentAnchorId3
+            // 
+            this.ParentAnchorId3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.ParentAnchorId3.HeaderText = "Parent";
+            this.ParentAnchorId3.Name = "ParentAnchorId3";
+            this.ParentAnchorId3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.ParentAnchorId3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.ParentAnchorId3.Width = 63;
+            // 
+            // Type3
+            // 
+            this.Type3.HeaderText = "Type";
+            this.Type3.Name = "Type3";
+            this.Type3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Type3.Width = 70;
+            // 
+            // Point03
+            // 
+            this.Point03.HeaderText = "Point0";
+            this.Point03.Name = "Point03";
+            this.Point03.ReadOnly = true;
+            this.Point03.Width = 60;
             // 
             // splitContainer3
             // 
@@ -658,6 +689,43 @@
             this.fields.Size = new System.Drawing.Size(429, 126);
             this.fields.TabIndex = 30;
             // 
+            // Name_
+            // 
+            this.Name_.HeaderText = "Name";
+            this.Name_.Name = "Name_";
+            this.Name_.ReadOnly = true;
+            this.Name_.Width = 60;
+            // 
+            // AnchorId
+            // 
+            this.AnchorId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.AnchorId.HeaderText = "Anchor";
+            this.AnchorId.Name = "AnchorId";
+            this.AnchorId.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.AnchorId.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.AnchorId.Width = 66;
+            // 
+            // Type
+            // 
+            this.Type.HeaderText = "Type";
+            this.Type.Name = "Type";
+            this.Type.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Type.Width = 70;
+            // 
+            // Rectangle
+            // 
+            this.Rectangle.HeaderText = "Rectangle";
+            this.Rectangle.Name = "Rectangle";
+            this.Rectangle.ReadOnly = true;
+            this.Rectangle.Width = 60;
+            // 
+            // Value
+            // 
+            this.Value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Value.HeaderText = "Value";
+            this.Value.Name = "Value";
+            this.Value.ReadOnly = true;
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -796,74 +864,6 @@
             this.label5.Size = new System.Drawing.Size(10, 13);
             this.label5.TabIndex = 59;
             this.label5.Text = "[";
-            // 
-            // Name_
-            // 
-            this.Name_.HeaderText = "Name";
-            this.Name_.Name = "Name_";
-            this.Name_.ReadOnly = true;
-            this.Name_.Width = 60;
-            // 
-            // AnchorId
-            // 
-            this.AnchorId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.AnchorId.HeaderText = "Anchor";
-            this.AnchorId.Name = "AnchorId";
-            this.AnchorId.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.AnchorId.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.AnchorId.Width = 66;
-            // 
-            // Type
-            // 
-            this.Type.HeaderText = "Type";
-            this.Type.Name = "Type";
-            this.Type.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Type.Width = 70;
-            // 
-            // Rectangle
-            // 
-            this.Rectangle.HeaderText = "Rectangle";
-            this.Rectangle.Name = "Rectangle";
-            this.Rectangle.ReadOnly = true;
-            this.Rectangle.Width = 60;
-            // 
-            // Value
-            // 
-            this.Value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Value.HeaderText = "Value";
-            this.Value.Name = "Value";
-            this.Value.ReadOnly = true;
-            // 
-            // Id3
-            // 
-            this.Id3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Id3.HeaderText = "Id";
-            this.Id3.Name = "Id3";
-            this.Id3.ReadOnly = true;
-            this.Id3.Width = 41;
-            // 
-            // ParentAnchorId3
-            // 
-            this.ParentAnchorId3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.ParentAnchorId3.HeaderText = "Parent";
-            this.ParentAnchorId3.Name = "ParentAnchorId3";
-            this.ParentAnchorId3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ParentAnchorId3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.ParentAnchorId3.Width = 63;
-            // 
-            // Type3
-            // 
-            this.Type3.HeaderText = "Type";
-            this.Type3.Name = "Type3";
-            this.Type3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Type3.Width = 70;
-            // 
-            // Point03
-            // 
-            this.Point03.HeaderText = "Point0";
-            this.Point03.Name = "Point03";
-            this.Point03.ReadOnly = true;
-            this.Point03.Width = 60;
             // 
             // TemplateForm
             // 
