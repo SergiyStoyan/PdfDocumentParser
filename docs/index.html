@@ -16,16 +16,16 @@
 
 <div class='content'>
 <h1><a name='overview'>Overview</a></h1>
-<p>PdfDocumentParser is a parsing engine intended to extract text/images from PDF documents that conform to a recognizable graphic layout - such as invoices and the like. PdfDocumentParser was designed to be incorporated into a custom application, thus, drastically reducing efforts of building a PDF parser/extractor/scraper/indexer. 
+<p>PdfDocumentParser is a parsing engine intended to extract text/images from PDF documents that conform to a recognizable graphical layout - such as invoices and the like. PdfDocumentParser was designed to be incorporated into a custom application, thus, drastically reducing efforts of building PDF parser/extractor/scraper/indexer. 
 
-<p>PdfDocumentParser is a .NET DLL that provides the following API's:
+<p>PdfDocumentParser is a .NET DLL that provides the following features:
 <ul>
-<li>GUI named <a href="#templateEditor">Template Editor</a> where parsing templates can be created or debugged in an easy manner;</li>
-<li><a href="#api">Parsing API</a> that allows custom applications to parse PDF files in a custom manner with a little effort required;</li>
+<li><a href="#templateEditor">Template Editor</a> where parsing templates can be created and debugged in an easy manner;</li>
+<li><a href="#parsingApi">Parsing API</a> that allows custom applications to parse PDF files in a custom manner with a little effort required;</li>
 </ul> 
 
-<h2><a name='approach'>Approach</a></h2>
-<p>The main approach of parsing by PdfDocumentParser is based on finding certain text or image fragments on a page and then extracting text/images located relatively to those fragments.
+<h2><a name='idea'>Idea</a></h2>
+<p>The main approach of parsing by PdfDocumentParser is based on finding certain text or image fragments on a PDF page and then extracting text/images located relatively to those fragments.
 <p>Within this scope PdfDocumentParser is capable of the following:
 <ul>
 <li>search/extract text represented by PDF entities - meant for native PDF files;</li>
@@ -34,15 +34,32 @@
 </ul> 
 For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#fieldTypes'>field types</a>.
 
+<p>Also, PdfDocumentParser allows an application to check custom <a href='#condition'>conditions</a> on a PDF page to decide which actions should be taken on it.
+
+
+<h2><a name='customApplication'>Custom application</a></h2>
+Developing a custom application based on PdfDocumentParser, you should care about the following aspects:
+<ul>
+<li>allow a user to open <a href="#templateEditor">Template Editor</a> for a PDF file to edit a parsing template for its layout;</li>
+<li>provide storage and management of parsing templates;</li>
+<li>implement the custom algorithm of processing PDF files:
+    <ul>
+    <li>detect a template to be applied to a file or a page;</li>
+    <li>customly process data that is parsed by the applied template;</li>
+    </ul> 
+</li>
+</ul> 
+
+
 <h2><a name='licensing'>Licensing</a></h2>
-PdfDocumentParser is provided under GNU Affero General Public License v3.0. However, it may use third-party software as command line tools or linked libraries which are licensed separately.
+PdfDocumentParser is provided under GNU Affero General Public License v3.0. Also, it may use third-party software as command line tools or linked libraries which are licensed separately.
 
 
 <h2><a name='repository'>Repository</a></h2>
 Open <a href='https://github.com/sergeystoyan/PdfDocumentParser' target='_blank'>the repository</a>
 
 
-<h2><a name='approach'>Getting started</a></h2>
+<h2><a name='gettingStarted'>Getting started</a></h2>
 To get the feel of what can be done with PdfDocumentParser, review <a href='#tutorialApi'>the tutorial of bulding a custom application</a> and then <a href='#tutorialTemplateEditor'>the tutorial of setting template</a>.  
 
 
@@ -149,8 +166,9 @@ To get the feel of what can be done with PdfDocumentParser, review <a href='#tut
 
 
 <h2><a name="condition">Condition</a></h2> 
-<p>A condition is defined by a boolean expression that depends on anchors. It is used by a custom application to decide which actions should be performed on a PDF page. It can be checked by PdfDocumentParser <a href='#api'>API</a> method <a href='#IsCondition'><code>IsCondition(<condition name>)</code></a>.
-<p>Conditions are identified by their names. The condition collection is dictated by the logic of a custom application, and thus is predetermined within the application's scope and is the same for all templates that belong to it.
+<p>A condition is defined by a boolean expression that depends on anchors. It is used by a custom application to decide which actions should be performed on a PDF page. It can be checked by PdfDocumentParser <a href='#parsingApi'>API</a> method <a href='#IsCondition'><code>IsCondition(<condition name>)</code></a>.
+<p>Conditions are identified by their names. 
+<p>The condition collection is dictated by the logic of a custom application, and thus, is predetermined within the application's scope and is the same for all templates that belong to it.
 
 
 <h3>Boolean expression</h3>
@@ -176,7 +194,7 @@ For more details refer to <a href='#tutorialCondition'>the tutorial</a>.
 
 
 <h2><a name="field">Field</a></h2>
-<p>A field defines certain text or image that is to be extracted from a PDF page. It can be retrieved by PdfDocumentParser <a href='#api'>API</a> method <a href='#GetValue'><code>GetValue()</code></a>.
+<p>A field defines certain text or image that is to be extracted from a PDF page. It can be retrieved by PdfDocumentParser <a href='#parsingApi'>API</a> method <a href='#GetValue'><code>GetValue()</code></a>.
 <p>Fields are identified by their names. The field collection is dictated by the logic of a custom application, and thus is predetermined within its scope and is the same for all templates that belong to it. 
 
 <h3>Anchoring</h3>  
@@ -233,7 +251,7 @@ A template has the following settings that influence on parsing:
 
 
 
-<h1><a name='api'>API</a></h1>
+<h1><a name='parsingApi'>Parsing API</a></h1>
 
 <h2>Methods</h2>
 <table>
@@ -291,18 +309,19 @@ The main idea of using PdfDocumentParser in an application is that custom operat
 
 
 
-<h2><a name='tutorialApi'>Tutorial: custom application</a></h2>
-<p>PdfDocumentParser can only be called from within an application developed for a certain parsing task, so in this tutorial we'll consider a sample task and an application developed for it.
+<h2><a name='tutorialApi'>Tutorial: using Parsing API</a></h2>
 
 <h3>Custom task & application</h3>
-<p>The parsing task considered in this tutorial follows: there are PDF files that consist of invoices issued by different companies. Values INVOICE#, JOB#, PO#, COST should be parsed from every invoice.
+<p>Since PdfDocumentParser can only be used from within another application developed for a certain parsing task, this tutorial considers a sample task and an application developed for it.
+<p>The parsing task follows: 
+<p>there are PDF files that consist of invoices issued by different companies. Values INVOICE#, JOB#, PO#, COST should be parsed from every invoice.
 <p>It is known that the PDF files to be parsed comply with the following:
 <ul>
 <li>a file can consist of multiple invoices;</li>
 <li>an invoice can consist of multiple pages;</li>
 <li>any page in a file participates in an invoice;</li>
 </ul>
-<p><a href='#InvoiceParser'>InvoiceParser</a> is an application developed for this task and is referred to during the tutorial.
+<p>The application developed for this task is <a href='#InvoiceParser'>InvoiceParser</a>. It can be referred to while learning the tutorial.
 
 <h3><a name='customConfiguration'>Custom configuration<a/></h3>
 <p>As is obvious from the task requirements, the <a href='#field'>field</a> collection predetermined in our application should be: INVOICE#, JOB#, PO#, COST.
@@ -359,7 +378,7 @@ Refer to <a href='#InvoiceParser'>InvoiceParser</a> as live code.
 
 
 <h1><a name="templateEditor">Template Editor</a></h1>
-Template Editor is a GUI object that is called in a desktop application whenever configuring <a href="#template">a template</a> is required. 
+Template Editor is a GUI object that is called in a desktop application whenever configuring <a href="#template">template</a> is required. 
 
 <p>How to configure a template, see in <a href='#tutorialTemplateEditor'>the tutorial of setting template</a>.
 
