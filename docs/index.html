@@ -16,9 +16,9 @@
 
 <div class='content'>
 <h1><a name='overview'>Overview</a></h1>
-<p>PdfDocumentParser is a parsing engine intended to extract text/images from PDF documents that conform to a recognizable graphical layout - such as invoices and the like. PdfDocumentParser was designed to be incorporated into a custom application, thus, drastically reducing efforts of building PDF parser/extractor/scraper/indexer. 
+<p>PdfDocumentParser is a .NET engine desinged for parsing PDF documents that conform to a recognizable graphical layout - such as invoices and the like. PdfDocumentParser was designed to be incorporated into a custom application, thus, drastically reducing efforts of building PDF parser/extractor/scraper/indexer. 
 
-<p>PdfDocumentParser is a .NET DLL that provides the following features:
+<p>PdfDocumentParser provides the following facilities:
 <ul>
 <li><a href="#templateEditor">Template Editor</a> where parsing templates can be created and debugged in an easy manner;</li>
 <li><a href="#parsingApi">Parsing API</a> that allows custom applications to parse PDF files in a custom manner with a little effort required;</li>
@@ -38,21 +38,38 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 
 
 <h2><a name='customApplication'>Custom application</a></h2>
-Developing a custom application based on PdfDocumentParser, you should care about the following aspects:
+<p>The general workflow of an application based on PdfDocumentParser is the following:
+<br>- first, the user creates parsing templates for PDF files that are to be parsed;
+<br>- then, the application processes every file in accordance with the required logic;
+
+<p>To provide the above-mentioned steps, a custom application should care about the following aspects:
 <ul>
-<li>allow a user to open <a href="#templateEditor">Template Editor</a> for a PDF file to edit a parsing template for its layout;</li>
+<li>allow a user to open <a href="#templateEditor">Template Editor</a> for a PDF file in order to create a parsing template for its layout;</li>
 <li>provide storage and management of parsing templates;</li>
-<li>implement the custom algorithm of processing PDF files:
+<li>implement a custom algorithm of processing PDF files:
     <ul>
-    <li>detect a template to be applied to a file or a page;</li>
-    <li>customly process data that is parsed by the applied template;</li>
+    <li>choose a template to be applied to a PDF page or an entire PDF file;</li>
+    <li>customly process data parsed by the chosen template;</li>
     </ul> 
 </li>
 </ul> 
+For more details see <a href='#pseudoCode'>pseudo-code</a>, <a href='#tutorialApi'>Parsing API tutorial</a> and <a href='#InvoiceParser'>InvoiceParser</a>.
+
+<h2><a name='creatingSolution'>Creating solution</a></h2>
+In Visual Studio:
+<ul>
+<li>create your project;</li>
+<li>add PdfDocumentParser project;</li>
+<li>reference PdfDocumentParser in your project;</li>
+<li>update nuget packages for the solution;</li>
+<li>code your parser using PdfDocumentParser API;</li>
+</ul> 
+
 
 
 <h2><a name='licensing'>Licensing</a></h2>
-PdfDocumentParser is provided under GNU Affero General Public License v3.0. Also, it may use third-party software as command line tools or linked libraries which are licensed separately.
+PdfDocumentParser is provided under GNU Affero General Public License v3.0. Contact me if you want another license.
+<p>Be noticed PdfDocumentParser may use third-party software as command line tools or linked libraries that are licensed separately.
 
 
 <h2><a name='repository'>Repository</a></h2>
@@ -263,15 +280,19 @@ A template has the following settings that influence on parsing:
 <tr><td class='title_column'><a name='GetValue'><code>Cliver.PdfDocumentParser.Page::GetValue()</code></a></td>
 <td>Extract a field from the page. If anchor of the field was not found, NULL is returned.</td></tr>
 </table>
-Refer to <a href='#InvoiceParser'>InvoiceParser</a> as an live example of using PdfDocumentParser in a custom application.
+<p>Refer to <a href='#InvoiceParser'>InvoiceParser</a> as an live example of using PdfDocumentParser in a custom application.
 
 
-<h2>Pseudo-code</h2>
+<h2><a name='pseudoCode'>Pseudo-code</a></h2>
 The main idea of using PdfDocumentParser in an application is that custom operations are performed depending on custom <a href='#condition'>conditions</a>. 
-<p>Because of the fact that the collection of <a href='#condition'>conditions</a> is determined by a custom application, it is impossible to outline 'the most common algorithm' of using PdfDocumentParser. But some basic algorithm of processing a PDF file would look like the following:
+<p>Because of the fact that the collection of <a href='#condition'>conditions</a> is determined by a custom application, it is impossible to outline 'the most general algorithm' of processing a PDF file with PdfDocumentParser. But some basic algorithm would look like the following:
 <pre>
-<code class="language-csharp">foreach(page in PdfFile)
+<code class="language-csharp">//pseudo-code: processing a PDF file.
+//Note, the classes and methods are not real and serve for simplicity and clarity only.
+
+foreach(page in pdfFile)
 {
+    //find a template apropriate for the page
     if(PdfDocumentParser.ActiveTemplate == null)
     {
         foreach(template in templates)
@@ -282,29 +303,67 @@ The main idea of using PdfDocumentParser in an application is that custom operat
             PdfDocumentParser.ActiveTemplate = null;
         }
     }
-    if(PdfDocumentParser.ActiveTemplate != null)
-    {      
-        if(PdfDocumentParser.IsCondition(page, "Field1Page"))
-        {
-            object value1 = PdfDocumentParser.GetValue(page, "field1");
-            //doing something with value1...
-            <...>
-        }
-        if(PdfDocumentParser.IsCondition(page, "Field2Page"))
-        {
-            object value2 = PdfDocumentParser.GetValue(page, "field2");
-            //doing something with value2...
-            <...>
-        }
-        <...>
-        if(PdfDocumentParser.IsCondition(page, "DocumentLastPage"))
-            PdfDocumentParser.ActiveTemplate = null;
+    
+    if(PdfDocumentParser.ActiveTemplate == null)
+    {
+        logWarning("No template was detected for page: " + page.Number);
+        continue;
     }
+        
+    //applying the chosen template  
+    object value1 = PdfDocumentParser.GetValue(page, "field1");
+    //doing something with value1...
+    <...>
+    
+    object value2 = PdfDocumentParser.GetValue(page, "field2");
+    //doing something with value2...
+    <...>
 }</code>
 </pre>
 <p>Notice that the above algorithm assumes that only one template can be applied to a PDF page while it is not mandatory in general. 
 
 
+<h3><a name='pseudoCode2'>Multi-page documents</a></h3>
+Here is a more advanced algorithm designed for PDF files that contain multi-page documents.
+<pre>
+<code class="language-csharp">//pseudo-code: processing a PDF file that contains multi-page documents.
+//Note, the classes and methods are not real and serve for simplicity and clarity only.
+
+foreach(page in pdfFile)
+{
+    //find a template apropriate for the document
+    if(PdfDocumentParser.ActiveTemplate == null)
+    {
+        foreach(template in templates)
+        {
+            PdfDocumentParser.ActiveTemplate = template;
+            if(PdfDocumentParser.IsCondition(page, "DocumentFirstPage"))
+                break;
+            PdfDocumentParser.ActiveTemplate = null;
+        }
+    }
+    
+    if(PdfDocumentParser.ActiveTemplate != null)
+    {        
+        //applying the chosen template    
+        if(PdfDocumentParser.IsCondition(page, "Field1MustBeParsed"))
+        {
+            object value1 = PdfDocumentParser.GetValue(page, "field1");
+            //doing something with value1...
+            <...>
+        }
+        if(PdfDocumentParser.IsCondition(page, "Field2MustBeParsed"))
+        {
+            object value2 = PdfDocumentParser.GetValue(page, "field2");
+            //doing something with value2...
+            <...>
+        }
+    
+        if(PdfDocumentParser.IsCondition(page, "DocumentLastPage"))
+            PdfDocumentParser.ActiveTemplate = null;
+    }
+}</code>
+</pre>
 
 
 
@@ -336,9 +395,12 @@ The main idea of using PdfDocumentParser in an application is that custom operat
 <h3>Custom algorithm</h3>
 Now, summing up the said above, the algorithm of processing a PDF file in our application should be the following:
 <pre>
-<code class="language-csharp">object INVOICE#, JOB#, PO#, COST;
+<code class="language-csharp">//pseudo-code: parsing an invoice
+//Note, the classes and methods are not real and serve for simplicity and clarity only.
+
+object INVOICE#, JOB#, PO#, COST;
 Template currentTemplate;
-foreach(page in PdfFile)
+foreach(page in pdfFile)
 { 
     foreach(template in templates)
     {
@@ -482,7 +544,7 @@ PdfDocumentParser has parameters that are the same within application's scope an
 
 
 
-<h1><a name='InvoiceParser'></a>InvoiceParser</h1>
+<h1><a name='InvoiceParser'>InvoiceParser</a></h1>
 Invoice Parser is a custom desktop application based on <a href='#overview'>PdfDocumentParser</a>. It can be referred to as an example of incorporating PdfDocumentParser into a custom code. Also, as its custom specificity lays only in a way how PDF files are parsed, the rest code of it can be used as a framework in a new application.
 <p>Generally, it does the following:
 <ul>
@@ -557,7 +619,9 @@ Invoice Parser is a custom desktop application based on <a href='#overview'>PdfD
 
 <div class='footer'>
         <script src='copyright.js'></script>
-        &nbsp;2018,&nbsp;&nbsp;<a href='mailto:sergey.stoyan@gmail.com?Subject=PdfDocumentParser request' target='_top'>Sergey Stoyan</a>
+        &nbsp;2018,&nbsp;&nbsp;<a href="javascript:window.location.href = '&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#115;&#101;&#114;&#103;&#101;&#121;&#46;&#115;&#116;&#111;&#121;&#97;&#110;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;'" target="_top">Sergey Stoyan</a>
+</script>
+        
 </div>
 
 <script>
