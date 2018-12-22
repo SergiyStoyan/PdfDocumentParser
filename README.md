@@ -9,7 +9,7 @@ PdfDocumentParser is a .NET DLL.
 [More details...](https://sergeystoyan.github.io/PdfDocumentParser/#1)
 
 ## InvoiceParser
-[Invoice Parser](https://github.com/sergeystoyan/PdfDocumentParser/tree/lib%2Bcustomization/InvoiceParser) is a desktop application based on [PdfDocumentParser](https://github.com/sergeystoyan/PdfDocumentParser). Developed for custom needs, it can be considered as an example of using PdfDocumentParser in a custom code.
+[Invoice Parser](https://github.com/sergeystoyan/PdfDocumentParser/tree/lib%2Bcustomization/InvoiceParser) is a desktop application based on [PdfDocumentParser](https://github.com/sergeystoyan/PdfDocumentParser). Developed for custom needs, it can be considered as an example of using PdfDocumentParser.
 
 [More details...](https://sergeystoyan.github.io/PdfDocumentParser/#6)
 
