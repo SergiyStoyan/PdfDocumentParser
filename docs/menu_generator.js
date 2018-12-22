@@ -430,7 +430,7 @@ switch(anchorName){
             return false;
         };
         anchorDiv.innerHTML = '<a class="switchLink" href="#" onclick="loadInMenuMode();" title="Switch to javascript generated document.">menu mode</a>';
-        body.insertBefore(anchorDiv, document.body.childNodes[0]);
+        document.body.insertBefore(anchorDiv, document.body.childNodes[0]);
     break;
     case '_checkInternalLinks':
         var as = document.getElementsByTagName('a');

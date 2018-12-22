@@ -625,8 +625,8 @@ Invoice Parser is a custom desktop application based on <a href='#overview'>PdfD
 </div>
 
 <script>
-if(!window.location.href.match(/\#/ig)){
-    window.location.href += '#1';
+if(!window.location.href.match(/\#./ig)){
+    window.location.href = window.location.href.replace(/#.*/, '') + '#1';
     location.reload();
 }
 </script>
