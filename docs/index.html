@@ -16,7 +16,7 @@
 
 <div class='content'>
 <h1><a name='overview'>Overview</a></h1>
-<p>PdfDocumentParser is a .NET engine desinged for parsing PDF documents that conform to a recognizable graphical layout - such as invoices and the like. PdfDocumentParser was designed to be incorporated into a custom application, thus, drastically reducing efforts of building PDF parser/extractor/scraper/indexer. 
+<p>PdfDocumentParser is a .NET engine designed for parsing PDF documents that conform to a recognizable graphical layout - such as invoices and the like. PdfDocumentParser was designed to be incorporated into a custom application, thus, drastically reducing efforts of building PDF parser/extractor/scraper/indexer. 
 
 <p>PdfDocumentParser provides the following facilities:
 <ul>
@@ -42,14 +42,14 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 <br>- first, the user creates parsing templates for PDF files that are to be parsed;
 <br>- then, the application processes every file in accordance with the required logic;
 
-<p>To provide the above-mentioned steps, a custom application should care about the following aspects:
+<p>To implement it, a custom application should care about the following aspects:
 <ul>
 <li>allow a user to open <a href="#templateEditor">Template Editor</a> for a PDF file in order to create a parsing template for its layout;</li>
 <li>provide storage and management of parsing templates;</li>
 <li>implement a custom algorithm of processing PDF files:
     <ul>
     <li>choose a template to be applied to a PDF page or an entire PDF file;</li>
-    <li>customly process data parsed by the chosen template;</li>
+    <li>process data parsed with the chosen template;</li>
     </ul> 
 </li>
 </ul> 
@@ -77,7 +77,7 @@ Open <a href='https://github.com/sergeystoyan/PdfDocumentParser' target='_blank'
 
 
 <h2><a name='gettingStarted'>Getting started</a></h2>
-To get the feel of what can be done with PdfDocumentParser, review <a href='#tutorialApi'>the tutorial of bulding a custom application</a> and then <a href='#tutorialTemplateEditor'>the tutorial of setting template</a>.  
+To get the feel of what can be done with PdfDocumentParser, review <a href='#tutorialApi'>the tutorial of building a custom application</a> and then <a href='#tutorialTemplateEditor'>the tutorial of setting template</a>.  
 
 
 <h1><a name="template">Template</a></h1>
@@ -292,7 +292,7 @@ The main idea of using PdfDocumentParser in an application is that custom operat
 
 foreach(page in pdfFile)
 {
-    //find a template apropriate for the page
+    //find a template appropriate for the page
     if(PdfDocumentParser.ActiveTemplate == null)
     {
         foreach(template in templates)
@@ -331,7 +331,7 @@ Here is a more advanced algorithm designed for PDF files that contain multi-page
 
 foreach(page in pdfFile)
 {
-    //find a template apropriate for the document
+    //find a template appropriate for the document
     if(PdfDocumentParser.ActiveTemplate == null)
     {
         foreach(template in templates)
@@ -384,10 +384,10 @@ foreach(page in pdfFile)
 
 <h3><a name='customConfiguration'>Custom configuration<a/></h3>
 <p>As is obvious from the task requirements, the <a href='#field'>field</a> collection predetermined in our application should be: INVOICE#, JOB#, PO#, COST.
-<p>Now let's decide which <a href='#condition'>conditions</a> are needed in our applcation. 
+<p>Now let's decide which <a href='#condition'>conditions</a> are needed in our application. 
 <p>Since the invoices are issued by different companies, they have different layouts. Every layout requires its own parsing template. Therefore, our application should be able to <b>A)</b>recognize layout of a PDF page in order to know which template should be applied. 
-<p>Additionaly, as invoices can be multi-page, our application has to <b>B)</b>detect the first page of every invoice. 
-<p>Checkings (A) and (B) can be joined into one <a href='#condition'>condition</a>. Let's name it 'FirstPageOfDocument'. 
+<p>Additionally, as invoices can be multi-page, our application has to <b>B)</b>detect the first page of every invoice. 
+<p>Checks (A) and (B) can be joined into one <a href='#condition'>condition</a>. Let's name it 'FirstPageOfDocument'. 
 <p>It will work in the following manner: when a template has its FirstPageOfDocument satisfied on a PDF page, it will be chosen for processing of this page and the next ones until the first page of a new invoice is detected. And when a new invoice starts, the previously captured fields should be processed/recorded and cleaned.
 <p>Thus, the condition collection in our application will consist of only condition FirstPageOfDocument which is sufficient for the task.
 
@@ -520,13 +520,13 @@ We already have created anchors #1 and #2 that are needed to specify FirstPageOf
 
 
 
-<h1><a name='generalSettings'>Clobal settings</a></h1>
+<h1><a name='generalSettings'>Global settings</a></h1>
 PdfDocumentParser has parameters that are the same within application's scope and can be modified in the configuration dialog invoked from Template Editor.
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'><a name='PdfPageImageResolution'>PdfPageImageResolution</a></td>
 <td>It is the resolution with which PdfDocumentParser converts PDF pages into images. It influences on the quality of PDF view in Template Editor. 
-<p>What is more important, it also impacts on work of OctText acnhors and fields. It must be not less than 300dpi (even if the resolution of input documents is lower), otherwise OCR will not work properly. The higher the resolution, the better quality of OCR is. On the other hand, increasing the resolution increases processing time.
+<p>What is more important, it also impacts on work of OctText anchors and fields. It must be not less than 300dpi (even if the resolution of input documents is lower), otherwise OCR will not work properly. The higher the resolution, the better quality of OCR is. On the other hand, increasing the resolution increases processing time.
 <p> Usually there is no need to touch it.</td></tr>
 <tr><td class='title_column'><a name='CoordinateDeviationMargin'>CoordinateDeviationMargin</a></td>
 <td>It is a zero value threshold while comparing pixel coordinates which may have slight discrepancy because of conversions. 
