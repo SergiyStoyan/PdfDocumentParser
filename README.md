@@ -1,17 +1,15 @@
 ## PdfDocumentParser
 
-PdfDocumentParser is a parsing engine intended to extract text/images from PDF documents that conform to a recognizable graphic layout - such as invoices and the like. The main parsing approach is based on finding certain text or image fragments in page and then extracting text/images located relatively to those fragments.
+PdfDocumentParser is a parsing engine intended to find and extract text/images from PDF documents that conform to a recognizable graphic layout - such as invoices and the like. Its main parsing approach is based on finding certain text or image fragments in page and then extracting text/images located relatively to those fragments.
 
 Within this scope PdfDocumentParser is capable of the following:
-- operating with text represented by PDF entities (meant for native PDF files);
-- processing OCR'ed text (meant for scanned PDF files);
-- image search/comparison/extraction (meant for either native or scanned PDF files);
+- search/extract text represented by PDF entities;
+- search/extract text obtained by OCR;
+- search/compare/extract page fragments as images;
 
-PdfDocumentParser was designed to be incorporated into custom applications hopefully without need of change.
-
-PdfDocumentParser API consists of:
+PdfDocumentParser provides:
 - Template Editor where parsing templates can be created or debugged in an easy manner;
-- Parsing API that allows custom applications to parse PDF files in a custom manner with little effort required;
+- Parsing API that allows hosting applications to parse PDF files in a custom manner with little effort required;
 
 PdfDocumentParser is a .NET DLL.
 
