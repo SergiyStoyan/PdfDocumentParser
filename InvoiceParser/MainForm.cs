@@ -317,8 +317,7 @@ namespace Cliver.InvoiceParser
 
         void editTemplate(DataGridViewRow r)
         {
-            TemplateForm tf;
-            if (rows2TemplateForm.TryGetValue(r, out tf) && !tf.IsDisposed)
+            if (rows2TemplateForm.TryGetValue(r, out TemplateForm tf) && !tf.IsDisposed)
             {
                 tf.Show();
                 tf.Activate();
@@ -649,7 +648,7 @@ namespace Cliver.InvoiceParser
             useOrderWeightPattern.Checked = Settings.General.UseOrderWeightPattern;
             sortSelectedUp.Checked = Settings.General.SortSelectedUp;
 
-            Action showSelectedCount = delegate
+            void showSelectedCount()
             {
                 int count = 0;
                 foreach (DataGridViewRow r in template2s.Rows)
@@ -660,7 +659,7 @@ namespace Cliver.InvoiceParser
                 selectedTemplatesCount.Text = "Selected: " + count + " templates";
             };
 
-            EventHandler select_by_filter = delegate
+            void select_by_filter(object sender, EventArgs e)
             {
                 float orderWeight1 = (float)orderWeightPattern1.Value;
                 float orderWeight2 = (float)orderWeightPattern2.Value;
@@ -691,7 +690,7 @@ namespace Cliver.InvoiceParser
             };
             selectByFilter.Click += select_by_filter;
 
-            KeyEventHandler select_on_Enter = delegate (object sender, KeyEventArgs e)
+            void select_on_Enter(object sender, KeyEventArgs e)
             {
                 if (e.KeyCode != Keys.Enter)
                     return;

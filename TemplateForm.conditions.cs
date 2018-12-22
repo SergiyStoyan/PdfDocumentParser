@@ -120,8 +120,7 @@ namespace Cliver.PdfDocumentParser
                 bool firstAnchor = true;
                 foreach (int ai in BooleanEngine.GetAnchorIds(c.Value))
                 {
-                    DataGridViewRow r;
-                    Template.Anchor a = getAnchor(ai, out r);
+                    Template.Anchor a = getAnchor(ai, out DataGridViewRow r);
                     if (r == null)
                         continue;
                     if (firstAnchor)
@@ -184,8 +183,7 @@ namespace Cliver.PdfDocumentParser
         }
         void _setAnchorStatus(int anchorId)
         {
-            DataGridViewRow row;
-            Template.Anchor a = getAnchor(anchorId, out row);
+            Template.Anchor a = getAnchor(anchorId, out DataGridViewRow row);
             if (a == null || row == null)
                 return;
 
@@ -202,15 +200,13 @@ namespace Cliver.PdfDocumentParser
                 if (!a_.IsSet())
                 {
                     set = false;
-                    DataGridViewRow r_;
-                    getAnchor(a_.Id, out r_);
+                    getAnchor(a_.Id, out DataGridViewRow r_);
                     setRowStatus(statuses.WARNING, r_, "Not set");
                 }
             if (!set)
                 return;
             List<List<RectangleF>> rss = pages[currentPage].GetAnchorRectangless(a);
-            DataGridViewRow r;
-            getAnchor(a.Id, out r);
+            getAnchor(a.Id, out DataGridViewRow r);
             if (rss == null || rss.Count < 1)
                 setRowStatus(statuses.ERROR, r, "Not found");
             else

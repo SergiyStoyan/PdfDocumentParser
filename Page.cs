@@ -23,8 +23,8 @@ namespace Cliver.PdfDocumentParser
             this.pageCollection = pageCollection;
             this.pageI = pageI;
         }
-        int pageI;
-        PageCollection pageCollection;
+        readonly int pageI;
+        readonly PageCollection pageCollection;
 
         ~Page()
         {
@@ -210,8 +210,7 @@ namespace Cliver.PdfDocumentParser
                 id = pa.ParentAnchorId;
             }
             string sa = sb.ToString();
-            List<List<RectangleF>> anchorRectangless;
-            if (!anchorHashes2anchorRectangless.TryGetValue(sa, out anchorRectangless))
+            if (!anchorHashes2anchorRectangless.TryGetValue(sa, out List<List<RectangleF>> anchorRectangless))
             {
                 anchorRectangless = new List<List<RectangleF>>();
                 findAnchor(a, (IEnumerable<RectangleF> rs) =>

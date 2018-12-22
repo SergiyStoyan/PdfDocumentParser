@@ -107,8 +107,7 @@ namespace Cliver.InvoiceParser
         }
         string getStampValue(string fieldName)
         {
-            string v;
-            if (fieldNames2text.TryGetValue(fieldName, out v) && v != null)
+            if (fieldNames2text.TryGetValue(fieldName, out string v) && v != null)
                 return Regex.Replace(v, @"\-", "");
             return "";
         }

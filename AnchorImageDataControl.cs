@@ -57,9 +57,11 @@ namespace Cliver.PdfDocumentParser
             if (_object.ImageBoxs != null)
                 foreach (Template.Anchor.ImageData.ImageBox id in _object.ImageBoxs)
                 {
-                    PictureBox p = new PictureBox();
-                    p.SizeMode = PictureBoxSizeMode.AutoSize;
-                    p.Image = id.ImageData.GetImage();
+                    PictureBox p = new PictureBox
+                    {
+                        SizeMode = PictureBoxSizeMode.AutoSize,
+                        Image = id.ImageData.GetImage()
+                    };
                     pictures.Controls.Add(p);
                 }
             PositionDeviationIsAbsolute.Checked = _object.PositionDeviationIsAbsolute;

@@ -51,8 +51,7 @@ namespace Cliver.PdfDocumentParser
 
         PointF? findAndDrawAnchor(int anchorId, bool renewImage = true)
         {
-            DataGridViewRow row;
-            Template.Anchor a = getAnchor(anchorId, out row);
+            Template.Anchor a = getAnchor(anchorId, out DataGridViewRow row);
             if (a == null || row == null)
                 throw new Exception("Anchor[Id=" + anchorId + "] does not exist.");
 
@@ -72,8 +71,7 @@ namespace Cliver.PdfDocumentParser
                 if (!a_.IsSet())
                 {
                     set = false;
-                    DataGridViewRow r_;
-                    getAnchor(a_.Id, out r_);
+                    getAnchor(a_.Id, out DataGridViewRow r_);
                     setRowStatus(statuses.WARNING, r_, "Not set");
                 }
             }
@@ -83,8 +81,7 @@ namespace Cliver.PdfDocumentParser
                 return null;
             }
             List<List<RectangleF>> rss = pages[currentPage].GetAnchorRectangless(a);
-            DataGridViewRow r;
-            getAnchor(a.Id, out r);
+            getAnchor(a.Id, out DataGridViewRow r);
             if (rss == null || rss.Count < 1)
             {
                 setRowStatus(statuses.ERROR, r, "Not found");
@@ -124,8 +121,7 @@ namespace Cliver.PdfDocumentParser
                     if (p0_ == null)
                         return null;
                     PointF p0 = (PointF)p0_;
-                    DataGridViewRow row;
-                    Template.Anchor a = getAnchor(field.AnchorId, out row);
+                    Template.Anchor a = getAnchor(field.AnchorId, out DataGridViewRow row);
                     RectangleF air = a.MainElementInitialRectangle();
                     shift.X += p0.X - air.X;
                     shift.Y += p0.Y - air.Y;
@@ -282,8 +278,7 @@ namespace Cliver.PdfDocumentParser
 
         private void changeCurrentPage()
         {
-            int i = 0;
-            if (int.TryParse(tCurrentPage.Text, out i))
+            if (int.TryParse(tCurrentPage.Text, out int i))
             {
                 if (i != currentPage)
                     showPage(i);

@@ -119,8 +119,7 @@ namespace Cliver.InvoiceParser
                         List<string> values = new List<string>() { PathRoutines.GetFileNameFromPath(f), PathRoutines.GetFileNameFromPath(of) };
                         foreach (string fn in orderedOutputFieldNames)
                         {
-                            string t;
-                            fieldNames2texts.TryGetValue(fn, out t);
+                            fieldNames2texts.TryGetValue(fn, out string t);
                             values.Add(t);
                         }
                         values.AddRange(new List<string> { templateName, page_i.ToString() });

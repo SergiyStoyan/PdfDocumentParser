@@ -200,8 +200,7 @@ namespace Cliver.PdfDocumentParser
 
             this.EnumControls((Control c) =>
             {
-                SplitContainer s = c as SplitContainer;
-                if (s != null)
+                if (c is SplitContainer s)
                 {
                     s.BackColor = Color.FromArgb(80, 70, 0);
                     s.SplitterWidth = 2;

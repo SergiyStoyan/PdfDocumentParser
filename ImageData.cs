@@ -134,9 +134,8 @@ namespace Cliver.PdfDocumentParser
         {
             if (Width != imageData.Width || Height != imageData.Height)
                 throw new Exception("Images have different sizes.");
-            int differentPixelNumber;
             //return isAbsolutizedBrightnessMatchOf(imageData, 0, 0, (int)(brightnessTolerance * 255 * absolutizedBrightnessToleranceFactor), (int)(Hash.Length * differentPixelNumberTolerance), out differentPixelNumber);
-            return isMatchOf(imageData, 0, 0, (int)(brightnessTolerance * 255), (int)(Hash.Length * differentPixelNumberTolerance), out differentPixelNumber);
+            return isMatchOf(imageData, 0, 0, (int)(brightnessTolerance * 255), (int)(Hash.Length * differentPixelNumberTolerance), out int differentPixelNumber);
         }
 
         /*!!!ATTENTION!!!
@@ -172,8 +171,7 @@ namespace Cliver.PdfDocumentParser
             for (int x = 0; x <= bw; x++)
                 for (int y = 0; y <= bh; y++)
                 {
-                    int differentPixelNumber;
-                    if (isMatchOf(imageData, x, y, brightnessMaxDifference, differentPixelMaxNumber, out differentPixelNumber))
+                    if (isMatchOf(imageData, x, y, brightnessMaxDifference, differentPixelMaxNumber, out int differentPixelNumber))
                     {
                         //int absolutizedBrightnessMaxDifference = (int)(brightnessTolerance * 255 * absolutizedBrightnessToleranceFactor);
                         //if (!isAbsolutizedBrightnessMatchOf(imageData, x, y, absolutizedBrightnessMaxDifference, differentPixelMaxNumber, out differentPixelNumber))
@@ -196,105 +194,103 @@ namespace Cliver.PdfDocumentParser
             return true;
         }
 
-        #region    with taking image brightness to account
+        //#region    with taking image brightness to account
 
-        ImageData absolutizedBrightnessImageData = null;
-        float absolutizedBrightnessToleranceFactor = 0.3f;
-        //float brightnessOptimumThreashold = 0.02f;
+        //ImageData absolutizedBrightnessImageData = null;
+        //float absolutizedBrightnessToleranceFactor = 0.3f;
+        ////float brightnessOptimumThreashold = 0.02f;
 
-        bool isAbsolutizedBrightnessMatchOf(ImageData imageData, int x, int y, int brightnessMaxDifference, int differentPixelMaxNumber, out int differentPixelNumber)
-        {
-            //!!!still works bad
-            if (absolutizedBrightnessImageData == null)
-                absolutizedBrightnessImageData = getAbsolutizedImageData(0, 0, Width, Height);
-            ImageData absolutizedBrightnessImageData2 = imageData.getAbsolutizedImageData(x, y, Width, Height);
-            return absolutizedBrightnessImageData.isMatchOf(absolutizedBrightnessImageData2, 0, 0, brightnessMaxDifference, differentPixelMaxNumber, out differentPixelNumber);
-        }
+        //bool isAbsolutizedBrightnessMatchOf(ImageData imageData, int x, int y, int brightnessMaxDifference, int differentPixelMaxNumber, out int differentPixelNumber)
+        //{
+        //    //!!!still works bad
+        //    if (absolutizedBrightnessImageData == null)
+        //        absolutizedBrightnessImageData = getAbsolutizedImageData(0, 0, Width, Height);
+        //    ImageData absolutizedBrightnessImageData2 = imageData.getAbsolutizedImageData(x, y, Width, Height);
+        //    return absolutizedBrightnessImageData.isMatchOf(absolutizedBrightnessImageData2, 0, 0, brightnessMaxDifference, differentPixelMaxNumber, out differentPixelNumber);
+        //}
 
-        void getMinMaxBrightnessOptimums(int x, int y, int width, int height, out byte minBrightness, out byte maxBrightness)
-        {
-            int[] brightnesses2pointCount = new int[256];
-            for (int i = 0; i < width; i++)
-            {
-                for (int j = 0; j < height; j++)
-                    brightnesses2pointCount[Hash[x + i, y + j]] = brightnesses2pointCount[Hash[x + i, y + j]] + 1;
-            }
-            //int minBrightnessPointCount = 0;
-            //minBrightness = 0;
-            //for (byte i = 0; i < 128; i++)
-            //    if (minBrightnessPointCount < brightnesses2pointCount[i])
-            //    {
-            //        minBrightnessPointCount = brightnesses2pointCount[i];
-            //        minBrightness = i;
-            //    }
-            //int maxBrightnessPointCount = 0;
-            //maxBrightness = 255;
-            //for (byte i = 127; 127 <= i; i++)
-            //    if (maxBrightnessPointCount < brightnesses2pointCount[i])
-            //    {
-            //        maxBrightnessPointCount = brightnesses2pointCount[i];
-            //        maxBrightness = i;
-            //    }
+        //void getMinMaxBrightnessOptimums(int x, int y, int width, int height, out byte minBrightness, out byte maxBrightness)
+        //{
+        //    int[] brightnesses2pointCount = new int[256];
+        //    for (int i = 0; i < width; i++)
+        //    {
+        //        for (int j = 0; j < height; j++)
+        //            brightnesses2pointCount[Hash[x + i, y + j]] = brightnesses2pointCount[Hash[x + i, y + j]] + 1;
+        //    }
+        //    //int minBrightnessPointCount = 0;
+        //    //minBrightness = 0;
+        //    //for (byte i = 0; i < 128; i++)
+        //    //    if (minBrightnessPointCount < brightnesses2pointCount[i])
+        //    //    {
+        //    //        minBrightnessPointCount = brightnesses2pointCount[i];
+        //    //        minBrightness = i;
+        //    //    }
+        //    //int maxBrightnessPointCount = 0;
+        //    //maxBrightness = 255;
+        //    //for (byte i = 127; 127 <= i; i++)
+        //    //    if (maxBrightnessPointCount < brightnesses2pointCount[i])
+        //    //    {
+        //    //        maxBrightnessPointCount = brightnesses2pointCount[i];
+        //    //        maxBrightness = i;
+        //    //    }
 
-            //float brightnessOptimumThreasholdCount = brightnessOptimumThreashold * width * height;
-            //minBrightness = 0;
-            //for (byte i = 0; i < brightnesses2pointCount.Length - 1; i++)
-            //    if (brightnesses2pointCount[i] > brightnessOptimumThreasholdCount)
-            //    {
-            //        minBrightness = i;
-            //        break;
-            //    }
-            //maxBrightness = 255;
-            //for (byte i = (byte)(brightnesses2pointCount.Length - 1); i > 0; i--)
-            //    if (brightnesses2pointCount[i] > brightnessOptimumThreasholdCount)
-            //    {
-            //        maxBrightness = i;
-            //        break;
-            //    }
+        //    //float brightnessOptimumThreasholdCount = brightnessOptimumThreashold * width * height;
+        //    //minBrightness = 0;
+        //    //for (byte i = 0; i < brightnesses2pointCount.Length - 1; i++)
+        //    //    if (brightnesses2pointCount[i] > brightnessOptimumThreasholdCount)
+        //    //    {
+        //    //        minBrightness = i;
+        //    //        break;
+        //    //    }
+        //    //maxBrightness = 255;
+        //    //for (byte i = (byte)(brightnesses2pointCount.Length - 1); i > 0; i--)
+        //    //    if (brightnesses2pointCount[i] > brightnessOptimumThreasholdCount)
+        //    //    {
+        //    //        maxBrightness = i;
+        //    //        break;
+        //    //    }
 
-            minBrightness = 0;
-            for (byte i = 0; i < brightnesses2pointCount.Length - 1; i++)
-                if (brightnesses2pointCount[i] > brightnesses2pointCount[i + 1])
-                {
-                    minBrightness = i;
-                    break;
-                }
-            maxBrightness = 255;
-            for (byte i = (byte)(brightnesses2pointCount.Length - 1); i > 0; i--)
-                if (brightnesses2pointCount[i] > brightnesses2pointCount[i - 1])
-                {
-                    maxBrightness = i;
-                    break;
-                }
-        }
+        //    minBrightness = 0;
+        //    for (byte i = 0; i < brightnesses2pointCount.Length - 1; i++)
+        //        if (brightnesses2pointCount[i] > brightnesses2pointCount[i + 1])
+        //        {
+        //            minBrightness = i;
+        //            break;
+        //        }
+        //    maxBrightness = 255;
+        //    for (byte i = (byte)(brightnesses2pointCount.Length - 1); i > 0; i--)
+        //        if (brightnesses2pointCount[i] > brightnesses2pointCount[i - 1])
+        //        {
+        //            maxBrightness = i;
+        //            break;
+        //        }
+        //}
 
-        ImageData getAbsolutizedImageData(int x, int y, int width, int height)
-        {
-            ImageData aid = new ImageData(null);
-            aid.Width = width;
-            aid.Height = height;
+        //ImageData getAbsolutizedImageData(int x, int y, int width, int height)
+        //{
+        //    ImageData aid = new ImageData(null);
+        //    aid.Width = width;
+        //    aid.Height = height;
 
-            byte minOptimum = 0;
-            byte maxOptimum = 255;
-            getMinMaxBrightnessOptimums(x, y, width, height, out minOptimum, out maxOptimum);
-            float brightnessFactor = (float)255 / (maxOptimum - minOptimum);
+        //    getMinMaxBrightnessOptimums(x, y, width, height, out byte minOptimum, out byte maxOptimum);
+        //    float brightnessFactor = (float)255 / (maxOptimum - minOptimum);
 
-            aid.Hash = new byte[width, height];
-            for (int i = 0; i < width; i++)
-            {
-                for (int j = 0; j < height; j++)
-                {
-                    if (Hash[x + i, y + j] <= minOptimum)
-                        aid.Hash[i, j] = 0;
-                    else if (Hash[x + i, y + j] < maxOptimum)
-                        aid.Hash[i, j] = (byte)(brightnessFactor * (Hash[x + i, y + j] - minOptimum));
-                    else
-                        aid.Hash[i, j] = 255;
-                }
-            }
-            return aid;
-        }
-        #endregion
+        //    aid.Hash = new byte[width, height];
+        //    for (int i = 0; i < width; i++)
+        //    {
+        //        for (int j = 0; j < height; j++)
+        //        {
+        //            if (Hash[x + i, y + j] <= minOptimum)
+        //                aid.Hash[i, j] = 0;
+        //            else if (Hash[x + i, y + j] < maxOptimum)
+        //                aid.Hash[i, j] = (byte)(brightnessFactor * (Hash[x + i, y + j] - minOptimum));
+        //            else
+        //                aid.Hash[i, j] = 255;
+        //        }
+        //    }
+        //    return aid;
+        //}
+        //#endregion
 
         //#region    with summing image brightness deltas
         //public bool ImageIsSimilar(ImageData imageData, float brightnessTolerance, float brightnessTotalDifferenceTolerance)

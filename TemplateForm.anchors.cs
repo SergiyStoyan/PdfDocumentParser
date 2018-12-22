@@ -241,8 +241,7 @@ namespace Cliver.PdfDocumentParser
                     return;
                 }
 
-                DataGridViewRow row;
-                Template.Anchor a = getAnchor(anchorId, out row);
+                Template.Anchor a = getAnchor(anchorId, out  DataGridViewRow row);
                 if (row == null || a == null)
                     throw new Exception("Anchor[Id=" + anchorId + "] does not exist.");
                 anchors.CurrentCell = anchors[0, row.Index];
@@ -506,8 +505,7 @@ namespace Cliver.PdfDocumentParser
                 }
             if (anchorId == null)
                 return;
-            DataGridViewRow row;
-            Template.Anchor a = getAnchor(anchorId, out row);
+            Template.Anchor a = getAnchor(anchorId, out DataGridViewRow row);
             if (row.HeaderCell.Tag as rowStates? == rowState)
                 return;
             row.HeaderCell.Tag = rowState;
