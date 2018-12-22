@@ -14,4 +14,4 @@ PdfDocumentParser is a .NET DLL.
 [More details...](https://sergeystoyan.github.io/PdfDocumentParser/#6)
 
 ## Support
-Contact me if you need to solve a parsing task of any complexity.
+Contact me if you want me to enhance PdfDocumentParser. Also, you can hire me for solving a parsing task of any complexity or for general development.
