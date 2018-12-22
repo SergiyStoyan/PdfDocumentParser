@@ -273,11 +273,11 @@ var convert = function(mode){
                 window.onresize = function(){
                     content.style.minHeight = window.innerHeight; 
                     setMenuContainerLocation();
-                    //scrollMenuToCurrentItem();//need to cure wrong shifting
+                    scrollMenuToCurrentItem();//?need to cure wrong shifting
                 }
                 window.onscroll = function(){
                     setMenuContainerLocation();
-                    //scrollMenuToCurrentItem();//need to cure wrong shifting
+                    scrollMenuToCurrentItem();//?need to cure wrong shifting
                 }
             }
             window.onresize();
@@ -400,10 +400,13 @@ var convert = function(mode){
     window.addEventListener("hashchange", onHashchange, true);
 
     navigate2currentAnchor();
-    //if(mode == '_collapsedContent'){ //show the header when opening first time       
-        //window.scrollTo(0, 0);
-        //scrollMenuToCurrentItem();
+    
+    //if ('scrollRestoration' in history) {//prevent browser from restoring scroll position
+    //    history.scrollRestoration = 'manual';
     //}
+    if(mode == '_collapsedContent'){ //show the header when opening first time       
+        window.scrollTo(0, 0);
+    }
 
     {//it is only to prevent browser from unpleasant page jerking when navigating to an anchor which is hidden
         var localPath = window.location.href.replace(/#.*/, '');
@@ -419,52 +422,53 @@ var convert = function(mode){
     }    
 };
 
-var anchorName = window.location.href.replace(/[^#]*#?(_localAnchor_)?/, '');
-switch(anchorName){
-    case '_plainHtml':
-        var anchorDiv = document.createElement('div');
-        var loadInMenuMode = function(){
-            var localPath = window.location.href.replace(/#.*/, '');
-            window.location.href = localPath;
-            location.reload();
-            return false;
-        };
-        anchorDiv.innerHTML = '<a class="switchLink" href="#" onclick="loadInMenuMode();" title="Switch to javascript generated document.">menu mode</a>';
-        document.body.insertBefore(anchorDiv, document.body.childNodes[0]);
-    break;
-    case '_checkInternalLinks':
-        var as = document.getElementsByTagName('a');
-        var internalLinks = [];
-        var internalAnchors = [];
-        for(var i = 0; i < as.length; i++){
-            if(as[i].href){
-                var m = as[i].href.match(/.*#(.*)/);
-                if(m)
-                    internalLinks.push(m[1]);
+window.onload = function(){
+    var anchorName = window.location.href.replace(/[^#]*#?(_localAnchor_)?/, '');
+    switch(anchorName){
+        case '_plainHtml':
+            var anchorDiv = document.createElement('div');
+            var loadInMenuMode = function(){
+                var localPath = window.location.href.replace(/#.*/, '');
+                window.location.href = localPath;
+                location.reload();
+                return false;
+            };
+            anchorDiv.innerHTML = '<a class="switchLink" href="#" onclick="loadInMenuMode();" title="Switch to javascript generated document.">menu mode</a>';
+            document.body.insertBefore(anchorDiv, document.body.childNodes[0]);
+        break;
+        case '_checkInternalLinks':
+            var as = document.getElementsByTagName('a');
+            var internalLinks = [];
+            var internalAnchors = [];
+            for(var i = 0; i < as.length; i++){
+                if(as[i].href){
+                    var m = as[i].href.match(/.*#(.*)/);
+                    if(m)
+                        internalLinks.push(m[1]);
+                }
+                if(as[i].name){
+                    internalAnchors.push(as[i].name);
+                }            
             }
-            if(as[i].name){
-                internalAnchors.push(as[i].name);
-            }            
-        }
-        internalLinks = internalLinks.filter(function(value, index, self){ return self.indexOf(value) === index; });
-        var brokenLinks = [];
-        for(var i = 0; i < internalLinks.length; i++){
-            if(internalAnchors.indexOf(internalLinks[i]) < 0)
-                brokenLinks.push(internalLinks[i]);
-        }
-        console.log('internalAnchors:', internalAnchors);
-        console.log('internalLinks:', internalLinks);
-        console.log('brokenLinks:', brokenLinks);
-        if(brokenLinks.length){
-            alert('There are broken internal links. They have been printed out on the console.');
-            //console.log('Broken links:\r\n' + brokenLinks.join('\r\n'));
-        }else
-            alert('No broken internal link was found.');
-    break;
-    case '_entireContent':
-        convert('_entireContent');
-    break;
-    default:
-        convert('_collapsedContent');
-    break;
-}
+            internalLinks = internalLinks.filter(function(value, index, self){ return self.indexOf(value) === index; });
+            var brokenLinks = [];
+            for(var i = 0; i < internalLinks.length; i++){
+                if(internalAnchors.indexOf(internalLinks[i]) < 0)
+                    brokenLinks.push(internalLinks[i]);
+            }
+            console.log('internalAnchors:', internalAnchors);
+            console.log('internalLinks:', internalLinks);
+            console.log('brokenLinks:', brokenLinks);
+            if(brokenLinks.length){
+                alert('There are broken internal links. They have been printed out on the console.');
+            }else
+                alert('No broken internal link was found.');
+        break;
+        case '_entireContent':
+            convert('_entireContent');
+        break;
+        default:
+            convert('_collapsedContent');
+        break;
+    }
+};
