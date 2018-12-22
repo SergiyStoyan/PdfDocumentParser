@@ -38,18 +38,14 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
 
 
 <h2><a name='customApplication'>Custom application</a></h2>
-<p>The general workflow of an application based on PdfDocumentParser is the following:
-<br>- first, the user creates parsing templates for PDF files that are to be parsed;
-<br>- then, the application processes every file in accordance with the required logic;
-
-<p>To implement it, a custom application has to care about the following aspects:
+<p>An application based on PdfDocumentParser has to care about the following main aspects:
 <ul>
-<li>allow a user to open <a href="#templateEditor">Template Editor</a> for a PDF file in order to create a parsing template for its layout;</li>
 <li>provide storage and management of parsing templates;</li>
+<li>allow a user to create and modify templates with <a href="#templateEditor">Template Editor</a>;</li>
 <li>implement a custom algorithm of processing PDF files:
     <ul>
-    <li>choose a template to be applied to a PDF page or an entire PDF file;</li>
-    <li>process data parsed with the chosen template;</li>
+    <li>choose a template to be applied on a PDF page;</li>
+    <li>process data parsed by the chosen template;</li>
     </ul> 
 </li>
 </ul> 
@@ -69,7 +65,7 @@ In Visual Studio:
 
 <h2><a name='licensing'>Licensing</a></h2>
 PdfDocumentParser is provided under GNU Affero General Public License v3.0. Contact me if you want another license.
-<p>Be noticed PdfDocumentParser may use third-party software as command line tools or linked libraries that are licensed separately.
+<p>Be noticed that PdfDocumentParser may use third-party software as command line tools or linked libraries that are licensed separately.
 
 
 <h2><a name='repository'>Repository</a></h2>
