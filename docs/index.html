@@ -99,19 +99,19 @@ To get the idea of what can be done with PdfDocumentParser and how it is used, r
 
 
 <h3>Compound anchor</h3>
-<p>A compound anchor is a chain of successively linked anchors. It is represented by the last anchor in the chain which gives one's position to it. 
-<p>A compound anchor is set not found when some of its anchors is not found.
-<p>Compound anchors are required for more conditioned search. Usage of compound anchors and simple anchors is the same.
+<p>A compound anchor is a chain of successively linked anchors. It is represented by the last anchor in the chain which gives one's position to it. It is used just like a simple anchor.
+<p>Compound anchors are used when more conditioned search is required. 
+<p>A compound anchor is not found when some of its anchors is not found.
 <p>A linked anchor is named 'child' of the linking one which is named 'parent'. When an anchor is linked to another anchor, its search area (when it is set to not entire page) becomes related to its parent anchor's position. That means that a parent anchor is searched not until its first match found as done for a stand-alone anchor, but until a match found that satisfies to the child anchor as well. 
 <br>More specifically, when a child anchor has <a href='#anchorPdfText'>Search Rectangle Margin</a> set to not entire page,  position of its parent anchor, while searching as parent, may differ from position of the very same anchor, while searching stand-alone. 
 <br>The same consideration is true for child anchors too: an anchor, whose search area is set to not entire page, may change its position after linking to another anchor. 
-<br>Thus, <span class='attention'>NOTE: </span>An anchor acting stand-alone and the same anchor acting as a part of a compound anchor should be considered different anchors because they can have different positions.
+<br>Thus, <span class='attention'>NOTE: </span>An anchor acting stand-alone and the same anchor acting as a part of a compound anchor should be considered different anchors because they can have different positions. 
 <p>Number of anchors in a compound anchor can be any. Though, it should be taken to account that processing time of recursive search performed for a compound anchor exponentially increases with the chain length.
 
 
 
 <h3><a name='anchorTypes'>Anchor types</a></h3>
-<p>Each of types is processed by its own very different way, therefore choosing the right type is crucial in successful and robust parsing. 
+<p>Each type is processed by its own very different way, therefore choosing the right type is crucial in successful and robust parsing. 
 
 
 <h4><a name='anchorPdfText'>PdfText</a></h4>
@@ -466,9 +466,9 @@ This tutorial proceeds with the sample considered in <a href='#tutorialParsingAp
 <img src='img/tutorial0.png'/>
 
 <h3><a name='tutorialAnchor'>Create anchors</a></h3>
-<p>Templates in our application have 1 condition and 4 fields (see <a href='#customConfiguration'>the configuration</a>). 
-<p>Let's first create anchors for the condition. As FirstPageOfDocument is intended to identify the type of a document, it needs an anchor targeted to some fragment of a document that is unique to its type. Obviously, such a fragment must identify the document type with a high confidence. Usually the logo of a company that issued the document can serve well this goal.
-<p class='screenshot_title'>Create an anchor that captures the logo and thus detects if a page corresponds to the template:
+<p>Templates in our application have 1 condition and 4 fields (see <a href='#customConfiguration'>configuration</a>). 
+<p>Let's first create anchors for the condition. As FirstPageOfDocument should identify documents that correspond to the template, it needs an anchor targeted to such a fragment of the document that is distinctive for its type. Obviously, such a fragment must identify the document type with a high confidence. In the case of invoices, the company's logo can serve well this goal.
+<p class='screenshot_title'>Create an anchor that captures the logo and thus detects if the template corresponds to the page:
 <img src='img/tutorial1.png'/>
 
 <p>In addition, as FirstPageOfDocument must be capable to detect the beginning page of a document, it needs an anchor that will do it.
