@@ -48,7 +48,7 @@ namespace Cliver.SampleParser
             }
 
             List<string> orderedOutputFieldNames = active_templates[0].Template.Fields.Select(x => x.Name).ToList();
-            List<string> headers = new List<string> { "Original File" };
+            List<string> headers = new List<string> { "File" };
             headers.AddRange(orderedOutputFieldNames);
             headers.AddRange(new List<string> { "Template", "First Page" });
 

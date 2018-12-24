@@ -535,18 +535,6 @@ namespace Cliver.SampleParser
             f.ShowDialog();
         }
 
-        private void help_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                System.Diagnostics.Process.Start(Settings.General.HelpFile);
-            }
-            catch (Exception ex)
-            {
-                LogMessage.Error(ex);
-            }
-        }
-
         private void Engine_Click(object sender, EventArgs e)
         {
             PdfDocumentParser.SettingsForm sf = new PdfDocumentParser.SettingsForm();
