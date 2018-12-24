@@ -27,11 +27,13 @@ namespace Cliver.PdfDocumentParser
         {
             PdfFile = pdfFile;
             PdfReader = new PdfReader(pdfFile);
+            TotalCount = PdfReader.NumberOfPages;
             getValue = (int pageI) => { return new Page(this, pageI); };
         }
 
         public readonly string PdfFile;
         public readonly PdfReader PdfReader;
+        public readonly int TotalCount;
 
         public override void Dispose()
         {
