@@ -348,7 +348,8 @@ namespace Cliver.PdfDocumentParser
                 default:
                     throw new Exception("Unknown option: " + a.Type);
             }
-            row.Cells["Point03"].Value = SerializationRoutines.Json.Serialize(new { r.X, r.Y });
+            if (r != null)
+                row.Cells["Point03"].Value = SerializationRoutines.Json.Serialize(new { r.X, r.Y });
 
             if (loadingTemplate)
                 return;

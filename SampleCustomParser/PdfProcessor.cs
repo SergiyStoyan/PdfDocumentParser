@@ -41,7 +41,7 @@ namespace Cliver.SampleParser
 
         Dictionary<string, string> fieldNames2text = new Dictionary<string, string>();
 
-        static public bool? Process(string inputPdf, List<Template2> template2s, Action<string, int, Dictionary<string, string>> record)
+        static public bool? Process(string inputPdf, List<Template2> template2s, Action<string, int, int, Dictionary<string, string>> record)
         {
             Log.Main.Inform(">>> Processing file '" + inputPdf + "'");
 
@@ -62,34 +62,41 @@ namespace Cliver.SampleParser
                 return cp.process(record, t2s);
             }
         }
-        bool process(Action<string, int, Dictionary<string, string>> record, List<Template2> template2s)
+        bool process(Action<string, int, int, Dictionary<string, string>> record, List<Template2> template2s)
         {
             int documentFirstPageI = 0;
             int documentCount = 0;
+            Template currentTemplate = null;
 
-            for (int page_i = 1; page_i <= Pages.TotalCount; page_i++)
+            for (int pageI = 1; pageI <= Pages.TotalCount; pageI++)
             {
-                if (Pages.ActiveTemplate == null)
+                if (currentTemplate == null)
                     foreach (Template2 t2 in template2s)
                     {
                         Pages.ActiveTemplate = t2.Template;
-                        if (Pages[page_i].IsCondition(Template2.ConditionNames.DocumentFirstPage))
+                        if (Pages[pageI].IsCondition(Template2.ConditionNames.DocumentFirstPage))
                         {
-                            documentFirstPageI = page_i;
-                            Log.Main.Inform("Document #" + (++documentCount) + " detected at page " + documentFirstPageI + " with template '" + Pages.ActiveTemplate.Name + "'");
-                            Settings.TemplateLocalInfo.SetUsedTime(Pages.ActiveTemplate.Name);
+                            currentTemplate = Pages.ActiveTemplate;
+                            documentFirstPageI = pageI;
+                            Log.Main.Inform("Document #" + (++documentCount) + " detected at page " + documentFirstPageI + " with template '" + currentTemplate.Name + "'");
+                            Settings.TemplateLocalInfo.SetUsedTime(currentTemplate.Name);
                             break;
                         }
                     }
-                if (Pages.ActiveTemplate != null && Pages[page_i].IsCondition(Template2.ConditionNames.DocumentLastPage))
+                if (currentTemplate == null)
                 {
-                    record(Pages.ActiveTemplate.Name, documentFirstPageI, fieldNames2text);
-                    fieldNames2text.Clear();
-                    Pages.ActiveTemplate = null;
+                    Log.Main.Warning2("No template found for page #" + pageI);
                     continue;
                 }
-                foreach (Template.Field f in Pages.ActiveTemplate.Fields)
-                    extractFieldText(Pages[page_i], f);
+                foreach (Template.Field f in currentTemplate.Fields)
+                    extractFieldText(Pages[pageI], f);
+                if (Pages[pageI].IsCondition(Template2.ConditionNames.DocumentLastPage))
+                {
+                    record(currentTemplate.Name, documentFirstPageI, pageI, fieldNames2text);
+                    fieldNames2text.Clear();
+                    currentTemplate = null;
+                    continue;
+                }
             }
             return documentCount > 0;
         }

@@ -27,27 +27,6 @@ namespace Cliver.InvoiceParser
             public override void Loaded()
             {
                 __Indented = false;
-
-                //to covert from the older format
-                //foreach (Template2 t in Template2s)
-                //    if (t.Template.Conditions == null || t.Template.Conditions.Count < 1)
-                //    {
-                //        Dictionary<string, List<string>> cns2ce = new Dictionary<string, List<string>>();
-                //        foreach (Template.Anchor a in t.Template.Anchors.Where(x => !string.IsNullOrWhiteSpace(x.Condition)))
-                //        {
-                //            List<string> ce;
-                //            if (!cns2ce.TryGetValue(a.Condition, out ce))
-                //            {
-                //                ce = new List<string>();
-                //                cns2ce[a.Condition] = ce;
-                //            }
-                //            ce.Add(a.Id.ToString());
-
-                //        }
-                //        t.Template.Conditions = new List<Template.Condition>();
-                //        foreach (string cn in cns2ce.Keys)
-                //            t.Template.Conditions.Add(new Template.Condition { Name = cn, Value = string.Join(" & ", cns2ce[cn]) });
-                //    }
             }
 
             public override void Saving()

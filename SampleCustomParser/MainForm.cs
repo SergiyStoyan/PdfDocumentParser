@@ -206,7 +206,6 @@ namespace Cliver.SampleParser
                 //        int i = templates.Rows.Add();
                 //        templates.Rows[i].Selected = true;
                 //        templates.Rows[i].Cells["Active"].Value = true;
-                //        templates.Rows[i].Cells["Group"].Value = "";
                 //    }
                 //    catch { }
                 //}
@@ -276,12 +275,9 @@ namespace Cliver.SampleParser
             if (tf.ShowDialog() != DialogResult.OK)
                 return;
             r.Cells["Active"].Value = t.Active;
-            r.Cells["Group"].Value = t.Group;
             r.Cells["Comment"].Value = t.Comment;
             r.Cells["OrderWeight"].Value = t.OrderWeight;
-            r.Cells["DetectingTemplateLastPageNumber"].Value = t.DetectingTemplateLastPageNumber;
             r.Cells["FileFilterRegex"].Value = t.FileFilterRegex;
-            r.Cells["SharedFileTemplateNamesRegex"].Value = t.SharedFileTemplateNamesRegex;
         }
 
         void editTemplate(DataGridViewRow r)

@@ -50,11 +50,12 @@ namespace Cliver.SampleParser
             List<string> orderedOutputFieldNames = active_templates[0].Template.Fields.Select(x => x.Name).ToList();
             List<string> headers = new List<string> { "File" };
             headers.AddRange(orderedOutputFieldNames);
-            headers.AddRange(new List<string> { "Template", "First Page" });
+            headers.AddRange(new List<string> { "Template", "First Page", "Last Page" });
 
             tw.WriteLine(FieldPreparation.GetCsvHeaderLine(headers, FieldPreparation.FieldSeparator.COMMA));
 
             List<string> files = FileSystemRoutines.GetFiles(Settings.General.InputFolder, Settings.General.ReadInputFolderRecursively);
+            files.Remove(output_records_file);
             if (Settings.General.IgnoreHiddenFiles)
                 files = files.Select(f => new FileInfo(f)).Where(fi => !fi.Attributes.HasFlag(FileAttributes.Hidden)).Select(fi => fi.FullName).ToList();
 
@@ -66,7 +67,7 @@ namespace Cliver.SampleParser
             {
                 try
                 {
-                    bool? result = PdfProcessor.Process(f, active_templates, (templateName, page_i, fieldNames2texts) =>
+                    bool? result = PdfProcessor.Process(f, active_templates, (templateName, firstPageI, lastPageI, fieldNames2texts) =>
                     {
                         List<string> values = new List<string>() { PathRoutines.GetFileNameFromPath(f) };
                         foreach (string fn in orderedOutputFieldNames)
@@ -74,7 +75,7 @@ namespace Cliver.SampleParser
                             fieldNames2texts.TryGetValue(fn, out string t);
                             values.Add(t);
                         }
-                        values.AddRange(new List<string> { templateName, page_i.ToString() });
+                        values.AddRange(new List<string> { templateName, firstPageI.ToString(), lastPageI.ToString() });
                         tw.WriteLine(FieldPreparation.GetCsvLine(values, FieldPreparation.FieldSeparator.COMMA));
                     });
 

@@ -71,7 +71,10 @@ namespace Cliver.SampleParser
                         PageRotation = PdfDocumentParser.Template.PageRotations.NONE,
                         AutoDeskew = false,
                         Anchors = new List<Template.Anchor>(),
-                        Conditions = new List<Template.Condition> { new Template.Condition { Name = Template2.ConditionNames.DocumentFirstPage } },
+                        Conditions = new List<Template.Condition> {
+                            new Template.Condition { Name = Template2.ConditionNames.DocumentFirstPage },
+                            new Template.Condition { Name = Template2.ConditionNames.DocumentLastPage }
+                        },
                         Fields = new List<Template.Field>
                         {
                             new Template.Field.PdfText { Name = "INVOICE" , Rectangle=new Template.RectangleF(0,0,10,10)},
@@ -101,14 +104,10 @@ namespace Cliver.SampleParser
         public Template Template;
 
         public bool Active = true;
-        public string Group;
         public DateTime ModifiedTime;
         public string Comment;
         public float OrderWeight = 1f;
-        //public int PdfPageMinNumberToDetectTemplate = 3;
-        public uint DetectingTemplateLastPageNumber = 1;
         public Regex FileFilterRegex = null;
-        public Regex SharedFileTemplateNamesRegex = null;
 
         public string GetModifiedTimeAsString()
         {
