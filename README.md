@@ -6,7 +6,7 @@ PdfDocumentParser does all the tricky job of building parsing templates, searc
 
 PdfDocumentParser is a .NET DLL.
 
-Within the repository there is SampleParser project which can be used as an example or framework for using PdfDocumentParser.
+In the repository there is SampleParser project that can be used as a sample or framework for using PdfDocumentParser.
 
 [More details...](https://sergeystoyan.github.io/PdfDocumentParser/#1)
 
