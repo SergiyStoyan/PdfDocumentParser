@@ -16,7 +16,7 @@
 
 <div class='content'>
 <h1><a name='overview'>Overview</a></h1>
-<p>PdfDocumentParser is a .NET engine designed for parsing PDF documents that conform to predictable graphical layouts - such as forms, CV's, invoices and the like. PdfDocumentParser was designed to be incorporated into an application, thus, drastically reducing efforts of building PDF parsers. 
+<p>PdfDocumentParser is a .NET engine designed for parsing PDF documents that conform to predictable graphical layouts - such as reports, forms, tickets, invoices and the like. PdfDocumentParser was designed to be incorporated into an application, thus, drastically reducing efforts of building PDF parsers. 
 
 <p>PdfDocumentParser provides the following facilities:
 <ul>
@@ -49,7 +49,7 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
     </ul> 
 </li>
 </ul> 
-For more details see <a href='#pseudoCode'>pseudo-code</a>, <a href='#tutorialParsingApi'>tutorial: using Parsing API</a> and <a href='#InvoiceParser'>InvoiceParser</a>.
+For more details see <a href='#pseudoCode'>pseudo-code</a>, <a href='#tutorialParsingApi'>tutorial: using Parsing API</a> and <a href='#sampleParser'>SampleParser</a>.
 
 <h3><a name='creatingSolution'>Visual Studio</a></h3>
 In Visual Studio:
@@ -77,7 +77,7 @@ To get the idea of what can be done with PdfDocumentParser and how it is used, r
 
 
 <h1><a name="template">Template</a></h1>
-<p>A parsing template is intended for parsing documents that comply with the same layout (e.g. invoices issued by the same company). It contains information what data should be extracted, where and how. 
+<p>A parsing template is intended for parsing documents that comply with the same layout (e.g. reports issued by the same company). It contains information what data should be extracted, where and how. 
 <p>Obviously, applying a template to documents with layouts different from that it was designed for, brings to incorrect parsing.
 <p>Creating and modifying templates is preformed with <a href='#templateEditor'>Template Editor<a/>
 
@@ -280,7 +280,7 @@ A template has the following settings that influence on parsing:
 <tr><td class='title_column'><a name='GetValue'><code>Cliver.PdfDocumentParser.Page::GetValue()</code></a></td>
 <td>Extract a field from the page. If anchor of the field was not found, NULL is returned.</td></tr>
 </table>
-<p>Refer to <a href='#InvoiceParser'>InvoiceParser</a> as an live example of using PdfDocumentParser in an application.
+<p>Refer to <a href='#sampleParser'>SampleParser</a> as an live example of using PdfDocumentParser in an application.
 
 
 <h2><a name='pseudoCode'>Pseudo-code</a></h2>
@@ -376,62 +376,64 @@ foreach(page in pdfFile)
 
 <h3>Sample task & application</h3>
 <p>Since PdfDocumentParser can only be used from within an application developed for a certain parsing task, in this tutorial the following sample task is considered: 
-<p>there are PDF files that consist of invoices issued by different companies. Values INVOICE#, JOB#, PO#, COST must be parsed from every invoice.
+<p>there are PDF files that contain invoices issued by different companies. Values INVOICE and TOTAL must be parsed from every invoice.
 <p>It is known that the PDF files to be parsed comply with the following:
 <ul>
-<li>a file can consist of multiple invoices;</li>
-<li>an invoice can consist of multiple pages;</li>
-<li>any page in a file is a part of invoice;</li>
+<li>a file can contain more than one invoice;</li>
+<li>a invoice can consist of multiple pages;</li>
+<li>invoices can not share the same page;</li>
+<li>between invoices there may be pages that should be passed off;</li>
 </ul>
-<p>The application developed for this task is <a href='#InvoiceParser'>InvoiceParser</a> which can be referred to during this tutorial.
+<p>The application developed for this task is <a href='#sampleParser'>SampleParser</a> which is referred to during this tutorial.
 
 <h3><a name='customConfiguration'>Custom configuration<a/></h3>
-<p>As is obvious from the task requirements, the <a href='#field'>field</a> collection predetermined in our application should be: INVOICE#, JOB#, PO#, COST.
-<p>Now let's decide which <a href='#condition'>conditions</a> are needed in our application. 
-<p>Since the invoices are issued by different companies, they have different layouts. Every layout requires its own parsing template. Therefore, our application should be able to <b>A)</b>recognize layout of a PDF page in order to know which template should be applied. 
-<p>Additionally, as invoices can be multi-page, our application has to <b>B)</b>detect the first page of every invoice. 
+<p>As is obvious from the task requirements, the <a href='#field'>field</a> collection predetermined in SampleParser should be: INVOICE, TOTAL.
+<p>Now let's decide which <a href='#condition'>conditions</a> are needed in SampleParser. 
+<p>Since the invoices are issued by different companies, they have different layouts. Every layout requires its own parsing template. Therefore, SampleParser should be able to <b>A)</b>recognize layout of a PDF page in order to know which template should be applied. 
+<p>Additionally, as invoices can be multi-page, SampleParser has to <b>B)</b>detect the first page of every invoice. 
 <p>Checks (A) and (B) can be joined into one <a href='#condition'>condition</a>. Let's name it 'FirstPageOfDocument'. 
-<p>It will work in the following manner: when a template has its FirstPageOfDocument satisfied on a PDF page, it is to be chosen for processing of this page and the next ones until the first page of a new invoice is detected. And when a new invoice starts, the previously captured fields should be processed/recorded and cleaned.
-<p>Thus, the condition collection in our application will consist of only condition FirstPageOfDocument which is sufficient for the task.
+<p>Also, the parser needs another <a href='#condition'>condition</a> that will detect the end of every invoice. Let's name it 'LastPageOfDocument'.
+<p>It will work in the following manner: when a template has its FirstPageOfDocument satisfied on a PDF page, it is to be chosen for processing of this page and the next ones until LastPageOfDocument is met. When it happens, the previously captured fields should be processed/recorded and new template must be chosen.
+<p>Thus, the condition collection in SampleParser will consist of FirstPageOfDocument and LastPageOfDocument which is sufficient for the task.
 
 
 <h3>Custom algorithm</h3>
-Now, summing up the said above, the algorithm of processing a PDF file in our application should be the following:
+Now, summing up the said above, the algorithm of processing a PDF file in SampleParser should be the following:
 <pre>
-<code class="language-csharp">//pseudo-code: parsing an invoice
+<code class="language-csharp">//pseudo-code: parsing a invoice
 //Note: the classes and methods are not real and serve for simplicity and clarity only.
 
-object INVOICE#, JOB#, PO#, COST;
-Template currentTemplate;
+object INVOICE, TOTAL;
+
 foreach(page in pdfFile)
 { 
-    foreach(template in templates)
+    if(PdfDocumentParser.ActiveTemplate == null)
     {
-        PdfDocumentParser.ActiveTemplate = template;
-        if(PdfDocumentParser.IsCondition(page, "DocumentFirstPage"))
+        foreach(template in templates)
         {
-            if(INVOICE# != null)
-            {
-                //do something with INVOICE#, JOB#, PO#, COST extracted from the previous invoice...
-                <...>
-                INVOICE# = null;
-            }
-            currentTemplate = PdfDocumentParser.ActiveTemplate;
-            break;
+            PdfDocumentParser.ActiveTemplate = template;
+            if(PdfDocumentParser.IsCondition(page, "DocumentFirstPage"))
+                break;
+            PdfDocumentParser.ActiveTemplate = null;
         }
     }
-    if(currentTemplate != null)
-    {  
-        PdfDocumentParser.ActiveTemplate = currentTemplate;
-        object INVOICE# = PdfDocumentParser.GetValue(page, "INVOICE#");
-        object JOB# = PdfDocumentParser.GetValue(page, "JOB#");
-        object PO# = PdfDocumentParser.GetValue(page, "PO#");
-        object COST = PdfDocumentParser.GetValue(page, "COST");
+    
+    if(PdfDocumentParser.ActiveTemplate != null)
+    {        
+        INVOICE = PdfDocumentParser.GetValue(page, "INVOICE");
+        TOTAL = PdfDocumentParser.GetValue(page, "TOTAL");
+        
+        if(PdfDocumentParser.IsCondition(page, "DocumentLastPage"))
+        {
+            record(INVOICE, TOTAL);
+            INVOICE, TOTAL = null;
+            PdfDocumentParser.ActiveTemplate = null;
+        }
     }
 }</code>
 </pre>
 
-Refer to <a href='#InvoiceParser'>InvoiceParser</a> as live code.
+Refer to <a href='#sampleParser'>SampleParser</a> as live code.
 
 
 
@@ -455,23 +457,23 @@ Template Editor is a GUI object that is called from the application whenever con
 <tr><td class='title_column'><code>Cliver.PdfDocumentParser.TemplateManager</code></td>
 <td>Abstract class that must be defined with custom routines. Passed to <code>TemplateForm()</code> as a parameter.</td></tr>
 </table>
-<p>Refer to <a href='#InvoiceParser'>InvoiceParser</a> as a sample of use.
+<p>Refer to <a href='#sampleParser'>SampleParser</a> as a sample of use.
 
 
 
 
 <h2><a name='tutorialTemplateEditor'>Tutorial: setting template</a></h2>
 This tutorial proceeds with the sample considered in <a href='#tutorialParsingApi'>tutorial: using Parsing API</a>.
-<p><a href='#InvoiceParser'>InvoiceParser</a> is used as a sample application.
+<p><a href='#sampleParser'>SampleParser</a> is used as a sample application.
 
 
 <h3>Open Template Editor</h3>
-<p>The way of opening Template Editor depends on the application. In <a href='#InvoiceParser'>InvoiceParser</a> a <a href="#template">template</a> can be created from scratch or copied from an existing one and then modified as needed. Let's start with a blank template: click the blank row in the table in the main window of InvoiceParser and then click button Edit.
+<p>The way of opening Template Editor depends on the application. In <a href='#sampleParser'>SampleParser</a> a <a href="#template">template</a> can be created from scratch or copied from an existing one and then modified as needed. Let's start with a blank template: click the blank row in the table in the main window of SampleParser and then click button Edit.
 <p class='screenshot_title'>Open a test PDF file in Template Editor:
 <img src='img/tutorial0.png'/>
 
 <h3><a name='tutorialAnchor'>Create anchors</a></h3>
-<p>Templates in our application have 1 condition and 4 fields (see <a href='#customConfiguration'>configuration</a>). 
+<p>Templates in SampleParser have 2 conditions and 2 fields (see <a href='#customConfiguration'>configuration</a>). 
 <p>Let's first create anchors for the condition. As FirstPageOfDocument should identify documents that correspond to the template, it needs an anchor targeted to such a fragment of the document that is distinctive for its type. Obviously, such a fragment must identify the document type with a high confidence. In the case of invoices, the company's logo can serve well this goal.
 <p class='screenshot_title'>Create an anchor that captures the logo and thus detects if the template corresponds to the page:
 <img src='img/tutorial1.png'/>
@@ -486,7 +488,7 @@ This tutorial proceeds with the sample considered in <a href='#tutorialParsingAp
 
 <p><span class='attention'>NOTE: </span>while setting an anchor, if you keep Ctrl pressed, you can select more than 1 element on a PDF page for the same anchor. In that case, to stop selecting and make the anchor set, you have to release Ctrl before releasing the mouse button.
 
-<h3><a name='tutorialCondition'>Specify condition</a></h3>
+<h3><a name='tutorialCondition'>Specify conditions</a></h3>
 We already have created anchors #1 and #2 that are needed to specify FirstPageOfDocument's expression. It must be True only when the anchors are found together on a page.
 
 <p class='screenshot_title'>Set condition FirstPageOfDocument with boolean expression "1 & 2":
@@ -494,24 +496,27 @@ We already have created anchors #1 and #2 that are needed to specify FirstPageOf
 
 <p>While in this sample FirstPageOfDocument is quite good with 2 anchors, sometimes more anchors may be needed: for instance when the same company issues documents of different types and thus company's logo is not sufficient to detect the type.
 
-<p>If the sample task considered here did not stated that every page belongs to an invoice then one more condition to detect last pages of invoices would be needed. However, in accordance with the requirements, such a condition is redundant.
+<p>Condition LastPageOfDocument will be set later.
 
 
 <h3><a name='tutorialField'>Set fields</a></h3>
-<p class='screenshot_title'>Set <a href='#field'>field</a> INVOICE#:
+<p class='screenshot_title'>Set <a href='#field'>field</a> INVOICE:
 <img src='img/tutorial4.png'/>
 
 <p class='screenshot_title'>In the same way as above set the rest fields and create anchors for them:
 <img src='img/tutorial5.png'/>
 
-<p>Though <a href='#field'>fields</a> INVOICE#, JOB#, PO# seem not to need linking to anchors, they were anchored just in case to minimize the probability of mistaken parsing in the future when the layout may change.
+
+<p class='screenshot_title'>And now it's time to set condition LastPageOfDocument. Assume that the total amount is always showed only on the last page of invoice:
+<img src='img/tutorial6.png'/>
+
 
 <h3>Check template</h3>
 <p>When all the conditions and fields are set, it's time to walk through the file and see how the template works on every page.
 <p class='screenshot_title'>The page #2 begins a new invoice:
-<img src='img/tutorial6.png'/>
-<p class='screenshot_title'>The page #3 continues and ends an invoice: 
 <img src='img/tutorial7.png'/>
+<p class='screenshot_title'>The page #3 continues and ends an invoice: 
+<img src='img/tutorial8.png'/>
 <p>The template worked properly on the test file. Click OK to save it.
 
 
@@ -547,9 +552,9 @@ PdfDocumentParser has parameters that are the same within the application's scop
 
 
 
-<h1><a name='InvoiceParser'>InvoiceParser</a></h1>
-Invoice Parser is a customized desktop application based on <a href='#overview'>PdfDocumentParser</a>. It can be referred to as an example of incorporating PdfDocumentParser. Also, since its custom specificity lays only in a way of how PDF files are parsed, it can be used as a framework.
-<p>Generally, it does the following:
+<h1><a name='SampleParser'>SampleParser</a></h1>
+SampleParser is a customized desktop application based on <a href='#overview'>PdfDocumentParser</a>. It can be referred to as an example or framework of incorporating PdfDocumentParser. 
+<p>It does the following:
 <ul>
 <li>enhances <code>PdfDocumentParser.Template</code> with auxiliary properties that are not related to parsing;</li>
 <li>stores and manages templates;</li>
@@ -557,13 +562,7 @@ Invoice Parser is a customized desktop application based on <a href='#overview'>
 <li>defines <code>PdfDocumentParser.TemplateForm.TemplateManager</code> and calls <code>PdfDocumentParser.TemplateForm</code> for template editing;</li>
 <li>processes PDF files in a custom manner;</li>
 </ul>
-<img src='img/invoiceparser2_1.png'/>
-
-<h2>Assumptions</h2>
-<ul>
-<li>by default, a PDF file can contain documents of the same type only. However, it can be tuned for every template individually;</li>
-<li>once detected, a document is considered continued until the next document begins or the file ends;</li>
-</ul>
+<img src='img/sampleparser.png'/>
 
 
 <h2>Enhanced template parameters</h2>
@@ -571,22 +570,14 @@ Invoice Parser is a customized desktop application based on <a href='#overview'>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'>Active</td>
 <td>Inactive template is ignored while parsing.</td></tr>
-<tr><td class='title_column'>Group</td>
-<td>An optional mark that can be helpful for managing templates.</td></tr>
 <tr><td class='title_column'>Order</td>
 <td>A weight indicating template's order in check line. It is intended to reduce processing time. Templates with the less order are tried first.</td></tr>
-<tr><td class='title_column'>DTLPage</td>
-<td>The last page in PDF files that is to be checked for this template. It is intended to reduce processing time.</td></tr>
 <tr><td class='title_column'>Filter</td>
 <td>It is a Regex applied to PDF file path to recognize the proper template. Optional. It is intended to reduce processing time.</td></tr>
-<tr><td class='title_column'>Filter</td>
-<td>It is a Regex applied to PDF file path to recognize the proper template. Optional. It is intended to reduce processing time.</td></tr>
-<tr><td class='title_column'>SFTRegex</td>
-<td>It is a Regex that matches to names of templates that can share the same PDF file. By default it is NULL meaning that such a template if chosen for processing a PDF file cannot be changed for this file.</td></tr>
 </table>
 
 <h2>Considerations</h2>
-<p>When processing documents InvoiceParser applies every active template to every new document to recognize a proper template. So, if you have 50 templates and 1000 files evenly distributed for templates, InvoiceParser will do on average 1000/2 *50 = 25,000 template tries. It may take a considerable time especially when templates use OCR. Processing time can be reduced by the following ways:
+<p>Processing time depends on the custom algorithm. However, it is possible to make some general advices. Processing time can be reduced by the following ways:
 <ul> 
 <li> specify file filters for templates. If it can be done then the other tips are not needed;
 <li> specify template orders so that templates that require a longer time for recognition have a higher order. E.g. templates that use auto-deskew should be checked in the last place;

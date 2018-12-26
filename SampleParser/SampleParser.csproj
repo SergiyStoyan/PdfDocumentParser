@@ -10,7 +10,7 @@
     <ApplicationIcon>computers308.ico</ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>InvoiceParser</AssemblyName>
+    <AssemblyName>SampleParser</AssemblyName>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
@@ -18,7 +18,7 @@
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Cliver.InvoiceParser</RootNamespace>
+    <RootNamespace>Cliver.SampleParser</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
@@ -106,12 +106,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EPPlus, Version=4.5.2.1, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
-      <HintPath>packages\EPPlus.4.5.2.1\lib\net40\EPPlus.dll</HintPath>
-    </Reference>
-    <Reference Include="itextsharp, Version=5.5.13.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>..\packages\iTextSharp.5.5.13\lib\itextsharp.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -145,7 +139,6 @@
     <Compile Include="AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Excel.cs" />
     <Compile Include="FileFilterForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -157,12 +150,6 @@
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="OutputConfigForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="OutputConfigForm.Designer.cs">
-      <DependentUpon>OutputConfigForm.cs</DependentUpon>
     </Compile>
     <Compile Include="PdfProcessor.cs" />
     <Compile Include="Processor.cs" />
@@ -178,7 +165,6 @@
     <Compile Include="SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Settings\Synchronization.cs" />
     <Compile Include="Settings\General.cs" />
     <Compile Include="Settings\Template2s.cs" />
     <Compile Include="Settings\TemplateLocalInfo.cs" />
@@ -188,13 +174,13 @@
     <Compile Include="Template2Form.Designer.cs">
       <DependentUpon>Template2Form.cs</DependentUpon>
     </Compile>
-    <Content Include="3RINGS~1.ICO" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Program.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Content Include="3RINGS~1.ICO" />
     <Content Include="computers308.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -227,9 +213,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OutputConfigForm.resx">
-      <DependentUpon>OutputConfigForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -422,17 +422,18 @@ var convert = function(mode){
     }    
 };
 
+var loadInMenuMode = function(){
+    var localPath = window.location.href.replace(/#.*/, '');
+    window.location.href = localPath;
+    location.reload();
+    return false;
+};
+            
 window.onload = function(){
     var anchorName = window.location.href.replace(/[^#]*#?(_localAnchor_)?/, '');
     switch(anchorName){
         case '_plainHtml':
             var anchorDiv = document.createElement('div');
-            var loadInMenuMode = function(){
-                var localPath = window.location.href.replace(/#.*/, '');
-                window.location.href = localPath;
-                location.reload();
-                return false;
-            };
             anchorDiv.innerHTML = '<a class="switchLink" href="#" onclick="loadInMenuMode();" title="Switch to javascript generated document.">menu mode</a>';
             document.body.insertBefore(anchorDiv, document.body.childNodes[0]);
         break;
