@@ -295,7 +295,7 @@ An algorithm of parsing a PDF file where pages has no logical relation between e
 
 foreach(page in pdfFile)
 {
-    //find a template appropriate for the page
+    //find the right template for the page
     if(PdfDocumentParser.ActiveTemplate == null)
     {
         foreach(template in templates)
@@ -309,15 +309,14 @@ foreach(page in pdfFile)
     
     if(PdfDocumentParser.ActiveTemplate == null)
     {
-        logWarning("No template was detected for page: " + page.Number);
+        logWarning("No template matched to page: " + page.Number);
         continue;
     }
         
-    //applying the chosen template  
+    //applying the chosen template to the page 
     object value1 = PdfDocumentParser.GetValue(page, "field1");
     //doing something with value1...
-    <...>
-    
+    <...>    
     object value2 = PdfDocumentParser.GetValue(page, "field2");
     //doing something with value2...
     <...>
