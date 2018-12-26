@@ -365,7 +365,7 @@ namespace Cliver.PdfDocumentParser
                         }
                     }
                     return false;
-                case Template.Types.ImageData:
+                case Template.Types.ImageData://TBD:? implement recursive search of images in an anchor
                     {
                         Template.Anchor.ImageData idv = (Template.Anchor.ImageData)a;
                         List<Template.Anchor.ImageData.ImageBox> ibs = idv.ImageBoxs;

@@ -375,35 +375,34 @@ foreach(page in pdfFile)
 <h2><a name='tutorialParsingApi'>Tutorial: using Parsing API</a></h2>
 
 <h3>Sample task & application</h3>
-<p>Since PdfDocumentParser can only be used from within an application developed for a certain parsing task, in this tutorial the following sample task is considered: 
-<p>there are PDF files that contain invoices issued by different companies. Values INVOICE and TOTAL must be parsed from every invoice.
+<p>Since PdfDocumentParser can only be used from within an application developed for a certain parsing task, in this tutorial is considered a certain sample task which at the same time is general enough to meet a broad range of custom tasks. The task follows:
+<p>there are PDF files that contain invoices issued by different companies. Values InvoiceId and TotalAmount must be parsed from every invoice. (Below, to keep the task more abstract, term 'document' is used instead of 'invoice'.)
 <p>It is known that the PDF files to be parsed comply with the following:
 <ul>
-<li>a file can contain more than one invoice;</li>
-<li>a invoice can consist of multiple pages;</li>
-<li>invoices can not share the same page;</li>
-<li>between invoices there may be pages that should be passed off;</li>
+<li>a file can contain more than one document;</li>
+<li>a document can consist of multiple pages;</li>
+<li>documents can not share the same page;</li>
+<li>between documents there may be pages that do not belong to a document and so should be passed off;</li>
 </ul>
 <p>The application developed for this task is <a href='#sampleParser'>SampleParser</a> which is referred to during this tutorial.
 
 <h3><a name='customConfiguration'>Custom configuration<a/></h3>
-<p>As is obvious from the task requirements, the <a href='#field'>field</a> collection predetermined in SampleParser should be: INVOICE, TOTAL.
+<p>As is obvious from the task requirements, the <a href='#field'>field</a> collection predetermined in SampleParser should be: InvoiceId, TotalAmount.
 <p>Now let's decide which <a href='#condition'>conditions</a> are needed in SampleParser. 
-<p>Since the invoices are issued by different companies, they have different layouts. Every layout requires its own parsing template. Therefore, SampleParser should be able to <b>A)</b>recognize layout of a PDF page in order to know which template should be applied. 
-<p>Additionally, as invoices can be multi-page, SampleParser has to <b>B)</b>detect the first page of every invoice. 
+<p>Since the documents are issued by different companies, they have different layouts. Every layout will require its own parsing template. On the other hand, a whole document can be processed with a single template. Therefore, SampleParser should be able to <b>A)</b>detect the first page of every document in a file and <b>B)</b>choose the right template for the document.
 <p>Checks (A) and (B) can be joined into one <a href='#condition'>condition</a>. Let's name it 'FirstPageOfDocument'. 
-<p>Also, the parser needs another <a href='#condition'>condition</a> that will detect the end of every invoice. Let's name it 'LastPageOfDocument'.
-<p>It will work in the following manner: when a template has its FirstPageOfDocument satisfied on a PDF page, it is to be chosen for processing of this page and the next ones until LastPageOfDocument is met. When it happens, the previously captured fields should be processed/recorded and new template must be chosen.
-<p>Thus, the condition collection in SampleParser will consist of FirstPageOfDocument and LastPageOfDocument which is sufficient for the task.
+<p>Also, another <a href='#condition'>condition</a> is required to detect the end of a document. Let's name it 'LastPageOfDocument'.
+<p>It will work in the following manner: when a template has its FirstPageOfDocument satisfied on a PDF page then it is to be chosen for processing of this page and the next ones until LastPageOfDocument is met. When it happens, the previously captured fields should be processed and emptied and next pages must be examined for FirstPageOfDocument condition until it is met for some template.
+<p>So, the condition collection in SampleParser will consist of FirstPageOfDocument and LastPageOfDocument which is sufficient for the task.
 
 
 <h3>Custom algorithm</h3>
 Now, summing up the said above, the algorithm of processing a PDF file in SampleParser should be the following:
 <pre>
-<code class="language-csharp">//pseudo-code: parsing a invoice
+<code class="language-csharp">//pseudo-code: parsing a document
 //Note: the classes and methods are not real and serve for simplicity and clarity only.
 
-object INVOICE, TOTAL;
+object InvoiceId, TotalAmount;
 
 foreach(page in pdfFile)
 { 
@@ -420,13 +419,13 @@ foreach(page in pdfFile)
     
     if(PdfDocumentParser.ActiveTemplate != null)
     {        
-        INVOICE = PdfDocumentParser.GetValue(page, "INVOICE");
-        TOTAL = PdfDocumentParser.GetValue(page, "TOTAL");
+        InvoiceId = PdfDocumentParser.GetValue(page, "INVOICE");
+        TotalAmount = PdfDocumentParser.GetValue(page, "TOTAL");
         
         if(PdfDocumentParser.IsCondition(page, "DocumentLastPage"))
         {
-            record(INVOICE, TOTAL);
-            INVOICE, TOTAL = null;
+            record(InvoiceId, TotalAmount);
+            InvoiceId, TotalAmount = null;
             PdfDocumentParser.ActiveTemplate = null;
         }
     }
@@ -500,22 +499,22 @@ We already have created anchors #1 and #2 that are needed to specify FirstPageOf
 
 
 <h3><a name='tutorialField'>Set fields</a></h3>
-<p class='screenshot_title'>Set <a href='#field'>field</a> INVOICE:
+<p class='screenshot_title'>Set <a href='#field'>field</a> InvoiceId:
 <img src='img/tutorial4.png'/>
 
 <p class='screenshot_title'>In the same way as above set the rest fields and create anchors for them:
 <img src='img/tutorial5.png'/>
 
 
-<p class='screenshot_title'>And now it's time to set condition LastPageOfDocument. Assume that the total amount is always showed only on the last page of invoice:
+<p class='screenshot_title'>And now it's time to set condition LastPageOfDocument. Assume that the total amount is always showed only on the last page of a document:
 <img src='img/tutorial6.png'/>
 
 
 <h3>Check template</h3>
 <p>When all the conditions and fields are set, it's time to walk through the file and see how the template works on every page.
-<p class='screenshot_title'>The page #2 begins a new invoice:
+<p class='screenshot_title'>The page #2 begins a new document:
 <img src='img/tutorial7.png'/>
-<p class='screenshot_title'>The page #3 continues and ends an invoice: 
+<p class='screenshot_title'>The page #3 continues and ends an document: 
 <img src='img/tutorial8.png'/>
 <p>The template worked properly on the test file. Click OK to save it.
 
@@ -563,6 +562,10 @@ SampleParser is a customized desktop application based on <a href='#overview'>Pd
 <li>processes PDF files in a custom manner;</li>
 </ul>
 <img src='img/sampleparser.png'/>
+
+
+<h2>Source code</h2>
+Find SampleParser directory in PdfDocumentParser <a href='#repository'>repository</a>.
 
 
 <h2>Enhanced template parameters</h2>
