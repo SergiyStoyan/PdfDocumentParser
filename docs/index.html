@@ -68,7 +68,7 @@ PdfDocumentParser is provided under GNU Affero General Public License v3.0. Cont
 <p>Be noticed that PdfDocumentParser may use third-party software as command line tools or linked libraries that are licensed separately.
 
 
-<h2><a name='repository'>Repository</a></h2>
+<h2><a name='repository'>Source code</a></h2>
 Open <a href='https://github.com/sergeystoyan/PdfDocumentParser' target='_blank'>repository</a>.
 
 
@@ -94,8 +94,8 @@ To get the idea of what can be done with PdfDocumentParser and how it is used, r
 
 <p>Anchors are identified by their numbers assigned automatically.
 <p>An anchor consists of a single or many elements of the same type which can be either text characters or images. The first element is 'master' and the rest are 'secondary'. Position of its master element is position of the anchor itself. 
-<p>When an anchor is searched on a page, its master element is searched first and, if found, then its secondary elements are checked being bonded to the master position. Anchor is set found only when all its elements are found. 
-<p><span class='attention'>NOTE: </span>Only the first match on page is used to locate anchor. No further match is searched.
+<p>When an anchor is searched on a page, its elements are searched together until the first satisfactory combination of them is found. Only the first match is used to locate an anchor on the page. No further match is searched.
+<p>An anchor is set found only when all its elements are found. 
 
 
 <h3>Compound anchor</h3>
@@ -327,7 +327,7 @@ foreach(page in pdfFile)
 
 <h3><a name='pseudoCode2'>Multi-page documents</a></h3>
 Here is a more advanced algorithm designed for parsing a PDF file that contains multi-page documents. 
-<p>Notice that term 'document' is used here for a range of pages that are to be processed with a single template. But, generally speaking, there is no problem to process a document with several templates.
+<p>Notice that term 'document' is used here for a range of pages that are to be processed with a single template. However, generally speaking, there is no problem to process a document with several templates.
 <pre>
 <code class="language-csharp">//pseudo-code: processing a PDF file that contains multi-page documents.
 //Note: the classes and methods are not real and serve for simplicity and clarity only.
@@ -560,6 +560,9 @@ SampleParser is a customized desktop application based on <a href='#overview'>Pd
 <li>defines <code>PdfDocumentParser.TemplateForm.TemplateManager</code> and calls <code>PdfDocumentParser.TemplateForm</code> for template editing;</li>
 <li>processes PDF files in a custom manner;</li>
 </ul>
+
+Some more details on SampleParser can be found in <a href='#tutorialParsingApi'>tutorial: using Parsing API</a> and then <a href='#tutorialTemplateEditor'>tutorial: setting template</a>. 
+
 <img src='img/sampleparser.png'/>
 
 
