@@ -573,13 +573,13 @@ Find SampleParser project in PdfDocumentParser.
 <tr><td class='title_column'>Active</td>
 <td>Inactive template is ignored while parsing.</td></tr>
 <tr><td class='title_column'>Order</td>
-<td>A weight indicating template's order in check line. It is intended to reduce processing time. Templates with the less order are tried first.</td></tr>
+<td>A weight indicating template's order in check line. Templates with the less order are tried first. It is intended to reduce processing time.</td></tr>
 <tr><td class='title_column'>Filter</td>
-<td>It is a Regex applied to PDF file path to recognize the proper template. Optional. It is intended to reduce processing time.</td></tr>
+<td>A Regex applied to PDF file path to recognize the proper template. Optional. It is intended to reduce processing time.</td></tr>
 </table>
 
 <h2>Considerations</h2>
-<p>Processing time depends on the custom algorithm. However, it is possible to make some general advices. Processing time can be reduced by the following ways:
+<p>Processing time depends on the custom algorithm. However, it is possible to make some general tips. Processing time can be reduced by the following ways:
 <ul> 
 <li> specify file filters for templates. If it can be done then the other tips are not needed;
 <li> specify template orders so that templates that require a longer time for recognition have a higher order. E.g. templates that use auto-deskew should be checked in the last place;
