@@ -170,9 +170,9 @@
     <Compile Include="Misc\Crypto.cs" />
     <Compile Include="Db\DbCommand.cs" />
     <Compile Include="Db\DbConnection.cs" />
-    <Compile Include="Log\Log.NamedWriter.cs" />
-    <Compile Include="Log\Log.Session.cs" />
-    <Compile Include="Log\Log.ThreadWriter.cs" />
+    <Compile Include="Log_\Log.NamedWriter.cs" />
+    <Compile Include="Log_\Log.Session.cs" />
+    <Compile Include="Log_\Log.ThreadWriter.cs" />
     <Compile Include="Misc\FieldPreparation.cs" />
     <Compile Include="InternetDateTime.cs" />
     <Compile Include="Misc\Enum.cs" />
@@ -189,10 +189,10 @@
     <Compile Include="Serialization\Serializable.cs" />
     <Compile Include="Misc\SettingsBase.cs" />
     <Compile Include="Serialization\SerializationRoutines.Binary.cs" />
-    <Compile Include="Log\Log.constants.cs" />
-    <Compile Include="Log\Log.static.cs" />
-    <Compile Include="Log\Log.Writer.cs" />
-    <Compile Include="Log\LogMessage.cs" />
+    <Compile Include="Log_\Log.constants.cs" />
+    <Compile Include="Log_\Log.static.cs" />
+    <Compile Include="Log_\Log.Writer.cs" />
+    <Compile Include="Log_\LogMessage.cs" />
     <Compile Include="Misc\ProcessRoutines.cs" />
     <Compile Include="Misc\ReflectionRoutines.cs" />
     <Compile Include="Misc\NetworkRoutines.cs" />
