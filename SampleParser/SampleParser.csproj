@@ -240,7 +240,6 @@
     <PreBuildEvent>
     </PreBuildEvent>
     <PostBuildEvent>xcopy /Y /S "$(ProjectDir)config" "$(TargetDir)"
-xcopy /Y /S "$(ProjectDir)_config" "$(TargetDir)"
 xcopy /Y /S "$(ProjectDir)..\externals" "$(TargetDir)"
 xcopy /Y /S "$(ProjectDir)..\config" "$(TargetDir)"
 xcopy /Y /S "$(ProjectDir)..\docs" "$(TargetDir)docs\"</PostBuildEvent>
