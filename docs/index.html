@@ -94,7 +94,8 @@ To get the idea of what can be done with PdfDocumentParser and how it is used, r
 
 <p>Anchors are identified by their numbers assigned automatically.
 <p>An anchor consists of a single or many elements of the same type which can be either text characters or images. The first element is 'master' and the rest are 'secondary'. Position of its master element is position of the anchor itself. 
-<p>When an anchor is searched on a page, its elements are searched together until the first satisfactory combination of them is found. Only the first match is used to locate an anchor on the page. No further match is searched.
+<p>When an anchor is searched on a page, its elements are searched together starting from the first element until the first satisfactory combination of them is found. 
+<p>Only the first match of the elements is used to locate an anchor on the page. No further match is searched.
 <p>An anchor is set found only when all its elements are found. 
 
 
@@ -151,8 +152,9 @@ To get the idea of what can be done with PdfDocumentParser and how it is used, r
 <p>This type is used to anchor to images. 
 <p>Elements of an ImageData anchor are images that were selected on PDF page while creating the anchor.
 <p>For native PDF documents where images are without discrepancy in quality, ImageData type works quite well. 
-<p>When anchoring to a text which is presented by image as happens in scanned or mixed documents, there is a choice between ImageData and OcrText types. Which one to choose? If a target image do not change much from document to document and looks the same (no matter how poor its quality is), ImageData is more reliable and fast. However, if a target image has essential discrepancy in size, contrast, brightness, orientation etc. in documents, OcrText may work better.
+<p>When anchoring to a text which is presented by image as happens in scanned or mixed documents, there is a choice between ImageData and OcrText types. Which one to choose? If a target image does not change much from document to document and looks the same (no matter how poor its quality is), ImageData is more reliable and fast. However, if a target image has an essential discrepancy in size, contrast, brightness, orientation etc. in documents, OcrText may work better.
 <p><span class='attention'>NOTE: </span> even when an image fragment is searched within the same page where it was extracted from, it cannot be found without a non-zero tolerance. It happens because search hashes of a whole page image and a fragment are produced after downsizing them, and then, when restoring from the hashes, pixel interpolation gives different results for the entire page and the fragment. 
+<p><span class='attention'>NOTE: </span> the search of ImageData differs from the other types: if some secondary element is not found then all the found element chain is dropped instead of dropping only the previous element so that the main element is moved to its next match. This difference comes into play only when ImageData anchor has more than 2 elements. In theory this means that an anchor consisting of 3 images might not be found on a page while the match does exist. In practice such ImageData anchors are rarely needed.
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'>Position deviation</td>
