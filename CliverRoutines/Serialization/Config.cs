@@ -60,16 +60,21 @@ namespace Cliver
         //{ }
     }
 
+    abstract public class AppSettings : Settings
+    {
+        public static readonly string StorageDir = Log.AppCommonDataDir + "\\" + Config.CONFIG_FOLDER_NAME;
+    }
+
+    abstract public class UserSettings : Settings
+    {
+        public static readonly string StorageDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\" + Log.CompanyName + "\\" + Log.ProcessName + "\\" + Config.CONFIG_FOLDER_NAME;
+    }
+
     /// <summary>
     /// Manages Serializable settings.
     /// </summary>
     public class Config
     {
-        static Config()
-        {
-            DefaultStorageDir = Log.AppCommonDataDir + "\\" + CONFIG_FOLDER_NAME;
-        }
-
         /// <summary>
         /// It allows to load only certain settings objects, while ignoring unneeded ones.
         /// However, objects attributed with [Settings.Obligatory] will be loaded in any way.
@@ -92,9 +97,6 @@ namespace Cliver
         public const string CONFIG_FOLDER_NAME = "config";
         public const string FILE_EXTENSION = "json";
 
-        public static readonly string DefaultStorageDir;
-        public static string StorageDir { get; private set; }
-
         static void get(bool reset)
         {
             lock (object_names2serializable)
@@ -114,7 +116,8 @@ namespace Cliver
                         foreach (Type et in ets)
                             fis.AddRange(et.GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public).Where(a => a.FieldType == st));
                         if (fis.Count < 1)
-                            throw new Exception("No field of type '" + st.FullName + "' was found.");
+                            //    throw new Exception("No field of type '" + st.FullName + "' was found.");
+                            continue;
                         if (fis.Count > 1)
                             throw new Exception("More then 1 field of type '" + st.FullName + "' was found.");
                         FieldInfo fi = fis[0];
@@ -124,7 +127,7 @@ namespace Cliver
                             continue;
 
                         Serializable t;
-                        string file = StorageDir + "\\" + name + "." + st.FullName + "." + FILE_EXTENSION;
+                        string file = (st.BaseType == typeof(UserSettings) ? UserSettings.StorageDir : AppSettings.StorageDir) + "\\" + name + "." + st.FullName + "." + FILE_EXTENSION;
                         if (reset)
                         {
                             string init_file = Log.AppDir + "\\" + name + "." + st.FullName + "." + FILE_EXTENSION;
@@ -198,7 +201,7 @@ namespace Cliver
                         if (fi != null)
                         {
                             Serializable t;
-                            string file = StorageDir + "\\" + name + "." + st.FullName + "." + FILE_EXTENSION;
+                            string file = (st.BaseType == typeof(UserSettings) ? UserSettings.StorageDir : AppSettings.StorageDir) + "\\" + name + "." + st.FullName + "." + FILE_EXTENSION;
                             try
                             {
                                 t = Serializable.Load(st, file);
@@ -230,31 +233,27 @@ namespace Cliver
             throw new Exception("Field '" + name + "' was not found.");
         }
 
-        static public void Reload(string storage_dir = null, bool read_only = false)
+        static public void Reload(bool read_only = false)
         {
-            StorageDir = storage_dir != null ? storage_dir : DefaultStorageDir;
             ReadOnly = read_only;
             get(false);
         }
 
         static public bool ReadOnly { get; private set; }
 
-        static public void Reset(string storage_dir = null)
+        static public void Reset()
         {
-            StorageDir = storage_dir != null ? storage_dir : DefaultStorageDir;
             get(true);
         }
 
-        static public void Save(string storage_dir = null)
+        static public void Save()
         {
-            storage_dir = storage_dir != null ? storage_dir : DefaultStorageDir;
-            if (ReadOnly && PathRoutines.ArePathsEqual(storage_dir, StorageDir))
+            if (ReadOnly)
                 throw new Exception("Config is read-only and cannot be saved to the same location.");
-            StorageDir = storage_dir;
             lock (object_names2serializable)
             {
                 foreach (Serializable s in object_names2serializable.Values)
-                    s.Save(StorageDir + "\\" + PathRoutines.GetFileNameFromPath(s.__File));
+                    s.Save();
             }
         }
 
