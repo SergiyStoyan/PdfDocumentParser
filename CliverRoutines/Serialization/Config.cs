@@ -75,6 +75,11 @@ namespace Cliver
     /// </summary>
     public class Config
     {
+        static Config()
+        {
+            DefaultStorageDir = Log.AppCommonDataDir + "\\" + CONFIG_FOLDER_NAME;
+        }
+
         /// <summary>
         /// It allows to load only certain settings objects, while ignoring unneeded ones.
         /// However, objects attributed with [Settings.Obligatory] will be loaded in any way.
@@ -96,6 +101,9 @@ namespace Cliver
 
         public const string CONFIG_FOLDER_NAME = "config";
         public const string FILE_EXTENSION = "json";
+        public static readonly string DefaultStorageDir;
+        public static string StorageDir { get; private set; }
+
 
         static void get(bool reset)
         {
@@ -127,7 +135,8 @@ namespace Cliver
                             continue;
 
                         Serializable t;
-                        string file = (st.BaseType == typeof(UserSettings) ? UserSettings.StorageDir : AppSettings.StorageDir) + "\\" + name + "." + st.FullName + "." + FILE_EXTENSION;
+
+                        string file = (st.BaseType == typeof(UserSettings) ? UserSettings.StorageDir : (st.BaseType == typeof(AppSettings) ? AppSettings.StorageDir : StorageDir)) + "\\" + name + "." + st.FullName + "." + FILE_EXTENSION;
                         if (reset)
                         {
                             string init_file = Log.AppDir + "\\" + name + "." + st.FullName + "." + FILE_EXTENSION;
@@ -201,7 +210,7 @@ namespace Cliver
                         if (fi != null)
                         {
                             Serializable t;
-                            string file = (st.BaseType == typeof(UserSettings) ? UserSettings.StorageDir : AppSettings.StorageDir) + "\\" + name + "." + st.FullName + "." + FILE_EXTENSION;
+                            string file = (st.BaseType == typeof(UserSettings) ? UserSettings.StorageDir : (st.BaseType == typeof(AppSettings) ? AppSettings.StorageDir : StorageDir)) + "\\" + name + "." + st.FullName + "." + FILE_EXTENSION;
                             try
                             {
                                 t = Serializable.Load(st, file);
@@ -233,27 +242,31 @@ namespace Cliver
             throw new Exception("Field '" + name + "' was not found.");
         }
 
-        static public void Reload(bool read_only = false)
+        static public void Reload(string storage_dir = null, bool read_only = false)
         {
+            StorageDir = storage_dir != null ? storage_dir : DefaultStorageDir;
             ReadOnly = read_only;
             get(false);
         }
 
         static public bool ReadOnly { get; private set; }
 
-        static public void Reset()
+        static public void Reset(string storage_dir = null)
         {
+            StorageDir = storage_dir != null ? storage_dir : DefaultStorageDir;
             get(true);
         }
 
-        static public void Save()
+        static public void Save(string storage_dir = null)
         {
-            if (ReadOnly)
+            storage_dir = storage_dir != null ? storage_dir : DefaultStorageDir;
+            if (ReadOnly && PathRoutines.ArePathsEqual(storage_dir, StorageDir))
                 throw new Exception("Config is read-only and cannot be saved to the same location.");
+            StorageDir = storage_dir;
             lock (object_names2serializable)
             {
                 foreach (Serializable s in object_names2serializable.Values)
-                    s.Save();
+                    s.Save(StorageDir + "\\" + PathRoutines.GetFileNameFromPath(s.__File));
             }
         }
 
