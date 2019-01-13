@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
 
 namespace Cliver
 {
@@ -11,13 +12,18 @@ namespace Cliver
     {
         public static Win32Exception GetLastError()
         {
-            return new Win32Exception(System.Runtime.InteropServices.Marshal.GetLastWin32Error());
+            return new Win32Exception(Marshal.GetLastWin32Error());
         }
 
         public static string GetLastErrorMessage()
         {
             Win32Exception e = GetLastError();
             return e?.Message;
+        }
+
+        public static string GetErrorMessage(int errorCode)
+        {
+            return new Win32Exception(errorCode).Message;
         }
     }
 }

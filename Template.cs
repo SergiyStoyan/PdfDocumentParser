@@ -215,6 +215,16 @@ namespace Cliver.PdfDocumentParser
         public abstract class Field
         {
             public string Name;
+            public int? AnchorId//conversion from the old format
+            {
+                set
+                {
+                    if (value == null)
+                        return;
+                    LeftAnchorId = value;
+                    TopAnchorId = value;
+                }
+            }
 
             public RectangleF Rectangle;
             /// <summary>

@@ -40,7 +40,7 @@ namespace Cliver
                 if (w > 0)
                 {
                     this.Width += w;
-                    this.message.Left += w;
+                    this.message.Left = this.message.Left + w;
                 }
             }
 
@@ -84,28 +84,48 @@ namespace Cliver
             //this.Height = this.Height + s.Height - this.message.Height;
         }
 
-        void b_Click(object sender, EventArgs e)
+        private void b_Click(object sender, EventArgs e)
         {
-            clicked_button = (int)((Button)sender).Tag;
+            ClickedButton = (int)((Button)sender).Tag;
             this.Close();
         }
 
-        int clicked_button = -1;
-
-        public int ClickedButton
-        {
-            get { return clicked_button; }
-        }
+        public int ClickedButton { get; private set; } = -1;
 
         new public int ShowDialog()
         {
             System.Windows.Forms.DialogResult r = base.ShowDialog();
-            return clicked_button;
+            return ClickedButton;
         }
 
         private void Message_ContentsResized(object sender, ContentsResizedEventArgs e)
         {
-
+            var rtb = (RichTextBox)sender;
+            Size s = this.Size;
+            {
+                int h = e.NewRectangle.Height - rtb.Height;
+                if (h > 0)
+                {
+                    int h2 = Screen.PrimaryScreen.WorkingArea.Height * 3 / 4 - this.Height;
+                    s.Height += h2 < h ? h2 : h;
+                }
+            }
+            {
+                int w = e.NewRectangle.Width - rtb.Width;
+                if (w > 0)
+                {
+                    int w2 = Screen.PrimaryScreen.WorkingArea.Width * 3 / 4 - this.Width;
+                    s.Width += w2 < w ? w2 : w;
+                }
+            }
+            {
+                if (s.Height > s.Width)
+                {
+                    s.Height -= 100;
+                    s.Width += 100;
+                }
+            }
+            this.Size = s;
         }
 
         protected override void WndProc(ref System.Windows.Forms.Message m)
@@ -124,7 +144,8 @@ namespace Cliver
             }
             base.WndProc(ref m);
         }
-        Size restored_size;
+
+        private Size restored_size;
 
         public new void Close()
         {
