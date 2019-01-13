@@ -94,9 +94,9 @@ namespace Cliver.PdfDocumentParser
             for (int i = rss.Count - 1; i >= 0; i--)
             {
                 List<RectangleF> rs = rss[i];
-                drawBoxes(Settings.Appearance.AnchorMasterBoxColor, new List<System.Drawing.RectangleF> { rs[0] }, i == rss.Count - 1 ? renewImage : false);
+                drawBoxes(Settings.Appearance.AnchorMasterBoxColor, Settings.Appearance.AnchorMasterBoxBorderWidth, new List<System.Drawing.RectangleF> { rs[0] }, i == rss.Count - 1 ? renewImage : false);
                 if (rs.Count > 1)
-                    drawBoxes(Settings.Appearance.AnchorSecondaryBoxColor, rs.GetRange(1, rs.Count - 1), false);
+                    drawBoxes(Settings.Appearance.AnchorSecondaryBoxColor, Settings.Appearance.AnchorSecondaryBoxBorderWidth, rs.GetRange(1, rs.Count - 1), false);
 
                 if (i == rss.Count - 1)
                     p0 = new PointF(rs[0].X, rs[0].Y);
@@ -133,7 +133,7 @@ namespace Cliver.PdfDocumentParser
                     return null;
 
                 RectangleF r = new RectangleF(field.Rectangle.X + shift.X, field.Rectangle.Y + shift.Y, field.Rectangle.Width, field.Rectangle.Height);
-                drawBoxes(Settings.Appearance.SelectionBoxColor, new List<RectangleF> { r }, renewImage);
+                drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r }, renewImage);
                 switch (field.Type)
                 {
                     case Template.Types.PdfText:
@@ -157,7 +157,7 @@ namespace Cliver.PdfDocumentParser
             return null;
         }
 
-        void drawBoxes(Color c, IEnumerable<System.Drawing.RectangleF> rs, bool renewImage)
+        void drawBoxes(Color color, float borderWidth, IEnumerable<System.Drawing.RectangleF> rs, bool renewImage)
         {
             if (pages == null)
                 return;
@@ -171,7 +171,8 @@ namespace Cliver.PdfDocumentParser
             using (Graphics gr = Graphics.FromImage(bm))
             {
                 float factor = (float)pictureScale.Value;
-                Pen p = new Pen(c);
+                Pen p = new Pen(color, borderWidth);
+                p.Alignment = System.Drawing.Drawing2D.PenAlignment.Outset;
                 foreach (System.Drawing.RectangleF r in rs)
                 {
                     System.Drawing.Rectangle r_ = new System.Drawing.Rectangle((int)(r.X * factor), (int)(r.Y * factor), (int)(r.Width * factor), (int)(r.Height * factor));

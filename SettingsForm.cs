@@ -34,6 +34,10 @@ namespace Cliver.PdfDocumentParser
             AnchorSecondaryBoxColor.ForeColor = Settings.Appearance.AnchorSecondaryBoxColor;
             SelectionBoxColor.ForeColor = Settings.Appearance.SelectionBoxColor;
 
+            SelectionBoxBorderWidth.Value = (decimal)Settings.Appearance.SelectionBoxBorderWidth;
+            AnchorMasterBoxBorderWidth.Value = (decimal)Settings.Appearance.AnchorMasterBoxBorderWidth;
+            AnchorSecondaryBoxBorderWidth.Value = (decimal)Settings.Appearance.SelectionBoxBorderWidth;
+
             PdfPageImageResolution.Value = Settings.Constants.PdfPageImageResolution;
             CoordinateDeviationMargin.Value = (decimal)Settings.Constants.CoordinateDeviationMargin;
         }
@@ -51,14 +55,16 @@ namespace Cliver.PdfDocumentParser
                 Settings.Appearance.AnchorSecondaryBoxColor = AnchorSecondaryBoxColor.ForeColor;
                 Settings.Appearance.SelectionBoxColor = SelectionBoxColor.ForeColor;
 
+                Settings.Appearance.SelectionBoxBorderWidth = (float)SelectionBoxBorderWidth.Value;
+                Settings.Appearance.AnchorMasterBoxBorderWidth = (float)AnchorMasterBoxBorderWidth.Value;
+                Settings.Appearance.AnchorSecondaryBoxBorderWidth = (float)AnchorSecondaryBoxBorderWidth.Value;
+
                 Settings.Appearance.Save();
-                Settings.Appearance.Reload();
 
                 Settings.Constants.PdfPageImageResolution = (int)PdfPageImageResolution.Value;
                 Settings.Constants.CoordinateDeviationMargin = (float)CoordinateDeviationMargin.Value;
 
                 Settings.Constants.Save();
-                Settings.Constants.Reload();
 
                 Close();
             }
@@ -66,6 +72,8 @@ namespace Cliver.PdfDocumentParser
             {
                 Message.Error2(ex);
             }
+            Settings.Appearance.Reload();
+            Settings.Constants.Reload();
         }
 
         private void bReset_Click(object sender, EventArgs e)
@@ -103,7 +111,6 @@ namespace Cliver.PdfDocumentParser
             cd.Color = Settings.Appearance.AnchorSecondaryBoxColor;
             if (cd.ShowDialog() == DialogResult.OK)
                 AnchorSecondaryBoxColor.ForeColor = cd.Color;
-
         }
     }
 }

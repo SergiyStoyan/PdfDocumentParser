@@ -105,32 +105,7 @@ namespace Cliver
 
         private void Message_ContentsResized(object sender, ContentsResizedEventArgs e)
         {
-            var rtb = (RichTextBox)sender;
-            Size s = this.Size;
-            {
-                int h = e.NewRectangle.Height - rtb.Height;
-                if (h > 0)
-                {
-                    int h2 = Screen.PrimaryScreen.WorkingArea.Height * 3 / 4 - this.Height;
-                    s.Height += h2 < h ? h2 : h;
-                }
-            }
-            {
-                int w = e.NewRectangle.Width - rtb.Width;
-                if (w > 0)
-                {
-                    int w2 = Screen.PrimaryScreen.WorkingArea.Width * 3 / 4 - this.Width;
-                    s.Width += w2 < w ? w2 : w;
-                }
-            }
-            {
-                if (s.Height > s.Width)
-                {
-                    s.Height -= 100;
-                    s.Width += 100;
-                }
-            }
-            this.Size = s;
+
         }
 
         protected override void WndProc(ref System.Windows.Forms.Message m)

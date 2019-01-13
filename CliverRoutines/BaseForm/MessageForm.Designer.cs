@@ -54,21 +54,21 @@ namespace Cliver
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MessageForm));
-            this.image_box = new System.Windows.Forms.PictureBox();
-            this.message = new System.Windows.Forms.RichTextBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.message = new System.Windows.Forms.RichTextBox();
+            this.image_box = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.image_box)).BeginInit();
             this.SuspendLayout();
             // 
-            // image_box
+            // flowLayoutPanel1
             // 
-            this.image_box.InitialImage = ((System.Drawing.Image)(resources.GetObject("image_box.InitialImage")));
-            this.image_box.Location = new System.Drawing.Point(12, 6);
-            this.image_box.Name = "image_box";
-            this.image_box.Size = new System.Drawing.Size(27, 25);
-            this.image_box.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.image_box.TabIndex = 4;
-            this.image_box.TabStop = false;
+            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.flowLayoutPanel1.AutoSize = true;
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(299, 83);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(80, 30);
+            this.flowLayoutPanel1.TabIndex = 10;
             // 
             // message
             // 
@@ -76,23 +76,22 @@ namespace Cliver
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.message.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.message.Location = new System.Drawing.Point(54, 12);
+            this.message.Location = new System.Drawing.Point(54, 13);
             this.message.Name = "message";
             this.message.ReadOnly = true;
             this.message.Size = new System.Drawing.Size(325, 64);
-            this.message.TabIndex = 6;
+            this.message.TabIndex = 9;
             this.message.Text = "message";
-            this.message.ContentsResized += new System.Windows.Forms.ContentsResizedEventHandler(this.Message_ContentsResized);
             // 
-            // flowLayoutPanel1
+            // image_box
             // 
-            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.flowLayoutPanel1.AutoSize = true;
-            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(299, 82);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(80, 30);
-            this.flowLayoutPanel1.TabIndex = 7;
+            this.image_box.InitialImage = ((System.Drawing.Image)(resources.GetObject("image_box.InitialImage")));
+            this.image_box.Location = new System.Drawing.Point(12, 7);
+            this.image_box.Name = "image_box";
+            this.image_box.Size = new System.Drawing.Size(27, 25);
+            this.image_box.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.image_box.TabIndex = 8;
+            this.image_box.TabStop = false;
             // 
             // MessageForm
             // 
@@ -112,8 +111,8 @@ namespace Cliver
         }
         #endregion
 
-        private PictureBox image_box;
-        private RichTextBox message;
         private FlowLayoutPanel flowLayoutPanel1;
+        private RichTextBox message;
+        private PictureBox image_box;
     }
 }
