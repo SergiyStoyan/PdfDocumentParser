@@ -214,9 +214,25 @@ namespace Cliver.PdfDocumentParser
 
         public abstract class Field
         {
-            public int? AnchorId;//when set, Rectangle.X,Y are bound to location of the anchor as to zero point
             public string Name;
-            public RectangleF Rectangle;//when Anchor is set, Rectangle.X,Y are bound to location of the anchor as to zero point
+
+            public RectangleF Rectangle;
+            /// <summary>
+            /// when set, Left shifts as the anchor shifts
+            /// </summary>
+            public int? LeftAnchorId;
+            /// <summary>
+            /// when set, Top shifts as the anchor shifts
+            /// </summary>
+            public int? TopAnchorId;
+            /// <summary>
+            /// when set, Right shifts as the anchor shifts
+            /// </summary>
+            public int? RightAnchorId;
+            /// <summary>
+            /// when set, Bottom shifts as the anchor shifts
+            /// </summary>
+            public int? BottomAnchorId;
 
             public Field()
             {
@@ -234,7 +250,7 @@ namespace Cliver.PdfDocumentParser
 
             public bool IsSet()
             {
-                return Rectangle != null;
+                return Rectangle != null && Rectangle.Width > 0 && Rectangle.Height > 0;
             }
 
             public class PdfText : Field

@@ -411,8 +411,14 @@ namespace Cliver.PdfDocumentParser
                 if (r.Tag == null)
                     continue;
                 Template.Field f = (Template.Field)r.Tag;
-                if (f.AnchorId != null && !ais.Contains((int)f.AnchorId))
-                    r.Cells["AnchorId"].Value = null;
+                if (f.LeftAnchorId != null && !ais.Contains((int)f.LeftAnchorId))
+                    r.Cells["LeftAnchorId"].Value = null;
+                if (f.TopAnchorId != null && !ais.Contains((int)f.TopAnchorId))
+                    r.Cells["TopAnchorId"].Value = null;
+                if (f.RightAnchorId != null && !ais.Contains((int)f.RightAnchorId))
+                    r.Cells["RightAnchorId"].Value = null;
+                if (f.BottomAnchorId != null && !ais.Contains((int)f.BottomAnchorId))
+                    r.Cells["BottomAnchorId"].Value = null;
             }
 
             setConditionsStatus();
@@ -420,7 +426,10 @@ namespace Cliver.PdfDocumentParser
             {
                 List<dynamic> ais_ = ais.Select(x => new { Id = x, Name = x.ToString() }).ToList<dynamic>();
                 ais_.Insert(0, new { Id = -1, Name = string.Empty });//commbobox returns value null for -1 (and throws an unclear expection if Id=null)
-                AnchorId.DataSource = ais_;
+                LeftAnchorId.DataSource = ais_;
+                TopAnchorId.DataSource = ais_;
+                RightAnchorId.DataSource = ais_;
+                BottomAnchorId.DataSource = ais_;
             }
         }
 

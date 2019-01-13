@@ -92,7 +92,7 @@ namespace Cliver.PdfDocumentParser
                 if (_activeTemplateOcrCharBoxs != null)
                     _activeTemplateOcrCharBoxs = null;
 
-                anchorHashes2anchorRectangless.Clear();
+                anchorHashes2anchorActualInfo.Clear();
             }
 
             //if (pageCollection.ActiveTemplate.Name != newTemplate.Name)
@@ -188,18 +188,23 @@ namespace Cliver.PdfDocumentParser
 
         internal PointF? GetAnchorPoint0(int anchorId)
         {
-            Template.Anchor a = pageCollection.ActiveTemplate.Anchors.Find(x => x.Id == anchorId);
-            if (a == null)
-                throw new Exception("Anchor[id=" + anchorId + "] does not exist.");
-            List<List<RectangleF>> rss = GetAnchorRectangless(a);
+            List<List<RectangleF>> rss = GetAnchorActualInfo(anchorId).Rectangless;
             if (rss == null || rss.Count < 1)
                 return null;
             RectangleF r = rss[rss.Count - 1][0];
             return new PointF(r.X, r.Y);
         }
 
-        internal List<List<RectangleF>> GetAnchorRectangless(Template.Anchor a)
+        internal List<List<RectangleF>> GetAnchorRectangless(int anchorId)
         {
+            return GetAnchorActualInfo(anchorId).Rectangless;
+        }
+
+        internal  AnchorActualInfo GetAnchorActualInfo(int anchorId)
+        {
+            Template.Anchor a = pageCollection.ActiveTemplate.Anchors.Find(x => x.Id == anchorId);
+            if (a == null)
+                throw new Exception("Anchor[id=" + anchorId + "] does not exist.");
             StringBuilder sb = new StringBuilder(SerializationRoutines.Json.Serialize(a, false));
             for (int? id = a.ParentAnchorId; id != null;)
             {
@@ -210,21 +215,49 @@ namespace Cliver.PdfDocumentParser
                 id = pa.ParentAnchorId;
             }
             string sa = sb.ToString();
-            if (!anchorHashes2anchorRectangless.TryGetValue(sa, out List<List<RectangleF>> anchorRectangless))
+            if (!anchorHashes2anchorActualInfo.TryGetValue(sa, out AnchorActualInfo anchorActualInfo))
             {
-                anchorRectangless = new List<List<RectangleF>>();
-                findAnchor(a, (IEnumerable<RectangleF> rs) =>
-                {
-                    anchorRectangless.Add(rs.ToList());
-                    return false;
-                }, anchorRectangless);
-
-                anchorHashes2anchorRectangless[sa] = anchorRectangless;
+                anchorActualInfo = new AnchorActualInfo(a, this);
+                anchorHashes2anchorActualInfo[sa] = anchorActualInfo;
             }
-            return anchorRectangless;
+            return anchorActualInfo;
         }
-        Dictionary<string, List<List<RectangleF>>> anchorHashes2anchorRectangless = new Dictionary<string, List<List<RectangleF>>>();
-        
+        Dictionary<string, AnchorActualInfo> anchorHashes2anchorActualInfo = new Dictionary<string, AnchorActualInfo>();
+
+        internal class AnchorActualInfo
+        {
+            readonly public Template.Anchor Anchor;
+            readonly public List<List<RectangleF>> Rectangless;
+            public bool Found { get { return Rectangless.Count > 0; } }
+
+            public SizeF Shift
+            {
+                get
+                {
+                    if (shift == null)
+                    {
+                        RectangleF air = Anchor.MainElementInitialRectangle();
+                        RectangleF r = Rectangless[Rectangless.Count - 1][0];
+                        shift = new SizeF(r.X - air.X, r.Y - air.Y);
+                    }
+                    return (SizeF)shift;
+                }
+            }
+            SizeF? shift;
+
+            internal AnchorActualInfo(Template.Anchor anchor, Page page)
+            {
+                Anchor = anchor;
+
+                Rectangless = new List<List<RectangleF>>();
+                page.findAnchor(Anchor, (IEnumerable<RectangleF> rs) =>
+                {
+                    Rectangless.Add(rs.ToList());
+                    return false;
+                }, Rectangless);
+            }
+        }
+
         void findAnchor(Template.Anchor a, Func<IEnumerable<RectangleF>, bool> proceedOnFound, List<List<RectangleF>> anchorRectangless)
         {
             if (a.ParentAnchorId != null)
@@ -483,22 +516,40 @@ namespace Cliver.PdfDocumentParser
 
         public object GetValue(Template.Field field)
         {
-            if (field.Rectangle == null)
-                throw new Exception("Rectangle is not defined.");
+            if (!field.IsSet())
+                throw new Exception("Field is not set.");
             if (field.Rectangle.Width <= Settings.Constants.CoordinateDeviationMargin || field.Rectangle.Height <= Settings.Constants.CoordinateDeviationMargin)
                 throw new Exception("Rectangle is malformed.");
             RectangleF r = field.Rectangle.GetSystemRectangleF();
-            if (field.AnchorId != null)
+            float right = r.Right;
+            float bottom = r.Bottom;
+            if (field.LeftAnchorId != null)
             {
-                PointF? p0_;
-                p0_ = GetAnchorPoint0((int)field.AnchorId);
-                if (p0_ == null)
+                Page.AnchorActualInfo aai = GetAnchorActualInfo((int)field.LeftAnchorId);
+                if (!aai.Found)
                     return null;
-                PointF p0 = (PointF)p0_;
-                Template.Anchor a = pageCollection.ActiveTemplate.Anchors.Find(x => x.Id == field.AnchorId);
-                RectangleF air = a.MainElementInitialRectangle();
-                r.X += p0.X - air.X;
-                r.Y += p0.Y - air.Y;
+                r.X += aai.Shift.Width;
+            }
+            if (field.TopAnchorId != null)
+            {
+                Page.AnchorActualInfo aai = GetAnchorActualInfo((int)field.TopAnchorId);
+                if (!aai.Found)
+                    return null;
+                r.Y += aai.Shift.Height;
+            }
+            if (field.RightAnchorId != null)
+            {
+                Page.AnchorActualInfo aai = GetAnchorActualInfo((int)field.RightAnchorId);
+                if (!aai.Found)
+                    return null;
+                r.Width += right + aai.Shift.Width - r.X;
+            }
+            if (field.LeftAnchorId != null)
+            {
+                Page.AnchorActualInfo aai = GetAnchorActualInfo((int)field.LeftAnchorId);
+                if (!aai.Found)
+                    return null;
+                r.Width += bottom + aai.Shift.Height - r.Y;
             }
             switch (field.Type)
             {
@@ -514,7 +565,7 @@ namespace Cliver.PdfDocumentParser
                 default:
                     throw new Exception("Unknown option: " + field.Type);
             }
-        }
+        }    
 
         public static string NormalizeText(string value)
         {

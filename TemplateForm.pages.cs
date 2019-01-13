@@ -80,7 +80,7 @@ namespace Cliver.PdfDocumentParser
                 clearPicture(renewImage);
                 return null;
             }
-            List<List<RectangleF>> rss = pages[currentPage].GetAnchorRectangless(a);
+            List<List<RectangleF>> rss = pages[currentPage].GetAnchorRectangless(a.Id);
             getAnchor(a.Id, out DataGridViewRow r);
             if (rss == null || rss.Count < 1)
             {
@@ -110,29 +110,50 @@ namespace Cliver.PdfDocumentParser
             {
                 if (pages == null)
                     return null;
-
-                pages.ActiveTemplate = getTemplateFromUI(false);
-
-                PointF shift = new PointF(0, 0);
-                if (field.AnchorId != null)
-                {
-                    showAnchorRowAs((int)field.AnchorId, rowStates.Linked, true);
-                    PointF? p0_ = findAndDrawAnchor((int)field.AnchorId, renewImage);
-                    if (p0_ == null)
-                        return null;
-                    PointF p0 = (PointF)p0_;
-                    Template.Anchor a = getAnchor(field.AnchorId, out DataGridViewRow row);
-                    RectangleF air = a.MainElementInitialRectangle();
-                    shift.X += p0.X - air.X;
-                    shift.Y += p0.Y - air.Y;
-
-                    renewImage = false;
-                }
-
                 if (field.Rectangle == null)
                     return null;
 
-                RectangleF r = new RectangleF(field.Rectangle.X + shift.X, field.Rectangle.Y + shift.Y, field.Rectangle.Width, field.Rectangle.Height);
+                pages.ActiveTemplate = getTemplateFromUI(false);
+
+                RectangleF r = field.Rectangle.GetSystemRectangleF();
+                float right = r.Right;
+                float bottom = r.Bottom;
+                if (field.LeftAnchorId != null)
+                {
+                    findAndDrawAnchor((int)field.LeftAnchorId, renewImage);
+                    Page.AnchorActualInfo aai = pages[currentPage].GetAnchorActualInfo((int)field.LeftAnchorId);
+                    if (!aai.Found)
+                        return null;
+                    r.X += aai.Shift.Width;
+                    renewImage = false;
+                }
+                if (field.TopAnchorId != null)
+                {
+                    findAndDrawAnchor((int)field.TopAnchorId, renewImage);
+                    Page.AnchorActualInfo aai = pages[currentPage].GetAnchorActualInfo((int)field.TopAnchorId);
+                    if (!aai.Found)
+                        return null;
+                    r.Y += aai.Shift.Height;
+                    renewImage = false;
+                }
+                if (field.RightAnchorId != null)
+                {
+                    findAndDrawAnchor((int)field.RightAnchorId, renewImage);
+                    Page.AnchorActualInfo aai = pages[currentPage].GetAnchorActualInfo((int)field.RightAnchorId);
+                    if (!aai.Found)
+                        return null;
+                    r.Width += right + aai.Shift.Width - r.X;
+                    renewImage = false;
+                }
+                if (field.LeftAnchorId != null)
+                {
+                    findAndDrawAnchor((int)field.BottomAnchorId, renewImage);
+                    Page.AnchorActualInfo aai = pages[currentPage].GetAnchorActualInfo((int)field.LeftAnchorId);
+                    if (!aai.Found)
+                        return null;
+                    r.Width += bottom + aai.Shift.Height - r.Y;
+                    renewImage = false;
+                }
                 drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r }, renewImage);
                 switch (field.Type)
                 {

@@ -25,9 +25,21 @@ namespace Cliver.PdfDocumentParser
     {
         void initializeFieldsTable()
         {
-            AnchorId.ValueType = typeof(int);
-            AnchorId.ValueMember = "Id";
-            AnchorId.DisplayMember = "Name";
+            LeftAnchorId.ValueType = typeof(int);
+            LeftAnchorId.ValueMember = "Id";
+            LeftAnchorId.DisplayMember = "Name";
+
+            TopAnchorId.ValueType = typeof(int);
+            TopAnchorId.ValueMember = "Id";
+            TopAnchorId.DisplayMember = "Name";
+
+            RightAnchorId.ValueType = typeof(int);
+            RightAnchorId.ValueMember = "Id";
+            RightAnchorId.DisplayMember = "Name";
+
+            BottomAnchorId.ValueType = typeof(int);
+            BottomAnchorId.ValueMember = "Id";
+            BottomAnchorId.DisplayMember = "Name";
 
             Type.ValueType = typeof(Template.Types);
             Type.DataSource = Enum.GetValues(typeof(Template.Types));
@@ -89,7 +101,10 @@ namespace Cliver.PdfDocumentParser
                                         throw new Exception("Unknown option: " + t2);
                                 }
                                 f2.Name = f.Name;
-                                f2.AnchorId = f.AnchorId;
+                                f2.LeftAnchorId = f.LeftAnchorId;
+                                f2.TopAnchorId = f.TopAnchorId;
+                                f2.RightAnchorId = f.RightAnchorId;
+                                f2.BottomAnchorId = f.BottomAnchorId;
                                 f2.Rectangle = f.Rectangle;
                                 f = f2;
                                 setFieldRow(row, f);
@@ -97,7 +112,10 @@ namespace Cliver.PdfDocumentParser
                             }
                         case "AnchorId":
                             {
-                                f.AnchorId = (int?)cs["AnchorId"].Value;
+                                f.LeftAnchorId = (int?)cs["LeftAnchorId"].Value;
+                                f.TopAnchorId = (int?)cs["TopAnchorId"].Value;
+                                f.RightAnchorId = (int?)cs["RightAnchorId"].Value;
+                                f.BottomAnchorId = (int?)cs["BottomAnchorId"].Value;
                                 //if (f.AnchorId != null)
                                 //{
                                 //    pages.ActiveTemplate = getTemplateFromUI(false);
@@ -224,7 +242,10 @@ namespace Cliver.PdfDocumentParser
 
                 fields.CurrentCell = fields[0, row.Index];
                 Template.Field f = (Template.Field)row.Tag;
-                setCurrentAnchorRow(f.AnchorId, true);
+                setCurrentAnchorRow(f.LeftAnchorId, true);
+                setCurrentAnchorRow(f.TopAnchorId, false);
+                setCurrentAnchorRow(f.RightAnchorId, false);
+                setCurrentAnchorRow(f.BottomAnchorId, false);
                 setCurrentConditionRow(null);
                 setFieldRowValue(row, false);
             }
@@ -300,7 +321,10 @@ namespace Cliver.PdfDocumentParser
                 default:
                     throw new Exception("Unknown option: " + f.Type);
             }
-            row.Cells["AnchorId"].Value = f.AnchorId;
+            row.Cells["LeftAnchorId"].Value = f.LeftAnchorId;
+            row.Cells["TopAnchorId"].Value = f.TopAnchorId;
+            row.Cells["RightAnchorId"].Value = f.RightAnchorId;
+            row.Cells["BottomAnchorId"].Value = f.BottomAnchorId;
 
             if (loadingTemplate)
                 return;
