@@ -40,6 +40,7 @@ namespace Cliver
                 if (w > 0)
                 {
                     this.Width += w;
+                    this.message.Width -= w;
                     this.message.Left = this.message.Left + w;
                 }
             }

@@ -65,7 +65,7 @@ namespace Cliver
             this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.flowLayoutPanel1.AutoSize = true;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(947, 312);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(675, 215);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(80, 30);
             this.flowLayoutPanel1.TabIndex = 10;
@@ -79,7 +79,7 @@ namespace Cliver
             this.message.Location = new System.Drawing.Point(60, 13);
             this.message.Name = "message";
             this.message.ReadOnly = true;
-            this.message.Size = new System.Drawing.Size(967, 279);
+            this.message.Size = new System.Drawing.Size(695, 182);
             this.message.TabIndex = 9;
             this.message.Text = "message";
             this.message.ContentsResized += new System.Windows.Forms.ContentsResizedEventHandler(this.Message_ContentsResized);
@@ -96,7 +96,7 @@ namespace Cliver
             // 
             // MessageForm
             // 
-            this.ClientSize = new System.Drawing.Size(1039, 349);
+            this.ClientSize = new System.Drawing.Size(767, 252);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.message);
             this.Controls.Add(this.image_box);
