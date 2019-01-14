@@ -217,17 +217,17 @@ namespace Cliver.PdfDocumentParser
         Point selectionBoxPoint0, selectionBoxPoint1, selectionBoxPoint2;
         bool drawingSelectionBox = false;
 
-        void showPage(int page_i)
+        void showPage(int pageI)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(testFile.Text) || 0 >= page_i || totalPageNumber < page_i)
+                if (string.IsNullOrWhiteSpace(testFile.Text) || 0 >= pageI || totalPageNumber < pageI)
                     return;
 
                 foreach (DataGridViewRow r in fields.Rows)
                     setFieldRowValue(r, true);
 
-                currentPage = page_i;
+                currentPage = pageI;
                 tCurrentPage.Text = currentPage.ToString();
 
                 setScaledImage();
@@ -275,11 +275,6 @@ namespace Cliver.PdfDocumentParser
         {
             bPrevPage.Enabled = currentPage > 1;
             bNextPage.Enabled = currentPage < totalPageNumber;
-        }
-
-        private void tCurrentPage_Leave(object sender, EventArgs e)
-        {
-            changeCurrentPage();
         }
 
         private void changeCurrentPage()

@@ -149,8 +149,8 @@ namespace Cliver.PdfDocumentParser
                                             });
                                         }
                                         break;
-                                    case Template.Anchor.Types.Script://not set by this way
-                                        break;
+                                    //case Template.Anchor.Types.Script://not set by this way
+                                    //    break;
                                     default:
                                         throw new Exception("Unknown option: " + a.Type);
                                 }
@@ -171,7 +171,7 @@ namespace Cliver.PdfDocumentParser
                             break;
                         default:
                             break;
-                    } 
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -302,6 +302,16 @@ namespace Cliver.PdfDocumentParser
             ShowPdfText.LinkClicked += ShowPdfText_LinkClicked;
             ShowOcrText.LinkClicked += ShowOcrText_LinkClicked;
             ShowJson.LinkClicked += ShowOcrText_LinkClicked;
+
+            tCurrentPage.Leave += delegate
+             {
+                 changeCurrentPage();
+             };
+            tCurrentPage.KeyDown += delegate (object sender, KeyEventArgs e)
+              {
+                  if (e.KeyCode == Keys.Enter)
+                      changeCurrentPage();
+              };
         }
         TemplateManager templateManager;
 

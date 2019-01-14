@@ -112,8 +112,8 @@ namespace Cliver.PdfDocumentParser
                     Type = Types.OcrText;
                 else if (this is ImageData)
                     Type = Types.ImageData;
-                else if (this is Script)
-                    Type = Types.Script;
+                //else if (this is Script)
+                //    Type = Types.Script;
                 else
                     throw new Exception("Unknown type: " + this.GetType());
             }
@@ -124,7 +124,7 @@ namespace Cliver.PdfDocumentParser
                 PdfText,
                 OcrText,
                 ImageData,
-                Script
+                //Script
             }
 
             abstract public bool IsSet();
@@ -202,22 +202,26 @@ namespace Cliver.PdfDocumentParser
                 }
             }
 
-            public class Script : Anchor
-            {
-                override public int? ParentAnchorId { get { return null; } set { throw new Exception("Should not be used in this type Anchor!"); } }
+            //public class Script : Anchor
+            //{
+            //    override public int? ParentAnchorId
+            //    {
+            //        get { return null; }
+            //        set { if (value != null) throw new Exception("Should not be used in this type Anchor!"); }
+            //    }
                 
-                public string Expression = null;
+            //    public string Expression = null;
 
-                override public bool IsSet()
-                {
-                    return !string.IsNullOrWhiteSpace(Expression);
-                }
+            //    override public bool IsSet()
+            //    {
+            //        return !string.IsNullOrWhiteSpace(Expression);
+            //    }
 
-                override public System.Drawing.RectangleF MainElementInitialRectangle()
-                {
-                    throw new Exception("Should not be called in this type Anchor!");
-                }
-            }
+            //    override public System.Drawing.RectangleF MainElementInitialRectangle()
+            //    {
+            //        throw new Exception("Should not be called in this type Anchor!");
+            //    }
+            //}
         }
 
         public class Condition

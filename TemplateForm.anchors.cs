@@ -140,9 +140,9 @@ namespace Cliver.PdfDocumentParser
                                 case Template.Anchor.Types.ImageData:
                                     a2 = new Template.Anchor.ImageData();
                                     break;
-                                case Template.Anchor.Types.Script:
-                                    a2 = new Template.Anchor.Script();
-                                    break;
+                                //case Template.Anchor.Types.Script:
+                                //    a2 = new Template.Anchor.Script();
+                                //    break;
                                 default:
                                     throw new Exception("Unknown option: " + t2);
                             }
@@ -280,12 +280,12 @@ namespace Cliver.PdfDocumentParser
                                 currentAnchorControl = new AnchorImageDataControl();
                         }
                         break;
-                    case Template.Anchor.Types.Script:
-                        {
-                            if (currentAnchorControl == null || !(currentAnchorControl is AnchorScriptControl))
-                                currentAnchorControl = new AnchorScriptControl();
-                        }
-                        break;
+                    //case Template.Anchor.Types.Script:
+                    //    {
+                    //        if (currentAnchorControl == null || !(currentAnchorControl is AnchorScriptControl))
+                    //            currentAnchorControl = new AnchorScriptControl();
+                    //    }
+                    //    break;
                     default:
                         throw new Exception("Unknown option: " + t);
                 }
@@ -356,13 +356,11 @@ namespace Cliver.PdfDocumentParser
                             r = id.ImageBoxs[0].Rectangle;
                     }
                     break;
-                case Template.Anchor.Types.Script:
-                    {
-                        Template.Anchor.Script s = (Template.Anchor.Script)a;
-                        //if (id.ImageBoxs.Count > 0)
-                        //    r = id.ImageBoxs[0].Rectangle;
-                    }
-                    break;
+                //case Template.Anchor.Types.Script:
+                //    {
+                //        Template.Anchor.Script s = (Template.Anchor.Script)a;
+                //    }
+                //    break;
                 default:
                     throw new Exception("Unknown option: " + a.Type);
             }

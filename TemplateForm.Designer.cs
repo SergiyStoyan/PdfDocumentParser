@@ -277,7 +277,7 @@
             this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel4.Name = "flowLayoutPanel4";
             this.flowLayoutPanel4.Padding = new System.Windows.Forms.Padding(0, 12, 0, 12);
-            this.flowLayoutPanel4.Size = new System.Drawing.Size(1141, 100);
+            this.flowLayoutPanel4.Size = new System.Drawing.Size(1141, 65);
             this.flowLayoutPanel4.TabIndex = 51;
             // 
             // ShowPdfText

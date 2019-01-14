@@ -230,64 +230,56 @@ namespace Cliver.PdfDocumentParser
             readonly public Template.Anchor Anchor;
             readonly public List<List<RectangleF>> Rectangless = new List<List<RectangleF>>();
             public bool Found { get { return Rectangless.Count > 0; } }
-
-            public SizeF Shift
-            {
-                get
-                {
-                    if (shift == null)
-                    {
-                        RectangleF air = Anchor.MainElementInitialRectangle();
-                        RectangleF r = Rectangless[Rectangless.Count - 1][0];
-                        shift = new SizeF(r.X - air.X, r.Y - air.Y);
-                    }
-                    return (SizeF)shift;
-                }
-            }
-            SizeF? shift;
+            readonly public SizeF Shift;
 
             internal AnchorActualInfo(Template.Anchor anchor, Page page)
             {
                 Anchor = anchor;
 
-                if (anchor.Type == Template.Anchor.Types.Script)//it is a special type of Anchor which is treated separately
-                {
-                    if (anchor.ParentAnchorId != null)
-                        throw new Exception("Anchor [" + anchor.Id + "] cannot be linked to another anchor.");
-                    Template.Anchor a = page.pageCollection.ActiveTemplate.Anchors.FirstOrDefault(x => x.ParentAnchorId == anchor.Id);
-                    if (a != null)
-                        throw new Exception("Anchor [" + anchor.Id + "] cannot be linked by another anchor but it is linked by anchor[" + a.Id + "]");
+                //if (anchor.Type == Template.Anchor.Types.Script)//it is a special type of Anchor which is treated separately
+                //{
+                //    if (anchor.ParentAnchorId != null)
+                //        throw new Exception("Anchor [" + anchor.Id + "] cannot be linked to another anchor.");
+                //    Template.Anchor a = page.pageCollection.ActiveTemplate.Anchors.FirstOrDefault(x => x.ParentAnchorId == anchor.Id);
+                //    if (a != null)
+                //        throw new Exception("Anchor [" + anchor.Id + "] cannot be linked by another anchor but it is linked by anchor[" + a.Id + "]");
 
-                    Template.Anchor.Script s = (Template.Anchor.Script)anchor;
-                    if (!BooleanEngine.Parse(s.Expression, page))
-                        return;
-                    foreach (int rai in BooleanEngine.GetAnchorIds(s.Expression))
-                    {//RULE OF RESULTING ANCHOR: the first anchor in the expression that is found
-                        AnchorActualInfo aai = page.GetAnchorActualInfo(rai);
-                        if (aai.Found)
-                        {
-                            Rectangless = aai.Rectangless;
-                            break;
-                        }
-                    }
-                    if (Rectangless.Count < 1)
-                        throw new Exception("No resulting anchor found for anchor[" + anchor.Id + "]. This means that its expression is malformed!");
+                //    Template.Anchor.Script s = (Template.Anchor.Script)anchor;
+                //    if (!BooleanEngine.Parse(s.Expression, page))
+                //        return;
+                //    foreach (int rai in BooleanEngine.GetAnchorIds(s.Expression))
+                //    {//RULE OF RESULTING ANCHOR: the first anchor in the expression that is found
+                //        AnchorActualInfo aai = page.GetAnchorActualInfo(rai);
+                //        if (aai.Found)
+                //        {
+                //            Rectangless = aai.Rectangless;
+                //            Shift = aai.Shift;
+                //            break;
+                //        }
+                //    }
+                //    if (Rectangless.Count < 1)
+                //        throw new Exception("No resulting anchor found for anchor[" + anchor.Id + "]. This means that its expression is malformed!");
+                //return;
+                //}
+                for (int? id = anchor.ParentAnchorId; id != null;)
+                {
+                    Template.Anchor pa = page.pageCollection.ActiveTemplate.Anchors.Find(x => x.Id == id);
+                    if (anchor == pa)
+                        throw new Exception("Reference loop: anchor[Id=" + anchor.Id + "] is linked by an ancestor anchor.");
+                    id = pa.ParentAnchorId;
                 }
-                else
-                {
-                    for (int? id = anchor.ParentAnchorId; id != null;)
-                    {
-                        Template.Anchor pa = page.pageCollection.ActiveTemplate.Anchors.Find(x => x.Id == id);
-                        if (anchor == pa)
-                            throw new Exception("Anchor[Id=" + anchor.Id + "] is referenced by an ancestor anchor.");
-                        id = pa.ParentAnchorId;
-                    }
 
-                    page.findAnchor(Anchor, (IEnumerable<RectangleF> rs) =>
-                    {
-                        Rectangless.Add(rs.ToList());
-                        return false;
-                    }, Rectangless);
+                page.findAnchor(Anchor, (IEnumerable<RectangleF> rs) =>
+                {
+                    Rectangless.Add(rs.ToList());
+                    return false;
+                }, Rectangless);
+
+                if (Found)
+                {
+                    RectangleF air = Anchor.MainElementInitialRectangle();
+                    RectangleF r = Rectangless[Rectangless.Count - 1][0];
+                    Shift = new SizeF(r.X - air.X, r.Y - air.Y);
                 }
             }
         }
