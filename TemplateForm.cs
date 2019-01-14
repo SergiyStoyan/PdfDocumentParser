@@ -83,7 +83,8 @@ namespace Cliver.PdfDocumentParser
                 selectionCoordinates.Text = selectionBoxPoint1.ToString() + ":" + selectionBoxPoint2.ToString();
 
                 RectangleF r = new RectangleF(selectionBoxPoint1.X, selectionBoxPoint1.Y, selectionBoxPoint2.X - selectionBoxPoint1.X, selectionBoxPoint2.Y - selectionBoxPoint1.Y);
-                drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<System.Drawing.RectangleF> { r }, true);
+                clearImageFromBoxes();
+                drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<System.Drawing.RectangleF> { r });
             };
 
             picture.MouseUp += delegate (object sender, MouseEventArgs e)
@@ -275,9 +276,10 @@ namespace Cliver.PdfDocumentParser
             };
 
             save.Click += Save_Click;
+            cancel.Click += delegate { Close(); };
             Help.LinkClicked += Help_LinkClicked;
             Configure.LinkClicked += Configure_LinkClicked;
-            cancel.Click += delegate { Close(); };
+            About.LinkClicked += About_LinkClicked;
 
             bTestFile.Click += delegate (object sender, EventArgs e)
          {
@@ -294,6 +296,10 @@ namespace Cliver.PdfDocumentParser
                  return;
              testFile.Text = d.FileName;
          };
+
+            ShowPdfText.LinkClicked += ShowPdfText_LinkClicked;
+            ShowOcrText.LinkClicked += ShowOcrText_LinkClicked;
+            ShowJson.LinkClicked += ShowOcrText_LinkClicked;
         }
         TemplateManager templateManager;
 

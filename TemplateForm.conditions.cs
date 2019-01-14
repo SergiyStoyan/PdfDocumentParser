@@ -128,10 +128,11 @@ namespace Cliver.PdfDocumentParser
                         firstAnchor = false;
                         showAnchorRowAs(ai, rowStates.Linked, true);
                         setCurrentAnchorRow(ai, true);
+                        clearImageFromBoxes();
                     }
                     else
                         showAnchorRowAs(ai, rowStates.Condition, false);
-                    findAndDrawAnchor(ai, firstAnchor);
+                    findAndDrawAnchor(ai);
                 }
                 if (firstAnchor)
                 {

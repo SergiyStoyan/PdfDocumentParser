@@ -110,21 +110,15 @@ namespace Cliver.PdfDocumentParser
                                 setFieldRow(row, f);
                                 break;
                             }
-                        case "AnchorId":
+                        case "LeftAnchorId":
+                        case "TopAnchorId":
+                        case "RightAnchorId":
+                        case "BottomAnchorId":
                             {
                                 f.LeftAnchorId = (int?)cs["LeftAnchorId"].Value;
                                 f.TopAnchorId = (int?)cs["TopAnchorId"].Value;
                                 f.RightAnchorId = (int?)cs["RightAnchorId"].Value;
                                 f.BottomAnchorId = (int?)cs["BottomAnchorId"].Value;
-                                //if (f.AnchorId != null)
-                                //{
-                                //    pages.ActiveTemplate = getTemplateFromUI(false);
-                                //    PointF? p = pages[currentPage].GetAnchorPoint0((int)f.AnchorId);
-                                //    if (p == null)
-                                //        setRowStatus(statuses.ERROR, row, "Anchor not found");
-                                //    else
-                                //        setRowStatus(statuses.SUCCESS, row, "Anchor found");
-                                //}
                                 setFieldRow(row, f);
                                 break;
                             }
@@ -276,6 +270,7 @@ namespace Cliver.PdfDocumentParser
                 setRowStatus(statuses.NEUTRAL, row, "");
                 return;
             }
+            clearImageFromBoxes();
             object v = extractFieldAndDrawSelectionBox(f);
             if (f.Type == Template.Types.ImageData)
             {

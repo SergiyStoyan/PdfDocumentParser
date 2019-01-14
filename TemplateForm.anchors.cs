@@ -154,6 +154,7 @@ namespace Cliver.PdfDocumentParser
                         }
                 }
                 setAnchorRow(row, a);
+                clearImageFromBoxes();
                 findAndDrawAnchor(a.Id);
             };
 
@@ -186,6 +187,7 @@ namespace Cliver.PdfDocumentParser
                     }
                     setCurrentAnchorRow(a.Id, false);
                     showAnchorRowAs(a.Id, rowStates.Selected, true);
+                    clearImageFromBoxes();
                     findAndDrawAnchor(a.Id);
                 }
                 catch (Exception ex)
@@ -489,6 +491,7 @@ namespace Cliver.PdfDocumentParser
                         throw new Exception("Unknown option: " + a.Type);
                 }
                 setAnchorRow(currentAnchorControl.Row, a);
+                clearImageFromBoxes();
                 findAndDrawAnchor(a.Id);
             }
             finally

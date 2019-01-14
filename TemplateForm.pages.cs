@@ -49,7 +49,7 @@ namespace Cliver.PdfDocumentParser
         }
         Bitmap scaledCurrentPageBitmap;
 
-        PointF? findAndDrawAnchor(int anchorId, bool renewImage = true)
+        PointF? findAndDrawAnchor(int anchorId)
         {
             Template.Anchor a = getAnchor(anchorId, out DataGridViewRow row);
             if (a == null || row == null)
@@ -76,16 +76,12 @@ namespace Cliver.PdfDocumentParser
                 }
             }
             if (!set)
-            {
-                clearPicture(renewImage);
                 return null;
-            }
             List<List<RectangleF>> rss = pages[currentPage].GetAnchorRectangless(a.Id);
             getAnchor(a.Id, out DataGridViewRow r);
             if (rss == null || rss.Count < 1)
             {
                 setRowStatus(statuses.ERROR, r, "Not found");
-                clearPicture(renewImage);
                 return null;
             }
             setRowStatus(statuses.SUCCESS, r, "Found");
@@ -94,9 +90,9 @@ namespace Cliver.PdfDocumentParser
             for (int i = rss.Count - 1; i >= 0; i--)
             {
                 List<RectangleF> rs = rss[i];
-                drawBoxes(Settings.Appearance.AnchorMasterBoxColor, Settings.Appearance.AnchorMasterBoxBorderWidth, new List<System.Drawing.RectangleF> { rs[0] }, i == rss.Count - 1 ? renewImage : false);
+                drawBoxes(Settings.Appearance.AnchorMasterBoxColor, Settings.Appearance.AnchorMasterBoxBorderWidth, new List<System.Drawing.RectangleF> { rs[0] });
                 if (rs.Count > 1)
-                    drawBoxes(Settings.Appearance.AnchorSecondaryBoxColor, Settings.Appearance.AnchorSecondaryBoxBorderWidth, rs.GetRange(1, rs.Count - 1), false);
+                    drawBoxes(Settings.Appearance.AnchorSecondaryBoxColor, Settings.Appearance.AnchorSecondaryBoxBorderWidth, rs.GetRange(1, rs.Count - 1));
 
                 if (i == rss.Count - 1)
                     p0 = new PointF(rs[0].X, rs[0].Y);
@@ -104,57 +100,53 @@ namespace Cliver.PdfDocumentParser
             return p0;
         }
 
-        object extractFieldAndDrawSelectionBox(Template.Field field, bool renewImage = true)
+        object extractFieldAndDrawSelectionBox(Template.Field field)
         {
             try
             {
                 if (pages == null)
                     return null;
+
                 if (field.Rectangle == null)
                     return null;
 
                 pages.ActiveTemplate = getTemplateFromUI(false);
 
                 RectangleF r = field.Rectangle.GetSystemRectangleF();
-                float right = r.Right;
-                float bottom = r.Bottom;
+                RectangleF r0 = r;
                 if (field.LeftAnchorId != null)
                 {
-                    findAndDrawAnchor((int)field.LeftAnchorId, renewImage);
+                    findAndDrawAnchor((int)field.LeftAnchorId);
                     Page.AnchorActualInfo aai = pages[currentPage].GetAnchorActualInfo((int)field.LeftAnchorId);
                     if (!aai.Found)
                         return null;
                     r.X += aai.Shift.Width;
-                    renewImage = false;
                 }
                 if (field.TopAnchorId != null)
                 {
-                    findAndDrawAnchor((int)field.TopAnchorId, renewImage);
+                    findAndDrawAnchor((int)field.TopAnchorId);
                     Page.AnchorActualInfo aai = pages[currentPage].GetAnchorActualInfo((int)field.TopAnchorId);
                     if (!aai.Found)
                         return null;
                     r.Y += aai.Shift.Height;
-                    renewImage = false;
                 }
                 if (field.RightAnchorId != null)
                 {
-                    findAndDrawAnchor((int)field.RightAnchorId, renewImage);
+                    findAndDrawAnchor((int)field.RightAnchorId);
                     Page.AnchorActualInfo aai = pages[currentPage].GetAnchorActualInfo((int)field.RightAnchorId);
                     if (!aai.Found)
                         return null;
-                    r.Width += right + aai.Shift.Width - r.X;
-                    renewImage = false;
+                    r.Width += r0.X - r.X + aai.Shift.Width;
                 }
-                if (field.LeftAnchorId != null)
+                if (field.BottomAnchorId != null)
                 {
-                    findAndDrawAnchor((int)field.BottomAnchorId, renewImage);
-                    Page.AnchorActualInfo aai = pages[currentPage].GetAnchorActualInfo((int)field.LeftAnchorId);
+                    findAndDrawAnchor((int)field.BottomAnchorId);
+                    Page.AnchorActualInfo aai = pages[currentPage].GetAnchorActualInfo((int)field.BottomAnchorId);
                     if (!aai.Found)
                         return null;
-                    r.Width += bottom + aai.Shift.Height - r.Y;
-                    renewImage = false;
+                    r.Height += r0.Y - r.Y + aai.Shift.Height;
                 }
-                drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r }, renewImage);
+                drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
                 switch (field.Type)
                 {
                     case Template.Types.PdfText:
@@ -178,17 +170,21 @@ namespace Cliver.PdfDocumentParser
             return null;
         }
 
-        void drawBoxes(Color color, float borderWidth, IEnumerable<System.Drawing.RectangleF> rs, bool renewImage)
+        void clearImageFromBoxes()
+        {
+            picture.Image?.Dispose();
+            if (scaledCurrentPageBitmap != null)
+                picture.Image = new Bitmap(scaledCurrentPageBitmap);
+            drawnAnchorIds.Clear();
+        }
+        readonly HashSet<int> drawnAnchorIds = new HashSet<int>();
+
+        void drawBoxes(Color color, float borderWidth, IEnumerable<System.Drawing.RectangleF> rs)
         {
             if (pages == null)
                 return;
 
-            Bitmap bm;
-            if (renewImage)
-                bm = new Bitmap(scaledCurrentPageBitmap);
-            else
-                bm = new Bitmap(picture.Image);
-
+            Bitmap bm = new Bitmap(picture.Image);
             using (Graphics gr = Graphics.FromImage(bm))
             {
                 float factor = (float)pictureScale.Value;
@@ -216,22 +212,6 @@ namespace Cliver.PdfDocumentParser
         }
         Point selectionBoxPoint0, selectionBoxPoint1, selectionBoxPoint2;
         bool drawingSelectionBox = false;
-
-        void clearPicture(bool renewImage)
-        {
-            if (pages == null)
-                return;
-
-            Bitmap bm;
-            if (renewImage)
-            {
-                bm = new Bitmap(scaledCurrentPageBitmap);
-                if (picture.Image != null)
-                    picture.Image.Dispose();
-                picture.Image = bm;
-                return;
-            }
-        }
 
         void showPage(int page_i)
         {

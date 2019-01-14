@@ -521,8 +521,7 @@ namespace Cliver.PdfDocumentParser
             if (field.Rectangle.Width <= Settings.Constants.CoordinateDeviationMargin || field.Rectangle.Height <= Settings.Constants.CoordinateDeviationMargin)
                 throw new Exception("Rectangle is malformed.");
             RectangleF r = field.Rectangle.GetSystemRectangleF();
-            float right = r.Right;
-            float bottom = r.Bottom;
+            RectangleF r0 = r;
             if (field.LeftAnchorId != null)
             {
                 Page.AnchorActualInfo aai = GetAnchorActualInfo((int)field.LeftAnchorId);
@@ -542,14 +541,14 @@ namespace Cliver.PdfDocumentParser
                 Page.AnchorActualInfo aai = GetAnchorActualInfo((int)field.RightAnchorId);
                 if (!aai.Found)
                     return null;
-                r.Width += right + aai.Shift.Width - r.X;
+                r.Width += r0.X - r.X + aai.Shift.Width;
             }
-            if (field.LeftAnchorId != null)
+            if (field.BottomAnchorId != null)
             {
-                Page.AnchorActualInfo aai = GetAnchorActualInfo((int)field.LeftAnchorId);
+                Page.AnchorActualInfo aai = GetAnchorActualInfo((int)field.BottomAnchorId);
                 if (!aai.Found)
                     return null;
-                r.Width += bottom + aai.Shift.Height - r.Y;
+                r.Height += r0.Y - r.Y + aai.Shift.Height;
             }
             switch (field.Type)
             {
