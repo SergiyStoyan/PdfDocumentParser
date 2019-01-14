@@ -111,12 +111,12 @@ namespace Cliver.PdfDocumentParser
                                 Template.Anchor a = (Template.Anchor)currentAnchorControl.Row.Tag;
                                 switch (a.Type)
                                 {
-                                    case Template.Types.PdfText:
+                                    case Template.Anchor.Types.PdfText:
                                         if (selectedPdfCharBoxs == null/* || (ModifierKeys & Keys.Control) != Keys.Control*/)
                                             selectedPdfCharBoxs = new List<Pdf.CharBox>();
                                         selectedPdfCharBoxs.AddRange(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPage].PdfCharBoxs, r.GetSystemRectangleF(), true));
                                         break;
-                                    case Template.Types.OcrText:
+                                    case Template.Anchor.Types.OcrText:
                                         if (selectedOcrCharBoxs == null/* || (ModifierKeys & Keys.Control) != Keys.Control*/)
                                             selectedOcrCharBoxs = new List<Ocr.CharBox>();
                                         Template.Anchor.OcrText ot = a as Template.Anchor.OcrText;
@@ -132,7 +132,7 @@ namespace Cliver.PdfDocumentParser
                                             }
                                         }
                                         break;
-                                    case Template.Types.ImageData:
+                                    case Template.Anchor.Types.ImageData:
                                         {
                                             if (selectedImageBoxs == null)
                                                 selectedImageBoxs = new List<Template.Anchor.ImageData.ImageBox>();
@@ -148,6 +148,8 @@ namespace Cliver.PdfDocumentParser
                                                 ImageData = id
                                             });
                                         }
+                                        break;
+                                    case Template.Anchor.Types.Script://not set by this way
                                         break;
                                     default:
                                         throw new Exception("Unknown option: " + a.Type);

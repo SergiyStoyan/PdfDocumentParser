@@ -205,12 +205,13 @@ namespace Cliver.PdfDocumentParser
             Template.Anchor a = pageCollection.ActiveTemplate.Anchors.Find(x => x.Id == anchorId);
             if (a == null)
                 throw new Exception("Anchor[id=" + anchorId + "] does not exist.");
+            if (!a.IsSet())
+                throw new Exception("Anchor[id=" + anchorId + "] is not defined.");
+
             StringBuilder sb = new StringBuilder(SerializationRoutines.Json.Serialize(a, false));
             for (int? id = a.ParentAnchorId; id != null;)
             {
                 Template.Anchor pa = pageCollection.ActiveTemplate.Anchors.Find(x => x.Id == id);
-                if (a == pa)
-                    throw new Exception("Anchor[Id=" + a.Id + "] is referenced by an ancestor anchor.");
                 sb.Append(SerializationRoutines.Json.Serialize(pa, false));
                 id = pa.ParentAnchorId;
             }
@@ -227,7 +228,7 @@ namespace Cliver.PdfDocumentParser
         internal class AnchorActualInfo
         {
             readonly public Template.Anchor Anchor;
-            readonly public List<List<RectangleF>> Rectangless;
+            readonly public List<List<RectangleF>> Rectangless = new List<List<RectangleF>>();
             public bool Found { get { return Rectangless.Count > 0; } }
 
             public SizeF Shift
@@ -249,12 +250,45 @@ namespace Cliver.PdfDocumentParser
             {
                 Anchor = anchor;
 
-                Rectangless = new List<List<RectangleF>>();
-                page.findAnchor(Anchor, (IEnumerable<RectangleF> rs) =>
+                if (anchor.Type == Template.Anchor.Types.Script)//it is a special type of Anchor which is treated separately
                 {
-                    Rectangless.Add(rs.ToList());
-                    return false;
-                }, Rectangless);
+                    if (anchor.ParentAnchorId != null)
+                        throw new Exception("Anchor [" + anchor.Id + "] cannot be linked to another anchor.");
+                    Template.Anchor a = page.pageCollection.ActiveTemplate.Anchors.FirstOrDefault(x => x.ParentAnchorId == anchor.Id);
+                    if (a != null)
+                        throw new Exception("Anchor [" + anchor.Id + "] cannot be linked by another anchor but it is linked by anchor[" + a.Id + "]");
+
+                    Template.Anchor.Script s = (Template.Anchor.Script)anchor;
+                    if (!BooleanEngine.Parse(s.Expression, page))
+                        return;
+                    foreach (int rai in BooleanEngine.GetAnchorIds(s.Expression))
+                    {//RULE OF RESULTING ANCHOR: the first anchor in the expression that is found
+                        AnchorActualInfo aai = page.GetAnchorActualInfo(rai);
+                        if (aai.Found)
+                        {
+                            Rectangless = aai.Rectangless;
+                            break;
+                        }
+                    }
+                    if (Rectangless.Count < 1)
+                        throw new Exception("No resulting anchor found for anchor[" + anchor.Id + "]. This means that its expression is malformed!");
+                }
+                else
+                {
+                    for (int? id = anchor.ParentAnchorId; id != null;)
+                    {
+                        Template.Anchor pa = page.pageCollection.ActiveTemplate.Anchors.Find(x => x.Id == id);
+                        if (anchor == pa)
+                            throw new Exception("Anchor[Id=" + anchor.Id + "] is referenced by an ancestor anchor.");
+                        id = pa.ParentAnchorId;
+                    }
+
+                    page.findAnchor(Anchor, (IEnumerable<RectangleF> rs) =>
+                    {
+                        Rectangless.Add(rs.ToList());
+                        return false;
+                    }, Rectangless);
+                }
             }
         }
 
@@ -279,9 +313,6 @@ namespace Cliver.PdfDocumentParser
 
         bool _findAnchor(Template.Anchor a, PointF parentAnchorPoint0, Func<IEnumerable<RectangleF>, bool> proceedOnFound)
         {
-            if (a == null)
-                return false;
-
             RectangleF mainElementSearchRectangle;
             {
                 RectangleF mainElementInitialRectangle = a.MainElementInitialRectangle();
@@ -301,7 +332,7 @@ namespace Cliver.PdfDocumentParser
 
             switch (a.Type)
             {
-                case Template.Types.PdfText:
+                case Template.Anchor.Types.PdfText:
                     {
                         Template.Anchor.PdfText ptv = (Template.Anchor.PdfText)a;
                         List<Template.Anchor.PdfText.CharBox> aes = ptv.CharBoxs;
@@ -339,7 +370,7 @@ namespace Cliver.PdfDocumentParser
                         }
                     }
                     return false;
-                case Template.Types.OcrText:
+                case Template.Anchor.Types.OcrText:
                     {
                         Template.Anchor.OcrText ot = (Template.Anchor.OcrText)a;
                         List<Template.Anchor.OcrText.CharBox> aes = ot.CharBoxs;
@@ -398,7 +429,7 @@ namespace Cliver.PdfDocumentParser
                         }
                     }
                     return false;
-                case Template.Types.ImageData://TBD:? implement recursive search of images in an anchor (- searching an image combination pixel by pixel will be very long!)
+                case Template.Anchor.Types.ImageData://TBD:? implement recursive search of images in an anchor (- searching an image combination pixel by pixel will be very long!)
                     {
                         Template.Anchor.ImageData idv = (Template.Anchor.ImageData)a;
                         List<Template.Anchor.ImageData.ImageBox> ibs = idv.ImageBoxs;
@@ -542,6 +573,8 @@ namespace Cliver.PdfDocumentParser
                 if (!aai.Found)
                     return null;
                 r.Width += r0.X - r.X + aai.Shift.Width;
+                if (r.Width <= 0)
+                    return null;
             }
             if (field.BottomAnchorId != null)
             {
@@ -549,14 +582,16 @@ namespace Cliver.PdfDocumentParser
                 if (!aai.Found)
                     return null;
                 r.Height += r0.Y - r.Y + aai.Shift.Height;
+                if (r.Height <= 0)
+                    return null;
             }
             switch (field.Type)
             {
-                case Template.Types.PdfText:
+                case Template.Field.Types.PdfText:
                     return Pdf.GetTextByTopLeftCoordinates(PdfCharBoxs, r, pageCollection.ActiveTemplate.TextAutoInsertSpaceThreshold);
-                case Template.Types.OcrText:
+                case Template.Field.Types.OcrText:
                     return Ocr.This.GetText(ActiveTemplateBitmap, r);
-                case Template.Types.ImageData:
+                case Template.Field.Types.ImageData:
                     using (Bitmap rb = GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
                     {
                         return ImageData.GetScaled(rb, Settings.Constants.Image2PdfResolutionRatio);

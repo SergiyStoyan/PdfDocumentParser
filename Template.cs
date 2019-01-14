@@ -95,22 +95,15 @@ namespace Cliver.PdfDocumentParser
             public float Height;
         }
 
-        public enum Types
-        {
-            PdfText,
-            OcrText,
-            ImageData
-        }
-
         public abstract class Anchor
         {
             public int Id;
             public int SearchRectangleMargin = -1;//px
             public float PositionDeviation = 1f;
             public bool PositionDeviationIsAbsolute = false;
-            public int? ParentAnchorId = null;
+            virtual public int? ParentAnchorId { get; set; } = null;
             //public string Condition = null;//to be removed in the next release
-
+            
             public Anchor()
             {
                 if (this is PdfText)
@@ -119,11 +112,20 @@ namespace Cliver.PdfDocumentParser
                     Type = Types.OcrText;
                 else if (this is ImageData)
                     Type = Types.ImageData;
+                else if (this is Script)
+                    Type = Types.Script;
                 else
                     throw new Exception("Unknown type: " + this.GetType());
             }
             [Newtonsoft.Json.JsonIgnore]
             public readonly Types Type;
+            public enum Types
+            {
+                PdfText,
+                OcrText,
+                ImageData,
+                Script
+            }
 
             abstract public bool IsSet();
 
@@ -199,6 +201,23 @@ namespace Cliver.PdfDocumentParser
                     return ImageBoxs[0].Rectangle.GetSystemRectangleF();
                 }
             }
+
+            public class Script : Anchor
+            {
+                override public int? ParentAnchorId { get { return null; } set { throw new Exception("Should not be used in this type Anchor!"); } }
+                
+                public string Expression = null;
+
+                override public bool IsSet()
+                {
+                    return !string.IsNullOrWhiteSpace(Expression);
+                }
+
+                override public System.Drawing.RectangleF MainElementInitialRectangle()
+                {
+                    throw new Exception("Should not be called in this type Anchor!");
+                }
+            }
         }
 
         public class Condition
@@ -215,16 +234,16 @@ namespace Cliver.PdfDocumentParser
         public abstract class Field
         {
             public string Name;
-            public int? AnchorId//conversion from the old format
-            {
-                set
-                {
-                    if (value == null)
-                        return;
-                    LeftAnchorId = value;
-                    TopAnchorId = value;
-                }
-            }
+            //public int? AnchorId//conversion from the old format
+            //{
+            //    set
+            //    {
+            //        if (value == null)
+            //            return;
+            //        LeftAnchorId = value;
+            //        TopAnchorId = value;
+            //    }
+            //}
 
             public RectangleF Rectangle;
             /// <summary>
@@ -257,6 +276,12 @@ namespace Cliver.PdfDocumentParser
             }
             [Newtonsoft.Json.JsonIgnore]
             public readonly Types Type;
+            public enum Types
+            {
+                PdfText,
+                OcrText,
+                ImageData,
+            }
 
             public bool IsSet()
             {

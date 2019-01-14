@@ -137,6 +137,8 @@ namespace Cliver.PdfDocumentParser
                     if (!aai.Found)
                         return null;
                     r.Width += r0.X - r.X + aai.Shift.Width;
+                    if (r.Width <= 0)
+                        return null;
                 }
                 if (field.BottomAnchorId != null)
                 {
@@ -145,15 +147,17 @@ namespace Cliver.PdfDocumentParser
                     if (!aai.Found)
                         return null;
                     r.Height += r0.Y - r.Y + aai.Shift.Height;
+                    if (r.Height <= 0)
+                        return null;
                 }
                 drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
                 switch (field.Type)
                 {
-                    case Template.Types.PdfText:
+                    case Template.Field.Types.PdfText:
                         return Page.NormalizeText(Pdf.GetTextByTopLeftCoordinates(pages[currentPage].PdfCharBoxs, r, pages.ActiveTemplate.TextAutoInsertSpaceThreshold));
-                    case Template.Types.OcrText:
+                    case Template.Field.Types.OcrText:
                         return Page.NormalizeText(Ocr.This.GetText(pages[currentPage].ActiveTemplateBitmap, r));
-                    case Template.Types.ImageData:
+                    case Template.Field.Types.ImageData:
                         using (Bitmap rb = pages[currentPage].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
                         {
                             return ImageData.GetScaled(rb, Settings.Constants.Image2PdfResolutionRatio);

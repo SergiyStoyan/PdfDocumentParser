@@ -41,8 +41,8 @@ namespace Cliver.PdfDocumentParser
             BottomAnchorId.ValueMember = "Id";
             BottomAnchorId.DisplayMember = "Name";
 
-            Type.ValueType = typeof(Template.Types);
-            Type.DataSource = Enum.GetValues(typeof(Template.Types));
+            Type.ValueType = typeof(Template.Field.Types);
+            Type.DataSource = Enum.GetValues(typeof(Template.Field.Types));
 
             fields.EnableHeadersVisualStyles = false;//needed to set row headers
 
@@ -82,19 +82,19 @@ namespace Cliver.PdfDocumentParser
                         //    }
                         case "Type":
                             {
-                                Template.Types t2 = (Template.Types)row.Cells["Type"].Value;
+                                Template.Field.Types t2 = (Template.Field.Types)row.Cells["Type"].Value;
                                 if (t2 == f.Type)
                                     break;
                                 Template.Field f2;
                                 switch (t2)
                                 {
-                                    case Template.Types.PdfText:
+                                    case Template.Field.Types.PdfText:
                                         f2 = new Template.Field.PdfText();
                                         break;
-                                    case Template.Types.OcrText:
+                                    case Template.Field.Types.OcrText:
                                         f2 = new Template.Field.OcrText();
                                         break;
-                                    case Template.Types.ImageData:
+                                    case Template.Field.Types.ImageData:
                                         f2 = new Template.Field.ImageData();
                                         break;
                                     default:
@@ -273,7 +273,7 @@ namespace Cliver.PdfDocumentParser
             }
             clearImageFromBoxes();
             object v = extractFieldAndDrawSelectionBox(f);
-            if (f.Type == Template.Types.ImageData)
+            if (f.Type == Template.Field.Types.ImageData)
             {
                 if (!(c is DataGridViewImageCell))
                 {
@@ -305,14 +305,14 @@ namespace Cliver.PdfDocumentParser
             row.Cells["Rectangle"].Value = SerializationRoutines.Json.Serialize(f.Rectangle);
             switch (f.Type)
             {
-                case Template.Types.PdfText:
-                    row.Cells["Type"].Value = Template.Types.PdfText;
+                case Template.Field.Types.PdfText:
+                    row.Cells["Type"].Value = Template.Field.Types.PdfText;
                     break;
-                case Template.Types.OcrText:
-                    row.Cells["Type"].Value = Template.Types.OcrText;
+                case Template.Field.Types.OcrText:
+                    row.Cells["Type"].Value = Template.Field.Types.OcrText;
                     break;
-                case Template.Types.ImageData:
-                    row.Cells["Type"].Value = Template.Types.ImageData;
+                case Template.Field.Types.ImageData:
+                    row.Cells["Type"].Value = Template.Field.Types.ImageData;
                     break;
                 default:
                     throw new Exception("Unknown option: " + f.Type);

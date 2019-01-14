@@ -175,6 +175,12 @@
     <Compile Include="AnchorOcrTextControl.Designer.cs">
       <DependentUpon>AnchorOcrTextControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="AnchorScriptControl .cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AnchorScriptControl .Designer.cs">
+      <DependentUpon>AnchorScriptControl .cs</DependentUpon>
+    </Compile>
     <Compile Include="AnchorPdfTextControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -290,6 +296,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AnchorOcrTextControl.resx">
       <DependentUpon>AnchorOcrTextControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AnchorScriptControl .resx">
+      <DependentUpon>AnchorScriptControl .cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AnchorPdfTextControl.resx">
       <DependentUpon>AnchorPdfTextControl.cs</DependentUpon>
