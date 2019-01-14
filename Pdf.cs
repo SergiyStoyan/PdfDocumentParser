@@ -29,9 +29,9 @@ namespace Cliver.PdfDocumentParser
             return new PdfReader(pdfFile);
         }
 
-        public static System.Drawing.SizeF GetPageSize2(this PdfReader pr, int page_i)
+        public static System.Drawing.SizeF GetPageSize2(this PdfReader pr, int pageI)
         {
-            iTextSharp.text.Rectangle r = pr.GetPageSize(page_i);
+            iTextSharp.text.Rectangle r = pr.GetPageSize(pageI);
             return new System.Drawing.SizeF(r.Width, r.Height);
         }
 
@@ -40,25 +40,25 @@ namespace Cliver.PdfDocumentParser
             return new RenderFilter[] { new RegionTextRenderFilter(new System.util.RectangleJ(x, y, w, h)) };
         }
 
-        //static public Dictionary<string, string> ExtractTexts(this PdfReader pr, int page_i, Dictionary<string, RenderFilter[]> fieldNames2filters)
+        //static public Dictionary<string, string> ExtractTexts(this PdfReader pr, int pageI, Dictionary<string, RenderFilter[]> fieldNames2filters)
         //{
         //    Dictionary<string, string> fieldNames2texts = new Dictionary<string, string>();
         //    foreach (string fn in fieldNames2filters.Keys)
-        //        fieldNames2texts[fn] = pr.ExtractText(page_i, fieldNames2filters[fn]);
+        //        fieldNames2texts[fn] = pr.ExtractText(pageI, fieldNames2filters[fn]);
         //    return fieldNames2texts;
         //}
 
-        public static string ExtractText(this PdfReader pr, int page_i, float x, float y, float w, float h)
+        public static string ExtractText(this PdfReader pr, int pageI, float x, float y, float w, float h)
         {
             RenderFilter[] rf = new RenderFilter[] { new RegionTextRenderFilter(new System.util.RectangleJ(x, y, w, h)) };
-            return ExtractText(pr, page_i, rf);
+            return ExtractText(pr, pageI, rf);
         }
 
-        public static string ExtractText(this PdfReader pr, int page_i, RenderFilter[] f)
+        public static string ExtractText(this PdfReader pr, int pageI, RenderFilter[] f)
         {
             ITextExtractionStrategy s = new FilteredTextRenderListener(new LocationTextExtractionStrategy(), f);
-            return PdfTextExtractor.GetTextFromPage(pr, page_i, new LimitedTextStrategy2(s));
-            //return PdfTextExtractor.GetTextFromPage(pr, page_i, new LimitedTextStrategy(new LocationTextExtractionStrategy(), f));
+            return PdfTextExtractor.GetTextFromPage(pr, pageI, new LimitedTextStrategy2(s));
+            //return PdfTextExtractor.GetTextFromPage(pr, pageI, new LimitedTextStrategy(new LocationTextExtractionStrategy(), f));
         }
         //public class LimitedTextStrategy : FilteredTextRenderListener
         //{
@@ -109,7 +109,7 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        static public System.Drawing.Bitmap RenderBitmap(string pdf_file, int page_i, int resolution, bool byFile = false)
+        static public System.Drawing.Bitmap RenderBitmap(string pdfFile, int pageI, int resolution, bool byFile = false)
         {
             Process p = new Process();
             p.StartInfo.FileName = Log.AppDir + "\\gswin32c.exe";
@@ -122,7 +122,7 @@ namespace Cliver.PdfDocumentParser
             {
                 p.StartInfo.RedirectStandardOutput = true;
                 p.StartInfo.RedirectStandardError = true;
-                p.StartInfo.Arguments = "-dNOPROMPT -r" + resolution + " -dDownScaleFactor=" + dDownScaleFactor + " -dBATCH -dFirstPage=" + page_i + " -dLastPage=" + page_i + " -sDEVICE=png16m -dNOPAUSE -sOutputFile=%stdout -q \"" + pdf_file + "\"";
+                p.StartInfo.Arguments = "-dNOPROMPT -r" + resolution + " -dDownScaleFactor=" + dDownScaleFactor + " -dBATCH -dFirstPage=" + pageI + " -dLastPage=" + pageI + " -sDEVICE=png16m -dNOPAUSE -sOutputFile=%stdout -q \"" + pdfFile + "\"";
                 p.Start();
                 MemoryStream ms = new MemoryStream();
                 p.StandardOutput.BaseStream.CopyTo(ms);
@@ -134,13 +134,13 @@ namespace Cliver.PdfDocumentParser
                 }
                 catch (Exception e)
                 {
-                    return RenderBitmap(pdf_file, page_i, resolution, true);
+                    return RenderBitmap(pdfFile, pageI, resolution, true);
                 }
             }
             else//some pdf's require this because gs puts errors to stdout
             {
                 string buffer_file = Log.AppCommonDataDir + "\\buffer.png";
-                p.StartInfo.Arguments = "-dNOPROMPT -r" + resolution + " -dDownScaleFactor=" + dDownScaleFactor + " -dBATCH -dFirstPage=" + page_i + " -dLastPage=" + page_i + " -sDEVICE=png16m -dNOPAUSE -sOutputFile=\"" + buffer_file + "\" -q \"" + pdf_file + "\"";
+                p.StartInfo.Arguments = "-dNOPROMPT -r" + resolution + " -dDownScaleFactor=" + dDownScaleFactor + " -dBATCH -dFirstPage=" + pageI + " -dLastPage=" + pageI + " -sDEVICE=png16m -dNOPAUSE -sOutputFile=\"" + buffer_file + "\" -q \"" + pdfFile + "\"";
                 p.Start();
                 p.WaitForExit();
 
@@ -148,10 +148,10 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        static public List<LocationTextExtractionStrategy.TextChunk> GetTextChunks(this PdfReader pr, int page_i)
+        static public List<LocationTextExtractionStrategy.TextChunk> GetTextChunks(this PdfReader pr, int pageI)
         {
             ChunkLocationTextExtractionStrategy2 s = new ChunkLocationTextExtractionStrategy2();
-            PdfTextExtractor.GetTextFromPage(pr, page_i, s);
+            PdfTextExtractor.GetTextFromPage(pr, pageI, s);
             return s.TextChunks;
         }
         public class ChunkLocationTextExtractionStrategy2 : LocationTextExtractionStrategy
@@ -170,10 +170,10 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        static public List<LocationTextExtractionStrategy.TextChunk> GetCharacterTextChunks(this PdfReader pr, int page_i)
+        static public List<LocationTextExtractionStrategy.TextChunk> GetCharacterTextChunks(this PdfReader pr, int pageI)
         {
             CharLocationTextExtractionStrategy s = new CharLocationTextExtractionStrategy();
-            PdfTextExtractor.GetTextFromPage(pr, page_i, s);
+            PdfTextExtractor.GetTextFromPage(pr, pageI, s);
             return s.TextChunks;
         }
         public class CharLocationTextExtractionStrategy : LocationTextExtractionStrategy

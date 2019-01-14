@@ -21,9 +21,9 @@ namespace Cliver.PdfDocumentParser
         internal Page(PageCollection pageCollection, int pageI)
         {
             this.pageCollection = pageCollection;
-            this.pageI = pageI;
+            Number = pageI;
         }
-        readonly int pageI;
+        public readonly int Number;
         readonly PageCollection pageCollection;
 
         ~Page()
@@ -66,7 +66,7 @@ namespace Cliver.PdfDocumentParser
             get
             {
                 if (_bitmap == null)
-                    _bitmap = Pdf.RenderBitmap(pageCollection.PdfFile, pageI, Settings.Constants.PdfPageImageResolution);
+                    _bitmap = Pdf.RenderBitmap(pageCollection.PdfFile, Number, Settings.Constants.PdfPageImageResolution);
                 return _bitmap;
             }
         }
@@ -485,7 +485,7 @@ namespace Cliver.PdfDocumentParser
             get
             {
                 if (_pdfCharBoxs == null)
-                    _pdfCharBoxs = Pdf.GetCharBoxsFromPage(pageCollection.PdfReader, pageI);
+                    _pdfCharBoxs = Pdf.GetCharBoxsFromPage(pageCollection.PdfReader, Number);
                 return _pdfCharBoxs;
             }
         }
