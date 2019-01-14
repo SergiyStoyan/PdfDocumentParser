@@ -236,10 +236,11 @@ namespace Cliver.PdfDocumentParser
 
                 fields.CurrentCell = fields[0, row.Index];
                 Template.Field f = (Template.Field)row.Tag;
-                setCurrentAnchorRow(f.LeftAnchorId, true);
-                setCurrentAnchorRow(f.TopAnchorId, false);
-                setCurrentAnchorRow(f.RightAnchorId, false);
-                setCurrentAnchorRow(f.BottomAnchorId, false);
+                //setCurrentAnchorRow(f.LeftAnchorId, true);
+                //setCurrentAnchorRow(f.TopAnchorId, false);
+                //setCurrentAnchorRow(f.RightAnchorId, false);
+                //setCurrentAnchorRow(f.BottomAnchorId, false);
+                setCurrentAnchorRow(null, true);
                 setCurrentConditionRow(null);
                 setFieldRowValue(row, false);
             }
