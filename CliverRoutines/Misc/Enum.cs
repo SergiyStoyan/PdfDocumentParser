@@ -49,14 +49,23 @@ namespace Cliver
 
         protected Enum(T value)
         {
-            this.Value = value;
+            Value = value;
+        }
+
+        public Enum()
+        {
         }
 
         public T Value { get; private set; }
 
         public Dictionary<string, T> ToDictionary()
         {
-            return this.GetType().GetFields(BindingFlags.Public | BindingFlags.Static).ToDictionary(x => x.Name, x => ((Enum<T>)x.GetValue(this)).Value);
+            return GetType().GetFields(BindingFlags.Public | BindingFlags.Static).ToDictionary(x => x.Name, x => ((Enum<T>)x.GetValue(this)).Value);
+        }
+
+        public List<T> ToList()
+        {
+            return GetType().GetFields(BindingFlags.Public | BindingFlags.Static).Select(x => ((Enum<T>)x.GetValue(this)).Value).ToList();
         }
     }
 }
