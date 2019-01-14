@@ -537,7 +537,21 @@ namespace Cliver.PdfDocumentParser
             return BooleanEngine.Parse(c.Value, this);
         }
 
-        public object GetValue(Template.Field field)
+        public object GetValue(string fieldName)
+        {
+            object o = false;
+            foreach (Template.Field f in pageCollection.ActiveTemplate.Fields.Where(x => x.Name == fieldName))
+            {
+                o = getValue(f);
+                if (o != null)
+                    return o;
+            }
+            if (o == null)
+                return null;
+            throw new Exception("These is no field[name=" + fieldName + "]");
+        }
+
+        object getValue(Template.Field field)
         {
             if (!field.IsSet())
                 throw new Exception("Field is not set.");
