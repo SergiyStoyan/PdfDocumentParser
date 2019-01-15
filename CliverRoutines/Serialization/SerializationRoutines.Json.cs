@@ -84,6 +84,11 @@ namespace Cliver
             {
                 return Deserialize<T>(Serialize(o, false, true));
             }
+
+            static public object Clone(Type type, object o)
+            {
+                return Deserialize(type, Serialize(o, false, true));
+            }
         }
     }
 }

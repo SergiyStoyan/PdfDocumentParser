@@ -149,14 +149,14 @@ namespace Cliver.PdfDocumentParser
                         string n = FieldPreparation.Normalize((string)r.Cells["Name_"].Value);
                         if (string.IsNullOrWhiteSpace(n))
                             throw new Exception("Name cannot be empty!");
-                        foreach (DataGridViewRow rr in fields.Rows)
-                        {
-                            if (r == rr)
-                                continue;
-                            Template.Field f = (Template.Field)rr.Tag;
-                            if (f != null && n == f.Name)
-                                throw new Exception("Name '" + n + "' is duplicated!");
-                        }
+                        //foreach (DataGridViewRow rr in fields.Rows)
+                        //{
+                        //    if (r == rr)
+                        //        continue;
+                        //    Template.Field f = (Template.Field)rr.Tag;
+                        //    if (f != null && n == f.Name)
+                        //        throw new Exception("Name '" + n + "' is duplicated!");
+                        //}
                         r.Cells["Name_"].Value = n;
                     }
                 }
@@ -214,6 +214,58 @@ namespace Cliver.PdfDocumentParser
                     LogMessage.Error(ex);
                 }
             };
+
+            fields.KeyPress += delegate (object sender, KeyPressEventArgs e)
+              {
+                  if (e.KeyChar == '+')
+                      addElseRemoveRow(true);
+                  else if (e.KeyChar == '-')
+                      addElseRemoveRow(false);
+              };
+
+            fields.KeyDown += delegate (object sender, KeyEventArgs e)
+             {
+                 if (e.KeyCode == Keys.ControlKey)
+                     addElseRemoveRow(true);
+                 else if (e.KeyCode == Keys.Delete)
+                     addElseRemoveRow(false);
+             };
+        }
+
+        void addElseRemoveRow(bool add)
+        {
+            if (add)
+            {
+                if (fields.SelectedRows.Count < 1)
+                    return;
+                DataGridViewRow r0 = fields.SelectedRows[fields.SelectedRows.Count - 1];
+                if (r0.Tag == null)
+                    return;
+                int i = fields.Rows.Add();
+                DataGridViewRow row = fields.Rows[i];
+                //fields.Rows.Remove(row);
+                //fields.Rows.Insert(r0.Index, row);
+                Template.Field f = (Template.Field)SerializationRoutines.Json.Clone(((Template.Field)r0.Tag).GetType(), r0.Tag);
+                setFieldRow(row, f);
+                row.Selected = true;
+            }
+            else
+            {
+                if (fields.SelectedRows.Count < 1)
+                    return;
+                DataGridViewRow r = fields.SelectedRows[fields.SelectedRows.Count - 1];
+                if (r.Tag == null)
+                    return;
+                bool unique = true;
+                foreach (DataGridViewRow rr in fields.Rows)
+                    if (rr != r && rr.Tag != null && ((Template.Field)rr.Tag).Name == ((Template.Field)r.Tag).Name)
+                    {
+                        unique = false;
+                        break;
+                    }
+                if (!unique)
+                    fields.Rows.Remove(r);
+            }
         }
 
         void setCurrentFieldRow(DataGridViewRow row)

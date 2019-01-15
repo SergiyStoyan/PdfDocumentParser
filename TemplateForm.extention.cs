@@ -339,9 +339,9 @@ namespace Cliver.PdfDocumentParser
             {
                 if (t.Fields.Count < 1)
                     throw new Exception("Fields is empty!");
-                var dfs = t.Fields.GroupBy(x => x.Name).Where(x => x.Count() > 1).FirstOrDefault();
-                if (dfs != null)
-                    throw new Exception("Field '" + dfs.First().Name + "' is duplicated!");
+                //var dfs = t.Fields.GroupBy(x => x.Name).Where(x => x.Count() > 1).FirstOrDefault();
+                //if (dfs != null)
+                //    throw new Exception("Field '" + dfs.First().Name + "' is duplicated!");
             }
 
             if (saving)
