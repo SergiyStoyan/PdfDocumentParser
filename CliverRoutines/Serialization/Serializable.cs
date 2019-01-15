@@ -68,7 +68,7 @@ namespace Cliver
             if (init_mode == InitMode.CREATE || (init_mode == InitMode.LOAD_OR_CREATE && !File.Exists(file)))
                 s = (Serializable)Activator.CreateInstance(serializable_type);
             else
-                s = (Serializable)Cliver.SerializationRoutines.Json.Load(serializable_type, file);
+                s = (Serializable)Cliver.Serialization.Json.Load(serializable_type, file);
             s.__File = file;
             return s;
         }
@@ -91,7 +91,7 @@ namespace Cliver
                 if (file != null)
                     __File = file;
                 Saving();
-                Cliver.SerializationRoutines.Json.Save(__File, this, true, __Indented);
+                Cliver.Serialization.Json.Save(__File, this, true, __Indented);
                 Saved();
             }
         }

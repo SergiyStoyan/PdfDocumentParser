@@ -121,12 +121,12 @@ namespace Cliver.PdfDocumentParser
                     setConditionRow(row, c);
                 }
 
-                for (int i = 0; i < t.Fields.Count; i++)
-                {
-                    for (int j = i + 1; j < t.Fields.Count; j++)
-                        if (t.Fields[i].Name == t.Fields[j].Name)
-                            t.Fields.RemoveAt(j);
-                }
+                //for (int i = 0; i < t.Fields.Count; i++)
+                //{
+                //    for (int j = i + 1; j < t.Fields.Count; j++)
+                //        if (t.Fields[i].Name == t.Fields[j].Name)
+                //            t.Fields.RemoveAt(j);
+                //}
                 fields.Rows.Clear();
                 if (t.Fields != null)
                 {
@@ -196,7 +196,7 @@ namespace Cliver.PdfDocumentParser
         private void showJson_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Template t = getTemplateFromUI(false);
-            TextForm tf = new TextForm("Template JSON object", SerializationRoutines.Json.Serialize(t), false);
+            TextForm tf = new TextForm("Template JSON object", Serialization.Json.Serialize(t), false);
             tf.ShowDialog();
         }
 

@@ -208,11 +208,11 @@ namespace Cliver.PdfDocumentParser
             if (!a.IsSet())
                 throw new Exception("Anchor[id=" + anchorId + "] is not defined.");
 
-            StringBuilder sb = new StringBuilder(SerializationRoutines.Json.Serialize(a, false));
+            StringBuilder sb = new StringBuilder(Serialization.Json.Serialize(a, false));
             for (int? id = a.ParentAnchorId; id != null;)
             {
                 Template.Anchor pa = pageCollection.ActiveTemplate.Anchors.Find(x => x.Id == id);
-                sb.Append(SerializationRoutines.Json.Serialize(pa, false));
+                sb.Append(Serialization.Json.Serialize(pa, false));
                 id = pa.ParentAnchorId;
             }
             string sa = sb.ToString();

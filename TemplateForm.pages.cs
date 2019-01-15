@@ -246,8 +246,15 @@ namespace Cliver.PdfDocumentParser
 
                 if (ExtractFieldsAutomaticallyWhenPageChanged.Checked)
                 {
+                    HashSet<string> foundFieldNames = new HashSet<string>();
                     foreach (DataGridViewRow row in fields.Rows)
-                        setFieldRowValue(row, false);
+                    {
+                        string fn = ((Template.Field)row.Tag).Name;
+                        if (foundFieldNames.Contains(fn))
+                            continue;
+                        if (setFieldRowValue(row, false))
+                            foundFieldNames.Add(fn);
+                    }
                 }
 
                 if (CheckConditionsAutomaticallyWhenPageChanged.Checked)

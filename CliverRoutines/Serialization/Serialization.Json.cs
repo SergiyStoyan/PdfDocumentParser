@@ -21,7 +21,7 @@ using System.Xml;
 
 namespace Cliver
 {
-    static public partial class SerializationRoutines
+    static public partial class Serialization
     {
         static public class Json
         {

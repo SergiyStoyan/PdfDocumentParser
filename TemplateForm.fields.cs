@@ -245,7 +245,7 @@ namespace Cliver.PdfDocumentParser
                 DataGridViewRow row = fields.Rows[i];
                 //fields.Rows.Remove(row);
                 //fields.Rows.Insert(r0.Index, row);
-                Template.Field f = (Template.Field)SerializationRoutines.Json.Clone(((Template.Field)r0.Tag).GetType(), r0.Tag);
+                Template.Field f = (Template.Field)Serialization.Json.Clone(((Template.Field)r0.Tag).GetType(), r0.Tag);
                 setFieldRow(row, f);
                 row.Selected = true;
             }
@@ -304,15 +304,15 @@ namespace Cliver.PdfDocumentParser
         bool settingCurrentFieldRow = false;
         DataGridViewRow currentFieldRow = null;
 
-        void setFieldRowValue(DataGridViewRow row, bool setEmpty)
+        bool setFieldRowValue(DataGridViewRow row, bool setEmpty)
         {
             Template.Field f = (Template.Field)row.Tag;
             if (f == null)
-                return;
+                return false;
             if (!f.IsSet())
             {
                 setRowStatus(statuses.WARNING, row, "Not set");
-                return;
+                return false;
             }
             DataGridViewCell c = row.Cells["Value"];
             if (c is DataGridViewImageCell && c.Value != null)
@@ -321,7 +321,7 @@ namespace Cliver.PdfDocumentParser
             {
                 c.Value = null;
                 setRowStatus(statuses.NEUTRAL, row, "");
-                return;
+                return false;
             }
             clearImageFromBoxes();
             object v = extractFieldAndDrawSelectionBox(f);
@@ -348,13 +348,14 @@ namespace Cliver.PdfDocumentParser
                 setRowStatus(statuses.SUCCESS, row, "Found");
             else
                 setRowStatus(statuses.ERROR, row, "Error");
+            return v != null;
         }
 
         void setFieldRow(DataGridViewRow row, Template.Field f)
         {
             row.Tag = f;
             row.Cells["Name_"].Value = f.Name;
-            row.Cells["Rectangle"].Value = SerializationRoutines.Json.Serialize(f.Rectangle);
+            row.Cells["Rectangle"].Value = Serialization.Json.Serialize(f.Rectangle);
             switch (f.Type)
             {
                 case Template.Field.Types.PdfText:

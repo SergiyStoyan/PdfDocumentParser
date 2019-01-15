@@ -45,15 +45,15 @@ namespace Cliver.PdfDocumentParser
         //    //    g = Encoding.UTF8.GetString(ms.ToArray());
         //    //}
 
-        //    //byte[] bs = SerializationRoutines.Binary.Serialize(this);//more compact
-        //    //return SerializationRoutines.Json.Serialize(bs, false);
-        //    return SerializationRoutines.Json.Serialize(this, false);
+        //    //byte[] bs = Serialization.Binary.Serialize(this);//more compact
+        //    //return Serialization.Json.Serialize(bs, false);
+        //    return Serialization.Json.Serialize(this, false);
         //}
         //static public ImageData GetFromString(string s)
         //{
-        //    //byte[] bs = SerializationRoutines.Json.Deserialize<byte[]>(s);
-        //    //return SerializationRoutines.Binary.Deserialize<ImageData>(bs);
-        //    return SerializationRoutines.Json.Deserialize<ImageData>(s);
+        //    //byte[] bs = Serialization.Json.Deserialize<byte[]>(s);
+        //    //return Serialization.Binary.Deserialize<ImageData>(bs);
+        //    return Serialization.Json.Deserialize<ImageData>(s);
 
         //    //using (MemoryStream ms = new MemoryStream(bs))
         //    //{
