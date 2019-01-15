@@ -217,10 +217,35 @@ namespace Cliver.PdfDocumentParser
 
             fields.KeyPress += delegate (object sender, KeyPressEventArgs e)
               {
-                  if (e.KeyChar == '+')
-                      addElseRemoveRow(true);
-                  else if (e.KeyChar == '-')
-                      addElseRemoveRow(false);
+                  switch (e.KeyChar)
+                  {
+                      case '+':
+                          addElseRemoveRow(true);
+                          break;
+                      case '-':
+                          addElseRemoveRow(false);
+                          break;
+                      case 'c':
+                      case 'C':
+                          DataGridViewRow r = fields.SelectedRows[fields.SelectedRows.Count - 1];
+                          if (r.Tag == null)
+                              return;
+                          Template.Field f = (Template.Field)r.Tag;
+                          object o = pages[currentPageI].GetValue(f.Name);
+                          switch (f.Type)
+                          {
+                              case Template.Field.Types.ImageData:
+                                  Clipboard.SetData(f.Type.ToString(), (Image)o);
+                                  break;
+                              case Template.Field.Types.PdfText:
+                              case Template.Field.Types.OcrText:
+                                  Clipboard.SetText((string)o);
+                                  break;
+                              default:
+                                  throw new Exception("Unknown option: " + f.Type);
+                          }
+                          break;
+                  }
               };
 
             fields.KeyDown += delegate (object sender, KeyEventArgs e)

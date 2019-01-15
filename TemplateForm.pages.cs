@@ -31,7 +31,7 @@ namespace Cliver.PdfDocumentParser
                 return;
             pages.Clear();
             pages.ActiveTemplate = getTemplateFromUI(false);
-            showPage(currentPage);
+            showPage(currentPageI);
         }
 
         void setScaledImage()
@@ -40,9 +40,9 @@ namespace Cliver.PdfDocumentParser
                 return;
             if (scaledCurrentPageBitmap != null)
                 scaledCurrentPageBitmap.Dispose();
-            if(pages[currentPage].ActiveTemplateBitmap == null)
+            if(pages[currentPageI].ActiveTemplateBitmap == null)
                 pages.ActiveTemplate = getTemplateFromUI(false);
-            scaledCurrentPageBitmap = ImageRoutines.GetScaled(pages[currentPage].ActiveTemplateBitmap, (float)pictureScale.Value * Settings.Constants.Image2PdfResolutionRatio);
+            scaledCurrentPageBitmap = ImageRoutines.GetScaled(pages[currentPageI].ActiveTemplateBitmap, (float)pictureScale.Value * Settings.Constants.Image2PdfResolutionRatio);
             if (picture.Image != null)
                 picture.Image.Dispose();
             picture.Image = new Bitmap(scaledCurrentPageBitmap);
@@ -77,7 +77,7 @@ namespace Cliver.PdfDocumentParser
             }
             if (!set)
                 return null;
-            List<List<RectangleF>> rss = pages[currentPage].GetAnchorRectangless(a.Id);
+            List<List<RectangleF>> rss = pages[currentPageI].GetAnchorRectangless(a.Id);
             getAnchor(a.Id, out DataGridViewRow r);
             if (rss == null || rss.Count < 1)
             {
@@ -117,7 +117,7 @@ namespace Cliver.PdfDocumentParser
                 if (field.LeftAnchorId != null)
                 {
                     findAndDrawAnchor((int)field.LeftAnchorId);
-                    Page.AnchorActualInfo aai = pages[currentPage].GetAnchorActualInfo((int)field.LeftAnchorId);
+                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo((int)field.LeftAnchorId);
                     if (!aai.Found)
                         return null;
                     r.X += aai.Shift.Width;
@@ -125,7 +125,7 @@ namespace Cliver.PdfDocumentParser
                 if (field.TopAnchorId != null)
                 {
                     findAndDrawAnchor((int)field.TopAnchorId);
-                    Page.AnchorActualInfo aai = pages[currentPage].GetAnchorActualInfo((int)field.TopAnchorId);
+                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo((int)field.TopAnchorId);
                     if (!aai.Found)
                         return null;
                     r.Y += aai.Shift.Height;
@@ -133,7 +133,7 @@ namespace Cliver.PdfDocumentParser
                 if (field.RightAnchorId != null)
                 {
                     findAndDrawAnchor((int)field.RightAnchorId);
-                    Page.AnchorActualInfo aai = pages[currentPage].GetAnchorActualInfo((int)field.RightAnchorId);
+                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo((int)field.RightAnchorId);
                     if (!aai.Found)
                         return null;
                     r.Width += r0.X - r.X + aai.Shift.Width;
@@ -143,7 +143,7 @@ namespace Cliver.PdfDocumentParser
                 if (field.BottomAnchorId != null)
                 {
                     findAndDrawAnchor((int)field.BottomAnchorId);
-                    Page.AnchorActualInfo aai = pages[currentPage].GetAnchorActualInfo((int)field.BottomAnchorId);
+                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo((int)field.BottomAnchorId);
                     if (!aai.Found)
                         return null;
                     r.Height += r0.Y - r.Y + aai.Shift.Height;
@@ -154,11 +154,11 @@ namespace Cliver.PdfDocumentParser
                 switch (field.Type)
                 {
                     case Template.Field.Types.PdfText:
-                        return Page.NormalizeText(Pdf.GetTextByTopLeftCoordinates(pages[currentPage].PdfCharBoxs, r, pages.ActiveTemplate.TextAutoInsertSpaceThreshold));
+                        return Page.NormalizeText(Pdf.GetTextByTopLeftCoordinates(pages[currentPageI].PdfCharBoxs, r, pages.ActiveTemplate.TextAutoInsertSpaceThreshold));
                     case Template.Field.Types.OcrText:
-                        return Page.NormalizeText(Ocr.This.GetText(pages[currentPage].ActiveTemplateBitmap, r));
+                        return Page.NormalizeText(Ocr.This.GetText(pages[currentPageI].ActiveTemplateBitmap, r));
                     case Template.Field.Types.ImageData:
-                        using (Bitmap rb = pages[currentPage].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
+                        using (Bitmap rb = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
                         {
                             return ImageData.GetScaled(rb, Settings.Constants.Image2PdfResolutionRatio);
                         }
@@ -227,8 +227,8 @@ namespace Cliver.PdfDocumentParser
                 foreach (DataGridViewRow r in fields.Rows)
                     setFieldRowValue(r, true);
 
-                currentPage = pageI;
-                tCurrentPage.Text = currentPage.ToString();
+                currentPageI = pageI;
+                tCurrentPage.Text = currentPageI.ToString();
 
                 setScaledImage();
                 enableNavigationButtons();
@@ -265,36 +265,36 @@ namespace Cliver.PdfDocumentParser
                 LogMessage.Error(e);
             }
         }
-        int currentPage;
+        int currentPageI;
         int totalPageNumber;
 
         private void bPrevPage_Click(object sender, EventArgs e)
         {
-            showPage(currentPage - 1);
+            showPage(currentPageI - 1);
         }
 
         private void bNextPage_Click(object sender, EventArgs e)
         {
-            showPage(currentPage + 1);
+            showPage(currentPageI + 1);
         }
 
         void enableNavigationButtons()
         {
-            bPrevPage.Enabled = currentPage > 1;
-            bNextPage.Enabled = currentPage < totalPageNumber;
+            bPrevPage.Enabled = currentPageI > 1;
+            bNextPage.Enabled = currentPageI < totalPageNumber;
         }
 
         private void changeCurrentPage()
         {
             if (int.TryParse(tCurrentPage.Text, out int i))
             {
-                if (i != currentPage)
+                if (i != currentPageI)
                     showPage(i);
             }
             else
             {
                 LogMessage.Error("Page is not a number.");
-                tCurrentPage.Text = currentPage.ToString();
+                tCurrentPage.Text = currentPageI.ToString();
             }
         }
 

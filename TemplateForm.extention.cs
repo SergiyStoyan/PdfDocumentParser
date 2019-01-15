@@ -180,7 +180,7 @@ namespace Cliver.PdfDocumentParser
         {
             if (pages == null)
                 return;
-            TextForm tf = new TextForm("Pdf Entity Text", PdfTextExtractor.GetTextFromPage(pages.PdfReader, currentPage), false);
+            TextForm tf = new TextForm("Pdf Entity Text", PdfTextExtractor.GetTextFromPage(pages.PdfReader, currentPageI), false);
             tf.ShowDialog();
         }
 
@@ -188,8 +188,8 @@ namespace Cliver.PdfDocumentParser
         {
             if (pages == null)
                 return;
-            //TextForm tf = new TextForm("OCR Text", PdfDocumentParser.Ocr.This.GetHtml(pages[currentPage].Bitmap), true);
-            TextForm tf = new TextForm("OCR Text", PdfDocumentParser.Ocr.GetText(pages[currentPage].ActiveTemplateOcrCharBoxs), false);
+            //TextForm tf = new TextForm("OCR Text", PdfDocumentParser.Ocr.This.GetHtml(pages[currentPageI].Bitmap), true);
+            TextForm tf = new TextForm("OCR Text", PdfDocumentParser.Ocr.GetText(pages[currentPageI].ActiveTemplateOcrCharBoxs), false);
             tf.ShowDialog();
         }
 

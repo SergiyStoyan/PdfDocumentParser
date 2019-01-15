@@ -114,17 +114,17 @@ namespace Cliver.PdfDocumentParser
                                     case Template.Anchor.Types.PdfText:
                                         if (selectedPdfCharBoxs == null/* || (ModifierKeys & Keys.Control) != Keys.Control*/)
                                             selectedPdfCharBoxs = new List<Pdf.CharBox>();
-                                        selectedPdfCharBoxs.AddRange(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPage].PdfCharBoxs, r.GetSystemRectangleF(), true));
+                                        selectedPdfCharBoxs.AddRange(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, r.GetSystemRectangleF(), true));
                                         break;
                                     case Template.Anchor.Types.OcrText:
                                         if (selectedOcrCharBoxs == null/* || (ModifierKeys & Keys.Control) != Keys.Control*/)
                                             selectedOcrCharBoxs = new List<Ocr.CharBox>();
                                         Template.Anchor.OcrText ot = a as Template.Anchor.OcrText;
                                         if (ot.OcrEntirePage)
-                                            selectedOcrCharBoxs.AddRange(PdfDocumentParser.Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPage].ActiveTemplateOcrCharBoxs, r.GetSystemRectangleF()));
+                                            selectedOcrCharBoxs.AddRange(PdfDocumentParser.Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateOcrCharBoxs, r.GetSystemRectangleF()));
                                         else
                                         {
-                                            foreach (Ocr.CharBox cb in PdfDocumentParser.Ocr.This.GetCharBoxs(pages[currentPage].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio)))
+                                            foreach (Ocr.CharBox cb in PdfDocumentParser.Ocr.This.GetCharBoxs(pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio)))
                                             {
                                                 cb.R.X += r.X;
                                                 cb.R.Y += r.Y;
@@ -137,7 +137,7 @@ namespace Cliver.PdfDocumentParser
                                             if (selectedImageBoxs == null)
                                                 selectedImageBoxs = new List<Template.Anchor.ImageData.ImageBox>();
                                             ImageData id;
-                                            using (Bitmap rb = pages[currentPage].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
+                                            using (Bitmap rb = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
                                             {
                                                 using (Bitmap b = ImageData.GetScaled(rb, Settings.Constants.Image2PdfResolutionRatio))
                                                     id = new ImageData(b, false);
@@ -264,13 +264,13 @@ namespace Cliver.PdfDocumentParser
             pageRotation.SelectedIndexChanged += delegate
             {
                 reloadPageBitmaps();
-                //showPage(currentPage);
+                //showPage(currentPageI);
             };
 
             autoDeskew.CheckedChanged += delegate
             {
                 reloadPageBitmaps();
-                //showPage(currentPage);
+                //showPage(currentPageI);
             };
 
             Load += delegate
