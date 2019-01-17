@@ -93,5 +93,18 @@ namespace Cliver
         //        File.Copy(f, f2, overwrite);
         //    }
         //}
+
+        public static bool IsFileLocked(string file)
+        {
+            try
+            {
+                using (Stream stream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.None))
+                    return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

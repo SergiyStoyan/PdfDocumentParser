@@ -13,6 +13,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Security.Cryptography;
+using System.Collections.Generic;
 
 namespace Cliver
 {
@@ -107,6 +108,17 @@ namespace Cliver
             }
         }
 
+        static public string GetKeyByComputer()
+        {
+            List<string> ss = SystemInfo.GetMotherboardIds();
+            if (ss.Count > 0)
+                return ss[0];
+            ss = SystemInfo.GetMACs();
+            if (ss.Count > 0)
+                return ss[0];
+            return null;
+        }
+
         public class ProtectedData
         {
             readonly byte[] key = null;
@@ -116,8 +128,10 @@ namespace Cliver
                 this.key = key;
             }
 
-            public ProtectedData(string key)
+            public ProtectedData(string key = null)
             {
+                if (key == null)
+                    key = GetKeyByComputer();
                 if (key != null)
                     this.key = Encoding.UTF8.GetBytes(key);
             }
