@@ -102,7 +102,6 @@ namespace Cliver.PdfDocumentParser
             public float PositionDeviation = 1f;
             public bool PositionDeviationIsAbsolute = false;
             virtual public int? ParentAnchorId { get; set; } = null;
-            //public string Condition = null;//to be removed in the next release
             
             public Anchor()
             {
@@ -238,16 +237,16 @@ namespace Cliver.PdfDocumentParser
         public abstract class Field
         {
             public string Name;
-            //public int? AnchorId//conversion from the old format
-            //{
-            //    set
-            //    {
-            //        if (value == null)
-            //            return;
-            //        LeftAnchorId = value;
-            //        TopAnchorId = value;
-            //    }
-            //}
+            public int? AnchorId//conversion from the old format; to be removed
+            {
+                set
+                {
+                    if (value == null)
+                        return;
+                    LeftAnchorId = value;
+                    TopAnchorId = value;
+                }
+            }
 
             public RectangleF Rectangle;
             /// <summary>
