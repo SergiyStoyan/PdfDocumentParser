@@ -111,17 +111,21 @@ namespace Cliver.PdfDocumentParser
                                 break;
                             }
                         case "LeftAnchorId":
+                            f.LeftAnchorId = (int?)cs["LeftAnchorId"].Value;
+                            setFieldRow(row, f);
+                            break;
                         case "TopAnchorId":
+                            f.TopAnchorId = (int?)cs["TopAnchorId"].Value;
+                            setFieldRow(row, f);
+                            break;
                         case "RightAnchorId":
+                            f.RightAnchorId = (int?)cs["RightAnchorId"].Value;
+                            setFieldRow(row, f);
+                            break;
                         case "BottomAnchorId":
-                            {
-                                f.LeftAnchorId = (int?)cs["LeftAnchorId"].Value;
-                                f.TopAnchorId = (int?)cs["TopAnchorId"].Value;
-                                f.RightAnchorId = (int?)cs["RightAnchorId"].Value;
-                                f.BottomAnchorId = (int?)cs["BottomAnchorId"].Value;
-                                setFieldRow(row, f);
-                                break;
-                            }
+                            f.BottomAnchorId = (int?)cs["BottomAnchorId"].Value;
+                            setFieldRow(row, f);
+                            break;
                         case "Name_":
                             f.Name = (string)row.Cells["Name_"].Value;
                             break;
@@ -215,51 +219,28 @@ namespace Cliver.PdfDocumentParser
                 }
             };
 
-            fields.KeyPress += delegate (object sender, KeyPressEventArgs e)
-              {
-                  switch (e.KeyChar)
-                  {
-                      case '+':
-                          addElseRemoveRow(true);
-                          break;
-                      case '-':
-                          addElseRemoveRow(false);
-                          break;
-                      case 'c':
-                      case 'C':
-                          DataGridViewRow r = fields.SelectedRows[fields.SelectedRows.Count - 1];
-                          if (r.Tag == null)
-                              return;
-                          Template.Field f = (Template.Field)r.Tag;
-                          object o = pages[currentPageI].GetValue(f.Name);
-                          switch (f.Type)
-                          {
-                              case Template.Field.Types.ImageData:
-                                  Clipboard.SetData(f.Type.ToString(), (Image)o);
-                                  break;
-                              case Template.Field.Types.PdfText:
-                              case Template.Field.Types.OcrText:
-                                  Clipboard.SetText((string)o);
-                                  break;
-                              default:
-                                  throw new Exception("Unknown option: " + f.Type);
-                          }
-                          break;
-                  }
-              };
+            copy2ClipboardField.LinkClicked += delegate
+            {
+                DataGridViewRow r = fields.SelectedRows[fields.SelectedRows.Count - 1];
+                if (r.Tag == null)
+                    return;
+                Template.Field f = (Template.Field)r.Tag;
+                object o = pages[currentPageI].GetValue(f.Name);
+                switch (f.Type)
+                {
+                    case Template.Field.Types.ImageData:
+                        Clipboard.SetData(f.Type.ToString(), (Image)o);
+                        break;
+                    case Template.Field.Types.PdfText:
+                    case Template.Field.Types.OcrText:
+                        Clipboard.SetText((string)o);
+                        break;
+                    default:
+                        throw new Exception("Unknown option: " + f.Type);
+                }
+            };
 
-            fields.KeyDown += delegate (object sender, KeyEventArgs e)
-             {
-                 if (e.KeyCode == Keys.ControlKey)
-                     addElseRemoveRow(true);
-                 else if (e.KeyCode == Keys.Delete)
-                     addElseRemoveRow(false);
-             };
-        }
-
-        void addElseRemoveRow(bool add)
-        {
-            if (add)
+            duplicateField.LinkClicked += delegate
             {
                 if (fields.SelectedRows.Count < 1)
                     return;
@@ -273,8 +254,9 @@ namespace Cliver.PdfDocumentParser
                 Template.Field f = (Template.Field)Serialization.Json.Clone(((Template.Field)r0.Tag).GetType(), r0.Tag);
                 setFieldRow(row, f);
                 row.Selected = true;
-            }
-            else
+            };
+
+            deleteField.LinkClicked += delegate
             {
                 if (fields.SelectedRows.Count < 1)
                     return;
@@ -290,7 +272,31 @@ namespace Cliver.PdfDocumentParser
                     }
                 if (!unique)
                     fields.Rows.Remove(r);
-            }
+            };
+
+            moveUpField.LinkClicked += delegate
+            {
+                if (fields.SelectedRows.Count < 1)
+                    return;
+                DataGridViewRow r = fields.SelectedRows[fields.SelectedRows.Count - 1];
+                int i = r.Index - 1;
+                if (i < 0)
+                    return;
+                fields.Rows.Remove(r);
+                fields.Rows.Insert(i, r);
+            };
+
+            moveDownField.LinkClicked += delegate
+            {
+                if (fields.SelectedRows.Count < 1)
+                    return;
+                DataGridViewRow r = fields.SelectedRows[fields.SelectedRows.Count - 1];
+                int i = r.Index + 1;
+                if (i > fields.Rows.Count - 1)
+                    return;
+                fields.Rows.Remove(r);
+                fields.Rows.Insert(i, r);
+            };
         }
 
         void setCurrentFieldRow(DataGridViewRow row)

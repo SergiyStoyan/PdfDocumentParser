@@ -95,6 +95,12 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.ExtractFieldsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
+            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.duplicateField = new System.Windows.Forms.LinkLabel();
+            this.deleteField = new System.Windows.Forms.LinkLabel();
+            this.moveUpField = new System.Windows.Forms.LinkLabel();
+            this.moveDownField = new System.Windows.Forms.LinkLabel();
+            this.copy2ClipboardField = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).BeginInit();
             this.flowLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).BeginInit();
@@ -122,6 +128,7 @@
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.autoDeskewThreshold)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureScale)).BeginInit();
+            this.flowLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // autoDeskew
@@ -808,6 +815,7 @@
             // 
             // splitContainer2.Panel2
             // 
+            this.splitContainer2.Panel2.Controls.Add(this.flowLayoutPanel2);
             this.splitContainer2.Panel2.Controls.Add(this.fields);
             this.splitContainer2.Panel2.Controls.Add(this.label1);
             this.splitContainer2.Panel2.Controls.Add(this.panel1);
@@ -944,6 +952,78 @@
             this.ExtractFieldsAutomaticallyWhenPageChanged.Text = "Extract When Page Changed]";
             this.ExtractFieldsAutomaticallyWhenPageChanged.UseVisualStyleBackColor = true;
             // 
+            // flowLayoutPanel2
+            // 
+            this.flowLayoutPanel2.Controls.Add(this.duplicateField);
+            this.flowLayoutPanel2.Controls.Add(this.deleteField);
+            this.flowLayoutPanel2.Controls.Add(this.moveUpField);
+            this.flowLayoutPanel2.Controls.Add(this.moveDownField);
+            this.flowLayoutPanel2.Controls.Add(this.copy2ClipboardField);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(577, 12);
+            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(564, 35);
+            this.flowLayoutPanel2.TabIndex = 0;
+            // 
+            // duplicateField
+            // 
+            this.duplicateField.AutoSize = true;
+            this.duplicateField.Location = new System.Drawing.Point(8, 0);
+            this.duplicateField.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.duplicateField.Name = "duplicateField";
+            this.duplicateField.Size = new System.Drawing.Size(135, 32);
+            this.duplicateField.TabIndex = 28;
+            this.duplicateField.TabStop = true;
+            this.duplicateField.Text = "Duplicate";
+            this.duplicateField.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // deleteField
+            // 
+            this.deleteField.AutoSize = true;
+            this.deleteField.Location = new System.Drawing.Point(159, 0);
+            this.deleteField.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.deleteField.Name = "deleteField";
+            this.deleteField.Size = new System.Drawing.Size(98, 32);
+            this.deleteField.TabIndex = 29;
+            this.deleteField.TabStop = true;
+            this.deleteField.Text = "Delete";
+            this.deleteField.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // moveUpField
+            // 
+            this.moveUpField.AutoSize = true;
+            this.moveUpField.Location = new System.Drawing.Point(273, 0);
+            this.moveUpField.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.moveUpField.Name = "moveUpField";
+            this.moveUpField.Size = new System.Drawing.Size(51, 32);
+            this.moveUpField.TabIndex = 30;
+            this.moveUpField.TabStop = true;
+            this.moveUpField.Text = "Up";
+            this.moveUpField.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // moveDownField
+            // 
+            this.moveDownField.AutoSize = true;
+            this.moveDownField.Location = new System.Drawing.Point(340, 0);
+            this.moveDownField.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.moveDownField.Name = "moveDownField";
+            this.moveDownField.Size = new System.Drawing.Size(87, 32);
+            this.moveDownField.TabIndex = 31;
+            this.moveDownField.TabStop = true;
+            this.moveDownField.Text = "Down";
+            this.moveDownField.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // copy2ClipboardField
+            // 
+            this.copy2ClipboardField.AutoSize = true;
+            this.copy2ClipboardField.Location = new System.Drawing.Point(443, 0);
+            this.copy2ClipboardField.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.copy2ClipboardField.Name = "copy2ClipboardField";
+            this.copy2ClipboardField.Size = new System.Drawing.Size(81, 32);
+            this.copy2ClipboardField.TabIndex = 32;
+            this.copy2ClipboardField.TabStop = true;
+            this.copy2ClipboardField.Text = "Copy";
+            this.copy2ClipboardField.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // TemplateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
@@ -988,6 +1068,8 @@
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.autoDeskewThreshold)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureScale)).EndInit();
+            this.flowLayoutPanel2.ResumeLayout(false);
+            this.flowLayoutPanel2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1061,5 +1143,11 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn ParentAnchorId3;
         private System.Windows.Forms.DataGridViewComboBoxColumn Type3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Point03;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+        private System.Windows.Forms.LinkLabel duplicateField;
+        private System.Windows.Forms.LinkLabel deleteField;
+        private System.Windows.Forms.LinkLabel moveUpField;
+        private System.Windows.Forms.LinkLabel moveDownField;
+        private System.Windows.Forms.LinkLabel copy2ClipboardField;
     }
 }
