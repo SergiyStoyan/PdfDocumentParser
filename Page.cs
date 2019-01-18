@@ -77,7 +77,7 @@ namespace Cliver.PdfDocumentParser
             if (pageCollection.ActiveTemplate == null)
                 return;
 
-            if (newTemplate.PageRotation != pageCollection.ActiveTemplate.PageRotation || newTemplate.AutoDeskew != pageCollection.ActiveTemplate.AutoDeskew)
+            if (newTemplate == null || newTemplate.PageRotation != pageCollection.ActiveTemplate.PageRotation || newTemplate.AutoDeskew != pageCollection.ActiveTemplate.AutoDeskew)
             {
                 if (_activeTemplateImageData != null)
                 {
@@ -94,9 +94,6 @@ namespace Cliver.PdfDocumentParser
 
                 anchorHashes2anchorActualInfo.Clear();
             }
-
-            //if (pageCollection.ActiveTemplate.Name != newTemplate.Name)
-            //    anchorValueStrings2rectangles.Clear();
         }
 
         internal Bitmap GetRectangleFromActiveTemplateBitmap(float x, float y, float w, float h)
