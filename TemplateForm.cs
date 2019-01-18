@@ -166,6 +166,28 @@ namespace Cliver.PdfDocumentParser
                                 var row = fields.SelectedRows[0];
                                 Template.Field f = (Template.Field)row.Tag;
                                 f.Rectangle = r;
+
+                                if (f.LeftAnchor != null)
+                                {
+                                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(f.LeftAnchor.Id);
+                                    f.LeftAnchor.Shift = aai.Shift.Width;
+                                }
+                                if (f.TopAnchor != null)
+                                {
+                                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(f.TopAnchor.Id);
+                                    f.TopAnchor.Shift = aai.Shift.Height;
+                                }
+                                if (f.RightAnchor != null)
+                                {
+                                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(f.RightAnchor.Id);
+                                    f.RightAnchor.Shift = aai.Shift.Width;
+                                }
+                                if (f.BottomAnchor != null)
+                                {
+                                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(f.BottomAnchor.Id);
+                                    f.BottomAnchor.Shift = aai.Shift.Height;
+                                }
+
                                 setFieldRow(row, f);
                             }
                             break;
