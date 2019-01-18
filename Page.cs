@@ -556,35 +556,35 @@ namespace Cliver.PdfDocumentParser
                 throw new Exception("Rectangle is malformed.");
             RectangleF r = field.Rectangle.GetSystemRectangleF();
             RectangleF r0 = r;
-            if (field.LeftAnchorId != null)
+            if (field.LeftAnchor != null)
             {
-                Page.AnchorActualInfo aai = GetAnchorActualInfo((int)field.LeftAnchorId);
+                Page.AnchorActualInfo aai = GetAnchorActualInfo(field.LeftAnchor.Id);
                 if (!aai.Found)
                     return null;
-                r.X += aai.Shift.Width;
+                r.X += aai.Shift.Width - field.LeftAnchor.Shift;
             }
-            if (field.TopAnchorId != null)
+            if (field.TopAnchor != null)
             {
-                Page.AnchorActualInfo aai = GetAnchorActualInfo((int)field.TopAnchorId);
+                Page.AnchorActualInfo aai = GetAnchorActualInfo(field.TopAnchor.Id);
                 if (!aai.Found)
                     return null;
-                r.Y += aai.Shift.Height;
+                r.Y += aai.Shift.Height - field.TopAnchor.Shift;
             }
-            if (field.RightAnchorId != null)
+            if (field.RightAnchor != null)
             {
-                Page.AnchorActualInfo aai = GetAnchorActualInfo((int)field.RightAnchorId);
+                Page.AnchorActualInfo aai = GetAnchorActualInfo(field.RightAnchor.Id);
                 if (!aai.Found)
                     return null;
-                r.Width += r0.X - r.X + aai.Shift.Width;
+                r.Width += r0.X - r.X + aai.Shift.Width - field.RightAnchor.Shift;
                 if (r.Width <= 0)
                     return null;
             }
-            if (field.BottomAnchorId != null)
+            if (field.BottomAnchor != null)
             {
-                Page.AnchorActualInfo aai = GetAnchorActualInfo((int)field.BottomAnchorId);
+                Page.AnchorActualInfo aai = GetAnchorActualInfo(field.BottomAnchor.Id);
                 if (!aai.Found)
                     return null;
-                r.Height += r0.Y - r.Y + aai.Shift.Height;
+                r.Height += r0.Y - r.Y + aai.Shift.Height - field.BottomAnchor.Shift;
                 if (r.Height <= 0)
                     return null;
             }

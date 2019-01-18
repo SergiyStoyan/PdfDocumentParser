@@ -101,30 +101,82 @@ namespace Cliver.PdfDocumentParser
                                         throw new Exception("Unknown option: " + t2);
                                 }
                                 f2.Name = f.Name;
-                                f2.LeftAnchorId = f.LeftAnchorId;
-                                f2.TopAnchorId = f.TopAnchorId;
-                                f2.RightAnchorId = f.RightAnchorId;
-                                f2.BottomAnchorId = f.BottomAnchorId;
+                                f2.LeftAnchor = f.LeftAnchor;
+                                f2.TopAnchor = f.TopAnchor;
+                                f2.RightAnchor = f.RightAnchor;
+                                f2.BottomAnchor = f.BottomAnchor;
                                 f2.Rectangle = f.Rectangle;
                                 f = f2;
                                 setFieldRow(row, f);
                                 break;
                             }
                         case "LeftAnchorId":
-                            f.LeftAnchorId = (int?)cs["LeftAnchorId"].Value;
-                            setFieldRow(row, f);
+                            {
+                                int? ai = (int?)cs["LeftAnchorId"].Value;
+                                if (ai == null)
+                                    f.LeftAnchor = null;
+                                else
+                                {
+                                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo((int)ai);
+                                    f.LeftAnchor = new Template.Field.SideAnchor
+                                    {
+                                        Id = (int)ai,
+                                        Shift = aai.Shift.Width,
+                                    };
+                                }
+                                setFieldRow(row, f);
+                            }
                             break;
                         case "TopAnchorId":
-                            f.TopAnchorId = (int?)cs["TopAnchorId"].Value;
-                            setFieldRow(row, f);
+                            {
+                                int? ai = (int?)cs["TopAnchorId"].Value;
+                                if (ai == null)
+                                    f.TopAnchor = null;
+                                else
+                                {
+                                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo((int)ai);
+                                    f.TopAnchor = new Template.Field.SideAnchor
+                                    {
+                                        Id = (int)ai,
+                                        Shift = aai.Shift.Height,
+                                    };
+                                }
+                                setFieldRow(row, f);
+                            }
                             break;
                         case "RightAnchorId":
-                            f.RightAnchorId = (int?)cs["RightAnchorId"].Value;
-                            setFieldRow(row, f);
+                            {
+                                int? ai = (int?)cs["RightAnchorId"].Value;
+                                if (ai == null)
+                                    f.RightAnchor = null;
+                                else
+                                {
+                                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo((int)ai);
+                                    f.RightAnchor = new Template.Field.SideAnchor
+                                    {
+                                        Id = (int)ai,
+                                        Shift = aai.Shift.Width,
+                                    };
+                                }
+                                setFieldRow(row, f);
+                            }
                             break;
                         case "BottomAnchorId":
-                            f.BottomAnchorId = (int?)cs["BottomAnchorId"].Value;
-                            setFieldRow(row, f);
+                            {
+                                int? ai = (int?)cs["BottomAnchorId"].Value;
+                                if (ai == null)
+                                    f.BottomAnchor = null;
+                                else
+                                {
+                                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo((int)ai);
+                                    f.BottomAnchor = new Template.Field.SideAnchor
+                                    {
+                                        Id = (int)ai,
+                                        Shift = aai.Shift.Height,
+                                    };
+                                }
+                                setFieldRow(row, f);
+                            }
                             break;
                         case "Name_":
                             f.Name = (string)row.Cells["Name_"].Value;
@@ -403,10 +455,10 @@ namespace Cliver.PdfDocumentParser
                 default:
                     throw new Exception("Unknown option: " + f.Type);
             }
-            row.Cells["LeftAnchorId"].Value = f.LeftAnchorId;
-            row.Cells["TopAnchorId"].Value = f.TopAnchorId;
-            row.Cells["RightAnchorId"].Value = f.RightAnchorId;
-            row.Cells["BottomAnchorId"].Value = f.BottomAnchorId;
+            row.Cells["LeftAnchorId"].Value = f.LeftAnchor?.Id;
+            row.Cells["TopAnchorId"].Value = f.TopAnchor?.Id;
+            row.Cells["RightAnchorId"].Value = f.RightAnchor?.Id;
+            row.Cells["BottomAnchorId"].Value = f.BottomAnchor?.Id;
 
             if (loadingTemplate)
                 return;

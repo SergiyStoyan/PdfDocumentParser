@@ -279,7 +279,7 @@ namespace Cliver.PdfDocumentParser
                         foreach (DataGridViewRow rr in fields.Rows)
                         {
                             Template.Field m = (Template.Field)rr.Tag;
-                            if (m != null && (m.LeftAnchorId == a.Id || m.TopAnchorId == a.Id || m.RightAnchorId == a.Id || m.BottomAnchorId == a.Id))
+                            if (m != null && (m.LeftAnchor?.Id == a.Id || m.TopAnchor?.Id == a.Id || m.RightAnchor?.Id == a.Id || m.BottomAnchor?.Id == a.Id))
                             {
                                 engaged = true;
                                 break;
@@ -330,7 +330,7 @@ namespace Cliver.PdfDocumentParser
                 if (saving && !f.IsSet())
                     throw new Exception("Field[" + r.Index + "] is not set!");
                 if (saving)
-                    foreach (int? ai in new List<int?> { f.LeftAnchorId, f.TopAnchorId, f.RightAnchorId, f.BottomAnchorId })
+                    foreach (int? ai in new List<int?> { f.LeftAnchor?.Id, f.TopAnchor?.Id, f.RightAnchor?.Id, f.BottomAnchor?.Id })
                         if (ai != null && t.Anchors.FirstOrDefault(x => x.Id == ai) == null)
                             throw new Exception("Anchor[Id=" + ai + " does not exist.");
                 t.Fields.Add(f);

@@ -427,13 +427,13 @@ namespace Cliver.PdfDocumentParser
                 if (r.Tag == null)
                     continue;
                 Template.Field f = (Template.Field)r.Tag;
-                if (f.LeftAnchorId != null && !ais.Contains((int)f.LeftAnchorId))
+                if (f.LeftAnchor != null && !ais.Contains(f.LeftAnchor.Id))
                     r.Cells["LeftAnchorId"].Value = null;
-                if (f.TopAnchorId != null && !ais.Contains((int)f.TopAnchorId))
+                if (f.TopAnchor != null && !ais.Contains(f.TopAnchor.Id))
                     r.Cells["TopAnchorId"].Value = null;
-                if (f.RightAnchorId != null && !ais.Contains((int)f.RightAnchorId))
+                if (f.RightAnchor != null && !ais.Contains(f.RightAnchor.Id))
                     r.Cells["RightAnchorId"].Value = null;
-                if (f.BottomAnchorId != null && !ais.Contains((int)f.BottomAnchorId))
+                if (f.BottomAnchor != null && !ais.Contains(f.BottomAnchor.Id))
                     r.Cells["BottomAnchorId"].Value = null;
             }
 

@@ -114,39 +114,39 @@ namespace Cliver.PdfDocumentParser
 
                 RectangleF r = field.Rectangle.GetSystemRectangleF();
                 RectangleF r0 = r;
-                if (field.LeftAnchorId != null)
+                if (field.LeftAnchor != null)
                 {
-                    findAndDrawAnchor((int)field.LeftAnchorId);
-                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo((int)field.LeftAnchorId);
+                    findAndDrawAnchor(field.LeftAnchor.Id);
+                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(field.LeftAnchor.Id);
                     if (!aai.Found)
                         return null;
-                    r.X += aai.Shift.Width;
+                    r.X += aai.Shift.Width - field.LeftAnchor.Shift;
                 }
-                if (field.TopAnchorId != null)
+                if (field.TopAnchor != null)
                 {
-                    findAndDrawAnchor((int)field.TopAnchorId);
-                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo((int)field.TopAnchorId);
+                    findAndDrawAnchor(field.TopAnchor.Id);
+                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(field.TopAnchor.Id);
                     if (!aai.Found)
                         return null;
-                    r.Y += aai.Shift.Height;
+                    r.Y += aai.Shift.Height - field.TopAnchor.Shift;
                 }
-                if (field.RightAnchorId != null)
+                if (field.RightAnchor != null)
                 {
-                    findAndDrawAnchor((int)field.RightAnchorId);
-                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo((int)field.RightAnchorId);
+                    findAndDrawAnchor(field.RightAnchor.Id);
+                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(field.RightAnchor.Id);
                     if (!aai.Found)
                         return null;
-                    r.Width += r0.X - r.X + aai.Shift.Width;
+                    r.Width += r0.X - r.X + aai.Shift.Width - field.RightAnchor.Shift;
                     if (r.Width <= 0)
                         return null;
                 }
-                if (field.BottomAnchorId != null)
+                if (field.BottomAnchor != null)
                 {
-                    findAndDrawAnchor((int)field.BottomAnchorId);
-                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo((int)field.BottomAnchorId);
+                    findAndDrawAnchor(field.BottomAnchor.Id);
+                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(field.BottomAnchor.Id);
                     if (!aai.Found)
                         return null;
-                    r.Height += r0.Y - r.Y + aai.Shift.Height;
+                    r.Height += r0.Y - r.Y + aai.Shift.Height - field.BottomAnchor.Shift;
                     if (r.Height <= 0)
                         return null;
                 }

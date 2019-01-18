@@ -237,14 +237,51 @@ namespace Cliver.PdfDocumentParser
         public abstract class Field
         {
             public string Name;
+
             public int? AnchorId//conversion from the old format; to be removed
             {
                 set
                 {
                     if (value == null)
                         return;
-                    LeftAnchorId = value;
-                    TopAnchorId = value;
+                    LeftAnchor = new SideAnchor { Id = (int)value };
+                    TopAnchor = new SideAnchor { Id = (int)value };
+                }
+            }
+            public int? LeftAnchorId//conversion from the old format; to be removed
+            {
+                set
+                {
+                    if (value == null)
+                        return;
+                    LeftAnchor = new SideAnchor { Id = (int)value };
+                }
+            }
+            public int? TopAnchorId//conversion from the old format; to be removed
+            {
+                set
+                {
+                    if (value == null)
+                        return;
+                    TopAnchor = new SideAnchor { Id = (int)value };
+                }
+            }
+            public int? RightAnchorId//conversion from the old format; to be removed
+            {
+                set
+                {
+                    if (value == null)
+                        return;
+                    RightAnchor = new SideAnchor { Id = (int)value };
+                }
+            }
+            public int? BottomAnchorId//conversion from the old format; to be removed
+            {
+                set
+                {
+                    if (value == null)
+                        return;
+                    BottomAnchor = new SideAnchor { Id = (int)value };
                 }
             }
 
@@ -252,19 +289,25 @@ namespace Cliver.PdfDocumentParser
             /// <summary>
             /// when set, Left shifts as the anchor shifts
             /// </summary>
-            public int? LeftAnchorId;
+            public SideAnchor LeftAnchor;
             /// <summary>
             /// when set, Top shifts as the anchor shifts
             /// </summary>
-            public int? TopAnchorId;
+            public SideAnchor TopAnchor;
             /// <summary>
             /// when set, Right shifts as the anchor shifts
             /// </summary>
-            public int? RightAnchorId;
+            public SideAnchor RightAnchor;
             /// <summary>
             /// when set, Bottom shifts as the anchor shifts
             /// </summary>
-            public int? BottomAnchorId;
+            public SideAnchor BottomAnchor;
+
+            public class SideAnchor
+            {
+                public int Id;
+                public float Shift = 0;
+            }
 
             public Field()
             {
