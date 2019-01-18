@@ -203,7 +203,7 @@ namespace Cliver.PdfDocumentParser
             if (a == null)
                 throw new Exception("Anchor[id=" + anchorId + "] does not exist.");
             if (!a.IsSet())
-                throw new Exception("Anchor[id=" + anchorId + "] is not defined.");
+                throw new Exception("Anchor[id=" + anchorId + "] is not set.");
 
             StringBuilder sb = new StringBuilder(Serialization.Json.Serialize(a, false));
             for (int? id = a.ParentAnchorId; id != null;)
@@ -530,7 +530,7 @@ namespace Cliver.PdfDocumentParser
                 throw new Exception("Condition name is not specified.");
             var c = pageCollection.ActiveTemplate.Conditions.FirstOrDefault(a => a.Name == conditionName);
             if (string.IsNullOrWhiteSpace(c.Value))
-                throw new Exception("Condition '" + conditionName + "' is not defined.");
+                throw new Exception("Condition '" + conditionName + "' is not set.");
             return BooleanEngine.Parse(c.Value, this);
         }
 
@@ -604,11 +604,16 @@ namespace Cliver.PdfDocumentParser
             }
         }    
 
+        /// <summary>
+        /// Auxiliary method which can be applied to a string during post-processing
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static string NormalizeText(string value)
         {
             if (value == null)
                 return null;
-            value = FieldPreparation.RemoveNonPrintablesRegex.Replace(value, " ");
+            value = FieldPreparation.ReplaceNonPrintableChars(value);
             value = Regex.Replace(value, @"\s+", " ");
             value = value.Trim();
             return value;

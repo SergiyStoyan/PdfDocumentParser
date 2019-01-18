@@ -194,7 +194,7 @@ namespace Cliver.PdfDocumentParser
             pages.ActiveTemplate = getTemplateFromUI(false);
             a = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == anchorId);
             if (a == null)
-                throw new Exception("Anchor[Id=" + a.Id + "] is not defined.");
+                throw new Exception("Anchor[Id=" + a.Id + "] does not exist.");
 
             bool set = true;
             for (Template.Anchor a_ = a; a_ != null; a_ = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == a_.ParentAnchorId))

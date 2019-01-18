@@ -51,17 +51,13 @@ namespace Cliver.PdfDocumentParser
 
         PointF? findAndDrawAnchor(int anchorId)
         {
-            Template.Anchor a = getAnchor(anchorId, out DataGridViewRow row);
-            if (a == null || row == null)
-                throw new Exception("Anchor[Id=" + anchorId + "] does not exist.");
-
             if (pages == null)
                 return null;
 
             pages.ActiveTemplate = getTemplateFromUI(false);
-            a = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == anchorId);
+            Template.Anchor a = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == anchorId);
             if (a == null)
-                throw new Exception("Anchor[Id=" + a.Id + "] is not defined.");
+                throw new Exception("Anchor[Id=" + a.Id + "] does not exist.");
 
             bool set = true;
             for (Template.Anchor a_ = a; a_ != null; a_ = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == a_.ParentAnchorId))
@@ -116,7 +112,8 @@ namespace Cliver.PdfDocumentParser
                 RectangleF r0 = r;
                 if (field.LeftAnchor != null)
                 {
-                    findAndDrawAnchor(field.LeftAnchor.Id);
+                    if (findAndDrawAnchor(field.LeftAnchor.Id) == null)
+                        return null;
                     Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(field.LeftAnchor.Id);
                     if (!aai.Found)
                         return null;
@@ -124,7 +121,8 @@ namespace Cliver.PdfDocumentParser
                 }
                 if (field.TopAnchor != null)
                 {
-                    findAndDrawAnchor(field.TopAnchor.Id);
+                    if (findAndDrawAnchor(field.TopAnchor.Id) == null)
+                        return null;
                     Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(field.TopAnchor.Id);
                     if (!aai.Found)
                         return null;
@@ -132,7 +130,8 @@ namespace Cliver.PdfDocumentParser
                 }
                 if (field.RightAnchor != null)
                 {
-                    findAndDrawAnchor(field.RightAnchor.Id);
+                    if (findAndDrawAnchor(field.RightAnchor.Id) == null)
+                        return null;
                     Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(field.RightAnchor.Id);
                     if (!aai.Found)
                         return null;
@@ -142,7 +141,8 @@ namespace Cliver.PdfDocumentParser
                 }
                 if (field.BottomAnchor != null)
                 {
-                    findAndDrawAnchor(field.BottomAnchor.Id);
+                    if (findAndDrawAnchor(field.BottomAnchor.Id) == null)
+                        return null;
                     Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(field.BottomAnchor.Id);
                     if (!aai.Found)
                         return null;
