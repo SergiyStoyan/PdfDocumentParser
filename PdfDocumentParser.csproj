@@ -192,6 +192,8 @@
       <DependentUpon>AnchorControl.cs</DependentUpon>
     </Compile>
     <Compile Include="BooleanEngine.cs" />
+    <Compile Include="Page.anchors.cs" />
+    <Compile Include="Page.fields.cs" />
     <Compile Include="PageCollection.cs" />
     <Compile Include="Page.cs" />
     <Compile Include="TemplateForm.TemplateManager.cs">

@@ -199,12 +199,16 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public static string GetTextByTopLeftCoordinates(List<CharBox> cbs, System.Drawing.RectangleF r, float textAutoInsertSpaceThreshold)
+        public static List<CharBox> GetCharBoxsSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r)
         {
-            cbs = removeDuplicates(cbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)));
-            cbs = cbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)).ToList();
+            return removeDuplicates(cbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)));
+        }
+
+        public static string GetTextSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r, float textAutoInsertSpaceThreshold, string textAutoInsertSpaceSubstitute)
+        {
+            cbs = GetCharBoxsSurroundedByRectangle(cbs, r);
             List<string> ls = new List<string>();
-            foreach (Line l in getLines(cbs, textAutoInsertSpaceThreshold))
+            foreach (Line l in getLines(cbs, textAutoInsertSpaceThreshold, textAutoInsertSpaceSubstitute))
             {
                 StringBuilder sb = new StringBuilder();
                 foreach (CharBox cb in l.CharBoxes)
@@ -214,20 +218,17 @@ namespace Cliver.PdfDocumentParser
             return string.Join("\r\n", ls);
         }
 
-        public static List<CharBox> GetCharBoxsSurroundedByRectangle(List<CharBox> bts, System.Drawing.RectangleF r, bool excludeInvisibleCharacters)
+        public static List<CharBox> GetCharBoxsSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r, bool excludeInvisibleCharacters)
         {
-            var bts_ = bts.Where(a => /*selectedR.IntersectsWith(a.R) || */r.Contains(a.R));
+            cbs = GetCharBoxsSurroundedByRectangle(cbs, r);
             if (excludeInvisibleCharacters)
-            {
-                string ignoredCharacters = " \t";
-                bts_ = bts_.Where(a => !ignoredCharacters.Contains(a.Char));
-            }
-            return bts_.ToList();
+                cbs = cbs.Where(a => !" \t".Contains(a.Char)).ToList();
+            return cbs;
         }
 
-        public static List<Line> RemoveDuplicatesAndGetLines(IEnumerable<CharBox> cbs, float textAutoInsertSpaceThreshold)
+        public static List<Line> RemoveDuplicatesAndGetLines(IEnumerable<CharBox> cbs, float textAutoInsertSpaceThreshold, string textAutoInsertSpaceSubstitute)
         {
-            return getLines(removeDuplicates(cbs), textAutoInsertSpaceThreshold);
+            return getLines(removeDuplicates(cbs), textAutoInsertSpaceThreshold, textAutoInsertSpaceSubstitute);
         }
 
         static List<CharBox> removeDuplicates(IEnumerable<CharBox> cbs)
@@ -247,7 +248,7 @@ namespace Cliver.PdfDocumentParser
             return bs;
         }
 
-        static List<Line> getLines(IEnumerable<CharBox> cbs, float textAutoInsertSpaceThreshold)
+        static List<Line> getLines(IEnumerable<CharBox> cbs, float textAutoInsertSpaceThreshold, string textAutoInsertSpaceSubstitute)
         {
             bool spaceAutoInsert = textAutoInsertSpaceThreshold > 0;
             cbs = cbs.OrderBy(a => a.R.X).ToList();
@@ -273,7 +274,7 @@ namespace Cliver.PdfDocumentParser
                                 float spaceWidth = (cb.R.Width + cb.R.Width) / 2;
                                 int spaceNumber = (int)Math.Ceiling((cb.R.Left - cb0.R.Right) / spaceWidth);
                                 for (int j = 0; j < spaceNumber; j++)
-                                    lines[i].CharBoxes.Add(new CharBox { Char = " ", R = new System.Drawing.RectangleF(cb.R.Left + spaceWidth * j, 0, 0, 0) });
+                                    lines[i].CharBoxes.Add(new CharBox { Char = textAutoInsertSpaceSubstitute, R = new System.Drawing.RectangleF(cb.R.Left + spaceWidth * j, 0, 0, 0) });
                             }
                         }
                         lines[i].CharBoxes.Add(cb);
@@ -321,6 +322,7 @@ namespace Cliver.PdfDocumentParser
         {
             public System.Drawing.RectangleF R;
             public string Char;
+            //public bool AutoInserted = false;
         }
     }
 }

@@ -29,9 +29,15 @@ namespace Cliver.PdfDocumentParser
 
         public string Name;
 
-        //public int ImageResolution = 300;//tesseract requires at least 300
-
         public float TextAutoInsertSpaceThreshold = 6;
+        public string TextAutoInsertSpaceSubstitute = "\t";
+        //public TextAutoInsertSpace TextAutoInsertSpace;
+        //public struct TextAutoInsertSpace
+        //{
+        //    public float Threshold = 6;
+        //    public string Substitute = "\t";
+        //    public string SubstituteReplacement = " ";
+        //}
 
         public PageRotations PageRotation = PageRotations.NONE;
         public enum PageRotations
@@ -302,12 +308,11 @@ namespace Cliver.PdfDocumentParser
             /// when set, Bottom shifts as the anchor shifts
             /// </summary>
             public SideAnchor BottomAnchor;
-
             public class SideAnchor
             {
                 public int Id;
                 public float Shift = 0;
-            }
+            } 
 
             public Field()
             {
@@ -336,10 +341,12 @@ namespace Cliver.PdfDocumentParser
 
             public class PdfText : Field
             {
+                public bool ValueAsCharBoxes = false;
             }
 
             public class OcrText : Field
             {
+                public bool ValueAsCharBoxes = false;
             }
 
             public class ImageData : Field

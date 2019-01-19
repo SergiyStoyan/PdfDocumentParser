@@ -101,6 +101,9 @@
             this.moveDownField = new System.Windows.Forms.LinkLabel();
             this.copy2ClipboardField = new System.Windows.Forms.LinkLabel();
             this.ExtractFieldsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.textAutoInsertSpaceSubstitute = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).BeginInit();
             this.flowLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).BeginInit();
@@ -129,6 +132,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.autoDeskewThreshold)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureScale)).BeginInit();
             this.flowLayoutPanel2.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // autoDeskew
@@ -420,7 +424,7 @@
             0,
             0,
             65536});
-            this.textAutoInsertSpaceThreshold.Location = new System.Drawing.Point(389, 386);
+            this.textAutoInsertSpaceThreshold.Location = new System.Drawing.Point(193, 50);
             this.textAutoInsertSpaceThreshold.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.textAutoInsertSpaceThreshold.Name = "textAutoInsertSpaceThreshold";
             this.textAutoInsertSpaceThreshold.Size = new System.Drawing.Size(139, 38);
@@ -434,19 +438,19 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(-5, 391);
+            this.label12.Location = new System.Drawing.Point(8, 56);
             this.label12.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(383, 32);
+            this.label12.Size = new System.Drawing.Size(150, 32);
             this.label12.TabIndex = 65;
-            this.label12.Text = "Space Auto-Insert Threshold:";
+            this.label12.Text = "Threshold:";
             // 
             // anchorsContainer
             // 
             this.anchorsContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.anchorsContainer.Location = new System.Drawing.Point(0, 482);
+            this.anchorsContainer.Location = new System.Drawing.Point(0, 527);
             this.anchorsContainer.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.anchorsContainer.Name = "anchorsContainer";
             // 
@@ -457,7 +461,7 @@
             // anchorsContainer.Panel2
             // 
             this.anchorsContainer.Panel2.Controls.Add(this.splitContainer3);
-            this.anchorsContainer.Size = new System.Drawing.Size(1144, 594);
+            this.anchorsContainer.Size = new System.Drawing.Size(1144, 549);
             this.anchorsContainer.SplitterDistance = 608;
             this.anchorsContainer.SplitterWidth = 11;
             this.anchorsContainer.TabIndex = 52;
@@ -476,7 +480,7 @@
             this.anchors.MultiSelect = false;
             this.anchors.Name = "anchors";
             this.anchors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.anchors.Size = new System.Drawing.Size(608, 594);
+            this.anchors.Size = new System.Drawing.Size(608, 549);
             this.anchors.TabIndex = 50;
             // 
             // Id3
@@ -526,8 +530,8 @@
             this.splitContainer3.Panel2.Controls.Add(this.CheckConditionsAutomaticallyWhenPageChanged);
             this.splitContainer3.Panel2.Controls.Add(this.label4);
             this.splitContainer3.Panel2.Controls.Add(this.label11);
-            this.splitContainer3.Size = new System.Drawing.Size(525, 594);
-            this.splitContainer3.SplitterDistance = 379;
+            this.splitContainer3.Size = new System.Drawing.Size(525, 549);
+            this.splitContainer3.SplitterDistance = 350;
             this.splitContainer3.SplitterWidth = 10;
             this.splitContainer3.TabIndex = 0;
             // 
@@ -545,7 +549,7 @@
             this.conditions.MultiSelect = false;
             this.conditions.Name = "conditions";
             this.conditions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.conditions.Size = new System.Drawing.Size(525, 161);
+            this.conditions.Size = new System.Drawing.Size(525, 145);
             this.conditions.TabIndex = 0;
             // 
             // Name2
@@ -793,8 +797,7 @@
             // 
             // splitContainer2.Panel1
             // 
-            this.splitContainer2.Panel1.Controls.Add(this.textAutoInsertSpaceThreshold);
-            this.splitContainer2.Panel1.Controls.Add(this.label12);
+            this.splitContainer2.Panel1.Controls.Add(this.groupBox2);
             this.splitContainer2.Panel1.Controls.Add(this.anchorsContainer);
             this.splitContainer2.Panel1.Controls.Add(this.selectionCoordinates);
             this.splitContainer2.Panel1.Controls.Add(this.bNextPage);
@@ -934,7 +937,7 @@
             // 
             // label10
             // 
-            this.label10.Location = new System.Drawing.Point(-8, 444);
+            this.label10.Location = new System.Drawing.Point(-6, 491);
             this.label10.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(216, 31);
@@ -1024,6 +1027,40 @@
             this.ExtractFieldsAutomaticallyWhenPageChanged.Text = "Extract When Page Changed]";
             this.ExtractFieldsAutomaticallyWhenPageChanged.UseVisualStyleBackColor = true;
             // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(373, 56);
+            this.label15.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(151, 32);
+            this.label15.TabIndex = 66;
+            this.label15.Text = "Substitute:";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.textAutoInsertSpaceSubstitute);
+            this.groupBox2.Controls.Add(this.label15);
+            this.groupBox2.Controls.Add(this.textAutoInsertSpaceThreshold);
+            this.groupBox2.Controls.Add(this.label12);
+            this.groupBox2.Location = new System.Drawing.Point(0, 379);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.groupBox2.Size = new System.Drawing.Size(1144, 105);
+            this.groupBox2.TabIndex = 64;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Text Auto-Insert Space";
+            // 
+            // textAutoInsertSpaceSubstitute
+            // 
+            this.textAutoInsertSpaceSubstitute.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.textAutoInsertSpaceSubstitute.Location = new System.Drawing.Point(542, 48);
+            this.textAutoInsertSpaceSubstitute.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.textAutoInsertSpaceSubstitute.Name = "textAutoInsertSpaceSubstitute";
+            this.textAutoInsertSpaceSubstitute.Size = new System.Drawing.Size(166, 38);
+            this.textAutoInsertSpaceSubstitute.TabIndex = 67;
+            // 
             // TemplateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
@@ -1070,6 +1107,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureScale)).EndInit();
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel2.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1149,5 +1188,8 @@
         private System.Windows.Forms.LinkLabel moveUpField;
         private System.Windows.Forms.LinkLabel moveDownField;
         private System.Windows.Forms.LinkLabel copy2ClipboardField;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.TextBox textAutoInsertSpaceSubstitute;
+        private System.Windows.Forms.Label label15;
     }
 }
