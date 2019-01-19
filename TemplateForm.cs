@@ -323,7 +323,7 @@ namespace Cliver.PdfDocumentParser
 
             ShowPdfText.LinkClicked += ShowPdfText_LinkClicked;
             ShowOcrText.LinkClicked += ShowOcrText_LinkClicked;
-            ShowJson.LinkClicked += ShowOcrText_LinkClicked;
+            ShowAsJson.LinkClicked += showAsJson_LinkClicked;
 
             tCurrentPage.Leave += delegate
              {

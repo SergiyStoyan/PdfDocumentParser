@@ -53,7 +53,7 @@
             this.label17 = new System.Windows.Forms.Label();
             this.ShowOcrText = new System.Windows.Forms.LinkLabel();
             this.label13 = new System.Windows.Forms.Label();
-            this.ShowJson = new System.Windows.Forms.LinkLabel();
+            this.ShowAsJson = new System.Windows.Forms.LinkLabel();
             this.label5 = new System.Windows.Forms.Label();
             this.textAutoInsertSpaceThreshold = new System.Windows.Forms.NumericUpDown();
             this.label12 = new System.Windows.Forms.Label();
@@ -94,13 +94,13 @@
             this.pictureScale = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.ExtractFieldsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.duplicateField = new System.Windows.Forms.LinkLabel();
             this.deleteField = new System.Windows.Forms.LinkLabel();
             this.moveUpField = new System.Windows.Forms.LinkLabel();
             this.moveDownField = new System.Windows.Forms.LinkLabel();
             this.copy2ClipboardField = new System.Windows.Forms.LinkLabel();
+            this.ExtractFieldsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).BeginInit();
             this.flowLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).BeginInit();
@@ -338,7 +338,7 @@
             this.flowLayoutPanel4.Controls.Add(this.label17);
             this.flowLayoutPanel4.Controls.Add(this.ShowOcrText);
             this.flowLayoutPanel4.Controls.Add(this.label13);
-            this.flowLayoutPanel4.Controls.Add(this.ShowJson);
+            this.flowLayoutPanel4.Controls.Add(this.ShowAsJson);
             this.flowLayoutPanel4.Location = new System.Drawing.Point(3, 188);
             this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel4.Name = "flowLayoutPanel4";
@@ -390,17 +390,17 @@
             this.label13.TabIndex = 26;
             this.label13.Text = "|";
             // 
-            // ShowJson
+            // ShowAsJson
             // 
-            this.ShowJson.AutoSize = true;
-            this.ShowJson.Location = new System.Drawing.Point(514, 12);
-            this.ShowJson.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
-            this.ShowJson.Name = "ShowJson";
-            this.ShowJson.Size = new System.Drawing.Size(319, 32);
-            this.ShowJson.TabIndex = 27;
-            this.ShowJson.TabStop = true;
-            this.ShowJson.Text = "Show Template As Json";
-            this.ShowJson.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.ShowAsJson.AutoSize = true;
+            this.ShowAsJson.Location = new System.Drawing.Point(514, 12);
+            this.ShowAsJson.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.ShowAsJson.Name = "ShowAsJson";
+            this.ShowAsJson.Size = new System.Drawing.Size(319, 32);
+            this.ShowAsJson.TabIndex = 27;
+            this.ShowAsJson.TabStop = true;
+            this.ShowAsJson.Text = "Show Template As Json";
+            this.ShowAsJson.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label5
             // 
@@ -941,17 +941,6 @@
             this.label10.TabIndex = 49;
             this.label10.Text = "Anchors:";
             // 
-            // ExtractFieldsAutomaticallyWhenPageChanged
-            // 
-            this.ExtractFieldsAutomaticallyWhenPageChanged.AutoSize = true;
-            this.ExtractFieldsAutomaticallyWhenPageChanged.Location = new System.Drawing.Point(136, 10);
-            this.ExtractFieldsAutomaticallyWhenPageChanged.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.ExtractFieldsAutomaticallyWhenPageChanged.Name = "ExtractFieldsAutomaticallyWhenPageChanged";
-            this.ExtractFieldsAutomaticallyWhenPageChanged.Size = new System.Drawing.Size(427, 36);
-            this.ExtractFieldsAutomaticallyWhenPageChanged.TabIndex = 56;
-            this.ExtractFieldsAutomaticallyWhenPageChanged.Text = "Extract When Page Changed]";
-            this.ExtractFieldsAutomaticallyWhenPageChanged.UseVisualStyleBackColor = true;
-            // 
             // flowLayoutPanel2
             // 
             this.flowLayoutPanel2.Controls.Add(this.duplicateField);
@@ -959,9 +948,9 @@
             this.flowLayoutPanel2.Controls.Add(this.moveUpField);
             this.flowLayoutPanel2.Controls.Add(this.moveDownField);
             this.flowLayoutPanel2.Controls.Add(this.copy2ClipboardField);
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(577, 12);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(577, 10);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(564, 35);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(564, 36);
             this.flowLayoutPanel2.TabIndex = 0;
             // 
             // duplicateField
@@ -1023,6 +1012,17 @@
             this.copy2ClipboardField.TabStop = true;
             this.copy2ClipboardField.Text = "Copy";
             this.copy2ClipboardField.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // ExtractFieldsAutomaticallyWhenPageChanged
+            // 
+            this.ExtractFieldsAutomaticallyWhenPageChanged.AutoSize = true;
+            this.ExtractFieldsAutomaticallyWhenPageChanged.Location = new System.Drawing.Point(136, 10);
+            this.ExtractFieldsAutomaticallyWhenPageChanged.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.ExtractFieldsAutomaticallyWhenPageChanged.Name = "ExtractFieldsAutomaticallyWhenPageChanged";
+            this.ExtractFieldsAutomaticallyWhenPageChanged.Size = new System.Drawing.Size(427, 36);
+            this.ExtractFieldsAutomaticallyWhenPageChanged.TabIndex = 56;
+            this.ExtractFieldsAutomaticallyWhenPageChanged.Text = "Extract When Page Changed]";
+            this.ExtractFieldsAutomaticallyWhenPageChanged.UseVisualStyleBackColor = true;
             // 
             // TemplateForm
             // 
@@ -1093,7 +1093,7 @@
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.LinkLabel ShowOcrText;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.LinkLabel ShowJson;
+        private System.Windows.Forms.LinkLabel ShowAsJson;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NumericUpDown textAutoInsertSpaceThreshold;
         private System.Windows.Forms.Label label12;
