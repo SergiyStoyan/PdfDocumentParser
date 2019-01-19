@@ -319,7 +319,7 @@ namespace Cliver.PdfDocumentParser
             /// This field is retrived and split on lines together with the rest columns 
             /// so that their lines match together. Thus every field contains the same number of lines. 
             /// </summary>
-            //public string Table = null;
+            public string Table = null;
 
             public Field()
             {

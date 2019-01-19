@@ -13,8 +13,13 @@ using System.Windows.Forms;
  DONE:
  - side anchors added to field;
  - same name field can have multiple instances to look by order;
- - text field can be retrieved as ValueAsCharBoxes
-     
+ - text field can be retrieved as ValueAsCharBoxes;
+     - fields are joined as table columns when they have the same top and bottom anchors;
+
+    manual: tables can be processed the following ways:
+    - get char boxes and do anything;
+    - substitute auto-insert spaces with "|" and then split to columns (very unreliabe);
+    - create fields as columns
      */
 namespace Cliver.PdfDocumentParser
 {

@@ -87,8 +87,8 @@ namespace Cliver.PdfDocumentParser
                     Template.Field.PdfText pt = (Template.Field.PdfText)field;
                     if (pt.ValueAsCharBoxes)
                         return Pdf.GetCharBoxsSurroundedByRectangle(PdfCharBoxs, r);
-                    return Pdf.GetTextSurroundedByRectangle(PdfCharBoxs, r, pageCollection.ActiveTemplate.TextAutoInsertSpaceThreshold, pageCollection.ActiveTemplate.TextAutoInsertSpaceSubstitute);
-                    //return getValueIfFieldIsColumn(field, r);
+                    //return Pdf.GetTextSurroundedByRectangle(PdfCharBoxs, r, pageCollection.ActiveTemplate.TextAutoInsertSpaceThreshold, pageCollection.ActiveTemplate.TextAutoInsertSpaceSubstitute);
+                    return getValueIfFieldIsColumn(field, r);
                 case Template.Field.Types.OcrText:
                     Template.Field.OcrText ot = (Template.Field.OcrText)field;
                     if (ot.ValueAsCharBoxes)
@@ -109,17 +109,19 @@ namespace Cliver.PdfDocumentParser
             if (r_ == null)
                 return null;
             RectangleF tableR = (RectangleF)r_;
-            foreach (Template.Field f in pageCollection.ActiveTemplate.Fields.Where(x => x != field && x.TopAnchor == field.TopAnchor && x.BottomAnchor == field.BottomAnchor))
-            {
-                r_ = getFieldActualRectange(f);
-                if (r_ == null)
-                    return null;
-                RectangleF r = (RectangleF)r_;
-                if (tableR.X > r.X)
-                    tableR.X = r.X;
-                if (tableR.Right < r.Right)
-                    tableR.Width += r.Right - tableR.Right;
-            }
+            //foreach (Template.Field f in pageCollection.ActiveTemplate.Fields.Where(x => x != field && x.TopAnchor.Id == field.TopAnchor.Id && x.BottomAnchor.Id == field.BottomAnchor.Id))
+            if (field.Table != null)
+                foreach (Template.Field f in pageCollection.ActiveTemplate.Fields.Where(x => x != field && x.Table == field.Table))
+                {
+                    r_ = getFieldActualRectange(f);
+                    if (r_ == null)
+                        return null;
+                    RectangleF r = (RectangleF)r_;
+                    if (tableR.X > r.X)
+                        tableR.X = r.X;
+                    if (tableR.Right < r.Right)
+                        tableR.Width += r.Right - tableR.Right;
+                }
             List<Pdf.CharBox> cbs = Pdf.GetCharBoxsSurroundedByRectangle(PdfCharBoxs, tableR);
             List<string> ls = new List<string>();
             foreach (Pdf.Line l in Pdf.GetLines(cbs, pageCollection.ActiveTemplate.TextAutoInsertSpaceThreshold, pageCollection.ActiveTemplate.TextAutoInsertSpaceSubstitute))
