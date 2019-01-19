@@ -58,6 +58,14 @@ namespace Cliver
         /// </summary>
         //public class UserDependent : Attribute
         //{ }
+
+        /// <summary>
+        /// if a custom Settings class is not direct descendant then it must to specify its Settings type explicitly
+        /// </summary>
+        //public class SeettingsType : Attribute
+        //{
+        //    public Type SettingsType;
+        //}
     }
 
     abstract public class AppSettings : Settings
@@ -117,7 +125,8 @@ namespace Cliver
                     {
                         List<FieldInfo> fis = new List<FieldInfo>();
                         foreach (Type et in ets)
-                            fis.AddRange(et.GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public).Where(a => a.FieldType == st));
+                            fis.AddRange(et.GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public).Where(a => st.IsAssignableFrom(a.FieldType)));
+
                         if (fis.Count < 1)
                             //    throw new Exception("No field of type '" + st.FullName + "' was found.");
                             continue;
@@ -127,7 +136,7 @@ namespace Cliver
                         {
                             string fullName = fi.DeclaringType.FullName + "." + fi.Name;
 
-                            if (null == fi.GetCustomAttributes(typeof(Settings.Obligatory), false).FirstOrDefault() && (obligatoryObjectNamesRegex == null || !obligatoryObjectNamesRegex.IsMatch(fullName)))
+                            if (null == fi.GetCustomAttributes<Settings.Obligatory>(false).FirstOrDefault() && (obligatoryObjectNamesRegex == null || !obligatoryObjectNamesRegex.IsMatch(fullName)))
                                 continue;
 
                             Serializable t;

@@ -86,6 +86,9 @@
             this.picture = new System.Windows.Forms.PictureBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.textAutoInsertSpaceSubstitute = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.autoDeskewThreshold = new System.Windows.Forms.NumericUpDown();
             this.testFile = new System.Windows.Forms.TextBox();
@@ -101,9 +104,6 @@
             this.moveDownField = new System.Windows.Forms.LinkLabel();
             this.copy2ClipboardField = new System.Windows.Forms.LinkLabel();
             this.ExtractFieldsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
-            this.label15 = new System.Windows.Forms.Label();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.textAutoInsertSpaceSubstitute = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).BeginInit();
             this.flowLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).BeginInit();
@@ -128,11 +128,11 @@
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.autoDeskewThreshold)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureScale)).BeginInit();
             this.flowLayoutPanel2.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // autoDeskew
@@ -829,6 +829,40 @@
             this.splitContainer2.SplitterWidth = 10;
             this.splitContainer2.TabIndex = 32;
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.textAutoInsertSpaceSubstitute);
+            this.groupBox2.Controls.Add(this.label15);
+            this.groupBox2.Controls.Add(this.textAutoInsertSpaceThreshold);
+            this.groupBox2.Controls.Add(this.label12);
+            this.groupBox2.Location = new System.Drawing.Point(0, 379);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.groupBox2.Size = new System.Drawing.Size(1144, 105);
+            this.groupBox2.TabIndex = 64;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Text Auto-Insert Space";
+            // 
+            // textAutoInsertSpaceSubstitute
+            // 
+            this.textAutoInsertSpaceSubstitute.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.textAutoInsertSpaceSubstitute.Location = new System.Drawing.Point(542, 48);
+            this.textAutoInsertSpaceSubstitute.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.textAutoInsertSpaceSubstitute.Name = "textAutoInsertSpaceSubstitute";
+            this.textAutoInsertSpaceSubstitute.Size = new System.Drawing.Size(166, 38);
+            this.textAutoInsertSpaceSubstitute.TabIndex = 67;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(373, 56);
+            this.label15.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(151, 32);
+            this.label15.TabIndex = 66;
+            this.label15.Text = "Substitute:";
+            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.autoDeskewThreshold);
@@ -1027,40 +1061,6 @@
             this.ExtractFieldsAutomaticallyWhenPageChanged.Text = "Extract When Page Changed]";
             this.ExtractFieldsAutomaticallyWhenPageChanged.UseVisualStyleBackColor = true;
             // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(373, 56);
-            this.label15.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(151, 32);
-            this.label15.TabIndex = 66;
-            this.label15.Text = "Substitute:";
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.textAutoInsertSpaceSubstitute);
-            this.groupBox2.Controls.Add(this.label15);
-            this.groupBox2.Controls.Add(this.textAutoInsertSpaceThreshold);
-            this.groupBox2.Controls.Add(this.label12);
-            this.groupBox2.Location = new System.Drawing.Point(0, 379);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.groupBox2.Size = new System.Drawing.Size(1144, 105);
-            this.groupBox2.TabIndex = 64;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Text Auto-Insert Space";
-            // 
-            // textAutoInsertSpaceSubstitute
-            // 
-            this.textAutoInsertSpaceSubstitute.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textAutoInsertSpaceSubstitute.Location = new System.Drawing.Point(542, 48);
-            this.textAutoInsertSpaceSubstitute.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.textAutoInsertSpaceSubstitute.Name = "textAutoInsertSpaceSubstitute";
-            this.textAutoInsertSpaceSubstitute.Size = new System.Drawing.Size(166, 38);
-            this.textAutoInsertSpaceSubstitute.TabIndex = 67;
-            // 
             // TemplateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
@@ -1101,14 +1101,14 @@
             this.splitContainer2.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.autoDeskewThreshold)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureScale)).EndInit();
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel2.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
 
         }
