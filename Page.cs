@@ -61,6 +61,18 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
+        //class ActualTemplateCash : IDisposable
+        //{
+        //    internal Dictionary<string, AnchorActualInfo> AnchorHashes2anchorActualInfo = new Dictionary<string, AnchorActualInfo>();
+        //    internal ImageData ImageData;
+        //    internal Bitmap Bitmap;
+        //    internal List<Ocr.CharBox> OcrCharBoxs;
+
+        //    public void Dispose()
+        //    {
+        //    }
+        //}
+
         internal Bitmap Bitmap
         {
             get

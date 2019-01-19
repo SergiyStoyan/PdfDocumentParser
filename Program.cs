@@ -9,6 +9,13 @@ using System.IO;
 using System.Drawing;
 using System.Windows.Forms;
 
+/*
+ DONE:
+ - side anchors added to field;
+ - same name field can have multiple instances to look by order;
+ - text field can be retrieved as ValueAsCharBoxes
+     
+     */
 namespace Cliver.PdfDocumentParser
 {
     public class Program

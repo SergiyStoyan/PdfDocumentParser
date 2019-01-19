@@ -197,18 +197,13 @@ namespace Cliver.PdfDocumentParser
                 }
                 TextChunks.AddRange(tcs);
             }
-        }
-
-        public static List<CharBox> GetCharBoxsSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r)
-        {
-            return removeDuplicates(cbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)));
-        }
+        }   
 
         public static string GetTextSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r, float textAutoInsertSpaceThreshold, string textAutoInsertSpaceSubstitute)
         {
             cbs = GetCharBoxsSurroundedByRectangle(cbs, r);
             List<string> ls = new List<string>();
-            foreach (Line l in getLines(cbs, textAutoInsertSpaceThreshold, textAutoInsertSpaceSubstitute))
+            foreach (Line l in GetLines(cbs, textAutoInsertSpaceThreshold, textAutoInsertSpaceSubstitute))
             {
                 StringBuilder sb = new StringBuilder();
                 foreach (CharBox cb in l.CharBoxes)
@@ -218,9 +213,9 @@ namespace Cliver.PdfDocumentParser
             return string.Join("\r\n", ls);
         }
 
-        public static List<CharBox> GetCharBoxsSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r, bool excludeInvisibleCharacters)
+        public static List<CharBox> GetCharBoxsSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r, bool excludeInvisibleCharacters = false)
         {
-            cbs = GetCharBoxsSurroundedByRectangle(cbs, r);
+            cbs = removeDuplicates(cbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)));
             if (excludeInvisibleCharacters)
                 cbs = cbs.Where(a => !" \t".Contains(a.Char)).ToList();
             return cbs;
@@ -228,7 +223,7 @@ namespace Cliver.PdfDocumentParser
 
         public static List<Line> RemoveDuplicatesAndGetLines(IEnumerable<CharBox> cbs, float textAutoInsertSpaceThreshold, string textAutoInsertSpaceSubstitute)
         {
-            return getLines(removeDuplicates(cbs), textAutoInsertSpaceThreshold, textAutoInsertSpaceSubstitute);
+            return GetLines(removeDuplicates(cbs), textAutoInsertSpaceThreshold, textAutoInsertSpaceSubstitute);
         }
 
         static List<CharBox> removeDuplicates(IEnumerable<CharBox> cbs)
@@ -248,7 +243,7 @@ namespace Cliver.PdfDocumentParser
             return bs;
         }
 
-        static List<Line> getLines(IEnumerable<CharBox> cbs, float textAutoInsertSpaceThreshold, string textAutoInsertSpaceSubstitute)
+      public  static List<Line> GetLines(IEnumerable<CharBox> cbs, float textAutoInsertSpaceThreshold, string textAutoInsertSpaceSubstitute)
         {
             bool spaceAutoInsert = textAutoInsertSpaceThreshold > 0;
             cbs = cbs.OrderBy(a => a.R.X).ToList();

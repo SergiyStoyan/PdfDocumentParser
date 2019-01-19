@@ -32,7 +32,7 @@ namespace Cliver.PdfDocumentParser
             throw new Exception("These is no field[name=" + fieldName + "]");
         }
 
-        object getValue(Template.Field field)
+        RectangleF? getFieldActualRectange(Template.Field field)
         {
             if (!field.IsSet())
                 throw new Exception("Field is not set.");
@@ -72,6 +72,15 @@ namespace Cliver.PdfDocumentParser
                 if (r.Height <= 0)
                     return null;
             }
+            return r;
+        }
+
+        object getValue(Template.Field field)
+        {
+            RectangleF? r_ = getFieldActualRectange(field);
+            if (r_ == null)
+                return null;
+            RectangleF r = (RectangleF)r_;
             switch (field.Type)
             {
                 case Template.Field.Types.PdfText:
@@ -79,6 +88,7 @@ namespace Cliver.PdfDocumentParser
                     if (pt.ValueAsCharBoxes)
                         return Pdf.GetCharBoxsSurroundedByRectangle(PdfCharBoxs, r);
                     return Pdf.GetTextSurroundedByRectangle(PdfCharBoxs, r, pageCollection.ActiveTemplate.TextAutoInsertSpaceThreshold, pageCollection.ActiveTemplate.TextAutoInsertSpaceSubstitute);
+                    //return getValueIfFieldIsColumn(field, r);
                 case Template.Field.Types.OcrText:
                     Template.Field.OcrText ot = (Template.Field.OcrText)field;
                     if (ot.ValueAsCharBoxes)
@@ -92,7 +102,41 @@ namespace Cliver.PdfDocumentParser
                 default:
                     throw new Exception("Unknown option: " + field.Type);
             }
-        }    
+        }
+        object getValueIfFieldIsColumn(Template.Field field, RectangleF rectangle)
+        {
+            RectangleF? r_ = getFieldActualRectange(field);
+            if (r_ == null)
+                return null;
+            RectangleF tableR = (RectangleF)r_;
+            foreach (Template.Field f in pageCollection.ActiveTemplate.Fields.Where(x => x != field && x.TopAnchor == field.TopAnchor && x.BottomAnchor == field.BottomAnchor))
+            {
+                r_ = getFieldActualRectange(f);
+                if (r_ == null)
+                    return null;
+                RectangleF r = (RectangleF)r_;
+                if (tableR.X > r.X)
+                    tableR.X = r.X;
+                if (tableR.Right < r.Right)
+                    tableR.Width += r.Right - tableR.Right;
+            }
+            List<Pdf.CharBox> cbs = Pdf.GetCharBoxsSurroundedByRectangle(PdfCharBoxs, tableR);
+            List<string> ls = new List<string>();
+            foreach (Pdf.Line l in Pdf.GetLines(cbs, pageCollection.ActiveTemplate.TextAutoInsertSpaceThreshold, pageCollection.ActiveTemplate.TextAutoInsertSpaceSubstitute))
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (Pdf.CharBox cb in l.CharBoxes)
+                    if (cb.R.X >= rectangle.X && cb.R.Right <= rectangle.Right)
+                        sb.Append(cb.Char);
+                ls.Add(sb.ToString());
+            }
+            return string.Join("\r\n", ls);
+        }
+
+        //class FieldActualInfo
+        //{
+
+        //}
 
         /// <summary>
         /// Auxiliary method which can be applied to a string during post-processing

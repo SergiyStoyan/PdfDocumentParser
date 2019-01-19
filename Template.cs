@@ -312,7 +312,14 @@ namespace Cliver.PdfDocumentParser
             {
                 public int Id;
                 public float Shift = 0;
-            } 
+            }
+
+            /// <summary>
+            /// set by the custom application. When set, the field is considered as a table column. 
+            /// This field is retrived and split on lines together with the rest columns 
+            /// so that their lines match together. Thus every field contains the same number of lines. 
+            /// </summary>
+            //public string Table = null;
 
             public Field()
             {
