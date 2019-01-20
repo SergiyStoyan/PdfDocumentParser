@@ -88,7 +88,7 @@ namespace Cliver.PdfDocumentParser
                     if (pt.ValueAsCharBoxes)
                         return Pdf.GetCharBoxsSurroundedByRectangle(PdfCharBoxs, r);
                     //return Pdf.GetTextSurroundedByRectangle(PdfCharBoxs, r, pageCollection.ActiveTemplate.TextAutoInsertSpaceThreshold, pageCollection.ActiveTemplate.TextAutoInsertSpaceSubstitute);
-                    return getValueIfFieldIsColumn(field, r);
+                    return getValueAsLinesIfFieldIsColumn(field, r);
                 case Template.Field.Types.OcrText:
                     Template.Field.OcrText ot = (Template.Field.OcrText)field;
                     if (ot.ValueAsCharBoxes)
@@ -103,7 +103,7 @@ namespace Cliver.PdfDocumentParser
                     throw new Exception("Unknown option: " + field.Type);
             }
         }
-        object getValueIfFieldIsColumn(Template.Field field, RectangleF rectangle)
+        List<string> getValueAsLinesIfFieldIsColumn(Template.Field field, RectangleF rectangle)
         {
             RectangleF? r_ = getFieldActualRectange(field);
             if (r_ == null)
@@ -132,7 +132,7 @@ namespace Cliver.PdfDocumentParser
                         sb.Append(cb.Char);
                 ls.Add(sb.ToString());
             }
-            return string.Join("\r\n", ls);
+            return ls;
         }
 
         //class FieldActualInfo
