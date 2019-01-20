@@ -109,7 +109,6 @@ namespace Cliver.PdfDocumentParser
                 pages.ActiveTemplate = getTemplateFromUI(false);
 
                 RectangleF r = field.Rectangle.GetSystemRectangleF();
-                RectangleF r0 = r;
                 if (field.LeftAnchor != null)
                 {
                     if (findAndDrawAnchor(field.LeftAnchor.Id) == null)
@@ -117,7 +116,9 @@ namespace Cliver.PdfDocumentParser
                     Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(field.LeftAnchor.Id);
                     if (!aai.Found)
                         return null;
+                    float right = r.Right;
                     r.X += aai.Shift.Width - field.LeftAnchor.Shift;
+                    r.Width = right - r.X;
                 }
                 if (field.TopAnchor != null)
                 {
@@ -126,7 +127,9 @@ namespace Cliver.PdfDocumentParser
                     Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(field.TopAnchor.Id);
                     if (!aai.Found)
                         return null;
+                    float bottom = r.Bottom;
                     r.Y += aai.Shift.Height - field.TopAnchor.Shift;
+                    r.Height = bottom - r.Y;
                 }
                 if (field.RightAnchor != null)
                 {
@@ -135,9 +138,7 @@ namespace Cliver.PdfDocumentParser
                     Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(field.RightAnchor.Id);
                     if (!aai.Found)
                         return null;
-                    r.Width += r0.X - r.X + aai.Shift.Width - field.RightAnchor.Shift;
-                    if (r.Width <= 0)
-                        return null;
+                    r.Width += aai.Shift.Width - field.RightAnchor.Shift;
                 }
                 if (field.BottomAnchor != null)
                 {
@@ -146,10 +147,10 @@ namespace Cliver.PdfDocumentParser
                     Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(field.BottomAnchor.Id);
                     if (!aai.Found)
                         return null;
-                    r.Height += r0.Y - r.Y + aai.Shift.Height - field.BottomAnchor.Shift;
-                    if (r.Height <= 0)
-                        return null;
+                    r.Height += aai.Shift.Height - field.BottomAnchor.Shift;
                 }
+                if (r.Width <= 0 || r.Height <= 0)
+                    return null;
                 drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
                 switch (field.Type)
                 {

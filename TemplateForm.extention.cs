@@ -306,14 +306,12 @@ namespace Cliver.PdfDocumentParser
                 Template.Condition c = (Template.Condition)r.Tag;
                 if (c == null)
                     continue;
-                if (!c.IsSet())
-                {
-                    if (saving && !string.IsNullOrWhiteSpace(c.Name))
-                        throw new Exception("Condition[row=" + (r.Index + 1) + "] is not set!");
-                    continue;
-                }
                 if (saving)
+                {
+                    if (!c.IsSet())
+                        throw new Exception("Condition[name=" + c.Name + "] is not set!");
                     BooleanEngine.Check(c.Value, t.Anchors.Select(x => x.Id));
+                }
                 t.Conditions.Add(c);
             }
             if (saving)

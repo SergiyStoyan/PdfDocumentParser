@@ -227,9 +227,9 @@ namespace Cliver.PdfDocumentParser
             try
             {
                 if (pages[currentPageI].IsCondition(c.Name))
-                    setRowStatus(statuses.SUCCESS, r, "Match");
+                    setRowStatus(statuses.SUCCESS, r, "True");
                 else
-                    setRowStatus(statuses.ERROR, r, "Not match");
+                    setRowStatus(statuses.ERROR, r, "False");
             }
             catch (Exception e)
             {

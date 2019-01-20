@@ -303,9 +303,11 @@ namespace Cliver.PdfDocumentParser
                     return;
                 int i = fields.Rows.Add();
                 DataGridViewRow row = fields.Rows[i];
-                //fields.Rows.Remove(row);
-                //fields.Rows.Insert(r0.Index, row);
                 Template.Field f = (Template.Field)Serialization.Json.Clone(((Template.Field)r0.Tag).GetType(), r0.Tag);
+                f.LeftAnchor = null;
+                f.TopAnchor = null;
+                f.RightAnchor = null;
+                f.BottomAnchor = null;
                 setFieldRow(row, f);
                 row.Selected = true;
             };
@@ -338,6 +340,7 @@ namespace Cliver.PdfDocumentParser
                     return;
                 fields.Rows.Remove(r);
                 fields.Rows.Insert(i, r);
+                r.Selected = true;
             };
 
             moveDownField.LinkClicked += delegate
@@ -350,6 +353,7 @@ namespace Cliver.PdfDocumentParser
                     return;
                 fields.Rows.Remove(r);
                 fields.Rows.Insert(i, r);
+                r.Selected = true;
             };
         }
 

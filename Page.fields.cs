@@ -39,39 +39,40 @@ namespace Cliver.PdfDocumentParser
             if (field.Rectangle.Width <= Settings.Constants.CoordinateDeviationMargin || field.Rectangle.Height <= Settings.Constants.CoordinateDeviationMargin)
                 throw new Exception("Rectangle is malformed.");
             RectangleF r = field.Rectangle.GetSystemRectangleF();
-            RectangleF r0 = r;
             if (field.LeftAnchor != null)
             {
                 Page.AnchorActualInfo aai = GetAnchorActualInfo(field.LeftAnchor.Id);
                 if (!aai.Found)
                     return null;
+                float right = r.Right;
                 r.X += aai.Shift.Width - field.LeftAnchor.Shift;
+                r.Width = right - r.X;
             }
             if (field.TopAnchor != null)
             {
                 Page.AnchorActualInfo aai = GetAnchorActualInfo(field.TopAnchor.Id);
                 if (!aai.Found)
                     return null;
+                float bottom = r.Bottom;
                 r.Y += aai.Shift.Height - field.TopAnchor.Shift;
+                r.Height = bottom - r.Y;
             }
             if (field.RightAnchor != null)
             {
                 Page.AnchorActualInfo aai = GetAnchorActualInfo(field.RightAnchor.Id);
                 if (!aai.Found)
                     return null;
-                r.Width += r0.X - r.X + aai.Shift.Width - field.RightAnchor.Shift;
-                if (r.Width <= 0)
-                    return null;
+                r.Width += aai.Shift.Width - field.RightAnchor.Shift;
             }
             if (field.BottomAnchor != null)
             {
                 Page.AnchorActualInfo aai = GetAnchorActualInfo(field.BottomAnchor.Id);
                 if (!aai.Found)
                     return null;
-                r.Height += r0.Y - r.Y + aai.Shift.Height - field.BottomAnchor.Shift;
-                if (r.Height <= 0)
-                    return null;
+                r.Height += aai.Shift.Height - field.BottomAnchor.Shift;
             }
+            if (r.Width <= 0 || r.Height <= 0)
+                return null;
             return r;
         }
 
@@ -87,8 +88,9 @@ namespace Cliver.PdfDocumentParser
                     Template.Field.PdfText pt = (Template.Field.PdfText)field;
                     if (pt.ValueAsCharBoxes)
                         return Pdf.GetCharBoxsSurroundedByRectangle(PdfCharBoxs, r);
-                    //return Pdf.GetTextSurroundedByRectangle(PdfCharBoxs, r, pageCollection.ActiveTemplate.TextAutoInsertSpaceThreshold, pageCollection.ActiveTemplate.TextAutoInsertSpaceSubstitute);
-                    return getValueAsLinesIfFieldIsColumn(field, r);
+                    if (field.Table == null)
+                        return Pdf.GetTextSurroundedByRectangle(PdfCharBoxs, r, pageCollection.ActiveTemplate.TextAutoInsertSpaceThreshold, pageCollection.ActiveTemplate.TextAutoInsertSpaceSubstitute);
+                    return getValueAsTableLines(field, r);
                 case Template.Field.Types.OcrText:
                     Template.Field.OcrText ot = (Template.Field.OcrText)field;
                     if (ot.ValueAsCharBoxes)
@@ -103,25 +105,42 @@ namespace Cliver.PdfDocumentParser
                     throw new Exception("Unknown option: " + field.Type);
             }
         }
-        List<string> getValueAsLinesIfFieldIsColumn(Template.Field field, RectangleF rectangle)
-        {
+        List<string> getValueAsTableLines(Template.Field field, RectangleF rectangle)
+        {//!!!should be done with caching to evoid repeating calculations!
             RectangleF? r_ = getFieldActualRectange(field);
             if (r_ == null)
                 return null;
             RectangleF tableR = (RectangleF)r_;
-            //foreach (Template.Field f in pageCollection.ActiveTemplate.Fields.Where(x => x != field && x.TopAnchor.Id == field.TopAnchor.Id && x.BottomAnchor.Id == field.BottomAnchor.Id))
-            if (field.Table != null)
-                foreach (Template.Field f in pageCollection.ActiveTemplate.Fields.Where(x => x != field && x.Table == field.Table))
+            Dictionary<string, List<Template.Field>> fieldName2orderedFields = new Dictionary<string, List<Template.Field>>();
+            foreach (Template.Field f in pageCollection.ActiveTemplate.Fields)
+            {
+                if (f.Table != field.Table)
+                    continue;
+                List<Template.Field> fs;
+                if (!fieldName2orderedFields.TryGetValue(f.Name, out fs))
                 {
-                    r_ = getFieldActualRectange(f);
-                    if (r_ == null)
-                        return null;
-                    RectangleF r = (RectangleF)r_;
-                    if (tableR.X > r.X)
-                        tableR.X = r.X;
-                    if (tableR.Right < r.Right)
-                        tableR.Width += r.Right - tableR.Right;
+                    fs = new List<Template.Field>();
+                    fieldName2orderedFields[f.Name] = fs;
                 }
+                fs.Add(f);
+            }
+            int i = fieldName2orderedFields[field.Name].IndexOf(field);
+            fieldName2orderedFields.Remove(field.Name);
+            foreach (string fn in fieldName2orderedFields.Keys)
+            {
+                r_ = getFieldActualRectange(fieldName2orderedFields[fn][i]);
+                if (r_ == null)
+                    return null;
+                RectangleF r = (RectangleF)r_;
+                if (tableR.X > r.X)
+                {
+                    float right = tableR.Right;
+                    tableR.X = r.X;
+                    tableR.Width = right - tableR.X;
+                }
+                if (tableR.Right < r.Right)
+                    tableR.Width += r.Right - tableR.Right;
+            }
             List<Pdf.CharBox> cbs = Pdf.GetCharBoxsSurroundedByRectangle(PdfCharBoxs, tableR);
             List<string> ls = new List<string>();
             foreach (Pdf.Line l in Pdf.GetLines(cbs, pageCollection.ActiveTemplate.TextAutoInsertSpaceThreshold, pageCollection.ActiveTemplate.TextAutoInsertSpaceSubstitute))

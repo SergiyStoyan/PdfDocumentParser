@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 /*
  DONE:
- - side anchors added to field;
+ - side anchors added to field;!!!RULE: a field must be completely set on the same page. 
  - same name field can have multiple instances to look by order;
  - text field can be retrieved as ValueAsCharBoxes;
      - fields are joined as table columns when they have the same top and bottom anchors;
