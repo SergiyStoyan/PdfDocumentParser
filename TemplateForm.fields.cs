@@ -312,10 +312,23 @@ namespace Cliver.PdfDocumentParser
                 //    if ((r.Tag as Template.Field.PdfText)?.ColumnOfTable == f0.Name)
                 //        cloningFieldRows.Add(r);
                 if (f0 is Template.Field.PdfText)
-                    foreach (DataGridViewRow r in fields.Rows)
-                        if ((r.Tag as Template.Field.PdfText)?.ColumnOfTable == ((Template.Field.PdfText)f0).ColumnOfTable)
-                            cloningFieldRows.Add(r);
+                {
+                    string columnOfTable = ((Template.Field.PdfText)f0).ColumnOfTable;
+                    if (columnOfTable != null)
+                    {
+                        if (!Message.YesNo("This field is a column of table " + columnOfTable + " and so new definions will be added to the rest column fields as well. Proceed?"))
+                            return;
+                        foreach (DataGridViewRow r in fields.Rows)
+                            if (r != r0 && (r.Tag as Template.Field.PdfText)?.ColumnOfTable == columnOfTable)
+                            {
+                                string fn = (r.Tag as Template.Field.PdfText)?.Name;
+                                if (cloningFieldRows.Find(x => (x.Tag as Template.Field.PdfText)?.Name == fn) == null)
+                                    cloningFieldRows.Add(r);
+                            }
+                    }
+                }
 
+                settingCurrentFieldRow = true;//required due to fields-column error calculation when selected row changes
                 foreach (DataGridViewRow row in cloningFieldRows)
                 {
                     Template.Field f = (Template.Field)Serialization.Json.Clone(((Template.Field)row.Tag).GetType(), row.Tag);
@@ -325,29 +338,64 @@ namespace Cliver.PdfDocumentParser
                     f.BottomAnchor = null;
                     int i = fields.Rows.Add();
                     DataGridViewRow r = fields.Rows[i];
+                    setFieldRow(r, f);
                     fields.Rows.Remove(r);
                     fields.Rows.Insert(row.Index + 1, r);
-                    setFieldRow(r, f);
-                    r.Selected = true;
                 }
+                settingCurrentFieldRow = false;
             };
 
             deleteField.LinkClicked += delegate
             {
                 if (fields.SelectedRows.Count < 1)
                     return;
-                DataGridViewRow r = fields.SelectedRows[fields.SelectedRows.Count - 1];
-                if (r.Tag == null)
+                DataGridViewRow r0 = fields.SelectedRows[fields.SelectedRows.Count - 1];
+                if (r0.Tag == null)
                     return;
+                Template.Field f0 = (Template.Field)r0.Tag;
                 bool unique = true;
                 foreach (DataGridViewRow rr in fields.Rows)
-                    if (rr != r && rr.Tag != null && ((Template.Field)rr.Tag).Name == ((Template.Field)r.Tag).Name)
+                    if (rr != r0 && rr.Tag != null && ((Template.Field)rr.Tag).Name == f0.Name)
                     {
                         unique = false;
                         break;
                     }
-                if (!unique)
-                    fields.Rows.Remove(r);
+                if (unique)
+                {
+                    Message.Inform("This field definition cannot be deleted because it is the last of the field.");
+                    return;
+                }
+                List<DataGridViewRow> deletingFieldRows = new List<DataGridViewRow> { r0 };
+                if (f0 is Template.Field.PdfText)
+                {
+                    string columnOfTable = ((Template.Field.PdfText)f0).ColumnOfTable;
+                    if (columnOfTable != null)
+                    {
+                        if (!Message.YesNo("This field is a column of table " + columnOfTable + " and so the respective definitions of the rest column fields will be deleted as well. Proceed?"))
+                            return;
+                        Dictionary<string, List<DataGridViewRow>> fieldName2orderedRows = new Dictionary<string, List<DataGridViewRow>>();
+                        foreach (DataGridViewRow r in fields.Rows)
+                            if ((r.Tag as Template.Field.PdfText)?.ColumnOfTable == columnOfTable)
+                            {
+                                List<DataGridViewRow> rs;
+                                string fn = (r.Tag as Template.Field)?.Name;
+                                if (!fieldName2orderedRows.TryGetValue(fn, out rs))
+                                {
+                                    rs = new List<DataGridViewRow>();
+                                    fieldName2orderedRows[fn] = rs;
+                                }
+                                rs.Add(r);
+                            }
+                        int definitionIndex = fieldName2orderedRows[f0.Name].IndexOf(r0);
+                        fieldName2orderedRows.Remove(f0.Name);
+                        foreach (List<DataGridViewRow> rs in fieldName2orderedRows.Values)
+                            deletingFieldRows.Add(rs[definitionIndex]);
+                    }
+                }
+                settingCurrentFieldRow = true;//required due to fields-column error calculation when selected row changes
+                foreach (DataGridViewRow row in deletingFieldRows)
+                    fields.Rows.Remove(row);
+                settingCurrentFieldRow = false;
             };
 
             moveUpField.LinkClicked += delegate
@@ -364,8 +412,10 @@ namespace Cliver.PdfDocumentParser
                         minI = rr.Index;
                 if (i2 < minI)
                     return;
+                settingCurrentFieldRow = true;//required due to fields-column error calculation when selected row changes
                 fields.Rows.Remove(r);
                 fields.Rows.Insert(i2, r);
+                settingCurrentFieldRow = false;
                 r.Selected = true;
             };
 
@@ -379,12 +429,14 @@ namespace Cliver.PdfDocumentParser
                     return;
                 int maxI = 0;
                 foreach (DataGridViewRow rr in fields.Rows)
-                    if (rr != r && rr.Tag != null && ((Template.Field)rr.Tag).Name == ((Template.Field)r.Tag).Name && rr.Index>maxI)
-                        maxI=rr.Index;
+                    if (rr != r && rr.Tag != null && ((Template.Field)rr.Tag).Name == ((Template.Field)r.Tag).Name && rr.Index > maxI)
+                        maxI = rr.Index;
                 if (i2 > maxI + 1)
                     return;
+                settingCurrentFieldRow = true;//required due to fields-column error calculation when selected row changes
                 fields.Rows.Remove(r);
                 fields.Rows.Insert(i2, r);
+                settingCurrentFieldRow = false;
                 r.Selected = true;
             };
         }

@@ -12,12 +12,12 @@ using System.Windows.Forms;
 /*
 TBD: 
 - change how char anchors work: allow char anchors to support empty space around selection rectangle;
-- ?provide multiple field extraction on page;
 - check if tesseract's DetectBestOrientation can perform deskew;
+- MainForm and TemplateForm to WPF;
 - ? !!!in page.cs::_findAnchor() in case Template.Types.ImageData: images are not searched recursively (if a secondary image search failed then search stops). It should be done like it is done for linked anchors;
 - ?switch to Tesseract.4
-- MainForm and TemplateForm to WPF;
 - tune image recognition by checking brightness deltas
+- ?provide multiple field extraction on page;
 - ?change anchor id->name (involves condition expressions)
 - ?store each template in separate file;
 
@@ -27,7 +27,7 @@ TBD:
  - side anchors added to field;!!!RULE: assigning of rectange and anchors to a field must be done on the same page. 
  - same name field can have multiple instances to look by order;
  - options added to page::GetValue();
-     - fields can be marked as columns of the same table;
+     - fields can be marked as columns of a table;
      - space substitution;
 
     manual: tables can be processed the following ways:
