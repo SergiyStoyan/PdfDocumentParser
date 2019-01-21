@@ -56,7 +56,7 @@ namespace Cliver.PdfDocumentParser
             StringBuilder sb = new StringBuilder();
             foreach (var l in Pdf.RemoveDuplicatesAndGetLines(_object.CharBoxs.Select(x => new Pdf.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() }), textAutoInsertSpaceThreshold, textAutoInsertSpaceSubstitute))
             {
-                foreach (var cb in l.CharBoxes)
+                foreach (var cb in l.CharBoxs)
                     sb.Append(cb.Char);
                 sb.Append("\r\n");
             }

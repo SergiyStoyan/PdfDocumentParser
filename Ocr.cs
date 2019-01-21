@@ -86,7 +86,7 @@ namespace Cliver.PdfDocumentParser
             foreach (Line l in GetLines(cbs))
             {
                 StringBuilder sb = new StringBuilder();
-                foreach (CharBox cb in l.CharBoxes)
+                foreach (CharBox cb in l.CharBoxs)
                     sb.Append(cb.Char);
                 ls.Add(sb.ToString());
             }
@@ -206,7 +206,7 @@ namespace Cliver.PdfDocumentParser
             foreach (Line l in GetLines(cbs))
             {
                 StringBuilder sb = new StringBuilder();
-                foreach (CharBox cb in l.CharBoxes)
+                foreach (CharBox cb in l.CharBoxs)
                     sb.Append(cb.Char);
                 ls.Add(sb.ToString());
             }
@@ -224,13 +224,13 @@ namespace Cliver.PdfDocumentParser
                     if (cb.R.Bottom < lines[i].Top)
                     {
                         Line l = new Line { Top = cb.R.Top, Bottom = cb.R.Bottom };
-                        l.CharBoxes.Add(cb);
+                        l.CharBoxs.Add(cb);
                         lines.Insert(i, l);
                         goto CONTINUE;
                     }
                     if (cb.R.Bottom - cb.R.Height / 2 <= lines[i].Bottom)
                     {
-                        lines[i].CharBoxes.Add(cb);
+                        lines[i].CharBoxs.Add(cb);
                         if (lines[i].Top > cb.R.Top)
                             lines[i].Top = cb.R.Top;
                         if (lines[i].Bottom < cb.R.Bottom)
@@ -240,20 +240,20 @@ namespace Cliver.PdfDocumentParser
                 }
                 {
                     Line l = new Line { Top = cb.R.Top, Bottom = cb.R.Bottom };
-                    l.CharBoxes.Add(cb);
+                    l.CharBoxs.Add(cb);
                     lines.Add(l);
                 }
                 CONTINUE:;
             }
             //foreach (Line l in lines)
-            //    l.CharBoxes = l.CharBoxes.OrderBy(a => a.R.X).ToList();
+            //    l.CharBoxs = l.CharBoxs.OrderBy(a => a.R.X).ToList();
             return lines;
         }
         public class Line
         {
             public float Top;
             public float Bottom;
-            public List<CharBox> CharBoxes = new List<CharBox>();
+            public List<CharBox> CharBoxs = new List<CharBox>();
         }
 
         public static List<CharBox> GetCharBoxsSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r)

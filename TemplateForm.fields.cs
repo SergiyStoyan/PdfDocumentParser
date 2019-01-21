@@ -301,15 +301,35 @@ namespace Cliver.PdfDocumentParser
                 DataGridViewRow r0 = fields.SelectedRows[fields.SelectedRows.Count - 1];
                 if (r0.Tag == null)
                     return;
-                int i = fields.Rows.Add();
-                DataGridViewRow row = fields.Rows[i];
-                Template.Field f = (Template.Field)Serialization.Json.Clone(((Template.Field)r0.Tag).GetType(), r0.Tag);
-                f.LeftAnchor = null;
-                f.TopAnchor = null;
-                f.RightAnchor = null;
-                f.BottomAnchor = null;
-                setFieldRow(row, f);
-                row.Selected = true;
+                Template.Field f0 = (Template.Field)r0.Tag;
+                List<DataGridViewRow> cloningFieldRows = new List<DataGridViewRow> { r0 };
+                //if((f0 as Template.Field.PdfText)?.ColumnOfTable!=null)
+                //{
+                //    Message.Exclaim("This field is a column of "+ (f0 as Template.Field.PdfText)?.ColumnOfTable + " so you should create a new definition of it.");
+                //    return;
+                //}
+                //foreach (DataGridViewRow r in fields.Rows)
+                //    if ((r.Tag as Template.Field.PdfText)?.ColumnOfTable == f0.Name)
+                //        cloningFieldRows.Add(r);
+                if (f0 is Template.Field.PdfText)
+                    foreach (DataGridViewRow r in fields.Rows)
+                        if ((r.Tag as Template.Field.PdfText)?.ColumnOfTable == ((Template.Field.PdfText)f0).ColumnOfTable)
+                            cloningFieldRows.Add(r);
+
+                foreach (DataGridViewRow row in cloningFieldRows)
+                {
+                    Template.Field f = (Template.Field)Serialization.Json.Clone(((Template.Field)row.Tag).GetType(), row.Tag);
+                    f.LeftAnchor = null;
+                    f.TopAnchor = null;
+                    f.RightAnchor = null;
+                    f.BottomAnchor = null;
+                    int i = fields.Rows.Add();
+                    DataGridViewRow r = fields.Rows[i];
+                    fields.Rows.Remove(r);
+                    fields.Rows.Insert(row.Index + 1, r);
+                    setFieldRow(r, f);
+                    r.Selected = true;
+                }
             };
 
             deleteField.LinkClicked += delegate

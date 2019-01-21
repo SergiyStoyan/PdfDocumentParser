@@ -197,20 +197,25 @@ namespace Cliver.PdfDocumentParser
                 }
                 TextChunks.AddRange(tcs);
             }
-        }   
+        }
 
         public static string GetTextSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r, float textAutoInsertSpaceThreshold, string textAutoInsertSpaceSubstitute)
+        {
+            return string.Join("\r\n", GetTextLinesSurroundedByRectangle(cbs, r, textAutoInsertSpaceThreshold, textAutoInsertSpaceSubstitute));
+        }
+
+        public static List<string> GetTextLinesSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r, float textAutoInsertSpaceThreshold, string textAutoInsertSpaceSubstitute)
         {
             cbs = GetCharBoxsSurroundedByRectangle(cbs, r);
             List<string> ls = new List<string>();
             foreach (Line l in GetLines(cbs, textAutoInsertSpaceThreshold, textAutoInsertSpaceSubstitute))
             {
                 StringBuilder sb = new StringBuilder();
-                foreach (CharBox cb in l.CharBoxes)
+                foreach (CharBox cb in l.CharBoxs)
                     sb.Append(cb.Char);
                 ls.Add(sb.ToString());
             }
-            return string.Join("\r\n", ls);
+            return ls;
         }
 
         public static List<CharBox> GetCharBoxsSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r, bool excludeInvisibleCharacters = false)
@@ -255,24 +260,24 @@ namespace Cliver.PdfDocumentParser
                     if (cb.R.Bottom < lines[i].Top)
                     {
                         Line l = new Line { Top = cb.R.Top, Bottom = cb.R.Bottom };
-                        l.CharBoxes.Add(cb);
+                        l.CharBoxs.Add(cb);
                         lines.Insert(i, l);
                         goto CONTINUE;
                     }
                     if (cb.R.Bottom - cb.R.Height / 2 <= lines[i].Bottom)
                     {
-                        if (spaceAutoInsert && /*cb.Char != " " &&*/ lines[i].CharBoxes.Count > 0)
+                        if (spaceAutoInsert && /*cb.Char != " " &&*/ lines[i].CharBoxs.Count > 0)
                         {
-                            CharBox cb0 = lines[i].CharBoxes[lines[i].CharBoxes.Count - 1];
+                            CharBox cb0 = lines[i].CharBoxs[lines[i].CharBoxs.Count - 1];
                             if (/*cb0.Char != " " && */cb.R.Left - cb0.R.Right > (cb.R.Width + cb.R.Height) / textAutoInsertSpaceThreshold)
                             {
                                 float spaceWidth = (cb.R.Width + cb.R.Width) / 2;
                                 int spaceNumber = (int)Math.Ceiling((cb.R.Left - cb0.R.Right) / spaceWidth);
                                 for (int j = 0; j < spaceNumber; j++)
-                                    lines[i].CharBoxes.Add(new CharBox { Char = textAutoInsertSpaceSubstitute, R = new System.Drawing.RectangleF(cb.R.Left + spaceWidth * j, 0, 0, 0) });
+                                    lines[i].CharBoxs.Add(new CharBox { Char = textAutoInsertSpaceSubstitute, R = new System.Drawing.RectangleF(cb.R.Left + spaceWidth * j, 0, 0, 0) });
                             }
                         }
-                        lines[i].CharBoxes.Add(cb);
+                        lines[i].CharBoxs.Add(cb);
                         if (lines[i].Top > cb.R.Top)
                             lines[i].Top = cb.R.Top;
                         if (lines[i].Bottom < cb.R.Bottom)
@@ -282,7 +287,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 {
                     Line l = new Line { Top = cb.R.Top, Bottom = cb.R.Bottom };
-                    l.CharBoxes.Add(cb);
+                    l.CharBoxs.Add(cb);
                     lines.Add(l);
                 }
                 CONTINUE:;
@@ -294,7 +299,7 @@ namespace Cliver.PdfDocumentParser
         {
             public float Top;
             public float Bottom;
-            public List<CharBox> CharBoxes = new List<CharBox>();
+            public List<CharBox> CharBoxs = new List<CharBox>();
         }
 
         public static List<CharBox> GetCharBoxsFromPage(PdfReader pdfReader, int pageI)
@@ -313,7 +318,7 @@ namespace Cliver.PdfDocumentParser
             return bts.ToList();
         }
 
-        public class CharBox
+        public struct CharBox
         {
             public System.Drawing.RectangleF R;
             public string Char;

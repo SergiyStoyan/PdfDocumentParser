@@ -108,7 +108,7 @@ namespace Cliver.PdfDocumentParser
             public float PositionDeviation = 1f;
             public bool PositionDeviationIsAbsolute = false;
             virtual public int? ParentAnchorId { get; set; } = null;
-            
+
             public Anchor()
             {
                 if (this is PdfText)
@@ -214,7 +214,7 @@ namespace Cliver.PdfDocumentParser
             //        get { return null; }
             //        set { if (value != null) throw new Exception("Should not be used in this type Anchor!"); }
             //    }
-                
+
             //    public string Expression = null;
 
             //    override public bool IsSet()
@@ -240,10 +240,10 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public IEnumerable<Field> GetFieldDefinitions(string fieldName)
-        {
-            return Fields.Where(x => x.Name == fieldName);
-        }
+        //public IEnumerable<Field> GetFieldDefinitions(string fieldName)
+        //{
+        //    return Fields.Where(x => x.Name == fieldName);
+        //}
 
         public abstract class Field
         {
@@ -321,13 +321,6 @@ namespace Cliver.PdfDocumentParser
                 public float Shift;// { get { return 0; } set { } }
             }
 
-            /// <summary>
-            /// set by the custom application. When set, the field is considered as a table column. 
-            /// This field is retrived and split on lines together with the rest columns 
-            /// so that their lines match together. Thus every field contains the same number of lines. 
-            /// </summary>
-            public string Table = null;
-
             public Field()
             {
                 if (this is PdfText)
@@ -355,12 +348,16 @@ namespace Cliver.PdfDocumentParser
 
             public class PdfText : Field
             {
-                public bool ValueAsCharBoxes = false;
+                /// <summary>
+                /// set by the custom application. When set, the field is considered as a table column intercepted with the field specified by ColumnOf. 
+                /// In this way, all the fields which are columns of the same field always contain the same number of lines. 
+                /// </summary>
+                public string ColumnOfTable = null;
             }
 
             public class OcrText : Field
             {
-                public bool ValueAsCharBoxes = false;
+                public string ColumnOf { set { throw new Exception("To be implemented."); } }
             }
 
             public class ImageData : Field

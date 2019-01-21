@@ -466,7 +466,7 @@ namespace Cliver.PdfDocumentParser
                             if (lines.Count < 1)
                                 break;
                             foreach (Pdf.Line l in lines)
-                                foreach (Pdf.CharBox cb in l.CharBoxes)
+                                foreach (Pdf.CharBox cb in l.CharBoxs)
                                     pt.CharBoxs.Add(new Template.Anchor.PdfText.CharBox
                                     {
                                         Char = cb.Char,
@@ -482,7 +482,7 @@ namespace Cliver.PdfDocumentParser
                             if (lines.Count < 1)
                                 break;
                             foreach (Ocr.Line l in lines)
-                                foreach (Ocr.CharBox cb in l.CharBoxes)
+                                foreach (Ocr.CharBox cb in l.CharBoxs)
                                     ot.CharBoxs.Add(new Template.Anchor.OcrText.CharBox
                                     {
                                         Char = cb.Char,
