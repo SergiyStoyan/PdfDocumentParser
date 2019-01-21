@@ -36,7 +36,7 @@ namespace Cliver
             else
                 ProcessName = System.Reflection.Assembly.GetEntryAssembly().GetName(false).Name;
 
-            AppDir = AppDomain.CurrentDomain.BaseDirectory;
+            AppDir = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\');
             
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location);
             CompanyName = string.IsNullOrWhiteSpace(fvi.CompanyName) ? "CliverSoft" : fvi.CompanyName;
@@ -98,7 +98,8 @@ namespace Cliver
                             foreach (string base_dir in new string[] {
                                 Log.AppDir,
                                 CompanyCommonDataDir,
-                                System.IO.Path.GetTempPath() + "\\" + CompanyName + "\\"
+                                System.IO.Path.GetTempPath() + "\\" + CompanyName + "\\",
+                                Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)
                             })
                             {
                                 work_dir = base_dir + @"\" + pre_work_dir + @"\" + Log.ProcessName + WorkDirPrefix;
@@ -123,7 +124,7 @@ namespace Cliver
                     }
                     // delete_old_logs?.Join();
                 }
-                return work_dir;
+                return Regex.Replace(work_dir, @"\\\\", @"\");
             }
         }
         static string work_dir = null;
