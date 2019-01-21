@@ -154,7 +154,7 @@ namespace Cliver.PdfDocumentParser
                 switch (field.Type)
                 {
                     case Template.Field.Types.PdfText:
-                        RectangleF? tr = pages[currentPageI].GetTableRectangle((Template.Field.PdfText)field);
+                        RectangleF? tr = pages[currentPageI].GetTableActualRectangle((Template.Field.PdfText)field);
                         if (tr != null)
                             drawBoxes(Settings.Appearance.TableBoxColor, Settings.Appearance.TableBoxBorderWidth, new List<RectangleF> { (RectangleF)tr });
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });

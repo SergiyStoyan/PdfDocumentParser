@@ -12,9 +12,8 @@ using System.Windows.Forms;
 /*
 TBD: 
 - check table fields while saving;
-- draw table box;
-- provide resizing selection box (and then probably change how char anchors work);
-- allow char anchors to support empty space around selection rectangle;
+- provide resizing selection box;
+- change how char anchors work: allow char anchors to support empty space around selection rectangle;
 - ?provide multiple field extraction on page;
 - check if tesseract's DetectBestOrientation can perform deskew;
 - ? !!!in page.cs::_findAnchor() in case Template.Types.ImageData: images are not searched recursively (if a secondary image search failed then search stops). It should be done like it is done for linked anchors;

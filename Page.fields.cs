@@ -151,7 +151,7 @@ namespace Cliver.PdfDocumentParser
             }
         }
         //List<string> getTextLinesAsTableColumn(Template.Field.PdfText field, RectangleF fieldR)
-        //{//can optimized by caching!
+        //{//can be optimized by caching!
         //    int fieldDefinitionIndex = pageCollection.ActiveTemplate.Fields.Where(x => x.Name == field.Name).TakeWhile(x => x != field).Count();
         //    List<Pdf.CharBox> cbs = null;
         //    Template.Field tableField = pageCollection.ActiveTemplate.Fields.Where(x => x.Name == field.ColumnOfTable).ElementAt(fieldDefinitionIndex);
@@ -172,8 +172,8 @@ namespace Cliver.PdfDocumentParser
         //    return ls;
         //}
 
-        internal RectangleF? GetTableRectangle(Template.Field.PdfText field, RectangleF? fieldR = null)
-        {//can optimized by caching!
+        internal RectangleF? GetTableActualRectangle(Template.Field.PdfText field, RectangleF? fieldR = null)
+        {//can be optimized by caching!
             if (fieldR == null)
                 fieldR = getFieldActualRectange(field);
             if (fieldR == null)
@@ -205,15 +205,23 @@ namespace Cliver.PdfDocumentParser
                     tableR.X = r.X;
                     tableR.Width = right - tableR.X;
                 }
+                if (tableR.Y > r.Y)
+                {
+                    float bottom = tableR.Bottom;
+                    tableR.Y = r.Y;
+                    tableR.Height = bottom - tableR.Y;
+                }
                 if (tableR.Right < r.Right)
                     tableR.Width += r.Right - tableR.Right;
+                if (tableR.Bottom < r.Bottom)
+                    tableR.Height += r.Bottom - tableR.Bottom;
             }
             return tableR;
         }
 
         List<string> getTextLinesAsTableColumn(Template.Field.PdfText field, RectangleF fieldR)
-        {//can optimized by caching!
-            RectangleF? tableR = GetTableRectangle(field, fieldR);
+        {//can be optimized by caching!
+            RectangleF? tableR = GetTableActualRectangle(field, fieldR);
             if (tableR == null)
                 return null;
             List<Pdf.CharBox> cbs = Pdf.GetCharBoxsSurroundedByRectangle(PdfCharBoxs, (RectangleF)tableR);
