@@ -47,6 +47,7 @@ namespace Cliver.PdfDocumentParser
                 if (rb != null)
                 {
                     drawingMode = resizebleBoxSide == ResizebleBoxSides.Left || resizebleBoxSide == ResizebleBoxSides.Right ? DrawingModes.resizingSelectionBoxV : DrawingModes.resizingSelectionBoxH;
+                    Cursor.Current = drawingMode == DrawingModes.resizingSelectionBoxV ? Cursors.VSplit : Cursors.HSplit;
                     selectionBoxPoint0 = rb.R.Location;
                     selectionBoxPoint1 = rb.R.Location;
                     selectionBoxPoint2 = new Point(rb.R.Right, rb.R.Bottom);

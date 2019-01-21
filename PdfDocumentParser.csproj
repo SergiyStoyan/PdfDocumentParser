@@ -196,6 +196,8 @@
     <Compile Include="Page.fields.cs" />
     <Compile Include="PageCollection.cs" />
     <Compile Include="Page.cs" />
+    <Compile Include="Template.Anchor.cs" />
+    <Compile Include="Template.Field.cs" />
     <Compile Include="TemplateForm.TemplateManager.cs">
       <SubType>Form</SubType>
     </Compile>
