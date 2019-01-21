@@ -15,6 +15,7 @@ using System.Windows.Forms;
  - same name field can have multiple instances to look by order;
  - options added to page::GetValue();
      - fields can be marked as columns of the same table;
+     - space substitution;
 
     manual: tables can be processed the following ways:
     - get char boxes and do anything;
