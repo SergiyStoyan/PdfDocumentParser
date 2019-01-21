@@ -151,6 +151,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 if (r.Width <= 0 || r.Height <= 0)
                     return null;
+                owners2resizebleBox[field] = new ResizebleBox(field, r, Settings.Appearance.SelectionBoxBorderWidth);
                 switch (field.Type)
                 {
                     case Template.Field.Types.PdfText:
@@ -186,6 +187,7 @@ namespace Cliver.PdfDocumentParser
             if (scaledCurrentPageBitmap != null)
                 picture.Image = new Bitmap(scaledCurrentPageBitmap);
             drawnAnchorIds.Clear();
+            owners2resizebleBox.Clear();
         }
         readonly HashSet<int> drawnAnchorIds = new HashSet<int>();
 
@@ -220,8 +222,6 @@ namespace Cliver.PdfDocumentParser
                 picture.Image.Dispose();
             picture.Image = bm;
         }
-        Point selectionBoxPoint0, selectionBoxPoint1, selectionBoxPoint2;
-        bool drawingSelectionBox = false;
 
         void showPage(int pageI)
         {

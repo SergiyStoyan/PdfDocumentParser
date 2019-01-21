@@ -40,10 +40,24 @@ namespace Cliver.PdfDocumentParser
             {
                 if (pages == null)
                     return;
-                drawingSelectionBox = true;
-                selectionBoxPoint0 = new Point((int)(e.X / (float)pictureScale.Value), (int)(e.Y / (float)pictureScale.Value));
-                selectionBoxPoint1 = new Point(selectionBoxPoint0.X, selectionBoxPoint0.Y);
-                selectionBoxPoint2 = new Point(selectionBoxPoint0.X, selectionBoxPoint0.Y);
+
+                Point p = new Point((int)(e.X / (float)pictureScale.Value), (int)(e.Y / (float)pictureScale.Value));
+
+                ResizebleBox rb = findResizebleBox(p, out ResizebleBoxSides resizebleBoxSide);
+                if (rb != null)
+                {
+                    drawingMode = resizebleBoxSide == ResizebleBoxSides.Left || resizebleBoxSide == ResizebleBoxSides.Right ? DrawingModes.resizingSelectionBoxV : DrawingModes.resizingSelectionBoxH;
+                    selectionBoxPoint0 = rb.R.Location;
+                    selectionBoxPoint1 = rb.R.Location;
+                    selectionBoxPoint2 = new Point(rb.R.Right, rb.R.Bottom);
+                }
+                else
+                {
+                    drawingMode = DrawingModes.drawingSelectionBox;
+                    selectionBoxPoint0 = p;
+                    selectionBoxPoint1 = p;
+                    selectionBoxPoint2 = p;
+                }
                 selectionCoordinates.Text = selectionBoxPoint1.ToString();
             };
 
@@ -54,34 +68,70 @@ namespace Cliver.PdfDocumentParser
 
                 Point p = new Point((int)(e.X / (float)pictureScale.Value), (int)(e.Y / (float)pictureScale.Value));
 
-                if (!drawingSelectionBox)
+                switch (drawingMode)
                 {
-                    selectionCoordinates.Text = p.ToString();
-                    return;
-                }
+                    case DrawingModes.NULL:
+                        selectionCoordinates.Text = p.ToString();
 
-                if (selectionBoxPoint0.X < p.X)
-                {
-                    selectionBoxPoint1.X = selectionBoxPoint0.X;
-                    selectionBoxPoint2.X = p.X;
-                }
-                else
-                {
-                    selectionBoxPoint1.X = p.X;
-                    selectionBoxPoint2.X = selectionBoxPoint0.X;
-                }
-                if (selectionBoxPoint0.Y < p.Y)
-                {
-                    selectionBoxPoint1.Y = selectionBoxPoint0.Y;
-                    selectionBoxPoint2.Y = p.Y;
-                }
-                else
-                {
-                    selectionBoxPoint1.Y = p.Y;
-                    selectionBoxPoint2.Y = selectionBoxPoint0.Y;
+                        if (findResizebleBox(p, out ResizebleBoxSides resizebleBoxSide) != null)
+                            Cursor.Current = resizebleBoxSide == ResizebleBoxSides.Left || resizebleBoxSide == ResizebleBoxSides.Right ? Cursors.VSplit : Cursors.HSplit;
+                        else
+                            Cursor.Current = Cursors.Default;
+                        return;
+                    case DrawingModes.drawingSelectionBox:
+                        if (selectionBoxPoint0.X < p.X)
+                        {
+                            selectionBoxPoint1.X = selectionBoxPoint0.X;
+                            selectionBoxPoint2.X = p.X;
+                        }
+                        else
+                        {
+                            selectionBoxPoint1.X = p.X;
+                            selectionBoxPoint2.X = selectionBoxPoint0.X;
+                        }
+                        if (selectionBoxPoint0.Y < p.Y)
+                        {
+                            selectionBoxPoint1.Y = selectionBoxPoint0.Y;
+                            selectionBoxPoint2.Y = p.Y;
+                        }
+                        else
+                        {
+                            selectionBoxPoint1.Y = p.Y;
+                            selectionBoxPoint2.Y = selectionBoxPoint0.Y;
+                        }
+                        break;
+                    case DrawingModes.resizingSelectionBoxV:
+                        if (Math.Abs(selectionBoxPoint2.X - p.X) < Math.Abs(p.X - selectionBoxPoint1.X))
+                            selectionBoxPoint2.X = p.X;
+                        else
+                            selectionBoxPoint1.X = p.X;
+                        break;
+                    case DrawingModes.resizingSelectionBoxH:
+                        if (Math.Abs(selectionBoxPoint2.Y - p.Y) < Math.Abs(p.Y - selectionBoxPoint1.Y))
+                            selectionBoxPoint2.Y = p.Y;
+                        else
+                            selectionBoxPoint1.Y = p.Y;
+                        break;
+                        //case DrawingModes.resizingSelectionBoxR:
+                        //    if (selectionBoxPoint1.X < p.X)
+                        //        selectionBoxPoint2.X = p.X;
+                        //    else
+                        //    {
+                        //        selectionBoxPoint2.X = selectionBoxPoint1.X;
+                        //        selectionBoxPoint1.X = p.X;
+                        //    }
+                        //    break;
+                        //case DrawingModes.resizingSelectionBoxB:
+                        //    if (selectionBoxPoint1.Y < p.Y)
+                        //        selectionBoxPoint2.Y = p.Y;
+                        //    else
+                        //    {
+                        //        selectionBoxPoint2.Y = selectionBoxPoint1.Y;
+                        //        selectionBoxPoint1.Y = p.Y;
+                        //    }
+                        //    break;
                 }
                 selectionCoordinates.Text = selectionBoxPoint1.ToString() + ":" + selectionBoxPoint2.ToString();
-
                 RectangleF r = new RectangleF(selectionBoxPoint1.X, selectionBoxPoint1.Y, selectionBoxPoint2.X - selectionBoxPoint1.X, selectionBoxPoint2.Y - selectionBoxPoint1.Y);
                 clearImageFromBoxes();
                 drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<System.Drawing.RectangleF> { r });
@@ -94,15 +144,15 @@ namespace Cliver.PdfDocumentParser
                     if (pages == null)
                         return;
 
-                    if (!drawingSelectionBox)
+                    if (drawingMode == DrawingModes.NULL)
                         return;
-                    drawingSelectionBox = false;
+                    drawingMode = DrawingModes.NULL;
 
                     Template.RectangleF r = new Template.RectangleF(selectionBoxPoint1.X, selectionBoxPoint1.Y, selectionBoxPoint2.X - selectionBoxPoint1.X, selectionBoxPoint2.Y - selectionBoxPoint1.Y);
 
-                    switch (mode)
+                    switch (settingMode)
                     {
-                        case Modes.SetAnchor:
+                        case SettingModes.SetAnchor:
                             {
                                 if (currentAnchorControl == null)
                                     break;
@@ -159,7 +209,7 @@ namespace Cliver.PdfDocumentParser
                                     setAnchorFromSelectedElements();
                             }
                             break;
-                        case Modes.SetField:
+                        case SettingModes.SetField:
                             {
                                 if (fields.SelectedRows.Count < 1)
                                     break;
@@ -189,6 +239,7 @@ namespace Cliver.PdfDocumentParser
                                 }
 
                                 setFieldRow(row, f);
+                                owners2resizebleBox[f] = new ResizebleBox(f, f.Rectangle.GetSystemRectangleF(), Settings.Appearance.SelectionBoxBorderWidth);
                             }
                             break;
                         default:
@@ -336,22 +387,89 @@ namespace Cliver.PdfDocumentParser
               };
         }
         TemplateManager templateManager;
+        Point selectionBoxPoint0, selectionBoxPoint1, selectionBoxPoint2;
 
-        enum Modes
+        enum DrawingModes
+        {
+            NULL,
+            drawingSelectionBox,
+            resizingSelectionBoxV,
+            resizingSelectionBoxH,
+        }
+        DrawingModes drawingMode = DrawingModes.NULL;
+
+        enum SettingModes
         {
             NULL,
             SetAnchor,
             SetField,
         }
-        Modes mode
+        SettingModes settingMode
         {
             get
             {
                 if (anchors.SelectedRows.Count > 0)
-                    return Modes.SetAnchor;
+                    return SettingModes.SetAnchor;
                 if (fields.SelectedRows.Count > 0)
-                    return Modes.SetField;
-                return Modes.NULL;
+                    return SettingModes.SetField;
+                return SettingModes.NULL;
+            }
+        }
+
+        ResizebleBox findResizebleBox(Point p, out ResizebleBoxSides resizebleBoxSides)
+        {
+            foreach (ResizebleBox rb in owners2resizebleBox.Values)
+            {
+                if (!rb.outerR.Contains(p))
+                    continue;
+                if (rb.R.Left >= p.X)
+                {
+                    resizebleBoxSides = ResizebleBoxSides.Left;
+                    return rb;
+                }
+                if (rb.R.Right <= p.X)
+                {
+                    resizebleBoxSides = ResizebleBoxSides.Right;
+                    return rb;
+                }
+                if (rb.R.Top >= p.Y)
+                {
+                    resizebleBoxSides = ResizebleBoxSides.Top;
+                    return rb;
+                }
+                if (rb.R.Bottom <= p.Y)
+                {
+                    resizebleBoxSides = ResizebleBoxSides.Bottom;
+                    return rb;
+                }
+            }
+            resizebleBoxSides = ResizebleBoxSides.Left;
+            return null;
+        }
+        enum ResizebleBoxSides
+        {
+            Left,
+            Top,
+            Right,
+            Bottom
+        }
+        readonly Dictionary<object, ResizebleBox> owners2resizebleBox = new Dictionary<object, ResizebleBox>();
+        internal class ResizebleBox
+        {
+            readonly public Rectangle outerR;
+            readonly public Rectangle R;
+            readonly public object owner;
+
+            public ResizebleBox(object owner, RectangleF rectangle, float borderWidth)
+            {
+                R = System.Drawing.Rectangle.Round(rectangle);
+                int borderW = (int)borderWidth;
+                outerR = System.Drawing.Rectangle.Round(rectangle);
+                outerR.X -= borderW;
+                outerR.Y -= borderW;
+                outerR.Width += 2 * borderW;
+                outerR.Height += 2 * borderW;
+                this.owner = owner;
             }
         }
     }
