@@ -11,7 +11,6 @@ using System.Windows.Forms;
 
 /*
 TBD: 
-- check table fields while saving;
 - change how char anchors work: allow char anchors to support empty space around selection rectangle;
 - ?provide multiple field extraction on page;
 - check if tesseract's DetectBestOrientation can perform deskew;

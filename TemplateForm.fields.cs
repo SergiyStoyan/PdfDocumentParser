@@ -355,11 +355,17 @@ namespace Cliver.PdfDocumentParser
                 if (fields.SelectedRows.Count < 1)
                     return;
                 DataGridViewRow r = fields.SelectedRows[fields.SelectedRows.Count - 1];
-                int i = r.Index - 1;
-                if (i < 0)
+                int i2 = r.Index - 1;
+                if (i2 < 0)
+                    return;
+                int minI = int.MaxValue;
+                foreach (DataGridViewRow rr in fields.Rows)
+                    if (rr != r && rr.Tag != null && ((Template.Field)rr.Tag).Name == ((Template.Field)r.Tag).Name && rr.Index < minI)
+                        minI = rr.Index;
+                if (i2 < minI)
                     return;
                 fields.Rows.Remove(r);
-                fields.Rows.Insert(i, r);
+                fields.Rows.Insert(i2, r);
                 r.Selected = true;
             };
 
@@ -368,11 +374,17 @@ namespace Cliver.PdfDocumentParser
                 if (fields.SelectedRows.Count < 1)
                     return;
                 DataGridViewRow r = fields.SelectedRows[fields.SelectedRows.Count - 1];
-                int i = r.Index + 1;
-                if (i > fields.Rows.Count - 1)
+                int i2 = r.Index + 1;
+                if (i2 > fields.Rows.Count - 1)
+                    return;
+                int maxI = 0;
+                foreach (DataGridViewRow rr in fields.Rows)
+                    if (rr != r && rr.Tag != null && ((Template.Field)rr.Tag).Name == ((Template.Field)r.Tag).Name && rr.Index>maxI)
+                        maxI=rr.Index;
+                if (i2 > maxI + 1)
                     return;
                 fields.Rows.Remove(r);
-                fields.Rows.Insert(i, r);
+                fields.Rows.Insert(i2, r);
                 r.Selected = true;
             };
         }

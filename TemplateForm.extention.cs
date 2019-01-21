@@ -342,6 +342,25 @@ namespace Cliver.PdfDocumentParser
                 //var dfs = t.Fields.GroupBy(x => x.Name).Where(x => x.Count() > 1).FirstOrDefault();
                 //if (dfs != null)
                 //    throw new Exception("Field '" + dfs.First().Name + "' is duplicated!");
+
+                foreach (string columnOfTable in t.Fields.Where(x => x is Template.Field.PdfText).Select(x => (Template.Field.PdfText)x).Where(x => x.ColumnOfTable != null).Select(x => x.ColumnOfTable))
+                {
+                    Dictionary<string, List<Template.Field>> fieldName2orderedFields = new Dictionary<string, List<Template.Field>>();
+                    foreach (Template.Field.PdfText pt in t.Fields.Where(x => x is Template.Field.PdfText).Select(x => (Template.Field.PdfText)x).Where(x => x.ColumnOfTable == columnOfTable))
+                    {
+                        List<Template.Field> fs;
+                        if (!fieldName2orderedFields.TryGetValue(pt.Name, out fs))
+                        {
+                            fs = new List<Template.Field>();
+                            fieldName2orderedFields[pt.Name] = fs;
+                        }
+                        fs.Add(pt);
+                    }
+                    int definitionCount = fieldName2orderedFields.Max(x => x.Value.Count());
+                    foreach (string fn in fieldName2orderedFields.Keys)
+                        if (definitionCount > fieldName2orderedFields[fn].Count)
+                            throw new Exception("Field '" + fn + "' is column of table " + columnOfTable + " and so it must have the same number of definitions as the rest column fields!");
+                }
             }
 
             if (saving)
