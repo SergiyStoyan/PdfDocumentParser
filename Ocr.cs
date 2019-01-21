@@ -60,7 +60,7 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public string GetText(Bitmap b, RectangleF r)
+        public string GetTextSurroundedByRectangle(Bitmap b, RectangleF r)
         {
             r = new RectangleF(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio);
             r.Intersect(new Rectangle(0, 0, b.Width, b.Height));
@@ -199,7 +199,7 @@ namespace Cliver.PdfDocumentParser
         //    return orderedCbs.Aggregate(new StringBuilder(), (sb, n) => sb.Append(n)).ToString();
         //}
 
-        public static string GetTextByTopLeftCoordinates(List<CharBox> cbs, RectangleF r)
+        public static string GetTextSurroundedByRectangle(List<CharBox> cbs, RectangleF r)
         {
             cbs = cbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)).ToList();
             List<string> ls = new List<string>();

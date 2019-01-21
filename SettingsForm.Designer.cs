@@ -36,6 +36,11 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.About = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.AnchorSecondaryBoxBorderWidth = new System.Windows.Forms.NumericUpDown();
+            this.AnchorMasterBoxBorderWidth = new System.Windows.Forms.NumericUpDown();
+            this.SelectionBoxBorderWidth = new System.Windows.Forms.NumericUpDown();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.AnchorSecondaryBoxColor = new System.Windows.Forms.Button();
@@ -46,20 +51,19 @@
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.CoordinateDeviationMargin = new System.Windows.Forms.NumericUpDown();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.SelectionBoxBorderWidth = new System.Windows.Forms.NumericUpDown();
-            this.AnchorMasterBoxBorderWidth = new System.Windows.Forms.NumericUpDown();
-            this.AnchorSecondaryBoxBorderWidth = new System.Windows.Forms.NumericUpDown();
+            this.TableBoxColor = new System.Windows.Forms.Button();
+            this.TableBoxBorderWidth = new System.Windows.Forms.NumericUpDown();
+            this.label6 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.PdfPageImageResolution)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.AnchorSecondaryBoxBorderWidth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.AnchorMasterBoxBorderWidth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SelectionBoxBorderWidth)).BeginInit();
             this.panel2.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CoordinateDeviationMargin)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.SelectionBoxBorderWidth)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.AnchorMasterBoxBorderWidth)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.AnchorSecondaryBoxBorderWidth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TableBoxBorderWidth)).BeginInit();
             this.SuspendLayout();
             // 
             // PdfPageImageResolution
@@ -139,7 +143,7 @@
             this.flowLayoutPanel1.Controls.Add(this.About);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 676);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 738);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(945, 74);
@@ -159,6 +163,8 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.TableBoxBorderWidth);
+            this.groupBox3.Controls.Add(this.label6);
             this.groupBox3.Controls.Add(this.AnchorSecondaryBoxBorderWidth);
             this.groupBox3.Controls.Add(this.AnchorMasterBoxBorderWidth);
             this.groupBox3.Controls.Add(this.SelectionBoxBorderWidth);
@@ -172,10 +178,86 @@
             this.groupBox3.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.groupBox3.Size = new System.Drawing.Size(875, 372);
+            this.groupBox3.Size = new System.Drawing.Size(875, 431);
             this.groupBox3.TabIndex = 59;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Appearance";
+            // 
+            // AnchorSecondaryBoxBorderWidth
+            // 
+            this.AnchorSecondaryBoxBorderWidth.Location = new System.Drawing.Point(624, 273);
+            this.AnchorSecondaryBoxBorderWidth.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.AnchorSecondaryBoxBorderWidth.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.AnchorSecondaryBoxBorderWidth.Name = "AnchorSecondaryBoxBorderWidth";
+            this.AnchorSecondaryBoxBorderWidth.Size = new System.Drawing.Size(113, 38);
+            this.AnchorSecondaryBoxBorderWidth.TabIndex = 61;
+            this.AnchorSecondaryBoxBorderWidth.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // AnchorMasterBoxBorderWidth
+            // 
+            this.AnchorMasterBoxBorderWidth.Location = new System.Drawing.Point(624, 207);
+            this.AnchorMasterBoxBorderWidth.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.AnchorMasterBoxBorderWidth.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.AnchorMasterBoxBorderWidth.Name = "AnchorMasterBoxBorderWidth";
+            this.AnchorMasterBoxBorderWidth.Size = new System.Drawing.Size(113, 38);
+            this.AnchorMasterBoxBorderWidth.TabIndex = 60;
+            this.AnchorMasterBoxBorderWidth.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // SelectionBoxBorderWidth
+            // 
+            this.SelectionBoxBorderWidth.Location = new System.Drawing.Point(624, 138);
+            this.SelectionBoxBorderWidth.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.SelectionBoxBorderWidth.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.SelectionBoxBorderWidth.Name = "SelectionBoxBorderWidth";
+            this.SelectionBoxBorderWidth.Size = new System.Drawing.Size(113, 38);
+            this.SelectionBoxBorderWidth.TabIndex = 59;
+            this.SelectionBoxBorderWidth.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.BackColor = System.Drawing.SystemColors.Control;
+            this.label5.Location = new System.Drawing.Point(618, 58);
+            this.label5.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(188, 32);
+            this.label5.TabIndex = 58;
+            this.label5.Text = "Border Width:";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.BackColor = System.Drawing.SystemColors.Control;
+            this.label7.Location = new System.Drawing.Point(369, 58);
+            this.label7.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(91, 32);
+            this.label7.TabIndex = 57;
+            this.label7.Text = "Color:";
             // 
             // label4
             // 
@@ -191,13 +273,14 @@
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.White;
+            this.panel2.Controls.Add(this.TableBoxColor);
             this.panel2.Controls.Add(this.AnchorSecondaryBoxColor);
             this.panel2.Controls.Add(this.SelectionBoxColor);
             this.panel2.Controls.Add(this.AnchorMasterBoxColor);
             this.panel2.Location = new System.Drawing.Point(375, 104);
             this.panel2.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(168, 222);
+            this.panel2.Size = new System.Drawing.Size(168, 293);
             this.panel2.TabIndex = 54;
             // 
             // AnchorSecondaryBoxColor
@@ -270,7 +353,7 @@
             this.groupBox4.Controls.Add(this.CoordinateDeviationMargin);
             this.groupBox4.Controls.Add(this.label8);
             this.groupBox4.Controls.Add(this.PdfPageImageResolution);
-            this.groupBox4.Location = new System.Drawing.Point(35, 415);
+            this.groupBox4.Location = new System.Drawing.Point(35, 488);
             this.groupBox4.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Padding = new System.Windows.Forms.Padding(8, 7, 8, 7);
@@ -313,87 +396,53 @@
             0,
             196608});
             // 
-            // label7
+            // TableBoxColor
             // 
-            this.label7.AutoSize = true;
-            this.label7.BackColor = System.Drawing.SystemColors.Control;
-            this.label7.Location = new System.Drawing.Point(369, 58);
-            this.label7.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(91, 32);
-            this.label7.TabIndex = 57;
-            this.label7.Text = "Color:";
+            this.TableBoxColor.BackColor = System.Drawing.Color.White;
+            this.TableBoxColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.TableBoxColor.ForeColor = System.Drawing.Color.Maroon;
+            this.TableBoxColor.Location = new System.Drawing.Point(16, 219);
+            this.TableBoxColor.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.TableBoxColor.Name = "TableBoxColor";
+            this.TableBoxColor.Size = new System.Drawing.Size(131, 52);
+            this.TableBoxColor.TabIndex = 58;
+            this.TableBoxColor.Text = "...";
+            this.TableBoxColor.UseVisualStyleBackColor = false;
             // 
-            // label5
+            // TableBoxBorderWidth
             // 
-            this.label5.AutoSize = true;
-            this.label5.BackColor = System.Drawing.SystemColors.Control;
-            this.label5.Location = new System.Drawing.Point(618, 58);
-            this.label5.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(188, 32);
-            this.label5.TabIndex = 58;
-            this.label5.Text = "Border Width:";
-            // 
-            // SelectionBoxBorderWidth
-            // 
-            this.SelectionBoxBorderWidth.Location = new System.Drawing.Point(624, 138);
-            this.SelectionBoxBorderWidth.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.SelectionBoxBorderWidth.Minimum = new decimal(new int[] {
+            this.TableBoxBorderWidth.Location = new System.Drawing.Point(624, 339);
+            this.TableBoxBorderWidth.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.TableBoxBorderWidth.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.SelectionBoxBorderWidth.Name = "SelectionBoxBorderWidth";
-            this.SelectionBoxBorderWidth.Size = new System.Drawing.Size(113, 38);
-            this.SelectionBoxBorderWidth.TabIndex = 59;
-            this.SelectionBoxBorderWidth.Value = new decimal(new int[] {
+            this.TableBoxBorderWidth.Name = "TableBoxBorderWidth";
+            this.TableBoxBorderWidth.Size = new System.Drawing.Size(113, 38);
+            this.TableBoxBorderWidth.TabIndex = 63;
+            this.TableBoxBorderWidth.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
             // 
-            // AnchorMasterBoxBorderWidth
+            // label6
             // 
-            this.AnchorMasterBoxBorderWidth.Location = new System.Drawing.Point(624, 207);
-            this.AnchorMasterBoxBorderWidth.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.AnchorMasterBoxBorderWidth.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.AnchorMasterBoxBorderWidth.Name = "AnchorMasterBoxBorderWidth";
-            this.AnchorMasterBoxBorderWidth.Size = new System.Drawing.Size(113, 38);
-            this.AnchorMasterBoxBorderWidth.TabIndex = 60;
-            this.AnchorMasterBoxBorderWidth.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // AnchorSecondaryBoxBorderWidth
-            // 
-            this.AnchorSecondaryBoxBorderWidth.Location = new System.Drawing.Point(624, 273);
-            this.AnchorSecondaryBoxBorderWidth.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.AnchorSecondaryBoxBorderWidth.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.AnchorSecondaryBoxBorderWidth.Name = "AnchorSecondaryBoxBorderWidth";
-            this.AnchorSecondaryBoxBorderWidth.Size = new System.Drawing.Size(113, 38);
-            this.AnchorSecondaryBoxBorderWidth.TabIndex = 61;
-            this.AnchorSecondaryBoxBorderWidth.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+            this.label6.AutoSize = true;
+            this.label6.BackColor = System.Drawing.SystemColors.Control;
+            this.label6.Location = new System.Drawing.Point(40, 341);
+            this.label6.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(151, 32);
+            this.label6.TabIndex = 62;
+            this.label6.Text = "Table Box:";
             // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(945, 750);
+            this.ClientSize = new System.Drawing.Size(945, 812);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.flowLayoutPanel1);
@@ -404,13 +453,14 @@
             this.flowLayoutPanel1.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.AnchorSecondaryBoxBorderWidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.AnchorMasterBoxBorderWidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SelectionBoxBorderWidth)).EndInit();
             this.panel2.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CoordinateDeviationMargin)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.SelectionBoxBorderWidth)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.AnchorMasterBoxBorderWidth)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.AnchorSecondaryBoxBorderWidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TableBoxBorderWidth)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -440,5 +490,8 @@
         private System.Windows.Forms.NumericUpDown SelectionBoxBorderWidth;
         private System.Windows.Forms.NumericUpDown AnchorSecondaryBoxBorderWidth;
         private System.Windows.Forms.NumericUpDown AnchorMasterBoxBorderWidth;
+        private System.Windows.Forms.NumericUpDown TableBoxBorderWidth;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button TableBoxColor;
     }
 }

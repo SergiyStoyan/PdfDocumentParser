@@ -107,7 +107,7 @@ namespace Cliver.PdfDocumentParser
                                 ls = Pdf.GetTextLinesSurroundedByRectangle(PdfCharBoxs, r, pageCollection.ActiveTemplate.TextAutoInsertSpaceThreshold, pageCollection.ActiveTemplate.TextAutoInsertSpaceSubstitute);
                             else
                                 ls = getTextLinesAsTableColumn(pt, r);
-                                return string.Join("\r\n", ls);  
+                            return string.Join("\r\n", ls);
                         case ValueTypes.TextLines:
                             if (pt.ColumnOfTable == null)
                                 ls = Pdf.GetTextLinesSurroundedByRectangle(PdfCharBoxs, r, pageCollection.ActiveTemplate.TextAutoInsertSpaceThreshold, pageCollection.ActiveTemplate.TextAutoInsertSpaceSubstitute);
@@ -124,7 +124,7 @@ namespace Cliver.PdfDocumentParser
                     switch (valueType)
                     {
                         case ValueTypes.Default:
-                            return Ocr.This.GetText(ActiveTemplateBitmap, r);
+                            return Ocr.This.GetTextSurroundedByRectangle(ActiveTemplateBitmap, r);
                         case ValueTypes.TextLines:
                             throw new Exception("To be implemented.");
                         case ValueTypes.CharBoxs:
@@ -171,9 +171,14 @@ namespace Cliver.PdfDocumentParser
         //    }
         //    return ls;
         //}
-        List<string> getTextLinesAsTableColumn(Template.Field.PdfText field, RectangleF fieldR)
+
+        internal RectangleF? GetTableRectangle(Template.Field.PdfText field, RectangleF? fieldR = null)
         {//can optimized by caching!
-            RectangleF tableR = fieldR;
+            if (fieldR == null)
+                fieldR = getFieldActualRectange(field);
+            if (fieldR == null)
+                return null;
+            RectangleF tableR = (RectangleF)fieldR;
             Dictionary<string, List<Template.Field>> fieldName2orderedFields = new Dictionary<string, List<Template.Field>>();
             foreach (Template.Field.PdfText pt in pageCollection.ActiveTemplate.Fields.Where(x => x is Template.Field.PdfText).Select(x => (Template.Field.PdfText)x).Where(x => x.ColumnOfTable == field.ColumnOfTable))
             {
@@ -191,7 +196,8 @@ namespace Cliver.PdfDocumentParser
             {
                 RectangleF? r_ = getFieldActualRectange(fieldName2orderedFields[fn][i]);
                 if (r_ == null)
-                    return null;
+                    //return null;
+                    continue;
                 RectangleF r = (RectangleF)r_;
                 if (tableR.X > r.X)
                 {
@@ -202,7 +208,15 @@ namespace Cliver.PdfDocumentParser
                 if (tableR.Right < r.Right)
                     tableR.Width += r.Right - tableR.Right;
             }
-            List<Pdf.CharBox> cbs = Pdf.GetCharBoxsSurroundedByRectangle(PdfCharBoxs, tableR);
+            return tableR;
+        }
+
+        List<string> getTextLinesAsTableColumn(Template.Field.PdfText field, RectangleF fieldR)
+        {//can optimized by caching!
+            RectangleF? tableR = GetTableRectangle(field, fieldR);
+            if (tableR == null)
+                return null;
+            List<Pdf.CharBox> cbs = Pdf.GetCharBoxsSurroundedByRectangle(PdfCharBoxs, (RectangleF)tableR);
             List<string> ls = new List<string>();
             foreach (Pdf.Line l in Pdf.GetLines(cbs, pageCollection.ActiveTemplate.TextAutoInsertSpaceThreshold, pageCollection.ActiveTemplate.TextAutoInsertSpaceSubstitute))
             {

@@ -40,7 +40,7 @@ namespace Cliver.PdfDocumentParser
                 return;
             if (scaledCurrentPageBitmap != null)
                 scaledCurrentPageBitmap.Dispose();
-            if(pages[currentPageI].ActiveTemplateBitmap == null)
+            if (pages[currentPageI].ActiveTemplateBitmap == null)
                 pages.ActiveTemplate = getTemplateFromUI(false);
             scaledCurrentPageBitmap = ImageRoutines.GetScaled(pages[currentPageI].ActiveTemplateBitmap, (float)pictureScale.Value * Settings.Constants.Image2PdfResolutionRatio);
             if (picture.Image != null)
@@ -151,14 +151,19 @@ namespace Cliver.PdfDocumentParser
                 }
                 if (r.Width <= 0 || r.Height <= 0)
                     return null;
-                drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
                 switch (field.Type)
                 {
                     case Template.Field.Types.PdfText:
+                        RectangleF? tr = pages[currentPageI].GetTableRectangle((Template.Field.PdfText)field);
+                        if (tr != null)
+                            drawBoxes(Settings.Appearance.TableBoxColor, Settings.Appearance.TableBoxBorderWidth, new List<RectangleF> { (RectangleF)tr });
+                        drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
                         return Page.NormalizeText(Pdf.GetTextSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, r, pages.ActiveTemplate.TextAutoInsertSpaceThreshold, pages.ActiveTemplate.TextAutoInsertSpaceSubstitute));
                     case Template.Field.Types.OcrText:
-                        return Page.NormalizeText(Ocr.This.GetText(pages[currentPageI].ActiveTemplateBitmap, r));
+                        drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
+                        return Page.NormalizeText(Ocr.This.GetTextSurroundedByRectangle(pages[currentPageI].ActiveTemplateBitmap, r));
                     case Template.Field.Types.ImageData:
+                        drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
                         using (Bitmap rb = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
                         {
                             return ImageData.GetScaled(rb, Settings.Constants.Image2PdfResolutionRatio);
