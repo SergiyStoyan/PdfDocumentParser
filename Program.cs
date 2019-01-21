@@ -11,10 +11,10 @@ using System.Windows.Forms;
 
 /*
  DONE:
- - side anchors added to field;!!!RULE: a field must be completely set on the same page. 
+ - side anchors added to field;!!!RULE: assigning of rectange and anchors to a field must be done on the same page. 
  - same name field can have multiple instances to look by order;
- - text field can be retrieved as ValueAsCharBoxes;
-     - fields are joined as table columns when they have the same top and bottom anchors;
+ - options added to page::GetValue();
+     - fields can be marked as columns of the same table;
 
     manual: tables can be processed the following ways:
     - get char boxes and do anything;
