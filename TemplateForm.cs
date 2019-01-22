@@ -150,6 +150,8 @@ namespace Cliver.PdfDocumentParser
                     drawingMode = DrawingModes.NULL;
 
                     Template.RectangleF r = new Template.RectangleF(selectionBoxPoint1.X, selectionBoxPoint1.Y, selectionBoxPoint2.X - selectionBoxPoint1.X, selectionBoxPoint2.Y - selectionBoxPoint1.Y);
+                    if (r.Width == 0 || r.Y == 0)//accidental tap
+                        return;
 
                     switch (settingMode)
                     {
@@ -243,8 +245,10 @@ namespace Cliver.PdfDocumentParser
                                 owners2resizebleBox[f] = new ResizebleBox(f, f.Rectangle.GetSystemRectangleF(), Settings.Appearance.SelectionBoxBorderWidth);
                             }
                             break;
-                        default:
+                        case SettingModes.NULL:
                             break;
+                        default:
+                            throw new Exception("Unknown option: " + settingMode);
                     }
                 }
                 catch (Exception ex)

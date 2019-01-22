@@ -155,11 +155,32 @@ namespace Cliver.PdfDocumentParser
                 switch (field.Type)
                 {
                     case Template.Field.Types.PdfText:
-                        RectangleF? tr = pages[currentPageI].GetTableActualRectangle((Template.Field.PdfText)field);
-                        if (tr != null)
+                        string s;
+                        if (field.ColumnOfTable != null)
+                        {
+                            //RectangleF? tr = pages[currentPageI].GetTableActualRectangle((Template.Field.PdfText)field);
+                            int fieldDefinitionIndex = pages.ActiveTemplate.Fields.Where(x => x.Name == field.Name).TakeWhile(x => x != field).Count();
+                            Template.Field tableField;
+                            try
+                            {
+                                tableField = pages.ActiveTemplate.Fields.Where(x => x.Name == field.ColumnOfTable).ElementAt(fieldDefinitionIndex);
+                            }
+                            catch (Exception e)
+                            {
+                                Message.Error("Field " + field.ColumnOfTable + " does not have enough definitions to respect definition " + field.Name + "[" + fieldDefinitionIndex + "]");
+                                return null;
+                            }
+                            RectangleF? tr = pages[currentPageI].GetFieldActualRectange(tableField);
+                            if (tr == null)
+                                return null;
                             drawBoxes(Settings.Appearance.TableBoxColor, Settings.Appearance.TableBoxBorderWidth, new List<RectangleF> { (RectangleF)tr });
+                            //return Page.NormalizeText(Pdf.GetTextSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, r, pages.ActiveTemplate.TextAutoInsertSpaceThreshold, pages.ActiveTemplate.TextAutoInsertSpaceSubstitute));
+                            s = string.Join("\r\n", pages[currentPageI].GetTextLinesAsTableColumn(field, r));
+                        }
+                        else
+                            s = Pdf.GetTextSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, r, pages.ActiveTemplate.TextAutoInsertSpaceThreshold, pages.ActiveTemplate.TextAutoInsertSpaceSubstitute);
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
-                        return Page.NormalizeText(Pdf.GetTextSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, r, pages.ActiveTemplate.TextAutoInsertSpaceThreshold, pages.ActiveTemplate.TextAutoInsertSpaceSubstitute));
+                        return Page.NormalizeText(s);
                     case Template.Field.Types.OcrText:
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
                         return Page.NormalizeText(Ocr.This.GetTextSurroundedByRectangle(pages[currentPageI].ActiveTemplateBitmap, r));
