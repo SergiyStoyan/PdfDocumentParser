@@ -11,7 +11,6 @@ using System.Windows.Forms;
 
 /*
 TBD: 
-- make table a field
 - change how char anchors work: allow char anchors to support empty space around selection rectangle;
 - check if tesseract's DetectBestOrientation can perform deskew;
 - MainForm and TemplateForm to WPF;
@@ -33,7 +32,7 @@ TBD:
 
     manual: tables can be processed the following ways:
     - get char boxes and do anything;
-    - substitute auto-insert spaces with "|" and then split to columns (very unreliabe);
+    - substitute auto-insert spaces with "|" and then split to columns (unreliabe);
     - create fields as columns
      */
 namespace Cliver.PdfDocumentParser
