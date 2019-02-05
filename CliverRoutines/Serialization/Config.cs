@@ -117,7 +117,8 @@ namespace Cliver
                 //bool ignore_load_error = false;
                 foreach (Assembly sa in sas)
                 {
-                    Type[] ets = sa.GetTypes();
+                    Type[] ets = null;
+                    ets = sa.GetTypes();
                     foreach (Type st in ets.Where(t => t.IsSubclassOf(typeof(Settings))))
                     {
                         List<FieldInfo> fis = new List<FieldInfo>();

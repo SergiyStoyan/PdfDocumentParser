@@ -18,21 +18,21 @@ namespace Cliver
     {
         static object lock_variable = new object();
 
-        static public void Initialize(Func<string, System.Drawing.Icon, string, string[], int, object, int> showDialog)
+        static LogMessage()
         {
-            LogMessage.showDialog = showDialog;
             if (ProgramRoutines.IsWebContext)
             {
                 DisableStumblingDialogs = true;
                 Output2Console = false;
             }
         }
-        static Func<string, System.Drawing.Icon, string, string[], int, object, int> showDialog = delegate(string title, System.Drawing.Icon icon, string message, string[] buttons, int defaultButtonId, object owner) 
-        {
-            if (!DisableStumblingDialogs)
-                throw new Exception("Message dialog is not provided!\r\n\r\nMessage to be showed:\r\n" + message);
-            return 0;
-        };
+
+        public static Func<string, System.Drawing.Icon, string, string[], int, Form, int> ShowDialog = delegate (string title, System.Drawing.Icon icon, string message, string[] buttons, int defaultButtonId, Form owner)
+         {
+             if (!DisableStumblingDialogs)
+                 throw new Exception("Message dialog is not provided!\r\n\r\nMessage to be showed:\r\n" + message);
+             return 0;
+         };
 
         /// <summary>
         /// Defines whether message boxes will be showed (run in manual mode) 
@@ -80,7 +80,7 @@ namespace Cliver
                         //Cliver.MessageForm mf = new Cliver.MessageForm(Application.ProductName, System.Drawing.SystemIcons.Question, message, new string[2] { "Yes", "No" }, automatic_yes ? 0 : 1, Owner);
                         //mf.ShowInTaskbar = Cliver.Message.ShowInTaskbar;
                         //return mf.ShowDialog() == 0;
-                        return 0 == showDialog(Application.ProductName, System.Drawing.SystemIcons.Question, message, new string[2] { "Yes", "No" }, automatic_yes ? 0 : 1, owner != null ? owner : Owner);
+                        return 0 == ShowDialog(Application.ProductName, System.Drawing.SystemIcons.Question, message, new string[2] { "Yes", "No" }, automatic_yes ? 0 : 1, owner != null ? owner : Owner);
                     }
                     else
                     {
@@ -132,7 +132,7 @@ namespace Cliver
                 if (!DisableStumblingDialogs)
                 {
                     if (!Output2Console)
-                        showDialog(Application.ProductName, System.Drawing.SystemIcons.Error, message, new string[1] { "OK" }, 0, owner != null ? owner : Owner);
+                        ShowDialog(Application.ProductName, System.Drawing.SystemIcons.Error, message, new string[1] { "OK" }, 0, owner != null ? owner : Owner);
                     else
                         Console.WriteLine("ERROR: " + message);
                 }
@@ -173,7 +173,7 @@ namespace Cliver
                 if (!DisableStumblingDialogs)
                 {
                     if (!Output2Console)
-                        showDialog(Application.ProductName, System.Drawing.SystemIcons.Error, message, new string[1] { "OK" }, 0, owner != null ? owner : Owner);
+                        ShowDialog(Application.ProductName, System.Drawing.SystemIcons.Error, message, new string[1] { "OK" }, 0, owner != null ? owner : Owner);
                     else
                     {
                         Console.WriteLine("EXIT: " + message);
@@ -202,7 +202,7 @@ namespace Cliver
                 if (!DisableStumblingDialogs)
                 {
                     if (!Output2Console)
-                        showDialog(Application.ProductName, System.Drawing.SystemIcons.Information, message, new string[1] { "OK" }, 0, owner != null ? owner : Owner);
+                        ShowDialog(Application.ProductName, System.Drawing.SystemIcons.Information, message, new string[1] { "OK" }, 0, owner != null ? owner : Owner);
                     else
                         Console.WriteLine(message);
                 }
@@ -227,7 +227,7 @@ namespace Cliver
                 if (!DisableStumblingDialogs)
                 {
                     if (!Output2Console)
-                        showDialog(Application.ProductName, System.Drawing.SystemIcons.Warning, message, new string[1] { "OK" }, 0, owner != null ? owner : Owner);
+                        ShowDialog(Application.ProductName, System.Drawing.SystemIcons.Warning, message, new string[1] { "OK" }, 0, owner != null ? owner : Owner);
                     else
                         Console.WriteLine(message);
                 }
@@ -247,7 +247,7 @@ namespace Cliver
                 if (!DisableStumblingDialogs)
                 {
                     if (!Output2Console)
-                        showDialog(Application.ProductName, System.Drawing.SystemIcons.Exclamation, message, new string[1] { "OK" }, 0, owner != null ? owner : Owner);
+                        ShowDialog(Application.ProductName, System.Drawing.SystemIcons.Exclamation, message, new string[1] { "OK" }, 0, owner != null ? owner : Owner);
                     else
                         Console.WriteLine(message);
                 }
@@ -272,7 +272,7 @@ namespace Cliver
                 if (!DisableStumblingDialogs)
                 {
                     if (!Output2Console)
-                        showDialog(Application.ProductName, System.Drawing.SystemIcons.Information, message, new string[1] { "OK" }, 0, owner != null ? owner : Owner);
+                        ShowDialog(Application.ProductName, System.Drawing.SystemIcons.Information, message, new string[1] { "OK" }, 0, owner != null ? owner : Owner);
                     else
                         Console.WriteLine(message);
                 }
