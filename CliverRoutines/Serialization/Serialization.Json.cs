@@ -7,26 +7,21 @@
 //#define UseNetJsonSerialization //for legacy apps
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Configuration;
 #if UseNetJsonSerialization
 using System.Web.Script.Serialization;
 #else
 using Newtonsoft.Json;
 #endif
 using System.IO;
-using System.Runtime.Serialization;
-using System.Xml;
 
 namespace Cliver
 {
-    static public partial class Serialization
+    public static partial class Serialization
     {
-        static public class Json
+        public static class Json
         {
-            static public string Serialize(object o, bool indented = true, bool polymorphic = true)
-            {
+            public static string Serialize(object o, bool indented = true, bool polymorphic = true)
+            { 
                 if (o == null)
                     return null;
 #if UseNetJsonSerialization
@@ -39,7 +34,7 @@ namespace Cliver
 #endif
             }
 
-            static public T Deserialize<T>(string json, bool polymorphic = true)
+            public static T Deserialize<T>(string json, bool polymorphic = true)
             {
 #if UseNetJsonSerialization
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -50,7 +45,7 @@ namespace Cliver
 #endif
             }
 
-            static public object Deserialize(Type type, string json, bool polymorphic = true)
+            public static object Deserialize(Type type, string json, bool polymorphic = true)
             {
 #if UseNetJsonSerialization
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -64,28 +59,28 @@ namespace Cliver
 
             static JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto };
 
-            static public void Save(string file, object o, bool polymorphic = true, bool indented = true)
+            public static void Save(string file, object o, bool polymorphic = true, bool indented = true)
             {
                 FileSystemRoutines.CreateDirectory(PathRoutines.GetDirFromPath(file));
                 File.WriteAllText(file, Serialize(o, indented, polymorphic));
             }
 
-            static public T Load<T>(string file, bool polymorphic = true)
+            public static T Load<T>(string file, bool polymorphic = true)
             {
                 return Deserialize<T>(File.ReadAllText(file), polymorphic);
             }
 
-            static public object Load(Type type, string file, bool polymorphic = true)
+            public static object Load(Type type, string file, bool polymorphic = true)
             {
                 return Deserialize(type, File.ReadAllText(file), polymorphic);
             }
 
-            static public T Clone<T>(T o)
+            public static T Clone<T>(T o)
             {
                 return Deserialize<T>(Serialize(o, false, true));
             }
 
-            static public object Clone(Type type, object o)
+            public static object Clone(Type type, object o)
             {
                 return Deserialize(type, Serialize(o, false, true));
             }

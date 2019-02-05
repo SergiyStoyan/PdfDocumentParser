@@ -39,10 +39,10 @@ namespace Cliver
             return System.Drawing.Icon.ExtractAssociatedIcon((assembly != null ? assembly : Assembly.GetEntryAssembly()).Location);
         }
 
-        public static System.Windows.Media.ImageSource GetAppIconImageSource()
-        {
-            return GetAppIcon().ToImageSource();
-        }
+        //public static System.Windows.Media.ImageSource GetAppIconImageSource()
+        //{
+        //    return GetAppIcon().ToImageSource();
+        //}
 
         public class AssemblyInfo
         {

@@ -13,7 +13,6 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Security.Cryptography;
-using System.Collections.Generic;
 
 namespace Cliver
 {
@@ -108,19 +107,9 @@ namespace Cliver
             }
         }
 
-        static public string GetKeyByComputer()
-        {
-            List<string> ss = SystemInfo.GetMotherboardIds();
-            if (ss.Count > 0)
-                return ss[0];
-            ss = SystemInfo.GetMACs();
-            if (ss.Count > 0)
-                return ss[0];
-            return null;
-        }
-
         public class ProtectedData
         {
+            public static DataProtectionScope DataProtectionScope = DataProtectionScope.CurrentUser;
             readonly byte[] key = null;
 
             public ProtectedData(byte[] key)
@@ -128,10 +117,8 @@ namespace Cliver
                 this.key = key;
             }
 
-            public ProtectedData(string key = null)
+            public ProtectedData(string key)
             {
-                if (key == null)
-                    key = GetKeyByComputer();
                 if (key != null)
                     this.key = Encoding.UTF8.GetBytes(key);
             }
@@ -141,7 +128,7 @@ namespace Cliver
                 if (str == null)
                     throw new ArgumentNullException("str");
                 var data = Encoding.Unicode.GetBytes(str);
-                byte[] encrypted = System.Security.Cryptography.ProtectedData.Protect(data, key, DataProtectionScope.LocalMachine);
+                byte[] encrypted = System.Security.Cryptography.ProtectedData.Protect(data, key, DataProtectionScope);
                 return Convert.ToBase64String(encrypted);
             }
 
@@ -150,7 +137,7 @@ namespace Cliver
                 if (str == null)
                     throw new ArgumentNullException("str");
                 byte[] data = Convert.FromBase64String(str);
-                byte[] decrypted = System.Security.Cryptography.ProtectedData.Unprotect(data, key, DataProtectionScope.LocalMachine);
+                byte[] decrypted = System.Security.Cryptography.ProtectedData.Unprotect(data, key, DataProtectionScope);
                 return Encoding.Unicode.GetString(decrypted);
             }
         }

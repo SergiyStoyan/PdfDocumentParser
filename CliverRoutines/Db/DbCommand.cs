@@ -7,12 +7,8 @@
 //Copyright: (C) 2006, Sergey Stoyan
 //********************************************************************************************
 using System;
-using System.Data.OleDb;
-using System.Data.Odbc;
 using System.Data;
-using System.IO;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data.SqlClient;
 //using MySql.Data.MySqlClient;
 

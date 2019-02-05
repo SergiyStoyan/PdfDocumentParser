@@ -6,9 +6,6 @@
 //        26 September 2006
 //Copyright: (C) 2006, Sergey Stoyan
 //********************************************************************************************
-using System;
-using System.Linq;
-using System.Threading;
 using System.Net.Sockets;
 
 

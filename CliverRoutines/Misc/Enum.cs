@@ -6,12 +6,7 @@
 //        26 September 2006
 //Copyright: (C) 2006, Sergey Stoyan
 //********************************************************************************************
-using System;
-using System.Diagnostics;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Reflection;
 

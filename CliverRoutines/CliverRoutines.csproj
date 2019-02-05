@@ -16,7 +16,6 @@
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
-    <DelaySign>false</DelaySign>
     <OutputType>Library</OutputType>
     <RootNamespace>Cliver</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
@@ -106,11 +105,6 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\InvoiceParser\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -142,91 +136,51 @@
       <Name>System.XML</Name>
     </Reference>
     <Reference Include="WindowsBase" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseForm\BaseForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="BaseForm\BaseForm.designer.cs">
-      <DependentUpon>BaseForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="BaseForm\Message.cs" />
-    <Compile Include="BaseForm\MessageForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="BaseForm\MessageForm.Designer.cs">
-      <DependentUpon>MessageForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="BaseService.cs" />
+    <Compile Include="Log_\Log.constants.cs" />
+    <Compile Include="Log_\Log.NamedWriter.cs" />
+    <Compile Include="Log_\Log.Session.cs" />
+    <Compile Include="Log_\Log.static.cs" />
+    <Compile Include="Log_\Log.ThreadWriter.cs" />
+    <Compile Include="Log_\Log.Writer.cs" />
+    <Compile Include="Log_\LogMessage.cs" />
     <Compile Include="Misc\WebClient.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Misc\ProcessRoutines.GetLockingProcesses.cs" />
-    <Compile Include="Serialization\Config.cs" />
     <Compile Include="ListDb.IndexedTable.cs" />
     <Compile Include="HandyDictionary.cs" />
     <Compile Include="ListDb.Table.cs" />
     <Compile Include="Misc\FileSystemRoutines.cs" />
-    <Compile Include="Serialization\Serialization.Json.cs" />
-    <Compile Include="Serialization\Serialization.Xml.cs" />
-    <Compile Include="Misc\WindowsFirewall.cs" />
     <Compile Include="Misc\Crypto.cs" />
     <Compile Include="Db\DbCommand.cs" />
     <Compile Include="Db\DbConnection.cs" />
-    <Compile Include="Log_\Log.NamedWriter.cs" />
-    <Compile Include="Log_\Log.Session.cs" />
-    <Compile Include="Log_\Log.ThreadWriter.cs" />
     <Compile Include="Misc\FieldPreparation.cs" />
     <Compile Include="InternetDateTime.cs" />
     <Compile Include="Misc\Enum.cs" />
     <Compile Include="Misc\AssemblyRoutines.cs" />
     <Compile Include="Misc\ImageRoutines.cs" />
-    <Compile Include="Misc\ProcessRoutines.AntiZombieGuard.cs" />
-    <Compile Include="Misc\ProcessRoutines.CreateProcess.cs" />
     <Compile Include="Misc\SocketRoutines.cs" />
-    <Compile Include="Misc\WindowsUserRoutines.cs" />
-    <Compile Include="Misc\SystemRoutines.cs" />
-    <Compile Include="Misc\SystemInfo.cs" />
     <Compile Include="Misc\ProgramRoutines.cs" />
     <Compile Include="Misc\ConvertionRoutines.cs" />
-    <Compile Include="Serialization\Serializable.cs" />
-    <Compile Include="Misc\SettingsBase.cs" />
-    <Compile Include="Serialization\Serialization.Binary.cs" />
-    <Compile Include="Log_\Log.constants.cs" />
-    <Compile Include="Log_\Log.static.cs" />
-    <Compile Include="Log_\Log.Writer.cs" />
-    <Compile Include="Log_\LogMessage.cs" />
-    <Compile Include="Misc\ProcessRoutines.cs" />
     <Compile Include="Misc\ReflectionRoutines.cs" />
     <Compile Include="Misc\NetworkRoutines.cs" />
-    <Compile Include="Misc\WindowInterceptor.cs" />
     <Compile Include="Misc\XmlRoutines.cs" />
     <Compile Include="Misc\ConsoleRoutines.cs" />
     <Compile Include="Misc\ThreadRoutines.cs" />
     <Compile Include="Misc\StringByteRoutines.cs" />
-    <Compile Include="Misc\ExcelRoutines.cs" />
     <Compile Include="Misc\SleepRoutines.cs" />
     <Compile Include="Misc\DateTimeRoutines.cs" />
     <Compile Include="Misc\PathRoutines.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WinApi\Shell32.cs" />
-    <Compile Include="WinApi\Secur32.cs" />
-    <Compile Include="WinApi\Wininet.cs" />
-    <Compile Include="WinApi\Advapi32.cs" />
-    <Compile Include="WinApi\Userenv.cs" />
-    <Compile Include="WinApi\Wts.cs" />
-    <Compile Include="WinApi\User32.cs" />
-    <Compile Include="WinApi\Messages.cs" />
-    <Compile Include="Misc\ErrorRoutines.cs" />
-    <Compile Include="WinApi\Kernel32.cs" />
-    <Compile Include="WinApi\Win64.cs" />
-    <EmbeddedResource Include="BaseForm\BaseForm.resx">
-      <DependentUpon>BaseForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="BaseForm\MessageForm.resx">
-      <DependentUpon>MessageForm.cs</DependentUpon>
-    </EmbeddedResource>
+    <Compile Include="Serialization\Config.cs" />
+    <Compile Include="Serialization\Serializable.cs" />
+    <Compile Include="Serialization\Serialization.Binary.cs" />
+    <Compile Include="Serialization\Serialization.Json.cs" />
+    <Compile Include="Serialization\Serialization.Xml.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -268,7 +222,6 @@
     <None Include="app.manifest" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

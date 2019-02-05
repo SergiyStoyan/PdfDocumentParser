@@ -3,10 +3,6 @@
 //        sergey.stoyan@gmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Configuration;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 

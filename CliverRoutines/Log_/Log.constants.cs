@@ -7,14 +7,9 @@
 //Copyright: (C) 2006-2013, Sergey Stoyan
 //********************************************************************************************
 using System;
-using System.Linq;
 using System.Threading;
-using System.Collections.Generic;
-using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Reflection;
 
 namespace Cliver
@@ -28,21 +23,21 @@ namespace Cliver
 
         static Log()
         {
-            if (ProgramRoutines.IsWebContext)
+            /*if (ProgramRoutines.IsWebContext) - crashes on Xamarin
                 throw new Exception("Log is disabled in web context.");
 
             if (ProgramRoutines.IsWebContext)
                 ProcessName = System.Web.Compilation.BuildManager.GetGlobalAsaxType().BaseType.Assembly.GetName(false).Name;
-            else
+            else*/
                 ProcessName = System.Reflection.Assembly.GetEntryAssembly().GetName(false).Name;
 
-            AppDir = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\');
+            AppDir = AppDomain.CurrentDomain.BaseDirectory.TrimEnd(System.IO.Path.DirectorySeparatorChar);
             
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location);
             CompanyName = string.IsNullOrWhiteSpace(fvi.CompanyName) ? "CliverSoft" : fvi.CompanyName;
 
-            CompanyCommonDataDir = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\" + CompanyName;
-            AppCommonDataDir = CompanyCommonDataDir + "\\" + Log.ProcessName;
+            CompanyCommonDataDir = Environment.GetFolderPath(Environment.SpecialFolder./*CommonApplicationData - no write permission on macOS*/LocalApplicationData) + System.IO.Path.DirectorySeparatorChar + CompanyName;
+            AppCommonDataDir = CompanyCommonDataDir + System.IO.Path.DirectorySeparatorChar + Log.ProcessName;
             //Log.DeleteOldLogs();
         }
 
@@ -75,60 +70,73 @@ namespace Cliver
         {
             get
             {
-                if (work_dir == null)
+                if (workDir == null)
                 {
-                    Thread deleting_old_logs_t = null;
+                    Thread deletingOldLogsThread = null;
                     lock (lock_object)
                     {
-                        if (pre_work_dir != null && pre_work_dir.Contains(":"))
+                        if (preWorkDir != null && System.IO.Path.IsPathRooted(preWorkDir))
                         {
-                            work_dir = pre_work_dir + @"\" + Log.ProcessName + WorkDirPrefix;
-                            if (write_log && !Directory.Exists(work_dir))
+                            workDir = preWorkDir + System.IO.Path.DirectorySeparatorChar + Log.ProcessName + WorkDirPrefix;
+                            if (writeLog && !Directory.Exists(workDir))
                                 try
                                 {
-                                    Directory.CreateDirectory(work_dir);
+                                    //Directory.CreateDirectory(workDir);
+                                    FileSystemRoutines.CreateDirectory(workDir);
                                 }
-                                catch
+                                catch(Exception e)
                                 {
-                                    pre_work_dir = null;
+                                    preWorkDir = null;
                                 }
                         }
-                        if (string.IsNullOrWhiteSpace(work_dir) || !Directory.Exists(work_dir))
+                        if (string.IsNullOrWhiteSpace(workDir) || !Directory.Exists(workDir))
                         {
-                            foreach (string base_dir in new string[] {
+                            foreach (string baseDir in new string[] {
                                 Log.AppDir,
                                 CompanyCommonDataDir,
-                                System.IO.Path.GetTempPath() + "\\" + CompanyName + "\\",
+                                System.IO.Path.GetTempPath() + System.IO.Path.DirectorySeparatorChar + CompanyName + System.IO.Path.DirectorySeparatorChar,
                                 Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)
                             })
                             {
-                                work_dir = base_dir + @"\" + pre_work_dir + @"\" + Log.ProcessName + WorkDirPrefix;
-                                if (!write_log)
+                                workDir = baseDir + System.IO.Path.DirectorySeparatorChar + preWorkDir + System.IO.Path.DirectorySeparatorChar + Log.ProcessName + WorkDirPrefix;
+                                if (!writeLog)
                                     break;
-                                if (Directory.Exists(work_dir))
+                                if (Directory.Exists(workDir))
                                     break;
                                 try
                                 {
-                                    Directory.CreateDirectory(work_dir);
-                                    if (Directory.Exists(work_dir))
+                                    //Directory.CreateDirectory(workDir);
+                                    FileSystemRoutines.CreateDirectory(workDir);
+                                    if (Directory.Exists(workDir))
                                         break;
                                 }
-                                catch { }
+                                catch (Exception e)
+                                { }
                             }
                         }
-                        if (write_log)
-                            if (Directory.Exists(work_dir) && delete_logs_older_days >= 0)
-                                deleting_old_logs_t = ThreadRoutines.StartTry(() => { Log.DeleteOldLogs(delete_logs_older_days, ShowDeleteOldLogsDialog); });//to avoid a concurrent loop while accessing the log file from the same thread 
+                        if (writeLog)
+                            if (Directory.Exists(workDir) && deleteLogsOlderDays >= 0)
+                                deletingOldLogsThread = startThread(() => { Log.DeleteOldLogs(deleteLogsOlderDays, ShowDeleteOldLogsDialog); });//to avoid a concurrent loop while accessing the log file from the same thread 
                             else
                                 throw new Exception("Could not create log folder!");
                     }
+                    workDir= PathRoutines.GetNormalizedPath(workDir, false);
                     // delete_old_logs?.Join();
                 }
-                return Regex.Replace(work_dir, @"\\\\", @"\");
+                return workDir;
             }
         }
-        static string work_dir = null;
+        static string workDir = null;
         public const string WorkDirPrefix = @"_Sessions";
+        static Thread startThread(ThreadStart code, bool background = true, ApartmentState state = ApartmentState.Unknown)
+        {
+            Thread t = new Thread(code);
+            if (state != ApartmentState.Unknown)
+                t.SetApartmentState(state);
+            t.IsBackground = background;
+            t.Start();
+            return t;
+        }
         //static bool HaveWritePermissionForDir(string dir)
         //{
         //    var writeAllow = false;
@@ -168,18 +176,18 @@ namespace Cliver
         {
             get
             {
-                if (main_session == null)
-                    main_session = new Session();
-                return main_session;
+                if (mainSession == null)
+                    mainSession = new Session();
+                return mainSession;
             }
         }
-        static Session main_session = null;
+        static Session mainSession = null;
 
         public static bool IsMainSessionOpen
         {
             get
             { 
-                return main_session != null;
+                return mainSession != null;
             }
         }
 
@@ -197,10 +205,10 @@ namespace Cliver
             {
                 Log.CloseAll();
                 
-                work_dir = null;
-                if (main_session != null)
-                    main_session.Close();
-                main_session = null;
+                workDir = null;
+                if (mainSession != null)
+                    mainSession.Close();
+                mainSession = null;
 
                 GC.Collect();
             }
@@ -209,7 +217,7 @@ namespace Cliver
         /// <summary>
         /// Deletes Log data from disk that is older than the specified threshold
         /// </summary>
-        public static void DeleteOldLogs(int delete_logs_older_days, bool show_dialog)
+        public static void DeleteOldLogs(int deleteLogsOlderDays, bool show_dialog)
         {
             //ThreadWriter tw = Log.Main;
             //Log.Main.Inform("test");
@@ -220,9 +228,9 @@ namespace Cliver
             delete_old_logs_running = true;
             try
             {
-                if (delete_logs_older_days > 0)
+                if (deleteLogsOlderDays > 0)
                 {
-                    DateTime FirstLogDate = DateTime.Now.AddDays(-delete_logs_older_days);
+                    DateTime FirstLogDate = DateTime.Now.AddDays(-deleteLogsOlderDays);
 
                     DirectoryInfo di = new DirectoryInfo(Log.WorkDir);
                     if (!di.Exists)
@@ -236,7 +244,7 @@ namespace Cliver
                             alert = "Session data including caches and logs older than " + FirstLogDate.ToString() + " are to be deleted.\r\nDelete?";
                             foreach (DirectoryInfo d in di.GetDirectories())
                             {
-                                if (main_session != null && d.FullName.StartsWith(main_session.Path, StringComparison.InvariantCultureIgnoreCase))
+                                if (mainSession != null && d.FullName.StartsWith(mainSession.Path, StringComparison.InvariantCultureIgnoreCase))
                                     continue;
                                 if (d.LastWriteTime >= FirstLogDate)
                                     continue;
@@ -310,7 +318,7 @@ namespace Cliver
         //    {
         //        if (path.Contains(":"))
         //            return path;
-        //        return System.IO.Path.GetFullPath(Log.AppDir + "\\" + path);
+        //        return System.IO.Path.GetFullPath(Log.AppDir + System.IO.Path.DirectorySeparatorChar + path);
         //    }
         //    catch (Exception e)
         //    {

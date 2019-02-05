@@ -7,14 +7,6 @@
 //Copyright: (C) 2006-2013, Sergey Stoyan
 //********************************************************************************************
 using System;
-using System.Linq;
-using System.Threading;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Cliver
 {

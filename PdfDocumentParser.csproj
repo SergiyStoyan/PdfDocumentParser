@@ -334,6 +334,10 @@
       <Project>{aca94788-bed1-4b8e-94ef-e54293e8d139}</Project>
       <Name>CliverRoutines</Name>
     </ProjectReference>
+    <ProjectReference Include="CliverWinRoutines\CliverWinRoutines.csproj">
+      <Project>{51f2df13-41f1-4f22-890f-c3b50c813909}</Project>
+      <Name>CliverWinRoutines</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -7,15 +7,8 @@
 //Copyright: (C) 2006-2013, Sergey Stoyan
 //********************************************************************************************
 using System;
-using System.Linq;
-using System.Threading;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Diagnostics;
 using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Reflection;
 
 namespace Cliver
 {
@@ -34,7 +27,7 @@ namespace Cliver
                 //    throw new Exception("SessionDir cannot be used in Log.Mode.ONLY_LOG");
 
                 path = get_path(name);
-                if(Log.mode == Mode.SESSIONS && write_log)
+                if(Log.mode == Mode.SESSIONS && writeLog)
                     Directory.CreateDirectory(path);
             }
 
@@ -48,7 +41,7 @@ namespace Cliver
                             return WorkDir;
                         //case Cliver.Log.Mode.SINGLE_SESSION:
                         case Cliver.Log.Mode.SESSIONS:
-                            string path0 = WorkDir + "\\" + session_name_prefix + "_" + (string.IsNullOrWhiteSpace(name) ? "" : name + "_") + TimeMark;
+                            string path0 = WorkDir + System.IO.Path.DirectorySeparatorChar + session_name_prefix + "_" + (string.IsNullOrWhiteSpace(name) ? "" : name + "_") + TimeMark;
                             string path = path0;
                             for (int count = 1; Directory.Exists(path); count++)
                                 path = path0 + "_" + count.ToString();
@@ -166,59 +159,6 @@ namespace Cliver
                     return NamedWriter.Get(this, name);
                 }
             }
-
-            ///// <summary>
-            ///// Output directory for current session
-            ///// </summary>
-            //public static string OutputDir
-            //{
-            //    get
-            //    {
-            //        if (output_dir == null)
-            //        {
-            //            lock (lock_object)
-            //            {
-            //                output_dir = SessionDir + @"\" + OutputDirName;
-
-            //                DirectoryInfo di = new DirectoryInfo(output_dir);
-            //                if (!di.Exists)
-            //                    di.Create();
-            //            }
-            //        }
-            //        return output_dir;
-            //    }
-            //}
-            //static string output_dir = null;
-
-            ///// <summary>
-            ///// Output folder name
-            ///// </summary>
-            //public static string OutputDirName = @"output";
-
-            ///// <summary>
-            ///// Download directory for session. 
-            ///// This dir can be used to calculate value of downloaded bytes.
-            ///// </summary>
-            //public static string DownloadDir
-            //{
-            //    get
-            //    {
-            //        if (download_dir == null)
-            //        {
-            //            lock (lock_object)
-            //            {
-            //                download_dir = SessionDir + "\\" + DownloadDirName;
-
-            //                DirectoryInfo di = new DirectoryInfo(download_dir);
-            //                if (!di.Exists)
-            //                    di.Create();
-            //            }
-            //        }
-            //        return download_dir;
-            //    }
-            //}
-            //static string download_dir = null;
-            //public const string DownloadDirName = "cache";
 
             public Writer Default
             {
