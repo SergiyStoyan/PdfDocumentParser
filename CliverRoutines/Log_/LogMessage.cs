@@ -30,7 +30,7 @@ namespace Cliver
         public static Func<string, System.Drawing.Icon, string, string[], int, Form, int> ShowDialog = delegate (string title, System.Drawing.Icon icon, string message, string[] buttons, int defaultButtonId, Form owner)
          {
              if (!DisableStumblingDialogs)
-                 throw new Exception("Message dialog is not provided!\r\n\r\nMessage to be showed:\r\n" + message);
+                 throw new Exception("Message dialog is not provided!\r\n\r\nMessage to be shown:\r\n" + message);
              return 0;
          };
 
