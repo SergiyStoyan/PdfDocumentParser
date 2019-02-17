@@ -67,12 +67,12 @@ namespace Cliver
 
     abstract public class AppSettings : Settings
     {
-        public static readonly string StorageDir = Log.AppCommonDataDir + System.IO.Path.DirectorySeparatorChar + Config.CONFIG_FOLDER_NAME;
+        public static readonly string StorageDir = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + System.IO.Path.DirectorySeparatorChar + Log.CompanyName + System.IO.Path.DirectorySeparatorChar + Log.ProcessName + System.IO.Path.DirectorySeparatorChar + Config.CONFIG_FOLDER_NAME;
     }
 
     abstract public class UserSettings : Settings
     {
-        public static readonly string StorageDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + System.IO.Path.DirectorySeparatorChar + Log.CompanyName + System.IO.Path.DirectorySeparatorChar + Log.ProcessName + System.IO.Path.DirectorySeparatorChar + Config.CONFIG_FOLDER_NAME;
+        public static readonly string StorageDir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + System.IO.Path.DirectorySeparatorChar + Log.CompanyName + System.IO.Path.DirectorySeparatorChar + Log.ProcessName + System.IO.Path.DirectorySeparatorChar + Config.CONFIG_FOLDER_NAME;
     }
 
     /// <summary>
@@ -82,7 +82,7 @@ namespace Cliver
     {
         static Config()
         {
-            DefaultStorageDir = Log.AppCommonDataDir + System.IO.Path.DirectorySeparatorChar + CONFIG_FOLDER_NAME;
+               DefaultStorageDir = AppSettings.StorageDir;
         }
 
         /// <summary>
@@ -117,8 +117,7 @@ namespace Cliver
                 //bool ignore_load_error = false;
                 foreach (Assembly sa in sas)
                 {
-                    Type[] ets = null;
-                    ets = sa.GetTypes();
+                    Type[] ets = sa.GetTypes();
                     foreach (Type st in ets.Where(t => t.IsSubclassOf(typeof(Settings))))
                     {
                         List<FieldInfo> fis = new List<FieldInfo>();

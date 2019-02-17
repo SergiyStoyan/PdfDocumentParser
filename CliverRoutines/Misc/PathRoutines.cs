@@ -35,7 +35,7 @@ namespace Cliver
 
         public static string GetAbsolutePath(string path)
         {
-            if (path.Contains(":"))
+            if (Path.IsPathRooted(path))
                 return path;
             return Log.AppDir + System.IO.Path.DirectorySeparatorChar + path;
         }

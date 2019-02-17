@@ -11,6 +11,7 @@ using System.Threading;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace Cliver
 {
@@ -29,34 +30,48 @@ namespace Cliver
             if (ProgramRoutines.IsWebContext)
                 ProcessName = System.Web.Compilation.BuildManager.GetGlobalAsaxType().BaseType.Assembly.GetName(false).Name;
             else*/
-                ProcessName = System.Reflection.Assembly.GetEntryAssembly().GetName(false).Name;
+            ProcessName = System.Reflection.Assembly.GetEntryAssembly().GetName(false).Name;
 
             AppDir = AppDomain.CurrentDomain.BaseDirectory.TrimEnd(System.IO.Path.DirectorySeparatorChar);
-            
+
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location);
             CompanyName = string.IsNullOrWhiteSpace(fvi.CompanyName) ? "CliverSoft" : fvi.CompanyName;
-
-            CompanyCommonDataDir = Environment.GetFolderPath(Environment.SpecialFolder./*CommonApplicationData - no write permission on macOS*/LocalApplicationData) + System.IO.Path.DirectorySeparatorChar + CompanyName;
+            
+            //!!!no write permission on macOS!!!
+            CompanyCommonDataDir = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + System.IO.Path.DirectorySeparatorChar + CompanyName;
             AppCommonDataDir = CompanyCommonDataDir + System.IO.Path.DirectorySeparatorChar + Log.ProcessName;
+
+            CompanyUserDataDir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + System.IO.Path.DirectorySeparatorChar + CompanyName;
+            AppUserDataDir = CompanyUserDataDir + System.IO.Path.DirectorySeparatorChar + Log.ProcessName;
             //Log.DeleteOldLogs();
         }
 
-        /// <summary>
-        /// Normalized name of this process
-        /// </summary>
-        public static readonly string ProcessName;
+    /// <summary>
+    /// Normalized name of this process
+    /// </summary>
+    public static readonly string ProcessName;
 
-        public static readonly string CompanyName;
+    public static readonly string CompanyName;
+
+    /// <summary>
+    /// Directory where the CliverSoft's application data independent on user are located.
+    /// </summary>
+    public static readonly string CompanyCommonDataDir;
+
+    /// <summary>
+    /// Directory where the application's data files independent on user are located.
+    /// </summary>
+    public static readonly string AppCommonDataDir;
 
         /// <summary>
-        /// Directory where the CliverSoft's application data independent on user are located.
+        /// Directory where the CliverSoft's application data dependent on user are located.
         /// </summary>
-        public static readonly string CompanyCommonDataDir;
+        public static readonly string CompanyUserDataDir;
 
         /// <summary>
-        /// Directory where the application's data files independent on user are located.
+        /// Directory where the application's data files dependent on user are located.
         /// </summary>
-        public static readonly string AppCommonDataDir;
+        public static readonly string AppUserDataDir;
 
         /// <summary>
         /// Directory where the application binary is located.
@@ -75,53 +90,46 @@ namespace Cliver
                     Thread deletingOldLogsThread = null;
                     lock (lock_object)
                     {
+                        List<string> baseDirs = new List<string> {
+                                Log.AppDir,
+                                CompanyUserDataDir,
+                                CompanyCommonDataDir,
+                                Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
+                                System.IO.Path.GetTempPath() + System.IO.Path.DirectorySeparatorChar + CompanyName + System.IO.Path.DirectorySeparatorChar,
+                                };
                         if (preWorkDir != null && System.IO.Path.IsPathRooted(preWorkDir))
                         {
-                            workDir = preWorkDir + System.IO.Path.DirectorySeparatorChar + Log.ProcessName + WorkDirPrefix;
-                            if (writeLog && !Directory.Exists(workDir))
-                                try
-                                {
-                                    //Directory.CreateDirectory(workDir);
-                                    FileSystemRoutines.CreateDirectory(workDir);
-                                }
-                                catch(Exception e)
-                                {
-                                    preWorkDir = null;
-                                }
+                            baseDirs.Insert(0, preWorkDir);
+                            preWorkDir = null;
                         }
-                        if (string.IsNullOrWhiteSpace(workDir) || !Directory.Exists(workDir))
+                        foreach (string baseDir in baseDirs)
                         {
-                            foreach (string baseDir in new string[] {
-                                Log.AppDir,
-                                CompanyCommonDataDir,
-                                System.IO.Path.GetTempPath() + System.IO.Path.DirectorySeparatorChar + CompanyName + System.IO.Path.DirectorySeparatorChar,
-                                Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)
-                            })
-                            {
-                                workDir = baseDir + System.IO.Path.DirectorySeparatorChar + preWorkDir + System.IO.Path.DirectorySeparatorChar + Log.ProcessName + WorkDirPrefix;
-                                if (!writeLog)
-                                    break;
-                                if (Directory.Exists(workDir))
-                                    break;
+                            workDir = baseDir + System.IO.Path.DirectorySeparatorChar + preWorkDir + System.IO.Path.DirectorySeparatorChar + Log.ProcessName + WorkDirPrefix;
+                            if (writeLog)
                                 try
                                 {
-                                    //Directory.CreateDirectory(workDir);
-                                    FileSystemRoutines.CreateDirectory(workDir);
-                                    if (Directory.Exists(workDir))
-                                        break;
+                                    if (!Directory.Exists(workDir))
+                                        FileSystemRoutines.CreateDirectory(workDir);
+                                    string testFile = workDir + System.IO.Path.DirectorySeparatorChar + "test";
+                                    File.WriteAllText(testFile, "test");
+                                    File.Delete(testFile);
+                                    break;
                                 }
                                 catch (Exception e)
-                                { }
-                            }
+                                {
+                                    workDir = null;
+                                }
                         }
+                        if (workDir == null)
+                            throw new Exception("Could not access any log directory.");
+                        workDir = PathRoutines.GetNormalizedPath(workDir, false);
                         if (writeLog)
                             if (Directory.Exists(workDir) && deleteLogsOlderDays >= 0)
                                 deletingOldLogsThread = startThread(() => { Log.DeleteOldLogs(deleteLogsOlderDays, ShowDeleteOldLogsDialog); });//to avoid a concurrent loop while accessing the log file from the same thread 
                             else
                                 throw new Exception("Could not create log folder!");
                     }
-                    workDir= PathRoutines.GetNormalizedPath(workDir, false);
-                    // delete_old_logs?.Join();
+                    // deletingOldLogsThread?.Join();
                 }
                 return workDir;
             }
