@@ -7,11 +7,7 @@
 //#define UseNetJsonSerialization //for legacy apps
 
 using System;
-#if UseNetJsonSerialization
-using System.Web.Script.Serialization;
-#else
 using Newtonsoft.Json;
-#endif
 using System.IO;
 
 namespace Cliver
@@ -20,44 +16,34 @@ namespace Cliver
     {
         public static class Json
         {
-            public static string Serialize(object o, bool indented = true, bool polymorphic = true)
-            { 
+            public static string Serialize(object o, bool indented = true, bool polymorphic = true, bool ignoreNullProperties = true)
+            {
                 if (o == null)
                     return null;
-#if UseNetJsonSerialization
-                JavaScriptSerializer serializer = new JavaScriptSerializer();
-                return serializer.Serialize(o);
-#else
                 return JsonConvert.SerializeObject(o,
                     indented ? Newtonsoft.Json.Formatting.Indented : Newtonsoft.Json.Formatting.None,
-                    polymorphic ? jsonSerializerSettings : null);
-#endif
+                   new JsonSerializerSettings
+                   {
+                       TypeNameHandling = polymorphic ? TypeNameHandling.Auto : TypeNameHandling.None,
+                       NullValueHandling = ignoreNullProperties ? NullValueHandling.Ignore : NullValueHandling.Include
+                   }
+                    );
             }
 
             public static T Deserialize<T>(string json, bool polymorphic = true)
             {
-#if UseNetJsonSerialization
-                JavaScriptSerializer serializer = new JavaScriptSerializer();
-                return serializer.Deserialize<T>(json);
-#else
                 return JsonConvert.DeserializeObject<T>(json,
-                    polymorphic ? jsonSerializerSettings : null);
-#endif
+                    new JsonSerializerSettings { TypeNameHandling = polymorphic ? TypeNameHandling.Auto : TypeNameHandling.None }
+                    );
             }
 
             public static object Deserialize(Type type, string json, bool polymorphic = true)
             {
-#if UseNetJsonSerialization
-                JavaScriptSerializer serializer = new JavaScriptSerializer();
-                return serializer.Deserialize(json, type);
-#else
-                return JsonConvert.DeserializeObject(json, 
+                return JsonConvert.DeserializeObject(json,
                     type,
-                    polymorphic ? jsonSerializerSettings : null);
-#endif
+                    new JsonSerializerSettings { TypeNameHandling = polymorphic ? TypeNameHandling.Auto : TypeNameHandling.None }
+                    );
             }
-
-            static JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto };
 
             public static void Save(string file, object o, bool polymorphic = true, bool indented = true)
             {
@@ -87,4 +73,3 @@ namespace Cliver
         }
     }
 }
-
