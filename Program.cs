@@ -11,8 +11,8 @@ using System.Windows.Forms;
 
 /*
 TBD: 
-- change how char anchors work: allow char anchors to support empty space around selection rectangle;
 - make ImageData anchors have only 1 image;
+- change how char anchors work: allow char anchors to support empty space around selection rectangle;
 - check if tesseract's DetectBestOrientation can perform deskew;
 - MainForm and TemplateForm to WPF;
 - ? !!!in page.cs::_findAnchor() in case Template.Types.ImageData: images are not searched recursively (if a secondary image search failed then search stops). It should be done like it is done for linked anchors;
