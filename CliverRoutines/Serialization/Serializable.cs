@@ -4,15 +4,7 @@
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Configuration;
-using System.Web.Script.Serialization;
 using System.IO;
-using System.Runtime.Serialization;
-using System.Xml;
-using System.Reflection;
-using Newtonsoft.Json;
 
 namespace Cliver
 {
@@ -62,13 +54,13 @@ namespace Cliver
 
         static Serializable get(Type serializable_type, string file, InitMode init_mode)
         {
-            if (!file.Contains(":"))
-                file = Log.AppCommonDataDir + "\\" + file;
+            if (!Path.IsPathRooted(file))
+                file = Log.AppCommonDataDir + System.IO.Path.DirectorySeparatorChar + file;
             Serializable s;
             if (init_mode == InitMode.CREATE || (init_mode == InitMode.LOAD_OR_CREATE && !File.Exists(file)))
                 s = (Serializable)Activator.CreateInstance(serializable_type);
             else
-                s = (Serializable)Cliver.SerializationRoutines.Json.Load(serializable_type, file);
+                s = (Serializable)Cliver.Serialization.Json.Load(serializable_type, file);
             s.__File = file;
             return s;
         }
@@ -91,7 +83,7 @@ namespace Cliver
                 if (file != null)
                     __File = file;
                 Saving();
-                Cliver.SerializationRoutines.Json.Save(__File, this, true, __Indented);
+                Cliver.Serialization.Json.Save(__File, this, true, __Indented);
                 Saved();
             }
         }

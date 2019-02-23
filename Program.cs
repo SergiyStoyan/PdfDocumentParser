@@ -9,6 +9,33 @@ using System.IO;
 using System.Drawing;
 using System.Windows.Forms;
 
+/*
+TBD: 
+- make ImageData anchors have only 1 image;
+- change how char anchors work: allow char anchors to support empty space around selection rectangle;
+- check if tesseract's DetectBestOrientation can perform deskew;
+- MainForm and TemplateForm to WPF;
+- ? !!!in page.cs::_findAnchor() in case Template.Types.ImageData: images are not searched recursively (if a secondary image search failed then search stops). It should be done like it is done for linked anchors;
+- ?switch to Tesseract.4
+- tune image recognition by checking brightness deltas
+- ?provide multiple field extraction on page;
+- ?change anchor id->name (involves condition expressions)
+- ?store each template in separate file;
+
+ */
+/*
+ DONE:
+ - side anchors added to field;!!!RULE: assigning of rectange and anchors to a field must be done on the same page. 
+ - same name field can have multiple instances to look by order;
+ - options added to page::GetValue();
+     - fields can be marked as columns of a table;
+     - space substitution;
+
+    manual: tables can be processed the following ways:
+    - get char boxes and do anything;
+    - substitute auto-insert spaces with "|" and then split to columns (unreliabe);
+    - create fields as columns
+     */
 namespace Cliver.PdfDocumentParser
 {
     public class Program

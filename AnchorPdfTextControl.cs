@@ -17,11 +17,12 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class AnchorPdfTextControl : AnchorControl
     {
-        public AnchorPdfTextControl(float textAutoInsertSpaceThreshold)
+        public AnchorPdfTextControl(float textAutoInsertSpaceThreshold, string textAutoInsertSpaceSubstitute)
         {
             InitializeComponent();
 
             this.textAutoInsertSpaceThreshold = textAutoInsertSpaceThreshold;
+            this.textAutoInsertSpaceSubstitute = textAutoInsertSpaceSubstitute;
 
             cSearchRectangleMargin.CheckedChanged += delegate
             {
@@ -32,6 +33,7 @@ namespace Cliver.PdfDocumentParser
             };
         }
         float textAutoInsertSpaceThreshold;
+        string textAutoInsertSpaceSubstitute;
 
         override protected object getObject()
         {
@@ -52,9 +54,9 @@ namespace Cliver.PdfDocumentParser
             if (_object == null)
                 _object = new Template.Anchor.PdfText();
             StringBuilder sb = new StringBuilder();
-            foreach (var l in Pdf.RemoveDuplicatesAndGetLines(_object.CharBoxs.Select(x => new Pdf.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() }), textAutoInsertSpaceThreshold))
+            foreach (var l in Pdf.RemoveDuplicatesAndGetLines(_object.CharBoxs.Select(x => new Pdf.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() }), textAutoInsertSpaceThreshold, textAutoInsertSpaceSubstitute))
             {
-                foreach (var cb in l.CharBoxes)
+                foreach (var cb in l.CharBoxs)
                     sb.Append(cb.Char);
                 sb.Append("\r\n");
             }

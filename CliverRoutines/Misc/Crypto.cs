@@ -109,6 +109,7 @@ namespace Cliver
 
         public class ProtectedData
         {
+            public static DataProtectionScope DataProtectionScope = DataProtectionScope.CurrentUser;
             readonly byte[] key = null;
 
             public ProtectedData(byte[] key)
@@ -127,7 +128,7 @@ namespace Cliver
                 if (str == null)
                     throw new ArgumentNullException("str");
                 var data = Encoding.Unicode.GetBytes(str);
-                byte[] encrypted = System.Security.Cryptography.ProtectedData.Protect(data, key, DataProtectionScope.LocalMachine);
+                byte[] encrypted = System.Security.Cryptography.ProtectedData.Protect(data, key, DataProtectionScope);
                 return Convert.ToBase64String(encrypted);
             }
 
@@ -136,7 +137,7 @@ namespace Cliver
                 if (str == null)
                     throw new ArgumentNullException("str");
                 byte[] data = Convert.FromBase64String(str);
-                byte[] decrypted = System.Security.Cryptography.ProtectedData.Unprotect(data, key, DataProtectionScope.LocalMachine);
+                byte[] decrypted = System.Security.Cryptography.ProtectedData.Unprotect(data, key, DataProtectionScope);
                 return Encoding.Unicode.GetString(decrypted);
             }
         }

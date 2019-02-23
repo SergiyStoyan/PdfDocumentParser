@@ -85,6 +85,7 @@ namespace Cliver.PdfDocumentParser
                 //imageResolution.Value = template.ImageResolution;
 
                 textAutoInsertSpaceThreshold.Value = (decimal)t.TextAutoInsertSpaceThreshold;
+                textAutoInsertSpaceSubstitute.Text = t.TextAutoInsertSpaceSubstitute;
 
                 pageRotation.SelectedIndex = (int)t.PageRotation;
                 autoDeskew.Checked = t.AutoDeskew;
@@ -121,12 +122,12 @@ namespace Cliver.PdfDocumentParser
                     setConditionRow(row, c);
                 }
 
-                for (int i = 0; i < t.Fields.Count; i++)
-                {
-                    for (int j = i + 1; j < t.Fields.Count; j++)
-                        if (t.Fields[i].Name == t.Fields[j].Name)
-                            t.Fields.RemoveAt(j);
-                }
+                //for (int i = 0; i < t.Fields.Count; i++)
+                //{
+                //    for (int j = i + 1; j < t.Fields.Count; j++)
+                //        if (t.Fields[i].Name == t.Fields[j].Name)
+                //            t.Fields.RemoveAt(j);
+                //}
                 fields.Rows.Clear();
                 if (t.Fields != null)
                 {
@@ -180,7 +181,7 @@ namespace Cliver.PdfDocumentParser
         {
             if (pages == null)
                 return;
-            TextForm tf = new TextForm("Pdf Entity Text", PdfTextExtractor.GetTextFromPage(pages.PdfReader, currentPage), false);
+            TextForm tf = new TextForm("Pdf Entity Text", PdfTextExtractor.GetTextFromPage(pages.PdfReader, currentPageI), false);
             tf.ShowDialog();
         }
 
@@ -188,15 +189,15 @@ namespace Cliver.PdfDocumentParser
         {
             if (pages == null)
                 return;
-            //TextForm tf = new TextForm("OCR Text", PdfDocumentParser.Ocr.This.GetHtml(pages[currentPage].Bitmap), true);
-            TextForm tf = new TextForm("OCR Text", PdfDocumentParser.Ocr.GetText(pages[currentPage].ActiveTemplateOcrCharBoxs), false);
+            //TextForm tf = new TextForm("OCR Text", PdfDocumentParser.Ocr.This.GetHtml(pages[currentPageI].Bitmap), true);
+            TextForm tf = new TextForm("OCR Text", PdfDocumentParser.Ocr.GetText(pages[currentPageI].ActiveTemplateOcrCharBoxs), false);
             tf.ShowDialog();
         }
 
-        private void showJson_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void showAsJson_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Template t = getTemplateFromUI(false);
-            TextForm tf = new TextForm("Template JSON object", SerializationRoutines.Json.Serialize(t), false);
+            TextForm tf = new TextForm("Template JSON object", Serialization.Json.Serialize(t), false);
             tf.ShowDialog();
         }
 
@@ -230,6 +231,7 @@ namespace Cliver.PdfDocumentParser
             t.Name = name.Text.Trim();
 
             t.TextAutoInsertSpaceThreshold = (float)textAutoInsertSpaceThreshold.Value;
+            t.TextAutoInsertSpaceSubstitute = textAutoInsertSpaceSubstitute.Text;
 
             t.PageRotation = (Template.PageRotations)pageRotation.SelectedIndex;
             t.AutoDeskew = autoDeskew.Checked;
@@ -279,7 +281,7 @@ namespace Cliver.PdfDocumentParser
                         foreach (DataGridViewRow rr in fields.Rows)
                         {
                             Template.Field m = (Template.Field)rr.Tag;
-                            if (m != null && m.AnchorId == a.Id)
+                            if (m != null && (m.LeftAnchor?.Id == a.Id || m.TopAnchor?.Id == a.Id || m.RightAnchor?.Id == a.Id || m.BottomAnchor?.Id == a.Id))
                             {
                                 engaged = true;
                                 break;
@@ -304,14 +306,12 @@ namespace Cliver.PdfDocumentParser
                 Template.Condition c = (Template.Condition)r.Tag;
                 if (c == null)
                     continue;
-                if (!c.IsSet())
-                {
-                    if (saving && !string.IsNullOrWhiteSpace(c.Name))
-                        throw new Exception("Condition[row=" + (r.Index + 1) + "] is not set!");
-                    continue;
-                }
                 if (saving)
+                {
+                    if (!c.IsSet())
+                        throw new Exception("Condition[name=" + c.Name + "] is not set!");
                     BooleanEngine.Check(c.Value, t.Anchors.Select(x => x.Id));
+                }
                 t.Conditions.Add(c);
             }
             if (saving)
@@ -329,17 +329,45 @@ namespace Cliver.PdfDocumentParser
                     continue;
                 if (saving && !f.IsSet())
                     throw new Exception("Field[" + r.Index + "] is not set!");
-                if (saving && f.AnchorId != null && t.Anchors.FirstOrDefault(x => x.Id == f.AnchorId) == null)
-                    throw new Exception("Anchor[Id=" + f.AnchorId + " does not exist.");
+                if (saving)
+                    foreach (int? ai in new List<int?> { f.LeftAnchor?.Id, f.TopAnchor?.Id, f.RightAnchor?.Id, f.BottomAnchor?.Id })
+                        if (ai != null && t.Anchors.FirstOrDefault(x => x.Id == ai) == null)
+                            throw new Exception("Anchor[Id=" + ai + " does not exist.");
                 t.Fields.Add(f);
             }
             if (saving)
             {
                 if (t.Fields.Count < 1)
                     throw new Exception("Fields is empty!");
-                var dfs = t.Fields.GroupBy(x => x.Name).Where(x => x.Count() > 1).FirstOrDefault();
-                if (dfs != null)
-                    throw new Exception("Field '" + dfs.First().Name + "' is duplicated!");
+                //var dfs = t.Fields.GroupBy(x => x.Name).Where(x => x.Count() > 1).FirstOrDefault();
+                //if (dfs != null)
+                //    throw new Exception("Field '" + dfs.First().Name + "' is duplicated!");
+
+                //foreach (string columnOfTable in t.Fields.Where(x => x is Template.Field.PdfText).Select(x => (Template.Field.PdfText)x).Where(x => x.ColumnOfTable != null).Select(x => x.ColumnOfTable))
+                //{
+                //    Dictionary<string, List<Template.Field>> fieldName2orderedFields = new Dictionary<string, List<Template.Field>>();
+                //    foreach (Template.Field.PdfText pt in t.Fields.Where(x => x is Template.Field.PdfText).Select(x => (Template.Field.PdfText)x).Where(x => x.ColumnOfTable == columnOfTable))
+                //    {
+                //        List<Template.Field> fs;
+                //        if (!fieldName2orderedFields.TryGetValue(pt.Name, out fs))
+                //        {
+                //            fs = new List<Template.Field>();
+                //            fieldName2orderedFields[pt.Name] = fs;
+                //        }
+                //        fs.Add(pt);
+                //    }
+                //    int definitionCount = fieldName2orderedFields.Max(x => x.Value.Count());
+                //    foreach (string fn in fieldName2orderedFields.Keys)
+                //        if (definitionCount > fieldName2orderedFields[fn].Count)
+                //            throw new Exception("Field '" + fn + "' is column of table " + columnOfTable + " and so it must have the same number of definitions as the rest column fields!");
+                //}
+                foreach (Template.Field f0 in t.Fields)
+                {
+                    int tableDefinitionsCount = t.Fields.Where(x => x.Name == f0.Name).Count();
+                    string fn = t.Fields.Where(x => x.ColumnOfTable == f0.Name).GroupBy(x => x.Name).Where(x => x.Count() > tableDefinitionsCount).FirstOrDefault()?.First().Name;
+                    if (fn != null)
+                        throw new Exception("Field '" + fn + "' is a column of table field " + f0.Name + " so " + f0.Name + " must have number of definitions not less then that of " + fn + ".");
+                }
             }
 
             if (saving)

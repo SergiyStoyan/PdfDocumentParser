@@ -8,13 +8,7 @@
 //********************************************************************************************
 using System;
 using System.Linq;
-using System.Threading;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Cliver
 {

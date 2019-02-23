@@ -29,9 +29,9 @@ namespace Cliver.PdfDocumentParser
             return new PdfReader(pdfFile);
         }
 
-        public static System.Drawing.SizeF GetPageSize2(this PdfReader pr, int page_i)
+        public static System.Drawing.SizeF GetPageSize2(this PdfReader pr, int pageI)
         {
-            iTextSharp.text.Rectangle r = pr.GetPageSize(page_i);
+            iTextSharp.text.Rectangle r = pr.GetPageSize(pageI);
             return new System.Drawing.SizeF(r.Width, r.Height);
         }
 
@@ -40,25 +40,25 @@ namespace Cliver.PdfDocumentParser
             return new RenderFilter[] { new RegionTextRenderFilter(new System.util.RectangleJ(x, y, w, h)) };
         }
 
-        //static public Dictionary<string, string> ExtractTexts(this PdfReader pr, int page_i, Dictionary<string, RenderFilter[]> fieldNames2filters)
+        //static public Dictionary<string, string> ExtractTexts(this PdfReader pr, int pageI, Dictionary<string, RenderFilter[]> fieldNames2filters)
         //{
         //    Dictionary<string, string> fieldNames2texts = new Dictionary<string, string>();
         //    foreach (string fn in fieldNames2filters.Keys)
-        //        fieldNames2texts[fn] = pr.ExtractText(page_i, fieldNames2filters[fn]);
+        //        fieldNames2texts[fn] = pr.ExtractText(pageI, fieldNames2filters[fn]);
         //    return fieldNames2texts;
         //}
 
-        public static string ExtractText(this PdfReader pr, int page_i, float x, float y, float w, float h)
+        public static string ExtractText(this PdfReader pr, int pageI, float x, float y, float w, float h)
         {
             RenderFilter[] rf = new RenderFilter[] { new RegionTextRenderFilter(new System.util.RectangleJ(x, y, w, h)) };
-            return ExtractText(pr, page_i, rf);
+            return ExtractText(pr, pageI, rf);
         }
 
-        public static string ExtractText(this PdfReader pr, int page_i, RenderFilter[] f)
+        public static string ExtractText(this PdfReader pr, int pageI, RenderFilter[] f)
         {
             ITextExtractionStrategy s = new FilteredTextRenderListener(new LocationTextExtractionStrategy(), f);
-            return PdfTextExtractor.GetTextFromPage(pr, page_i, new LimitedTextStrategy2(s));
-            //return PdfTextExtractor.GetTextFromPage(pr, page_i, new LimitedTextStrategy(new LocationTextExtractionStrategy(), f));
+            return PdfTextExtractor.GetTextFromPage(pr, pageI, new LimitedTextStrategy2(s));
+            //return PdfTextExtractor.GetTextFromPage(pr, pageI, new LimitedTextStrategy(new LocationTextExtractionStrategy(), f));
         }
         //public class LimitedTextStrategy : FilteredTextRenderListener
         //{
@@ -109,7 +109,7 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        static public System.Drawing.Bitmap RenderBitmap(string pdf_file, int page_i, int resolution, bool byFile = false)
+        static public System.Drawing.Bitmap RenderBitmap(string pdfFile, int pageI, int resolution, bool byFile = false)
         {
             Process p = new Process();
             p.StartInfo.FileName = Log.AppDir + "\\gswin32c.exe";
@@ -122,7 +122,7 @@ namespace Cliver.PdfDocumentParser
             {
                 p.StartInfo.RedirectStandardOutput = true;
                 p.StartInfo.RedirectStandardError = true;
-                p.StartInfo.Arguments = "-dNOPROMPT -r" + resolution + " -dDownScaleFactor=" + dDownScaleFactor + " -dBATCH -dFirstPage=" + page_i + " -dLastPage=" + page_i + " -sDEVICE=png16m -dNOPAUSE -sOutputFile=%stdout -q \"" + pdf_file + "\"";
+                p.StartInfo.Arguments = "-dNOPROMPT -r" + resolution + " -dDownScaleFactor=" + dDownScaleFactor + " -dBATCH -dFirstPage=" + pageI + " -dLastPage=" + pageI + " -sDEVICE=png16m -dNOPAUSE -sOutputFile=%stdout -q \"" + pdfFile + "\"";
                 p.Start();
                 MemoryStream ms = new MemoryStream();
                 p.StandardOutput.BaseStream.CopyTo(ms);
@@ -134,13 +134,13 @@ namespace Cliver.PdfDocumentParser
                 }
                 catch (Exception e)
                 {
-                    return RenderBitmap(pdf_file, page_i, resolution, true);
+                    return RenderBitmap(pdfFile, pageI, resolution, true);
                 }
             }
             else//some pdf's require this because gs puts errors to stdout
             {
                 string buffer_file = Log.AppCommonDataDir + "\\buffer.png";
-                p.StartInfo.Arguments = "-dNOPROMPT -r" + resolution + " -dDownScaleFactor=" + dDownScaleFactor + " -dBATCH -dFirstPage=" + page_i + " -dLastPage=" + page_i + " -sDEVICE=png16m -dNOPAUSE -sOutputFile=\"" + buffer_file + "\" -q \"" + pdf_file + "\"";
+                p.StartInfo.Arguments = "-dNOPROMPT -r" + resolution + " -dDownScaleFactor=" + dDownScaleFactor + " -dBATCH -dFirstPage=" + pageI + " -dLastPage=" + pageI + " -sDEVICE=png16m -dNOPAUSE -sOutputFile=\"" + buffer_file + "\" -q \"" + pdfFile + "\"";
                 p.Start();
                 p.WaitForExit();
 
@@ -148,10 +148,10 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        static public List<LocationTextExtractionStrategy.TextChunk> GetTextChunks(this PdfReader pr, int page_i)
+        static public List<LocationTextExtractionStrategy.TextChunk> GetTextChunks(this PdfReader pr, int pageI)
         {
             ChunkLocationTextExtractionStrategy2 s = new ChunkLocationTextExtractionStrategy2();
-            PdfTextExtractor.GetTextFromPage(pr, page_i, s);
+            PdfTextExtractor.GetTextFromPage(pr, pageI, s);
             return s.TextChunks;
         }
         public class ChunkLocationTextExtractionStrategy2 : LocationTextExtractionStrategy
@@ -170,10 +170,10 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        static public List<LocationTextExtractionStrategy.TextChunk> GetCharacterTextChunks(this PdfReader pr, int page_i)
+        static public List<LocationTextExtractionStrategy.TextChunk> GetCharacterTextChunks(this PdfReader pr, int pageI)
         {
             CharLocationTextExtractionStrategy s = new CharLocationTextExtractionStrategy();
-            PdfTextExtractor.GetTextFromPage(pr, page_i, s);
+            PdfTextExtractor.GetTextFromPage(pr, pageI, s);
             return s.TextChunks;
         }
         public class CharLocationTextExtractionStrategy : LocationTextExtractionStrategy
@@ -199,35 +199,36 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public static string GetTextByTopLeftCoordinates(List<CharBox> cbs, System.Drawing.RectangleF r, float textAutoInsertSpaceThreshold)
+        public static string GetTextSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r, float textAutoInsertSpaceThreshold, string textAutoInsertSpaceSubstitute)
         {
-            cbs = removeDuplicates(cbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)));
-            cbs = cbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)).ToList();
+            return string.Join("\r\n", GetTextLinesSurroundedByRectangle(cbs, r, textAutoInsertSpaceThreshold, textAutoInsertSpaceSubstitute));
+        }
+
+        public static List<string> GetTextLinesSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r, float textAutoInsertSpaceThreshold, string textAutoInsertSpaceSubstitute)
+        {
+            cbs = GetCharBoxsSurroundedByRectangle(cbs, r);
             List<string> ls = new List<string>();
-            foreach (Line l in getLines(cbs, textAutoInsertSpaceThreshold))
+            foreach (Line l in GetLines(cbs, textAutoInsertSpaceThreshold, textAutoInsertSpaceSubstitute))
             {
                 StringBuilder sb = new StringBuilder();
-                foreach (CharBox cb in l.CharBoxes)
+                foreach (CharBox cb in l.CharBoxs)
                     sb.Append(cb.Char);
                 ls.Add(sb.ToString());
             }
-            return string.Join("\r\n", ls);
+            return ls;
         }
 
-        public static List<CharBox> GetCharBoxsSurroundedByRectangle(List<CharBox> bts, System.Drawing.RectangleF r, bool excludeInvisibleCharacters)
+        public static List<CharBox> GetCharBoxsSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r, bool excludeInvisibleCharacters = false)
         {
-            var bts_ = bts.Where(a => /*selectedR.IntersectsWith(a.R) || */r.Contains(a.R));
+            cbs = removeDuplicates(cbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)));
             if (excludeInvisibleCharacters)
-            {
-                string ignoredCharacters = " \t";
-                bts_ = bts_.Where(a => !ignoredCharacters.Contains(a.Char));
-            }
-            return bts_.ToList();
+                cbs = cbs.Where(a => !" \t".Contains(a.Char)).ToList();
+            return cbs;
         }
 
-        public static List<Line> RemoveDuplicatesAndGetLines(IEnumerable<CharBox> cbs, float textAutoInsertSpaceThreshold)
+        public static List<Line> RemoveDuplicatesAndGetLines(IEnumerable<CharBox> cbs, float textAutoInsertSpaceThreshold, string textAutoInsertSpaceSubstitute)
         {
-            return getLines(removeDuplicates(cbs), textAutoInsertSpaceThreshold);
+            return GetLines(removeDuplicates(cbs), textAutoInsertSpaceThreshold, textAutoInsertSpaceSubstitute);
         }
 
         static List<CharBox> removeDuplicates(IEnumerable<CharBox> cbs)
@@ -247,7 +248,7 @@ namespace Cliver.PdfDocumentParser
             return bs;
         }
 
-        static List<Line> getLines(IEnumerable<CharBox> cbs, float textAutoInsertSpaceThreshold)
+      public  static List<Line> GetLines(IEnumerable<CharBox> cbs, float textAutoInsertSpaceThreshold, string textAutoInsertSpaceSubstitute)
         {
             bool spaceAutoInsert = textAutoInsertSpaceThreshold > 0;
             cbs = cbs.OrderBy(a => a.R.X).ToList();
@@ -259,19 +260,24 @@ namespace Cliver.PdfDocumentParser
                     if (cb.R.Bottom < lines[i].Top)
                     {
                         Line l = new Line { Top = cb.R.Top, Bottom = cb.R.Bottom };
-                        l.CharBoxes.Add(cb);
+                        l.CharBoxs.Add(cb);
                         lines.Insert(i, l);
                         goto CONTINUE;
                     }
                     if (cb.R.Bottom - cb.R.Height / 2 <= lines[i].Bottom)
                     {
-                        if (spaceAutoInsert && cb.Char != " " && lines[i].CharBoxes.Count > 0)
+                        if (spaceAutoInsert && /*cb.Char != " " &&*/ lines[i].CharBoxs.Count > 0)
                         {
-                            CharBox cb0 = lines[i].CharBoxes[lines[i].CharBoxes.Count - 1];
-                            if (cb0.Char != " " && cb.R.Left - cb0.R.Right > (cb.R.Width + cb.R.Height) / textAutoInsertSpaceThreshold)
-                                lines[i].CharBoxes.Add(new CharBox { Char = " ", R = new System.Drawing.RectangleF((cb.R.Left + cb0.R.Right) / 2, 0, 0, 0) });
+                            CharBox cb0 = lines[i].CharBoxs[lines[i].CharBoxs.Count - 1];
+                            if (/*cb0.Char != " " && */cb.R.Left - cb0.R.Right > (cb.R.Width + cb.R.Height) / textAutoInsertSpaceThreshold)
+                            {
+                                float spaceWidth = (cb.R.Width + cb.R.Width) / 2;
+                                int spaceNumber = (int)Math.Ceiling((cb.R.Left - cb0.R.Right) / spaceWidth);
+                                for (int j = 0; j < spaceNumber; j++)
+                                    lines[i].CharBoxs.Add(new CharBox { Char = textAutoInsertSpaceSubstitute, R = new System.Drawing.RectangleF(cb.R.Left + spaceWidth * j, 0, 0, 0) });
+                            }
                         }
-                        lines[i].CharBoxes.Add(cb);
+                        lines[i].CharBoxs.Add(cb);
                         if (lines[i].Top > cb.R.Top)
                             lines[i].Top = cb.R.Top;
                         if (lines[i].Bottom < cb.R.Bottom)
@@ -281,7 +287,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 {
                     Line l = new Line { Top = cb.R.Top, Bottom = cb.R.Bottom };
-                    l.CharBoxes.Add(cb);
+                    l.CharBoxs.Add(cb);
                     lines.Add(l);
                 }
                 CONTINUE:;
@@ -293,7 +299,7 @@ namespace Cliver.PdfDocumentParser
         {
             public float Top;
             public float Bottom;
-            public List<CharBox> CharBoxes = new List<CharBox>();
+            public List<CharBox> CharBoxs = new List<CharBox>();
         }
 
         public static List<CharBox> GetCharBoxsFromPage(PdfReader pdfReader, int pageI)
@@ -312,10 +318,11 @@ namespace Cliver.PdfDocumentParser
             return bts.ToList();
         }
 
-        public class CharBox
+        public struct CharBox
         {
             public System.Drawing.RectangleF R;
             public string Char;
+            //public bool AutoInserted = false;
         }
     }
 }

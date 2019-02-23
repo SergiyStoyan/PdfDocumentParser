@@ -51,7 +51,7 @@
             <Label Grid.Row="1" Grid.Column="0">Scale:</Label>
             <!--xctk:DecimalUpDown Grid.Row="1" Grid.Column="1" Name="pictureScale"  Value="1.3" Increment=".1" Maximum="10" Minimum="0.1"/-->
             <Label Grid.Row="1" Grid.Column="2">Page:</Label>
-            <TextBox Grid.Row="1" Grid.Column="3" Name="tCurrentPage" Text="{Binding currentPage}" />
+            <TextBox Grid.Row="1" Grid.Column="3" Name="tCurrentPage" Text="{Binding currentPageI}" />
             <Label Grid.Row="1" Grid.Column="4" Name="tTotalPages">totalPages</Label>
             <Button Grid.Row="1" Grid.Column="5" Name="bPrevPage">&lt;&lt;</Button>
             <Button Grid.Row="1" Grid.Column="6" Name="bNextPage">&gt;&gt;</Button>

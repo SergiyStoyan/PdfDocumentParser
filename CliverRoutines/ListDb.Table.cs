@@ -6,13 +6,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Threading;
 using System.IO;
 using Newtonsoft.Json;
-using System.Reflection;
 
 namespace Cliver
 {
@@ -61,7 +57,7 @@ namespace Cliver
             {
                 directory = get_normalized_directory(directory);
                 WeakReference wr;
-                string key = directory + "\\" + typeof(D).Name;
+                string key = directory + System.IO.Path.DirectorySeparatorChar + typeof(D).Name;
                 if (!table_keys2table.TryGetValue(key, out wr)
                     || !wr.IsAlive
                     )
@@ -78,7 +74,7 @@ namespace Cliver
             {
                 if (directory == null)
                     directory = Cliver.Log.AppCommonDataDir;
-                return PathRoutines.GetNormalizedPath(directory);
+                return PathRoutines.GetNormalizedPath(directory, true);
             }
 
             public readonly string Log = null;
@@ -112,9 +108,9 @@ namespace Cliver
 
                 Name = typeof(D).Name + "s";
 
-                File = directory + "\\" + Name + ".listdb";
+                File = directory + System.IO.Path.DirectorySeparatorChar + Name + ".listdb";
                 new_file = File + ".new";
-                Log = directory + "\\" + Name + ".listdb.log";
+                Log = directory + System.IO.Path.DirectorySeparatorChar + Name + ".listdb.log";
 
                 if (System.IO.File.Exists(new_file))
                 {

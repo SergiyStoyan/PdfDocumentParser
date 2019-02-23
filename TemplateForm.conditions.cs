@@ -128,10 +128,11 @@ namespace Cliver.PdfDocumentParser
                         firstAnchor = false;
                         showAnchorRowAs(ai, rowStates.Linked, true);
                         setCurrentAnchorRow(ai, true);
+                        clearImageFromBoxes();
                     }
                     else
                         showAnchorRowAs(ai, rowStates.Condition, false);
-                    findAndDrawAnchor(ai, firstAnchor);
+                    findAndDrawAnchor(ai);
                 }
                 if (firstAnchor)
                 {
@@ -193,7 +194,7 @@ namespace Cliver.PdfDocumentParser
             pages.ActiveTemplate = getTemplateFromUI(false);
             a = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == anchorId);
             if (a == null)
-                throw new Exception("Anchor[Id=" + a.Id + "] is not defined.");
+                throw new Exception("Anchor[Id=" + a.Id + "] does not exist.");
 
             bool set = true;
             for (Template.Anchor a_ = a; a_ != null; a_ = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == a_.ParentAnchorId))
@@ -205,7 +206,7 @@ namespace Cliver.PdfDocumentParser
                 }
             if (!set)
                 return;
-            List<List<RectangleF>> rss = pages[currentPage].GetAnchorRectangless(a);
+            List<List<RectangleF>> rss = pages[currentPageI].GetAnchorRectangless(a.Id);
             getAnchor(a.Id, out DataGridViewRow r);
             if (rss == null || rss.Count < 1)
                 setRowStatus(statuses.ERROR, r, "Not found");
@@ -225,10 +226,10 @@ namespace Cliver.PdfDocumentParser
             }
             try
             {
-                if (pages[currentPage].IsCondition(c.Name))
-                    setRowStatus(statuses.SUCCESS, r, "Match");
+                if (pages[currentPageI].IsCondition(c.Name))
+                    setRowStatus(statuses.SUCCESS, r, "True");
                 else
-                    setRowStatus(statuses.ERROR, r, "Not match");
+                    setRowStatus(statuses.ERROR, r, "False");
             }
             catch (Exception e)
             {

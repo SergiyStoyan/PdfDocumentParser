@@ -33,10 +33,12 @@ namespace Cliver.PdfDocumentParser
             AnchorMasterBoxColor.ForeColor = Settings.Appearance.AnchorMasterBoxColor;
             AnchorSecondaryBoxColor.ForeColor = Settings.Appearance.AnchorSecondaryBoxColor;
             SelectionBoxColor.ForeColor = Settings.Appearance.SelectionBoxColor;
+            TableBoxColor.ForeColor = Settings.Appearance.TableBoxColor;
 
             SelectionBoxBorderWidth.Value = (decimal)Settings.Appearance.SelectionBoxBorderWidth;
             AnchorMasterBoxBorderWidth.Value = (decimal)Settings.Appearance.AnchorMasterBoxBorderWidth;
             AnchorSecondaryBoxBorderWidth.Value = (decimal)Settings.Appearance.SelectionBoxBorderWidth;
+            TableBoxBorderWidth.Value = (decimal)Settings.Appearance.TableBoxBorderWidth;
 
             PdfPageImageResolution.Value = Settings.Constants.PdfPageImageResolution;
             CoordinateDeviationMargin.Value = (decimal)Settings.Constants.CoordinateDeviationMargin;
@@ -54,10 +56,12 @@ namespace Cliver.PdfDocumentParser
                 Settings.Appearance.AnchorMasterBoxColor = AnchorMasterBoxColor.ForeColor;
                 Settings.Appearance.AnchorSecondaryBoxColor = AnchorSecondaryBoxColor.ForeColor;
                 Settings.Appearance.SelectionBoxColor = SelectionBoxColor.ForeColor;
+                Settings.Appearance.TableBoxColor = TableBoxColor.ForeColor;
 
                 Settings.Appearance.SelectionBoxBorderWidth = (float)SelectionBoxBorderWidth.Value;
                 Settings.Appearance.AnchorMasterBoxBorderWidth = (float)AnchorMasterBoxBorderWidth.Value;
                 Settings.Appearance.AnchorSecondaryBoxBorderWidth = (float)AnchorSecondaryBoxBorderWidth.Value;
+                Settings.Appearance.TableBoxBorderWidth = (float)TableBoxBorderWidth.Value;
 
                 Settings.Appearance.Save();
 

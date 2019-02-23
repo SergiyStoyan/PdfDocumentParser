@@ -442,10 +442,6 @@ Refer to <a href='#sampleParser'>SampleParser</a> as live code.
 
 
 
-
-
-
-
 <h1><a name="templateEditor">Template Editor</a></h1>
 Template Editor is a GUI object that is called from the application whenever configuring <a href="#template">template</a> is required. 
 
@@ -548,6 +544,29 @@ PdfDocumentParser has parameters that are the same within the application's scop
 
 
 
+
+
+
+
+
+<h1><a name='guidance'></a>Guidance</h1>
+
+<h2>Parsing tables</h2>
+Tables can be processed by the following ways:
+<ul>
+<li><i>create fields as columns;</i>
+<p>It is the most gracious way....
+</li>
+<li><i>extract the whole table as a field;</i>
+<p>Sometimes tables can not be clearly separated onto columns because they include sub-headers that break the structure or because their fields have unpredictable length etc. In such a case, if the table data still is logically structured, the whole table should be extracted as a single field and then parsed by regexes or other syntax parsing engine;
+</li>
+<li><i>substitute auto-insert spaces with "|" and then split to columns (unreliabe);</i>
+<p>as a simplification of the pre
+</li>
+<li><i>get char boxes and do anything </i>
+<p>It is the most potentially powerful approach but unfortunately too abstract. Having all the information about the table content, it is up to you, how to process it.
+</li>
+</ul>
 
 
 

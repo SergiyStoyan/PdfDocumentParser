@@ -40,10 +40,25 @@ namespace Cliver.PdfDocumentParser
             {
                 if (pages == null)
                     return;
-                drawingSelectionBox = true;
-                selectionBoxPoint0 = new Point((int)(e.X / (float)pictureScale.Value), (int)(e.Y / (float)pictureScale.Value));
-                selectionBoxPoint1 = new Point(selectionBoxPoint0.X, selectionBoxPoint0.Y);
-                selectionBoxPoint2 = new Point(selectionBoxPoint0.X, selectionBoxPoint0.Y);
+
+                Point p = new Point((int)(e.X / (float)pictureScale.Value), (int)(e.Y / (float)pictureScale.Value));
+
+                ResizebleBox rb = findResizebleBox(p, out ResizebleBoxSides resizebleBoxSide);
+                if (rb != null)
+                {
+                    drawingMode = resizebleBoxSide == ResizebleBoxSides.Left || resizebleBoxSide == ResizebleBoxSides.Right ? DrawingModes.resizingSelectionBoxV : DrawingModes.resizingSelectionBoxH;
+                    Cursor.Current = drawingMode == DrawingModes.resizingSelectionBoxV ? Cursors.VSplit : Cursors.HSplit;
+                    selectionBoxPoint0 = rb.R.Location;
+                    selectionBoxPoint1 = rb.R.Location;
+                    selectionBoxPoint2 = new Point(rb.R.Right, rb.R.Bottom);
+                }
+                else
+                {
+                    drawingMode = DrawingModes.drawingSelectionBox;
+                    selectionBoxPoint0 = p;
+                    selectionBoxPoint1 = p;
+                    selectionBoxPoint2 = p;
+                }
                 selectionCoordinates.Text = selectionBoxPoint1.ToString();
             };
 
@@ -54,36 +69,73 @@ namespace Cliver.PdfDocumentParser
 
                 Point p = new Point((int)(e.X / (float)pictureScale.Value), (int)(e.Y / (float)pictureScale.Value));
 
-                if (!drawingSelectionBox)
+                switch (drawingMode)
                 {
-                    selectionCoordinates.Text = p.ToString();
-                    return;
-                }
+                    case DrawingModes.NULL:
+                        selectionCoordinates.Text = p.ToString();
 
-                if (selectionBoxPoint0.X < p.X)
-                {
-                    selectionBoxPoint1.X = selectionBoxPoint0.X;
-                    selectionBoxPoint2.X = p.X;
-                }
-                else
-                {
-                    selectionBoxPoint1.X = p.X;
-                    selectionBoxPoint2.X = selectionBoxPoint0.X;
-                }
-                if (selectionBoxPoint0.Y < p.Y)
-                {
-                    selectionBoxPoint1.Y = selectionBoxPoint0.Y;
-                    selectionBoxPoint2.Y = p.Y;
-                }
-                else
-                {
-                    selectionBoxPoint1.Y = p.Y;
-                    selectionBoxPoint2.Y = selectionBoxPoint0.Y;
+                        if (findResizebleBox(p, out ResizebleBoxSides resizebleBoxSide) != null)
+                            Cursor.Current = resizebleBoxSide == ResizebleBoxSides.Left || resizebleBoxSide == ResizebleBoxSides.Right ? Cursors.VSplit : Cursors.HSplit;
+                        else
+                            Cursor.Current = Cursors.Default;
+                        return;
+                    case DrawingModes.drawingSelectionBox:
+                        if (selectionBoxPoint0.X < p.X)
+                        {
+                            selectionBoxPoint1.X = selectionBoxPoint0.X;
+                            selectionBoxPoint2.X = p.X;
+                        }
+                        else
+                        {
+                            selectionBoxPoint1.X = p.X;
+                            selectionBoxPoint2.X = selectionBoxPoint0.X;
+                        }
+                        if (selectionBoxPoint0.Y < p.Y)
+                        {
+                            selectionBoxPoint1.Y = selectionBoxPoint0.Y;
+                            selectionBoxPoint2.Y = p.Y;
+                        }
+                        else
+                        {
+                            selectionBoxPoint1.Y = p.Y;
+                            selectionBoxPoint2.Y = selectionBoxPoint0.Y;
+                        }
+                        break;
+                    case DrawingModes.resizingSelectionBoxV:
+                        if (Math.Abs(selectionBoxPoint2.X - p.X) < Math.Abs(p.X - selectionBoxPoint1.X))
+                            selectionBoxPoint2.X = p.X;
+                        else
+                            selectionBoxPoint1.X = p.X;
+                        break;
+                    case DrawingModes.resizingSelectionBoxH:
+                        if (Math.Abs(selectionBoxPoint2.Y - p.Y) < Math.Abs(p.Y - selectionBoxPoint1.Y))
+                            selectionBoxPoint2.Y = p.Y;
+                        else
+                            selectionBoxPoint1.Y = p.Y;
+                        break;
+                        //case DrawingModes.resizingSelectionBoxR:
+                        //    if (selectionBoxPoint1.X < p.X)
+                        //        selectionBoxPoint2.X = p.X;
+                        //    else
+                        //    {
+                        //        selectionBoxPoint2.X = selectionBoxPoint1.X;
+                        //        selectionBoxPoint1.X = p.X;
+                        //    }
+                        //    break;
+                        //case DrawingModes.resizingSelectionBoxB:
+                        //    if (selectionBoxPoint1.Y < p.Y)
+                        //        selectionBoxPoint2.Y = p.Y;
+                        //    else
+                        //    {
+                        //        selectionBoxPoint2.Y = selectionBoxPoint1.Y;
+                        //        selectionBoxPoint1.Y = p.Y;
+                        //    }
+                        //    break;
                 }
                 selectionCoordinates.Text = selectionBoxPoint1.ToString() + ":" + selectionBoxPoint2.ToString();
-
                 RectangleF r = new RectangleF(selectionBoxPoint1.X, selectionBoxPoint1.Y, selectionBoxPoint2.X - selectionBoxPoint1.X, selectionBoxPoint2.Y - selectionBoxPoint1.Y);
-                drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<System.Drawing.RectangleF> { r }, true);
+                clearImageFromBoxes();
+                drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<System.Drawing.RectangleF> { r });
             };
 
             picture.MouseUp += delegate (object sender, MouseEventArgs e)
@@ -93,15 +145,17 @@ namespace Cliver.PdfDocumentParser
                     if (pages == null)
                         return;
 
-                    if (!drawingSelectionBox)
+                    if (drawingMode == DrawingModes.NULL)
                         return;
-                    drawingSelectionBox = false;
+                    drawingMode = DrawingModes.NULL;
 
                     Template.RectangleF r = new Template.RectangleF(selectionBoxPoint1.X, selectionBoxPoint1.Y, selectionBoxPoint2.X - selectionBoxPoint1.X, selectionBoxPoint2.Y - selectionBoxPoint1.Y);
+                    if (r.Width == 0 || r.Y == 0)//accidental tap
+                        return;
 
-                    switch (mode)
+                    switch (settingMode)
                     {
-                        case Modes.SetAnchor:
+                        case SettingModes.SetAnchor:
                             {
                                 if (currentAnchorControl == null)
                                     break;
@@ -110,20 +164,20 @@ namespace Cliver.PdfDocumentParser
                                 Template.Anchor a = (Template.Anchor)currentAnchorControl.Row.Tag;
                                 switch (a.Type)
                                 {
-                                    case Template.Types.PdfText:
+                                    case Template.Anchor.Types.PdfText:
                                         if (selectedPdfCharBoxs == null/* || (ModifierKeys & Keys.Control) != Keys.Control*/)
                                             selectedPdfCharBoxs = new List<Pdf.CharBox>();
-                                        selectedPdfCharBoxs.AddRange(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPage].PdfCharBoxs, r.GetSystemRectangleF(), true));
+                                        selectedPdfCharBoxs.AddRange(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, r.GetSystemRectangleF(), true));
                                         break;
-                                    case Template.Types.OcrText:
+                                    case Template.Anchor.Types.OcrText:
                                         if (selectedOcrCharBoxs == null/* || (ModifierKeys & Keys.Control) != Keys.Control*/)
                                             selectedOcrCharBoxs = new List<Ocr.CharBox>();
                                         Template.Anchor.OcrText ot = a as Template.Anchor.OcrText;
                                         if (ot.OcrEntirePage)
-                                            selectedOcrCharBoxs.AddRange(PdfDocumentParser.Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPage].ActiveTemplateOcrCharBoxs, r.GetSystemRectangleF()));
+                                            selectedOcrCharBoxs.AddRange(PdfDocumentParser.Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateOcrCharBoxs, r.GetSystemRectangleF()));
                                         else
                                         {
-                                            foreach (Ocr.CharBox cb in PdfDocumentParser.Ocr.This.GetCharBoxs(pages[currentPage].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio)))
+                                            foreach (Ocr.CharBox cb in PdfDocumentParser.Ocr.This.GetCharBoxs(pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio)))
                                             {
                                                 cb.R.X += r.X;
                                                 cb.R.Y += r.Y;
@@ -131,12 +185,12 @@ namespace Cliver.PdfDocumentParser
                                             }
                                         }
                                         break;
-                                    case Template.Types.ImageData:
+                                    case Template.Anchor.Types.ImageData:
                                         {
                                             if (selectedImageBoxs == null)
                                                 selectedImageBoxs = new List<Template.Anchor.ImageData.ImageBox>();
                                             ImageData id;
-                                            using (Bitmap rb = pages[currentPage].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
+                                            using (Bitmap rb = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
                                             {
                                                 using (Bitmap b = ImageData.GetScaled(rb, Settings.Constants.Image2PdfResolutionRatio))
                                                     id = new ImageData(b, false);
@@ -148,6 +202,8 @@ namespace Cliver.PdfDocumentParser
                                             });
                                         }
                                         break;
+                                    //case Template.Anchor.Types.Script://not set by this way
+                                    //    break;
                                     default:
                                         throw new Exception("Unknown option: " + a.Type);
                                 }
@@ -156,19 +212,44 @@ namespace Cliver.PdfDocumentParser
                                     setAnchorFromSelectedElements();
                             }
                             break;
-                        case Modes.SetField:
+                        case SettingModes.SetField:
                             {
                                 if (fields.SelectedRows.Count < 1)
                                     break;
                                 var row = fields.SelectedRows[0];
                                 Template.Field f = (Template.Field)row.Tag;
                                 f.Rectangle = r;
+
+                                if (f.LeftAnchor != null)
+                                {
+                                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(f.LeftAnchor.Id);
+                                    f.LeftAnchor.Shift = aai.Shift.Width;
+                                }
+                                if (f.TopAnchor != null)
+                                {
+                                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(f.TopAnchor.Id);
+                                    f.TopAnchor.Shift = aai.Shift.Height;
+                                }
+                                if (f.RightAnchor != null)
+                                {
+                                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(f.RightAnchor.Id);
+                                    f.RightAnchor.Shift = aai.Shift.Width;
+                                }
+                                if (f.BottomAnchor != null)
+                                {
+                                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(f.BottomAnchor.Id);
+                                    f.BottomAnchor.Shift = aai.Shift.Height;
+                                }
+
                                 setFieldRow(row, f);
+                                owners2resizebleBox[f] = new ResizebleBox(f, f.Rectangle.GetSystemRectangleF(), Settings.Appearance.SelectionBoxBorderWidth);
                             }
                             break;
-                        default:
+                        case SettingModes.NULL:
                             break;
-                    } 
+                        default:
+                            throw new Exception("Unknown option: " + settingMode);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -261,13 +342,13 @@ namespace Cliver.PdfDocumentParser
             pageRotation.SelectedIndexChanged += delegate
             {
                 reloadPageBitmaps();
-                //showPage(currentPage);
+                //showPage(currentPageI);
             };
 
             autoDeskew.CheckedChanged += delegate
             {
                 reloadPageBitmaps();
-                //showPage(currentPage);
+                //showPage(currentPageI);
             };
 
             Load += delegate
@@ -275,9 +356,10 @@ namespace Cliver.PdfDocumentParser
             };
 
             save.Click += Save_Click;
+            cancel.Click += delegate { Close(); };
             Help.LinkClicked += Help_LinkClicked;
             Configure.LinkClicked += Configure_LinkClicked;
-            cancel.Click += delegate { Close(); };
+            About.LinkClicked += About_LinkClicked;
 
             bTestFile.Click += delegate (object sender, EventArgs e)
          {
@@ -294,24 +376,105 @@ namespace Cliver.PdfDocumentParser
                  return;
              testFile.Text = d.FileName;
          };
+
+            ShowPdfText.LinkClicked += ShowPdfText_LinkClicked;
+            ShowOcrText.LinkClicked += ShowOcrText_LinkClicked;
+            ShowAsJson.LinkClicked += showAsJson_LinkClicked;
+
+            tCurrentPage.Leave += delegate
+             {
+                 changeCurrentPage();
+             };
+            tCurrentPage.KeyDown += delegate (object sender, KeyEventArgs e)
+              {
+                  if (e.KeyCode == Keys.Enter)
+                      changeCurrentPage();
+              };
         }
         TemplateManager templateManager;
+        Point selectionBoxPoint0, selectionBoxPoint1, selectionBoxPoint2;
 
-        enum Modes
+        enum DrawingModes
+        {
+            NULL,
+            drawingSelectionBox,
+            resizingSelectionBoxV,
+            resizingSelectionBoxH,
+        }
+        DrawingModes drawingMode = DrawingModes.NULL;
+
+        enum SettingModes
         {
             NULL,
             SetAnchor,
             SetField,
         }
-        Modes mode
+        SettingModes settingMode
         {
             get
             {
                 if (anchors.SelectedRows.Count > 0)
-                    return Modes.SetAnchor;
+                    return SettingModes.SetAnchor;
                 if (fields.SelectedRows.Count > 0)
-                    return Modes.SetField;
-                return Modes.NULL;
+                    return SettingModes.SetField;
+                return SettingModes.NULL;
+            }
+        }
+
+        ResizebleBox findResizebleBox(Point p, out ResizebleBoxSides resizebleBoxSides)
+        {
+            foreach (ResizebleBox rb in owners2resizebleBox.Values)
+            {
+                if (!rb.outerR.Contains(p))
+                    continue;
+                if (rb.R.Left >= p.X)
+                {
+                    resizebleBoxSides = ResizebleBoxSides.Left;
+                    return rb;
+                }
+                if (rb.R.Right <= p.X)
+                {
+                    resizebleBoxSides = ResizebleBoxSides.Right;
+                    return rb;
+                }
+                if (rb.R.Top >= p.Y)
+                {
+                    resizebleBoxSides = ResizebleBoxSides.Top;
+                    return rb;
+                }
+                if (rb.R.Bottom <= p.Y)
+                {
+                    resizebleBoxSides = ResizebleBoxSides.Bottom;
+                    return rb;
+                }
+            }
+            resizebleBoxSides = ResizebleBoxSides.Left;
+            return null;
+        }
+        enum ResizebleBoxSides
+        {
+            Left,
+            Top,
+            Right,
+            Bottom
+        }
+        readonly Dictionary<object, ResizebleBox> owners2resizebleBox = new Dictionary<object, ResizebleBox>();
+        internal class ResizebleBox
+        {
+            readonly public Rectangle outerR;
+            readonly public Rectangle R;
+            readonly public object owner;
+
+            public ResizebleBox(object owner, RectangleF rectangle, float borderWidth)
+            {
+                R = System.Drawing.Rectangle.Round(rectangle);
+                int borderW = (int)borderWidth;
+                outerR = System.Drawing.Rectangle.Round(rectangle);
+                outerR.X -= borderW;
+                outerR.Y -= borderW;
+                outerR.Width += 2 * borderW;
+                outerR.Height += 2 * borderW;
+                this.owner = owner;
             }
         }
     }

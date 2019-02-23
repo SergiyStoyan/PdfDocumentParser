@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 
 namespace Cliver
@@ -93,5 +90,18 @@ namespace Cliver
         //        File.Copy(f, f2, overwrite);
         //    }
         //}
+
+        public static bool IsFileLocked(string file)
+        {
+            try
+            {
+                using (Stream stream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.None))
+                    return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

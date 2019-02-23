@@ -27,8 +27,8 @@ namespace Cliver.PdfDocumentParser
         {
             Id3.ValueType = typeof(int);
 
-            Type3.ValueType = typeof(Template.Types);
-            Type3.DataSource = Enum.GetValues(typeof(Template.Types));
+            Type3.ValueType = typeof(Template.Anchor.Types);
+            Type3.DataSource = Enum.GetValues(typeof(Template.Anchor.Types));
 
             ParentAnchorId3.ValueType = typeof(int);
             ParentAnchorId3.ValueMember = "Id";
@@ -125,21 +125,24 @@ namespace Cliver.PdfDocumentParser
                     //    }
                     case "Type3":
                         {
-                            Template.Types t2 = (Template.Types)row.Cells["Type3"].Value;
+                            Template.Anchor.Types t2 = (Template.Anchor.Types)row.Cells["Type3"].Value;
                             if (t2 == a.Type)
                                 break;
                             Template.Anchor a2;
                             switch (t2)
                             {
-                                case Template.Types.PdfText:
+                                case Template.Anchor.Types.PdfText:
                                     a2 = new Template.Anchor.PdfText();
                                     break;
-                                case Template.Types.OcrText:
+                                case Template.Anchor.Types.OcrText:
                                     a2 = new Template.Anchor.OcrText();
                                     break;
-                                case Template.Types.ImageData:
+                                case Template.Anchor.Types.ImageData:
                                     a2 = new Template.Anchor.ImageData();
                                     break;
+                                //case Template.Anchor.Types.Script:
+                                //    a2 = new Template.Anchor.Script();
+                                //    break;
                                 default:
                                     throw new Exception("Unknown option: " + t2);
                             }
@@ -154,6 +157,7 @@ namespace Cliver.PdfDocumentParser
                         }
                 }
                 setAnchorRow(row, a);
+                clearImageFromBoxes();
                 findAndDrawAnchor(a.Id);
             };
 
@@ -186,6 +190,7 @@ namespace Cliver.PdfDocumentParser
                     }
                     setCurrentAnchorRow(a.Id, false);
                     showAnchorRowAs(a.Id, rowStates.Selected, true);
+                    clearImageFromBoxes();
                     findAndDrawAnchor(a.Id);
                 }
                 catch (Exception ex)
@@ -254,27 +259,33 @@ namespace Cliver.PdfDocumentParser
                     setCurrentFieldRow(null);
                 }
 
-                Template.Types t = ((Template.Anchor)row.Tag).Type;
+                Template.Anchor.Types t = ((Template.Anchor)row.Tag).Type;
                 switch (t)
                 {
-                    case Template.Types.PdfText:
+                    case Template.Anchor.Types.PdfText:
                         {
                             if (currentAnchorControl == null || !(currentAnchorControl is AnchorPdfTextControl))
-                                currentAnchorControl = new AnchorPdfTextControl((float)textAutoInsertSpaceThreshold.Value);
+                                currentAnchorControl = new AnchorPdfTextControl((float)textAutoInsertSpaceThreshold.Value, textAutoInsertSpaceSubstitute.Text);
                         }
                         break;
-                    case Template.Types.OcrText:
+                    case Template.Anchor.Types.OcrText:
                         {
                             if (currentAnchorControl == null || !(currentAnchorControl is AnchorOcrTextControl))
                                 currentAnchorControl = new AnchorOcrTextControl();
                         }
                         break;
-                    case Template.Types.ImageData:
+                    case Template.Anchor.Types.ImageData:
                         {
                             if (currentAnchorControl == null || !(currentAnchorControl is AnchorImageDataControl))
                                 currentAnchorControl = new AnchorImageDataControl();
                         }
                         break;
+                    //case Template.Anchor.Types.Script:
+                    //    {
+                    //        if (currentAnchorControl == null || !(currentAnchorControl is AnchorScriptControl))
+                    //            currentAnchorControl = new AnchorScriptControl();
+                    //    }
+                    //    break;
                     default:
                         throw new Exception("Unknown option: " + t);
                 }
@@ -324,32 +335,37 @@ namespace Cliver.PdfDocumentParser
             Template.RectangleF r = null;
             switch (a.Type)
             {
-                case Template.Types.PdfText:
+                case Template.Anchor.Types.PdfText:
                     {
                         Template.Anchor.PdfText pt = (Template.Anchor.PdfText)a;
                         if (pt.CharBoxs.Count > 0)
                             r = pt.CharBoxs[0].Rectangle;
                     }
                     break;
-                case Template.Types.OcrText:
+                case Template.Anchor.Types.OcrText:
                     {
                         Template.Anchor.OcrText ot = (Template.Anchor.OcrText)a;
                         if (ot.CharBoxs.Count > 0)
                             r = ot.CharBoxs[0].Rectangle;
                     }
                     break;
-                case Template.Types.ImageData:
+                case Template.Anchor.Types.ImageData:
                     {
                         Template.Anchor.ImageData id = (Template.Anchor.ImageData)a;
                         if (id.ImageBoxs.Count > 0)
                             r = id.ImageBoxs[0].Rectangle;
                     }
                     break;
+                //case Template.Anchor.Types.Script:
+                //    {
+                //        Template.Anchor.Script s = (Template.Anchor.Script)a;
+                //    }
+                //    break;
                 default:
                     throw new Exception("Unknown option: " + a.Type);
             }
             if (r != null)
-                row.Cells["Point03"].Value = SerializationRoutines.Json.Serialize(new { r.X, r.Y });
+                row.Cells["Point03"].Value = Serialization.Json.Serialize(new { r.X, r.Y });
 
             if (loadingTemplate)
                 return;
@@ -411,8 +427,14 @@ namespace Cliver.PdfDocumentParser
                 if (r.Tag == null)
                     continue;
                 Template.Field f = (Template.Field)r.Tag;
-                if (f.AnchorId != null && !ais.Contains((int)f.AnchorId))
-                    r.Cells["AnchorId"].Value = null;
+                if (f.LeftAnchor != null && !ais.Contains(f.LeftAnchor.Id))
+                    r.Cells["LeftAnchorId"].Value = null;
+                if (f.TopAnchor != null && !ais.Contains(f.TopAnchor.Id))
+                    r.Cells["TopAnchorId"].Value = null;
+                if (f.RightAnchor != null && !ais.Contains(f.RightAnchor.Id))
+                    r.Cells["RightAnchorId"].Value = null;
+                if (f.BottomAnchor != null && !ais.Contains(f.BottomAnchor.Id))
+                    r.Cells["BottomAnchorId"].Value = null;
             }
 
             setConditionsStatus();
@@ -420,7 +442,10 @@ namespace Cliver.PdfDocumentParser
             {
                 List<dynamic> ais_ = ais.Select(x => new { Id = x, Name = x.ToString() }).ToList<dynamic>();
                 ais_.Insert(0, new { Id = -1, Name = string.Empty });//commbobox returns value null for -1 (and throws an unclear expection if Id=null)
-                AnchorId.DataSource = ais_;
+                LeftAnchorId.DataSource = ais_;
+                TopAnchorId.DataSource = ais_;
+                RightAnchorId.DataSource = ais_;
+                BottomAnchorId.DataSource = ais_;
             }
         }
 
@@ -433,15 +458,15 @@ namespace Cliver.PdfDocumentParser
                 Template.Anchor a = (Template.Anchor)currentAnchorControl.Row.Tag;
                 switch (a.Type)
                 {
-                    case Template.Types.PdfText:
+                    case Template.Anchor.Types.PdfText:
                         {
                             Template.Anchor.PdfText pt = (Template.Anchor.PdfText)a;
                             pt.CharBoxs = new List<Template.Anchor.PdfText.CharBox>();
-                            List<Pdf.Line> lines = Pdf.RemoveDuplicatesAndGetLines(selectedPdfCharBoxs, -1);
+                            List<Pdf.Line> lines = Pdf.RemoveDuplicatesAndGetLines(selectedPdfCharBoxs, -1, null);
                             if (lines.Count < 1)
                                 break;
                             foreach (Pdf.Line l in lines)
-                                foreach (Pdf.CharBox cb in l.CharBoxes)
+                                foreach (Pdf.CharBox cb in l.CharBoxs)
                                     pt.CharBoxs.Add(new Template.Anchor.PdfText.CharBox
                                     {
                                         Char = cb.Char,
@@ -449,7 +474,7 @@ namespace Cliver.PdfDocumentParser
                                     });
                         }
                         break;
-                    case Template.Types.OcrText:
+                    case Template.Anchor.Types.OcrText:
                         {
                             Template.Anchor.OcrText ot = (Template.Anchor.OcrText)a;
                             ot.CharBoxs = new List<Template.Anchor.OcrText.CharBox>();
@@ -457,7 +482,7 @@ namespace Cliver.PdfDocumentParser
                             if (lines.Count < 1)
                                 break;
                             foreach (Ocr.Line l in lines)
-                                foreach (Ocr.CharBox cb in l.CharBoxes)
+                                foreach (Ocr.CharBox cb in l.CharBoxs)
                                     ot.CharBoxs.Add(new Template.Anchor.OcrText.CharBox
                                     {
                                         Char = cb.Char,
@@ -465,7 +490,7 @@ namespace Cliver.PdfDocumentParser
                                     });
                         }
                         break;
-                    case Template.Types.ImageData:
+                    case Template.Anchor.Types.ImageData:
                         {
                             Template.Anchor.ImageData id = (Template.Anchor.ImageData)a;
                             id.ImageBoxs = new List<Template.Anchor.ImageData.ImageBox>();
@@ -480,6 +505,7 @@ namespace Cliver.PdfDocumentParser
                         throw new Exception("Unknown option: " + a.Type);
                 }
                 setAnchorRow(currentAnchorControl.Row, a);
+                clearImageFromBoxes();
                 findAndDrawAnchor(a.Id);
             }
             finally

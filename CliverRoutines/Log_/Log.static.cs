@@ -7,14 +7,8 @@
 //Copyright: (C) 2006-2013, Sergey Stoyan
 //********************************************************************************************
 using System;
-using System.Linq;
-using System.Threading;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using System.Diagnostics;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Reflection;
 
 namespace Cliver
@@ -24,21 +18,21 @@ namespace Cliver
     /// </summary>
     public static partial class Log
     {
-        public static void Initialize(Mode mode, string pre_work_dir = null, bool write_log = true, int delete_logs_older_days = 10, string session_name_prefix = "Session")
+        public static void Initialize(Mode mode, string preWorkDir = null, bool writeLog = true, int deleteLogsOlderDays = 10, string session_name_prefix = "Session")
         {
             Log.ClearSession();
-            //if (work_dir != null)
+            //if (workDir != null)
             //return;
             //    throw new Exception("Initialize should not be called when log is open.");
             Log.mode = mode;
-            Log.pre_work_dir = pre_work_dir;
-            Log.write_log = write_log;
-            Log.delete_logs_older_days = delete_logs_older_days;
+            Log.preWorkDir = preWorkDir;
+            Log.writeLog = writeLog;
+            Log.deleteLogsOlderDays = deleteLogsOlderDays;
             Log.session_name_prefix = session_name_prefix;
         }
-        static string pre_work_dir = null;
-        static int delete_logs_older_days = 10;
-        static bool write_log = true;
+        static string preWorkDir = null;
+        static int deleteLogsOlderDays = 10;
+        static bool writeLog = true;
         static Mode mode = Mode.ONLY_LOG;
         static string session_name_prefix = "Session";
 

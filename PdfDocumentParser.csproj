@@ -175,6 +175,10 @@
     <Compile Include="AnchorOcrTextControl.Designer.cs">
       <DependentUpon>AnchorOcrTextControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="AnchorScriptControl .cs" />
+    <Compile Include="AnchorScriptControl .Designer.cs">
+      <DependentUpon>AnchorScriptControl .cs</DependentUpon>
+    </Compile>
     <Compile Include="AnchorPdfTextControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -188,8 +192,12 @@
       <DependentUpon>AnchorControl.cs</DependentUpon>
     </Compile>
     <Compile Include="BooleanEngine.cs" />
+    <Compile Include="Page.anchors.cs" />
+    <Compile Include="Page.fields.cs" />
     <Compile Include="PageCollection.cs" />
     <Compile Include="Page.cs" />
+    <Compile Include="Template.Anchor.cs" />
+    <Compile Include="Template.Field.cs" />
     <Compile Include="TemplateForm.TemplateManager.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -291,6 +299,9 @@
     <EmbeddedResource Include="AnchorOcrTextControl.resx">
       <DependentUpon>AnchorOcrTextControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="AnchorScriptControl .resx">
+      <DependentUpon>AnchorScriptControl .cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AnchorPdfTextControl.resx">
       <DependentUpon>AnchorPdfTextControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -306,6 +317,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TemplateForm.resx">
       <DependentUpon>TemplateForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="TextForm.resx">
       <DependentUpon>TextForm.cs</DependentUpon>
@@ -321,6 +333,10 @@
     <ProjectReference Include="CliverRoutines\CliverRoutines.csproj">
       <Project>{aca94788-bed1-4b8e-94ef-e54293e8d139}</Project>
       <Name>CliverRoutines</Name>
+    </ProjectReference>
+    <ProjectReference Include="CliverWinRoutines\CliverWinRoutines.csproj">
+      <Project>{51f2df13-41f1-4f22-890f-c3b50c813909}</Project>
+      <Name>CliverWinRoutines</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
