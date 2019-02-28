@@ -36,34 +36,34 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.About = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.AnchorSecondaryBoxBorderWidth = new System.Windows.Forms.NumericUpDown();
-            this.AnchorMasterBoxBorderWidth = new System.Windows.Forms.NumericUpDown();
+            this.TableBoxBorderWidth = new System.Windows.Forms.NumericUpDown();
+            this.label6 = new System.Windows.Forms.Label();
+            this.AscendantAnchorBoxBorderWidth = new System.Windows.Forms.NumericUpDown();
+            this.AnchorBoxBorderWidth = new System.Windows.Forms.NumericUpDown();
             this.SelectionBoxBorderWidth = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.AnchorSecondaryBoxColor = new System.Windows.Forms.Button();
+            this.TableBoxColor = new System.Windows.Forms.Button();
+            this.AscendantAnchorBoxColor = new System.Windows.Forms.Button();
             this.SelectionBoxColor = new System.Windows.Forms.Button();
-            this.AnchorMasterBoxColor = new System.Windows.Forms.Button();
+            this.AnchorBoxColor = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.CoordinateDeviationMargin = new System.Windows.Forms.NumericUpDown();
-            this.TableBoxColor = new System.Windows.Forms.Button();
-            this.TableBoxBorderWidth = new System.Windows.Forms.NumericUpDown();
-            this.label6 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.PdfPageImageResolution)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.AnchorSecondaryBoxBorderWidth)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.AnchorMasterBoxBorderWidth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TableBoxBorderWidth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.AscendantAnchorBoxBorderWidth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.AnchorBoxBorderWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SelectionBoxBorderWidth)).BeginInit();
             this.panel2.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CoordinateDeviationMargin)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.TableBoxBorderWidth)).BeginInit();
             this.SuspendLayout();
             // 
             // PdfPageImageResolution
@@ -165,8 +165,8 @@
             // 
             this.groupBox3.Controls.Add(this.TableBoxBorderWidth);
             this.groupBox3.Controls.Add(this.label6);
-            this.groupBox3.Controls.Add(this.AnchorSecondaryBoxBorderWidth);
-            this.groupBox3.Controls.Add(this.AnchorMasterBoxBorderWidth);
+            this.groupBox3.Controls.Add(this.AscendantAnchorBoxBorderWidth);
+            this.groupBox3.Controls.Add(this.AnchorBoxBorderWidth);
             this.groupBox3.Controls.Add(this.SelectionBoxBorderWidth);
             this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.label7);
@@ -183,37 +183,66 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Appearance";
             // 
-            // AnchorSecondaryBoxBorderWidth
+            // TableBoxBorderWidth
             // 
-            this.AnchorSecondaryBoxBorderWidth.Location = new System.Drawing.Point(624, 273);
-            this.AnchorSecondaryBoxBorderWidth.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.AnchorSecondaryBoxBorderWidth.Minimum = new decimal(new int[] {
+            this.TableBoxBorderWidth.Location = new System.Drawing.Point(624, 339);
+            this.TableBoxBorderWidth.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.TableBoxBorderWidth.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.AnchorSecondaryBoxBorderWidth.Name = "AnchorSecondaryBoxBorderWidth";
-            this.AnchorSecondaryBoxBorderWidth.Size = new System.Drawing.Size(113, 38);
-            this.AnchorSecondaryBoxBorderWidth.TabIndex = 61;
-            this.AnchorSecondaryBoxBorderWidth.Value = new decimal(new int[] {
+            this.TableBoxBorderWidth.Name = "TableBoxBorderWidth";
+            this.TableBoxBorderWidth.Size = new System.Drawing.Size(113, 38);
+            this.TableBoxBorderWidth.TabIndex = 63;
+            this.TableBoxBorderWidth.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
             // 
-            // AnchorMasterBoxBorderWidth
+            // label6
             // 
-            this.AnchorMasterBoxBorderWidth.Location = new System.Drawing.Point(624, 207);
-            this.AnchorMasterBoxBorderWidth.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.AnchorMasterBoxBorderWidth.Minimum = new decimal(new int[] {
+            this.label6.AutoSize = true;
+            this.label6.BackColor = System.Drawing.SystemColors.Control;
+            this.label6.Location = new System.Drawing.Point(40, 341);
+            this.label6.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(151, 32);
+            this.label6.TabIndex = 62;
+            this.label6.Text = "Table Box:";
+            // 
+            // AscendantAnchorBoxBorderWidth
+            // 
+            this.AscendantAnchorBoxBorderWidth.Location = new System.Drawing.Point(624, 273);
+            this.AscendantAnchorBoxBorderWidth.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.AscendantAnchorBoxBorderWidth.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.AnchorMasterBoxBorderWidth.Name = "AnchorMasterBoxBorderWidth";
-            this.AnchorMasterBoxBorderWidth.Size = new System.Drawing.Size(113, 38);
-            this.AnchorMasterBoxBorderWidth.TabIndex = 60;
-            this.AnchorMasterBoxBorderWidth.Value = new decimal(new int[] {
+            this.AscendantAnchorBoxBorderWidth.Name = "AscendantAnchorBoxBorderWidth";
+            this.AscendantAnchorBoxBorderWidth.Size = new System.Drawing.Size(113, 38);
+            this.AscendantAnchorBoxBorderWidth.TabIndex = 61;
+            this.AscendantAnchorBoxBorderWidth.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // AnchorBoxBorderWidth
+            // 
+            this.AnchorBoxBorderWidth.Location = new System.Drawing.Point(624, 207);
+            this.AnchorBoxBorderWidth.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.AnchorBoxBorderWidth.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.AnchorBoxBorderWidth.Name = "AnchorBoxBorderWidth";
+            this.AnchorBoxBorderWidth.Size = new System.Drawing.Size(113, 38);
+            this.AnchorBoxBorderWidth.TabIndex = 60;
+            this.AnchorBoxBorderWidth.Value = new decimal(new int[] {
             1,
             0,
             0,
@@ -266,36 +295,49 @@
             this.label4.Location = new System.Drawing.Point(40, 275);
             this.label4.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(312, 32);
+            this.label4.Size = new System.Drawing.Size(311, 32);
             this.label4.TabIndex = 56;
-            this.label4.Text = "Anchor Secondary Box:";
+            this.label4.Text = "Ascendant Anchor Box:";
             // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.White;
             this.panel2.Controls.Add(this.TableBoxColor);
-            this.panel2.Controls.Add(this.AnchorSecondaryBoxColor);
+            this.panel2.Controls.Add(this.AscendantAnchorBoxColor);
             this.panel2.Controls.Add(this.SelectionBoxColor);
-            this.panel2.Controls.Add(this.AnchorMasterBoxColor);
+            this.panel2.Controls.Add(this.AnchorBoxColor);
             this.panel2.Location = new System.Drawing.Point(375, 104);
             this.panel2.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(168, 293);
             this.panel2.TabIndex = 54;
             // 
-            // AnchorSecondaryBoxColor
+            // TableBoxColor
             // 
-            this.AnchorSecondaryBoxColor.BackColor = System.Drawing.Color.White;
-            this.AnchorSecondaryBoxColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.AnchorSecondaryBoxColor.ForeColor = System.Drawing.Color.Maroon;
-            this.AnchorSecondaryBoxColor.Location = new System.Drawing.Point(16, 150);
-            this.AnchorSecondaryBoxColor.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.AnchorSecondaryBoxColor.Name = "AnchorSecondaryBoxColor";
-            this.AnchorSecondaryBoxColor.Size = new System.Drawing.Size(131, 52);
-            this.AnchorSecondaryBoxColor.TabIndex = 57;
-            this.AnchorSecondaryBoxColor.Text = "...";
-            this.AnchorSecondaryBoxColor.UseVisualStyleBackColor = false;
-            this.AnchorSecondaryBoxColor.Click += new System.EventHandler(this.AnchorSecondaryBoxColor_Click);
+            this.TableBoxColor.BackColor = System.Drawing.Color.White;
+            this.TableBoxColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.TableBoxColor.ForeColor = System.Drawing.Color.Maroon;
+            this.TableBoxColor.Location = new System.Drawing.Point(16, 219);
+            this.TableBoxColor.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.TableBoxColor.Name = "TableBoxColor";
+            this.TableBoxColor.Size = new System.Drawing.Size(131, 52);
+            this.TableBoxColor.TabIndex = 58;
+            this.TableBoxColor.Text = "...";
+            this.TableBoxColor.UseVisualStyleBackColor = false;
+            // 
+            // AscendantAnchorBoxColor
+            // 
+            this.AscendantAnchorBoxColor.BackColor = System.Drawing.Color.White;
+            this.AscendantAnchorBoxColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.AscendantAnchorBoxColor.ForeColor = System.Drawing.Color.Maroon;
+            this.AscendantAnchorBoxColor.Location = new System.Drawing.Point(16, 150);
+            this.AscendantAnchorBoxColor.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.AscendantAnchorBoxColor.Name = "AscendantAnchorBoxColor";
+            this.AscendantAnchorBoxColor.Size = new System.Drawing.Size(131, 52);
+            this.AscendantAnchorBoxColor.TabIndex = 57;
+            this.AscendantAnchorBoxColor.Text = "...";
+            this.AscendantAnchorBoxColor.UseVisualStyleBackColor = false;
+            this.AscendantAnchorBoxColor.Click += new System.EventHandler(this.AnchorSecondaryBoxColor_Click);
             // 
             // SelectionBoxColor
             // 
@@ -311,19 +353,19 @@
             this.SelectionBoxColor.UseVisualStyleBackColor = false;
             this.SelectionBoxColor.Click += new System.EventHandler(this.SelectionBoxColor_Click);
             // 
-            // AnchorMasterBoxColor
+            // AnchorBoxColor
             // 
-            this.AnchorMasterBoxColor.BackColor = System.Drawing.Color.White;
-            this.AnchorMasterBoxColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.AnchorMasterBoxColor.ForeColor = System.Drawing.Color.Maroon;
-            this.AnchorMasterBoxColor.Location = new System.Drawing.Point(16, 83);
-            this.AnchorMasterBoxColor.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.AnchorMasterBoxColor.Name = "AnchorMasterBoxColor";
-            this.AnchorMasterBoxColor.Size = new System.Drawing.Size(131, 52);
-            this.AnchorMasterBoxColor.TabIndex = 55;
-            this.AnchorMasterBoxColor.Text = "...";
-            this.AnchorMasterBoxColor.UseVisualStyleBackColor = false;
-            this.AnchorMasterBoxColor.Click += new System.EventHandler(this.AnchorMasterBoxColor_Click);
+            this.AnchorBoxColor.BackColor = System.Drawing.Color.White;
+            this.AnchorBoxColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.AnchorBoxColor.ForeColor = System.Drawing.Color.Maroon;
+            this.AnchorBoxColor.Location = new System.Drawing.Point(16, 83);
+            this.AnchorBoxColor.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.AnchorBoxColor.Name = "AnchorBoxColor";
+            this.AnchorBoxColor.Size = new System.Drawing.Size(131, 52);
+            this.AnchorBoxColor.TabIndex = 55;
+            this.AnchorBoxColor.Text = "...";
+            this.AnchorBoxColor.UseVisualStyleBackColor = false;
+            this.AnchorBoxColor.Click += new System.EventHandler(this.AnchorMasterBoxColor_Click);
             // 
             // label1
             // 
@@ -334,7 +376,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(262, 32);
             this.label1.TabIndex = 52;
-            this.label1.Text = "Anchor Master Box:";
+            this.label1.Text = "Master Anchor Box:";
             // 
             // label3
             // 
@@ -396,48 +438,6 @@
             0,
             196608});
             // 
-            // TableBoxColor
-            // 
-            this.TableBoxColor.BackColor = System.Drawing.Color.White;
-            this.TableBoxColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.TableBoxColor.ForeColor = System.Drawing.Color.Maroon;
-            this.TableBoxColor.Location = new System.Drawing.Point(16, 219);
-            this.TableBoxColor.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.TableBoxColor.Name = "TableBoxColor";
-            this.TableBoxColor.Size = new System.Drawing.Size(131, 52);
-            this.TableBoxColor.TabIndex = 58;
-            this.TableBoxColor.Text = "...";
-            this.TableBoxColor.UseVisualStyleBackColor = false;
-            // 
-            // TableBoxBorderWidth
-            // 
-            this.TableBoxBorderWidth.Location = new System.Drawing.Point(624, 339);
-            this.TableBoxBorderWidth.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.TableBoxBorderWidth.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.TableBoxBorderWidth.Name = "TableBoxBorderWidth";
-            this.TableBoxBorderWidth.Size = new System.Drawing.Size(113, 38);
-            this.TableBoxBorderWidth.TabIndex = 63;
-            this.TableBoxBorderWidth.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.BackColor = System.Drawing.SystemColors.Control;
-            this.label6.Location = new System.Drawing.Point(40, 341);
-            this.label6.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(151, 32);
-            this.label6.TabIndex = 62;
-            this.label6.Text = "Table Box:";
-            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
@@ -453,14 +453,14 @@
             this.flowLayoutPanel1.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.AnchorSecondaryBoxBorderWidth)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.AnchorMasterBoxBorderWidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TableBoxBorderWidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.AscendantAnchorBoxBorderWidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.AnchorBoxBorderWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.SelectionBoxBorderWidth)).EndInit();
             this.panel2.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CoordinateDeviationMargin)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.TableBoxBorderWidth)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -482,14 +482,14 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button SelectionBoxColor;
-        private System.Windows.Forms.Button AnchorMasterBoxColor;
+        private System.Windows.Forms.Button AnchorBoxColor;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button AnchorSecondaryBoxColor;
+        private System.Windows.Forms.Button AscendantAnchorBoxColor;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NumericUpDown SelectionBoxBorderWidth;
-        private System.Windows.Forms.NumericUpDown AnchorSecondaryBoxBorderWidth;
-        private System.Windows.Forms.NumericUpDown AnchorMasterBoxBorderWidth;
+        private System.Windows.Forms.NumericUpDown AscendantAnchorBoxBorderWidth;
+        private System.Windows.Forms.NumericUpDown AnchorBoxBorderWidth;
         private System.Windows.Forms.NumericUpDown TableBoxBorderWidth;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button TableBoxColor;

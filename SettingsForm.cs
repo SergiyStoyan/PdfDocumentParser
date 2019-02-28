@@ -4,13 +4,6 @@
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Cliver.PdfDocumentParser
@@ -22,22 +15,21 @@ namespace Cliver.PdfDocumentParser
             InitializeComponent();
 
             this.Icon = AssemblyRoutines.GetAppIcon();
-            //Text = Application.ProductName;
-            Text = AboutBox.AssemblyTitle;
+            Text = Program.Name + ": Settings";
 
             load_settings();
         }
 
         void load_settings()
         {
-            AnchorMasterBoxColor.ForeColor = Settings.Appearance.AnchorMasterBoxColor;
-            AnchorSecondaryBoxColor.ForeColor = Settings.Appearance.AnchorSecondaryBoxColor;
+            AnchorBoxColor.ForeColor = Settings.Appearance.AnchorBoxColor;
+            AscendantAnchorBoxColor.ForeColor = Settings.Appearance.AscendantAnchorBoxColor;
             SelectionBoxColor.ForeColor = Settings.Appearance.SelectionBoxColor;
             TableBoxColor.ForeColor = Settings.Appearance.TableBoxColor;
 
             SelectionBoxBorderWidth.Value = (decimal)Settings.Appearance.SelectionBoxBorderWidth;
-            AnchorMasterBoxBorderWidth.Value = (decimal)Settings.Appearance.AnchorMasterBoxBorderWidth;
-            AnchorSecondaryBoxBorderWidth.Value = (decimal)Settings.Appearance.SelectionBoxBorderWidth;
+            AnchorBoxBorderWidth.Value = (decimal)Settings.Appearance.AnchorBoxBorderWidth;
+            AscendantAnchorBoxBorderWidth.Value = (decimal)Settings.Appearance.SelectionBoxBorderWidth;
             TableBoxBorderWidth.Value = (decimal)Settings.Appearance.TableBoxBorderWidth;
 
             PdfPageImageResolution.Value = Settings.Constants.PdfPageImageResolution;
@@ -53,14 +45,14 @@ namespace Cliver.PdfDocumentParser
         {
             try
             {
-                Settings.Appearance.AnchorMasterBoxColor = AnchorMasterBoxColor.ForeColor;
-                Settings.Appearance.AnchorSecondaryBoxColor = AnchorSecondaryBoxColor.ForeColor;
+                Settings.Appearance.AnchorBoxColor = AnchorBoxColor.ForeColor;
+                Settings.Appearance.AscendantAnchorBoxColor = AscendantAnchorBoxColor.ForeColor;
                 Settings.Appearance.SelectionBoxColor = SelectionBoxColor.ForeColor;
                 Settings.Appearance.TableBoxColor = TableBoxColor.ForeColor;
 
                 Settings.Appearance.SelectionBoxBorderWidth = (float)SelectionBoxBorderWidth.Value;
-                Settings.Appearance.AnchorMasterBoxBorderWidth = (float)AnchorMasterBoxBorderWidth.Value;
-                Settings.Appearance.AnchorSecondaryBoxBorderWidth = (float)AnchorSecondaryBoxBorderWidth.Value;
+                Settings.Appearance.AnchorBoxBorderWidth = (float)AnchorBoxBorderWidth.Value;
+                Settings.Appearance.AscendantAnchorBoxBorderWidth = (float)AscendantAnchorBoxBorderWidth.Value;
                 Settings.Appearance.TableBoxBorderWidth = (float)TableBoxBorderWidth.Value;
 
                 Settings.Appearance.Save();
@@ -104,17 +96,17 @@ namespace Cliver.PdfDocumentParser
         private void AnchorMasterBoxColor_Click(object sender, EventArgs e)
         {
             ColorDialog cd = new ColorDialog();
-            cd.Color = Settings.Appearance.AnchorMasterBoxColor;
+            cd.Color = Settings.Appearance.AnchorBoxColor;
             if (cd.ShowDialog() == DialogResult.OK)
-                AnchorMasterBoxColor.ForeColor = cd.Color;
+                AnchorBoxColor.ForeColor = cd.Color;
         }
 
         private void AnchorSecondaryBoxColor_Click(object sender, EventArgs e)
         {
             ColorDialog cd = new ColorDialog();
-            cd.Color = Settings.Appearance.AnchorSecondaryBoxColor;
+            cd.Color = Settings.Appearance.AscendantAnchorBoxColor;
             if (cd.ShowDialog() == DialogResult.OK)
-                AnchorSecondaryBoxColor.ForeColor = cd.Color;
+                AscendantAnchorBoxColor.ForeColor = cd.Color;
         }
     }
 }

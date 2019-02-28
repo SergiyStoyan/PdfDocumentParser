@@ -4,20 +4,17 @@
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
-using System.Diagnostics;
-using System.IO;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Diagnostics;
+using System.Reflection;
 
 /*
 TBD: 
-- make ImageData anchors have only 1 image;
-- change how char anchors work: allow char anchors to support empty space around selection rectangle;
 - check if tesseract's DetectBestOrientation can perform deskew;
 - MainForm and TemplateForm to WPF;
-- ? !!!in page.cs::_findAnchor() in case Template.Types.ImageData: images are not searched recursively (if a secondary image search failed then search stops). It should be done like it is done for linked anchors;
-- ?switch to Tesseract.4
 - tune image recognition by checking brightness deltas
+- ?switch to Tesseract.4
 - ?provide multiple field extraction on page;
 - ?change anchor id->name (involves condition expressions)
 - ?store each template in separate file;
@@ -25,16 +22,12 @@ TBD:
  */
 /*
  DONE:
- - side anchors added to field;!!!RULE: assigning of rectange and anchors to a field must be done on the same page. 
+ - side anchors added to field;
  - same name field can have multiple instances to look by order;
  - options added to page::GetValue();
-     - fields can be marked as columns of a table;
-     - space substitution;
-
-    manual: tables can be processed the following ways:
-    - get char boxes and do anything;
-    - substitute auto-insert spaces with "|" and then split to columns (unreliabe);
-    - create fields as columns
+ - fields can be marked as columns of a table;
+ - space substitution;
+ - anchor functioning changed;
      */
 namespace Cliver.PdfDocumentParser
 {
@@ -48,22 +41,32 @@ namespace Cliver.PdfDocumentParser
             AppDomain.CurrentDomain.UnhandledException += delegate (object sender, UnhandledExceptionEventArgs args)
             {
                 Exception e = (Exception)args.ExceptionObject;
-                LogMessage.Error(e);
+                Log.Message.Error(e);
                 Environment.Exit(0);
             };
 
-            Message.TopMost = true;
+            //Assembly assembly = Assembly.GetExecutingAssembly();
+            //FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+            //Version = new Version(fvi.ProductVersion);
+            Version = Assembly.GetExecutingAssembly().GetName().Version;
 
+            object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false);
+            Name = ((AssemblyProductAttribute)attributes[0]).Product;
+
+            //Log.Initialize(Log.Mode.ONLY_LOG, Log.CompanyCommonDataDir, true);//must be called from the entry projects
+            //Log.ShowDeleteOldLogsDialog = false;//must be called from the entry projects
+            //Message.TopMost = true;//must be called from the entry projects
             //Config.Reload();//must be called from the entry projects
-
-            LogMessage.DisableStumblingDialogs = false;
-            Log.ShowDeleteOldLogsDialog = false;
-            Log.Initialize(Log.Mode.ONLY_LOG, Log.CompanyCommonDataDir, true);
+            //Log.Message.DisableStumblingDialogs = false;//must be called from the entry projects
+            Log.Message.ShowDialog = ((string title, Icon icon, string message, string[] buttons, int default_button, Form owner) => { return Message.ShowDialog(title, icon, message, buttons, default_button, owner); });
         }
 
         public static void Initialize()
         {//trigger Program()
 
         }
+
+        public static readonly Version Version;
+        public static readonly string Name;
     }
 }

@@ -82,7 +82,7 @@ namespace Cliver
     {
         static Config()
         {
-               DefaultStorageDir = AppSettings.StorageDir;
+            DefaultStorageDir = UserSettings.StorageDir;
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace Cliver
                                     //if (!ignore_load_error && !Directory.Exists(StorageDir))//it is newly installed and so files are not expected to be there
                                     //    ignore_load_error = true;
                                     //if (!ignore_load_error)
-                                    //    LogMessage.Error2(e);
+                                    //    Log.Message.Error2(e);
                                     string initFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + fullName + "." + FILE_EXTENSION;
                                     if (File.Exists(initFile))
                                     {
@@ -216,7 +216,7 @@ namespace Cliver
                                 //if (!ignore_load_error && !Directory.Exists(StorageDir))//it is newly installed and so files are not expected to be there
                                 //    ignore_load_error = true;
                                 //if (!ignore_load_error)
-                                //    LogMessage.Error2(e);
+                                //    Log.Message.Error2(e);
                                 string initFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + fullName + "." + FILE_EXTENSION;
                                 if (File.Exists(initFile))
                                 {

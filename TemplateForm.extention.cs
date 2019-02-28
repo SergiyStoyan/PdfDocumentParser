@@ -5,19 +5,9 @@
 //********************************************************************************************
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Diagnostics;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using iTextSharp.text.pdf.parser;
 using System.IO;
 
 namespace Cliver.PdfDocumentParser
@@ -84,8 +74,10 @@ namespace Cliver.PdfDocumentParser
 
                 //imageResolution.Value = template.ImageResolution;
 
-                textAutoInsertSpaceThreshold.Value = (decimal)t.TextAutoInsertSpaceThreshold;
-                textAutoInsertSpaceSubstitute.Text = t.TextAutoInsertSpaceSubstitute;
+                if (t.TextAutoInsertSpace == null)
+                    t.TextAutoInsertSpace = new TextAutoInsertSpace();
+                textAutoInsertSpaceThreshold.Value = (decimal)t.TextAutoInsertSpace.Threshold;
+                textAutoInsertSpaceRepresentative.Text = t.TextAutoInsertSpace.Representative;
 
                 pageRotation.SelectedIndex = (int)t.PageRotation;
                 autoDeskew.Checked = t.AutoDeskew;
@@ -181,7 +173,8 @@ namespace Cliver.PdfDocumentParser
         {
             if (pages == null)
                 return;
-            TextForm tf = new TextForm("Pdf Entity Text", PdfTextExtractor.GetTextFromPage(pages.PdfReader, currentPageI), false);
+            //TextForm tf = new TextForm("Pdf Entity Text", PdfTextExtractor.GetTextFromPage(pages.PdfReader, currentPageI), false);
+            TextForm tf = new TextForm("Pdf Entity Text", Pdf.GetText(pages[currentPageI].PdfCharBoxs, new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = textAutoInsertSpaceRepresentative.Text }), false);
             tf.ShowDialog();
         }
 
@@ -190,7 +183,7 @@ namespace Cliver.PdfDocumentParser
             if (pages == null)
                 return;
             //TextForm tf = new TextForm("OCR Text", PdfDocumentParser.Ocr.This.GetHtml(pages[currentPageI].Bitmap), true);
-            TextForm tf = new TextForm("OCR Text", PdfDocumentParser.Ocr.GetText(pages[currentPageI].ActiveTemplateOcrCharBoxs), false);
+            TextForm tf = new TextForm("OCR Text", PdfDocumentParser.Ocr.GetText(pages[currentPageI].ActiveTemplateOcrCharBoxs, new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = textAutoInsertSpaceRepresentative.Text }), false);
             tf.ShowDialog();
         }
 
@@ -230,8 +223,11 @@ namespace Cliver.PdfDocumentParser
 
             t.Name = name.Text.Trim();
 
-            t.TextAutoInsertSpaceThreshold = (float)textAutoInsertSpaceThreshold.Value;
-            t.TextAutoInsertSpaceSubstitute = textAutoInsertSpaceSubstitute.Text;
+            t.TextAutoInsertSpace = new TextAutoInsertSpace
+            {
+                Threshold = (float)textAutoInsertSpaceThreshold.Value,
+                Representative = textAutoInsertSpaceRepresentative.Text,
+            };
 
             t.PageRotation = (Template.PageRotations)pageRotation.SelectedIndex;
             t.AutoDeskew = autoDeskew.Checked;

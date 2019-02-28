@@ -39,9 +39,21 @@ namespace Cliver.SampleParser
             }
         }
 
-        Dictionary<string, string> fieldNames2text = new Dictionary<string, string>();
+        public class Document
+        {
+            public string Invoice;
+            public string Total;
+            public List<Product> Products = new List<Product>();
+            public class Product
+            {
+                public string Name;
+                public string Cost;
+            }
+        }
 
-        static public bool? Process(string inputPdf, List<Template2> template2s, Action<string, int, int, Dictionary<string, string>> record)
+        Document document;
+
+        static public bool? Process(string inputPdf, List<Template2> template2s, Action<string, int, int, Document> record)
         {
             Log.Main.Inform(">>> Processing file '" + inputPdf + "'");
 
@@ -62,7 +74,7 @@ namespace Cliver.SampleParser
                 return cp.process(record, t2s);
             }
         }
-        bool process(Action<string, int, int, Dictionary<string, string>> record, List<Template2> template2s)
+        bool process(Action<string, int, int, Document> record, List<Template2> template2s)
         {
             int documentFirstPageI = 0;
             int documentCount = 0;
@@ -80,6 +92,9 @@ namespace Cliver.SampleParser
                             documentFirstPageI = pageI;
                             Log.Main.Inform("Document #" + (++documentCount) + " detected at page " + documentFirstPageI + " with template '" + currentTemplate.Name + "'");
                             Settings.TemplateLocalInfo.SetUsedTime(currentTemplate.Name);
+
+                            document = new Document();
+                            document.Invoice = (string)Pages[pageI].GetValue(Template2.FieldNames.InvoiceId);
                             break;
                         }
                     }
@@ -88,12 +103,17 @@ namespace Cliver.SampleParser
                     Log.Main.Warning2("No template found for page #" + pageI);
                     continue;
                 }
-                foreach (Template.Field f in currentTemplate.Fields)
-                    extractFieldText(Pages[pageI], f);
+
+                List<string> names = (List<string>)Pages[pageI].GetValue(Template2.FieldNames.ProductNames, Page.ValueTypes.TextLines);
+                List<string> costs = (List<string>)Pages[pageI].GetValue(Template2.FieldNames.ProductCosts, Page.ValueTypes.TextLines);
+                for (int i = 0; i < names.Count; i++)
+                    if (!string.IsNullOrWhiteSpace(names[i]))
+                        document.Products.Add(new Document.Product { Name = names[i], Cost = costs[i] });
+
                 if (Pages[pageI].IsCondition(Template2.ConditionNames.DocumentLastPage))
                 {
-                    record(currentTemplate.Name, documentFirstPageI, pageI, fieldNames2text);
-                    fieldNames2text.Clear();
+                    document.Total = (string)Pages[pageI].GetValue(Template2.FieldNames.TotalAmount);
+                    record(currentTemplate.Name, documentFirstPageI, pageI, document);
                     currentTemplate = null;
                     continue;
                 }
@@ -101,19 +121,19 @@ namespace Cliver.SampleParser
             return documentCount > 0;
         }
 
-        void extractFieldText(Page p, Template.Field field)
-        {
-            if (field.Rectangle == null)
-                return;
-            object v = p.GetValue(field);
-            if (v is ImageData)
-            {
-                if (!fieldNames2text.ContainsKey(field.Name))
-                    fieldNames2text[field.Name] = "--image--";
-                return;
-            }
-            if (v != null)
-                fieldNames2text[field.Name] = Page.NormalizeText((string)v);
-        }
+        //void extractFieldText(Page p, Template.Field field)
+        //{
+        //    if (field.Rectangle == null)
+        //        return;
+        //    object v = p.GetValue(field.Name);
+        //    if (v is ImageData)
+        //    {
+        //        if (!fieldNames2text.ContainsKey(field.Name))
+        //            fieldNames2text[field.Name] = "--image--";
+        //        return;
+        //    }
+        //    if (v != null)
+        //        fieldNames2text[field.Name] = Page.NormalizeText((string)v);
+        //}
     }
 }

@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 using Tesseract;
 
@@ -80,10 +79,10 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public static string GetText(List<CharBox> cbs)
+        public static string GetText(List<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace)
         {
             List<string> ls = new List<string>();
-            foreach (Line l in GetLines(cbs))
+            foreach (Line l in GetLines(cbs, textAutoInsertSpace))
             {
                 StringBuilder sb = new StringBuilder();
                 foreach (CharBox cb in l.CharBoxs)
@@ -163,12 +162,13 @@ namespace Cliver.PdfDocumentParser
                                 //        R = new RectangleF(r.X1 * Settings.Constants.Image2PdfResolutionRatio - Settings.Constants.CoordinateDeviationMargin * 2, r.Y1 * Settings.Constants.Image2PdfResolutionRatio, r.Width * Settings.Constants.Image2PdfResolutionRatio, r.Height * Settings.Constants.Image2PdfResolutionRatio)
                                 //    });
                                 //}//seems to work not well
-                                cbs.Add(new CharBox
-                                {
-                                    Char = " ",
-                                    AutoInserted = true,
-                                    R = new RectangleF(r.X1 * Settings.Constants.Image2PdfResolutionRatio - Settings.Constants.CoordinateDeviationMargin * 2, r.Y1 * Settings.Constants.Image2PdfResolutionRatio, r.Width * Settings.Constants.Image2PdfResolutionRatio, r.Height * Settings.Constants.Image2PdfResolutionRatio)
-                                });
+
+                                //cbs.Add(new CharBox//worked well before autoinsert was moved
+                                //{
+                                //    Char = " ",
+                                //    AutoInserted = true,
+                                //    R = new RectangleF(r.X1 * Settings.Constants.Image2PdfResolutionRatio - Settings.Constants.CoordinateDeviationMargin * 2, r.Y1 * Settings.Constants.Image2PdfResolutionRatio, r.Width * Settings.Constants.Image2PdfResolutionRatio, r.Height * Settings.Constants.Image2PdfResolutionRatio)
+                                //});
                             }
                             cbs.Add(new CharBox
                             {
@@ -189,7 +189,7 @@ namespace Cliver.PdfDocumentParser
         public class CharBox
         {
             public string Char;
-            public bool AutoInserted = false;
+            //public bool AutoInserted = false;
             public System.Drawing.RectangleF R;
         }
 
@@ -199,22 +199,28 @@ namespace Cliver.PdfDocumentParser
         //    return orderedCbs.Aggregate(new StringBuilder(), (sb, n) => sb.Append(n)).ToString();
         //}
 
-        public static string GetTextSurroundedByRectangle(List<CharBox> cbs, RectangleF r)
+        public static string GetTextSurroundedByRectangle(List<CharBox> cbs, RectangleF r, TextAutoInsertSpace textAutoInsertSpace)
         {
-            cbs = cbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)).ToList();
+            return string.Join("\r\n", GetTextLinesSurroundedByRectangle(cbs, r, textAutoInsertSpace));
+        }
+
+        public static List<string> GetTextLinesSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r, TextAutoInsertSpace textAutoInsertSpace)
+        {
+            cbs = GetCharBoxsSurroundedByRectangle(cbs, r);
             List<string> ls = new List<string>();
-            foreach (Line l in GetLines(cbs))
+            foreach (Line l in GetLines(cbs, textAutoInsertSpace))
             {
                 StringBuilder sb = new StringBuilder();
                 foreach (CharBox cb in l.CharBoxs)
                     sb.Append(cb.Char);
                 ls.Add(sb.ToString());
             }
-            return string.Join("\r\n", ls);
+            return ls;
         }
 
-        public static List<Line> GetLines(IEnumerable<CharBox> cbs)
+        public static List<Line> GetLines(IEnumerable<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace)
         {
+            bool spaceAutoInsert = textAutoInsertSpace!=null&& textAutoInsertSpace.Threshold > 0;
             cbs = cbs.OrderBy(a => a.R.X).ToList();
             List<Line> lines = new List<Line>();
             foreach (CharBox cb in cbs)
@@ -230,6 +236,17 @@ namespace Cliver.PdfDocumentParser
                     }
                     if (cb.R.Bottom - cb.R.Height / 2 <= lines[i].Bottom)
                     {
+                        if (spaceAutoInsert && /*cb.Char != " " &&*/ lines[i].CharBoxs.Count > 0)
+                        {
+                            CharBox cb0 = lines[i].CharBoxs[lines[i].CharBoxs.Count - 1];
+                            if (/*cb0.Char != " " && */cb.R.Left - cb0.R.Right > (cb.R.Width + cb.R.Height) / textAutoInsertSpace.Threshold)
+                            {
+                                float spaceWidth = (cb.R.Width + cb.R.Width) / 2;
+                                int spaceNumber = (int)Math.Ceiling((cb.R.Left - cb0.R.Right) / spaceWidth);
+                                for (int j = 0; j < spaceNumber; j++)
+                                    lines[i].CharBoxs.Add(new CharBox { Char = textAutoInsertSpace.Representative, R = new System.Drawing.RectangleF(cb.R.Left + spaceWidth * j, 0, 0, 0) });
+                            }
+                        }
                         lines[i].CharBoxs.Add(cb);
                         if (lines[i].Top > cb.R.Top)
                             lines[i].Top = cb.R.Top;
@@ -245,8 +262,6 @@ namespace Cliver.PdfDocumentParser
                 }
                 CONTINUE:;
             }
-            //foreach (Line l in lines)
-            //    l.CharBoxs = l.CharBoxs.OrderBy(a => a.R.X).ToList();
             return lines;
         }
         public class Line
@@ -258,7 +273,7 @@ namespace Cliver.PdfDocumentParser
 
         public static List<CharBox> GetCharBoxsSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r)
         {
-            return cbs.Where(a => !a.AutoInserted && /*selectedR.IntersectsWith(a.R) || */r.Contains(a.R)).ToList();
+            return cbs.Where(a => /*selectedR.IntersectsWith(a.R) || */r.Contains(a.R)).ToList();
         }
 
         public static List<CharBox> GetOrdered(List<CharBox> orderedContainerCbs, List<CharBox> cbs)

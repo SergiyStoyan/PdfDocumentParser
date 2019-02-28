@@ -4,7 +4,6 @@
 //        http://www.cliversoft.com
 //********************************************************************************************
 
-//#define UseNetJsonSerialization //for legacy apps
 
 using System;
 using Newtonsoft.Json;
@@ -45,20 +44,20 @@ namespace Cliver
                     );
             }
 
-            public static void Save(string file, object o, bool polymorphic = true, bool indented = true)
+            public static void Save(string file, object o, bool indented = true, bool polymorphic = true, bool ignoreNullProperties = true)
             {
                 FileSystemRoutines.CreateDirectory(PathRoutines.GetDirFromPath(file));
-                File.WriteAllText(file, Serialize(o, indented, polymorphic));
+                File.WriteAllText(file, Serialize(o, indented, polymorphic, ignoreNullProperties));
             }
 
-            public static T Load<T>(string file, bool polymorphic = true)
+            public static T Load<T>(string file)
             {
-                return Deserialize<T>(File.ReadAllText(file), polymorphic);
+                return Deserialize<T>(File.ReadAllText(file));
             }
 
-            public static object Load(Type type, string file, bool polymorphic = true)
+            public static object Load(Type type, string file)
             {
-                return Deserialize(type, File.ReadAllText(file), polymorphic);
+                return Deserialize(type, File.ReadAllText(file));
             }
 
             public static T Clone<T>(T o)

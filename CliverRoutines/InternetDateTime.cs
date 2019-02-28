@@ -23,7 +23,7 @@ InternetDateTime.CHECK_TEST_PERIOD_VALIDITY(2008, 11, 8);
 
 #if TEST_VERSION && !DEBUG
 				if(new DateTime(2006, 3, 11) < InternetDateTime.GetOverHttps())
-					LogMessage.Exit("Test time expired");
+					Log.Message.Exit("Test time expired");
 #endif	  
  
 */
@@ -80,7 +80,7 @@ namespace Cliver
                 //    return;
                 //if (for_release_only && !IsReleaseVersion(Assembly.GetEntryAssembly()))
                 //    return;
-                //LogMessage.Inform("It is a demo version that is valid until " + year + "-" + month + "-" + day);
+                //Log.Message.Inform("It is a demo version that is valid until " + year + "-" + month + "-" + day);
                 if (!silently)
                     Log.Main.Inform("It is a demo version that is valid until " + year + "-" + month + "-" + day);
                 ThreadRoutines.StartTry(() =>
@@ -88,7 +88,7 @@ namespace Cliver
                     if (new DateTime(year, month, day) < InternetDateTime.GetOverHttp())
                     {
                         Action a = (Action)(() => {
-                            LogMessage.Exit("The test time expired. \nPlease contact the vendor if you want to use this software.");
+                            Log.Message.Exit("The test time expired. \nPlease contact the vendor if you want to use this software.");
                         });
                         if (System.Windows.Forms.Application.OpenForms.Count > 0)
                             System.Windows.Forms.Application.OpenForms[0].Invoke(a);
@@ -107,13 +107,13 @@ namespace Cliver
                 },
                 (Exception e) =>
                 {
-                    LogMessage.Exit(e);
+                    Log.Message.Exit(e);
                 }
                 );
             }
             catch (Exception e)
             {
-                LogMessage.Exit(e);
+                Log.Message.Exit(e);
             }
         }
         static bool silently = false;
@@ -178,7 +178,7 @@ namespace Cliver
                 if (silently)
                     Log.Main.Error("Validation failed.\n\n" + e.Message);
                 else
-                    LogMessage.Exit("Test period validation failed.\n\n" + e.Message);
+                    Log.Message.Exit("Test period validation failed.\n\n" + e.Message);
                 //Environment.Exit(0);
             }
 

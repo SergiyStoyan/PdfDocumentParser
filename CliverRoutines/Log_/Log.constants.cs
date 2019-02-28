@@ -261,7 +261,7 @@ namespace Cliver
                                     if (!show_dialog)
                                         Log.Main.Inform("Deleting session data including caches and logs older than " + FirstLogDate.ToString());
                                     else
-                                    if (!LogMessage.AskYesNo(alert, true))
+                                    if (!Log.Message.AskYesNo(alert, true))
                                         return;
                                     alert = null;
                                 }
@@ -272,7 +272,7 @@ namespace Cliver
                                 }
                                 catch (Exception e)
                                 {
-                                    LogMessage.Error(e);
+                                    Log.Message.Error(e);
                                 }
                             }
                             break;
@@ -287,7 +287,7 @@ namespace Cliver
                                     if (!show_dialog)
                                         Log.Main.Inform("Deleting logs older than " + FirstLogDate.ToString());
                                     else
-                                    if (!LogMessage.AskYesNo(alert, true))
+                                    if (!Log.Message.AskYesNo(alert, true))
                                         return;
                                     alert = null;
                                 }
@@ -298,7 +298,7 @@ namespace Cliver
                                 }
                                 catch (Exception e)
                                 {
-                                    LogMessage.Error(e);
+                                    Log.Message.Error(e);
                                 }
                             }
                             break;
@@ -330,7 +330,7 @@ namespace Cliver
         //    }
         //    catch (Exception e)
         //    {
-        //        LogMessage.Exit(e);
+        //        Log.Message.Exit(e);
         //    }
 
         //    return null;

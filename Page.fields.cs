@@ -4,12 +4,11 @@
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
-using System.Data.Linq;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Drawing;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -104,13 +103,13 @@ namespace Cliver.PdfDocumentParser
                         case ValueTypes.Default:
                             List<string> ls;
                             if (pt.ColumnOfTable == null)
-                                ls = Pdf.GetTextLinesSurroundedByRectangle(PdfCharBoxs, r, pageCollection.ActiveTemplate.TextAutoInsertSpaceThreshold, pageCollection.ActiveTemplate.TextAutoInsertSpaceSubstitute);
+                                ls = Pdf.GetTextLinesSurroundedByRectangle(PdfCharBoxs, r, pageCollection.ActiveTemplate.TextAutoInsertSpace);
                             else
                                 ls = GetTextLinesAsTableColumn(pt, r);
                             return string.Join("\r\n", ls);
                         case ValueTypes.TextLines:
                             if (pt.ColumnOfTable == null)
-                                ls = Pdf.GetTextLinesSurroundedByRectangle(PdfCharBoxs, r, pageCollection.ActiveTemplate.TextAutoInsertSpaceThreshold, pageCollection.ActiveTemplate.TextAutoInsertSpaceSubstitute);
+                                ls = Pdf.GetTextLinesSurroundedByRectangle(PdfCharBoxs, r, pageCollection.ActiveTemplate.TextAutoInsertSpace);
                             else
                                 ls = GetTextLinesAsTableColumn(pt, r);
                             return ls;
@@ -142,7 +141,7 @@ namespace Cliver.PdfDocumentParser
                             }
                         case ValueTypes.TextLines:
                         case ValueTypes.CharBoxs:
-                            throw new Exception("Option " + valueType + " does not go with this Field type");
+                            throw new Exception("Option " + valueType + " cannot be used this Field type.");
                         default:
                             throw new Exception("Unknown option: " + valueType);
                     }
@@ -168,7 +167,7 @@ namespace Cliver.PdfDocumentParser
                 return null;
 
             List<string> ls = new List<string>();
-            foreach (Pdf.Line l in Pdf.GetLines(cbs, pageCollection.ActiveTemplate.TextAutoInsertSpaceThreshold, pageCollection.ActiveTemplate.TextAutoInsertSpaceSubstitute))
+            foreach (Pdf.Line l in Pdf.GetLines(cbs, pageCollection.ActiveTemplate.TextAutoInsertSpace))
             {
                 StringBuilder sb = new StringBuilder();
                 foreach (Pdf.CharBox cb in l.CharBoxs)

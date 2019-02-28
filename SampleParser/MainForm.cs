@@ -38,7 +38,7 @@ namespace Cliver.SampleParser
             InitializeComponent();
 
             this.Icon = AssemblyRoutines.GetAppIcon();
-            Text = Application.ProductName;
+            Text = Program.Name + " [" + Program.Version + "] / " + PdfDocumentParser.Program.Name + " [" + PdfDocumentParser.Program.Version.ToString(2) + "]";
 
             Message.Owner = this;
 
@@ -183,7 +183,7 @@ namespace Cliver.SampleParser
                 }
                 catch (Exception ex)
                 {
-                    LogMessage.Error(ex);
+                    Log.Message.Error(ex);
                 }
             };
 
@@ -244,7 +244,7 @@ namespace Cliver.SampleParser
                         Template2 t = (Template2)r.Tag;
                         if (t == null)
                             return;
-                        Template2 t2 = SerializationRoutines.Json.Deserialize<Template2>(SerializationRoutines.Json.Serialize(t));
+                        Template2 t2 = Serialization.Json.Deserialize<Template2>(Serialization.Json.Serialize(t));
                         t2.Template.Name = "";
                         t2.Template.Editor.TestFile = null;
                         int i = template2s.Rows.Add(new DataGridViewRow());
@@ -300,20 +300,20 @@ namespace Cliver.SampleParser
 
             TemplateManager tm = new TemplateManager(
                 r,
-                SerializationRoutines.Json.Clone(t.Template),
+                Serialization.Json.Clone(t.Template),
                 Settings.TemplateLocalInfo.GetInfo(t.Template.Name).LastTestFile,
                 Settings.General.InputFolder
                 );
-            Template2 it = Settings.Template2s.CreateInitialTemplate();
-            foreach (Template.Field f in tm.Template.Fields)
-            {
-                int i = it.Template.Fields.FindIndex(x => x.Name == f.Name);
-                if (i >= 0)
-                    it.Template.Fields[i] = f;
-                else
-                    it.Template.Fields.Add(f);
-            }
-            tm.Template.Fields = it.Template.Fields;
+            //Template2 it = Settings.Template2s.CreateInitialTemplate();
+            //foreach (Template.Field f in tm.Template.Fields)
+            //{
+            //    int i = it.Template.Fields.FindIndex(x => x.Name == f.Name);
+            //    if (i >= 0)
+            //        it.Template.Fields[i] = f;
+            //    else
+            //        it.Template.Fields.Add(f);
+            //}
+            //tm.Template.Fields = it.Template.Fields;
 
             tf = new TemplateForm(tm);
             tf.FormClosed += delegate
@@ -392,7 +392,7 @@ namespace Cliver.SampleParser
             }
             catch (Exception e)
             {
-                LogMessage.Error(e);
+                Log.Message.Error(e);
                 return false;
             }
         }
@@ -422,7 +422,7 @@ namespace Cliver.SampleParser
             }
             catch (Exception ex)
             {
-                LogMessage.Error(ex);
+                Log.Message.Error(ex);
             }
         }
 
@@ -443,7 +443,7 @@ namespace Cliver.SampleParser
         {
             if (processorThread != null && processorThread.IsAlive)
             {
-                if (!LogMessage.AskYesNo("Processing is running. Would you like to abort it and restart?", true))
+                if (!Log.Message.AskYesNo("Processing is running. Would you like to abort it and restart?", true))
                     return;
                 while (processorThread.IsAlive)
                 {
@@ -491,7 +491,7 @@ namespace Cliver.SampleParser
                     }
                     catch (Exception ex)
                     {
-                        LogMessage.Error(ex);
+                        Log.Message.Error(ex);
                     }
                     finally
                     {
@@ -513,7 +513,7 @@ namespace Cliver.SampleParser
         {
             if (processorThread != null && processorThread.IsAlive)
             {
-                if (!LogMessage.AskYesNo("Processing is running. Would you like to abort it?", true))
+                if (!Log.Message.AskYesNo("Processing is running. Would you like to abort it?", true))
                     return;
             }
             Close();

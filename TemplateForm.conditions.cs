@@ -5,16 +5,8 @@
 //********************************************************************************************
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Diagnostics;
-using System.IO;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -206,9 +198,9 @@ namespace Cliver.PdfDocumentParser
                 }
             if (!set)
                 return;
-            List<List<RectangleF>> rss = pages[currentPageI].GetAnchorRectangless(a.Id);
+            Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(a.Id);
             getAnchor(a.Id, out DataGridViewRow r);
-            if (rss == null || rss.Count < 1)
+            if (!aai.Found)
                 setRowStatus(statuses.ERROR, r, "Not found");
             else
                 setRowStatus(statuses.SUCCESS, r, "Found");

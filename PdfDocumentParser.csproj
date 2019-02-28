@@ -117,7 +117,7 @@
       <HintPath>..\HawkeyeParser\packages\Magick.NET-Q16-AnyCPU.7.10.0\lib\net40\Magick.NET-Q16-AnyCPU.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\InvoiceParser\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\HawkeyeParser\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -192,6 +192,7 @@
       <DependentUpon>AnchorControl.cs</DependentUpon>
     </Compile>
     <Compile Include="BooleanEngine.cs" />
+    <Compile Include="Page.conditions.cs" />
     <Compile Include="Page.anchors.cs" />
     <Compile Include="Page.fields.cs" />
     <Compile Include="PageCollection.cs" />

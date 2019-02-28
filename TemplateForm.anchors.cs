@@ -5,16 +5,9 @@
 //********************************************************************************************
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Diagnostics;
-using System.IO;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -265,19 +258,19 @@ namespace Cliver.PdfDocumentParser
                     case Template.Anchor.Types.PdfText:
                         {
                             if (currentAnchorControl == null || !(currentAnchorControl is AnchorPdfTextControl))
-                                currentAnchorControl = new AnchorPdfTextControl((float)textAutoInsertSpaceThreshold.Value, textAutoInsertSpaceSubstitute.Text);
+                                currentAnchorControl = new AnchorPdfTextControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = textAutoInsertSpaceRepresentative.Text });
                         }
                         break;
                     case Template.Anchor.Types.OcrText:
                         {
                             if (currentAnchorControl == null || !(currentAnchorControl is AnchorOcrTextControl))
-                                currentAnchorControl = new AnchorOcrTextControl();
+                                currentAnchorControl = new AnchorOcrTextControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = textAutoInsertSpaceRepresentative.Text });
                         }
                         break;
                     case Template.Anchor.Types.ImageData:
                         {
                             if (currentAnchorControl == null || !(currentAnchorControl is AnchorImageDataControl))
-                                currentAnchorControl = new AnchorImageDataControl();
+                                currentAnchorControl = new AnchorImageDataControl((float)pictureScale.Value);
                         }
                         break;
                     //case Template.Anchor.Types.Script:
@@ -332,28 +325,22 @@ namespace Cliver.PdfDocumentParser
             row.Cells["Type3"].Value = a.Type;
             row.Cells["ParentAnchorId3"].Value = a.ParentAnchorId;
 
-            Template.RectangleF r = null;
+            Template.PointF p = a.Position;
             switch (a.Type)
             {
                 case Template.Anchor.Types.PdfText:
                     {
                         Template.Anchor.PdfText pt = (Template.Anchor.PdfText)a;
-                        if (pt.CharBoxs.Count > 0)
-                            r = pt.CharBoxs[0].Rectangle;
                     }
                     break;
                 case Template.Anchor.Types.OcrText:
                     {
                         Template.Anchor.OcrText ot = (Template.Anchor.OcrText)a;
-                        if (ot.CharBoxs.Count > 0)
-                            r = ot.CharBoxs[0].Rectangle;
                     }
                     break;
                 case Template.Anchor.Types.ImageData:
                     {
                         Template.Anchor.ImageData id = (Template.Anchor.ImageData)a;
-                        if (id.ImageBoxs.Count > 0)
-                            r = id.ImageBoxs[0].Rectangle;
                     }
                     break;
                 //case Template.Anchor.Types.Script:
@@ -364,8 +351,8 @@ namespace Cliver.PdfDocumentParser
                 default:
                     throw new Exception("Unknown option: " + a.Type);
             }
-            if (r != null)
-                row.Cells["Point03"].Value = Serialization.Json.Serialize(new { r.X, r.Y });
+            if (p != null)
+                row.Cells["Position3"].Value = Serialization.Json.Serialize(p);
 
             if (loadingTemplate)
                 return;
@@ -448,77 +435,6 @@ namespace Cliver.PdfDocumentParser
                 BottomAnchorId.DataSource = ais_;
             }
         }
-
-        void setAnchorFromSelectedElements()
-        {
-            try
-            {
-                if (currentAnchorControl == null)
-                    return;
-                Template.Anchor a = (Template.Anchor)currentAnchorControl.Row.Tag;
-                switch (a.Type)
-                {
-                    case Template.Anchor.Types.PdfText:
-                        {
-                            Template.Anchor.PdfText pt = (Template.Anchor.PdfText)a;
-                            pt.CharBoxs = new List<Template.Anchor.PdfText.CharBox>();
-                            List<Pdf.Line> lines = Pdf.RemoveDuplicatesAndGetLines(selectedPdfCharBoxs, -1, null);
-                            if (lines.Count < 1)
-                                break;
-                            foreach (Pdf.Line l in lines)
-                                foreach (Pdf.CharBox cb in l.CharBoxs)
-                                    pt.CharBoxs.Add(new Template.Anchor.PdfText.CharBox
-                                    {
-                                        Char = cb.Char,
-                                        Rectangle = new Template.RectangleF(cb.R.X, cb.R.Y, cb.R.Width, cb.R.Height),
-                                    });
-                        }
-                        break;
-                    case Template.Anchor.Types.OcrText:
-                        {
-                            Template.Anchor.OcrText ot = (Template.Anchor.OcrText)a;
-                            ot.CharBoxs = new List<Template.Anchor.OcrText.CharBox>();
-                            List<Ocr.Line> lines = PdfDocumentParser.Ocr.GetLines(selectedOcrCharBoxs);
-                            if (lines.Count < 1)
-                                break;
-                            foreach (Ocr.Line l in lines)
-                                foreach (Ocr.CharBox cb in l.CharBoxs)
-                                    ot.CharBoxs.Add(new Template.Anchor.OcrText.CharBox
-                                    {
-                                        Char = cb.Char,
-                                        Rectangle = new Template.RectangleF(cb.R.X, cb.R.Y, cb.R.Width, cb.R.Height),
-                                    });
-                        }
-                        break;
-                    case Template.Anchor.Types.ImageData:
-                        {
-                            Template.Anchor.ImageData id = (Template.Anchor.ImageData)a;
-                            id.ImageBoxs = new List<Template.Anchor.ImageData.ImageBox>();
-                            if (selectedImageBoxs.Count < 1)
-                                break;
-                            if (selectedImageBoxs.Where(x => x.ImageData == null).FirstOrDefault() != null)
-                                break;
-                            id.ImageBoxs = selectedImageBoxs;
-                        }
-                        break;
-                    default:
-                        throw new Exception("Unknown option: " + a.Type);
-                }
-                setAnchorRow(currentAnchorControl.Row, a);
-                clearImageFromBoxes();
-                findAndDrawAnchor(a.Id);
-            }
-            finally
-            {
-                anchors.EndEdit();
-                selectedPdfCharBoxs = null;
-                selectedOcrCharBoxs = null;
-                selectedImageBoxs = null;
-            }
-        }
-        List<Pdf.CharBox> selectedPdfCharBoxs;
-        List<Ocr.CharBox> selectedOcrCharBoxs;
-        List<Template.Anchor.ImageData.ImageBox> selectedImageBoxs;
 
         void showAnchorRowAs(int? anchorId, rowStates rowState, bool resetRows)
         {

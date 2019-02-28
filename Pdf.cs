@@ -4,17 +4,13 @@
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
-using System.Data.Linq;
 using System.Linq;
 using System.Text;
 using System.Collections.Generic;
 using System.IO;
-using iTextSharp.text;
 using iTextSharp.text.pdf;
-using System.Text.RegularExpressions;
 using iTextSharp.text.pdf.parser;
 using System.Diagnostics;
-using ImageMagick;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -199,16 +195,29 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public static string GetTextSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r, float textAutoInsertSpaceThreshold, string textAutoInsertSpaceSubstitute)
+        public static string GetText(List<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace)
         {
-            return string.Join("\r\n", GetTextLinesSurroundedByRectangle(cbs, r, textAutoInsertSpaceThreshold, textAutoInsertSpaceSubstitute));
+            List<string> ls = new List<string>();
+            foreach (Line l in GetLines(cbs, textAutoInsertSpace))
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (CharBox cb in l.CharBoxs)
+                    sb.Append(cb.Char);
+                ls.Add(sb.ToString());
+            }
+            return string.Join("\r\n", ls);
         }
 
-        public static List<string> GetTextLinesSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r, float textAutoInsertSpaceThreshold, string textAutoInsertSpaceSubstitute)
+        public static string GetTextSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r, TextAutoInsertSpace textAutoInsertSpace)
+        {
+            return string.Join("\r\n", GetTextLinesSurroundedByRectangle(cbs, r, textAutoInsertSpace));
+        }
+
+        public static List<string> GetTextLinesSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r, TextAutoInsertSpace textAutoInsertSpace)
         {
             cbs = GetCharBoxsSurroundedByRectangle(cbs, r);
             List<string> ls = new List<string>();
-            foreach (Line l in GetLines(cbs, textAutoInsertSpaceThreshold, textAutoInsertSpaceSubstitute))
+            foreach (Line l in GetLines(cbs, textAutoInsertSpace))
             {
                 StringBuilder sb = new StringBuilder();
                 foreach (CharBox cb in l.CharBoxs)
@@ -222,13 +231,15 @@ namespace Cliver.PdfDocumentParser
         {
             cbs = removeDuplicates(cbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)));
             if (excludeInvisibleCharacters)
-                cbs = cbs.Where(a => !" \t".Contains(a.Char)).ToList();
+                cbs = cbs.Where(a => !InvisibleCharacters.Contains(a.Char)).ToList();
             return cbs;
         }
 
-        public static List<Line> RemoveDuplicatesAndGetLines(IEnumerable<CharBox> cbs, float textAutoInsertSpaceThreshold, string textAutoInsertSpaceSubstitute)
+        public static readonly string InvisibleCharacters = " \t";
+
+        public static List<Line> RemoveDuplicatesAndGetLines(IEnumerable<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace)
         {
-            return GetLines(removeDuplicates(cbs), textAutoInsertSpaceThreshold, textAutoInsertSpaceSubstitute);
+            return GetLines(removeDuplicates(cbs), textAutoInsertSpace);
         }
 
         static List<CharBox> removeDuplicates(IEnumerable<CharBox> cbs)
@@ -248,9 +259,9 @@ namespace Cliver.PdfDocumentParser
             return bs;
         }
 
-      public  static List<Line> GetLines(IEnumerable<CharBox> cbs, float textAutoInsertSpaceThreshold, string textAutoInsertSpaceSubstitute)
+      public  static List<Line> GetLines(IEnumerable<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace)
         {
-            bool spaceAutoInsert = textAutoInsertSpaceThreshold > 0;
+            bool spaceAutoInsert = textAutoInsertSpace!=null&& textAutoInsertSpace.Threshold > 0;
             cbs = cbs.OrderBy(a => a.R.X).ToList();
             List<Line> lines = new List<Line>();
             foreach (CharBox cb in cbs)
@@ -269,12 +280,12 @@ namespace Cliver.PdfDocumentParser
                         if (spaceAutoInsert && /*cb.Char != " " &&*/ lines[i].CharBoxs.Count > 0)
                         {
                             CharBox cb0 = lines[i].CharBoxs[lines[i].CharBoxs.Count - 1];
-                            if (/*cb0.Char != " " && */cb.R.Left - cb0.R.Right > (cb.R.Width + cb.R.Height) / textAutoInsertSpaceThreshold)
+                            if (/*cb0.Char != " " && */cb.R.Left - cb0.R.Right > (cb.R.Width + cb.R.Height) / textAutoInsertSpace.Threshold)
                             {
                                 float spaceWidth = (cb.R.Width + cb.R.Width) / 2;
                                 int spaceNumber = (int)Math.Ceiling((cb.R.Left - cb0.R.Right) / spaceWidth);
                                 for (int j = 0; j < spaceNumber; j++)
-                                    lines[i].CharBoxs.Add(new CharBox { Char = textAutoInsertSpaceSubstitute, R = new System.Drawing.RectangleF(cb.R.Left + spaceWidth * j, 0, 0, 0) });
+                                    lines[i].CharBoxs.Add(new CharBox { Char = textAutoInsertSpace.Representative, R = new System.Drawing.RectangleF(cb.R.Left + spaceWidth * j, 0, 0, 0) });
                             }
                         }
                         lines[i].CharBoxs.Add(cb);
@@ -318,7 +329,7 @@ namespace Cliver.PdfDocumentParser
             return bts.ToList();
         }
 
-        public struct CharBox
+        public class CharBox
         {
             public System.Drawing.RectangleF R;
             public string Char;

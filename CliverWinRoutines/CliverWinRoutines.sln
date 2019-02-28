@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliverWinRoutines", "CliverWinRoutines.csproj", "{51F2DF13-41F1-4F22-890F-C3B50C813909}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliverRoutines", "..\..\CliverRoutines\CliverRoutines.csproj", "{E88444BA-1B07-40E6-96D1-922D27965F91}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliverRoutines", "..\CliverRoutines\CliverRoutines.csproj", "{E88444BA-1B07-40E6-96D1-922D27965F91}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

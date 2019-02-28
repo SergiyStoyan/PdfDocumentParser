@@ -3,18 +3,8 @@
 //        sergey.stoyan@gmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
-using System;
-using System.Data.Linq;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-using System.IO;
 //using iTextSharp.text;
 using iTextSharp.text.pdf;
-using System.Text.RegularExpressions;
-using iTextSharp.text.pdf.parser;
-using System.Windows.Forms;
-using System.Drawing;
 
 namespace Cliver.PdfDocumentParser
 {

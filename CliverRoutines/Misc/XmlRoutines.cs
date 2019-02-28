@@ -46,7 +46,7 @@ namespace Cliver
             }
             catch (Exception e)
             {
-                LogMessage.Error(e);
+                Log.Message.Error(e);
             }
             return null;
         }
@@ -67,7 +67,7 @@ namespace Cliver
             }
             catch (Exception e)
             {
-                LogMessage.Error(e);
+                Log.Message.Error(e);
             }
             return null;
         }

@@ -50,7 +50,7 @@ namespace Cliver
                         continue;
                     }
                     if (!silent)
-                        LogMessage.Exit(e);
+                        Log.Message.Exit(e);
                     else
                         Environment.Exit(0);
                 }
@@ -58,7 +58,7 @@ namespace Cliver
             if (GLOBAL_SINGLE_PROCESS_MUTEX.WaitOne(1000, false))//wait for some time while contending, if the other instance of the program is still in progress of shutting down.
                 return;
             if (!silent)
-                LogMessage.Exit2(app_name + " is already running, so this instance will exit.");
+                Log.Message.Exit2(app_name + " is already running, so this instance will exit.");
             else
                 Environment.Exit(0);
         }

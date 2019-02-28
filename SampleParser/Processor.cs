@@ -23,12 +23,12 @@ namespace Cliver.SampleParser
             progress(0, 0);
             if (string.IsNullOrWhiteSpace(Settings.General.InputFolder))
             {
-                LogMessage.Error("Input Folder is not specified.");
+                Log.Message.Error("Input Folder is not specified.");
                 return;
             }
             if (!Directory.Exists(Settings.General.InputFolder))
             {
-                LogMessage.Error("Input folder '" + Settings.General.InputFolder + "' does not exist.");
+                Log.Message.Error("Input folder '" + Settings.General.InputFolder + "' does not exist.");
                 return;
             }
 
@@ -43,14 +43,11 @@ namespace Cliver.SampleParser
             }).ToList();
             if (active_templates.Count < 1)
             {
-                LogMessage.Error("There is no active template!");
+                Log.Message.Error("There is no active template!");
                 return;
             }
 
-            List<string> orderedOutputFieldNames = active_templates[0].Template.Fields.Select(x => x.Name).ToList();
-            List<string> headers = new List<string> { "File" };
-            headers.AddRange(orderedOutputFieldNames);
-            headers.AddRange(new List<string> { "Template", "First Page", "Last Page" });
+            List<string> headers = new List<string> { "File", "Template", "First Page", "Last Page", "Invoice", "Total", "Product Name", "Product Cost" };
 
             tw.WriteLine(FieldPreparation.GetCsvHeaderLine(headers, FieldPreparation.FieldSeparator.COMMA));
 
@@ -67,16 +64,17 @@ namespace Cliver.SampleParser
             {
                 try
                 {
-                    bool? result = PdfProcessor.Process(f, active_templates, (templateName, firstPageI, lastPageI, fieldNames2texts) =>
+                    bool? result = PdfProcessor.Process(f, active_templates, (templateName, firstPageI, lastPageI, document) =>
                     {
-                        List<string> values = new List<string>() { PathRoutines.GetFileNameFromPath(f) };
-                        foreach (string fn in orderedOutputFieldNames)
                         {
-                            fieldNames2texts.TryGetValue(fn, out string t);
-                            values.Add(t);
+                            List<string> values = new List<string>() { PathRoutines.GetFileNameFromPath(f), templateName, firstPageI.ToString(), lastPageI.ToString(), document.Invoice, document.Total, "", "" };
+                            tw.WriteLine(FieldPreparation.GetCsvLine(values, FieldPreparation.FieldSeparator.COMMA));
                         }
-                        values.AddRange(new List<string> { templateName, firstPageI.ToString(), lastPageI.ToString() });
-                        tw.WriteLine(FieldPreparation.GetCsvLine(values, FieldPreparation.FieldSeparator.COMMA));
+                        foreach (PdfProcessor.Document.Product p in document.Products)
+                        {
+                            List<string> values = new List<string>() { "", "", "", "", "", "", p.Name, p.Cost };
+                            tw.WriteLine(FieldPreparation.GetCsvLine(values, FieldPreparation.FieldSeparator.COMMA));
+                        }
                     });
 
                     if (result != true)

@@ -4,21 +4,10 @@
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Diagnostics;
-using System.Reflection;
-using System.Configuration;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Net;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
-using System.IO.Compression;
 
 namespace Cliver.PdfDocumentParser
 {

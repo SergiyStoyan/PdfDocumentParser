@@ -166,7 +166,6 @@
     </Compile>
     <Compile Include="WinRoutines\ProcessRoutines.GetLockingProcesses.cs" />
     <Compile Include="WinRoutines\WindowsFirewall.cs" />
-    <Compile Include="WinRoutines\Crypto.cs" />
     <Compile Include="WinRoutines\ProcessRoutines.AntiZombieGuard.cs" />
     <Compile Include="WinRoutines\ProcessRoutines.CreateProcess.cs" />
     <Compile Include="WinRoutines\WindowsUserRoutines.cs" />
@@ -174,7 +173,6 @@
     <Compile Include="WinRoutines\SystemInfo.cs" />
     <Compile Include="WinRoutines\ProcessRoutines.cs" />
     <Compile Include="WinRoutines\WindowInterceptor.cs" />
-    <Compile Include="WinRoutines\XmlRoutines.cs" />
     <Compile Include="WinRoutines\ExcelRoutines.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WinApi\Shell32.cs" />
@@ -237,11 +235,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\CliverLog\CliverLog.csproj">
-      <Project>{aca94788-bed1-4b8e-94ef-e54293e8d139}</Project>
-      <Name>CliverLog</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\CliverRoutines\CliverRoutines.csproj">
+    <ProjectReference Include="..\CliverRoutines\CliverRoutines.csproj">
       <Project>{e88444ba-1b07-40e6-96d1-922d27965f91}</Project>
       <Name>CliverRoutines</Name>
     </ProjectReference>

@@ -49,7 +49,7 @@ For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#field
     </ul> 
 </li>
 </ul> 
-For more details see <a href='#pseudoCode'>pseudo-code</a>, <a href='#tutorialParsingApi'>tutorial: using Parsing API</a> and <a href='#sampleParser'>SampleParser</a>.
+For more details see <a href='#pseudoCode'>pseudo-code</a>, <a href='#tutorial'>tutorial</a> and <a href='#sampleParser'>SampleParser</a>.
 
 <h3><a name='creatingSolution'>Visual Studio</a></h3>
 In Visual Studio:
@@ -75,7 +75,7 @@ Open <a href='https://github.com/sergeystoyan/PdfDocumentParser' target='_blank'
 
 
 <h2><a name='gettingStarted'>Getting started</a></h2>
-To get the idea of what can be done with PdfDocumentParser and how it is used, review <a href='#tutorialParsingApi'>tutorial: using Parsing API</a> and then <a href='#tutorialTemplateEditor'>tutorial: setting template</a>.  
+To get the idea of what can be done with PdfDocumentParser and how it is used, review <a href='#tutorial'>tutorial</a>.  
 
 
 <h1><a name="template">Template</a></h1>
@@ -95,21 +95,7 @@ To get the idea of what can be done with PdfDocumentParser and how it is used, r
 <p>Being used does not impose any restriction on an anchor. Thus, an anchor can be used in many ways at the same time.
 
 <p>Anchors are identified by their numbers assigned automatically.
-<p>An anchor consists of a single or many elements of the same type which can be either text characters or images. The first element is 'master' and the rest are 'secondary'. Position of its master element is position of the anchor itself. 
-<p>When an anchor is searched on a page, its elements are searched together starting from the first element until the first satisfactory combination of them is found. 
-<p>Only the first match of the elements is used to locate an anchor on the page. No further match is searched.
-<p>An anchor is set found only when all its elements are found. 
-
-
-<h3>Compound anchor</h3>
-<p>A compound anchor is a chain of successively linked anchors. It is represented by the last anchor in the chain which gives one's position to it. It is used just like a simple anchor.
-<p>Compound anchors are used when more conditioned search is required. 
-<p>A compound anchor is not found when some of its anchors is not found.
-<p>A linked anchor is named 'child' of the linking one which is named 'parent'. When an anchor is linked to another anchor, its search area (when it is set to not entire page) becomes related to its parent anchor's position. That means that a parent anchor is searched not until its first match found as done for a stand-alone anchor, but until a match found that satisfies to the child anchor as well. 
-<br>More specifically, when a child anchor has <a href='#anchorPdfText'>Search Rectangle Margin</a> set to not entire page,  position of its parent anchor, while searching as parent, may differ from position of the very same anchor, while searching stand-alone. 
-<br>The same consideration is true for child anchors too: an anchor, whose search area is set to not entire page, may change its position after linking to another anchor. 
-<br>Thus, <span class='attention'>NOTE: </span>An anchor acting stand-alone and the same anchor acting as a part of a compound anchor should be considered different anchors because they can have different positions. 
-<p>Number of anchors in a compound anchor can be any. Though, it should be taken to account that processing time of recursive search performed for a compound anchor exponentially increases with the chain length.
+<p>Only the first match on the page is used to locate the anchor. No further match is searched.
 
 
 
@@ -118,23 +104,22 @@ To get the idea of what can be done with PdfDocumentParser and how it is used, r
 
 
 <h4><a name='anchorPdfText'>PdfText</a></h4>
-<p>This type can only be used to anchor to text. It should be used whenever possible because it is most robust and fast. 
-<p>It is based on the native text presentation inside a PDF file. Elements of this type are character boxes extracted from PDF entities. Every character is a separate anchor element. Together they present a text fragment to be found on page.
+<p>This type is used to anchor to text fragments. It is based on the native text presentation inside a PDF file so it can work only with native (not scanned) PDF files. At the same time, it should be chosen whenever possible because it is most robust and fast.  
 
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'>Position deviation</td>
-<td>It allows to loose bonds between master element and secondary elements in an anchor when for some reason they can shift relative to each other. It is measured in pixels and must be a positive float number, non-zero even for identical documents because of discrepancy reasoned by internal image re-scaling.
-<br>It makes no sense for an anchor having no secondary element.</td></tr>
+<td>It allows to loose bonds between character boxes in the anchor when for some reason they can shift relatively to each other. It is measured in pixels and must be a positive float number, non-zero even for identical documents because of discrepancy reasoned by internal image re-scaling.
+<br>It makes no sense, obviously, when the anchor consists of only 1 character.</td></tr>
 <tr><td class='title_column'>Position deviation is absolute</td>
-<td>If True, position deviation of every secondary element is measured by the master element's position, otherwise, by position of the previous element. The latter is looser than the former.</td></tr>
+<td>If True, position deviation of every character box is measured relatively to the position of the anchor's first character box, otherwise, to position of the previous character box. The latter is looser than the former because in the letter case, deviation can accumulate.</td></tr>
 <td class='title_column'>Search rectangle margin</td>
-<td>When set, the area where the anchor is searched is the entire page. Otherwise, the search area is restricted by Search rectangle margin that specifies a rectangular area around the anchor's initial rectangle which is the rectangle where the anchor was located on page while creating. It is measured in pixels. It should be used only when it is known definitely that the anchor is always located in a certain part of page. It helps to avoid undesired matching and speed up processing.</td></tr>
+<td>When set, the area where the anchor is searched is restricted by Search rectangle margin that specifies a rectangular area around the anchor's initial rectangle which is the rectangle where the anchor was located on page while creating. Otherwise, the search area is the entire page. It is measured in pixels. It should be used only when it is known definitely that the anchor is always located in a certain part of page. It helps to avoid undesired matching and speed up processing.</td></tr>
 </table>
 
 <h4>OcrText</h4>
-<p>This type can only be used to anchor to text. It should be used only when PdfText does not work which happens on scanned or mixed documents. 
-<p>It works similarly to <a href='#anchorPdfText'>PdfText</a> type except that difference that character boxes are provided by OCR engine instead of native PDF entities.
+<p>This type is used to anchor to OCR'ed text. It should be used only when PdfText does not work which happens on scanned or mixed documents. 
+<p>It works similarly to <a href='#anchorPdfText'>PdfText</a> with that difference that character boxes are provided by OCR engine instead of native PDF entities.
 <p>In contrast to PdfText, OcrText type does not ensure 100% accuracy and can acceptably work only with images of resolution not less than 300dpi (see <a href='#PdfPageImageResolution'>PdfPageImageResolution</a> parameter). 
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
@@ -151,19 +136,14 @@ To get the idea of what can be done with PdfDocumentParser and how it is used, r
 </table>
 
 <h4>ImageData</h4>
-<p>This type is used to anchor to images. 
-<p>Elements of an ImageData anchor are images that were selected on PDF page while creating the anchor.
-<p>For native PDF documents where images are without discrepancy in quality, ImageData type works quite well. 
+<p>This type is an image that represents the area selected on PDF page while creating anchor. It can be used on any visible part of either native or scanned PDF page. 
+<p>For native PDF documents whose appearance has no discrepancy in quality, ImageData type works quite well. 
 <p>When anchoring to a text which is presented by image as happens in scanned or mixed documents, there is a choice between ImageData and OcrText types. Which one to choose? If a target image does not change much from document to document and looks the same (no matter how poor its quality is), ImageData is more reliable and fast. However, if a target image has an essential discrepancy in size, contrast, brightness, orientation etc. in documents, OcrText may work better.
-<p><span class='attention'>NOTE: </span> even when an image fragment is searched within the same page where it was extracted from, it cannot be found without a non-zero tolerance. It happens because search hashes of a whole page image and a fragment are produced after downsizing them, and then, when restoring from the hashes, pixel interpolation gives different results for the entire page and the fragment. 
-<p><span class='attention'>NOTE: </span> the search of ImageData differs from the other types: if some secondary element is not found then all the found element chain is dropped instead of dropping only the previous element so that the main element is moved to its next match. This difference comes into play only when ImageData anchor has more than 2 elements. In theory this means that an anchor consisting of 3 images might not be found on a page while the match does exist. In practice such ImageData anchors are rarely needed.
+<p><span class='attention'>NOTE: </span> even when an image fragment is searched within the same page where it was extracted from, it cannot be found without a non-zero tolerance. It happens because search hashes of a whole page and of a fragment are produced after downsizing them, and then, when restoring images from the hashes, pixel interpolation gives slight deviations from the original images. Those deviations should be overcome with some tolerance. 
+
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
-<tr><td class='title_column'>Position deviation</td>
-<td>See <a href='#anchorPdfText'>PdfText</a>.</td></tr>
-<tr><td class='title_column'>Position deviation is absolute</td>
-<td>See <a href='#anchorPdfText'>PdfText</a>.</td></tr>
-<td class='title_column'>Search rectangle margin</td>
+<tr><td class='title_column'>Search rectangle margin</td>
 <td>See <a href='#anchorPdfText'>PdfText</a>.</td></tr>
 <tr><td class='title_column'>Brightness tolerance</td>
 <td>While for native PDF documents it can be 0.1 - 0.2, scanned documents which have brightness discrepancy may need it higher. A higher tolerance gives a less accuracy.</td></tr>
@@ -174,7 +154,18 @@ To get the idea of what can be done with PdfDocumentParser and how it is used, r
 </table>
 
 
-<h3>Create anchor</h3>
+<h3>Compound anchor</h3>
+<p>Compound anchor is a chain of successively linked anchors. It is represented by the last anchor in the chain which gives one's position to it. It is used just like a simple anchor.
+<p>Compound anchors are used when more conditioned search is required. 
+<p>A compound anchor is not found when some of its anchors is not found.
+<p>A linked anchor is named 'child' of the linking one which is named 'parent'. When an anchor is linked to another anchor, its search area (when it is set to not entire page) becomes related to its parent anchor's position. That means that a parent anchor is searched not until its first match found as done for a stand-alone anchor, but until a match found that satisfies to the child anchor as well. 
+<br>More specifically, when a child anchor has <a href='#anchorPdfText'>Search Rectangle Margin</a> set to not entire page, position of its parent anchor, while searching as parent, may differ from position of the very same anchor, while searching stand-alone. 
+<br>The same consideration is true for child anchors too: an anchor, whose search area is set to not entire page, may change its position after linking to another anchor. 
+<br>Thus, <span class='attention'>NOTE: </span>An anchor acting stand-alone and the same anchor acting as a part of a compound anchor should be considered different anchors because they may have different positions on a page. 
+<p>Number of anchors in a compound anchor can be any. Though, it should be taken to account that processing time of recursive search performed for a compound anchor exponentially grows with the chain length.
+
+
+<h3>Creating anchor</h3>
 <p>How to create anchors, see in <a href='#tutorialAnchor'>tutorial</a>.
 
 
@@ -185,7 +176,7 @@ To get the idea of what can be done with PdfDocumentParser and how it is used, r
 <h2><a name="condition">Condition</a></h2> 
 <p>A condition is defined by a boolean expression that depends on anchors. It is intended to be used in a custom application for deciding which actions should be performed on a PDF page. It is checked by method <a href='#IsCondition'><code>IsCondition(<condition name>)</code></a>.
 <p>Conditions are identified by their names. 
-<p>The condition collection is dictated by logic of the application, and thus, is predetermined within its scope and is the same for all templates that belong to it.
+<p>The condition collection is dictated by logic of the application.
 
 
 <h3>Boolean expression</h3>
@@ -208,22 +199,23 @@ Condition expressions are composed of the following symbols: &lt;anchor id&gt;, 
 For more details refer to <a href='#tutorialCondition'>tutorial</a>.
 
 
-<h3>Set condition</h3>
+<h3>Setting condition</h3>
 <p><p>How to set conditions, see in <a href='#tutorialCondition'>tutorial</a>.
 
 
 
 <h2><a name="field">Field</a></h2>
 <p>A field defines certain text or image that is to be extracted from a PDF page. It is retrieved by method <a href='#GetValue'><code>GetValue()</code></a>.
-<p>Fields are identified by their names. The field collection is dictated by logic of the application, and thus is predetermined within its scope and is the same for all templates that belong to it. 
+<p>Fields are identified by their names. The field collection is dictated by logic of the application. 
 
 <h3>Anchoring</h3>  
-<p>A field optionally can be linked to an anchor.
-When a field has no anchor, its selecting rectangle retains the initial position which was its position during creation.
-When a field is linked to an anchor, its rectangle is bonded to its anchor's actual position so that if on some page the anchor shifts, the field shifts together with it. 
-<p>When it is definitely known about some field that it appears on every page and always keeps the same position then there is no need to link it to an anchor.
+<p>Every side of a field's rectangular can be linked to an anchor.
+When a field has no anchor, it retains the initial position and size which were set during creation.
+When some side of a field is linked to an anchor, it becomes bonded to the anchor's actual position so that if the anchor shifts on a page, the linked side shifts together with it. This means, that the field can change its location and/or size according to its anchors. When all the sides of a field are linked to the same anchor then the field is simply shifts.
+<p>When some anchor of a field is not found then the field itself is set not found.
+<p>When it is definitely known about a field that it appears on every page and always keeps the same position and size then there is no need to anchor it.
 <p>In scanned documents whose margins vary, fields cannot retain constant positions and so always should be processed with anchors.
-<p>It is advisable always to link fields to anchors thus minimizing probability of mistaken parsing.
+<p>It is advisable always to anchor fields thus minimizing probability of mistaken parsing.
 
 
 <h3><a name='fieldTypes'>Field types</a></h3>
@@ -242,25 +234,54 @@ Its value is a <code>System.Drawing.Bitmap</code> object that contains a fragmen
 <p>It is used when image is required rather than text or when OcrText type is not reliable enough.
 
 
-<h3>Set field</h3> 
+<h3>Multiply defined field</h3> 
+A field can have multiple definitions. In Template Editor they are shown as separate fields but have the same name. When a field has multiple definitions, during call of <a href='#GetValue'><code>GetValue()</code></a> they are tried by PdfDocumentParser consecutively from first to last until some is captured on the page. So, precedence of field's definitions is important.
+<p>Multiple definitions help to keep the custom parsing code simple and unified.
+
+
+
+
+
+
+<h3>Setting field</h3> 
+<span class='attention'>IMPORTANT! </span> A field must be completely set on the same page. Anchors which are linked by a field, can be created on any page before, but must be assigned on the same page together with the field's rectangle. Otherwise, field's shift or size may be calculated incorrectly on some page during parsing. Thus, when tuning a field on a page that is not the page where it was set initially, it is recommended to reset it completely from scratch. 
 <p>How to set fields, see in <a href='#tutorialField'>the tutorial</a>.
 
 
 
 
-<h2><a name='templateSettings'>Settings</a></h2>
-A template has the following settings that influence on parsing:
+
+
+
+
+
+
+<h2><a name='templateSettings'>Common Settings</a></h2>
+There are settings that are common within template scope and influence on parsing.
+
+<h3>Space auto-detection</h3>
+<p>When extracting text, PdfDocumentParser automatically detects spaces between words. This influences on the output of PdfText and OcrText fields and also, on displaying PdfText anchor's patterns in Template Editor.
+<table>
+<tr><th class='title_column'>Parameter</th><th>Description</th></tr>
+<tr><td class='title_column'><a name='Representative'>Representative</a></td>
+<td>Character which is inserted into output as an auto-detected space.</td></tr>
+<tr><td class='title_column'><a name='Threshold'>Threshold</a></td>
+<td>Space detection can be tuned by this parameter. When needed, it should be tuned experimentally. </td></tr>
+</table>
+
+
+<h3>Scanned PDF pages pre-processing</h3>
+<p>The following options are used for pre-processing preparation of scanned PDF pages. They influence on OcrText or ImageData anchors and fields while PdfText type remains not affected.
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'><a name='AutoDeskew'>Auto-Deskew</a></td>
 <td>It is used for scanned documents. It is always advisable to keep it active in templates targeted to scanned documents. </td></tr>
 <tr><td class='title_column'><a name='PageRotation'>Rotate Pages</a></td>
 <td>It is used mostly for scanned documents. A page must be correctly oriented to get OCR working properly on it.</td></tr>
-<tr><td class='title_column'><a name='TextAutoInsertSpaceThreshold'>Space Auto-Insert Threshold</a></td>
-<td>It is used while splitting text, captured for PdfText field, onto words.
-<br>Also, it is used when displaying PdfText anchor's patterns but has no influence on parsing here. 
-<br>When needed, it should be tuned experimentally.</td></tr>
 </table>
+
+
+
 
 
 
@@ -274,20 +295,31 @@ A template has the following settings that influence on parsing:
 
 <h1><a name='parsingApi'>Parsing API</a></h1>
 
-<h2>Methods</h2>
 <table>
-<tr><th class='title_column'>Method | Property</th><th>Description</th></tr>
-<tr><td class='title_column'><code>Cliver.PdfDocumentParser.PageCollection::ActiveTemplate</code></td>
-<td>Set active template in PdfDocumentParser.</td></tr>
-<tr><td class='title_column'><a name='IsCondition'><code>Cliver.PdfDocumentParser.Page::IsCondition()</code></a></td>
+<tr><th class='title_column'>Object</th>
+<th class='title_column'>Method | Property</th>
+<th>Description</th></tr>
+<tr><td class='title_column' rowspan='2'><code>Cliver.PdfDocumentParser.PageCollection</code></td>
+<td class='title_column'><code>ActiveTemplate</code></td>
+<td>Set active template for the PDF file.</td></tr>
+<tr>
+<td class='title_column'><code>[int pageNumber]</code></td>
+<td>Get Cliver.PdfDocumentParser.Page object from the PDF file.</td></tr>
+<tr><td class='title_column' rowspan='2'><code>Cliver.PdfDocumentParser.Page</code></td>
+<td class='title_column'><a name='IsCondition'><code>IsCondition(string conditionName)</code></a></td>
 <td>Check if a condition is met on the page.</td></tr>
-<tr><td class='title_column'><a name='GetValue'><code>Cliver.PdfDocumentParser.Page::GetValue()</code></a></td>
-<td>Extract a field from the page. If anchor of the field was not found, NULL is returned.</td></tr>
+<tr>
+<td class='title_column'><a name='GetValue'><code>GetValue(string fieldName, ValueTypes valueType)</code></a></td>
+<td>Extract a field from the page. The returned object depends on valueType supplied. When some anchor of the field, if any, was not found, NULL is returned.</td></tr>
 </table>
-<p>Refer to <a href='#sampleParser'>SampleParser</a> as an live example of using PdfDocumentParser in an application.
+<p>There may be more auxiliary properties and methods which are not mentioned here. Their use can be understood from the code. 
+<p>Refer to <a href='#sampleParser'>SampleParser</a> as a live example of using PdfDocumentParser in an application.
 
 
-<h2><a name='pseudoCode'>Pseudo-code</a></h2>
+
+
+
+<h2><a name='pseudoCode'>Pseudo-code samples</a></h2>
 The main idea of using PdfDocumentParser in an application is that custom operations are performed depending on custom <a href='#condition'>conditions</a>. 
 <p>Since the collection of <a href='#condition'>conditions</a> is predetermined by the application, it is impossible to outline 'the most general algorithm' of processing a PDF file with PdfDocumentParser. Still, some basic algorithms are considered below. 
 
@@ -297,31 +329,33 @@ An algorithm of parsing a PDF file where pages has no logical relation between e
 <code class="language-csharp">//pseudo-code: processing a PDF file where every page is a new document.
 //Note: the classes and methods are not real and serve for simplicity and clarity only.
 
-foreach(page in pdfFile)
+pageCollection = new PageCollection(pdfFile);
+
+foreach(page in pageCollection)
 {
     //find the right template for the page
-    if(PdfDocumentParser.ActiveTemplate == null)
+    if(pageCollection.ActiveTemplate == null)
     {
         foreach(template in templates)
         {
-            PdfDocumentParser.ActiveTemplate = template;
-            if(PdfDocumentParser.IsCondition(page, "RightTemplateForPage"))
+            pageCollection.ActiveTemplate = template;
+            if(page.IsCondition("TemplateCorrespondsToPage"))
                 break;
-            PdfDocumentParser.ActiveTemplate = null;
+            pageCollection.ActiveTemplate = null;
         }
     }
     
-    if(PdfDocumentParser.ActiveTemplate == null)
+    if(pageCollection.ActiveTemplate == null)
     {
         logWarning("No template matched to page: " + page.Number);
         continue;
     }
         
     //applying the chosen template to the page 
-    object value1 = PdfDocumentParser.GetValue(page, "field1");
+    object value1 = page.GetValue("field1");
     //doing something with value1...
     <...>    
-    object value2 = PdfDocumentParser.GetValue(page, "field2");
+    object value2 = page.GetValue("field2");
     //doing something with value2...
     <...>
 }</code>
@@ -336,38 +370,40 @@ Here is a more advanced algorithm designed for parsing a PDF file that contains 
 <code class="language-csharp">//pseudo-code: processing a PDF file that contains multi-page documents.
 //Note: the classes and methods are not real and serve for simplicity and clarity only.
 
-foreach(page in pdfFile)
+pageCollection = new PageCollection(pdfFile);
+
+foreach(page in pageCollection)
 {
     //find a template appropriate for the document
-    if(PdfDocumentParser.ActiveTemplate == null)
+    if(pageCollection.ActiveTemplate == null)
     {
         foreach(template in templates)
         {
-            PdfDocumentParser.ActiveTemplate = template;
-            if(PdfDocumentParser.IsCondition(page, "DocumentFirstPage"))
+            pageCollection.ActiveTemplate = template;
+            if(page.IsCondition("DocumentFirstPage"))
                 break;
-            PdfDocumentParser.ActiveTemplate = null;
+            pageCollection.ActiveTemplate = null;
         }
     }
     
-    if(PdfDocumentParser.ActiveTemplate != null)
+    if(pageCollection.ActiveTemplate != null)
     {        
         //applying the chosen template    
-        if(PdfDocumentParser.IsCondition(page, "Field1MustBeParsed"))
+        if(page.IsCondition("Field1MustBeParsed"))
         {
-            object value1 = PdfDocumentParser.GetValue(page, "field1");
+            object value1 = page.GetValue("field1");
             //doing something with value1...
             <...>
         }
-        if(PdfDocumentParser.IsCondition(page, "Field2MustBeParsed"))
+        if(p.IsCondition(page, "Field2MustBeParsed"))
         {
-            object value2 = PdfDocumentParser.GetValue(page, "field2");
+            object value2 = page.GetValue("field2");
             //doing something with value2...
             <...>
         }
     
-        if(PdfDocumentParser.IsCondition(page, "DocumentLastPage"))
-            PdfDocumentParser.ActiveTemplate = null;
+        if(page.IsCondition("DocumentLastPage"))
+            pageCollection.ActiveTemplate = null;
     }
 }</code>
 </pre>
@@ -375,67 +411,8 @@ foreach(page in pdfFile)
 
 
 
-<h2><a name='tutorialParsingApi'>Tutorial: using Parsing API</a></h2>
-
-<h3>Sample task & application</h3>
-<p>Since PdfDocumentParser can only be used from within an application developed for a certain parsing task, this tutorial consider a certain sample task that is general enough to cover a broad range of practical tasks. The task follows:
-<p>there are PDF files that contain invoices issued by different companies. Values InvoiceId and TotalAmount must be parsed from every invoice. (Below, to keep the task more abstract, term 'document' is used instead of 'invoice'.)
-<p>It is known that the PDF files to be parsed comply with the following:
-<ul>
-<li>a file can contain more than one document;</li>
-<li>a document can consist of multiple pages;</li>
-<li>documents can not share the same page;</li>
-<li>between documents there may be pages that do not belong to a document and so should be passed off;</li>
-</ul>
-<p>The application developed for this task and referred to during this tutorial is <a href='#sampleParser'>SampleParser</a>.
-
-<h3><a name='customConfiguration'>Custom configuration<a/></h3>
-<p>As is obvious from the task requirements, the <a href='#field'>field</a> collection predetermined in SampleParser should be: InvoiceId, TotalAmount.
-<p>Now let's decide which <a href='#condition'>conditions</a> are needed in SampleParser. 
-<p>Since the documents are issued by different companies, they have different layouts. Every layout will require its own parsing template. On the other hand, a whole document can be processed with a single template. Therefore, SampleParser should be able to <b>A)</b>detect the first page of every document in a file and <b>B)</b>choose the right template for the document.
-<p>Checks (A) and (B) can be joined into one <a href='#condition'>condition</a>. Let's name it 'FirstPageOfDocument'. 
-<p>Also, another <a href='#condition'>condition</a> is required to detect the end of a document. Let's name it 'LastPageOfDocument'.
-<p>It will work in the following manner: when a template has its FirstPageOfDocument satisfied on a PDF page then it is to be chosen for processing of this page and the next ones until LastPageOfDocument is met. When it happens, the previously captured fields should be processed and emptied and next pages must be examined for FirstPageOfDocument condition until it is met for some template.
-<p>So, the condition collection in SampleParser will consist of FirstPageOfDocument and LastPageOfDocument which is sufficient for the task.
 
 
-<h3>Custom algorithm</h3>
-Now, summing up the said above, the algorithm of processing a PDF file in SampleParser should be the following:
-<pre>
-<code class="language-csharp">//pseudo-code: parsing a document
-//Note: the classes and methods are not real and serve for simplicity and clarity only.
-
-object InvoiceId, TotalAmount;
-
-foreach(page in pdfFile)
-{ 
-    if(PdfDocumentParser.ActiveTemplate == null)
-    {
-        foreach(template in templates)
-        {
-            PdfDocumentParser.ActiveTemplate = template;
-            if(PdfDocumentParser.IsCondition(page, "DocumentFirstPage"))
-                break;
-            PdfDocumentParser.ActiveTemplate = null;
-        }
-    }
-    
-    if(PdfDocumentParser.ActiveTemplate != null)
-    {        
-        InvoiceId = PdfDocumentParser.GetValue(page, "INVOICE");
-        TotalAmount = PdfDocumentParser.GetValue(page, "TOTAL");
-        
-        if(PdfDocumentParser.IsCondition(page, "DocumentLastPage"))
-        {
-            record(InvoiceId, TotalAmount);
-            InvoiceId, TotalAmount = null;
-            PdfDocumentParser.ActiveTemplate = null;
-        }
-    }
-}</code>
-</pre>
-
-Refer to <a href='#sampleParser'>SampleParser</a> as live code.
 
 
 
@@ -445,9 +422,9 @@ Refer to <a href='#sampleParser'>SampleParser</a> as live code.
 <h1><a name="templateEditor">Template Editor</a></h1>
 Template Editor is a GUI object that is called from the application whenever configuring <a href="#template">template</a> is required. 
 
-<p>How to configure a template, see in <a href='#tutorialTemplateEditor'>tutorial</a>.
+<p>How to configure a template, see in <a href='#tutorial'>tutorial</a>.
 
-<h2><a name='templateEditorApi'>Template Editor API</a></h2>
+<h2><a name='templateEditorApi'>API</a></h2>
 <table>
 <tr><th class='title_column'>Object</th><th>Description</th></tr>
 <tr><td class='title_column'><code>Cliver.PdfDocumentParser.TemplateForm</code></td>
@@ -460,22 +437,106 @@ Template Editor is a GUI object that is called from the application whenever con
 
 
 
-<h2><a name='tutorialTemplateEditor'>Tutorial: setting template</a></h2>
-This tutorial proceeds with the sample considered in <a href='#tutorialParsingApi'>tutorial: using Parsing API</a>. 
-<p>The custom application is <a href='#sampleParser'>SampleParser</a>.
+
+<h1><a name='generalSettings'>Global settings</a></h1>
+PdfDocumentParser has parameters that are the same within the application's scope and can be modified in the configuration dialog invoked from Template Editor.
+<table>
+<tr><th class='title_column'>Parameter</th><th>Description</th></tr>
+<tr><td class='title_column'><a name='PdfPageImageResolution'>PdfPageImageResolution</a></td>
+<td>It is the resolution with which PdfDocumentParser converts PDF pages into images. It influences on the quality of PDF view in Template Editor. 
+<p>What is more important, it also impacts on work of OctText anchors and fields. It must be not less than 300dpi (even if the resolution of input documents is lower), otherwise OCR will not work properly. The higher the resolution, the better quality of OCR is. On the other hand, increasing the resolution increases processing time.
+<p> Usually there is no need to touch it.</td></tr>
+<tr><td class='title_column'><a name='CoordinateDeviationMargin'>CoordinateDeviationMargin</a></td>
+<td>It is a zero value threshold while comparing pixel coordinates which may have slight discrepancy because of conversions. 
+<p>Usually there is no need to touch it.</td></tr>
+</table>
+
+
+
+
+
+
+<h1><a name='tutorial'>Tutorial</a></h1>
+This tutorial considers a sample task that is general enough to cover a broad range of practical tasks.
+
+<h2>Sample task</h2>
+<p>The task to be solved is as follows:
+<p>there are PDF files that contain invoices issued by different companies. Values InvoiceId and TotalAmount must be parsed from every invoice. (Below, to keep the task more abstract, term 'document' is used instead of 'invoice'.)
+<p>It is known that the PDF files to be parsed comply with the following:
+<br>- a file can contain more than one document;
+<br>- a document can consist of multiple pages;
+<br>- documents can not share the same page;
+<br>- between documents there may be pages that do not belong to a document and so should be passed off;
+
+<p>The application developed for this task is <a href='#sampleParser'>SampleParser</a>. It can be referred to during this tutorial.
+
+<h2>Planning application</h2>
+<p>Since the documents are issued by different companies, they have different layouts. Every layout will require its own parsing template. So, SampleParser will have to manage many templates where every template should process a whole document. One-to-one correspondence between document types and templates is the common way.
+<p>As is obvious, every template will have the following <a href='#field'>fields</a> InvoiceId and TotalAmount.
+<p>Next, let's decide which <a href='#condition'>conditions</a> are needed. SampleParser should be able <b>A)</b>to detect the first page of every document in a file and <b>B)</b>to choose the right template for the detected document. (A) and (B) can be joined into one <a href='#condition'>condition</a> named 'FirstPageOfDocument'. 
+<p>Also, one more <a href='#condition'>condition</a> is required to detect the end of a document. Let's name it 'LastPageOfDocument'.
+<p>These conditions will work in the following manner: when a template has FirstPageOfDocument satisfied on a PDF page then it is to be chosen for processing of this page and the next ones until LastPageOfDocument is met. When it happens, the previously captured fields should be processed and emptied and next page must be examined by FirstPageOfDocument condition of every template until the right template is detected.
+
+
+<h2>Algorithm</h2>
+When fields and conditions are predetermined, we can outline the algorithm of processing a PDF file:
+<pre>
+<code class="language-csharp">//pseudo-code: parsing a document
+//Note: the classes and methods are not real and serve for simplicity and clarity only.
+
+string InvoiceId, TotalAmount;
+pageCollection = new PageCollection(pdfFile);
+
+foreach(page in pageCollection)
+{ 
+    if(pageCollection.ActiveTemplate == null)
+    {
+        foreach(template in templates)
+        {
+            pageCollection.ActiveTemplate = template;
+            if(page.IsCondition("DocumentFirstPage"))
+                break;
+            pageCollection.ActiveTemplate = null;
+        }
+    }
+    
+    if(pageCollection.ActiveTemplate != null)
+    {        
+        InvoiceId = page.GetValue("InvoiceId");
+        TotalAmount = page.GetValue("TotalAmount");
+        
+        if(page.IsCondition("DocumentLastPage"))
+        {
+            record(InvoiceId, TotalAmount);
+            InvoiceId, TotalAmount = null;
+            pageCollection.ActiveTemplate = null;
+        }
+    }
+}</code>
+</pre>
+
+Refer to <a href='#sampleParser'>SampleParser</a> as live code.
+
+
+
+
+
+
+<h2>Setting template</h2>
+Now, having the parser code elaborated, let's learn how to create templates with Template Editor.
 
 
 <h3>Open Template Editor</h3>
 <p>The way of opening Template Editor depends on the application. In <a href='#sampleParser'>SampleParser</a> a <a href="#template">template</a> can be created from scratch or copied from an existing one and then modified as needed. 
 
-<p>The tutorial shows creating a template for a pdf file by repository path PdfDocumentParser\SampleParser\test_files\102.pdf. A template created for this file is supplied in SampleParser under name 'test'. The template created below should be identical with it.
+<p>The tutorial shows creating a template for a PDF file by repository path PdfDocumentParser\SampleParser\test_files\102.pdf. A template created for this file is supplied in SampleParser under name 'test'. The template created below should be identical with it.
 <p>Let's start with a blank template: click the blank row in the table in the main window of SampleParser and then click button Edit.
 <p class='screenshot_title'>Open a test PDF file in Template Editor:
 <img src='img/tutorial0.png'/>
 
 <h3><a name='tutorialAnchor'>Create anchors</a></h3>
-<p>Templates in SampleParser have 2 conditions and 2 fields (see <a href='#customConfiguration'>configuration</a>). 
-<p>Let's first create anchors for the condition. As FirstPageOfDocument should identify documents that correspond to the template, it needs an anchor targeted to such a fragment of the document that is distinctive for its type. Obviously, such a fragment must identify the document type with a high confidence. In the case of invoices, the company's logo can serve well this goal.
+<p>As was defined, templates in SampleParser have 2 conditions and 2 fields. 
+<p>Let's first create anchors needed for the conditions. As FirstPageOfDocument should identify documents that correspond to the template, it needs an anchor targeted to such a fragment of the document that is distinctive for its type. Obviously, such a fragment must identify the document type with a high confidence. In the case of invoices, the company's logo can serve well this goal.
 <p class='screenshot_title'>Create an anchor that captures the logo and thus detects if the template corresponds to the page:
 <img src='img/tutorial1.png'/>
 
@@ -486,8 +547,6 @@ This tutorial proceeds with the sample considered in <a href='#tutorialParsingAp
 <p>Anchors for the fields will be created later.
 
 <p><span class='attention'>NOTE: </span>when you select a row in either table: anchors, conditions or fields, its status is updated in the head cell and the captured place is displayed in the page viewer.
-
-<p><span class='attention'>NOTE: </span>while setting an anchor, if you keep Ctrl pressed, you can select more than 1 element on a PDF page for the same anchor. In that case, to stop selecting and make the anchor set, you have to release Ctrl before releasing the mouse button.
 
 <h3><a name='tutorialCondition'>Specify conditions</a></h3>
 We already have created anchors #1 and #2 that are needed to specify FirstPageOfDocument's expression. It must be True only when the anchors are found together on a page.
@@ -523,50 +582,62 @@ We already have created anchors #1 and #2 that are needed to specify FirstPageOf
 
 
 
+<h2><a name1=''>Parsing tables</a></h2>
+Let's consider an additional requirement to the tutorial task: extract from invoices all the listed product/services and their prices as arrays. 
+<p>Such a task cannot be solved the way considered above because tables can have unpredictable size and column width. Because of that tables need special treatment. Depending on the case, the following ways can be used:
+
+<p><b>Use table and column fields:</b>
+<br>It is the main method designed for correctly-structured tables. 
+<br>There must be a field that captures the whole table. Then, there must be fields that capture table's columns. The column fields must have <code>ColumnOfTable</code> property set to the name of their table field. 
+<br>Now, GetValue([field], ValueTypes.TextLines) called for a column field, will return an array of strings that correspond to the rows of the table. That means that the size of the output array is always the same for all the column fields. Thus, if in some column some rows are empty then they will be presented in the output array as empty strings.
+<br><span class='attention'>NOTE: </span>Only the intersection of a column field and its table field is processed.
+
+<p>Sometimes tables can not be clearly separated onto columns because they include sub-headers that break the structure or because their fields have unpredictable length etc. In such a case, parsing with column fields may not work well and the following ways can be used instead or additionally:  
+
+<p><b>Extract the whole table as text:</b>
+<br>If the table data still is logically structured, the whole table should be extracted as a single field and then parsed by regexes or some other parsing tool.
+
+<p><b>Use auto-inserted spaces to split the table text onto columns:</b>
+<br>It is a variation of the previous way. If empty spans between columns are long enough so that PdfDocumentParser will automatically insert spaces between column values, then those spaces can be configured to be substituted with some uncommon character e.g. "|". Then, the whole table text can be be split onto lines by new line symbol and every line split onto column values by "|". 
+<br>Generally this way must be considered as unreliable but in some cases it may work well.
+
+<p><b>Get the table field as char boxes:</b>
+<br>Call GetValue([field], ValueTypes.CharBoxs) to get the table's content as char boxes. It is the most powerful approach potentially but unfortunately too abstract. On the one hand, you get all the information about the table's content: characters, their positions and sizes, on the other hand, it is completely up to you how to process this stuff.
+
+
+
+<h3>Setting table and column fields</h3>
+Let's see how to use table and column fields for parsing products in our sample task.
+<p>The following fields are to be added to SampleParser ProductTable that catches the entire table and ProductNames and ProductCosts that catch the respective columns. ProductNames and ProductCosts must have <code>ColumnOfTable</code> property set to "ProductTable".
+
+<p>When it is done, open template 'test' that was created previously for test102.pdf, in Template Editor and set the introduced fields. Because the table in the test file may have different location and height, the fields' top and bottom must be linked to the proper anchors. 
+<img src='img/tutorial9.png'/>
+
+
+
+<h3>Duplicating field definitions</h3>
+
+<p>It appears that the fields are not captured on the next page because the bottom anchor does not exists on the page. To fix it, new definitions should be created for the fields.
+<img src='img/tutorial10.png'/>
+
+<p>Now, the fields are captured successfully with additional definitions and there is no need to change anything in the parsing code. 
+<br><span class='attention'>NOTE: </span>Column definitions strongly belong to the definitions of their table accordingly to their order so the number of definitions of table and column fields must be the same.
 
 
 
 
 
 
-<h1><a name='generalSettings'>Global settings</a></h1>
-PdfDocumentParser has parameters that are the same within the application's scope and can be modified in the configuration dialog invoked from Template Editor.
-<table>
-<tr><th class='title_column'>Parameter</th><th>Description</th></tr>
-<tr><td class='title_column'><a name='PdfPageImageResolution'>PdfPageImageResolution</a></td>
-<td>It is the resolution with which PdfDocumentParser converts PDF pages into images. It influences on the quality of PDF view in Template Editor. 
-<p>What is more important, it also impacts on work of OctText anchors and fields. It must be not less than 300dpi (even if the resolution of input documents is lower), otherwise OCR will not work properly. The higher the resolution, the better quality of OCR is. On the other hand, increasing the resolution increases processing time.
-<p> Usually there is no need to touch it.</td></tr>
-<tr><td class='title_column'><a name='CoordinateDeviationMargin'>CoordinateDeviationMargin</a></td>
-<td>It is a zero value threshold while comparing pixel coordinates which may have slight discrepancy because of conversions. 
-<p>Usually there is no need to touch it.</td></tr>
-</table>
 
 
 
 
+<h2>Parsing scanned PDF file</h2>
+When PDF page is a scanned image, the template designed for it, most likely, will need to perform a pre-processing preparation which includes auto-deskew and rotation. Then OcrText or ImageData anchors and OcrText fields can be applied to the page. 
+<p>Except the said above, parsing routine is the same for either scanned and native PDF's. 
 
 
 
-
-<h1><a name='guidance'></a>Guidance</h1>
-
-<h2>Parsing tables</h2>
-Tables can be processed by the following ways:
-<ul>
-<li><i>create fields as columns;</i>
-<p>It is the most gracious way....
-</li>
-<li><i>extract the whole table as a field;</i>
-<p>Sometimes tables can not be clearly separated onto columns because they include sub-headers that break the structure or because their fields have unpredictable length etc. In such a case, if the table data still is logically structured, the whole table should be extracted as a single field and then parsed by regexes or other syntax parsing engine;
-</li>
-<li><i>substitute auto-insert spaces with "|" and then split to columns (unreliabe);</i>
-<p>as a simplification of the pre
-</li>
-<li><i>get char boxes and do anything </i>
-<p>It is the most potentially powerful approach but unfortunately too abstract. Having all the information about the table content, it is up to you, how to process it.
-</li>
-</ul>
 
 
 
@@ -587,13 +658,13 @@ SampleParser is a customized desktop application based on <a href='#overview'>Pd
 <li>processes PDF files in a custom manner;</li>
 </ul>
 
-Some more details on SampleParser can be found in tutorials: <a href='#tutorialParsingApi'>using Parsing API</a> and <a href='#tutorialTemplateEditor'>setting template</a>. 
+Some more details on SampleParser can be found in <a href='#tutorial'>tutorial</a>. 
 
 <img src='img/sampleparser.png'/>
 
 
 <h2>Source code</h2>
-Download PdfDocumentParser (pre-)release <a href='#repository'>source code</a>. Find SampleParser.sln there and open it in Visual Studio. It will give a complete example of using PdfDocumentParser which you can modify according to your requirements.
+Download PdfDocumentParser (pre-)release <a href='#repository'>source code</a>. Find SampleParser.sln there and open it in Visual Studio. It will give a complete example of using PdfDocumentParser which you can modify according to your needs.
 
 
 <h2>Enhanced template parameters</h2>
@@ -608,7 +679,7 @@ Download PdfDocumentParser (pre-)release <a href='#repository'>source code</a>. 
 </table>
 
 <h2>Considerations</h2>
-<p>Processing time depends on the custom algorithm. However, it is possible to make some general tips. Processing time can be reduced by the following ways:
+<p>Processing time depends on the custom algorithm and templates. However, it is possible to drastically reduce the processing time by the following ways:
 <ul> 
 <li> specify file filters for templates. If it can be done then the other tips are not needed;
 <li> specify template orders so that templates that require a longer time for recognition have a higher order. E.g. templates that use auto-deskew should be checked in the last place;
@@ -642,11 +713,17 @@ Download PdfDocumentParser (pre-)release <a href='#repository'>source code</a>. 
 </div>
 
 <div class='footer'>
-        <script src='copyright.js'></script>
-        &nbsp;2018,&nbsp;&nbsp;<a href="javascript:window.location.href = '&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#115;&#101;&#114;&#103;&#101;&#121;&#46;&#115;&#116;&#111;&#121;&#97;&#110;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;'" target="_top">Sergey Stoyan</a>
+<script src='copyright.js'></script>
+        &nbsp;2018, 2019&nbsp;&nbsp;<a href="javascript:window.location.href = '&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#115;&#101;&#114;&#103;&#101;&#121;&#46;&#115;&#116;&#111;&#121;&#97;&#110;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;'" target="_top">Sergey Stoyan</a>
 </script>
         
 </div>
+
+<!--script>
+var cs = document.getElementsByTagName('code');
+for(var i = 0; i < cs.length; i++)
+	cs[i].classList.add("language-csharp");
+</script-->
 
 <script>
 if(!window.location.href.match(/\#./ig)){

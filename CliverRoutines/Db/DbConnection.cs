@@ -194,7 +194,7 @@ namespace Cliver.Db
         //                }
         //                catch (Exception e)
         //                {
-        //                    LogMessage.Exit(e);
+        //                    Log.Message.Exit(e);
         //                }
         //            }
         //            return oc;
@@ -222,7 +222,7 @@ namespace Cliver.Db
         //                }
         //                catch (Exception e)
         //                {
-        //                    LogMessage.Exit(e);
+        //                    Log.Message.Exit(e);
         //                }
         //            }
         //            return lc;
@@ -250,7 +250,7 @@ namespace Cliver.Db
         //                }
         //                catch (Exception e)
         //                {
-        //                    LogMessage.Exit(e);
+        //                    Log.Message.Exit(e);
         //                }
         //            }
         //            return mc;

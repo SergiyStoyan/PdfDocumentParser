@@ -5,11 +5,6 @@
 //********************************************************************************************
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using System.Data.Linq;
-using System.Linq;
-using System.Drawing;
-using System.Collections.Specialized;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -21,9 +16,8 @@ namespace Cliver.PdfDocumentParser
         public abstract class Anchor
         {
             public int Id;
+            public PointF Position;
             public int SearchRectangleMargin = -1;//px
-            public float PositionDeviation = 1f;
-            public bool PositionDeviationIsAbsolute = false;
             virtual public int? ParentAnchorId { get; set; } = null;
 
             public Anchor()
@@ -50,8 +44,7 @@ namespace Cliver.PdfDocumentParser
             }
 
             abstract public bool IsSet();
-
-            abstract public System.Drawing.RectangleF MainElementInitialRectangle();
+            abstract public System.Drawing.RectangleF Rectangle();
 
             public class PdfText : Anchor
             {
@@ -61,23 +54,19 @@ namespace Cliver.PdfDocumentParser
                     public string Char;
                     public RectangleF Rectangle;
                 }
-                //public List<TextBox> TextBoxs = new List<TextBox>();
-                //public class TextBox
-                //{
-                //    public List<CharBox> CharBoxs = new List<CharBox>();
-                //    public RectangleF Rectangle;
-                //}
+                public SizeF Size;
+                public bool IgnoreInvisibleChars = true;
+                public float PositionDeviation = 1f;
+                public bool PositionDeviationIsAbsolute = false;
 
                 override public bool IsSet()
                 {
-                    return CharBoxs.Count > 0;
+                    return /*CharBoxs.Count > 0 &&*/ Size != null;
                 }
 
-                override public System.Drawing.RectangleF MainElementInitialRectangle()
+                override public System.Drawing.RectangleF Rectangle()
                 {
-                    if (CharBoxs == null || CharBoxs.Count < 1)
-                        return new System.Drawing.RectangleF();
-                    return CharBoxs[0].Rectangle.GetSystemRectangleF();
+                    return new System.Drawing.RectangleF(Position.X, Position.Y, Size.Width, Size.Height);
                 }
             }
 
@@ -89,35 +78,32 @@ namespace Cliver.PdfDocumentParser
                 {
                     public string Char;
                     public RectangleF Rectangle;
-                }                
-                //public List<TextBox> TextBoxs = new List<TextBox>();
-                //public class TextBox
-                //{
-                //    public List<CharBox> CharBoxs = new List<CharBox>();
-                //    public RectangleF Rectangle;
-                //}
+                }
+                public SizeF Size;
+                public float PositionDeviation = 1f;
+                public bool PositionDeviationIsAbsolute = false;
 
                 override public bool IsSet()
                 {
-                    return CharBoxs.Count > 0;
+                    return /*CharBoxs.Count > 0 &&*/ Size != null;
                 }
 
-                override public System.Drawing.RectangleF MainElementInitialRectangle()
+                override public System.Drawing.RectangleF Rectangle()
                 {
-                    if (CharBoxs == null || CharBoxs.Count < 1)
-                        return new System.Drawing.RectangleF();
-                    return CharBoxs[0].Rectangle.GetSystemRectangleF();
+                    return new System.Drawing.RectangleF(Position.X, Position.Y, Size.Width, Size.Height);
                 }
             }
 
             public class ImageData : Anchor
             {
-                public List<ImageBox> ImageBoxs = new List<ImageBox>();
-                public class ImageBox
-                {
-                    public PdfDocumentParser.ImageData ImageData;
-                    public RectangleF Rectangle;
-                }
+                //public List<ImageBox> ImageBoxs;//to be deleted: conversion
+                //public class ImageBox//to be deleted: conversion
+                //{
+                //    public PdfDocumentParser.ImageData ImageData;
+                //    public RectangleF Rectangle;
+                //}
+
+                public PdfDocumentParser.ImageData Image;
 
                 public float BrightnessTolerance = 0.20f;
                 public float DifferentPixelNumberTolerance = 0.15f;
@@ -125,14 +111,12 @@ namespace Cliver.PdfDocumentParser
 
                 override public bool IsSet()
                 {
-                    return ImageBoxs.Count > 0;
+                    return Image != null && Image.Width > 0 && Image.Height > 0;
                 }
 
-                override public System.Drawing.RectangleF MainElementInitialRectangle()
+                override public System.Drawing.RectangleF Rectangle()
                 {
-                    if (ImageBoxs == null || ImageBoxs.Count < 1)
-                        return new System.Drawing.RectangleF();
-                    return ImageBoxs[0].Rectangle.GetSystemRectangleF();
+                    return new System.Drawing.RectangleF(Position.X, Position.Y, Image.Width, Image.Height);
                 }
             }
 

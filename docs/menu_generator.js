@@ -46,10 +46,28 @@ var convert = function(mode){
                             ids.pop();
                     }
                     ids[ids.length - 1] += 1;
+                    var id = ids.join('_');
+					
                     var content = document.createElement('div');
                     e.parentNode.insertBefore(content, e.nextSibling);
-                    var id = ids.join('_');
-                    items[id] = {'header': e, 'content': content, 'id': id};
+					
+                    var pathCaption = document.createElement('span');
+                    e.parentNode.insertBefore(pathCaption, e);
+					pathCaption.classList.add('pathCaption');
+					var p = '';
+					var pid = id;
+					while(1){
+						var pm = pid.match(/(.*)_.*?$/);
+						if(!pm)
+							break;
+						pid = pm[1];
+						p = '<a href="#' + pid + '">' + items[pid]['header'].innerText + '</a> &gt; ' + p;
+					}
+					pathCaption.innerHTML = p;
+					pathCaption.style['margin-top'] = getComputedStyle(e).marginTop;
+					e.classList.add('noTopMargin');
+					
+                    items[id] = {'header': e, 'content': content, 'id': id, 'pathCaption': pathCaption};
                     orderedItemIds.push(id);
                     e = content.nextSibling;
                     continue;
@@ -150,18 +168,29 @@ var convert = function(mode){
             var id = orderedItemIds[i];
             var e = document.createElement('span');
             e.classList.add('menuItem');
-            if(/\S/.test(items[id]['content'].innerText)){
+            //if(/\S/.test(items[id]['content'].innerText)){
                 e.addEventListener('click', onClickMenuItem);
-            }
-            else
-                e.classList.add('empty');
+            //}
+            //else
+            //    e.classList.add('empty');
             var level = (id.match(/_/ig) || []).length + 1;
             e.classList.add('h' + level);
             e.setAttribute('_id', id);
-            e.innerHTML = items[id]['header'].innerText; 
+            e.innerHTML = items[id]['header'].innerText;// + items[id]['pathCaption'].outerHTML;
             menu.appendChild(e);
             items[id]['menuItem'] = e;
             
+            /*items[id]['menuItem'].addEventListener('mouseenter', function(e){
+				var t = this.childNodes[1]; 
+				t.left = '0px';
+				t.bottom = 0;//e.top - 10;				
+				t.classList.add('visible');
+			});            
+            items[id]['menuItem'].addEventListener('mouseleave', function(e){
+				var t = this.childNodes[1]; 			
+				t.classList.remove('visible');
+			});*/
+			
             items[id]['header'].addEventListener('click', onClickItemHeader);
         }
         
@@ -287,9 +316,10 @@ var convert = function(mode){
     var navigate2currentAnchor = function(){
         var setItemVisibleInContent = function(item, visible){
             if(mode == '_collapsedContent')
-                item['header'].classList.add('noTopMargin');
+                item['pathCaption'].classList.add('noTopMargin');
             else
-                item['header'].classList.remove('noTopMargin');
+                item['pathCaption'].classList.remove('noTopMargin');
+            item['pathCaption'].style.display = visible ? 'block': 'none';
             item['header'].style.display = visible ? 'block': 'none';
             item['content'].style.display = visible ? 'block': 'none';            
         };
@@ -326,7 +356,7 @@ var convert = function(mode){
                         top = ar.top;
                     }else{
                         left = 0;           
-                        top = (mode == '_collapsedContent' ? content : item['header']).getBoundingClientRect().top;
+                        top = (mode == '_collapsedContent' ? content : item['pathCaption']).getBoundingClientRect().top;
                     }
                     top = Math.min(footer.getBoundingClientRect().top - window.innerHeight, top);
                     window.scrollTo(window.pageXOffset + left, window.pageYOffset + top);

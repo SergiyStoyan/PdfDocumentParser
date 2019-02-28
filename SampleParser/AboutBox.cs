@@ -23,10 +23,10 @@ namespace Cliver.SampleParser
             this.Icon = AssemblyRoutines.GetAppIcon();
             this.Text = String.Format("About {0}", AssemblyTitle);
             this.labelProductName.Text = AssemblyProduct;
-            this.labelVersion.Text = "Version: " + AssemblyRoutines.GetAssemblyCompiledTime(Assembly.GetEntryAssembly()).ToString("yyMMdd-HHmmss"); //String.Format("Version {0}", AssemblyVersion);
+            this.labelVersion.Text = "Version: " + Program.Version; //AssemblyRoutines.GetAssemblyCompiledTime(Assembly.GetEntryAssembly()).ToString("yyMMdd-HHmmss"); //String.Format("Version {0}", AssemblyVersion);
             this.labelCopyright.Text = AssemblyCopyright;
             this.labelCompanyName.Text = AssemblyCompany;
-            this.textBoxDescription.Text = AssemblyDescription;
+            this.textBoxDescription.Text = AssemblyDescription + "\r\nEngine: " + PdfDocumentParser.Program.Name + ", version: " + PdfDocumentParser.Program.Version;
         }
 
         #region Assembly Attribute Accessors

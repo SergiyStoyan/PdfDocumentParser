@@ -5,16 +5,9 @@
 //********************************************************************************************
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Diagnostics;
-using System.IO;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -49,10 +42,10 @@ namespace Cliver.PdfDocumentParser
         }
         Bitmap scaledCurrentPageBitmap;
 
-        PointF? findAndDrawAnchor(int anchorId)
+        bool findAndDrawAnchor(int anchorId)
         {
             if (pages == null)
-                return null;
+                return false;
 
             pages.ActiveTemplate = getTemplateFromUI(false);
             Template.Anchor a = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == anchorId);
@@ -72,28 +65,60 @@ namespace Cliver.PdfDocumentParser
                 }
             }
             if (!set)
-                return null;
-            List<List<RectangleF>> rss = pages[currentPageI].GetAnchorRectangless(a.Id);
+                return false;
             getAnchor(a.Id, out DataGridViewRow r);
-            if (rss == null || rss.Count < 1)
+            if (!pages[currentPageI].GetAnchorActualInfo(a.Id).Found)
             {
                 setRowStatus(statuses.ERROR, r, "Not found");
-                return null;
+                return false;
             }
             setRowStatus(statuses.SUCCESS, r, "Found");
 
-            PointF? p0 = null;
-            for (int i = rss.Count - 1; i >= 0; i--)
+            for (Template.Anchor a_ = a; a_ != null; a_ = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == a_.ParentAnchorId))
             {
-                List<RectangleF> rs = rss[i];
-                drawBoxes(Settings.Appearance.AnchorMasterBoxColor, Settings.Appearance.AnchorMasterBoxBorderWidth, new List<System.Drawing.RectangleF> { rs[0] });
-                if (rs.Count > 1)
-                    drawBoxes(Settings.Appearance.AnchorSecondaryBoxColor, Settings.Appearance.AnchorSecondaryBoxBorderWidth, rs.GetRange(1, rs.Count - 1));
+                SizeF shift = pages[currentPageI].GetAnchorActualInfo(a_.Id).Shift;
+                RectangleF r_ = a_.Rectangle();
+                r_.X += shift.Width;
+                r_.Y += shift.Height;
+                if (a_ == a)
+                    if (currentAnchorControl != null)
+                    {
+                        drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r_ });
+                        owners2resizebleBox[a_] = new ResizebleBox(a_, r_, Settings.Appearance.SelectionBoxBorderWidth);
+                    }
+                    else
+                        drawBoxes(Settings.Appearance.AnchorBoxColor, Settings.Appearance.AnchorBoxBorderWidth, new List<RectangleF> { r_ });
+                else
+                    drawBoxes(Settings.Appearance.AscendantAnchorBoxColor, Settings.Appearance.AscendantAnchorBoxBorderWidth, new List<RectangleF> { r_ });
 
-                if (i == rss.Count - 1)
-                    p0 = new PointF(rs[0].X, rs[0].Y);
+                List<RectangleF> bs = null;
+                switch (a_.Type)
+                {
+                    case Template.Anchor.Types.PdfText:
+                        {
+                            var pt = (Template.Anchor.PdfText)a_;
+                            bs = pt.CharBoxs.Select(x => new RectangleF(x.Rectangle.X + shift.Width, x.Rectangle.Y + shift.Height, x.Rectangle.Width, x.Rectangle.Height)).ToList();
+                        }
+                        break;
+                    case Template.Anchor.Types.OcrText:
+                        {
+                            var ot = (Template.Anchor.OcrText)a_;
+                            bs = ot.CharBoxs.Select(x => new RectangleF(x.Rectangle.X + shift.Width, x.Rectangle.Y + shift.Height, x.Rectangle.Width, x.Rectangle.Height)).ToList();
+                        }
+                        break;
+                    case Template.Anchor.Types.ImageData:
+                        //bs = new List<System.Drawing.RectangleF> { rs[0] };
+                        break;
+                    default:
+                        throw new Exception("Unknown option: " + a_.Type);
+                }
+                if (bs != null)
+                    if (a_ == a)
+                        drawBoxes(Settings.Appearance.AnchorBoxColor, Settings.Appearance.AnchorBoxBorderWidth, bs);
+                    else
+                        drawBoxes(Settings.Appearance.AscendantAnchorBoxColor, Settings.Appearance.AscendantAnchorBoxBorderWidth, bs);
             }
-            return p0;
+            return true;
         }
 
         object extractFieldAndDrawSelectionBox(Template.Field field)
@@ -111,42 +136,34 @@ namespace Cliver.PdfDocumentParser
                 RectangleF r = field.Rectangle.GetSystemRectangleF();
                 if (field.LeftAnchor != null)
                 {
-                    if (findAndDrawAnchor(field.LeftAnchor.Id) == null)
+                    if (!findAndDrawAnchor(field.LeftAnchor.Id))
                         return null;
                     Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(field.LeftAnchor.Id);
-                    if (!aai.Found)
-                        return null;
                     float right = r.Right;
                     r.X += aai.Shift.Width - field.LeftAnchor.Shift;
                     r.Width = right - r.X;
                 }
                 if (field.TopAnchor != null)
                 {
-                    if (findAndDrawAnchor(field.TopAnchor.Id) == null)
+                    if (!findAndDrawAnchor(field.TopAnchor.Id))
                         return null;
                     Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(field.TopAnchor.Id);
-                    if (!aai.Found)
-                        return null;
                     float bottom = r.Bottom;
                     r.Y += aai.Shift.Height - field.TopAnchor.Shift;
                     r.Height = bottom - r.Y;
                 }
                 if (field.RightAnchor != null)
                 {
-                    if (findAndDrawAnchor(field.RightAnchor.Id) == null)
+                    if (!findAndDrawAnchor(field.RightAnchor.Id))
                         return null;
                     Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(field.RightAnchor.Id);
-                    if (!aai.Found)
-                        return null;
                     r.Width += aai.Shift.Width - field.RightAnchor.Shift;
                 }
                 if (field.BottomAnchor != null)
                 {
-                    if (findAndDrawAnchor(field.BottomAnchor.Id) == null)
+                    if (!findAndDrawAnchor(field.BottomAnchor.Id))
                         return null;
                     Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(field.BottomAnchor.Id);
-                    if (!aai.Found)
-                        return null;
                     r.Height += aai.Shift.Height - field.BottomAnchor.Shift;
                 }
                 if (r.Width <= 0 || r.Height <= 0)
@@ -178,7 +195,7 @@ namespace Cliver.PdfDocumentParser
                             s = string.Join("\r\n", pages[currentPageI].GetTextLinesAsTableColumn(field, r));
                         }
                         else
-                            s = Pdf.GetTextSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, r, pages.ActiveTemplate.TextAutoInsertSpaceThreshold, pages.ActiveTemplate.TextAutoInsertSpaceSubstitute);
+                            s = Pdf.GetTextSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, r, pages.ActiveTemplate.TextAutoInsertSpace);
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
                         return Page.NormalizeText(s);
                     case Template.Field.Types.OcrText:
@@ -196,8 +213,8 @@ namespace Cliver.PdfDocumentParser
             }
             catch (Exception ex)
             {
-                //LogMessage.Error("Rectangle", ex);
-                LogMessage.Error(ex);
+                //Log.Message.Error("Rectangle", ex);
+                Log.Message.Error(ex);
             }
             return null;
         }
@@ -289,7 +306,7 @@ namespace Cliver.PdfDocumentParser
             }
             catch (Exception e)
             {
-                LogMessage.Error(e);
+                Log.Message.Error(e);
             }
         }
         int currentPageI;
@@ -320,7 +337,7 @@ namespace Cliver.PdfDocumentParser
             }
             else
             {
-                LogMessage.Error("Page is not a number.");
+                Log.Message.Error("Page is not a number.");
                 tCurrentPage.Text = currentPageI.ToString();
             }
         }

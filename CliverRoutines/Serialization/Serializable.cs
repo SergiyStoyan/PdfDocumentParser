@@ -83,7 +83,7 @@ namespace Cliver
                 if (file != null)
                     __File = file;
                 Saving();
-                Cliver.Serialization.Json.Save(__File, this, true, __Indented);
+                Cliver.Serialization.Json.Save(__File, this, __Indented, true);
                 Saved();
             }
         }

@@ -28,7 +28,7 @@ span.h5 {margin:5 0 0 80;}
 span.h6 {margin:5 0 0 100;}
 
 .noTopMargin{
-    margin-top: 0;
+    margin-top: 0 !important;
 }
 
 .contentContainer{
@@ -91,3 +91,46 @@ span.h6 {margin:5 0 0 100;}
     color: #00d;   
 }
 
+.pathCaption{
+    color: #888;
+    background-color1: #ddd;
+    font-weight1: bold;
+	font-size:0.9em;
+}
+
+.pathCaption > a:link {
+  color: #888;
+  text-decoration: none;
+}
+
+.pathCaption > a:visited {
+  color: #888;
+  text-decoration: none;
+}
+
+.pathCaption > a:hover {
+  color: #000;
+  text-decoration1: underline;
+  text-decoration: none;
+}
+
+.menuItem > .pathCaption {
+  visibility: hidden;
+  background-color: #f3f2ed7a;
+  color1: #f00;
+  text-align: center;
+  padding: 5px;
+
+  position: absolute;
+  z-index: -1;
+  bottom1: 125%;
+  left1: -50%;
+
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.menuItem > .pathCaption.visible {
+  visibility: visible;
+  opacity: 1;
+}

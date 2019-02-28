@@ -27,7 +27,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <SccProjectName>
     </SccProjectName>
@@ -104,6 +104,9 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -202,6 +205,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="app.manifest" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -229,6 +233,10 @@
     <ProjectReference Include="..\CliverRoutines\CliverRoutines.csproj">
       <Project>{aca94788-bed1-4b8e-94ef-e54293e8d139}</Project>
       <Name>CliverRoutines</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CliverWinRoutines\CliverWinRoutines.csproj">
+      <Project>{51f2df13-41f1-4f22-890f-c3b50c813909}</Project>
+      <Name>CliverWinRoutines</Name>
     </ProjectReference>
     <ProjectReference Include="..\PdfDocumentParser.csproj">
       <Project>{b1d7ba69-35aa-45bd-b1d0-d84fd2bc47a0}</Project>

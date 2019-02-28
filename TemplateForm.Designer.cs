@@ -37,14 +37,6 @@
             this.label14 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.fields = new System.Windows.Forms.DataGridView();
-            this.Name_ = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Type = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.LeftAnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.TopAnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.RightAnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.BottomAnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Rectangle = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.selectionCoordinates = new System.Windows.Forms.Label();
             this.bNextPage = new System.Windows.Forms.Button();
             this.lTotalPages = new System.Windows.Forms.Label();
@@ -62,7 +54,7 @@
             this.Id3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ParentAnchorId3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Type3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Point03 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Position3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.conditions = new System.Windows.Forms.DataGridView();
             this.Name2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -87,7 +79,7 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.textAutoInsertSpaceSubstitute = new System.Windows.Forms.TextBox();
+            this.textAutoInsertSpaceRepresentative = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.autoDeskewThreshold = new System.Windows.Forms.NumericUpDown();
@@ -98,12 +90,21 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.label18 = new System.Windows.Forms.Label();
             this.duplicateField = new System.Windows.Forms.LinkLabel();
             this.deleteField = new System.Windows.Forms.LinkLabel();
             this.moveUpField = new System.Windows.Forms.LinkLabel();
             this.moveDownField = new System.Windows.Forms.LinkLabel();
             this.copy2ClipboardField = new System.Windows.Forms.LinkLabel();
             this.ExtractFieldsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
+            this.Name_ = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Type = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.LeftAnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.TopAnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.RightAnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.BottomAnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Rectangle = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).BeginInit();
             this.flowLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).BeginInit();
@@ -234,72 +235,13 @@
             this.Rectangle,
             this.Value});
             this.fields.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fields.Location = new System.Drawing.Point(0, 44);
+            this.fields.Location = new System.Drawing.Point(0, 89);
             this.fields.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.fields.MultiSelect = false;
             this.fields.Name = "fields";
             this.fields.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.fields.Size = new System.Drawing.Size(1144, 299);
+            this.fields.Size = new System.Drawing.Size(1144, 254);
             this.fields.TabIndex = 30;
-            // 
-            // Name_
-            // 
-            this.Name_.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Name_.HeaderText = "Name";
-            this.Name_.Name = "Name_";
-            this.Name_.ReadOnly = true;
-            this.Name_.Width = 144;
-            // 
-            // Type
-            // 
-            this.Type.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Type.HeaderText = "Type";
-            this.Type.Name = "Type";
-            this.Type.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Type.Width = 84;
-            // 
-            // LeftAnchorId
-            // 
-            this.LeftAnchorId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.LeftAnchorId.HeaderText = "LA";
-            this.LeftAnchorId.Name = "LeftAnchorId";
-            this.LeftAnchorId.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.LeftAnchorId.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.LeftAnchorId.Width = 104;
-            // 
-            // TopAnchorId
-            // 
-            this.TopAnchorId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.TopAnchorId.HeaderText = "TA";
-            this.TopAnchorId.Name = "TopAnchorId";
-            this.TopAnchorId.Width = 57;
-            // 
-            // RightAnchorId
-            // 
-            this.RightAnchorId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.RightAnchorId.HeaderText = "RA";
-            this.RightAnchorId.Name = "RightAnchorId";
-            this.RightAnchorId.Width = 60;
-            // 
-            // BottomAnchorId
-            // 
-            this.BottomAnchorId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.BottomAnchorId.HeaderText = "BA";
-            this.BottomAnchorId.Name = "BottomAnchorId";
-            this.BottomAnchorId.Width = 59;
-            // 
-            // Rectangle
-            // 
-            this.Rectangle.HeaderText = "Rectangle";
-            this.Rectangle.Name = "Rectangle";
-            this.Rectangle.Width = 104;
-            // 
-            // Value
-            // 
-            this.Value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Value.HeaderText = "Value";
-            this.Value.Name = "Value";
-            this.Value.ReadOnly = true;
             // 
             // selectionCoordinates
             // 
@@ -473,7 +415,7 @@
             this.Id3,
             this.ParentAnchorId3,
             this.Type3,
-            this.Point03});
+            this.Position3});
             this.anchors.Dock = System.Windows.Forms.DockStyle.Fill;
             this.anchors.Location = new System.Drawing.Point(0, 0);
             this.anchors.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
@@ -508,13 +450,13 @@
             this.Type3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.Type3.Width = 84;
             // 
-            // Point03
+            // Position3
             // 
-            this.Point03.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Point03.HeaderText = "Point0";
-            this.Point03.Name = "Point03";
-            this.Point03.ReadOnly = true;
-            this.Point03.Width = 151;
+            this.Position3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Position3.HeaderText = "Position";
+            this.Position3.Name = "Position3";
+            this.Position3.ReadOnly = true;
+            this.Position3.Width = 172;
             // 
             // splitContainer3
             // 
@@ -818,8 +760,8 @@
             // 
             // splitContainer2.Panel2
             // 
-            this.splitContainer2.Panel2.Controls.Add(this.flowLayoutPanel2);
             this.splitContainer2.Panel2.Controls.Add(this.fields);
+            this.splitContainer2.Panel2.Controls.Add(this.flowLayoutPanel2);
             this.splitContainer2.Panel2.Controls.Add(this.label1);
             this.splitContainer2.Panel2.Controls.Add(this.panel1);
             this.splitContainer2.Panel2.Controls.Add(this.ExtractFieldsAutomaticallyWhenPageChanged);
@@ -831,7 +773,7 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.textAutoInsertSpaceSubstitute);
+            this.groupBox2.Controls.Add(this.textAutoInsertSpaceRepresentative);
             this.groupBox2.Controls.Add(this.label15);
             this.groupBox2.Controls.Add(this.textAutoInsertSpaceThreshold);
             this.groupBox2.Controls.Add(this.label12);
@@ -844,14 +786,14 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Text Auto-Insert Space";
             // 
-            // textAutoInsertSpaceSubstitute
+            // textAutoInsertSpaceRepresentative
             // 
-            this.textAutoInsertSpaceSubstitute.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textAutoInsertSpaceSubstitute.Location = new System.Drawing.Point(542, 48);
-            this.textAutoInsertSpaceSubstitute.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.textAutoInsertSpaceSubstitute.Name = "textAutoInsertSpaceSubstitute";
-            this.textAutoInsertSpaceSubstitute.Size = new System.Drawing.Size(166, 38);
-            this.textAutoInsertSpaceSubstitute.TabIndex = 67;
+            this.textAutoInsertSpaceRepresentative.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.textAutoInsertSpaceRepresentative.Location = new System.Drawing.Point(542, 48);
+            this.textAutoInsertSpaceRepresentative.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.textAutoInsertSpaceRepresentative.Name = "textAutoInsertSpaceRepresentative";
+            this.textAutoInsertSpaceRepresentative.Size = new System.Drawing.Size(166, 38);
+            this.textAutoInsertSpaceRepresentative.TabIndex = 67;
             // 
             // label15
             // 
@@ -980,21 +922,35 @@
             // 
             // flowLayoutPanel2
             // 
+            this.flowLayoutPanel2.AutoSize = true;
+            this.flowLayoutPanel2.Controls.Add(this.label18);
             this.flowLayoutPanel2.Controls.Add(this.duplicateField);
             this.flowLayoutPanel2.Controls.Add(this.deleteField);
             this.flowLayoutPanel2.Controls.Add(this.moveUpField);
             this.flowLayoutPanel2.Controls.Add(this.moveDownField);
             this.flowLayoutPanel2.Controls.Add(this.copy2ClipboardField);
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(577, 10);
+            this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 44);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(564, 36);
+            this.flowLayoutPanel2.Padding = new System.Windows.Forms.Padding(0, 8, 0, 0);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(1144, 45);
             this.flowLayoutPanel2.TabIndex = 0;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(0, 8);
+            this.label18.Margin = new System.Windows.Forms.Padding(0);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(173, 32);
+            this.label18.TabIndex = 67;
+            this.label18.Text = "[ Definitions:";
             // 
             // duplicateField
             // 
             this.duplicateField.AutoSize = true;
-            this.duplicateField.Location = new System.Drawing.Point(8, 0);
-            this.duplicateField.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.duplicateField.Location = new System.Drawing.Point(173, 8);
+            this.duplicateField.Margin = new System.Windows.Forms.Padding(0, 0, 8, 0);
             this.duplicateField.Name = "duplicateField";
             this.duplicateField.Size = new System.Drawing.Size(135, 32);
             this.duplicateField.TabIndex = 28;
@@ -1005,8 +961,8 @@
             // deleteField
             // 
             this.deleteField.AutoSize = true;
-            this.deleteField.Location = new System.Drawing.Point(159, 0);
-            this.deleteField.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.deleteField.Location = new System.Drawing.Point(316, 8);
+            this.deleteField.Margin = new System.Windows.Forms.Padding(0, 0, 8, 0);
             this.deleteField.Name = "deleteField";
             this.deleteField.Size = new System.Drawing.Size(98, 32);
             this.deleteField.TabIndex = 29;
@@ -1017,8 +973,8 @@
             // moveUpField
             // 
             this.moveUpField.AutoSize = true;
-            this.moveUpField.Location = new System.Drawing.Point(273, 0);
-            this.moveUpField.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.moveUpField.Location = new System.Drawing.Point(422, 8);
+            this.moveUpField.Margin = new System.Windows.Forms.Padding(0, 0, 8, 0);
             this.moveUpField.Name = "moveUpField";
             this.moveUpField.Size = new System.Drawing.Size(51, 32);
             this.moveUpField.TabIndex = 30;
@@ -1029,25 +985,27 @@
             // moveDownField
             // 
             this.moveDownField.AutoSize = true;
-            this.moveDownField.Location = new System.Drawing.Point(340, 0);
-            this.moveDownField.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.moveDownField.LinkArea = new System.Windows.Forms.LinkArea(0, 4);
+            this.moveDownField.Location = new System.Drawing.Point(481, 8);
+            this.moveDownField.Margin = new System.Windows.Forms.Padding(0);
             this.moveDownField.Name = "moveDownField";
-            this.moveDownField.Size = new System.Drawing.Size(87, 32);
+            this.moveDownField.Size = new System.Drawing.Size(96, 37);
             this.moveDownField.TabIndex = 31;
             this.moveDownField.TabStop = true;
-            this.moveDownField.Text = "Down";
+            this.moveDownField.Text = "Down ]";
             this.moveDownField.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.moveDownField.UseCompatibleTextRendering = true;
             // 
             // copy2ClipboardField
             // 
             this.copy2ClipboardField.AutoSize = true;
-            this.copy2ClipboardField.Location = new System.Drawing.Point(443, 0);
-            this.copy2ClipboardField.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.copy2ClipboardField.Location = new System.Drawing.Point(605, 8);
+            this.copy2ClipboardField.Margin = new System.Windows.Forms.Padding(28, 0, 8, 0);
             this.copy2ClipboardField.Name = "copy2ClipboardField";
-            this.copy2ClipboardField.Size = new System.Drawing.Size(81, 32);
+            this.copy2ClipboardField.Size = new System.Drawing.Size(332, 32);
             this.copy2ClipboardField.TabIndex = 32;
             this.copy2ClipboardField.TabStop = true;
-            this.copy2ClipboardField.Text = "Copy";
+            this.copy2ClipboardField.Text = "Copy Value To Clipboard";
             this.copy2ClipboardField.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // ExtractFieldsAutomaticallyWhenPageChanged
@@ -1060,6 +1018,69 @@
             this.ExtractFieldsAutomaticallyWhenPageChanged.TabIndex = 56;
             this.ExtractFieldsAutomaticallyWhenPageChanged.Text = "Extract When Page Changed]";
             this.ExtractFieldsAutomaticallyWhenPageChanged.UseVisualStyleBackColor = true;
+            // 
+            // Name_
+            // 
+            this.Name_.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Name_.HeaderText = "Name";
+            this.Name_.Name = "Name_";
+            this.Name_.ReadOnly = true;
+            this.Name_.Width = 144;
+            // 
+            // Type
+            // 
+            this.Type.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Type.HeaderText = "Type";
+            this.Type.Name = "Type";
+            this.Type.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Type.Width = 84;
+            // 
+            // LeftAnchorId
+            // 
+            this.LeftAnchorId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.LeftAnchorId.HeaderText = "LA";
+            this.LeftAnchorId.Name = "LeftAnchorId";
+            this.LeftAnchorId.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.LeftAnchorId.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.LeftAnchorId.ToolTipText = "Left Anchor";
+            this.LeftAnchorId.Width = 104;
+            // 
+            // TopAnchorId
+            // 
+            this.TopAnchorId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.TopAnchorId.HeaderText = "TA";
+            this.TopAnchorId.Name = "TopAnchorId";
+            this.TopAnchorId.ToolTipText = "Top Anchor";
+            this.TopAnchorId.Width = 57;
+            // 
+            // RightAnchorId
+            // 
+            this.RightAnchorId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.RightAnchorId.HeaderText = "RA";
+            this.RightAnchorId.Name = "RightAnchorId";
+            this.RightAnchorId.ToolTipText = "Right Anchor";
+            this.RightAnchorId.Width = 60;
+            // 
+            // BottomAnchorId
+            // 
+            this.BottomAnchorId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.BottomAnchorId.HeaderText = "BA";
+            this.BottomAnchorId.Name = "BottomAnchorId";
+            this.BottomAnchorId.ToolTipText = "Bottom Anchor";
+            this.BottomAnchorId.Width = 59;
+            // 
+            // Rectangle
+            // 
+            this.Rectangle.HeaderText = "Rectangle";
+            this.Rectangle.Name = "Rectangle";
+            this.Rectangle.Width = 140;
+            // 
+            // Value
+            // 
+            this.Value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Value.HeaderText = "Value";
+            this.Value.Name = "Value";
+            this.Value.ReadOnly = true;
             // 
             // TemplateForm
             // 
@@ -1170,6 +1191,20 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.CheckBox ExtractFieldsAutomaticallyWhenPageChanged;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+        private System.Windows.Forms.LinkLabel duplicateField;
+        private System.Windows.Forms.LinkLabel deleteField;
+        private System.Windows.Forms.LinkLabel moveUpField;
+        private System.Windows.Forms.LinkLabel moveDownField;
+        private System.Windows.Forms.LinkLabel copy2ClipboardField;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.TextBox textAutoInsertSpaceRepresentative;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Id3;
+        private System.Windows.Forms.DataGridViewComboBoxColumn ParentAnchorId3;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Type3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Position3;
+        private System.Windows.Forms.Label label18;
         private System.Windows.Forms.DataGridViewTextBoxColumn Name_;
         private System.Windows.Forms.DataGridViewComboBoxColumn Type;
         private System.Windows.Forms.DataGridViewComboBoxColumn LeftAnchorId;
@@ -1178,18 +1213,5 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn BottomAnchorId;
         private System.Windows.Forms.DataGridViewTextBoxColumn Rectangle;
         private System.Windows.Forms.DataGridViewTextBoxColumn Value;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Id3;
-        private System.Windows.Forms.DataGridViewComboBoxColumn ParentAnchorId3;
-        private System.Windows.Forms.DataGridViewComboBoxColumn Type3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Point03;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
-        private System.Windows.Forms.LinkLabel duplicateField;
-        private System.Windows.Forms.LinkLabel deleteField;
-        private System.Windows.Forms.LinkLabel moveUpField;
-        private System.Windows.Forms.LinkLabel moveDownField;
-        private System.Windows.Forms.LinkLabel copy2ClipboardField;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.TextBox textAutoInsertSpaceSubstitute;
-        private System.Windows.Forms.Label label15;
     }
 }

@@ -31,7 +31,7 @@ namespace Cliver.SampleParser
             Comment.Text = t.Comment;
             OrderWeight.Value = (decimal)t.OrderWeight;
             if (t.FileFilterRegex != null)
-                FileFilterRegex.Text = SerializationRoutines.Json.Serialize(t.FileFilterRegex, false);
+                FileFilterRegex.Text = Serialization.Json.Serialize(t.FileFilterRegex, false);
             else
                 FileFilterRegex.Text = "";
         }
@@ -42,12 +42,12 @@ namespace Cliver.SampleParser
             try
             {
                 string d = string.IsNullOrWhiteSpace(template2.Template.Editor.TestFile) ? Settings.General.InputFolder : PathRoutines.GetDirFromPath(template2.Template.Editor.TestFile);
-                FileFilterForm f = new FileFilterForm(d, SerializationRoutines.Json.Deserialize<Regex>(FileFilterRegex.Text));
+                FileFilterForm f = new FileFilterForm(d, Serialization.Json.Deserialize<Regex>(FileFilterRegex.Text));
                 f.ShowDialog();
             }
             catch (Exception ex)
             {
-                LogMessage.Error(ex);
+                Log.Message.Error(ex);
             }
         }
 
@@ -59,7 +59,7 @@ namespace Cliver.SampleParser
                 template2.Comment = Comment.Text;
                 template2.OrderWeight = (float)OrderWeight.Value;
                 if (FileFilterRegex.Text.Length > 0)
-                    template2.FileFilterRegex = SerializationRoutines.Json.Deserialize<Regex>(FileFilterRegex.Text);
+                    template2.FileFilterRegex = Serialization.Json.Deserialize<Regex>(FileFilterRegex.Text);
                 else
                     template2.FileFilterRegex = null;
 

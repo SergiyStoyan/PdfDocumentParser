@@ -4,22 +4,17 @@
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Cliver.PdfDocumentParser
 {
     public partial class AnchorImageDataControl : AnchorControl
     {
-        public AnchorImageDataControl()
+        public AnchorImageDataControl(float imageScale)
         {
             InitializeComponent();
+
+            this.imageScale = imageScale;
 
             cSearchRectangleMargin.CheckedChanged += delegate
             {
@@ -29,6 +24,7 @@ namespace Cliver.PdfDocumentParser
                 SearchRectangleMargin.Value = cSearchRectangleMargin.Checked ? ((_object == null || _object.ParentAnchorId != null) ? (decimal)Settings.Constants.CoordinateDeviationMargin : 100) : -1;
             };
         }
+        float imageScale = 1;
 
         override protected object getObject()
         {
@@ -37,8 +33,6 @@ namespace Cliver.PdfDocumentParser
             _object.FindBestImageMatch = FindBestImageMatch.Checked;
             _object.BrightnessTolerance = (float)BrightnessTolerance.Value;
             _object.DifferentPixelNumberTolerance = (float)DifferentPixelNumberTolerance.Value;
-            _object.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
-            _object.PositionDeviation = (float)PositionDeviation.Value;
             _object.SearchRectangleMargin = SearchRectangleMargin.Enabled ? (int)SearchRectangleMargin.Value : -1;
             return _object;
         }
@@ -53,23 +47,15 @@ namespace Cliver.PdfDocumentParser
             FindBestImageMatch.Checked = _object.FindBestImageMatch;
             BrightnessTolerance.Value = (decimal)_object.BrightnessTolerance;
             DifferentPixelNumberTolerance.Value = (decimal)_object.DifferentPixelNumberTolerance;
-            pictures.Controls.Clear();
-            if (_object.ImageBoxs != null)
-                foreach (Template.Anchor.ImageData.ImageBox id in _object.ImageBoxs)
-                {
-                    PictureBox p = new PictureBox
-                    {
-                        SizeMode = PictureBoxSizeMode.AutoSize,
-                        Image = id.ImageData.GetImage()
-                    };
-                    pictures.Controls.Add(p);
-                }
-            PositionDeviationIsAbsolute.Checked = _object.PositionDeviationIsAbsolute;
-            try
+            pictureBox.Image = null;
+            if (_object.Image != null)
             {
-                PositionDeviation.Value = (decimal)_object.PositionDeviation;
+                System.Drawing.Image i = _object.Image.GetImage();
+                pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+                pictureBox.Width = (int)(i.Width * imageScale);
+                pictureBox.Height = (int)(i.Height * imageScale);
+                pictureBox.Image = i;
             }
-            catch { }
 
             SearchRectangleMargin.Value = _object.SearchRectangleMargin;
             SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked;
