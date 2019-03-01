@@ -591,7 +591,7 @@ Let's consider an additional requirement to the tutorial task: for every invoice
 <p><b>Use table and column fields:</b>
 <br>It is the main method designed for correctly-structured tables. 
 <br>There must be a field that captures the whole table. Then, there must be fields that capture table's columns. The column fields must have <code>ColumnOfTable</code> property set to the name of their table field. 
-<br>When it is done, GetValue([column field], ValueTypes.TextLines) will return an array of strings that correspond to the rows of the table. That means that the size of the output array will be the same for all the column fields. Thus, if in some column some rows are empty then they will be presented in the output array as empty strings.
+<br>When this is done, <code>GetValue([column field], ValueTypes.TextLines)</code> returns an array of strings that correspond to the rows of the table. That means that the size of the output array will be the same for all the column fields. Thus, if a column has some rows empty then they will be presented in the output array as empty strings.
 <br><span class='attention'>NOTE: </span>Only content of the intersection of a column field and its table field goes to the output.
 
 <p>Sometimes tables can not be clearly separated onto columns because they include sub-headers that break the structure or because their fields have unpredictable length etc. In such a case, parsing with column fields may not work well and the following ways should be used instead or additionally:  
@@ -604,7 +604,7 @@ Let's consider an additional requirement to the tutorial task: for every invoice
 <br>Generally this way must be considered as unreliable but in some cases it may work well.
 
 <p><b>Get the table field as char boxes:</b>
-<br>Call GetValue([field], ValueTypes.CharBoxs) to get the table's content as char boxes. It is the most powerful approach potentially but unfortunately too abstract. On the one hand, you get all the information about the table's content: characters, their positions and sizes, on the other hand, it is completely up to you how to process this stuff.
+<br>Call <code>GetValue([field], ValueTypes.CharBoxs)</code> to get the table's content as char boxes. It is the most powerful approach potentially but unfortunately too abstract. On the one hand, you get all the information about the table's content: characters, their positions and sizes, on the other hand, it is completely up to you how to process this stuff.
 
 
 
