@@ -258,7 +258,7 @@ A field can have multiple definitions. In Template Editor they are shown as sepa
 
 
 
-<h2><a name='templateSettings'>Common Settings</a></h2>
+<h2><a name='templateSettings'>Common settings</a></h2>
 There are settings that are common within template scope and influence on parsing.
 
 <h3>Space auto-detection</h3>
@@ -272,8 +272,8 @@ There are settings that are common within template scope and influence on parsin
 </table>
 
 
-<h3>Scanned PDF pages pre-processing</h3>
-<p>The following options are used for pre-processing preparation of scanned PDF pages. They influence on OcrText or ImageData anchors and fields while PdfText type remains not affected.
+<h3>Scanned document preprocessing</h3>
+<p>The following options are used for preprocessing of scanned PDF pages. They influence on OcrText or ImageData anchors and fields while PdfText type remains not affected.
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'><a name='AutoDeskew'>Auto-Deskew</a></td>
@@ -475,7 +475,7 @@ This tutorial considers a sample task that is general enough to cover a broad ra
 <h2>Planning application</h2>
 <p>Since the documents are issued by different companies, they have different layouts. Every layout will require its own parsing template. So, SampleParser will have to manage many templates where every template should process a whole document. One-to-one correspondence between document types and templates is the common way.
 <p>As is obvious, every template will have the following <a href='#field'>fields</a> InvoiceId and TotalAmount.
-<p>Next, let's decide which <a href='#condition'>conditions</a> are needed. SampleParser should be able <b>A)</b>to detect the first page of every document in a file and <b>B)</b>to choose the right template for the detected document. (A) and (B) can be joined into one <a href='#condition'>condition</a> named 'FirstPageOfDocument'. 
+<p>Next, let's decide which <a href='#condition'>conditions</a> are needed. SampleParser should be able to <b>A)</b> detect the first page of every document in a file and <b>B)</b> choose the right template for the detected document. (A) and (B) can be joined into one <a href='#condition'>condition</a> named 'FirstPageOfDocument'. 
 <p>Also, one more <a href='#condition'>condition</a> is required to detect the end of a document. Let's name it 'LastPageOfDocument'.
 <p>These conditions will work in the following manner: when a template has FirstPageOfDocument satisfied on a PDF page then it is to be chosen for processing of this page and the next ones until LastPageOfDocument is met. When it happens, the previously captured fields should be processed and emptied and next page must be examined by FirstPageOfDocument condition of every template until the right template is detected.
 
@@ -636,7 +636,7 @@ Let's see how to use table and column fields for parsing products in our sample 
 
 
 <h2>Parsing scanned PDF file</h2>
-When PDF page is a scanned image, the template designed for it, most likely will need to perform a pre-processing preparation which includes auto-deskew and rotation. Then OcrText or ImageData anchors and OcrText fields can be applied to the page. 
+When PDF page is a scanned image, the template designed for it, most likely will need to perform preprocessing which includes auto-deskew and rotation. Then OcrText or ImageData anchors and OcrText fields can be applied to the page. 
 <p>Except the said above, the parsing routine is the same for either scanned or native PDF's. 
 
 
@@ -667,7 +667,7 @@ More details on SampleParser can be found in <a href='#tutorial'>tutorial</a>.
 
 
 <h2>Source code</h2>
-Download PdfDocumentParser (pre-)release <a href='#repository'>source code</a>. Find SampleParser.sln there and open it in Visual Studio. 
+Download PdfDocumentParser <a href='#repository'>source code</a>. Find SampleParser.sln there and open it in Visual Studio. 
 
 
 <h2>Enhanced template parameters</h2>
