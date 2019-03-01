@@ -595,7 +595,7 @@ Let's consider an additional requirement to the tutorial task: for every invoice
 <p>Sometimes tables can not be clearly separated onto columns because they include sub-headers that break the structure or because their fields have unpredictable length etc. In such a case, parsing with column fields may not work well and the following ways should be used instead or additionally:  
 
 <p><b>Extract the whole table as text:</b>
-<br>If the table data is still logically structured, the whole table should be extracted as a single field and then parsed by regexes or other parsing facility.
+<br>If the table data is still logically structured, the whole table should be extracted as a single field and then parsed by regexes or another parsing means.
 
 <p><b>Use auto-inserted spaces to split the table text onto columns:</b>
 <br>It is a variation of the previous way. If empty spans between columns are long enough so that PdfDocumentParser will automatically insert spaces between column values, then those spaces can be configured to be substituted with some uncommon character e.g. "|". Then, the whole table text can be be split onto lines by new line symbol and every line split onto column values by "|". 
