@@ -522,16 +522,16 @@ Refer to <a href='#sampleParser'>SampleParser</a> as live code.
 
 
 
-<h2>Setting template</h2>
+<h2>Creating template</h2>
 Now, having the parser code elaborated, let's learn how to create templates with Template Editor.
 
 
 <h3>Open Template Editor</h3>
 <p>The way of opening Template Editor depends on the application. In <a href='#sampleParser'>SampleParser</a> a <a href="#template">template</a> can be created from scratch or copied from an existing one and then modified as needed. 
 
-<p>The tutorial shows creating a template for a PDF file by repository path PdfDocumentParser\SampleParser\test_files\102.pdf. A template created for this file is supplied in SampleParser under name 'test'. The template created below should be identical with it.
+<!--p>This tutorial shows creating a template for a PDF file by repository path. A template created for this file is supplied in SampleParser under name 'test'. The template created below should be identical with it.<-->
 <p>Let's start with a blank template: click the blank row in the table in the main window of SampleParser and then click button Edit.
-<p class='screenshot_title'>Open a test PDF file in Template Editor:
+<p class='screenshot_title'>In Template Editor open the test PDF file PdfDocumentParser\SampleParser\test_files\102.pdf:
 <img src='img/tutorial0.png'/>
 
 <h3><a name='tutorialAnchor'>Create anchors</a></h3>
@@ -583,19 +583,19 @@ We already have created anchors #1 and #2 that are needed to specify FirstPageOf
 
 
 <h2><a name1=''>Parsing tables</a></h2>
-Let's consider an additional requirement to the tutorial task: extract from invoices all the listed product/services and their prices as arrays. 
-<p>Such a task cannot be solved the way considered above because tables can have unpredictable size and column width. Because of that tables need special treatment. Depending on the case, the following ways can be used:
+Let's consider an additional requirement to the tutorial task: for every invoice, extract the product/services and their prices listed in table and provide them as array of objects. 
+<p>Such a task cannot be solved the way considered above because: A) tables can have unpredictable size and column width and B) table's content must be split on columns preserving table's rows. Because of that tables need special treatment. Depending on the case, the following ways can be used:
 
 <p><b>Use table and column fields:</b>
 <br>It is the main method designed for correctly-structured tables. 
 <br>There must be a field that captures the whole table. Then, there must be fields that capture table's columns. The column fields must have <code>ColumnOfTable</code> property set to the name of their table field. 
-<br>Now, GetValue([field], ValueTypes.TextLines) called for a column field, will return an array of strings that correspond to the rows of the table. That means that the size of the output array is always the same for all the column fields. Thus, if in some column some rows are empty then they will be presented in the output array as empty strings.
-<br><span class='attention'>NOTE: </span>Only the intersection of a column field and its table field is processed.
+<br>When it is done, GetValue([column field], ValueTypes.TextLines) will return an array of strings that correspond to the rows of the table. That means that the size of the output array will be the same for all the column fields. Thus, if in some column some rows are empty then they will be presented in the output array as empty strings.
+<br><span class='attention'>NOTE: </span>Only content of the intersection of a column field and its table field goes to the output.
 
-<p>Sometimes tables can not be clearly separated onto columns because they include sub-headers that break the structure or because their fields have unpredictable length etc. In such a case, parsing with column fields may not work well and the following ways can be used instead or additionally:  
+<p>Sometimes tables can not be clearly separated onto columns because they include sub-headers that break the structure or because their fields have unpredictable length etc. In such a case, parsing with column fields may not work well and the following ways should be used instead or additionally:  
 
 <p><b>Extract the whole table as text:</b>
-<br>If the table data still is logically structured, the whole table should be extracted as a single field and then parsed by regexes or some other parsing tool.
+<br>If the table data is still logically structured, the whole table should be extracted as a single field and then parsed by regexes or other parsing facility.
 
 <p><b>Use auto-inserted spaces to split the table text onto columns:</b>
 <br>It is a variation of the previous way. If empty spans between columns are long enough so that PdfDocumentParser will automatically insert spaces between column values, then those spaces can be configured to be substituted with some uncommon character e.g. "|". Then, the whole table text can be be split onto lines by new line symbol and every line split onto column values by "|". 
@@ -608,9 +608,9 @@ Let's consider an additional requirement to the tutorial task: extract from invo
 
 <h3>Setting table and column fields</h3>
 Let's see how to use table and column fields for parsing products in our sample task.
-<p>The following fields are to be added to SampleParser ProductTable that catches the entire table and ProductNames and ProductCosts that catch the respective columns. ProductNames and ProductCosts must have <code>ColumnOfTable</code> property set to "ProductTable".
+<p>The following fields were added to SampleParser: ProductTable that catches the entire table and ProductNames and ProductCosts that catch the respective columns. ProductNames and ProductCosts have <code>ColumnOfTable</code> property set to "ProductTable".
 
-<p>When it is done, open template 'test' that was created previously for test102.pdf, in Template Editor and set the introduced fields. Because the table in the test file may have different location and height, the fields' top and bottom must be linked to the proper anchors. 
+<p>Open template 'test' that was created previously for test102.pdf, in Template Editor and set the table and coloumn fields. Because the table in the test file may have different location and height, the fields' top and bottom must be linked to the proper anchors. 
 <img src='img/tutorial9.png'/>
 
 
