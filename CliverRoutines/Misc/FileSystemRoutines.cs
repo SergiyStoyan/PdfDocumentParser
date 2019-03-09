@@ -67,6 +67,18 @@ namespace Cliver
             File.Copy(file1, file2, overwrite);
         }
 
+        public static void MoveFile(string file1, string file2, bool overwrite = true)
+        {
+            CreateDirectory(PathRoutines.GetDirFromPath(file2), false);
+            if (File.Exists(file2))
+            {
+                if (!overwrite)
+                    throw new System.Exception("File " + file2 + " already exists.");
+                File.Delete(file2);
+            }
+            File.Move(file1, file2);
+        }
+
         //public static void Copy(string path1, string path2, bool overwrite = false)
         //{
         //    if (Directory.Exists(path1))

@@ -283,9 +283,11 @@ namespace Cliver.PdfDocumentParser
                 anchors.ClearSelection();//1-st row is autoselected
                 conditions.ClearSelection();//1-st row is autoselected
                 fields.ClearSelection();//1-st row is autoselected
-                //setCurrentAnchorRow(null, true);
-                //setCurrentConditionRow(null);
-                //setCurrentFieldRow(null);
+                                        //setCurrentAnchorRow(null, true);
+                                        //setCurrentConditionRow(null);
+                                        //setCurrentFieldRow(null);
+                foreach (DataGridViewRow row in anchors.Rows)
+                    setRowStatus(statuses.NEUTRAL, row, "");
                 loadingTemplate = false;
 
                 if (ExtractFieldsAutomaticallyWhenPageChanged.Checked)
@@ -300,9 +302,15 @@ namespace Cliver.PdfDocumentParser
                             foundFieldNames.Add(fn);
                     }
                 }
+                else
+                    foreach (DataGridViewRow row in fields.Rows)
+                        setRowStatus(statuses.NEUTRAL, row, "");
 
                 if (CheckConditionsAutomaticallyWhenPageChanged.Checked)
                     setConditionsStatus();
+                else
+                    foreach (DataGridViewRow row in conditions.Rows)
+                        setRowStatus(statuses.NEUTRAL, row, "");
             }
             catch (Exception e)
             {

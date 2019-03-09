@@ -148,12 +148,18 @@ namespace Cliver
 
             public static void Error(Exception e, Form owner = null)
             {
-                Error(Log.GetExceptionMessage(e), owner);
+                string m;
+                string d;
+                GetExceptionMessage(e, out m, out d);
+                Error2(m + (e is Exception2 ? null : "\r\n\r\n" + d), owner);
             }
 
             public static void Error2(Exception e, Form owner = null)
             {
-                Error2(Log.GetExceptionMessage(e), owner);
+                string m;
+                string d;
+                GetExceptionMessage(e, out m, out d);
+                Error2(m, owner);
             }
 
             public static void Exit(string message, Form owner = null)
@@ -193,7 +199,10 @@ namespace Cliver
 
             public static void Exit(Exception e)
             {
-                Exit(Log.GetExceptionMessage(e));
+                string m;
+                string d;
+                GetExceptionMessage(e, out m, out d);
+                Exit(m + (e is Exception2 ? null : "\r\n\r\n" + d));
             }
 
             public static void Inform(string message, Form owner = null)

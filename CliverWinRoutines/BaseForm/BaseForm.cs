@@ -68,6 +68,8 @@ namespace Cliver
         {
             if (c.InvokeRequired)
                 c.Invoke(code);
+            else
+                code();
         }
 
         public static void BeginInvoke(this Control c, MethodInvoker code)
@@ -79,6 +81,8 @@ namespace Cliver
         {
             if (c.InvokeRequired)
                 c.BeginInvoke(code);
+            else
+                code.BeginInvoke(null, null);
         }
 
         public static object InvokeFromUiThread(Delegate d)

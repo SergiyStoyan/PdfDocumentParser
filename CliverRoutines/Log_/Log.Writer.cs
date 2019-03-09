@@ -102,8 +102,8 @@ namespace Cliver
             {
                 string m;
                 string d;
-                Log.GetExceptionMessage(e, out m, out d);
-                Write(Log.MessageType.ERROR, m, d);
+                GetExceptionMessage(e, out m, out d);
+                Write(Log.MessageType.ERROR, m, e is Exception2 ? null : d);
             }
 
             public void Error2(Exception e)
@@ -125,7 +125,10 @@ namespace Cliver
 
             public void Error(string message, Exception e)
             {
-                Write(MessageType.ERROR, message, "\r\n\r\n" + GetExceptionMessage(e));
+                string m;
+                string d;
+                GetExceptionMessage(e, out m, out d);
+                Write(MessageType.ERROR, message, m + (e is Exception2 ? null : "\r\n\r\n" + d));
             }
 
             public void Error2(string message)
@@ -179,7 +182,7 @@ namespace Cliver
                     string m;
                     string d;
                     GetExceptionMessage(e, out m, out d);
-                    Write(MessageType.EXIT, m, d);
+                    Write(MessageType.EXIT, m, e is Exception2 ? null : d);
                 }
             }
 
@@ -209,7 +212,7 @@ namespace Cliver
                 string m;
                 string d;
                 GetExceptionMessage(e, out m, out d);
-                Write(MessageType.WARNING, m, d);
+                Write(MessageType.WARNING, m, e is Exception2 ? null : d);
             }
 
             public void Warning2(Exception e)
@@ -268,7 +271,7 @@ namespace Cliver
                             {
                                 string m;
                                 string d;
-                                Log.GetExceptionMessage(e, out m, out d);
+                                GetExceptionMessage(e, out m, out d);
                                 write(Log.MessageType.ERROR, m, d);
                             }
                             finally
