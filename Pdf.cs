@@ -236,25 +236,6 @@ namespace Cliver.PdfDocumentParser
             return cbs.ToList();
         }
 
-        public static readonly string InvisibleCharacters = " \t";
-        
-        public static List<CharBox> RemoveDuplicates(IEnumerable<CharBox> cbs)
-        {
-            List<CharBox> bs = cbs.Where(a => a.R.Width >= 0 && a.R.Height >= 0).ToList();//some symbols are duplicated with negative width anf height
-            for (int i = 0; i < bs.Count; i++)
-                for (int j = bs.Count - 1; j > i; j--)
-                {
-                    if (Math.Abs(bs[i].R.X - bs[j].R.X) > Settings.Constants.CoordinateDeviationMargin)//some symbols are duplicated in [almost] same position
-                        continue;
-                    if (Math.Abs(bs[i].R.Y - bs[j].R.Y) > Settings.Constants.CoordinateDeviationMargin)//some symbols are duplicated in [almost] same position
-                        continue;
-                    if (bs[i].Char != bs[j].Char)
-                        continue;
-                    bs.RemoveAt(j);
-                }
-            return bs;
-        }
-
       public static List<Line> GetLines(IEnumerable<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace/*, bool removeDuplicates - no need because input collection is already filtered*/)
         {
             //if (removeDuplicates)
@@ -311,7 +292,7 @@ namespace Cliver.PdfDocumentParser
             public List<CharBox> CharBoxs = new List<CharBox>();
         }
 
-        public static List<CharBox> GetCharBoxsFromPage(PdfReader pdfReader, int pageI, bool removeInvisible, bool removeDuplicates)
+        public static List<CharBox> GetCharBoxsFromPage(PdfReader pdfReader, int pageI, bool removeDuplicates)
         {
             var cbs = pdfReader.GetCharacterTextChunks(pageI).Select(x => new Pdf.CharBox
             {
@@ -324,12 +305,33 @@ namespace Cliver.PdfDocumentParser
                 },
                 Char = x.Text
             });
-            if (removeInvisible)
-                cbs = cbs.Where(x => !InvisibleCharacters.Contains(x.Char));
             if (removeDuplicates)
                 cbs = RemoveDuplicates(cbs);
             return cbs.ToList();
         }
+
+        public static List<CharBox> RemoveDuplicates(IEnumerable<CharBox> cbs)
+        {
+            List<CharBox> bs = cbs.Where(a => a.R.Width >= 0 && a.R.Height >= 0).ToList();//some symbols are duplicated with negative width anf height
+            for (int i = 0; i < bs.Count; i++)
+                for (int j = bs.Count - 1; j > i; j--)
+                {
+                    if (Math.Abs(bs[i].R.X - bs[j].R.X) > Settings.Constants.CoordinateDeviationMargin)//some symbols are duplicated in [almost] same position
+                        continue;
+                    if (Math.Abs(bs[i].R.Y - bs[j].R.Y) > Settings.Constants.CoordinateDeviationMargin)//some symbols are duplicated in [almost] same position
+                        continue;
+                    if (bs[i].Char != bs[j].Char)
+                        continue;
+                    bs.RemoveAt(j);
+                }
+            return bs;
+        }
+
+        public static IEnumerable<CharBox> RemoveInvisibles(IEnumerable<CharBox> cbs)
+        {
+            return cbs.Where(x => !InvisibleCharacters.Contains(x.Char));
+        }
+        public static readonly string InvisibleCharacters = " \t";
 
         public class CharBox
         {
