@@ -207,7 +207,7 @@ namespace Cliver.PdfDocumentParser
             get
             {
                 if (_pdfCharBoxs == null)
-                    _pdfCharBoxs = Pdf.GetCharBoxsFromPage(pageCollection.PdfReader, Number);
+                    _pdfCharBoxs = Pdf.GetCharBoxsFromPage(pageCollection.PdfReader, Number, true, true);
                 return _pdfCharBoxs;
             }
         }

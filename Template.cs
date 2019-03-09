@@ -28,6 +28,9 @@ namespace Cliver.PdfDocumentParser
         //public string TextAutoInsertSpaceSubstitute = "\t";
         public TextAutoInsertSpace TextAutoInsertSpace;
 
+        public bool IgnoreInvisiblePdfChars = true;//used but not edited
+        public bool IgnoreDuplicatedPdfChars = true;//used but not edited
+
         public PageRotations PageRotation = PageRotations.NONE;
         public enum PageRotations
         {

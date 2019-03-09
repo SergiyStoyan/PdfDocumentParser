@@ -55,7 +55,6 @@ namespace Cliver.PdfDocumentParser
                     public RectangleF Rectangle;
                 }
                 public SizeF Size;
-                public bool IgnoreInvisibleChars = true;
                 public float PositionDeviation = 1f;
                 public bool PositionDeviationIsAbsolute = false;
 

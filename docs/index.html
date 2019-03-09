@@ -104,7 +104,7 @@ To get the idea of what can be done with PdfDocumentParser and how it is used, r
 
 
 <h4><a name='anchorPdfText'>PdfText</a></h4>
-<p>This type is used to anchor to text fragments. It is based on the native text presentation inside a PDF file so it can work only with native (not scanned) PDF files. At the same time, it should be chosen whenever possible because it is most robust and fast.  
+<p>This type is used to anchor to text fragments. It is based on the native text presentation inside a PDF file so it can work only with native (not scanned) PDF files. At the same time, it should be chosen whenever possible because it is most robust and fast. 
 
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
@@ -261,6 +261,8 @@ A field can have multiple definitions. In Template Editor they are shown as sepa
 <h2><a name='templateSettings'>Common settings</a></h2>
 There are settings that are common within template scope and influence on parsing.
 
+
+
 <h3>Space auto-detection</h3>
 <p>When extracting text, PdfDocumentParser automatically detects spaces between words. This influences on the output of PdfText and OcrText fields and also, on displaying PdfText anchor's patterns in Template Editor.
 <table>
@@ -282,6 +284,18 @@ There are settings that are common within template scope and influence on parsin
 <td>It is used mostly for scanned documents. A page must be correctly oriented to get OCR working properly on it.</td></tr>
 </table>
 
+
+
+<h3>PDF entities filtering</h3>
+<p>While processing PDF text entities in a file, PdfDocumentParser does filtering according to the following parameters:
+<table>
+<tr><th class='title_column'>Parameter</th><th>Description</th></tr>
+<tr><td class='title_column'><a name='IgnoreInvisiblePdfChars'>IgnoreInvisiblePdfChars</a></td>
+<td>Invisible characters like '\t' if any are ignored.</td></tr>
+<tr><td class='title_column'><a name='IgnoreDuplicatedPdfChars'>IgnoreDuplicatedPdfChars</a></td>
+<td>Sometimes text entities in a PDF page may be duplicated meaning that they have (almost) the same location. Such duplications do not make a difference in the text itself (while maybe changing its look) but hinder search of PdfText anchors. For this reason, such duplicates are ignored. </td></tr>
+</table>
+These parameters by default are <code>True</code> and switching them off is highly not recommended. For this reason, they can be only edited manually in template data, not from GUI.
 
 
 

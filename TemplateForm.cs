@@ -146,7 +146,7 @@ namespace Cliver.PdfDocumentParser
                                             {
                                                 Template.Anchor.PdfText pt = (Template.Anchor.PdfText)a;
                                                 pt.CharBoxs = new List<Template.Anchor.PdfText.CharBox>();
-                                                List<Pdf.Line> lines = Pdf.RemoveDuplicatesAndGetLines(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, r.GetSystemRectangleF(), true), null);
+                                                List<Pdf.Line> lines = Pdf.GetLines(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, r.GetSystemRectangleF(), true), null);
                                                 foreach (Pdf.Line l in lines)
                                                     foreach (Pdf.CharBox cb in l.CharBoxs)
                                                         pt.CharBoxs.Add(new Template.Anchor.PdfText.CharBox

@@ -195,7 +195,7 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public static string GetText(List<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace)
+        public static string GetText(IEnumerable<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace)
         {
             List<string> ls = new List<string>();
             foreach (Line l in GetLines(cbs, textAutoInsertSpace))
@@ -208,12 +208,12 @@ namespace Cliver.PdfDocumentParser
             return string.Join("\r\n", ls);
         }
 
-        public static string GetTextSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r, TextAutoInsertSpace textAutoInsertSpace)
+        public static string GetTextSurroundedByRectangle(IEnumerable<CharBox> cbs, System.Drawing.RectangleF r, TextAutoInsertSpace textAutoInsertSpace)
         {
             return string.Join("\r\n", GetTextLinesSurroundedByRectangle(cbs, r, textAutoInsertSpace));
         }
 
-        public static List<string> GetTextLinesSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r, TextAutoInsertSpace textAutoInsertSpace)
+        public static List<string> GetTextLinesSurroundedByRectangle(IEnumerable<CharBox> cbs, System.Drawing.RectangleF r, TextAutoInsertSpace textAutoInsertSpace)
         {
             cbs = GetCharBoxsSurroundedByRectangle(cbs, r);
             List<string> ls = new List<string>();
@@ -227,22 +227,18 @@ namespace Cliver.PdfDocumentParser
             return ls;
         }
 
-        public static List<CharBox> GetCharBoxsSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r, bool excludeInvisibleCharacters = false)
+        public static List<CharBox> GetCharBoxsSurroundedByRectangle(IEnumerable<CharBox> cbs, System.Drawing.RectangleF r, bool excludeInvisibleCharacters = false)
         {
-            cbs = removeDuplicates(cbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)));
+            //cbs = RemoveDuplicates(cbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)));
+            cbs = cbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/));
             if (excludeInvisibleCharacters)
                 cbs = cbs.Where(a => !InvisibleCharacters.Contains(a.Char)).ToList();
-            return cbs;
+            return cbs.ToList();
         }
 
         public static readonly string InvisibleCharacters = " \t";
-
-        public static List<Line> RemoveDuplicatesAndGetLines(IEnumerable<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace)
-        {
-            return GetLines(removeDuplicates(cbs), textAutoInsertSpace);
-        }
-
-        static List<CharBox> removeDuplicates(IEnumerable<CharBox> cbs)
+        
+        public static List<CharBox> RemoveDuplicates(IEnumerable<CharBox> cbs)
         {
             List<CharBox> bs = cbs.Where(a => a.R.Width >= 0 && a.R.Height >= 0).ToList();//some symbols are duplicated with negative width anf height
             for (int i = 0; i < bs.Count; i++)
@@ -259,9 +255,11 @@ namespace Cliver.PdfDocumentParser
             return bs;
         }
 
-      public  static List<Line> GetLines(IEnumerable<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace)
+      public static List<Line> GetLines(IEnumerable<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace/*, bool removeDuplicates - no need because input collection is already filtered*/)
         {
-            bool spaceAutoInsert = textAutoInsertSpace!=null&& textAutoInsertSpace.Threshold > 0;
+            //if (removeDuplicates)
+            //    cbs = RemoveDuplicates(cbs);
+            bool spaceAutoInsert = textAutoInsertSpace != null && textAutoInsertSpace.Threshold > 0;
             cbs = cbs.OrderBy(a => a.R.X).ToList();
             List<Line> lines = new List<Line>();
             foreach (CharBox cb in cbs)
@@ -313,9 +311,9 @@ namespace Cliver.PdfDocumentParser
             public List<CharBox> CharBoxs = new List<CharBox>();
         }
 
-        public static List<CharBox> GetCharBoxsFromPage(PdfReader pdfReader, int pageI)
+        public static List<CharBox> GetCharBoxsFromPage(PdfReader pdfReader, int pageI, bool removeInvisible, bool removeDuplicates)
         {
-            var bts = pdfReader.GetCharacterTextChunks(pageI).Select(x => new Pdf.CharBox
+            var cbs = pdfReader.GetCharacterTextChunks(pageI).Select(x => new Pdf.CharBox
             {
                 R = new System.Drawing.RectangleF
                 {
@@ -326,7 +324,11 @@ namespace Cliver.PdfDocumentParser
                 },
                 Char = x.Text
             });
-            return bts.ToList();
+            if (removeInvisible)
+                cbs = cbs.Where(x => !InvisibleCharacters.Contains(x.Char));
+            if (removeDuplicates)
+                cbs = RemoveDuplicates(cbs);
+            return cbs.ToList();
         }
 
         public class CharBox
