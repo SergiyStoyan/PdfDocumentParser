@@ -23,7 +23,7 @@ namespace Cliver
             {
                 int i = 1;
                 string p = directory + "_" + i;
-                for (; Directory.Exists(p); p = p + "_" + (++i)) ;
+                for (; Directory.Exists(p); p = directory + "_" + (++i)) ;
                 directory = p;
                 Directory.CreateDirectory(directory);
             }
