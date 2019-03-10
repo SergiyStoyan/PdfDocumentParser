@@ -166,6 +166,7 @@ To get the idea of what can be done with PdfDocumentParser and how it is used, r
 
 
 <h3>Creating anchor</h3>
+<span class='attention'>IMPORTANT! </span> In a compound anchor, if some child anchor's position depends on its parent's position, those anchors must be set on the same page. Otherwise, anchor's position may be calculated incorrectly. So, when tuning a compound anchor on a page which is not the page where it was set initially, it is recommended to reset it completely from scratch. 
 <p>How to create anchors, see in <a href='#tutorialAnchor'>tutorial</a>.
 
 
@@ -246,7 +247,7 @@ A field can have multiple definitions. In Template Editor they are shown as sepa
 
 
 <h3>Setting field</h3> 
-<span class='attention'>IMPORTANT! </span> A field must be completely set on the same page. Anchors which are linked by a field, can be created on any page before, but must be assigned on the same page together with the field's rectangle. Otherwise, field's shift or size may be calculated incorrectly on some page during parsing. Thus, when tuning a field on a page that is not the page where it was set initially, it is recommended to reset it completely from scratch. 
+<span class='attention'>IMPORTANT! </span> A field must be completely set on the same page. Anchors which are linked by a field, can be created on any page before, but must be assigned on the same page together with the field's rectangle. Otherwise, field's shift or size may be calculated incorrectly on some page during parsing. So, when tuning a field on a page which is not the page where it was set initially, it is recommended to reset it completely from scratch. 
 <p>How to set fields, see in <a href='#tutorialField'>the tutorial</a>.
 
 
