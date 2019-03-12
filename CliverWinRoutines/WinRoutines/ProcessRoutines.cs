@@ -17,7 +17,7 @@ using System.Security.Principal;
 using System.Management;
 using System.Security.AccessControl;
 
-namespace Cliver
+namespace Cliver.Win
 {
     public static partial class ProcessRoutines
     {
@@ -50,7 +50,7 @@ namespace Cliver
                         continue;
                     }
                     if (!silent)
-                        Log.Message.Exit(e);
+                        LogMessage.Exit(e);
                     else
                         Environment.Exit(0);
                 }
@@ -58,7 +58,7 @@ namespace Cliver
             if (GLOBAL_SINGLE_PROCESS_MUTEX.WaitOne(1000, false))//wait for some time while contending, if the other instance of the program is still in progress of shutting down.
                 return;
             if (!silent)
-                Log.Message.Exit2(app_name + " is already running, so this instance will exit.");
+                LogMessage.Exit2(app_name + " is already running, so this instance will exit.");
             else
                 Environment.Exit(0);
         }

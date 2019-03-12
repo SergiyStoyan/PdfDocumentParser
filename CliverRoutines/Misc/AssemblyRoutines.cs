@@ -34,10 +34,10 @@ namespace Cliver
             return dt.ToString("yy-MM-dd-HH-mm-ss");
         }
 
-        public static System.Drawing.Icon GetAppIcon(Assembly assembly = null)
-        {
-            return System.Drawing.Icon.ExtractAssociatedIcon((assembly != null ? assembly : Assembly.GetEntryAssembly()).Location);
-        }
+        //public static System.Drawing.Icon GetAppIcon(Assembly assembly = null)
+        //{
+        //    return System.Drawing.Icon.ExtractAssociatedIcon((assembly != null ? assembly : Assembly.GetEntryAssembly()).Location);
+        //}
 
         //public static System.Windows.Media.ImageSource GetAppIconImageSource()
         //{

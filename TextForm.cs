@@ -7,7 +7,7 @@ namespace Cliver.PdfDocumentParser
         public TextForm(string caption, string t, bool html)
         {
             InitializeComponent();
-            this.Icon = AssemblyRoutines.GetAppIcon();
+            this.Icon = Win.AssemblyRoutines.GetAppIcon();
             Text = AboutBox.AssemblyProduct + ": " + caption;// Application.ProductName;
 
             if (html)

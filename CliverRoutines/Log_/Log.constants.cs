@@ -125,7 +125,7 @@ namespace Cliver
                         workDir = PathRoutines.GetNormalizedPath(workDir, false);
                         if (writeLog)
                             if (Directory.Exists(workDir) && deleteLogsOlderDays >= 0)
-                                deletingOldLogsThread = startThread(() => { Log.DeleteOldLogs(deleteLogsOlderDays, ShowDeleteOldLogsDialog); });//to avoid a concurrent loop while accessing the log file from the same thread 
+                                deletingOldLogsThread = startThread(() => { Log.DeleteOldLogs(deleteLogsOlderDays, DeleteOldLogsDialog); });//to avoid a concurrent loop while accessing the log file from the same thread 
                             else
                                 throw new Exception("Could not create log folder!");
                     }
@@ -225,7 +225,7 @@ namespace Cliver
         /// <summary>
         /// Deletes Log data from disk that is older than the specified threshold
         /// </summary>
-        public static void DeleteOldLogs(int deleteLogsOlderDays, bool show_dialog)
+        public static void DeleteOldLogs(int deleteLogsOlderDays, Func<string, bool> askYesNo = null)
         {
             //ThreadWriter tw = Log.Main;
             //Log.Main.Inform("test");
@@ -258,10 +258,10 @@ namespace Cliver
                                     continue;
                                 if (alert != null)
                                 {
-                                    if (!show_dialog)
+                                    if (askYesNo == null)
                                         Log.Main.Inform("Deleting session data including caches and logs older than " + FirstLogDate.ToString());
                                     else
-                                    if (!Log.Message.AskYesNo(alert, true))
+                                    if (!askYesNo(alert))
                                         return;
                                     alert = null;
                                 }
@@ -272,7 +272,7 @@ namespace Cliver
                                 }
                                 catch (Exception e)
                                 {
-                                    Log.Message.Error(e);
+                                    Log.Error(e);
                                 }
                             }
                             break;
@@ -284,10 +284,10 @@ namespace Cliver
                                     continue;
                                 if (alert != null)
                                 {
-                                    if (!show_dialog)
+                                    if (askYesNo==null)
                                         Log.Main.Inform("Deleting logs older than " + FirstLogDate.ToString());
                                     else
-                                    if (!Log.Message.AskYesNo(alert, true))
+                                    if (!askYesNo(alert))
                                         return;
                                     alert = null;
                                 }
@@ -298,7 +298,7 @@ namespace Cliver
                                 }
                                 catch (Exception e)
                                 {
-                                    Log.Message.Error(e);
+                                    Log.Error(e);
                                 }
                             }
                             break;
@@ -330,7 +330,7 @@ namespace Cliver
         //    }
         //    catch (Exception e)
         //    {
-        //        Log.Message.Exit(e);
+        //        LogMessage.Exit(e);
         //    }
 
         //    return null;

@@ -20,7 +20,7 @@ namespace Cliver.PdfDocumentParser
         {
             InitializeComponent();
 
-            Icon = AssemblyRoutines.GetAppIcon();
+            Icon = Win.AssemblyRoutines.GetAppIcon();
             Text = Program.Name + ": Template Editor";
 
             this.templateManager = templateManager;
@@ -313,7 +313,7 @@ namespace Cliver.PdfDocumentParser
 
                     if (!File.Exists(testFile.Text))
                     {
-                        Log.Message.Error("File '" + testFile.Text + "' does not exist!");
+                        Win.LogMessage.Error("File '" + testFile.Text + "' does not exist!");
                         return;
                     }
 
@@ -324,7 +324,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 catch (Exception ex)
                 {
-                    Log.Message.Error(ex);
+                    Win.LogMessage.Error(ex);
                 }
             };
 

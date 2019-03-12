@@ -147,7 +147,6 @@
     <Compile Include="Log_\Log.static.cs" />
     <Compile Include="Log_\Log.ThreadWriter.cs" />
     <Compile Include="Log_\Log.Writer.cs" />
-    <Compile Include="Log_\Log.Message.cs" />
     <Compile Include="Misc\WebClient.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -156,15 +155,10 @@
     <Compile Include="ListDb.Table.cs" />
     <Compile Include="Misc\FileSystemRoutines.cs" />
     <Compile Include="Misc\Crypto.cs" />
-    <Compile Include="Db\DbCommand.cs" />
-    <Compile Include="Db\DbConnection.cs" />
     <Compile Include="Misc\FieldPreparation.cs" />
-    <Compile Include="InternetDateTime.cs" />
     <Compile Include="Misc\Enum.cs" />
     <Compile Include="Misc\AssemblyRoutines.cs" />
-    <Compile Include="Misc\ImageRoutines.cs" />
     <Compile Include="Misc\SocketRoutines.cs" />
-    <Compile Include="Misc\ProgramRoutines.cs" />
     <Compile Include="Misc\ConvertionRoutines.cs" />
     <Compile Include="Misc\ReflectionRoutines.cs" />
     <Compile Include="Misc\NetworkRoutines.cs" />

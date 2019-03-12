@@ -34,8 +34,8 @@ namespace Cliver
 
         public static string Move2Attribute(this XmlTextReader xtr, string attribute_name, bool ignore_case = false)
         {
-            try
-            {
+            //try
+            //{
                 xtr.MoveToFirstAttribute();
                 do
                 {
@@ -43,18 +43,18 @@ namespace Cliver
                         return xtr.Value;
                 }
                 while (xtr.MoveToNextAttribute());
-            }
-            catch (Exception e)
-            {
-                Log.Message.Error(e);
-            }
+            //}
+            //catch (Exception e)
+            //{
+            //    LogMessage.Error(e);
+            //}
             return null;
         }
 
         public static Dictionary<string, string> GetAttributeName2AttributeValues(this XmlTextReader xtr, Regex attribute_name_filter)
         {
-            try
-            {
+            //try
+            //{
                 Dictionary<string, string> n2vs = new Dictionary<string, string>();
                 xtr.MoveToFirstAttribute();
                 do
@@ -64,12 +64,12 @@ namespace Cliver
                 }
                 while (xtr.MoveToNextAttribute());
                 return n2vs;
-            }
-            catch (Exception e)
-            {
-                Log.Message.Error(e);
-            }
-            return null;
+            //}
+            //catch (Exception e)
+            //{
+            //    LogMessage.Error(e);
+            //}
+            //return null;
         }
 
         public static void WriteElement(this XmlTextWriter xtw, string element_name, params string[] attribute_value_pairs)

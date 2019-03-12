@@ -8,7 +8,6 @@
 //********************************************************************************************
 using System;
 using System.Threading;
-using System.Windows.Forms;
 
 namespace Cliver
 {
@@ -29,7 +28,7 @@ namespace Cliver
 
         public delegate void ErrorHandler(Exception e);
 
-        public static Thread StartTry(MethodInvoker code, ErrorHandler on_error = null, MethodInvoker on_finally = null, bool background = true, ApartmentState state = ApartmentState.Unknown)
+        public static Thread StartTry(Action code, ErrorHandler on_error = null, Action on_finally = null, bool background = true, ApartmentState state = ApartmentState.Unknown)
         {
             Thread t = new Thread(
                 () =>

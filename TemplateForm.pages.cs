@@ -213,8 +213,8 @@ namespace Cliver.PdfDocumentParser
             }
             catch (Exception ex)
             {
-                //Log.Message.Error("Rectangle", ex);
-                Log.Message.Error(ex);
+                //Win.LogMessage.Error("Rectangle", ex);
+                Win.LogMessage.Error(ex);
             }
             return null;
         }
@@ -314,7 +314,7 @@ namespace Cliver.PdfDocumentParser
             }
             catch (Exception e)
             {
-                Log.Message.Error(e);
+                Win.LogMessage.Error(e);
             }
         }
         int currentPageI;
@@ -345,7 +345,7 @@ namespace Cliver.PdfDocumentParser
             }
             else
             {
-                Log.Message.Error("Page is not a number.");
+                Win.LogMessage.Error("Page is not a number.");
                 tCurrentPage.Text = currentPageI.ToString();
             }
         }

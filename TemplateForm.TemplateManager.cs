@@ -24,7 +24,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 catch (Exception ex)
                 {
-                    Log.Message.Error(ex);
+                    Win.LogMessage.Error(ex);
                 }
             }
 

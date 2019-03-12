@@ -23,7 +23,7 @@ InternetDateTime.CHECK_TEST_PERIOD_VALIDITY(2008, 11, 8);
 
 #if TEST_VERSION && !DEBUG
 				if(new DateTime(2006, 3, 11) < InternetDateTime.GetOverHttps())
-					Log.Message.Exit("Test time expired");
+					LogMessage.Exit("Test time expired");
 #endif	  
  
 */
@@ -34,7 +34,7 @@ using System.Reflection;
 using System.Diagnostics;
 using System.Threading;
 
-namespace Cliver
+namespace Cliver.Win
 {
     /// <summary>
     /// Get current time from internet. Used to control test period.
@@ -80,15 +80,15 @@ namespace Cliver
                 //    return;
                 //if (for_release_only && !IsReleaseVersion(Assembly.GetEntryAssembly()))
                 //    return;
-                //Log.Message.Inform("It is a demo version that is valid until " + year + "-" + month + "-" + day);
+                //LogMessage.Inform("It is a demo version that is valid until " + year + "-" + month + "-" + day);
                 if (!silently)
-                    Log.Main.Inform("It is a demo version that is valid until " + year + "-" + month + "-" + day);
+                    Cliver.Log.Main.Inform("It is a demo version that is valid until " + year + "-" + month + "-" + day);
                 ThreadRoutines.StartTry(() =>
                 {
                     if (new DateTime(year, month, day) < InternetDateTime.GetOverHttp())
                     {
                         Action a = (Action)(() => {
-                            Log.Message.Exit("The test time expired. \nPlease contact the vendor if you want to use this software.");
+                            LogMessage.Exit("The test time expired. \nPlease contact the vendor if you want to use this software.");
                         });
                         if (System.Windows.Forms.Application.OpenForms.Count > 0)
                             System.Windows.Forms.Application.OpenForms[0].Invoke(a);
@@ -107,13 +107,13 @@ namespace Cliver
                 },
                 (Exception e) =>
                 {
-                    Log.Message.Exit(e);
+                    LogMessage.Exit(e);
                 }
                 );
             }
             catch (Exception e)
             {
-                Log.Message.Exit(e);
+                LogMessage.Exit(e);
             }
         }
         static bool silently = false;
@@ -176,9 +176,9 @@ namespace Cliver
             catch (Exception e)
             {
                 if (silently)
-                    Log.Main.Error("Validation failed.\n\n" + e.Message);
+                    Cliver.Log.Main.Error("Validation failed.\n\n" + e.Message);
                 else
-                    Log.Message.Exit("Test period validation failed.\n\n" + e.Message);
+                    LogMessage.Exit("Test period validation failed.\n\n" + e.Message);
                 //Environment.Exit(0);
             }
 

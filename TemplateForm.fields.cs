@@ -210,7 +210,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 catch (Exception ex)
                 {
-                    //Log.Message.Error("Name", ex);
+                    //Win.LogMessage.Error("Name", ex);
                     Message.Error2(ex);
                     e.Cancel = true;
                 }
@@ -259,7 +259,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 catch (Exception ex)
                 {
-                    Log.Message.Error(ex);
+                    Win.LogMessage.Error(ex);
                 }
             };
 
@@ -334,7 +334,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 catch (Exception e)
                 {
-                    Log.Message.Error(e);
+                    Win.LogMessage.Error(e);
                 }
                 finally
                 {
@@ -431,7 +431,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 catch (Exception e)
                 {
-                    Log.Message.Error(e);
+                    Win.LogMessage.Error(e);
                 }
                 finally
                 {
@@ -513,7 +513,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 catch (Exception e)
                 {
-                    Log.Message.Error(e);
+                    Win.LogMessage.Error(e);
                 }
                 finally
                 {
@@ -545,7 +545,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 catch (Exception e)
                 {
-                    Log.Message.Error(e);
+                    Win.LogMessage.Error(e);
                 }
                 finally
                 {

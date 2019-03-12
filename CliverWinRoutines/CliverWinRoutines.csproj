@@ -150,6 +150,8 @@
     <Compile Include="BaseForm\BaseForm.designer.cs">
       <DependentUpon>BaseForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="WinRoutines\ProgramRoutines.cs" />
+    <Compile Include="WinRoutines\ImageRoutines.cs" />
     <Compile Include="BaseForm\Message.cs" />
     <Compile Include="BaseForm\MessageForm.cs">
       <SubType>Form</SubType>
@@ -158,8 +160,11 @@
       <DependentUpon>MessageForm.cs</DependentUpon>
     </Compile>
     <Compile Include="BaseService.cs" />
+    <Compile Include="BaseForm\Log.Message.cs" />
+    <Compile Include="Db\DbCommand.cs" />
+    <Compile Include="Db\DbConnection.cs" />
+    <Compile Include="InternetDateTime.cs" />
     <Compile Include="WinRoutines\AssemblyRoutines.cs" />
-    <Compile Include="WinRoutines\ImageRoutines.cs" />
     <Compile Include="WinRoutines\ThreadRoutines.cs" />
     <Compile Include="WinRoutines\WebClient.cs">
       <SubType>Component</SubType>

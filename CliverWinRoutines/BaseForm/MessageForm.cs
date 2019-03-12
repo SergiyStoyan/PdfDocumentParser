@@ -1,5 +1,5 @@
 //********************************************************************************************
-//Author: Sergey Stoyan, CliverSoft.com
+//Author: Sergey Stoyan, CliverSoft.comAssemblyRoutines.GetAppIcon
 //        http://cliversoft.com
 //        stoyan@cliversoft.com
 //        sergey.stoyan@gmail.com
@@ -24,7 +24,7 @@ namespace Cliver
             
             CreateHandle();
 
-            this.Icon = AssemblyRoutines.GetAppIcon();
+            this.Icon = Win.AssemblyRoutines.GetAppIcon();
 
             this.MaximizeBox = true;
 

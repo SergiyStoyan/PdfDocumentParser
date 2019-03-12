@@ -36,7 +36,7 @@ namespace Cliver
         static Mode mode = Mode.ONLY_LOG;
         static string session_name_prefix = "Session";
 
-        public static bool ShowDeleteOldLogsDialog = true;
+        public static Func<string, bool> DeleteOldLogsDialog = null;
 
         public enum Mode
         {
@@ -220,7 +220,7 @@ namespace Cliver
                     break;
                 MethodBase mb = sf.GetMethod();
                 Type dt = mb.DeclaringType;
-                if (dt != typeof(Log) && dt != typeof(Log.Writer) && dt != typeof(Log.Message))
+                if (dt != typeof(Log) && dt != typeof(Log.Writer) && TypesExcludedFromStack?.Find(x => x == dt) == null)
                     break;
             }
             List<string> frameSs = new List<string>();
@@ -239,6 +239,7 @@ namespace Cliver
             }
             return string.Join("\r\n<=", frameSs);
         }
+        static List<Type> TypesExcludedFromStack = null;
 
         public static string GetExceptionMessage(Exception e)
         {
@@ -246,6 +247,14 @@ namespace Cliver
             string d;
             GetExceptionMessage(e, out m, out d);
             return m + " \r\n\r\n" + d;
+        }
+
+        public static string GetExceptionMessage2(Exception e)
+        {
+            string m;
+            string d;
+            GetExceptionMessage(e, out m, out d);
+            return m;
         }
 
         //        static public void GetExceptionMessage(Exception e, out string message, out string details)
@@ -303,14 +312,14 @@ namespace Cliver
         //}
     }
 
-    public class TerminatingException : Exception
-    {
-        public TerminatingException(string message)
-            : base(message)
-        {
-            Log.Message.Exit(message);
-        }
-    }
+    //public class TerminatingException : Exception
+    //{
+    //    public TerminatingException(string message)
+    //        : base(message)
+    //    {
+    //        LogMessage.Exit(message);
+    //    }
+    //}
 
     public class Exception2 : Exception
     {
