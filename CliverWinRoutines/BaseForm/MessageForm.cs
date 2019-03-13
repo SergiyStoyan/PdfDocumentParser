@@ -1,5 +1,5 @@
 //********************************************************************************************
-//Author: Sergey Stoyan, CliverSoft.comAssemblyRoutines.GetAppIcon
+//Author: Sergey Stoyan, CliverSoft.com
 //        http://cliversoft.com
 //        stoyan@cliversoft.com
 //        sergey.stoyan@gmail.com
