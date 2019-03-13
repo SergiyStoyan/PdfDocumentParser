@@ -161,7 +161,7 @@
       <DependentUpon>MessageForm.cs</DependentUpon>
     </Compile>
     <Compile Include="BaseService.cs" />
-    <Compile Include="BaseForm\Log.Message.cs" />
+    <Compile Include="BaseForm\LogMessage.cs" />
     <Compile Include="Db\DbCommand.cs" />
     <Compile Include="Db\DbConnection.cs" />
     <Compile Include="InternetDateTime.cs" />
