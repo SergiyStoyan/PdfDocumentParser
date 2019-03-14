@@ -114,6 +114,11 @@ namespace Cliver
             ThreadWriter.This.Error(e);
         }
 
+        public static void Error(string message, Exception e)
+        {
+            ThreadWriter.This.Error(message, e);
+        }
+
         /// <summary>
         /// Write the error to the current thread's log
         /// </summary>
