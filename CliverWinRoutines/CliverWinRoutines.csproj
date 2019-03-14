@@ -7,7 +7,8 @@
     <ProjectGuid>{51F2DF13-41F1-4F22-890F-C3B50C813909}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ApplicationIcon>3RINGS~1.ICO</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>CliverWinRoutines</AssemblyName>
@@ -231,9 +232,6 @@
       <ProductName>SQL Server Compact 4.0 SP1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="3RINGS~1.ICO" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
