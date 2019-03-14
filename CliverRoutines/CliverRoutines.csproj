@@ -99,9 +99,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup />
-  <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualBasic" />
@@ -169,7 +167,6 @@
     <Compile Include="Misc\SleepRoutines.cs" />
     <Compile Include="Misc\DateTimeRoutines.cs" />
     <Compile Include="Misc\PathRoutines.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\Config.cs" />
     <Compile Include="Serialization\Serializable.cs" />
     <Compile Include="Serialization\Serialization.Binary.cs" />
@@ -212,9 +209,10 @@
     <Content Include="3RINGS~1.ICO" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="app.manifest" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
