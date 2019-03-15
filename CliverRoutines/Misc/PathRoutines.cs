@@ -20,16 +20,30 @@ namespace Cliver
     {
         public static bool ArePathsEqual(string path1, string path2)
         {
-            var p1 = Path.GetFullPath(path1).Trim().ToLower();
-            var p2 = Path.GetFullPath(path2).Trim().ToLower();
+            var p1 = GetNormalizedPath(path1, true);
+            var p2 = GetNormalizedPath(path2, true);
             return p1 == p2;
         }
 
-        public static string GetNormalizedPath(string path, bool upper_case)
+        public static bool IsPathWithinPath(string path1, string path2)
+        {
+            var p1 = GetNormalizedPath(path1, true);
+            var p2 = GetNormalizedPath(path2, true);
+            string[] p1s = p1.Split(Path.DirectorySeparatorChar);
+            string[] p2s = p2.Split(Path.DirectorySeparatorChar);
+            if (p1s.Length < p2s.Length)
+                return false;
+            for (int i = 0; i < p2s.Length; i++)
+                if (p1s[i] != p2s[i])
+                    return false;
+            return true;
+        }
+
+        public static string GetNormalizedPath(string path, bool lowerCaseIfIsCaseInsensitive)
         {
             string p = Path.GetFullPath(new Uri(path).LocalPath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-            if (upper_case)
-                return p.ToUpperInvariant();
+            if (lowerCaseIfIsCaseInsensitive && !FileSystemRoutines.IsCaseSensitive)
+                return p.ToLowerInvariant();
             return p;
         }
 
@@ -116,4 +130,3 @@ namespace Cliver
         }
     }
 }
-

@@ -6,6 +6,20 @@ namespace Cliver
 {
     public class FileSystemRoutines
     {
+        public static bool IsCaseSensitive
+        {
+            get
+            {
+                if (isCaseSensitive == null)
+                {
+                    var tmp = Path.GetTempPath();
+                    isCaseSensitive = !Directory.Exists(tmp.ToUpper()) || !Directory.Exists(tmp.ToLower());
+                }
+                return (bool)isCaseSensitive;
+            }
+        }
+        static bool? isCaseSensitive = null;
+
         static public List<string> GetFiles(string directory, bool include_subfolders = true)
         {
             List<string> fs = Directory.EnumerateFiles(directory).ToList();
