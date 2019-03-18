@@ -22,7 +22,7 @@ namespace Cliver.SampleParser
         {
             InitializeComponent();
 
-            this.Icon = AssemblyRoutines.GetAppIcon();
+            this.Icon = Win.AssemblyRoutines.GetAppIcon();
             Text = "Filtered Files";
             files.ReadOnly = true;
 

@@ -22,7 +22,7 @@ namespace Cliver.SampleParser
         {
             InitializeComponent();
 
-            this.Icon = AssemblyRoutines.GetAppIcon();
+            this.Icon = Win.AssemblyRoutines.GetAppIcon();
             Text = Application.ProductName + ": additional properties of '" + t.Template.Name + "'";
 
             template2 = t;
@@ -47,7 +47,7 @@ namespace Cliver.SampleParser
             }
             catch (Exception ex)
             {
-                Log.Message.Error(ex);
+                Win.LogMessage.Error(ex);
             }
         }
 

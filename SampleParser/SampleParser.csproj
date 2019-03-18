@@ -231,7 +231,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CliverRoutines\CliverRoutines.csproj">
-      <Project>{aca94788-bed1-4b8e-94ef-e54293e8d139}</Project>
+      <Project>{e88444ba-1b07-40e6-96d1-922d27965f91}</Project>
       <Name>CliverRoutines</Name>
     </ProjectReference>
     <ProjectReference Include="..\CliverWinRoutines\CliverWinRoutines.csproj">

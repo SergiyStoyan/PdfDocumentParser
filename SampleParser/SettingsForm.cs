@@ -43,7 +43,7 @@ namespace Cliver.SampleParser
         {
             InitializeComponent();
 
-            this.Icon = AssemblyRoutines.GetAppIcon();
+            this.Icon = Win.AssemblyRoutines.GetAppIcon();
             Text = Application.ProductName;
 
             //important.Text = "Important! Letting folder '" + Config.StorageDir + "' be synchronized by a remote drive application may bring to malfunction.";

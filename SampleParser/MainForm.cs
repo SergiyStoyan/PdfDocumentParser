@@ -37,7 +37,7 @@ namespace Cliver.SampleParser
         {
             InitializeComponent();
 
-            this.Icon = AssemblyRoutines.GetAppIcon();
+            this.Icon = Win.AssemblyRoutines.GetAppIcon();
             Text = Program.Name + " [" + Program.Version + "] / " + PdfDocumentParser.Program.Name + " [" + PdfDocumentParser.Program.Version.ToString(2) + "]";
 
             Message.Owner = this;
@@ -183,7 +183,7 @@ namespace Cliver.SampleParser
                 }
                 catch (Exception ex)
                 {
-                    Log.Message.Error(ex);
+                    Win.LogMessage.Error(ex);
                 }
             };
 
@@ -392,7 +392,7 @@ namespace Cliver.SampleParser
             }
             catch (Exception e)
             {
-                Log.Message.Error(e);
+                Win.LogMessage.Error(e);
                 return false;
             }
         }
@@ -422,7 +422,7 @@ namespace Cliver.SampleParser
             }
             catch (Exception ex)
             {
-                Log.Message.Error(ex);
+                Win.LogMessage.Error(ex);
             }
         }
 
@@ -443,7 +443,7 @@ namespace Cliver.SampleParser
         {
             if (processorThread != null && processorThread.IsAlive)
             {
-                if (!Log.Message.AskYesNo("Processing is running. Would you like to abort it and restart?", true))
+                if (!Win.LogMessage.AskYesNo("Processing is running. Would you like to abort it and restart?", true))
                     return;
                 while (processorThread.IsAlive)
                 {
@@ -491,7 +491,7 @@ namespace Cliver.SampleParser
                     }
                     catch (Exception ex)
                     {
-                        Log.Message.Error(ex);
+                        Win.LogMessage.Error(ex);
                     }
                     finally
                     {
@@ -513,7 +513,7 @@ namespace Cliver.SampleParser
         {
             if (processorThread != null && processorThread.IsAlive)
             {
-                if (!Log.Message.AskYesNo("Processing is running. Would you like to abort it?", true))
+                if (!Win.LogMessage.AskYesNo("Processing is running. Would you like to abort it?", true))
                     return;
             }
             Close();
