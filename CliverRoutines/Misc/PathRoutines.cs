@@ -25,10 +25,10 @@ namespace Cliver
             return p1 == p2;
         }
 
-        public static bool IsPathWithinPath(string path1, string path2)
+        public static bool IsDirWithinDir(string dir1, string dir2)
         {
-            var p1 = GetNormalizedPath(path1, true);
-            var p2 = GetNormalizedPath(path2, true);
+            var p1 = GetNormalizedPath(dir1, true);
+            var p2 = GetNormalizedPath(dir2, true);
             string[] p1s = p1.Split(Path.DirectorySeparatorChar);
             string[] p2s = p2.Split(Path.DirectorySeparatorChar);
             if (p1s.Length < p2s.Length)
