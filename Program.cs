@@ -12,12 +12,11 @@ using System.Reflection;
 /*
 TBD: 
 - check if tesseract's DetectBestOrientation can perform deskew;
-- MainForm and TemplateForm to WPF;
+- migrate to WPF;
 - tune image recognition by checking brightness deltas
 - ?switch to Tesseract.4
 - ?provide multiple field extraction on page;
 - ?change anchor id->name (involves condition expressions)
-- ?store each template in separate file;
 
  */
 /*
