@@ -332,5 +332,10 @@ namespace Cliver
             : base(message)
         {
         }
+
+        public Exception2(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
     }
 }

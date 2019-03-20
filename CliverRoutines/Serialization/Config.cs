@@ -138,10 +138,11 @@ namespace Cliver
 
                             Serializable t;
 
-                            string file = (fi.FieldType.BaseType == typeof(UserSettings) ? UserSettings.StorageDir : (fi.FieldType.BaseType == typeof(AppSettings) ? AppSettings.StorageDir : StorageDir)) + System.IO.Path.DirectorySeparatorChar + fullName + "." + FILE_EXTENSION;
+                            string fileName = fullName + "." + FILE_EXTENSION;
+                            string file = (fi.FieldType.BaseType == typeof(UserSettings) ? UserSettings.StorageDir : (fi.FieldType.BaseType == typeof(AppSettings) ? AppSettings.StorageDir : StorageDir)) + System.IO.Path.DirectorySeparatorChar + fileName;
                             if (reset)
                             {
-                                string initFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + fullName + "." + FILE_EXTENSION;
+                                string initFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + fileName;
                                 if (File.Exists(initFile))
                                 {
                                     FileSystemRoutines.CopyFile(initFile, file, true);
@@ -164,7 +165,7 @@ namespace Cliver
                                     //    ignore_load_error = true;
                                     //if (!ignore_load_error)
                                     //    LogMessage.Error2(e);
-                                    string initFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + fullName + "." + FILE_EXTENSION;
+                                    string initFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + fileName;
                                     if (File.Exists(initFile))
                                     {
                                         FileSystemRoutines.CopyFile(initFile, file, true);
@@ -204,7 +205,8 @@ namespace Cliver
                         if (fi != null)
                         {
                             Serializable t;
-                            string file = (fi.FieldType.BaseType == typeof(UserSettings) ? UserSettings.StorageDir : (fi.FieldType.BaseType == typeof(AppSettings) ? AppSettings.StorageDir : StorageDir)) + System.IO.Path.DirectorySeparatorChar + fullName + "." + FILE_EXTENSION;
+                            string fileName = fullName + "." + FILE_EXTENSION;
+                            string file = (fi.FieldType.BaseType == typeof(UserSettings) ? UserSettings.StorageDir : (fi.FieldType.BaseType == typeof(AppSettings) ? AppSettings.StorageDir : StorageDir)) + System.IO.Path.DirectorySeparatorChar + fileName;
                             try
                             {
                                 t = Serializable.Load(fi.FieldType, file);
@@ -217,7 +219,7 @@ namespace Cliver
                                 //    ignore_load_error = true;
                                 //if (!ignore_load_error)
                                 //    LogMessage.Error2(e);
-                                string initFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + fullName + "." + FILE_EXTENSION;
+                                string initFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + fileName;
                                 if (File.Exists(initFile))
                                 {
                                     FileSystemRoutines.CopyFile(initFile, file, true);
