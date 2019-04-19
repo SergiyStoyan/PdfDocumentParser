@@ -24,7 +24,7 @@ namespace Cliver
 
         public class IndexedTable<D> : Table<D>, IDisposable where D : IndexedDocument, new()
         {
-            public static IndexedTable<D> Get(string directory = null)
+            new public static IndexedTable<D> Get(string directory = null)
             {
                 directory = get_normalized_directory(directory);
                 WeakReference wr;

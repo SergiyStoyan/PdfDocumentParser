@@ -77,13 +77,13 @@ namespace Cliver
 
         public static void CopyFile(string file1, string file2, bool overwrite = false)
         {
-            CreateDirectory(PathRoutines.GetDirFromPath(file2), false);
+            CreateDirectory(PathRoutines.GetFileDir(file2), false);
             File.Copy(file1, file2, overwrite);
         }
 
         public static void MoveFile(string file1, string file2, bool overwrite = true)
         {
-            CreateDirectory(PathRoutines.GetDirFromPath(file2), false);
+            CreateDirectory(PathRoutines.GetFileDir(file2), false);
             if (File.Exists(file2))
             {
                 if (!overwrite)

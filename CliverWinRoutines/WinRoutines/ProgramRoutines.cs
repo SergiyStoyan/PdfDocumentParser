@@ -97,7 +97,7 @@ namespace Cliver
 
         static public string GetAppDirectory()
         {
-            return PathRoutines.GetDirFromPath(GetAppPath()).TrimEnd('\\', '/');
+            return PathRoutines.GetFileDir(GetAppPath()).TrimEnd('\\', '/');
         }
 
         static public string GetAppName()

@@ -41,7 +41,7 @@ namespace Cliver
 
         public static string GetNormalizedPath(string path, bool lowerCaseIfIsCaseInsensitive)
         {
-            string p = Path.GetFullPath(new Uri(path).LocalPath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            string p = Path.GetFullPath(new Uri(path).LocalPath).TrimEnd(Path.DirectorySeparatorChar);
             if (lowerCaseIfIsCaseInsensitive && !FileSystemRoutines.IsCaseSensitive)
                 return p.ToLowerInvariant();
             return p;
@@ -51,82 +51,94 @@ namespace Cliver
         {
             if (Path.IsPathRooted(path))
                 return path;
-            return Log.AppDir + System.IO.Path.DirectorySeparatorChar + path;
+            return Log.AppDir + Path.DirectorySeparatorChar + path;
         }
 
         /// <summary>
-        /// Clear file name from entities
+        /// Clean file name from entities
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="file"></param>
         /// <returns></returns>
-        public static string GetNormalizedFileName(string path)
+        public static string GetNormalizedFileName(string file)
         {
-            path = HttpUtility.HtmlDecode(path);
-            path = HttpUtility.UrlDecode(path);
+            file = HttpUtility.HtmlDecode(file);
+            file = HttpUtility.UrlDecode(file);
             char[] cs = new char[2] { '/', '\\' };
-            return Regex.Replace(path.Substring(path.LastIndexOfAny(cs) + 1), @"[^\w]", "-", RegexOptions.Compiled);
+            return Regex.Replace(file.Substring(file.LastIndexOfAny(cs) + 1), @"[^\w]", "-");
         }
 
         /// <summary>
         /// Works for any length path unlike Path.GetFileName()
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="file"></param>
         /// <returns></returns>
-        public static string GetFileNameFromPath(string path)
+        public static string GetFileName(string file)
         {
-            return Regex.Replace(path, @".*[\\\/]", "", RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled);
+            return Regex.Replace(file, @".*"+ Regex.Escape(Path.DirectorySeparatorChar.ToString()), "", RegexOptions.IgnoreCase | RegexOptions.Singleline);
         }
 
-        public static string GetFileNameWithoutExtentionFromPath(string path)
+        public static string GetFileNameWithoutExtention(string file)
         {
-            string n = GetFileNameFromPath(path);
-            return Regex.Replace(n, @"\.[^\.]*$", "", RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled);
+            string n = GetFileName(file);
+            return Regex.Replace(n, @"\.[^\.]*$", "", RegexOptions.IgnoreCase | RegexOptions.Singleline);
         }
 
-        public static string GetDirNameFromPath(string path)
+        /// <summary>
+        /// Works for any length path unlike Path.GetFileName()
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <returns></returns>
+        public static string GetDirName(string dir)
         {
-            return Regex.Replace(path.TrimEnd(Path.DirectorySeparatorChar), @".*\\\/", "", RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled);
+            return Regex.Replace(dir.TrimEnd(Path.DirectorySeparatorChar), @".*" + Regex.Escape(Path.DirectorySeparatorChar.ToString()), "", RegexOptions.IgnoreCase | RegexOptions.Singleline);
         }
 
-        public static string InsertSuffixBeforeFileExtension(string path, string suffix)
+        public static string InsertSuffixBeforeFileExtension(string file, string suffix)
         {
-            Match m = Regex.Match(path, @"(.*)(\.[^\\\/]*)$", RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled);
+            Match m = Regex.Match(file, @"(.*)(\.[^" + Regex.Escape(Path.DirectorySeparatorChar.ToString()) + "]*)$", RegexOptions.IgnoreCase | RegexOptions.Singleline);
             if (m.Success)
                 return m.Groups[1].Value + suffix + m.Groups[2].Value;
-            return path + suffix;
+            return file + suffix;
         }
 
         /// <summary>
         /// Works for any length path unlike Path.GetFileName()
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="file"></param>
         /// <returns></returns>
-        public static string GetFileExtensionFromPath(string path)
+        public static string GetFileExtension(string file)
         {
-            return Regex.Replace(path, @".*\.", "", RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled);
+            return Regex.Replace(file, @".*\.", "", RegexOptions.IgnoreCase | RegexOptions.Singleline);
         }
 
         /// <summary>
         /// Works for any length path unlike Path.GetDir()
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="file"></param>
         /// <returns></returns>        
-        public static string GetDirFromPath(string path)
+        public static string GetFileDir(string file)
         {
-            return Regex.Replace(path, @"[^\\\/]*$", "", RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled);
+            return Regex.Replace(file, @"[^"+ Regex.Escape(Path.DirectorySeparatorChar.ToString()) + @"]*$", "", RegexOptions.IgnoreCase | RegexOptions.Singleline);
         }
 
-        public static string ReplaceFileExtention(string path, string extention)
+        public static string ReplaceFileExtention(string file, string extention)
         {
-            return Regex.Replace(path, @"\.[^\.]+$", "." + extention, RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled);
+            return Regex.Replace(file, @"\.[^\.]+$", "." + extention, RegexOptions.IgnoreCase | RegexOptions.Singleline);
         }
 
-        public static string GetPathMirroredInDir(string path, string root_dir, string mirror_dir)
+        public static string GetPathMirroredInDir(string path, string rootDir, string mirrorDir)
         {
             string p = GetNormalizedPath(path, false);
-            string rd = GetNormalizedPath(root_dir, false);
-            string md = GetNormalizedPath(mirror_dir, false);
-            return Regex.Replace(p, Regex.Escape(rd), md);
+            string rd = GetNormalizedPath(rootDir, false);
+            string md = GetNormalizedPath(mirrorDir, false);
+            return Regex.Replace(p, @"^\s*" + Regex.Escape(rd), md);
+        }
+
+        public static string GetRelativePath(string path, string baseDir)
+        {
+            string p = GetNormalizedPath(path, false);
+            string bd = GetNormalizedPath(baseDir, false);
+            return Regex.Replace(p, @"^\s*" + Regex.Escape(bd), "");
         }
     }
 }

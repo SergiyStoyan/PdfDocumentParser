@@ -280,7 +280,7 @@ namespace Cliver
                     System.IO.File.Delete(Log);
             }
 
-            public void Clear()
+            new public void Clear()
             {
                 base.Clear();
 
@@ -330,7 +330,7 @@ namespace Cliver
             /// Table works as an ordered HashSet
             /// </summary>
             /// <param name="document"></param>
-            virtual public Results Add(D document)
+            new virtual public Results Add(D document)
             {
                 int i = base.IndexOf(document);
                 if (i >= 0)
@@ -352,17 +352,17 @@ namespace Cliver
                 }
             }
 
-            public void AddRange(IEnumerable<D> documents)
+            new public void AddRange(IEnumerable<D> documents)
             {
                 throw new Exception("TBD");
-                base.AddRange(documents);
+                //base.AddRange(documents);
             }
 
             /// <summary>
             /// Table works as an ordered HashSet
             /// </summary>
             /// <param name="document"></param>
-            virtual public Results Insert(int index, D document)
+            new virtual public Results Insert(int index, D document)
             {
                 int i = base.IndexOf(document);
                 if (i >= 0)
@@ -384,13 +384,13 @@ namespace Cliver
                 }
             }
 
-            public void InsertRange(int index, IEnumerable<D> documents)
+            new public void InsertRange(int index, IEnumerable<D> documents)
             {
                 throw new Exception("TBD");
-                base.InsertRange(index, documents);
+                //base.InsertRange(index, documents);
             }
 
-            public bool Remove(D document)
+            new public bool Remove(D document)
             {
                 int i = base.IndexOf(document);
                 if (i >= 0)
@@ -404,19 +404,19 @@ namespace Cliver
                 return false;
             }
 
-            public int RemoveAll(Predicate<D> match)
+            new public int RemoveAll(Predicate<D> match)
             {
                 throw new Exception("TBD");
-                return base.RemoveAll(match);
+                //return base.RemoveAll(match);
             }
 
-            public void RemoveAt(int index)
+            new public void RemoveAt(int index)
             {
                 base.RemoveAt(index);
                 log_writer.WriteLine("deleted: " + index);
             }
 
-            public void RemoveRange(int index, int count)
+            new public void RemoveRange(int index, int count)
             {
                 for (int i = index; i < count; i++)
                 {

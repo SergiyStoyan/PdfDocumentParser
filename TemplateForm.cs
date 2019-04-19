@@ -360,7 +360,7 @@ namespace Cliver.PdfDocumentParser
          {
              OpenFileDialog d = new OpenFileDialog();
              if (!string.IsNullOrWhiteSpace(testFile.Text))
-                 d.InitialDirectory = PathRoutines.GetDirFromPath(testFile.Text);
+                 d.InitialDirectory = PathRoutines.GetFileDir(testFile.Text);
              else
                 if (!string.IsNullOrWhiteSpace(templateManager.TestFileDefaultFolder))
                  d.InitialDirectory = templateManager.TestFileDefaultFolder;

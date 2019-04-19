@@ -46,7 +46,7 @@ namespace Cliver
 
             public static void Save(string file, object o, bool indented = true, bool polymorphic = true, bool ignoreNullProperties = true)
             {
-                FileSystemRoutines.CreateDirectory(PathRoutines.GetDirFromPath(file));
+                FileSystemRoutines.CreateDirectory(PathRoutines.GetFileDir(file));
                 File.WriteAllText(file, Serialize(o, indented, polymorphic, ignoreNullProperties));
             }
 
