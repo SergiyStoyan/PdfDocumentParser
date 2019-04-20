@@ -116,9 +116,12 @@ namespace Cliver
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>        
-        public static string GetFileDir(string file)
+        public static string GetFileDir(string file, bool removeTrailingSeparator = true)
         {
-            return Regex.Replace(file, @"[^"+ Regex.Escape(Path.DirectorySeparatorChar.ToString()) + @"]*$", "", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+            string fd = Regex.Replace(file, @"[^" + Regex.Escape(Path.DirectorySeparatorChar.ToString()) + @"]*$", "", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+            if (removeTrailingSeparator)
+                fd = fd.TrimEnd(Path.DirectorySeparatorChar);
+            return fd;
         }
 
         public static string ReplaceFileExtention(string file, string extention)
