@@ -19,15 +19,6 @@ TBD:
 - ?change anchor id->name (involves condition expressions)
 
  */
-/*
- DONE:
- - side anchors added to field;
- - same name field can have multiple instances to look by order;
- - options added to page::GetValue();
- - fields can be marked as columns of a table;
- - space substitution;
- - anchor functioning changed;
-     */
 namespace Cliver.PdfDocumentParser
 {
     public class Program
