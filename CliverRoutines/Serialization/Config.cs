@@ -118,7 +118,7 @@ namespace Cliver
                 foreach (Assembly sa in sas)
                 {
                     Type[] ets = sa.GetTypes();
-                    foreach (Type st in ets.Where(t => t.IsSubclassOf(typeof(Settings))))
+                    foreach (Type st in ets.Where(t => t.BaseType == typeof(Settings)))
                     {
                         List<FieldInfo> fis = new List<FieldInfo>();
                         foreach (Type et in ets)
