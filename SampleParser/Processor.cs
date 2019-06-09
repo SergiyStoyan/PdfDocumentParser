@@ -67,7 +67,7 @@ namespace Cliver.SampleParser
                     bool? result = PdfProcessor.Process(f, active_templates, (templateName, firstPageI, lastPageI, document) =>
                     {
                         {
-                            List<string> values = new List<string>() { PathRoutines.GetFileNameFromPath(f), templateName, firstPageI.ToString(), lastPageI.ToString(), document.Invoice, document.Total, "", "" };
+                            List<string> values = new List<string>() { PathRoutines.GetFileName(f), templateName, firstPageI.ToString(), lastPageI.ToString(), document.Invoice, document.Total, "", "" };
                             tw.WriteLine(FieldPreparation.GetCsvLine(values, FieldPreparation.FieldSeparator.COMMA));
                         }
                         foreach (PdfProcessor.Document.Product p in document.Products)
