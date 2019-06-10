@@ -68,8 +68,7 @@
             // 
             // PdfPageImageResolution
             // 
-            this.PdfPageImageResolution.Location = new System.Drawing.Point(624, 79);
-            this.PdfPageImageResolution.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.PdfPageImageResolution.Location = new System.Drawing.Point(234, 33);
             this.PdfPageImageResolution.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -81,7 +80,7 @@
             0,
             0});
             this.PdfPageImageResolution.Name = "PdfPageImageResolution";
-            this.PdfPageImageResolution.Size = new System.Drawing.Size(184, 38);
+            this.PdfPageImageResolution.Size = new System.Drawing.Size(69, 20);
             this.PdfPageImageResolution.TabIndex = 47;
             this.PdfPageImageResolution.Value = new decimal(new int[] {
             72,
@@ -92,20 +91,18 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(43, 83);
-            this.label8.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label8.Location = new System.Drawing.Point(16, 35);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(521, 32);
+            this.label8.Size = new System.Drawing.Size(194, 13);
             this.label8.TabIndex = 46;
             this.label8.Text = "Image Resolution (OCR requires>=300):";
             // 
             // bReset
             // 
             this.bReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bReset.Location = new System.Drawing.Point(305, 7);
-            this.bReset.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.bReset.Location = new System.Drawing.Point(115, 3);
             this.bReset.Name = "bReset";
-            this.bReset.Size = new System.Drawing.Size(200, 55);
+            this.bReset.Size = new System.Drawing.Size(75, 23);
             this.bReset.TabIndex = 48;
             this.bReset.Text = "Reset";
             this.bReset.UseVisualStyleBackColor = true;
@@ -114,10 +111,9 @@
             // bSave
             // 
             this.bSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bSave.Location = new System.Drawing.Point(521, 7);
-            this.bSave.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.bSave.Location = new System.Drawing.Point(196, 3);
             this.bSave.Name = "bSave";
-            this.bSave.Size = new System.Drawing.Size(200, 55);
+            this.bSave.Size = new System.Drawing.Size(75, 23);
             this.bSave.TabIndex = 49;
             this.bSave.Text = "Save";
             this.bSave.UseVisualStyleBackColor = true;
@@ -126,10 +122,9 @@
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bCancel.Location = new System.Drawing.Point(737, 7);
-            this.bCancel.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.bCancel.Location = new System.Drawing.Point(277, 3);
             this.bCancel.Name = "bCancel";
-            this.bCancel.Size = new System.Drawing.Size(200, 55);
+            this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 50;
             this.bCancel.Text = "Cancel";
             this.bCancel.UseVisualStyleBackColor = true;
@@ -143,19 +138,17 @@
             this.flowLayoutPanel1.Controls.Add(this.About);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 738);
-            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 322);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(945, 74);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(355, 31);
             this.flowLayoutPanel1.TabIndex = 51;
             // 
             // About
             // 
             this.About.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.About.Location = new System.Drawing.Point(89, 7);
-            this.About.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.About.Location = new System.Drawing.Point(34, 3);
             this.About.Name = "About";
-            this.About.Size = new System.Drawing.Size(200, 55);
+            this.About.Size = new System.Drawing.Size(75, 23);
             this.About.TabIndex = 51;
             this.About.Text = "About";
             this.About.UseVisualStyleBackColor = true;
@@ -174,26 +167,23 @@
             this.groupBox3.Controls.Add(this.panel2);
             this.groupBox3.Controls.Add(this.label1);
             this.groupBox3.Controls.Add(this.label3);
-            this.groupBox3.Location = new System.Drawing.Point(35, 29);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.groupBox3.Location = new System.Drawing.Point(13, 12);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.groupBox3.Size = new System.Drawing.Size(875, 431);
+            this.groupBox3.Size = new System.Drawing.Size(328, 181);
             this.groupBox3.TabIndex = 59;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Appearance";
             // 
             // TableBoxBorderWidth
             // 
-            this.TableBoxBorderWidth.Location = new System.Drawing.Point(624, 339);
-            this.TableBoxBorderWidth.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.TableBoxBorderWidth.Location = new System.Drawing.Point(234, 142);
             this.TableBoxBorderWidth.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
             this.TableBoxBorderWidth.Name = "TableBoxBorderWidth";
-            this.TableBoxBorderWidth.Size = new System.Drawing.Size(113, 38);
+            this.TableBoxBorderWidth.Size = new System.Drawing.Size(42, 20);
             this.TableBoxBorderWidth.TabIndex = 63;
             this.TableBoxBorderWidth.Value = new decimal(new int[] {
             1,
@@ -205,24 +195,22 @@
             // 
             this.label6.AutoSize = true;
             this.label6.BackColor = System.Drawing.SystemColors.Control;
-            this.label6.Location = new System.Drawing.Point(40, 341);
-            this.label6.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label6.Location = new System.Drawing.Point(15, 143);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(151, 32);
+            this.label6.Size = new System.Drawing.Size(58, 13);
             this.label6.TabIndex = 62;
             this.label6.Text = "Table Box:";
             // 
             // AscendantAnchorBoxBorderWidth
             // 
-            this.AscendantAnchorBoxBorderWidth.Location = new System.Drawing.Point(624, 273);
-            this.AscendantAnchorBoxBorderWidth.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.AscendantAnchorBoxBorderWidth.Location = new System.Drawing.Point(234, 114);
             this.AscendantAnchorBoxBorderWidth.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
             this.AscendantAnchorBoxBorderWidth.Name = "AscendantAnchorBoxBorderWidth";
-            this.AscendantAnchorBoxBorderWidth.Size = new System.Drawing.Size(113, 38);
+            this.AscendantAnchorBoxBorderWidth.Size = new System.Drawing.Size(42, 20);
             this.AscendantAnchorBoxBorderWidth.TabIndex = 61;
             this.AscendantAnchorBoxBorderWidth.Value = new decimal(new int[] {
             1,
@@ -232,15 +220,14 @@
             // 
             // AnchorBoxBorderWidth
             // 
-            this.AnchorBoxBorderWidth.Location = new System.Drawing.Point(624, 207);
-            this.AnchorBoxBorderWidth.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.AnchorBoxBorderWidth.Location = new System.Drawing.Point(234, 87);
             this.AnchorBoxBorderWidth.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
             this.AnchorBoxBorderWidth.Name = "AnchorBoxBorderWidth";
-            this.AnchorBoxBorderWidth.Size = new System.Drawing.Size(113, 38);
+            this.AnchorBoxBorderWidth.Size = new System.Drawing.Size(42, 20);
             this.AnchorBoxBorderWidth.TabIndex = 60;
             this.AnchorBoxBorderWidth.Value = new decimal(new int[] {
             1,
@@ -250,15 +237,14 @@
             // 
             // SelectionBoxBorderWidth
             // 
-            this.SelectionBoxBorderWidth.Location = new System.Drawing.Point(624, 138);
-            this.SelectionBoxBorderWidth.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.SelectionBoxBorderWidth.Location = new System.Drawing.Point(234, 58);
             this.SelectionBoxBorderWidth.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
             this.SelectionBoxBorderWidth.Name = "SelectionBoxBorderWidth";
-            this.SelectionBoxBorderWidth.Size = new System.Drawing.Size(113, 38);
+            this.SelectionBoxBorderWidth.Size = new System.Drawing.Size(42, 20);
             this.SelectionBoxBorderWidth.TabIndex = 59;
             this.SelectionBoxBorderWidth.Value = new decimal(new int[] {
             1,
@@ -270,10 +256,9 @@
             // 
             this.label5.AutoSize = true;
             this.label5.BackColor = System.Drawing.SystemColors.Control;
-            this.label5.Location = new System.Drawing.Point(618, 58);
-            this.label5.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label5.Location = new System.Drawing.Point(232, 24);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(188, 32);
+            this.label5.Size = new System.Drawing.Size(72, 13);
             this.label5.TabIndex = 58;
             this.label5.Text = "Border Width:";
             // 
@@ -281,10 +266,9 @@
             // 
             this.label7.AutoSize = true;
             this.label7.BackColor = System.Drawing.SystemColors.Control;
-            this.label7.Location = new System.Drawing.Point(369, 58);
-            this.label7.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label7.Location = new System.Drawing.Point(138, 24);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(91, 32);
+            this.label7.Size = new System.Drawing.Size(34, 13);
             this.label7.TabIndex = 57;
             this.label7.Text = "Color:";
             // 
@@ -292,10 +276,9 @@
             // 
             this.label4.AutoSize = true;
             this.label4.BackColor = System.Drawing.SystemColors.Control;
-            this.label4.Location = new System.Drawing.Point(40, 275);
-            this.label4.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label4.Location = new System.Drawing.Point(15, 115);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(311, 32);
+            this.label4.Size = new System.Drawing.Size(119, 13);
             this.label4.TabIndex = 56;
             this.label4.Text = "Ascendant Anchor Box:";
             // 
@@ -306,10 +289,9 @@
             this.panel2.Controls.Add(this.AscendantAnchorBoxColor);
             this.panel2.Controls.Add(this.SelectionBoxColor);
             this.panel2.Controls.Add(this.AnchorBoxColor);
-            this.panel2.Location = new System.Drawing.Point(375, 104);
-            this.panel2.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.panel2.Location = new System.Drawing.Point(141, 44);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(168, 293);
+            this.panel2.Size = new System.Drawing.Size(63, 123);
             this.panel2.TabIndex = 54;
             // 
             // TableBoxColor
@@ -317,10 +299,9 @@
             this.TableBoxColor.BackColor = System.Drawing.Color.White;
             this.TableBoxColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.TableBoxColor.ForeColor = System.Drawing.Color.Maroon;
-            this.TableBoxColor.Location = new System.Drawing.Point(16, 219);
-            this.TableBoxColor.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.TableBoxColor.Location = new System.Drawing.Point(6, 92);
             this.TableBoxColor.Name = "TableBoxColor";
-            this.TableBoxColor.Size = new System.Drawing.Size(131, 52);
+            this.TableBoxColor.Size = new System.Drawing.Size(49, 22);
             this.TableBoxColor.TabIndex = 58;
             this.TableBoxColor.Text = "...";
             this.TableBoxColor.UseVisualStyleBackColor = false;
@@ -330,10 +311,9 @@
             this.AscendantAnchorBoxColor.BackColor = System.Drawing.Color.White;
             this.AscendantAnchorBoxColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.AscendantAnchorBoxColor.ForeColor = System.Drawing.Color.Maroon;
-            this.AscendantAnchorBoxColor.Location = new System.Drawing.Point(16, 150);
-            this.AscendantAnchorBoxColor.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.AscendantAnchorBoxColor.Location = new System.Drawing.Point(6, 63);
             this.AscendantAnchorBoxColor.Name = "AscendantAnchorBoxColor";
-            this.AscendantAnchorBoxColor.Size = new System.Drawing.Size(131, 52);
+            this.AscendantAnchorBoxColor.Size = new System.Drawing.Size(49, 22);
             this.AscendantAnchorBoxColor.TabIndex = 57;
             this.AscendantAnchorBoxColor.Text = "...";
             this.AscendantAnchorBoxColor.UseVisualStyleBackColor = false;
@@ -344,10 +324,9 @@
             this.SelectionBoxColor.BackColor = System.Drawing.Color.White;
             this.SelectionBoxColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.SelectionBoxColor.ForeColor = System.Drawing.Color.Maroon;
-            this.SelectionBoxColor.Location = new System.Drawing.Point(16, 19);
-            this.SelectionBoxColor.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.SelectionBoxColor.Location = new System.Drawing.Point(6, 8);
             this.SelectionBoxColor.Name = "SelectionBoxColor";
-            this.SelectionBoxColor.Size = new System.Drawing.Size(131, 52);
+            this.SelectionBoxColor.Size = new System.Drawing.Size(49, 22);
             this.SelectionBoxColor.TabIndex = 56;
             this.SelectionBoxColor.Text = "...";
             this.SelectionBoxColor.UseVisualStyleBackColor = false;
@@ -358,10 +337,9 @@
             this.AnchorBoxColor.BackColor = System.Drawing.Color.White;
             this.AnchorBoxColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.AnchorBoxColor.ForeColor = System.Drawing.Color.Maroon;
-            this.AnchorBoxColor.Location = new System.Drawing.Point(16, 83);
-            this.AnchorBoxColor.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.AnchorBoxColor.Location = new System.Drawing.Point(6, 35);
             this.AnchorBoxColor.Name = "AnchorBoxColor";
-            this.AnchorBoxColor.Size = new System.Drawing.Size(131, 52);
+            this.AnchorBoxColor.Size = new System.Drawing.Size(49, 22);
             this.AnchorBoxColor.TabIndex = 55;
             this.AnchorBoxColor.Text = "...";
             this.AnchorBoxColor.UseVisualStyleBackColor = false;
@@ -371,10 +349,9 @@
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.SystemColors.Control;
-            this.label1.Location = new System.Drawing.Point(43, 209);
-            this.label1.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label1.Location = new System.Drawing.Point(16, 88);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(262, 32);
+            this.label1.Size = new System.Drawing.Size(100, 13);
             this.label1.TabIndex = 52;
             this.label1.Text = "Master Anchor Box:";
             // 
@@ -382,10 +359,9 @@
             // 
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.SystemColors.Control;
-            this.label3.Location = new System.Drawing.Point(43, 140);
-            this.label3.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label3.Location = new System.Drawing.Point(16, 59);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(198, 32);
+            this.label3.Size = new System.Drawing.Size(75, 13);
             this.label3.TabIndex = 51;
             this.label3.Text = "Selection Box:";
             // 
@@ -395,11 +371,9 @@
             this.groupBox4.Controls.Add(this.CoordinateDeviationMargin);
             this.groupBox4.Controls.Add(this.label8);
             this.groupBox4.Controls.Add(this.PdfPageImageResolution);
-            this.groupBox4.Location = new System.Drawing.Point(35, 488);
-            this.groupBox4.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.groupBox4.Location = new System.Drawing.Point(13, 205);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Padding = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.groupBox4.Size = new System.Drawing.Size(875, 231);
+            this.groupBox4.Size = new System.Drawing.Size(328, 97);
             this.groupBox4.TabIndex = 60;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Image Processing";
@@ -407,18 +381,16 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(43, 150);
-            this.label2.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label2.Location = new System.Drawing.Point(16, 63);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(439, 32);
+            this.label2.Size = new System.Drawing.Size(164, 13);
             this.label2.TabIndex = 55;
             this.label2.Text = "Coordinate Deviation Margin (px):";
             // 
             // CoordinateDeviationMargin
             // 
             this.CoordinateDeviationMargin.DecimalPlaces = 3;
-            this.CoordinateDeviationMargin.Location = new System.Drawing.Point(624, 145);
-            this.CoordinateDeviationMargin.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.CoordinateDeviationMargin.Location = new System.Drawing.Point(234, 61);
             this.CoordinateDeviationMargin.Maximum = new decimal(new int[] {
             10,
             0,
@@ -430,7 +402,7 @@
             0,
             262144});
             this.CoordinateDeviationMargin.Name = "CoordinateDeviationMargin";
-            this.CoordinateDeviationMargin.Size = new System.Drawing.Size(184, 38);
+            this.CoordinateDeviationMargin.Size = new System.Drawing.Size(69, 20);
             this.CoordinateDeviationMargin.TabIndex = 56;
             this.CoordinateDeviationMargin.Value = new decimal(new int[] {
             1,
@@ -440,13 +412,12 @@
             // 
             // SettingsForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(945, 812);
+            this.ClientSize = new System.Drawing.Size(355, 353);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.flowLayoutPanel1);
-            this.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.Name = "SettingsForm";
             this.Text = "SettingsForm";
             ((System.ComponentModel.ISupportInitialize)(this.PdfPageImageResolution)).EndInit();
