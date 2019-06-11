@@ -18,9 +18,9 @@ namespace Cliver.PdfDocumentParser
     /// <summary>
     /// Interaction logic for AnchorOcrTextControlW.xaml
     /// </summary>
-    public partial class AnchorOcrTextControlW : TableRowControlW
+    public partial class AnchorPdfTextControlW : TableRowControlW
     {
-        public AnchorOcrTextControlW(TextAutoInsertSpace textAutoInsertSpace)
+        public AnchorPdfTextControlW(TextAutoInsertSpace textAutoInsertSpace)
         {
             InitializeComponent();
 

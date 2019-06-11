@@ -175,6 +175,9 @@
     <Compile Include="AnchorOcrTextControl.Designer.cs">
       <DependentUpon>AnchorOcrTextControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="AnchorPdfTextControlW.xaml.cs">
+      <DependentUpon>AnchorPdfTextControlW.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AnchorOcrTextControlW.xaml.cs">
       <DependentUpon>AnchorOcrTextControlW.xaml</DependentUpon>
     </Compile>
@@ -203,6 +206,12 @@
     <Compile Include="TableRowControlW.cs" />
     <Compile Include="Template.Anchor.cs" />
     <Compile Include="Template.Field.cs" />
+    <Compile Include="TemplateWindow.pages.cs" />
+    <Compile Include="TemplateWindow.fields.cs" />
+    <Compile Include="TemplateWindow.extention.cs" />
+    <Compile Include="TemplateWindow.conditions.cs" />
+    <Compile Include="TemplateWindow.anchors.cs" />
+    <Compile Include="TemplateWindow.TemplateManager.cs" />
     <Compile Include="TemplateForm.TemplateManager.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -337,6 +346,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="AnchorPdfTextControlW.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="AnchorOcrTextControlW.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -354,6 +367,10 @@
     <ProjectReference Include="CliverWinRoutines\CliverWinRoutines.csproj">
       <Project>{51f2df13-41f1-4f22-890f-c3b50c813909}</Project>
       <Name>CliverWinRoutines</Name>
+    </ProjectReference>
+    <ProjectReference Include="CliverWpfRoutines\CliverWpfRoutines.csproj">
+      <Project>{7ba069e2-96ce-4edf-85a0-afe4191913cb}</Project>
+      <Name>CliverWpfRoutines</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

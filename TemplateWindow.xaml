@@ -57,16 +57,16 @@
             <xctk:DecimalUpDown Grid.Row="2" Grid.Column="1" Name="pictureScale"  Value="1.3" Increment=".1" Maximum="10" Minimum="0.1"/>
             <Label Grid.Row="2" Grid.Column="2">Page:</Label>
             <TextBox Grid.Row="2" Grid.Column="3" Name="tCurrentPage" Text="{Binding currentPageI}" />
-            <Label Grid.Row="2" Grid.Column="4" Name="tTotalPages">totalPages</Label>
+            <Label Grid.Row="2" Grid.Column="4" Name="lTotalPages">totalPages</Label>
             <Button Grid.Row="2" Grid.Column="5" Name="bPrevPage">&lt;&lt;</Button>
             <Button Grid.Row="2" Grid.Column="6" Name="bNextPage">&gt;&gt;</Button>
 
             <TextBlock  Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="8" >
-                <Hyperlink  >Show Pdf Text</Hyperlink>
+                <Hyperlink Name="ShowPdfText" >Show Pdf Text</Hyperlink>
             <Label >|</Label>
-                <Hyperlink >Show Ocr Text</Hyperlink>
+                <Hyperlink Name="ShowOcrText"  >Show Ocr Text</Hyperlink>
             <Label >|</Label>
-                <Hyperlink >Show Template As Json</Hyperlink>
+                <Hyperlink  Name="ShowAsJson" >Show Template As Json</Hyperlink>
             </TextBlock>
 
             <GroupBox Header="Scanned Document Settings" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="8">
@@ -90,7 +90,7 @@
             </Grid>
 
 
-            <Grid Grid.Row="1"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="AliceBlue">
+            <Grid Grid.Row="1"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width="5" />
@@ -105,7 +105,7 @@
                 </Grid.RowDefinitions>
             <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">Anchors:</Label>
 
-                <DataGrid Grid.Row="1" Grid.Column="0" Grid.RowSpan="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ></DataGrid>
+                <DataGrid Name="anchors" Grid.Row="1" Grid.Column="0" Grid.RowSpan="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ></DataGrid>
                 <GridSplitter Grid.Row="1" Grid.Column="1" Grid.RowSpan="4" Width="5" VerticalAlignment="Stretch"  />
                 <Control Grid.Row="1" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></Control>
                 <GridSplitter Grid.Row="2" Grid.Column="2" Height="5" HorizontalAlignment="Stretch"  />
@@ -113,7 +113,7 @@
                 <Label>Conditions:</Label>
                     <CheckBox>[Check When Page Changed]</CheckBox>
 </StackPanel>
-                <DataGrid Grid.Row="4" Grid.Column="2"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ></DataGrid>
+                <DataGrid Grid.Row="4" Grid.Column="2" Name="conditions" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ></DataGrid>
             </Grid>
 
 
@@ -128,7 +128,7 @@
                 ]
                 <Hyperlink >Copy Value To Clipboard</Hyperlink>
             </TextBlock>
-            <DataGrid Grid.Row="5"  ></DataGrid>
+            <DataGrid Grid.Row="5" Name="fields" ></DataGrid>
 
         <Grid Grid.Row="6">
             <Grid.ColumnDefinitions>
@@ -136,11 +136,11 @@
                     <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <TextBlock  Grid.Column="0" >
-                <Hyperlink  >Configure</Hyperlink>
+                <Hyperlink Name="Configure" >Configure</Hyperlink>
          |
-                <Hyperlink >Help</Hyperlink>
+                <Hyperlink Name="Help">Help</Hyperlink>
             |
-                <Hyperlink >About</Hyperlink>
+                <Hyperlink Name="About">About</Hyperlink>
             </TextBlock>
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                     <Button Name="save">OK</Button>
