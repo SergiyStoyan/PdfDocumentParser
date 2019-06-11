@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
+using System.Windows.Media.Imaging;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -354,6 +355,27 @@ namespace Cliver.PdfDocumentParser
                 for (int y = 0; y < Height; y++)
                     b.SetPixel(x, y, Color.FromArgb(Hash[x, y], Hash[x, y], Hash[x, y]));
             return b;
+        }
+
+        //public BitmapImage GetBitmapImage()
+        //{
+            //using (MemoryStream memory = new MemoryStream())
+            //{
+            //    bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
+            //    memory.Position = 0;
+            //    BitmapImage bitmapimage = new BitmapImage();
+            //    bitmapimage.BeginInit();
+            //    bitmapimage.pi.CopyPixels(.StreamSource = memory;
+            //    bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
+            //    bitmapimage.EndInit();
+
+            //    return bitmapimage;
+            //}
+        //}
+
+        public System.Windows.Media.ImageSource GetImageSource()
+        {
+            return ImageRoutines.ToImageSource((Bitmap)GetImage());
         }
     }
 }

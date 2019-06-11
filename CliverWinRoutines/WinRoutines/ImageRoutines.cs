@@ -13,6 +13,28 @@ namespace Cliver
 {
     public static class ImageRoutines
     {
+        public static System.Windows.Media.ImageSource ToImageSource(Bitmap bitmap)
+        {
+            var handle = bitmap.GetHbitmap();
+            try
+            {
+                System.Windows.Media.ImageSource newSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+                    handle,
+                    IntPtr.Zero,
+                    System.Windows.Int32Rect.Empty,
+                    System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
+                return newSource;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            finally
+            {
+                WinApi.Gdi32.DeleteObject(handle);
+            }
+        }
+
         public static System.Windows.Media.ImageSource ToImageSource(this System.Drawing.Icon icon)
         {
             return System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(

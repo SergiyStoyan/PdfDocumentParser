@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Cliver.PdfDocumentParser
 {
     /// <summary>
-    /// Interaction logic for AnchorControlW.xaml
+    /// Interaction logic for AnchorOcrTextControlW.xaml
     /// </summary>
-    public partial class AnchorControlW : TableRowControlW
+    public partial class AnchorOcrTextControlW : TableRowControlW
     {
-        public AnchorControlW()
+        public AnchorOcrTextControlW()
         {
             InitializeComponent();
         }

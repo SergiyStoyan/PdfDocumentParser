@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,17 +18,17 @@ namespace Cliver.PdfDocumentParser
     /// <summary>
     /// Interaction logic for TableRowControlW.xaml
     /// </summary>
-    public partial class TableRowControlW : UserControl
+    public abstract partial class TableRowControlW : UserControl
     {
         public TableRowControlW()
         {
-            InitializeComponent();
+            //InitializeComponent();
             LostFocus += delegate (object sender, RoutedEventArgs e)
             {
                 SetTagFromControl();
             };
         }
-        
+
         public DataGridRow Row;
         //protected TemplateForm templateForm;
         protected Action<DataGridRow> onLeft = null;
