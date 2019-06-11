@@ -23,6 +23,32 @@ namespace Cliver.PdfDocumentParser
         public TableRowControlW()
         {
             InitializeComponent();
+            LostFocus += delegate (object sender, RoutedEventArgs e)
+            {
+                SetTagFromControl();
+            };
+        }
+        
+        public DataGridRow Row;
+        //protected TemplateForm templateForm;
+        protected Action<DataGridRow> onLeft = null;
+
+        public virtual void Initialize(DataGridRow row/*, TemplateForm templateForm*/, Action<DataGridRow> onLeft)
+        {
+            Row = row;
+            //this.templateForm = templateForm;
+            this.onLeft = onLeft;
+        }
+
+        virtual protected object getObject()
+        {
+            throw new Exception("Not overrrided!");
+        }
+
+        virtual public void SetTagFromControl()
+        {
+            Row.Tag = getObject();
+            onLeft?.Invoke(Row);
         }
     }
 }

@@ -169,6 +169,9 @@
     <Compile Include="AnchorImageDataControl.Designer.cs">
       <DependentUpon>AnchorImageDataControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="AnchorImageDataControlW.xaml.cs">
+      <DependentUpon>AnchorImageDataControlW.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AnchorOcrTextControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -333,6 +336,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="AnchorControlW.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AnchorImageDataControlW.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
