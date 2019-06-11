@@ -18,7 +18,7 @@ namespace Cliver.PdfDocumentParser
     /// <summary>
     /// Interaction logic for AnchorImageDataControlW.xaml
     /// </summary>
-    public partial class AnchorImageDataControlW : TableRowControlW
+    public partial class AnchorImageDataControlW : AnchorControlW
     {
         public AnchorImageDataControlW(float imageScale)
         {

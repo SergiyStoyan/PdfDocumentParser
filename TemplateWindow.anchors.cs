@@ -9,7 +9,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows;
 //using System.Windows.Forms;
-using System.Windows.Input;
+using System.Windows.Controls;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -195,14 +195,14 @@ namespace Cliver.PdfDocumentParser
             };
         }
 
-        void setAnchorParentAnchorIdList(DataGridViewRow row)
+        void setAnchorParentAnchorIdList(DataGridRow row)
         {
             Template.Anchor currentRowAnchor = (Template.Anchor)row.Tag;
             if (currentRowAnchor == null)
                 return;
             SortedSet<int> ais = new SortedSet<int>();
             List<Template.Anchor> as_ = new List<Template.Anchor>();
-            foreach (DataGridViewRow r in anchors.Rows)
+            foreach (DataGridRow r in anchors.Items)
                 if (r.Tag != null)
                 {
                     Template.Anchor a = (Template.Anchor)r.Tag;
@@ -257,19 +257,19 @@ namespace Cliver.PdfDocumentParser
                 Template.Anchor.Types t = ((Template.Anchor)row.Tag).Type;
                 switch (t)
                 {
-                    case Template.Anchor.Types.PdfText:
+                    case PdfDocumentParser.Template.Anchor.Types.PdfText:
                         {
                             if (currentAnchorControl == null || !(currentAnchorControl is AnchorPdfTextControl))
                                 currentAnchorControl = new AnchorPdfTextControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = textAutoInsertSpaceRepresentative.Text });
                         }
                         break;
-                    case Template.Anchor.Types.OcrText:
+                    case PdfDocumentParser.Template.Anchor.Types.OcrText:
                         {
                             if (currentAnchorControl == null || !(currentAnchorControl is AnchorOcrTextControl))
                                 currentAnchorControl = new AnchorOcrTextControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = textAutoInsertSpaceRepresentative.Text });
                         }
                         break;
-                    case Template.Anchor.Types.ImageData:
+                    case PdfDocumentParser.Template.Anchor.Types.ImageData:
                         {
                             if (currentAnchorControl == null || !(currentAnchorControl is AnchorImageDataControl))
                                 currentAnchorControl = new AnchorImageDataControl((float)pictureScale.Value);
@@ -320,7 +320,7 @@ namespace Cliver.PdfDocumentParser
             Linked,
         }
 
-        void setAnchorRow(DataGridViewRow row, Template.Anchor a)
+        void setAnchorRow(DataGridRow row, Template.Anchor a)
         {
             row.Tag = a;
             row.Cells["Id3"].Value = a.Id;

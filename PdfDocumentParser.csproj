@@ -203,6 +203,7 @@
     <Compile Include="Page.fields.cs" />
     <Compile Include="PageCollection.cs" />
     <Compile Include="Page.cs" />
+    <Compile Include="AnchorControlW.cs" />
     <Compile Include="TableRowControlW.cs" />
     <Compile Include="Template.Anchor.cs" />
     <Compile Include="Template.Field.cs" />
