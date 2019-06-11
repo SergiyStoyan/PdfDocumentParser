@@ -46,8 +46,11 @@ namespace Cliver.SampleParser
             try
             {
                 PdfDocumentParser.Program.Initialize();
-                
-                Application.Run(MainForm.This);
+
+                PdfDocumentParser.TemplateWindow tw = new PdfDocumentParser.TemplateWindow();
+                tw.ShowDialog();
+
+                //Application.Run(MainForm.This);
             }
             catch (Exception e)
             {

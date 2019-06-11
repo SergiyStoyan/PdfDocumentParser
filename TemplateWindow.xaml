@@ -17,8 +17,8 @@
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0" HorizontalAlignment="Stretch">
             <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
+                <RowDefinition Height="auto"  />
+                <RowDefinition Height="auto" />
                 <RowDefinition Height="5"/>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
@@ -90,7 +90,7 @@
             </Grid>
 
 
-        <Grid Grid.Row="1" >
+            <Grid Grid.Row="1"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="AliceBlue">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width="5" />
@@ -101,19 +101,19 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="5" />
                     <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-            <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Stretch">Anchors:</Label>
+            <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">Anchors:</Label>
 
-                <DataGrid Grid.Row="1" Grid.Column="0" Grid.RowSpan="4" ></DataGrid>
+                <DataGrid Grid.Row="1" Grid.Column="0" Grid.RowSpan="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ></DataGrid>
                 <GridSplitter Grid.Row="1" Grid.Column="1" Grid.RowSpan="4" Width="5" VerticalAlignment="Stretch"  />
-                <Control Grid.Row="1" Grid.Column="2"></Control>
+                <Control Grid.Row="1" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></Control>
                 <GridSplitter Grid.Row="2" Grid.Column="2" Height="5" HorizontalAlignment="Stretch"  />
                 <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal">
                 <Label>Conditions:</Label>
                     <CheckBox>[Check When Page Changed]</CheckBox>
 </StackPanel>
-                    <DataGrid Grid.Row="4" Grid.Column="2"  ></DataGrid>
+                <DataGrid Grid.Row="4" Grid.Column="2"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ></DataGrid>
             </Grid>
 
 
@@ -124,13 +124,7 @@
                 <CheckBox>[Extract When Page Changed]</CheckBox>
             </StackPanel>
             <TextBlock  Grid.Row="4" VerticalAlignment="Stretch" >[Definitions:
-                <Hyperlink  >Duplicate</Hyperlink>
-         |
-                <Hyperlink >Delete</Hyperlink>
-            |
-                <Hyperlink >Up</Hyperlink>
-            |
-                <Hyperlink >Down</Hyperlink>
+                <Hyperlink  >Duplicate</Hyperlink>|<Hyperlink >Delete</Hyperlink>|<Hyperlink >Up</Hyperlink>|<Hyperlink >Down</Hyperlink>
                 ]
                 <Hyperlink >Copy Value To Clipboard</Hyperlink>
             </TextBlock>

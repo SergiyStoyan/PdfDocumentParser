@@ -160,6 +160,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnchorControlW.xaml.cs">
+      <DependentUpon>AnchorControlW.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AnchorImageDataControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -194,6 +197,9 @@
     <Compile Include="Page.fields.cs" />
     <Compile Include="PageCollection.cs" />
     <Compile Include="Page.cs" />
+    <Compile Include="TableRowControlW.xaml.cs">
+      <DependentUpon>TableRowControlW.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Template.Anchor.cs" />
     <Compile Include="Template.Field.cs" />
     <Compile Include="TemplateForm.TemplateManager.cs">
@@ -326,6 +332,14 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="AnchorControlW.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TableRowControlW.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="TemplateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
