@@ -12,38 +12,39 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
+            <ColumnDefinition Width="5" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-            <Grid Grid.Column="0">
-                <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
+        <Grid Grid.Column="0" HorizontalAlignment="Stretch">
+            <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition />
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
                 <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
+                <RowDefinition  Height="auto"/>
             </Grid.RowDefinitions>
 
+            <Grid Grid.Row="0"  >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition  Height="auto"/>
+                    <RowDefinition  Height="auto"/>
+                    <RowDefinition  Height="auto"/>
+                    <RowDefinition  Height="auto"/>
+                    <RowDefinition  Height="auto"/>
+                    <RowDefinition  Height="auto"/>
+                    <RowDefinition  Height="auto"/>
+                </Grid.RowDefinitions>
             <Label Grid.Row="0" Grid.Column="0">Template:</Label>
             <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Name="name" />
             <Label Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="4" Name="selectionCoordinates">selection coordinates</Label>
@@ -51,7 +52,7 @@
             <Label Grid.Row="1" Grid.Column="0">Test File:</Label>
             <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="5" Name="testFile" />
             <Button Grid.Row="1" Grid.Column="6" Name="bTestFile">Pick Up</Button>
-                
+
             <Label Grid.Row="2" Grid.Column="0">Scale:</Label>
             <xctk:DecimalUpDown Grid.Row="2" Grid.Column="1" Name="pictureScale"  Value="1.3" Increment=".1" Maximum="10" Minimum="0.1"/>
             <Label Grid.Row="2" Grid.Column="2">Page:</Label>
@@ -60,7 +61,7 @@
             <Button Grid.Row="2" Grid.Column="5" Name="bPrevPage">&lt;&lt;</Button>
             <Button Grid.Row="2" Grid.Column="6" Name="bNextPage">&gt;&gt;</Button>
 
-            <TextBlock  Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="8">
+            <TextBlock  Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="8" >
                 <Hyperlink  >Show Pdf Text</Hyperlink>
             <Label >|</Label>
                 <Hyperlink >Show Ocr Text</Hyperlink>
@@ -68,43 +69,94 @@
                 <Hyperlink >Show Template As Json</Hyperlink>
             </TextBlock>
 
-            <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="8">
-            <Label >Rotate Pages:</Label>
-                <ComboBox Name="pageRotation" />
-                <CheckBox Name="autoDeskew">Auto-Deskew:</CheckBox>
-                <Label  >Auto-Deskew Threshold:</Label>
-                <xctk:IntegerUpDown Name="autoDeskewThreshold"  Value="100" Increment="1" Maximum="1000" Minimum="0"/>
-            </StackPanel>
+            <GroupBox Header="Scanned Document Settings" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="8">
+                <StackPanel Orientation="Horizontal">
+                    <Label >Rotate Pages:</Label>
+                    <ComboBox Name="pageRotation" />
+                    <CheckBox Name="autoDeskew">Auto-Deskew:</CheckBox>
+                    <Label  >Auto-Deskew Threshold:</Label>
+                    <xctk:IntegerUpDown Name="autoDeskewThreshold"  Value="100" Increment="1" Maximum="1000" Minimum="0"/>
+                </StackPanel>
+            </GroupBox>
 
-            <GroupBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="7" >
-                <StackPanel Orientation="Horizontal" Margin="0,0,-0.4,-16" >
+                <GroupBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="7" Header="Text Auto-Insert Space"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <StackPanel Orientation="Horizontal"  >
                     <Label >Threshold:</Label>
                     <xctk:DecimalUpDown  Name="textAutoInsertSpaceThreshold" Value="6.00" Increment=".1" Maximum="100" Minimum="0"/>
                     <Label >Substitute:</Label>
                     <TextBox  Name="textAutoInsertSpaceRepresentative" />
                 </StackPanel>
             </GroupBox>
-                
-                
-                
-            <GridSplitter Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="7"></GridSplitter>
-            <Separator Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="7"/>
-            <Label Grid.Row="7" Grid.Column="0">Scanned Document Settings</Label>
-            <Label Grid.Row="8" Grid.Column="0">Status:</Label>
-            <Label Grid.Row="9" Grid.Column="0">Status:</Label>
+            </Grid>
 
-            <GridSplitter Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="7" Height="5" HorizontalAlignment="Stretch"  />
-            <DataGrid Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="7" ></DataGrid>
 
-            <GridSplitter Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="7" Height="5" HorizontalAlignment="Stretch"  />
-            <DataGrid Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="7" ></DataGrid>
-                
-            <GridSplitter Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="7" Height="5" HorizontalAlignment="Stretch"  />
-            <DataGrid Grid.Row="15" Grid.Column="0" Grid.ColumnSpan="7" ></DataGrid>
-                
+        <Grid Grid.Row="1" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition  Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Stretch">Anchors:</Label>
+
+                <DataGrid Grid.Row="1" Grid.Column="0" Grid.RowSpan="4" ></DataGrid>
+                <GridSplitter Grid.Row="1" Grid.Column="1" Grid.RowSpan="4" Width="5" VerticalAlignment="Stretch"  />
+                <Control Grid.Row="1" Grid.Column="2"></Control>
+                <GridSplitter Grid.Row="2" Grid.Column="2" Height="5" HorizontalAlignment="Stretch"  />
+                <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal">
+                <Label>Conditions:</Label>
+                    <CheckBox>[Check When Page Changed]</CheckBox>
+</StackPanel>
+                    <DataGrid Grid.Row="4" Grid.Column="2"  ></DataGrid>
+            </Grid>
+
+
+
+            <GridSplitter Grid.Row="2" Height="5" HorizontalAlignment="Stretch"  />
+            <StackPanel Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Stretch" >
+                <Label>Field:</Label>
+                <CheckBox>[Extract When Page Changed]</CheckBox>
+            </StackPanel>
+            <TextBlock  Grid.Row="4" VerticalAlignment="Stretch" >[Definitions:
+                <Hyperlink  >Duplicate</Hyperlink>
+         |
+                <Hyperlink >Delete</Hyperlink>
+            |
+                <Hyperlink >Up</Hyperlink>
+            |
+                <Hyperlink >Down</Hyperlink>
+                ]
+                <Hyperlink >Copy Value To Clipboard</Hyperlink>
+            </TextBlock>
+            <DataGrid Grid.Row="5"  ></DataGrid>
+
+        <Grid Grid.Row="6">
+            <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <TextBlock  Grid.Column="0" >
+                <Hyperlink  >Configure</Hyperlink>
+         |
+                <Hyperlink >Help</Hyperlink>
+            |
+                <Hyperlink >About</Hyperlink>
+            </TextBlock>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Name="save">OK</Button>
+                    <Button Name="cancel">Cancel</Button>
+                </StackPanel>
         </Grid>
-        <GridSplitter Width="5"/>
-        <StackPanel Grid.Column="1" CanVerticallyScroll="True" CanHorizontallyScroll="True">
+        </Grid>
+        
+            <GridSplitter Width="5" Grid.Column="1" HorizontalAlignment="Stretch"/>
+        <StackPanel Grid.Column="2" CanVerticallyScroll="True" CanHorizontallyScroll="True">
             <Image Name="picture" />
         </StackPanel>
 
