@@ -114,14 +114,15 @@ namespace Cliver
                 assemblies.Add(Assembly.GetEntryAssembly());
                 foreach (AssemblyName assemblyNames in Assembly.GetEntryAssembly().GetReferencedAssemblies().Where(assemblyNames => assemblyNameRegexPattern != null ? Regex.IsMatch(assemblyNames.Name, assemblyNameRegexPattern) : true))
                     assemblies.Add(Assembly.Load(assemblyNames));
-                List<FieldInfo> settingsTypeFieldInfos = new List<FieldInfo>();
+                HashSet<FieldInfo> settingsTypeFieldInfos = new HashSet<FieldInfo>();
                 foreach (Assembly assembly in assemblies)
                 {
                     Type[] types = assembly.GetTypes();
                     foreach (Type settingsType in types.Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(Settings))))
                     {
                         foreach (Type type in types)
-                            settingsTypeFieldInfos.AddRange(type.GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public).Where(a => a.FieldType.IsAssignableFrom(settingsType)));
+                            foreach (FieldInfo settingsTypeFieldInfo in type.GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public).Where(a => a.FieldType.IsAssignableFrom(settingsType)))
+                                settingsTypeFieldInfos.Add(settingsTypeFieldInfo);
                     }
                 }
                 foreach (FieldInfo settingsTypeFieldInfo in settingsTypeFieldInfos)
