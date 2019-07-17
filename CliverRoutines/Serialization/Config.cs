@@ -23,15 +23,15 @@ namespace Cliver
         public void Reset()
         {
             Serializable s = Create(GetType(), __File);
-            foreach (FieldInfo fi in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance))
-                fi.SetValue(this, fi.GetValue(s));
+            foreach (FieldInfo settingsTypeFieldInfo in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance))
+                settingsTypeFieldInfo.SetValue(this, settingsTypeFieldInfo.GetValue(s));
         }
 
         public void Reload()
         {
             Serializable s = LoadOrCreate(GetType(), __File);
-            foreach (FieldInfo fi in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance))
-                fi.SetValue(this, fi.GetValue(s));
+            foreach (FieldInfo settingsTypeFieldInfo in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance))
+                settingsTypeFieldInfo.SetValue(this, settingsTypeFieldInfo.GetValue(s));
         }
 
         public S GetResetInstance<S>() where S : Settings, new()
@@ -110,76 +110,69 @@ namespace Cliver
             lock (objectFullNames2serializable)
             {
                 objectFullNames2serializable.Clear();
-                List<Assembly> sas = new List<Assembly>();
-                sas.Add(Assembly.GetEntryAssembly());
-                foreach (AssemblyName an in Assembly.GetEntryAssembly().GetReferencedAssemblies().Where(an => assemblyNameRegexPattern != null ? Regex.IsMatch(an.Name, assemblyNameRegexPattern) : true))
-                    sas.Add(Assembly.Load(an));
-                //bool ignore_load_error = false;
-                foreach (Assembly sa in sas)
+                List<Assembly> assemblies = new List<Assembly>();
+                assemblies.Add(Assembly.GetEntryAssembly());
+                foreach (AssemblyName assemblyNames in Assembly.GetEntryAssembly().GetReferencedAssemblies().Where(assemblyNames => assemblyNameRegexPattern != null ? Regex.IsMatch(assemblyNames.Name, assemblyNameRegexPattern) : true))
+                    assemblies.Add(Assembly.Load(assemblyNames));
+                List<FieldInfo> settingsTypeFieldInfos = new List<FieldInfo>();
+                foreach (Assembly assembly in assemblies)
                 {
-                    Type[] ets = sa.GetTypes();
-                    foreach (Type st in ets.Where(t => t.BaseType == typeof(Settings)))
+                    Type[] types = assembly.GetTypes();
+                    foreach (Type settingsType in types.Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(Settings))))
                     {
-                        List<FieldInfo> fis = new List<FieldInfo>();
-                        foreach (Type et in ets)
-                            fis.AddRange(et.GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public).Where(a => st.IsAssignableFrom(a.FieldType)));
+                        foreach (Type type in types)
+                            settingsTypeFieldInfos.AddRange(type.GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public).Where(a => settingsType.IsAssignableFrom(a.FieldType)));
+                    }
+                }
+                foreach (FieldInfo settingsTypeFieldInfo in settingsTypeFieldInfos)
+                {
+                    string fullName = settingsTypeFieldInfo.DeclaringType.FullName + "." + settingsTypeFieldInfo.Name;
 
-                        if (fis.Count < 1)
-                            //    throw new Exception("No field of type '" + st.FullName + "' was found.");
-                            continue;
-                        //if (fis.Count > 1)
-                        //    throw new Exception("More then 1 field of type '" + st.FullName + "' was found.");
-                        foreach (FieldInfo fi in fis)
+                    if (null == settingsTypeFieldInfo.GetCustomAttributes<Settings.Obligatory>(false).FirstOrDefault() && (obligatoryObjectNamesRegex == null || !obligatoryObjectNamesRegex.IsMatch(fullName)))
+                        continue;
+
+                    Serializable serializable;
+
+                    string fileName = fullName + "." + FILE_EXTENSION;
+                    string file = (settingsTypeFieldInfo.FieldType.BaseType == typeof(UserSettings) ? UserSettings.StorageDir : (settingsTypeFieldInfo.FieldType.BaseType == typeof(AppSettings) ? AppSettings.StorageDir : StorageDir)) + System.IO.Path.DirectorySeparatorChar + fileName;
+                    if (reset)
+                    {
+                        string initFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + fileName;
+                        if (File.Exists(initFile))
                         {
-                            string fullName = fi.DeclaringType.FullName + "." + fi.Name;
-
-                            if (null == fi.GetCustomAttributes<Settings.Obligatory>(false).FirstOrDefault() && (obligatoryObjectNamesRegex == null || !obligatoryObjectNamesRegex.IsMatch(fullName)))
-                                continue;
-
-                            Serializable t;
-
-                            string fileName = fullName + "." + FILE_EXTENSION;
-                            string file = (fi.FieldType.BaseType == typeof(UserSettings) ? UserSettings.StorageDir : (fi.FieldType.BaseType == typeof(AppSettings) ? AppSettings.StorageDir : StorageDir)) + System.IO.Path.DirectorySeparatorChar + fileName;
-                            if (reset)
+                            FileSystemRoutines.CopyFile(initFile, file, true);
+                            serializable = Serializable.LoadOrCreate(settingsTypeFieldInfo.FieldType, file);
+                        }
+                        else
+                            serializable = Serializable.Create(settingsTypeFieldInfo.FieldType, file);
+                    }
+                    else
+                    {
+                        try
+                        {
+                            serializable = Serializable.Load(settingsTypeFieldInfo.FieldType, file);
+                        }
+                        catch (Exception e)
+                        {
+                            //if (!Message.YesNo("Error while loading config file " + file + "\r\n\r\n" + e.Message + "\r\n\r\nWould you like to proceed with restoring the initial config?", null, Message.Icons.Error))
+                            //    Environment.Exit(0);
+                            //if (!ignore_load_error && !Directory.Exists(StorageDir))//it is newly installed and so files are not expected to be there
+                            //    ignore_load_error = true;
+                            //if (!ignore_load_error)
+                            //    LogMessage.Error2(e);
+                            string initFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + fileName;
+                            if (File.Exists(initFile))
                             {
-                                string initFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + fileName;
-                                if (File.Exists(initFile))
-                                {
-                                    FileSystemRoutines.CopyFile(initFile, file, true);
-                                    t = Serializable.LoadOrCreate(fi.FieldType, file);
-                                }
-                                else
-                                    t = Serializable.Create(fi.FieldType, file);
+                                FileSystemRoutines.CopyFile(initFile, file, true);
+                                serializable = Serializable.LoadOrCreate(settingsTypeFieldInfo.FieldType, file);
                             }
                             else
-                            {
-                                try
-                                {
-                                    t = Serializable.Load(fi.FieldType, file);
-                                }
-                                catch (Exception e)
-                                {
-                                    //if (!Message.YesNo("Error while loading config file " + file + "\r\n\r\n" + e.Message + "\r\n\r\nWould you like to proceed with restoring the initial config?", null, Message.Icons.Error))
-                                    //    Environment.Exit(0);
-                                    //if (!ignore_load_error && !Directory.Exists(StorageDir))//it is newly installed and so files are not expected to be there
-                                    //    ignore_load_error = true;
-                                    //if (!ignore_load_error)
-                                    //    LogMessage.Error2(e);
-                                    string initFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + fileName;
-                                    if (File.Exists(initFile))
-                                    {
-                                        FileSystemRoutines.CopyFile(initFile, file, true);
-                                        t = Serializable.LoadOrCreate(fi.FieldType, file);
-                                    }
-                                    else
-                                        t = Serializable.Create(fi.FieldType, file);
-                                }
-                            }
-
-                            fi.SetValue(null, t);
-                            objectFullNames2serializable[fullName] = t;
+                                serializable = Serializable.Create(settingsTypeFieldInfo.FieldType, file);
                         }
                     }
+
+                    settingsTypeFieldInfo.SetValue(null, serializable);
+                    objectFullNames2serializable[fullName] = serializable;
                 }
             }
         }
@@ -190,26 +183,26 @@ namespace Cliver
         /// </summary>
         static public void ReloadField(string fullName)
         {
-            List<Assembly> sas = new List<Assembly>();
-            sas.Add(Assembly.GetEntryAssembly());
-            foreach (AssemblyName an in Assembly.GetEntryAssembly().GetReferencedAssemblies().Where(an => assemblyNameRegexPattern != null ? Regex.IsMatch(an.Name, assemblyNameRegexPattern) : true))
-                sas.Add(Assembly.Load(an));
-            foreach (Assembly sa in sas)
+            List<Assembly> assemblies = new List<Assembly>();
+            assemblies.Add(Assembly.GetEntryAssembly());
+            foreach (AssemblyName assemblyNames in Assembly.GetEntryAssembly().GetReferencedAssemblies().Where(assemblyNames => assemblyNameRegexPattern != null ? Regex.IsMatch(assemblyNames.Name, assemblyNameRegexPattern) : true))
+                assemblies.Add(Assembly.Load(assemblyNames));
+            foreach (Assembly assembly in assemblies)
             {
-                Type[] ets = sa.GetTypes();
-                foreach (Type st in ets.Where(t => t.IsSubclassOf(typeof(Settings))))
+                Type[] types = assembly.GetTypes();
+                foreach (Type settingsType in types.Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(Settings))))
                 {
-                    foreach (Type et in ets)
+                    foreach (Type type in types)
                     {
-                        FieldInfo fi = et.GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public).Where(a => a.FieldType == st && (a.DeclaringType.FullName + "." + a.Name) == fullName).FirstOrDefault();
-                        if (fi != null)
+                        FieldInfo settingsTypeFieldInfo = type.GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public).Where(a => a.FieldType == settingsType && (a.DeclaringType.FullName + "." + a.Name) == fullName).FirstOrDefault();
+                        if (settingsTypeFieldInfo != null)
                         {
-                            Serializable t;
+                            Serializable serializable;
                             string fileName = fullName + "." + FILE_EXTENSION;
-                            string file = (fi.FieldType.BaseType == typeof(UserSettings) ? UserSettings.StorageDir : (fi.FieldType.BaseType == typeof(AppSettings) ? AppSettings.StorageDir : StorageDir)) + System.IO.Path.DirectorySeparatorChar + fileName;
+                            string file = (settingsTypeFieldInfo.FieldType.BaseType == typeof(UserSettings) ? UserSettings.StorageDir : (settingsTypeFieldInfo.FieldType.BaseType == typeof(AppSettings) ? AppSettings.StorageDir : StorageDir)) + System.IO.Path.DirectorySeparatorChar + fileName;
                             try
                             {
-                                t = Serializable.Load(fi.FieldType, file);
+                                serializable = Serializable.Load(settingsTypeFieldInfo.FieldType, file);
                             }
                             catch (Exception e)
                             {
@@ -223,13 +216,13 @@ namespace Cliver
                                 if (File.Exists(initFile))
                                 {
                                     FileSystemRoutines.CopyFile(initFile, file, true);
-                                    t = Serializable.LoadOrCreate(fi.FieldType, file);
+                                    serializable = Serializable.LoadOrCreate(settingsTypeFieldInfo.FieldType, file);
                                 }
                                 else
-                                    t = Serializable.Create(fi.FieldType, file);
+                                    serializable = Serializable.Create(settingsTypeFieldInfo.FieldType, file);
                             }
 
-                            fi.SetValue(null, t);
+                            settingsTypeFieldInfo.SetValue(null, serializable);
                             return;
                         }
                     }

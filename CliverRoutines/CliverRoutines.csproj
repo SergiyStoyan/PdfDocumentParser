@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <AssemblyVersion>3.1.0.0</AssemblyVersion>
     <RepositoryUrl>https://github.com/sergeystoyan/CliverRoutines.git</RepositoryUrl>
     <FileVersion>3.1.0.0</FileVersion>
@@ -11,7 +11,7 @@
     <Copyright>Sergey Stoyan</Copyright>
     <Authors>Sergey Stoyan</Authors>
     <Company>CliverSoft</Company>
-    <Version>3.4.0</Version>
+    <Version>3.5.0</Version>
     <PackageProjectUrl>https://github.com/sergeystoyan/CliverRoutines</PackageProjectUrl>
     <Description>Cross-platform routines:
 - serializing which replaces .NET settings for desktop applications;
