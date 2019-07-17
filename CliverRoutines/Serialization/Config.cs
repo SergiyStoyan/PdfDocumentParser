@@ -121,12 +121,7 @@ namespace Cliver
                     foreach (Type settingsType in types.Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(Settings))))
                     {
                         foreach (Type type in types)
-                        {
-                            List<FieldInfo> fis = type.GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public).Where(a => a.FieldType.IsAssignableFrom(settingsType)).ToList();
-                            if (fis.Count > 1)
-                                throw new Exception("There are more than one fields of Settings type " + settingsType.FullName + ":\r\n" + string.Join(",\r\n", fis.Select(a => a.DeclaringType.FullName + "." + a.Name).ToList()));
-                            settingsTypeFieldInfos.AddRange(fis);
-                        }
+                            settingsTypeFieldInfos.AddRange(type.GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public).Where(a => a.FieldType.IsAssignableFrom(settingsType)));
                     }
                 }
                 foreach (FieldInfo settingsTypeFieldInfo in settingsTypeFieldInfos)
