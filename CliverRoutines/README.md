@@ -1,19 +1,19 @@
 # CliverRoutines
 
 ## Overview
-A cross-platform C# lib that exposes generally used routines: 
+A cross-platform C# lib providing generally used routines: 
 - serializing which replaces standard .NET settings for desktop applications; 
 - logging with threading and session support;
 - auxiliary routines;
 
-## Framework
+### Framework
 .NET Standard 2.0
 
-## Supported platforms
+### Supported platforms
 It is supposed to run anywhere with .NET Standard lib supported. 
 Presumably it will run on any Xamarin platforms (probably with minor updates required). 
 
-The most concern is peculiarities of the target file system because serializing and logging routines write/read files and do everything as automatically as possible.
+The most concern would be peculiarities of the target file system because of writing/reading/managing files.
 
 ### Tested on:
 - Windows 7, 10 in C# projects of any configuration built in Visual Studio;
@@ -32,13 +32,13 @@ Features:
 - serialized types can inherit from another serialized types which may be abstract;
 
 ### How to use:
-Define classes that is to be serialized and make them a subclass of Cliver.Settings class. Anywhere declare public class fields of these types. Add the following calls in the beginning of the app: 
+Define types that is to be serialized and make them subclasses of Cliver.Settings class. Anywhere you want declare public fields of these types. Add the following calls in the beginning of the app: 
 
 (optionally) Cliver.Config.Initialize(); 
 
 (mandatory) Cliver.Config.Reload();
 
-That's all. Now the fields will be set to the previously serialized values if any, otherwise keep the values they are initialized with.
+That's all. Now the fields will be set to their previously serialized values if any, otherwise keep the values they are initialized with.
 
 To serialize current value of a field, call Save() on it.
 
@@ -58,11 +58,11 @@ Features:
 - (option) automatic old log cleanup; 
 
 ### How to use:
-Add the following calls in the beginning of the app: 
+Add the following call in the beginning of the app: 
 
 (optionally) Cliver.Log.Initialize();
 
-To write to log call either Cliver.Log.Write() or Cliver.Log.Main.Write() or more specific methods.
+To write to log, call either Cliver.Log.Write() or Cliver.Log.Main.Write() or more specific methods.
 
 Review my C# projects in github to see live examples.
 
