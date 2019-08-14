@@ -10,7 +10,7 @@ namespace Cliver.WinApi
         [DllImport("kernel32.dll", ExactSpelling = true)]
         public static extern IntPtr GlobalLock(IntPtr handle);
         [DllImport("kernel32.dll", ExactSpelling = true)]
-        public static extern IntPtr GlobalUnlock(IntPtr handle);
+        public static extern bool GlobalUnlock(IntPtr handle);
 
         [DllImport("kernel32.dll")]
         public static extern bool ReadProcessMemory(int hProcess, int lpBaseAddress, byte[] lpBuffer, int dwSize, ref int lpNumberOfBytesRead);

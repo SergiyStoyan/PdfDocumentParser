@@ -107,40 +107,45 @@ namespace Cliver.PdfDocumentParser
 
         static public System.Drawing.Bitmap RenderBitmap(string pdfFile, int pageI, int resolution, bool byFile = false)
         {
-            Process p = new Process();
-            p.StartInfo.FileName = Log.AppDir + "\\gswin32c.exe";
-            int dDownScaleFactor = 1;
-            p.StartInfo.CreateNoWindow = true;
-            p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            p.StartInfo.UseShellExecute = false;
-
-            if (!byFile)
+            using (Process p = new Process())
             {
-                p.StartInfo.RedirectStandardOutput = true;
-                p.StartInfo.RedirectStandardError = true;
-                p.StartInfo.Arguments = "-dNOPROMPT -r" + resolution + " -dDownScaleFactor=" + dDownScaleFactor + " -dBATCH -dFirstPage=" + pageI + " -dLastPage=" + pageI + " -sDEVICE=png16m -dNOPAUSE -sOutputFile=%stdout -q \"" + pdfFile + "\"";
-                p.Start();
-                MemoryStream ms = new MemoryStream();
-                p.StandardOutput.BaseStream.CopyTo(ms);
-                p.WaitForExit();
+                p.StartInfo.FileName = Log.AppDir + "\\gswin32c.exe";
+                int dDownScaleFactor = 1;
+                p.StartInfo.CreateNoWindow = true;
+                p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                p.StartInfo.UseShellExecute = false;
 
-                try
+                if (!byFile)
                 {
-                    return new System.Drawing.Bitmap(System.Drawing.Image.FromStream(ms));
-                }
-                catch (Exception e)
-                {
-                    return RenderBitmap(pdfFile, pageI, resolution, true);
-                }
-            }
-            else//some pdf's require this because gs puts errors to stdout
-            {
-                string buffer_file = Log.AppCommonDataDir + "\\buffer.png";
-                p.StartInfo.Arguments = "-dNOPROMPT -r" + resolution + " -dDownScaleFactor=" + dDownScaleFactor + " -dBATCH -dFirstPage=" + pageI + " -dLastPage=" + pageI + " -sDEVICE=png16m -dNOPAUSE -sOutputFile=\"" + buffer_file + "\" -q \"" + pdfFile + "\"";
-                p.Start();
-                p.WaitForExit();
+                    p.StartInfo.RedirectStandardOutput = true;
+                    p.StartInfo.RedirectStandardError = true;
+                    p.StartInfo.Arguments = "-dNOPROMPT -r" + resolution + " -dDownScaleFactor=" + dDownScaleFactor + " -dBATCH -dFirstPage=" + pageI + " -dLastPage=" + pageI + " -sDEVICE=png16m -dNOPAUSE -sOutputFile=%stdout -q \"" + pdfFile + "\"";
+                    p.Start();
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        p.StandardOutput.BaseStream.CopyTo(ms);
+                        p.WaitForExit();
 
-                return new System.Drawing.Bitmap(System.Drawing.Image.FromFile(buffer_file));
+                        try
+                        {
+                            return new System.Drawing.Bitmap(System.Drawing.Image.FromStream(ms));
+                        }
+                        catch (Exception e)
+                        {
+                            return RenderBitmap(pdfFile, pageI, resolution, true);
+                        }
+                    }
+                }
+                else//some pdf's require this because gs puts errors to stdout
+                {
+                    string bufferFile = Log.AppCommonDataDir + "\\buffer.png";
+                    p.StartInfo.Arguments = "-dNOPROMPT -r" + resolution + " -dDownScaleFactor=" + dDownScaleFactor + " -dBATCH -dFirstPage=" + pageI + " -dLastPage=" + pageI + " -sDEVICE=png16m -dNOPAUSE -sOutputFile=\"" + bufferFile + "\" -q \"" + pdfFile + "\"";
+                    p.Start();
+                    p.WaitForExit();
+                    System.Drawing.Bitmap b = new System.Drawing.Bitmap(System.Drawing.Image.FromFile(bufferFile));
+                    File.Delete(bufferFile);
+                    return b;
+                }
             }
         }
 
