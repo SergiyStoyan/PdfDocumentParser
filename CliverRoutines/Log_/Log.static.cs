@@ -326,6 +326,9 @@ namespace Cliver
     //    }
     //}
 
+    /// <summary>
+    /// Exception's details are not logged. Used for foreseen errors.
+    /// </summary>
     public class Exception2 : Exception
     {
         public Exception2(string message)
