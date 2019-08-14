@@ -125,7 +125,6 @@ namespace Cliver.PdfDocumentParser
                     {
                         p.StandardOutput.BaseStream.CopyTo(ms);
                         p.WaitForExit();
-
                         try
                         {
                             return new System.Drawing.Bitmap(System.Drawing.Image.FromStream(ms));
@@ -138,11 +137,19 @@ namespace Cliver.PdfDocumentParser
                 }
                 else//some pdf's require this because gs puts errors to stdout
                 {
-                    string bufferFile = Log.AppCommonDataDir + "\\buffer.png";
+                    string bufferFileDir = System.IO.Path.GetTempPath() + Log.ProcessName;
+                    if (Directory.Exists(bufferFileDir))
+                        Directory.Delete(bufferFileDir, true);
+                    Directory.CreateDirectory(bufferFileDir);
+                    string bufferFile = bufferFileDir + "\\buffer.png";
                     p.StartInfo.Arguments = "-dNOPROMPT -r" + resolution + " -dDownScaleFactor=" + dDownScaleFactor + " -dBATCH -dFirstPage=" + pageI + " -dLastPage=" + pageI + " -sDEVICE=png16m -dNOPAUSE -sOutputFile=\"" + bufferFile + "\" -q \"" + pdfFile + "\"";
                     p.Start();
                     p.WaitForExit();
-                    System.Drawing.Bitmap b = new System.Drawing.Bitmap(System.Drawing.Image.FromFile(bufferFile));
+                    System.Drawing.Bitmap b;
+                    using (var bt = new System.Drawing.Bitmap(bufferFile))//to free the file
+                    {
+                        b = new System.Drawing.Bitmap(bt);
+                    }
                     File.Delete(bufferFile);
                     return b;
                 }
