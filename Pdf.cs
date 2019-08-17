@@ -127,7 +127,7 @@ namespace Cliver.PdfDocumentParser
                         p.WaitForExit();
                         try
                         {
-                            return new System.Drawing.Bitmap(System.Drawing.Image.FromStream(ms));
+                            return new System.Drawing.Bitmap(ms);
                         }
                         catch (Exception e)
                         {
