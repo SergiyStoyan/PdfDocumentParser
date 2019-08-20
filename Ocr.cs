@@ -53,8 +53,8 @@ namespace Cliver.PdfDocumentParser
         {
             using (var page = engine.Process(b, PageSegMode.OsdOnly))
             {
-                Orientation o;
-                page.DetectBestOrientation(out o, out confidence);
+                page.DetectBestOrientation(out Orientation o, out confidence);
+                //page.DetectBestOrientation(out int o2, out confidence);
                 return o;
             }
         }

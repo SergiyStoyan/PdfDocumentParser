@@ -110,14 +110,14 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="itextsharp, Version=5.5.13.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>SampleParser\packages\iTextSharp.5.5.13\lib\itextsharp.dll</HintPath>
+    <Reference Include="itextsharp, Version=5.5.13.1, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\HawkeyeParser\packages\iTextSharp.5.5.13.1\lib\itextsharp.dll</HintPath>
     </Reference>
-    <Reference Include="Magick.NET-Q16-AnyCPU, Version=7.10.0.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
-      <HintPath>SampleParser\packages\Magick.NET-Q16-AnyCPU.7.10.0\lib\net40\Magick.NET-Q16-AnyCPU.dll</HintPath>
+    <Reference Include="Magick.NET-Q16-AnyCPU, Version=7.14.2.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
+      <HintPath>..\HawkeyeParser\packages\Magick.NET-Q16-AnyCPU.7.14.2\lib\net40\Magick.NET-Q16-AnyCPU.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>SampleParser\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\HawkeyeParser\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -135,8 +135,8 @@
     <Reference Include="System.XML">
       <Name>System.XML</Name>
     </Reference>
-    <Reference Include="Tesseract, Version=3.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>SampleParser\packages\Tesseract.3.3.0\lib\net45\Tesseract.dll</HintPath>
+    <Reference Include="Tesseract, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\HawkeyeParser\packages\Genesis.Tesseract4.4.0.2.11\lib\net47\Tesseract.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -322,5 +322,7 @@
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
     </PropertyGroup>
+    <Error Condition="!Exists('..\HawkeyeParser\packages\Genesis.Tesseract4.4.0.2.11\build\Genesis.Tesseract4.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\HawkeyeParser\packages\Genesis.Tesseract4.4.0.2.11\build\Genesis.Tesseract4.targets'))" />
   </Target>
+  <Import Project="..\HawkeyeParser\packages\Genesis.Tesseract4.4.0.2.11\build\Genesis.Tesseract4.targets" Condition="Exists('..\HawkeyeParser\packages\Genesis.Tesseract4.4.0.2.11\build\Genesis.Tesseract4.targets')" />
 </Project>
