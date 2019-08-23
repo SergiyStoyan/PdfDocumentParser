@@ -54,17 +54,37 @@ namespace Cliver
             return Log.AppDir + Path.DirectorySeparatorChar + path;
         }
 
-        /// <summary>
-        /// Clean file name from entities
-        /// </summary>
-        /// <param name="file"></param>
-        /// <returns></returns>
-        public static string GetNormalizedFileName(string file)
+        public static string GetLegalizedPath(string path, bool webDecode = false)
         {
-            file = HttpUtility.HtmlDecode(file);
-            file = HttpUtility.UrlDecode(file);
-            char[] cs = new char[2] { '/', '\\' };
-            return Regex.Replace(file.Substring(file.LastIndexOfAny(cs) + 1), @"[^\w]", "-");
+            if (webDecode)
+            {
+                path = HttpUtility.HtmlDecode(path);
+                path = HttpUtility.UrlDecode(path);
+            }
+            return Regex.Replace(path, invalidPathChars, "");
+        }
+        static string invalidPathChars = "[" + Regex.Escape(new string(Path.GetInvalidPathChars())) + "]";
+
+        public static string GetLegalizedFileName(string file, bool webDecode = false)
+        {
+            if (webDecode)
+            {
+                file = HttpUtility.HtmlDecode(file);
+                file = HttpUtility.UrlDecode(file);
+            }
+            return Regex.Replace(file.Substring(file.LastIndexOf(Path.DirectorySeparatorChar) + 1), invalidFileNameChars, "");
+        }
+        static string invalidFileNameChars = "[" + Regex.Escape(new string(Path.GetInvalidFileNameChars())) + "]";
+        
+        public static string GetLegalizedFile(string file, bool webDecode = false)
+        {
+            if (webDecode)
+            {
+                file = HttpUtility.HtmlDecode(file);
+                file = HttpUtility.UrlDecode(file);
+            }
+            int p = file.LastIndexOf(Path.DirectorySeparatorChar) + 1;
+            return Regex.Replace(file.Substring(0, p), invalidPathChars, "") + Regex.Replace(file.Substring(p), invalidFileNameChars, "");
         }
 
         /// <summary>
