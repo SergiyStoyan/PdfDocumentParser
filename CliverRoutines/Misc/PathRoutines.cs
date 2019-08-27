@@ -54,29 +54,29 @@ namespace Cliver
             return Log.AppDir + Path.DirectorySeparatorChar + path;
         }
 
-        public static string GetLegalizedPath(string path, bool webDecode = false)
+        public static string GetLegalizedPath(string path, bool webDecode = false, string illegalCharReplacement = "")
         {
             if (webDecode)
             {
                 path = HttpUtility.HtmlDecode(path);
                 path = HttpUtility.UrlDecode(path);
             }
-            return Regex.Replace(path, invalidPathChars, "");
+            return Regex.Replace(path, invalidPathChars, illegalCharReplacement);
         }
         static string invalidPathChars = "[" + Regex.Escape(new string(Path.GetInvalidPathChars())) + "]";
 
-        public static string GetLegalizedFileName(string file, bool webDecode = false)
+        public static string GetLegalizedFileName(string file, bool webDecode = false, string illegalCharReplacement = "")
         {
             if (webDecode)
             {
                 file = HttpUtility.HtmlDecode(file);
                 file = HttpUtility.UrlDecode(file);
             }
-            return Regex.Replace(file.Substring(file.LastIndexOf(Path.DirectorySeparatorChar) + 1), invalidFileNameChars, "");
+            return Regex.Replace(file.Substring(file.LastIndexOf(Path.DirectorySeparatorChar) + 1), invalidFileNameChars, illegalCharReplacement);
         }
         static string invalidFileNameChars = "[" + Regex.Escape(new string(Path.GetInvalidFileNameChars())) + "]";
         
-        public static string GetLegalizedFile(string file, bool webDecode = false)
+        public static string GetLegalizedFile(string file, bool webDecode = false, string illegalCharReplacement = "")
         {
             if (webDecode)
             {
@@ -84,7 +84,7 @@ namespace Cliver
                 file = HttpUtility.UrlDecode(file);
             }
             int p = file.LastIndexOf(Path.DirectorySeparatorChar) + 1;
-            return Regex.Replace(file.Substring(0, p), invalidPathChars, "") + Regex.Replace(file.Substring(p), invalidFileNameChars, "");
+            return Regex.Replace(file.Substring(0, p), invalidPathChars, illegalCharReplacement) + Regex.Replace(file.Substring(p), invalidFileNameChars, illegalCharReplacement);
         }
 
         /// <summary>
