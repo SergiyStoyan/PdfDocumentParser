@@ -8,7 +8,7 @@ PdfDocumentParser is a .NET DLL.
 
 For a sample of using PdfDocumentParser or a framework refer to SampleParser project in the repository.
 
-##Known issues
+## Known issues
 - because it is WinForm, GUI may appear mangled in UHD display (or otherwise in FHD, depending on version). Don't be afraid: you can open it in VS and tune for your resolution. WPF version is in freezing developement...
 
 [More details...](https://sergeystoyan.github.io/PdfDocumentParser/#1)
