@@ -133,46 +133,14 @@ namespace Cliver.PdfDocumentParser
 
                 pages.ActiveTemplate = getTemplateFromUI(false);
 
-                RectangleF r = field.Rectangle.GetSystemRectangleF();
-                if (field.LeftAnchor != null)
-                {
-                    if (!findAndDrawAnchor(field.LeftAnchor.Id))
-                        return null;
-                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(field.LeftAnchor.Id);
-                    float right = r.Right;
-                    r.X += aai.Shift.Width - field.LeftAnchor.Shift;
-                    r.Width = right - r.X;
-                }
-                if (field.TopAnchor != null)
-                {
-                    if (!findAndDrawAnchor(field.TopAnchor.Id))
-                        return null;
-                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(field.TopAnchor.Id);
-                    float bottom = r.Bottom;
-                    r.Y += aai.Shift.Height - field.TopAnchor.Shift;
-                    r.Height = bottom - r.Y;
-                }
-                if (field.RightAnchor != null)
-                {
-                    if (!findAndDrawAnchor(field.RightAnchor.Id))
-                        return null;
-                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(field.RightAnchor.Id);
-                    r.Width += aai.Shift.Width - field.RightAnchor.Shift;
-                }
-                if (field.BottomAnchor != null)
-                {
-                    if (!findAndDrawAnchor(field.BottomAnchor.Id))
-                        return null;
-                    Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(field.BottomAnchor.Id);
-                    r.Height += aai.Shift.Height - field.BottomAnchor.Shift;
-                }
-                if (r.Width <= 0 || r.Height <= 0)
+                object v = pages[currentPageI].GetValue(field, out RectangleF? r_, Page.ValueTypes.Default);
+                if (r_ == null)
                     return null;
+                RectangleF r = (RectangleF)r_;
                 owners2resizebleBox[field] = new ResizebleBox(field, r, Settings.Appearance.SelectionBoxBorderWidth);
                 switch (field.Type)
                 {
                     case Template.Field.Types.PdfText:
-                        string s;
                         if (field.ColumnOfTable != null)
                         {
                             //RectangleF? tr = pages[currentPageI].GetTableActualRectangle((Template.Field.PdfText)field);
@@ -187,26 +155,19 @@ namespace Cliver.PdfDocumentParser
                                 Message.Error("Field " + field.ColumnOfTable + " does not have enough definitions to respect definition " + field.Name + "[" + fieldDefinitionIndex + "]");
                                 return null;
                             }
-                            RectangleF? tr = pages[currentPageI].GetFieldActualRectange(tableField);
+                            RectangleF? tr = pages[currentPageI].GetFieldActualRectangle(tableField);
                             if (tr == null)
                                 return null;
                             drawBoxes(Settings.Appearance.TableBoxColor, Settings.Appearance.TableBoxBorderWidth, new List<RectangleF> { (RectangleF)tr });
-                            //return Page.NormalizeText(Pdf.GetTextSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, r, pages.ActiveTemplate.TextAutoInsertSpaceThreshold, pages.ActiveTemplate.TextAutoInsertSpaceSubstitute));
-                            s = string.Join("\r\n", pages[currentPageI].GetTextLinesAsTableColumn(field, r));
                         }
-                        else
-                            s = Pdf.GetTextSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, r, pages.ActiveTemplate.TextAutoInsertSpace);
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
-                        return Page.NormalizeText(s);
+                        return Page.NormalizeText((string)v);
                     case Template.Field.Types.OcrText:
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
-                        return Page.NormalizeText(Ocr.This.GetTextSurroundedByRectangle(pages[currentPageI].ActiveTemplateBitmap, r));
+                        return Page.NormalizeText((string)v);
                     case Template.Field.Types.ImageData:
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
-                        using (Bitmap rb = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
-                        {
-                            return ImageData.GetScaled(rb, Settings.Constants.Image2PdfResolutionRatio);
-                        }
+                        return v;
                     default:
                         throw new Exception("Unknown option: " + field.Type);
                 }

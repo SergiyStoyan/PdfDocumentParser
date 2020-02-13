@@ -18,13 +18,14 @@ namespace Cliver.PdfDocumentParser
 
             public int PdfPageImageResolution = 300;//tesseract requires at least 300
             public float CoordinateDeviationMargin = 1f;
+            public int PdfResolution = 72;//72 is resolution of the most pdf's
 
             [Newtonsoft.Json.JsonIgnore]
             public float Image2PdfResolutionRatio { get; private set; }
 
             public override void Loaded()
             {
-                Image2PdfResolutionRatio = (float)72 / PdfPageImageResolution;//72 is resolution of the most pdf's
+                Image2PdfResolutionRatio = (float)PdfResolution / PdfPageImageResolution;
             }
 
             public override void Saving()

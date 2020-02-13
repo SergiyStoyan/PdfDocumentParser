@@ -29,7 +29,7 @@ namespace Cliver.PdfDocumentParser
             //int fieldDefinitionIndex = 0;
             foreach (Template.Field f in pageCollection.ActiveTemplate.Fields.Where(x => x.Name == fieldName))
             {
-                o = getValue(f/*, fieldDefinitionIndex*/, valueType);
+                o = GetValue(f/*, fieldDefinitionIndex*/,out RectangleF? r, valueType);
                 if (o != null)
                     return o;
                 //fieldDefinitionIndex++;
@@ -43,9 +43,9 @@ namespace Cliver.PdfDocumentParser
         //{
 
         //}
-
-        internal RectangleF? GetFieldActualRectange(Template.Field field)
-        {
+        
+        internal RectangleF? GetFieldActualRectangle(Template.Field field)
+        { 
             if (!field.IsSet())
                 throw new Exception("Field is not set.");
             if (field.Rectangle.Width <= Settings.Constants.CoordinateDeviationMargin || field.Rectangle.Height <= Settings.Constants.CoordinateDeviationMargin)
@@ -88,12 +88,12 @@ namespace Cliver.PdfDocumentParser
             return r;
         }
 
-        object getValue(Template.Field field/*, int fieldDefinitionIndex*/, ValueTypes valueType = ValueTypes.Default)
+        internal object GetValue(Template.Field field/*, int fieldDefinitionIndex*/, out RectangleF? rectangle, ValueTypes valueType = ValueTypes.Default)
         {
-            RectangleF? r_ = GetFieldActualRectange(field);
-            if (r_ == null)
+            rectangle = GetFieldActualRectangle(field);
+            if (rectangle == null)
                 return null;
-            RectangleF r = (RectangleF)r_;
+            RectangleF r = (RectangleF)rectangle;
             switch (field.Type)
             {
                 case Template.Field.Types.PdfText:
@@ -162,7 +162,7 @@ namespace Cliver.PdfDocumentParser
             {
                 throw new Exception("Field " + field.ColumnOfTable + " does not have enough definitions to respect definition " + field.Name + "[" + fieldDefinitionIndex + "]", e);
             }
-            List<Pdf.CharBox> cbs = (List<Pdf.CharBox>)getValue(tableField, ValueTypes.CharBoxs);
+            List<Pdf.CharBox> cbs = (List<Pdf.CharBox>)GetValue(tableField, out RectangleF? r, ValueTypes.CharBoxs);
             if (cbs == null)
                 return null;
 

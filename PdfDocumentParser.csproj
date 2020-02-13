@@ -135,8 +135,8 @@
     <Reference Include="System.XML">
       <Name>System.XML</Name>
     </Reference>
-    <Reference Include="Tesseract, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\HawkeyeParser\packages\Genesis.Tesseract4.4.0.2.11\lib\net47\Tesseract.dll</HintPath>
+    <Reference Include="Tesseract, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\HawkeyeParser\packages\Tesseract.4.1.0-beta1\lib\net45\Tesseract.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -319,10 +319,11 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
+  <Import Project="..\HawkeyeParser\packages\Tesseract.4.1.0-beta1\build\Tesseract.targets" Condition="Exists('..\HawkeyeParser\packages\Tesseract.4.1.0-beta1\build\Tesseract.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\HawkeyeParser\packages\Genesis.Tesseract4.4.0.2.11\build\Genesis.Tesseract4.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\HawkeyeParser\packages\Genesis.Tesseract4.4.0.2.11\build\Genesis.Tesseract4.targets'))" />
+    <Error Condition="!Exists('..\HawkeyeParser\packages\Tesseract.4.1.0-beta1\build\Tesseract.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\HawkeyeParser\packages\Tesseract.4.1.0-beta1\build\Tesseract.targets'))" />
   </Target>
-  <Import Project="..\HawkeyeParser\packages\Genesis.Tesseract4.4.0.2.11\build\Genesis.Tesseract4.targets" Condition="Exists('..\HawkeyeParser\packages\Genesis.Tesseract4.4.0.2.11\build\Genesis.Tesseract4.targets')" />
 </Project>
