@@ -133,6 +133,15 @@ namespace Cliver.PdfDocumentParser
 
                 pages.ActiveTemplate = getTemplateFromUI(false);
 
+                if (field.LeftAnchor != null && !findAndDrawAnchor(field.LeftAnchor.Id))
+                    return null;
+                if (field.TopAnchor != null && !findAndDrawAnchor(field.TopAnchor.Id))
+                    return null;
+                if (field.RightAnchor != null && !findAndDrawAnchor(field.RightAnchor.Id))
+                    return null;
+                if (field.BottomAnchor != null && !findAndDrawAnchor(field.BottomAnchor.Id))
+                    return null;
+
                 object v = pages[currentPageI].GetValue(field, out RectangleF? r_, Page.ValueTypes.Default);
                 if (r_ == null)
                     return null;

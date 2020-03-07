@@ -42,7 +42,7 @@ namespace Cliver.PdfDocumentParser
         }
 
         public bool AutoDeskew = false;
-        public int AutoDeskewThreshold = 100;
+        public int AutoDeskewThreshold = 1;
 
         public List<Anchor> Anchors;
 
