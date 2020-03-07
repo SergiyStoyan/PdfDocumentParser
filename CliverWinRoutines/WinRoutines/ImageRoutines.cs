@@ -9,7 +9,7 @@ using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 
-namespace Cliver
+namespace Cliver.Win
 {
     public static class ImageRoutines
     {

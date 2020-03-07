@@ -23,7 +23,7 @@ namespace Cliver
                 {
                     socket.Connect(destination_ip, 0);
                 }
-                catch(Exception e)
+                catch//(Exception e)
                 {
                     return null;
                 }

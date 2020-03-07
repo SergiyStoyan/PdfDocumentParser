@@ -17,11 +17,11 @@ namespace Cliver
         public class ThreadWriter : Writer
         {
             ThreadWriter(int id, string file_name)
-                : base(id.ToString(), file_name, Log.MainSession)
+                : base(id == MAIN_THREAD_LOG_ID ? MAIN_THREAD_LOG_NAME : id.ToString(), file_name, Log.MainSession)
             {
                 this.Id = id;
             }
-            
+
             internal const int MAIN_THREAD_LOG_ID = -1;
 
             /// <summary>

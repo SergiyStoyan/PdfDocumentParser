@@ -186,14 +186,26 @@ namespace Cliver
         /// Write the message to the current thread's log.
         /// </summary>
         /// <param name="e"></param>
-        static public void Write(MessageType type, string message, string details = null)
+        static public void Write(MessageType messageType , string message, string details = null)
         {
-            ThreadWriter.This.Write(type, message, details);
+            ThreadWriter.This.Write(messageType, message, details);
         }
 
         static public void Write(string message)
         {
             ThreadWriter.This.Write(MessageType.LOG, message);
+        }
+
+        /// <summary>
+        /// Log only messages of the respective types
+        /// </summary>
+        public enum Level
+        {
+            NONE,
+            ERROR,
+            WARNING,
+            INFORM,
+            ALL
         }
 
         public enum MessageType
@@ -248,17 +260,13 @@ namespace Cliver
 
         public static string GetExceptionMessage(Exception e)
         {
-            string m;
-            string d;
-            GetExceptionMessage(e, out m, out d);
+            GetExceptionMessage(e, out string m, out string d);
             return m + " \r\n\r\n" + d;
         }
 
         public static string GetExceptionMessage2(Exception e)
         {
-            string m;
-            string d;
-            GetExceptionMessage(e, out m, out d);
+            GetExceptionMessage(e, out string m, out string d);
             return m;
         }
 
@@ -327,7 +335,7 @@ namespace Cliver
     //}
 
     /// <summary>
-    /// Exception's details are not logged. Used for foreseen errors.
+    /// Trace info for such Exception is not logged. Used for foreseen errors.
     /// </summary>
     public class Exception2 : Exception
     {

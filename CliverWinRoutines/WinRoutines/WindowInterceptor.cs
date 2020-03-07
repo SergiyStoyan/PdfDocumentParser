@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 //using Cliver.Win32;
 using System.Collections;
 
-namespace Cliver
+namespace Cliver.Win
 {
     /// <summary>
     /// Intercept dialog box creation

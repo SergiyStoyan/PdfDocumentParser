@@ -33,7 +33,7 @@ namespace Cliver
 
             string get_path(string name)
             {
-                lock (this.names2nw)
+                lock (this.names2NamedWriter)
                 {
                     switch (Log.mode)
                     {
@@ -56,7 +56,7 @@ namespace Cliver
             {
                 get
                 {
-                    lock (this.names2nw)//this lock is needed if Session::Close(string new_name) is performing
+                    lock (this.names2NamedWriter)//this lock is needed if Session::Close(string new_name) is performing
                     {
                         return name;
                     }
@@ -68,7 +68,7 @@ namespace Cliver
             {
                 get
                 {
-                    lock (this.names2nw)//this lock is needed if Session::Close(string new_name) is performing
+                    lock (this.names2NamedWriter)//this lock is needed if Session::Close(string new_name) is performing
                     {
                         return path;
                     }
@@ -79,7 +79,7 @@ namespace Cliver
             public readonly DateTime CreatedTime = DateTime.Now;
             public readonly string TimeMark;
 
-            Dictionary<string, NamedWriter> names2nw = new Dictionary<string, NamedWriter>();
+            Dictionary<string, NamedWriter> names2NamedWriter = new Dictionary<string, NamedWriter>();
 
             /// <summary>
             /// Close all writing streams and rename session and its directory. Using the session can be continued after that.
@@ -87,7 +87,7 @@ namespace Cliver
             /// <param name="new_name"></param>
             public void Close(string new_name)
             {
-                lock (this.names2nw)
+                lock (this.names2NamedWriter)
                 {
                     if (Log.mode == Mode.ONLY_LOG)
                         throw new Exception("Cannot rename log folder in mode: " + Log.mode);
@@ -121,9 +121,9 @@ namespace Cliver
             /// </summary>
             public void Close()
             {
-                lock (this.names2nw)
+                lock (this.names2NamedWriter)
                 {
-                    if (names2nw.Values.Count < 1 && !ThreadWriter.IsAnythingOpen)
+                    if (names2NamedWriter.Values.Count < 1 && !ThreadWriter.IsAnythingOpen)
                         return;
 
                     Default.Write("Closing the log session");
@@ -132,9 +132,9 @@ namespace Cliver
                     if(Log.IsMainSessionOpen && this == Log.MainSession)
                         Log.ThreadWriter.CloseAll();
 
-                    foreach (NamedWriter nw in names2nw.Values)
+                    foreach (NamedWriter nw in names2NamedWriter.Values)
                         nw.Close();
-                    //names2nw.Clear(); !!! clearing writers will bring to duplicating of them if they are referenced alongside also.
+                    //names2NamedWriter.Clear(); !!! clearing writers will bring to duplicating of them if they are referenced alongside also.
                 }
             }
 
@@ -142,10 +142,10 @@ namespace Cliver
             {
                 get
                 {
-                    lock (this.names2nw)
+                    lock (this.names2NamedWriter)
                     {
                         int ec = 0;
-                        foreach (NamedWriter nw in names2nw.Values)
+                        foreach (NamedWriter nw in names2NamedWriter.Values)
                             ec += nw.ErrorCount;
                         return ec;
                     }
@@ -212,9 +212,9 @@ namespace Cliver
                 Default.Inform(message);
             }
 
-            public void Write(MessageType type, string message, string details = null)
+            public void Write(MessageType messageType , string message, string details = null)
             {
-                Default.Write(type, message, details);
+                Default.Write(messageType, message, details);
             }
 
             public void Write(string message)

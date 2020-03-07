@@ -35,7 +35,7 @@ namespace Cliver.PdfDocumentParser
                 scaledCurrentPageBitmap.Dispose();
             if (pages[currentPageI].ActiveTemplateBitmap == null)
                 pages.ActiveTemplate = getTemplateFromUI(false);
-            scaledCurrentPageBitmap = ImageRoutines.GetScaled(pages[currentPageI].ActiveTemplateBitmap, (float)pictureScale.Value * Settings.Constants.Image2PdfResolutionRatio);
+            scaledCurrentPageBitmap = Win.ImageRoutines.GetScaled(pages[currentPageI].ActiveTemplateBitmap, (float)pictureScale.Value * Settings.Constants.Image2PdfResolutionRatio);
             if (picture.Image != null)
                 picture.Image.Dispose();
             picture.Image = new Bitmap(scaledCurrentPageBitmap);

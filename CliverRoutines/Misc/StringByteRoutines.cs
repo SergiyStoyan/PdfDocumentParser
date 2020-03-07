@@ -8,6 +8,7 @@
 //********************************************************************************************
 using System;
 using System.IO;
+using System.Collections;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -20,8 +21,10 @@ namespace Cliver
             string s = null;
 
             string output_format;
-            if (hexadecimal_output) output_format = "X";
-            else output_format = "N";
+            if (hexadecimal_output)
+                output_format = "X";
+            else
+                output_format = "N";
 
             byte[] bs1 = File.ReadAllBytes(f1);
             byte[] bs2 = File.ReadAllBytes(f2);
@@ -50,41 +53,58 @@ namespace Cliver
             return s;
         }
 
-        public static string GetHexadecimalRepresentation(string s)
+        public static string GetHexadecimalReadableRepresentation(byte[] bs, int startPosition = 0, int? length = null)
         {
-            s = BitConverter.ToString(Encoding.ASCII.GetBytes(s)).ToLower();
-            return normalize_hexadecimal_representation(s);
-        }
-
-        public static string GetHexadecimalRepresentation(byte[] bs)
-        {
-            string s = BitConverter.ToString(bs).ToLower();
-            return normalize_hexadecimal_representation(s);
-        }
-
-        static string normalize_hexadecimal_representation(string s)
-        {
-            const string between_8_and_9 = "    ";
-            s = Regex.Replace(s, between_8_and_9, "", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase);
-            s = Regex.Replace(s, @"((?:[\da-z]{2}[^\da-z]*){7}[\da-z]{2})(?:[^\da-z]*)", "$1" + between_8_and_9, RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase);
-            s = Regex.Replace(s, @"(.*?" + between_8_and_9 + ".*?)" + between_8_and_9, "$1\r\n", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase);
+            if (bs == null)
+                return null;
+            if (length == null)
+                length = bs.Length;
+            string s = BitConverter.ToString(bs, startPosition, (int)length);
+            s = Regex.Replace(s, @"\s+", "");
             return s;
         }
 
-        public static byte[] GetByteArrayFromHexadecimalRepresentation(string hexadecimal_s)
+        public static string GetHexadecimalPrefixedRepresentation(byte[] bs, int startPosition = 0, int? length = null, string prefix = "0x")
         {
-            hexadecimal_s = GetNormalizedHexadecimalRepresentation(hexadecimal_s);
-            int cn = hexadecimal_s.Length / 2;
+            if (bs == null)
+                return null;
+            if (length == null)
+                length = bs.Length;
+            string s = BitConverter.ToString(bs, startPosition, (int)length);
+            s = Regex.Replace(s, @"\s+", "");
+            s = Regex.Replace(s, @"\-", "");
+            return prefix + s;
+        }
+
+        //static string normalize_hexadecimal_representation(string s)
+        //{
+        //    const string between_8_and_9 = "    ";
+        //    s = Regex.Replace(s, between_8_and_9, "", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase);
+        //    s = Regex.Replace(s, @"((?:[\da-z]{2}[^\da-z]*){7}[\da-z]{2})(?:[^\da-z]*)", "$1" + between_8_and_9, RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase);
+        //    s = Regex.Replace(s, @"(.*?" + between_8_and_9 + ".*?)" + between_8_and_9, "$1\r\n", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase);
+        //    return s;
+        //}
+
+        public static byte[] GetByteArrayFromHexadecimalRepresentation(string hexadecimalRepresentation)
+        {
+            if (hexadecimalRepresentation == null)
+                return null;
+            hexadecimalRepresentation = Regex.Replace(hexadecimalRepresentation.Trim(), @"^0x", "");
+            hexadecimalRepresentation = Regex.Replace(hexadecimalRepresentation, @"[^\da-f]+", "");
+            int cn = hexadecimalRepresentation.Length / 2;
             byte[] bytes = new byte[cn];
-            StringReader sr = new StringReader(hexadecimal_s);
-            for (int i = 0; i < cn; i++) bytes[i] = Convert.ToByte(new string(new char[2] { (char)sr.Read(), (char)sr.Read() }), 16);
+            StringReader sr = new StringReader(hexadecimalRepresentation);
+            for (int i = 0; i < cn; i++)
+                bytes[i] = Convert.ToByte(new string(new char[2] { (char)sr.Read(), (char)sr.Read() }), 16);
             return bytes;
         }
 
-        public static string GetNormalizedHexadecimalRepresentation(string hexadecimal_s, string spacer = "")
+        public static string ToBitString(this BitArray bits)
         {
-            if (spacer != "") hexadecimal_s = Regex.Replace(hexadecimal_s, @"^[^\da-f]+|[^\da-f]+$", "", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
-            return Regex.Replace(hexadecimal_s, @"[^\da-f]+", spacer, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline).ToLower();
+            char[] cs = new char[bits.Count];
+            for (int i = 0; i < bits.Count; i++)
+                cs[i] = bits[i] ? '1' : '0';
+            return new string(cs);
         }
     }
 }

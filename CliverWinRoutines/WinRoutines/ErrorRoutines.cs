@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.InteropServices;
 
-namespace Cliver
+namespace Cliver.Win
 {
     public class ErrorRoutines
     {

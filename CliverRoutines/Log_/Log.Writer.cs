@@ -37,7 +37,7 @@ namespace Cliver
 
             public static int MaxFileSize = -1;
 
-            internal const string MAIN_THREAD_LOG_NAME = null;
+            public const string MAIN_THREAD_LOG_NAME = "";
 
             /// <summary>
             /// Log path
@@ -93,6 +93,8 @@ namespace Cliver
                     _ErrorCount = 0;
                 }
             }
+
+            public Level Level =  Level.ALL;
 
             /// <summary>
             /// Write the error to the current thread's log
@@ -198,6 +200,14 @@ namespace Cliver
                 Write(MessageType.WARNING, message, GetStackString());
             }
 
+            public void Warning(string message, Exception e)
+            {
+                string m;
+                string d;
+                GetExceptionMessage(e, out m, out d);
+                Write(MessageType.WARNING, message, m + (e is Exception2 ? null : "\r\n\r\n" + d));
+            }
+
             public void Warning2(string message)
             {
                 Write(MessageType.WARNING, message);
@@ -251,15 +261,15 @@ namespace Cliver
             /// Write the message to the current thread's log.
             /// </summary>
             /// <param name="e"></param>
-            public void Write(Log.MessageType type, string message, string details = null)
+            public void Write(Log.MessageType messageType , string message, string details = null)
             {
                 lock (this)
                 {
-                    if (type == Log.MessageType.EXIT)
+                    if (messageType == Log.MessageType.EXIT)
                     {
                         if (exiting_thread != null)
                             return;
-                        write(type, message, details);
+                        write(messageType, message, details);
                         exiting_thread = startThread(() =>
                         {
                             try
@@ -281,15 +291,36 @@ namespace Cliver
                         });
                     }
                     else
-                        write(type, message, details);
+                        write(messageType, message, details);
                 }
             }
-            void write(Log.MessageType type, string message, string details)
+            void write(Log.MessageType messageType , string message, string details)
             {
+                switch(Level)
+                {
+                    case Level.NONE:
+                        return;
+                    case Level.ERROR:
+                        if (messageType < MessageType.ERROR)
+                            return;
+                        break;
+                    case Level.WARNING:
+                        if (messageType < MessageType.WARNING)
+                            return;
+                        break;
+                    case Level.INFORM:
+                        if (messageType < MessageType.INFORM)
+                            return;
+                        break;
+                    case Level.ALL:
+                        break;
+                    default:
+                        throw new Exception("Unknown option: " + Level);
+                }
+
                 lock (this)
                 {
-                    if (Writing != null)
-                        Writing.Invoke(type, message, details);
+                    Writing?.Invoke(Name, messageType, message, details);
 
                     if (Log.writeLog)
                     {
@@ -297,7 +328,7 @@ namespace Cliver
                             log_writer = new StreamWriter(Path, true);
 
                         details = string.IsNullOrWhiteSpace(details) ? "" : "\r\n\r\n" + details;
-                        message = (type == MessageType.LOG ? "" : type.ToString()) + ": " + message + details;
+                        message = (messageType == MessageType.LOG ? "" : messageType.ToString()) + ": " + message + details;
                         //switch (type)
                         //{
                         //    case Log.MessageType.INFORM:
@@ -387,7 +418,7 @@ namespace Cliver
             }
             int _ErrorCount = 0;
 
-            public delegate void OnWrite(Log.MessageType type, string message, string details);
+            public delegate void OnWrite(string logWriterName, Log.MessageType messageType, string message, string details);
             static public event OnWrite Writing = null;
         }
     }

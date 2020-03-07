@@ -107,9 +107,6 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\InvoiceParser\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System">
@@ -151,6 +148,7 @@
     <Compile Include="BaseForm\BaseForm.designer.cs">
       <DependentUpon>BaseForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="WinRoutines\Config.cs" />
     <Compile Include="WinRoutines\Crypto.cs" />
     <Compile Include="WinRoutines\ProgramRoutines.cs" />
     <Compile Include="WinRoutines\ImageRoutines.cs" />
@@ -168,14 +166,11 @@
     <Compile Include="InternetDateTime.cs" />
     <Compile Include="WinRoutines\AssemblyRoutines.cs" />
     <Compile Include="WinRoutines\ThreadRoutines.cs" />
-    <Compile Include="WinRoutines\WebClient.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="WinRoutines\ProcessRoutines.GetLockingProcesses.cs" />
-    <Compile Include="WinRoutines\WindowsFirewall.cs" />
+    <Compile Include="WinRoutines\Firewall.cs" />
     <Compile Include="WinRoutines\ProcessRoutines.AntiZombieGuard.cs" />
     <Compile Include="WinRoutines\ProcessRoutines.CreateProcess.cs" />
-    <Compile Include="WinRoutines\WindowsUserRoutines.cs" />
+    <Compile Include="WinRoutines\UserRoutines.cs" />
     <Compile Include="WinRoutines\SystemRoutines.cs" />
     <Compile Include="WinRoutines\SystemInfo.cs" />
     <Compile Include="WinRoutines\ProcessRoutines.cs" />
@@ -239,8 +234,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CliverRoutines\CliverRoutines.csproj">
-      <Project>{e88444ba-1b07-40e6-96d1-922d27965f91}</Project>
+    <ProjectReference Include="..\..\CliverRoutines\CliverRoutines.csproj">
+      <Project>{b85a42c6-9145-4054-8939-4717b6edc060}</Project>
       <Name>CliverRoutines</Name>
     </ProjectReference>
   </ItemGroup>

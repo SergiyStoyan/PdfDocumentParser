@@ -8,7 +8,7 @@
 //********************************************************************************************
 using System.Diagnostics;
 
-namespace Cliver
+namespace Cliver.Win
 {
     public static class SystemRoutines
     {

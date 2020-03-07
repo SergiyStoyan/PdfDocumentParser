@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Collections.Generic;
 
-namespace Cliver
+namespace Cliver.Win
 {
     public static partial class ProcessRoutines
     {

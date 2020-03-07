@@ -13,6 +13,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Security.Cryptography;
+using System.Linq;
 
 namespace Cliver.Win
 {
@@ -25,13 +26,31 @@ namespace Cliver.Win
 
             public ProtectedData(byte[] key)
             {
+                if (key == null)
+                    throw new ArgumentNullException("key");
                 this.key = key;
             }
 
             public ProtectedData(string key)
             {
-                if (key != null)
-                    this.key = Encoding.UTF8.GetBytes(key);
+                if (key == null)
+                    throw new ArgumentNullException("key");
+                this.key = Encoding.UTF8.GetBytes(key);
+            }
+
+            /// <summary>
+            /// Initialize cryption with the given computer's system info.
+            /// </summary>
+            public ProtectedData()
+            {
+                string key = SystemInfo.GetMotherboardIds().FirstOrDefault();
+                if (key == null)
+                {
+                    var pi = SystemInfo.GetProcessorInfos().FirstOrDefault();
+                    key = pi != null ? pi.Id : throw new Exception("Could not create the default key");
+                }
+
+                this.key = Encoding.UTF8.GetBytes(key);
             }
 
             public string Encrypt(string str)

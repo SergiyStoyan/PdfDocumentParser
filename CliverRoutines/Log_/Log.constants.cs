@@ -36,7 +36,7 @@ namespace Cliver
 
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location);
             CompanyName = string.IsNullOrWhiteSpace(fvi.CompanyName) ? "CliverSoft" : fvi.CompanyName;
-            
+
             //!!!no write permission on macOS!!!
             CompanyCommonDataDir = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + System.IO.Path.DirectorySeparatorChar + CompanyName;
             AppCommonDataDir = CompanyCommonDataDir + System.IO.Path.DirectorySeparatorChar + Log.ProcessName;
@@ -46,22 +46,22 @@ namespace Cliver
             //Log.DeleteOldLogs();
         }
 
-    /// <summary>
-    /// Normalized name of this process
-    /// </summary>
-    public static readonly string ProcessName;
+        /// <summary>
+        /// Normalized name of this process
+        /// </summary>
+        public static readonly string ProcessName;
 
-    public static readonly string CompanyName;
+        public static readonly string CompanyName;
 
-    /// <summary>
-    /// Directory where the CliverSoft's application data independent on user are located.
-    /// </summary>
-    public static readonly string CompanyCommonDataDir;
+        /// <summary>
+        /// Directory where the CliverSoft's application data independent on user are located.
+        /// </summary>
+        public static readonly string CompanyCommonDataDir;
 
-    /// <summary>
-    /// Directory where the application's data files independent on user are located.
-    /// </summary>
-    public static readonly string AppCommonDataDir;
+        /// <summary>
+        /// Directory where the application's data files independent on user are located.
+        /// </summary>
+        public static readonly string AppCommonDataDir;
 
         /// <summary>
         /// Directory where the CliverSoft's application data dependent on user are located.
@@ -77,7 +77,7 @@ namespace Cliver
         /// Directory where the application binary is located.
         /// </summary>
         public readonly static string AppDir;
-        
+
         /// <summary>
         ///Parent Log directory where logs are recorded
         /// </summary>
@@ -115,7 +115,7 @@ namespace Cliver
                                     File.Delete(testFile);
                                     break;
                                 }
-                                catch (Exception e)
+                                catch //(Exception e)
                                 {
                                     workDir = null;
                                 }
@@ -169,17 +169,6 @@ namespace Cliver
         //    return writeAllow && !writeDeny;
         //}
 
-        /// <summary>
-        /// Directory of the current main session
-        /// </summary>
-        public static string SessionDir
-        {
-            get
-            {
-                return MainSession.Path;
-            }
-        }
-
         public static Session MainSession
         {
             get
@@ -194,7 +183,7 @@ namespace Cliver
         public static bool IsMainSessionOpen
         {
             get
-            { 
+            {
                 return mainSession != null;
             }
         }
@@ -203,7 +192,7 @@ namespace Cliver
         /// Output folder name
         /// </summary>
         public static string OutputDirName = @"output";
-        
+
         /// <summary>
         /// Used to clear all session parameters in order to start a new session
         /// </summary>
@@ -212,7 +201,7 @@ namespace Cliver
             lock (lock_object)
             {
                 Log.CloseAll();
-                
+
                 workDir = null;
                 if (mainSession != null)
                     mainSession.Close();
@@ -284,7 +273,7 @@ namespace Cliver
                                     continue;
                                 if (alert != null)
                                 {
-                                    if (askYesNo==null)
+                                    if (askYesNo == null)
                                         Log.Main.Inform("Deleting logs older than " + FirstLogDate.ToString());
                                     else
                                     if (!askYesNo(alert))

@@ -82,7 +82,7 @@ namespace Cliver
     {
         static Config()
         {
-            DefaultStorageDir = UserSettings.StorageDir;
+            UnknownTypeStorageDir = UserSettings.StorageDir;
         }
 
         /// <summary>
@@ -101,8 +101,7 @@ namespace Cliver
 
         public const string CONFIG_FOLDER_NAME = "config";
         public const string FILE_EXTENSION = "json";
-        public static readonly string DefaultStorageDir;
-        public static string StorageDir { get; private set; }
+        public static string UnknownTypeStorageDir { get; private set; }
 
 
         static void get(bool reset)
@@ -135,7 +134,7 @@ namespace Cliver
                     Serializable serializable;
 
                     string fileName = fullName + "." + FILE_EXTENSION;
-                    string file = (settingsTypeFieldInfo.FieldType.BaseType == typeof(UserSettings) ? UserSettings.StorageDir : (settingsTypeFieldInfo.FieldType.BaseType == typeof(AppSettings) ? AppSettings.StorageDir : StorageDir)) + System.IO.Path.DirectorySeparatorChar + fileName;
+                    string file = (settingsTypeFieldInfo.FieldType.BaseType == typeof(UserSettings) ? UserSettings.StorageDir : (settingsTypeFieldInfo.FieldType.BaseType == typeof(AppSettings) ? AppSettings.StorageDir : UnknownTypeStorageDir)) + System.IO.Path.DirectorySeparatorChar + fileName;
                     if (reset)
                     {
                         string initFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + fileName;
@@ -153,7 +152,7 @@ namespace Cliver
                         {
                             serializable = Serializable.Load(settingsTypeFieldInfo.FieldType, file);
                         }
-                        catch (Exception e)
+                        catch //(Exception e)
                         {
                             //if (!Message.YesNo("Error while loading config file " + file + "\r\n\r\n" + e.Message + "\r\n\r\nWould you like to proceed with restoring the initial config?", null, Message.Icons.Error))
                             //    Environment.Exit(0);
@@ -200,12 +199,12 @@ namespace Cliver
                         {
                             Serializable serializable;
                             string fileName = fullName + "." + FILE_EXTENSION;
-                            string file = (settingsTypeFieldInfo.FieldType.BaseType == typeof(UserSettings) ? UserSettings.StorageDir : (settingsTypeFieldInfo.FieldType.BaseType == typeof(AppSettings) ? AppSettings.StorageDir : StorageDir)) + System.IO.Path.DirectorySeparatorChar + fileName;
+                            string file = (settingsTypeFieldInfo.FieldType.BaseType == typeof(UserSettings) ? UserSettings.StorageDir : (settingsTypeFieldInfo.FieldType.BaseType == typeof(AppSettings) ? AppSettings.StorageDir : UnknownTypeStorageDir)) + System.IO.Path.DirectorySeparatorChar + fileName;
                             try
                             {
                                 serializable = Serializable.Load(settingsTypeFieldInfo.FieldType, file);
                             }
-                            catch (Exception e)
+                            catch //(Exception e)
                             {
                                 //if (!Message.YesNo("Error while loading config file " + file + "\r\n\r\n" + e.Message + "\r\n\r\nWould you like to proceed with restoring the initial config?", null, Message.Icons.Error))
                                 //    Environment.Exit(0);
@@ -232,31 +231,45 @@ namespace Cliver
             throw new Exception("Field '" + fullName + "' was not found.");
         }
 
-        static public void Reload(string storageDir = null, bool readOnly = false)
+        static public void Reload(string unknownTypeStorageDir = null, bool readOnly = false)
         {
-            StorageDir = storageDir != null ? storageDir : DefaultStorageDir;
+            if (unknownTypeStorageDir != null)
+                UnknownTypeStorageDir = unknownTypeStorageDir;
             ReadOnly = readOnly;
             get(false);
         }
 
         static public bool ReadOnly { get; private set; }
 
-        static public void Reset(string storageDir = null)
+        static public void Reset(string unknownTypeStorageDir = null)
         {
-            StorageDir = storageDir != null ? storageDir : DefaultStorageDir;
+            if (unknownTypeStorageDir != null)
+                UnknownTypeStorageDir = unknownTypeStorageDir;
             get(true);
         }
 
-        static public void Save(string storageDir = null)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="unknownTypeStorageDir">only unknown Serializable types will be saved to a new location</param>
+        static public void Save(string unknownTypeStorageDir = null)
         {
-            storageDir = storageDir != null ? storageDir : DefaultStorageDir;
-            if (ReadOnly && PathRoutines.ArePathsEqual(storageDir, StorageDir))
-                throw new Exception("Config is read-only and cannot be saved to the same location.");
-            StorageDir = storageDir;
+            if (unknownTypeStorageDir != null)
+                if (ReadOnly && PathRoutines.ArePathsEqual(unknownTypeStorageDir, UnknownTypeStorageDir))
+                    throw new Exception("Config is read-only and cannot be saved to the same location: " + unknownTypeStorageDir);
+            UnknownTypeStorageDir = unknownTypeStorageDir;
             lock (objectFullNames2serializable)
             {
                 foreach (Serializable s in objectFullNames2serializable.Values)
-                    s.Save(StorageDir + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(s.__File));
+                {
+                    if (s is AppSettings)
+                        s.Save(AppSettings.StorageDir + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(s.__File));
+                    else
+                  if (s is UserSettings)
+                        s.Save(UserSettings.StorageDir + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(s.__File));
+                    else
+                        s.Save(UnknownTypeStorageDir + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(s.__File));
+                }
             }
         }
 

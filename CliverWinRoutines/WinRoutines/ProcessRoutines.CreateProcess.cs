@@ -10,7 +10,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace Cliver
+namespace Cliver.Win
 {
     public static partial class ProcessRoutines
     {

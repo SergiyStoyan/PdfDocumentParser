@@ -84,7 +84,7 @@ namespace Cliver.PdfDocumentParser
         {
             int w = bitmap.Width;
             int h = bitmap.Height;
-            bitmap = ImageRoutines.GetResized(bitmap, w, h);
+            bitmap = Win.ImageRoutines.GetResized(bitmap, w, h);
             Int32[] rawImageData = new Int32[w * h];
             BitmapData bd = bitmap.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
             Marshal.Copy(bd.Scan0, rawImageData, 0, w * h);
