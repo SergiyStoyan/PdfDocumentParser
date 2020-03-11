@@ -95,13 +95,6 @@ namespace Cliver.PdfDocumentParser
 
             public class ImageData : Anchor
             {
-                //public List<ImageBox> ImageBoxs;//to be deleted: conversion
-                //public class ImageBox//to be deleted: conversion
-                //{
-                //    public PdfDocumentParser.ImageData ImageData;
-                //    public RectangleF Rectangle;
-                //}
-
                 public PdfDocumentParser.ImageData Image;
 
                 public float BrightnessTolerance = 0.20f;
@@ -118,6 +111,21 @@ namespace Cliver.PdfDocumentParser
                     return new System.Drawing.RectangleF(Position.X, Position.Y, Image.Width, Image.Height);
                 }
             }
+
+            //public class OpenCv : Anchor
+            //{
+            //    public PdfDocumentParser.ImageData Image;
+
+            //    override public bool IsSet()
+            //    {
+            //        return Image != null && Image.Width > 0 && Image.Height > 0;
+            //    }
+
+            //    override public System.Drawing.RectangleF Rectangle()
+            //    {
+            //        return new System.Drawing.RectangleF(Position.X, Position.Y, Image.Width, Image.Height);
+            //    }
+            //}
 
             //public class Script : Anchor
             //{
