@@ -264,8 +264,7 @@ namespace Cliver
                 {
                     if (s is AppSettings)
                         s.Save(AppSettings.StorageDir + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(s.__File));
-                    else
-                  if (s is UserSettings)
+                    else if (s is UserSettings)
                         s.Save(UserSettings.StorageDir + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(s.__File));
                     else
                         s.Save(UnknownTypeStorageDir + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(s.__File));
@@ -289,7 +288,7 @@ namespace Cliver
             {
                 string d = FileSystemRoutines.CreateDirectory(toDirectory + System.IO.Path.DirectorySeparatorChar + CONFIG_FOLDER_NAME);
                 foreach (Serializable s in objectFullNames2serializable.Values)
-                    if (File.Exists(s.__File))//it can be absent if default settings used still
+                    if (File.Exists(s.__File))//it can be absent if default settings are used still
                         File.Copy(s.__File, d + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(s.__File));
             }
         }
