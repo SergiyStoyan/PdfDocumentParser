@@ -27,6 +27,11 @@ namespace Cliver.PdfDocumentParser
                     Image.Dispose();
                     Image = null;
                 }
+                //if (Bitmap != null)
+                //{
+                //    Bitmap.Dispose();
+                //    Bitmap = null;
+                //}
             }
         }
 
@@ -42,34 +47,82 @@ namespace Cliver.PdfDocumentParser
         {
             get
             {
-                if (Image == null)
-                    return null;
                 byte[] hash = new byte[8 + Image.Bytes.Length];
                 Array.Copy(BitConverter.GetBytes(Width), 0, hash, 0, 4);
                 Array.Copy(BitConverter.GetBytes(Height), 0, hash, 4, 4);
+
                 Array.Copy(Image.Bytes, 0, hash, 8, Image.Bytes.Length);
-                return System.Text.Encoding.ASCII.GetString(hash);
+                //int w = Bitmap.Width;
+                //int h = Bitmap.Height;
+                //Bitmap = Win.ImageRoutines.GetResized(Bitmap, w, h);
+                //Int32[] rawImageData = new Int32[w * h];
+                //BitmapData bd = Bitmap.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                //Marshal.Copy(bd.Scan0, rawImageData, 0, w * h);
+                //Bitmap.UnlockBits(bd);
+                //int p = 8;
+                //for (int x = 0; x < w; x++)
+                //{
+                //    for (int y = 0; y < h; y++)
+                //    {
+                //        Color c = Color.FromArgb(rawImageData[p]);
+                //        hash[p] = (byte)((c.R + c.G + c.B) / 3);
+                //        p++;
+                //    }
+                //}
+
+                return Convert.ToBase64String(hash);
             }
             set
             {
-                byte[] hash = System.Text.Encoding.ASCII.GetBytes(value);
-                Width = BitConverter.ToInt32(hash, 0);
-                Height = BitConverter.ToInt32(hash, 4);
+                try
+                {
+                    byte[] hash = Convert.FromBase64String(value);
+                    Width = BitConverter.ToInt32(hash, 0);
+                    Height = BitConverter.ToInt32(hash, 4);
 
+                    //Bitmap = new Bitmap(Width, Height);
+                    //int p = 0;
+                    //for (int x = 0; x < Width; x++)
+                    //    for (int y = 0; y < Height; y++)
+                    //    {
+                    //        Bitmap.SetPixel(x, y, Color.FromArgb(hash[p], hash[p], hash[p]));
+                    //        p++;
+                    //    }
 
-                //Bitmap b = new Bitmap(Width, Height);
-                //for (int x = 0; x < Width; x++)
-                //    for (int y = 0; y < Height; y++)
-                //        b.SetPixel(x, y, Color.FromArgb(Hash[x, y], Hash[x, y], Hash[x, y]));
-
-
-                Image = new Image<Gray, byte>(Width, Height);
-                Array.Copy(hash, 8, Image.Bytes, 0, Image.Bytes.Length);
+                    Image = new Image<Gray, byte>(Width, Height);
+                    byte[] bs = new byte[hash.Length - 8];
+                    Array.Copy(hash, 8, bs, 0, bs.Length);
+                    Image.Bytes = bs;
+                }
+                catch
+                {
+                    Width = 10;
+                    Height = 10;
+                    Image = new Image<Gray, byte>(Width, Height);
+                }
             }
         }
         internal int Width;
         internal int Height;
         internal Image<Gray, byte> Image;
+        //internal Bitmap Bitmap
+        //{
+        //    set
+        //    {
+        //        _bitmap = value;
+        //        Image<Gray, byte> Image = _bitmap.ToImage<Gray, byte>();
+        //        Emgu.CV.CvInvoke.Blur(Image, Image, new Size(10, 10), new Point(0, 0));
+        //        //Emgu.CV.CvInvoke.Threshold(image, image, 60, 255, ThresholdType.Otsu | ThresholdType.Binary);
+        //        //Emgu.CV.CvInvoke.Erode(image, image, null, new Point(-1, -1), 1, BorderType.Constant, CvInvoke.MorphologyDefaultBorderValue);
+        //        //CvInvoke.Dilate(image, image, null, new Point(-1, -1), 1, BorderType.Constant, CvInvoke.MorphologyDefaultBorderValue);
+        //        //CvInvoke.Canny(image, image, 100, 30, 3);
+        //    }
+        //    get
+        //    {
+        //        return _bitmap;
+        //    }
+        //}
+        //Bitmap _bitmap;
 
         public CvImage(Bitmap bitmap, bool scaleBitmap = true)
         {
@@ -102,7 +155,7 @@ namespace Cliver.PdfDocumentParser
         static private Image<Gray, byte> getPreprocessedImage(Bitmap bitmap)
         {
             Image<Gray, byte> image = bitmap.ToImage<Gray, byte>();
-            Emgu.CV.CvInvoke.Blur(image, image, new Size(10, 10), new Point(0, 0));
+            //Emgu.CV.CvInvoke.Blur(image, image, new Size(10, 10), new Point(0, 0));
             //Emgu.CV.CvInvoke.Threshold(image, image, 60, 255, ThresholdType.Otsu | ThresholdType.Binary);
             //Emgu.CV.CvInvoke.Erode(image, image, null, new Point(-1, -1), 1, BorderType.Constant, CvInvoke.MorphologyDefaultBorderValue);
             //CvInvoke.Dilate(image, image, null, new Point(-1, -1), 1, BorderType.Constant, CvInvoke.MorphologyDefaultBorderValue);
