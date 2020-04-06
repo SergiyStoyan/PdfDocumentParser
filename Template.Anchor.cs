@@ -28,6 +28,8 @@ namespace Cliver.PdfDocumentParser
                     Type = Types.OcrText;
                 else if (this is ImageData)
                     Type = Types.ImageData;
+                else if (this is CvImage)
+                    Type = Types.CvImage;
                 //else if (this is Script)
                 //    Type = Types.Script;
                 else
@@ -40,6 +42,7 @@ namespace Cliver.PdfDocumentParser
                 PdfText,
                 OcrText,
                 ImageData,
+                CvImage,
                 //Script
             }
 
@@ -100,6 +103,24 @@ namespace Cliver.PdfDocumentParser
                 public float BrightnessTolerance = 0.20f;
                 public float DifferentPixelNumberTolerance = 0.15f;
                 public bool FindBestImageMatch = false;
+
+                override public bool IsSet()
+                {
+                    return Image != null && Image.Width > 0 && Image.Height > 0;
+                }
+
+                override public System.Drawing.RectangleF Rectangle()
+                {
+                    return new System.Drawing.RectangleF(Position.X, Position.Y, Image.Width, Image.Height);
+                }
+            }
+
+            public class CvImage : Anchor
+            {
+                public PdfDocumentParser.CvImage Image;
+
+                public float Threshold = 0.70f;
+                public float ScaleDeviation = 0.1f;
 
                 override public bool IsSet()
                 {

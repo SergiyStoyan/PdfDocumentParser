@@ -133,6 +133,9 @@ namespace Cliver.PdfDocumentParser
                                 case Template.Anchor.Types.ImageData:
                                     a2 = new Template.Anchor.ImageData();
                                     break;
+                                case Template.Anchor.Types.CvImage:
+                                    a2 = new Template.Anchor.CvImage();
+                                    break;
                                 //case Template.Anchor.Types.Script:
                                 //    a2 = new Template.Anchor.Script();
                                 //    break;
@@ -273,6 +276,12 @@ namespace Cliver.PdfDocumentParser
                                 currentAnchorControl = new AnchorImageDataControl((float)pictureScale.Value);
                         }
                         break;
+                    case Template.Anchor.Types.CvImage:
+                        {
+                            if (currentAnchorControl == null || !(currentAnchorControl is AnchorCvImageControl))
+                                currentAnchorControl = new AnchorCvImageControl((float)pictureScale.Value);
+                        }
+                        break;
                     //case Template.Anchor.Types.Script:
                     //    {
                     //        if (currentAnchorControl == null || !(currentAnchorControl is AnchorScriptControl))
@@ -326,31 +335,36 @@ namespace Cliver.PdfDocumentParser
             row.Cells["ParentAnchorId3"].Value = a.ParentAnchorId;
 
             Template.PointF p = a.Position;
-            switch (a.Type)
-            {
-                case Template.Anchor.Types.PdfText:
-                    {
-                        Template.Anchor.PdfText pt = (Template.Anchor.PdfText)a;
-                    }
-                    break;
-                case Template.Anchor.Types.OcrText:
-                    {
-                        Template.Anchor.OcrText ot = (Template.Anchor.OcrText)a;
-                    }
-                    break;
-                case Template.Anchor.Types.ImageData:
-                    {
-                        Template.Anchor.ImageData id = (Template.Anchor.ImageData)a;
-                    }
-                    break;
-                //case Template.Anchor.Types.Script:
-                //    {
-                //        Template.Anchor.Script s = (Template.Anchor.Script)a;
-                //    }
-                //    break;
-                default:
-                    throw new Exception("Unknown option: " + a.Type);
-            }
+            //switch (a.Type)
+            //{
+            //    case Template.Anchor.Types.PdfText:
+            //        {
+            //            Template.Anchor.PdfText pt = (Template.Anchor.PdfText)a;
+            //        }
+            //        break;
+            //    case Template.Anchor.Types.OcrText:
+            //        {
+            //            Template.Anchor.OcrText ot = (Template.Anchor.OcrText)a;
+            //        }
+            //        break;
+            //    case Template.Anchor.Types.ImageData:
+            //        {
+            //            Template.Anchor.ImageData id = (Template.Anchor.ImageData)a;
+            //        }
+            //        break;
+            //    case Template.Anchor.Types.CvImage:
+            //        {
+            //            Template.Anchor.CvImage ci = (Template.Anchor.CvImage)a;
+            //        }
+            //        break;
+            //    //case Template.Anchor.Types.Script:
+            //    //    {
+            //    //        Template.Anchor.Script s = (Template.Anchor.Script)a;
+            //    //    }
+            //    //    break;
+            //    default:
+            //        throw new Exception("Unknown option: " + a.Type);
+            //}
             if (p != null)
                 row.Cells["Position3"].Value = Serialization.Json.Serialize(p);
 

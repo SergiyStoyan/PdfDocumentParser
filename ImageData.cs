@@ -66,6 +66,7 @@ namespace Cliver.PdfDocumentParser
             Width = Hash.GetLength(0);
             Height = Hash.GetLength(1);
         }
+
         public static Bitmap GetScaled(Image image, float ratio)
         {
             var b = new Bitmap((int)Math.Round(image.Width * ratio, 0), (int)Math.Round(image.Height * ratio, 0), PixelFormat.Format24bppRgb);
@@ -80,6 +81,7 @@ namespace Cliver.PdfDocumentParser
             }
             return b;
         }
+
         static byte[,] getBitmapHash(Bitmap bitmap)
         {
             int w = bitmap.Width;

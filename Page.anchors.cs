@@ -294,6 +294,27 @@ namespace Cliver.PdfDocumentParser
                         Point p = (Point)p_;
                         return !proceedOnFound(new PointF(searchRectanglePosition.X + p.X, searchRectanglePosition.Y + p.Y));
                     }
+                case Template.Anchor.Types.CvImage:
+                    {
+                        Template.Anchor.CvImage civ = (Template.Anchor.CvImage)a;
+                        Point searchRectanglePosition;
+                        CvImage ci0;
+                        if (civ.SearchRectangleMargin < 0)
+                        {
+                            ci0 = ActiveTemplateCvImage;
+                            searchRectanglePosition = new Point(0, 0);
+                        }
+                        else
+                        {
+                            searchRectanglePosition = new Point(searchRectangle.X < 0 ? 0 : (int)searchRectangle.X, searchRectangle.Y < 0 ? 0 : (int)searchRectangle.Y);
+                            ci0 = new CvImage(GetRectangleFromActiveTemplateBitmap(searchRectangle.X / Settings.Constants.Image2PdfResolutionRatio, searchRectangle.Y / Settings.Constants.Image2PdfResolutionRatio, searchRectangle.Width / Settings.Constants.Image2PdfResolutionRatio, searchRectangle.Height / Settings.Constants.Image2PdfResolutionRatio));
+                        }
+                        Point? p_ = civ.Image.FindWithinImage(ci0, civ.Threshold, civ.ScaleDeviation);
+                        if (p_ == null)
+                            return false;
+                        Point p = (Point)p_;
+                        return !proceedOnFound(new PointF(searchRectanglePosition.X + p.X, searchRectanglePosition.Y + p.Y));
+                    }
                 default:
                     throw new Exception("Unknown option: " + a.Type);
             }

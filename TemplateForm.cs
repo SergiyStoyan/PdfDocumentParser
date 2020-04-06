@@ -193,6 +193,16 @@ namespace Cliver.PdfDocumentParser
                                                 }
                                             }
                                             break;
+                                        case Template.Anchor.Types.CvImage:
+                                            {
+                                                Template.Anchor.CvImage ci = (Template.Anchor.CvImage)a;
+                                                using (Bitmap rb = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
+                                                {
+                                                    using (Bitmap b = CvImage.GetScaled(rb, Settings.Constants.Image2PdfResolutionRatio))
+                                                        ci.Image = new CvImage(b, false);
+                                                }
+                                            }
+                                            break;
                                         default:
                                             throw new Exception("Unknown option: " + a.Type);
                                     }

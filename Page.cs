@@ -203,6 +203,17 @@ namespace Cliver.PdfDocumentParser
         }
         ImageData _activeTemplateImageData;
 
+        internal CvImage ActiveTemplateCvImage
+        {
+            get
+            {
+                if (_activeTemplateCvImage == null)
+                    _activeTemplateCvImage = new CvImage(ActiveTemplateBitmap);
+                return _activeTemplateCvImage;
+            }
+        }
+        CvImage _activeTemplateCvImage;
+
         internal List<Pdf.CharBox> PdfCharBoxs
         {
             get

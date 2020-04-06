@@ -109,6 +109,9 @@ namespace Cliver.PdfDocumentParser
                     case Template.Anchor.Types.ImageData:
                         //bs = new List<System.Drawing.RectangleF> { rs[0] };
                         break;
+                    case Template.Anchor.Types.CvImage:
+                        //bs = new List<System.Drawing.RectangleF> { rs[0] };
+                        break;
                     default:
                         throw new Exception("Unknown option: " + a_.Type);
                 }
