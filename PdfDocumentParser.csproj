@@ -185,6 +185,7 @@
     </Compile>
     <Compile Include="BooleanEngine.cs" />
     <Compile Include="CvImage.cs" />
+    <Compile Include="Page.deskew.cs" />
     <Compile Include="Page.conditions.cs" />
     <Compile Include="Page.anchors.cs" />
     <Compile Include="Page.fields.cs" />

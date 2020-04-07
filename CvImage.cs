@@ -170,9 +170,9 @@ namespace Cliver.PdfDocumentParser
             if (p != null)
                 return p;
             //running though pyramid
-            const int scaleStep = 4;
-            float stepCount = scaleDeviation * Width / scaleStep;
-            for (int i = 0; i < stepCount; i++)
+            const int scaleStep = 2;
+            int stepCount = Convert.ToInt32(scaleDeviation * Width / scaleStep);
+            for (int i = 1; i <= stepCount; i++)
             {
                 double scaleDelta = scaleStep * i / Width;
                 Image<Gray, byte> template = Image.Resize(1 + scaleDelta, Inter.Linear);
