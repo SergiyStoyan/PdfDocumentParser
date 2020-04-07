@@ -142,24 +142,14 @@ namespace Cliver.PdfDocumentParser
                             b.RotateFlip(RotateFlipType.Rotate270FlipNone);
                             break;
                         case Template.PageRotations.AutoDetection:
-                            float confidence;
-                            Tesseract.Orientation o = Ocr.This.DetectOrientation(b, out confidence);
-                            switch (o)
-                            {
-                                case Tesseract.Orientation.PageUp:
-                                    break;
-                                case Tesseract.Orientation.PageRight:
-                                    b.RotateFlip(RotateFlipType.Rotate270FlipNone);
-                                    break;
-                                case Tesseract.Orientation.PageDown:
-                                    b.RotateFlip(RotateFlipType.Rotate180FlipNone);
-                                    break;
-                                case Tesseract.Orientation.PageLeft:
-                                    b.RotateFlip(RotateFlipType.Rotate90FlipNone);
-                                    break;
-                                default:
-                                    throw new Exception("Unknown option: " + o);
-                            }
+                            int o = Ocr.This.DetectOrientation(b, out float confidence);
+                            if (o <= 45) { }
+                            else if (o <= 135)
+                                b.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                            else if (o <= 225)
+                                b.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                            else if (o <= 315)
+                                b.RotateFlip(RotateFlipType.Rotate90FlipNone);
                             break;
                         default:
                             throw new Exception("Unknown option: " + pageCollection.ActiveTemplate.PageRotation);

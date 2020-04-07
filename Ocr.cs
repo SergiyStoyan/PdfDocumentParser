@@ -49,12 +49,11 @@ namespace Cliver.PdfDocumentParser
         }
         Tesseract.TesseractEngine _engine = null;
 
-        public Orientation DetectOrientation(Bitmap b, out float confidence)
+        public int DetectOrientation(Bitmap b, out float confidence)
         {
             using (var page = engine.Process(b, PageSegMode.OsdOnly))
             {
-                page.DetectBestOrientation(out Orientation o, out confidence);
-                //page.DetectBestOrientation(out int o2, out confidence);
+                page.DetectBestOrientation(out int o, out confidence);
                 return o;
             }
         }
