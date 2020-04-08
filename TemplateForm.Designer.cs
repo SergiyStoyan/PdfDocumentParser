@@ -239,6 +239,7 @@
             this.fields.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.fields.MultiSelect = false;
             this.fields.Name = "fields";
+            this.fields.RowHeadersWidth = 102;
             this.fields.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.fields.Size = new System.Drawing.Size(1239, 258);
             this.fields.TabIndex = 30;
@@ -247,6 +248,7 @@
             // 
             this.Name_.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.Name_.HeaderText = "Name";
+            this.Name_.MinimumWidth = 12;
             this.Name_.Name = "Name_";
             this.Name_.ReadOnly = true;
             this.Name_.Width = 144;
@@ -255,6 +257,7 @@
             // 
             this.Type.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.Type.HeaderText = "Type";
+            this.Type.MinimumWidth = 12;
             this.Type.Name = "Type";
             this.Type.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.Type.Width = 84;
@@ -263,6 +266,7 @@
             // 
             this.LeftAnchorId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.LeftAnchorId.HeaderText = "LA";
+            this.LeftAnchorId.MinimumWidth = 12;
             this.LeftAnchorId.Name = "LeftAnchorId";
             this.LeftAnchorId.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.LeftAnchorId.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
@@ -273,6 +277,7 @@
             // 
             this.TopAnchorId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.TopAnchorId.HeaderText = "TA";
+            this.TopAnchorId.MinimumWidth = 12;
             this.TopAnchorId.Name = "TopAnchorId";
             this.TopAnchorId.ToolTipText = "Top Anchor";
             this.TopAnchorId.Width = 57;
@@ -281,6 +286,7 @@
             // 
             this.RightAnchorId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.RightAnchorId.HeaderText = "RA";
+            this.RightAnchorId.MinimumWidth = 12;
             this.RightAnchorId.Name = "RightAnchorId";
             this.RightAnchorId.ToolTipText = "Right Anchor";
             this.RightAnchorId.Width = 60;
@@ -289,6 +295,7 @@
             // 
             this.BottomAnchorId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.BottomAnchorId.HeaderText = "BA";
+            this.BottomAnchorId.MinimumWidth = 12;
             this.BottomAnchorId.Name = "BottomAnchorId";
             this.BottomAnchorId.ToolTipText = "Bottom Anchor";
             this.BottomAnchorId.Width = 59;
@@ -296,6 +303,7 @@
             // Rectangle
             // 
             this.Rectangle.HeaderText = "Rectangle";
+            this.Rectangle.MinimumWidth = 12;
             this.Rectangle.Name = "Rectangle";
             this.Rectangle.Width = 140;
             // 
@@ -303,6 +311,7 @@
             // 
             this.Value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.Value.HeaderText = "Value";
+            this.Value.MinimumWidth = 12;
             this.Value.Name = "Value";
             this.Value.ReadOnly = true;
             // 
@@ -484,6 +493,7 @@
             this.anchors.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.anchors.MultiSelect = false;
             this.anchors.Name = "anchors";
+            this.anchors.RowHeadersWidth = 102;
             this.anchors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.anchors.Size = new System.Drawing.Size(658, 545);
             this.anchors.TabIndex = 50;
@@ -492,6 +502,7 @@
             // 
             this.Id3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.Id3.HeaderText = "Id";
+            this.Id3.MinimumWidth = 12;
             this.Id3.Name = "Id3";
             this.Id3.ReadOnly = true;
             this.Id3.Width = 92;
@@ -500,6 +511,7 @@
             // 
             this.ParentAnchorId3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.ParentAnchorId3.HeaderText = "Parent";
+            this.ParentAnchorId3.MinimumWidth = 12;
             this.ParentAnchorId3.Name = "ParentAnchorId3";
             this.ParentAnchorId3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.ParentAnchorId3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
@@ -509,6 +521,7 @@
             // 
             this.Type3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.Type3.HeaderText = "Type";
+            this.Type3.MinimumWidth = 12;
             this.Type3.Name = "Type3";
             this.Type3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.Type3.Width = 84;
@@ -517,6 +530,7 @@
             // 
             this.Position3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.Position3.HeaderText = "Position";
+            this.Position3.MinimumWidth = 12;
             this.Position3.Name = "Position3";
             this.Position3.ReadOnly = true;
             this.Position3.Width = 172;
@@ -553,6 +567,7 @@
             this.conditions.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.conditions.MultiSelect = false;
             this.conditions.Name = "conditions";
+            this.conditions.RowHeadersWidth = 102;
             this.conditions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.conditions.Size = new System.Drawing.Size(570, 146);
             this.conditions.TabIndex = 0;
@@ -561,6 +576,7 @@
             // 
             this.Name2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.Name2.HeaderText = "Name";
+            this.Name2.MinimumWidth = 12;
             this.Name2.Name = "Name2";
             this.Name2.ReadOnly = true;
             this.Name2.Width = 144;
@@ -569,6 +585,7 @@
             // 
             this.Value2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.Value2.HeaderText = "Expression";
+            this.Value2.MinimumWidth = 12;
             this.Value2.Name = "Value2";
             this.Value2.Width = 210;
             // 

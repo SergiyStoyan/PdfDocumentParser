@@ -105,7 +105,11 @@
                 </Grid.RowDefinitions>
             <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">Anchors:</Label>
 
-                <DataGrid Name="anchors" Grid.Row="1" Grid.Column="0" Grid.RowSpan="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ></DataGrid>
+                <DataGrid Name="anchors" Grid.Row="1" Grid.Column="0" Grid.RowSpan="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+                    
+                    
+                    
+                </DataGrid>
                 <GridSplitter Grid.Row="1" Grid.Column="1" Grid.RowSpan="4" Width="5" VerticalAlignment="Stretch"  />
                 <Control Grid.Row="1" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></Control>
                 <GridSplitter Grid.Row="2" Grid.Column="2" Height="5" HorizontalAlignment="Stretch"  />

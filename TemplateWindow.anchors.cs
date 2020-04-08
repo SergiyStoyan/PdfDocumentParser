@@ -18,6 +18,14 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class TemplateWindow
     {
+        public class Anchor
+        {
+            public int Id { get; set; }
+            public int Parent { get; set; }
+            public string Type { get; set; }
+            public string Position { get; set; }
+        }
+
         void initializeAnchorsTable()
         {
             Id3.ValueType = typeof(int);
