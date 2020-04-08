@@ -309,7 +309,7 @@ namespace Cliver.PdfDocumentParser
                             searchRectanglePosition = new Point(searchRectangle.X < 0 ? 0 : (int)searchRectangle.X, searchRectangle.Y < 0 ? 0 : (int)searchRectangle.Y);
                             ci0 = new CvImage(GetRectangleFromActiveTemplateBitmap(searchRectangle.X / Settings.Constants.Image2PdfResolutionRatio, searchRectangle.Y / Settings.Constants.Image2PdfResolutionRatio, searchRectangle.Width / Settings.Constants.Image2PdfResolutionRatio, searchRectangle.Height / Settings.Constants.Image2PdfResolutionRatio));
                         }
-                        Point? p_ = civ.Image.FindWithinImage(ci0, civ.Threshold, civ.ScaleDeviation);
+                        Point? p_ = civ.Image.FindWithinImage(ci0, civ.Threshold, civ.ScaleDeviation, pageCollection.ActiveTemplate.CvImageScalePyramidStep);
                         if (p_ == null)
                             return false;
                         Point p = (Point)p_;

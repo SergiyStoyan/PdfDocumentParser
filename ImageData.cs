@@ -54,11 +54,11 @@ namespace Cliver.PdfDocumentParser
         //    //}
         //}
 
+        public ImageData()// Used only by deserializer!!!
+        { }
+
         public ImageData(Bitmap bitmap, bool scaleBitmap = true)
         {
-            if (bitmap == null)// Used only by deserializer!!!
-                return;
-
             if (scaleBitmap)
                 bitmap = GetScaled(bitmap, Settings.Constants.Image2PdfResolutionRatio);
 

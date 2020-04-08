@@ -124,11 +124,11 @@ namespace Cliver.PdfDocumentParser
         //}
         //Bitmap _bitmap;
 
+        public CvImage()// Used only by deserializer!!!
+        { }
+
         public CvImage(Bitmap bitmap, bool scaleBitmap = true)
         {
-            if (bitmap == null)// Used only by deserializer!!!
-                return;
-
             if (scaleBitmap)
                 bitmap = GetScaled(bitmap, Settings.Constants.Image2PdfResolutionRatio);
 
@@ -163,14 +163,13 @@ namespace Cliver.PdfDocumentParser
             return image;
         }
 
-        public System.Drawing.Point? FindWithinImage(CvImage cvImage, float threshold, float scaleDeviation)
+        public System.Drawing.Point? FindWithinImage(CvImage cvImage, float threshold, float scaleDeviation, int scaleStep/*, out float detectedScale*/)
         {
             System.Drawing.Point? p;
             p = findWithinImage(Image, cvImage.Image, threshold);
             if (p != null)
                 return p;
             //running though pyramid
-            const int scaleStep = 2;
             int stepCount = Convert.ToInt32(scaleDeviation * Width / scaleStep);
             for (int i = 1; i <= stepCount; i++)
             {

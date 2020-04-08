@@ -8,13 +8,11 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 /*
 TBD: 
-- check if tesseract's DetectBestOrientation can perform deskew;
-- migrate to WPF;
-- tune image recognition by checking brightness deltas
-- ?switch to Tesseract.4
+- ?migrate to WPF;
 - ?provide multiple field extraction on page;
 - ?change anchor id->name (involves condition expressions)
 
@@ -23,6 +21,17 @@ namespace Cliver.PdfDocumentParser
 {
     public class Program
     {
+        [DllImport("Shcore.dll")]
+        static extern int SetProcessDpiAwareness(int PROCESS_DPI_AWARENESS);
+
+        // According to https://msdn.microsoft.com/en-us/library/windows/desktop/dn280512(v=vs.85).aspx
+        private enum DpiAwareness
+        {
+            None = 0,
+            SystemAware = 1,
+            PerMonitorAware = 2
+        }
+
         static Program()
         {
             Application.EnableVisualStyles();
@@ -34,6 +43,8 @@ namespace Cliver.PdfDocumentParser
                 Win.LogMessage.Error(e);
                 Environment.Exit(0);
             };
+
+            //SetProcessDpiAwareness((int)DpiAwareness.PerMonitorAware);
 
             //Assembly assembly = Assembly.GetExecutingAssembly();
             //FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);

@@ -43,6 +43,7 @@ namespace Cliver.PdfDocumentParser
 
         public bool AutoDeskew = false;
         public int AutoDeskewThreshold = 1;
+        public int CvImageScalePyramidStep = 2;
 
         public List<Anchor> Anchors;
 

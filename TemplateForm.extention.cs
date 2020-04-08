@@ -82,6 +82,7 @@ namespace Cliver.PdfDocumentParser
                 pageRotation.SelectedIndex = (int)t.PageRotation;
                 autoDeskew.Checked = t.AutoDeskew;
                 autoDeskewThreshold.Value = t.AutoDeskewThreshold;
+                CvImageScalePyramidStep.Value = t.CvImageScalePyramidStep;
 
                 anchors.Rows.Clear();
                 if (t.Anchors != null)
@@ -232,6 +233,7 @@ namespace Cliver.PdfDocumentParser
             t.PageRotation = (Template.PageRotations)pageRotation.SelectedIndex;
             t.AutoDeskew = autoDeskew.Checked;
             t.AutoDeskewThreshold = (int)autoDeskewThreshold.Value;
+            t.CvImageScalePyramidStep = (int)CvImageScalePyramidStep.Value;
 
             bool? removeNotLinkedAnchors = null;
             t.Anchors = new List<Template.Anchor>();
