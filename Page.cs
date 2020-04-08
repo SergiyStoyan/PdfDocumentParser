@@ -142,7 +142,7 @@ namespace Cliver.PdfDocumentParser
                             b.RotateFlip(RotateFlipType.Rotate270FlipNone);
                             break;
                         case Template.PageRotations.AutoDetection:
-                            int o = Ocr.This.DetectOrientation(b, out float confidence);
+                            int o = Ocr.This.DetectOrientationAngle(b, out float confidence);
                             if (o <= 45) { }
                             else if (o <= 135)
                                 b.RotateFlip(RotateFlipType.Rotate270FlipNone);
@@ -150,6 +150,16 @@ namespace Cliver.PdfDocumentParser
                                 b.RotateFlip(RotateFlipType.Rotate180FlipNone);
                             else if (o <= 315)
                                 b.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                            //Bitmap b2 = new Bitmap(b.Width, b.Height);
+                            //using (var gr = Graphics.FromImage(b2))
+                            //{
+                            //    gr.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                            //    gr.TranslateTransform(b.Width / 2, b.Height / 2);
+                            //    gr.RotateTransform(-(float)o);
+                            //    gr.DrawImage(b, -b.Width / 2, -b.Height / 2, b.Width, b.Height);
+                            //}
+                            //b.Dispose();
+                            //b = b2;
                             break;
                         default:
                             throw new Exception("Unknown option: " + pageCollection.ActiveTemplate.PageRotation);

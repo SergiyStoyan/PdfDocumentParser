@@ -16,12 +16,12 @@
 //    /// </summary>
 //    public partial class Page : IDisposable
 //    {
-//       static void deskew(Bitmap img, int stripCount, bool isVertical = false)
+//        static void deskew(Bitmap img, int stripCount, bool isVertical = false)
 //        {
 //            const int MaxHeight = 600;
 //            float Scale = img.Height > MaxHeight ? 1f * MaxHeight / img.Height : 1f;
 
-//          int  Height = (int)((isVertical ? img.Width : img.Height) * Scale);
+//            int Height = (int)((isVertical ? img.Width : img.Height) * Scale);
 //            int Width = stripCount;
 
 //            var w = isVertical ? Height : Width;
@@ -36,17 +36,17 @@
 //                BitmapData bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
 //                int stride = bmpData.Stride;
 //                byte[] data = new byte[stride * Height];
-//                        byte getColor(int x, int y)
-//                        {
-//                            var i = (x < 0 || x >= Width || y < 0 || y >= Height) ? -1 : x * 4 + y * stride;
-//                            return (i < 0 ? DefaultColor : Color.FromArgb(data[i + 3], data[i + 2], data[i + 1], data[i])).G;
-//                        }
+//                byte getColor(int x, int y)
+//                {
+//                    var i = (x < 0 || x >= Width || y < 0 || y >= Height) ? -1 : x * 4 + y * stride;
+//                    return (i < 0 ? DefaultColor : Color.FromArgb(data[i + 3], data[i + 2], data[i + 1], data[i])).G;
+//                }
 //                {
 //                    int[][] Strips = new int[Width][];
 //                    for (int x = 0; x < Strips.Length; x++)
 //                    {
 //                        var strip = Strips[x] = new int[Height];
-//                            for (int y = 0; y < strip.Length; y++) strip[y] = getColor(y, x);
+//                        for (int y = 0; y < strip.Length; y++) strip[y] = getColor(y, x);
 //                    }
 //                }
 //            }
@@ -99,18 +99,18 @@
 //            return bestShift;
 //        }
 
-//public static Bitmap Rotate(Bitmap img, double angle)
-//{
-//    var rotated = new Bitmap(img.Width, img.Height);
-//    using (var gr = Graphics.FromImage(rotated))
-//    {
-//        gr.InterpolationMode = InterpolationMode.HighQualityBicubic;
-//        gr.TranslateTransform(img.Width / 2, img.Height / 2);
-//        gr.RotateTransform(-(float)angle);
-//        gr.DrawImage(img, -img.Width / 2, -img.Height / 2, img.Width, img.Height);
-//    }
+//        public static Bitmap Rotate(Bitmap img, double angle)
+//        {
+//            var rotated = new Bitmap(img.Width, img.Height);
+//            using (var gr = Graphics.FromImage(rotated))
+//            {
+//                gr.InterpolationMode = InterpolationMode.HighQualityBicubic;
+//                gr.TranslateTransform(img.Width / 2, img.Height / 2);
+//                gr.RotateTransform(-(float)angle);
+//                gr.DrawImage(img, -img.Width / 2, -img.Height / 2, img.Width, img.Height);
+//            }
 
-//    return rotated;
-//}
+//            return rotated;
+//        }
 //    }
 //}
