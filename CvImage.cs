@@ -127,29 +127,12 @@ namespace Cliver.PdfDocumentParser
         public CvImage()// Used only by deserializer!!!
         { }
 
-        public CvImage(Bitmap bitmap, bool scaleBitmap = true)
+        public CvImage(Bitmap bitmap)
         {
-            if (scaleBitmap)
-                bitmap = GetScaled(bitmap, Settings.Constants.Image2PdfResolutionRatio);
-
+            bitmap = ImageData.GetScaledToPdfView(bitmap);
             Image = getPreprocessedImage(bitmap);
             Width = Image.Width;
             Height = Image.Height;
-        }
-
-        public static Bitmap GetScaled(Image image, float ratio)
-        {
-            var b = new Bitmap((int)Math.Round(image.Width * ratio, 0), (int)Math.Round(image.Height * ratio, 0), PixelFormat.Format24bppRgb);
-            using (var g = Graphics.FromImage(b))
-            {
-                g.CompositingMode = CompositingMode.SourceCopy;
-                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                g.SmoothingMode = SmoothingMode.HighQuality;
-                g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                g.CompositingQuality = CompositingQuality.HighQuality;
-                g.DrawImage(image, 0, 0, b.Width, b.Height);
-            }
-            return b;
         }
 
         static private Image<Gray, byte> getPreprocessedImage(Bitmap bitmap)

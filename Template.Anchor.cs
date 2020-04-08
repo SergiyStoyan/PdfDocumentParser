@@ -132,42 +132,6 @@ namespace Cliver.PdfDocumentParser
                     return new System.Drawing.RectangleF(Position.X, Position.Y, Image.Width, Image.Height);
                 }
             }
-
-            //public class OpenCv : Anchor
-            //{
-            //    public PdfDocumentParser.ImageData Image;
-
-            //    override public bool IsSet()
-            //    {
-            //        return Image != null && Image.Width > 0 && Image.Height > 0;
-            //    }
-
-            //    override public System.Drawing.RectangleF Rectangle()
-            //    {
-            //        return new System.Drawing.RectangleF(Position.X, Position.Y, Image.Width, Image.Height);
-            //    }
-            //}
-
-            //public class Script : Anchor
-            //{
-            //    override public int? ParentAnchorId
-            //    {
-            //        get { return null; }
-            //        set { if (value != null) throw new Exception("Should not be used in this type Anchor!"); }
-            //    }
-
-            //    public string Expression = null;
-
-            //    override public bool IsSet()
-            //    {
-            //        return !string.IsNullOrWhiteSpace(Expression);
-            //    }
-
-            //    override public System.Drawing.RectangleF MainElementInitialRectangle()
-            //    {
-            //        throw new Exception("Should not be called in this type Anchor!");
-            //    }
-            //}
         }
     }
 }

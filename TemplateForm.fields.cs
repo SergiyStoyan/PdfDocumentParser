@@ -86,8 +86,8 @@ namespace Cliver.PdfDocumentParser
                                     case Template.Field.Types.OcrText:
                                         f2 = new Template.Field.OcrText();
                                         break;
-                                    case Template.Field.Types.ImageData:
-                                        f2 = new Template.Field.ImageData();
+                                    case Template.Field.Types.Image:
+                                        f2 = new Template.Field.Image();
                                         break;
                                     default:
                                         throw new Exception("Unknown option: " + t2);
@@ -274,7 +274,7 @@ namespace Cliver.PdfDocumentParser
                 object o = pages[currentPageI].GetValue(f.Name);
                 switch (f.Type)
                 {
-                    case Template.Field.Types.ImageData:
+                    case Template.Field.Types.Image:
                         Clipboard.SetData(f.Type.ToString(), (Image)o);
                         break;
                     case Template.Field.Types.PdfText:
@@ -611,7 +611,7 @@ namespace Cliver.PdfDocumentParser
             }
             clearImageFromBoxes();
             object v = extractFieldAndDrawSelectionBox(f);
-            if (f.Type == Template.Field.Types.ImageData)
+            if (f.Type == Template.Field.Types.Image)
             {
                 if (!(c is DataGridViewImageCell))
                 {
@@ -650,8 +650,8 @@ namespace Cliver.PdfDocumentParser
                 case Template.Field.Types.OcrText:
                     row.Cells["Type"].Value = Template.Field.Types.OcrText;
                     break;
-                case Template.Field.Types.ImageData:
-                    row.Cells["Type"].Value = Template.Field.Types.ImageData;
+                case Template.Field.Types.Image:
+                    row.Cells["Type"].Value = Template.Field.Types.Image;
                     break;
                 default:
                     throw new Exception("Unknown option: " + f.Type);

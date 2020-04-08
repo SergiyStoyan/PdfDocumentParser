@@ -57,19 +57,18 @@ namespace Cliver.PdfDocumentParser
         public ImageData()// Used only by deserializer!!!
         { }
 
-        public ImageData(Bitmap bitmap, bool scaleBitmap = true)
+        public ImageData(Bitmap bitmap)
         {
-            if (scaleBitmap)
-                bitmap = GetScaled(bitmap, Settings.Constants.Image2PdfResolutionRatio);
+            bitmap = GetScaledToPdfView(bitmap);
 
             Hash = getBitmapHash(bitmap);
             Width = Hash.GetLength(0);
             Height = Hash.GetLength(1);
         }
 
-        public static Bitmap GetScaled(Image image, float ratio)
+        public static Bitmap GetScaledToPdfView(Image image)
         {
-            var b = new Bitmap((int)Math.Round(image.Width * ratio, 0), (int)Math.Round(image.Height * ratio, 0), PixelFormat.Format24bppRgb);
+            var b = new Bitmap((int)Math.Round(image.Width * Settings.Constants.Image2PdfResolutionRatio, 0), (int)Math.Round(image.Height * Settings.Constants.Image2PdfResolutionRatio, 0), PixelFormat.Format24bppRgb);
             using (var g = Graphics.FromImage(b))
             {
                 g.CompositingMode = CompositingMode.SourceCopy;

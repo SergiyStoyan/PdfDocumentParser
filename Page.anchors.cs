@@ -286,7 +286,10 @@ namespace Cliver.PdfDocumentParser
                         else
                         {
                             searchRectanglePosition = new Point(searchRectangle.X < 0 ? 0 : (int)searchRectangle.X, searchRectangle.Y < 0 ? 0 : (int)searchRectangle.Y);
-                            id0 = new ImageData(GetRectangleFromActiveTemplateBitmap(searchRectangle.X / Settings.Constants.Image2PdfResolutionRatio, searchRectangle.Y / Settings.Constants.Image2PdfResolutionRatio, searchRectangle.Width / Settings.Constants.Image2PdfResolutionRatio, searchRectangle.Height / Settings.Constants.Image2PdfResolutionRatio));
+                            using (Bitmap b = GetRectangleFromActiveTemplateBitmap(searchRectangle.X / Settings.Constants.Image2PdfResolutionRatio, searchRectangle.Y / Settings.Constants.Image2PdfResolutionRatio, searchRectangle.Width / Settings.Constants.Image2PdfResolutionRatio, searchRectangle.Height / Settings.Constants.Image2PdfResolutionRatio))
+                            {
+                                id0 = new ImageData(b);
+                            }
                         }
                         Point? p_ = idv.Image.FindWithinImage(id0, idv.BrightnessTolerance, idv.DifferentPixelNumberTolerance, idv.FindBestImageMatch);
                         if (p_ == null)

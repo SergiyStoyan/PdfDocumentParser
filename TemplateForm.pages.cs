@@ -177,7 +177,7 @@ namespace Cliver.PdfDocumentParser
                     case Template.Field.Types.OcrText:
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
                         return Page.NormalizeText((string)v);
-                    case Template.Field.Types.ImageData:
+                    case Template.Field.Types.Image:
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
                         return v;
                     default:

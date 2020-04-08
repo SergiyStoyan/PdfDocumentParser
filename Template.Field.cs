@@ -99,8 +99,8 @@ namespace Cliver.PdfDocumentParser
                     Type = Types.PdfText;
                 else if (this is OcrText)
                     Type = Types.OcrText;
-                else if (this is ImageData)
-                    Type = Types.ImageData;
+                else if (this is Image)
+                    Type = Types.Image;
                 else
                     throw new Exception("Unknown type: " + this.GetType());
             }
@@ -110,7 +110,7 @@ namespace Cliver.PdfDocumentParser
             {
                 PdfText,
                 OcrText,
-                ImageData,
+                Image,
             }
 
             public bool IsSet()
@@ -133,7 +133,7 @@ namespace Cliver.PdfDocumentParser
             {
             }
 
-            public class ImageData : Field
+            public class Image : Field
             {
             }
         }

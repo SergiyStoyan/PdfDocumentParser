@@ -131,13 +131,13 @@ namespace Cliver.PdfDocumentParser
                         default:
                             throw new Exception("Unknown option: " + valueType);
                     }
-                case Template.Field.Types.ImageData:
+                case Template.Field.Types.Image:
                     switch (valueType)
                     {
                         case ValueTypes.Default:
-                            using (Bitmap rb = GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
+                            using (Bitmap b = GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
                             {
-                                return ImageData.GetScaled(rb, Settings.Constants.Image2PdfResolutionRatio);
+                                return ImageData.GetScaledToPdfView(b);
                             }
                         case ValueTypes.TextLines:
                         case ValueTypes.CharBoxs:

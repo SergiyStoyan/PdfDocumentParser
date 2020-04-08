@@ -21,7 +21,7 @@ namespace Cliver.PdfDocumentParser
             InitializeComponent();
 
             Icon = Win.AssemblyRoutines.GetAppIcon();
-            Text = Program.Name + ": Template Editor";
+            Text = Program.FullName + ": Template Editor";
 
             this.templateManager = templateManager;
 
@@ -186,20 +186,18 @@ namespace Cliver.PdfDocumentParser
                                         case Template.Anchor.Types.ImageData:
                                             {
                                                 Template.Anchor.ImageData id = (Template.Anchor.ImageData)a;
-                                                using (Bitmap rb = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
+                                                using (Bitmap b = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
                                                 {
-                                                    using (Bitmap b = ImageData.GetScaled(rb, Settings.Constants.Image2PdfResolutionRatio))
-                                                        id.Image = new ImageData(b, false);
+                                                    id.Image = new ImageData(b);
                                                 }
                                             }
                                             break;
                                         case Template.Anchor.Types.CvImage:
                                             {
                                                 Template.Anchor.CvImage ci = (Template.Anchor.CvImage)a;
-                                                using (Bitmap rb = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
+                                                using (Bitmap b = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
                                                 {
-                                                    using (Bitmap b = CvImage.GetScaled(rb, Settings.Constants.Image2PdfResolutionRatio))
-                                                        ci.Image = new CvImage(b, false);
+                                                    ci.Image = new CvImage(b);
                                                 }
                                             }
                                             break;

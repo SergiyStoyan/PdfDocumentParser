@@ -15,7 +15,7 @@ namespace Cliver.PdfDocumentParser
             InitializeComponent();
 
             this.Icon = Win.AssemblyRoutines.GetAppIcon();
-            Text = Program.Name + ": Settings";
+            Text = Program.FullName + ": Settings";
 
             load_settings();
         }
