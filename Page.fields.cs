@@ -17,19 +17,13 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class Page
     {
-        public enum ValueTypes
-        {
-            Default,
-            TextLines,
-            CharBoxs
-        }
-        public object GetValue(string fieldName, ValueTypes valueType = ValueTypes.Default)
+        public object GetValue(string fieldName, Template.Field.ValueTypes? valueType = null)
         {
             object o = false;
             //int fieldDefinitionIndex = 0;
             foreach (Template.Field f in pageCollection.ActiveTemplate.Fields.Where(x => x.Name == fieldName))
             {
-                o = GetValue(f/*, fieldDefinitionIndex*/,out RectangleF? r, valueType);
+                o = GetValue(f/*, fieldDefinitionIndex*/, out RectangleF? r, valueType);
                 if (o != null)
                     return o;
                 //fieldDefinitionIndex++;
@@ -88,65 +82,43 @@ namespace Cliver.PdfDocumentParser
             return r;
         }
 
-        internal object GetValue(Template.Field field/*, int fieldDefinitionIndex*/, out RectangleF? rectangle, ValueTypes valueType = ValueTypes.Default)
+        internal object GetValue(Template.Field field/*, int fieldDefinitionIndex*/, out RectangleF? rectangle, Template.Field.ValueTypes? valueType = null)
         {
             rectangle = GetFieldActualRectangle(field);
             if (rectangle == null)
                 return null;
             RectangleF r = (RectangleF)rectangle;
-            switch (field.Type)
+            valueType = valueType == null ? field.DefaultValueType : valueType;
+            switch (valueType)
             {
-                case Template.Field.Types.PdfText:
-                    Template.Field.PdfText pt = (Template.Field.PdfText)field;
-                    switch (valueType)
+                case Template.Field.ValueTypes.PdfText:
+                    List<string> ls;
+                    if (field.ColumnOfTable == null)
+                        ls = Pdf.GetTextLinesSurroundedByRectangle(PdfCharBoxs, r, pageCollection.ActiveTemplate.TextAutoInsertSpace);
+                    else
+                        ls = GetTextLinesAsTableColumn(field, r);
+                    return string.Join("\r\n", ls);
+                case Template.Field.ValueTypes.PdfTextTextLines:
+                    if (field.ColumnOfTable == null)
+                        ls = Pdf.GetTextLinesSurroundedByRectangle(PdfCharBoxs, r, pageCollection.ActiveTemplate.TextAutoInsertSpace);
+                    else
+                        ls = GetTextLinesAsTableColumn(field, r);
+                    return ls;
+                case Template.Field.ValueTypes.PdfTextCharBoxs:
+                    return Pdf.GetCharBoxsSurroundedByRectangle(PdfCharBoxs, r);
+                case Template.Field.ValueTypes.OcrText:
+                    return Ocr.This.GetTextSurroundedByRectangle(ActiveTemplateBitmap, r);
+                case Template.Field.ValueTypes.OcrTextTextLines:
+                    throw new Exception("To be implemented.");
+                case Template.Field.ValueTypes.OcrTextCharBoxs:
+                    return Ocr.GetCharBoxsSurroundedByRectangle(ActiveTemplateOcrCharBoxs, r);
+                case Template.Field.ValueTypes.Image:
+                    using (Bitmap b = GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
                     {
-                        case ValueTypes.Default:
-                            List<string> ls;
-                            if (pt.ColumnOfTable == null)
-                                ls = Pdf.GetTextLinesSurroundedByRectangle(PdfCharBoxs, r, pageCollection.ActiveTemplate.TextAutoInsertSpace);
-                            else
-                                ls = GetTextLinesAsTableColumn(pt, r);
-                            return string.Join("\r\n", ls);
-                        case ValueTypes.TextLines:
-                            if (pt.ColumnOfTable == null)
-                                ls = Pdf.GetTextLinesSurroundedByRectangle(PdfCharBoxs, r, pageCollection.ActiveTemplate.TextAutoInsertSpace);
-                            else
-                                ls = GetTextLinesAsTableColumn(pt, r);
-                            return ls;
-                        case ValueTypes.CharBoxs:
-                            return Pdf.GetCharBoxsSurroundedByRectangle(PdfCharBoxs, r);
-                        default:
-                            throw new Exception("Unknown option: " + valueType);
-                    }
-                case Template.Field.Types.OcrText:
-                    Template.Field.OcrText ot = (Template.Field.OcrText)field;
-                    switch (valueType)
-                    {
-                        case ValueTypes.Default:
-                            return Ocr.This.GetTextSurroundedByRectangle(ActiveTemplateBitmap, r);
-                        case ValueTypes.TextLines:
-                            throw new Exception("To be implemented.");
-                        case ValueTypes.CharBoxs:
-                            return Ocr.GetCharBoxsSurroundedByRectangle(ActiveTemplateOcrCharBoxs, r);
-                        default:
-                            throw new Exception("Unknown option: " + valueType);
-                    }
-                case Template.Field.Types.Image:
-                    switch (valueType)
-                    {
-                        case ValueTypes.Default:
-                            using (Bitmap b = GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
-                            {
-                                return ImageData.GetScaledToPdfView(b);
-                            }
-                        case ValueTypes.TextLines:
-                        case ValueTypes.CharBoxs:
-                            throw new Exception("Option " + valueType + " cannot be used this Field type.");
-                        default:
-                            throw new Exception("Unknown option: " + valueType);
+                        return ImageData.GetScaledToPdfView(b);
                     }
                 default:
-                    throw new Exception("Unknown option: " + field.Type);
+                    throw new Exception("Unknown option: " + valueType);
             }
         }
 
@@ -162,7 +134,7 @@ namespace Cliver.PdfDocumentParser
             {
                 throw new Exception("Field " + field.ColumnOfTable + " does not have enough definitions to respect definition " + field.Name + "[" + fieldDefinitionIndex + "]", e);
             }
-            List<Pdf.CharBox> cbs = (List<Pdf.CharBox>)GetValue(tableField, out RectangleF? r, ValueTypes.CharBoxs);
+            List<Pdf.CharBox> cbs = (List<Pdf.CharBox>)GetValue(tableField, out RectangleF? r, Template.Field.ValueTypes.PdfTextCharBoxs);
             if (cbs == null)
                 return null;
 

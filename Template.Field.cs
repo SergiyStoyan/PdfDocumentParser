@@ -17,7 +17,7 @@ namespace Cliver.PdfDocumentParser
         //    return Fields.Where(x => x.Name == fieldName);
         //}
 
-        public abstract class Field
+        public class Field
         {
             public string Name;
 
@@ -95,21 +95,18 @@ namespace Cliver.PdfDocumentParser
 
             public Field()
             {
-                if (this is PdfText)
-                    Type = Types.PdfText;
-                else if (this is OcrText)
-                    Type = Types.OcrText;
-                else if (this is Image)
-                    Type = Types.Image;
-                else
-                    throw new Exception("Unknown type: " + this.GetType());
             }
-            [Newtonsoft.Json.JsonIgnore]
-            public readonly Types Type;
-            public enum Types
+
+            public ValueTypes DefaultValueType = ValueTypes.PdfText;
+
+            public enum ValueTypes
             {
                 PdfText,
+                PdfTextTextLines,
+                PdfTextCharBoxs,
                 OcrText,
+                OcrTextTextLines,
+                OcrTextCharBoxs,
                 Image,
             }
 
@@ -124,18 +121,6 @@ namespace Cliver.PdfDocumentParser
             /// Not all field types supported!
             /// </summary>
             public string ColumnOfTable = null;
-
-            public class PdfText : Field
-            {
-            }
-
-            public class OcrText : Field
-            {
-            }
-
-            public class Image : Field
-            {
-            }
         }
     }
 }

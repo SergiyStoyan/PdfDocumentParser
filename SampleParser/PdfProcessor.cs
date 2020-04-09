@@ -104,8 +104,8 @@ namespace Cliver.SampleParser
                     continue;
                 }
 
-                List<string> names = (List<string>)Pages[pageI].GetValue(Template2.FieldNames.ProductNames, Page.ValueTypes.TextLines);
-                List<string> costs = (List<string>)Pages[pageI].GetValue(Template2.FieldNames.ProductCosts, Page.ValueTypes.TextLines);
+                List<string> names = (List<string>)Pages[pageI].GetValue(Template2.FieldNames.ProductNames);
+                List<string> costs = (List<string>)Pages[pageI].GetValue(Template2.FieldNames.ProductCosts);
                 for (int i = 0; i < names.Count; i++)
                     if (!string.IsNullOrWhiteSpace(names[i]))
                         document.Products.Add(new Document.Product { Name = names[i], Cost = costs[i] });

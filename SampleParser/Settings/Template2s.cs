@@ -77,11 +77,11 @@ namespace Cliver.SampleParser
                         },
                         Fields = new List<Template.Field>
                         {
-                            new Template.Field.PdfText { Name = Template2.FieldNames.InvoiceId , Rectangle=new Template.RectangleF(0,0,10,10)},
-                            new Template.Field.PdfText { Name = Template2.FieldNames.TotalAmount, Rectangle=new Template.RectangleF(0,0,10,10)},
-                            new Template.Field.PdfText { Name = Template2.FieldNames.ProductTable, Rectangle=new Template.RectangleF(0,0,10,10)},
-                            new Template.Field.PdfText { Name = Template2.FieldNames.ProductNames, Rectangle=new Template.RectangleF(0,0,10,10), ColumnOfTable=Template2.FieldNames.ProductTable},
-                            new Template.Field.PdfText { Name = Template2.FieldNames.ProductCosts, Rectangle=new Template.RectangleF(0,0,10,10), ColumnOfTable=Template2.FieldNames.ProductTable},
+                            new Template.Field { DefaultValueType = Template.Field.ValueTypes.PdfText, Name = Template2.FieldNames.InvoiceId , Rectangle=new Template.RectangleF(0,0,10,10)},
+                            new Template.Field { DefaultValueType = Template.Field.ValueTypes.PdfText, Name = Template2.FieldNames.TotalAmount, Rectangle=new Template.RectangleF(0,0,10,10)},
+                            new Template.Field { DefaultValueType = Template.Field.ValueTypes.PdfText, Name = Template2.FieldNames.ProductTable, Rectangle=new Template.RectangleF(0,0,10,10)},
+                            new Template.Field { DefaultValueType = Template.Field.ValueTypes.PdfTextTextLines, Name = Template2.FieldNames.ProductNames, Rectangle=new Template.RectangleF(0,0,10,10), ColumnOfTable=Template2.FieldNames.ProductTable},
+                            new Template.Field { DefaultValueType = Template.Field.ValueTypes.PdfTextTextLines, Name = Template2.FieldNames.ProductCosts, Rectangle=new Template.RectangleF(0,0,10,10), ColumnOfTable=Template2.FieldNames.ProductTable},
                         },
                         Editor = new Template.EditorSettings
                         {

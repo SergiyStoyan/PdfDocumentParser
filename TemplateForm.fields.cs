@@ -33,8 +33,8 @@ namespace Cliver.PdfDocumentParser
             BottomAnchorId.ValueMember = "Id";
             BottomAnchorId.DisplayMember = "Name";
 
-            Type.ValueType = typeof(Template.Field.Types);
-            Type.DataSource = Enum.GetValues(typeof(Template.Field.Types));
+            Type.ValueType = typeof(Template.Field.ValueTypes);
+            Type.DataSource = Enum.GetValues(typeof(Template.Field.ValueTypes));
 
             fields.EnableHeadersVisualStyles = false;//needed to set row headers
 
@@ -67,38 +67,9 @@ namespace Cliver.PdfDocumentParser
                     Template.Field f = (Template.Field)row.Tag;
                     switch (fields.Columns[e.ColumnIndex].Name)
                     {
-                        //case "Rectangle":
-                        //    {
-                        //        cs["Value"].Value = extractValueAndDrawSelectionBox(f.AnchorId, f.Rectangle, f.Type);
-                        //        break;
-                        //    }
                         case "Type":
                             {
-                                Template.Field.Types t2 = (Template.Field.Types)row.Cells["Type"].Value;
-                                if (t2 == f.Type)
-                                    break;
-                                Template.Field f2;
-                                switch (t2)
-                                {
-                                    case Template.Field.Types.PdfText:
-                                        f2 = new Template.Field.PdfText();
-                                        break;
-                                    case Template.Field.Types.OcrText:
-                                        f2 = new Template.Field.OcrText();
-                                        break;
-                                    case Template.Field.Types.Image:
-                                        f2 = new Template.Field.Image();
-                                        break;
-                                    default:
-                                        throw new Exception("Unknown option: " + t2);
-                                }
-                                f2.Name = f.Name;
-                                f2.LeftAnchor = f.LeftAnchor;
-                                f2.TopAnchor = f.TopAnchor;
-                                f2.RightAnchor = f.RightAnchor;
-                                f2.BottomAnchor = f.BottomAnchor;
-                                f2.Rectangle = f.Rectangle;
-                                f = f2;
+                                f.DefaultValueType = (Template.Field.ValueTypes)row.Cells["Type"].Value;
                                 setFieldRow(row, f);
                                 break;
                             }
@@ -272,17 +243,25 @@ namespace Cliver.PdfDocumentParser
                     return;
                 Template.Field f = (Template.Field)r.Tag;
                 object o = pages[currentPageI].GetValue(f.Name);
-                switch (f.Type)
+                switch (f.DefaultValueType)
                 {
-                    case Template.Field.Types.Image:
-                        Clipboard.SetData(f.Type.ToString(), (Image)o);
+                    case Template.Field.ValueTypes.Image:
+                        Clipboard.SetData(f.DefaultValueType.ToString(), (Image)o);
                         break;
-                    case Template.Field.Types.PdfText:
-                    case Template.Field.Types.OcrText:
+                    case Template.Field.ValueTypes.PdfText:
+                    case Template.Field.ValueTypes.OcrText:
                         Clipboard.SetText((string)o);
                         break;
+                    case Template.Field.ValueTypes.PdfTextTextLines:
+                    case Template.Field.ValueTypes.OcrTextTextLines:
+                        Clipboard.SetText(string.Join("\r\n", (List<string>)o));
+                        break;
+                    case Template.Field.ValueTypes.PdfTextCharBoxs:
+                    case Template.Field.ValueTypes.OcrTextCharBoxs:
+                        Clipboard.SetText(Serialization.Json.Serialize(o));
+                        break;
                     default:
-                        throw new Exception("Unknown option: " + f.Type);
+                        throw new Exception("Unknown option: " + f.DefaultValueType);
                 }
             };
 
@@ -409,7 +388,7 @@ namespace Cliver.PdfDocumentParser
                             return;
                         Dictionary<string, List<DataGridViewRow>> fieldName2orderedRows = new Dictionary<string, List<DataGridViewRow>>();
                         foreach (DataGridViewRow r in fields.Rows)
-                            if ((r.Tag as Template.Field.PdfText)?.ColumnOfTable == f0.ColumnOfTable)
+                            if (((Template.Field)r.Tag).ColumnOfTable == f0.ColumnOfTable)
                             {
                                 List<DataGridViewRow> rs;
                                 string fn = (r.Tag as Template.Field)?.Name;
@@ -611,7 +590,7 @@ namespace Cliver.PdfDocumentParser
             }
             clearImageFromBoxes();
             object v = extractFieldAndDrawSelectionBox(f);
-            if (f.Type == Template.Field.Types.Image)
+            if (f.DefaultValueType == Template.Field.ValueTypes.Image)
             {
                 if (!(c is DataGridViewImageCell))
                 {
@@ -642,20 +621,7 @@ namespace Cliver.PdfDocumentParser
             row.Tag = f;
             row.Cells["Name_"].Value = f.Name;
             row.Cells["Rectangle"].Value = Serialization.Json.Serialize(f.Rectangle);
-            switch (f.Type)
-            {
-                case Template.Field.Types.PdfText:
-                    row.Cells["Type"].Value = Template.Field.Types.PdfText;
-                    break;
-                case Template.Field.Types.OcrText:
-                    row.Cells["Type"].Value = Template.Field.Types.OcrText;
-                    break;
-                case Template.Field.Types.Image:
-                    row.Cells["Type"].Value = Template.Field.Types.Image;
-                    break;
-                default:
-                    throw new Exception("Unknown option: " + f.Type);
-            }
+            row.Cells["Type"].Value = f.DefaultValueType;
             row.Cells["LeftAnchorId"].Value = f.LeftAnchor?.Id;
             row.Cells["TopAnchorId"].Value = f.TopAnchor?.Id;
             row.Cells["RightAnchorId"].Value = f.RightAnchor?.Id;

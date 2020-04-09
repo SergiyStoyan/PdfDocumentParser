@@ -145,14 +145,16 @@ namespace Cliver.PdfDocumentParser
                 if (field.BottomAnchor != null && !findAndDrawAnchor(field.BottomAnchor.Id))
                     return null;
 
-                object v = pages[currentPageI].GetValue(field, out RectangleF? r_, Page.ValueTypes.Default);
+                object v = pages[currentPageI].GetValue(field, out RectangleF? r_);
                 if (r_ == null)
                     return null;
                 RectangleF r = (RectangleF)r_;
                 owners2resizebleBox[field] = new ResizebleBox(field, r, Settings.Appearance.SelectionBoxBorderWidth);
-                switch (field.Type)
+                switch (field.DefaultValueType)
                 {
-                    case Template.Field.Types.PdfText:
+                    case Template.Field.ValueTypes.PdfText:
+                    case Template.Field.ValueTypes.PdfTextTextLines:
+                    case Template.Field.ValueTypes.PdfTextCharBoxs:
                         if (field.ColumnOfTable != null)
                         {
                             //RectangleF? tr = pages[currentPageI].GetTableActualRectangle((Template.Field.PdfText)field);
@@ -173,15 +175,27 @@ namespace Cliver.PdfDocumentParser
                             drawBoxes(Settings.Appearance.TableBoxColor, Settings.Appearance.TableBoxBorderWidth, new List<RectangleF> { (RectangleF)tr });
                         }
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
-                        return Page.NormalizeText((string)v);
-                    case Template.Field.Types.OcrText:
+                        if (field.DefaultValueType == Template.Field.ValueTypes.PdfText)
+                            return Page.NormalizeText((string)v);
+                        if (field.DefaultValueType == Template.Field.ValueTypes.PdfTextTextLines)
+                            return Page.NormalizeText(string.Join("\r\n", (List<string>)v));
+                        //if (field.DefaultValueType == Template.Field.ValueTypes.PdfTextCharBoxs)
+                        return Page.NormalizeText(Serialization.Json.Serialize(v));
+                    case Template.Field.ValueTypes.OcrText:
+                    case Template.Field.ValueTypes.OcrTextTextLines:
+                    case Template.Field.ValueTypes.OcrTextCharBoxs:
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
-                        return Page.NormalizeText((string)v);
-                    case Template.Field.Types.Image:
+                        if (field.DefaultValueType == Template.Field.ValueTypes.OcrText)
+                            return Page.NormalizeText((string)v);
+                        if (field.DefaultValueType == Template.Field.ValueTypes.OcrTextTextLines)
+                            return Page.NormalizeText(string.Join("\r\n", (List<string>)v));
+                        //if (field.DefaultValueType == Template.Field.ValueTypes.OcrTextCharBoxs)
+                        return Page.NormalizeText(Serialization.Json.Serialize(v));
+                    case Template.Field.ValueTypes.Image:
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
                         return v;
                     default:
-                        throw new Exception("Unknown option: " + field.Type);
+                        throw new Exception("Unknown option: " + field.DefaultValueType);
                 }
             }
             catch (Exception ex)

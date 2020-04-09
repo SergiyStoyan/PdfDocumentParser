@@ -40,7 +40,7 @@ namespace Cliver.PdfDocumentParser
 
             virtual public Template.Field CreateDefaultField()
             {
-                return new Template.Field.PdfText { };
+                return new Template.Field { DefaultValueType = Template.Field.ValueTypes.PdfText };
             }
 
             /// <summary>
