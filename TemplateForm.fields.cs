@@ -252,12 +252,12 @@ namespace Cliver.PdfDocumentParser
                     case Template.Field.ValueTypes.OcrText:
                         Clipboard.SetText((string)o);
                         break;
-                    case Template.Field.ValueTypes.PdfTextTextLines:
-                    case Template.Field.ValueTypes.OcrTextTextLines:
+                    case Template.Field.ValueTypes.PdfTextLines:
+                    case Template.Field.ValueTypes.OcrTextLines:
                         Clipboard.SetText(string.Join("\r\n", (List<string>)o));
                         break;
-                    case Template.Field.ValueTypes.PdfTextCharBoxs:
-                    case Template.Field.ValueTypes.OcrTextCharBoxs:
+                    case Template.Field.ValueTypes.PdfCharBoxs:
+                    case Template.Field.ValueTypes.OcrCharBoxs:
                         Clipboard.SetText(Serialization.Json.Serialize(o));
                         break;
                     default:

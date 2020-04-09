@@ -98,19 +98,19 @@ namespace Cliver.PdfDocumentParser
                     else
                         ls = GetTextLinesAsTableColumn(field, r);
                     return string.Join("\r\n", ls);
-                case Template.Field.ValueTypes.PdfTextTextLines:
+                case Template.Field.ValueTypes.PdfTextLines:
                     if (field.ColumnOfTable == null)
                         ls = Pdf.GetTextLinesSurroundedByRectangle(PdfCharBoxs, r, pageCollection.ActiveTemplate.TextAutoInsertSpace);
                     else
                         ls = GetTextLinesAsTableColumn(field, r);
                     return ls;
-                case Template.Field.ValueTypes.PdfTextCharBoxs:
+                case Template.Field.ValueTypes.PdfCharBoxs:
                     return Pdf.GetCharBoxsSurroundedByRectangle(PdfCharBoxs, r);
                 case Template.Field.ValueTypes.OcrText:
                     return Ocr.This.GetTextSurroundedByRectangle(ActiveTemplateBitmap, r);
-                case Template.Field.ValueTypes.OcrTextTextLines:
+                case Template.Field.ValueTypes.OcrTextLines:
                     throw new Exception("To be implemented.");
-                case Template.Field.ValueTypes.OcrTextCharBoxs:
+                case Template.Field.ValueTypes.OcrCharBoxs:
                     return Ocr.GetCharBoxsSurroundedByRectangle(ActiveTemplateOcrCharBoxs, r);
                 case Template.Field.ValueTypes.Image:
                     using (Bitmap b = GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
@@ -134,7 +134,7 @@ namespace Cliver.PdfDocumentParser
             {
                 throw new Exception("Field " + field.ColumnOfTable + " does not have enough definitions to respect definition " + field.Name + "[" + fieldDefinitionIndex + "]", e);
             }
-            List<Pdf.CharBox> cbs = (List<Pdf.CharBox>)GetValue(tableField, out RectangleF? r, Template.Field.ValueTypes.PdfTextCharBoxs);
+            List<Pdf.CharBox> cbs = (List<Pdf.CharBox>)GetValue(tableField, out RectangleF? r, Template.Field.ValueTypes.PdfCharBoxs);
             if (cbs == null)
                 return null;
 

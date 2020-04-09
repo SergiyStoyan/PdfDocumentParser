@@ -102,11 +102,11 @@ namespace Cliver.PdfDocumentParser
             public enum ValueTypes
             {
                 PdfText,
-                PdfTextTextLines,
-                PdfTextCharBoxs,
+                PdfTextLines,
+                PdfCharBoxs,
                 OcrText,
-                OcrTextTextLines,
-                OcrTextCharBoxs,
+                OcrTextLines,
+                OcrCharBoxs,
                 Image,
             }
 
