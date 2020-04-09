@@ -104,11 +104,12 @@ namespace Cliver.SampleParser
                     continue;
                 }
 
-                List<string> names = (List<string>)Pages[pageI].GetValue(Template2.FieldNames.ProductNames);
-                List<string> costs = (List<string>)Pages[pageI].GetValue(Template2.FieldNames.ProductCosts);
-                for (int i = 0; i < names.Count; i++)
-                    if (!string.IsNullOrWhiteSpace(names[i]))
-                        document.Products.Add(new Document.Product { Name = names[i], Cost = costs[i] });
+                List<string> names = (List<string>)Pages[pageI].GetValue(Template2.FieldNames.ProductNames, Template.Field.ValueTypes.PdfTextLines);
+                List<string> costs = (List<string>)Pages[pageI].GetValue(Template2.FieldNames.ProductCosts, Template.Field.ValueTypes.PdfTextLines);
+                if (names != null)
+                    for (int i = 0; i < names.Count; i++)
+                        if (!string.IsNullOrWhiteSpace(names[i]))
+                            document.Products.Add(new Document.Product { Name = names[i], Cost = costs[i] });
 
                 if (Pages[pageI].IsCondition(Template2.ConditionNames.DocumentLastPage))
                 {
