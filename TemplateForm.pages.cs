@@ -145,34 +145,22 @@ namespace Cliver.PdfDocumentParser
                 if (field.BottomAnchor != null && !findAndDrawAnchor(field.BottomAnchor.Id))
                     return null;
 
-                object v = pages[currentPageI].GetValue(field, out RectangleF? r_);
-                if (r_ == null)
+                Page.FieldActualInfo fai = pages[currentPageI].GetNonCachedFieldActualInfo(field);
+                if (!fai.Found)
                     return null;
-                RectangleF r = (RectangleF)r_;
+                RectangleF r = (RectangleF)fai.ActualRectangle;
                 owners2resizebleBox[field] = new ResizebleBox(field, r, Settings.Appearance.SelectionBoxBorderWidth);
+                object v = fai.GetValue(field.DefaultValueType);
                 switch (field.DefaultValueType)
                 {
                     case Template.Field.ValueTypes.PdfText:
                     case Template.Field.ValueTypes.PdfTextLines:
                     case Template.Field.ValueTypes.PdfCharBoxs:
                         if (field.ColumnOfTable != null)
-                        {
-                            //RectangleF? tr = pages[currentPageI].GetTableActualRectangle((Template.Field.PdfText)field);
-                            int fieldDefinitionIndex = pages.ActiveTemplate.Fields.Where(x => x.Name == field.Name).TakeWhile(x => x != field).Count();
-                            Template.Field tableField;
-                            try
-                            {
-                                tableField = pages.ActiveTemplate.Fields.Where(x => x.Name == field.ColumnOfTable).ElementAt(fieldDefinitionIndex);
-                            }
-                            catch (Exception e)
-                            {
-                                Message.Error("Field " + field.ColumnOfTable + " does not have enough definitions to respect definition " + field.Name + "[" + fieldDefinitionIndex + "]");
+                        {                            
+                            if (!fai.TableFieldActualInfo.Found)
                                 return null;
-                            }
-                            RectangleF? tr = pages[currentPageI].GetFieldActualRectangle(tableField);
-                            if (tr == null)
-                                return null;
-                            drawBoxes(Settings.Appearance.TableBoxColor, Settings.Appearance.TableBoxBorderWidth, new List<RectangleF> { (RectangleF)tr });
+                            drawBoxes(Settings.Appearance.TableBoxColor, Settings.Appearance.TableBoxBorderWidth, new List<RectangleF> { (RectangleF)fai.TableFieldActualInfo.ActualRectangle });
                         }
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
                         if (field.DefaultValueType == Template.Field.ValueTypes.PdfText)

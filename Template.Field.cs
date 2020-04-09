@@ -21,55 +21,6 @@ namespace Cliver.PdfDocumentParser
         {
             public string Name;
 
-            //public int? AnchorId//conversion from the old format; to be removed
-            //{
-            //    set
-            //    {
-            //        if (value == null)
-            //            return;
-            //        LeftAnchor = new SideAnchor { Id = (int)value };
-            //        TopAnchor = new SideAnchor { Id = (int)value };
-            //        RightAnchor = new SideAnchor { Id = (int)value };
-            //        BottomAnchor = new SideAnchor { Id = (int)value };
-            //    }
-            //}
-            //public int? LeftAnchorId//conversion from the old format; to be removed
-            //{
-            //    set
-            //    {
-            //        if (value == null)
-            //            return;
-            //        LeftAnchor = new SideAnchor { Id = (int)value };
-            //    }
-            //}
-            //public int? TopAnchorId//conversion from the old format; to be removed
-            //{
-            //    set
-            //    {
-            //        if (value == null)
-            //            return;
-            //        TopAnchor = new SideAnchor { Id = (int)value };
-            //    }
-            //}
-            //public int? RightAnchorId//conversion from the old format; to be removed
-            //{
-            //    set
-            //    {
-            //        if (value == null)
-            //            return;
-            //        RightAnchor = new SideAnchor { Id = (int)value };
-            //    }
-            //}
-            //public int? BottomAnchorId//conversion from the old format; to be removed
-            //{
-            //    set
-            //    {
-            //        if (value == null)
-            //            return;
-            //        BottomAnchor = new SideAnchor { Id = (int)value };
-            //    }
-            //}
-
             public RectangleF Rectangle;
             /// <summary>
             /// when set, Left shifts as the anchor shifts

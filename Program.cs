@@ -54,7 +54,7 @@ namespace Cliver.PdfDocumentParser
             object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false);
             Name = ((AssemblyProductAttribute)attributes[0]).Product;
 
-            FullName = Name + " [" + Version.ToString(2) + "]";
+            FullName = Name + " [" + Version.ToString(3) + "]";
 
             //Log.Initialize(Log.Mode.ONLY_LOG, Log.CompanyCommonDataDir, true);//must be called from the entry projects
             //Log.ShowDeleteOldLogsDialog = false;//must be called from the entry projects

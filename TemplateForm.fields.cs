@@ -284,10 +284,10 @@ namespace Cliver.PdfDocumentParser
                     //foreach (DataGridViewRow r in fields.Rows)
                     //    if ((r.Tag as Template.Field.PdfText)?.ColumnOfTable == f0.Name)
                     //        cloningFieldRows.Add(r);
-                    if (f0.ColumnOfTable != null)
+                    if (f0.ColumnOfTable != null
+                        && Message.YesNo("This field is a column of table " + f0.ColumnOfTable + ".\r\nWould you like new definions to be created for all the column fields of the table?")
+                        )
                     {
-                        if (!Message.YesNo("This field is a column of table " + f0.ColumnOfTable + " and so new definions will be added to the rest column fields as well. Proceed?"))
-                            return;
                         foreach (DataGridViewRow r in fields.Rows)
                             if (r != r0 && (r.Tag as Template.Field)?.ColumnOfTable == f0.ColumnOfTable)
                             {
@@ -381,32 +381,33 @@ namespace Cliver.PdfDocumentParser
                         Message.Inform("This field definition cannot be deleted because it is the last of the field.");
                         return;
                     }
-                    List<DataGridViewRow> deletingFieldRows = new List<DataGridViewRow> { r0 };
-                    if (f0.ColumnOfTable != null)
-                    {
-                        if (!Message.YesNo("This field is a column of table " + f0.ColumnOfTable + " and so the respective definitions of the rest column fields will be deleted as well. Proceed?"))
-                            return;
-                        Dictionary<string, List<DataGridViewRow>> fieldName2orderedRows = new Dictionary<string, List<DataGridViewRow>>();
-                        foreach (DataGridViewRow r in fields.Rows)
-                            if (((Template.Field)r.Tag).ColumnOfTable == f0.ColumnOfTable)
-                            {
-                                List<DataGridViewRow> rs;
-                                string fn = (r.Tag as Template.Field)?.Name;
-                                if (!fieldName2orderedRows.TryGetValue(fn, out rs))
-                                {
-                                    rs = new List<DataGridViewRow>();
-                                    fieldName2orderedRows[fn] = rs;
-                                }
-                                rs.Add(r);
-                            }
-                        int definitionIndex = fieldName2orderedRows[f0.Name].IndexOf(r0);
-                        fieldName2orderedRows.Remove(f0.Name);
-                        foreach (List<DataGridViewRow> rs in fieldName2orderedRows.Values)
-                            deletingFieldRows.Add(rs[definitionIndex]);
-                    }                    
-                    settingCurrentFieldRow = true;//required due to fields-column error calculation when selected row changes
-                    foreach (DataGridViewRow row in deletingFieldRows)
-                        fields.Rows.Remove(row);
+                    //List<DataGridViewRow> deletingFieldRows = new List<DataGridViewRow> { r0 };
+                    //if (f0.ColumnOfTable != null)
+                    //{
+                    //    if (!Message.YesNo("This field is a column of table " + f0.ColumnOfTable + " and so the respective definitions of the rest column fields will be deleted as well. Proceed?"))
+                    //        return;
+                    //    Dictionary<string, List<DataGridViewRow>> fieldName2orderedRows = new Dictionary<string, List<DataGridViewRow>>();
+                    //    foreach (DataGridViewRow r in fields.Rows)
+                    //        if (((Template.Field)r.Tag).ColumnOfTable == f0.ColumnOfTable)
+                    //        {
+                    //            List<DataGridViewRow> rs;
+                    //            string fn = (r.Tag as Template.Field)?.Name;
+                    //            if (!fieldName2orderedRows.TryGetValue(fn, out rs))
+                    //            {
+                    //                rs = new List<DataGridViewRow>();
+                    //                fieldName2orderedRows[fn] = rs;
+                    //            }
+                    //            rs.Add(r);
+                    //        }
+                    //    int definitionIndex = fieldName2orderedRows[f0.Name].IndexOf(r0);
+                    //    fieldName2orderedRows.Remove(f0.Name);
+                    //    foreach (List<DataGridViewRow> rs in fieldName2orderedRows.Values)
+                    //        deletingFieldRows.Add(rs[definitionIndex]);
+                    //}                    
+                    //settingCurrentFieldRow = true;//required due to fields-column error calculation when selected row changes
+                    //foreach (DataGridViewRow row in deletingFieldRows)
+                    //    fields.Rows.Remove(row);
+                    fields.Rows.Remove(r0);
                 }
                 catch (Exception e)
                 {
@@ -590,29 +591,17 @@ namespace Cliver.PdfDocumentParser
             }
             clearImageFromBoxes();
             object v = extractFieldAndDrawSelectionBox(f);
-            if (f.DefaultValueType == Template.Field.ValueTypes.Image)
+            if ((f.DefaultValueType == Template.Field.ValueTypes.Image) != (c is DataGridViewImageCell))
             {
-                if (!(c is DataGridViewImageCell))
-                {
-                    c.Dispose();
-                    c = new DataGridViewImageCell();
-                    row.Cells["Value"] = c;
-                }
-            }
-            else
-            {
-                if (c is DataGridViewImageCell)
-                {
-                    c.Dispose();
-                    c = new DataGridViewTextBoxCell();
-                    row.Cells["Value"] = c;
-                }
+                c.Dispose();
+                c = new DataGridViewImageCell();
+                row.Cells["Value"] = c;
             }
             c.Value = v;
             if (c.Value != null)
                 setRowStatus(statuses.SUCCESS, row, "Found");
             else
-                setRowStatus(statuses.ERROR, row, "Error");
+                setRowStatus(statuses.ERROR, row, "Not found");
             return v != null;
         }
 

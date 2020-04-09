@@ -59,26 +59,11 @@ namespace Cliver.PdfDocumentParser
 
         public ImageData(Bitmap bitmap)
         {
-            bitmap = GetScaledToPdfView(bitmap);
+            bitmap = Page.GetScaledImage2Pdf(bitmap);
 
             Hash = getBitmapHash(bitmap);
             Width = Hash.GetLength(0);
             Height = Hash.GetLength(1);
-        }
-
-        public static Bitmap GetScaledToPdfView(Image image)
-        {
-            var b = new Bitmap((int)Math.Round(image.Width * Settings.Constants.Image2PdfResolutionRatio, 0), (int)Math.Round(image.Height * Settings.Constants.Image2PdfResolutionRatio, 0), PixelFormat.Format24bppRgb);
-            using (var g = Graphics.FromImage(b))
-            {
-                g.CompositingMode = CompositingMode.SourceCopy;
-                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                g.SmoothingMode = SmoothingMode.HighQuality;
-                g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                g.CompositingQuality = CompositingQuality.HighQuality;
-                g.DrawImage(image, 0, 0, b.Width, b.Height);
-            }
-            return b;
         }
 
         static byte[,] getBitmapHash(Bitmap bitmap)

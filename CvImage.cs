@@ -129,7 +129,7 @@ namespace Cliver.PdfDocumentParser
 
         public CvImage(Bitmap bitmap)
         {
-            bitmap = ImageData.GetScaledToPdfView(bitmap);
+            bitmap = Page.GetScaledImage2Pdf(bitmap);
             Image = getPreprocessedImage(bitmap);
             Width = Image.Width;
             Height = Image.Height;
