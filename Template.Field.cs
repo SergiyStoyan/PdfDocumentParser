@@ -52,13 +52,13 @@ namespace Cliver.PdfDocumentParser
 
             public enum ValueTypes
             {
-                PdfText,
-                PdfTextLines,
-                PdfCharBoxs,
-                OcrText,
-                OcrTextLines,
-                OcrCharBoxs,
-                Image,
+                PdfText = 0,
+                PdfTextLines = 1,
+                PdfCharBoxs = 2,
+                OcrText = 3,
+                OcrTextLines = 4,
+                OcrCharBoxs = 5,
+                Image = 6,
             }
 
             public bool IsSet()

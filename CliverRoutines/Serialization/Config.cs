@@ -152,7 +152,7 @@ namespace Cliver
                         {
                             serializable = Serializable.Load(settingsTypeFieldInfo.FieldType, file);
                         }
-                        catch //(Exception e)
+                        catch (Exception e)
                         {
                             //if (!Message.YesNo("Error while loading config file " + file + "\r\n\r\n" + e.Message + "\r\n\r\nWould you like to proceed with restoring the initial config?", null, Message.Icons.Error))
                             //    Environment.Exit(0);

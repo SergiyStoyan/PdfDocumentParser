@@ -36,18 +36,16 @@ namespace Cliver.PdfDocumentParser
         {
             if (!cached || !fieldNames2fieldActualInfo.TryGetValue(fieldName, out FieldActualInfo fai))
             {
-                RectangleF? ar = RectangleF.Empty;
+                RectangleF? ar = null;
                 Template.Field af = null;
                 foreach (Template.Field f in pageCollection.ActiveTemplate.Fields.Where(x => x.Name == fieldName))
                 {
                     ar = getFieldActualRectangle(f);
+                    af = f;
                     if (ar != null)
-                    {
-                        af = f;
                         break;
-                    }
                 }
-                if (ar == RectangleF.Empty)
+                if (af == null)
                     throw new Exception("Field[name=" + fieldName + "] does not exist.");
                 fai = new FieldActualInfo(this, af, ar, af.ColumnOfTable != null ? getFieldActualInfo(af.ColumnOfTable, cached) : null);
                 fieldNames2fieldActualInfo[fieldName] = fai;
