@@ -41,7 +41,7 @@ namespace Cliver
 
         public S GetReloadedInstance<S>() where S : Settings, new()
         {
-            return Load<S>(__File);
+            return LoadOrCreate<S>(__File);
         }
 
         /// <summary>
@@ -252,23 +252,31 @@ namespace Cliver
         /// 
         /// </summary>
         /// <param name="unknownTypeStorageDir">only unknown Serializable types will be saved to a new location</param>
-        static public void Save(string unknownTypeStorageDir = null)
+        //static public void Save(string unknownTypeStorageDir = null)
+        //{
+        //    if (unknownTypeStorageDir != null)
+        //        if (ReadOnly && PathRoutines.ArePathsEqual(unknownTypeStorageDir, UnknownTypeStorageDir))
+        //            throw new Exception("Config is read-only and cannot be saved to the same location: " + unknownTypeStorageDir);
+        //    UnknownTypeStorageDir = unknownTypeStorageDir;
+        //    lock (objectFullNames2serializable)
+        //    {
+        //        foreach (Serializable s in objectFullNames2serializable.Values)
+        //        {
+        //            if (s is AppSettings)
+        //                s.Save(AppSettings.StorageDir + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(s.__File));
+        //            else if (s is UserSettings)
+        //                s.Save(UserSettings.StorageDir + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(s.__File));
+        //            else
+        //                s.Save(UnknownTypeStorageDir + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(s.__File));
+        //        }
+        //    }
+        //}
+        static public void Save()
         {
-            if (unknownTypeStorageDir != null)
-                if (ReadOnly && PathRoutines.ArePathsEqual(unknownTypeStorageDir, UnknownTypeStorageDir))
-                    throw new Exception("Config is read-only and cannot be saved to the same location: " + unknownTypeStorageDir);
-            UnknownTypeStorageDir = unknownTypeStorageDir;
             lock (objectFullNames2serializable)
             {
                 foreach (Serializable s in objectFullNames2serializable.Values)
-                {
-                    if (s is AppSettings)
-                        s.Save(AppSettings.StorageDir + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(s.__File));
-                    else if (s is UserSettings)
-                        s.Save(UserSettings.StorageDir + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(s.__File));
-                    else
-                        s.Save(UnknownTypeStorageDir + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(s.__File));
-                }
+                    s.Save();
             }
         }
 

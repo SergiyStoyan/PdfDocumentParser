@@ -157,7 +157,7 @@ namespace Cliver
                 {
                     if (Name != MAIN_THREAD_LOG_NAME)
                         Main.Write("EXITING: due to thread #" + Name + ". See the respective Log");
-                    Write(MessageType.EXIT, message, Log.GetStackString());
+                    Write(MessageType.EXIT, message, GetStackString());
                 }
             }
 
