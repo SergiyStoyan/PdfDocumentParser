@@ -40,9 +40,9 @@ namespace Cliver.PdfDocumentParser
             public enum Types
             {
                 PdfText,
+                CvImage,
                 OcrText,
                 ImageData,
-                CvImage,
                 //Script
             }
 
@@ -96,13 +96,12 @@ namespace Cliver.PdfDocumentParser
                 }
             }
 
-            public class ImageData : Anchor
+            public class CvImage : Anchor
             {
-                public PdfDocumentParser.ImageData Image;
+                public PdfDocumentParser.CvImage Image;
 
-                public float BrightnessTolerance = 0.20f;
-                public float DifferentPixelNumberTolerance = 0.15f;
-                public bool FindBestImageMatch = false;
+                public float Threshold = 0.70f;
+                public float ScaleDeviation = 0.05f;
 
                 override public bool IsSet()
                 {
@@ -115,12 +114,13 @@ namespace Cliver.PdfDocumentParser
                 }
             }
 
-            public class CvImage : Anchor
+            public class ImageData : Anchor
             {
-                public PdfDocumentParser.CvImage Image;
+                public PdfDocumentParser.ImageData Image;
 
-                public float Threshold = 0.70f;
-                public float ScaleDeviation = 0.05f;
+                public float BrightnessTolerance = 0.20f;
+                public float DifferentPixelNumberTolerance = 0.15f;
+                public bool FindBestImageMatch = false;
 
                 override public bool IsSet()
                 {
