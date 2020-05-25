@@ -135,7 +135,7 @@ To get the idea of what can be done with PdfDocumentParser and how it is used, r
 <br>This switch makes sense only if Search rectangle margin is on, otherwise the entire page is OCR'ed anyway.</td></tr>
 </table>
 
-<h4>CvImage</h4>
+<h4><a name="CvImage">CvImage</a></h4>
 <p>This type is an image that represents the area selected on PDF page while creating anchor. It can be used on any visible part of either native or scanned PDF page. 
 <p>For native PDF documents whose appearance has no discrepancy in quality, CvImage type works quite well. 
 <p>CvImage is based on the OpenCV image template matching.
@@ -152,10 +152,9 @@ To get the idea of what can be done with PdfDocumentParser and how it is used, r
 </table>
 
 <h4>ImageData</h4>
-<p><span class='attention'>NOTE: </span> this type is obsolete and replaced with CvImage. Used for backward compatibility.
-<p>This type is an image that represents the area selected on PDF page while creating anchor. It can be used on any visible part of either native or scanned PDF page. 
-<p>For native PDF documents whose appearance has no discrepancy in quality, ImageData type works quite well. 
-<p>When anchoring to a text which is presented by image as happens in scanned or mixed documents, there is a choice between ImageData and OcrText types. Which one to choose? If a target image does not change much from document to document and looks the same (no matter how poor its quality is), ImageData is more reliable and fast. However, if a target image has an essential discrepancy in size, contrast, brightness, orientation etc. in documents, OcrText may work better.
+<p><span class='attention'>NOTE: </span> this type is obsolete and <a href="#CvImage">CvImage</a> should be used instead. Remains for backward compatibility.
+<p>This type is an image that represents the area selected on PDF page while creating anchor. It can be used on any visible part of either native or scanned PDF page.
+
 <p><span class='attention'>NOTE: </span> even when an image fragment is searched within the same page where it was extracted from, it cannot be found without a non-zero tolerance. It happens because search hashes of a whole page and of a fragment are produced after downsizing them, and then, when restoring images from the hashes, pixel interpolation gives slight deviations from the original images. Those deviations should be overcome with some tolerance. 
 
 <table>
