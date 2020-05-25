@@ -46,7 +46,7 @@ namespace Cliver.Wpf
         /// </summary>
         public static bool NoDuplicate = true;
 
-        public readonly static string ProductName = Application.Current != null ? ProductName : ProgramRoutines.GetAppName();
+        public readonly static string ProductName = /*Application.Current != null ? ProductName :*/ ProgramRoutines.GetAppName();
 
         public static bool ShowDetailsOnException =
 #if DEBUG

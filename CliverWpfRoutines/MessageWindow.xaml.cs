@@ -1,4 +1,9 @@
-﻿using System;
+﻿//********************************************************************************************
+//Author: Sergey Stoyan
+//        sergey.stoyan@gmail.com
+//        http://www.cliversoft.com
+//********************************************************************************************
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Drawing;

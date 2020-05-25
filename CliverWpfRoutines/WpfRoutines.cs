@@ -7,11 +7,27 @@ using System.Windows.Data;
 using System.Windows.Controls;
 using System.Reflection;
 using System.Windows.Media.Animation;
+using System.IO;
+using System.Windows.Media.Imaging;
 
 namespace Cliver.Wpf
 {
     static public class Routines
     {
+        public static BitmapImage Convert(System.Drawing.Bitmap bitmap, bool disposeBitmap = true)
+        {
+            MemoryStream ms = new MemoryStream();
+            bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+            BitmapImage image = new BitmapImage();
+            image.BeginInit();
+            ms.Seek(0, SeekOrigin.Begin);
+            image.StreamSource = ms;
+            image.EndInit();
+            if (disposeBitmap)
+                bitmap.Dispose();
+            return image;
+        }
+
         public static void AddFadeEffect(this System.Windows.Window window, double durationMss)
         {
             window.IsVisibleChanged += (object sender, DependencyPropertyChangedEventArgs e) =>

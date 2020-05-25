@@ -10,6 +10,8 @@ using System.Linq;
 using System.Windows;
 //using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -38,9 +40,7 @@ namespace Cliver.PdfDocumentParser
             if (pages[currentPageI].ActiveTemplateBitmap == null)
                 pages.ActiveTemplate = getTemplateFromUI(false);
             scaledCurrentPageBitmap = ImageRoutines.GetScaled(pages[currentPageI].ActiveTemplateBitmap, (float)pictureScale.Value * Settings.Constants.Image2PdfResolutionRatio);
-            if (picture.Image != null)
-                picture.Image.Dispose();
-            picture.Image = new Bitmap(scaledCurrentPageBitmap);
+            picture.Source = Wpf.Routines.Convert(scaledCurrentPageBitmap, false);
         }
         Bitmap scaledCurrentPageBitmap;
 
@@ -55,26 +55,26 @@ namespace Cliver.PdfDocumentParser
                 throw new Exception("Anchor[Id=" + a.Id + "] does not exist.");
 
             bool set = true;
-            for (Template.Anchor a_ = a; a_ != null; a_ = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == a_.ParentAnchorId))
-            {
-                if (a != a_)
-                    showAnchorRowAs(a_.Id, rowStates.Parent, false);
-                if (!a_.IsSet())
-                {
-                    set = false;
-                    getAnchor(a_.Id, out DataGridViewRow r_);
-                    setRowStatus(statuses.WARNING, r_, "Not set");
-                }
-            }
-            if (!set)
-                return false;
-            getAnchor(a.Id, out DataGridViewRow r);
-            if (!pages[currentPageI].GetAnchorActualInfo(a.Id).Found)
-            {
-                setRowStatus(statuses.ERROR, r, "Not found");
-                return false;
-            }
-            setRowStatus(statuses.SUCCESS, r, "Found");
+            //for (Template.Anchor a_ = a; a_ != null; a_ = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == a_.ParentAnchorId))
+            //{
+            //    if (a != a_)
+            //        showAnchorRowAs(a_.Id, rowStates.Parent, false);
+            //    if (!a_.IsSet())
+            //    {
+            //        set = false;
+            //        getAnchor(a_.Id, out DataGridViewRow r_);
+            //        setRowStatus(statuses.WARNING, r_, "Not set");
+            //    }
+            //}
+            //if (!set)
+            //    return false;
+            //getAnchor(a.Id, out DataGridViewRow r);
+            //if (!pages[currentPageI].GetAnchorActualInfo(a.Id).Found)
+            //{
+            //    setRowStatus(statuses.ERROR, r, "Not found");
+            //    return false;
+            //}
+            //setRowStatus(statuses.SUCCESS, r, "Found");
 
             for (Template.Anchor a_ = a; a_ != null; a_ = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == a_.ParentAnchorId))
             {
@@ -96,19 +96,19 @@ namespace Cliver.PdfDocumentParser
                 List<RectangleF> bs = null;
                 switch (a_.Type)
                 {
-                    case Template.Anchor.Types.PdfText:
+                    case Cliver.PdfDocumentParser.Template.Anchor.Types.PdfText:
                         {
                             var pt = (Template.Anchor.PdfText)a_;
                             bs = pt.CharBoxs.Select(x => new RectangleF(x.Rectangle.X + shift.Width, x.Rectangle.Y + shift.Height, x.Rectangle.Width, x.Rectangle.Height)).ToList();
                         }
                         break;
-                    case Template.Anchor.Types.OcrText:
+                    case Cliver.PdfDocumentParser.Template.Anchor.Types.OcrText:
                         {
                             var ot = (Template.Anchor.OcrText)a_;
                             bs = ot.CharBoxs.Select(x => new RectangleF(x.Rectangle.X + shift.Width, x.Rectangle.Y + shift.Height, x.Rectangle.Width, x.Rectangle.Height)).ToList();
                         }
                         break;
-                    case Template.Anchor.Types.ImageData:
+                    case Cliver.PdfDocumentParser.Template.Anchor.Types.ImageData:
                         //bs = new List<System.Drawing.RectangleF> { rs[0] };
                         break;
                     default:
@@ -173,7 +173,7 @@ namespace Cliver.PdfDocumentParser
                 owners2resizebleBox[field] = new ResizebleBox(field, r, Settings.Appearance.SelectionBoxBorderWidth);
                 switch (field.Type)
                 {
-                    case Template.Field.Types.PdfText:
+                    case Cliver.PdfDocumentParser.Template.Field.Types.PdfText:
                         string s;
                         if (field.ColumnOfTable != null)
                         {
@@ -200,10 +200,10 @@ namespace Cliver.PdfDocumentParser
                             s = Pdf.GetTextSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, r, pages.ActiveTemplate.TextAutoInsertSpace);
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
                         return Page.NormalizeText(s);
-                    case Template.Field.Types.OcrText:
+                    case Cliver.PdfDocumentParser.Template.Field.Types.OcrText:
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
                         return Page.NormalizeText(Ocr.This.GetTextSurroundedByRectangle(pages[currentPageI].ActiveTemplateBitmap, r));
-                    case Template.Field.Types.ImageData:
+                    case Cliver.PdfDocumentParser.Template.Field.Types.ImageData:
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
                         using (Bitmap rb = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
                         {
@@ -223,9 +223,7 @@ namespace Cliver.PdfDocumentParser
 
         void clearImageFromBoxes()
         {
-            picture.Image?.Dispose();
-            if (scaledCurrentPageBitmap != null)
-                picture.Image = new Bitmap(scaledCurrentPageBitmap);
+            picture.Source = Wpf.Routines.Convert(scaledCurrentPageBitmap, false);
             drawnAnchorIds.Clear();
             owners2resizebleBox.Clear();
         }
@@ -236,7 +234,16 @@ namespace Cliver.PdfDocumentParser
             if (pages == null)
                 return;
 
-            Bitmap bm = new Bitmap(picture.Image);
+                BitmapSource bs = (BitmapSource)picture.Source;
+            DrawingVisual dVisual = new DrawingVisual();
+            using (DrawingContext dc = dVisual.RenderOpen())
+            {
+                dc.DrawImage(bs, new Rect(0, 0, bs.PixelWidth, bs.PixelHeight));
+                dc.DrawRectangle(Brushes.Green, null, new Rect(20, 20, 150, 100));
+            }
+            picture.Source = bs;
+                DrawingGroup dg = new DrawingGroup();
+            dg.Children.Add(new ImageDrawing( picture.Source,));
             using (Graphics gr = Graphics.FromImage(bm))
             {
                 float factor = (float)pictureScale.Value;

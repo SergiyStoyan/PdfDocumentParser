@@ -105,13 +105,76 @@
                 </Grid.RowDefinitions>
             <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">Anchors:</Label>
 
-                <DataGrid Name="anchors" Grid.Row="1" Grid.Column="0" Grid.RowSpan="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
-                    
-                    
-                    
+                <DataGrid Name="anchors" Grid.Row="1" Grid.Column="0" Grid.RowSpan="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" AutoGenerateColumns="True" >
+
+                    <DataGrid.Resources>
+                        <Style TargetType="{x:Type DataGridRow}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding}" Value="{x:Static CollectionView.NewItemPlaceholder}"/>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.Resources>
+                    <!--<DataGrid.RowValidationRules>
+                        <local:RowValidationRule ValidationStep="ConvertedProposedValue"/>
+                    </DataGrid.RowValidationRules>-->
+
+                    <DataGrid.Columns>
+
+                        <DataGridTemplateColumn SortMemberPath="Id" IsReadOnly="True">
+                            <DataGridTemplateColumn.Header>
+                                <TextBlock>Id</TextBlock>
+                            </DataGridTemplateColumn.Header>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Id, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn  SortMemberPath="Parent" IsReadOnly="False">
+                            <DataGridTemplateColumn.Header>
+                                <TextBlock>Parent</TextBlock>
+                            </DataGridTemplateColumn.Header>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Parent, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <ComboBox Text="{Binding Parent, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn  SortMemberPath="Type" IsReadOnly="False">
+                            <DataGridTemplateColumn.Header>
+                                <TextBlock>Type</TextBlock>
+                            </DataGridTemplateColumn.Header>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Type, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <ComboBox Text="{Binding Type, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn SortMemberPath="Position" IsReadOnly="True">
+                            <DataGridTemplateColumn.Header>
+                                <TextBlock>Position</TextBlock>
+                            </DataGridTemplateColumn.Header>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Position, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, NotifyOnValidationError=True}"></TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+
                 </DataGrid>
                 <GridSplitter Grid.Row="1" Grid.Column="1" Grid.RowSpan="4" Width="5" VerticalAlignment="Stretch"  />
-                <Control Grid.Row="1" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></Control>
+                <Canvas Grid.Row="1" Grid.Column="2" Name="anchorPanel" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></Canvas>
                 <GridSplitter Grid.Row="2" Grid.Column="2" Height="5" HorizontalAlignment="Stretch"  />
                 <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal">
                 <Label>Conditions:</Label>
