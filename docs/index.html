@@ -11,7 +11,7 @@
 <body>
 <script src="prism.js"></script>
 <div class='header'>
-<div class='mainHeader'>Pdf Document Parser</div>
+<div class='mainHeader'>Pdf Document Parser 6.0</div>
 </div>
 
 <div class='content'>
@@ -135,7 +135,24 @@ To get the idea of what can be done with PdfDocumentParser and how it is used, r
 <br>This switch makes sense only if Search rectangle margin is on, otherwise the entire page is OCR'ed anyway.</td></tr>
 </table>
 
+<h4>CvImage</h4>
+<p>This type is an image that represents the area selected on PDF page while creating anchor. It can be used on any visible part of either native or scanned PDF page. 
+<p>For native PDF documents whose appearance has no discrepancy in quality, CvImage type works quite well. 
+<p>CvImage is based on the OpenCV image template matching.
+<p>When anchoring to a text which is presented by image as happens in scanned or mixed documents, there is a choice between CvImage and OcrText types. Which one to choose? If a target image does not change much from document to document and looks the same (no matter how poor its quality is), CvImage is more reliable and fast. However, if a target image has an essential discrepancy in size, contrast, brightness, orientation etc. in documents, OcrText may work better.
+
+<table>
+<tr><th class='title_column'>Parameter</th><th>Description</th></tr>
+<tr><td class='title_column'>Threshold</td>
+<td>It filteres out CV image matches which are most likely incorrect. Recommended value is 0.7 or higher.</td></tr>
+<tr><td class='title_column'>Scale deviation</td>
+<td>Scanned images usually can deviate in their scaling so that the searched image can appear in different size and so might not be found. To deal with this the pyramid image search is performed. CvImage engine starts from scale 1 and then moves along the pyramid dawn and up with the <a href="#CvImageScalePyramidStep">Scale Pyramid Step</a>. Scale devialtion value sets the maximum factor of scaling the template image down and up while matching. Usually 0.05 suffices meaning that the template will be scaled from (1-0.05) to (1+0.05).</td></tr>
+<td class='title_column'>Search rectangle margin</td>
+<td>See <a href='#anchorPdfText'>PdfText</a>.</td></tr>
+</table>
+
 <h4>ImageData</h4>
+<p><span class='attention'>NOTE: </span> this type is obsolete and replaced with CvImage. Used for backward compatibility.
 <p>This type is an image that represents the area selected on PDF page while creating anchor. It can be used on any visible part of either native or scanned PDF page. 
 <p>For native PDF documents whose appearance has no discrepancy in quality, ImageData type works quite well. 
 <p>When anchoring to a text which is presented by image as happens in scanned or mixed documents, there is a choice between ImageData and OcrText types. Which one to choose? If a target image does not change much from document to document and looks the same (no matter how poor its quality is), ImageData is more reliable and fast. However, if a target image has an essential discrepancy in size, contrast, brightness, orientation etc. in documents, OcrText may work better.
@@ -225,12 +242,24 @@ When some side of a field is linked to an anchor, it becomes bonded to the ancho
 Its value is text surrounded by the field's rectangle and obtained from native PDF entities. 
 <p>It is the preferable type for extracting text. However, it does not work with text presented by image.
 
+<h4><a name='fieldPdfTextLines'>PdfTextLines</a></h4>
+It is the same as PdfText except it contains an array of text strings corresponding captured lines instad of plain text.
+
+<h4><a name='fieldPdfCharBoxs'>PdfCharBoxs</a></h4>
+Instead of text it gives an array of captured chars and their coordinates.
+
 <h4>OcrText</h4>
 Its value is text surrounded by the field's rectangle and recognized by OCR engine. 
 <p>For native PDF documents, this type should never be used. But for scanned documents, it is the only way to get text in the digital form which can be indexed, searched and so on.
 <p>In contrast to PdfText, OcrText type does not ensure 100% accuracy and can acceptably work only with images of resolution not less than 300dpi (see <a href='#PdfPageImageResolution'>PdfPageImageResolution</a> parameter). 
 
-<h4>ImageData</h4>
+<h4><a name='fieldOcrTextLines'>OcrText</a></h4>
+It is the same as PdfText except it contains an array of text strings corresponding captured lines instad of plain text.
+
+<h4><a name='fieldOcrCharBoxs'>OcrCharBoxs</a></h4>
+Instead of text it gives an array of captured chars and their coordinates.
+
+<h4>Image</h4>
 Its value is a <code>System.Drawing.Bitmap</code> object that contains a fragment of page surrounded by the field's rectangle. 
 <p>It is used when image is required rather than text or when OcrText type is not reliable enough.
 
@@ -276,13 +305,24 @@ There are settings that are common within template scope and influence on parsin
 
 
 <h3>Scanned document preprocessing</h3>
-<p>The following options are used for preprocessing of scanned PDF pages. They influence on OcrText or ImageData anchors and fields while PdfText type remains not affected.
+<p>The following options are used for preprocessing of scanned PDF pages. They influence on OcrText or CvImage/ImageData anchors and OcrText or Image fields while PdfText type remains not affected.
 <table>
 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
 <tr><td class='title_column'><a name='AutoDeskew'>Auto-Deskew</a></td>
 <td>It is used for scanned documents. It is always advisable to keep it active in templates targeted to scanned documents. </td></tr>
 <tr><td class='title_column'><a name='PageRotation'>Rotate Pages</a></td>
 <td>It is used mostly for scanned documents. A page must be correctly oriented to get OCR working properly on it.</td></tr>
+<tr><td class='title_column'><a name='CvImageScalePyramidStep'>Scale Pyramid Step</a></td>
+<td>It is only applied to CvImage type (that is for scanned documents). It is the scale pyramid step set in pixels of the PDF resolution (which is by default 72dpi). The bigger step, the faster perfomance.</td></tr>
+</table>
+
+
+<h3>CvImage anchor settings</h3>
+<p>The following options are only applied to CvImage anchors.
+<table>
+<tr><th class='title_column'>Parameter</th><th>Description</th></tr>
+<tr><td class='title_column'><a name='CvImageScalePyramidStep'>Scale Pyramid Step</a></td>
+<td>It is the scale pyramid step set in pixels of the PDF resolution (which is by default 72dpi). The bigger step, the faster perfomance... and the higher chance to overlook the macth.</td></tr>
 </table>
 
 
@@ -638,7 +678,7 @@ Let's see how to use table and column fields for parsing products in our sample 
 <img src='img/tutorial10.png'/>
 
 <p>Now, the fields are captured successfully with additional definitions and there is no need to change anything in the parsing code. 
-<br><span class='attention'>NOTE: </span>Column definitions strongly belong to the definitions of their table accordingly to their order so the number of definitions of table and column fields must be the same.
+<!--br><span class='attention'>NOTE: </span>Column definitions strongly belong to the definitions of their table accordingly to their order so the number of definitions of table and column fields must be the same.-->
 
 <p>The last page of test102.pdf requires more definitions which can be added as considered above.
 

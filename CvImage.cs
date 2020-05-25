@@ -22,10 +22,10 @@ namespace Cliver.PdfDocumentParser
         {
             lock (this)
             {
-                if (Image != null)
+                if (image != null)
                 {
-                    Image.Dispose();
-                    Image = null;
+                    image.Dispose();
+                    image = null;
                 }
                 //if (Bitmap != null)
                 //{
@@ -47,28 +47,11 @@ namespace Cliver.PdfDocumentParser
         {
             get
             {
-                byte[] hash = new byte[8 + Image.Bytes.Length];
+                byte[] hash = new byte[8 + image.Bytes.Length];
                 Array.Copy(BitConverter.GetBytes(Width), 0, hash, 0, 4);
                 Array.Copy(BitConverter.GetBytes(Height), 0, hash, 4, 4);
 
-                Array.Copy(Image.Bytes, 0, hash, 8, Image.Bytes.Length);
-                //int w = Bitmap.Width;
-                //int h = Bitmap.Height;
-                //Bitmap = Win.ImageRoutines.GetResized(Bitmap, w, h);
-                //Int32[] rawImageData = new Int32[w * h];
-                //BitmapData bd = Bitmap.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-                //Marshal.Copy(bd.Scan0, rawImageData, 0, w * h);
-                //Bitmap.UnlockBits(bd);
-                //int p = 8;
-                //for (int x = 0; x < w; x++)
-                //{
-                //    for (int y = 0; y < h; y++)
-                //    {
-                //        Color c = Color.FromArgb(rawImageData[p]);
-                //        hash[p] = (byte)((c.R + c.G + c.B) / 3);
-                //        p++;
-                //    }
-                //}
+                Array.Copy(image.Bytes, 0, hash, 8, image.Bytes.Length);
 
                 return Convert.ToBase64String(hash);
             }
@@ -80,31 +63,23 @@ namespace Cliver.PdfDocumentParser
                     Width = BitConverter.ToInt32(hash, 0);
                     Height = BitConverter.ToInt32(hash, 4);
 
-                    //Bitmap = new Bitmap(Width, Height);
-                    //int p = 0;
-                    //for (int x = 0; x < Width; x++)
-                    //    for (int y = 0; y < Height; y++)
-                    //    {
-                    //        Bitmap.SetPixel(x, y, Color.FromArgb(hash[p], hash[p], hash[p]));
-                    //        p++;
-                    //    }
-
-                    Image = new Image<Gray, byte>(Width, Height);
+                    image = new Image<Gray, byte>(Width, Height);
                     byte[] bs = new byte[hash.Length - 8];
                     Array.Copy(hash, 8, bs, 0, bs.Length);
-                    Image.Bytes = bs;
+                    image.Bytes = bs;
                 }
                 catch
                 {
                     Width = 10;
                     Height = 10;
-                    Image = new Image<Gray, byte>(Width, Height);
+                    image = new Image<Gray, byte>(Width, Height);
                 }
             }
         }
-        internal int Width;
-        internal int Height;
-        internal Image<Gray, byte> Image;
+        internal int Width { get; private set; }
+        internal int Height { get; private set; }
+
+        Image<Gray, byte> image;
         //internal Bitmap Bitmap
         //{
         //    set
@@ -130,9 +105,9 @@ namespace Cliver.PdfDocumentParser
         public CvImage(Bitmap bitmap)
         {
             bitmap = Page.GetScaledImage2Pdf(bitmap);
-            Image = getPreprocessedImage(bitmap);
-            Width = Image.Width;
-            Height = Image.Height;
+            image = getPreprocessedImage(bitmap);
+            Width = image.Width;
+            Height = image.Height;
         }
 
         static private Image<Gray, byte> getPreprocessedImage(Bitmap bitmap)
@@ -149,7 +124,7 @@ namespace Cliver.PdfDocumentParser
         public System.Drawing.Point? FindWithinImage(CvImage cvImage, float threshold, float scaleDeviation, int scaleStep/*, out float detectedScale*/)
         {
             System.Drawing.Point? p;
-            p = findWithinImage(Image, cvImage.Image, threshold);
+            p = findWithinImage(image, cvImage.image, threshold);
             if (p != null)
                 return p;
             //running though pyramid
@@ -157,12 +132,12 @@ namespace Cliver.PdfDocumentParser
             for (int i = 1; i <= stepCount; i++)
             {
                 double scaleDelta = scaleStep * i / Width;
-                Image<Gray, byte> template = Image.Resize(1 + scaleDelta, Inter.Linear);
-                p = findWithinImage(template, cvImage.Image, threshold);
+                Image<Gray, byte> template = image.Resize(1 + scaleDelta, Inter.Linear);
+                p = findWithinImage(template, cvImage.image, threshold);
                 if (p != null)
                     return p;
-                template = Image.Resize(1 - scaleDelta, Inter.Linear);
-                p = findWithinImage(template, cvImage.Image, threshold);
+                template = image.Resize(1 - scaleDelta, Inter.Linear);
+                p = findWithinImage(template, cvImage.image, threshold);
                 if (p != null)
                     return p;
             }
@@ -183,7 +158,7 @@ namespace Cliver.PdfDocumentParser
 
         public Image GetImage()
         {
-            return Image.ToBitmap();
+            return image.ToBitmap();
         }
     }
 }

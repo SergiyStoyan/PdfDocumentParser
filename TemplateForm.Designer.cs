@@ -86,12 +86,13 @@
             this.picture = new System.Windows.Forms.PictureBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.CvImageScalePyramidStep = new System.Windows.Forms.NumericUpDown();
+            this.label19 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.textAutoInsertSpaceRepresentative = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.CvImageScalePyramidStep = new System.Windows.Forms.NumericUpDown();
-            this.label19 = new System.Windows.Forms.Label();
             this.autoDeskewThreshold = new System.Windows.Forms.NumericUpDown();
             this.testFile = new System.Windows.Forms.TextBox();
             this.bTestFile = new System.Windows.Forms.Button();
@@ -131,9 +132,10 @@
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.CvImageScalePyramidStep)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.CvImageScalePyramidStep)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.autoDeskewThreshold)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureScale)).BeginInit();
             this.flowLayoutPanel2.SuspendLayout();
@@ -161,7 +163,7 @@
             // bPrevPage
             // 
             this.bPrevPage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bPrevPage.Location = new System.Drawing.Point(486, 54);
+            this.bPrevPage.Location = new System.Drawing.Point(329, 54);
             this.bPrevPage.Name = "bPrevPage";
             this.bPrevPage.Size = new System.Drawing.Size(47, 23);
             this.bPrevPage.TabIndex = 22;
@@ -175,14 +177,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.name.Location = new System.Drawing.Point(51, 2);
             this.name.Name = "name";
-            this.name.Size = new System.Drawing.Size(371, 20);
+            this.name.Size = new System.Drawing.Size(214, 20);
             this.name.TabIndex = 39;
             // 
             // label8
             // 
             this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(355, 56);
+            this.label8.Location = new System.Drawing.Point(198, 56);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(35, 13);
             this.label8.TabIndex = 46;
@@ -235,7 +237,7 @@
             this.fields.Name = "fields";
             this.fields.RowHeadersWidth = 102;
             this.fields.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.fields.Size = new System.Drawing.Size(589, 129);
+            this.fields.Size = new System.Drawing.Size(432, 124);
             this.fields.TabIndex = 30;
             // 
             // Name_
@@ -313,7 +315,7 @@
             // 
             this.selectionCoordinates.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.selectionCoordinates.AutoSize = true;
-            this.selectionCoordinates.Location = new System.Drawing.Point(429, 5);
+            this.selectionCoordinates.Location = new System.Drawing.Point(272, 5);
             this.selectionCoordinates.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.selectionCoordinates.Name = "selectionCoordinates";
             this.selectionCoordinates.Size = new System.Drawing.Size(119, 13);
@@ -323,7 +325,7 @@
             // bNextPage
             // 
             this.bNextPage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bNextPage.Location = new System.Drawing.Point(542, 54);
+            this.bNextPage.Location = new System.Drawing.Point(385, 54);
             this.bNextPage.Name = "bNextPage";
             this.bNextPage.Size = new System.Drawing.Size(47, 23);
             this.bNextPage.TabIndex = 23;
@@ -335,7 +337,7 @@
             // 
             this.lTotalPages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lTotalPages.AutoSize = true;
-            this.lTotalPages.Location = new System.Drawing.Point(424, 56);
+            this.lTotalPages.Location = new System.Drawing.Point(267, 56);
             this.lTotalPages.Name = "lTotalPages";
             this.lTotalPages.Size = new System.Drawing.Size(32, 13);
             this.lTotalPages.TabIndex = 33;
@@ -353,7 +355,7 @@
             this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel4.Name = "flowLayoutPanel4";
             this.flowLayoutPanel4.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
-            this.flowLayoutPanel4.Size = new System.Drawing.Size(464, 27);
+            this.flowLayoutPanel4.Size = new System.Drawing.Size(588, 23);
             this.flowLayoutPanel4.TabIndex = 51;
             // 
             // ShowPdfText
@@ -424,7 +426,7 @@
             0,
             0,
             65536});
-            this.textAutoInsertSpaceThreshold.Location = new System.Drawing.Point(72, 21);
+            this.textAutoInsertSpaceThreshold.Location = new System.Drawing.Point(61, 21);
             this.textAutoInsertSpaceThreshold.Name = "textAutoInsertSpaceThreshold";
             this.textAutoInsertSpaceThreshold.Size = new System.Drawing.Size(52, 20);
             this.textAutoInsertSpaceThreshold.TabIndex = 64;
@@ -458,8 +460,8 @@
             // anchorsContainer.Panel2
             // 
             this.anchorsContainer.Panel2.Controls.Add(this.splitContainer3);
-            this.anchorsContainer.Size = new System.Drawing.Size(589, 282);
-            this.anchorsContainer.SplitterDistance = 312;
+            this.anchorsContainer.Size = new System.Drawing.Size(432, 265);
+            this.anchorsContainer.SplitterDistance = 228;
             this.anchorsContainer.TabIndex = 52;
             // 
             // anchors
@@ -476,7 +478,7 @@
             this.anchors.Name = "anchors";
             this.anchors.RowHeadersWidth = 102;
             this.anchors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.anchors.Size = new System.Drawing.Size(312, 282);
+            this.anchors.Size = new System.Drawing.Size(228, 265);
             this.anchors.TabIndex = 50;
             // 
             // Id3
@@ -529,8 +531,8 @@
             this.splitContainer3.Panel2.Controls.Add(this.CheckConditionsAutomaticallyWhenPageChanged);
             this.splitContainer3.Panel2.Controls.Add(this.label4);
             this.splitContainer3.Panel2.Controls.Add(this.label11);
-            this.splitContainer3.Size = new System.Drawing.Size(273, 282);
-            this.splitContainer3.SplitterDistance = 178;
+            this.splitContainer3.Size = new System.Drawing.Size(200, 265);
+            this.splitContainer3.SplitterDistance = 167;
             this.splitContainer3.TabIndex = 0;
             // 
             // conditions
@@ -547,7 +549,7 @@
             this.conditions.Name = "conditions";
             this.conditions.RowHeadersWidth = 102;
             this.conditions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.conditions.Size = new System.Drawing.Size(273, 82);
+            this.conditions.Size = new System.Drawing.Size(200, 76);
             this.conditions.TabIndex = 0;
             // 
             // Name2
@@ -669,7 +671,7 @@
             this.flowLayoutPanel1.Controls.Add(this.cancel);
             this.flowLayoutPanel1.Controls.Add(this.save);
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(419, 0);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(261, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(170, 31);
             this.flowLayoutPanel1.TabIndex = 27;
@@ -691,9 +693,9 @@
             this.panel1.Controls.Add(this.flowLayoutPanel1);
             this.panel1.Controls.Add(this.flowLayoutPanel3);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 167);
+            this.panel1.Location = new System.Drawing.Point(0, 162);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(589, 31);
+            this.panel1.Size = new System.Drawing.Size(432, 31);
             this.panel1.TabIndex = 29;
             // 
             // flowLayoutPanel3
@@ -734,7 +736,7 @@
             // tCurrentPage
             // 
             this.tCurrentPage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.tCurrentPage.Location = new System.Drawing.Point(396, 54);
+            this.tCurrentPage.Location = new System.Drawing.Point(239, 54);
             this.tCurrentPage.Name = "tCurrentPage";
             this.tCurrentPage.Size = new System.Drawing.Size(26, 20);
             this.tCurrentPage.TabIndex = 47;
@@ -764,8 +766,8 @@
             // 
             this.splitContainer1.Panel2.AutoScroll = true;
             this.splitContainer1.Panel2.Controls.Add(this.picture);
-            this.splitContainer1.Size = new System.Drawing.Size(1297, 724);
-            this.splitContainer1.SplitterDistance = 609;
+            this.splitContainer1.Size = new System.Drawing.Size(964, 703);
+            this.splitContainer1.SplitterDistance = 452;
             this.splitContainer1.TabIndex = 2;
             // 
             // splitContainer2
@@ -778,6 +780,7 @@
             // 
             // splitContainer2.Panel1
             // 
+            this.splitContainer2.Panel1.Controls.Add(this.groupBox3);
             this.splitContainer2.Panel1.Controls.Add(this.groupBox2);
             this.splitContainer2.Panel1.Controls.Add(this.anchorsContainer);
             this.splitContainer2.Panel1.Controls.Add(this.selectionCoordinates);
@@ -805,64 +808,26 @@
             this.splitContainer2.Panel2.Controls.Add(this.panel1);
             this.splitContainer2.Panel2.Controls.Add(this.ExtractFieldsAutomaticallyWhenPageChanged);
             this.splitContainer2.Panel2.Controls.Add(this.label5);
-            this.splitContainer2.Size = new System.Drawing.Size(589, 704);
-            this.splitContainer2.SplitterDistance = 502;
+            this.splitContainer2.Size = new System.Drawing.Size(432, 683);
+            this.splitContainer2.SplitterDistance = 486;
             this.splitContainer2.TabIndex = 32;
             // 
-            // groupBox2
+            // groupBox3
             // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.textAutoInsertSpaceRepresentative);
-            this.groupBox2.Controls.Add(this.label15);
-            this.groupBox2.Controls.Add(this.textAutoInsertSpaceThreshold);
-            this.groupBox2.Controls.Add(this.label12);
-            this.groupBox2.Location = new System.Drawing.Point(0, 159);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(589, 44);
-            this.groupBox2.TabIndex = 64;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Text Auto-Insert Space";
-            // 
-            // textAutoInsertSpaceRepresentative
-            // 
-            this.textAutoInsertSpaceRepresentative.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textAutoInsertSpaceRepresentative.Location = new System.Drawing.Point(205, 21);
-            this.textAutoInsertSpaceRepresentative.Name = "textAutoInsertSpaceRepresentative";
-            this.textAutoInsertSpaceRepresentative.Size = new System.Drawing.Size(65, 20);
-            this.textAutoInsertSpaceRepresentative.TabIndex = 67;
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(140, 23);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(57, 13);
-            this.label15.TabIndex = 66;
-            this.label15.Text = "Substitute:";
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.CvImageScalePyramidStep);
-            this.groupBox1.Controls.Add(this.label19);
-            this.groupBox1.Controls.Add(this.autoDeskewThreshold);
-            this.groupBox1.Controls.Add(this.autoDeskew);
-            this.groupBox1.Controls.Add(this.pageRotation);
-            this.groupBox1.Controls.Add(this.label21);
-            this.groupBox1.Controls.Add(this.label14);
-            this.groupBox1.Controls.Add(this.label9);
-            this.groupBox1.Location = new System.Drawing.Point(0, 109);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(589, 48);
-            this.groupBox1.TabIndex = 1;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Scanned Document Settings";
+            this.groupBox3.Controls.Add(this.CvImageScalePyramidStep);
+            this.groupBox3.Controls.Add(this.label19);
+            this.groupBox3.Location = new System.Drawing.Point(266, 159);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(165, 44);
+            this.groupBox3.TabIndex = 68;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "CvImage";
             // 
             // CvImageScalePyramidStep
             // 
-            this.CvImageScalePyramidStep.Location = new System.Drawing.Point(506, 21);
+            this.CvImageScalePyramidStep.Location = new System.Drawing.Point(114, 21);
             this.CvImageScalePyramidStep.Minimum = new decimal(new int[] {
             1,
             0,
@@ -880,11 +845,57 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(404, 24);
+            this.label19.Location = new System.Drawing.Point(10, 21);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(102, 13);
             this.label19.TabIndex = 65;
             this.label19.Text = "Scale Pyramid Step:";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.textAutoInsertSpaceRepresentative);
+            this.groupBox2.Controls.Add(this.label15);
+            this.groupBox2.Controls.Add(this.textAutoInsertSpaceThreshold);
+            this.groupBox2.Controls.Add(this.label12);
+            this.groupBox2.Location = new System.Drawing.Point(0, 159);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(260, 44);
+            this.groupBox2.TabIndex = 64;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Text Auto-Insert Space";
+            // 
+            // textAutoInsertSpaceRepresentative
+            // 
+            this.textAutoInsertSpaceRepresentative.Location = new System.Drawing.Point(180, 21);
+            this.textAutoInsertSpaceRepresentative.Name = "textAutoInsertSpaceRepresentative";
+            this.textAutoInsertSpaceRepresentative.Size = new System.Drawing.Size(65, 20);
+            this.textAutoInsertSpaceRepresentative.TabIndex = 67;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(125, 23);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(57, 13);
+            this.label15.TabIndex = 66;
+            this.label15.Text = "Substitute:";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.autoDeskewThreshold);
+            this.groupBox1.Controls.Add(this.autoDeskew);
+            this.groupBox1.Controls.Add(this.pageRotation);
+            this.groupBox1.Controls.Add(this.label21);
+            this.groupBox1.Controls.Add(this.label14);
+            this.groupBox1.Controls.Add(this.label9);
+            this.groupBox1.Location = new System.Drawing.Point(0, 109);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(432, 48);
+            this.groupBox1.TabIndex = 1;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Scanned Document Settings";
             // 
             // autoDeskewThreshold
             // 
@@ -909,14 +920,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.testFile.Location = new System.Drawing.Point(51, 28);
             this.testFile.Name = "testFile";
-            this.testFile.Size = new System.Drawing.Size(505, 20);
+            this.testFile.Size = new System.Drawing.Size(348, 20);
             this.testFile.TabIndex = 10;
             this.testFile.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // bTestFile
             // 
             this.bTestFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bTestFile.Location = new System.Drawing.Point(565, 25);
+            this.bTestFile.Location = new System.Drawing.Point(408, 25);
             this.bTestFile.Name = "bTestFile";
             this.bTestFile.Size = new System.Drawing.Size(24, 23);
             this.bTestFile.TabIndex = 9;
@@ -991,7 +1002,7 @@
             this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(589, 20);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(432, 20);
             this.flowLayoutPanel2.TabIndex = 0;
             // 
             // label18
@@ -1080,7 +1091,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1297, 724);
+            this.ClientSize = new System.Drawing.Size(964, 703);
             this.Controls.Add(this.splitContainer1);
             this.Name = "TemplateForm";
             this.Text = "TemplateForm";
@@ -1115,11 +1126,13 @@
             this.splitContainer2.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.CvImageScalePyramidStep)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.CvImageScalePyramidStep)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.autoDeskewThreshold)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureScale)).EndInit();
             this.flowLayoutPanel2.ResumeLayout(false);
@@ -1209,5 +1222,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Value;
         private System.Windows.Forms.NumericUpDown CvImageScalePyramidStep;
         private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.GroupBox groupBox3;
     }
 }

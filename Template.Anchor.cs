@@ -120,7 +120,7 @@ namespace Cliver.PdfDocumentParser
                 public PdfDocumentParser.CvImage Image;
 
                 public float Threshold = 0.70f;
-                public float ScaleDeviation = 0.1f;
+                public float ScaleDeviation = 0.05f;
 
                 override public bool IsSet()
                 {
