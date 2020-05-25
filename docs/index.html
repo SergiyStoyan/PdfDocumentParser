@@ -146,7 +146,7 @@ To get the idea of what can be done with PdfDocumentParser and how it is used, r
 <tr><td class='title_column'>Threshold</td>
 <td>It filteres out CV image matches which are most likely incorrect. Recommended value is 0.7 or higher.</td></tr>
 <tr><td class='title_column'>Scale deviation</td>
-<td>Scanned images usually can deviate in their scaling so that the searched image can appear in different size and so might not be found. To deal with this the pyramid image search is performed. CvImage engine starts from scale 1 and then moves along the pyramid dawn and up with the <a href="#CvImageScalePyramidStep">Scale Pyramid Step</a>. Scale devialtion value sets the maximum factor of scaling the template image down and up while matching. Usually 0.05 suffices meaning that the template will be scaled from (1-0.05) to (1+0.05).</td></tr>
+<td>Scanned images usually can deviate in their scaling so that the searched image can appear in different size and so might not be found. To deal with this the pyramid image search is performed. CvImage engine starts from scale 1 and then moves along the scaling pyramid with the <a href="#CvImageScalePyramidStep">Scale Pyramid Step</a> down and up. Scale deviation value defines the minimum and maximum scaling factors to be applied to the template image. E.g. 0.05 means that the template is to be scaled from (1-0.05) to (1+0.05).</td></tr>
 <td class='title_column'>Search rectangle margin</td>
 <td>See <a href='#anchorPdfText'>PdfText</a>.</td></tr>
 </table>
@@ -311,8 +311,6 @@ There are settings that are common within template scope and influence on parsin
 <td>It is used for scanned documents. It is always advisable to keep it active in templates targeted to scanned documents. </td></tr>
 <tr><td class='title_column'><a name='PageRotation'>Rotate Pages</a></td>
 <td>It is used mostly for scanned documents. A page must be correctly oriented to get OCR working properly on it.</td></tr>
-<tr><td class='title_column'><a name='CvImageScalePyramidStep'>Scale Pyramid Step</a></td>
-<td>It is only applied to CvImage type (that is for scanned documents). It is the scale pyramid step set in pixels of the PDF resolution (which is by default 72dpi). The bigger step, the faster perfomance.</td></tr>
 </table>
 
 
