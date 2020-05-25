@@ -37,8 +37,8 @@ namespace Cliver
 
         public static Version GetExecutingAssemblyVersion()
         {
-            AssemblyInfo ai = new AssemblyInfo(Assembly.GetExecutingAssembly());
-            return ai.AssemblyVersion;
+            AssemblyInfo ai = new AssemblyInfo(Assembly.GetCallingAssembly());
+            return ai.Version;
         }
 
         //public static System.Drawing.Icon GetAppIcon(Assembly assembly = null)
@@ -56,7 +56,7 @@ namespace Cliver
             public AssemblyInfo(string file)
             {
                 if (file == null)
-                    a = Assembly.GetEntryAssembly();
+                    a = Assembly.GetCallingAssembly();
                 else
                     a = Assembly.LoadFile(file);
             }
@@ -65,12 +65,12 @@ namespace Cliver
             public AssemblyInfo(Assembly a = null)
             {
                 if (a == null)
-                    this.a = Assembly.GetEntryAssembly();
+                    this.a = Assembly.GetCallingAssembly();
                 else
                     this.a = a;
             }
 
-            public string AssemblyCompilationVersion
+            public string CompilationVersion
             {
                 get
                 {
@@ -79,7 +79,7 @@ namespace Cliver
                 }
             }
 
-            public string AssemblyTitle
+            public string Title
             {
                 get
                 {
@@ -104,7 +104,15 @@ namespace Cliver
             //    }
             //}
 
-            public Version AssemblyVersion
+            public Version Version
+            {
+                get
+                {
+                    return a.GetName().Version;
+                }
+            }
+
+            public Version FileVersion
             {
                 get
                 {
@@ -113,7 +121,7 @@ namespace Cliver
                 }
             }
 
-            public string AssemblyDescription
+            public string Description
             {
                 get
                 {
@@ -126,7 +134,7 @@ namespace Cliver
                 }
             }
 
-            public string AssemblyProduct
+            public string Product
             {
                 get
                 {
@@ -139,7 +147,7 @@ namespace Cliver
                 }
             }
 
-            public string AssemblyCopyright
+            public string Copyright
             {
                 get
                 {
@@ -152,7 +160,7 @@ namespace Cliver
                 }
             }
 
-            public string AssemblyCompany
+            public string Company
             {
                 get
                 {

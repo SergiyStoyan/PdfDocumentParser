@@ -41,8 +41,9 @@ namespace Cliver.SampleParser
 
             //SetProcessDpiAwareness((int)DpiAwareness.PerMonitorAware);
 
-            Version = AssemblyRoutines.GetAssemblyCompiledTime(Assembly.GetEntryAssembly()).ToString("yyMMdd-HHmmss"); //String.Format("Version {0}", AssemblyVersion);
-            Name = Application.ProductName;
+            AssemblyRoutines.AssemblyInfo ai = new AssemblyRoutines.AssemblyInfo();
+            Version = ai.Version;
+            Name = ai.Product;
 
             Message.TopMost = true;
 
@@ -51,7 +52,7 @@ namespace Cliver.SampleParser
             Log.DeleteOldLogsDialog = null;
             Log.Initialize(Log.Mode.ONLY_LOG, Log.CompanyCommonDataDir, true);
         }
-        public static readonly string Version;
+        public static readonly Version Version;
         public static readonly string Name;
 
         [STAThread]

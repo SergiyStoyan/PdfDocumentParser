@@ -46,13 +46,9 @@ namespace Cliver.PdfDocumentParser
 
             //SetProcessDpiAwareness((int)DpiAwareness.PerMonitorAware);
 
-            //Assembly assembly = Assembly.GetExecutingAssembly();
-            //FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-            //Version = new Version(fvi.ProductVersion);
-            Version = Assembly.GetExecutingAssembly().GetName().Version;
-
-            object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false);
-            Name = ((AssemblyProductAttribute)attributes[0]).Product;
+            AssemblyRoutines.AssemblyInfo ai = new AssemblyRoutines.AssemblyInfo();
+            Version = ai.Version;
+            Name = ai.Product;
 
             FullName = Name + " [" + Version.ToString(3) + "]";
 

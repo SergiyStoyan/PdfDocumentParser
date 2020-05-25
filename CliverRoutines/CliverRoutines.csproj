@@ -3,9 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <AssemblyVersion>3.5.1.0</AssemblyVersion>
+    <AssemblyVersion>3.5.2.0</AssemblyVersion>
     <RepositoryUrl>https://github.com/sergeystoyan/CliverRoutines.git</RepositoryUrl>
-    <FileVersion>3.5.1.0</FileVersion>
+    <FileVersion>3.5.2.0</FileVersion>
     <!--PackageLicenseFile>LICENSE</PackageLicenseFile-->
 	<PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
     <Copyright>Sergey Stoyan</Copyright>
