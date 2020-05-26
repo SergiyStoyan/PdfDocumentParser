@@ -185,11 +185,9 @@ namespace Cliver.PdfDocumentParser
             return cbs;
         }
 
-        public class CharBox
+        public class CharBox : Page.CharBox
         {
-            public string Char;
             //public bool AutoInserted = false;
-            public System.Drawing.RectangleF R;
         }
 
         //public static string GetTextByTopLeftCoordinates(List<CharBox> orderedCbs, RectangleF r)

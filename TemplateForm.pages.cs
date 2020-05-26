@@ -145,7 +145,7 @@ namespace Cliver.PdfDocumentParser
                 if (field.BottomAnchor != null && !findAndDrawAnchor(field.BottomAnchor.Id))
                     return null;
 
-                Page.FieldActualInfo fai = pages[currentPageI].GetNonCachedFieldActualInfo(field);
+                Page.FieldActualInfo fai = pages[currentPageI].GetFieldActualInfo(field);
                 if (!fai.Found)
                     return null;
                 RectangleF r = (RectangleF)fai.ActualRectangle;

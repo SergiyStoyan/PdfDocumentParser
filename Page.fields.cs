@@ -21,20 +21,20 @@ namespace Cliver.PdfDocumentParser
     {
         public object GetValue(string fieldName, Template.Field.ValueTypes? valueType = null)
         {
-            FieldActualInfo fai = getFieldActualInfo(fieldName, true);
+            FieldActualInfo fai = getFieldActualInfo(fieldName);
             if (!fai.Found)
                 return null;
             return fai.GetValue(valueType == null ? fai.ActualField.DefaultValueType : (Template.Field.ValueTypes)valueType);
         }
 
-        internal FieldActualInfo GetNonCachedFieldActualInfo(Template.Field field)
+        internal FieldActualInfo GetFieldActualInfo(Template.Field field)
         {
-            return new FieldActualInfo(this, field, getFieldActualRectangle(field), field.ColumnOfTable != null ? getFieldActualInfo(field.ColumnOfTable, false) : null);
+            return new FieldActualInfo(this, field, getFieldActualRectangle(field), field.ColumnOfTable != null ? getFieldActualInfo(field.ColumnOfTable) : null);
         }
 
-        FieldActualInfo getFieldActualInfo(string fieldName, bool cached)
+        FieldActualInfo getFieldActualInfo(string fieldName)
         {
-            if (!cached || !fieldNames2fieldActualInfo.TryGetValue(fieldName, out FieldActualInfo fai))
+            if (!fieldNames2fieldActualInfo.TryGetValue(fieldName, out FieldActualInfo fai))
             {
                 RectangleF? ar = null;
                 Template.Field af = null;
@@ -47,54 +47,72 @@ namespace Cliver.PdfDocumentParser
                 }
                 if (af == null)
                     throw new Exception("Field[name=" + fieldName + "] does not exist.");
-                fai = new FieldActualInfo(this, af, ar, af.ColumnOfTable != null ? getFieldActualInfo(af.ColumnOfTable, cached) : null);
+                fai = new FieldActualInfo(this, af, ar, af.ColumnOfTable != null ? getFieldActualInfo(af.ColumnOfTable) : null);
                 fieldNames2fieldActualInfo[fieldName] = fai;
             }
             return fai;
         }
         Dictionary<string, FieldActualInfo> fieldNames2fieldActualInfo = new Dictionary<string, FieldActualInfo>();
+
         internal class FieldActualInfo
         {
+            ~FieldActualInfo()
+            {
+                foreach (object o in valueTypes2cachedValue.Values)
+                    if (o is IDisposable)
+                        ((IDisposable)o).Dispose();
+            }
+
             readonly public Template.Field ActualField;
             readonly public RectangleF? ActualRectangle;
             readonly public FieldActualInfo TableFieldActualInfo = null;
             public bool Found { get { return ActualRectangle != null; } }
-            public Dictionary<Template.Field.ValueTypes, object> ValueTypes2Values = new Dictionary<Template.Field.ValueTypes, object>();
+
             public object GetValue(Template.Field.ValueTypes valueType)
             {
-                if (!ValueTypes2Values.TryGetValue(valueType, out object o))
-                {
-                    if (!Found)
-                        o = null;
-                    else
-                        o = getValue(valueType);
-                    ValueTypes2Values[valueType] = o;
+                return getValue(valueType, false);
+            }
+
+            object getValue(Template.Field.ValueTypes valueType, bool cached)
+            {
+                if (!cached)
+                    return getValue_(valueType);
+                if (!valueTypes2cachedValue.TryGetValue(valueType, out object o))
+                {//!!!to cache Table field values to re-use them internally only!!!
+                    o = getValue_(valueType);
+                    valueTypes2cachedValue[valueType] = o;
                 }
                 return o;
             }
-            readonly Page page;
-
-            object getValue(Template.Field.ValueTypes valueType)
+            Dictionary<Template.Field.ValueTypes, object> valueTypes2cachedValue = new Dictionary<Template.Field.ValueTypes, object>();//!!!cache Table field values for internal reuse only!!! 
+            object getValue_(Template.Field.ValueTypes valueType)
             {
                 RectangleF r = (RectangleF)ActualRectangle;
                 switch (valueType)
                 {
                     case Template.Field.ValueTypes.PdfText:
-                    case Template.Field.ValueTypes.PdfTextLines:
                         List<string> ls;
                         if (ActualField.ColumnOfTable == null)
                             ls = Pdf.GetTextLinesSurroundedByRectangle(page.PdfCharBoxs, r, page.pageCollection.ActiveTemplate.TextAutoInsertSpace);
                         else
-                            ls = getTextLinesAsTableColumn();
-                        if (valueType == Template.Field.ValueTypes.PdfText)
-                            return string.Join("\r\n", ls);
-                        return ls;
+                            ls = getPdfTextLinesAsTableColumn();
+                        return string.Join("\r\n", ls);
+                    case Template.Field.ValueTypes.PdfTextLines:
+                        if (ActualField.ColumnOfTable == null)
+                            return Pdf.GetTextLinesSurroundedByRectangle(page.PdfCharBoxs, r, page.pageCollection.ActiveTemplate.TextAutoInsertSpace);
+                        return getPdfTextLinesAsTableColumn();
                     case Template.Field.ValueTypes.PdfCharBoxs:
                         return Pdf.GetCharBoxsSurroundedByRectangle(page.PdfCharBoxs, r);
                     case Template.Field.ValueTypes.OcrText:
-                        return Ocr.This.GetTextSurroundedByRectangle(page.ActiveTemplateBitmap, r);
+                        if (ActualField.ColumnOfTable == null)
+                            return Ocr.This.GetTextSurroundedByRectangle(page.ActiveTemplateBitmap, r);
+                        throw new Exception("This code has to be debugged!");
+                        return string.Join("\r\n", getOcrTextLinesAsTableColumn());
                     case Template.Field.ValueTypes.OcrTextLines:
-                        throw new Exception("To be implemented.");
+                        throw new Exception("This code has to be debugged!");
+                        if (ActualField.ColumnOfTable == null)
+                            return Regex.Split(Ocr.This.GetTextSurroundedByRectangle(page.ActiveTemplateBitmap, r), "$", RegexOptions.Multiline);
+                        return getOcrTextLinesAsTableColumn();
                     case Template.Field.ValueTypes.OcrCharBoxs:
                         return Ocr.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, r);
                     case Template.Field.ValueTypes.Image:
@@ -106,20 +124,41 @@ namespace Cliver.PdfDocumentParser
                         throw new Exception("Unknown option: " + valueType);
                 }
             }
+            readonly Page page;
 
-            List<string> getTextLinesAsTableColumn()
+            List<string> getPdfTextLinesAsTableColumn()
             {
                 if (ActualRectangle == null)
                     return null;
                 if (!TableFieldActualInfo.Found)
                     return null;
                 RectangleF ar = (RectangleF)ActualRectangle;
-                List<Pdf.CharBox> cbs = (List<Pdf.CharBox>)TableFieldActualInfo.GetValue(Template.Field.ValueTypes.PdfCharBoxs);
+                List<Pdf.CharBox> cbs = (List<Pdf.CharBox>)TableFieldActualInfo.getValue(Template.Field.ValueTypes.PdfCharBoxs, true);
                 List<string> ls = new List<string>();
                 foreach (Pdf.Line l in Pdf.GetLines(cbs, page.pageCollection.ActiveTemplate.TextAutoInsertSpace))
                 {
                     StringBuilder sb = new StringBuilder();
                     foreach (Pdf.CharBox cb in l.CharBoxs)
+                        if (cb.R.Left >= ar.Left && cb.R.Right <= ar.Right && cb.R.Top >= ar.Top && cb.R.Bottom <= ar.Bottom)
+                            sb.Append(cb.Char);
+                    ls.Add(sb.ToString());
+                }
+                return ls;
+            }
+
+            List<string> getOcrTextLinesAsTableColumn()
+            {
+                if (ActualRectangle == null)
+                    return null;
+                if (!TableFieldActualInfo.Found)
+                    return null;
+                RectangleF ar = (RectangleF)ActualRectangle;
+                List<Ocr.CharBox> cbs = (List<Ocr.CharBox>)TableFieldActualInfo.getValue(Template.Field.ValueTypes.OcrCharBoxs, true);
+                List<string> ls = new List<string>();
+                foreach (Ocr.Line l in Ocr.GetLines(cbs, page.pageCollection.ActiveTemplate.TextAutoInsertSpace))
+                {
+                    StringBuilder sb = new StringBuilder();
+                    foreach (Ocr.CharBox cb in l.CharBoxs)
                         if (cb.R.Left >= ar.Left && cb.R.Right <= ar.Right && cb.R.Top >= ar.Top && cb.R.Bottom <= ar.Bottom)
                             sb.Append(cb.Char);
                     ls.Add(sb.ToString());
@@ -134,6 +173,12 @@ namespace Cliver.PdfDocumentParser
                 ActualRectangle = actualRectangle;
                 TableFieldActualInfo = tableFieldActualInfo;
             }
+        }
+
+        public class CharBox
+        {
+            public string Char;
+            public System.Drawing.RectangleF R;
         }
 
         RectangleF? getFieldActualRectangle(Template.Field field)

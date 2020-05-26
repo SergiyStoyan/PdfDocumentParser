@@ -243,7 +243,7 @@ namespace Cliver.PdfDocumentParser
             return cbs.ToList();
         }
 
-      public static List<Line> GetLines(IEnumerable<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace/*, bool removeDuplicates - no need because input collection is already filtered*/)
+        public static List<Line> GetLines(IEnumerable<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace/*, bool removeDuplicates - no need because input collection is already filtered*/)
         {
             //if (removeDuplicates)
             //    cbs = RemoveDuplicates(cbs);
@@ -340,10 +340,8 @@ namespace Cliver.PdfDocumentParser
         }
         public static readonly string InvisibleCharacters = " \t";
 
-        public class CharBox
+        public class CharBox : Page.CharBox
         {
-            public System.Drawing.RectangleF R;
-            public string Char;
             //public bool AutoInserted = false;
         }
     }

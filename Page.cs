@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -100,7 +101,11 @@ namespace Cliver.PdfDocumentParser
                 if (_activeTemplateOcrCharBoxs != null)
                     _activeTemplateOcrCharBoxs = null;
 
+            }
+            if (!Serialization.Json.IsEqual(pageCollection.ActiveTemplate, newTemplate))
+            {
                 anchorHashes2anchorActualInfo.Clear();
+                fieldNames2fieldActualInfo.Clear();
             }
         }
 
