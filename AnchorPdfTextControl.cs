@@ -47,7 +47,7 @@ namespace Cliver.PdfDocumentParser
             if (_object == null)
                 _object = new Template.Anchor.PdfText();
             StringBuilder sb = new StringBuilder();
-            foreach (var l in Pdf.GetLines(_object.CharBoxs.Select(x => new PdfCharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() }), textAutoInsertSpace))
+            foreach (var l in Pdf.GetLines(_object.CharBoxs.Select(x => new Pdf.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() }), textAutoInsertSpace))
             {
                 foreach (var cb in l.CharBoxs)
                     sb.Append(cb.Char);

@@ -214,7 +214,7 @@ namespace Cliver.PdfDocumentParser
         }
         CvImage _activeTemplateCvImage;
 
-        internal List<PdfCharBox> PdfCharBoxs
+        internal List<Pdf.CharBox> PdfCharBoxs
         {
             get
             {
@@ -223,9 +223,9 @@ namespace Cliver.PdfDocumentParser
                 return _pdfCharBoxs;
             }
         }
-        List<PdfCharBox> _pdfCharBoxs;
+        List<Pdf.CharBox> _pdfCharBoxs;
 
-        internal List<OcrCharBox> ActiveTemplateOcrCharBoxs
+        internal List<Ocr.CharBox> ActiveTemplateOcrCharBoxs
         {
             get
             {
@@ -236,6 +236,6 @@ namespace Cliver.PdfDocumentParser
                 return _activeTemplateOcrCharBoxs;
             }
         }
-        List<OcrCharBox> _activeTemplateOcrCharBoxs;
+        List<Ocr.CharBox> _activeTemplateOcrCharBoxs;
     }
 }

@@ -242,29 +242,23 @@ namespace Cliver.PdfDocumentParser
                 if (r.Tag == null)
                     return;
                 Template.Field f = (Template.Field)r.Tag;
-                Page.FieldActualInfo fai = pages[currentPageI][f.Name];
+                object o = pages[currentPageI].GetValue(f.Name);
                 switch (f.DefaultValueType)
                 {
                     case Template.Field.ValueTypes.Image:
-                        Clipboard.SetData(f.DefaultValueType.ToString(), fai.Image);
+                        Clipboard.SetData(f.DefaultValueType.ToString(), (Image)o);
                         break;
                     case Template.Field.ValueTypes.PdfText:
-                        Clipboard.SetText(fai.PdfText);
-                        break;
                     case Template.Field.ValueTypes.OcrText:
-                        Clipboard.SetText(fai.OcrText);
+                        Clipboard.SetText((string)o);
                         break;
                     case Template.Field.ValueTypes.PdfTextLines:
-                        Clipboard.SetText(string.Join("\r\n", fai.PdfTextLines));
-                        break;
                     case Template.Field.ValueTypes.OcrTextLines:
-                        Clipboard.SetText(string.Join("\r\n", fai.OcrTextLines));
+                        Clipboard.SetText(string.Join("\r\n", (List<string>)o));
                         break;
                     case Template.Field.ValueTypes.PdfCharBoxs:
-                        Clipboard.SetText(Serialization.Json.Serialize(fai.PdfCharBoxs));
-                        break;
                     case Template.Field.ValueTypes.OcrCharBoxs:
-                        Clipboard.SetText(Serialization.Json.Serialize(fai.OcrCharBoxs));
+                        Clipboard.SetText(Serialization.Json.Serialize(o));
                         break;
                     default:
                         throw new Exception("Unknown option: " + f.DefaultValueType);
