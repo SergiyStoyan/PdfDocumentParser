@@ -78,27 +78,27 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public static string GetText(List<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace)
+        public static string GetText(List<OcrCharBox> cbs, TextAutoInsertSpace textAutoInsertSpace)
         {
             List<string> ls = new List<string>();
             foreach (Line l in GetLines(cbs, textAutoInsertSpace))
             {
                 StringBuilder sb = new StringBuilder();
-                foreach (CharBox cb in l.CharBoxs)
+                foreach (OcrCharBox cb in l.CharBoxs)
                     sb.Append(cb.Char);
                 ls.Add(sb.ToString());
             }
             return string.Join("\r\n", ls);
         }
 
-        //public static string GetText(List<CharBox> orderedCbs)
+        //public static string GetText(List<OcrCharBox> orderedCbs)
         //{
         //    return orderedCbs.Aggregate(new StringBuilder(), (sb, n) => sb.Append(n.Char)).ToString();
         //}
 
-        public List<CharBox> GetCharBoxs(Bitmap b)
+        public List<OcrCharBox> GetCharBoxs(Bitmap b)
         {
-            List<CharBox> cbs = new List<CharBox>();
+            List<OcrCharBox> cbs = new List<OcrCharBox>();
             using (var page = engine.Process(b, PageSegMode.SingleBlock))
             {
                 //string t = page.GetHOCRText(1, true);
@@ -154,7 +154,7 @@ namespace Cliver.PdfDocumentParser
                             {
                                 //if (i.IsAtBeginningOf(PageIteratorLevel.Para))
                                 //{
-                                //    cbs.Add(new CharBox
+                                //    cbs.Add(new OcrCharBox
                                 //    {
                                 //        Char = "\r\n",
                                 //        AutoInserted = true,
@@ -162,14 +162,14 @@ namespace Cliver.PdfDocumentParser
                                 //    });
                                 //}//seems to work not well
 
-                                //cbs.Add(new CharBox//worked well before autoinsert was moved
+                                //cbs.Add(new OcrCharBox//worked well before autoinsert was moved
                                 //{
                                 //    Char = " ",
                                 //    AutoInserted = true,
                                 //    R = new RectangleF(r.X1 * Settings.Constants.Image2PdfResolutionRatio - Settings.Constants.CoordinateDeviationMargin * 2, r.Y1 * Settings.Constants.Image2PdfResolutionRatio, r.Width * Settings.Constants.Image2PdfResolutionRatio, r.Height * Settings.Constants.Image2PdfResolutionRatio)
                                 //});
                             }
-                            cbs.Add(new CharBox
+                            cbs.Add(new OcrCharBox
                             {
                                 Char = i.GetText(PageIteratorLevel.Symbol),
                                 R = new RectangleF(r.X1 * Settings.Constants.Image2PdfResolutionRatio, r.Y1 * Settings.Constants.Image2PdfResolutionRatio, r.Width * Settings.Constants.Image2PdfResolutionRatio, r.Height * Settings.Constants.Image2PdfResolutionRatio)
@@ -185,44 +185,37 @@ namespace Cliver.PdfDocumentParser
             return cbs;
         }
 
-        public class CharBox
-        {
-            public string Char;
-            //public bool AutoInserted = false;
-            public System.Drawing.RectangleF R;
-        }
-
-        //public static string GetTextByTopLeftCoordinates(List<CharBox> orderedCbs, RectangleF r)
+        //public static string GetTextByTopLeftCoordinates(List<OcrCharBox> orderedCbs, RectangleF r)
         //{
         //    orderedCbs = orderedCbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)).ToList();
         //    return orderedCbs.Aggregate(new StringBuilder(), (sb, n) => sb.Append(n)).ToString();
         //}
 
-        public static string GetTextSurroundedByRectangle(List<CharBox> cbs, RectangleF r, TextAutoInsertSpace textAutoInsertSpace)
+        public static string GetTextSurroundedByRectangle(List<OcrCharBox> cbs, RectangleF r, TextAutoInsertSpace textAutoInsertSpace)
         {
             return string.Join("\r\n", GetTextLinesSurroundedByRectangle(cbs, r, textAutoInsertSpace));
         }
 
-        public static List<string> GetTextLinesSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r, TextAutoInsertSpace textAutoInsertSpace)
+        public static List<string> GetTextLinesSurroundedByRectangle(List<OcrCharBox> cbs, System.Drawing.RectangleF r, TextAutoInsertSpace textAutoInsertSpace)
         {
             cbs = GetCharBoxsSurroundedByRectangle(cbs, r);
             List<string> ls = new List<string>();
             foreach (Line l in GetLines(cbs, textAutoInsertSpace))
             {
                 StringBuilder sb = new StringBuilder();
-                foreach (CharBox cb in l.CharBoxs)
+                foreach (OcrCharBox cb in l.CharBoxs)
                     sb.Append(cb.Char);
                 ls.Add(sb.ToString());
             }
             return ls;
         }
 
-        public static List<Line> GetLines(IEnumerable<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace)
+        public static List<Line> GetLines(IEnumerable<OcrCharBox> cbs, TextAutoInsertSpace textAutoInsertSpace)
         {
             bool spaceAutoInsert = textAutoInsertSpace!=null&& textAutoInsertSpace.Threshold > 0;
             cbs = cbs.OrderBy(a => a.R.X).ToList();
             List<Line> lines = new List<Line>();
-            foreach (CharBox cb in cbs)
+            foreach (OcrCharBox cb in cbs)
             {
                 for (int i = 0; i < lines.Count; i++)
                 {
@@ -237,13 +230,13 @@ namespace Cliver.PdfDocumentParser
                     {
                         if (spaceAutoInsert && /*cb.Char != " " &&*/ lines[i].CharBoxs.Count > 0)
                         {
-                            CharBox cb0 = lines[i].CharBoxs[lines[i].CharBoxs.Count - 1];
+                            OcrCharBox cb0 = lines[i].CharBoxs[lines[i].CharBoxs.Count - 1];
                             if (/*cb0.Char != " " && */cb.R.Left - cb0.R.Right > (cb.R.Width + cb.R.Height) / textAutoInsertSpace.Threshold)
                             {
                                 float spaceWidth = (cb.R.Width + cb.R.Width) / 2;
                                 int spaceNumber = (int)Math.Ceiling((cb.R.Left - cb0.R.Right) / spaceWidth);
                                 for (int j = 0; j < spaceNumber; j++)
-                                    lines[i].CharBoxs.Add(new CharBox { Char = textAutoInsertSpace.Representative, R = new System.Drawing.RectangleF(cb.R.Left + spaceWidth * j, 0, 0, 0) });
+                                    lines[i].CharBoxs.Add(new OcrCharBox { Char = textAutoInsertSpace.Representative, R = new System.Drawing.RectangleF(cb.R.Left + spaceWidth * j, 0, 0, 0) });
                             }
                         }
                         lines[i].CharBoxs.Add(cb);
@@ -267,18 +260,18 @@ namespace Cliver.PdfDocumentParser
         {
             public float Top;
             public float Bottom;
-            public List<CharBox> CharBoxs = new List<CharBox>();
+            public List<OcrCharBox> CharBoxs = new List<OcrCharBox>();
         }
 
-        public static List<CharBox> GetCharBoxsSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r)
+        public static List<OcrCharBox> GetCharBoxsSurroundedByRectangle(List<OcrCharBox> cbs, System.Drawing.RectangleF r)
         {
             return cbs.Where(a => /*selectedR.IntersectsWith(a.R) || */r.Contains(a.R)).ToList();
         }
 
-        public static List<CharBox> GetOrdered(List<CharBox> orderedContainerCbs, List<CharBox> cbs)
+        public static List<OcrCharBox> GetOrdered(List<OcrCharBox> orderedContainerCbs, List<OcrCharBox> cbs)
         {
-            List<CharBox> orderedCbs = new List<CharBox>();
-            foreach (CharBox cb in orderedContainerCbs)
+            List<OcrCharBox> orderedCbs = new List<OcrCharBox>();
+            foreach (OcrCharBox cb in orderedContainerCbs)
             {
                 if (orderedCbs.Count == cbs.Count)
                     break;
@@ -287,5 +280,12 @@ namespace Cliver.PdfDocumentParser
             }
             return orderedCbs;
         }
+    }
+
+    public class OcrCharBox
+    {
+        public string Char;
+        //public bool AutoInserted = false;
+        public System.Drawing.RectangleF R;
     }
 }

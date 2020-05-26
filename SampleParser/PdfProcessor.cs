@@ -94,7 +94,7 @@ namespace Cliver.SampleParser
                             Settings.TemplateLocalInfo.SetUsedTime(currentTemplate.Name);
 
                             document = new Document();
-                            document.Invoice = (string)Pages[pageI].GetValue(Template2.FieldNames.InvoiceId);
+                            document.Invoice = Pages[pageI][Template2.FieldNames.InvoiceId].PdfText;
                             break;
                         }
                     }
@@ -104,8 +104,8 @@ namespace Cliver.SampleParser
                     continue;
                 }
 
-                List<string> names = (List<string>)Pages[pageI].GetValue(Template2.FieldNames.ProductNames, Template.Field.ValueTypes.PdfTextLines);
-                List<string> costs = (List<string>)Pages[pageI].GetValue(Template2.FieldNames.ProductCosts, Template.Field.ValueTypes.PdfTextLines);
+                List<string> names = Pages[pageI][Template2.FieldNames.ProductNames].PdfTextLines;
+                List<string> costs = Pages[pageI][Template2.FieldNames.ProductCosts].PdfTextLines;
                 if (names != null)
                     for (int i = 0; i < names.Count; i++)
                         if (!string.IsNullOrWhiteSpace(names[i]))
@@ -113,7 +113,7 @@ namespace Cliver.SampleParser
 
                 if (Pages[pageI].IsCondition(Template2.ConditionNames.DocumentLastPage))
                 {
-                    document.Total = (string)Pages[pageI].GetValue(Template2.FieldNames.TotalAmount);
+                    document.Total = Pages[pageI][Template2.FieldNames.TotalAmount].PdfText;
                     record(currentTemplate.Name, documentFirstPageI, pageI, document);
                     currentTemplate = null;
                     continue;

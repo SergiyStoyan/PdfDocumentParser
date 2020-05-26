@@ -152,13 +152,13 @@ namespace Cliver.PdfDocumentParser
                                 }
                             return false;
                         }
-                        IEnumerable<Pdf.CharBox> tcb0s;
+                        IEnumerable<PdfCharBox> tcb0s;
                         if (pt.SearchRectangleMargin < 0)
                             tcb0s = PdfCharBoxs.Where(x => x.Char == cbs[0].Char);
                         else
                             tcb0s = PdfCharBoxs.Where(x => x.Char == cbs[0].Char && searchRectangle.Contains(x.R));
-                        List<Pdf.CharBox> tcbs = new List<Pdf.CharBox>();
-                        foreach (Pdf.CharBox tcb0 in tcb0s)
+                        List<PdfCharBox> tcbs = new List<PdfCharBox>();
+                        foreach (PdfCharBox tcb0 in tcb0s)
                         {
                             tcbs.Clear();
                             tcbs.Add(tcb0);
@@ -169,7 +169,7 @@ namespace Cliver.PdfDocumentParser
                                     p = new PointF(tcb0.R.X + cbs[i].Rectangle.X - cbs[0].Rectangle.X, tcb0.R.Y + cbs[i].Rectangle.Y - cbs[0].Rectangle.Y);
                                 else
                                     p = new PointF(tcbs[i - 1].R.X + cbs[i].Rectangle.X - cbs[i - 1].Rectangle.X, tcbs[i - 1].R.Y + cbs[i].Rectangle.Y - cbs[i - 1].Rectangle.Y);
-                                foreach (Pdf.CharBox bt in PdfCharBoxs.Where(x => x.Char == cbs[i].Char))
+                                foreach (PdfCharBox bt in PdfCharBoxs.Where(x => x.Char == cbs[i].Char))
                                     if (Math.Abs(bt.R.X - p.X) <= pt.PositionDeviation && Math.Abs(bt.R.Y - p.Y) <= pt.PositionDeviation)
                                     {
                                         tcbs.Add(bt);
@@ -209,8 +209,8 @@ namespace Cliver.PdfDocumentParser
                                 }
                             return false;
                         }
-                        List<Ocr.CharBox> searchRectangleOcrCharBoxs;
-                        IEnumerable<Ocr.CharBox> tcb0s;
+                        List<OcrCharBox> searchRectangleOcrCharBoxs;
+                        IEnumerable<OcrCharBox> tcb0s;
                         if (ot.OcrEntirePage)
                         {
                             searchRectangleOcrCharBoxs = ActiveTemplateOcrCharBoxs;
@@ -240,8 +240,8 @@ namespace Cliver.PdfDocumentParser
                             searchRectangleOcrCharBoxs.ForEach(x => { x.R.X += searchRectanglePosition.X; x.R.Y += searchRectanglePosition.Y; });
                             tcb0s = searchRectangleOcrCharBoxs.Where(x => x.Char == cbs[0].Char && searchRectangle.Contains(x.R));
                         }
-                        List<Ocr.CharBox> tcbs = new List<Ocr.CharBox>();
-                        foreach (Ocr.CharBox tcb0 in tcb0s)
+                        List<OcrCharBox> tcbs = new List<OcrCharBox>();
+                        foreach (OcrCharBox tcb0 in tcb0s)
                         {
                             tcbs.Clear();
                             tcbs.Add(tcb0);
@@ -252,7 +252,7 @@ namespace Cliver.PdfDocumentParser
                                     p = new PointF(tcb0.R.X + cbs[i].Rectangle.X - cbs[0].Rectangle.X, tcb0.R.Y + cbs[i].Rectangle.Y - cbs[0].Rectangle.Y);
                                 else
                                     p = new PointF(tcbs[i - 1].R.X + cbs[i].Rectangle.X - cbs[i - 1].Rectangle.X, tcbs[i - 1].R.Y + cbs[i].Rectangle.Y - cbs[i - 1].Rectangle.Y);
-                                foreach (Ocr.CharBox bt in searchRectangleOcrCharBoxs.Where(x => x.Char == cbs[i].Char))
+                                foreach (OcrCharBox bt in searchRectangleOcrCharBoxs.Where(x => x.Char == cbs[i].Char))
                                     if (Math.Abs(bt.R.X - p.X) <= ot.PositionDeviation && Math.Abs(bt.R.Y - p.Y) <= ot.PositionDeviation)
                                     {
                                         tcbs.Add(bt);

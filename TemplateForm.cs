@@ -148,7 +148,7 @@ namespace Cliver.PdfDocumentParser
                                                 pt.CharBoxs = new List<Template.Anchor.PdfText.CharBox>();
                                                 List<Pdf.Line> lines = Pdf.GetLines(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, r.GetSystemRectangleF(), true), null);
                                                 foreach (Pdf.Line l in lines)
-                                                    foreach (Pdf.CharBox cb in l.CharBoxs)
+                                                    foreach (PdfCharBox cb in l.CharBoxs)
                                                         pt.CharBoxs.Add(new Template.Anchor.PdfText.CharBox
                                                         {
                                                             Char = cb.Char,
@@ -161,12 +161,12 @@ namespace Cliver.PdfDocumentParser
                                             {
                                                 Template.Anchor.OcrText ot = (Template.Anchor.OcrText)a;
                                                 ot.CharBoxs = new List<Template.Anchor.OcrText.CharBox>();
-                                                var selectedOcrCharBoxs = new List<Ocr.CharBox>();
+                                                var selectedOcrCharBoxs = new List<OcrCharBox>();
                                                 if (ot.OcrEntirePage)
                                                     selectedOcrCharBoxs.AddRange(Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateOcrCharBoxs, r.GetSystemRectangleF()));
                                                 else
                                                 {
-                                                    foreach (Ocr.CharBox cb in Ocr.This.GetCharBoxs(pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio)))
+                                                    foreach (OcrCharBox cb in Ocr.This.GetCharBoxs(pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio)))
                                                     {
                                                         cb.R.X += r.X;
                                                         cb.R.Y += r.Y;
@@ -174,7 +174,7 @@ namespace Cliver.PdfDocumentParser
                                                     }
                                                 }
                                                 foreach (Ocr.Line l in Ocr.GetLines(selectedOcrCharBoxs, null))
-                                                    foreach (Ocr.CharBox cb in l.CharBoxs)
+                                                    foreach (OcrCharBox cb in l.CharBoxs)
                                                         ot.CharBoxs.Add(new Template.Anchor.OcrText.CharBox
                                                         {
                                                             Char = cb.Char,
