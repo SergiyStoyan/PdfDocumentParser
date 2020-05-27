@@ -21,7 +21,7 @@ namespace Cliver.PdfDocumentParser
     {
         public object GetValue(string fieldName, Template.Field.ValueTypes? valueType = null)
         {
-            FieldActualInfo fai = getFieldActualInfo(fieldName);
+            FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
             if (!fai.Found)
                 return null;
             return fai.GetValue(valueType == null ? fai.ActualField.DefaultValueType : (Template.Field.ValueTypes)valueType);
@@ -29,10 +29,10 @@ namespace Cliver.PdfDocumentParser
 
         internal FieldActualInfo GetFieldActualInfo(Template.Field field)
         {
-            return new FieldActualInfo(this, field, getFieldActualRectangle(field), field.ColumnOfTable != null ? getFieldActualInfo(field.ColumnOfTable) : null);
+            return new FieldActualInfo(this, field, getFieldActualRectangle(field), field.ColumnOfTable != null ? getFoundFieldActualInfo(field.ColumnOfTable) : null);
         }
 
-        FieldActualInfo getFieldActualInfo(string fieldName)
+        FieldActualInfo getFoundFieldActualInfo(string fieldName)
         {
             if (!fieldNames2fieldActualInfo.TryGetValue(fieldName, out FieldActualInfo fai))
             {
@@ -47,7 +47,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 if (af == null)
                     throw new Exception("Field[name=" + fieldName + "] does not exist.");
-                fai = new FieldActualInfo(this, af, ar, af.ColumnOfTable != null ? getFieldActualInfo(af.ColumnOfTable) : null);
+                fai = new FieldActualInfo(this, af, ar, af.ColumnOfTable != null ? getFoundFieldActualInfo(af.ColumnOfTable) : null);
                 fieldNames2fieldActualInfo[fieldName] = fai;
             }
             return fai;

@@ -44,6 +44,11 @@ namespace Cliver
             return LoadOrCreate<S>(__File);
         }
 
+        public bool IsChanged()
+        {
+            return !Serialization.Json.IsEqual(LoadOrCreate(GetType(), __File), this);
+        }
+
         /// <summary>
         /// this object is ever to be loaded
         /// </summary>
