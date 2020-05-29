@@ -627,9 +627,9 @@ We already have created anchors #1 and #2 that are needed to specify FirstPageOf
 
 <h3>Check template</h3>
 <p>When all the conditions and fields are set, it's time to walk through the file and see how the template works on every page.
-<p class='screenshot_title'>The page #2 begins a new document:
+<p class='screenshot_title'>Page #2 begins a new document:
 <img src='img/tutorial7.png'/>
-<p class='screenshot_title'>The page #3 continues and ends an document: 
+<p class='screenshot_title'>Page #3 continues and ends the document: 
 <img src='img/tutorial8.png'/>
 <p>The template worked properly on the test file. Click OK to save it.
 
@@ -664,20 +664,20 @@ Let's consider an additional requirement to the tutorial task: for every invoice
 Let's see how to use table and column fields for parsing products in our sample task.
 <p>The following fields were added to SampleParser: ProductTable that catches the entire table and ProductNames and ProductCosts that catch the respective columns. ProductNames and ProductCosts have <code>ColumnOfTable</code> property set to "ProductTable".
 
-<p>In Template Editor, open template 'test' which was created previously for test102.pdf, and set the table and column fields. Because the table in the test file may have different location and height, the fields' top and bottom must be linked to the proper anchors. 
+<p>In Template Editor, open template 'test' which was created previously for test102.pdf, and set the table and column fields. Because the table in the test file may have different location and height, the top and bottom of ProductTable must be linked to the proper anchors. 
 <img src='img/tutorial9.png'/>
-
+<p>It make sense to make ProductNames and ProductCosts as high as possible because such defintions will work on the rest pages as well.
 
 
 <h3>Duplicating field definitions</h3>
 
-<p>It appears that the fields are not captured on the next page because the bottom anchor does not exists on the page. To fix it, new definitions should be created for the fields.
+<p>It appears that the fields are not captured on the next page because the bottom anchor does not exists on the page. To fix it, a new definition of ProductTable should be created.
 <img src='img/tutorial10.png'/>
 
-<p>Now, the fields are captured successfully with additional definitions and there is no need to change anything in the parsing code. 
-<!--br><span class='attention'>NOTE: </span>Column definitions strongly belong to the definitions of their table accordingly to their order so the number of definitions of table and column fields must be the same.-->
+<p>Now the fields are captured successfully with the new definition of ProductTable and there is no need to change anything in the parsing code. 
+<p><span class='attention'>NOTE: </span>It is important to create ProductTable definitions in the right order: they must start with the most conditioned one and end with the less conditioned one. If defintion #2 of ProductTable was #1 then it would work on the page #1 before the right definition which would bring to a wrong capture.
 
-<p>The last page of test102.pdf requires more definitions which can be added as considered above.
+<p>The last page of test102.pdf requires one more definition of ProductTable which can be added in the same way.
 
 
 
