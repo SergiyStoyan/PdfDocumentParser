@@ -67,6 +67,11 @@ namespace Cliver
             return t;
         }
 
+        public static Thread StartTrySTA(Action code, ErrorHandler on_error = null, Action on_finally = null, bool background = true)
+        {
+            return StartTry(code, on_error, on_finally, background, ApartmentState.STA);
+        }
+
         //static HashSet<Thread> threads = new HashSet<Thread>();
 
         //public static Thread GetThread(ThreadStart st)
