@@ -41,6 +41,12 @@ namespace Cliver
             return ai.Version;
         }
 
+        public static string GetExecutingAssemblyName()
+        {
+            AssemblyInfo ai = new AssemblyInfo(Assembly.GetCallingAssembly());
+            return ai.Name;
+        }
+
         //public static System.Drawing.Icon GetAppIcon(Assembly assembly = null)
         //{
         //    return System.Drawing.Icon.ExtractAssociatedIcon((assembly != null ? assembly : Assembly.GetEntryAssembly()).Location);
@@ -127,9 +133,7 @@ namespace Cliver
                 {
                     object[] attributes = a.GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
                     if (attributes.Length == 0)
-                    {
                         return "";
-                    }
                     return ((AssemblyDescriptionAttribute)attributes[0]).Description;
                 }
             }
@@ -170,6 +174,14 @@ namespace Cliver
                         return "";
                     }
                     return ((AssemblyCompanyAttribute)attributes[0]).Company;
+                }
+            }
+
+            public string Name
+            {
+                get
+                {
+                    return a.GetName().Name;
                 }
             }
         }
