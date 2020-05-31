@@ -74,8 +74,16 @@ namespace Cliver.Win
             Environment.Exit(0);
         }
 
-        public static void Restart(bool as_administarator = false, string arguments = null)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="as_administarator"></param>
+        /// <param name="arguments">if NULL then reuse parameters of the calling process</param>
+        public static void Restart(bool as_administarator = false, string arguments = "")
         {
+            if (arguments == null)
+                arguments = Regex.Replace(Environment.CommandLine, @"^\s*(\'.*?\'|\"".*?\"")\s+", "", RegexOptions.Singleline);
+
             ProcessStartInfo psi = new ProcessStartInfo();
             psi.UseShellExecute = true;
             psi.WorkingDirectory = Environment.CurrentDirectory;
