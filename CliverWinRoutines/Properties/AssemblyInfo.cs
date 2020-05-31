@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CliverRoutines")]
-[assembly: AssemblyDescription("Common C# Routines Lib")]
+[assembly: AssemblyTitle("CliverWinRoutines")]
+[assembly: AssemblyDescription("Common C# Windows Routines Lib")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CliverSoft")]
-[assembly: AssemblyProduct("Common C# Routines Lib")]
+[assembly: AssemblyProduct("Common C# Windows Routines Lib")]
 [assembly: AssemblyCopyright("Copyright © 2006-2020, CliverSoft")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
