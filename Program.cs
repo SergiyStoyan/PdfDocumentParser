@@ -50,7 +50,7 @@ namespace Cliver.PdfDocumentParser
             Version = ai.Version;
             Name = ai.Product;
 
-            FullName = Name + " [" + Version.ToString(3) + "]";
+            FullName = Name + " " + Version.ToString(3);
 
             //Log.Initialize(Log.Mode.ONLY_LOG, Log.CompanyCommonDataDir, true);//must be called from the entry projects
             //Log.ShowDeleteOldLogsDialog = false;//must be called from the entry projects
