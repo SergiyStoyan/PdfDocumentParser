@@ -12,7 +12,6 @@ using System.Text.RegularExpressions;
 using System.IO;
 using System.Reflection;
 using System.Linq;
-using System.Diagnostics;
 
 namespace Cliver
 {
@@ -32,10 +31,27 @@ namespace Cliver
         #region Routines for individual Settings objects in the config scope.
 
         /// <summary>
+        /// Returns full name of the Settings type field which is stored in Config. 
+        /// So this method must be called only after Reload() or Reset(). 
+        /// The name of the storage file without extension equals to it.
+        /// </summary>
+        /// <param name="settings">Settings type object</param>
+        /// <returns>full name of the Settings type field</returns>
+        public List<string> GetFieldFullNames(Settings settings)
+        {
+            lock (fieldFullNames2settingsObject)
+            {
+                return fieldFullNames2settingsObject.Where(kv => kv.Value == settings).Select(kv => kv.Key).ToList();
+            }
+            //return hostingClassType.GetField(settingsFieldName) + "." + settingsFieldName;
+            //return settingsTypeFieldInfo.DeclaringType.FullName + "." + settingsTypeFieldInfo.Name;
+        }
+
+        /// <summary>
         /// Returns the Settings object identified by the full name of the field to which the object belongs.
         /// The object is not newly created but must already exist in the config scope.
         /// </summary>
-        /// <param name="settingsTypeFieldFullName">Settings field's full name which is the name of its file without extention</param>
+        /// <param name="settingsTypeFieldFullName">full name of Settings type field; it equals to the name of its file without extention</param>
         /// <returns>The Settings object which was previously created by Config</returns>
         static public Settings GetSettings(string settingsTypeFieldFullName)
         {
@@ -74,27 +90,23 @@ namespace Cliver
         /// <summary>
         /// Returns the file path of the Settings object before the Settings field has been initialized.
         /// </summary>
-        /// <param name="settingsTypeFieldFullName">Settings field's full name which is the name of its file without extention</param>
+        /// <param name="settingsTypeFieldFullName">full name of Settings type field; it equals to the name of its file without extention</param>
         /// <returns>Settings object's storage file path</returns>
         public static string GetSettingsFile(string settingsTypeFieldFullName)
         {
             lock (fieldFullNames2settingsObject)
             {
-                foreach (IEnumerable<FieldInfo> settingsTypeFieldInfos in enumSettingsTypesFieldInfos())
-                {
-                    FieldInfo settingsTypeFieldInfo = settingsTypeFieldInfos.Where(a => (a.DeclaringType.FullName + "." + a.Name) == settingsTypeFieldFullName).FirstOrDefault();
-                    if (settingsTypeFieldInfo == null)
-                        continue;
-                    return Settings.GetConfigStorageDir(settingsTypeFieldInfo.FieldType) + System.IO.Path.DirectorySeparatorChar + settingsTypeFieldFullName + "." + FILE_EXTENSION;
-                }
-                throw new Exception("Field '" + settingsTypeFieldFullName + "' was not found.");
+                FieldInfo settingsTypeFieldInfo = enumSettingsTypeFieldInfos().Where(a => (a.DeclaringType.FullName + "." + a.Name) == settingsTypeFieldFullName).FirstOrDefault();
+                if (settingsTypeFieldInfo == null)
+                    throw new Exception("Field '" + settingsTypeFieldFullName + "' was not found.");
+                return Settings.GetConfigStorageDir(settingsTypeFieldInfo.FieldType) + System.IO.Path.DirectorySeparatorChar + settingsTypeFieldFullName + "." + FILE_EXTENSION;
             }
         }
 
         /// <summary>
         /// Returns the file path of the Settings object before the Settings field has been initialized.
         /// </summary>
-        /// <param name="settingsTypeFieldInfo">Settings field's FieldInfo</param>
+        /// <param name="settingsTypeFieldInfo">FieldInfo of Settings type field</param>
         /// <returns>Settings object's storage file path</returns>
         public static string GetSettingsFile(FieldInfo settingsTypeFieldInfo)
         {
