@@ -11,7 +11,7 @@ namespace Cliver.PdfDocumentParser
         [Cliver.Settings.Obligatory]
         public static readonly ConstantsSettings Constants;
 
-        public class ConstantsSettings : Cliver.Settings
+        public class ConstantsSettings : Cliver.UserSettings
         {
             [Newtonsoft.Json.JsonIgnore]
             public readonly string HelpFile = @"docs\index.html";

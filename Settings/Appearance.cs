@@ -11,7 +11,7 @@ namespace Cliver.PdfDocumentParser
         [Cliver.Settings.Obligatory]
         public static readonly AppearanceSettings Appearance;
 
-        public class AppearanceSettings : Cliver.Settings
+        public class AppearanceSettings : Cliver.UserSettings
         {
             public System.Drawing.Color SelectionBoxColor = System.Drawing.Color.Red;
             public System.Drawing.Color AnchorBoxColor = System.Drawing.Color.Violet;

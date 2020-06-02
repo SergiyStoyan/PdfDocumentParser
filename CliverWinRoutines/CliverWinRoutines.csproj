@@ -148,7 +148,7 @@
     <Compile Include="BaseForm\BaseForm.designer.cs">
       <DependentUpon>BaseForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="WinRoutines\Config.cs" />
+    <Compile Include="AppSettings.cs" />
     <Compile Include="WinRoutines\Crypto.cs" />
     <Compile Include="WinRoutines\ProgramRoutines.cs" />
     <Compile Include="WinRoutines\ImageRoutines.cs" />

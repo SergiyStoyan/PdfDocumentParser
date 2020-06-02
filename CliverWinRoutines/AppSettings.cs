@@ -12,31 +12,37 @@ using System.Security.Principal;
 
 namespace Cliver.Win
 {
-    abstract public class AppSettings : Settings
+    /// <summary>
+    /// Inheritor of this class is stored in CommonApplicationData folder.
+    /// It is Windows adapted version of AppSettings which provides necessary routines.
+    /// </summary>
+    public class AppSettings : Cliver.AppSettings
     {
         /// <summary>
-        /// By defult Environment.SpecialFolder.CommonApplicationData does not have writting permission
+        /// By default Environment.SpecialFolder.CommonApplicationData does not have writting permission
+        /// so use this method to set it.
         /// </summary>
         /// <param name="userIdentityName"></param>
-        public static void AllowReadWriteConfig(string userIdentityName = null)
+        public static void AllowReadWriteConfigDir(string userIdentityName = null)
         {
             if (userIdentityName == null)
                 userIdentityName = UserRoutines.GetCurrentUserName3();
             NTAccount a = new NTAccount(userIdentityName);
-            allowReadWriteConfig((SecurityIdentifier)a.Translate(typeof(SecurityIdentifier)));
+            allowReadWriteConfigDir((SecurityIdentifier)a.Translate(typeof(SecurityIdentifier)));
         }
 
         /// <summary>
-        /// By defult Environment.SpecialFolder.CommonApplicationData does not have writting permission
+        /// By default Environment.SpecialFolder.CommonApplicationData does not have writting permission
+        /// so use this method to set it.
         /// </summary>
-        public static void AllowReadWriteConfigToEveryone()
+        public static void AllowReadWriteConfigDirToEveryone()
         {
-            allowReadWriteConfig(new SecurityIdentifier(WellKnownSidType.WorldSid, null));
+            allowReadWriteConfigDir(new SecurityIdentifier(WellKnownSidType.WorldSid, null));
         }
 
-        static void allowReadWriteConfig(SecurityIdentifier securityIdentifier)
+        static void allowReadWriteConfigDir(SecurityIdentifier securityIdentifier)
         {
-            DirectoryInfo di = new DirectoryInfo(Cliver.AppSettings.StorageDir);
+            DirectoryInfo di = new DirectoryInfo(AppSettings.StorageDir);
             DirectorySecurity ds = di.GetAccessControl();
             ds.AddAccessRule(new FileSystemAccessRule(
                     securityIdentifier,
