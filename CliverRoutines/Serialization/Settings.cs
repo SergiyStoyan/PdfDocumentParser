@@ -83,7 +83,7 @@ namespace Cliver
         /// </summary>
         /// <typeparam name="S"></typeparam>
         /// <returns></returns>
-        public S CreateReloadedInstance<S>(bool throwExceptionIfCouldNotLoadFromStorageFile) where S : Settings, new()
+        public S CreateReloadedInstance<S>(bool throwExceptionIfCouldNotLoadFromStorageFile = false) where S : Settings, new()
         {
             return (S)getSerializable(false, throwExceptionIfCouldNotLoadFromStorageFile);
         }
