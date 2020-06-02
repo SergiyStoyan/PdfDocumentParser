@@ -98,14 +98,14 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Indicates that this Settings field should not be initiated by Config by default.
+        /// Indicates that this Settings type field should not be initiated by Config by default.
         /// </summary>
         public class Optional : Attribute
         { }
 
         /// <summary>
         /// Folder where storage files of this Settings type are stored by Config engine.
-        /// Each custom Settings type has to define this path.
+        /// Each Settings type has to define this path.
         /// </summary>
         public abstract string ConfigStorageDir { get; }
 
@@ -115,15 +115,6 @@ namespace Cliver
         public static string GetConfigStorageDir(Type settingsType)
         {
             Settings s = (Settings)Activator.CreateInstance(settingsType);
-            return s.ConfigStorageDir;
-        }
-
-        /// <summary>
-        /// Folder where storage files of this Settings type are stored by Config engine.
-        /// </summary>
-        public static string GetConfigStorageDir<S>() where S : Settings, new()
-        {
-            S s = Activator.CreateInstance<S>();
             return s.ConfigStorageDir;
         }
     }
