@@ -98,9 +98,9 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Indicates that this object is always initiated by Config.
+        /// Indicates that this Settings field should not be initiated by Config by default.
         /// </summary>
-        public class Obligatory : Attribute
+        public class Optional : Attribute
         { }
 
         /// <summary>

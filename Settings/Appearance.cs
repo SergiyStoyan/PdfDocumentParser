@@ -8,7 +8,7 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class Settings
     {
-        [Cliver.Settings.Obligatory]
+        
         public static readonly AppearanceSettings Appearance;
 
         public class AppearanceSettings : Cliver.UserSettings
