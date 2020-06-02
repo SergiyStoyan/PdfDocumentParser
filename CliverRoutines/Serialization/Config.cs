@@ -21,15 +21,19 @@ namespace Cliver
     /// </summary>
     public partial class Config
     {
-        static Config()
-        {
-        }
-
         /// <summary>
-        /// Tells Config which optional (i.e. attributed with [Settings.Optional]) Settings fields to load. 
+        /// Tells Config which optional (i.e. attributed with [Settings.Optional]) Settings type fields to initialize. 
         /// It must be set before calling Reload() or Reset().
         /// </summary>
         public static Regex RequiredOptionalFieldFullNamesRegex = null;
+
+        /// <summary>
+        /// Tells Config in which order Settings types are to be inialized.        
+        /// It may be necessary due to dependencies between Settings types.
+        /// Types listed here will be initialized first in the provided order.
+        /// It must be set before calling Reload() or Reset().
+        /// </summary>
+        public static List<Type> InitialzingOrderedSettingsTypes = null;
 
         public const string CONFIG_FOLDER_NAME = "config";
         public const string FILE_EXTENSION = "json";
@@ -58,6 +62,29 @@ namespace Cliver
         }
         static Dictionary<string, Settings> fieldFullNames2settingsObject = new Dictionary<string, Settings>();
 
+        class TypeComparer : IComparer<Type>
+        {
+            public TypeComparer(List<Type> orderedTypes)
+            {
+                this.orderedTypes = orderedTypes;
+            }
+           readonly List<Type> orderedTypes;
+            public int Compare(Type a, Type b)
+            {
+                int ai = orderedTypes.IndexOf(a);
+                int bi = orderedTypes.IndexOf(b);
+                if (ai < 0)
+                    if (bi < 0)
+                        return 0;
+                    else
+                        return 1;
+                if (bi < 0)
+                    return -1;
+                if (a == b)
+                    return 0;
+                return ai < bi ? -1 : 1;
+            }
+        }
         static IEnumerable<IEnumerable<FieldInfo>> enumSettingsTypesFieldInfos()
         {
             string configAssemblyFullName = Assembly.GetExecutingAssembly().FullName;
@@ -76,9 +103,16 @@ namespace Cliver
             foreach (Assembly assembly in assemblies)
             {
                 Type[] types = assembly.GetTypes();
-                foreach (Type settingsType in types.Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(Settings))))
+                IEnumerable<Type> settingsTypes= types.Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(Settings))).Distinct();
+                if (InitialzingOrderedSettingsTypes != null)
+                {
+                    TypeComparer typeComparer = new TypeComparer(InitialzingOrderedSettingsTypes);
+                    settingsTypes = settingsTypes.OrderBy(t => t, typeComparer);
+                }
+                foreach (Type settingsType in settingsTypes)
                 {
                     foreach (Type type in types)
+                        //usually there is only 1 FieldInfo per Settings type
                         yield return type.GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public).Where(f => f.FieldType == settingsType/* && f.FieldType.IsAssignableFrom(settingsType)*/);
                 }
             }

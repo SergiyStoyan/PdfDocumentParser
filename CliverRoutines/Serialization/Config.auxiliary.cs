@@ -47,31 +47,32 @@ namespace Cliver
             }
         }
 
-        /// <summary>
-        /// Can be called from code when ordered load is required due to dependencies.
-        /// </summary>
-        /// <param name="settingsTypeFieldFullName">Settings field's full name which is the name of its file without extention</param>
-        /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
-        static public void ReloadField(string settingsTypeFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
-        {
-            lock (fieldFullNames2settingsObject)
-            {
-                foreach (IEnumerable<FieldInfo> settingsTypeFieldInfos in enumSettingsTypesFieldInfos())
-                {
-                    FieldInfo settingsTypeFieldInfo = settingsTypeFieldInfos.Where(a => (a.DeclaringType.FullName + "." + a.Name) == settingsTypeFieldFullName).FirstOrDefault();
-                    if (settingsTypeFieldInfo != null)
-                    {
-                        Serializable serializable = getSerializable(settingsTypeFieldInfo.FieldType, settingsTypeFieldFullName, false, throwExceptionIfCouldNotLoadFromStorageFile);
-                        settingsTypeFieldInfo.SetValue(null, serializable);
-                        return;
-                    }
-                }
-                throw new Exception("Field '" + settingsTypeFieldFullName + "' was not found.");
-            }
-        }
+        ///// <summary>
+        ///// !!!Deprecated. Use InitialzingOrderedSettingsTypes instead of it.
+        ///// Can be called when ordered load is required due to dependencies.
+        ///// </summary>
+        ///// <param name="settingsTypeFieldFullName">Settings field's full name which is the name of its file without extention</param>
+        ///// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
+        //static public void ReloadField(string settingsTypeFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
+        //{
+        //    lock (fieldFullNames2settingsObject)
+        //    {
+        //        foreach (IEnumerable<FieldInfo> settingsTypeFieldInfos in enumSettingsTypesFieldInfos())
+        //        {
+        //            FieldInfo settingsTypeFieldInfo = settingsTypeFieldInfos.Where(a => (a.DeclaringType.FullName + "." + a.Name) == settingsTypeFieldFullName).FirstOrDefault();
+        //            if (settingsTypeFieldInfo != null)
+        //            {
+        //                Serializable serializable = getSerializable(settingsTypeFieldInfo.FieldType, settingsTypeFieldFullName, false, throwExceptionIfCouldNotLoadFromStorageFile);
+        //                settingsTypeFieldInfo.SetValue(null, serializable);
+        //                return;
+        //            }
+        //        }
+        //        throw new Exception("Field '" + settingsTypeFieldFullName + "' was not found.");
+        //    }
+        //}
 
         /// <summary>
-        /// Returns the file path of the Settings object before the Settings object has been created. 
+        /// Returns the file path of the Settings object before the Settings field has been initialized.
         /// </summary>
         /// <param name="settingsTypeFieldFullName">Settings field's full name which is the name of its file without extention</param>
         /// <returns>Settings object's storage file path</returns>
@@ -91,7 +92,7 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Returns the file path of the Settings object before the Settings object has been created.
+        /// Returns the file path of the Settings object before the Settings field has been initialized.
         /// </summary>
         /// <param name="settingsTypeFieldInfo">Settings field's FieldInfo</param>
         /// <returns>Settings object's storage file path</returns>
