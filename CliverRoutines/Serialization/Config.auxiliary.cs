@@ -24,12 +24,12 @@ namespace Cliver
         /// <param name="toDirectory">folder where files are to be copied</param>
         static public void ExportSettingsFiles(string toDirectory)
         {
-            lock (fieldFullNames2settingsObject)
+            lock (fieldFullNames2SettingsField)
             {
                 string d = FileSystemRoutines.CreateDirectory(toDirectory + System.IO.Path.DirectorySeparatorChar + CONFIG_FOLDER_NAME);
-                foreach (Serializable s in fieldFullNames2settingsObject.Values)
-                    if (File.Exists(s.__File))//it can be absent if default settings are used still
-                        File.Copy(s.__File, d + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(s.__File));
+                foreach (SettingsField settingsField in fieldFullNames2SettingsField.Values)
+                    if (File.Exists(settingsField.File))//it can be absent if default settings are used still
+                        File.Copy(settingsField.File, d + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(settingsField.File));
             }
         }
 
@@ -42,10 +42,11 @@ namespace Cliver
         /// <returns>The Settings object which is stored in Config</returns>
         static public Settings GetSettings(string settingsTypeFieldFullName)
         {
-            lock (fieldFullNames2settingsObject)
+            lock (fieldFullNames2SettingsField)
             {
-                fieldFullNames2settingsObject.TryGetValue(settingsTypeFieldFullName, out Settings s);
-                return s;
+               if(! fieldFullNames2SettingsField.TryGetValue(settingsTypeFieldFullName, out SettingsField settingsField))
+                return null;
+                return settingsField.GetObject();
             }
         }
 
@@ -59,11 +60,11 @@ namespace Cliver
         /// </summary>
         /// <param name="settings">Settings type object</param>
         /// <returns>full name of the Settings type field</returns>
-        public List<string> GetFieldFullNames(Settings settings)
+        public List<string> FindFieldFullNames(Settings settings)
         {
-            lock (fieldFullNames2settingsObject)
+            lock (fieldFullNames2SettingsField)
             {
-                return fieldFullNames2settingsObject.Where(kv => kv.Value == settings).Select(kv => kv.Key).ToList();
+                return fieldFullNames2SettingsField.Where(kv => kv.Value.GetObject() == settings).Select(kv => kv.Value.FullName).ToList();
             }
             //return hostingClassType.GetField(settingsFieldName) + "." + settingsFieldName;
             //return settingsTypeFieldInfo.DeclaringType.FullName + "." + settingsTypeFieldInfo.Name;
@@ -77,7 +78,7 @@ namespace Cliver
         ///// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
         //static public void ReloadField(string settingsTypeFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
         //{
-        //    lock (fieldFullNames2settingsObject)
+        //    lock (fieldFullNames2SettingsField)
         //    {
         //        foreach (IEnumerable<FieldInfo> settingsTypeFieldInfos in enumSettingsTypesFieldInfos())
         //        {
@@ -101,12 +102,12 @@ namespace Cliver
         /// <returns>Settings object's storage file path</returns>
         public static string GetSettingsFile(string settingsTypeFieldFullName)
         {
-            lock (fieldFullNames2settingsObject)
+            lock (fieldFullNames2SettingsField)
             {
-                FieldInfo settingsTypeFieldInfo = enumSettingsTypeFieldInfos().Where(a => (a.DeclaringType.FullName + "." + a.Name) == settingsTypeFieldFullName).FirstOrDefault();
-                if (settingsTypeFieldInfo == null)
+                SettingsField settingsField = enumSettingsTypeFieldInfos().Where(a => (a.FieldInfo.DeclaringType.FullName + "." + a.FieldInfo.Name) == settingsTypeFieldFullName).FirstOrDefault();
+                if (settingsField == null)
                     throw new Exception("Field '" + settingsTypeFieldFullName + "' was not found.");
-                return Settings.GetConfigStorageDir(settingsTypeFieldInfo.FieldType) + System.IO.Path.DirectorySeparatorChar + settingsTypeFieldFullName + "." + FILE_EXTENSION;
+                return settingsField.File;
             }
         }
 
@@ -118,7 +119,7 @@ namespace Cliver
         /// <returns>Settings object's storage file path</returns>
         public static string GetSettingsFile(FieldInfo settingsTypeFieldInfo)
         {
-            return Settings.GetConfigStorageDir(settingsTypeFieldInfo.FieldType) + System.IO.Path.DirectorySeparatorChar + settingsTypeFieldInfo.DeclaringType.FullName + "." + settingsTypeFieldInfo.Name + "." + FILE_EXTENSION;
+            return new SettingsField(settingsTypeFieldInfo).File;
         }
 
 

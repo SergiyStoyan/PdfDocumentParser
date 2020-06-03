@@ -17,9 +17,9 @@ using System.Diagnostics;
 namespace Cliver
 {
     /// <summary>
-    /// Config manages serializable Settings type objects.
+    /// Config manages serializable Settings type objects set to static fields of this type declared in the application.
     /// It provides:
-    /// - linking between Settings type objects and static fields of this type declared in the application;
+    /// - detecting static fields of Settings types declared in the application and initiating them with Settings type objects;
     /// - serializing/deserializing the Settings objects;
     /// Every Settings type field in the application has it own storage file which is defined by the Settings type and full name of the field of this type. 
     /// Usually it's that only one field is expected to be declared per Settings type, but generally there can be any number of fields of the same Settings type.
@@ -45,26 +45,55 @@ namespace Cliver
 
         static void loadOrReset(bool reset, bool throwExceptionIfCouldNotLoadFromStorageFile)
         {
-            List<FieldInfo> fieldInfos = new List<FieldInfo>();
-            lock (fieldFullNames2settingsObject)
+            lock (fieldFullNames2SettingsField)
             {
-                fieldFullNames2settingsObject.Clear();
-                foreach (FieldInfo settingsTypeFieldInfo in enumSettingsTypeFieldInfos())
+                fieldFullNames2SettingsField.Clear();
+                foreach (SettingsField settingsField in enumSettingsTypeFieldInfos())
                 {
-                    fieldInfos.Add(settingsTypeFieldInfo);
-                    string fullName = settingsTypeFieldInfo.DeclaringType.FullName + "." + settingsTypeFieldInfo.Name;
-
-                    if (null != settingsTypeFieldInfo.GetCustomAttributes<Settings.Optional>(false).FirstOrDefault() && (RequiredOptionalFieldFullNamesRegex == null || !RequiredOptionalFieldFullNamesRegex.IsMatch(fullName)))
+                    if (null != settingsField.FieldInfo.GetCustomAttributes<Settings.Optional>(false).FirstOrDefault() && (RequiredOptionalFieldFullNamesRegex == null || !RequiredOptionalFieldFullNamesRegex.IsMatch(settingsField.FullName)))
                         continue;
 
-                    Serializable serializable = getSerializable(settingsTypeFieldInfo.FieldType, fullName, reset, throwExceptionIfCouldNotLoadFromStorageFile);
+                    Settings settings = getSettings(settingsField, reset, throwExceptionIfCouldNotLoadFromStorageFile);
 
-                    settingsTypeFieldInfo.SetValue(null, serializable);
-                    fieldFullNames2settingsObject[fullName] = (Settings)serializable;
+                    settingsField.SetObject(settings);
+                    fieldFullNames2SettingsField[settingsField.FullName] = settingsField;
                 }
             }
         }
-        static Dictionary<string, Settings> fieldFullNames2settingsObject = new Dictionary<string, Settings>();
+
+        class SettingsField
+        {
+            internal readonly string FullName;
+            internal readonly FieldInfo FieldInfo;
+            internal readonly string File;
+            internal readonly string InitFile;
+            internal readonly Type Type;
+
+            internal Settings GetObject()
+            {
+                return (Settings)FieldInfo.GetValue(null);
+            }
+
+            internal void SetObject(Settings settings)
+            {
+                FieldInfo.SetValue(null, settings);
+            }
+
+            //internal void SetObject(object settings)
+            //{
+            //    FieldInfo.SetValue(null, settings);
+            //}
+            
+            internal SettingsField(FieldInfo settingsTypeFieldInfo)
+            {
+                FullName = settingsTypeFieldInfo.DeclaringType.FullName + "." + settingsTypeFieldInfo.Name;
+                FieldInfo = settingsTypeFieldInfo;
+                File = Settings.GetConfigStorageDir(settingsTypeFieldInfo.FieldType) + System.IO.Path.DirectorySeparatorChar + FullName + "." + FILE_EXTENSION;
+                InitFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + FullName + "." + FILE_EXTENSION;
+                Type = settingsTypeFieldInfo.FieldType;
+            }
+        }
+        static Dictionary<string, SettingsField> fieldFullNames2SettingsField = new Dictionary<string, SettingsField>();
 
         class SettingsTypeComparer : IComparer<Type>
         {
@@ -89,7 +118,7 @@ namespace Cliver
                 return ai < bi ? -1 : 1;
             }
         }
-        static IEnumerable<FieldInfo> enumSettingsTypeFieldInfos()
+        static IEnumerable<SettingsField> enumSettingsTypeFieldInfos()
         {
             string configAssemblyFullName = Assembly.GetExecutingAssembly().FullName;
             StackTrace stackTrace = new StackTrace();
@@ -116,34 +145,29 @@ namespace Cliver
                 foreach (Type type in types)
                     foreach (FieldInfo settingsTypeFieldInfo in type.GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public).Where(f => settingsTypes.Contains(f.FieldType) /* && f.FieldType.IsAssignableFrom(settingsType)*/))
                     {//usually it should be only 1 FieldInfo per Settings type
-                        if (!settingsTypeFieldInfo.IsInitOnly)
-                            throw new Exception("Settings type field " + settingsTypeFieldInfo.DeclaringType.FullName + "." + settingsTypeFieldInfo.Name + " must be readonly to ensure the proper work of Cliver.Config");
-                        yield return settingsTypeFieldInfo;
+                        yield return new SettingsField(settingsTypeFieldInfo);
                     }
             }
         }
 
-        static Serializable getSerializable(Type settingsType, string fullName, bool reset, bool throwExceptionIfCouldNotLoadFromStorageFile)
+        static Settings getSettings(SettingsField settingsField, bool reset, bool throwExceptionIfCouldNotLoadFromStorageFile)
         {
-            string fileName = fullName + "." + FILE_EXTENSION;
-            string file = Settings.GetConfigStorageDir(settingsType) + System.IO.Path.DirectorySeparatorChar + fileName;
-            string initFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + fileName;
-            if (!reset && File.Exists(file))
+            if (!reset && File.Exists(settingsField.File))
                 try
                 {
-                    return Serializable.Load(settingsType, file);
+                    return (Settings)Serializable.Load(settingsField.Type, settingsField.File);
                 }
                 catch (Exception e)
                 {
                     if (throwExceptionIfCouldNotLoadFromStorageFile)
-                        throw new Exception("Error while loading settings " + fullName + " from file " + file, e);
+                        throw new Exception("Error while loading settings " + settingsField.FullName + " from file " + settingsField.File, e);
                 }
-            if (File.Exists(initFile))
+            if (File.Exists(settingsField.InitFile))
             {
-                FileSystemRoutines.CopyFile(initFile, file, true);
-                return Serializable.LoadOrCreate(settingsType, file);
+                FileSystemRoutines.CopyFile(settingsField.InitFile, settingsField.File, true);
+                return (Settings)Serializable.LoadOrCreate(settingsField.Type, settingsField.File);
             }
-            return Serializable.Create(settingsType, file);
+            return (Settings)Serializable.Create(settingsField.Type, settingsField.File);
         }
 
         /// <summary>
@@ -174,10 +198,10 @@ namespace Cliver
         /// </summary>
         static public void Save()
         {
-            lock (fieldFullNames2settingsObject)
+            lock (fieldFullNames2SettingsField)
             {
-                foreach (Settings s in fieldFullNames2settingsObject.Values)
-                    s.Save();
+                foreach (SettingsField settingsField in fieldFullNames2SettingsField.Values)
+                    settingsField.GetObject().Save(settingsField.File);//it is necessary to provide file as the object can be altered!
             }
         }
     }
