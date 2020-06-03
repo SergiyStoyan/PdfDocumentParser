@@ -17,9 +17,11 @@ using System.Diagnostics;
 namespace Cliver
 {
     /// <summary>
-    /// Config manages serializable objects pertaining to Settings type fields.
-    /// It provides linking between each Settings type object and fields of this type in the application. 
-    /// Every Settings type field in the application has it own storage file whcich is defined by the Settings type and full name of the field.
+    /// Config manages serializable Settings type objects.
+    /// It provides:
+    /// - linking between Settings type objects and static fields of this type declared in the application;
+    /// - serializing/deserializing the Settings objects;
+    /// Every Settings type field in the application has it own storage file which is defined by the Settings type and full name of the field of this type. 
     /// Usually it's that only one field is expected to be declared per Settings type, but generally there can be any number of fields of the same Settings type.
     /// </summary>
     public partial class Config
@@ -174,7 +176,7 @@ namespace Cliver
         {
             lock (fieldFullNames2settingsObject)
             {
-                foreach (Serializable s in fieldFullNames2settingsObject.Values)
+                foreach (Settings s in fieldFullNames2settingsObject.Values)
                     s.Save();
             }
         }
