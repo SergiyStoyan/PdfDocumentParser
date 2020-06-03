@@ -17,6 +17,11 @@ namespace Cliver
 {
     public partial class Config
     {
+        /// <summary>
+        /// Copies storage files of all the Settings type fields initiated in Config.
+        /// So this method must be called only after Reload() or Reset(). 
+        /// </summary>
+        /// <param name="toDirectory">folder where files are to be copied</param>
         static public void ExportSettingsFiles(string toDirectory)
         {
             lock (fieldFullNames2settingsObject)
@@ -28,12 +33,29 @@ namespace Cliver
             }
         }
 
-        #region Routines for individual Settings objects in the config scope.
+        /// <summary>
+        /// Returns the Settings object identified by the full name of the field to which the object belongs.
+        /// The object is not newly created but must exist in Config.
+        /// So this method must be called only after Reload() or Reset(). 
+        /// </summary>
+        /// <param name="settingsTypeFieldFullName">full name of Settings type field; it equals to the name of its file without extention</param>
+        /// <returns>The Settings object which is stored in Config</returns>
+        static public Settings GetSettings(string settingsTypeFieldFullName)
+        {
+            lock (fieldFullNames2settingsObject)
+            {
+                fieldFullNames2settingsObject.TryGetValue(settingsTypeFieldFullName, out Settings s);
+                return s;
+            }
+        }
+
+        #region Routines for individual Settings type fields.
 
         /// <summary>
-        /// Returns full name of the Settings type field which is stored in Config. 
+        /// Returns full names of the fields of the given Settings type which are stored in Config. 
         /// So this method must be called only after Reload() or Reset(). 
-        /// The name of the storage file without extension equals to it.
+        /// Practically, it is expected to be only one field per Settings type but in general it can be any number of them.
+        /// The name of the storage file without extension is the same as the field full name.
         /// </summary>
         /// <param name="settings">Settings type object</param>
         /// <returns>full name of the Settings type field</returns>
@@ -45,22 +67,6 @@ namespace Cliver
             }
             //return hostingClassType.GetField(settingsFieldName) + "." + settingsFieldName;
             //return settingsTypeFieldInfo.DeclaringType.FullName + "." + settingsTypeFieldInfo.Name;
-        }
-
-        /// <summary>
-        /// Returns the Settings object identified by the full name of the field to which the object belongs.
-        /// The object is not newly created but must already exist in the config scope.
-        /// </summary>
-        /// <param name="settingsTypeFieldFullName">full name of Settings type field; it equals to the name of its file without extention</param>
-        /// <returns>The Settings object which was previously created by Config</returns>
-        static public Settings GetSettings(string settingsTypeFieldFullName)
-        {
-            lock (fieldFullNames2settingsObject)
-            {
-                Settings s = null;
-                fieldFullNames2settingsObject.TryGetValue(settingsTypeFieldFullName, out s);
-                return s;
-            }
         }
 
         ///// <summary>
@@ -88,7 +94,8 @@ namespace Cliver
         //}
 
         /// <summary>
-        /// Returns the file path of the Settings object before the Settings field has been initialized.
+        /// Returns the file path of the Settings object before the object has been created (i.e. the Settings field has been initialized).
+        /// So this method can be called anytime. 
         /// </summary>
         /// <param name="settingsTypeFieldFullName">full name of Settings type field; it equals to the name of its file without extention</param>
         /// <returns>Settings object's storage file path</returns>
@@ -104,7 +111,8 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Returns the file path of the Settings object before the Settings field has been initialized.
+        /// Returns the file path of the Settings object before the object has been created (i.e. the Settings field has been initialized). 
+        /// So this method can be called anytime. 
         /// </summary>
         /// <param name="settingsTypeFieldInfo">FieldInfo of Settings type field</param>
         /// <returns>Settings object's storage file path</returns>

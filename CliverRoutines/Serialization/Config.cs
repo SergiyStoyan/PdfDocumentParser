@@ -17,12 +17,15 @@ using System.Diagnostics;
 namespace Cliver
 {
     /// <summary>
-    /// Manages serializable objects pertaining to Settings type fields.
+    /// Config manages serializable objects pertaining to Settings type fields.
+    /// It provides linking between each Settings type object and fields of this type in the application. 
+    /// Every Settings type field in the application has it own storage file whcich is defined by the Settings type and full name of the field.
+    /// Usually it's that only one field is expected to be declared per Settings type, but generally there can be any number of fields of the same Settings type.
     /// </summary>
     public partial class Config
     {
         /// <summary>
-        /// Tells Config which optional (i.e. attributed with [Settings.Optional]) Settings type fields to initialize. 
+        /// Tells Config which optional (i.e. attributed with [Settings.Optional]) Settings type fields are to be initialized. 
         /// It must be set before calling Reload() or Reset().
         /// </summary>
         public static Regex RequiredOptionalFieldFullNamesRegex = null;
@@ -67,7 +70,7 @@ namespace Cliver
             {
                 this.orderedTypes = orderedTypes;
             }
-           readonly List<Type> orderedTypes;
+            readonly List<Type> orderedTypes;
             public int Compare(Type a, Type b)
             {
                 int ai = orderedTypes.IndexOf(a);
@@ -142,7 +145,8 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Reloads all the Settings type fields. It the usual method to be called in the beginning of an application to initiate Config scope.
+        /// Reloads all the Settings type fields. 
+        /// It's the usual method to be called in the beginning of an application to initiate Config.
         /// First it tries to load each Settings object from its default storage directory. 
         /// If this file does not exist, it tries to load from the initial settings file in app's directory.
         /// Only if this file does not exist, it resets to the hardcoded values.

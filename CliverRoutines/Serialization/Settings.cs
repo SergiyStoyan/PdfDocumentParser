@@ -17,6 +17,9 @@ namespace Cliver
 {
     /// <summary>
     /// Alternative to .NET settings. Inheritors of this class are automatically managed by Config engine.
+    /// Practically only one field of this type in the application is expected to be declared per Settings type, but generally there can be any number of fields of the same Settings type.
+    /// So Settings object is unaware of the field(s) it belongs to. The linking between Settings objects and fields is managed by Config.
+    /// Settings type, however, defines its storage directory.
     /// </summary>
     abstract public class Settings : Serializable
     {
