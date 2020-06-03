@@ -53,7 +53,7 @@ namespace Cliver
                     if (null != settingsField.FieldInfo.GetCustomAttributes<Settings.Optional>(false).FirstOrDefault() && (RequiredOptionalFieldFullNamesRegex == null || !RequiredOptionalFieldFullNamesRegex.IsMatch(settingsField.FullName)))
                         continue;
 
-                    Settings settings = getSettings(settingsField, reset, throwExceptionIfCouldNotLoadFromStorageFile);
+                    Settings settings = Settings.Create(settingsField, reset, throwExceptionIfCouldNotLoadFromStorageFile);
 
                     settingsField.SetObject(settings);
                     fieldFullNames2SettingsField[settingsField.FullName] = settingsField;
@@ -61,7 +61,7 @@ namespace Cliver
             }
         }
 
-        class SettingsField
+       internal class SettingsField
         {
             internal readonly string FullName;
             internal readonly FieldInfo FieldInfo;
@@ -150,26 +150,6 @@ namespace Cliver
             }
         }
 
-        static Settings getSettings(SettingsField settingsField, bool reset, bool throwExceptionIfCouldNotLoadFromStorageFile)
-        {
-            if (!reset && File.Exists(settingsField.File))
-                try
-                {
-                    return (Settings)Serializable.Load(settingsField.Type, settingsField.File);
-                }
-                catch (Exception e)
-                {
-                    if (throwExceptionIfCouldNotLoadFromStorageFile)
-                        throw new Exception("Error while loading settings " + settingsField.FullName + " from file " + settingsField.File, e);
-                }
-            if (File.Exists(settingsField.InitFile))
-            {
-                FileSystemRoutines.CopyFile(settingsField.InitFile, settingsField.File, true);
-                return (Settings)Serializable.LoadOrCreate(settingsField.Type, settingsField.File);
-            }
-            return (Settings)Serializable.Create(settingsField.Type, settingsField.File);
-        }
-
         /// <summary>
         /// Reloads all the Settings type fields. 
         /// It's the usual method to be called in the beginning of an application to initiate Config.
@@ -201,7 +181,15 @@ namespace Cliver
             lock (fieldFullNames2SettingsField)
             {
                 foreach (SettingsField settingsField in fieldFullNames2SettingsField.Values)
-                    settingsField.GetObject().Save(settingsField.File);//it is necessary to provide file as the object can be altered!
+                    settingsField.GetObject()?.Save();
+            }
+        }
+
+        internal static SettingsField GetSettingsField(Settings settings)
+        {
+            lock (fieldFullNames2SettingsField)
+            {
+                return fieldFullNames2SettingsField.Where(a => a.Value.Type == settings.GetType() && a.Value.GetObject() == settings).Select(a=>a.Value).FirstOrDefault();
             }
         }
     }

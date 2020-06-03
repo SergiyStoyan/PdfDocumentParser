@@ -21,33 +21,27 @@ namespace Cliver
     /// So Settings object is unaware of the field(s) it belongs to. The linking between Settings objects and fields is managed by Config.
     /// Settings type, however, defines its storage directory.
     /// </summary>
-    abstract public class Settings : Serializable
+    abstract public partial class Settings
     {
-        //public bool ReadOnly { get; private set; }
-
-        Serializable getSerializable(bool reset, bool throwExceptionIfCouldNotLoadFromStorageFile)
+        //public void ChangeField(FieldInfo newFieldInfo)
+        //{
+        //    throw new Exception("TBD");
+        //    if (Field.Type != newFieldInfo.FieldType)
+        //        throw new Exception("New field type differs from ");
+        //}
+        internal Config.SettingsField Field { get; private set; }
+        [Newtonsoft.Json.JsonIgnore]
+        public string __FullName { get { return Field.FullName; } }
+        [Newtonsoft.Json.JsonIgnore]
+        public string __File { get { return Field.File; } }
+        [Newtonsoft.Json.JsonIgnore]
+        public string __InitFile { get { return Field.InitFile; } }
+        public bool __IsInConfig()
         {
-            Type settingsType = GetType();
-            string initFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(__File);
-            if (!reset && File.Exists(__File))
-                try
-                {
-                    return Serializable.Load(settingsType, __File);
-                }
-                catch (Exception e)
-                {
-                    if (throwExceptionIfCouldNotLoadFromStorageFile)
-                        throw new Exception("Error while loading settings from file " + __File, e);
-                }
-            if (File.Exists(initFile))
-            {
-                FileSystemRoutines.CopyFile(initFile, __File, true);
-                return Serializable.LoadOrCreate(settingsType, __File);
-            }
-            return Serializable.Create(settingsType, __File);
+            return Config.GetSettingsField(this) != null;
         }
-
-        void importValues(Serializable s)
+        
+        void importValues(Settings s)
         {
             foreach (FieldInfo settingsTypeFieldInfo in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance))
                 settingsTypeFieldInfo.SetValue(this, settingsTypeFieldInfo.GetValue(s));
@@ -56,9 +50,9 @@ namespace Cliver
         /// <summary>
         /// Reset this object to its hardcoded values.
         /// </summary>
-        public void Reset()
+        public void Reset(/*bool ignoreInitFile = false*/)
         {
-            importValues(getSerializable(true, true));
+            importValues(Create(Field, true, true));
         }
 
         /// <summary>
@@ -67,7 +61,7 @@ namespace Cliver
         /// </summary>
         public void Reload(bool throwExceptionIfCouldNotLoadFromStorageFile = false)
         {
-            importValues(getSerializable(false, throwExceptionIfCouldNotLoadFromStorageFile));
+            importValues(Create(Field, false, throwExceptionIfCouldNotLoadFromStorageFile));
         }
 
         /// <summary>
@@ -77,7 +71,7 @@ namespace Cliver
         /// <returns></returns>
         public S CreateResetInstance<S>() where S : Settings, new()
         {
-            return (S)getSerializable(true, true);
+            return (S)Create(Field, true, true);
         }
 
         /// <summary>
@@ -88,7 +82,7 @@ namespace Cliver
         /// <returns></returns>
         public S CreateReloadedInstance<S>(bool throwExceptionIfCouldNotLoadFromStorageFile = false) where S : Settings, new()
         {
-            return (S)getSerializable(false, throwExceptionIfCouldNotLoadFromStorageFile);
+            return (S)Create(Field, false, throwExceptionIfCouldNotLoadFromStorageFile);
         }
 
         /// <summary>
@@ -97,7 +91,7 @@ namespace Cliver
         /// <returns>False if the values are the identical.</returns>
         public bool IsChanged()
         {
-            return !Serialization.Json.IsEqual(LoadOrCreate(GetType(), __File), this);
+            return !Serialization.Json.IsEqual(Create(Field, false, true), this);
         }
 
         /// <summary>
