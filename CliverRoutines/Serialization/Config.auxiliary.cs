@@ -34,18 +34,16 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Returns the Settings object identified by the full name of the field to which the object belongs.
-        /// The object is not newly created but must exist in Config.
-        /// So this method must be called only after Reload() or Reset(). 
+        /// Returns the Settings object which is set to the field identified by the field's full name.
         /// </summary>
         /// <param name="settingsTypeFieldFullName">full name of Settings type field; it equals to the name of its file without extention</param>
-        /// <returns>The Settings object which is stored in Config</returns>
+        /// <returns>The Settings object which is set to the field</returns>
         static public Settings GetSettings(string settingsTypeFieldFullName)
         {
             lock (fieldFullNames2SettingsField)
             {
-               if(! fieldFullNames2SettingsField.TryGetValue(settingsTypeFieldFullName, out SettingsField settingsField))
-                return null;
+                if (!fieldFullNames2SettingsField.TryGetValue(settingsTypeFieldFullName, out SettingsField settingsField))
+                    return null;
                 return settingsField.GetObject();
             }
         }
@@ -56,6 +54,7 @@ namespace Cliver
         /// Returns full names of the fields of the given Settings type which are stored in Config. 
         /// So this method must be called only after Reload() or Reset(). 
         /// Practically, it is expected to be only one field per Settings type but in general it can be any number of them.
+        /// Also, Settings object might not to be set to any field at all in which case the empty list is returned.
         /// The name of the storage file without extension is the same as the field full name.
         /// </summary>
         /// <param name="settings">Settings type object</param>
