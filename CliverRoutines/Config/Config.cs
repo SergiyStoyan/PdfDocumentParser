@@ -46,7 +46,7 @@ namespace Cliver
         {
             lock (fieldFullNames2SettingsField)
             {
-                fieldFullNames2SettingsField.Clear(); enumSettingsTypeFieldInfos(); enumSettingsTypeFieldInfos();
+                fieldFullNames2SettingsField.Clear(); 
                 foreach (SettingsField settingsField in enumSettingsTypeFieldInfos())
                 {
                     if (null != settingsField.Info.GetCustomAttributes<Settings.Optional>(false).FirstOrDefault() && (RequiredOptionalFieldFullNamesRegex == null || !RequiredOptionalFieldFullNamesRegex.IsMatch(settingsField.FullName)))
