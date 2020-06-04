@@ -92,7 +92,7 @@ namespace Cliver
             /// Indicates if this Settings type object is managed by Congif (e.g. it's set to some Settings type field) 
             /// or it was copied and is not the value of a Settings type field managed by Config.
             /// </summary>
-            public bool __IsCopy()
+            public bool IsCopy()
             {
                 return Config.FindSettingsField(this).GetObject() != this;
             }
@@ -181,7 +181,7 @@ namespace Cliver
             /// Compares actual values of this object with the values in the storage file or default values.
             /// </summary>
             /// <returns>False if the values are the identical.</returns>
-            public bool __IsChanged()
+            public bool IsChanged()
             {
                 return Serialization.Json.IsEqual(this, Create(Field, false, false));
             }
