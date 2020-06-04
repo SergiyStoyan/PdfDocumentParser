@@ -125,7 +125,7 @@ namespace Cliver
 
             }
 
-            //void importValues(Settings s)!!!Declined because such copying may bring to the mess in a object state (if any)
+            //void importValues(Settings s)!!!Declined because such copying may bring to the mess in a object's state (if any)
             //{
             //    foreach (FieldInfo settingsTypeFieldInfo in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance))
             //        settingsTypeFieldInfo.SetValue(this, settingsTypeFieldInfo.GetValue(s));
