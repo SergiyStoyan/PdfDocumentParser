@@ -58,7 +58,7 @@ namespace Cliver
             }
         }
 
-       internal class SettingsField
+        internal class SettingsField
         {
             internal readonly string FullName;
             internal readonly FieldInfo Info;
@@ -68,14 +68,20 @@ namespace Cliver
 
             internal Settings GetObject()
             {
-                return (Settings)Info.GetValue(null);
+                lock (this)
+                {
+                    return (Settings)Info.GetValue(null);
+                }
             }
 
             internal void SetObject(Settings settings)
             {
-                Info.SetValue(null, settings);
+                lock (this)
+                {
+                    Info.SetValue(null, settings);
+                }
             }
-            
+
             internal SettingsField(FieldInfo settingsTypeFieldInfo)
             {
                 FullName = settingsTypeFieldInfo.DeclaringType.FullName + "." + settingsTypeFieldInfo.Name;
@@ -177,12 +183,12 @@ namespace Cliver
             }
         }
 
-        internal static SettingsField FindSettingsField(Settings settings)
+        internal static SettingsField GetSettingsField(string fieldFullName)
         {
             lock (fieldFullNames2SettingsField)
             {
                 //return fieldFullNames2SettingsField.Where(a => a.Value.Type == settings.GetType() && a.Value.GetObject() == settings).Select(a => a.Value).FirstOrDefault();
-                fieldFullNames2SettingsField.TryGetValue(settings.Field.FullName, out SettingsField settingField);
+                fieldFullNames2SettingsField.TryGetValue(fieldFullName, out SettingsField settingField);
                 return settingField;
             }
         }

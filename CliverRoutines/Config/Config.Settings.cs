@@ -54,22 +54,9 @@ namespace Cliver
                 }
                 return (Settings)Activator.CreateInstance(settingsField.Type);
             }
-            internal enum InitMode
-            {
-                LOAD,
-                LOAD_OR_NEW,
-                NEW
-            }
 
             #endregion
-
-            //public void ChangeField(FieldInfo newFieldInfo)
-            //{
-            //    throw new Exception("TBD");
-            //    if (Field.Type != newFieldInfo.FieldType)
-            //        throw new Exception("New field type differs from ");
-            //}
-
+            
             /// <summary>
             /// Field full name is the string that is used in the code to refer to this field. It is the type path of the field. 
             /// </summary>
@@ -94,7 +81,7 @@ namespace Cliver
             /// </summary>
             public bool IsCopy()
             {
-                return Config.FindSettingsField(this).GetObject() != this;
+                return Config.GetSettingsField(__FieldFullName).GetObject() != this;
             }
 
             public void Save()
@@ -110,20 +97,11 @@ namespace Cliver
             [Newtonsoft.Json.JsonIgnore]
             public bool __Indented = true;
 
-            virtual public void Loaded()
-            {
+            virtual public void Loaded() { }
 
-            }
+            virtual public void Saving() { }
 
-            virtual public void Saving()
-            {
-
-            }
-
-            virtual public void Saved()
-            {
-
-            }
+            virtual public void Saved() { }
 
             //void importValues(Settings s)!!!Declined because such copying may bring to the mess in a object's state (if any)
             //{
@@ -132,9 +110,9 @@ namespace Cliver
             //}
 
             /// <summary>
-            /// Reset this object to its default values.
-            /// First it tries to load from the initial file located in the app's directory. 
-            /// If this file does not exist, it resets to the hardcoded values.
+            /// Replaces this object with a new one with its default values.
+            /// Tries to load it from the initial file located in the app's directory. 
+            /// If this file does not exist, it creates an object with the hardcoded values.
             /// </summary>
             public void Reset(/*bool ignoreInitFile = false*/)
             {
@@ -142,9 +120,10 @@ namespace Cliver
             }
 
             /// <summary>
-            /// First it tries to load from the storage file.
-            /// If this file does not exist, it tries to reset from the initial file located in the app's directory. 
-            /// If this file does not exist, it resets to the hardcoded values.
+            /// Replaces this object with a new one with its stored values.
+            /// Tries to load it from the storage file.
+            /// If this file does not exist, it tries to load it from the initial file located in the app's directory. 
+            /// If this file does not exist, it creates an object with the hardcoded values.
             /// </summary>
             /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
             public void Reload(bool throwExceptionIfCouldNotLoadFromStorageFile = false)
@@ -153,9 +132,9 @@ namespace Cliver
             }
 
             /// <summary>
-            /// Creates a new instance of this Settings type with default values.
-            /// First it tries to load a Settings object from the initial file located in the app's directory. 
-            /// If this file does not exist, it creates a Settings object with the hardcoded values.
+            /// Creates a new instance of this Settings type with its default values.
+            /// Tries to load it from the initial file located in the app's directory. 
+            /// If this file does not exist, it creates an object with the hardcoded values.
             /// </summary>
             /// <typeparam name="S"></typeparam>
             /// <returns></returns>
@@ -165,9 +144,10 @@ namespace Cliver
             }
 
             /// <summary>
-            /// First tries to load a new instance of this Settings type from its storage file.
-            /// If the file does not exist, it tries to load a Settings object from the initial file located in the app's directory. 
-            /// If this file does not exist, it creates a Settings object with the hardcoded values.
+            /// Creates a new instance of this Settings type with its stored values.
+            /// Tries to load it from the storage file.
+            /// If this file does not exist, it tries to load it from the initial file located in the app's directory. 
+            /// If this file does not exist, it creates an object with the hardcoded values.
             /// </summary>
             /// <typeparam name="S"></typeparam>
             /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
@@ -183,14 +163,16 @@ namespace Cliver
             /// <returns>False if the values are the identical.</returns>
             public bool IsChanged()
             {
-                return Serialization.Json.IsEqual(this, Create(Field, false, false));
+                lock (this)
+                {
+                    return Serialization.Json.IsEqual(this, Create(Field, false, false));
+                }
             }
 
             /// <summary>
             /// Indicates that this Settings type field should not be initiated by Config by default.
             /// </summary>
-            public class Optional : Attribute
-            { }
+            public class Optional : Attribute { }
 
             /// <summary>
             /// Folder where storage files of this Settings type are stored by Config engine.
