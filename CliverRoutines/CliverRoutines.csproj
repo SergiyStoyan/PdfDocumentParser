@@ -5,19 +5,19 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <AssemblyVersion>4.0.0.0</AssemblyVersion>
     <RepositoryUrl>https://github.com/sergeystoyan/CliverRoutines.git</RepositoryUrl>
-    <FileVersion>4.0.6.0</FileVersion>
+    <FileVersion>4.2.0.0</FileVersion>
     <!--PackageLicenseFile>LICENSE</PackageLicenseFile-->
 	<PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
     <Copyright>Sergey Stoyan</Copyright>
     <Authors>Sergey Stoyan</Authors>
     <Company>CliverSoft</Company>
-    <Version>4.1.0</Version>
+    <Version>4.2.0</Version>
     <PackageProjectUrl>https://github.com/sergeystoyan/CliverRoutines</PackageProjectUrl>
     <Description>Cross-platform routines:
 - serializing which replaces .NET settings for desktop applications;
 - logging with threading and session support;
 - auxiliary routines;</Description>
-    <PackageTags>serialize, log</PackageTags>
+    <PackageTags>serialize, log, settings</PackageTags>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>

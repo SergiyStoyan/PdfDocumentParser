@@ -26,6 +26,7 @@ namespace Cliver
         abstract public partial class Settings
         {
             #region engine internal API
+
             internal Config.SettingsField Field { get; private set; }
 
             internal static Settings Create(Config.SettingsField settingsField, bool reset, bool throwExceptionIfCouldNotLoadFromStorageFile)
