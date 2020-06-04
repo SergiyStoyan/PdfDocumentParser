@@ -56,7 +56,7 @@ namespace Cliver
             }
 
             #endregion
-            
+
             /// <summary>
             /// Field full name is the string that is used in the code to refer to this field. It is the type path of the field. 
             /// </summary>
@@ -76,16 +76,17 @@ namespace Cliver
             public string __InitFile { get { return Field.InitFile; } }
 
             /// <summary>
-            /// Indicates if this Settings type object is managed by Congif (e.g. it's set to some Settings type field) 
-            /// or it was copied and is not the value of a Settings type field managed by Config.
+            /// Indicates whether this Settings type object is value of some Settings type field or it is not.
             /// </summary>
-            public bool IsCopy()
+            public bool IsDetached()
             {
-                return Config.GetSettingsField(__FieldFullName).GetObject() != this;
+                return Config.GetSettings(__FieldFullName) != this;
             }
 
             public void Save()
             {
+                if (IsDetached())
+                    throw new Exception("This method cannot be performed because this Settings object it is not value of the field " + __FieldFullName);
                 lock (this)
                 {
                     Saving();
@@ -110,17 +111,19 @@ namespace Cliver
             //}
 
             /// <summary>
-            /// Replaces this object with a new one with its default values.
+            /// Replaces the value of the field defined by __FieldFullName with a new object initiated with default values. 
             /// Tries to load it from the initial file located in the app's directory. 
             /// If this file does not exist, it creates an object with the hardcoded values.
             /// </summary>
             public void Reset(/*bool ignoreInitFile = false*/)
             {
+                if (IsDetached())
+                    throw new Exception("This method cannot be performed because this Settings object it is not value of the field " + __FieldFullName);
                 Field.SetObject(Create(Field, true, true));
             }
 
             /// <summary>
-            /// Replaces this object with a new one with its stored values.
+            /// Replaces the value of the field defined by __FieldFullName with a new object initiated with stored values.
             /// Tries to load it from the storage file.
             /// If this file does not exist, it tries to load it from the initial file located in the app's directory. 
             /// If this file does not exist, it creates an object with the hardcoded values.
@@ -128,11 +131,13 @@ namespace Cliver
             /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
             public void Reload(bool throwExceptionIfCouldNotLoadFromStorageFile = false)
             {
+                if (IsDetached())
+                    throw new Exception("This method cannot be performed because this Settings object it is not value of the field " + __FieldFullName);
                 Field.SetObject(Create(Field, false, throwExceptionIfCouldNotLoadFromStorageFile));
             }
 
             /// <summary>
-            /// Creates a new instance of this Settings type with its default values.
+            /// Creates a new instance of this Settings type initiated with default values.
             /// Tries to load it from the initial file located in the app's directory. 
             /// If this file does not exist, it creates an object with the hardcoded values.
             /// </summary>
@@ -144,7 +149,7 @@ namespace Cliver
             }
 
             /// <summary>
-            /// Creates a new instance of this Settings type with its stored values.
+            /// Creates a new instance of this Settings type initiated with stored values.
             /// Tries to load it from the storage file.
             /// If this file does not exist, it tries to load it from the initial file located in the app's directory. 
             /// If this file does not exist, it creates an object with the hardcoded values.

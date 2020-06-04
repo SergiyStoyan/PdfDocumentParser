@@ -32,21 +32,6 @@ namespace Cliver
             }
         }
 
-        /// <summary>
-        /// Returns the Settings object which is set to the field identified by the field's full name.
-        /// </summary>
-        /// <param name="settingsTypeFieldFullName">full name of Settings type field; it equals to the name of its file without extention</param>
-        /// <returns>The Settings object which is set to the field</returns>
-        static public Settings GetSettings(string settingsTypeFieldFullName)
-        {
-            lock (fieldFullNames2SettingsField)
-            {
-                if (!fieldFullNames2SettingsField.TryGetValue(settingsTypeFieldFullName, out SettingsField settingsField))
-                    return null;
-                return settingsField.GetObject();
-            }
-        }
-
         #region Routines for individual Settings type fields.
 
         ///// <summary>
@@ -67,30 +52,6 @@ namespace Cliver
         //    //return settingsTypeFieldInfo.DeclaringType.FullName + "." + settingsTypeFieldInfo.Name;
         //}
 
-        ///// <summary>
-        ///// !!!Deprecated. Use InitialzingOrderedSettingsTypes instead of it.
-        ///// Can be called when ordered load is required due to dependencies.
-        ///// </summary>
-        ///// <param name="settingsTypeFieldFullName">Settings field's full name which is the name of its file without extention</param>
-        ///// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
-        //static public void ReloadField(string settingsTypeFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
-        //{
-        //    lock (fieldFullNames2SettingsField)
-        //    {
-        //        foreach (IEnumerable<FieldInfo> settingsTypeFieldInfos in enumSettingsTypesFieldInfos())
-        //        {
-        //            FieldInfo settingsTypeFieldInfo = settingsTypeFieldInfos.Where(a => (a.DeclaringType.FullName + "." + a.Name) == settingsTypeFieldFullName).FirstOrDefault();
-        //            if (settingsTypeFieldInfo != null)
-        //            {
-        //                Serializable serializable = getSerializable(settingsTypeFieldInfo.FieldType, settingsTypeFieldFullName, false, throwExceptionIfCouldNotLoadFromStorageFile);
-        //                settingsTypeFieldInfo.SetValue(null, serializable);
-        //                return;
-        //            }
-        //        }
-        //        throw new Exception("Field '" + settingsTypeFieldFullName + "' was not found.");
-        //    }
-        //}
-
         /// <summary>
         /// Returns the file path of the Settings object before the object has been created (i.e. the Settings field has been initialized).
         /// So this method can be called anytime. 
@@ -99,25 +60,11 @@ namespace Cliver
         /// <returns>Settings object's storage file path</returns>
         public static string GetSettingsFile(string settingsTypeFieldFullName)
         {
-            lock (fieldFullNames2SettingsField)
-            {
-                if (fieldFullNames2SettingsField.TryGetValue(settingsTypeFieldFullName, out SettingsField settingsField))
-                    return settingsField.File;
+            SettingsField settingsField = enumSettingsTypeFieldInfos().FirstOrDefault(a => a.FullName == settingsTypeFieldFullName);
+            if (settingsField == null)
                 throw new Exception("Field '" + settingsTypeFieldFullName + "' was not found.");
-            }
+            return settingsField.File;
         }
-
-        /// <summary>
-        /// Returns the file path of the Settings object before the object has been created (i.e. the Settings field has been initialized). 
-        /// So this method can be called anytime. 
-        /// </summary>
-        /// <param name="settingsTypeFieldInfo">FieldInfo of Settings type field</param>
-        /// <returns>Settings object's storage file path</returns>
-        public static string GetSettingsFile(FieldInfo settingsTypeFieldInfo)
-        {
-            return new SettingsField(settingsTypeFieldInfo).File;
-        }
-
 
         #endregion
     }

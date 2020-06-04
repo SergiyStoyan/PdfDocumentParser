@@ -142,7 +142,7 @@ namespace Cliver
                 }
                 foreach (Type type in types)
                     foreach (FieldInfo settingsTypeFieldInfo in type.GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public).Where(f => settingsTypes.Contains(f.FieldType) /* && f.FieldType.IsAssignableFrom(settingsType)*/))
-                    {//usually it should be only 1 FieldInfo per Settings type
+                    {//usually it is only 1 FieldInfo per Settings type
                         yield return new SettingsField(settingsTypeFieldInfo);
                     }
             }
@@ -183,13 +183,19 @@ namespace Cliver
             }
         }
 
-        internal static SettingsField GetSettingsField(string fieldFullName)
-        {
+        /// <summary>
+        /// Returns the Settings object which is set to the field identified by the field's full name.
+        /// The object must be previously created by Reload() or Reset().
+        /// </summary>
+        /// <param name="settingsTypeFieldFullName">full name of Settings type field; it equals to the name of its file without extention</param>
+        /// <returns>The Settings object which is set to the field</returns>
+        static public Settings GetSettings(string settingsTypeFieldFullName)
+        {//!!! before altering this method, pay attention that it is used by Settings !!!
             lock (fieldFullNames2SettingsField)
             {
-                //return fieldFullNames2SettingsField.Where(a => a.Value.Type == settings.GetType() && a.Value.GetObject() == settings).Select(a => a.Value).FirstOrDefault();
-                fieldFullNames2SettingsField.TryGetValue(fieldFullName, out SettingsField settingField);
-                return settingField;
+                if (fieldFullNames2SettingsField.TryGetValue(settingsTypeFieldFullName, out SettingsField settingsField))
+                    return settingsField.GetObject();
+                return null;
             }
         }
     }
