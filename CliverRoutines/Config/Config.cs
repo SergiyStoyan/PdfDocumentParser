@@ -21,7 +21,7 @@ namespace Cliver
     /// It provides:
     /// - detecting static fields of Settings types declared in the application and initiating them with Settings type objects;
     /// - serializing/deserializing the Settings objects;
-    /// Every Settings type field in the application has it own storage file which is defined by the Settings type and full name of the field of this type. 
+    /// Every Settings type field in the application has it own storage file which is defined by the Settings type and the field full name of this type. 
     /// Usually it's that only one field is expected to be declared per Settings type, but generally there can be any number of fields of the same Settings type.
     /// </summary>
     public partial class Config
@@ -50,11 +50,9 @@ namespace Cliver
                 fieldFullNames2SettingsField.Clear();
                 foreach (SettingsField settingsField in enumSettingsTypeFieldInfos())
                 {
-                    if (null != settingsField.FieldInfo.GetCustomAttributes<Settings.Optional>(false).FirstOrDefault() && (RequiredOptionalFieldFullNamesRegex == null || !RequiredOptionalFieldFullNamesRegex.IsMatch(settingsField.FullName)))
+                    if (null != settingsField.Info.GetCustomAttributes<Settings.Optional>(false).FirstOrDefault() && (RequiredOptionalFieldFullNamesRegex == null || !RequiredOptionalFieldFullNamesRegex.IsMatch(settingsField.FullName)))
                         continue;
-
                     Settings settings = Settings.Create(settingsField, reset, throwExceptionIfCouldNotLoadFromStorageFile);
-
                     settingsField.SetObject(settings);
                     fieldFullNames2SettingsField[settingsField.FullName] = settingsField;
                 }
@@ -64,31 +62,26 @@ namespace Cliver
        internal class SettingsField
         {
             internal readonly string FullName;
-            internal readonly FieldInfo FieldInfo;
+            internal readonly FieldInfo Info;
             internal readonly string File;
             internal readonly string InitFile;
             internal readonly Type Type;
 
             internal Settings GetObject()
             {
-                return (Settings)FieldInfo.GetValue(null);
+                return (Settings)Info.GetValue(null);
             }
 
             internal void SetObject(Settings settings)
             {
-                FieldInfo.SetValue(null, settings);
+                Info.SetValue(null, settings);
             }
-
-            //internal void SetObject(object settings)
-            //{
-            //    FieldInfo.SetValue(null, settings);
-            //}
             
             internal SettingsField(FieldInfo settingsTypeFieldInfo)
             {
                 FullName = settingsTypeFieldInfo.DeclaringType.FullName + "." + settingsTypeFieldInfo.Name;
-                FieldInfo = settingsTypeFieldInfo;
-                File = Settings.GetConfigStorageDir(settingsTypeFieldInfo.FieldType) + System.IO.Path.DirectorySeparatorChar + FullName + "." + FILE_EXTENSION;
+                Info = settingsTypeFieldInfo;
+                File = Settings.GetStorageDir(settingsTypeFieldInfo.FieldType) + System.IO.Path.DirectorySeparatorChar + FullName + "." + FILE_EXTENSION;
                 InitFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + FullName + "." + FILE_EXTENSION;
                 Type = settingsTypeFieldInfo.FieldType;
             }
@@ -185,7 +178,7 @@ namespace Cliver
             }
         }
 
-        internal static SettingsField GetSettingsField(Settings settings)
+        internal static SettingsField FindSettingsField(Settings settings)
         {
             lock (fieldFullNames2SettingsField)
             {

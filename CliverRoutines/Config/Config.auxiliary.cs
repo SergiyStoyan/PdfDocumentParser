@@ -18,8 +18,8 @@ namespace Cliver
     public partial class Config
     {
         /// <summary>
-        /// Copies storage files of all the Settings type fields initiated in Config.
-        /// So this method must be called only after Reload() or Reset(). 
+        /// Copies storage files of all the Settings type fields initiated by Config, to the specified directory.
+        /// So this method makes effect only if called after Reload() or Reset(). 
         /// </summary>
         /// <param name="toDirectory">folder where files are to be copied</param>
         static public void ExportSettingsFiles(string toDirectory)
@@ -50,24 +50,23 @@ namespace Cliver
 
         #region Routines for individual Settings type fields.
 
-        /// <summary>
-        /// Returns full names of the fields of the given Settings type which are stored in Config. 
-        /// So this method must be called only after Reload() or Reset(). 
-        /// Practically, it is expected to be only one field per Settings type but in general it can be any number of them.
-        /// Also, Settings object might not to be set to any field at all in which case the empty list is returned.
-        /// The name of the storage file without extension is the same as the field full name.
-        /// </summary>
-        /// <param name="settings">Settings type object</param>
-        /// <returns>full name of the Settings type field</returns>
-        public List<string> FindFieldFullNames(Settings settings)
-        {
-            lock (fieldFullNames2SettingsField)
-            {
-                return fieldFullNames2SettingsField.Where(kv => kv.Value.GetObject() == settings).Select(kv => kv.Value.FullName).ToList();
-            }
-            //return hostingClassType.GetField(settingsFieldName) + "." + settingsFieldName;
-            //return settingsTypeFieldInfo.DeclaringType.FullName + "." + settingsTypeFieldInfo.Name;
-        }
+        ///// <summary>
+        ///// Returns full names of the fields of the given Settings type which are stored in Config. 
+        ///// So this method must be called only after Reload() or Reset(). 
+        ///// Practically, it is expected to be only one field per Settings type but in general it can be any number of them.
+        ///// Also, Settings object might be not set to any field at all in which case the empty list is returned.
+        ///// </summary>
+        ///// <param name="settings">Settings type object</param>
+        ///// <returns>full name of the Settings type field</returns>
+        //public List<string> FindFieldFullNames(Settings settings)
+        //{
+        //    lock (fieldFullNames2SettingsField)
+        //    {
+        //        return fieldFullNames2SettingsField.Where(kv => kv.Value.GetObject() == settings).Select(kv => kv.Value.FullName).ToList();
+        //    }
+        //    //return hostingClassType.GetField(settingsFieldName) + "." + settingsFieldName;
+        //    //return settingsTypeFieldInfo.DeclaringType.FullName + "." + settingsTypeFieldInfo.Name;
+        //}
 
         ///// <summary>
         ///// !!!Deprecated. Use InitialzingOrderedSettingsTypes instead of it.
@@ -103,10 +102,9 @@ namespace Cliver
         {
             lock (fieldFullNames2SettingsField)
             {
-                SettingsField settingsField = enumSettingsTypeFieldInfos().Where(a => (a.FieldInfo.DeclaringType.FullName + "." + a.FieldInfo.Name) == settingsTypeFieldFullName).FirstOrDefault();
-                if (settingsField == null)
-                    throw new Exception("Field '" + settingsTypeFieldFullName + "' was not found.");
-                return settingsField.File;
+                if (fieldFullNames2SettingsField.TryGetValue(settingsTypeFieldFullName, out SettingsField settingsField))
+                    return settingsField.File;
+                throw new Exception("Field '" + settingsTypeFieldFullName + "' was not found.");
             }
         }
 
