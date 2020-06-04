@@ -182,7 +182,7 @@ namespace Cliver
             /// Compares actual values of this object with the values in the storage file or default values.
             /// </summary>
             /// <returns>False if the values are the identical.</returns>
-            public bool IsChanged()
+            public bool __IsChanged()
             {
                 return Serialization.Json.IsEqual(this, Create(Field, false, false));
             }
