@@ -46,7 +46,7 @@ namespace Cliver
         {
             lock (fieldFullNames2SettingsField)
             {
-                fieldFullNames2SettingsField.Clear();
+                fieldFullNames2SettingsField.Clear(); enumSettingsTypeFieldInfos(); enumSettingsTypeFieldInfos();
                 foreach (SettingsField settingsField in enumSettingsTypeFieldInfos())
                 {
                     if (null != settingsField.Info.GetCustomAttributes<Settings.Optional>(false).FirstOrDefault() && (RequiredOptionalFieldFullNamesRegex == null || !RequiredOptionalFieldFullNamesRegex.IsMatch(settingsField.FullName)))
@@ -120,14 +120,6 @@ namespace Cliver
         {
             lock (fieldFullNames2SettingsField)
             {
-                if (settingsFields != null)
-                {
-                    foreach (SettingsField sf in settingsFields)
-                        yield return sf;
-                    yield break;
-                }
-                settingsFields = new List<SettingsField>();
-
                 string configAssemblyFullName = Assembly.GetExecutingAssembly().FullName;
                 StackTrace stackTrace = new StackTrace();
                 Assembly callingAssembly = stackTrace.GetFrames().Where(f => f.GetMethod().DeclaringType.Assembly.FullName != configAssemblyFullName).Select(f => f.GetMethod().DeclaringType.Assembly).FirstOrDefault();
@@ -153,14 +145,11 @@ namespace Cliver
                     foreach (Type type in types)
                         foreach (FieldInfo settingsTypeFieldInfo in type.GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public).Where(f => settingsTypes.Contains(f.FieldType) /* && f.FieldType.IsAssignableFrom(settingsType)*/))
                         {//usually it is only 1 FieldInfo per Settings type
-                            SettingsField settingsField = new SettingsField(settingsTypeFieldInfo);
-                            settingsFields.Add(settingsField);
-                            yield return settingsField;
+                            yield return new SettingsField(settingsTypeFieldInfo);
                         }
                 }
             }
         }
-        static List<SettingsField> settingsFields = null;
 
         /// <summary>
         /// Reloads all the Settings type fields. 
