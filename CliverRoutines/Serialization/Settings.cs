@@ -36,9 +36,9 @@ namespace Cliver
         public string __File { get { return Field.File; } }
         [Newtonsoft.Json.JsonIgnore]
         public string __InitFile { get { return Field.InitFile; } }
-        public bool __IsInConfig()
+        public bool __IsCopy()
         {
-            return Config.GetSettingsField(this) != null;
+            return Config.GetSettingsField(this).GetObject() != this;
         }
         
         void importValues(Settings s)
