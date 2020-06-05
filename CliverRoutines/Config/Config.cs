@@ -57,40 +57,6 @@ namespace Cliver
                 }
             }
         }
-
-        internal class SettingsField
-        {
-            internal readonly string FullName;
-            internal readonly FieldInfo Info;
-            internal readonly string File;
-            internal readonly string InitFile;
-            internal readonly Type Type;
-
-            internal Settings GetObject()
-            {
-                lock (this)
-                {
-                    return (Settings)Info.GetValue(null);
-                }
-            }
-
-            internal void SetObject(Settings settings)
-            {
-                lock (this)
-                {
-                    Info.SetValue(null, settings);
-                }
-            }
-
-            internal SettingsField(FieldInfo settingsTypeFieldInfo)
-            {
-                FullName = settingsTypeFieldInfo.DeclaringType.FullName + "." + settingsTypeFieldInfo.Name;
-                Info = settingsTypeFieldInfo;
-                File = Settings.GetStorageDir(settingsTypeFieldInfo.FieldType) + System.IO.Path.DirectorySeparatorChar + FullName + "." + FILE_EXTENSION;
-                InitFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + FullName + "." + FILE_EXTENSION;
-                Type = settingsTypeFieldInfo.FieldType;
-            }
-        }
         static Dictionary<string, SettingsField> fieldFullNames2SettingsField = new Dictionary<string, SettingsField>();
 
         class SettingsTypeComparer : IComparer<Type>

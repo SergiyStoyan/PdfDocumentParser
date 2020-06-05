@@ -53,17 +53,13 @@ namespace Cliver
         //}
 
         /// <summary>
-        /// Returns the file path of the Settings object before the object has been created (i.e. the Settings field has been initialized).
-        /// So this method can be called anytime. 
+        /// Allows to get the Settings type field's properties before its value has been created (i.e. before the Settings type field has been initialized).
         /// </summary>
         /// <param name="settingsTypeFieldFullName">full name of Settings type field; it equals to the name of its file without extention</param>
-        /// <returns>Settings object's storage file path</returns>
-        public static string GetSettingsFile(string settingsTypeFieldFullName)
+        /// <returns>Settings type field's properties</returns>
+        public static SettingsField GetSettingsField(string settingsTypeFieldFullName)
         {
-            SettingsField settingsField = enumSettingsTypeFieldInfos().FirstOrDefault(a => a.FullName == settingsTypeFieldFullName);
-            if (settingsField == null)
-                throw new Exception("Field '" + settingsTypeFieldFullName + "' was not found.");
-            return settingsField.File;
+            return enumSettingsTypeFieldInfos().FirstOrDefault(a => a.FullName == settingsTypeFieldFullName);
         }
 
         #endregion
