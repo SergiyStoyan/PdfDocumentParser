@@ -5,11 +5,34 @@
 //********************************************************************************************
 
 using System;
+using System.Text.RegularExpressions;
 
 namespace Cliver
 {
     static public class ConvertionRoutines
     {
+        /// <summary>
+        /// (Credit to stackoverflow people)
+        /// Makes the decimal lose the right trailing zero's
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static decimal Normalize(this decimal value)
+        {
+            return value / 1.000000000000000000000000000000000m;
+        }
+
+        /// <summary>
+        /// Due to internal implementation a decimal retains the number of positions after '.'
+        /// Those positions go to string output by default and this function removes them if they are insignificant.
+        /// </summary>
+        /// <param name="d"></param>
+        /// <returns></returns>
+        public static string ToTrimmedString(this decimal d)
+        {
+            return Regex.Replace(d.ToString(), @"\.0+$|(?<=\.\d+?)0+$", "");
+        }
+
         public static string NumberToWords(int number)
         {
             if (number == 0)

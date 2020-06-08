@@ -172,7 +172,7 @@ namespace Cliver
             {
                 lock (this)
                 {
-                    return Serialization.Json.IsEqual(this, Create(Field, false, false));
+                    return !Serialization.Json.IsEqual(this, Create(Field, false, false));
                 }
             }
 

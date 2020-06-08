@@ -1,0 +1,70 @@
+body, html{
+    margin:0;
+    padding: 0;
+}
+
+.mainHeader {font-size: 2em; color:#348; margin:20 0 20 0; text-align:center; font-weight:bold;}
+
+h1 {color:#c35; font-size: 1.6em; text-indent: 0px; padding-top:10; margin:100 0 25 0; text-decoration1:underline;}
+h2 {color:#c35; font-size: 1.4em; text-indent: 50px; padding-top:10; margin:80 0 20 0; text-decoration1:underline;}
+h3 {color:#c35; font-size: 1.2em; text-indent: 100px; padding-top:10; margin:40 0 15 0; text-decoration1:underline;}
+h4 {color:#c35; font-size: 1.1em; text-indent: 150px; padding-top:10; margin:30 0 10 0; text-decoration1:underline;}
+h5 {color:#c35; font-size: 1em; text-indent: 200px; padding-top:10; margin:20 0 5 0; text-decoration1:underline;}
+h6 {color:#c35; font-size: 1em; text-indent: 250px; padding-top:10; margin:10 0 3 0; font-style: italic; text-decoration1:underline;}
+
+/*h1:before{content: '\25FE';  margin:0 10px;} h1:after{content: '\25FE';  margin:0 10px;}*/
+
+/*h1:before{content: '';  margin:0 10px;} h1:after{content: '';  margin:0 10px;}
+h2:before{content: '\2013';  margin:0 10px;} h2:after{content: '\2013';  margin:0 10px;}
+h3:before{content: '\2013\2013';  margin:0 10px;} h3:after{content: '\2013\2013';  margin:0 10px;}
+h4:before{content: '\2013\2013\2013';  margin:0 10px;} h4:after{content: '\2013\2013\2013';  margin:0 10px;}
+h5:before{content: '\2013\2013\2013\2013';  margin:0 10px;} h5:after{content: '\2013\2013\2013\2013';  margin:0 10px;}
+h6:before{content: '\2013\2013\2013\2013\2013';  margin:0 10px;} h5:after{content: '\2013\2013\2013\2013\2013';  margin:0 10px;}*/
+
+/*h1:before{content: '';  margin:0 10px;} h1:after{content: '';  margin:0 10px;}
+h2:before{content: '\003E';  margin:0 10px;} h2:after{content: '';  margin:0 10px;}
+h3:before{content: '\003E\0020\003E';  margin:0 10px;} h3:after{content: '';  margin:0 10px;}
+h4:before{content: '\003E\0020\003E\0020\003E';  margin:0 10px;} h4:after{content: '';  margin:0 10px;}
+h5:before{content: '\003E\0020\003E\0020\003E\0020\003E';  margin:0 10px;} h5:after{content: '';  margin:0 10px;}
+h6:before{content: '\003E\0020\003E\0020\003E\0020\003E\0020\003E';  margin:0 10px;} h5:after{content: '';  margin:0 10px;}*/
+
+/*h1:before{content: '';  margin:0 10px;} h1:after{content: '';  margin:0 10px;}
+h2:before{content: '\002D';  margin:0 10px;} h2:after{content: '';  margin:0 10px;}
+h3:before{content: '\002D\0020\002D';  margin:0 10px;} h3:after{content: '';  margin:0 10px;}
+h4:before{content: '\002D\0020\002D\0020\002D';  margin:0 10px;} h4:after{content: '';  margin:0 10px;}
+h5:before{content: '\002D\0020\002D\0020\002D\0020\002D';  margin:0 10px;} h5:after{content: '';  margin:0 10px;}
+h6:before{content: '\002D\0020\002D\0020\002D\0020\002D\0020\002D';  margin:0 10px;} h5:after{content: '';  margin:0 10px;}*/
+
+.header{
+    text-align: center;
+    padding:0 0 0 0;
+    border-bottom:1px solid #ddd;
+    overflow:auto;/*removes gaps appearing between block elements due to margin of their childs!*/
+}
+    
+.content{
+    margin:0 50 0 50;
+    overflow1:auto;/*off to allow window horizontal scrollbar*//*removes gaps appearing between block elements due to margin of their childs!*/
+}
+
+.footer {
+    overflow:auto;/*removes gaps appearing between block elements due to margin of their childs!*/
+    border-top:1px solid #ddd;
+    padding:20 0 20 0;
+    text-align:center;
+    display:flex;
+    align-content1:center;
+    justify-content:center;
+}
+
+.attention{font-style:italic;font-weight:bold;color1:#503;}
+.screenshot_title{}
+.title_column{white-space: nowrap;font-weight:bold;}
+.title_column_center{white-space: nowrap;font-weight:bold;text-align:center;}
+
+p {   margin1: 0;    margin-top:10;    padding1: 0;}
+table { margin-top:20; margin-bottom:10; border-collapse: collapse; border-color: grey; }
+table, th, td {border: 1px solid grey; }
+th {color:#000; font-style:italic;}
+th, td {margin:5; padding:5;}
+img {max-width: 1200px; max-height: 700px; margin-top:20; margin-bottom:30;display:block;}
