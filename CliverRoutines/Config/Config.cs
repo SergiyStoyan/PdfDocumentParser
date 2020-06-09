@@ -16,17 +16,17 @@ using System.Diagnostics;
 namespace Cliver
 {
     /// <summary>
-    /// Config manages serializable Settings type objects set to static fields of this type declared in the application.
+    /// Config manages serializable Settings objects set to static fields of this type declared in the application.
     /// It provides:
-    /// - detecting static fields of Settings types declared in the application and initiating them with Settings type objects;
+    /// - detecting static fields of Settings types declared in the application and initiating them with Settings objects;
     /// - serializing/deserializing the Settings objects;
-    /// Every Settings type field in the application has it own storage file which is defined by the Settings type and the field full name of this type. 
-    /// Usually it's that only one field is expected to be declared per Settings type, but generally there can be any number of fields of the same Settings type.
+    /// Every Settings field in the application has it own storage file which is defined by the Settings type and the field's full name. 
+    /// Usually it's that only one field is declared per Settings type, but generally there can be any number of fields of the same Settings type.
     /// </summary>
     public partial class Config
     {
         /// <summary>
-        /// Tells Config which optional (i.e. attributed with [Settings.Optional]) Settings type fields are to be initialized. 
+        /// Tells Config which optional (i.e. attributed with [Settings.Optional]) Settings fields are to be initialized. 
         /// It must be set before calling Reload() or Reset().
         /// </summary>
         public static Regex RequiredOptionalFieldFullNamesRegex = null;
@@ -47,7 +47,7 @@ namespace Cliver
             lock (fieldFullNames2SettingsField)
             {
                 fieldFullNames2SettingsField.Clear(); 
-                foreach (SettingsField settingsField in enumSettingsTypeFieldInfos())
+                foreach (SettingsField settingsField in enumSettingsFields())
                 {
                     if (null != settingsField.Info.GetCustomAttributes<Settings.Optional>(false).FirstOrDefault() && (RequiredOptionalFieldFullNamesRegex == null || !RequiredOptionalFieldFullNamesRegex.IsMatch(settingsField.FullName)))
                         continue;
@@ -82,7 +82,7 @@ namespace Cliver
                 return ai < bi ? -1 : 1;
             }
         }
-        static IEnumerable<SettingsField> enumSettingsTypeFieldInfos()
+        static IEnumerable<SettingsField> enumSettingsFields()
         {
             string configAssemblyFullName = Assembly.GetExecutingAssembly().FullName;
             StackTrace stackTrace = new StackTrace();
@@ -115,7 +115,7 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Reloads all the Settings type fields. 
+        /// Reloads all the Settings fields. 
         /// It's the usual method to be called in the beginning of an application to initiate Config.
         /// First it tries to load each Settings object from its default storage directory. 
         /// If this file does not exist, it tries to load from the initial settings file in app's directory.
@@ -128,7 +128,7 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Resets all the Settings type fields.
+        /// Resets all the Settings fields.
         /// First it tries to load each Settings object from the initial settings file in app's directory. 
         /// Only if this file does not exist, it resets to the hardcoded values.
         /// </summary>
@@ -138,7 +138,7 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Serializes all the Settings type fields to their files.
+        /// Serializes all the Settings fields to their storage files.
         /// </summary>
         static public void Save()
         {
@@ -153,13 +153,13 @@ namespace Cliver
         /// Returns the Settings object which is set to the field identified by the field's full name.
         /// The object must be previously created by Reload() or Reset().
         /// </summary>
-        /// <param name="settingsTypeFieldFullName">full name of Settings type field; it equals to the name of its file without extention</param>
+        /// <param name="settingsFieldFullName">full name of Settings field; it equals to the name of its file without extention</param>
         /// <returns>The Settings object which is set to the field</returns>
-        static public Settings GetSettings(string settingsTypeFieldFullName)
+        static public Settings GetSettings(string settingsFieldFullName)
         {//!!! before altering this method, pay attention that it is used by Settings !!!
             lock (fieldFullNames2SettingsField)
             {
-                if (fieldFullNames2SettingsField.TryGetValue(settingsTypeFieldFullName, out SettingsField settingsField))
+                if (fieldFullNames2SettingsField.TryGetValue(settingsFieldFullName, out SettingsField settingsField))
                     return settingsField.GetObject();
                 return null;
             }

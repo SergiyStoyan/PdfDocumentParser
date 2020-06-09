@@ -19,7 +19,7 @@ namespace Cliver
         /// <summary>
         /// Alternative to .NET settings. Inheritors of this class in the application are automatically managed by Config.
         /// From practical point of view, usually only one field is to be declared per certain Settings type, but generally there can be any number of fields of the same Settings type.
-        /// A Settings type object always belongs to some Settings type field even it is not the value of this field (i.e. it is detached). 
+        /// A Settings object always belongs to one Settings field even it is not the value of this field (i.e. it is detached). 
         /// </summary>
         abstract public partial class Settings
         {
@@ -66,14 +66,14 @@ namespace Cliver
             public string __File { get { return Field.File; } }
 
             /// <summary>
-            /// Path of the init file. It consists of the directory where the entry assembly is loacted and file name which is the field's full name.
+            /// Path of the init file. It consists of the directory where the entry assembly is located and file name which is the field's full name.
             /// </summary>
             [Newtonsoft.Json.JsonIgnore]
             public string __InitFile { get { return Field.InitFile; } }
 
             /// <summary>
-            /// Indicates whether this Settings type object is value of some Settings type field or it is not.
-            /// If in the application Settings type object copies are created, this method can distinguish them before calling Reload(), Reset() and Save()
+            /// Indicates whether this Settings object is value of some Settings field or it is not.
+            /// If Settings object copies are created in the application then this method allows to indicate them before calling Reload(), Reset() and Save()
             /// </summary>
             public bool IsDetached()
             {
@@ -81,7 +81,7 @@ namespace Cliver
             }
 
             /// <summary>
-            /// Serializes this Settings type object to the storage file.
+            /// Serializes this Settings object to the storage file.
             /// </summary>
             public void Save()
             {
@@ -114,7 +114,7 @@ namespace Cliver
             /// Replaces the value of the field defined by __FieldFullName with a new object initiated with default values. 
             /// Tries to load it from the initial file located in the app's directory. 
             /// If this file does not exist, it creates an object with the hardcoded values.
-            /// Avoid calling this method on a detached Settings type object as it leads to a confusing effect. 
+            /// Avoid calling this method on a detached Settings object as it leads to a confusing effect. 
             /// </summary>
             public void Reset(/*bool ignoreInitFile = false*/)
             {
@@ -128,7 +128,7 @@ namespace Cliver
             /// Tries to load it from the storage file.
             /// If this file does not exist, it tries to load it from the initial file located in the app's directory. 
             /// If this file does not exist, it creates an object with the hardcoded values.
-            /// Avoid calling this method on a detached Settings type object as it leads to a confusing effect. 
+            /// Avoid calling this method on a detached Settings object as it leads to a confusing effect. 
             /// </summary>
             /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
             public void Reload(bool throwExceptionIfCouldNotLoadFromStorageFile = false)
@@ -177,7 +177,7 @@ namespace Cliver
             }
 
             /// <summary>
-            /// Indicates that this Settings type field should not be initiated by Config by default.
+            /// Indicates that the attributed Settings field should not be initiated by Config by default.
             /// </summary>
             public class Optional : Attribute { }
 
