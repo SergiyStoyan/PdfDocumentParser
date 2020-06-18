@@ -3,7 +3,8 @@
 //        sergey.stoyan@gmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
-using System;
+
+using System.Collections.Generic;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -20,6 +21,8 @@ namespace Cliver.PdfDocumentParser
         public class Field
         {
             public string Name;
+
+            //public List<Definition> Definitions = new List<Definition>();
 
             public RectangleF Rectangle;
             /// <summary>
@@ -38,11 +41,39 @@ namespace Cliver.PdfDocumentParser
             /// when set, Bottom shifts as the anchor shifts
             /// </summary>
             public SideAnchor BottomAnchor;
-            public class SideAnchor
+
+            public class SideAnchor //: Definition.SideAnchor
             {
                 public int Id;
                 public float Shift;// { get { return 0; } set { } }
             }
+
+            //public class Definition
+            //{
+            //    public RectangleF Rectangle;
+            //    /// <summary>
+            //    /// when set, Left shifts as the anchor shifts
+            //    /// </summary>
+            //    public SideAnchor LeftAnchor;
+            //    /// <summary>
+            //    /// when set, Top shifts as the anchor shifts
+            //    /// </summary>
+            //    public SideAnchor TopAnchor;
+            //    /// <summary>
+            //    /// when set, Right shifts as the anchor shifts
+            //    /// </summary>
+            //    public SideAnchor RightAnchor;
+            //    /// <summary>
+            //    /// when set, Bottom shifts as the anchor shifts
+            //    /// </summary>
+            //    public SideAnchor BottomAnchor;
+
+            //    public class SideAnchor
+            //    {
+            //        public int Id;
+            //        public float Shift;// { get { return 0; } set { } }
+            //    }
+            //}
 
             public Field()
             {

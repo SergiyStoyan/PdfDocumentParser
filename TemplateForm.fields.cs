@@ -69,8 +69,15 @@ namespace Cliver.PdfDocumentParser
                     {
                         case "Type":
                             {
-                                f.DefaultValueType = (Template.Field.ValueTypes)row.Cells["Type"].Value;
-                                setFieldRow(row, f);
+                                foreach (DataGridViewRow r in fields.Rows)
+                                {
+                                    if (r.Tag != null && ((Template.Field)r.Tag).Name == f.Name)
+                                    {
+                                        f = (Template.Field)r.Tag;
+                                        f.DefaultValueType = (Template.Field.ValueTypes)row.Cells["Type"].Value;
+                                        setFieldRow(r, f);
+                                    }
+                                }
                                 break;
                             }
                         case "LeftAnchorId":

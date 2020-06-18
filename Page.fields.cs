@@ -19,6 +19,12 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class Page
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fieldName">field is referenced by name because there may be several field-definitions for the same name</param>
+        /// <param name="valueType"></param>
+        /// <returns></returns>
         public object GetValue(string fieldName, Template.Field.ValueTypes? valueType = null)
         {
             FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
