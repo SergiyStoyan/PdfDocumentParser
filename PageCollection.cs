@@ -13,7 +13,7 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public class PageCollection : HandyDictionary<int, Page>
     {
-        public PageCollection(string pdfFile) : base(null)
+        public PageCollection(string pdfFile) : base()
         {
             PdfFile = pdfFile;
             PdfReader = new PdfReader(pdfFile);

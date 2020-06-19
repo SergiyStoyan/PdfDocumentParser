@@ -11,11 +11,22 @@ namespace Cliver
 {
     public class HandyDictionary<KT, VT> : IDisposable, IEnumerable<KeyValuePair<KT, VT>> //where VT: class
     {
-        public HandyDictionary(Func<KT, VT> get_value)
+        public HandyDictionary(Func<KT, VT> getValue)
         {
-            getValue = get_value;
+            this.getValue = getValue;
         }
         protected Func<KT, VT> getValue;
+
+        public HandyDictionary(VT defaultValue)
+        {
+            this.defaultValue = defaultValue;
+        }
+        protected VT defaultValue;
+
+        public HandyDictionary()
+        {
+            defaultValue = default;
+        }
 
         ~HandyDictionary()
         {
@@ -78,13 +89,15 @@ namespace Cliver
                     VT v;
                     if (!keys2value.TryGetValue(k, out v))
                     {
+                        if (getValue == null)
+                            return defaultValue;
                         v = getValue(k);
                         keys2value[k] = v;
                     }
                     return v;
                 }
             }
-            protected set
+            set
             {
                 lock (this)
                 {
