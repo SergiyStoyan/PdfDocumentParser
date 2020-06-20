@@ -97,6 +97,22 @@ namespace Cliver
             string timeMark = null;
 
             /// <summary>
+            /// Default log of the session.
+            /// Depending on condition THREAD_LOG_IS_DEFAULT, it is either Main log or Thread log.
+            /// </summary>
+            public Writer Default
+            {
+                get
+                {
+#if THREAD_LOG_IS_DEFAULT
+                    return Thread;
+#else
+                    return Main;
+#endif
+                }
+            }
+
+            /// <summary>
             /// Close all log files in the session.  
             /// Nevertheless the session can be called and used again.
             /// </summary>

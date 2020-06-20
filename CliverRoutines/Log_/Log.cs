@@ -53,7 +53,7 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Noname session created by default.
+        /// Noname/head session created by default.
         /// </summary>
         public static Session Head
         {
@@ -67,7 +67,7 @@ namespace Cliver
         static Session headSession = null; 
         
         /// <summary>
-        /// Main log of Head session.
+        /// Main log of the head session.
         /// </summary>
         public static Session.NamedWriter Main
         {
@@ -78,19 +78,7 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Default log of Head session. 
-        /// Depending on condition THREAD_LOG_IS_DEFAULT, it is eaither Main log or Thread log.
-        /// </summary>
-        public static Writer Default
-        {
-            get
-            {
-                return Head.Default;
-            }
-        }
-
-        /// <summary>
-        /// Thread log of Head session.
+        /// Thread log of the head session.
         /// </summary>
         public static Session.ThreadWriter Thread
         {

@@ -24,7 +24,7 @@ namespace Cliver
             }
 
             /// <summary>
-            /// Main log in the session.
+            /// Main log of the session.
             /// </summary>
             public NamedWriter Main
             {
