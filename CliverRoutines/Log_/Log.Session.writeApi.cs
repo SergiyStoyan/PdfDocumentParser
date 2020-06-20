@@ -110,6 +110,16 @@ namespace Cliver
             {
                 Default.Write0(message);
             }
+
+            public void Debug(string message)
+            {
+                Default.Write(MessageType.DEBUG, message);
+            }
+
+            public void Debug0(string message)
+            {
+                Default.Write(MessageType.DEBUG, message, GetStackString());
+            }
         }
     }
 }

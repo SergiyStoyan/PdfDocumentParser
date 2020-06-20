@@ -24,26 +24,28 @@ namespace Cliver
                 string path = Path;//initialize
             }
 
-            public Level Level = Log.level;
-
             string getPath(string name)
             {
                 lock (this.names2NamedWriter)
                 {
+                    string path;
                     switch (Log.mode)
                     {
                         case Cliver.Log.Mode.ALL_LOGS_ARE_IN_SAME_FOLDER:
-                            return WorkDir;
-                        //case Cliver.Log.Mode.SINGLE_SESSION:
+                            path = WorkDir;
+                            break;
                         case Cliver.Log.Mode.EACH_SESSION_IS_IN_OWN_FORLDER:
                             string path0 = WorkDir + System.IO.Path.DirectorySeparatorChar + NamePrefix + "_" + TimeMark + (string.IsNullOrWhiteSpace(name) ? "" : "_" + name);
-                            string path = path0;
+                            path = path0;
                             for (int count = 1; Directory.Exists(path); count++)
                                 path = path0 + "_" + count.ToString();
-                            return path;
+                            break;
                         default:
                             throw new Exception("Unknown LOGGING_MODE:" + Cliver.Log.mode);
                     }
+                    if (level > Level.NONE)
+                        Directory.CreateDirectory(path);
+                    return path;
                 }
             }
 
@@ -68,11 +70,7 @@ namespace Cliver
                     lock (this.names2NamedWriter)//this lock is needed if Session::Close(string new_name) is being performed
                     {
                         if (path == null)
-                        {
                             path = getPath(name);
-                            if (writeLog)
-                                Directory.CreateDirectory(path);
-                        }
                         return path;
                     }
                 }

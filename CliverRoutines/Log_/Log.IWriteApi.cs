@@ -118,6 +118,18 @@ namespace Cliver
             /// Write message without type and without details.
             /// </summary>
             /// <param name="message"></param>
+            void Debug(string message);
+
+            /// <summary>
+            /// Write message without type and with details.
+            /// </summary>
+            /// <param name="message"></param>
+            void Debug0(string message);
+
+            /// <summary>
+            /// Write message without type and without details.
+            /// </summary>
+            /// <param name="message"></param>
             void Write(string message);
 
             /// <summary>

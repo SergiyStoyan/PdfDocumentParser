@@ -111,5 +111,15 @@ namespace Cliver
         {
             Head.Write(message);
         }
+
+        static public void Debug0(string message)
+        {
+            Head.Debug0(message);
+        }
+
+        static public void Debug(string message)
+        {
+            Head.Debug(message);
+        }
     }
 }

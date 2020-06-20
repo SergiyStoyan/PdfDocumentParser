@@ -20,14 +20,13 @@ namespace Cliver
             {
                 Name = name;
                 this.session = session;
-                Level = session.Level;
 
                 switch (Log.mode)
                 {
                     case Log.Mode.ALL_LOGS_ARE_IN_SAME_FOLDER:
                         FileName = Log.ProcessName + (string.IsNullOrWhiteSpace(session.Name) ? "" : "_" + session.Name) + "_" + session.TimeMark + (string.IsNullOrWhiteSpace(name) ? "" : "_" + name) + ".log";
                         break;
-                        //case Cliver.Log.Mode.SINGLE_SESSION:
+                    //case Cliver.Log.Mode.SINGLE_SESSION:
                     case Cliver.Log.Mode.EACH_SESSION_IS_IN_OWN_FORLDER:
                         FileName = Log.ProcessName + "_" + session.TimeMark + (string.IsNullOrWhiteSpace(name) ? "" : "_" + name) + ".log";
                         break;
@@ -36,14 +35,30 @@ namespace Cliver
                 }
             }
 
-            public Level Level = Level.ALL;
+            public Level Level 
+            {
+                get 
+                {
+                    return level;
+                }
+                set 
+                {
+                    if (level == Level.NONE && value > Level.NONE)
+                    {
+                        setWorkDir(true);
+                        Directory.CreateDirectory(session.Path);
+                    }
+                    level = value;
+                }
+            }
+            Level level = Log.level;
 
             public readonly string Name;
             public string FileName { get; private set; } = null;
 
             readonly Session session;
 
-            public static int MaxFileSize = -1;
+            public int MaxFileSize = Log.maxFileSize;
 
             public const string MAIN_THREAD_LOG_NAME = "";
 
@@ -91,99 +106,74 @@ namespace Cliver
             /// <summary>
             /// General writting log method.
             /// </summary>
-            public void Write(Log.MessageType messageType , string message, string details = null)
+            public void Write(Log.MessageType messageType, string message, string details = null)
             {
                 lock (this)
                 {
+                    write(messageType, message, details);
                     if (messageType == Log.MessageType.EXIT)
                     {
-                        if (exitingThread != null)
+                        if (exiting)
                             return;
-                        write(messageType, message, details);
-                        exitingThread = ThreadRoutines.Start(() =>
+                        exiting = true;
+                        //if (exitingThread != null)
+                        //    return;
+                        //exitingThread = ThreadRoutines.Start(() =>
+                        //{
+                        try
                         {
-                            try
-                            {
-                                if (Exitig != null)
-                                    Exitig.Invoke(message);
-                            }
-                            catch (Exception e)
-                            {
-                                string m;
-                                string d;
-                                GetExceptionMessage(e, out m, out d);
-                                write(Log.MessageType.ERROR, m, d);
-                            }
-                            finally
-                            {
-                                Environment.Exit(0);
-                            }
-                        });
+                            Exitig?.Invoke(message);
+                        }
+                        catch (Exception e)
+                        {
+                            string m;
+                            string d;
+                            GetExceptionMessage(e, out m, out d);
+                            write(Log.MessageType.ERROR, m, d);
+                        }
+                        finally
+                        {
+                            Environment.Exit(0);
+                        }
+                        //});
                     }
-                    else
-                        write(messageType, message, details);
                 }
             }
+            //static protected System.Threading.Thread exitingThread = null;
+            static protected bool exiting = false;
             void write(Log.MessageType messageType, string message, string details)
             {
-                switch (Level)
-                {
-                    case Level.NONE:
-                        return;
-                    case Level.ERROR:
-                        if (messageType < MessageType.ERROR)
-                            return;
-                        break;
-                    case Level.WARNING:
-                        if (messageType < MessageType.WARNING)
-                            return;
-                        break;
-                    case Level.INFORM:
-                        if (messageType < MessageType.INFORM)
-                            return;
-                        break;
-                    case Level.ALL:
-                        break;
-                    default:
-                        throw new Exception("Unknown option: " + Level);
-                }
-
                 lock (this)
                 {
                     Writing?.Invoke(Name, messageType, message, details);
 
-                    if (!Log.writeLog)
-                        return;
+                    switch (Level)
+                    {
+                        case Level.NONE:
+                            return;
+                        case Level.ERROR:
+                            if (messageType < MessageType.ERROR)
+                                return;
+                            break;
+                        case Level.WARNING:
+                            if (messageType < MessageType.WARNING)
+                                return;
+                            break;
+                        case Level.INFORM:
+                            if (messageType < MessageType.INFORM)
+                                return;
+                            break;
+                        case Level.ALL:
+                            break;
+                        default:
+                            throw new Exception("Unknown option: " + Level);
+                    }
 
                     if (logWriter == null)
                         logWriter = new StreamWriter(Path, true);
 
                     details = string.IsNullOrWhiteSpace(details) ? "" : "\r\n\r\n" + details;
                     message = (messageType == MessageType.LOG ? "" : messageType.ToString()) + ": " + message + details;
-                    //switch (type)
-                    //{
-                    //    case Log.MessageType.INFORM:
-                    //        message = "INFORM: " + message;
-                    //        break;
-                    //    case Log.MessageType.WARNING:
-                    //        message = "WARNING: " + message;
-                    //        break;
-                    //    case Log.MessageType.ERROR:
-                    //        message = "ERROR: " + message + details;
-                    //        _ErrorCount++;
-                    //        break;
-                    //    case Log.MessageType.EXIT:
-                    //        message = "EXIT: " + message + details;
-                    //        _ErrorCount++;
-                    //        break;
-                    //    case Log.MessageType.TRACE:
-                    //        message = "TRACE: " + message;
-                    //        break;
-                    //    case Log.MessageType.LOG:
-                    //        break;
-                    //    default:
-                    //        throw new Exception("No case for " + type.ToString());
-                    //}
 
                     if (MaxFileSize > 0)
                     {
@@ -213,7 +203,6 @@ namespace Cliver
                 }
             }
             TextWriter logWriter = null;
-            static protected System.Threading.Thread exitingThread = null;
 
             public delegate void OnWrite(string logWriterName, Log.MessageType messageType, string message, string details);
             static public event OnWrite Writing = null;

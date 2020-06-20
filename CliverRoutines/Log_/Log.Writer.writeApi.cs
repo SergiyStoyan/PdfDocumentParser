@@ -181,6 +181,16 @@ namespace Cliver
             {
                 Write(MessageType.LOG, message, GetStackString());
             }
+
+            public void Debug(string message)
+            {
+                Write(MessageType.DEBUG, message);
+            }
+
+            public void Debug0(string message)
+            {
+                Write(MessageType.DEBUG, message, GetStackString());
+            }
         }
     }
 }

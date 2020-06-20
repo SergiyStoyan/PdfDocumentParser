@@ -19,23 +19,23 @@ namespace Cliver
     {
         static readonly object lockObject = new object();
 
-        public static void Initialize(Mode mode, List<string> primaryBaseDirs = null, Level level = Level.ALL, bool writeLog = true, int deleteLogsOlderDays = 10)
+        public static void Initialize(Mode mode, List<string> primaryBaseDirs = null, Level level = Level.ALL, int deleteLogsOlderDays = 10, int maxFileSize = -1)
         {
             lock (lockObject)
             {
                 Log.CloseAll();
                 Log.mode = mode;
                 Log.primaryBaseDirs = primaryBaseDirs;
-                Log.writeLog = writeLog;
                 Log.deleteLogsOlderDays = deleteLogsOlderDays;
                 Log.level = level;
+                Log.maxFileSize = maxFileSize;
             }
         }
         static List<string> primaryBaseDirs = null;
         static int deleteLogsOlderDays = 10;
-        static bool writeLog = true;
         static Mode mode = Mode.ALL_LOGS_ARE_IN_SAME_FOLDER;
         static Level level = Level.ALL;
+        static int maxFileSize = -1;
 
         public static bool ReuseThreadLogIndexes = false;
 
@@ -53,7 +53,7 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Head nname session created by default.
+        /// Head session which is created by default.
         /// </summary>
         public static Session Head
         {
@@ -115,12 +115,13 @@ namespace Cliver
 
         public enum MessageType
         {
-            LOG = 0,
-            INFORM = 1,
-            WARNING = 2,
-            ERROR = 3,
-            EXIT = 4,
-            TRACE = 5,
+            LOG,
+            DEBUG,
+            INFORM,
+            WARNING,
+            ERROR,
+            EXIT,
+            TRACE,
             //INFORM2 = 11,
             //WARNING2 = 21,
             //ERROR2 = 31,
@@ -128,7 +129,7 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Clear all sessions and close all the log files.
+        /// Clear all existing sessions and close all the logs.
         /// </summary>
         public static void CloseAll()
         {
@@ -153,52 +154,7 @@ namespace Cliver
             get
             {
                 if (workDir == null)
-                {
-                    while (deletingOldLogsThread != null && deletingOldLogsThread.IsAlive)
-                    {
-                        deletingOldLogsThread.Abort();
-                        System.Threading.Thread.Sleep(100);
-                    }
-                    lock (lockObject)
-                    {
-                        List<string> baseDirs = new List<string> {
-                                Log.AppDir,
-                                CompanyUserDataDir,
-                                CompanyCommonDataDir,
-                                Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
-                                System.IO.Path.GetTempPath() + System.IO.Path.DirectorySeparatorChar + CompanyName + System.IO.Path.DirectorySeparatorChar,
-                                };
-                        if (Log.primaryBaseDirs != null)
-                            baseDirs.InsertRange(0, Log.primaryBaseDirs);
-                        foreach (string baseDir in baseDirs)
-                        {
-                            workDir = baseDir + System.IO.Path.DirectorySeparatorChar + Log.ProcessName + WorkDirNameSuffix;
-                            if (writeLog)
-                                try
-                                {
-                                    if (!Directory.Exists(workDir))
-                                        FileSystemRoutines.CreateDirectory(workDir);
-                                    string testFile = workDir + System.IO.Path.DirectorySeparatorChar + "test";
-                                    File.WriteAllText(testFile, "test");
-                                    File.Delete(testFile);
-                                    break;
-                                }
-                                catch //(Exception e)
-                                {
-                                    workDir = null;
-                                }
-                        }
-                        if (workDir == null)
-                            throw new Exception("Could not access any log directory.");
-                        workDir = PathRoutines.GetNormalizedPath(workDir, false);
-                        if (writeLog)
-                            if (Directory.Exists(workDir) && deleteLogsOlderDays >= 0)
-                                deletingOldLogsThread = ThreadRoutines.Start(() => { Log.DeleteOldLogs(deleteLogsOlderDays, DeleteOldLogsDialog); });//to avoid a concurrent loop while accessing the log file from the same thread 
-                            else
-                                throw new Exception("Could not create log folder!");
-                    }
-                    // deletingOldLogsThread?.Join();
-                }
+                    setWorkDir(level > Level.NONE);
                 return workDir;
             }
         }
@@ -206,6 +162,62 @@ namespace Cliver
         public const string WorkDirNameSuffix = @"_Sessions";
         static Thread deletingOldLogsThread = null;
         public static Func<string, bool> DeleteOldLogsDialog = null;
+
+        static void setWorkDir(bool create)
+        {
+            lock (lockObject)
+            {
+                if (workDir != null)
+                {
+                    if (!create)
+                        return;
+                    if (Directory.Exists(workDir))
+                        return;
+                }
+                List<string> baseDirs = new List<string> {
+                                Log.AppDir,
+                                CompanyUserDataDir,
+                                CompanyCommonDataDir,
+                                Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
+                                System.IO.Path.GetTempPath() + System.IO.Path.DirectorySeparatorChar + CompanyName + System.IO.Path.DirectorySeparatorChar,
+                                };
+                if (Log.primaryBaseDirs != null)
+                    baseDirs.InsertRange(0, Log.primaryBaseDirs);
+                foreach (string baseDir in baseDirs)
+                {
+                    workDir = baseDir + System.IO.Path.DirectorySeparatorChar + Log.ProcessName + WorkDirNameSuffix;
+                    if (create)
+                        try
+                        {
+                            if (!Directory.Exists(workDir))
+                                FileSystemRoutines.CreateDirectory(workDir);
+                            string testFile = workDir + System.IO.Path.DirectorySeparatorChar + "test";
+                            File.WriteAllText(testFile, "test");
+                            File.Delete(testFile);
+                            break;
+                        }
+                        catch //(Exception e)
+                        {
+                            workDir = null;
+                        }
+                }
+                if (workDir == null)
+                    throw new Exception("Could not access any log directory.");
+                workDir = PathRoutines.GetNormalizedPath(workDir, false);
+                if (Directory.Exists(workDir) && deleteLogsOlderDays >= 0)
+                {
+                    while (deletingOldLogsThread != null && deletingOldLogsThread.IsAlive)
+                    {
+                        deletingOldLogsThread.Abort();
+                        System.Threading.Thread.Sleep(100);
+                    }
+                    deletingOldLogsThread = ThreadRoutines.Start(() => { Log.DeleteOldLogs(deleteLogsOlderDays, DeleteOldLogsDialog); });//to avoid a concurrent loop while accessing the log file from the same thread 
+                }
+                else
+                    throw new Exception("Could not create log folder!");
+            }
+            // deletingOldLogsThread?.Join();      
+        }
     }
 
     //public class TerminatingException : Exception
