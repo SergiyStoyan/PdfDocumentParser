@@ -16,32 +16,25 @@ namespace Cliver
     {
         public partial class Session
         {
-            const string MAIN_SESSION_NAME = "";
-
-            public Session(string name = MAIN_SESSION_NAME)
+            Session(string name)
             {
-                TimeMark = CreatedTime.ToString("yyMMddHHmmss");
                 this.name = name;
-
-                //if (Log.mode == Mode.ONLY_LOG)
-                //    throw new Exception("SessionDir cannot be used in Log.Mode.ONLY_LOG");
-
-                path = get_path(name);
-                if(Log.mode == Mode.SESSIONS && writeLog)
-                    Directory.CreateDirectory(path);
+                CreatedTime = DateTime.MinValue;
+                timeMark = null;
+                string path = Path;//initialize
             }
 
-            string get_path(string name)
+            string getPath(string name)
             {
                 lock (this.names2NamedWriter)
                 {
                     switch (Log.mode)
                     {
-                        case Cliver.Log.Mode.ONLY_LOG:
+                        case Cliver.Log.Mode.ALL_LOGS_ARE_IN_SAME_FOLDER:
                             return WorkDir;
                         //case Cliver.Log.Mode.SINGLE_SESSION:
-                        case Cliver.Log.Mode.SESSIONS:
-                            string path0 = WorkDir + System.IO.Path.DirectorySeparatorChar + session_name_prefix + "_" + (string.IsNullOrWhiteSpace(name) ? "" : name + "_") + TimeMark;
+                        case Cliver.Log.Mode.EACH_SESSION_IS_IN_OWN_FORLDER:
+                            string path0 = WorkDir + System.IO.Path.DirectorySeparatorChar + NamePrefix + "_" + TimeMark + (string.IsNullOrWhiteSpace(name) ? "" : "_" + name);
                             string path = path0;
                             for (int count = 1; Directory.Exists(path); count++)
                                 path = path0 + "_" + count.ToString();
@@ -52,11 +45,13 @@ namespace Cliver
                 }
             }
 
+            public static string NamePrefix = "Session";
+
             public string Name
             {
                 get
                 {
-                    lock (this.names2NamedWriter)//this lock is needed if Session::Close(string new_name) is performing
+                    lock (this.names2NamedWriter)//this lock is needed if Session::Close(string new_name) is being performed
                     {
                         return name;
                     }
@@ -68,158 +63,110 @@ namespace Cliver
             {
                 get
                 {
-                    lock (this.names2NamedWriter)//this lock is needed if Session::Close(string new_name) is performing
+                    lock (this.names2NamedWriter)//this lock is needed if Session::Close(string new_name) is being performed
                     {
+                        if (path == null)
+                        {
+                            path = getPath(name);
+                            if (writeLog)
+                                Directory.CreateDirectory(path);
+                        }
                         return path;
                     }
                 }
             }
             string path;
 
-            public readonly DateTime CreatedTime = DateTime.Now;
-            public readonly string TimeMark;
-
-            Dictionary<string, NamedWriter> names2NamedWriter = new Dictionary<string, NamedWriter>();
+            public DateTime CreatedTime { get; protected set; }
+            public string TimeMark {
+                get
+                {
+                    lock (this.names2NamedWriter)//this lock is needed if Session::Close(string new_name) is being performed
+                    {
+                        if (timeMark == null)
+                        {
+                            CreatedTime = DateTime.Now;
+                            timeMark = CreatedTime.ToString("yyMMddHHmmss");
+                        }
+                        return timeMark;
+                    }
+                }
+            }
+            string timeMark = null;
 
             /// <summary>
-            /// Close all writing streams and rename session and its directory. Using the session can be continued after that.
+            /// Close all log files in the session.  
+            /// Nevertheless the session can be called and used again.
             /// </summary>
-            /// <param name="new_name"></param>
-            public void Close(string new_name)
+            /// <param name="newName"></param>
+            public void Rename(string newName)
             {
                 lock (this.names2NamedWriter)
                 {
-                    if (Log.mode == Mode.ONLY_LOG)
+                    if (Log.mode == Mode.ALL_LOGS_ARE_IN_SAME_FOLDER)
                         throw new Exception("Cannot rename log folder in mode: " + Log.mode);
 
-                    if (new_name == Name)
+                    if (newName == Name)
                     {
-                        Close();
+                        Close(true);
                         return;
                     }
 
-                    string new_path = get_path(new_name);
-                    Default.Write("Renaming session: '" + Path + "' to '" + new_path + "'");
+                    string newPath = getPath(newName);
+                    Default.Write("Renaming session...: '" + Path + "' to '" + newName + "'");
 
-                    Close();
+                    Close(true);
 
                     try
                     {
-                        Directory.Move(Path, new_path);
-                        path = new_path;
-                        name = new_name;
+                        Directory.Move(Path, newPath);
+                        path = newPath;
+
+                        lock (names2Session)
+                        {
+                            names2Session.Remove(name);
+                            name = newName;
+                            names2Session[name] = this;
+                        }
                     }
                     catch (Exception e)
                     {
-                        Log.Main.Error(e);
+                        Default.Error(e);
                     }
                 }
             }
 
             /// <summary>
-            /// Close all writing streams. The session can be used after.
+            /// Close all log files in the session. 
             /// </summary>
-            public void Close()
+            /// <param name="reuse">if true, the same session folder can be used again, otherwise a new folder will be created for this session</param>
+            public void Close(bool reuse)
             {
-                lock (this.names2NamedWriter)
+                lock (names2NamedWriter)
                 {
-                    if (names2NamedWriter.Values.Count < 1 && !ThreadWriter.IsAnythingOpen)
+                    if (names2NamedWriter.Values.Count < 1 && threads2treadWriter.Values.Count < 1)
                         return;
 
-                    Default.Write("Closing the log session");
-
-                    //any ThreadWriter can belong only to MainSession
-                    if(Log.IsMainSessionOpen && this == Log.MainSession)
-                        Log.ThreadWriter.CloseAll();
+                    Default.Write("Closing the log session...");
 
                     foreach (NamedWriter nw in names2NamedWriter.Values)
                         nw.Close();
                     //names2NamedWriter.Clear(); !!! clearing writers will bring to duplicating of them if they are referenced alongside also.
-                }
-            }
 
-            public int TotalErrorCount
-            {
-                get
-                {
-                    lock (this.names2NamedWriter)
+                    lock (threads2treadWriter)
                     {
-                        int ec = 0;
-                        foreach (NamedWriter nw in names2NamedWriter.Values)
-                            ec += nw.ErrorCount;
-                        return ec;
+                        foreach (ThreadWriter tw in threads2treadWriter.Values)
+                            tw.Close();
+                        threads2treadWriter.Clear();
+                    }
+
+                    if (!reuse)
+                    {
+                        path = null;
+                        CreatedTime = DateTime.MinValue;
+                        timeMark = null;
                     }
                 }
-            }
-            
-            public NamedWriter this[string name]
-            {
-                get
-                {
-                    return NamedWriter.Get(this, name);
-                }
-            }
-
-            public Writer Default
-            {
-                get
-                {
-                    if (this == Log.MainSession)
-                        return ThreadWriter.Main;
-                    return NamedWriter.Get(this, DEFAULT_NAMED_LOG);
-                }
-            }
-
-            internal const string DEFAULT_NAMED_LOG = "_";//to differ from ThreadWriter.Main
-
-            public void Error(Exception e)
-            {
-                Default.Error(e);
-            }
-
-            public void Error(string message)
-            {
-                Default.Error(message);
-            }
-
-            public void Trace(object message = null)
-            {
-                Default.Trace(message);
-            }
-
-            public void Exit(string message)
-            {
-                Default.Error(message);
-            }
-
-            public void Exit(Exception e)
-            {
-                Default.Exit(e);
-            }
-
-            public void Warning(string message)
-            {
-                Default.Warning(message);
-            }
-
-            public void Warning(Exception e)
-            {
-                Default.Warning(e);
-            }
-
-            public void Inform(string message)
-            {
-                Default.Inform(message);
-            }
-
-            public void Write(MessageType messageType , string message, string details = null)
-            {
-                Default.Write(messageType, message, details);
-            }
-
-            public void Write(string message)
-            {
-                Default.Write(MessageType.LOG, message);
             }
         }
     }

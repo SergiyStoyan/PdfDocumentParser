@@ -7,6 +7,7 @@
 //Copyright: (C) 2006-2013, Sergey Stoyan
 //********************************************************************************************
 using System;
+using System.Collections.Generic;
 
 namespace Cliver
 {
@@ -14,43 +15,44 @@ namespace Cliver
     {
         partial class Session
         {
+            public NamedWriter this[string name]
+            {
+                get
+                {
+                    return NamedWriter.Get(this, name);
+                }
+            }
+
+            public NamedWriter Default
+            {
+                get
+                {
+                    if (_Default == null)
+                        _Default = NamedWriter.Get(this);
+                    return _Default;
+                }
+            }
+            NamedWriter _Default = null;
+
+            Dictionary<string, NamedWriter> names2NamedWriter = new Dictionary<string, NamedWriter>();
+
             public class NamedWriter : Writer
             {
-                NamedWriter(Session session, string name, string file_name)
-                    : base(name, file_name, session)
+                NamedWriter(Session session, string name)
+                    : base(name, session)
                 {
                 }
 
-                public static NamedWriter Get(Session session, string name)
-                {
-                    return get_named_writer(session, name);
-                }
-
-                public static bool IsDefaultOpen(Session session)
-                {
-                    lock (session.names2NamedWriter)
-                    {
-                        return session.names2NamedWriter.ContainsKey(DEFAULT_NAMED_LOG);
-                    }
-                }
-
-                static NamedWriter get_named_writer(Session session, string name)
+                public const string DEFAULT_WRITER_NAME = "";
+                static internal NamedWriter Get(Session session, string name = DEFAULT_WRITER_NAME)
                 {
                     lock (session.names2NamedWriter)
                     {
                         NamedWriter nw = null;
                         if (!session.names2NamedWriter.TryGetValue(name, out nw))
                         {
-                            try
-                            {
-                                string log_name = Log.ProcessName + (string.IsNullOrWhiteSpace(name) ? "" : "_" + name) + "_" + session.TimeMark + ".log";
-                                nw = new NamedWriter(session, name, log_name);
-                                session.names2NamedWriter.Add(name, nw);
-                            }
-                            catch (Exception e)
-                            {
-                                Cliver.Log.Main.Error(e);
-                            }
+                            nw = new NamedWriter(session, name);
+                            session.names2NamedWriter.Add(name, nw);
                         }
                         return nw;
                     }

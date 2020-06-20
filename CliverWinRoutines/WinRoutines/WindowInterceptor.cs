@@ -38,7 +38,7 @@ namespace Cliver.Win
                     al.Add(owner_window);
                     owner_windows = (IntPtr[])al.ToArray(typeof(IntPtr));
 
-                    owner_window_logs[owner_window] = Log.This;
+                    owner_window_logs[owner_window] = Log.Thread;
 
                     if (hook_id == IntPtr.Zero)
                         hook_id = WinApi.User32.SetWindowsHookEx(WinApi.User32.HookType.WH_CALLWNDPROCRET, cbf, IntPtr.Zero, WinApi.Kernel32.GetCurrentThreadId());

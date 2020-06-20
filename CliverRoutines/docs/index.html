@@ -27,16 +27,37 @@
 cfgfg
 
 <h1><a name='log'>Log</a></h1>
-<p>thread-safe
+<p>Log module was defeloved with multi-threded environment in mind. That means it is:
+multi-threaded support:
+- thread-safe;
+- each .NET thread by default writes its own log file;
 
-<h2><a name='example'>Thread</a></h2>
-dsvfd
+session support
+
+
+<h2><a name='thread'>Thread</a></h2>
+By default each .NET thread writes its own log file, like this:
 <pre>
-<code class="language-csharp">{}</code>
+<code class="language-csharp">
+
+Log.Inform("test message");
+
+</code>
 </pre>
 
-<h2><a name='example'>Session</a></h2>
-dsvfd
+Logging everything to one file done like this:
+<pre>
+<code class="language-csharp">
+
+Log.Main.Inform("test message");
+
+</code>
+</pre>
+
+<h2><a name='session'>Session</a></h2>
+
+Log always creates a session. During running the app can use only one log session or close and create many sessions. However, only one session can be open at the same time.
+
 <pre>
 <code class="language-csharp">{}</code>
 </pre>
@@ -49,14 +70,147 @@ dsvfd
 </pre>
 <p>
 
-<h1><a name='settings'>Settings</a></h1>
-<p>thread-safe
+<h1><a name='config'>Config</a></h1>
 
+Logic behind Config follows:
+
+Settings class is a framework for custom settings. And Config class detects in the application all static fields of Settings-based types and peforms initializing/deserializing/serilizing them.
+Serializing is performed to a file which is defined by 2 constituents: directory is defined by the Settings type (that is the type of the settings field) and file name is defined by the full type path of the settings field in the application. Example:
+<br>
+C:\Users\serge\AppData\Local\CliverSoft\HawkeyeParser\config\Cliver.HawkeyeParser.Settings.General.json
+<br>
+where C:\Users\serge\AppData\Local is defined by Cliver.UserSettings type,
+<br>CliverSoft\HawkeyeParser\config is defined by the application,
+<br>Cliver.HawkeyeParser.Settings.General.json is defined by the full type path of the field General in the application.
+
+<p>Usually you need only one field per each Settings type you define in your application but no problem to declare any number fo fields of the same Settings type.
+
+
+<h2><a name='settings'>Settings</a></h2>
+
+Settings based class defines the settings and directory where they are to be serialized.
+There are the following built-in Settings types:
+<br> - Cliver.UserSettings which is serialized into user app data directory;
+<br> - Cliver.AppSettings which is serialized into program data directory (writting to it on Windows may require additional permissions which is done by Cliver.Win.AppSettings);
+
+<p>You can create your Settings class basing on those types or directly on Settings in which case you have to define the serialization directory.
+
+<p>Config creates only one value per field and usually you
+
+
+<p>Config methods are thread-safe.
 
 <h2><a name='example'>Example</a></h2>
-dsvfd
+
+Create your settings class and a field:
+
 <pre>
-<code class="language-csharp">{}</code>
+<code class="language-csharp">
+//define a Settings based class which is serialized into the user data directory
+public class GeneralSettings : Cliver.UserSettings
+{   	
+	public List<string> Files = new List<string>(); 
+	
+	public string SmtpHost = "";
+	public int SmtpPort = 25;
+	public string SmtpEncryptedPassword = null;
+}
+
+//create a field of GeneralSettings type anywhere in the code
+public static class Settings
+{
+	//Usually, to avoid mess, you'd like to make it readonly. But it is optional because sometimes the logic of the app may require to replace the value.
+	public static readonly GeneralSettings General;
+}
+
+
+</code>
+</pre>
+
+
+Add initializing of Config:
+<pre>
+<code class="language-csharp">
+
+//call this in the very beginning of the application to initialize Settings fields
+Cliver.Config.Reload();
+
+</code>
+</pre>
+
+Use the Settings in the code, modify and save:
+<pre>
+<code class="language-csharp">
+
+Settings.General.Files.Add("c:\\temp.txt");
+Settings.General.Save();
+
+</code>
+</pre>
+<p>
+
+<h2><a name='swapping'>Copying and Swapping</a></h2>
+
+A Settings field can be replaced. If you need to pass the Settings to another app for copying or editing, it's better to pass a copy: 
+<pre>
+<code class="language-csharp">
+
+GeneralSettings generalSettings = Settings.General.
+
+//doing something with generalSettings...
+
+//accept modifications
+Settings.General = generalSettings;
+Settings.General.Save();
+
+
+</code>
+</pre>
+<p>
+
+
+<p>By default Config 
+
+<h2><a name='password'>Password</a></h2>
+How to store passwords:
+<pre>
+<code class="language-csharp">
+public class GeneralSettings : Cliver.Win.UserSettings
+{   	            
+	public string SmtpEncryptedPassword = null;
+	
+	//it is internal not to be serialized; otheriwse, use attribute [Newtonsoft.Json.JsonIgnore]
+	internal string SmtpPassword
+	{
+		get
+		{
+			if (string.IsNullOrEmpty(SmtpEncryptedPassword))
+				return null;
+			try
+			{
+				return crypto.Decrypt(SmtpEncryptedPassword);
+			}
+			catch
+			{
+				Cliver.Log.Main.Error("Could not decrypt the password.");
+				return null;
+			}
+		}
+		set
+		{
+			if (string.IsNullOrEmpty(value))
+				SmtpEncryptedPassword = null;
+			else
+				SmtpEncryptedPassword = crypto.Encrypt(value);
+		}
+	}
+	//on Widnows
+    Cliver.Win.Crypto.ProtectedData crypto = new Cliver.Win.Crypto.ProtectedData();
+	//on not Windows
+    Cliver.Crypto.Rijndael crypto = new Cliver.Crypto.Rijndael("random key");
+
+}
+</code>
 </pre>
 <p>
 
