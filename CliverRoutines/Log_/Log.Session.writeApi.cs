@@ -17,7 +17,8 @@ namespace Cliver
         public partial class Session : IWriteApi
         {
             /// <summary>
-            /// Default log in the session.
+            /// Default log of the session.
+            /// Depending on condition THREAD_LOG_IS_DEFAULT, it is eaither Main log or Thread log.
             /// </summary>
             public Writer Default
             {
@@ -26,7 +27,7 @@ namespace Cliver
 #if THREAD_LOG_IS_DEFAULT
                     return Thread;
 #else
-                    return Noname;
+                    return Main;
 #endif
                 }
             }

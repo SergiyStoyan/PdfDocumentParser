@@ -53,46 +53,50 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Main session. It is noname session to be created by default.
+        /// Noname session created by default.
         /// </summary>
-        public static Session Main
+        public static Session Head
         {
             get
             {
-                if (mainSession == null)
-                    mainSession = Session.Get();
-                return mainSession;
+                if (headSession == null)
+                    headSession = Session.Get();
+                return headSession;
             }
         }
-        static Session mainSession = null; 
+        static Session headSession = null; 
         
-        public static Session.NamedWriter Noname
+        /// <summary>
+        /// Main log of Head session.
+        /// </summary>
+        public static Session.NamedWriter Main
         {
             get
             {
-                return Main.Noname;
+                return Head.Main;
             }
         }
 
         /// <summary>
-        /// 
+        /// Default log of Head session. 
+        /// Depending on condition THREAD_LOG_IS_DEFAULT, it is eaither Main log or Thread log.
         /// </summary>
         public static Writer Default
         {
             get
             {
-                return Main.Default;
+                return Head.Default;
             }
         }
 
         /// <summary>
-        /// 
+        /// Thread log of Head session.
         /// </summary>
         public static Session.ThreadWriter Thread
         {
             get
             {
-                return Main.Thread;
+                return Head.Thread;
             }
         }
 
@@ -132,9 +136,9 @@ namespace Cliver
                 Session.CloseAll();
 
                 workDir = null;
-                if (mainSession != null)
-                    mainSession.Close(false);
-                mainSession = null;
+                if (headSession != null)
+                    headSession.Close(false);
+                headSession = null;
 
                 GC.Collect();
             }

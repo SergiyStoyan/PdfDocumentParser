@@ -26,16 +26,16 @@ namespace Cliver
             /// <summary>
             /// Main log in the session.
             /// </summary>
-            public NamedWriter Noname
+            public NamedWriter Main
             {
                 get
                 {
-                    if (_Noname == null)
-                        _Noname = NamedWriter.Get(this);
-                    return _Noname;
+                    if (_Main == null)
+                        _Main = NamedWriter.Get(this);
+                    return _Main;
                 }
             }
-            NamedWriter _Noname = null;
+            NamedWriter _Main = null;
 
             Dictionary<string, NamedWriter> names2NamedWriter = new Dictionary<string, NamedWriter>();
 

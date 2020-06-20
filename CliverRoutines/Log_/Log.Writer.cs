@@ -20,6 +20,7 @@ namespace Cliver
             {
                 Name = name;
                 this.session = session;
+                Level = session.Level;
 
                 switch (Log.mode)
                 {
@@ -34,6 +35,8 @@ namespace Cliver
                         throw new Exception("Unknown LOGGING_MODE:" + Cliver.Log.mode);
                 }
             }
+
+            public Level Level = Level.ALL;
 
             public readonly string Name;
             public string FileName { get; private set; } = null;
@@ -84,8 +87,6 @@ namespace Cliver
                     logWriter = null;
                 }
             }
-
-            public Level Level = Log.level;
 
             /// <summary>
             /// General writting log method.

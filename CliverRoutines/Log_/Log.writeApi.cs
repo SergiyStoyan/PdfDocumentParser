@@ -21,95 +21,95 @@ namespace Cliver
     {
         public static void Error(Exception e)
         {
-            Main.Error(e);
+            Head.Error(e);
         }
         public static void Error2(Exception e)
         {
-            Main.Error2(e);
+            Head.Error2(e);
         }
 
         public static void Error(string message, Exception e)
         {
-            Main.Error(message, e);
+            Head.Error(message, e);
         }
 
         static public void Error(string message)
         {
-            Main.Error(message);
+            Head.Error(message);
         }
 
         static public void Error2(string message)
         {
-            Main.Error2(message);
+            Head.Error2(message);
         }
 
         static public void Trace(object message = null)
         {
-            Main.Trace(message);
+            Head.Trace(message);
         }
 
         static public void Exit(string message)
         {
-            Main.Error(message);
+            Head.Error(message);
         }
         static public void Exit2(string message)
         {
-            Main.Error2(message);
+            Head.Error2(message);
         }
 
         static public void Exit(Exception e)
         {
-            Main.Exit(e);
+            Head.Exit(e);
         }
 
         static public void Warning(string message)
         {
-            Main.Warning(message);
+            Head.Warning(message);
         }
 
         static public void Warning2(string message)
         {
-            Main.Warning2(message);
+            Head.Warning2(message);
         }
 
         static public void Warning(string message, Exception e)
         {
-            Main.Warning(message, e);
+            Head.Warning(message, e);
         }
 
         static public void Warning(Exception e)
         {
-            Main.Warning(e);
+            Head.Warning(e);
         }
 
         static public void Warning2(Exception e)
         {
-            Main.Warning2(e);
+            Head.Warning2(e);
         }
 
         static public void Inform0(string message)
         {
-            Main.Inform0(message);
+            Head.Inform0(message);
         }
 
         static public void Inform(string message)
         {
-            Main.Inform(message);
+            Head.Inform(message);
         }
 
         static public void Write(MessageType messageType, string message, string details = null)
         {
-            Main.Write(messageType, message, details);
+            Head.Write(messageType, message, details);
         }
 
         static public void Write0(string message)
         {
-            Main.Write0(message);
+            Head.Write0(message);
         }
 
         static public void Write(string message)
         {
-            Main.Write(message);
+            Head.Write(message);
         }
     }
 }

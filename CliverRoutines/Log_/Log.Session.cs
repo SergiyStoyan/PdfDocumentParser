@@ -24,6 +24,8 @@ namespace Cliver
                 string path = Path;//initialize
             }
 
+            public Level Level = Log.level;
+
             string getPath(string name)
             {
                 lock (this.names2NamedWriter)
