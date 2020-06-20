@@ -16,6 +16,21 @@ namespace Cliver
     {
         public partial class Session : IWriteApi
         {
+            /// <summary>
+            /// Default log in the session.
+            /// </summary>
+            public Writer Default
+            {
+                get
+                {
+#if THREAD_LOG_IS_DEFAULT
+                    return Thread;
+#else
+                    return Noname;
+#endif
+                }
+            }
+
             public void Error(Exception e)
             {
                 Default.Error(e);

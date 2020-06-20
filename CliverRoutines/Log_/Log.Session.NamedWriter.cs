@@ -24,33 +24,18 @@ namespace Cliver
             }
 
             /// <summary>
-            /// Default log in the session.
-            /// </summary>
-            public Writer Default
-            {
-                get
-                {
-#if THREAD_LOG_IS_DEFAULT
-                        return Thread;
-#else
-                        return Main;
-#endif
-                }
-            }
-
-            /// <summary>
             /// Main log in the session.
             /// </summary>
-            public NamedWriter Main
+            public NamedWriter Noname
             {
                 get
                 {
-                    if (_Main == null)
-                        _Main = NamedWriter.Get(this);
-                    return _Main;
+                    if (_Noname == null)
+                        _Noname = NamedWriter.Get(this);
+                    return _Noname;
                 }
             }
-            NamedWriter _Main = null;
+            NamedWriter _Noname = null;
 
             Dictionary<string, NamedWriter> names2NamedWriter = new Dictionary<string, NamedWriter>();
 

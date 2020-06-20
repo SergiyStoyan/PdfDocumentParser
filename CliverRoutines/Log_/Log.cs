@@ -64,7 +64,26 @@ namespace Cliver
                 return mainSession;
             }
         }
-        static Session mainSession = null;
+        static Session mainSession = null; 
+        
+        public static Session.NamedWriter Noname
+        {
+            get
+            {
+                return Main.Noname;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static Writer Default
+        {
+            get
+            {
+                return Main.Default;
+            }
+        }
 
         /// <summary>
         /// 

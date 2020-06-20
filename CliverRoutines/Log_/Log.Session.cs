@@ -113,7 +113,7 @@ namespace Cliver
                     }
 
                     string newPath = getPath(newName);
-                    Default.Write("Renaming session...: '" + Path + "' to '" + newName + "'");
+                    Write("Renaming session...: '" + Path + "' to '" + newName + "'");
 
                     Close(true);
 
@@ -131,7 +131,7 @@ namespace Cliver
                     }
                     catch (Exception e)
                     {
-                        Default.Error(e);
+                        Error(e);
                     }
                 }
             }
@@ -147,7 +147,7 @@ namespace Cliver
                     if (names2NamedWriter.Values.Count < 1 && threads2treadWriter.Values.Count < 1)
                         return;
 
-                    Default.Write("Closing the log session...");
+                    Write("Closing the log session...");
 
                     foreach (NamedWriter nw in names2NamedWriter.Values)
                         nw.Close();
