@@ -35,13 +35,13 @@ namespace Cliver
                 }
             }
 
-            public Level Level 
+            public Level Level
             {
-                get 
+                get
                 {
                     return level;
                 }
-                set 
+                set
                 {
                     if (level == Level.NONE && value > Level.NONE)
                     {
@@ -182,16 +182,13 @@ namespace Cliver
                         {
                             logWriter.Close();
 
-                            int counter = 0;
-                            FileName = Regex.Replace(FileName, @"(\d+_)(\d+)(\.[^\.]+)$",
-                                (Match m) =>
-                                {
-                                    counter = int.Parse(m.Groups[2].Value) + 1;
-                                    return m.Groups[1].Value + counter + m.Groups[3].Value;
-                                }
-                                );
-                            if (counter < 1)
-                                FileName = Regex.Replace(FileName, @"\.[^\.]+$", @"_1$0");
+                            if (fileCounter < 1)
+                            {
+                                FileName = Regex.Replace(FileName, @"\.[^\.]+$", @"[1]$0");
+                                fileCounter = 1;
+                            }
+                            else
+                                FileName = Regex.Replace(FileName, @"\[" + fileCounter + @"\](\.[^\.]+)$", @"[" + (++fileCounter) + @"]$1");
 
                             logWriter = new StreamWriter(Path, true);
                         }
@@ -203,6 +200,7 @@ namespace Cliver
                 }
             }
             TextWriter logWriter = null;
+            int fileCounter = 0;
 
             public delegate void OnWrite(string logWriterName, Log.MessageType messageType, string message, string details);
             static public event OnWrite Writing = null;
