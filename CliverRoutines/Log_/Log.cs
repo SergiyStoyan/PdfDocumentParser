@@ -53,18 +53,19 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Noname/head session created by default.
+        /// Head nname session created by default.
         /// </summary>
         public static Session Head
         {
             get
             {
                 if (headSession == null)
-                    headSession = Session.Get();
+                    headSession = Session.Get(HEAD_SESSION_NAME);
                 return headSession;
             }
         }
         static Session headSession = null;
+        public const string HEAD_SESSION_NAME = "";
 
         /// <summary>
         /// Default log of the head session. 
@@ -145,7 +146,7 @@ namespace Cliver
         }
 
         /// <summary>
-        ///Parent Log directory where logs are recorded
+        ///Parent log directory.
         /// </summary>
         public static string WorkDir
         {

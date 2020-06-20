@@ -31,11 +31,12 @@ namespace Cliver
                 get
                 {
                     if (_Main == null)
-                        _Main = NamedWriter.Get(this);
+                        _Main = NamedWriter.Get(this, MAIN_WRITER_NAME);
                     return _Main;
                 }
             }
             NamedWriter _Main = null;
+            public const string MAIN_WRITER_NAME = "";
 
             Dictionary<string, NamedWriter> names2NamedWriter = new Dictionary<string, NamedWriter>();
 
@@ -46,8 +47,7 @@ namespace Cliver
                 {
                 }
 
-                public const string DEFAULT_WRITER_NAME = "";
-                static internal NamedWriter Get(Session session, string name = DEFAULT_WRITER_NAME)
+                static internal NamedWriter Get(Session session, string name)
                 {
                     lock (session.names2NamedWriter)
                     {

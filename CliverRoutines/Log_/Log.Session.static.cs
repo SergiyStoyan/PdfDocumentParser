@@ -28,9 +28,7 @@ namespace Cliver
                 }
             }
 
-            public const string MAIN_SESSION_NAME = "";
-
-            public static Session Get(string sessionName = MAIN_SESSION_NAME)
+            public static Session Get(string sessionName)
             {
                 lock (names2Session)
                 {

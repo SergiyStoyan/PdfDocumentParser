@@ -25,7 +25,8 @@ namespace Cliver
             }
 
             Dictionary<System.Threading.Thread, ThreadWriter> threads2treadWriter = new Dictionary<System.Threading.Thread, ThreadWriter>();
-            int threadLogMaxId = 0;
+
+            int threadWriterCounter = 0;
 
             public class ThreadWriter : Writer
             {
@@ -60,7 +61,7 @@ namespace Cliver
                                 session.threads2treadWriter.Remove(t);
                             }
 
-                            session.threadLogMaxId++;
+                            session.threadWriterCounter++;
                             int logId;
                             if (Log.ReuseThreadLogIndexes)
                             {
@@ -71,7 +72,7 @@ namespace Cliver
                                         logId++;
                             }
                             else
-                                logId = session.threadLogMaxId;
+                                logId = session.threadWriterCounter;
 
                             tw = new ThreadWriter(session, logId);
                             session.threads2treadWriter.Add(thread, tw);
