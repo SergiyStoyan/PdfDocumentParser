@@ -64,8 +64,20 @@ namespace Cliver
                 return headSession;
             }
         }
-        static Session headSession = null; 
-        
+        static Session headSession = null;
+
+        /// <summary>
+        /// Default log of the head session. 
+        /// Depending on condition THREAD_LOG_IS_DEFAULT, it is either Main log or Thread log.
+        /// </summary>
+        public static Writer Default
+        {
+            get
+            {
+                return Head.Default;
+            }
+        }
+
         /// <summary>
         /// Main log of the head session.
         /// </summary>

@@ -19,18 +19,6 @@ namespace Cliver
     /// </summary>
     public static partial class Log
     {
-        /// <summary>
-        /// Default log of the head session. 
-        /// Depending on condition THREAD_LOG_IS_DEFAULT, it is either Main log or Thread log.
-        /// </summary>
-        public static Writer Default
-        {
-            get
-            {
-                return Head.Default;
-            }
-        }
-
         public static void Error(Exception e)
         {
             Head.Error(e);
