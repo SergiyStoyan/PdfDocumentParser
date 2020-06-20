@@ -52,6 +52,9 @@ namespace Cliver
             ALL_LOGS_ARE_IN_SAME_FOLDER
         }
 
+        /// <summary>
+        /// Main session. It is noname session to be created by default.
+        /// </summary>
         public static Session Main
         {
             get
@@ -66,22 +69,11 @@ namespace Cliver
         /// <summary>
         /// 
         /// </summary>
-        public static Session.NamedWriter Default
-        {
-            get
-            {
-                return mainSession.Default;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public static Session.ThreadWriter Thread
         {
             get
             {
-                return mainSession.Thread;
+                return Main.Thread;
             }
         }
 

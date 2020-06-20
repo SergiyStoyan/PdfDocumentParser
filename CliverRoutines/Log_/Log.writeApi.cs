@@ -21,95 +21,95 @@ namespace Cliver
     {
         public static void Error(Exception e)
         {
-            mainSession.Error(e);
+            Main.Error(e);
         }
         public static void Error2(Exception e)
         {
-            mainSession.Error2(e);
+            Main.Error2(e);
         }
 
         public static void Error(string message, Exception e)
         {
-            mainSession.Error(message, e);
+            Main.Error(message, e);
         }
 
         static public void Error(string message)
         {
-            mainSession.Error(message);
+            Main.Error(message);
         }
 
         static public void Error2(string message)
         {
-            mainSession.Error2(message);
+            Main.Error2(message);
         }
 
         static public void Trace(object message = null)
         {
-            mainSession.Trace(message);
+            Main.Trace(message);
         }
 
         static public void Exit(string message)
         {
-            mainSession.Error(message);
+            Main.Error(message);
         }
         static public void Exit2(string message)
         {
-            mainSession.Error2(message);
+            Main.Error2(message);
         }
 
         static public void Exit(Exception e)
         {
-            mainSession.Exit(e);
+            Main.Exit(e);
         }
 
         static public void Warning(string message)
         {
-            mainSession.Warning(message);
+            Main.Warning(message);
         }
 
         static public void Warning2(string message)
         {
-            mainSession.Warning2(message);
+            Main.Warning2(message);
         }
 
         static public void Warning(string message, Exception e)
         {
-            mainSession.Warning(message, e);
+            Main.Warning(message, e);
         }
 
         static public void Warning(Exception e)
         {
-            mainSession.Warning(e);
+            Main.Warning(e);
         }
 
         static public void Warning2(Exception e)
         {
-            mainSession.Warning2(e);
+            Main.Warning2(e);
         }
 
         static public void Inform0(string message)
         {
-            mainSession.Inform0(message);
+            Main.Inform0(message);
         }
 
         static public void Inform(string message)
         {
-            mainSession.Inform(message);
+            Main.Inform(message);
         }
 
         static public void Write(MessageType messageType, string message, string details = null)
         {
-            mainSession.Write(messageType, message, details);
+            Main.Write(messageType, message, details);
         }
 
         static public void Write0(string message)
         {
-            mainSession.Write0(message);
+            Main.Write0(message);
         }
 
         static public void Write(string message)
         {
-            mainSession.Write(message);
+            Main.Write(message);
         }
     }
 }

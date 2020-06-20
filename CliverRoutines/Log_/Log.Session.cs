@@ -81,7 +81,7 @@ namespace Cliver
             public string TimeMark {
                 get
                 {
-                    lock (this.names2NamedWriter)//this lock is needed if Session::Close(string new_name) is being performed
+                    lock (names2NamedWriter)//this lock is needed if Session::Close(string new_name) is being performed
                     {
                         if (timeMark == null)
                         {

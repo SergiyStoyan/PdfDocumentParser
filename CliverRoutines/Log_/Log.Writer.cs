@@ -45,7 +45,7 @@ namespace Cliver
             public const string MAIN_THREAD_LOG_NAME = "";
 
             /// <summary>
-            /// Log path
+            /// Log file path.
             /// </summary>
             public string Path
             {
