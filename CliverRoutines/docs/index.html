@@ -1,108 +1,70 @@
 <html>
 <head>
-<title>CliverRoutines</title>
- 
-<link rel="stylesheet" type="text/css" href="main.css">
-<link rel="stylesheet" type="text/css" href="menu_generator.css">
+    <title>CliverRoutines</title>
 
-<link href="prism.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <link rel="stylesheet" type="text/css" href="menu_generator.css">
+
+    <link href="prism.css" rel="stylesheet" />
 
 </head>
 <body>
-<script src="prism.js"></script>
-<div class='header'>
-<div class='mainHeader'>CliverRoutines 4.0</div>
-</div>
+    <script src="prism.js"></script>
+    <div class='header'>
+        <div class='mainHeader'>CliverRoutines 5.0</div>
+    </div>
 
-<div class='content'>
-<h1><a name='overview'>Overview</a></h1>
-<p>CliverRoutines is cross-platform .NET lib providing the following facilities:
-<ul>
-<li>logging;</li>
-<li>settings management;</li>
-<li>auxiliary routines;</li>
-</ul> 
+    <div class='content'>
+        <h1><a name='overview'>Overview</a></h1>
+        <p>
+            CliverRoutines is cross-platform .NET lib providing the following facilities:
+            <ul>
+                <li><a href="#config">settings management</a>;</li>
+                <li><a href="#log">logging</a>;</li>
+                <li><a href="#miscellaneous">miscellaneous routines</a>;</li>
+            </ul>
 
-<h2><a name='licensing'>Licensing</a></h2>
-cfgfg
-
-<h1><a name='log'>Log</a></h1>
-<p>Log module was defeloved with multi-threded environment in mind. That means it is:
-multi-threaded support:
-- thread-safe;
-- each .NET thread by default writes its own log file;
-
-session support
+            <h2><a name='licensing'>Licensing</a></h2>
+            cfgfg
 
 
-<h2><a name='thread'>Thread</a></h2>
-By default each .NET thread writes its own log file, like this:
-<pre>
-<code class="language-csharp">
-
-Log.Inform("test message");
-
-</code>
-</pre>
-
-Logging everything to one file done like this:
-<pre>
-<code class="language-csharp">
-
-Log.Main.Inform("test message");
-
-</code>
-</pre>
-
-<h2><a name='session'>Session</a></h2>
-
-Log always creates a session. During running the app can use only one log session or close and create many sessions. However, only one session can be open at the same time.
-
-<pre>
-<code class="language-csharp">{}</code>
-</pre>
-
-<p>
-<h2><a name='example'>Example</a></h2>
-dsvfd
-<pre>
-<code class="language-csharp">{}</code>
-</pre>
-<p>
-
-<h1><a name='config'>Config</a></h1>
-
-Logic behind Config follows:
-
-Settings class is a framework for custom settings. And Config class detects in the application all static fields of Settings-based types and peforms initializing/deserializing/serilizing them.
-Serializing is performed to a file which is defined by 2 constituents: directory is defined by the Settings type (that is the type of the settings field) and file name is defined by the full type path of the settings field in the application. Example:
-<br>
-C:\Users\serge\AppData\Local\CliverSoft\HawkeyeParser\config\Cliver.HawkeyeParser.Settings.General.json
-<br>
-where C:\Users\serge\AppData\Local is defined by Cliver.UserSettings type,
-<br>CliverSoft\HawkeyeParser\config is defined by the application,
-<br>Cliver.HawkeyeParser.Settings.General.json is defined by the full type path of the field General in the application.
-
-<p>Usually you need only one field per each Settings type you define in your application but no problem to declare any number fo fields of the same Settings type.
 
 
-<h2><a name='settings'>Settings</a></h2>
+            <h1><a name='config'>Config</a></h1>
 
-Settings based class defines the settings and directory where they are to be serialized.
-There are the following built-in Settings types:
-<br> - Cliver.UserSettings which is serialized into user app data directory;
-<br> - Cliver.AppSettings which is serialized into program data directory (writting to it on Windows may require additional permissions which is done by Cliver.Win.AppSettings);
+            Logic behind Config follows:
 
-<p>You can create your Settings class basing on those types or directly on Settings in which case you have to define the serialization directory.
+            Settings class is a framework for custom settings. And Config class detects in the application all static fields of Settings-based types and peforms initializing/deserializing/serilizing them.
+            Serializing is performed to a file which is defined by 2 constituents: directory is defined by the Settings type (that is the type of the settings field) and file name is defined by the full type path of the settings field in the application. Example:
+            <br>
+            C:\Users\serge\AppData\Local\CliverSoft\HawkeyeParser\config\Cliver.HawkeyeParser.Settings.General.json
+            <br>
+            where C:\Users\serge\AppData\Local is defined by Cliver.UserSettings type,
+            <br>CliverSoft\HawkeyeParser\config is defined by the application,
+            <br>Cliver.HawkeyeParser.Settings.General.json is defined by the full type path of the field General in the application.
 
-<p>Config creates only one value per field and usually you
+        <p>
+            Usually you need only one field per each Settings type you define in your application but no problem to declare any number fo fields of the same Settings type.
 
 
-<p>Config methods are thread-safe.
+            <h2><a name='settings'>Settings</a></h2>
 
-<h2><a name='example'>Example</a></h2>
+            Settings based class defines the settings and directory where they are to be serialized.
+            There are the following built-in Settings types:
+            <br> - Cliver.UserSettings which is serialized into user app data directory;
+            <br> - Cliver.AppSettings which is serialized into program data directory (writting to it on Windows may require additional permissions which is done by Cliver.Win.AppSettings);
 
-Create your settings class and a field:
+        <p>You can create your Settings class basing on those types or directly on Settings in which case you have to define the serialization directory.
+
+        <p>Config creates only one value per field and usually you
+
+
+        <p>
+            Config methods are thread-safe.
+
+            <h2><a name='example'>Example</a></h2>
+
+            Create your settings class and a field:
 
 <pre>
 <code class="language-csharp">
@@ -128,7 +90,7 @@ public static class Settings
 </pre>
 
 
-Add initializing of Config:
+            Add initializing of Config:
 <pre>
 <code class="language-csharp">
 
@@ -138,7 +100,7 @@ Cliver.Config.Reload();
 </code>
 </pre>
 
-Use the Settings in the code, modify and save:
+            Use the Settings in the code, modify and save:
 <pre>
 <code class="language-csharp">
 
@@ -147,11 +109,11 @@ Settings.General.Save();
 
 </code>
 </pre>
-<p>
+        <p>
 
-<h2><a name='swapping'>Copying and Swapping</a></h2>
+            <h2><a name='swapping'>Copying and Swapping</a></h2>
 
-A Settings field can be replaced. If you need to pass the Settings to another app for copying or editing, it's better to pass a copy: 
+            A Settings field can be replaced. If you need to pass the Settings to another app for copying or editing, it's better to pass a copy:
 <pre>
 <code class="language-csharp">
 
@@ -166,13 +128,14 @@ Settings.General.Save();
 
 </code>
 </pre>
-<p>
+        <p>
 
 
-<p>By default Config 
+        <p>
+            By default Config
 
-<h2><a name='password'>Password</a></h2>
-How to store passwords:
+            <h2><a name='password'>Password</a></h2>
+            How to store passwords:
 <pre>
 <code class="language-csharp">
 public class GeneralSettings : Cliver.Win.UserSettings
@@ -212,9 +175,104 @@ public class GeneralSettings : Cliver.Win.UserSettings
 }
 </code>
 </pre>
+        <p>
+
+
+
+
+            <h1><a name='log'>Log</a></h1>
+        <p>
+            Log is <a href="#logSession">session</a> oriented meaning that the application can write multiple log sessions successively or simultaneously.
+            It is helpful when the application launches many logincal subprocesses which are not depend on each other.
+
+            Also, Log module was developed with <a href="#logThread">multi-threaded</a> environment in mind meaning that:
+            <ul>
+                <li>it is thread-safe;</li>
+                <li>each .NET thread can write its own log file;</li>
+            </ul>
+
+
+
+
+
+
+
+            <h2><a name='logSession'>Session</a></h2>
+
+            Log always creates a session. During its lifespan a process can open only one log session or open/close multiple sessions. 
+            Session means that logs belonging to it are wrote to a separate session folder or contain session name in their names.
+            Session folder can be used to store additional data like caches etc.
+
+<pre>
+<code class="language-csharp">{}</code>
+</pre>
+
+<p>
+            <h2><a name='example'>Example</a></h2>
+            dsvfd
+<pre>
+<code class="language-csharp">{}</code>
+</pre>
 <p>
 
-<h1><a name='auxiliary_routines'>Auxiliary routines</a></h1>
+
+
+
+
+    <h2><a name='logNamed'>Named logs</a></h2>
+    In session can be named logs open. Actually the default named log is considered the main log of a session. 
+    It suffices for trivial logging and can be referenced as simple as this:
+<pre>
+    <code class="language-csharp">
+        //writting to the default named log of the default session
+        Log.Main.Inform("test message");
+
+        //writting to the default named log of the session "Test"
+        Log.Session testSession = Log.Session.Get("Test");
+        testSession.Warning("test message");
+
+    </code>
+</pre>
+
+    Logging to a named log of a session:
+<pre>
+    <code class="language-csharp">
+
+        //writting to the log Test of the default session
+        Log.Head["Test"].Inform("test message");
+
+        //writting to the log Test of the session "Test"
+        Log.Session testSession = Log.Session.Get("Test");
+        testSession["Test"].Inform("test message");
+
+    </code>
+</pre>
+
+
+
+
+
+    <h2><a name='logThread'>Thread logs</a></h2>
+    Each .NET thread can write its own log file, like this:
+<pre>
+<code class="language-csharp">
+Log.Thread.Inform("test message");
+</code>
+</pre>
+
+    Logging everything to one file done like this:
+<pre>
+<code class="language-csharp">
+Log.Main.Inform("test message");
+</code>
+</pre>
+
+
+
+
+
+
+    <h1><a name='miscellaneous'>Miscellaneous routines</a></h1>
 <p>fdsf
 
 
@@ -223,28 +281,27 @@ public class GeneralSettings : Cliver.Win.UserSettings
 
 
 
-</div>
+    </div>
 
-<div class='footer'>
-<script src='copyright.js'></script>
+    <div class='footer'>
+        <script src='copyright.js'></script>
         &nbsp;2006 - 2020&nbsp;&nbsp;<a href="javascript:window.location.href = '&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#115;&#101;&#114;&#103;&#101;&#121;&#46;&#115;&#116;&#111;&#121;&#97;&#110;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;'" target="_top">Sergey Stoyan</a>
-</script>
-        
-</div>
+       
+    </div>
 
-<!--script>
-var cs = document.getElementsByTagName('code');
-for(var i = 0; i < cs.length; i++)
-	cs[i].classList.add("language-csharp");
-</script-->
+    <!--script>
+    var cs = document.getElementsByTagName('code');
+    for(var i = 0; i < cs.length; i++)
+        cs[i].classList.add("language-csharp");
+    </script-->
 
-<script>
-if(!window.location.href.match(/\#./ig)){
-    window.location.href = window.location.href.replace(/#.*/, '') + '#1';
-    location.reload();
-}
-</script>
-<script src='menu_generator.js' shiftHeaderAndFooterToContentView=''></script>
+    <script>
+        if (!window.location.href.match(/\#./ig)) {
+            window.location.href = window.location.href.replace(/#.*/, '') + '#1';
+            location.reload();
+        }
+    </script>
+    <script src='menu_generator.js' shiftHeaderAndFooterToContentView=''></script>
 
 </body>
 </html>
