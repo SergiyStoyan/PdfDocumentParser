@@ -258,6 +258,26 @@
       <SubType>Code</SubType>
     </Compile>
     <Content Include="computers308.ico" />
+    <Content Include="docs\copyright.js" />
+    <Content Include="docs\img\sampleparser.png" />
+    <Content Include="docs\img\tutorial0.png" />
+    <Content Include="docs\img\tutorial1.png" />
+    <Content Include="docs\img\tutorial10.png" />
+    <Content Include="docs\img\tutorial2.png" />
+    <Content Include="docs\img\tutorial3.png" />
+    <Content Include="docs\img\tutorial4.png" />
+    <Content Include="docs\img\tutorial5.png" />
+    <Content Include="docs\img\tutorial6.png" />
+    <Content Include="docs\img\tutorial7.png" />
+    <Content Include="docs\img\tutorial8.png" />
+    <Content Include="docs\img\tutorial9.png" />
+    <Content Include="docs\index.html" />
+    <Content Include="docs\main.css" />
+    <Content Include="docs\menu_generator.css" />
+    <Content Include="docs\menu_generator.js" />
+    <Content Include="docs\prism.css" />
+    <Content Include="docs\prism.js" />
+    <Content Include="docs\testLinks.html" />
     <Content Include="License-LGPL.txt" />
   </ItemGroup>
   <ItemGroup>
