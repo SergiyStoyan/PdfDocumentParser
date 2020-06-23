@@ -64,17 +64,20 @@ namespace Cliver
                         default:
                             throw new Exception("Unknown LOGGING_MODE:" + Cliver.Log.mode);
                     }
+
+                    if (fileCounter == 1)
+                        file2 = Regex.Replace(file2, @"\.[^\.]+$", @"[1]$0");
+                    else
+                        file2 = Regex.Replace(file2, @"\[" + fileCounter + @"\](\.[^\.]+)$", @"[" + fileCounter + @"]$1");
+
                     if (File == file2)
                         return;
                     if (logWriter != null)
                         logWriter.Close();
-                    if (level > Level.NONE)
-                        Directory.CreateDirectory(PathRoutines.GetFileDir(file2));
-                    if (System.IO.File.Exists(File))
-                        System.IO.File.Move(File, file2);
                     File = file2;
                 }
             }
+            int fileCounter = 0;
 
             readonly Session session;
 
@@ -161,38 +164,29 @@ namespace Cliver
                             throw new Exception("Unknown option: " + Level);
                     }
 
-                    if (logWriter == null)
-                        logWriter = new StreamWriter(File, true);
-
-                    details = string.IsNullOrWhiteSpace(details) ? "" : "\r\n\r\n" + details;
-                    message = (messageType == MessageType.LOG ? "" : messageType.ToString()) + ": " + message + details;
-
                     if (MaxFileSize > 0)
                     {
                         FileInfo fi = new FileInfo(File);
-                        if (fi.Length > MaxFileSize)
+                        if (fi.Exists && fi.Length > MaxFileSize)
                         {
-                            logWriter.Close();
-
-                            if (fileCounter < 1)
-                            {
-                                File = Regex.Replace(File, @"\.[^\.]+$", @"[1]$0");
-                                fileCounter = 1;
-                            }
-                            else
-                                File = Regex.Replace(File, @"\[" + fileCounter + @"\](\.[^\.]+)$", @"[" + (++fileCounter) + @"]$1");
-
-                            logWriter = new StreamWriter(File, true);
+                            fileCounter++;
+                            SetFile();
                         }
                     }
-                    //if (!string.IsNullOrWhiteSpace(details))
-                    //    message += "\r\n\r\n" + details;
+
+                    if (logWriter == null)
+                    {
+                        Directory.CreateDirectory(PathRoutines.GetFileDir(File));
+                        logWriter = new StreamWriter(File, true);
+                    }
+
+                    details = string.IsNullOrWhiteSpace(details) ? "" : "\r\n\r\n" + details;
+                    message = (messageType == MessageType.LOG ? "" : messageType.ToString()) + ": " + message + details;
                     logWriter.WriteLine(DateTime.Now.ToString("[dd-MM-yy HH:mm:ss] ") + message);
                     logWriter.Flush();
                 }
             }
             TextWriter logWriter = null;
-            int fileCounter = 0;
 
             public delegate void OnWrite(string logWriterName, Log.MessageType messageType, string message, string details);
             static public event OnWrite Writing = null;

@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Cliver
 {
@@ -128,7 +129,8 @@ namespace Cliver
                         case Cliver.Log.Mode.ALL_LOGS_ARE_IN_SAME_FOLDER:
                             break;
                         case Cliver.Log.Mode.EACH_SESSION_IS_IN_OWN_FORLDER:
-                            Directory.Move(Path, newPath);
+                            if (Directory.Exists(Path))
+                                Directory.Move(Path, newPath);
                             break;
                         default:
                             throw new Exception("Unknown LOGGING_MODE:" + Cliver.Log.mode);
@@ -140,10 +142,13 @@ namespace Cliver
                         name = newName;
                         names2Session[name] = this;
                     }
-                    foreach (Writer w in names2NamedWriter.Values)
+                    foreach (Writer w in names2NamedWriter.Values.Select(a => (Writer)a).Concat(threads2treadWriter.Values))
+                    {
+                        string file0 = w.File;
                         w.SetFile();
-                    foreach (Writer w in threads2treadWriter.Values)
-                        w.SetFile();
+                        if (File.Exists(file0))
+                            File.Move(file0, w.File);
+                    }
                 }
             }
 
