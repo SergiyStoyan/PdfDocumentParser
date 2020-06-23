@@ -30,9 +30,9 @@
         <p>
             Within this scope PdfDocumentParser is capable of the following:
             <ul>
-                <li>search/extract text represented by PDF entities - meant for native PDF files;</li>
-                <li>search/extract text obtained by OCR - meant for scanned PDF files;</li>
-                <li>search/compare/extract page fragments as images - meant for either native or scanned PDF files;</li>
+                <li>search/extract text represented by PDF entities - intended for native PDF files;</li>
+                <li>search/extract text obtained by OCR - intended for scanned PDF files;</li>
+                <li>search/compare/extract page fragments as images - intended for either native or scanned PDF files;</li>
             </ul>
             For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#fieldTypes'>field types</a>.
 
@@ -71,7 +71,7 @@
             <h2><a name='licensing'>Licensing</a></h2>
             PdfDocumentParser is provided under GNU Affero General Public License v3.0. Contact me if you want another license.
         <p>
-            Notice that PdfDocumentParser may use third-party software as command line tools or linked libraries that are licensed separately.
+            Notice that PdfDocumentParser may use third-party software as command line tools or linked libraries that are licensed independently.
 
 
             <h2><a name='repository'>Source code</a></h2>
@@ -392,7 +392,7 @@
                 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
                 <tr>
                     <td class='title_column'><a name='CvImageScalePyramidStep'>Scale Pyramid Step</a></td>
-                    <td>It is the scale pyramid step set in pixels of the PDF resolution (which is by default 72dpi). The bigger step, the faster perfomance... and the higher chance to overlook the macth.</td>
+                    <td>It is the scale pyramid step set in pixels of the PDF resolution (which is by default 72dpi). The bigger step, the faster perfomance... and the higher chance to overlook the match.</td>
                 </tr>
             </table>
 
@@ -450,7 +450,7 @@
                 </tr>
                 <tr>
                     <td class='title_column'><a name='GetValue'><code>GetValue(string fieldName, ValueTypes valueType)</code></a></td>
-                    <td>Extract a field from the page. The returned object depends on valueType supplied. When some anchor of the field, if any, was not found, NULL is returned.</td>
+                    <td>Extract a field from the page. The kind of returned object depends on valueType which is usually is not be supplied and the field's default valueType is used. Pay attention, that a field must always be referred to by name and not as a Field object. It is because a field can have multiple definitions which are multiple Field objects united under the same name. When some anchor of the field, if any, was not found, NULL is returned.</td>
                 </tr>
             </table>
         <p>There may be more auxiliary properties and methods which are not mentioned here. Their use can be understood from the code.
