@@ -9,22 +9,22 @@ namespace Example
     /// </summary>
     class SmtpSettings : Cliver.UserSettings
     {
-        public string SmtpHost = "";
-        public int SmtpPort = 25;
-        public string SmtpEncryptedPassword = null;
+        public string Host = "";
+        public int Port = 25;
+        public string EncryptedPassword = null;
 
         /// <summary>
         /// 
         /// </summary>
-        internal string SmtpPassword
+        internal string Password
         {
             get
             {
-                if (string.IsNullOrEmpty(SmtpEncryptedPassword))
+                if (string.IsNullOrEmpty(EncryptedPassword))
                     return null;
                 try
                 {
-                    return crypto.Decrypt(SmtpEncryptedPassword);
+                    return crypto.Decrypt(EncryptedPassword);
                 }
                 catch
                 {
@@ -35,9 +35,9 @@ namespace Example
             set
             {
                 if (string.IsNullOrEmpty(value))
-                    SmtpEncryptedPassword = null;
+                    EncryptedPassword = null;
                 else
-                    SmtpEncryptedPassword = crypto.Encrypt(value);
+                    EncryptedPassword = crypto.Encrypt(value);
             }
         }
         Cliver.Crypto.Aes crypto = new Cliver.Crypto.Aes("motherboard ID");

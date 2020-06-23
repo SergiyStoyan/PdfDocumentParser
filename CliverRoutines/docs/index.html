@@ -75,7 +75,7 @@ public class GeneralSettings : Cliver.UserSettings
 	
 	public string SmtpHost = "";
 	public int SmtpPort = 25;
-	public string SmtpEncryptedPassword = null;
+	public string EncryptedPassword = null;
 }
 
 //create a field of GeneralSettings type anywhere in the code
@@ -140,18 +140,18 @@ Settings.General.Save();
 <code class="language-csharp">
 public class GeneralSettings : Cliver.Win.UserSettings
 {   	            
-	public string SmtpEncryptedPassword = null;
+	public string EncryptedPassword = null;
 	
 	//it is internal not to be serialized; otheriwse, use attribute [Newtonsoft.Json.JsonIgnore]
 	internal string SmtpPassword
 	{
 		get
 		{
-			if (string.IsNullOrEmpty(SmtpEncryptedPassword))
+			if (string.IsNullOrEmpty(EncryptedPassword))
 				return null;
 			try
 			{
-				return crypto.Decrypt(SmtpEncryptedPassword);
+				return crypto.Decrypt(EncryptedPassword);
 			}
 			catch
 			{
@@ -162,9 +162,9 @@ public class GeneralSettings : Cliver.Win.UserSettings
 		set
 		{
 			if (string.IsNullOrEmpty(value))
-				SmtpEncryptedPassword = null;
+				EncryptedPassword = null;
 			else
-				SmtpEncryptedPassword = crypto.Encrypt(value);
+				EncryptedPassword = crypto.Encrypt(value);
 		}
 	}
 	//on Widnows

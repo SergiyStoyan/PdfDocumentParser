@@ -20,19 +20,7 @@ namespace Cliver
             {
                 Name = name;
                 this.session = session;
-
-                switch (Log.mode)
-                {
-                    case Log.Mode.ALL_LOGS_ARE_IN_SAME_FOLDER:
-                        FileName = Log.ProcessName + (string.IsNullOrWhiteSpace(session.Name) ? "" : "_" + session.Name) + "_" + session.TimeMark + (string.IsNullOrWhiteSpace(name) ? "" : "_" + name) + "." + FileExtension;
-                        break;
-                    //case Cliver.Log.Mode.SINGLE_SESSION:
-                    case Cliver.Log.Mode.EACH_SESSION_IS_IN_OWN_FORLDER:
-                        FileName = Log.ProcessName + "_" + session.TimeMark + (string.IsNullOrWhiteSpace(name) ? "" : "_" + name) + "." + FileExtension;
-                        break;
-                    default:
-                        throw new Exception("Unknown LOGGING_MODE:" + Cliver.Log.mode);
-                }
+                SetFile();
             }
 
             public Level Level
@@ -43,52 +31,56 @@ namespace Cliver
                 }
                 set
                 {
-                    if (level == Level.NONE && value > Level.NONE)
+                    lock (this)
                     {
-                        setWorkDir(true);
-                        Directory.CreateDirectory(session.Path);
+                        if (level == Level.NONE && value > Level.NONE)
+                        {
+                            setWorkDir(true);
+                            Directory.CreateDirectory(session.Path);
+                        }
+                        level = value;
                     }
-                    level = value;
                 }
             }
             Level level = Log.level;
 
             public readonly string Name;
-            public string FileName { get; private set; } = null;
+
+            public string File { get; private set; } = null;
+
+            internal void SetFile()
+            {
+                lock (this)
+                {
+                    string file2;
+                    switch (Log.mode)
+                    {
+                        case Log.Mode.ALL_LOGS_ARE_IN_SAME_FOLDER:
+                            file2 = session.Path + System.IO.Path.DirectorySeparatorChar + Log.ProcessName + (string.IsNullOrWhiteSpace(session.Name) ? "" : "_" + session.Name) + "_" + session.TimeMark + (string.IsNullOrWhiteSpace(Name) ? "" : "_" + Name) + "." + FileExtension;
+                            break;
+                        case Cliver.Log.Mode.EACH_SESSION_IS_IN_OWN_FORLDER:
+                            file2 = session.Path + System.IO.Path.DirectorySeparatorChar + Log.ProcessName + "_" + session.TimeMark + (string.IsNullOrWhiteSpace(Name) ? "" : "_" + Name) + "." + FileExtension;
+                            break;
+                        default:
+                            throw new Exception("Unknown LOGGING_MODE:" + Cliver.Log.mode);
+                    }
+                    if (File == file2)
+                        return;
+                    if (logWriter != null)
+                        logWriter.Close();
+                    if (level > Level.NONE)
+                        Directory.CreateDirectory(PathRoutines.GetFileDir(file2));
+                    if (System.IO.File.Exists(File))
+                        System.IO.File.Move(File, file2);
+                    File = file2;
+                }
+            }
 
             readonly Session session;
 
             public int MaxFileSize = Log.maxFileSize;
 
             public const string MAIN_THREAD_LOG_NAME = "";
-
-            /// <summary>
-            /// Log file path.
-            /// </summary>
-            public string Path
-            {
-                get
-                {
-                    return session.Path + System.IO.Path.DirectorySeparatorChar + FileName;
-                }
-            }
-
-            //public string TimeMark
-            //{
-            //    get
-            //    {
-            //        switch (Log.mode)
-            //        {
-            //            case Cliver.Log.Mode.ONLY_LOG:
-            //                return Cliver.Log.TimeMark;
-            //            //case Cliver.Log.Mode.SINGLE_SESSION:
-            //            case Cliver.Log.Mode.SESSIONS:
-            //                return session.TimeMark;
-            //            default:
-            //                throw new Exception("Unknown LOGGING_MODE:" + Cliver.Log.mode);
-            //        }
-            //    }
-            //}
 
             /// <summary>
             /// Close the log
@@ -170,27 +162,27 @@ namespace Cliver
                     }
 
                     if (logWriter == null)
-                        logWriter = new StreamWriter(Path, true);
+                        logWriter = new StreamWriter(File, true);
 
                     details = string.IsNullOrWhiteSpace(details) ? "" : "\r\n\r\n" + details;
                     message = (messageType == MessageType.LOG ? "" : messageType.ToString()) + ": " + message + details;
 
                     if (MaxFileSize > 0)
                     {
-                        FileInfo fi = new FileInfo(Path);
+                        FileInfo fi = new FileInfo(File);
                         if (fi.Length > MaxFileSize)
                         {
                             logWriter.Close();
 
                             if (fileCounter < 1)
                             {
-                                FileName = Regex.Replace(FileName, @"\.[^\.]+$", @"[1]$0");
+                                File = Regex.Replace(File, @"\.[^\.]+$", @"[1]$0");
                                 fileCounter = 1;
                             }
                             else
-                                FileName = Regex.Replace(FileName, @"\[" + fileCounter + @"\](\.[^\.]+)$", @"[" + (++fileCounter) + @"]$1");
+                                File = Regex.Replace(File, @"\[" + fileCounter + @"\](\.[^\.]+)$", @"[" + (++fileCounter) + @"]$1");
 
-                            logWriter = new StreamWriter(Path, true);
+                            logWriter = new StreamWriter(File, true);
                         }
                     }
                     //if (!string.IsNullOrWhiteSpace(details))

@@ -43,8 +43,6 @@ namespace Cliver
                         default:
                             throw new Exception("Unknown LOGGING_MODE:" + Cliver.Log.mode);
                     }
-                    if (level > Level.NONE)
-                        Directory.CreateDirectory(path);
                     return path;
                 }
             }
@@ -112,43 +110,40 @@ namespace Cliver
 
             /// <summary>
             /// Close all log files in the session.  
-            /// Nevertheless the session can be called and used again.
+            /// Nevertheless the session can be re-used after.
             /// </summary>
             /// <param name="newName"></param>
             public void Rename(string newName)
             {
                 lock (this.names2NamedWriter)
                 {
-                    if (Log.mode == Mode.ALL_LOGS_ARE_IN_SAME_FOLDER)
-                        throw new Exception("Cannot rename log folder in mode: " + Log.mode);
-
                     if (newName == Name)
-                    {
-                        Close(true);
                         return;
-                    }
 
-                    string newPath = getPath(newName);
-                    Write("Renaming session...: '" + Path + "' to '" + newName + "'");
-
+                    Write("Renaming session...: '" + Name + "' to '" + newName + "'");
                     Close(true);
-
-                    try
+                    string newPath = getPath(newName);
+                    switch (Log.mode)
                     {
-                        Directory.Move(Path, newPath);
-                        path = newPath;
-
-                        lock (names2Session)
-                        {
-                            names2Session.Remove(name);
-                            name = newName;
-                            names2Session[name] = this;
-                        }
+                        case Cliver.Log.Mode.ALL_LOGS_ARE_IN_SAME_FOLDER:
+                            break;
+                        case Cliver.Log.Mode.EACH_SESSION_IS_IN_OWN_FORLDER:
+                            Directory.Move(Path, newPath);
+                            break;
+                        default:
+                            throw new Exception("Unknown LOGGING_MODE:" + Cliver.Log.mode);
                     }
-                    catch (Exception e)
+                    path = newPath;
+                    lock (names2Session)
                     {
-                        Error(e);
+                        names2Session.Remove(name);
+                        name = newName;
+                        names2Session[name] = this;
                     }
+                    foreach (Writer w in names2NamedWriter.Values)
+                        w.SetFile();
+                    foreach (Writer w in threads2treadWriter.Values)
+                        w.SetFile();
                 }
             }
 
@@ -167,13 +162,13 @@ namespace Cliver
 
                     foreach (NamedWriter nw in names2NamedWriter.Values)
                         nw.Close();
-                    //names2NamedWriter.Clear(); !!! clearing writers will bring to duplicating of them if they are referenced alongside also.
+                    //names2NamedWriter.Clear(); !!! clearing writers will bring to duplicating of them if they are referenced in the custom code.
 
                     lock (threads2treadWriter)
                     {
                         foreach (ThreadWriter tw in threads2treadWriter.Values)
                             tw.Close();
-                        threads2treadWriter.Clear();
+                        //threads2treadWriter.Clear(); !!!clearing writers will bring to duplicating of them if they are referenced in the custom code.
                     }
 
                     if (!reuse)

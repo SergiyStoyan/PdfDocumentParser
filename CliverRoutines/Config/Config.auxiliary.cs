@@ -18,7 +18,7 @@ namespace Cliver
     {
         /// <summary>
         /// Creates a new instance of the given Settings field initiated with default values.
-        /// Tries to load it from the initial file located in the app's directory. 
+        /// Tries to load values from the initial file located in the app's directory. 
         /// If this file does not exist, it creates an object with the hardcoded values.
         /// </summary>
         /// <typeparam name="S"></typeparam>
@@ -31,8 +31,8 @@ namespace Cliver
 
         /// <summary>
         /// Creates a new instance of the given Settings field initiated with stored values.
-        /// Tries to load it from the storage file.
-        /// If this file does not exist, it tries to load it from the initial file located in the app's directory. 
+        /// Tries to load values from the storage file.
+        /// If this file does not exist, it tries to load values from the initial file located in the app's directory. 
         /// If this file does not exist, it creates an object with the hardcoded values.
         /// </summary>
         /// <typeparam name="S"></typeparam>
@@ -54,9 +54,19 @@ namespace Cliver
             lock (fieldFullNames2SettingsField)
             {
                 string d = FileSystemRoutines.CreateDirectory(toDirectory + System.IO.Path.DirectorySeparatorChar + CONFIG_FOLDER_NAME);
-                foreach (SettingsField settingsField in fieldFullNames2SettingsField.Values)
+                foreach (SettingsField settingsField in enumSettingsFields())
+                {
                     if (File.Exists(settingsField.File))//it can be absent if default settings are used still
                         File.Copy(settingsField.File, d + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(settingsField.File));
+                    else if (File.Exists(settingsField.InitFile))
+                        File.Copy(settingsField.InitFile, d + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(settingsField.InitFile));
+                    else
+                    {
+                        Settings s = Settings.Create(settingsField, true, true);
+                        s.Save();
+                        File.Move(settingsField.File, d + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(settingsField.File));
+                    }
+                }
             }
         }
 
