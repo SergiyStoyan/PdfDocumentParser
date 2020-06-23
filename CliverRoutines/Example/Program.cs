@@ -33,6 +33,8 @@ namespace Example
                 s1.Thread.Inform("test");
                 s1.Rename("Name2");
 
+                SmtpSettings smtpSettings2 = Config.CreateResetCopy(Settings.Smtp);
+
                 throw new Exception2("test exception2");
             }
             catch(Exception e)

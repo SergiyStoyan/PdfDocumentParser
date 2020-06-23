@@ -24,11 +24,11 @@ namespace Cliver
                 switch (Log.mode)
                 {
                     case Log.Mode.ALL_LOGS_ARE_IN_SAME_FOLDER:
-                        FileName = Log.ProcessName + (string.IsNullOrWhiteSpace(session.Name) ? "" : "_" + session.Name) + "_" + session.TimeMark + (string.IsNullOrWhiteSpace(name) ? "" : "_" + name) + ".log";
+                        FileName = Log.ProcessName + (string.IsNullOrWhiteSpace(session.Name) ? "" : "_" + session.Name) + "_" + session.TimeMark + (string.IsNullOrWhiteSpace(name) ? "" : "_" + name) + "." + FileExtension;
                         break;
                     //case Cliver.Log.Mode.SINGLE_SESSION:
                     case Cliver.Log.Mode.EACH_SESSION_IS_IN_OWN_FORLDER:
-                        FileName = Log.ProcessName + "_" + session.TimeMark + (string.IsNullOrWhiteSpace(name) ? "" : "_" + name) + ".log";
+                        FileName = Log.ProcessName + "_" + session.TimeMark + (string.IsNullOrWhiteSpace(name) ? "" : "_" + name) + "." + FileExtension;
                         break;
                     default:
                         throw new Exception("Unknown LOGGING_MODE:" + Cliver.Log.mode);

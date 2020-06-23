@@ -39,15 +39,15 @@ namespace Cliver
 
         internal readonly Type Type;
 
-        internal Config.Settings GetObject()
+        internal Settings GetObject()
         {
             lock (this)
             {
-                return (Config.Settings)Info.GetValue(null);
+                return (Settings)Info.GetValue(null);
             }
         }
 
-        internal void SetObject(Config.Settings settings)
+        internal void SetObject(Settings settings)
         {
             lock (this)
             {
@@ -59,7 +59,7 @@ namespace Cliver
         {
             FullName = settingsTypeFieldInfo.DeclaringType.FullName + "." + settingsTypeFieldInfo.Name;
             Info = settingsTypeFieldInfo;
-            File = Config.Settings.GetStorageDir(settingsTypeFieldInfo.FieldType) + System.IO.Path.DirectorySeparatorChar + FullName + "." + Config.FILE_EXTENSION;
+            File = Settings.GetStorageDir(settingsTypeFieldInfo.FieldType) + System.IO.Path.DirectorySeparatorChar + FullName + "." + Config.FILE_EXTENSION;
             InitFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + FullName + "." + Config.FILE_EXTENSION;
             Type = settingsTypeFieldInfo.FieldType;
         }

@@ -38,6 +38,7 @@ namespace Cliver
         static int maxFileSize = -1;
 
         public static bool ReuseThreadLogIndexes = false;
+        public static string FileExtension = "log";
 
         public enum Mode
         {
