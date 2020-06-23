@@ -79,13 +79,13 @@ namespace Cliver
         }
 
         // ???what would it be needed for?
-        public static S CreateResetCopy<S>(string settingsFieldFullName) where S : Settings, new()
+        public static S CreateResetInstance<S>(string settingsFieldFullName) where S : Settings, new()
         {
             return (S)Settings.Create(GetSettingsField(settingsFieldFullName), true, true);
         }
 
         // ???what would it be needed for?
-        public static S CreateReloadedCopy<S>(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false) where S : Settings, new()
+        public static S CreateReloadedInstance<S>(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false) where S : Settings, new()
         {
             return (S)Settings.Create(GetSettingsField(settingsFieldFullName), false, throwExceptionIfCouldNotLoadFromStorageFile);
         }
