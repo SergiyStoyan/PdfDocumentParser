@@ -20,14 +20,39 @@ namespace Cliver.PdfDocumentParser
     public partial class Page
     {
         /// <summary>
-        /// 
+        /// Tries field definitions with the given name in turn until one is found on the page.
         /// </summary>
         /// <param name="fieldName">field is referenced by name because there may be several field-definitions for the same name</param>
-        /// <param name="valueType"></param>
+        /// <param name="valueType">if not set then DefaultValueType is used</param>
         /// <returns></returns>
         public object GetValue(string fieldName, Template.Field.ValueTypes? valueType = null)
         {
+            return GetValue(fieldName, out _, valueType);
+        }
+
+        /// <summary>
+        /// Tries field definitions with the given name in turn until one is found on the page.
+        /// </summary>
+        /// <param name="fieldName">field is referenced by name because there may be several field-definitions for the same name</param>
+        /// <param name="actualField">actual field definition which was found on the page</param>
+        /// <param name="valueType">if not set then DefaultValueType is used</param>
+        /// <returns></returns>
+        public object GetValue(string fieldName, out Template.Field actualField, Template.Field.ValueTypes? valueType = null)
+        {
             FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
+            if (!fai.Found)
+            {
+                actualField = null;
+                return null;
+            }
+            actualField = fai.ActualField;
+            return fai.GetValue(valueType == null ? fai.ActualField.DefaultValueType : (Template.Field.ValueTypes)valueType);
+        }
+
+        public object GetValue(Template.Field exactField, Template.Field.ValueTypes? valueType = null)
+        {
+            RectangleF? ar = getFieldActualRectangle(exactField);
+            FieldActualInfo fai = new FieldActualInfo(this, exactField, ar, exactField.ColumnOfTable != null ? getFoundFieldActualInfo(exactField.ColumnOfTable) : null);
             if (!fai.Found)
                 return null;
             return fai.GetValue(valueType == null ? fai.ActualField.DefaultValueType : (Template.Field.ValueTypes)valueType);
