@@ -356,6 +356,8 @@ namespace Cliver.PdfDocumentParser
 
             Load += delegate
             {
+                //Application.DoEvents();//make form be drawn completely
+                //BeginInvoke((Action<Template>)setUIFromTemplate, templateManager.Template);           
             };
 
             save.Click += Save_Click;

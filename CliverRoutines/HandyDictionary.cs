@@ -9,8 +9,19 @@ using System.Collections.Generic;
 
 namespace Cliver
 {
+    /// <summary>
+    /// Features:
+    /// - auto-generating values;
+    /// - auto-disposing IDisposable values;
+    /// </summary>
+    /// <typeparam name="KT"></typeparam>
+    /// <typeparam name="VT"></typeparam>
     public class HandyDictionary<KT, VT> : IDisposable, IEnumerable<KeyValuePair<KT, VT>> //where VT: class
     {
+        /// <summary>
+        /// Create HandyDictionary with auto-generating value function.
+        /// </summary>
+        /// <param name="getValue"></param>
         public HandyDictionary(GetValue getValue)
         {
             this.getValue = getValue;
@@ -18,6 +29,10 @@ namespace Cliver
         public delegate VT GetValue(KT key);
         protected GetValue getValue;
 
+        /// <summary>
+        /// Create HandyDictionary without auto-generating value function.
+        /// </summary>
+        /// <param name="defaultValue"></param>
         public HandyDictionary(VT defaultValue)
         {
             this.defaultValue = defaultValue;

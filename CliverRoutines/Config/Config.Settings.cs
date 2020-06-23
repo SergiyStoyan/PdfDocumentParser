@@ -77,7 +77,8 @@ namespace Cliver
             /// </summary>
             public bool IsDetached()
             {
-                return Config.GetSettings(Field.FullName) != this;
+                return Field == null//was created outside Config
+                    || Config.GetSettings(Field.FullName) != this;//is not referenced by the field
             }
 
             /// <summary>
