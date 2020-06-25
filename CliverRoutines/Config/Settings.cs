@@ -15,68 +15,73 @@ using System.Linq;
 namespace Cliver
 {
     /// <summary>
-    /// Alternative to .NET settings. Inheritors of this class in the application are automatically managed by Config.
-    /// From practical point of view, usually only one field is to be declared per certain Settings type, but generally there can be any number of fields of the same Settings type.
-    /// A Settings object always belongs to one Settings field even it is not the value of this field (i.e. it is detached). 
+    /// Alternative to .NET settings. Fields/properties of Settings based types in the application are automatically managed by Config.
+    /// From practical point of view, usually only one field is declared per a Settings based type, but generally there can be any number of fields of the same Settings type.
     /// </summary>
     abstract public partial class Settings
     {
+        /// <summary>
+        /// This info identifies a certain Settings field/property in the application to which this object belongs. 
+        /// For some rare hypothetical need, it is possible to change/set it from the application.
+        /// </summary>
         [Newtonsoft.Json.JsonIgnore]
-        internal SettingsField Field { get; private set; }
-
-        internal static Settings Create(SettingsField settingsField, bool reset, bool throwExceptionIfCouldNotLoadFromStorageFile)
+        public SettingsFieldInfo __Info
         {
-            Settings settings = create(settingsField, reset, throwExceptionIfCouldNotLoadFromStorageFile);
-            settings.Field = settingsField;
+            get
+            {
+                return settingsFieldInfo;
+            }            
+            set
+            {
+                if (value.Type != GetType())
+                    throw new Exception("Disaccording SettingsFieldInfo Type. It must be '" + GetType() + "'.");
+                settingsFieldInfo = value;
+            }
+        }
+        public SettingsFieldInfo settingsFieldInfo = null;
+
+        internal static Settings Create(SettingsFieldInfo settingsFieldInfo, bool reset, bool throwExceptionIfCouldNotLoadFromStorageFile)
+        {
+            Settings settings = create(settingsFieldInfo, reset, throwExceptionIfCouldNotLoadFromStorageFile);
+            settings.__Info = settingsFieldInfo;
             settings.Loaded();
             return settings;
         }
-        static Settings create(SettingsField settingsField, bool reset, bool throwExceptionIfCouldNotLoadFromStorageFile)
+        static Settings create(SettingsFieldInfo settingsFieldInfo, bool reset, bool throwExceptionIfCouldNotLoadFromStorageFile)
         {
-            if (!reset && File.Exists(settingsField.File))
+            if (!reset && File.Exists(settingsFieldInfo.File))
                 try
                 {
-                    return (Settings)Cliver.Serialization.Json.Load(settingsField.Type, settingsField.File);
+                    return (Settings)Cliver.Serialization.Json.Load(settingsFieldInfo.Type, settingsFieldInfo.File);
                 }
                 catch (Exception e)
                 {
                     if (throwExceptionIfCouldNotLoadFromStorageFile)
-                        throw new Exception("Error while loading settings " + settingsField.FullName + " from file " + settingsField.File, e);
+                        throw new Exception("Error while loading settings " + settingsFieldInfo.FullName + " from file " + settingsFieldInfo.File, e);
                 }
-            if (File.Exists(settingsField.InitFile))
+            if (File.Exists(settingsFieldInfo.InitFile))
             {
-                FileSystemRoutines.CopyFile(settingsField.InitFile, settingsField.File, true);
-                return (Settings)Cliver.Serialization.Json.Load(settingsField.Type, settingsField.InitFile);
+                FileSystemRoutines.CopyFile(settingsFieldInfo.InitFile, settingsFieldInfo.File, true);
+                try
+                {
+                    return (Settings)Cliver.Serialization.Json.Load(settingsFieldInfo.Type, settingsFieldInfo.InitFile);
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("Error while loading settings " + settingsFieldInfo.FullName + " from initial file " + settingsFieldInfo.InitFile, e);
+                }
             }
-            return (Settings)Activator.CreateInstance(settingsField.Type);
+            return (Settings)Activator.CreateInstance(settingsFieldInfo.Type);
         }
 
         /// <summary>
-        /// Field full name is the string that is used in the code to refer to this field. It is the type path of the field. 
-        /// </summary>
-        [Newtonsoft.Json.JsonIgnore]
-        public string __FullName { get { return Field.FullName; } }
-
-        /// <summary>
-        /// Path of the storage file. It consists of a directory which defined by Settings type and file name which is the field's full name.
-        /// </summary>
-        [Newtonsoft.Json.JsonIgnore]
-        public string __File { get { return Field.File; } }
-
-        /// <summary>
-        /// Path of the init file. It consists of the directory where the entry assembly is located and file name which is the field's full name.
-        /// </summary>
-        [Newtonsoft.Json.JsonIgnore]
-        public string __InitFile { get { return Field.InitFile; } }
-
-        /// <summary>
-        /// Indicates whether this Settings object is value of some Settings field or it is not.
+        /// Indicates whether this Settings object is value of some Settings field in the application or it is not.
         /// If Settings object copies are created in the application then this method allows to indicate them before calling Reload(), Reset() and Save()
         /// </summary>
         public bool IsDetached()
         {
-            return Field == null//was created outside Config
-                || Config.GetSettings(Field.FullName) != this;//is not referenced by the field
+            return __Info == null//was created outside Config
+                || Config.GetSettingsFieldInfo(__Info.FullName).GetObject() != this;//is not referenced by the field
         }
 
         /// <summary>
@@ -84,18 +89,17 @@ namespace Cliver
         /// </summary>
         public void Save()
         {
-            //if (IsDetached())
-            //    throw new Exception("This method cannot be performed because this Settings object it is not value of the field " + __FieldFullName);
             lock (this)
             {
+                //it must be allowed to perform it on a detached object. 
+                //The real case: saving an edited detached object while the attached object remains unchanged in use until the end of the process so that the changes will come into game after restart.
+                if (__Info == null)
+                    throw new Exception("This method cannot be performed on a Settings object which has __Info undefined.");
                 Saving();
-                Cliver.Serialization.Json.Save(__File, this, __Indented, true);
+                Cliver.Serialization.Json.Save(__Info.File, this, __Info.Indented, true);
                 Saved();
             }
         }
-
-        [Newtonsoft.Json.JsonIgnore]
-        public bool __Indented = true;
 
         virtual public void Loaded() { }
 
@@ -103,49 +107,53 @@ namespace Cliver
 
         virtual public void Saved() { }
 
-        //void importValues(Settings s)!!!Declined because such copying may bring to the mess in a object's state (if any)
+        //void importValues(Settings s)!!!Declined because such copying may bring to a mess in the object's state (if any)
         //{
         //    foreach (FieldInfo settingsTypeFieldInfo in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance))
         //        settingsTypeFieldInfo.SetValue(this, settingsTypeFieldInfo.GetValue(s));
         //}
 
         /// <summary>
-        /// Replaces the value of the field defined by __FieldFullName with a new object initiated with default values. 
+        /// Replaces the value of the field defined by __Info.FullName with a new object initiated with default values. 
         /// Tries to load it from the initial file located in the app's directory. 
         /// If this file does not exist, it creates an object with the hardcoded values.
-        /// Avoid calling this method on a detached Settings object as it leads to a confusing effect. 
+        /// Calling this method on a detached Settings object makes no effect because otherwise it would lead to a confusing effect. 
         /// </summary>
-        public void Reset(/*bool ignoreInitFile = false*/)
+        public bool Reset(/*bool ignoreInitFile = false*/)
         {
-            //if (IsDetached())
-            //    throw new Exception("This method cannot be performed because this Settings object it is not value of the field " + __FieldFullName);
-            Field.SetObject(Create(Field, true, true));
+            if (IsDetached())//while technically it is possible, it seems to contradict the idea of Settings if this method was performed outside the Settings field.
+                return false;
+            __Info.SetObject(Create(__Info, true, true));
+            return true;
         }
 
         /// <summary>
-        /// Replaces the value of the field defined by __FieldFullName with a new object initiated with stored values.
+        /// Replaces the value of the field defined by __Info.FullName with a new object initiated with stored values.
         /// Tries to load it from the storage file.
         /// If this file does not exist, it tries to load it from the initial file located in the app's directory. 
         /// If this file does not exist, it creates an object with the hardcoded values.
-        /// Avoid calling this method on a detached Settings object as it leads to a confusing effect. 
+        /// Calling this method on a detached Settings object makes no effect because otherwise it would lead to a confusing effect. 
         /// </summary>
         /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
-        public void Reload(bool throwExceptionIfCouldNotLoadFromStorageFile = false)
+        public bool Reload(bool throwExceptionIfCouldNotLoadFromStorageFile = false)
         {
-            //if (IsDetached())
-            //    throw new Exception("This method cannot be performed because this Settings object it is not value of the field " + __FieldFullName);
-            Field.SetObject(Create(Field, false, throwExceptionIfCouldNotLoadFromStorageFile));
+            if (IsDetached())//while technically it is possible, it seems to contradict the idea of Settings if this method was performed outside the Settings field.
+                return false;
+            __Info.SetObject(Create(__Info, false, throwExceptionIfCouldNotLoadFromStorageFile));
+            return true;
         }
 
         /// <summary>
         /// Compares serializable properties of this object with the ones stored in the file or the default ones.
         /// </summary>
         /// <returns>False if the values are the identical.</returns>
-        public bool IsChanged()
+        public bool? IsChanged()
         {
             lock (this)
             {
-                return !Serialization.Json.IsEqual(this, Create(Field, false, false));
+                if (__Info == null)//was created outside Config
+                    return null;
+                return !Serialization.Json.IsEqual(this, Create(__Info, false, false));
             }
         }
 
@@ -155,24 +163,17 @@ namespace Cliver
         public class Optional : Attribute { }
 
         /// <summary>
-        /// Folder where storage files of this Settings type are to be saved by Config.
-        /// Each Settings type has to define it.
+        /// Folder where storage files of this Settings based type are to be saved by Config.
+        /// Each Settings based class has to have it defined. 
+        /// Despite of the fact it not static, it is actually instance independent as only default value of it is used.
+        /// (It is not static because of badly restrictions in C#.)
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         public abstract string __StorageDir { get; }
-
-        /// <summary>
-        /// Folder where storage files of this Settings type are saved by Config.
-        /// </summary>
-        public static string GetStorageDir(Type settingsType)
-        {
-            Settings s = (Settings)Activator.CreateInstance(settingsType);
-            return s.__StorageDir;
-        }
     }
 
     /// <summary>
-    /// Inheritor of this class is stored in CommonApplicationData folder.
+    /// Instances of this class are to be stored in CommonApplicationData folder.
     /// CliverWinRoutines lib contains AppSettings adapted for Windows.
     /// </summary>
     public class AppSettings : Settings
@@ -182,7 +183,7 @@ namespace Cliver
     }
 
     /// <summary>
-    /// Inheritor of this class is stored in LocalApplicationData folder.
+    /// Instances of this class are to be stored in LocalApplicationData folder.
     /// </summary>
     public class UserSettings : Settings
     {

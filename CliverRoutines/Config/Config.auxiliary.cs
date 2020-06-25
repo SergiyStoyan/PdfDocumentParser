@@ -24,9 +24,11 @@ namespace Cliver
         /// <typeparam name="S"></typeparam>
         /// <param name="settings"></param>
         /// <returns></returns>
-        public static S CreateResetCopy<S>(S settings) where S : Settings, new()
+        public static S CreateResetInstance<S>(S settings) where S : Settings, new()
         {
-            return (S)Settings.Create(settings.Field, true, true);
+            if (settings.__Info == null)
+                throw new Exception("This method cannot be performed on a Settings object which has __Info undefined.");
+            return (S)Settings.Create(settings.__Info, true, true);
         }
 
         /// <summary>
@@ -39,9 +41,11 @@ namespace Cliver
         /// <param name="settings"></param>
         /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
         /// <returns></returns>
-        public static S CreateReloadedCopy<S>(S settings, bool throwExceptionIfCouldNotLoadFromStorageFile = false) where S : Settings, new()
+        public static S CreateReloadedInstance<S>(S settings, bool throwExceptionIfCouldNotLoadFromStorageFile = false) where S : Settings, new()
         {
-            return (S)Settings.Create(settings.Field, false, throwExceptionIfCouldNotLoadFromStorageFile);
+            if (settings.__Info == null)
+                throw new Exception("This method cannot be performed on a Settings object which has __Info undefined.");
+            return (S)Settings.Create(settings.__Info, false, throwExceptionIfCouldNotLoadFromStorageFile);
         }
 
         /// <summary>
@@ -51,69 +55,70 @@ namespace Cliver
         /// <param name="toDirectory">folder where files are to be copied</param>
         static public void ExportStorageFiles(string toDirectory)
         {
-            lock (fieldFullNames2SettingsField)
+            lock (settingsFullNames2SettingsFieldInfo)
             {
                 string d = FileSystemRoutines.CreateDirectory(toDirectory + System.IO.Path.DirectorySeparatorChar + CONFIG_FOLDER_NAME);
-                foreach (SettingsField settingsField in enumSettingsFields())
+                foreach (SettingsFieldInfo settingsFieldInfo in enumSettingsFieldInfos())
                 {
-                    if (File.Exists(settingsField.File))//it can be absent if default settings are used still
-                        File.Copy(settingsField.File, d + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(settingsField.File));
-                    else if (File.Exists(settingsField.InitFile))
-                        File.Copy(settingsField.InitFile, d + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(settingsField.InitFile));
+                    if (File.Exists(settingsFieldInfo.File))//it can be absent if default settings are used still
+                        File.Copy(settingsFieldInfo.File, d + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(settingsFieldInfo.File));
+                    else if (File.Exists(settingsFieldInfo.InitFile))
+                        File.Copy(settingsFieldInfo.InitFile, d + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(settingsFieldInfo.InitFile));
                     else
                     {
-                        Settings s = Settings.Create(settingsField, true, true);
+                        Settings s = Settings.Create(settingsFieldInfo, true, true);
                         s.Save();
-                        File.Move(settingsField.File, d + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(settingsField.File));
+                        File.Move(settingsFieldInfo.File, d + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(settingsFieldInfo.File));
                     }
                 }
             }
         }
 
+        //// ???what would it be needed for?
+        //public static S CreateResetInstance<S>(string settingsFullName) where S : Settings, new()
+        //{
+        //    return (S)Settings.Create(GetSettingsFieldInfo(settingsFullName), true, true);
+        //}
+
+        //// ???what would it be needed for?
+        //public static S CreateReloadedInstance<S>(string settingsFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false) where S : Settings, new()
+        //{
+        //    return (S)Settings.Create(GetSettingsFieldInfo(settingsFullName), false, throwExceptionIfCouldNotLoadFromStorageFile);
+        //}
+
         /// <summary>
-        /// Allows to get the Settings field's properties before its value has been created (i.e. before the Settings field has been initialized).
+        /// Can be used to initialize an optional Settings field.
         /// </summary>
-        /// <param name="settingsFieldFullName">full name of Settings field; it equals to the name of its storage file without extention</param>
-        /// <returns>Settings field's properties</returns>
-        public static SettingsField GetSettingsField(string settingsFieldFullName)
+        /// <param name="settingsFullName">full name of Settings field; it equals to the name of its storage file without extention</param>
+        public static void Reset(string settingsFullName) 
         {
-            lock (fieldFullNames2SettingsField)
-            {
-                if (!fieldFullNames2SettingsField.TryGetValue(settingsFieldFullName, out SettingsField sf))
-                {
-                    sf = enumSettingsFields().FirstOrDefault(a => a.FullName == settingsFieldFullName);
-                    fieldFullNames2SettingsField[settingsFieldFullName] = sf;
-                }
-                return sf;
-            }
-        }
-
-        // ???what would it be needed for?
-        public static S CreateResetInstance<S>(string settingsFieldFullName) where S : Settings, new()
-        {
-            return (S)Settings.Create(GetSettingsField(settingsFieldFullName), true, true);
-        }
-
-        // ???what would it be needed for?
-        public static S CreateReloadedInstance<S>(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false) where S : Settings, new()
-        {
-            return (S)Settings.Create(GetSettingsField(settingsFieldFullName), false, throwExceptionIfCouldNotLoadFromStorageFile);
-        }
-
-        // ???what would it be needed for?
-        public static void Reset<S>(string settingsFieldFullName) where S : Settings, new()
-        {
-            SettingsField sf = GetSettingsField(settingsFieldFullName);
-            S s = (S)Settings.Create(sf, true, true);
+            SettingsFieldInfo sf = GetSettingsFieldInfo(settingsFullName);
+            Settings s = Settings.Create(sf, true, true);
             sf.SetObject(s);
         }
 
-        // ???what would it be needed for?
-        public static void Reload<S>(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false) where S : Settings, new()
+        /// <summary>
+        /// Can be used to initialize an optional Settings field.
+        /// </summary>
+        /// <param name="settingsFullName">full name of Settings field; it equals to the name of its storage file without extention</param>
+        /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
+        public static void Reload(string settingsFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
         {
-            SettingsField sf = GetSettingsField(settingsFieldFullName);
-            S s = (S)Settings.Create(GetSettingsField(settingsFieldFullName), false, throwExceptionIfCouldNotLoadFromStorageFile);
+            SettingsFieldInfo sf = GetSettingsFieldInfo(settingsFullName);
+            Settings s = Settings.Create(GetSettingsFieldInfo(settingsFullName), false, throwExceptionIfCouldNotLoadFromStorageFile);
             sf.SetObject(s);
         }
+
+        ///// <summary>
+        //// ???what would it be needed for?
+        ///// Returns the Settings object which is set to the field identified by the field's full name.
+        ///// </summary>
+        ///// <param name="settingsFullName">full name of Settings field; it equals to the name of its file without extention</param>
+        ///// <returns>The Settings object which is set to the field</returns>
+        //static public Settings GetSettings(string settingsFullName)
+        //{
+        //    SettingsFieldInfo sf = GetSettingsFieldInfo(settingsFullName);
+        //    return sf.GetObject();
+        //}
     }
 }

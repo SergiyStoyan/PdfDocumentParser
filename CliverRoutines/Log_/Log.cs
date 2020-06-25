@@ -19,7 +19,7 @@ namespace Cliver
     {
         static readonly object lockObject = new object();
 
-        public static void Initialize(Mode mode, List<string> primaryBaseDirs = null, Level level = Level.ALL, int deleteLogsOlderDays = 10, int maxFileSize = -1)
+        public static void Initialize(Mode mode, List<string> primaryBaseDirs = null, Level defaultLevel = Level.ALL, int deleteLogsOlderDays = 10, int defaultMaxFileSize = -1)
         {
             lock (lockObject)
             {
@@ -27,15 +27,15 @@ namespace Cliver
                 Log.mode = mode;
                 Log.primaryBaseDirs = primaryBaseDirs;
                 Log.deleteLogsOlderDays = deleteLogsOlderDays;
-                Log.level = level;
-                Log.maxFileSize = maxFileSize;
+                Log.defaultLevel = defaultLevel;
+                Log.defaultMaxFileSize = defaultMaxFileSize;
             }
         }
         static List<string> primaryBaseDirs = null;
         static int deleteLogsOlderDays = 10;
         static Mode mode = Mode.ALL_LOGS_ARE_IN_SAME_FOLDER;
-        static Level level = Level.ALL;
-        static int maxFileSize = -1;
+        static Level defaultLevel = Level.ALL;
+        static int defaultMaxFileSize = -1;
 
         public static bool ReuseThreadLogIndexes = false;
         public static string FileExtension = "log";
@@ -155,7 +155,7 @@ namespace Cliver
             get
             {
                 if (workDir == null)
-                    setWorkDir(level > Level.NONE);
+                    setWorkDir(defaultLevel > Level.NONE);
                 return workDir;
             }
         }

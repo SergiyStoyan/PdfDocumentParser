@@ -60,9 +60,9 @@ namespace Cliver
                 return Deserialize(type, File.ReadAllText(file));
             }
 
-            public static T Clone<T>(T o)
+            public static O Clone<O>(O o)
             {
-                return Deserialize<T>(Serialize(o, false, true));
+                return Deserialize<O>(Serialize(o, false, true));
             }
 
             public static object Clone(Type type, object o)
@@ -74,6 +74,21 @@ namespace Cliver
             {
                 return Serialize(a, false, true) == Serialize(b, false, true);
             }
+        }
+
+        public static O CreateJCloneByJson<O>(this O o)
+        {
+            return Json.Clone<O>(o);
+        }
+
+        public static object CreateCloneByJson(this object o, Type type)
+        {
+            return Json.Clone(type, o);
+        }
+
+        public static bool IsEqualByJson(this object a, object b)
+        {
+            return Json.Serialize(a, false, true) == Json.Serialize(b, false, true);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace Cliver
             internal Writer(string name, Session session)
             {
                 Name = name;
-                this.session = session;
+                Session = session;
                 SetFile();
             }
 
@@ -36,13 +36,13 @@ namespace Cliver
                         if (level == Level.NONE && value > Level.NONE)
                         {
                             setWorkDir(true);
-                            Directory.CreateDirectory(session.Path);
+                            Directory.CreateDirectory(Session.Dir);
                         }
                         level = value;
                     }
                 }
             }
-            Level level = Log.level;
+            Level level = Log.defaultLevel;
 
             public readonly string Name;
 
@@ -52,23 +52,18 @@ namespace Cliver
             {
                 lock (this)
                 {
-                    string file2;
+                    string file2 = Session.Dir + System.IO.Path.DirectorySeparatorChar + Log.ProcessName;
                     switch (Log.mode)
                     {
                         case Log.Mode.ALL_LOGS_ARE_IN_SAME_FOLDER:
-                            file2 = session.Path + System.IO.Path.DirectorySeparatorChar + Log.ProcessName + (string.IsNullOrWhiteSpace(session.Name) ? "" : "_" + session.Name) + "_" + session.TimeMark + (string.IsNullOrWhiteSpace(Name) ? "" : "_" + Name) + "." + FileExtension;
+                            file2 += (string.IsNullOrWhiteSpace(Session.Name) ? "" : "_" + Session.Name);
                             break;
                         case Cliver.Log.Mode.EACH_SESSION_IS_IN_OWN_FORLDER:
-                            file2 = session.Path + System.IO.Path.DirectorySeparatorChar + Log.ProcessName + "_" + session.TimeMark + (string.IsNullOrWhiteSpace(Name) ? "" : "_" + Name) + "." + FileExtension;
                             break;
                         default:
                             throw new Exception("Unknown LOGGING_MODE:" + Cliver.Log.mode);
                     }
-
-                    if (fileCounter == 1)
-                        file2 = Regex.Replace(file2, @"\.[^\.]+$", @"[1]$0");
-                    else
-                        file2 = Regex.Replace(file2, @"\[" + fileCounter + @"\](\.[^\.]+)$", @"[" + fileCounter + @"]$1");
+                    file2 += "_" + Session.TimeMark + (string.IsNullOrWhiteSpace(Name) ? "" : "_" + Name) + (fileCounter > 0 ? "[" + fileCounter + "]" : "") + "." + FileExtension;
 
                     if (File == file2)
                         return;
@@ -79,9 +74,9 @@ namespace Cliver
             }
             int fileCounter = 0;
 
-            readonly Session session;
+            public readonly Session Session;
 
-            public int MaxFileSize = Log.maxFileSize;
+            public int MaxFileSize = Log.defaultMaxFileSize;
 
             public const string MAIN_THREAD_LOG_NAME = "";
 

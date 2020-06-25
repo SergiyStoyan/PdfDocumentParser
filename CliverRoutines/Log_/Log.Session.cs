@@ -22,29 +22,29 @@ namespace Cliver
                 this.name = name;
                 CreatedTime = DateTime.MinValue;
                 timeMark = null;
-                string path = Path;//initialize
+                string dir = Dir;//initialize
             }
 
-            string getPath(string name)
+            string getDir(string name)
             {
                 lock (this.names2NamedWriter)
                 {
-                    string path;
+                    string dir;
                     switch (Log.mode)
                     {
                         case Cliver.Log.Mode.ALL_LOGS_ARE_IN_SAME_FOLDER:
-                            path = WorkDir;
+                            dir = WorkDir;
                             break;
                         case Cliver.Log.Mode.EACH_SESSION_IS_IN_OWN_FORLDER:
-                            string path0 = WorkDir + System.IO.Path.DirectorySeparatorChar + NamePrefix + "_" + TimeMark + (string.IsNullOrWhiteSpace(name) ? "" : "_" + name);
-                            path = path0;
-                            for (int count = 1; Directory.Exists(path); count++)
-                                path = path0 + "_" + count.ToString();
+                            string dir0 = WorkDir + System.IO.Path.DirectorySeparatorChar + NamePrefix + "_" + TimeMark + (string.IsNullOrWhiteSpace(name) ? "" : "_" + name);
+                            dir = dir0;
+                            for (int count = 1; Directory.Exists(dir); count++)
+                                dir = dir0 + "_" + count.ToString();
                             break;
                         default:
                             throw new Exception("Unknown LOGGING_MODE:" + Cliver.Log.mode);
                     }
-                    return path;
+                    return dir;
                 }
             }
 
@@ -62,19 +62,19 @@ namespace Cliver
             }
             string name;
 
-            public string Path
+            public string Dir
             {
                 get
                 {
                     lock (this.names2NamedWriter)//this lock is needed if Session::Close(string new_name) is being performed
                     {
-                        if (path == null)
-                            path = getPath(name);
-                        return path;
+                        if (dir == null)
+                            dir = getDir(name);
+                        return dir;
                     }
                 }
             }
-            string path;
+            string dir;
 
             public DateTime CreatedTime { get; protected set; }
             public string TimeMark {
@@ -122,32 +122,34 @@ namespace Cliver
                         return;
 
                     Write("Renaming session...: '" + Name + "' to '" + newName + "'");
+
                     Close(true);
-                    string newPath = getPath(newName);
+                    string newDir = getDir(newName);
                     switch (Log.mode)
                     {
                         case Cliver.Log.Mode.ALL_LOGS_ARE_IN_SAME_FOLDER:
+                            dir = newDir;
+                            foreach (Writer w in names2NamedWriter.Values.Select(a => (Writer)a).Concat(threads2treadWriter.Values))
+                            {
+                                string file0 = w.File;
+                                w.SetFile();
+                                if (File.Exists(file0))
+                                    File.Move(file0, w.File);
+                            }
                             break;
                         case Cliver.Log.Mode.EACH_SESSION_IS_IN_OWN_FORLDER:
-                            if (Directory.Exists(Path))
-                                Directory.Move(Path, newPath);
+                            if (Directory.Exists(dir))
+                                Directory.Move(dir, newDir);
+                            dir = newDir;
                             break;
                         default:
                             throw new Exception("Unknown LOGGING_MODE:" + Cliver.Log.mode);
                     }
-                    path = newPath;
                     lock (names2Session)
                     {
                         names2Session.Remove(name);
                         name = newName;
                         names2Session[name] = this;
-                    }
-                    foreach (Writer w in names2NamedWriter.Values.Select(a => (Writer)a).Concat(threads2treadWriter.Values))
-                    {
-                        string file0 = w.File;
-                        w.SetFile();
-                        if (File.Exists(file0))
-                            File.Move(file0, w.File);
                     }
                 }
             }
@@ -178,7 +180,7 @@ namespace Cliver
 
                     if (!reuse)
                     {
-                        path = null;
+                        dir = null;
                         CreatedTime = DateTime.MinValue;
                         timeMark = null;
                     }

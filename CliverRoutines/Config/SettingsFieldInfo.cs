@@ -16,34 +16,43 @@ using System.Diagnostics;
 namespace Cliver
 {
     /// <summary>
-    /// Settings type field's properties.
+    /// Settings attributes which are defined by a Settings field.
     /// </summary>
-    public class SettingsField
+    public class SettingsFieldInfo
     {
         /// <summary>
-        /// Field full name is the string that is used in the code to refer to this field. It is the type path of the field. 
+        /// Settings' full name is the string that is used in code to refer to this field/property. 
+        /// It defines exactly Settings field/property in the code but has nothing to do with the type of it. 
         /// </summary>
         public readonly string FullName;
 
-        internal readonly FieldInfo Info;
+        internal readonly FieldInfo FieldInfo;
 
         /// <summary>
-        /// Path of the storage file. It consists of a directory which defined by Settings type and file name which is the field's full name.
+        /// Path of the storage file. It consists of a directory which defined by the Settings based type and the file name which is the field's full path in the code.
         /// </summary>
         public readonly string File;
 
         /// <summary>
-        /// Path of the init file. It consists of the directory where the entry assembly is located and file name which is the field's full name.
+        /// Path of the init file. It consists of the directory where the entry assembly is located and the file name which is the field's full name in the code.
         /// </summary>
         public readonly string InitFile;
 
+        /// <summary>
+        /// Whether serialization to string is done with indention.
+        /// </summary>
+        public bool Indented;
+
+        /// <summary>
+        /// Settings based type.
+        /// </summary>
         internal readonly Type Type;
 
         internal Settings GetObject()
         {
             lock (this)
             {
-                return (Settings)Info.GetValue(null);
+                return (Settings)FieldInfo.GetValue(null);
             }
         }
 
@@ -51,15 +60,16 @@ namespace Cliver
         {
             lock (this)
             {
-                Info.SetValue(null, settings);
+                FieldInfo.SetValue(null, settings);
             }
         }
 
-        internal SettingsField(FieldInfo settingsTypeFieldInfo)
+        internal SettingsFieldInfo(FieldInfo settingsTypeFieldInfo)
         {
             FullName = settingsTypeFieldInfo.DeclaringType.FullName + "." + settingsTypeFieldInfo.Name;
-            Info = settingsTypeFieldInfo;
-            File = Settings.GetStorageDir(settingsTypeFieldInfo.FieldType) + System.IO.Path.DirectorySeparatorChar + FullName + "." + Config.FILE_EXTENSION;
+            FieldInfo = settingsTypeFieldInfo;
+            Settings s = (Settings)Activator.CreateInstance(settingsTypeFieldInfo.FieldType);
+            File = s.__StorageDir + System.IO.Path.DirectorySeparatorChar + FullName + "." + Config.FILE_EXTENSION;
             InitFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + FullName + "." + Config.FILE_EXTENSION;
             Type = settingsTypeFieldInfo.FieldType;
         }

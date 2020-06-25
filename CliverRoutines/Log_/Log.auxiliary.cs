@@ -41,11 +41,10 @@ namespace Cliver
                         switch (Log.mode)
                         {
                             case Mode.EACH_SESSION_IS_IN_OWN_FORLDER:
-                                //case Mode.SINGLE_SESSION:
                                 alert = "Session data including caches and logs older than " + FirstLogDate.ToString() + " are to be deleted.\r\nDelete?";
                                 foreach (DirectoryInfo d in di.GetDirectories())
                                 {
-                                    if (headSession != null && d.FullName.StartsWith(headSession.Path, StringComparison.InvariantCultureIgnoreCase))
+                                    if (headSession != null && d.FullName.StartsWith(headSession.Dir, StringComparison.InvariantCultureIgnoreCase))
                                         continue;
                                     if (d.LastWriteTime >= FirstLogDate)
                                         continue;

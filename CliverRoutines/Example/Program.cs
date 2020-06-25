@@ -10,6 +10,18 @@ namespace Example
         {
             try
             {
+                Log_usage_example();
+                Config_usage_example();
+            }
+            catch (Exception e)
+            {
+                Log.Exit(e);
+            }
+        }
+        static void Log_usage_example()
+        {
+            try
+            {
                 Log.Initialize(Log.Mode.EACH_SESSION_IS_IN_OWN_FORLDER);
 
                 Log.Inform("test");
@@ -31,25 +43,31 @@ namespace Example
                 s1.Trace("to the main log of session 'Name1'");
                 s1.Thread.Inform("to the thread log of session 'Name1'");
                 s1.Rename("Name2");
-
-
-                Config.Reload();
-
-                //the usual routine is direct manipulating with settings data
-                Settings.Smtp.Port = 10;
-                Settings.Smtp.Save();
-
-                //a more advanced routine which is usually not required
-                SmtpSettings smtpSettings2 = Config.CreateResetCopy(Settings.Smtp);
-                //pass smtpSettings2 somewhere for editing...
-                smtpSettings2.Port = 10;
-                Settings.Smtp = smtpSettings2;
-                Settings.Smtp.Save();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                Log.Exit(e);
-            }            
+                Log.Error(e);
+            }
+        }
+
+        static void Config_usage_example()
+        {
+            Config.Reload();
+
+            //the usual routine is direct manipulating with settings data
+            Settings.Smtp.Port = 10;
+            //if the data is OK
+            Settings.Smtp.Save();
+            //else
+            Settings.Smtp.Reload();
+
+            //a more advanced routine which usually is not used
+            SmtpSettings smtp2 = Config.CreateResetInstance(Settings.Smtp);
+            //pass smtp2 somewhere for editing...
+            smtp2.Port = 11;
+            //if the data is OK
+            Settings.Smtp = smtp2;
+            Settings.Smtp.Save();
         }
     }
 }
