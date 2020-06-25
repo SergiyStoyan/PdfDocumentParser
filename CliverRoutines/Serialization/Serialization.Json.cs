@@ -76,7 +76,7 @@ namespace Cliver
             }
         }
 
-        public static O CreateJCloneByJson<O>(this O o)
+        public static O CreateCloneByJson<O>(this O o)
         {
             return Json.Clone<O>(o);
         }
@@ -88,7 +88,7 @@ namespace Cliver
 
         public static bool IsEqualByJson(this object a, object b)
         {
-            return Json.Serialize(a, false, true) == Json.Serialize(b, false, true);
+            return Json.IsEqual(a, b);
         }
     }
 }

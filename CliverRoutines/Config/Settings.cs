@@ -15,26 +15,27 @@ using System.Linq;
 namespace Cliver
 {
     /// <summary>
-    /// Alternative to .NET settings. Fields/properties of Settings based types in the application are automatically managed by Config.
-    /// From practical point of view, usually only one field is declared per a Settings based type, but generally there can be any number of fields of the same Settings type.
+    /// Alternative to .NET settings. Fields/properties of Settings based types in the application are automatically managed by Config. 
+    /// Those Settings field to be managed must be static and public.
+    /// In practice, usually only one field is declared per a Settings derived type, but generally there can be any number of fields of the same Settings type.
     /// </summary>
     abstract public partial class Settings
     {
         /// <summary>
         /// This info identifies a certain Settings field/property in the application to which this object belongs. 
-        /// For some rare hypothetical need, it is possible to change/set it from the application.
+        /// For some rare hypothetical need, changing/setting it from the application is allowed (with caution!).
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         public SettingsFieldInfo __Info
         {
             get
-            {
+            { 
                 return settingsFieldInfo;
             }            
             set
             {
                 if (value.Type != GetType())
-                    throw new Exception("Disaccording SettingsFieldInfo Type. It must be '" + GetType() + "'.");
+                    throw new Exception("Disaccording SettingsFieldInfo Type field. Expected: " + GetType());
                 settingsFieldInfo = value;
             }
         }
@@ -75,8 +76,7 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Indicates whether this Settings object is value of some Settings field in the application or it is not.
-        /// If Settings object copies are created in the application then this method allows to indicate them before calling Reload(), Reset() and Save()
+        /// Indicates whether this Settings object is value of the Settings field indicated by __Info.
         /// </summary>
         public bool IsDetached()
         {
@@ -85,16 +85,16 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Serializes this Settings object to the storage file.
+        /// Serializes this Settings object to the storage file according to __Info.
         /// </summary>
         public void Save()
         {
             lock (this)
             {
-                //it must be allowed to perform it on a detached object. 
-                //The real case: saving an edited detached object while the attached object remains unchanged in use until the end of the process so that the changes will come into game after restart.
+                //!!!Performing on a detached object must be allowed. Consider the real case: 
+                //save an edited detached object while the attached object remains unchanged in use until the end of the process so that the changes will come into game after restart.
                 if (__Info == null)
-                    throw new Exception("This method cannot be performed on a Settings object which has __Info undefined.");
+                    throw new Exception("This method cannot be performed on a Settings object which has __Info not defined.");
                 Saving();
                 Cliver.Serialization.Json.Save(__Info.File, this, __Info.Indented, true);
                 Saved();
@@ -114,7 +114,7 @@ namespace Cliver
         //}
 
         /// <summary>
-        /// Replaces the value of the field defined by __Info.FullName with a new object initiated with default values. 
+        /// Replaces the value of the field defined by __Info with a new object initiated with default values. 
         /// Tries to load it from the initial file located in the app's directory. 
         /// If this file does not exist, it creates an object with the hardcoded values.
         /// Calling this method on a detached Settings object makes no effect because otherwise it would lead to a confusing effect. 
@@ -128,7 +128,7 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Replaces the value of the field defined by __Info.FullName with a new object initiated with stored values.
+        /// Replaces the value of the field defined by __Info with a new object initiated with stored values.
         /// Tries to load it from the storage file.
         /// If this file does not exist, it tries to load it from the initial file located in the app's directory. 
         /// If this file does not exist, it creates an object with the hardcoded values.
@@ -146,13 +146,13 @@ namespace Cliver
         /// <summary>
         /// Compares serializable properties of this object with the ones stored in the file or the default ones.
         /// </summary>
-        /// <returns>False if the values are the identical.</returns>
-        public bool? IsChanged()
+        /// <returns>False if the values are identical.</returns>
+        public bool IsChanged()
         {
             lock (this)
             {
                 if (__Info == null)//was created outside Config
-                    return null;
+                    throw new Exception("This method cannot be performed on a Settings object which has __Info not defined.");
                 return !Serialization.Json.IsEqual(this, Create(__Info, false, false));
             }
         }
@@ -163,10 +163,10 @@ namespace Cliver
         public class Optional : Attribute { }
 
         /// <summary>
-        /// Folder where storage files of this Settings based type are to be saved by Config.
-        /// Each Settings based class has to have it defined. 
-        /// Despite of the fact it not static, it is actually instance independent as only default value of it is used.
-        /// (It is not static because of badly restrictions in C#.)
+        /// Folder where storage files for this Settings derived type are to be saved by Config.
+        /// Each Settings derived class must have it defined. 
+        /// Despite of the fact it is not static, it is instance independent actually as only default value of it is used.
+        /// (It is not static due to badly awkwardness of C#.)
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         public abstract string __StorageDir { get; }

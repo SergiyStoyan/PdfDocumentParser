@@ -54,20 +54,19 @@ namespace Example
         {
             Config.Reload();
 
-            //the usual routine is direct manipulating with settings data
+            //direct manipulating with settings data
             Settings.Smtp.Port = 10;
             //if the data is OK
             Settings.Smtp.Save();
             //else
             Settings.Smtp.Reload();
 
-            //a more advanced routine which usually is not used
-            SmtpSettings smtp2 = Config.CreateResetInstance(Settings.Smtp);
+            //a more advanced routine
+            SmtpSettings smtp2 = Config.CreateReloadedClone(Settings.Smtp);
             //pass smtp2 somewhere for editing...
             smtp2.Port = 11;
             //if the data is OK
-            Settings.Smtp = smtp2;
-            Settings.Smtp.Save();
+            smtp2.Save();
         }
     }
 }

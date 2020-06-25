@@ -29,7 +29,7 @@ namespace Cliver
         internal readonly FieldInfo FieldInfo;
 
         /// <summary>
-        /// Path of the storage file. It consists of a directory which defined by the Settings based type and the file name which is the field's full path in the code.
+        /// Path of the storage file. It consists of a directory which defined by the Settings based type and the file name which is the field's full name in the code.
         /// </summary>
         public readonly string File;
 
@@ -39,12 +39,12 @@ namespace Cliver
         public readonly string InitFile;
 
         /// <summary>
-        /// Whether serialization to string is done with indention.
+        /// Whether serialization to string is to be done with indention.
         /// </summary>
         public bool Indented;
 
         /// <summary>
-        /// Settings based type.
+        /// Settings derived type.
         /// </summary>
         internal readonly Type Type;
 
