@@ -20,10 +20,9 @@ namespace Cliver.SampleParser
 {
     public partial class Settings
     {
-        [Cliver.Settings.Obligatory]
         public static readonly TemplateLocalInfoSettings TemplateLocalInfo;
 
-        public class TemplateLocalInfoSettings : Cliver.Settings
+        public class TemplateLocalInfoSettings : Cliver.UserSettings
         {
             public Dictionary<string, Info> TemplateNames2Info;
 

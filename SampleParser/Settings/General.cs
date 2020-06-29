@@ -23,10 +23,9 @@ namespace Cliver.SampleParser
 {
     public partial class Settings
     {
-        [Cliver.Settings.Obligatory]
         public static readonly GeneralSettings General;
 
-        public class GeneralSettings : Cliver.Settings
+        public class GeneralSettings : Cliver.UserSettings
         {
             public string InputFolder = @"d:\_d\_projects\PdfDocumentParser\_test_files";
             public bool IgnoreHiddenFiles = true;

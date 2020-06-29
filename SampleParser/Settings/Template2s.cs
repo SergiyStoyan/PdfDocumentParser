@@ -17,16 +17,15 @@ namespace Cliver.SampleParser
 {
     public partial class Settings
     {
-        [Cliver.Settings.Obligatory]
         public static readonly Template2sSettings3 Template2s;
 
-        public class Template2sSettings3 : Cliver.Settings
+        public class Template2sSettings3 : Cliver.UserSettings
         {
             public List<Template2> Template2s = new List<Template2>();
 
             public override void Loaded()
             {
-                __Indented = false;
+                __Info.Indented = false;
             }
 
             public override void Saving()

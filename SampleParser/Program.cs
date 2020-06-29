@@ -50,7 +50,7 @@ namespace Cliver.SampleParser
             Config.Reload();
             Win.LogMessage.DisableStumblingDialogs = false;
             Log.DeleteOldLogsDialog = null;
-            Log.Initialize(Log.Mode.ONLY_LOG, Log.CompanyCommonDataDir, true);
+            Log.Initialize(Log.Mode.ALL_LOGS_ARE_IN_SAME_FOLDER,new System.Collections.Generic.List<string> { Log.CompanyCommonDataDir }, Log.Level.ALL);
         }
         public static readonly Version Version;
         public static readonly string Name;
