@@ -76,7 +76,7 @@ namespace Cliver.Win
                 if (jobHandle == IntPtr.Zero)
                     initialize();
                 if (!WinApi.Kernel32.AssignProcessToJobObject(jobHandle, process.Handle))
-                    throw new Exception("!AssignProcessToJobObject. " + ErrorRoutines.GetLastError());
+                    throw new Exception("!AssignProcessToJobObject()", ErrorRoutines.GetLastError());
             }
 
             public static AntiZombieGuard This = new AntiZombieGuard();

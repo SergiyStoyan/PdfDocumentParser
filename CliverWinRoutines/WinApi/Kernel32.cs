@@ -1,10 +1,26 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using Microsoft.Win32.SafeHandles;
 
 namespace Cliver.WinApi
 {
     public class Kernel32
     {
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool WriteFile(SafeFileHandle hFile, // Handle to file 
+                                            byte[] lpBuffer, // Data buffer 
+                                            uint nNumberOfBytesToWrite, // Number of bytes to write 
+                                            out uint lpNumberOfBytesWritten, // Number of bytes written 
+                                            [In] ref System.Threading.NativeOverlapped lpOverlapped); // Overlapped buffer 
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool SetHandleInformation(IntPtr hObject, uint dwMask, uint dwFlags);
+        public const uint HANDLE_FLAG_INHERIT = 0x00000001;
+        public const uint HANDLE_FLAG_PROTECT_FROM_CLOSE = 0x00000002;
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool CreatePipe(out IntPtr hReadPipe, out IntPtr hWritePipe, ref SECURITY_ATTRIBUTES lpPipeAttributes, uint nSize);
+
         [DllImport("kernel32.dll", ExactSpelling = true)]
         public static extern IntPtr GlobalFree(IntPtr handle);
         [DllImport("kernel32.dll", ExactSpelling = true)]
@@ -96,14 +112,6 @@ namespace Cliver.WinApi
 
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall, SetLastError = true)]
         public static extern Microsoft.Win32.SafeHandles.SafeFileHandle CreateFile(string lpFileName, dwDesiredAccess dwDesiredAccess, dwShareMode dwShareMode, ref SECURITY_ATTRIBUTES lpSecurityAttributes, dwCreationDisposition dwCreationDisposition, dwFlagsAndAttributes dwFlagsAndAttributes, IntPtr hTemplateFile);
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct SECURITY_ATTRIBUTES
-        {
-            public int nLength;
-            public IntPtr lpSecurityDescriptor;
-            public bool bInheritHandle;
-        }
 
         public enum dwDesiredAccess : long
         {

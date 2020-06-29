@@ -15,11 +15,11 @@ namespace Cliver
 {
     public static class AssemblyRoutines
     {
-        public static Assembly GetPreviousAssemblyInStack()
+        public static Assembly GetPreviousAssemblyInCallStack()
         {
             Assembly thisAssembly = Assembly.GetExecutingAssembly();
             StackTrace stackTrace = new StackTrace();
-            return stackTrace.GetFrames().Where(f => f.GetMethod().DeclaringType.Assembly != thisAssembly).Select(f => f.GetMethod().DeclaringType.Assembly).FirstOrDefault();
+            return stackTrace.GetFrames().Select(f => f.GetMethod().DeclaringType.Assembly).Where(a => a != thisAssembly).FirstOrDefault();
         }
 
         public static DateTime GetAssemblyCompiledTime(Assembly assembly)

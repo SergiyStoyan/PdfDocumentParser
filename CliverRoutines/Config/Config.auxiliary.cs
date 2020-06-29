@@ -56,7 +56,7 @@ namespace Cliver
         {
             lock (settingsFieldFullNames2SettingsFieldInfo)
             {
-                foreach (SettingsFieldInfo sfi in enumSettingsFieldInfos())
+                foreach (SettingsFieldInfo sfi in EnumSettingsFieldInfos())
                 //foreach (SettingsFieldInfo sfi in settingsFieldFullNames2SettingsFieldInfo.Values)
                 {
                     string file2 = toDirectory + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(sfi.File);
@@ -120,5 +120,6 @@ namespace Cliver
         //    SettingsFieldInfo sf = GetSettingsFieldInfo(settingsFieldFullName);
         //    return sf.GetObject();
         //}
+
     }
 }

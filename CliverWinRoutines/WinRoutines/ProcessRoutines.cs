@@ -27,7 +27,7 @@ namespace Cliver.Win
             return (from x in Process.GetProcessesByName(p.ProcessName) where x.MainModule.FileName == p.MainModule.FileName select x).Count() > 1;
         }
 
-        public static void RunSingleProcessOnly(bool silent = false)
+        public static void RunSingleProcessOnly(Action<string> showError)
         {
             string app_name = ProgramRoutines.GetAppName();
             bool createdNew;
@@ -49,18 +49,16 @@ namespace Cliver.Win
                         Thread.Sleep(1000);//wait for some time while contending, if the other instance of the program is still in progress of shutting down.
                         continue;
                     }
-                    if (!silent)
-                        LogMessage.Exit(e);
-                    else
-                        Environment.Exit(0);
+                    if (showError != null)
+                        showError(Log.GetExceptionMessage(e) + "\r\n\r\nExiting...");
+                    Environment.Exit(0);
                 }
             }
             if (GLOBAL_SINGLE_PROCESS_MUTEX.WaitOne(1000, false))//wait for some time while contending, if the other instance of the program is still in progress of shutting down.
                 return;
-            if (!silent)
-                LogMessage.Exit2(app_name + " is already running, so this instance will exit.");
-            else
-                Environment.Exit(0);
+            if (showError != null)
+                showError(app_name + " is already running, so this instance will exit.");
+            Environment.Exit(0);
         }
         static Mutex GLOBAL_SINGLE_PROCESS_MUTEX = null;
 

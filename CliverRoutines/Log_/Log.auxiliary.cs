@@ -141,12 +141,22 @@ namespace Cliver
         }
         static List<Type> TypesExcludedFromStack = null;
 
+        /// <summary>
+        /// Get exception message with details.
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
         public static string GetExceptionMessage(Exception e)
         {
             GetExceptionMessage(e, out string m, out string d);
             return m + " \r\n\r\n" + d;
         }
 
+        /// <summary>
+        /// Get exception message without details.
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
         public static string GetExceptionMessage2(Exception e)
         {
             GetExceptionMessage(e, out string m, out string d);
@@ -164,6 +174,11 @@ namespace Cliver
         //#endif
         //        }
 
+        /// <summary>
+        /// Get exception message and details.
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
         static public void GetExceptionMessage(Exception e, out string message, out string details)
         {
             Exception lastInterestingE = null;

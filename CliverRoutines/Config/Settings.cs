@@ -6,11 +6,7 @@
 //********************************************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System.IO;
-using System.Reflection;
-using System.Linq;
 
 namespace Cliver
 {
@@ -26,20 +22,21 @@ namespace Cliver
         /// For some rare hypothetical need, changing/setting it from the application is allowed (with caution!).
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
+        [System.Runtime.Serialization.IgnoreDataMember]//required when a Settings object is being passed through WCF service between processes
         public SettingsFieldInfo __Info
         {
             get
-            { 
+            {
                 return settingsFieldInfo;
-            }            
+            }
             set
             {
-                if (value.Type != GetType())
+                if (value != null && value.Type != GetType())
                     throw new Exception("Disaccording SettingsFieldInfo Type field. Expected: " + GetType());
                 settingsFieldInfo = value;
             }
         }
-        public SettingsFieldInfo settingsFieldInfo = null;
+        SettingsFieldInfo settingsFieldInfo = null;
 
         internal static Settings Create(SettingsFieldInfo settingsFieldInfo, bool reset, bool throwExceptionIfCouldNotLoadFromStorageFile)
         {

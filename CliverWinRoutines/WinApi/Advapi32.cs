@@ -14,32 +14,6 @@ namespace Cliver.WinApi
 {
     public partial class Advapi32
     {
-        [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
-        public class SERVICE_NOTIFY
-        {
-            public uint dwVersion;
-            public IntPtr pfnNotifyCallback;
-            public IntPtr pContext;
-            public uint dwNotificationStatus;
-            public SERVICE_STATUS_PROCESS ServiceStatus;
-            public uint dwNotificationTriggered;
-            public IntPtr pszServiceNames;
-        };
-
-        [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
-        public struct SERVICE_STATUS_PROCESS
-        {
-            public uint dwServiceType;
-            public uint dwCurrentState;
-            public uint dwControlsAccepted;
-            public uint dwWin32ExitCode;
-            public uint dwServiceSpecificExitCode;
-            public uint dwCheckPoint;
-            public uint dwWaitHint;
-            public uint dwProcessId;
-            public uint dwServiceFlags;
-        };
-
         [DllImport("advapi32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         public static extern IntPtr OpenService(IntPtr hSCManager, string lpServiceName, OpenServiceDesiredAccess dwDesiredAccess);
         [Flags]
@@ -162,13 +136,7 @@ namespace Cliver.WinApi
 
         [DllImport("advapi32.dll", EntryPoint = "CreateProcessAsUser", SetLastError = true, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         public static extern bool CreateProcessAsUser(IntPtr hToken, String lpApplicationName, String lpCommandLine, ref SECURITY_ATTRIBUTES lpProcessAttributes, ref SECURITY_ATTRIBUTES lpThreadAttributes, bool bInheritHandle, CreationFlags dwCreationFlags, IntPtr lpEnvironment, String lpCurrentDirectory, ref STARTUPINFO lpStartupInfo, out PROCESS_INFORMATION lpProcessInformation);
-        [StructLayout(LayoutKind.Sequential)]
-        public struct SECURITY_ATTRIBUTES
-        {
-            public int Length;
-            public IntPtr lpSecurityDescriptor;
-            public bool bInheritHandle;
-        }
+        
         public enum CreationFlags : uint
         {
             DEBUG_PROCESS = 0x00000001,

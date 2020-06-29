@@ -47,7 +47,7 @@ namespace Cliver
             lock (settingsFieldFullNames2SettingsFieldInfo)
             {
                 settingsFieldFullNames2SettingsFieldInfo.Clear();
-                foreach (SettingsFieldInfo settingsFieldInfo in enumSettingsFieldInfos())
+                foreach (SettingsFieldInfo settingsFieldInfo in EnumSettingsFieldInfos())
                 {
                     if (null != settingsFieldInfo.FieldInfo.GetCustomAttributes<Settings.Optional>(false).FirstOrDefault() && (RequiredOptionalFieldFullNamesRegex == null || !RequiredOptionalFieldFullNamesRegex.IsMatch(settingsFieldInfo.FullName)))
                         continue;
@@ -82,15 +82,20 @@ namespace Cliver
                 return ai < bi ? -1 : 1;
             }
         }
-        static IEnumerable<SettingsFieldInfo> enumSettingsFieldInfos()
+
+        /// <summary>
+        /// Enumerates through all the Settings fields available in the application.
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<SettingsFieldInfo> EnumSettingsFieldInfos()
         {
-            string configAssemblyFullName = Assembly.GetExecutingAssembly().FullName;
+            Assembly configAssembly = Assembly.GetExecutingAssembly();
             StackTrace stackTrace = new StackTrace();
-            Assembly callingAssembly = stackTrace.GetFrames().Where(f => f.GetMethod().DeclaringType.Assembly.FullName != configAssemblyFullName).Select(f => f.GetMethod().DeclaringType.Assembly).FirstOrDefault();
+            Assembly callingAssembly =  stackTrace.GetFrames().Select(f => f.GetMethod().DeclaringType.Assembly).Where(a => a != configAssembly).FirstOrDefault();
             if (callingAssembly == null)
                 callingAssembly = Assembly.GetEntryAssembly();
-            List<Assembly> assemblies = new List<Assembly>();
-            assemblies.Add(callingAssembly);
+            List<Assembly> assemblies = new List<Assembly> { callingAssembly };
+            string configAssemblyFullName = configAssembly.FullName;
             foreach (AssemblyName assemblyName in callingAssembly.GetReferencedAssemblies())
             {
                 Assembly a = Assembly.Load(assemblyName);
@@ -158,7 +163,7 @@ namespace Cliver
             {
                 if (!settingsFieldFullNames2SettingsFieldInfo.TryGetValue(settingsFieldFullName, out SettingsFieldInfo sfi))
                 {
-                    sfi = enumSettingsFieldInfos().FirstOrDefault(a => a.FullName == settingsFieldFullName);
+                    sfi = EnumSettingsFieldInfos().FirstOrDefault(a => a.FullName == settingsFieldFullName);
                     if (sfi == null)
                         throw new Exception("Settings field with full name: '" + settingsFieldFullName + "' does not exist.");
                     settingsFieldFullNames2SettingsFieldInfo[settingsFieldFullName] = sfi;
