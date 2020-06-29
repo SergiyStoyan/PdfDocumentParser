@@ -20,7 +20,7 @@ namespace Cliver.PdfDocumentParser
     public partial class Page
     {
         /// <summary>
-        /// Tries field definitions with the given name in turn until one is found on the page.
+        /// Tries field definitions of the given name in turn until some is found on the page.
         /// </summary>
         /// <param name="fieldName">field is referenced by name because there may be several field-definitions for the same name</param>
         /// <param name="valueType">if not set then DefaultValueType is used</param>
@@ -31,7 +31,7 @@ namespace Cliver.PdfDocumentParser
         }
 
         /// <summary>
-        /// Tries field definitions with the given name in turn until one is found on the page.
+        /// Tries field definitions of the given name in turn until some is found on the page.
         /// </summary>
         /// <param name="fieldName">field is referenced by name because there may be several field-definitions for the same name</param>
         /// <param name="actualField">actual field definition which was found on the page</param>
@@ -118,6 +118,8 @@ namespace Cliver.PdfDocumentParser
             Dictionary<Template.Field.ValueTypes, object> valueTypes2cachedValue = new Dictionary<Template.Field.ValueTypes, object>();//!!!cache Table field values for internal reuse only!!! 
             object getValue_(Template.Field.ValueTypes valueType)
             {
+                if (ActualRectangle == null || TableFieldActualInfo?.Found == false)
+                    return null;
                 RectangleF r = (RectangleF)ActualRectangle;
                 switch (valueType)
                 {
@@ -159,10 +161,6 @@ namespace Cliver.PdfDocumentParser
 
             List<string> getPdfTextLinesAsTableColumn()
             {
-                if (ActualRectangle == null)
-                    return null;
-                if (!TableFieldActualInfo.Found)
-                    return null;
                 RectangleF ar = (RectangleF)ActualRectangle;
                 List<Pdf.CharBox> cbs = (List<Pdf.CharBox>)TableFieldActualInfo.getValue(Template.Field.ValueTypes.PdfCharBoxs, true);
                 List<string> ls = new List<string>();

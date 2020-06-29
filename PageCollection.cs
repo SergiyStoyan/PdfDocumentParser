@@ -39,10 +39,9 @@ namespace Cliver.PdfDocumentParser
         {
             set
             {
-                //if (value == _ActiveTemplate)
-                //    return;
+                if (value == _ActiveTemplate)
+                    return;
                 foreach (Page p in Values)
-                    //p.ActiveTemplate = value;
                     p.OnActiveTemplateUpdating(value);
                 _ActiveTemplate = value;
             }
