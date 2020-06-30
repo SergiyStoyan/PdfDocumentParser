@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace Cliver.PdfDocumentParser
@@ -242,7 +243,7 @@ namespace Cliver.PdfDocumentParser
                     return;
                 }
 
-                Template.Anchor a = getAnchor(anchorId, out  DataGridViewRow row);
+                Template.Anchor a = getAnchor(anchorId, out DataGridViewRow row);
                 if (row == null || a == null)
                     throw new Exception("Anchor[Id=" + anchorId + "] does not exist.");
                 anchors.CurrentCell = anchors[0, row.Index];
@@ -260,26 +261,22 @@ namespace Cliver.PdfDocumentParser
                 {
                     case Template.Anchor.Types.PdfText:
                         {
-                            if (currentAnchorControl == null || !(currentAnchorControl is AnchorPdfTextControl))
-                                currentAnchorControl = new AnchorPdfTextControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = textAutoInsertSpaceRepresentative.Text });
+                            currentAnchorControl = new AnchorPdfTextControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) });
                         }
                         break;
                     case Template.Anchor.Types.OcrText:
                         {
-                            if (currentAnchorControl == null || !(currentAnchorControl is AnchorOcrTextControl))
-                                currentAnchorControl = new AnchorOcrTextControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = textAutoInsertSpaceRepresentative.Text });
+                            currentAnchorControl = new AnchorOcrTextControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) });
                         }
                         break;
                     case Template.Anchor.Types.ImageData:
                         {
-                            if (currentAnchorControl == null || !(currentAnchorControl is AnchorImageDataControl))
-                                currentAnchorControl = new AnchorImageDataControl((float)pictureScale.Value);
+                            currentAnchorControl = new AnchorImageDataControl((float)pictureScale.Value);
                         }
                         break;
                     case Template.Anchor.Types.CvImage:
                         {
-                            if (currentAnchorControl == null || !(currentAnchorControl is AnchorCvImageControl))
-                                currentAnchorControl = new AnchorCvImageControl((float)pictureScale.Value);
+                            currentAnchorControl = new AnchorCvImageControl((float)pictureScale.Value);
                         }
                         break;
                     //case Template.Anchor.Types.Script:
@@ -299,7 +296,7 @@ namespace Cliver.PdfDocumentParser
             }
         }
         bool settingCurrentAnchorRow = false;
-        
+
         AnchorControl currentAnchorControl
         {
             get

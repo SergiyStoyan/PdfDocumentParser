@@ -199,8 +199,9 @@ namespace Cliver.PdfDocumentParser
                             {
                                 SizeF shift = new SizeF(tcbs[0].R.X - cbs[0].Rectangle.X, tcbs[0].R.Y - cbs[0].Rectangle.Y);
                                 RectangleF actualR = new RectangleF(rectangle.X + shift.Width, rectangle.Y + shift.Height, rectangle.Width, rectangle.Height);
-                                if (PdfCharBoxs.FirstOrDefault(x => actualR.Contains(x.R) && !tcbs.Contains(x) && (!pageCollection.ActiveTemplate.IgnoreInvisiblePdfChars || !Pdf.InvisibleCharacters.Contains(x.Char))) == null
-                                && !proceedOnFound(actualR.Location)
+                                if (//check that the found rectangle contains only the anchor's boxes
+                                    PdfCharBoxs.FirstOrDefault(x => actualR.Contains(x.R) && !tcbs.Contains(x) && (!pageCollection.ActiveTemplate.IgnoreInvisiblePdfChars || !Pdf.InvisibleCharacters.Contains(x.Char))) == null
+                                    && !proceedOnFound(actualR.Location)
                                 )
                                     return true;
                             }
@@ -282,8 +283,9 @@ namespace Cliver.PdfDocumentParser
                             {
                                 SizeF shift = new SizeF(tcbs[0].R.X - cbs[0].Rectangle.X, tcbs[0].R.Y - cbs[0].Rectangle.Y);
                                 RectangleF actualR = new RectangleF(rectangle.X + shift.Width, rectangle.Y + shift.Height, rectangle.Width, rectangle.Height);
-                                if (searchRectangleOcrCharBoxs.FirstOrDefault(x => actualR.Contains(x.R) && !tcbs.Contains(x)) == null
-                                && !proceedOnFound(actualR.Location)
+                                if (//check that the found rectangle contains only the anchor's boxes
+                                    searchRectangleOcrCharBoxs.FirstOrDefault(x => actualR.Contains(x.R) && !tcbs.Contains(x)) == null
+                                    && !proceedOnFound(actualR.Location)
                                 )
                                     return true;
                             }

@@ -126,6 +126,7 @@
                     <td>
                         It allows to loose bonds between character boxes in the anchor when for some reason they can shift relatively to each other. It is measured in pixels and must be a positive float number, non-zero even for identical documents because of discrepancy reasoned by internal image re-scaling.
                         <br>It makes no sense, obviously, when the anchor consists of only 1 character.
+						<br><span class='attention'>NOTE: </span>Increasing this parameter might bring to a failing to detect the existing anchor because PdfDocumentParser looks for matches with rectangular which contain exactly the anchor's chars and does not contain any more chars (excluding invisible ones which can be ignored). That is, if there are several same chars located on a page close to each other within the deviation distance then the engine can catch one of them while the other one(s) can appear within the match rectangular making thus the match invalid. 						
                     </td>
                 </tr>
                 <tr>

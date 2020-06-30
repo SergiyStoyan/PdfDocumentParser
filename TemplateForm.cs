@@ -146,14 +146,12 @@ namespace Cliver.PdfDocumentParser
                                             {
                                                 Template.Anchor.PdfText pt = (Template.Anchor.PdfText)a;
                                                 pt.CharBoxs = new List<Template.Anchor.PdfText.CharBox>();
-                                                List<Pdf.Line> lines = Pdf.GetLines(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, r.GetSystemRectangleF(), true), null);
-                                                foreach (Pdf.Line l in lines)
-                                                    foreach (Pdf.CharBox cb in l.CharBoxs)
-                                                        pt.CharBoxs.Add(new Template.Anchor.PdfText.CharBox
-                                                        {
-                                                            Char = cb.Char,
-                                                            Rectangle = new Template.RectangleF(cb.R.X, cb.R.Y, cb.R.Width, cb.R.Height),
-                                                        });
+                                                foreach (Pdf.CharBox cb in Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, r.GetSystemRectangleF(), true))
+                                                    pt.CharBoxs.Add(new Template.Anchor.PdfText.CharBox
+                                                    {
+                                                        Char = cb.Char,
+                                                        Rectangle = new Template.RectangleF(cb.R.X, cb.R.Y, cb.R.Width, cb.R.Height),
+                                                    });
                                                 pt.Size = new Template.SizeF { Width = r.Width, Height = r.Height };
                                             }
                                             break;
@@ -173,13 +171,12 @@ namespace Cliver.PdfDocumentParser
                                                         selectedOcrCharBoxs.Add(cb);
                                                     }
                                                 }
-                                                foreach (Ocr.Line l in Ocr.GetLines(selectedOcrCharBoxs, null))
-                                                    foreach (Ocr.CharBox cb in l.CharBoxs)
-                                                        ot.CharBoxs.Add(new Template.Anchor.OcrText.CharBox
-                                                        {
-                                                            Char = cb.Char,
-                                                            Rectangle = new Template.RectangleF(cb.R.X, cb.R.Y, cb.R.Width, cb.R.Height),
-                                                        });
+                                                foreach (Ocr.CharBox cb in selectedOcrCharBoxs)
+                                                    ot.CharBoxs.Add(new Template.Anchor.OcrText.CharBox
+                                                    {
+                                                        Char = cb.Char,
+                                                        Rectangle = new Template.RectangleF(cb.R.X, cb.R.Y, cb.R.Width, cb.R.Height),
+                                                    });
                                                 ot.Size = new Template.SizeF { Width = r.Width, Height = r.Height };
                                             }
                                             break;
