@@ -107,12 +107,8 @@
             0,
             0,
             0});
-            this.ScaleDeviation.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.ScaleDeviation.Name = "ScaleDeviation";
+            this.ScaleDeviation.Minimum = new decimal(0);
+            this.ScaleDeviation.Name = "Scale Deviation";
             this.ScaleDeviation.Size = new System.Drawing.Size(125, 38);
             this.ScaleDeviation.TabIndex = 64;
             this.ScaleDeviation.Value = new decimal(new int[] {

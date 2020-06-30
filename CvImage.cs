@@ -127,7 +127,7 @@ namespace Cliver.PdfDocumentParser
             p = findWithinImage(image, cvImage.image, threshold);
             if (p != null)
                 return p;
-            //running though pyramid
+            //running through pyramid
             int stepCount = Convert.ToInt32(scaleDeviation * Width / scaleStep);
             for (int i = 1; i <= stepCount; i++)
             {
@@ -144,8 +144,10 @@ namespace Cliver.PdfDocumentParser
             return null;
         }
 
-       static System.Drawing.Point? findWithinImage(Image<Gray, byte> template, Image<Gray, byte> image, float threshold = 0.7f)
+        static System.Drawing.Point? findWithinImage(Image<Gray, byte> template, Image<Gray, byte> image, float threshold = 0.7f)
         {
+            if (template.Width > image.Width || template.Height > image.Height)//otherwise MatchTemplate() throws an exception
+                return null;
             using (Image<Gray, float> match = image.MatchTemplate(template, TemplateMatchingType.CcoeffNormed))
             {
                 match.MinMax(out double[] min, out double[] max, out Point[] minPoint, out Point[] maxPoint);

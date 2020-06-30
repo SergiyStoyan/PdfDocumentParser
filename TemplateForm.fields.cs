@@ -59,16 +59,20 @@ namespace Cliver.PdfDocumentParser
                 switch (e.KeyCode)
                 {
                     case Keys.Add:
+                    case Keys.Oemplus:
                         duplicateSelectedField();
                         break;
                     case Keys.Delete:
+                    case Keys.OemMinus:
                         deleteSelectedField();
                         break;
                     case Keys.Up:
-                        moveUpSelectedField();
+                        if (e.Modifiers == Keys.Control)
+                            moveUpSelectedField();
                         break;
                     case Keys.Down:
-                        moveDownSelectedField();
+                        if (e.Modifiers == Keys.Control)
+                            moveDownSelectedField();
                         break;
                 }
             };
