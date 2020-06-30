@@ -16,6 +16,31 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class Page
     {
+        //internal AnchorActualInfo GetAnchorActualInfo(int anchorId)
+        //{
+        //    Template.Anchor a = pageCollection.ActiveTemplate.Anchors.Find(x => x.Id == anchorId);
+        //    if (a == null)
+        //        throw new Exception("Anchor[id=" + anchorId + "] does not exist.");
+        //    if (!a.IsSet())
+        //        throw new Exception("Anchor[id=" + anchorId + "] is not set.");
+
+        //    StringBuilder sb = new StringBuilder(Serialization.Json.Serialize(a, false));
+        //    for (int? id = a.ParentAnchorId; id != null;)
+        //    {
+        //        Template.Anchor pa = pageCollection.ActiveTemplate.Anchors.Find(x => x.Id == id);
+        //        sb.Append(Serialization.Json.Serialize(pa, false));
+        //        id = pa.ParentAnchorId;
+        //    }
+        //    string sa = sb.ToString();
+        //    if (!anchorHashes2anchorActualInfo.TryGetValue(sa, out AnchorActualInfo anchorActualInfo))
+        //    {
+        //        anchorActualInfo = new AnchorActualInfo(a, this);
+        //        anchorHashes2anchorActualInfo[sa] = anchorActualInfo;
+        //    }
+        //    return anchorActualInfo;
+        //}
+        //Dictionary<string, AnchorActualInfo> anchorHashes2anchorActualInfo = new Dictionary<string, AnchorActualInfo>();
+
         internal AnchorActualInfo GetAnchorActualInfo(int anchorId)
         {
             Template.Anchor a = pageCollection.ActiveTemplate.Anchors.Find(x => x.Id == anchorId);
@@ -24,22 +49,14 @@ namespace Cliver.PdfDocumentParser
             if (!a.IsSet())
                 throw new Exception("Anchor[id=" + anchorId + "] is not set.");
 
-            StringBuilder sb = new StringBuilder(Serialization.Json.Serialize(a, false));
-            for (int? id = a.ParentAnchorId; id != null;)
-            {
-                Template.Anchor pa = pageCollection.ActiveTemplate.Anchors.Find(x => x.Id == id);
-                sb.Append(Serialization.Json.Serialize(pa, false));
-                id = pa.ParentAnchorId;
-            }
-            string sa = sb.ToString();
-            if (!anchorHashes2anchorActualInfo.TryGetValue(sa, out AnchorActualInfo anchorActualInfo))
+            if (!anchorIds2anchorActualInfo.TryGetValue(a.Id, out AnchorActualInfo anchorActualInfo))
             {
                 anchorActualInfo = new AnchorActualInfo(a, this);
-                anchorHashes2anchorActualInfo[sa] = anchorActualInfo;
+                anchorIds2anchorActualInfo[a.Id] = anchorActualInfo;
             }
             return anchorActualInfo;
         }
-        Dictionary<string, AnchorActualInfo> anchorHashes2anchorActualInfo = new Dictionary<string, AnchorActualInfo>();
+        Dictionary<int, AnchorActualInfo> anchorIds2anchorActualInfo = new Dictionary<int, AnchorActualInfo>();
 
         internal class AnchorActualInfo
         {

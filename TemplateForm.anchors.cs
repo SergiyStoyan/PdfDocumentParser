@@ -174,7 +174,7 @@ namespace Cliver.PdfDocumentParser
                     }
                     var row = anchors.SelectedRows[0];
                     Template.Anchor a = (Template.Anchor)row.Tag;
-                    if (a == null)//hacky forcing commit a newly added row and display the blank row
+                    if (a == null)//hacky forcing to commit a newly added row and display the blank row
                     {
                         int i = anchors.Rows.Add();
                         row = anchors.Rows[i];

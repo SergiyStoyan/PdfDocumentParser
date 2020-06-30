@@ -100,11 +100,10 @@ namespace Cliver.PdfDocumentParser
                 }
                 if (_activeTemplateOcrCharBoxs != null)
                     _activeTemplateOcrCharBoxs = null;
-
             }
             if (!Serialization.Json.IsEqual(pageCollection.ActiveTemplate, newTemplate))
             {
-                anchorHashes2anchorActualInfo.Clear();
+                anchorIds2anchorActualInfo.Clear();
                 fieldNames2fieldActualInfo.Clear();
             }
         }

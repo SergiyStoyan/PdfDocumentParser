@@ -226,7 +226,7 @@ namespace Cliver.PdfDocumentParser
                         return;
                     DataGridViewRow row = fields.SelectedRows[0];
                     Template.Field f = (Template.Field)row.Tag;
-                    if (f == null)//hacky forcing commit a newly added row and display the blank row
+                    if (f == null)//hacky forcing to commit a newly added row and display the blank row
                     {
                         int i = fields.Rows.Add();
                         row = fields.Rows[i];

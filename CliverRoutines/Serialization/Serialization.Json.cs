@@ -70,6 +70,11 @@ namespace Cliver
                 return Deserialize(type, Serialize(o, false, true));
             }
 
+            public static object Clone2(object o)
+            {
+                return Deserialize(o.GetType(), Serialize(o, false, true));
+            }
+
             public static bool IsEqual(object a, object b)
             {
                 return Serialize(a, false, true) == Serialize(b, false, true);

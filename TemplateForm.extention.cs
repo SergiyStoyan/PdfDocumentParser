@@ -236,7 +236,6 @@ namespace Cliver.PdfDocumentParser
             t.CvImageScalePyramidStep = (int)CvImageScalePyramidStep.Value;
 
             bool? removeNotLinkedAnchors = null;
-            t.Anchors = new List<Template.Anchor>();
             List<int> conditionAnchorIds = null;
             if (saving)
             {
@@ -249,6 +248,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 conditionAnchorIds = conditionAnchorIds.Distinct().ToList();
             }
+            t.Anchors = new List<Template.Anchor>();
             foreach (DataGridViewRow r in anchors.Rows)
             {
                 Template.Anchor a = (Template.Anchor)r.Tag;
@@ -293,8 +293,7 @@ namespace Cliver.PdfDocumentParser
                             continue;
                     }
                 }
-
-                t.Anchors.Add(a);
+                t.Anchors.Add((Template.Anchor)Serialization.Json.Clone2(a));
             }
             t.Anchors = t.Anchors.OrderBy(a => a.Id).ToList();
 
@@ -310,7 +309,7 @@ namespace Cliver.PdfDocumentParser
                         throw new Exception("Condition[name=" + c.Name + "] is not set!");
                     BooleanEngine.Check(c.Value, t.Anchors.Select(x => x.Id));
                 }
-                t.Conditions.Add(c);
+                t.Conditions.Add(Serialization.Json.Clone(c));
             }
             if (saving)
             {
@@ -331,7 +330,7 @@ namespace Cliver.PdfDocumentParser
                     foreach (int? ai in new List<int?> { f.LeftAnchor?.Id, f.TopAnchor?.Id, f.RightAnchor?.Id, f.BottomAnchor?.Id })
                         if (ai != null && t.Anchors.FirstOrDefault(x => x.Id == ai) == null)
                             throw new Exception("Anchor[Id=" + ai + " does not exist.");
-                t.Fields.Add(f);
+                t.Fields.Add(Serialization.Json.Clone(f));
             }
             if (saving)
             {
