@@ -611,8 +611,26 @@ namespace Cliver.PdfDocumentParser
                 return false;
             }
             DataGridViewCell c = row.Cells["Value"];
-            if (c is DataGridViewImageCell && c.Value != null)
-                ((Bitmap)c.Value).Dispose();
+            if (c.Value != null && c.Value is IDisposable)
+                ((IDisposable)c.Value).Dispose();
+            if (f.DefaultValueType == Template.Field.ValueTypes.Image)
+            {
+                if (!(c is DataGridViewImageCell))
+                {
+                    c.Dispose();
+                    c = new DataGridViewImageCell();
+                    row.Cells["Value"] = c;
+                }
+            }
+            else
+            {
+                if (c is DataGridViewImageCell)
+                {
+                    c.Dispose();
+                    c = new DataGridViewTextBoxCell();
+                    row.Cells["Value"] = c;
+                }
+            }
             if (setEmpty)
             {
                 c.Value = null;
@@ -621,12 +639,6 @@ namespace Cliver.PdfDocumentParser
             }
             clearImageFromBoxes();
             object v = extractFieldAndDrawSelectionBox(f);
-            if ((f.DefaultValueType == Template.Field.ValueTypes.Image) != (c is DataGridViewImageCell))
-            {
-                c.Dispose();
-                c = new DataGridViewImageCell();
-                row.Cells["Value"] = c;
-            }
             c.Value = v;
             if (c.Value != null)
                 setRowStatus(statuses.SUCCESS, row, "Found");

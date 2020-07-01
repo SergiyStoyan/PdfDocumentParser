@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using ZedGraph;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -157,10 +158,22 @@ namespace Cliver.PdfDocumentParser
                     case Template.Field.ValueTypes.PdfTextLines:
                     case Template.Field.ValueTypes.PdfCharBoxs:
                         if (field.ColumnOfTable != null)
-                        {                            
+                        {
                             if (!fai.TableFieldActualInfo.Found)
                                 return null;
-                            drawBoxes(Settings.Appearance.TableBoxColor, Settings.Appearance.TableBoxBorderWidth, new List<RectangleF> { (RectangleF)fai.TableFieldActualInfo.ActualRectangle });
+                            RectangleF tableAR = (RectangleF)fai.TableFieldActualInfo.ActualRectangle;
+                            drawBoxes(Settings.Appearance.TableBoxColor, Settings.Appearance.TableBoxBorderWidth, new List<RectangleF> { tableAR });
+                            if (ShowTableFieldLines.Checked)
+                            {
+                                List<Pdf.Line> lines = Pdf.GetLines(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, tableAR), pages.ActiveTemplate.TextAutoInsertSpace).ToList();
+                                List<RectangleF> lineBoxes = new List<RectangleF>();
+                                for (int i = 0; i < lines.Count; i++)
+                                {
+                                    float y = i == 0 ? tableAR.Top : lines[i].Top;
+                                    lineBoxes.Add(new RectangleF { X = tableAR.X, Y = y, Width = tableAR.Width, Height = i < lines.Count - 1 ? lines[i + 1].Top - y : tableAR.Bottom - y });
+                                }
+                                drawBoxes(Settings.Appearance.TableBoxColor, Settings.Appearance.TableBoxBorderWidth, lineBoxes);
+                            }
                         }
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
                         if (field.DefaultValueType == Template.Field.ValueTypes.PdfText)

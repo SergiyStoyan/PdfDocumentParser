@@ -136,6 +136,7 @@ namespace Cliver.PdfDocumentParser
                 pictureScale.Value = t.Editor.TestPictureScale > 0 ? t.Editor.TestPictureScale : 1;
 
                 ExtractFieldsAutomaticallyWhenPageChanged.Checked = t.Editor.ExtractFieldsAutomaticallyWhenPageChanged;
+                ShowTableFieldLines.Checked = t.Editor.ShowTableFieldLines;
                 CheckConditionsAutomaticallyWhenPageChanged.Checked = t.Editor.CheckConditionsAutomaticallyWhenPageChanged;
 
                 if (t.Editor.TestFile != null && File.Exists(t.Editor.TestFile))
@@ -379,6 +380,7 @@ namespace Cliver.PdfDocumentParser
                     TestFile = testFile.Text,
                     TestPictureScale = pictureScale.Value,
                     ExtractFieldsAutomaticallyWhenPageChanged = ExtractFieldsAutomaticallyWhenPageChanged.Checked,
+                    ShowTableFieldLines = ShowTableFieldLines.Checked,
                     CheckConditionsAutomaticallyWhenPageChanged = CheckConditionsAutomaticallyWhenPageChanged.Checked,
                 };
             }

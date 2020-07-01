@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 
 /*
 TBD: 
-- multiple cvimage search for parent anchor
+- multiple cvimage search for parent anchor;
 
 - ?migrate to WPF;
 - ?provide multiple field extraction on page;
