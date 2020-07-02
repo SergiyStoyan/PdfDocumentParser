@@ -17,7 +17,7 @@ namespace Cliver.PdfDocumentParser
     /// <summary>
     /// PDF routines
     /// </summary>
-    internal static partial class Pdf
+    public static partial class Pdf
     {
         static public PdfReader CreatePdfReader(string pdfFile)
         {
@@ -319,7 +319,7 @@ namespace Cliver.PdfDocumentParser
 
         public static List<CharBox> RemoveDuplicates(IEnumerable<CharBox> cbs)
         {
-            List<CharBox> bs = cbs.Where(a => a.R.Width >= 0 && a.R.Height >= 0).ToList();//some symbols are duplicated with negative width anf height
+            List<CharBox> bs = cbs.Where(a => a.R.Width >= 0 && a.R.Height >= 0).ToList();//some symbols are duplicated with negative width and height
             for (int i = 0; i < bs.Count; i++)
                 for (int j = bs.Count - 1; j > i; j--)
                 {

@@ -69,7 +69,7 @@ namespace Cliver.PdfDocumentParser
             {
                 RectangleF? ar = null;
                 Template.Field af = null;
-                foreach (Template.Field f in pageCollection.ActiveTemplate.Fields.Where(x => x.Name == fieldName))
+                foreach (Template.Field f in PageCollection.ActiveTemplate.Fields.Where(x => x.Name == fieldName))
                 {
                     ar = getFieldActualRectangle(f);
                     af = f;
@@ -126,13 +126,13 @@ namespace Cliver.PdfDocumentParser
                     case Template.Field.ValueTypes.PdfText:
                         List<string> ls;
                         if (ActualField.ColumnOfTable == null)
-                            ls = Pdf.GetTextLinesSurroundedByRectangle(page.PdfCharBoxs, r, page.pageCollection.ActiveTemplate.TextAutoInsertSpace);
+                            ls = Pdf.GetTextLinesSurroundedByRectangle(page.PdfCharBoxs, r, page.PageCollection.ActiveTemplate.TextAutoInsertSpace);
                         else
                             ls = getPdfTextLinesAsTableColumn();
                         return string.Join("\r\n", ls);
                     case Template.Field.ValueTypes.PdfTextLines:
                         if (ActualField.ColumnOfTable == null)
-                            return Pdf.GetTextLinesSurroundedByRectangle(page.PdfCharBoxs, r, page.pageCollection.ActiveTemplate.TextAutoInsertSpace);
+                            return Pdf.GetTextLinesSurroundedByRectangle(page.PdfCharBoxs, r, page.PageCollection.ActiveTemplate.TextAutoInsertSpace);
                         return getPdfTextLinesAsTableColumn();
                     case Template.Field.ValueTypes.PdfCharBoxs:
                         return Pdf.GetCharBoxsSurroundedByRectangle(page.PdfCharBoxs, r);
@@ -164,7 +164,7 @@ namespace Cliver.PdfDocumentParser
                 RectangleF ar = (RectangleF)ActualRectangle;
                 List<Pdf.CharBox> cbs = (List<Pdf.CharBox>)TableFieldActualInfo.getValue(Template.Field.ValueTypes.PdfCharBoxs, true);
                 List<string> ls = new List<string>();
-                foreach (Pdf.Line l in Pdf.GetLines(cbs, page.pageCollection.ActiveTemplate.TextAutoInsertSpace))
+                foreach (Pdf.Line l in Pdf.GetLines(cbs, page.PageCollection.ActiveTemplate.TextAutoInsertSpace))
                 {
                     StringBuilder sb = new StringBuilder();
                     foreach (Pdf.CharBox cb in l.CharBoxs)
@@ -184,7 +184,7 @@ namespace Cliver.PdfDocumentParser
                 RectangleF ar = (RectangleF)ActualRectangle;
                 List<Ocr.CharBox> cbs = (List<Ocr.CharBox>)TableFieldActualInfo.getValue(Template.Field.ValueTypes.OcrCharBoxs, true);
                 List<string> ls = new List<string>();
-                foreach (Ocr.Line l in Ocr.GetLines(cbs, page.pageCollection.ActiveTemplate.TextAutoInsertSpace))
+                foreach (Ocr.Line l in Ocr.GetLines(cbs, page.PageCollection.ActiveTemplate.TextAutoInsertSpace))
                 {
                     StringBuilder sb = new StringBuilder();
                     foreach (Ocr.CharBox cb in l.CharBoxs)

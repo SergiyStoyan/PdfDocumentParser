@@ -77,6 +77,15 @@ namespace Cliver
         {
             lock (this)
             {
+                dispose(key);
+                keys2value.Remove(key);
+            }
+        }
+
+        void dispose(KT key)
+        {
+            lock (this)
+            {
                 if (keys2value.TryGetValue(key, out VT v) && v != null && v is IDisposable)
                 {
                     int vKeyCount = 0;
@@ -84,7 +93,6 @@ namespace Cliver
                     if (vKeyCount < 2)//make sure it is the only inclusion of the object
                         ((IDisposable)v).Dispose();
                 }
-                keys2value.Remove(key);
             }
         }
 
@@ -94,14 +102,7 @@ namespace Cliver
             {
                 lock (this)
                 {
-                    VT v;
-                    if (!keys2value.TryGetValue(key, out v))
-                    {
-                        if (getValue == null)
-                            return defaultValue;
-                        v = getValue(key);
-                        keys2value[key] = v;
-                    }
+                    TryGetValue(key, out VT v);
                     return v;
                 }
             }
@@ -109,7 +110,7 @@ namespace Cliver
             {
                 lock (this)
                 {
-                    Unset(key);
+                    dispose(key);
                     keys2value[key] = value;
                 }
             }
@@ -155,6 +156,11 @@ namespace Cliver
                 keys2value[key] = value;
             }
             return true;
+        }
+
+        public void Add(KT key, VT value)
+        {
+            this[key] = value; 
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Cliver.PdfDocumentParser
         {
             if (string.IsNullOrWhiteSpace(conditionName))
                 throw new Exception("Condition name is not specified.");
-            var c = pageCollection.ActiveTemplate.Conditions.FirstOrDefault(a => a.Name == conditionName);
+            var c = PageCollection.ActiveTemplate.Conditions.FirstOrDefault(a => a.Name == conditionName);
             if (string.IsNullOrWhiteSpace(c.Value))
                 throw new Exception("Condition '" + conditionName + "' is not set.");
             return BooleanEngine.Parse(c.Value, this);

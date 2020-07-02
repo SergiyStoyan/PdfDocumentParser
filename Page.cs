@@ -3,6 +3,7 @@
 //        sergey.stoyan@gmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
+using Emgu.CV;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -17,11 +18,11 @@ namespace Cliver.PdfDocumentParser
     {
         internal Page(PageCollection pageCollection, int pageI)
         {
-            this.pageCollection = pageCollection;
+            PageCollection = pageCollection;
             Number = pageI;
         }
         public readonly int Number;
-        readonly PageCollection pageCollection;
+        public readonly PageCollection PageCollection;
 
         ~Page()
         {
@@ -75,7 +76,7 @@ namespace Cliver.PdfDocumentParser
             get
             {
                 if (_bitmap == null)
-                    _bitmap = Pdf.RenderBitmap(pageCollection.PdfFile, Number, Settings.Constants.PdfPageImageResolution);
+                    _bitmap = Pdf.RenderBitmap(PageCollection.PdfFile, Number, Settings.Constants.PdfPageImageResolution);
                 return _bitmap;
             }
         }
@@ -83,10 +84,10 @@ namespace Cliver.PdfDocumentParser
 
         internal void OnActiveTemplateUpdating(Template newTemplate)
         {
-            if (pageCollection.ActiveTemplate == null)
+            if (PageCollection.ActiveTemplate == null)
                 return;
 
-            if (newTemplate == null || newTemplate.PageRotation != pageCollection.ActiveTemplate.PageRotation || newTemplate.AutoDeskew != pageCollection.ActiveTemplate.AutoDeskew)
+            if (newTemplate == null || newTemplate.PageRotation != PageCollection.ActiveTemplate.PageRotation || newTemplate.AutoDeskew != PageCollection.ActiveTemplate.AutoDeskew)
             {
                 if (_activeTemplateImageData != null)
                 {
@@ -101,7 +102,7 @@ namespace Cliver.PdfDocumentParser
                 if (_activeTemplateOcrCharBoxs != null)
                     _activeTemplateOcrCharBoxs = null;
             }
-            if (!Serialization.Json.IsEqual(pageCollection.ActiveTemplate, newTemplate))
+            if (!Serialization.Json.IsEqual(PageCollection.ActiveTemplate, newTemplate))
             {
                 anchorIds2anchorActualInfo.Clear();
                 fieldNames2fieldActualInfo.Clear();
@@ -122,7 +123,7 @@ namespace Cliver.PdfDocumentParser
             {
                 if (_activeTemplateBitmap == null)
                 {
-                    if (pageCollection.ActiveTemplate == null)
+                    if (PageCollection.ActiveTemplate == null)
                         return null;
 
                     //From stackoverflow:
@@ -132,7 +133,7 @@ namespace Cliver.PdfDocumentParser
                     //Bitmap b = Bitmap.Clone(new Rectangle(0, 0, Bitmap.Width, Bitmap.Height), System.Drawing.Imaging.PixelFormat.Undefined);!!!throws from Tesseract: A generic error occurred in GDI+.
                     Bitmap b = new Bitmap(Bitmap);
 
-                    switch (pageCollection.ActiveTemplate.PageRotation)
+                    switch (PageCollection.ActiveTemplate.PageRotation)
                     {
                         case Template.PageRotations.NONE:
                             break;
@@ -166,10 +167,10 @@ namespace Cliver.PdfDocumentParser
                             //b = b2;
                             break;
                         default:
-                            throw new Exception("Unknown option: " + pageCollection.ActiveTemplate.PageRotation);
+                            throw new Exception("Unknown option: " + PageCollection.ActiveTemplate.PageRotation);
                     }
 
-                    if (pageCollection.ActiveTemplate.AutoDeskew)
+                    if (PageCollection.ActiveTemplate.AutoDeskew)
                     {
                         using (ImageMagick.MagickImage image = new ImageMagick.MagickImage(b))
                         {
@@ -178,7 +179,7 @@ namespace Cliver.PdfDocumentParser
                             //image.Negate();
                             //image.AdaptiveThreshold(10, 10, new ImageMagick.Percentage(20));
                             //image.Negate();
-                            image.Deskew(new ImageMagick.Percentage(pageCollection.ActiveTemplate.AutoDeskewThreshold));
+                            image.Deskew(new ImageMagick.Percentage(PageCollection.ActiveTemplate.AutoDeskewThreshold));
                             //image.AutoThreshold(AutoThresholdMethod.OTSU);
                             //image.Despeckle();
                             //image.WhiteThreshold(new Percentage(20));
@@ -223,7 +224,7 @@ namespace Cliver.PdfDocumentParser
             get
             {
                 if (_pdfCharBoxs == null)
-                    _pdfCharBoxs = Pdf.GetCharBoxsFromPage(pageCollection.PdfReader, Number, true);
+                    _pdfCharBoxs = Pdf.GetCharBoxsFromPage(PageCollection.PdfReader, Number, true);
                 return _pdfCharBoxs;
             }
         }
@@ -241,5 +242,10 @@ namespace Cliver.PdfDocumentParser
             }
         }
         List<Ocr.CharBox> _activeTemplateOcrCharBoxs;
+
+        public Bitmap GetActiveTemplateBitmapCopy()
+        {
+            return GetScaledImage2Pdf(ActiveTemplateBitmap);
+        }
     }
 }
