@@ -8,7 +8,7 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class Settings
     {
-        
+
         public static readonly AppearanceSettings Appearance;
 
         public class AppearanceSettings : Cliver.UserSettings
@@ -22,6 +22,7 @@ namespace Cliver.PdfDocumentParser
             public float AnchorBoxBorderWidth = 1;
             public float AscendantAnchorBoxBorderWidth = 1;
             public float TableBoxBorderWidth = 1;
+            public float TextLineSeparatorWidth = 1;
 
             public override void Loaded()
             {

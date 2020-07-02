@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 /*
 TBD: 
 - multiple cvimage search for parent anchor;
+- enhance template with C# code processor (if a processor is defined, the output field dictionary is filled by it) https://www.codeproject.com/Articles/1215168/Using-Roslyn-for-Compiling-Code-into-Separate-Net
 
 - ?migrate to WPF;
 - ?provide multiple field extraction on page;

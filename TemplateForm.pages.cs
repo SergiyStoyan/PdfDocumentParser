@@ -161,18 +161,32 @@ namespace Cliver.PdfDocumentParser
                         {
                             if (!fai.TableFieldActualInfo.Found)
                                 return null;
-                            RectangleF tableAR = (RectangleF)fai.TableFieldActualInfo.ActualRectangle;
-                            drawBoxes(Settings.Appearance.TableBoxColor, Settings.Appearance.TableBoxBorderWidth, new List<RectangleF> { tableAR });
-                            if (ShowTableFieldLines.Checked)
+                            drawBoxes(Settings.Appearance.TableBoxColor, Settings.Appearance.TableBoxBorderWidth, new List<RectangleF> { (RectangleF)fai.TableFieldActualInfo.ActualRectangle });
+                            if (ShowFieldTextLineSeparators.Checked)
                             {
+                                RectangleF tableAR = (RectangleF)fai.TableFieldActualInfo.ActualRectangle;
                                 List<Pdf.Line> lines = Pdf.GetLines(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, tableAR), pages.ActiveTemplate.TextAutoInsertSpace).ToList();
                                 List<RectangleF> lineBoxes = new List<RectangleF>();
-                                for (int i = 0; i < lines.Count; i++)
+                                for (int i = 1; i < lines.Count; i++)
                                 {
-                                    float y = i == 0 ? tableAR.Top : lines[i].Top;
-                                    lineBoxes.Add(new RectangleF { X = tableAR.X, Y = y, Width = tableAR.Width, Height = i < lines.Count - 1 ? lines[i + 1].Top - y : tableAR.Bottom - y });
+                                    if (lines[i].Bottom < tableAR.Top || lines[i].Top > tableAR.Bottom
+                                        || lines[i].Bottom < r.Top || lines[i].Top > r.Bottom
+                                        )
+                                        continue;
+                                    lineBoxes.Add(new RectangleF { X = r.X, Y = lines[i].Top, Width = r.Width, Height = 0 });
                                 }
-                                drawBoxes(Settings.Appearance.TableBoxColor, Settings.Appearance.TableBoxBorderWidth, lineBoxes);
+                                drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.TextLineSeparatorWidth, lineBoxes);
+                            }
+                        }
+                        else
+                        {
+                            if (ShowFieldTextLineSeparators.Checked)
+                            {
+                                List<Pdf.Line> lines = Pdf.GetLines(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, r), pages.ActiveTemplate.TextAutoInsertSpace).ToList();
+                                List<RectangleF> lineBoxes = new List<RectangleF>();
+                                for (int i = 1; i < lines.Count; i++)
+                                    lineBoxes.Add(new RectangleF { X = r.X, Y = lines[i].Top, Width = r.Width, Height = 0 });
+                                drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.TextLineSeparatorWidth, lineBoxes);
                             }
                         }
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
@@ -241,6 +255,10 @@ namespace Cliver.PdfDocumentParser
                     //            bm.SetPixel(i, j, rgb);
                     //        }
                     //}
+                    if (r_.Height == 0)
+                        gr.DrawLine(p, r_.X, r_.Y, r_.X + r_.Width, r_.Y);
+                    else if (r_.Width == 0)
+                        gr.DrawLine(p, r_.X, r_.Y, r_.X, r_.Y + r_.Height);
                     gr.DrawRectangle(p, r_);
                 }
             }

@@ -100,7 +100,7 @@
             this.pictureScale = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.ShowTableFieldLines = new System.Windows.Forms.CheckBox();
+            this.ShowFieldTextLineSeparators = new System.Windows.Forms.CheckBox();
             this.label20 = new System.Windows.Forms.Label();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.label18 = new System.Windows.Forms.Label();
@@ -804,7 +804,7 @@
             // 
             // splitContainer2.Panel2
             // 
-            this.splitContainer2.Panel2.Controls.Add(this.ShowTableFieldLines);
+            this.splitContainer2.Panel2.Controls.Add(this.ShowFieldTextLineSeparators);
             this.splitContainer2.Panel2.Controls.Add(this.label20);
             this.splitContainer2.Panel2.Controls.Add(this.fields);
             this.splitContainer2.Panel2.Controls.Add(this.flowLayoutPanel2);
@@ -992,15 +992,15 @@
             this.label10.TabIndex = 49;
             this.label10.Text = "Anchors:";
             // 
-            // ShowTableFieldLines
+            // ShowFieldTextLineSeparators
             // 
-            this.ShowTableFieldLines.AutoSize = true;
-            this.ShowTableFieldLines.Location = new System.Drawing.Point(227, 4);
-            this.ShowTableFieldLines.Name = "ShowTableFieldLines";
-            this.ShowTableFieldLines.Size = new System.Drawing.Size(114, 17);
-            this.ShowTableFieldLines.TabIndex = 60;
-            this.ShowTableFieldLines.Text = "Show Table Lines]";
-            this.ShowTableFieldLines.UseVisualStyleBackColor = true;
+            this.ShowFieldTextLineSeparators.AutoSize = true;
+            this.ShowFieldTextLineSeparators.Location = new System.Drawing.Point(227, 4);
+            this.ShowFieldTextLineSeparators.Name = "ShowFieldTextLineSeparators";
+            this.ShowFieldTextLineSeparators.Size = new System.Drawing.Size(114, 17);
+            this.ShowFieldTextLineSeparators.TabIndex = 60;
+            this.ShowFieldTextLineSeparators.Text = "Show Table Lines]";
+            this.ShowFieldTextLineSeparators.UseVisualStyleBackColor = true;
             // 
             // label20
             // 
@@ -1246,7 +1246,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Rectangle;
         private System.Windows.Forms.DataGridViewComboBoxColumn Type;
         private System.Windows.Forms.DataGridViewTextBoxColumn Value;
-        private System.Windows.Forms.CheckBox ShowTableFieldLines;
+        private System.Windows.Forms.CheckBox ShowFieldTextLineSeparators;
         private System.Windows.Forms.Label label20;
     }
 }

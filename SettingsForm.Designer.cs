@@ -54,6 +54,8 @@
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.CoordinateDeviationMargin = new System.Windows.Forms.NumericUpDown();
+            this.TextLineSeparatorWidth = new System.Windows.Forms.NumericUpDown();
+            this.label9 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.PdfPageImageResolution)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -64,6 +66,7 @@
             this.panel2.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CoordinateDeviationMargin)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TextLineSeparatorWidth)).BeginInit();
             this.SuspendLayout();
             // 
             // PdfPageImageResolution
@@ -138,7 +141,7 @@
             this.flowLayoutPanel1.Controls.Add(this.About);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 322);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 367);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(355, 31);
             this.flowLayoutPanel1.TabIndex = 51;
@@ -156,6 +159,8 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.TextLineSeparatorWidth);
+            this.groupBox3.Controls.Add(this.label9);
             this.groupBox3.Controls.Add(this.TableBoxBorderWidth);
             this.groupBox3.Controls.Add(this.label6);
             this.groupBox3.Controls.Add(this.AscendantAnchorBoxBorderWidth);
@@ -169,14 +174,14 @@
             this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Location = new System.Drawing.Point(13, 12);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(328, 181);
+            this.groupBox3.Size = new System.Drawing.Size(328, 223);
             this.groupBox3.TabIndex = 59;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Appearance";
             // 
             // TableBoxBorderWidth
             // 
-            this.TableBoxBorderWidth.Location = new System.Drawing.Point(234, 142);
+            this.TableBoxBorderWidth.Location = new System.Drawing.Point(234, 141);
             this.TableBoxBorderWidth.Minimum = new decimal(new int[] {
             1,
             0,
@@ -203,7 +208,7 @@
             // 
             // AscendantAnchorBoxBorderWidth
             // 
-            this.AscendantAnchorBoxBorderWidth.Location = new System.Drawing.Point(234, 114);
+            this.AscendantAnchorBoxBorderWidth.Location = new System.Drawing.Point(234, 113);
             this.AscendantAnchorBoxBorderWidth.Minimum = new decimal(new int[] {
             1,
             0,
@@ -220,7 +225,7 @@
             // 
             // AnchorBoxBorderWidth
             // 
-            this.AnchorBoxBorderWidth.Location = new System.Drawing.Point(234, 87);
+            this.AnchorBoxBorderWidth.Location = new System.Drawing.Point(234, 85);
             this.AnchorBoxBorderWidth.Minimum = new decimal(new int[] {
             1,
             0,
@@ -237,7 +242,7 @@
             // 
             // SelectionBoxBorderWidth
             // 
-            this.SelectionBoxBorderWidth.Location = new System.Drawing.Point(234, 58);
+            this.SelectionBoxBorderWidth.Location = new System.Drawing.Point(234, 57);
             this.SelectionBoxBorderWidth.Minimum = new decimal(new int[] {
             1,
             0,
@@ -289,7 +294,7 @@
             this.panel2.Controls.Add(this.AscendantAnchorBoxColor);
             this.panel2.Controls.Add(this.SelectionBoxColor);
             this.panel2.Controls.Add(this.AnchorBoxColor);
-            this.panel2.Location = new System.Drawing.Point(141, 44);
+            this.panel2.Location = new System.Drawing.Point(141, 46);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(63, 123);
             this.panel2.TabIndex = 54;
@@ -349,7 +354,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.SystemColors.Control;
-            this.label1.Location = new System.Drawing.Point(16, 88);
+            this.label1.Location = new System.Drawing.Point(16, 87);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(100, 13);
             this.label1.TabIndex = 52;
@@ -371,7 +376,7 @@
             this.groupBox4.Controls.Add(this.CoordinateDeviationMargin);
             this.groupBox4.Controls.Add(this.label8);
             this.groupBox4.Controls.Add(this.PdfPageImageResolution);
-            this.groupBox4.Location = new System.Drawing.Point(13, 205);
+            this.groupBox4.Location = new System.Drawing.Point(13, 252);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(328, 97);
             this.groupBox4.TabIndex = 60;
@@ -410,11 +415,38 @@
             0,
             196608});
             // 
+            // TextLineSeparatorWidth
+            // 
+            this.TextLineSeparatorWidth.Location = new System.Drawing.Point(234, 193);
+            this.TextLineSeparatorWidth.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.TextLineSeparatorWidth.Name = "TextLineSeparatorWidth";
+            this.TextLineSeparatorWidth.Size = new System.Drawing.Size(42, 20);
+            this.TextLineSeparatorWidth.TabIndex = 65;
+            this.TextLineSeparatorWidth.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.BackColor = System.Drawing.SystemColors.Control;
+            this.label9.Location = new System.Drawing.Point(15, 195);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(134, 13);
+            this.label9.TabIndex = 64;
+            this.label9.Text = "Text Line Separator Width:";
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(355, 353);
+            this.ClientSize = new System.Drawing.Size(355, 398);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.flowLayoutPanel1);
@@ -432,6 +464,7 @@
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CoordinateDeviationMargin)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TextLineSeparatorWidth)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -464,5 +497,7 @@
         private System.Windows.Forms.NumericUpDown TableBoxBorderWidth;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button TableBoxColor;
+        private System.Windows.Forms.NumericUpDown TextLineSeparatorWidth;
+        private System.Windows.Forms.Label label9;
     }
 }

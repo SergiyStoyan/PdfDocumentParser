@@ -6,13 +6,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Cliver
 {
     /// <summary>
     /// Features:
     /// - auto-generating values;
-    /// - auto-disposing IDisposable values;
+    /// - auto-disposing IDisposable values which have left the dictionary;
     /// </summary>
     /// <typeparam name="KT"></typeparam>
     /// <typeparam name="VT"></typeparam>
@@ -55,28 +56,19 @@ namespace Cliver
             {
                 if (keys2value != null)
                 {
-                    if (IsDisposable(typeof(VT)))
-                        foreach (VT v in keys2value.Values)
-                            if (v != null)
-                                ((IDisposable)v).Dispose();
+                    Clear();
                     keys2value = null;
                 }
             }
-        }
-
-        static bool IsDisposable(Type type)
-        {
-            return typeof(IDisposable).IsAssignableFrom(type);
         }
 
         virtual public void Clear()
         {
             lock (this)
             {
-                if (IsDisposable(typeof(VT)))
-                    foreach (VT v in keys2value.Values)
-                        if (v != null)
-                            ((IDisposable)v).Dispose();
+                foreach (VT v in keys2value.Values)
+                    if (v != null && v is IDisposable)
+                        ((IDisposable)v).Dispose();
                 keys2value.Clear();
             }
         }
@@ -85,12 +77,12 @@ namespace Cliver
         {
             lock (this)
             {
-                if (IsDisposable(typeof(VT)))
+                if (keys2value.TryGetValue(key, out VT v) && v != null && v is IDisposable)
                 {
-                    VT v;
-                    if (keys2value.TryGetValue(key, out v))
-                        if (v != null)
-                            ((IDisposable)v).Dispose();
+                    int vKeyCount = 0;
+                    keys2value.Values.Where(a => a.Equals(v)).TakeWhile(a => ++vKeyCount < 2);
+                    if (vKeyCount < 2)//make sure it is the only inclusion of the object
+                        ((IDisposable)v).Dispose();
                 }
                 keys2value.Remove(key);
             }
@@ -117,6 +109,7 @@ namespace Cliver
             {
                 lock (this)
                 {
+                    Unset(key);
                     keys2value[key] = value;
                 }
             }
