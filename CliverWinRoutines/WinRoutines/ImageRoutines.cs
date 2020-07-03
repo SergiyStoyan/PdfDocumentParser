@@ -141,6 +141,12 @@ namespace Cliver.Win
             return b2;
         }
 
+        public static Color ToGreyScale(Color c)
+        {
+            int gc = (c.R + c.G + c.B) / 3;
+            return Color.FromArgb(c.A, gc, gc, gc);
+        }
+
         public static Bitmap GetInverted(Bitmap b)
         {
             Bitmap b2 = new Bitmap(b);
@@ -228,7 +234,7 @@ namespace Cliver.Win
             for (int x = 0; x < bw; x++)
                 for (int y = 0; y < bh; y++)
                     if (isHashMatch(bHash, x, y, hash, w, h, brightnessMaxDifference, differentPixelMaxNumber))
-                        return new PointF(x/ hashImageRatio, y/ hashImageRatio);
+                        return new PointF(x / hashImageRatio, y / hashImageRatio);
             return null;
         }
 
