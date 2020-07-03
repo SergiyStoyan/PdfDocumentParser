@@ -96,6 +96,12 @@ namespace Cliver
             }
         }
 
+        /// <summary>
+        /// It is safe: returns default if does not exists.
+        /// To check for existance, use TryGetValue().
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public VT this[KT key]
         {
             get
@@ -160,7 +166,18 @@ namespace Cliver
 
         public void Add(KT key, VT value)
         {
-            this[key] = value; 
+            this[key] = value;
+        }
+
+        /// <summary>
+        /// Attention: the count can be implicitly changed due to auto-generating value function
+        /// </summary>
+        public int Count
+        {
+            get
+            {
+                return keys2value.Count;
+            }
         }
     }
 }
