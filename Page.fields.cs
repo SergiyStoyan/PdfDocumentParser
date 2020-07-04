@@ -49,14 +49,19 @@ namespace Cliver.PdfDocumentParser
             return fai.GetValue(valueType == null ? fai.ActualField.DefaultValueType : (Template.Field.ValueTypes)valueType);
         }
 
-        public object GetValue(Template.Field exactField, Template.Field.ValueTypes? valueType = null)
-        {
-            RectangleF? ar = getFieldActualRectangle(exactField);
-            FieldActualInfo fai = new FieldActualInfo(this, exactField, ar, exactField.ColumnOfTable != null ? getFoundFieldActualInfo(exactField.ColumnOfTable) : null);
-            if (!fai.Found)
-                return null;
-            return fai.GetValue(valueType == null ? fai.ActualField.DefaultValueType : (Template.Field.ValueTypes)valueType);
-        }
+        ///// <summary>
+        ///// !!!passing Template.Field is deceitful as is may belong to another template than ActiveTemplate!
+        ///// </summary>
+        ///// <param name="field"></param>
+        ///// <returns></returns>
+        //public object GetValue(Template.Field exactField, Template.Field.ValueTypes? valueType = null)
+        //{
+        //    RectangleF? ar = getFieldActualRectangle(exactField);
+        //    FieldActualInfo fai = new FieldActualInfo(this, exactField, ar, exactField.ColumnOfTable != null ? getFoundFieldActualInfo(exactField.ColumnOfTable) : null);
+        //    if (!fai.Found)
+        //        return null;
+        //    return fai.GetValue(valueType == null ? fai.ActualField.DefaultValueType : (Template.Field.ValueTypes)valueType);
+        //}
 
         internal FieldActualInfo GetFieldActualInfo(Template.Field field)
         {
