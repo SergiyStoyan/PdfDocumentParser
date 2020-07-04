@@ -50,7 +50,9 @@ namespace Cliver.PdfDocumentParser
         }
 
         ///// <summary>
-        ///// !!!passing Template.Field is deceitful as is may belong to another template than ActiveTemplate!
+        ///// !!!passing Template.Field is deceitful for 2 reasons:
+        ///// - it may belong to another template than ActiveTemplate;
+        ///// - it implies that a Template.Field object is equivalent to a field while it is a defintion;
         ///// </summary>
         ///// <param name="field"></param>
         ///// <returns></returns>
