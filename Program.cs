@@ -15,6 +15,7 @@ TBD:
 - multiple cvimage search for parent anchor (to avoid shifting search by pixels, set a buffer rectangle around matches);
 - enhance template with C# code processor (if a processor is defined, the output field dictionary is filled by it) https://www.codeproject.com/Articles/1215168/Using-Roslyn-for-Compiling-Code-into-Separate-Net
 - implement anchor row-separator whichs require multiple anchor matching (needed for GCG statement);
+- move to IText7;
 
 - ?migrate to WPF;
 - ?provide multiple field extraction on page;
