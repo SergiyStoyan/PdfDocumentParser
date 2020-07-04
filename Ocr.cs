@@ -206,12 +206,7 @@ namespace Cliver.PdfDocumentParser
             cbs = GetCharBoxsSurroundedByRectangle(cbs, r);
             List<string> ls = new List<string>();
             foreach (Line l in GetLines(cbs, textAutoInsertSpace))
-            {
-                StringBuilder sb = new StringBuilder();
-                foreach (CharBox cb in l.CharBoxs)
-                    sb.Append(cb.Char);
-                ls.Add(sb.ToString());
-            }
+                ls.Add(l.ToString());
             return ls;
         }
 
@@ -261,11 +256,20 @@ namespace Cliver.PdfDocumentParser
             }
             return lines;
         }
+
         public class Line
         {
             public float Top;
             public float Bottom;
             public List<CharBox> CharBoxs = new List<CharBox>();
+
+            public override string ToString()
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (CharBox cb in CharBoxs)
+                    sb.Append(cb.Char);
+                return sb.ToString();
+            }
         }
 
         public static List<CharBox> GetCharBoxsSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r)
