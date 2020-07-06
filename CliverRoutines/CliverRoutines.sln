@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.30104.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CliverRoutines", "CliverRoutines.csproj", "{E88444BA-1B07-40E6-96D1-922D27965F91}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example", "Example\Example.csproj", "{A2D1208B-231C-450D-BE6E-03A158FA1DC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CliverRoutinesExample", "CliverRoutinesExample\CliverRoutinesExample.csproj", "{A2D1208B-231C-450D-BE6E-03A158FA1DC7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliverRoutinesTests", "CliverRoutinesTests\CliverRoutinesTests.csproj", "{B5349609-A24E-47C4-8F72-DA621BF83595}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{A2D1208B-231C-450D-BE6E-03A158FA1DC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2D1208B-231C-450D-BE6E-03A158FA1DC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2D1208B-231C-450D-BE6E-03A158FA1DC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5349609-A24E-47C4-8F72-DA621BF83595}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5349609-A24E-47C4-8F72-DA621BF83595}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5349609-A24E-47C4-8F72-DA621BF83595}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5349609-A24E-47C4-8F72-DA621BF83595}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
