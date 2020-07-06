@@ -247,5 +247,10 @@ namespace Cliver.PdfDocumentParser
         {
             return GetScaledImage2Pdf(ActiveTemplateBitmap);
         }
+
+        public Color GetColor(float x, float y)
+        {
+            return ActiveTemplateBitmap.GetPixel((int)Math.Round(x / Settings.Constants.Image2PdfResolutionRatio), (int)Math.Round(y / Settings.Constants.Image2PdfResolutionRatio));
+        }
     }
 }
