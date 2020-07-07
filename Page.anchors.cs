@@ -336,6 +336,9 @@ namespace Cliver.PdfDocumentParser
                             return false;
                         Point p = (Point)p_;
                         return !proceedOnFound(new PointF(searchRectanglePosition.X + p.X, searchRectanglePosition.Y + p.Y));
+                        //foreach (CvImage.Match m in civ.Image.FindWithinImage(ci0,new Size(20,20), civ.Threshold, civ.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep))
+                        //    return !proceedOnFound(new PointF(searchRectanglePosition.X + m.Rectangle.X, searchRectanglePosition.Y + m.Rectangle.Y));
+                        //return false;
                     }
                 default:
                     throw new Exception("Unknown option: " + a.Type);

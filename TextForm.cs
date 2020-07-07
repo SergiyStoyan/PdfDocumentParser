@@ -4,22 +4,33 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class TextForm : Form
     {
-        public TextForm(string caption, string t, bool html)
+        public TextForm(string caption, string t, bool edit)
         {
             InitializeComponent();
-            this.Icon = Win.AssemblyRoutines.GetAppIcon();
+            Icon = Win.AssemblyRoutines.GetAppIcon();
             Text = AboutBox.AssemblyProduct + ": " + caption;// Application.ProductName;
 
-            if (html)
+            textBox.ReadOnly = !edit;
+            panel.Visible = edit;
+            textBox.Text = t;
+        }
+
+        private void bSave_Click(object sender, System.EventArgs e)
+        {
+            DialogResult = DialogResult.OK;
+        }
+
+        public string Content
+        {
+            get
             {
-                browser.DocumentText = t;
-                browser.BringToFront();
+                return textBox.Text;
             }
-            else
-            {
-                textBox.Text = t;
-                textBox.BringToFront();
-            }
+        }
+
+        private void bCancel_Click(object sender, System.EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
         }
     }
 }

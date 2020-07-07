@@ -13,10 +13,12 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.CV.Features2D;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Cliver.PdfDocumentParser
 {
-    public class CvImage:IDisposable
+    public class CvImage : IDisposable
     {
         public void Dispose()
         {
@@ -156,6 +158,134 @@ namespace Cliver.PdfDocumentParser
                     return maxPoint[0];
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Run through pyramid and detect the best scale.
+        /// </summary>
+        /// <param name="cvImage"></param>
+        /// <param name="padding"></param>
+        /// <param name="threshold"></param>
+        /// <param name="scaleDeviation"></param>
+        /// <param name="scaleStep"></param>
+        /// <param name="bestScale"></param>
+        /// <returns></returns>
+        public List<Match> FindWithinImage(CvImage cvImage, Size padding, float threshold, float scaleDeviation, int scaleStep, out float bestScale)
+        {
+            bestScale = 1;
+            List<Match> bestMatches = findWithinImage(image, padding, cvImage.image, threshold);
+            float bestScore = bestMatches.Max(a => a.Score);
+            //running through pyramid
+            int stepCount = Convert.ToInt32(scaleDeviation * Width / scaleStep);
+            for (int i = 1; i <= stepCount; i++)
+            {
+                float scaleDelta = scaleStep * i / Width;
+                float scale = 1 + scaleDelta;
+                Image<Gray, byte> template = image.Resize(scale, Inter.Linear);
+                List<Match> ms = findWithinImage(template, padding, cvImage.image, threshold);
+                float s = ms.Max(a => a.Score);
+                if (bestScore > s)
+                    break;
+                bestScale = scale;
+                bestMatches = ms;
+                bestScore = s;
+            }
+            for (int i = 1; i <= stepCount; i++)
+            {
+                float scaleDelta = scaleStep * i / Width;
+                float scale = 1 - scaleDelta;
+                Image<Gray, byte> template = image.Resize(scale, Inter.Linear);
+                List<Match> ms = findWithinImage(template, padding, cvImage.image, threshold);
+                float s = ms.Max(a => a.Score);
+                if (bestScore > s)
+                    break;
+                bestScale = scale;
+                bestMatches = ms;
+                bestScore = s;
+            }
+            return bestMatches;
+        }
+
+        /// <summary>
+        /// Runs through pyramid only until something is found. 
+        /// </summary>
+        /// <param name="cvImage"></param>
+        /// <param name="padding"></param>
+        /// <param name="threshold"></param>
+        /// <param name="scaleDeviation"></param>
+        /// <param name="scaleStep"></param>
+        /// <returns></returns>
+        public List<Match> FindWithinImage(CvImage cvImage, Size padding, float threshold, float scaleDeviation, int scaleStep)
+        {
+            List<Match> ms;
+            ms = findWithinImage(image, padding, cvImage.image, threshold);
+            if (ms.Count > 0)
+                return ms;
+            //running through pyramid
+            int stepCount = Convert.ToInt32(scaleDeviation * Width / scaleStep);
+            for (int i = 1; i <= stepCount; i++)
+            {
+                float scaleDelta = scaleStep * i / Width;
+                Image<Gray, byte> template = image.Resize(1 + scaleDelta, Inter.Linear);
+                ms = findWithinImage(template, padding, cvImage.image, threshold);
+                if (ms.Count > 0)
+                    return ms;
+                template = image.Resize(1 - scaleDelta, Inter.Linear);
+                ms = findWithinImage(template, padding, cvImage.image, threshold);
+                if (ms.Count > 0)
+                    return ms;
+            }
+            return ms;
+        }
+
+        public List<Match> FindWithinImage(CvImage cvImage, Size padding, float threshold, float scale)
+        {
+            Image<Gray, byte> template = image.Resize(scale, Inter.Linear);
+            return findWithinImage(template, padding, cvImage.image, threshold);
+        }
+
+        static List<Match> findWithinImage(Image<Gray, byte> template, Size padding, Image<Gray, byte> image, float threshold = 0.7f)
+        {
+            if (template.Width > image.Width || template.Height > image.Height)//otherwise MatchTemplate() throws an exception
+                return null;
+
+            using (Image<Gray, float> match = image.MatchTemplate(template, TemplateMatchingType.CcoeffNormed))
+            {
+                float[,,] matches = match.Data;
+                Dictionary<Rectangle, Match> paddedMatchRs2bestMatchP = new Dictionary<Rectangle, Match>();
+
+                for (int x = matches.GetLength(1) - 1; x >= 0; x--)
+                {
+                    for (int y = matches.GetLength(0) - 1; y >= 0; y--)
+                    {
+                        float score = matches[y, x, 0];
+                        //if (score < 0.003)//SqdiffNormed
+                        if (score > threshold)//CcoeffNormed
+                        {
+                            Rectangle r = new Rectangle(new Point(x, y), template.Size);
+                            var kv = paddedMatchRs2bestMatchP.FirstOrDefault(a => a.Key.Contains(r));
+                            if (kv.Key == Rectangle.Empty)
+                            {
+                                Rectangle ar = new Rectangle(r.Location, r.Size);
+                                ar.Inflate(padding);
+                                paddedMatchRs2bestMatchP[ar] = new Match { Rectangle = r, Score = score };
+                            }
+                            else
+                            {
+                                if (kv.Value.Score < score)
+                                    paddedMatchRs2bestMatchP[kv.Key] = new Match { Rectangle = r, Score = score };
+                            }
+                        }
+                    }
+                }
+                return paddedMatchRs2bestMatchP.Values.ToList();
+            }
+        }
+
+        public class Match
+        {
+            public Rectangle Rectangle;
+            public float Score;
         }
 
         public Image GetImage()

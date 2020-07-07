@@ -193,8 +193,19 @@ namespace Cliver.PdfDocumentParser
         private void showAsJson_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Template t = getTemplateFromUI(false);
-            TextForm tf = new TextForm("Template JSON object", Serialization.Json.Serialize(t), false);
-            tf.ShowDialog();
+            TextForm tf = new TextForm("Template JSON object", Serialization.Json.Serialize(t), true);
+            while (tf.ShowDialog() == DialogResult.OK)
+                try
+                {
+                    Template t2 = Serialization.Json.Deserialize<Template>(tf.Content);
+                    t2.Editor = t.Editor;
+                    setUIFromTemplate(t2);
+                    break;
+                }
+                catch(Exception ex)
+                {
+                    Message.Error2("Updating template:", ex);
+                }
         }
 
         private void Help_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
