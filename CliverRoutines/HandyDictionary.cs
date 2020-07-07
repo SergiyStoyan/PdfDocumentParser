@@ -73,26 +73,26 @@ namespace Cliver
             }
         }
 
-        public void Unset(KT key)
+        public void Remove(KT key)
         {
             lock (this)
             {
-                dispose(key);
+                if (keys2value.TryGetValue(key, out VT v))
+                    dispose(v);
                 keys2value.Remove(key);
             }
         }
 
-        void dispose(KT key)
+        void dispose(VT value)
         {
             lock (this)
             {
-                if (keys2value.TryGetValue(key, out VT v) && v != null && v is IDisposable)
-                {
-                    int vKeyCount = 0;
-                    keys2value.Values.Where(a => a.Equals(v)).TakeWhile(a => ++vKeyCount < 2);
-                    if (vKeyCount < 2)//make sure it is the only inclusion of the object
-                        ((IDisposable)v).Dispose();
-                }
+                if (value == null || !(value is IDisposable))
+                    return;
+                int vKeyCount = 0;
+                keys2value.Values.Where(a => a.Equals(value)).TakeWhile(a => ++vKeyCount < 2);
+                if (vKeyCount < 2)//make sure it is the only inclusion of the object
+                    ((IDisposable)value).Dispose();
             }
         }
 
@@ -116,7 +116,8 @@ namespace Cliver
             {
                 lock (this)
                 {
-                    dispose(key);
+                    if (keys2value.TryGetValue(key, out VT v) && v != null && !v.Equals(value))
+                        dispose(v);
                     keys2value[key] = value;
                 }
             }
