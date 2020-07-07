@@ -89,18 +89,12 @@ namespace Cliver.PdfDocumentParser
 
             if (newTemplate == null || newTemplate.PageRotation != PageCollection.ActiveTemplate.PageRotation || newTemplate.AutoDeskew != PageCollection.ActiveTemplate.AutoDeskew)
             {
-                if (_activeTemplateImageData != null)
-                {
-                    //_activeTemplateImageData.Dispose();
-                    _activeTemplateImageData = null;
-                }
-                if (_activeTemplateBitmap != null)
-                {
-                    _activeTemplateBitmap.Dispose();
-                    _activeTemplateBitmap = null;
-                }
-                if (_activeTemplateOcrCharBoxs != null)
-                    _activeTemplateOcrCharBoxs = null;
+                _activeTemplateImageData = null;
+                _activeTemplateBitmap?.Dispose();
+                _activeTemplateBitmap = null;
+                _activeTemplateOcrCharBoxs = null;
+                _activeTemplateCvImage?.Dispose();
+                _activeTemplateCvImage = null;
             }
             if (!Serialization.Json.IsEqual(PageCollection.ActiveTemplate, newTemplate))
             {
