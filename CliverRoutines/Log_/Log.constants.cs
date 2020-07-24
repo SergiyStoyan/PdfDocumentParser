@@ -29,6 +29,10 @@ namespace Cliver
             if (ProgramRoutines.IsWebContext)
                 ProcessName = System.Web.Compilation.BuildManager.GetGlobalAsaxType().BaseType.Assembly.GetName(false).Name;
             else*/
+            System.Reflection.Assembly a = System.Reflection.Assembly.GetEntryAssembly();
+            //!!!when using WCF hapenned that GetEntryAssembly() is NULL 
+            if (a == null)
+                a = System.Reflection.Assembly.GetCallingAssembly();
             ProcessName = System.Reflection.Assembly.GetEntryAssembly().GetName(false).Name;
 
             AppDir = AppDomain.CurrentDomain.BaseDirectory.TrimEnd(System.IO.Path.DirectorySeparatorChar);

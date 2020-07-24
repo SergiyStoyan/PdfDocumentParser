@@ -240,7 +240,7 @@
         <p>A condition is defined by a boolean expression that depends on anchors. It is intended to be used in a custom application for deciding which actions should be performed on a PDF page. It is checked by method <a href='#IsCondition'><code>IsCondition(<condition name>)</code></a>.
         <p>Conditions are identified by their names.
         <p>
-            The condition collection is dictated by logic of the application.
+            The condition collection is dictated by the logic of an application.
 
 
             <h3>Boolean expression</h3>
@@ -299,7 +299,7 @@
             It is the preferable type for extracting text. However, it does not work with text presented by image.
 
             <h4><a name='fieldPdfTextLines'>PdfTextLines</a></h4>
-            It is the same as PdfText except it contains an array of text strings corresponding captured lines instead of plain text.
+            It is the same as PdfText excepting it is an array of text lines rather than a plain text.
 
             <h4><a name='fieldPdfCharBoxs'>PdfCharBoxs</a></h4>
             Instead of text it gives an array of captured chars and their coordinates.
@@ -311,19 +311,19 @@
             In contrast to PdfText, OcrText type does not ensure 100% accuracy and can acceptably work only with images of resolution not less than 300dpi (see <a href='#PdfPageImageResolution'>PdfPageImageResolution</a> parameter).
 
             <h4><a name='fieldOcrTextLines'>OcrTextLines</a></h4>
-            It is the same as OcrText except it contains an array of text strings corresponding captured lines instead of plain text.
+            It is the same as OcrText excepting it is an array of text lines rather than a plain text.
 
             <h4><a name='fieldOcrCharBoxs'>OcrCharBoxs</a></h4>
             Instead of text it gives an array of captured chars and their coordinates.
 
             <h4>Image</h4>
             Its value is a <code>System.Drawing.Bitmap</code> object that contains a fragment of page surrounded by the field's rectangle.
-        <p>
+<p>
             It is used when image is required rather than text or when OcrText type is not reliable enough.
 
 
             <h3>Multiply defined field</h3>
-            A field can have multiple definitions. In Template Editor they are shown as separate fields but have the same name. When a field has multiple definitions, during call of <a href='#GetValue'><code>GetValue()</code></a> they are tried by PdfDocumentParser consecutively from first to last until some is captured on the page. So, precedence of field's definitions is important.
+            A field can have multiple definitions. In Template Editor they are shown as separate fields but have the same name. If a field has multiple definitions, while calling <a href='#GetValue'><code>GetValue()</code></a>, the definitions are tried by PdfDocumentParser consecutively from first to last until some is captured on the page. So, precedence of field's definitions is important.
         <p>
             Multiple definitions help to keep the custom parsing code simple and unified.
 
@@ -847,7 +847,7 @@ foreach(page in pageCollection)
 
 
             <h2>Source code</h2>
-            Download PdfDocumentParser <a href='#repository'>source code</a>. Find SampleParser.sln there and open it in Visual Studio.
+            Download PdfDocumentParser <a href='#repository'>source code</a>. Open PdfDocumentParser.sln in Visual Studio and find SampleParser project.
 
 
             <h2>Enhanced template parameters</h2>
@@ -868,7 +868,7 @@ foreach(page in pageCollection)
             </table>
 
             <h2>Considerations</h2>
-        <p>
+<p>
             Processing time depends on the custom algorithm and templates. However, it is possible to drastically reduce the processing time by the following ways:
             <ul>
                 <li> specify file filters for templates. If it can be done then the other tips are not needed;

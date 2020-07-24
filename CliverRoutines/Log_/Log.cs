@@ -137,10 +137,7 @@ namespace Cliver
             lock (lockObject)
             {
                 Session.CloseAll();
-
                 workDir = null;
-                if (headSession != null)
-                    headSession.Close(false);
                 headSession = null;
 
                 GC.Collect();
