@@ -73,54 +73,14 @@ namespace Cliver
             }
             string value = m.Groups[1].Value.Trim();
 
-            if (platform == PlatformID.Win32NT)
+            //!!!ATTENTION: generally such unescaping does not work on Windows
+            m = Regex.Match(value, @"^""(.*?)[^\\]"".*", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+            if (m.Success)
             {
-                m = Regex.Match(value, @"^""(.*?)[^\\]"".*", RegexOptions.IgnoreCase | RegexOptions.Singleline);
-                if (m.Success)
-                {
-                    value = m.Groups[1].Value.Replace(@"\""", @"""").Replace(@"\\", @"\");
-                    return value.Trim();
-                }
-                return Regex.Replace(value, @"(?<=.*?)\s.*$", "", RegexOptions.IgnoreCase | RegexOptions.Singleline);
-
-
-
-
-                //StringBuilder quoted = new StringBuilder();
-                //quoted.Append('"');
-
-                //int numberBackslashes = 0;
-                //foreach (var chr in argument)
-                //{
-                //    switch (chr)
-                //    {
-                //        case '\\':
-                //            numberBackslashes++;
-                //            continue;
-                //        case '"':
-                //            // Escape all backslashes and the following
-                //            // double quotation mark.
-                //            quoted.Append('\\', numberBackslashes * 2 + 1);
-                //            quoted.Append(chr);
-                //            break;
-                //        default:
-                //            // Backslashes aren't special here.
-                //            quoted.Append('\\', numberBackslashes);
-                //            quoted.Append(chr);
-                //            break;
-                //    }
-                //    numberBackslashes = 0;
-                //}
-
-                //// Escape all backslashes, but let the terminating
-                //// double quotation mark we add below be interpreted
-                //// as a metacharacter.
-                //quoted.Append('\\', numberBackslashes * 2);
-                //quoted.Append('"');
-
-                //return quoted.ToString();
+                value = m.Groups[1].Value.Replace(@"\""", @"""").Replace(@"\\", @"\");
+                return value.Trim();
             }
-            throw new Exception("TBD!!!");
+            return Regex.Replace(value, @"(?<=.*?)\s.*$", "", RegexOptions.IgnoreCase | RegexOptions.Singleline);
         }
 
         //public static T Parse<T>(string commandLine = null) where T: CommandLine, new()
@@ -172,64 +132,15 @@ namespace Cliver
                     throw new Exception("The value of command line parameter '" + p.name + "' contains '=': " + p.value);
                 if (Regex.IsMatch(p.value, @"\""|\s"))
                 {
-                    //p.value = p.value.Replace(@"\", @"\\").Replace(@"""", @"\""");
-                    //p.value = "\"" + p.value + "\"";
-                        p.value = encodeParameter(p.value);
+                    //!!!ATTENTION: generally such escaping does not work on Windows
+                    p.value = p.value.Replace(@"\", @"\\").Replace(@"""", @"\""");
+                    p.value = "\"" + p.value + "\"";
                 }
                 ps.Add(p);
             }
             return ps.Aggregate(new StringBuilder(), (s, p) => s.Append(p.name + (p.value == null ? null : "=" + p.value)).Append(" ")).ToString();
         }
-
-        private static string encodeParameter(string argument, bool force = false)
-        {
-            if (platform == PlatformID.Win32NT)
-            {
-                // Unless we're told otherwise, don't quote unless we actually
-                // need to do so --- hopefully avoid problems if programs won't
-                // parse quotes properly
-                if (force == false
-                && argument.Length > 0
-                && argument.IndexOfAny(" \t\n\v\"".ToCharArray()) < 0)
-                    return argument;
-
-                StringBuilder quoted = new StringBuilder();
-                quoted.Append('"');
-
-                int numberBackslashes = 0;
-                foreach (var chr in argument)
-                {
-                    switch (chr)
-                    {
-                        case '\\':
-                            numberBackslashes++;
-                            continue;
-                        case '"':
-                            // Escape all backslashes and the following
-                            // double quotation mark.
-                            quoted.Append('\\', numberBackslashes * 2 + 1);
-                            quoted.Append(chr);
-                            break;
-                        default:
-                            // Backslashes aren't special here.
-                            quoted.Append('\\', numberBackslashes);
-                            quoted.Append(chr);
-                            break;
-                    }
-                    numberBackslashes = 0;
-                }
-
-                // Escape all backslashes, but let the terminating
-                // double quotation mark we add below be interpreted
-                // as a metacharacter.
-                quoted.Append('\\', numberBackslashes * 2);
-                quoted.Append('"');
-
-                return quoted.ToString();
-            }
-            throw new Exception("TBD!!!");
-        }
-        static PlatformID platform = Environment.OSVersion.Platform;
+        //static PlatformID platform = Environment.OSVersion.Platform;
 
         //public static string ToString()
         //{
