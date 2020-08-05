@@ -1,8 +1,10 @@
-//********************************************************************************************
-//Author: Sergey Stoyan
-//        sergey.stoyan@gmail.com
-//        http://www.cliversoft.com
-//********************************************************************************************
+/********************************************************************************************
+        Author: Sergey Stoyan
+        sergey.stoyan@gmail.com
+        sergey.stoyan@hotmail.com
+        stoyan@cliversoft.com
+        http://www.cliversoft.com
+********************************************************************************************/
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;

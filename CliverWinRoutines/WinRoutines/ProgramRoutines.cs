@@ -1,11 +1,10 @@
-﻿//********************************************************************************************
-//Author: Sergey Stoyan
-//        sergey.stoyan@gmail.com
-//        sergey_stoyan@yahoo.com
-//        http://www.cliversoft.com
-//        26 September 2006
-//Copyright: (C) 2006, Sergey Stoyan
-//********************************************************************************************
+﻿/********************************************************************************************
+        Author: Sergey Stoyan
+        sergey.stoyan@gmail.com
+        sergey.stoyan@hotmail.com
+        stoyan@cliversoft.com
+        http://www.cliversoft.com
+********************************************************************************************/
 using System;
 using System.Windows.Forms;
 using System.IO;
@@ -48,28 +47,6 @@ namespace Cliver
                 }
             }
             return clps;
-        }
-
-        public class CommandLineParameters
-        {
-            public static readonly CommandLineParameters NOT_SET = new CommandLineParameters(null);
-
-            public override string ToString()
-            {
-                return Value;
-            }
-
-            protected CommandLineParameters(string value)
-            {
-                this.Value = value;
-            }
-
-            public string Value { get; private set; }
-        }
-
-        static public bool IsParameterSet<T>(T parameter) where T : CommandLineParameters
-        {
-            return Regex.IsMatch(Environment.CommandLine, @"\s" + parameter.Value + @"([^\w]|$)", RegexOptions.IgnoreCase);
         }
 
         public static bool IsWebContext

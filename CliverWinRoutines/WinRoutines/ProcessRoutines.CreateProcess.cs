@@ -1,176 +1,315 @@
-﻿//********************************************************************************************
-//Author: Sergey Stoyan
-//        sergey.stoyan@gmail.com
-//        sergey_stoyan@yahoo.com
-//        http://www.cliversoft.com
-//        26 September 2006
-//Copyright: (C) 2006, Sergey Stoyan
-//********************************************************************************************
+﻿/********************************************************************************************
+        Author: Sergey Stoyan
+        sergey.stoyan@gmail.com
+        sergey.stoyan@hotmail.com
+        stoyan@cliversoft.com
+        http://www.cliversoft.com
+********************************************************************************************/
 using Cliver.WinApi;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Cliver.Win
 {
     public static partial class ProcessRoutines
     {
-        public enum CreationFlags2
-        {
-            REDIRECT_STDIN = 0x00000001,
-            REDIRECT_STDOUT = 0x00000002,
-            REDIRECT_STDERR = 0x00000004,
-            REDIRECT_STDERR_TO_STDOUT = 0x00000005,
-        }
         public class ProcessParameters
         {
-            public Advapi32.CreationFlags CreationFlags = 0;
-            public CreationFlags2 CreationFlags2 = 0;
-            public Advapi32.STARTUPINFO? StartupInfo = null;
-            public string CommandLine;
+            public bool ShowWindow = true;
+            public bool NewConsole = true;
+            public string Executable;
+            public string Arguments;
+            public string CurrentDirectory;
+            public SafeFileHandle StdIn = default;
+            public SafeFileHandle StdOut = default;
+            public SafeFileHandle StdErr = default;
+
+            public string GetCommandLine()
+            {
+                string fileName = Executable.Trim();
+                bool fileNameIsQuoted = (fileName.StartsWith("\"", StringComparison.Ordinal) && fileName.EndsWith("\"", StringComparison.Ordinal));
+                string commandLine = fileName;
+                if (!fileNameIsQuoted)
+                    commandLine = "\"" + commandLine + "\"";
+                if (!string.IsNullOrEmpty(Arguments))
+                    commandLine += " " + Arguments;
+                return commandLine;
+            }
         }
-        public class ProcessInfo : IDisposable
+
+        //public class ProcessInfo : IDisposable
+        //{
+        //    public readonly uint Id = default;
+        //    public IntPtr StdIn { get; internal set; } = default;
+        //    public IntPtr StdOut { get; internal set; } = default;
+        //    public IntPtr StdErr { get; internal set; } = default;
+
+        //    public readonly Process Process;
+
+        //    internal ProcessInfo(uint id)
+        //    {
+        //        Id = id;
+        //        try
+        //        {
+        //            Process = Process.GetProcessById((int)Id);
+        //        }
+        //        catch (System.ArgumentException e)//throws an exception if the process is not running
+        //        { }
+        //    }
+
+        //    public bool WriteIn(byte[] buffer, int offset, int count)
+        //    {
+        //        lock (this)
+        //        {
+        //            if (fileStreamIn == null)
+        //            {
+        //                if (StdIn == default)
+        //                    throw new Exception("StdIn is not redirected.");
+        //                SafeFileHandle h = new SafeFileHandle(StdIn, true);
+        //                fileStreamIn = new FileStream(h, FileAccess.Write, BufferLength);
+        //            }
+        //            if (!fileStreamIn.CanWrite)
+        //                return false;
+        //            fileStreamIn.Write(buffer, offset, count);
+        //            fileStreamIn.Flush();
+        //            return true;
+        //        }
+        //    }
+        //    FileStream fileStreamIn = null;
+        //    public int BufferLength = 4096;
+
+        //    public bool WriteIn2(string m)
+        //    {
+        //        byte[] buffer = System.Text.Encoding.ASCII.GetBytes(m);
+        //        uint dwWritten;
+        //        System.Threading.NativeOverlapped o = new System.Threading.NativeOverlapped();
+        //        bool r = Kernel32.WriteFile(new SafeFileHandle(StdIn, true), buffer, (uint)buffer.Length, out dwWritten, ref o);
+        //        WinApi.Kernel32.CloseHandle(StdIn);
+        //        return r;
+        //    }
+
+        //    public bool WriteIn(string m)
+        //    {
+        //        //byte[] bs = Process.StandardInput.Encoding.GetBytes(m);!!! does not work
+        //        byte[] bs = System.Text.Encoding.ASCII.GetBytes(m);
+        //        return WriteIn(bs, 0, bs.Length);
+        //    }
+
+        //    public int ReadOut(byte[] buffer, int offset, int count)
+        //    {
+        //        lock (this)
+        //        {
+        //            if (fileStreamOut == null)
+        //            {
+        //                if (StdOut == default)
+        //                    throw new Exception("StdOut is not redirected.");
+        //                SafeFileHandle h = new SafeFileHandle(StdOut, true);
+        //                fileStreamOut = new FileStream(h, FileAccess.Read, BufferLength, false);
+        //            }
+        //            if (!fileStreamOut.CanRead)
+        //                return -1;
+        //            return fileStreamOut.Read(buffer, offset, count);
+        //        }
+        //    }
+        //    FileStream fileStreamOut = null;
+
+        //    System.Text.Encoding encoding
+        //    {
+        //        get
+        //        {
+        //            if (_encoding == null)
+        //                _encoding = System.Text.Encoding.GetEncoding(Kernel32.GetConsoleOutputCP());
+        //            return _encoding;
+        //        }
+        //    }
+        //    System.Text.Encoding _encoding = null;
+
+        //    public string ReadOut(int count)
+        //    {
+        //        byte[] bs = new byte[count];
+        //        int r = ReadOut(bs, 0, count);
+        //        return encoding.GetString(bs, 0, r);
+        //    }
+
+        //    //public string ReadOut(int count)
+        //    //{
+        //    //    byte[] bs = new byte[count];
+        //    //    uint r;
+        //    //    System.Threading.NativeOverlapped o = new System.Threading.NativeOverlapped();
+        //    //    //Kernel32.ReadFile(new SafeFileHandle(StdOut, true), bs, 100, out r, ref o);
+        //    //    bool c = Kernel32.ReadFile(StdOut, bs, (uint)count, out r, ref o);
+        //    //    return System.Text.Encoding.ASCII.GetString(bs, 0, (int)r);
+        //    //}
+
+        //    public int ReadErr(byte[] buffer, int offset, int count)
+        //    {
+        //        lock (this)
+        //        {
+        //            if (fileStreamErr == null)
+        //                fileStreamErr = new FileStream(new SafeFileHandle(StdErr, true), FileAccess.Read);
+        //            if (!fileStreamErr.CanRead)
+        //                return -1;
+        //            return fileStreamErr.Read(buffer, offset, count);
+        //        }
+        //    }
+        //    FileStream fileStreamErr = null;
+
+        //    public string ReadErr(int count)
+        //    {
+        //        byte[] bs = new byte[count];
+        //        int r = ReadErr(bs, 0, count);
+        //        return encoding.GetString(bs, 0, r);
+        //    }
+
+        //    ~ProcessInfo()
+        //    {
+        //        Dispose();
+        //    }
+
+        //    public void Dispose()
+        //    {
+        //        lock (this)
+        //        {
+        //            if (StdIn != default)
+        //            {
+        //                Kernel32.CloseHandle(StdIn);
+        //                if (fileStreamIn != null)
+        //                {
+        //                    fileStreamIn.Close();
+        //                    fileStreamIn = null;
+        //                }
+        //            }
+        //            if (StdOut != default)
+        //            {
+        //                Kernel32.CloseHandle(StdOut);
+        //                if (fileStreamOut != null)
+        //                {
+        //                    fileStreamOut.Close();
+        //                    fileStreamOut = null;
+        //                }
+        //            }
+        //            if (StdErr != default)
+        //            {
+        //                Kernel32.CloseHandle(StdErr);
+        //                if (fileStreamErr != null)
+        //                {
+        //                    fileStreamErr.Close();
+        //                    fileStreamErr = null;
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
+
+        public static int CreateProcess(ProcessParameters processParameters)
         {
-            public uint Id = default;
-            public IntPtr StdIn = default;
-            public IntPtr StdOut = default;
-            public IntPtr StdErr = default;
-            public Process Process
+            try
             {
-                get
-                {
-                    if (process == null && Id > 0)
-                        process = Process.GetProcessById((int)Id);
-                    return process;
-                }
-            }
-            Process process = null;
+                Advapi32.STARTUPINFO si = new Advapi32.STARTUPINFO();
+                si.hStdInput = processParameters.StdIn != null ? processParameters.StdIn : new SafeFileHandle(Kernel32.GetStdHandle(Kernel32.StdHandles.STD_INPUT_HANDLE), true);
+                si.hStdOutput = processParameters.StdOut != null ? processParameters.StdOut : new SafeFileHandle(Kernel32.GetStdHandle(Kernel32.StdHandles.STD_OUTPUT_HANDLE), true);
+                si.hStdError = processParameters.StdErr != null ? processParameters.StdErr : new SafeFileHandle(Kernel32.GetStdHandle(Kernel32.StdHandles.STD_ERROR_HANDLE), true);
+                if (processParameters.StdIn != null || processParameters.StdOut != null || processParameters.StdErr != null)
+                    si.dwFlags |= Advapi32.dwFlags.STARTF_USESTDHANDLES;
+                si.dwFlags |= Advapi32.dwFlags.STARTF_USESHOWWINDOW; //it is needed if hiding the window when CREATE_NEW_CONSOLE
+                si.wShowWindow = (short)(!processParameters.ShowWindow ? User32.SW.SW_HIDE : User32.SW.SW_SHOW);//what does it do???
+                //si.lpDesktop = "winsta0\\default";
 
-            public bool Write(byte[] buffer)
-            {
-                if (fileStreamIn == null)
-                    fileStreamIn = new FileStream(new SafeFileHandle(StdIn, true), FileAccess.Write);
-                if (!fileStreamIn.CanWrite)
-                    return false;
-                fileStreamIn.Write(buffer, 0, buffer.Length);
-                fileStreamIn.Flush();//!!! denied !!!
-                return true;
-            }
-            FileStream fileStreamIn = null;
+                SECURITY_ATTRIBUTES sa = new SECURITY_ATTRIBUTES();
+                if (processParameters.StdIn != null || processParameters.StdOut != null || processParameters.StdErr != null)
+                    sa.bInheritHandle = true;
 
-            public void Dispose()
+                Advapi32.CreationFlags creationFlags = 0;
+                //|=Advapi32.CreationFlags.CREATE_UNICODE_ENVIRONMENT
+                if (processParameters.NewConsole)
+                    creationFlags |= Advapi32.CreationFlags.CREATE_NEW_CONSOLE;
+                if (!processParameters.ShowWindow)
+                    creationFlags |= Advapi32.CreationFlags.CREATE_NO_WINDOW;
+
+                Advapi32.PROCESS_INFORMATION pi = new Advapi32.PROCESS_INFORMATION();
+                if (!Advapi32.CreateProcess(
+                    processParameters.Executable, // file to execute
+                    processParameters.Arguments, // command line 
+                    null, // pointer to process SECURITY_ATTRIBUTES
+                    null, // pointer to thread SECURITY_ATTRIBUTES
+                    true, // handles are inheritable
+                    creationFlags, // creation flags
+                    IntPtr.Zero, // pointer to new environment block;  NULL = use parent's environment
+                    Environment.CurrentDirectory, // name of current directory; NULL = use parent's current directory 
+                    si, // pointer to STARTUPINFO structure
+                    pi // receives information about new process
+                    ))
+                    throw new LastErrorException("!CreateProcess()");
+                return pi.dwProcessId;
+            }
+            finally
             {
-                if (StdIn != default)
-                {
-                    Kernel32.CloseHandle(StdIn);
-                    StdIn = default;
-                    if (fileStreamIn != null)
-                    {
-                        fileStreamIn.Close();
-                        fileStreamIn = null;
-                    }
-                }
-                if (StdOut != default)
-                {
-                    Kernel32.CloseHandle(StdOut);
-                    StdOut = default;
-                }
-                if (StdErr != default)
-                {
-                    Kernel32.CloseHandle(StdErr);
-                    StdErr = default;
-                }
             }
         }
-        public static ProcessInfo CreateProcessAsUserOfCurrentProcess(uint dwSessionId, ProcessParameters processParameters)
+
+        /// <summary>
+        /// Run a process in the specified logon session as the user of the current process.
+        /// </summary>
+        /// <param name="dwSessionId">ID of the logon session where the process is to run</param>
+        /// <param name="processParameters"></param>
+        /// <returns></returns>
+        public static int CreateProcessAsUserOfCurrentProcess(uint dwSessionId, ProcessParameters processParameters)
         {
             IntPtr hNewProcessToken = IntPtr.Zero;
             IntPtr hProcessToken = IntPtr.Zero;
             try
             {
-                WinApi.Advapi32.STARTUPINFO si;
-                if (processParameters.StartupInfo != null)
-                    si = (WinApi.Advapi32.STARTUPINFO)processParameters.StartupInfo;
-                else
-                    si = new WinApi.Advapi32.STARTUPINFO();
-                si.cb = Marshal.SizeOf(si);
-                si.lpDesktop = "winsta0\\default";
+                if (!Advapi32.OpenProcessToken(Process.GetCurrentProcess().Handle, Advapi32.DesiredAccess.MAXIMUM_ALLOWED, out hProcessToken))
+                    throw new LastErrorException("!OpenProcessToken()");
 
-                if (!WinApi.Advapi32.OpenProcessToken(Process.GetCurrentProcess().Handle, WinApi.Advapi32.DesiredAccess.MAXIMUM_ALLOWED, out hProcessToken))
-                    throw new Exception("!OpenProcessToken()", ErrorRoutines.GetLastError());
+                SECURITY_ATTRIBUTES sa = new SECURITY_ATTRIBUTES();
+                sa.bInheritHandle = true;
+                if (!Advapi32.DuplicateTokenEx(hProcessToken, Advapi32.DesiredAccess.MAXIMUM_ALLOWED, sa, Advapi32.SECURITY_IMPERSONATION_LEVEL.SecurityIdentification, Advapi32.TOKEN_TYPE.TokenPrimary, out hNewProcessToken))
+                    throw new LastErrorException("!DuplicateTokenEx()");
 
-                var sa = new WinApi.SECURITY_ATTRIBUTES();
-                sa.Length = Marshal.SizeOf(sa);
-                if (!WinApi.Advapi32.DuplicateTokenEx(hProcessToken, WinApi.Advapi32.DesiredAccess.MAXIMUM_ALLOWED, ref sa, WinApi.Advapi32.SECURITY_IMPERSONATION_LEVEL.SecurityIdentification, WinApi.Advapi32.TOKEN_TYPE.TokenPrimary, ref hNewProcessToken))
-                    throw new Exception("!DuplicateTokenEx()", ErrorRoutines.GetLastError());
+                //is it needed to specify in which logon session the process is to run
+                //!!!it usually needs to run with SYSTEM priviledges
+                if (!Advapi32.SetTokenInformation(hNewProcessToken, WinApi.Advapi32.TOKEN_INFORMATION_CLASS.TokenSessionId, ref dwSessionId, (uint)IntPtr.Size))
+                    throw new LastErrorException("!SetTokenInformation()");
 
-                //!!! is it needed ???
-                //if (!WinApi.Advapi32.SetTokenInformation(hNewProcessToken, WinApi.Advapi32.TOKEN_INFORMATION_CLASS.TokenSessionId, ref dwSessionId, (uint)IntPtr.Size))
-                //    throw new Exception("!SetTokenInformation()", ErrorRoutines.GetLastError());
+                Advapi32.STARTUPINFO si = new Advapi32.STARTUPINFO();
+                //si.lpDesktop = "winsta0\\default";
+                si.wShowWindow = (short)(processParameters.ShowWindow ? User32.SW.SW_SHOW : User32.SW.SW_HIDE);//what does it do???
 
-                if (processParameters.CreationFlags2.HasFlag(CreationFlags2.REDIRECT_STDIN))
-                {
-                    if (!WinApi.Kernel32.CreatePipe(out IntPtr stdInRead, out IntPtr stdInWrite, ref sa, 0))
-                        throw new Exception("!CreatePipe()", ErrorRoutines.GetLastError());
-                    // Ensure the write handle to the pipe for STDIN is not inherited. 
-                    if (!WinApi.Kernel32.SetHandleInformation(stdInWrite, WinApi.Kernel32.HANDLE_FLAG_INHERIT, 0))
-                        throw new Exception("!SetHandleInformation()", ErrorRoutines.GetLastError());
-                    si.hStdInput = stdInRead;
-                    si.dwFlags |= WinApi.Advapi32.STARTF.USESTDHANDLES;
-                }
+                Advapi32.CreationFlags creationFlags = processParameters.ShowWindow ? 0 : Advapi32.CreationFlags.CREATE_NO_WINDOW;
 
-                if (processParameters.CreationFlags2.HasFlag(CreationFlags2.REDIRECT_STDOUT))
-                {
-                    if (!WinApi.Kernel32.CreatePipe(out IntPtr stdOutRead, out IntPtr stdOutWrite, ref sa, 0))
-                        throw new Exception("!CreatePipe()", ErrorRoutines.GetLastError());
-                    // Ensure the write handle to the pipe for STDIN is not inherited. 
-                    if (!WinApi.Kernel32.SetHandleInformation(stdOutRead, WinApi.Kernel32.HANDLE_FLAG_INHERIT, 0))
-                        throw new Exception("!SetHandleInformation()", ErrorRoutines.GetLastError());
-                    si.hStdOutput = stdOutWrite;
-                    if (processParameters.CreationFlags2.HasFlag(CreationFlags2.REDIRECT_STDERR_TO_STDOUT))
-                        si.hStdError = stdOutWrite;
-                    si.dwFlags |= WinApi.Advapi32.STARTF.USESTDHANDLES;
-                }
-
-                if (processParameters.CreationFlags2.HasFlag(CreationFlags2.REDIRECT_STDERR))
-                {
-                    if (!WinApi.Kernel32.CreatePipe(out IntPtr stdErrRead, out IntPtr stdErrWrite, ref sa, 0))
-                        throw new Exception("!CreatePipe()", ErrorRoutines.GetLastError());
-                    // Ensure the write handle to the pipe for STDIN is not inherited. 
-                    if (!WinApi.Kernel32.SetHandleInformation(stdErrRead, WinApi.Kernel32.HANDLE_FLAG_INHERIT, 0))
-                        throw new Exception("!SetHandleInformation()", ErrorRoutines.GetLastError());
-                    si.hStdError = stdErrWrite;
-                    si.dwFlags |= WinApi.Advapi32.STARTF.USESTDHANDLES;
-                }
-
-                WinApi.Advapi32.PROCESS_INFORMATION pi;
-                if (!WinApi.Advapi32.CreateProcessAsUser(hNewProcessToken, // client's access token
-                    null, // file to execute
-                    processParameters.CommandLine, // command line
-                    ref sa, // pointer to process SECURITY_ATTRIBUTES
-                    ref sa, // pointer to thread SECURITY_ATTRIBUTES
-                    false, // handles are not inheritable
-                  processParameters.CreationFlags, // creation flags
-                    IntPtr.Zero,//pEnv, // pointer to new environment block 
-                    null, // name of current directory 
-                    ref si, // pointer to STARTUPINFO structure
-                    out pi // receives information about new process
+                Advapi32.PROCESS_INFORMATION pi = new Advapi32.PROCESS_INFORMATION();
+                if (!Advapi32.CreateProcessAsUser(
+                    hNewProcessToken, // client's access token
+                    processParameters.Executable, // file to execute
+                    processParameters.Arguments, // command line
+                    null, // process SECURITY_ATTRIBUTES
+                    null, // thread SECURITY_ATTRIBUTES
+                    false, // You cannot inherit handles across sessions. Additionally, if this parameter is TRUE, you must create the process in the same session as the caller.
+                    creationFlags, // creation flags
+                    IntPtr.Zero, // pointer to new environment block 
+                    processParameters.CurrentDirectory, // name of current directory 
+                    si, // pointer to STARTUPINFO structure
+                    pi // receives information about new process
                     ))
                     throw new Exception("!CreateProcessAsUser()", ErrorRoutines.GetLastError());
-                return new ProcessInfo { Id = pi.dwProcessId, StdIn = si.hStdInput, StdOut = si.hStdOutput, StdErr = si.hStdError };
+                return pi.dwProcessId;
             }
             finally
             {
                 if (hProcessToken != IntPtr.Zero)
-                    WinApi.Kernel32.CloseHandle(hProcessToken);
+                    Kernel32.CloseHandle(hProcessToken);
                 if (hNewProcessToken != IntPtr.Zero)
-                    WinApi.Kernel32.CloseHandle(hNewProcessToken);
+                    Kernel32.CloseHandle(hNewProcessToken);
             }
         }
 
-        public static uint CreateProcessAsUserOfCurrentSession(string appCmdLine /*,int processId*/)
+        public static int CreateProcessAsUserOfCurrentSession(string appCmdLine /*,int processId*/)
         {
             IntPtr hToken = IntPtr.Zero;
             IntPtr envBlock = IntPtr.Zero;
@@ -207,17 +346,16 @@ namespace Cliver.Win
                     WinApi.Kernel32.CloseHandle(hToken);
             }
         }
-        static uint createProcessAsUser(string cmdLine, IntPtr hToken, IntPtr envBlock)
+        static int createProcessAsUser(string cmdLine, IntPtr hToken, IntPtr envBlock)
         {
             try
             {
-                WinApi.Advapi32.PROCESS_INFORMATION pi = new WinApi.Advapi32.PROCESS_INFORMATION();
-                WinApi.SECURITY_ATTRIBUTES saProcess = new WinApi.SECURITY_ATTRIBUTES();
-                WinApi.SECURITY_ATTRIBUTES saThread = new WinApi.SECURITY_ATTRIBUTES();
-                saProcess.Length = Marshal.SizeOf(saProcess);
-                saThread.Length = Marshal.SizeOf(saThread);
+                SECURITY_ATTRIBUTES saProcess = new SECURITY_ATTRIBUTES();
+                SECURITY_ATTRIBUTES saThread = new SECURITY_ATTRIBUTES();
+                saProcess.nLength = Marshal.SizeOf(saProcess);
+                saThread.nLength = Marshal.SizeOf(saThread);
 
-                WinApi.Advapi32.STARTUPINFO si = new WinApi.Advapi32.STARTUPINFO();
+                Advapi32.STARTUPINFO si = new Advapi32.STARTUPINFO();
                 si.cb = Marshal.SizeOf(si);
 
                 //if this member is NULL, the new process inherits the desktop 
@@ -228,22 +366,23 @@ namespace Cliver.Win
                 //If the impersonated user already has a desktop, the system uses the 
                 //existing desktop. 
 
-                si.lpDesktop = @"WinSta0\Default"; //Modify as needed 
-                si.dwFlags = WinApi.Advapi32.STARTF.USESHOWWINDOW | WinApi.Advapi32.STARTF.FORCEONFEEDBACK;
+                //si.lpDesktop = @"WinSta0\Default"; //Modify as needed 
+                si.dwFlags = Advapi32.dwFlags.STARTF_USESHOWWINDOW | Advapi32.dwFlags.STARTF_FORCEONFEEDBACK;
                 si.wShowWindow = WinApi.User32.SW_SHOW;
 
-                if (!WinApi.Advapi32.CreateProcessAsUser(
+                Advapi32.PROCESS_INFORMATION pi = new Advapi32.PROCESS_INFORMATION();
+                if (!Advapi32.CreateProcessAsUser(
                     hToken,
                     null,
                     cmdLine,
-                    ref saProcess,
-                    ref saThread,
+                    saProcess,
+                    saThread,
                     false,
                     WinApi.Advapi32.CreationFlags.CREATE_UNICODE_ENVIRONMENT,
                     envBlock,
                     null,
-                    ref si,
-                    out pi
+                    si,
+                    pi
                     ))
                     throw new Exception("!CreateProcessAsUser()", ErrorRoutines.GetLastError());
                 return pi.dwProcessId;
@@ -269,16 +408,16 @@ namespace Cliver.Win
                     throw new Exception("!OpenProcessToken()", ErrorRoutines.GetLastError());
 
                 WinApi.SECURITY_ATTRIBUTES sa = new WinApi.SECURITY_ATTRIBUTES();
-                sa.Length = Marshal.SizeOf(sa);
+                sa.nLength = Marshal.SizeOf(sa);
 
                 //Convert the impersonation token into Primary token 
                 if (!WinApi.Advapi32.DuplicateTokenEx(
                     hToken,
                     WinApi.Advapi32.DesiredAccess.TOKEN_ASSIGN_PRIMARY | WinApi.Advapi32.DesiredAccess.TOKEN_DUPLICATE | WinApi.Advapi32.DesiredAccess.TOKEN_QUERY,
-                    ref sa,
+                    sa,
                     WinApi.Advapi32.SECURITY_IMPERSONATION_LEVEL.SecurityIdentification,
                     WinApi.Advapi32.TOKEN_TYPE.TokenPrimary,
-                    ref primaryToken
+                    out primaryToken
                     ))
                     throw new Exception("!DuplicateTokenEx()", ErrorRoutines.GetLastError());
                 return primaryToken;
@@ -292,6 +431,111 @@ namespace Cliver.Win
                 if (hToken != IntPtr.Zero)
                     WinApi.Kernel32.CloseHandle(hToken);
             }
+        }
+
+
+
+
+
+        /// <summary>
+        /// !!! to be checked
+        /// </summary>
+        /// <param name="appPath"></param>
+        /// <param name="cmdLine"></param>
+        /// <param name="workDir"></param>
+        /// <param name="visible"></param>
+        /// <returns></returns>
+        public static bool StartProcessAsCurrentUser(string appPath, string cmdLine = null, string workDir = null, bool visible = true)
+        {
+            var hUserToken = IntPtr.Zero;
+            Advapi32.STARTUPINFO startInfo = new Advapi32.STARTUPINFO();
+            WinApi.Advapi32.PROCESS_INFORMATION procInfo = default;
+            var pEnv = IntPtr.Zero;
+            int iResultOfCreateProcessAsUser;
+            startInfo.cb = Marshal.SizeOf(typeof(Advapi32.STARTUPINFO));
+
+            try
+            {
+                if (!getActiveSessionUserToken(ref hUserToken))
+                    throw new Exception("StartProcessAsCurrentUser: GetSessionUserToken failed.");
+
+                Advapi32.CreationFlags dwCreationFlags = Advapi32.CreationFlags.CREATE_UNICODE_ENVIRONMENT | (visible ? Advapi32.CreationFlags.CREATE_NEW_CONSOLE : Advapi32.CreationFlags.CREATE_NO_WINDOW);
+                startInfo.wShowWindow = (short)(visible ? User32.SW.SW_SHOW : User32.SW.SW_HIDE);
+                //startInfo.lpDesktop = "winsta0\\default";
+
+                if (!Userenv.CreateEnvironmentBlock(ref pEnv, hUserToken, false))
+                    throw new Exception("StartProcessAsCurrentUser: CreateEnvironmentBlock failed.");
+
+                if (!Advapi32.CreateProcessAsUser(hUserToken,
+                    appPath, // Application Name
+                    cmdLine, // Command Line
+                    null,
+                    null,
+                    false,
+                    dwCreationFlags,
+                    pEnv,
+                    workDir, // Working directory
+                    startInfo,
+                    procInfo))
+                {
+                    iResultOfCreateProcessAsUser = Marshal.GetLastWin32Error();
+                    throw new Exception("StartProcessAsCurrentUser: CreateProcessAsUser failed.  Error Code -" + iResultOfCreateProcessAsUser);
+                }
+
+                iResultOfCreateProcessAsUser = Marshal.GetLastWin32Error();
+            }
+            finally
+            {
+                Kernel32.CloseHandle(hUserToken);
+                if (pEnv != IntPtr.Zero)
+                {
+                    Userenv.DestroyEnvironmentBlock(pEnv);
+                }
+                Kernel32.CloseHandle(procInfo.hThread);
+                Kernel32.CloseHandle(procInfo.hProcess);
+            }
+
+            return true;
+        }
+        private static bool getActiveSessionUserToken(ref IntPtr phUserToken)
+        {
+            var bResult = false;
+            var hImpersonationToken = IntPtr.Zero;
+            var activeSessionId = Wts.INVALID_SESSION_ID;
+            var pSessionInfo = IntPtr.Zero;
+            var sessionCount = 0;
+
+            // Get a handle to the user access token for the current active session.
+            if (Wts.WTSEnumerateSessions(Wts.WTS_CURRENT_SERVER_HANDLE, 0, 1, ref pSessionInfo, ref sessionCount) != 0)
+            {
+                var arrayElementSize = Marshal.SizeOf(typeof(Wts.WTS_SESSION_INFO));
+                var current = pSessionInfo;
+
+                for (var i = 0; i < sessionCount; i++)
+                {
+                    var si = (Wts.WTS_SESSION_INFO)Marshal.PtrToStructure((IntPtr)current, typeof(Wts.WTS_SESSION_INFO));
+                    current += arrayElementSize;
+
+                    if (si.State == Wts.WTS_CONNECTSTATE_CLASS.WTSActive)
+                        activeSessionId = si.SessionID;
+                }
+            }
+
+            // If enumerating did not work, fall back to the old method
+            if (activeSessionId == Wts.INVALID_SESSION_ID)
+            {
+                activeSessionId = Wts.WTSGetActiveConsoleSessionId();
+            }
+
+            if (Wts.WTSQueryUserToken(activeSessionId, ref hImpersonationToken) != 0)
+            {
+                // Convert the impersonation token to a primary token
+                var sa = new WinApi.SECURITY_ATTRIBUTES();
+                bResult = Advapi32.DuplicateTokenEx(hImpersonationToken, 0, sa, WinApi.Advapi32.SECURITY_IMPERSONATION_LEVEL.SecurityIdentification, WinApi.Advapi32.TOKEN_TYPE.TokenPrimary, out phUserToken);
+                Kernel32.CloseHandle(hImpersonationToken);
+            }
+
+            return bResult;
         }
     }
 }

@@ -1,10 +1,9 @@
 //********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
-//        sergey_stoyan@yahoo.com
+//        sergey.stoyan@hotmail.com
+//        stoyan@cliversoft.com
 //        http://www.cliversoft.com
-//        26 September 2006
-//Copyright: (C) 2006-2013, Sergey Stoyan
 //********************************************************************************************
 using System;
 using System.IO;
@@ -116,10 +115,7 @@ namespace Cliver
                         }
                         catch (Exception e)
                         {
-                            string m;
-                            string d;
-                            GetExceptionMessage(e, out m, out d);
-                            write(Log.MessageType.ERROR, m, d);
+                            write(Log.MessageType.ERROR, GetExceptionMessage(e));
                         }
                         finally
                         {
@@ -131,7 +127,7 @@ namespace Cliver
             }
             //static protected System.Threading.Thread exitingThread = null;
             static protected bool exiting = false;
-            void write(Log.MessageType messageType, string message, string details)
+            void write(Log.MessageType messageType, string message, string details = null)
             {
                 lock (this)
                 {
@@ -175,9 +171,8 @@ namespace Cliver
                         logWriter = new StreamWriter(File, true);
                     }
 
-                    details = string.IsNullOrWhiteSpace(details) ? "" : "\r\n\r\n" + details;
-                    message = (messageType == MessageType.LOG ? "" : messageType.ToString()) + ": " + message + details;
-                    logWriter.WriteLine(DateTime.Now.ToString("[dd-MM-yy HH:mm:ss] ") + message);
+                    message = (messageType == MessageType.LOG ? "" : messageType.ToString() + ": ") + message + (string.IsNullOrWhiteSpace(details) ? "" : "\r\n\r\n" + details);
+                    logWriter.WriteLine(DateTime.Now.ToString(Log.timePattern) + message);
                     logWriter.Flush();
                 }
             }

@@ -1,12 +1,12 @@
-﻿//********************************************************************************************
-//Author: Sergey Stoyan
-//        sergey.stoyan@gmail.com
-//        sergey_stoyan@yahoo.com
-//        http://www.cliversoft.com
-//        26 September 2006
-//Copyright: (C) 2006, Sergey Stoyan
-//********************************************************************************************
+﻿/********************************************************************************************
+        Author: Sergey Stoyan
+        sergey.stoyan@gmail.com
+        sergey.stoyan@hotmail.com
+        stoyan@cliversoft.com
+        http://www.cliversoft.com
+********************************************************************************************/
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
@@ -18,7 +18,7 @@ namespace Cliver.Win
         /// Makes processes live no longer than this object
         /// </summary>
         public class AntiZombieGuard
-        {            
+        {
             void initialize()
             {
                 // This feature requires Windows 8 or later. To support Windows 7 requires
@@ -54,32 +54,52 @@ namespace Cliver.Win
             // Windows will automatically close any open job handles when our process terminates.
             // When the job handle is closed, the child processes will be killed.
             IntPtr jobHandle = IntPtr.Zero;
+           readonly HashSet<IntPtr> trackedProcessHandles = new HashSet<IntPtr>();
 
             ~AntiZombieGuard()
             {
                 KillTrackedProcesses();
             }
 
+            public bool IsProcessTracked(Process process)
+            {
+                return trackedProcessHandles.Contains(process.Handle); 
+            }
+
             public void KillTrackedProcesses()
             {
-                if (jobHandle != IntPtr.Zero)
+                lock (This)
                 {
+                    if (jobHandle == IntPtr.Zero)
+                        return;
                     WinApi.Kernel32.CloseHandle(jobHandle);
                     jobHandle = IntPtr.Zero;
+                    trackedProcessHandles.Clear();
                 }
             }
 
+            //!!!After a process is associated with a job, the association cannot be broken. 
+            //public void Untrack(Process process)
+            //{
+            //}
+
             public void Track(Process process)
             {
-                //All processes associated with a job must run in the same session. 
-                //A job is associated with the session of the first process to be assigned to the job.
-                if (jobHandle == IntPtr.Zero)
-                    initialize();
-                if (!WinApi.Kernel32.AssignProcessToJobObject(jobHandle, process.Handle))
-                    throw new Exception("!AssignProcessToJobObject()", ErrorRoutines.GetLastError());
+                lock (This)
+                {
+                    //All processes associated with a job must run in the same session. 
+                    //A job is associated with the session of the first process to be assigned to the job.
+                    if (jobHandle == IntPtr.Zero)
+                        initialize();
+                    if (trackedProcessHandles.Contains(process.Handle))
+                        return;
+                    if (!WinApi.Kernel32.AssignProcessToJobObject(jobHandle, process.Handle))
+                        throw new Exception("!AssignProcessToJobObject()", ErrorRoutines.GetLastError());
+                    trackedProcessHandles.Add(process.Handle);
+                }
             }
 
-            public static AntiZombieGuard This = new AntiZombieGuard();
+            public readonly static AntiZombieGuard This = new AntiZombieGuard();
         }
     }
 }

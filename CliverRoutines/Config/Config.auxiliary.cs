@@ -2,15 +2,12 @@
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
 //        sergey.stoyan@hotmail.com
+//        stoyan@cliversoft.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System.IO;
-using System.Reflection;
-using System.Linq;
 
 namespace Cliver
 {
@@ -20,11 +17,12 @@ namespace Cliver
         /// Creates a new instance of the given Settings field initiated with default values.
         /// Tries to load values from the initial file located in the app's directory. 
         /// If this file does not exist, it creates an object with the hardcoded values.
+        /// The new instance shares the same __Info object with the original instance.
         /// </summary>
         /// <typeparam name="S"></typeparam>
         /// <param name="settings"></param>
         /// <returns></returns>
-        public static S CreateResetClone<S>(S settings) where S : Settings, new()
+        public static S CreateResetClone<S>(this S settings) where S : Settings, new()
         {
             if (settings.__Info == null)
                 throw new Exception("This method cannot be performed on a Settings object which has __Info not defined.");
@@ -36,16 +34,32 @@ namespace Cliver
         /// Tries to load values from the storage file.
         /// If this file does not exist, it tries to load values from the initial file located in the app's directory. 
         /// If this file does not exist, it creates an object with the hardcoded values.
+        /// The new instance shares the same __Info object with the original instance.
         /// </summary>
         /// <typeparam name="S"></typeparam>
         /// <param name="settings"></param>
         /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
         /// <returns></returns>
-        public static S CreateReloadedClone<S>(S settings, bool throwExceptionIfCouldNotLoadFromStorageFile = false) where S : Settings, new()
+        public static S CreateReloadedClone<S>(this S settings, bool throwExceptionIfCouldNotLoadFromStorageFile = false) where S : Settings, new()
         {
             if (settings.__Info == null)
                 throw new Exception("This method cannot be performed on a Settings object which has __Info not defined.");
             return (S)Settings.Create(settings.__Info, false, throwExceptionIfCouldNotLoadFromStorageFile);
+        }
+
+        /// <summary>
+        /// Creates a new instance of the given Settings field with cloned values.
+        /// The new instance shares the same __Info object with the original instance.
+        /// </summary>
+        /// <typeparam name="S"></typeparam>
+        /// <param name="settings"></param>
+        /// <returns></returns>
+        public static S CreateClone<S>(this S settings) where S : Settings, new()
+        {
+            S s = Serialization.Json.Clone(settings);
+            if (settings.__Info != null)
+                s.__Info = settings.__Info;
+            return s;
         }
 
         /// <summary>
@@ -90,7 +104,7 @@ namespace Cliver
         /// Can be used to initialize an optional Settings field.
         /// </summary>
         /// <param name="settingsFieldFullName">full name of Settings field; it equals to the name of its storage file without extention</param>
-        public static void Reset(string settingsFieldFullName) 
+        public static void Reset(string settingsFieldFullName)
         {
             SettingsFieldInfo sfi = GetSettingsFieldInfo(settingsFieldFullName);
             Settings s = Settings.Create(sfi, true, true);

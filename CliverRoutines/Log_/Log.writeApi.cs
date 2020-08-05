@@ -1,10 +1,9 @@
 //********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
-//        sergey_stoyan@yahoo.com
+//        sergey.stoyan@hotmail.com
+//        stoyan@cliversoft.com
 //        http://www.cliversoft.com
-//        26 September 2006
-//Copyright: (C) 2006-2013, Sergey Stoyan
 //********************************************************************************************
 
 using System;
@@ -43,6 +42,11 @@ namespace Cliver
             Head.Error2(message);
         }
 
+        static public void Error2(string message, Exception e)
+        {
+            Head.Error2(message, e);
+        }
+
         static public void Trace(object message = null)
         {
             Head.Trace(message);
@@ -75,6 +79,11 @@ namespace Cliver
         static public void Warning(string message, Exception e)
         {
             Head.Warning(message, e);
+        }
+
+        static public void Warning2(string message, Exception e)
+        {
+            Head.Warning2(message, e);
         }
 
         static public void Warning(Exception e)

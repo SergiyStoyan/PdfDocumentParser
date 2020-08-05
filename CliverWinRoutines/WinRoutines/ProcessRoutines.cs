@@ -1,11 +1,12 @@
-﻿//********************************************************************************************
-//Author: Sergey Stoyan
-//        sergey.stoyan@gmail.com
-//        sergey_stoyan@yahoo.com
-//        http://www.cliversoft.com
-//        26 September 2006
-//Copyright: (C) 2006, Sergey Stoyan
-//********************************************************************************************
+﻿/********************************************************************************************
+        Author: Sergey Stoyan
+        sergey.stoyan@gmail.com
+        sergey.stoyan@hotmail.com
+        stoyan@cliversoft.com
+        http://www.cliversoft.com
+********************************************************************************************/
+
+
 using System;
 using System.Windows.Forms;
 using System.Diagnostics;
@@ -16,28 +17,42 @@ using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Management;
 using System.Security.AccessControl;
+using System.Collections.Generic;
 
 namespace Cliver.Win
 {
     public static partial class ProcessRoutines
     {
-        public static bool IsProgramRunningAlready()
+        public static IEnumerable<Process> GetProcesses(string exeFile)
         {
-            Process p = Process.GetCurrentProcess();
-            return (from x in Process.GetProcessesByName(p.ProcessName) where x.MainModule.FileName == p.MainModule.FileName select x).Count() > 1;
+            string exeFileDir = PathRoutines.GetFileDir(exeFile).ToLower();
+            return Process.GetProcessesByName(PathRoutines.GetFileNameWithoutExtention(exeFile)).Where(p =>
+            {
+                ProcessModule pm;
+                try
+                {
+                    pm = p.MainModule;
+                }
+                catch//sometimes it throws exception (if the process exited?)
+                {
+                    pm = null;
+                }
+                return pm == null ? false : pm.FileName.StartsWith(exeFileDir, StringComparison.InvariantCultureIgnoreCase);
+            }
+            );
         }
 
-        public static void RunSingleProcessOnly(Action<string> showError)
+        public static void RunMeInSingleProcessOnly(Action<string> exitingMessage)
         {
-            string app_name = ProgramRoutines.GetAppName();
+            string appName = ProgramRoutines.GetAppName();
             bool createdNew;
-            MutexSecurity mutexSecurity = new System.Security.AccessControl.MutexSecurity();
+            MutexSecurity mutexSecurity = new MutexSecurity();
             mutexSecurity.AddAccessRule(new MutexAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), MutexRights.Synchronize | MutexRights.Modify, AccessControlType.Allow));
             for (int i = 0; i < 2; i++)
             {
                 try
                 {
-                    GLOBAL_SINGLE_PROCESS_MUTEX = new Mutex(false, @"Global\CLIVERSOFT_" + app_name + @"_SINGLE_PROCESS", out createdNew, mutexSecurity);
+                    GLOBAL_SINGLE_PROCESS_MUTEX = new Mutex(false, @"Global\CLIVERSOFT_" + appName + @"_SINGLE_PROCESS", out createdNew, mutexSecurity);
                     break;
                 }
                 catch (Exception e)
@@ -49,15 +64,13 @@ namespace Cliver.Win
                         Thread.Sleep(1000);//wait for some time while contending, if the other instance of the program is still in progress of shutting down.
                         continue;
                     }
-                    if (showError != null)
-                        showError(Log.GetExceptionMessage(e) + "\r\n\r\nExiting...");
+                    exitingMessage?.Invoke(Log.GetExceptionMessage(e) + "\r\n\r\nExiting...");
                     Environment.Exit(0);
                 }
             }
             if (GLOBAL_SINGLE_PROCESS_MUTEX.WaitOne(1000, false))//wait for some time while contending, if the other instance of the program is still in progress of shutting down.
                 return;
-            if (showError != null)
-                showError(app_name + " is already running, so this instance will exit.");
+            exitingMessage?.Invoke(appName + " is already running, so this instance will exit.");
             Environment.Exit(0);
         }
         static Mutex GLOBAL_SINGLE_PROCESS_MUTEX = null;
@@ -97,66 +110,87 @@ namespace Cliver.Win
             }
             catch
             { //if the user cancelled
-            }            
+            }
             Environment.Exit(0);
         }
 
-        public static bool IsProcessAlive(int process_id)
-        {
-            return GetProcess(process_id) != null;
-        }
+        //public static bool IsProcessAlive(int process_id)
+        //{
+        //    return GetProcess(process_id) != null;
+        //}
 
-        public static bool IsProcessAlive(Process process)
-        {
-            return GetProcess(process.Id) != null;
-        }
+        //public static bool IsProcessAlive(this Process process)
+        //{
+        //    return GetProcess(process.Id) != null;
+        //}
 
-        public static Process GetProcess(int process_id)
+        public static Process GetProcess(int processId)
         {
             try
             {
-                return Process.GetProcessById(process_id);
+                return Process.GetProcessById(processId);
             }
-            catch
+            catch (System.ArgumentException e)//throws an exception if the process exited
             {
                 return null;
             }
         }
 
-        public static bool KillProcessTree(int process_id)
+        public static bool TryKillProcessTree(int processId, int timeoutMss = 1000, int pollTimeSpanMss = 300)
         {
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("Select * From Win32_Process Where ParentProcessID=" + process_id);
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher("Select * From Win32_Process Where ParentProcessID=" + processId);
             foreach (ManagementObject mo in searcher.Get())
-                KillProcessTree(Convert.ToInt32(mo["ProcessID"]));
+                if (!TryKillProcessTree(Convert.ToInt32(mo["ProcessID"]), timeoutMss, pollTimeSpanMss))
+                    return false;
 
+            return TryKillProcess(processId);
+        }
+
+        public static bool TryKillProcessTree(this Process process, int timeoutMss = 1000, int pollTimeSpanMss = 300)
+        {
+            return TryKillProcessTree(process.Id, timeoutMss, pollTimeSpanMss);
+        }
+
+        public static bool TryKillProcess(int processId, int timeoutMss = 1000, int pollTimeSpanMss = 300)
+        {
             Process p;
             try
             {
-                p = Process.GetProcessById(process_id);
+                p = Process.GetProcessById(processId);
             }
             catch
             {
                 return true;
             }
-            for (int i = 0; i < 10; i++)
+            return p.TryKill(timeoutMss, pollTimeSpanMss);
+        }
+
+        public static bool TryKill(this Process process, int timeoutMss = 1000, int pollTimeSpanMss = 300)
+        {
+            return SleepRoutines.WaitForCondition(() =>
             {
                 try
                 {
-                    p.Kill();
+                    process.Kill();
                 }
                 catch
                 {
                     // Process already exited.
                     return true;
                 }
-                p.WaitForExit(1000);
-                if (!IsProcessRunning(p))
-                    return true;
-            }
-            return false;
+                process.WaitForExit(pollTimeSpanMss);
+                return !process.IsRunning();
+            },
+                timeoutMss
+                );
         }
 
-        public static bool IsProcessRunning(Process p)
+        /// <summary>
+        /// Safe method instead of HasExited
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public static bool IsRunning(this Process p)
         {
             try
             {
@@ -300,5 +334,37 @@ namespace Cliver.Win
         }
         private const string uacRegistryKey = "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System";
         private const string uacRegistryValue = "EnableLUA";
+
+        public static Process GetParentProcess(int processId)
+        {
+            Process process = Process.GetProcessById(processId);
+            ParentProcessUtilities pbi = new ParentProcessUtilities();
+            int status = NtQueryInformationProcess(process.Handle, 0, ref pbi, Marshal.SizeOf(pbi), out int returnLength);
+            if (status != 0)
+                throw new System.ComponentModel.Win32Exception(status);
+
+            try
+            {
+                return Process.GetProcessById(pbi.InheritedFromUniqueProcessId.ToInt32());
+            }
+            catch (ArgumentException)
+            {
+                // not found
+                return null;
+            }
+        }
+        [DllImport("ntdll.dll", SetLastError = true)]
+        private static extern int NtQueryInformationProcess(IntPtr processHandle, int processInformationClass, ref ParentProcessUtilities processInformation, int processInformationLength, out int returnLength);
+        [StructLayout(LayoutKind.Sequential)]
+        public struct ParentProcessUtilities
+        {
+            // These members must match PROCESS_BASIC_INFORMATION
+            internal IntPtr Reserved1;
+            internal IntPtr PebBaseAddress;
+            internal IntPtr Reserved2_0;
+            internal IntPtr Reserved2_1;
+            internal IntPtr UniqueProcessId;
+            internal IntPtr InheritedFromUniqueProcessId;
+        }
     }
 }

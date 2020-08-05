@@ -1,10 +1,9 @@
 //********************************************************************************************
-//Author: Sergey Stoyan, CliverSoft.com
-//        http://cliversoft.com
-//        stoyan@cliversoft.com
+//Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
-//        27 February 2007
-//Copyright: (C) 2007, Sergey Stoyan
+//        sergey.stoyan@hotmail.com
+//        stoyan@cliversoft.com
+//        http://www.cliversoft.com
 //********************************************************************************************
 using System;
 using System.IO;

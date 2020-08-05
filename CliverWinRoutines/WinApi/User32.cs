@@ -15,6 +15,32 @@ namespace Cliver.WinApi
 {
     public partial class User32
     {
+        public enum SW
+        {
+            SW_HIDE = 0,
+            SW_SHOWNORMAL = 1,
+            SW_NORMAL = 1,
+            SW_SHOWMINIMIZED = 2,
+            SW_SHOWMAXIMIZED = 3,
+            SW_MAXIMIZE = 3,
+            SW_SHOWNOACTIVATE = 4,
+            SW_SHOW = 5,
+            SW_MINIMIZE = 6,
+            SW_SHOWMINNOACTIVE = 7,
+            SW_SHOWNA = 8,
+            SW_RESTORE = 9,
+            SW_SHOWDEFAULT = 10,
+            SW_MAX = 10
+        }
+
+        public const int UOI_USER_SID = 4;
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool GetUserObjectInformation(IntPtr hObj, int nIndex, [MarshalAs(UnmanagedType.LPArray)] byte[] pvInfo, int nLength, out uint lpnLengthNeeded);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr GetThreadDesktop(int dwThreadId);
+
         [DllImport("user32.dll", EntryPoint = "ShowWindow", SetLastError = true)]
         static public extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
@@ -88,7 +114,7 @@ namespace Cliver.WinApi
         public static extern byte VkKeyScan(char c);
 
         [DllImport("user32.dll")]
-        public static extern IntPtr SetWindowsHookEx(HookType hook, HookProc callback, IntPtr hMod, uint dwThreadId);
+        public static extern IntPtr SetWindowsHookEx(HookType hook, HookProc callback, IntPtr hMod, int dwThreadId);
         public enum HookType : uint
         {
             WH_JOURNALRECORD = 0,

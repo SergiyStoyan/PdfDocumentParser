@@ -1,10 +1,9 @@
 //********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
-//        sergey_stoyan@yahoo.com
+//        sergey.stoyan@hotmail.com
+//        stoyan@cliversoft.com
 //        http://www.cliversoft.com
-//        26 September 2006
-//Copyright: (C) 2006-2013, Sergey Stoyan
 //********************************************************************************************
 
 using System;
@@ -12,6 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Text;
 
 namespace Cliver
 {
@@ -142,55 +142,33 @@ namespace Cliver
         static List<Type> TypesExcludedFromStack = null;
 
         /// <summary>
-        /// Get exception message with details.
-        /// </summary>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        public static string GetExceptionMessage(Exception e)
-        {
-            GetExceptionMessage(e, out string m, out string d);
-            return m + " \r\n\r\n" + d;
-        }
-
-        /// <summary>
         /// Get exception message without details.
         /// </summary>
         /// <param name="e"></param>
         /// <returns></returns>
         public static string GetExceptionMessage2(Exception e)
         {
-            GetExceptionMessage(e, out string m, out string d);
-            return m;
+          return  GetExceptionMessage(e, false);
         }
 
-        //        static public void GetExceptionMessage(Exception e, out string message, out string details)
-        //        {
-        //            for (; e.InnerException != null; e = e.InnerException) ;
-        //            message = "Exception: \r\n" + e.Message;
-        //#if DEBUG            
-        //            details = "Module:" + e.TargetSite.Module + " \r\n\r\nStack:" + e.StackTrace;
-        //#else       
-        //            details = ""; //"Module:" + e.TargetSite.Module + " \r\n\r\nStack:" + e.StackTrace;
-        //#endif
-        //        }
-
         /// <summary>
-        /// Get exception message and details.
+        /// Get exception message with details.
         /// </summary>
         /// <param name="e"></param>
         /// <returns></returns>
-        static public void GetExceptionMessage(Exception e, out string message, out string details)
+        static public string GetExceptionMessage(Exception e, bool withDetails = true)
         {
             Exception lastInterestingE = null;
             bool passedOutOfApp = false;
-            List<string> ms = new List<string>();
+            List<string> messages = new List<string>();
             for (; e != null; e = e.InnerException)
             {
+                string m = e.Message + (withDetails ? " [" + e.GetType().FullName + "]" : "");
                 AggregateException ae = e as AggregateException;
                 if (ae != null && ae.InnerExceptions.Count > 1)
-                    ms.Add("More than 1 exception aggregated! Show only [0]:" + e.Message);
+                    messages.Add("More than 1 exception aggregated! Show only [0]:" + m);
                 else
-                    ms.Add(e.Message);
+                    messages.Add(m);
                 if (!passedOutOfApp)
                 {
                     if (lastInterestingE != null && (e.StackTrace == null || e.TargetSite == null))//it seems to be passing out of the application
@@ -199,8 +177,10 @@ namespace Cliver
                         lastInterestingE = e;
                 }
             }
-            message = string.Join("\r\n<= ", ms);
-            details = "Module: " + lastInterestingE?.TargetSite?.Module + " \r\n\r\nStack:" + lastInterestingE?.StackTrace;
+            StringBuilder sb = new StringBuilder(string.Join("\r\n<= ", messages));
+            if (withDetails)
+                sb.Append("\r\n\r\nModule: " + lastInterestingE?.TargetSite?.Module + " \r\n\r\nStack:" + lastInterestingE?.StackTrace);
+            return sb.ToString();
         }
         //static void getExceptionMessage(Exception e, ref string message, ref string details)
         //{

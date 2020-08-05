@@ -1,10 +1,9 @@
 //********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
-//        sergey_stoyan@yahoo.com
+//        sergey.stoyan@hotmail.com
+//        stoyan@cliversoft.com
 //        http://www.cliversoft.com
-//        26 September 2006
-//Copyright: (C) 2006-2013, Sergey Stoyan
 //********************************************************************************************
 using System;
 using System.IO;
@@ -47,6 +46,8 @@ namespace Cliver
             /// <param name="message"></param>
             void Error2(string message);
 
+            void Error2(string message, Exception e);
+
             /// <summary>
             /// Write message with the stack information.
             /// </summary>
@@ -83,6 +84,8 @@ namespace Cliver
             /// <param name="message"></param>
             /// <param name="e"></param>
             void Warning(string message, Exception e);
+
+            void Warning2(string message, Exception e);
 
             /// <summary>
             /// Write warning without details.

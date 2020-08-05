@@ -9,11 +9,29 @@
 
 using System;
 using System.Runtime.InteropServices;
+using Microsoft.Win32.SafeHandles;
 
 namespace Cliver.WinApi
 {
     public partial class Advapi32
     {
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        public static extern bool CreateProcess(
+            string lpApplicationName,                   // LPCTSTR
+            string lpCommandLine,                // LPTSTR - note: CreateProcess might insert a null somewhere in this string
+            SECURITY_ATTRIBUTES lpProcessAttributes,    // LPSECURITY_ATTRIBUTES
+            SECURITY_ATTRIBUTES lpThreadAttributes,     // LPSECURITY_ATTRIBUTES
+            bool bInheritHandles,                        // BOOL
+            CreationFlags dwCreationFlags,                        // DWORD
+            IntPtr lpEnvironment,                       // LPVOID
+            string lpCurrentDirectory,                  // LPCTSTR
+            STARTUPINFO lpStartupInfo,                  // LPSTARTUPINFO
+            PROCESS_INFORMATION lpProcessInformation    // LPPROCESS_INFORMATION
+        );
+
+        [DllImport("advapi32", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern bool ConvertSidToStringSid([MarshalAs(UnmanagedType.LPArray)] byte[] pSID, out IntPtr ptrSid);
+
         [DllImport("advapi32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         public static extern IntPtr OpenService(IntPtr hSCManager, string lpServiceName, OpenServiceDesiredAccess dwDesiredAccess);
         [Flags]
@@ -24,26 +42,26 @@ namespace Cliver.WinApi
 
         [DllImport("advapi32.dll", EntryPoint = "OpenSCManagerW", ExactSpelling = true, CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern IntPtr OpenSCManager(string machineName, string databaseName, SCM_ACCESS dwAccess);
-    [Flags]
-    public enum SCM_ACCESS : uint
-    {
-        STANDARD_RIGHTS_REQUIRED = 0xF0000,
-        SC_MANAGER_CONNECT = 0x00001,
-        SC_MANAGER_CREATE_SERVICE = 0x00002,
-        SC_MANAGER_ENUMERATE_SERVICE = 0x00004,
-        SC_MANAGER_LOCK = 0x00008,
-        SC_MANAGER_QUERY_LOCK_STATUS = 0x00010,
-        SC_MANAGER_MODIFY_BOOT_CONFIG = 0x00020,
-        SC_MANAGER_ALL_ACCESS = STANDARD_RIGHTS_REQUIRED |
-                         SC_MANAGER_CONNECT |
-                         SC_MANAGER_CREATE_SERVICE |
-                         SC_MANAGER_ENUMERATE_SERVICE |
-                         SC_MANAGER_LOCK |
-                         SC_MANAGER_QUERY_LOCK_STATUS |
-                         SC_MANAGER_MODIFY_BOOT_CONFIG
-    }
+        [Flags]
+        public enum SCM_ACCESS : uint
+        {
+            STANDARD_RIGHTS_REQUIRED = 0xF0000,
+            SC_MANAGER_CONNECT = 0x00001,
+            SC_MANAGER_CREATE_SERVICE = 0x00002,
+            SC_MANAGER_ENUMERATE_SERVICE = 0x00004,
+            SC_MANAGER_LOCK = 0x00008,
+            SC_MANAGER_QUERY_LOCK_STATUS = 0x00010,
+            SC_MANAGER_MODIFY_BOOT_CONFIG = 0x00020,
+            SC_MANAGER_ALL_ACCESS = STANDARD_RIGHTS_REQUIRED |
+                             SC_MANAGER_CONNECT |
+                             SC_MANAGER_CREATE_SERVICE |
+                             SC_MANAGER_ENUMERATE_SERVICE |
+                             SC_MANAGER_LOCK |
+                             SC_MANAGER_QUERY_LOCK_STATUS |
+                             SC_MANAGER_MODIFY_BOOT_CONFIG
+        }
 
-    [DllImport("advapi32.dll", SetLastError = true)]
+        [DllImport("advapi32.dll", SetLastError = true)]
         public static extern uint NotifyServiceStatusChange(IntPtr hService, NotifyMask dwNotifyMask, IntPtr pNotifyBuffer);
 
         public enum NotifyMask : uint
@@ -62,7 +80,7 @@ namespace Cliver.WinApi
 
         [DllImportAttribute("kernel32.dll", EntryPoint = "SleepEx")]
         public static extern uint SleepEx(uint dwMilliseconds, [MarshalAsAttribute(UnmanagedType.Bool)] bool bAlertable);
-        
+
         [DllImport("advapi32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool OpenProcessToken(IntPtr ProcessHandle, DesiredAccess DesiredAccess, out IntPtr TokenHandle);
@@ -118,7 +136,7 @@ namespace Cliver.WinApi
             TokenElevationTypeFull,
             TokenElevationTypeLimited
         }
-        
+
         [DllImport("advapi32.dll", SetLastError = true)]
         public static extern bool LookupPrivilegeValue(IntPtr lpSystemName, string lpname, [MarshalAs(UnmanagedType.Struct)] ref LUID lpLuid);
         [StructLayout(LayoutKind.Sequential)]
@@ -134,9 +152,24 @@ namespace Cliver.WinApi
             public int Attributes;
         }
 
-        [DllImport("advapi32.dll", EntryPoint = "CreateProcessAsUser", SetLastError = true, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
-        public static extern bool CreateProcessAsUser(IntPtr hToken, String lpApplicationName, String lpCommandLine, ref SECURITY_ATTRIBUTES lpProcessAttributes, ref SECURITY_ATTRIBUTES lpThreadAttributes, bool bInheritHandle, CreationFlags dwCreationFlags, IntPtr lpEnvironment, String lpCurrentDirectory, ref STARTUPINFO lpStartupInfo, out PROCESS_INFORMATION lpProcessInformation);
-        
+
+        [DllImport("advapi32.dll", CharSet = CharSet.Auto, SetLastError = true, BestFitMapping = false)]
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        public extern static bool CreateProcessAsUser(
+            IntPtr hToken,
+            string lpApplicationName,
+            string lpCommandLine,
+            SECURITY_ATTRIBUTES lpProcessAttributes,
+            SECURITY_ATTRIBUTES lpThreadAttributes,
+            bool bInheritHandles,
+            Advapi32.CreationFlags dwCreationFlags,
+            IntPtr lpEnvironment,
+            string lpCurrentDirectory,
+            STARTUPINFO lpStartupInfo,
+            PROCESS_INFORMATION lpProcessInformation
+        );
+
+
         public enum CreationFlags : uint
         {
             DEBUG_PROCESS = 0x00000001,
@@ -170,42 +203,93 @@ namespace Cliver.WinApi
             PROFILE_SERVER = 0x40000000,
             CREATE_IGNORE_SYSTEM_DEFAULT = 0x80000000,
         }
+        //[StructLayout(LayoutKind.Sequential)]
+        //public struct STARTUPINFO
+        //{
+        //    public int cb;
+        //    public String lpReserved;
+        //    public String lpDesktop;
+        //    public String lpTitle;
+        //    public uint dwX;
+        //    public uint dwY;
+        //    public uint dwXSize;
+        //    public uint dwYSize;
+        //    public uint dwXCountChars;
+        //    public uint dwYCountChars;
+        //    public uint dwFillAttribute;
+        //    public dwFlags dwFlags;
+        //    public short wShowWindow;
+        //    public short cbReserved2;
+        //    public IntPtr lpReserved2;
+        //    public IntPtr hStdInput;
+        //    public IntPtr hStdOutput;
+        //    public IntPtr hStdError;
+        //}
+
         [StructLayout(LayoutKind.Sequential)]
-        public struct STARTUPINFO
+        public class STARTUPINFO
         {
             public int cb;
-            public String lpReserved;
-            public String lpDesktop;
-            public String lpTitle;
-            public uint dwX;
-            public uint dwY;
-            public uint dwXSize;
-            public uint dwYSize;
-            public uint dwXCountChars;
-            public uint dwYCountChars;
-            public uint dwFillAttribute;
-            public STARTF dwFlags;
-            public short wShowWindow;
-            public short cbReserved2;
-            public IntPtr lpReserved2;
-            public IntPtr hStdInput;
-            public IntPtr hStdOutput;
-            public IntPtr hStdError;
+            public IntPtr lpReserved = IntPtr.Zero;
+            public IntPtr lpDesktop = IntPtr.Zero;
+            public IntPtr lpTitle = IntPtr.Zero;
+            public int dwX = 0;
+            public int dwY = 0;
+            public int dwXSize = 0;
+            public int dwYSize = 0;
+            public int dwXCountChars = 0;
+            public int dwYCountChars = 0;
+            public int dwFillAttribute = 0;
+            public dwFlags dwFlags = 0;
+            public short wShowWindow = 0;
+            public short cbReserved2 = 0;
+            public IntPtr lpReserved2 = IntPtr.Zero;
+            public SafeFileHandle hStdInput = new SafeFileHandle(IntPtr.Zero, false);
+            public SafeFileHandle hStdOutput = new SafeFileHandle(IntPtr.Zero, false);
+            public SafeFileHandle hStdError = new SafeFileHandle(IntPtr.Zero, false);
+
+            public STARTUPINFO()
+            {
+                cb = Marshal.SizeOf(this);
+            }
+
+            public void Dispose()
+            {
+                // close the handles created for child process
+                if (hStdInput != null && !hStdInput.IsInvalid)
+                {
+                    hStdInput.Close();
+                    hStdInput = null;
+                }
+
+                if (hStdOutput != null && !hStdOutput.IsInvalid)
+                {
+                    hStdOutput.Close();
+                    hStdOutput = null;
+                }
+
+                if (hStdError != null && !hStdError.IsInvalid)
+                {
+                    hStdError.Close();
+                    hStdError = null;
+                }
+            }
         }
+
         [StructLayout(LayoutKind.Sequential)]
-        public struct PROCESS_INFORMATION
+        public class PROCESS_INFORMATION
         {
-            public IntPtr hProcess;
-            public IntPtr hThread;
-            public uint dwProcessId;
-            public uint dwThreadId;
+            public IntPtr hProcess = IntPtr.Zero;
+            public IntPtr hThread = IntPtr.Zero;
+            public int dwProcessId = 0;
+            public int dwThreadId = 0;
         }
 
         [DllImport("advapi32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool DuplicateToken(IntPtr ExistingTokenHandle, int SECURITY_IMPERSONATION_LEVEL, ref IntPtr DuplicateTokenHandle);
 
-        [DllImport("advapi32.dll", EntryPoint = "DuplicateTokenEx")]
-        public static extern bool DuplicateTokenEx(IntPtr ExistingTokenHandle, DesiredAccess dwDesiredAccess, ref SECURITY_ATTRIBUTES lpTokenAttributes, SECURITY_IMPERSONATION_LEVEL ImpersonationLevel, TOKEN_TYPE TokenType, ref IntPtr DuplicateTokenHandle);
+        [DllImport("advapi32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern bool DuplicateTokenEx(IntPtr ExistingTokenHandle, DesiredAccess dwDesiredAccess, SECURITY_ATTRIBUTES lpTokenAttributes, SECURITY_IMPERSONATION_LEVEL ImpersonationLevel, TOKEN_TYPE TokenType, out IntPtr DuplicateTokenHandle);
         public enum TOKEN_TYPE
         {
             TokenPrimary = 1,
@@ -219,7 +303,7 @@ namespace Cliver.WinApi
             SecurityDelegation = 3,
         }
 
-        [DllImport("advapi32.dll", SetLastError = true)]
+        [DllImport("advapi32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool AdjustTokenPrivileges(IntPtr TokenHandle, bool DisableAllPrivileges, ref TOKEN_PRIVILEGES NewState, int BufferLength, IntPtr PreviousState, IntPtr ReturnLength);
         [StructLayout(LayoutKind.Sequential)]
         public struct TOKEN_PRIVILEGES
@@ -237,17 +321,17 @@ namespace Cliver.WinApi
         //[SuppressUnmanagedCodeSecurity]
         public static extern bool OpenProcessToken(IntPtr ProcessHandle, int DesiredAccess, ref IntPtr TokenHandle);
 
-        public enum STARTF : uint
+        public enum dwFlags : uint
         {
-            USESHOWWINDOW = 0x00000001,
-            USESIZE = 0x00000002,
-            USEPOSITION = 0x00000004,
-            USECOUNTCHARS = 0x00000008,
-            USEFILLATTRIBUTE = 0x00000010,
-            RUNFULLSCREEN = 0x00000020,  // ignored for non-x86 platforms
-            FORCEONFEEDBACK = 0x00000040,
-            FORCEOFFFEEDBACK = 0x00000080,
-            USESTDHANDLES = 0x00000100,
+            STARTF_USESHOWWINDOW = 0x00000001,
+            STARTF_USESIZE = 0x00000002,
+            STARTF_USEPOSITION = 0x00000004,
+            STARTF_USECOUNTCHARS = 0x00000008,
+            STARTF_USEFILLATTRIBUTE = 0x00000010,
+            STARTF_RUNFULLSCREEN = 0x00000020,  // ignored for non-x86 platforms
+            STARTF_FORCEONFEEDBACK = 0x00000040,
+            STARTF_FORCEOFFFEEDBACK = 0x00000080,
+            STARTF_USESTDHANDLES = 0x00000100,
         }
     }
 }

@@ -1,11 +1,11 @@
 //********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
-//        sergey_stoyan@yahoo.com
+//        sergey.stoyan@hotmail.com
+//        stoyan@cliversoft.com
 //        http://www.cliversoft.com
-//        26 September 2006
-//Copyright: (C) 2006-2013, Sergey Stoyan
 //********************************************************************************************
+
 using System;
 using System.Threading;
 using System.Diagnostics;
@@ -19,7 +19,7 @@ namespace Cliver
     {
         static readonly object lockObject = new object();
 
-        public static void Initialize(Mode mode, List<string> primaryBaseDirs = null, Level defaultLevel = Level.ALL, int deleteLogsOlderDays = 10, int defaultMaxFileSize = -1)
+        public static void Initialize(Mode mode, List<string> primaryBaseDirs = null, Level defaultLevel = Level.ALL, int deleteLogsOlderDays = 10, int defaultMaxFileSize = -1, string timePattern = "[dd-MM-yy HH:mm:ss] ")
         {
             lock (lockObject)
             {
@@ -29,6 +29,7 @@ namespace Cliver
                 Log.deleteLogsOlderDays = deleteLogsOlderDays;
                 Log.defaultLevel = defaultLevel;
                 Log.defaultMaxFileSize = defaultMaxFileSize;
+                Log.timePattern = timePattern;
             }
         }
         static List<string> primaryBaseDirs = null;
@@ -36,6 +37,7 @@ namespace Cliver
         static Mode mode = Mode.ALL_LOGS_ARE_IN_SAME_FOLDER;
         static Level defaultLevel = Level.ALL;
         static int defaultMaxFileSize = -1;
+        static string timePattern= "[dd-MM-yy HH:mm:ss] ";
 
         public static bool ReuseThreadLogIndexes = false;
         public static string FileExtension = "log";
@@ -204,11 +206,8 @@ namespace Cliver
                 workDir = PathRoutines.GetNormalizedPath(workDir, false);
                 if (Directory.Exists(workDir) && deleteLogsOlderDays >= 0)
                 {
-                    while (deletingOldLogsThread != null && deletingOldLogsThread.IsAlive)
-                    {
-                        deletingOldLogsThread.Abort();
-                        System.Threading.Thread.Sleep(100);
-                    }
+                    if (deletingOldLogsThread?.TryAbort(1000) == false)
+                        throw new Exception("Could not abort deletingOldLogsThread");
                     deletingOldLogsThread = ThreadRoutines.Start(() => { Log.DeleteOldLogs(deleteLogsOlderDays, DeleteOldLogsDialog); });//to avoid a concurrent loop while accessing the log file from the same thread 
                 }
                 else

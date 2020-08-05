@@ -7,18 +7,90 @@ namespace Cliver.WinApi
     public class Kernel32
     {
         [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool ConnectNamedPipe(IntPtr hNamedPipe, ref System.Threading.NativeOverlapped lpOverlapped);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern IntPtr CreateNamedPipe(string lpName, PipeOpenModeFlags dwOpenMode, PipeModeFlags dwPipeMode, uint nMaxInstances, uint nOutBufferSize, uint nInBufferSize, uint nDefaultTimeOut, ref SECURITY_ATTRIBUTES lpSecurityAttributes);
+        [Flags]
+        public enum PipeOpenModeFlags : uint
+        {
+            PIPE_ACCESS_DUPLEX = 0x00000003,
+            PIPE_ACCESS_INBOUND = 0x00000001,
+            PIPE_ACCESS_OUTBOUND = 0x00000002,
+            FILE_FLAG_FIRST_PIPE_INSTANCE = 0x00080000,
+            FILE_FLAG_WRITE_THROUGH = 0x80000000,
+            FILE_FLAG_OVERLAPPED = 0x40000000,
+            WRITE_DAC = 0x00040000,
+            WRITE_OWNER = 0x00080000,
+            ACCESS_SYSTEM_SECURITY = 0x01000000
+        }
+        [Flags]
+        public enum PipeModeFlags : uint
+        {
+            //One of the following type modes can be specified. The same type mode must be specified for each instance of the pipe.
+            PIPE_TYPE_BYTE = 0x00000000,
+            PIPE_TYPE_MESSAGE = 0x00000004,
+            //One of the following read modes can be specified. Different instances of the same pipe can specify different read modes
+            PIPE_READMODE_BYTE = 0x00000000,
+            PIPE_READMODE_MESSAGE = 0x00000002,
+            //One of the following wait modes can be specified. Different instances of the same pipe can specify different wait modes.
+            PIPE_WAIT = 0x00000000,
+            PIPE_NOWAIT = 0x00000001,
+            //One of the following remote-client modes can be specified. Different instances of the same pipe can specify different remote-client modes.
+            PIPE_ACCEPT_REMOTE_CLIENTS = 0x00000000,
+            PIPE_REJECT_REMOTE_CLIENTS = 0x00000008
+        }
+        public static readonly IntPtr INVALID_HANDLE_VALUE = new IntPtr(-1);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool DuplicateHandle(IntPtr hSourceProcessHandle, IntPtr hSourceHandle, IntPtr hTargetProcessHandle, out IntPtr lpTargetHandle, uint dwDesiredAccess, bool bInheritHandle, DuplicateOptions dwOptions);
+        [Flags]
+        public enum DuplicateOptions : uint
+        {
+            DUPLICATE_CLOSE_SOURCE = 0x00000001,// Closes the source handle. This occurs regardless of any error status returned.
+            DUPLICATE_SAME_ACCESS = 0x00000002, //Ignores the dwDesiredAccess parameter. The duplicate handle has the same access as the source handle.
+        }
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern int GetConsoleOutputCP();
+
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern IntPtr GetStdHandle(StdHandles whichHandle);
+        public enum StdHandles : int
+        {
+            STD_INPUT_HANDLE = -10,
+            STD_OUTPUT_HANDLE = -11,
+            STD_ERROR_HANDLE = -12,
+        }
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern int GetCurrentThreadId();
+
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern bool ReadFile(IntPtr hFile, byte[] lpBuffer, uint nNumberOfBytesToRead, out uint lpNumberOfBytesRead, [In] ref System.Threading.NativeOverlapped lpOverlapped);
+
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool WriteFile(SafeFileHandle hFile, // Handle to file 
                                             byte[] lpBuffer, // Data buffer 
                                             uint nNumberOfBytesToWrite, // Number of bytes to write 
                                             out uint lpNumberOfBytesWritten, // Number of bytes written 
                                             [In] ref System.Threading.NativeOverlapped lpOverlapped); // Overlapped buffer 
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern bool SetHandleInformation(IntPtr hObject, uint dwMask, uint dwFlags);
-        public const uint HANDLE_FLAG_INHERIT = 0x00000001;
-        public const uint HANDLE_FLAG_PROTECT_FROM_CLOSE = 0x00000002;
 
         [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool SetHandleInformation(IntPtr hObject, HANDLE_FLAGS dwMask, HANDLE_FLAGS dwFlags);
+        [Flags]
+        public enum HANDLE_FLAGS : uint
+        {
+            None = 0,
+            INHERIT = 1,
+            PROTECT_FROM_CLOSE = 2
+        }
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool CreatePipe(out IntPtr hReadPipe, out IntPtr hWritePipe, ref SECURITY_ATTRIBUTES lpPipeAttributes, uint nSize);
 
         [DllImport("kernel32.dll", ExactSpelling = true)]
@@ -66,8 +138,25 @@ namespace Cliver.WinApi
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern bool CloseHandle(IntPtr hObject);
 
-        [DllImport("kernel32.dll")]
-        public static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern IntPtr OpenProcess(ProcessAccessRights processAccess, bool bInheritHandle, int processId);
+        [Flags]
+        public enum ProcessAccessRights : uint
+        {
+            All = 0x001F0FFF,
+            Terminate = 0x00000001,
+            CreateThread = 0x00000002,
+            VirtualMemoryOperation = 0x00000008,
+            VirtualMemoryRead = 0x00000010,
+            VirtualMemoryWrite = 0x00000020,
+            PROCESS_DUP_HANDLE = 0x00000040,
+            CreateProcess = 0x000000080,
+            SetQuota = 0x00000100,
+            SetInformation = 0x00000200,
+            QueryInformation = 0x00000400,
+            QueryLimitedInformation = 0x00001000,
+            Synchronize = 0x00100000
+        }
 
         [DllImport("kernel32.dll")]
         public static extern int Process32First(uint hSnapshot, ref PROCESSENTRY32 lppe);
@@ -98,37 +187,35 @@ namespace Cliver.WinApi
         [DllImport("kernel32.dll")]
         public static extern bool ProcessIdToSessionId(uint dwProcessId, ref uint pSessionId);
 
-        [DllImport("kernel32.dll")]
-        public static extern IntPtr OpenProcess(uint dwDesiredAccess, bool bInheritHandle, uint dwProcessId);
-
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern int GetLastError();
 
         //[DllImport("kernel32.dll", SetLastError = true)]
         //public static extern int FormatMessage(int   dwFlags,  _In_opt_ LPCVOID lpSource,  _In_ DWORD   dwMessageId,  _In_ DWORD   dwLanguageId,  _Out_ LPTSTR  lpBuffer,  _In_ DWORD   nSize,  _In_opt_ va_list *Arguments);
 
-        [DllImport("kernel32.dll")]
-        public static extern uint GetCurrentThreadId();
+        //[DllImport("kernel32.dll", SetLastError = true)]
+        //public static extern IntPtr CreateFile(string lpFileName, dwDesiredAccess dwDesiredAccess, dwShareMode dwShareMode, ref SECURITY_ATTRIBUTES lpSecurityAttributes, dwCreationDisposition dwCreationDisposition, dwFlagsAndAttributes dwFlagsAndAttributes, IntPtr hTemplateFile);
 
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall, SetLastError = true)]
-        public static extern Microsoft.Win32.SafeHandles.SafeFileHandle CreateFile(string lpFileName, dwDesiredAccess dwDesiredAccess, dwShareMode dwShareMode, ref SECURITY_ATTRIBUTES lpSecurityAttributes, dwCreationDisposition dwCreationDisposition, dwFlagsAndAttributes dwFlagsAndAttributes, IntPtr hTemplateFile);
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern SafeFileHandle CreateFile(string lpFileName, dwDesiredAccess dwDesiredAccess, dwShareMode dwShareMode, SECURITY_ATTRIBUTES lpSecurityAttributes, dwCreationDisposition dwCreationDisposition, dwFlagsAndAttributes dwFlagsAndAttributes, IntPtr hTemplateFile);
 
-        public enum dwDesiredAccess : long
+        public enum dwDesiredAccess : uint
         {
-            GENERIC_READ = 0x80000000L,
-            GENERIC_WRITE = 0x40000000L,
-            GENERIC_EXECUTE = 0x20000000L,
-            GENERIC_ALL = 0x10000000L,
+            GENERIC_READ = 0x80000000,
+            GENERIC_WRITE = 0x40000000,
+            GENERIC_EXECUTE = 0x20000000,
+            GENERIC_ALL = 0x10000000,
+            FILE_APPEND_DATA = 4
         }
 
-        public enum dwShareMode : long
+        public enum dwShareMode : uint
         {
             FILE_SHARE_READ = 0x00000001,
             FILE_SHARE_WRITE = 0x00000002,
             FILE_SHARE_DELETE = 0x00000004,
         }
 
-        public enum dwFlagsAndAttributes : long
+        public enum dwFlagsAndAttributes : uint
         {
             FILE_ATTRIBUTE_READONLY = 0x00000001,
             FILE_ATTRIBUTE_HIDDEN = 0x00000002,
@@ -140,9 +227,26 @@ namespace Cliver.WinApi
             FILE_ATTRIBUTE_TEMPORARY = 0x00000100,
             FILE_ATTRIBUTE_SPARSE_FILE = 0x00000200,
             FILE_ATTRIBUTE_REPARSE_POINT = 0x00000400,
+            FILE_ATTRIBUTE_COMPRESSED = 0x800,
+            FILE_ATTRIBUTE_OFFLINE = 0x1000,
+            FILE_ATTRIBUTE_NOT_CONTENT_INDEXED = 0x2000,
+            FILE_ATTRIBUTE_ENCRYPTED = 0x4000,
+            FILE_ATTRIBUTE_VIRTUAL = 0x10000,
+
+            //This parameter can also contain combinations of flags (FILE_FLAG_*)
+            FILE_FLAG_BACKUP_SEMANTICS = 0x2000000,
+            FILE_FLAG_DELETE_ON_CLOSE = 0x4000000,
+            FILE_FLAG_NO_BUFFERING = 0x20000000,// & H20000000
+            FILE_FLAG_OPEN_NO_RECALL = 0x100000,
+            FILE_FLAG_OPEN_REPARSE_POINT = 0x200000,
+            FILE_FLAG_OVERLAPPED = 0x40000000,
+            FILE_FLAG_POSIX_SEMANTICS = 0x1000000,
+            FILE_FLAG_RANDOM_ACCESS = 0x10000000,
+            FILE_FLAG_SEQUENTIAL_SCAN = 0x8000000,
+            FILE_FLAG_WRITE_THROUGH = 0x80000000,
         }
 
-        public enum dwCreationDisposition : long
+        public enum dwCreationDisposition : uint
         {
             CREATE_NEW = 1,
             CREATE_ALWAYS = 2,

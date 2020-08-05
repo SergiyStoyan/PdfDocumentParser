@@ -1,4 +1,12 @@
-﻿using System.ComponentModel;
+﻿/********************************************************************************************
+        Author: Sergey Stoyan
+        sergey.stoyan@gmail.com
+        sergey.stoyan@hotmail.com
+        stoyan@cliversoft.com
+        http://www.cliversoft.com
+********************************************************************************************/
+
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 
 namespace Cliver.Win
@@ -19,6 +27,14 @@ namespace Cliver.Win
         public static string GetErrorMessage(int errorCode)
         {
             return new Win32Exception(errorCode).Message;
+        }
+    }
+
+    public class LastErrorException : System.Exception
+    {
+        public LastErrorException(string message) : base(message, ErrorRoutines.GetLastError())
+        {
+
         }
     }
 }

@@ -2,6 +2,7 @@
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
 //        sergey.stoyan@hotmail.com
+//        stoyan@cliversoft.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 
@@ -19,10 +20,11 @@ namespace Cliver
     {
         /// <summary>
         /// This info identifies a certain Settings field/property in the application to which this object belongs. 
-        /// For some rare hypothetical need, changing/setting it from the application is allowed (with caution!).
+        /// All __Info instances are paired one-to-one with all Settings fields in the application. 
+        /// Cloned Settings objects share the same __Info instance which means that while multiple Settings objects can reference the same Settings field, the field references only one of them (attached object).
+        /// For some rare needs (for instance when a Settings object was created by deserialization/cloning and so has empty __Info), setting __Info from an application is allowed (with caution!).
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
-        [System.Runtime.Serialization.IgnoreDataMember]//required when a Settings object is being passed through WCF service between processes
         public SettingsFieldInfo __Info
         {
             get
@@ -31,8 +33,10 @@ namespace Cliver
             }
             set
             {
-                if (value != null && value.Type != GetType())
-                    throw new Exception("Disaccording SettingsFieldInfo Type field. Expected: " + GetType());
+                if (value == null)
+                    throw new Exception("SettingsFieldInfo cannot be set to NULL.");//to ensure that no __Info object can be lost in the custom application scope
+                if (value.Type != GetType())
+                    throw new Exception("Disaccording SettingsFieldInfo Type field. It must be: " + GetType().FullName + " but set: " + value.Type.FullName);
                 settingsFieldInfo = value;
             }
         }
@@ -73,12 +77,12 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Indicates whether this Settings object is value of the Settings field indicated by __Info.
+        /// Indicates whether this Settings object is value of the Settings field defined in __Info.
         /// </summary>
-        public bool IsDetached()
+        public bool IsAttached()
         {
-            return __Info == null//was created outside Config
-                || Config.GetSettingsFieldInfo(__Info.FullName).GetObject() != this;//is not referenced by the field
+            return __Info != null
+                && Config.GetSettingsFieldInfo(__Info.FullName).GetObject() == this;//is referenced by the field
         }
 
         /// <summary>
@@ -89,7 +93,7 @@ namespace Cliver
             lock (this)
             {
                 //!!!Performing on a detached object must be allowed. Consider the real case: 
-                //save an edited detached object while the attached object remains unchanged in use until the end of the process so that the changes will come into game after restart.
+                //save an edited detached Settings object while the attached one remains unchanged in use until the end of the process so that the changes will come into game after restart.
                 if (__Info == null)
                     throw new Exception("This method cannot be performed on a Settings object which has __Info not defined.");
                 Saving();
@@ -118,7 +122,7 @@ namespace Cliver
         /// </summary>
         public bool Reset(/*bool ignoreInitFile = false*/)
         {
-            if (IsDetached())//while technically it is possible, it seems to contradict the idea of Settings if this method was performed outside the Settings field.
+            if (!IsAttached())//while technically it is possible, it seems to contradict the idea of Settings if this method would be performed outside the Settings field.
                 return false;
             __Info.SetObject(Create(__Info, true, true));
             return true;
@@ -134,7 +138,7 @@ namespace Cliver
         /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
         public bool Reload(bool throwExceptionIfCouldNotLoadFromStorageFile = false)
         {
-            if (IsDetached())//while technically it is possible, it seems to contradict the idea of Settings if this method was performed outside the Settings field.
+            if (!IsAttached())//while technically it is possible, it seems to contradict the idea of Settings if this method would be performed outside the Settings field.
                 return false;
             __Info.SetObject(Create(__Info, false, throwExceptionIfCouldNotLoadFromStorageFile));
             return true;
@@ -155,14 +159,15 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Indicates that the attributed Settings field should not be initiated by Config by default.
+        /// Indicates that a Settings field with this attribute should not be initiated by Config by default.
+        /// Such a field should be initiated explisitly when needed by Config.Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
         /// </summary>
         public class Optional : Attribute { }
 
         /// <summary>
         /// Folder where storage files for this Settings derived type are to be saved by Config.
         /// Each Settings derived class must have it defined. 
-        /// Despite of the fact it is not static, it is instance independent actually as only default value of it is used.
+        /// Despite of the fact it is not static, actually it is instance independent as only the initial value is used.
         /// (It is not static due to badly awkwardness of C#.)
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
