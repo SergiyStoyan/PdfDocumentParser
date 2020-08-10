@@ -61,14 +61,6 @@ namespace Cliver
 
         public readonly static string AppName = ProgramRoutines.GetAppName();
 
-        public static bool ShowDetailsOnException =
-#if DEBUG
-            true
-#else
-            false
-#endif
-            ;
-
         public static void Inform(string message, Form owner = null)
         {
             ShowDialog(AppName, SystemIcons.Information, message, new string[1] { "OK" }, 0, owner);
@@ -79,12 +71,14 @@ namespace Cliver
             ShowDialog(AppName, SystemIcons.Exclamation, message, new string[1] { "OK" }, 0, owner);
         }
 
+        public static void Exclaim0(Exception e, Form owner = null)
+        {
+            ShowDialog(AppName, SystemIcons.Exclamation, /*GetExceptionDetails(e)*/Log.GetExceptionMessage(e, !(e is Exception2)), new string[1] { "OK" }, 0, owner);
+        }
+
         public static void Exclaim(Exception e, Form owner = null)
         {
-            if (!ShowDetailsOnException)
-                ShowDialog(AppName, SystemIcons.Exclamation, e.Message, new string[1] { "OK" }, 0, owner);
-            else
-                ShowDialog(AppName, SystemIcons.Exclamation, GetExceptionDetails(e), new string[1] { "OK" }, 0, owner);
+            ShowDialog(AppName, SystemIcons.Exclamation, e.Message, new string[1] { "OK" }, 0, owner);
         }
 
         public static void Warning(string message, Form owner = null)
@@ -94,53 +88,46 @@ namespace Cliver
 
         public static void Warning(Exception e, Form owner = null)
         {
-            if (!ShowDetailsOnException)
-                ShowDialog(AppName, SystemIcons.Warning, e.Message, new string[1] { "OK" }, 0, owner);
-            else
-                ShowDialog(AppName, SystemIcons.Warning, GetExceptionDetails(e), new string[1] { "OK" }, 0, owner);
+            ShowDialog(AppName, SystemIcons.Warning, /*GetExceptionDetails(e)*/Log.GetExceptionMessage(e, !(e is Exception2)), new string[1] { "OK" }, 0, owner);
+        }
+
+        public static void Warning2(Exception e, Form owner = null)
+        {
+            ShowDialog(AppName, SystemIcons.Warning, e.Message, new string[1] { "OK" }, 0, owner);
         }
 
         public static void Error(Exception e, Form owner = null)
         {
-            if(!ShowDetailsOnException)
-                Error(e.Message, owner);
-            else
-                ShowDialog(AppName, SystemIcons.Error, GetExceptionDetails(e), new string[1] { "OK" }, 0, owner);
+            ShowDialog(AppName, SystemIcons.Error, /*GetExceptionDetails(e)*/Log.GetExceptionMessage(e, !(e is Exception2)), new string[1] { "OK" }, 0, owner);
         }
 
-        public static string GetExceptionDetails(Exception e)
-        {
-            List<string> ms = new List<string>();
-            bool stack_trace_added = false;
-            for (; e != null; e = e.InnerException)
-            {
-                string s = e.Message;
-                if (!stack_trace_added && e.StackTrace != null)
-                {
-                    stack_trace_added = true;
-                    s += "\r\n" + e.StackTrace;
-                }
-                ms.Add(s);
-            }
-            return string.Join("\r\n=>\r\n", ms);
-        }
-
-        /// <summary>
-        /// Display exception without tracing inforamation.
-        /// </summary>
-        /// <param name="e"></param>
-        /// <param name="owner"></param>
         public static void Error2(Exception e, Form owner = null)
         {
             Error(e.Message, owner);
         }
 
-        /// <summary>
-        /// Display exception without tracing inforamation.
-        /// </summary>
-        /// <param name="subtitle"></param>
-        /// <param name="e"></param>
-        /// <param name="owner"></param>
+        //public static string GetExceptionDetails(Exception e)
+        //{
+        //    List<string> ms = new List<string>();
+        //    bool stack_trace_added = false;
+        //    for (; e != null; e = e.InnerException)
+        //    {
+        //        string s = e.Message;
+        //        if (!stack_trace_added && e.StackTrace != null)
+        //        {
+        //            stack_trace_added = true;
+        //            s += "\r\n" + e.StackTrace;
+        //        }
+        //        ms.Add(s);
+        //    }
+        //    return string.Join("\r\n=>\r\n", ms);
+        //}
+
+        public static void Error(string subtitle, Exception e, Form owner = null)
+        {
+            Error(subtitle + "\r\n\r\n" + Log.GetExceptionMessage(e, !(e is Exception2)), owner);
+        }
+
         public static void Error2(string subtitle, Exception e, Form owner = null)
         {
             Error(subtitle + "\r\n\r\n" + e.Message, owner);
@@ -238,7 +225,7 @@ namespace Cliver
         }
         static Icon get_icon(Icons icon)
         {
-            switch(icon)
+            switch (icon)
             {
                 case Icons.Information:
                     return SystemIcons.Information;

@@ -164,12 +164,6 @@
     </Compile>
     <Compile Include="BooleanEngine.cs" />
     <Compile Include="CvImage.cs" />
-    <Compile Include="DebugForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="DebugForm.Designer.cs">
-      <DependentUpon>DebugForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Page.deskew.cs" />
     <Compile Include="Page.conditions.cs" />
     <Compile Include="Page.anchors.cs" />
@@ -307,9 +301,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AnchorPdfTextControl.resx">
       <DependentUpon>AnchorPdfTextControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DebugForm.resx">
-      <DependentUpon>DebugForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
