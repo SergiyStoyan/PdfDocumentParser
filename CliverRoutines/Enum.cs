@@ -73,6 +73,16 @@ namespace Cliver
         EnumExample(string value) : base(value) { }
     }
 
+    //internal class StringEnum : Cliver.Enum<string>
+    //{
+    //    StringEnum(string value) : base(value) { }
+
+    //    public bool IsMatch(params StringEnum[] objects) 
+    //    {
+    //        return objects.FirstOrDefault(a => a == System.Text.RegularExpressions.Regex.IsMatch( (E)this) != null;
+    //    }
+    //}
+
     //public static class StringValues
     //{
     //    public static Dictionary<string, string> ToDictionary()
