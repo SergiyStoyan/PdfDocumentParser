@@ -17,7 +17,7 @@ namespace Cliver
     {
         public override string ToString()
         {
-            return Value.ToString();
+            return Value?.ToString();
         }
 
         protected Enum(V value)
@@ -37,17 +37,18 @@ namespace Cliver
             return typeof(E).GetFields(BindingFlags.Public | BindingFlags.Static).Where(x => x.FieldType.IsSubclassOf(typeof(Enum<V>))).Select(x => ((E)x.GetValue(null))).ToList();
         }
 
-        static public E Parse<E>(string valueStr, bool ignoreCase = false) where E : Enum<V>
+        static public E Parse<E>(string valueStr, bool ignoreCase = true) where E : Enum<V>
         {
             if (valueStr != null)
                 valueStr = valueStr.Trim();
             foreach (E e in ToList<E>())
             {
                 if (e.Value == null)
+                {
                     if (valueStr == null)
                         return e;
-                    else
-                        continue;
+                    continue;
+                }
                 if (valueStr == null)
                     continue;
                 if (0 == string.Compare(e.Value.ToString(), valueStr, ignoreCase))
