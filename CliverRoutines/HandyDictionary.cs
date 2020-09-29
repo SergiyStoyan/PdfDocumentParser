@@ -120,7 +120,12 @@ namespace Cliver
                 lock (this)
                 {
                     if (keys2value.TryGetValue(key, out VT v) && v != null && !v.Equals(value))
-                        dispose(v);
+                    {
+                        int vKeyCount = 0;
+                        keys2value.Values.Where(a => a.Equals(v)).TakeWhile(a => ++vKeyCount < 2);
+                        if (vKeyCount < 2)//make sure it is the only inclusion of the object
+                            dispose(v);
+                    }
                     keys2value[key] = value;
                 }
             }
