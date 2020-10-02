@@ -172,10 +172,9 @@ namespace Cliver
                         break;
                 }
                 caller = sf.GetMethod().Name + "," + sf.GetNativeOffset().ToString();
-                string m = null;
                 lock (callers2message)
                 {
-                    if (callers2message.TryGetValue(caller, out m) && m == message)
+                    if (callers2message.TryGetValue(caller, out string m) && m == message)
                         return -1;
                     callers2message[caller] = message;
                 }
