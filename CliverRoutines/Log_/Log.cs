@@ -37,7 +37,7 @@ namespace Cliver
         static Mode mode = Mode.ALL_LOGS_ARE_IN_SAME_FOLDER;
         static Level defaultLevel = Level.ALL;
         static int defaultMaxFileSize = -1;
-        static string timePattern= "[dd-MM-yy HH:mm:ss] ";
+        static string timePattern = "[dd-MM-yy HH:mm:ss] ";
 
         public static bool ReuseThreadLogIndexes = false;
         public static string FileExtension = "log";
@@ -194,6 +194,7 @@ namespace Cliver
                             string testFile = workDir + System.IO.Path.DirectorySeparatorChar + "test";
                             File.WriteAllText(testFile, "test");
                             File.Delete(testFile);
+                            Log.baseDir = baseDir;
                             break;
                         }
                         catch //(Exception e)
@@ -215,6 +216,15 @@ namespace Cliver
             }
             // deletingOldLogsThread?.Join();      
         }
+
+        static public string BaseDir
+        {
+            get
+            {
+                return baseDir;
+            }
+        }
+        static string baseDir;
     }
 
     //public class TerminatingException : Exception
