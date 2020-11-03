@@ -120,7 +120,7 @@ namespace Cliver
                     break;
                 MethodBase mb = sf.GetMethod();
                 Type dt = mb.DeclaringType;
-                if (dt != typeof(Log) && dt != typeof(Log.Writer) && TypesExcludedFromStack?.Find(x => x == dt) == null)
+                if (dt != typeof(Log) && dt != typeof(Log.Writer) && dt != typeof(Log.Session) && TypesExcludedFromStack?.Find(x => x == dt) == null)
                     break;
             }
             List<string> frameSs = new List<string>();
