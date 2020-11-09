@@ -31,18 +31,18 @@ namespace Cliver
                     );
             }
 
-            public static T Deserialize<T>(string json, bool polymorphic = true)
+            public static T Deserialize<T>(string json, bool polymorphic = true, bool createNewObjects = true)
             {
                 return JsonConvert.DeserializeObject<T>(json,
-                    new JsonSerializerSettings { TypeNameHandling = polymorphic ? TypeNameHandling.Auto : TypeNameHandling.None }
+                    new JsonSerializerSettings { TypeNameHandling = polymorphic ? TypeNameHandling.Auto : TypeNameHandling.None, ObjectCreationHandling = createNewObjects? ObjectCreationHandling.Replace: ObjectCreationHandling.Auto }
                     );
             }
 
-            public static object Deserialize(Type type, string json, bool polymorphic = true)
+            public static object Deserialize(Type type, string json, bool polymorphic = true, bool createNewObjects = true)
             {
                 return JsonConvert.DeserializeObject(json,
                     type,
-                    new JsonSerializerSettings { TypeNameHandling = polymorphic ? TypeNameHandling.Auto : TypeNameHandling.None }
+                    new JsonSerializerSettings { TypeNameHandling = polymorphic ? TypeNameHandling.Auto : TypeNameHandling.None, ObjectCreationHandling = createNewObjects ? ObjectCreationHandling.Replace : ObjectCreationHandling.Auto }
                     );
             }
 
@@ -52,14 +52,14 @@ namespace Cliver
                 File.WriteAllText(file, Serialize(o, indented, polymorphic, ignoreNullProperties));
             }
 
-            public static T Load<T>(string file)
+            public static T Load<T>(string file, bool polymorphic = true, bool createNewObjects = true)
             {
-                return Deserialize<T>(File.ReadAllText(file));
+                return Deserialize<T>(File.ReadAllText(file), polymorphic,  createNewObjects );
             }
 
-            public static object Load(Type type, string file)
+            public static object Load(Type type, string file, bool polymorphic = true, bool createNewObjects = true)
             {
-                return Deserialize(type, File.ReadAllText(file));
+                return Deserialize(type, File.ReadAllText(file), polymorphic, createNewObjects);
             }
 
             public static O Clone<O>(O o)

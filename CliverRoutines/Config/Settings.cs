@@ -54,7 +54,7 @@ namespace Cliver
             if (!reset && File.Exists(settingsFieldInfo.File))
                 try
                 {
-                    return (Settings)Cliver.Serialization.Json.Load(settingsFieldInfo.Type, settingsFieldInfo.File);
+                    return (Settings)Cliver.Serialization.Json.Load(settingsFieldInfo.Type, settingsFieldInfo.File, true, true);
                 }
                 catch (Exception e)
                 {
@@ -66,7 +66,7 @@ namespace Cliver
                 FileSystemRoutines.CopyFile(settingsFieldInfo.InitFile, settingsFieldInfo.File, true);
                 try
                 {
-                    return (Settings)Cliver.Serialization.Json.Load(settingsFieldInfo.Type, settingsFieldInfo.InitFile);
+                    return (Settings)Cliver.Serialization.Json.Load(settingsFieldInfo.Type, settingsFieldInfo.InitFile, true, true);
                 }
                 catch (Exception e)
                 {

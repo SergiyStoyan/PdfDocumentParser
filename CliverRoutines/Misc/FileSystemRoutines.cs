@@ -8,11 +8,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System;
 
 namespace Cliver
 {
     public class FileSystemRoutines
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="PATHs">dirs listes like environmentVariable PATH</param>
+        /// <param name="PATHEXTs">extensions listed like environmentVariable PATHEXT</param>
+        /// <returns></returns>
+        public static string FindFullCommandLinePath(string fileName, string PATHs, string PATHEXTs)
+        {
+            var paths = new[] { Environment.CurrentDirectory }.Concat(PATHs.Split(';'));
+            var extensions = new[] { string.Empty }.Concat(PATHEXTs.Split(';').Where(e => e.StartsWith(".")));
+            var combinations = paths.SelectMany(x => extensions, (path, extension) => Path.Combine(path, fileName + extension));
+            return combinations.FirstOrDefault(File.Exists);
+        }
+
         public static bool IsCaseSensitive
         {
             get
