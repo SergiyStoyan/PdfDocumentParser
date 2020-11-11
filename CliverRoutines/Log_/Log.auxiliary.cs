@@ -148,7 +148,7 @@ namespace Cliver
         /// <returns></returns>
         public static string GetExceptionMessage2(Exception e)
         {
-          return  GetExceptionMessage(e, false);
+            return GetExceptionMessage(e, false);
         }
 
         /// <summary>
@@ -201,5 +201,10 @@ namespace Cliver
         //    }    
         //    details += "\r\n\r\nModule:" + e.TargetSite?.Module + " \r\n\r\nStack:" + e.StackTrace;
         //}
+
+        static public string GetThisMethodName([System.Runtime.CompilerServices.CallerMemberName] string name = "undefined")
+        {
+            return name;
+        }
     }
 }

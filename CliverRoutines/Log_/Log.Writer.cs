@@ -51,18 +51,19 @@ namespace Cliver
             {
                 lock (this)
                 {
-                    string file2 = Session.Dir + System.IO.Path.DirectorySeparatorChar + Log.ProcessName;
+                    //string file2 = Session.Dir + System.IO.Path.DirectorySeparatorChar + Log.ProcessName;
+                    string file2 = Session.Dir + System.IO.Path.DirectorySeparatorChar;
                     switch (Log.mode)
                     {
                         case Log.Mode.ALL_LOGS_ARE_IN_SAME_FOLDER:
-                            file2 += (string.IsNullOrWhiteSpace(Session.Name) ? "" : "_" + Session.Name);
+                            file2 += (string.IsNullOrWhiteSpace(Session.Name) ? "" : "_" + Session.Name) + "_" + Session.TimeMark + "_";
                             break;
                         case Cliver.Log.Mode.EACH_SESSION_IS_IN_OWN_FORLDER:
                             break;
                         default:
                             throw new Exception("Unknown LOGGING_MODE:" + Cliver.Log.mode);
                     }
-                    file2 += "_" + Session.TimeMark + (string.IsNullOrWhiteSpace(Name) ? "" : "_" + Name) + (fileCounter > 0 ? "[" + fileCounter + "]" : "") + "." + FileExtension;
+                    file2 += DateTime.Now.ToString("yyMMddHHmmss") + (string.IsNullOrWhiteSpace(Name) ? "" : "_" + Name) + (fileCounter > 0 ? "[" + fileCounter + "]" : "") + "." + FileExtension;
 
                     if (File == file2)
                         return;
@@ -89,6 +90,14 @@ namespace Cliver
                     if (logWriter != null)
                         logWriter.Close();
                     logWriter = null;
+                }
+            }
+
+            internal bool IsClosed
+            {
+                get
+                {
+                    return logWriter == null;
                 }
             }
 
