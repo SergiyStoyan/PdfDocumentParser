@@ -56,14 +56,17 @@ namespace Cliver
                     switch (Log.mode)
                     {
                         case Log.Mode.ALL_LOGS_ARE_IN_SAME_FOLDER:
-                            file2 += (string.IsNullOrWhiteSpace(Session.Name) ? "" : "_" + Session.Name) + "_" + Session.TimeMark + "_";
+                            file2 += (string.IsNullOrWhiteSpace(Session.Name) ? "" : Session.Name + "_") + Session.TimeMark;
+                            //if (!string.IsNullOrWhiteSpace(Name))//not Main log
+                            //    file2 += "_" + DateTime.Now.ToString("yyMMddHHmmss");
                             break;
                         case Cliver.Log.Mode.EACH_SESSION_IS_IN_OWN_FORLDER:
+                            //file2 += DateTime.Now.ToString("yyMMddHHmmss");
                             break;
                         default:
                             throw new Exception("Unknown LOGGING_MODE:" + Cliver.Log.mode);
                     }
-                    file2 += DateTime.Now.ToString("yyMMddHHmmss") + (string.IsNullOrWhiteSpace(Name) ? "" : "_" + Name) + (fileCounter > 0 ? "[" + fileCounter + "]" : "") + "." + FileExtension;
+                    file2 += (string.IsNullOrWhiteSpace(Name) ? "" : "_" + Name) + (fileCounter > 0 ? "[" + fileCounter + "]" : "") + "." + FileExtension;
 
                     if (File == file2)
                         return;
