@@ -61,7 +61,7 @@ namespace Cliver
                             //    file2 += "_" + DateTime.Now.ToString("yyMMddHHmmss");
                             break;
                         case Cliver.Log.Mode.EACH_SESSION_IS_IN_OWN_FORLDER:
-                            //file2 += DateTime.Now.ToString("yyMMddHHmmss");
+                            file2 += DateTime.Now.ToString("yyMMddHHmmss");
                             break;
                         default:
                             throw new Exception("Unknown LOGGING_MODE:" + Cliver.Log.mode);
