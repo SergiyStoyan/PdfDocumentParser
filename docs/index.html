@@ -69,9 +69,37 @@
 
 
             <h2><a name='licensing'>Licensing</a></h2>
-            PdfDocumentParser is provided under GNU Affero General Public License v3.0. Contact me if you want another license.
-        <p>
-            Notice that PdfDocumentParser may use third-party software as command line tools or linked libraries that are licensed independently.
+			
+			  Open <a href='https://raw.githubusercontent.com/sergeystoyan/PdfDocumentParser/master/LICENSE' target='_blank'>license</a>
+			  <p>Contact me if you want another license.
+			  
+        <p>Notice that PdfDocumentParser may use third-party software as command line tools or linked libraries that are licensed independently.
+			<br><br><br>
+			<textarea id="license" rows="30" cols="100">
+           
+</textarea>
+<script>
+function setLicense() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'https://raw.githubusercontent.com/sergeystoyan/PdfDocumentParser/master/LICENSE');
+    xhr.send(null);
+
+    xhr.onreadystatechange = function () {
+        var status = 4;
+        var http_code = 200;
+        if (xhr.readyState === status) {
+            if (xhr.status === http_code)  {
+                var textarea = document.getElementById('license');
+                textarea.value = xhr.responseText;
+            } else {
+                // do something with an error here
+            }
+        } 
+    }
+};
+
+setLicense();
+</script>
 
 
             <h2><a name='repository'>Source code</a></h2>
