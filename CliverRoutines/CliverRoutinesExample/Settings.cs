@@ -42,12 +42,12 @@ namespace Example
         }
         Cliver.Crypto.Aes crypto = new Cliver.Crypto.Aes("motherboard ID");
 
-        public override void Loaded()
+        protected override void Loaded()
         {
             Cliver.Log.Main.Inform("Settings loaded.");
         }
 
-        public override void Saved()
+        protected override void Saved()
         {
             Cliver.Log.Main.Inform("Settings saved.");
         }
