@@ -26,31 +26,47 @@ namespace Cliver
                 if (key == null)
                     throw new ArgumentNullException("key");
                 Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(key, vector);
+               // rijndael.Padding = PaddingMode.Zeros;
                 rijndael.Key = pdb.GetBytes(32);
                 rijndael.IV = pdb.GetBytes(16);
             }
             System.Security.Cryptography.Rijndael rijndael = System.Security.Cryptography.Rijndael.Create();
 
+            public byte[] Encrypt(byte[] bytes)
+            {
+                using (MemoryStream ms = new MemoryStream())
+                using (CryptoStream cs = new CryptoStream(ms, rijndael.CreateEncryptor(), CryptoStreamMode.Write))
+                {
+                    cs.Write(bytes, 0, bytes.Length);
+                    //cs.FlushFinalBlock();
+                    cs.Close();
+                    return ms.ToArray();
+                }
+            }
+
+            public byte[] Decrypt(byte[] bytes)
+            {
+                using (MemoryStream ms = new MemoryStream())
+                using (CryptoStream cs = new CryptoStream(ms, rijndael.CreateDecryptor(), CryptoStreamMode.Write))
+                {
+                    cs.Write(bytes, 0, bytes.Length);
+                    //cs.FlushFinalBlock();
+                    cs.Close();
+                    return ms.ToArray();
+                }
+            }
+
             public string Encrypt(string str)
             {
                 byte[] bytes = Encoding.Unicode.GetBytes(str);
-                MemoryStream ms = new MemoryStream();
-                CryptoStream cs = new CryptoStream(ms, rijndael.CreateEncryptor(), CryptoStreamMode.Write);
-                cs.Write(bytes, 0, bytes.Length);
-                cs.Close();
-                bytes = ms.ToArray();
-                return Convert.ToBase64String(bytes);
+                return Convert.ToBase64String(Encrypt(bytes));
             }
 
             public string Decrypt(string str)
             {
+                str = str.Replace(" ", "+");
                 byte[] bytes = Convert.FromBase64String(str);
-                MemoryStream ms = new MemoryStream();
-                CryptoStream cs = new CryptoStream(ms, rijndael.CreateDecryptor(), CryptoStreamMode.Write);
-                cs.Write(bytes, 0, bytes.Length);
-                cs.Close();
-                bytes = ms.ToArray();
-                return Encoding.Unicode.GetString(bytes);
+                return Encoding.Unicode.GetString( Decrypt(bytes));
             }
         }
 

@@ -33,12 +33,19 @@ namespace Cliver
         public static Regex RequiredOptionalFieldFullNamesRegex = null;
 
         /// <summary>
-        /// Tells Config in which order Settings types are to be inialized.        
+        /// Tells Config in which order Settings fields ordered by their types are to be initalized.        
         /// It may be necessary due to dependencies between Settings types.
         /// Types listed here will be initialized first in the provided order.
         /// It must be set before calling Reload() or Reset().
         /// </summary>
         public static List<Type> InitialzingOrderedSettingsTypes = null;
+
+        /// <summary>
+        /// Tells Config in which assemblies to look for Settings fields.
+        /// If not set, the default assemblies are processed.      
+        /// It must be set before calling Reload() or Reset().
+        /// </summary>
+        public static List<Assembly> ExplicitlyTrackedAssemblies = null;
 
         public const string CONFIG_FOLDER_NAME = "config";
         public const string FILE_EXTENSION = "json";
@@ -90,19 +97,28 @@ namespace Cliver
         /// <returns></returns>
         public static IEnumerable<SettingsFieldInfo> EnumSettingsFieldInfos()
         {
-            Assembly configAssembly = Assembly.GetExecutingAssembly();
-            StackTrace stackTrace = new StackTrace();
-            Assembly callingAssembly =  stackTrace.GetFrames().Select(f => f.GetMethod().DeclaringType.Assembly).Where(a => a != configAssembly).FirstOrDefault();
-            if (callingAssembly == null)
-                callingAssembly = Assembly.GetEntryAssembly();
-            List<Assembly> assemblies = new List<Assembly> { callingAssembly };
-            string configAssemblyFullName = configAssembly.FullName;
-            foreach (AssemblyName assemblyName in callingAssembly.GetReferencedAssemblies())
+            List<Assembly> assemblies;
+            if (ExplicitlyTrackedAssemblies != null)
+                assemblies = new List<Assembly>(ExplicitlyTrackedAssemblies);
+            else
             {
-                Assembly a = Assembly.Load(assemblyName);
-                if (null != a.GetReferencedAssemblies().Where(an => an.FullName == configAssemblyFullName).FirstOrDefault())
-                    assemblies.Add(a);
+                Assembly configAssembly = Assembly.GetExecutingAssembly();
+                StackTrace stackTrace = new StackTrace();
+                Assembly callingAssembly = stackTrace.GetFrames().Select(f => f.GetMethod().DeclaringType.Assembly).Where(a => a != configAssembly).FirstOrDefault();
+                if (callingAssembly == null)
+                    callingAssembly = Assembly.GetEntryAssembly();
+                assemblies = new List<Assembly> { callingAssembly };
+                string configAssemblyFullName = configAssembly.FullName;
+                //!!!The search scope is limited as it is in order not to load more assemblies which is unavoidable while enumerating them.
+                foreach (AssemblyName assemblyName in callingAssembly.GetReferencedAssemblies())
+                {
+                    Assembly a = Assembly.Load(assemblyName);
+                    if (null != a.GetReferencedAssemblies().Where(an => an.FullName == configAssemblyFullName).FirstOrDefault())
+                        assemblies.Add(a);
+                }
             }
+            assemblies.RemoveAll(a => a == null);
+            assemblies.Distinct();
             foreach (Assembly assembly in assemblies)
             {
                 Type[] types = assembly.GetTypes();

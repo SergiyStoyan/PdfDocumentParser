@@ -34,7 +34,7 @@ namespace Cliver
             public static T Deserialize<T>(string json, bool polymorphic = true, bool createNewObjects = true)
             {
                 return JsonConvert.DeserializeObject<T>(json,
-                    new JsonSerializerSettings { TypeNameHandling = polymorphic ? TypeNameHandling.Auto : TypeNameHandling.None, ObjectCreationHandling = createNewObjects? ObjectCreationHandling.Replace: ObjectCreationHandling.Auto }
+                    new JsonSerializerSettings { TypeNameHandling = polymorphic ? TypeNameHandling.Auto : TypeNameHandling.None, ObjectCreationHandling = createNewObjects ? ObjectCreationHandling.Replace : ObjectCreationHandling.Auto }
                     );
             }
 
@@ -54,7 +54,7 @@ namespace Cliver
 
             public static T Load<T>(string file, bool polymorphic = true, bool createNewObjects = true)
             {
-                return Deserialize<T>(File.ReadAllText(file), polymorphic,  createNewObjects );
+                return Deserialize<T>(File.ReadAllText(file), polymorphic, createNewObjects);
             }
 
             public static object Load(Type type, string file, bool polymorphic = true, bool createNewObjects = true)
@@ -96,6 +96,11 @@ namespace Cliver
         public static bool IsEqualByJson(this object a, object b)
         {
             return Json.IsEqual(a, b);
+        }
+
+        public static string ToStringByJson(this object o, bool indented = true, bool polymorphic = false, bool ignoreNullProperties = true)
+        {
+            return Json.Serialize(o, indented, polymorphic, ignoreNullProperties);
         }
     }
 }

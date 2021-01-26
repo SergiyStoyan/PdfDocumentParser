@@ -24,11 +24,11 @@ namespace Cliver.PdfDocumentParser
             public float TableBoxBorderWidth = 1;
             public float TextLineSeparatorWidth = 1;
 
-            public override void Loaded()
+            protected override void Loaded()
             {
             }
 
-            public override void Saving()
+            protected override void Saving()
             {
             }
         }

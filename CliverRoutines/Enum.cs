@@ -73,10 +73,8 @@ namespace Cliver
 
         EnumExample(string value) : base(value) { }
 
-        public static implicit operator string(EnumExample o)
-        {
-            return o?.Value;
-        }
+        public static implicit operator string(EnumExample o) => o?.Value;
+        public static implicit operator EnumExample(string s) => Parse<EnumExample>(s);
     }
 
     //internal class StringEnum : Cliver.Enum<string>
