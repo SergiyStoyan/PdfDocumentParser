@@ -73,7 +73,7 @@
 			  Open <a href='https://raw.githubusercontent.com/sergeystoyan/PdfDocumentParser/master/LICENSE' target='_blank'>license</a>
 			  <p>Contact me if you want another license.
 			  
-        <p>Notice that PdfDocumentParser may use third-party software as command line tools or linked libraries that are licensed independently.
+        <p>Notice that PdfDocumentParser can use third-party software as command line tools or linked libraries that are licensed independently.
 			<br><br><br>
 			<textarea id="license" rows="30" cols="100">
            
@@ -105,7 +105,7 @@ setLicense();
             <h2><a name='repository'>Source code</a></h2>
             Open <a href='https://github.com/sergeystoyan/PdfDocumentParser' target='_blank'>repository</a>
         <p>
-            Do not download the latest code as is from a branch because it may be under development. Instead, go to releases and download the latest (pre-)release source code.
+            Do not download the latest code as is from a branch because it can be under development. Instead, go to releases and download the latest (pre-)release source code.
 
 
 
@@ -228,11 +228,11 @@ setLicense();
                 </tr>
                 <tr>
                     <td class='title_column'>Brightness tolerance</td>
-                    <td>While for native PDF documents it can be 0.1 - 0.2, scanned documents which have brightness discrepancy may need it higher. A higher tolerance gives a less accuracy.</td>
+                    <td>While for native PDF documents it can be 0.1 - 0.2, scanned documents which have brightness discrepancy, may need it higher. A higher tolerance gives a less accuracy.</td>
                 </tr>
                 <tr>
                     <td class='title_column'>Different pixel number tolerance</td>
-                    <td>While for native PDF documents it can be 0.1 - 0.2, scanned documents which have brightness discrepancy may need it higher. A higher tolerance gives a less accuracy.</td>
+                    <td>While for native PDF documents it can be 0.1 - 0.2, scanned documents which have brightness discrepancy, may need it higher. A higher tolerance gives a less accuracy.</td>
                 </tr>
                 <tr>
                     <td class='title_column'>Find best match</td>
@@ -247,15 +247,15 @@ setLicense();
         <p>A compound anchor is not found when some of its anchors is not found.
         <p>
             A linked anchor is named 'child' of the linking one which is named 'parent'. When an anchor is linked to another anchor, its search area (when it is set to not entire page) becomes related to its parent anchor's position. That means that a parent anchor is searched not until its first match found as done for a stand-alone anchor, but until a match found that satisfies to the child anchor as well.
-            <br>More specifically, when a child anchor has <a href='#anchorPdfText'>Search Rectangle Margin</a> set to not entire page, position of its parent anchor, while searching as parent, may differ from position of the very same anchor, while searching stand-alone.
-            <br>The same consideration is true for child anchors too: an anchor, whose search area is set to not entire page, may change its position after linking to another anchor.
-            <br>Thus, <span class='attention'>NOTE: </span>An anchor acting stand-alone and the same anchor acting as a part of a compound anchor should be considered different anchors because they may have different positions on a page.
+            <br>More specifically, when a child anchor has <a href='#anchorPdfText'>Search Rectangle Margin</a> set to not entire page, position of its parent anchor, while searching as parent, can differ from position of the very same anchor, while searching stand-alone.
+            <br>The same consideration is true for child anchors too: an anchor, whose search area is set to not entire page, can change its position after linking to another anchor.
+            <br>Thus, <span class='attention'>NOTE: </span>An anchor acting stand-alone and the same anchor acting as a part of a compound anchor should be considered different anchors because they can have different positions on a page.
         <p>
             Number of anchors in a compound anchor can be any. Though, it should be taken to account that processing time of recursive search performed for a compound anchor exponentially grows with the chain length.
 
 
             <h3>Creating anchor</h3>
-            <span class='attention'>NOTE: </span> In a compound anchor, if some child anchor's position depends on its parent's position, those anchors must be set on the same page. Otherwise, anchor's position may be calculated incorrectly. So, when tuning a compound anchor on a page which is not the page where it was set initially, it is recommended to reset it completely from scratch.
+            <span class='attention'>NOTE: </span> In a compound anchor, if some child anchor's position depends on its parent's position, those anchors must be set on the same page. Otherwise, anchor's position can be calculated incorrectly. So, when tuning a compound anchor on a page which is not the page where it was set initially, it is recommended to reset it completely from scratch.
         <p>
             How to create anchors, see in <a href='#tutorialAnchor'>tutorial</a>.
 
@@ -364,7 +364,7 @@ setLicense();
 
 
             <h3>Setting field</h3>
-            <span class='attention'>NOTE: </span> A field must be completely set on the same page. Anchors which are linked by a field, can be created on any page before, but must be assigned on the same page together with the field's rectangle. Otherwise, field's shift or size may be calculated incorrectly on some page during parsing. So, when tuning a field on a page which is not the page where it was set initially, it is recommended to reset it completely from scratch.
+            <span class='attention'>NOTE: </span> A field must be completely set on the same page. Anchors which are linked by a field, can be created on any page before, but must be assigned on the same page together with the field's rectangle. Otherwise, field's shift or size can be calculated incorrectly on some page during parsing. So, when tuning a field on a page which is not the page where it was set initially, it is recommended to reset it completely from scratch.
         <p>
             How to set fields, see in <a href='#tutorialField'>the tutorial</a>.
 
@@ -438,7 +438,7 @@ setLicense();
                 </tr>
                 <tr>
                     <td class='title_column'><a name='IgnoreDuplicatedPdfChars'>IgnoreDuplicatedPdfChars</a></td>
-                    <td>Sometimes text entities in a PDF page may be duplicated meaning that they have (almost) the same location. Such duplications do not make a difference in the text itself (while maybe changing its look) but hinder search of PdfText anchors. For this reason, PDF pages are stripped from such duplicates. </td>
+                    <td>Sometimes text entities in a PDF page can be duplicated meaning that they have (almost) the same location. Such duplications do not make a difference in the text itself (while maybe changing its look) but hinder search of PdfText anchors. For this reason, PDF pages are stripped from such duplicates. </td>
                 </tr>
             </table>
             These parameters by default are <code>True</code> and switching them off is highly unrecommended. For this reason, they can only be edited manually in template data, not from GUI.
@@ -482,7 +482,7 @@ setLicense();
                     <td>Extract a field from the page. The kind of returned object depends on valueType which is usually is not be supplied and the field's default valueType is used. Pay attention, that a field must always be referred to by name and not as a Field object. It is because a field can have multiple definitions which are multiple Field objects united under the same name. When some anchor of the field, if any, was not found, NULL is returned.</td>
                 </tr>
             </table>
-        <p>There may be more auxiliary properties and methods which are not mentioned here. Their use can be understood from the code.
+        <p>There can be more auxiliary properties and methods which are not mentioned here. Their use can be understood from the code.
         <p>
             Refer to <a href='#sampleParser'>SampleParser</a> as a live example of using PdfDocumentParser in an application.
 
@@ -630,7 +630,7 @@ foreach(page in pageCollection)
             Usually there is no need to touch it.</td></tr>
             <tr>
                 <td class='title_column'><a name='CoordinateDeviationMargin'>CoordinateDeviationMargin</a></td>
-                <td>It is a zero value threshold while comparing pixel coordinates which may have slight discrepancy because of conversions.
+                <td>It is a zero value threshold while comparing pixel coordinates which can have slight discrepancy because of conversions.
         <p>
             Usually there is no need to touch it.</td></tr>
             </table>
@@ -651,7 +651,7 @@ foreach(page in pageCollection)
             <br>- a file can contain more than one document;
             <br>- a document can consist of multiple pages;
             <br>- documents can not share the same page;
-            <br>- between documents there may be pages that do not belong to a document and so should be passed off;
+            <br>- between documents there can be pages that do not belong to a document and so should be passed off;
 
         <p>
             The application developed for this task is <a href='#sampleParser'>SampleParser</a>. It can be referred to during this tutorial.
@@ -747,7 +747,7 @@ foreach(page in pageCollection)
             Set condition FirstPageOfDocument with boolean expression "1 & 2":
             <img src='img/tutorial3.png' />
 
-        <p>While in this sample FirstPageOfDocument is quite good with 2 anchors, sometimes more anchors may be needed: for instance when the same company issues documents of different types and thus company's logo is not sufficient to detect the type.
+        <p>While in this sample FirstPageOfDocument is quite good with 2 anchors, yet sometimes more anchors can be needed: for instance when the same company issues documents of different types and thus company's logo is not sufficient to detect the type.
 
         <p>
             Condition LastPageOfDocument will be set later.
@@ -815,7 +815,7 @@ foreach(page in pageCollection)
         <p>The following fields were added to SampleParser: ProductTable that catches the entire table and ProductNames and ProductCosts that catch the respective columns. ProductNames and ProductCosts have <code>ColumnOfTable</code> property set to "ProductTable".
 
         <p>
-            In Template Editor, open template 'test' which was created previously for test102.pdf, and set the table and column fields. Because the table in the test file may have different location and height, the top and bottom of ProductTable must be linked to the proper anchors.
+            In Template Editor, open template 'test' which was created previously for test102.pdf, and set the table and column fields. Because the table in the test file can have different location and height, the top and bottom of ProductTable must be linked to the proper anchors.
             <img src='img/tutorial9.png' />
         <p>
             It make sense to make selection boxes of ProductNames and ProductCosts as high as possible because such defintions can work on the rest pages as well.
