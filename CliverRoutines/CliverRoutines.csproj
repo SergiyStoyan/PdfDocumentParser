@@ -3,22 +3,22 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>5.14.1.0</AssemblyVersion>
+    <AssemblyVersion>5.17.2.0</AssemblyVersion>
     <RepositoryUrl>https://github.com/sergeystoyan/CliverRoutines.git</RepositoryUrl>
-    <FileVersion>5.14.1.0</FileVersion>
+    <FileVersion>5.17.2.0</FileVersion>
     <!--PackageLicenseFile>LICENSE</PackageLicenseFile-->
 	<PackageLicenseExpression></PackageLicenseExpression>
     <Copyright>Sergey Stoyan</Copyright>
     <Authors>Sergey Stoyan</Authors>
     <Company>CliverSoft</Company>
-    <Version>5.14.1</Version>
+    <Version>5.17.2</Version>
     <PackageProjectUrl>https://github.com/sergeystoyan/CliverRoutines</PackageProjectUrl>
     <Description>Cross-platform routines:
-- application settings module which replaces the one of Visual Studio;
-- logging with multi-threading and session support;
+- settings manager which supersedes .NET ConfigurationManager;
+- logger with multi-threading and session support;
 - auxiliary routines;</Description>
     <PackageTags>serialize, log, settings</PackageTags>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -39,11 +39,6 @@
     <None Remove="CliverRoutinesExample\**" />
     <None Remove="CliverRoutinesTests\**" />
     <None Remove="Example\**" />
-    <None Remove="LICENSE" />
-    <None Include="..\..\CliverRoutines\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
     <None Include="LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>

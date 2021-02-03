@@ -57,7 +57,7 @@ namespace Cliver
         static Serializable get(Type serializable_type, string file, InitMode init_mode)
         {
             if (!Path.IsPathRooted(file))
-                file = Log.AppCommonDataDir + System.IO.Path.DirectorySeparatorChar + file;
+                file = Log.AppCompanyCommonDataDir + System.IO.Path.DirectorySeparatorChar + file;
             Serializable s;
             if (init_mode == InitMode.CREATE || (init_mode == InitMode.LOAD_OR_CREATE && !File.Exists(file)))
                 s = (Serializable)Activator.CreateInstance(serializable_type);

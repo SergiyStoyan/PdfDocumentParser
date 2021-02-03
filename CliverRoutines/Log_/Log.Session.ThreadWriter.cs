@@ -15,6 +15,11 @@ namespace Cliver
     {
         public partial class Session
         {
+            /// <summary>
+            /// Get log for this thread.
+            /// It will be created if not exists.
+            /// </summary>
+            /// <returns>thread log</returns>
             public ThreadWriter Thread
             {
                 get
@@ -23,41 +28,45 @@ namespace Cliver
                 }
             }
 
-            Dictionary<System.Threading.Thread, ThreadWriter> threads2treadWriter = new Dictionary<System.Threading.Thread, ThreadWriter>();
+            Dictionary<int, ThreadWriter> threadIds2TreadWriter = new Dictionary<int, ThreadWriter>();
 
             int threadWriterCounter = 0;
 
+            /// <summary>
+            /// Thread log.
+            /// </summary>
             public class ThreadWriter : Writer
             {
-                ThreadWriter(Session session, int id)
+                ThreadWriter(Session session, int id, System.Threading.Thread thread)
                     : base(id.ToString(), session)
                 {
-                    this.Id = id;
+                    Id = id;
+                    Thread = thread;
                 }
 
                 /// <summary>
-                /// Log id that is used for logging and browsing in GUI
+                /// Log ID.
                 /// </summary>
                 public readonly int Id = 0;
 
+                /// <summary>
+                /// Log thread.
+                /// </summary>
+                public readonly System.Threading.Thread Thread;
+
                 static internal ThreadWriter Get(Session session, System.Threading.Thread thread)
                 {
-                    lock (session.threads2treadWriter)
+                    lock (session.threadIds2TreadWriter)
                     {
                         ThreadWriter tw;
-                        if (!session.threads2treadWriter.TryGetValue(thread, out tw))
+                        if (!session.threadIds2TreadWriter.TryGetValue(thread.ManagedThreadId, out tw))
                         {
                             //cleanup for dead thread logs
-                            List<System.Threading.Thread> oldLogThreads = (from t in session.threads2treadWriter.Keys where !t.IsAlive select t).ToList();
+                            List<System.Threading.Thread> oldLogThreads = session.threadIds2TreadWriter.Values.Where(a => !a.Thread.IsAlive).Select(a => a.Thread).ToList();
                             foreach (System.Threading.Thread t in oldLogThreads)
                             {
-                                if (t.ThreadState != System.Threading.ThreadState.Stopped)
-                                {
-                                    session.threads2treadWriter[t].Error("This thread is detected as not alive. Aborting it...");
-                                    t.Abort();
-                                }
-                                session.threads2treadWriter[t].Close();
-                                session.threads2treadWriter.Remove(t);
+                                session.threadIds2TreadWriter[t.ManagedThreadId].Close();
+                                session.threadIds2TreadWriter.Remove(t.ManagedThreadId);
                             }
 
                             session.threadWriterCounter++;
@@ -65,7 +74,7 @@ namespace Cliver
                             if (Log.ReuseThreadLogIndexes)
                             {
                                 logId = 1;
-                                var ids = session.threads2treadWriter.Values.OrderBy(a => a.Id).Select(a => a.Id);
+                                var ids = session.threadIds2TreadWriter.Values.OrderBy(a => a.Id).Select(a => a.Id);
                                 foreach (int id in ids)
                                     if (logId == id)
                                         logId++;
@@ -73,8 +82,8 @@ namespace Cliver
                             else
                                 logId = session.threadWriterCounter;
 
-                            tw = new ThreadWriter(session, logId);
-                            session.threads2treadWriter.Add(thread, tw);
+                            tw = new ThreadWriter(session, logId, thread);
+                            session.threadIds2TreadWriter.Add(thread.ManagedThreadId, tw);
                         }
                         return tw;
                     }

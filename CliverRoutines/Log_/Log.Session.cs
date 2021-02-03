@@ -14,6 +14,9 @@ namespace Cliver
 {
     public static partial class Log
     {
+        /// <summary>
+        /// Log session.
+        /// </summary>
         public partial class Session
         {
             Session(string name)
@@ -29,26 +32,30 @@ namespace Cliver
                 lock (this.names2NamedWriter)
                 {
                     string dir;
-                    switch (Log.mode)
+                    if (Log.mode.HasFlag(Mode.FOLDER_PER_SESSION))
                     {
-                        case Cliver.Log.Mode.ALL_LOGS_ARE_IN_SAME_FOLDER:
-                            dir = WorkDir;
-                            break;
-                        case Cliver.Log.Mode.EACH_SESSION_IS_IN_OWN_FORLDER:
-                            string dir0 = WorkDir + System.IO.Path.DirectorySeparatorChar + NamePrefix + "_" + TimeMark + (string.IsNullOrWhiteSpace(name) ? "" : "_" + name);
-                            dir = dir0;
-                            for (int count = 1; Directory.Exists(dir); count++)
-                                dir = dir0 + "_" + count.ToString();
-                            break;
-                        default:
-                            throw new Exception("Unknown LOGGING_MODE:" + Cliver.Log.mode);
+                        //string dir0 = WorkDir + System.IO.Path.DirectorySeparatorChar + (string.IsNullOrEmpty(NamePrefix) ? "" : NamePrefix + "_") + (string.IsNullOrWhiteSpace(name) ? "" : name + "_") + TimeMark;
+                        string dir0 = WorkDir + System.IO.Path.DirectorySeparatorChar + NamePrefix + TimeMark + (string.IsNullOrWhiteSpace(name) ? "" : "_" + name);
+                        dir = dir0;
+                        for (int count = 1; Directory.Exists(dir); count++)
+                            dir = dir0 + "_" + count.ToString();
+                    }
+                    else //if (Log.mode.HasFlag(Mode.ONE_FOLDER))//default
+                    {
+                        dir = WorkDir;
                     }
                     return dir;
                 }
             }
 
-            public static string NamePrefix = "Session";
+            /// <summary>
+            /// Prefix to the session folder name.
+            /// </summary>
+            public static string NamePrefix = "";
 
+            /// <summary>
+            /// Session name.
+            /// </summary>
             public string Name
             {
                 get
@@ -61,6 +68,9 @@ namespace Cliver
             }
             string name;
 
+            /// <summary>
+            /// Session directory.
+            /// </summary>
             public string Dir
             {
                 get
@@ -75,7 +85,14 @@ namespace Cliver
             }
             string dir;
 
+            /// <summary>
+            /// Time when the session was created.
+            /// </summary>
             public DateTime CreatedTime { get; protected set; }
+
+            /// <summary>
+            /// Time mark in the session directory of log names.
+            /// </summary>
             public string TimeMark
             {
                 get
@@ -95,76 +112,87 @@ namespace Cliver
 
             /// <summary>
             /// Default log of the session.
-            /// Depending on condition THREAD_LOG_IS_DEFAULT, it is either Main log or Thread log.
+            /// Depending on Mode, it is either Main log or Thread log.
             /// </summary>
             public Writer Default
             {
                 get
                 {
-#if THREAD_LOG_IS_DEFAULT
-                    return Thread;
-#else
-                    return Main;
-#endif
+                    if (mode.HasFlag(Mode.DEFAULT_THREAD_LOG))
+                        return Thread;
+                    else
+                        return Main;
                 }
             }
 
             /// <summary>
             /// Close all log files in the session.  
             /// Nevertheless the session can be re-used after.
+            /// Make sure that during this call no log of this session is used.
             /// </summary>
-            /// <param name="newName"></param>
+            /// <param name="newName">new name</param>
+            /// <param name="tryMaxCount">number of attempts if the session foldr is locked</param>
+            /// <param name="tryDelayMss">time span between attempts</param>
             public void Rename(string newName, int tryMaxCount = 10, int tryDelayMss = 50)
             {
-                lock (this.names2NamedWriter)
+                lock (names2NamedWriter)
                 {
-                    if (newName == Name)
-                        return;
+                    lock (threadIds2TreadWriter)
+                    {
+                        if (newName == Name)
+                            return;
 
-                    Write("Renaming session...: '" + Name + "' to '" + newName + "'");
+                        Write("Renaming session...: '" + Name + "' to '" + newName + "'");
 
-                    for (int tryCount = 1; ; tryCount++)
-                        try
+                        lock (names2Session)
                         {
+                            if (names2Session.ContainsKey(newName))
+                                throw new Exception("Such session already exists.");
+
                             Close(true);
-                            string newDir = getDir(newName);
-                            switch (Log.mode)
-                            {
-                                case Cliver.Log.Mode.ALL_LOGS_ARE_IN_SAME_FOLDER:
-                                    dir = newDir;
-                                    foreach (Writer w in names2NamedWriter.Values.Select(a => (Writer)a).Concat(threads2treadWriter.Values))
-                                    {
-                                        string file0 = w.File;
-                                        w.SetFile();
-                                        if (File.Exists(file0))
-                                            File.Move(file0, w.File);
-                                    }
-                                    break;
-                                case Cliver.Log.Mode.EACH_SESSION_IS_IN_OWN_FORLDER:
+
+                            names2Session.Remove(name);
+                            name = newName;
+                            names2Session[name] = this;
+                        }
+                        string newDir = getDir(newName);
+
+                        if (Log.mode.HasFlag(Mode.FOLDER_PER_SESSION))
+                        {
+                            for (int tryCount = 1; ; tryCount++)
+                                try
+                                {
                                     if (Directory.Exists(dir))
                                         Directory.Move(dir, newDir);
-                                    dir = newDir;
-                                    foreach (Writer w in names2NamedWriter.Values.Select(a => (Writer)a).Concat(threads2treadWriter.Values))
-                                        w.SetFile();
                                     break;
-                                default:
-                                    throw new Exception("Unknown LOGGING_MODE:" + Cliver.Log.mode);
-                            }
-                            lock (names2Session)
-                            {
-                                names2Session.Remove(name);
-                                name = newName;
-                                names2Session[name] = this;
-                            }
-                            return;
+                                }
+                                catch (Exception e)//if another thread calls a log in this session then it locks the folder against renaming
+                                {
+                                    if (tryCount >= tryMaxCount)
+                                        throw new Exception("Could not rename log session.", e);
+                                    Error(e);
+                                    System.Threading.Thread.Sleep(tryDelayMss);
+                                }
+                            dir = newDir;
+                            foreach (Writer w in names2NamedWriter.Values.Select(a => (Writer)a).Concat(threadIds2TreadWriter.Values))
+                                w.SetFile();
                         }
-                        catch (Exception e)//if another thread calls a log in this session then it locks the folder against renaming
+                        else //if (Log.mode.HasFlag(Mode.ONE_FOLDER))//default
                         {
-                            if (tryCount >= tryMaxCount)
-                                throw new Exception("Could not rename log session.", e);
-                            Error(e);
-                            System.Threading.Thread.Sleep(tryDelayMss);
+                            dir = newDir;
+                            foreach (Writer w in names2NamedWriter.Values.Select(a => (Writer)a).Concat(threadIds2TreadWriter.Values))
+                            {
+                                lock (w)
+                                {
+                                    w.Close();
+                                    string file0 = w.File;
+                                    w.SetFile();
+                                    if (File.Exists(file0))
+                                        File.Move(file0, w.File);
+                                }
+                            }
                         }
+                    }
                 }
             }
 
@@ -176,20 +204,20 @@ namespace Cliver
             {
                 lock (names2NamedWriter)
                 {
-                    if (names2NamedWriter.Values.FirstOrDefault(a => !a.IsClosed) == null && threads2treadWriter.Values.FirstOrDefault(a => !a.IsClosed) == null)
+                    if (names2NamedWriter.Values.FirstOrDefault(a => !a.IsClosed) == null && threadIds2TreadWriter.Values.FirstOrDefault(a => !a.IsClosed) == null)
                         return;
 
                     Write("Closing the log session...");
 
                     foreach (NamedWriter nw in names2NamedWriter.Values)
                         nw.Close();
-                    //names2NamedWriter.Clear(); !!! clearing writers will bring to duplicating them if they are referenced in the custom code.
+                    //names2NamedWriter.Clear(); !!! clearing writers will bring to duplicating them if they are referenced in the calling code.
 
-                    lock (threads2treadWriter)
+                    lock (threadIds2TreadWriter)
                     {
-                        foreach (ThreadWriter tw in threads2treadWriter.Values)
+                        foreach (ThreadWriter tw in threadIds2TreadWriter.Values)
                             tw.Close();
-                        //threads2treadWriter.Clear(); !!!clearing writers will bring to duplicating them if they are referenced in the custom code.
+                        //threadIds2TreadWriter.Clear(); !!!clearing writers will bring to duplicating them if they are referenced in the calling code.
                     }
 
                     if (!reuse)
@@ -197,6 +225,7 @@ namespace Cliver
                         dir = null;
                         CreatedTime = DateTime.MinValue;
                         timeMark = null;
+                        //names2Session.Remove(name);!!!removing session will bring to duplicating it if it is referenced in the calling code.
                     }
                 }
             }

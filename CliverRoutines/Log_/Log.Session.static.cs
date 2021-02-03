@@ -5,7 +5,7 @@
 //        stoyan@cliversoft.com
 //        http://www.cliversoft.com
 //********************************************************************************************
-using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 
@@ -17,6 +17,9 @@ namespace Cliver
         {
             static Dictionary<string, Session> names2Session = new Dictionary<string, Session>();
 
+            /// <summary>
+            /// Close all the sessions.
+            /// </summary>
             internal static void CloseAll()
             {
                 lock (names2Session)
@@ -27,6 +30,12 @@ namespace Cliver
                 }
             }
 
+            /// <summary>
+            /// Get the session.
+            /// It will be created if not exists.
+            /// </summary>
+            /// <param name="sessionName">session name</param>
+            /// <returns>session</returns>
             public static Session Get(string sessionName)
             {
                 lock (names2Session)
@@ -39,6 +48,45 @@ namespace Cliver
                     return s;
                 }
             }
+
+            /// <summary>
+            /// Get all the existing sessions.
+            /// </summary>
+            /// <returns>existing sessions</returns>
+            public static List<Session> GetAll()
+            {
+                lock (names2Session)
+                {
+                    return names2Session.Values.ToList();
+                }
+            }
         }
+
+        //public static readonly sessions Sessions = new sessions();
+        //public class sessions
+        //{
+        //    /// <summary>
+        //    /// alias for Session.Get(s)
+        //    /// </summary>
+        //    /// <param name="s"></param>
+        //    /// <returns></returns>
+        //    public Session this[string s]
+        //    {
+        //        get
+        //        {
+        //            return Session.Get(s);
+        //        }
+        //    }
+        //    /// <summary>
+        //    /// alias for Session.GetAll()
+        //    /// </summary>
+        //    /// <returns></returns>
+        //    public static List<Session> GetAll()
+        //    {
+        //        return Session.GetAll();
+        //    }
+
+        //    internal sessions() { }
+        //}
     }
 }

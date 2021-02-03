@@ -51,7 +51,7 @@ namespace Cliver
         //        });
         //} public Dictionary<string, string> nameOfAlreadyAcessed = new Dictionary<string, string>();
 
-        public static string GetNameOfVariablePassedInAsParameter(string parameterName, int level = 1)//!!!not debugged! It will not work for Release
+        public static string GetNameOfVariablePassedInAsParameter(string parameterName, int frame = 1)//!!!not debugged! It will not work for Release
         {
             MethodBase mb = System.Reflection.MethodBase.GetCurrentMethod();
             int parameterNumber = 0;
@@ -61,7 +61,7 @@ namespace Cliver
                     break;
                 parameterNumber++;
             }
-            StackFrame stackFrame = new StackTrace(true).GetFrame(level);
+            StackFrame stackFrame = new StackTrace(true).GetFrame(frame);
             string fileName = stackFrame.GetFileName();
             int lineNumber = stackFrame.GetFileLineNumber();
             System.IO.StreamReader file = new System.IO.StreamReader(fileName);

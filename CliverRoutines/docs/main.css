@@ -68,3 +68,8 @@ table, th, td {border: 1px solid grey; }
 th {color:#000; font-style:italic;}
 th, td {margin:5; padding:5;}
 img {max-width: 1200px; max-height: 700px; margin-top:20; margin-bottom:30;display:block;}
+a:link {  text-decoration: none;color: #00b;}
+a:visited {  text-decoration: none;color: #00b;}
+a:hover {  text-decoration: underline;color: #00b;}
+a:active {  text-decoration: underline;color: #00b;}
+

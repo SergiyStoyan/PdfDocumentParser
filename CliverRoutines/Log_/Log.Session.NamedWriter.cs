@@ -14,6 +14,12 @@ namespace Cliver
     {
         partial class Session
         {
+            /// <summary>
+            /// Get log by name.
+            /// It will be created if not exists.
+            /// </summary>
+            /// <param name="name">log name</param>
+            /// <returns>named log</returns>
             public NamedWriter this[string name]
             {
                 get
@@ -39,6 +45,9 @@ namespace Cliver
 
             Dictionary<string, NamedWriter> names2NamedWriter = new Dictionary<string, NamedWriter>();
 
+            /// <summary>
+            /// Named log
+            /// </summary>
             public class NamedWriter : Writer
             {
                 NamedWriter(Session session, string name)

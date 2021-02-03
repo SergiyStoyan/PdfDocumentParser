@@ -70,8 +70,8 @@ namespace Cliver
         {
             lock (settingsFieldFullNames2SettingsFieldInfo)
             {
-                foreach (SettingsFieldInfo sfi in EnumSettingsFieldInfos())
-                //foreach (SettingsFieldInfo sfi in settingsFieldFullNames2SettingsFieldInfo.Values)
+                foreach (SettingsMemberInfo sfi in EnumSettingsFieldInfos())
+                //foreach (SettingsMemberInfo sfi in settingsFieldFullNames2SettingsFieldInfo.Values)
                 {
                     string file2 = toDirectory + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(sfi.File);
                     if (File.Exists(sfi.File))//it can be absent if default settings are used still
@@ -81,7 +81,7 @@ namespace Cliver
                     else
                     {
                         Settings s = Settings.Create(sfi, true, true);
-                        s.Save();
+                        s.Save(sfi);
                         File.Move(sfi.File, file2);
                     }
                 }
@@ -106,7 +106,7 @@ namespace Cliver
         /// <param name="settingsFieldFullName">full name of Settings field; it equals to the name of its storage file without extention</param>
         public static void Reset(string settingsFieldFullName)
         {
-            SettingsFieldInfo sfi = GetSettingsFieldInfo(settingsFieldFullName);
+            SettingsMemberInfo sfi = GetSettingsFieldInfo(settingsFieldFullName);
             Settings s = Settings.Create(sfi, true, true);
             sfi.SetObject(s);
         }
@@ -118,7 +118,7 @@ namespace Cliver
         /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
         public static void Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
         {
-            SettingsFieldInfo sfi = GetSettingsFieldInfo(settingsFieldFullName);
+            SettingsMemberInfo sfi = GetSettingsFieldInfo(settingsFieldFullName);
             Settings s = Settings.Create(sfi, false, throwExceptionIfCouldNotLoadFromStorageFile);
             sfi.SetObject(s);
         }
@@ -131,7 +131,7 @@ namespace Cliver
         ///// <returns>The Settings object which is set to the field</returns>
         //static public Settings GetSettings(string settingsFieldFullName)
         //{
-        //    SettingsFieldInfo sf = GetSettingsFieldInfo(settingsFieldFullName);
+        //    SettingsMemberInfo sf = GetSettingsFieldInfo(settingsFieldFullName);
         //    return sf.GetObject();
         //}
 

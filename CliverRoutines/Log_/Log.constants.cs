@@ -29,51 +29,116 @@ namespace Cliver
             if (ProgramRoutines.IsWebContext)
                 ProcessName = System.Web.Compilation.BuildManager.GetGlobalAsaxType().BaseType.Assembly.GetName(false).Name;
             else*/
-            System.Reflection.Assembly a = System.Reflection.Assembly.GetEntryAssembly();
-            //!!!when using WCF hapenned that GetEntryAssembly() is NULL 
-            if (a == null)
-                a = System.Reflection.Assembly.GetCallingAssembly();
-            ProcessName = System.Reflection.Assembly.GetEntryAssembly().GetName(false).Name;
+            /*
+            {//this block works on Windows desktop, XamarinMAC, NT service
+                Assembly entryAssembly = Assembly.GetEntryAssembly();
+                //!!!when using WCF, GetEntryAssembly() is NULL 
+                if (entryAssembly == null)
+                    entryAssembly = Assembly.GetCallingAssembly();
+                ProcessName = entryAssembly.GetName(false).Name;
 
-            AppDir = AppDomain.CurrentDomain.BaseDirectory.TrimEnd(System.IO.Path.DirectorySeparatorChar);
+                AssemblyRoutines.AssemblyInfo ai = new AssemblyRoutines.AssemblyInfo(entryAssembly);
+                CompanyName = string.IsNullOrWhiteSpace(ai.Company) ? "CliverSoft" : ai.Company;
+                ProductName = ai.Product;
 
-            AssemblyRoutines.AssemblyInfo ai = new AssemblyRoutines.AssemblyInfo(Assembly.GetEntryAssembly());
-            CompanyName = string.IsNullOrWhiteSpace(ai.Company) ? "CliverSoft" : ai.Company;
+                AppDir = AppDomain.CurrentDomain.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar);
+            }
+            */
+            {//this block works on Windows desktop, NT service. 
+                //!!!Needs testing on XamarinMAC
+                Process p = Process.GetCurrentProcess();
+                ProcessName = p.ProcessName;
+                AppDir = PathRoutines.GetFileDir(p.MainModule.FileName);
+                FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(p.MainModule.FileName);
+                if (fvi != null)
+                {
+                    CompanyName = fvi.CompanyName;
+                    //ProductName = fvi.ProductName;
+                }
+            }            
 
-            //!!!no write permission on macOS!!!
-            CompanyCommonDataDir = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + System.IO.Path.DirectorySeparatorChar + CompanyName;
-            AppCommonDataDir = CompanyCommonDataDir + System.IO.Path.DirectorySeparatorChar + Log.ProcessName;
-
-            CompanyUserDataDir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + System.IO.Path.DirectorySeparatorChar + CompanyName;
-            AppUserDataDir = CompanyUserDataDir + System.IO.Path.DirectorySeparatorChar + Log.ProcessName;
+            //!!!No write permission on macOS
+            //CompanyCommonDataDir = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + Path.DirectorySeparatorChar + CompanyName;
+            //!!!No write permission on macOS
+            //AppCompanyCommonDataDir = CompanyCommonDataDir + Path.DirectorySeparatorChar + ProcessName;
+            //CompanyUserDataDir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + Path.DirectorySeparatorChar + CompanyName;
+            //AppCompanyUserDataDir = CompanyUserDataDir + Path.DirectorySeparatorChar + ProcessName;
         }
 
         /// <summary>
-        /// Normalized name of this process
+        /// Name of this process.
         /// </summary>
         public static readonly string ProcessName;
 
+        /// <summary>
+        /// Product name of the executing file.
+        /// </summary>
+        //public static readonly string ProductName;
+
+        /// <summary>
+        /// Company name of the executing file.
+        /// </summary>
         public static readonly string CompanyName;
 
         /// <summary>
-        /// Directory where the company's application data independent on user are located.
+        /// User-independent company data directory.
+        /// (!)No write permission on macOS
         /// </summary>
-        public static readonly string CompanyCommonDataDir;
+        public static string CompanyCommonDataDir//it is property to avoid forced setting if crashes on certain platform
+        {
+            get
+            {
+                if (companyCommonDataDir == null)
+                    //!!!No write permission on macOS
+                    companyCommonDataDir = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + Path.DirectorySeparatorChar + CompanyName;
+                return companyCommonDataDir;
+            }
+        }
+        static string companyCommonDataDir;
 
         /// <summary>
-        /// Directory where the application's data files independent on user are located.
+        /// User-independent company-application data directory.
+        /// (!)No write permission on macOS
         /// </summary>
-        public static readonly string AppCommonDataDir;
+        public static string AppCompanyCommonDataDir//it is property to avoid forced setting if crashes on certain platform
+        {
+            get
+            {
+                if (appCompanyCommonDataDir == null)
+                    //!!!No write permission on macOS
+                    appCompanyCommonDataDir = CompanyCommonDataDir + Path.DirectorySeparatorChar + ProcessName;
+                return appCompanyCommonDataDir;
+            }
+        }
+        static string appCompanyCommonDataDir;
 
         /// <summary>
-        /// Directory where the CliverSoft's application data dependent on user are located.
+        /// User-specific company data directory.
         /// </summary>
-        public static readonly string CompanyUserDataDir;
+        public static string CompanyUserDataDir//it is property to avoid forced setting if crashes on certain platform
+        {
+            get
+            {
+                if (companyUserDataDir == null)
+                    companyUserDataDir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + Path.DirectorySeparatorChar + CompanyName;
+                return companyUserDataDir;
+            }
+        }
+        static string companyUserDataDir;
 
         /// <summary>
-        /// Directory where the application's data files dependent on user are located.
+        /// User-specific company-application data directory.
         /// </summary>
-        public static readonly string AppUserDataDir;
+        public static string AppCompanyUserDataDir//it is property to avoid forced setting if crashes on certain platform
+        {
+            get
+            {
+                if (appCompanyUserDataDir == null)
+                    appCompanyUserDataDir = CompanyUserDataDir + Path.DirectorySeparatorChar + ProcessName;
+                return appCompanyUserDataDir;
+            }
+        }
+        static string appCompanyUserDataDir;
 
         /// <summary>
         /// Directory where the application binary is located.

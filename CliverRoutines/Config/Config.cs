@@ -17,11 +17,11 @@ using System.Diagnostics;
 namespace Cliver
 {
     /// <summary>
-    /// Config manages serializable Settings objects set to static fields of Settings derived types declared in the application.
-    /// It performs:
-    /// - detecting static fields of Settings types declared in the application and initiating them with Settings objects;
-    /// - serializing/deserializing the Settings objects;
-    /// Every Settings field in the application has it own storage file which is defined by the Settings type and the field's full name in code. 
+    /// Config manages values of the static public fields/properties of Settings-derived types that are declared anywhere in the application.
+    /// It provides:
+    /// - detecting static public fields of Settings types declared in the application and initiating them with values;
+    /// - serializing/deserializing those Settings fields/properties;
+    /// Every Settings field/property has it own storage file which is defined by its type and its full name in code. 
     /// Usually it's that only one field is declared per Settings type, but generally there can be any number of fields of the same Settings type.
     /// </summary>
     public static partial class Config
@@ -38,7 +38,7 @@ namespace Cliver
         /// Types listed here will be initialized first in the provided order.
         /// It must be set before calling Reload() or Reset().
         /// </summary>
-        public static List<Type> InitialzingOrderedSettingsTypes = null;
+        public static List<Type> InitializationOrderedSettingsTypes = null;
 
         /// <summary>
         /// Tells Config in which assemblies to look for Settings fields.
@@ -55,9 +55,9 @@ namespace Cliver
             lock (settingsFieldFullNames2SettingsFieldInfo)
             {
                 settingsFieldFullNames2SettingsFieldInfo.Clear();
-                foreach (SettingsFieldInfo settingsFieldInfo in EnumSettingsFieldInfos())
+                foreach (SettingsMemberInfo settingsFieldInfo in EnumSettingsFieldInfos())
                 {
-                    if (null != settingsFieldInfo.FieldInfo.GetCustomAttributes<Settings.Optional>(false).FirstOrDefault() && (RequiredOptionalFieldFullNamesRegex == null || !RequiredOptionalFieldFullNamesRegex.IsMatch(settingsFieldInfo.FullName)))
+                    if (settingsFieldInfo.Attribute?.Optional == true && RequiredOptionalFieldFullNamesRegex?.IsMatch(settingsFieldInfo.FullName) == false)
                         continue;
                     Settings settings = Settings.Create(settingsFieldInfo, reset, throwExceptionIfCouldNotLoadFromStorageFile);
                     settingsFieldInfo.SetObject(settings);
@@ -65,7 +65,7 @@ namespace Cliver
                 }
             }
         }
-        static Dictionary<string, SettingsFieldInfo> settingsFieldFullNames2SettingsFieldInfo = new Dictionary<string, SettingsFieldInfo>();
+        static Dictionary<string, SettingsMemberInfo> settingsFieldFullNames2SettingsFieldInfo = new Dictionary<string, SettingsMemberInfo>();
 
         class SettingsTypeComparer : IComparer<Type>
         {
@@ -95,7 +95,7 @@ namespace Cliver
         /// Enumerates through all the Settings fields available in the application.
         /// </summary>
         /// <returns></returns>
-        public static IEnumerable<SettingsFieldInfo> EnumSettingsFieldInfos()
+        public static IEnumerable<SettingsMemberInfo> EnumSettingsFieldInfos()
         {
             List<Assembly> assemblies;
             if (ExplicitlyTrackedAssemblies != null)
@@ -123,14 +123,28 @@ namespace Cliver
             {
                 Type[] types = assembly.GetTypes();
                 IEnumerable<Type> settingsTypes = types.Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(Settings))).Distinct();
-                if (InitialzingOrderedSettingsTypes != null)
+                if (InitializationOrderedSettingsTypes != null)
                 {
-                    SettingsTypeComparer settingsTypeComparer = new SettingsTypeComparer(InitialzingOrderedSettingsTypes);
+                    SettingsTypeComparer settingsTypeComparer = new SettingsTypeComparer(InitializationOrderedSettingsTypes);
                     settingsTypes = settingsTypes.OrderBy(t => t, settingsTypeComparer);
                 }
                 foreach (Type type in types)
-                    foreach (FieldInfo settingsTypeFieldInfo in type.GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public).Where(f => settingsTypes.Contains(f.FieldType) /* && f.FieldType.IsAssignableFrom(settingsType)*/))
-                        yield return new SettingsFieldInfo(settingsTypeFieldInfo);
+                    //!!!while FieldInfo can see property, it loses its attributes if any. So we need to retrieve by GetMembers().
+                    foreach (MemberInfo settingsTypeMemberInfo in type.GetMembers(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)/*.Where(f => settingsTypes.Contains(f.Member)*/ /* && f.FieldType.IsAssignableFrom(settingsType)*/)
+                    {
+                        FieldInfo fi = settingsTypeMemberInfo as FieldInfo;
+                        if (fi != null)
+                        {
+                            if (!fi.Name.StartsWith("<")/*it is a compiled property*/ && settingsTypes.Contains(fi.FieldType))
+                                yield return new SettingsFieldInfo(fi);
+                        }
+                        else
+                        {
+                            PropertyInfo pi = settingsTypeMemberInfo as PropertyInfo;
+                            if (pi != null && settingsTypes.Contains(pi.PropertyType))
+                                yield return new SettingsPropertyInfo(pi);
+                        }
+                    }
             }
         }
 
@@ -164,8 +178,8 @@ namespace Cliver
         {
             lock (settingsFieldFullNames2SettingsFieldInfo)
             {
-                foreach (SettingsFieldInfo settingsFieldInfo in settingsFieldFullNames2SettingsFieldInfo.Values)
-                    settingsFieldInfo.GetObject()?.Save();
+                foreach (SettingsMemberInfo settingsFieldInfo in settingsFieldFullNames2SettingsFieldInfo.Values)
+                    settingsFieldInfo.GetObject()?.Save(settingsFieldInfo);
             }
         }
 
@@ -174,11 +188,11 @@ namespace Cliver
         /// </summary>
         /// <param name="settingsFieldFullName">full name of Settings field; it equals to the name of its storage file without extention</param>
         /// <returns>Settings field's properties</returns>
-        public static SettingsFieldInfo GetSettingsFieldInfo(string settingsFieldFullName)
+        public static SettingsMemberInfo GetSettingsFieldInfo(string settingsFieldFullName)
         {//!!! before altering this method, pay attention that it is used by the engine !!!
             lock (settingsFieldFullNames2SettingsFieldInfo)
             {
-                if (!settingsFieldFullNames2SettingsFieldInfo.TryGetValue(settingsFieldFullName, out SettingsFieldInfo sfi))
+                if (!settingsFieldFullNames2SettingsFieldInfo.TryGetValue(settingsFieldFullName, out SettingsMemberInfo sfi))
                 {
                     sfi = EnumSettingsFieldInfos().FirstOrDefault(a => a.FullName == settingsFieldFullName);
                     if (sfi == null)

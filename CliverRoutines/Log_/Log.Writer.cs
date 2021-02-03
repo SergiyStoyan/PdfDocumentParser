@@ -22,6 +22,9 @@ namespace Cliver
                 SetFile();
             }
 
+            /// <summary>
+            /// Message importance level.
+            /// </summary>
             public Level Level
             {
                 get
@@ -41,30 +44,31 @@ namespace Cliver
                     }
                 }
             }
-            Level level = Log.defaultLevel;
+            Level level = Log.DefaultLevel;
 
+            /// <summary>
+            /// Log name.
+            /// </summary>
             public readonly string Name;
 
+            /// <summary>
+            /// Log file path.
+            /// </summary>
             public string File { get; private set; } = null;
 
             internal void SetFile()
             {
                 lock (this)
                 {
-                    //string file2 = Session.Dir + System.IO.Path.DirectorySeparatorChar + Log.ProcessName;
                     string file2 = Session.Dir + System.IO.Path.DirectorySeparatorChar;
-                    switch (Log.mode)
+                    if (Log.mode.HasFlag(Mode.FOLDER_PER_SESSION))
                     {
-                        case Log.Mode.ALL_LOGS_ARE_IN_SAME_FOLDER:
-                            file2 += (string.IsNullOrWhiteSpace(Session.Name) ? "" : Session.Name + "_") + Session.TimeMark;
-                            //if (!string.IsNullOrWhiteSpace(Name))//not Main log
-                            //    file2 += "_" + DateTime.Now.ToString("yyMMddHHmmss");
-                            break;
-                        case Cliver.Log.Mode.EACH_SESSION_IS_IN_OWN_FORLDER:
-                            file2 += DateTime.Now.ToString("yyMMddHHmmss");
-                            break;
-                        default:
-                            throw new Exception("Unknown LOGGING_MODE:" + Cliver.Log.mode);
+                        file2 += DateTime.Now.ToString("yyMMddHHmmss");
+                    }
+                    else //if (Log.mode.HasFlag(Mode.ONE_FOLDER))//default
+                    {
+                        //file2 += (string.IsNullOrWhiteSpace(Session.Name) ? "" : Session.Name + "_") + Session.TimeMark;//separates session name from log name
+                        file2 += Session.TimeMark + (string.IsNullOrWhiteSpace(Session.Name) ? "" : "_" + Session.Name);
                     }
                     file2 += (string.IsNullOrWhiteSpace(Name) ? "" : "_" + Name) + (fileCounter > 0 ? "[" + fileCounter + "]" : "") + "." + FileExtension;
 
@@ -77,9 +81,16 @@ namespace Cliver
             }
             int fileCounter = 0;
 
+            /// <summary>
+            /// Session to which this log belongs.
+            /// </summary>
             public readonly Session Session;
 
-            public int MaxFileSize = Log.defaultMaxFileSize;
+            /// <summary>
+            /// Maximum log file length in bytes.
+            /// If negative than no effect.
+            /// </summary>
+            public int MaxFileSize = Log.DefaultMaxFileSize;
 
             public const string MAIN_THREAD_LOG_NAME = "";
 
@@ -105,7 +116,7 @@ namespace Cliver
             }
 
             /// <summary>
-            /// General writting log method.
+            /// Base writting log method.
             /// </summary>
             public void Write(Log.MessageType messageType, string message, string details = null)
             {
@@ -113,32 +124,9 @@ namespace Cliver
                 {
                     write(messageType, message, details);
                     if (messageType == Log.MessageType.EXIT)
-                    {
-                        if (exiting)
-                            return;
-                        exiting = true;
-                        //if (exitingThread != null)
-                        //    return;
-                        //exitingThread = ThreadRoutines.Start(() =>
-                        //{
-                        try
-                        {
-                            Exitig?.Invoke(message);
-                        }
-                        catch (Exception e)
-                        {
-                            write(Log.MessageType.ERROR, GetExceptionMessage(e));
-                        }
-                        finally
-                        {
-                            Environment.Exit(0);
-                        }
-                        //});
-                    }
+                        Environment.Exit(0);
                 }
             }
-            //static protected System.Threading.Thread exitingThread = null;
-            static protected bool exiting = false;
             void write(Log.MessageType messageType, string message, string details = null)
             {
                 lock (this)
@@ -184,13 +172,23 @@ namespace Cliver
                     }
 
                     message = (messageType == MessageType.LOG ? "" : messageType.ToString() + ": ") + message + (string.IsNullOrWhiteSpace(details) ? "" : "\r\n\r\n" + details);
-                    logWriter.WriteLine(DateTime.Now.ToString(Log.timePattern) + message);
+                    logWriter.WriteLine(DateTime.Now.ToString(Log.TimePattern) + message);
                     logWriter.Flush();
                 }
             }
             TextWriter logWriter = null;
 
+            /// <summary>
+            /// Called for Writing. 
+            /// </summary>
+            /// <param name="logWriterName"></param>
+            /// <param name="messageType"></param>
+            /// <param name="message"></param>
+            /// <param name="details"></param>
             public delegate void OnWrite(string logWriterName, Log.MessageType messageType, string message, string details);
+            /// <summary>
+            /// Triggered before writing message.
+            /// </summary>
             static public event OnWrite Writing = null;
         }
     }

@@ -5,6 +5,11 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>Example</RootNamespace>
     <StartupObject></StartupObject>
+    <Company>CliverSoft</Company>
+    <Authors>Sergey Stoyan</Authors>
+    <AssemblyName>CliverRoutinesExample</AssemblyName>
+    <Product></Product>
+    <PackageId>CliverRoutinesExample</PackageId>
   </PropertyGroup>
 
   <ItemGroup>

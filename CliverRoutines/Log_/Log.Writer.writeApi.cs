@@ -15,10 +15,6 @@ namespace Cliver
     {
         public abstract partial class Writer : IWriteApi
         {
-            /// <summary>
-            /// Write the error to the current thread's log
-            /// </summary>
-            /// <param name="e"></param>
             public void Error(Exception e)
             {
                 Write(MessageType.ERROR, GetExceptionMessage(e, !(e is Exception2)));
@@ -49,19 +45,11 @@ namespace Cliver
                 Write(MessageType.ERROR, message, GetExceptionMessage2(e));
             }
 
-            /// <summary>
-            /// Write the stack information for the caller.
-            /// </summary>
-            /// <param name="e"></param>
             public void Trace(object message = null)
             {
                 Write(MessageType.TRACE, message == null ? null : message.ToString(), GetStackString());
             }
 
-            /// <summary>
-            /// Write the error to the log and terminate the process.
-            /// </summary>
-            /// <param name="e"></param>
             public void Exit(string message)
             {
                 lock (this)
@@ -82,10 +70,6 @@ namespace Cliver
                 }
             }
 
-            /// <summary>
-            /// Write the error to the log and terminate the process.
-            /// </summary>
-            /// <param name="e"></param>
             public void Exit(Exception e)
             {
                 lock (this)
@@ -96,26 +80,19 @@ namespace Cliver
                 }
             }
 
-            public delegate void OnExitig(string message);
-            static public event OnExitig Exitig = null;
-
-            /// <summary>
-            /// Write warning with stack details.
-            /// </summary>
-            /// <param name="message"></param>
             public void Warning(string message)
             {
                 Write(MessageType.WARNING, message, GetStackString());
             }
 
-            /// <summary>
-            /// Write warning with exception with details.
-            /// </summary>
-            /// <param name="message"></param>
-            /// <param name="e"></param>
             public void Warning(string message, Exception e)
             {
                 Write(MessageType.WARNING, message, GetExceptionMessage(e, !(e is Exception2)));
+            }
+
+            public void Warning2(string message)
+            {
+                Write(MessageType.WARNING, message);
             }
 
             public void Warning2(string message, Exception e)
@@ -123,36 +100,14 @@ namespace Cliver
                 Write(MessageType.WARNING, message, GetExceptionMessage2(e));
             }
 
-            /// <summary>
-            /// Write warning without stack details.
-            /// </summary>
-            /// <param name="message"></param>
-            public void Warning2(string message)
-            {
-                Write(MessageType.WARNING, message);
-            }
-
-            /// <summary>
-            /// Write exception with details.
-            /// </summary>
-            /// <param name="e"></param>
             public void Warning(Exception e)
             {
                 Write(MessageType.WARNING, GetExceptionMessage(e, !(e is Exception2)));
             }
 
-            /// <summary>
-            /// Write exception without details.
-            /// </summary>
-            /// <param name="e"></param>
             public void Warning2(Exception e)
             {
                 Write(MessageType.WARNING, GetExceptionMessage2(e));
-            }
-
-            public void Inform(string message)
-            {
-                Write(MessageType.INFORM, message);
             }
 
             public void Inform0(string message)
@@ -160,14 +115,14 @@ namespace Cliver
                 Write(MessageType.INFORM, message, GetStackString());
             }
 
-            public void Write(string message)
+            public void Inform(string message)
             {
-                Write(MessageType.LOG, message);
+                Write(MessageType.INFORM, message);
             }
 
-            public void Write0(string message)
+            public void Debug0(string message)
             {
-                Write(MessageType.LOG, message, GetStackString());
+                Write(MessageType.DEBUG, message, GetStackString());
             }
 
             public void Debug(string message)
@@ -175,9 +130,14 @@ namespace Cliver
                 Write(MessageType.DEBUG, message);
             }
 
-            public void Debug0(string message)
+            public void Write0(string message)
             {
-                Write(MessageType.DEBUG, message, GetStackString());
+                Write(MessageType.LOG, message, GetStackString());
+            }
+
+            public void Write(string message)
+            {
+                Write(MessageType.LOG, message);
             }
         }
     }
