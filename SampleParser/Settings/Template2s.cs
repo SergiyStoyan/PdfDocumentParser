@@ -23,12 +23,12 @@ namespace Cliver.SampleParser
         {
             public List<Template2> Template2s = new List<Template2>();
 
-            public override void Loaded()
+            protected override void Loaded()
             {
                 __Info.Indented = false;
             }
 
-            public override void Saving()
+            protected override void Saving()
             {
                 Template2s.RemoveAll(x => string.IsNullOrWhiteSpace(x.Template.Name));
             }
@@ -53,7 +53,7 @@ namespace Cliver.SampleParser
             public delegate void OnTouchedChanged();
             public event OnTouchedChanged TouchedChanged;
 
-            public override void Saved()
+            protected override void Saved()
             {
                 touched = false;
                 TouchedChanged?.BeginInvoke(null, null);

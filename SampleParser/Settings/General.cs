@@ -42,13 +42,13 @@ namespace Cliver.SampleParser
             public bool UseOrderWeightPattern = false; 
             public bool SortSelectedUp = true;
 
-            public override void Loaded()
+            protected override void Loaded()
             {
                 if (string.IsNullOrWhiteSpace(InputFolder))
                     InputFolder = ProgramRoutines.GetAppDirectory();
             }
 
-            public override void Saving()
+            protected override void Saving()
             {
             }
         }

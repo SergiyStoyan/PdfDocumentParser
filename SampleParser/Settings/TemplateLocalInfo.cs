@@ -68,13 +68,13 @@ namespace Cliver.SampleParser
                 Save();
             }
 
-            public override void Loaded()
+            protected override void Loaded()
             {
                 if (TemplateNames2Info == null)
                     TemplateNames2Info = new Dictionary<string, Info>();
             }
 
-            public override void Saving()
+            protected override void Saving()
             {
             }
         }

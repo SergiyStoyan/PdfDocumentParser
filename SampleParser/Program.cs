@@ -50,7 +50,7 @@ namespace Cliver.SampleParser
             Config.Reload();
             Win.LogMessage.DisableStumblingDialogs = false;
             Log.DeleteOldLogsDialog = null;
-            Log.Initialize(Log.Mode.ALL_LOGS_ARE_IN_SAME_FOLDER,new System.Collections.Generic.List<string> { Log.CompanyCommonDataDir }, Log.Level.ALL);
+            Log.Initialize(Log.Mode.FOLDER_PER_SESSION, new System.Collections.Generic.List<string> { Log.CompanyUserDataDir });
         }
         public static readonly Version Version;
         public static readonly string Name;
@@ -61,7 +61,7 @@ namespace Cliver.SampleParser
             try
             {
                 PdfDocumentParser.Program.Initialize();
-                
+
                 Application.Run(MainForm.This);
             }
             catch (Exception e)
