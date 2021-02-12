@@ -105,7 +105,7 @@ setLicense();
             <h2><a name='repository'>Source code</a></h2>
             Open <a href='https://github.com/sergeystoyan/PdfDocumentParser' target='_blank'>repository</a>
         <p>
-            Do not download the latest code as is from a branch because it may be under development. Instead, go to releases and get the latest (pre-)release source code.
+            Do not use the latest code as is from a branch because it might be under development. Instead, go to releases and download the latest (pre-)release source code.
 
 
 
@@ -114,7 +114,7 @@ setLicense();
 
 
             <h1><a name="template">Template</a></h1>
-        <p>A parsing template is intended for parsing documents that comply with the same layout (e.g. reports issued by the same company). It contains information what data should be extracted, where and how.
+        <p>Template is intended for parsing documents that comply with the same layout (e.g. reports issued by the same company). It contains information what data should be extracted, where and how.
         <p>Obviously, applying a template to documents with layouts different from that it was designed for, brings to incorrect parsing.
         <p>
             Creating and modifying templates is preformed with <a href='#templateEditor'>
@@ -124,7 +124,7 @@ setLicense();
 
                 <h2><a name='anchor'>Anchor</a></h2>
         <p>
-            An anchor is a fragment of either text or image captured on a PDF page in order to be searched on any page needed afterwards. An anchor can be used in the following ways:
+            Anchor is a fragment of either text or image captured on a PDF page in order to be searched on any page needed afterwards. An anchor can be used in the following ways:
             <ul>
                 <li><a href="#field">fields</a> can be linked to it;</li>
                 <li>it can be engaged in <a href="#condition">conditions</a>;</li>
@@ -154,7 +154,7 @@ setLicense();
                     <td>
                         It allows to loose bonds between character boxes in the anchor when for some reason they can shift relatively to each other. It is measured in pixels and must be a positive float number, non-zero even for identical documents because of discrepancy reasoned by internal image re-scaling.
                         <br>It makes no sense, obviously, when the anchor consists of only 1 character.
-						<br><span class='attention'>NOTE: </span>Increasing this parameter might bring to a failing to detect the existing anchor because PdfDocumentParser looks for matches with rectangular which contain exactly the anchor's chars and does not contain any more chars (excluding invisible ones which can be ignored). That is, if there are several same chars located on a page close to each other within the deviation distance then the engine can catch one of them while the other one(s) can appear within the match rectangular making thus the match invalid. 						
+						<br><span class='attention'>NOTE: </span>Increasing this parameter might bring to failing to detect the existing anchor because PdfDocumentParser looks for matches with rectangular that contain exactly the anchor's chars and does not contain any more chars (excluding invisible ones which can be ignored). That is, if there are several same chars located on a page close to each other within the deviation distance then the engine can catch one of them while the other one(s) can appear within the match rectangular making thus the match invalid. 						
                     </td>
                 </tr>
                 <tr>
@@ -249,7 +249,7 @@ setLicense();
             A linked anchor is named 'child' of the linking one which is named 'parent'. When an anchor is linked to another anchor, its search area (when it is set to not entire page) becomes related to its parent anchor's position. That means that a parent anchor is searched not until its first match found as done for a stand-alone anchor, but until a match found that satisfies to the child anchor as well.
             <br>More specifically, when a child anchor has <a href='#anchorPdfText'>Search Rectangle Margin</a> set to not entire page, position of its parent anchor, while searching as parent, can differ from position of the very same anchor, while searching stand-alone.
             <br>The same consideration is true for child anchors too: an anchor, whose search area is set to not entire page, can change its position after linking to another anchor.
-            <br>Thus, <span class='attention'>NOTE: </span>An anchor acting stand-alone and the same anchor acting as a part of a compound anchor should be considered different anchors because they can have different positions on a page.
+            <br>Therefore, <span class='attention'>NOTE: </span>An anchor acting stand-alone and the same anchor acting as a part of a compound anchor should be considered different anchors because they can have different positions on a page.
         <p>
             Number of anchors in a compound anchor can be any. Though, it should be taken to account that processing time of recursive search performed for a compound anchor exponentially grows with the chain length.
 
@@ -265,15 +265,15 @@ setLicense();
 
 
             <h2><a name="condition">Condition</a></h2>
-        <p>A condition is defined by a boolean expression that depends on anchors. It is intended to be used in a custom application for deciding which actions should be performed on a PDF page. It is checked by method <a href='#IsCondition'><code>IsCondition(<condition name>)</code></a>.
+        <p>Condition is defined by a boolean expression that depends on anchors. It is intended to be used in a custom application for deciding which actions should be performed on a PDF page. It is checked by method <a href='#IsCondition'><code>IsCondition(<condition name>)</code></a>.
         <p>Conditions are identified by their names.
         <p>
-            The condition collection is dictated by the logic of an application.
+            The condition collection is dictated by logic of the application.
 
 
             <h3>Boolean expression</h3>
             Condition expressions are composed of the following symbols: &lt;anchor id&gt;, '!', '&', '|', '(', ')', 'T', 'F'. When an anchor referenced by &lt;anchor id&gt; is found then it is treated as True, otherwise False. The meaning of condition is the boolean result of its expression and is a function of pair [PDF page, template].
-        <p><span class='attention'>NOTE: </span>Operands '&' and '|' are processed successively, therefore, for instance, "1 | 2 & 3" and "2 & 3 | 1" are not equivalent. Parentheses should be used to manage precedence of operations.
+        <p><span class='attention'>NOTE: </span>Operands '&' and '|' are processed successively, thus, for instance, "1 | 2 & 3" and "2 & 3 | 1" are not equivalent. Parentheses should be used to manage precedence of operations.
         <p>
             Sample expressions:
             <table>
@@ -290,7 +290,7 @@ setLicense();
                 <td>Such an expression could be used for instance in decision whether a certain field should be parsed or passed off.</td></tr>
                 </tr>
                 <td class='title_column_center'>T</td>
-                <td>In order to keep the processing code unified, a condition can be predefined in some templates.</td></tr>
+                <td>In order to keep the processing code unified, the outcome of a condition can be predefined in some templates.</td></tr>
             </table>
 
             For more details refer to <a href='#tutorialCondition'>tutorial</a>.
@@ -303,7 +303,7 @@ setLicense();
 
 
             <h2><a name="field">Field</a></h2>
-        <p>A field defines certain text or image that is to be extracted from a PDF page. It is retrieved by method <a href='#GetValue'><code>GetValue()</code></a>.
+        <p>Field defines certain text or image that is to be extracted from a PDF page. It is retrieved by method <a href='#GetValue'><code>GetValue()</code></a>.
         <p>
             Fields are identified by their names. The field collection is dictated by logic of the application.
 
@@ -378,13 +378,13 @@ setLicense();
 
 
             <h2><a name='templateSettings'>Common settings</a></h2>
-            There are settings that are common within template scope and influence on parsing.
+            There are settings that are common within template scope and influence parsing.
 
 
 
             <h3>Space auto-detection</h3>
         <p>
-            When extracting text, PdfDocumentParser automatically detects spaces between words. This influences on the output of PdfText and OcrText fields and also, on displaying PdfText anchor's patterns in Template Editor.
+            When extracting text, PdfDocumentParser automatically detects spaces between words. This influences the output of PdfText and OcrText fields and also, displaying PdfText anchor's patterns in Template Editor.
             <table>
                 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
                 <tr>
@@ -400,7 +400,7 @@ setLicense();
 
             <h3>Scanned document preprocessing</h3>
         <p>
-            The following options are used for preprocessing of scanned PDF pages. They influence on OcrText or CvImage/ImageData anchors and OcrText or Image fields while PdfText type remains not affected.
+            The following options are used for preprocessing scanned PDF pages. It influences OcrText or CvImage/ImageData anchors and OcrText or Image fields while PdfText type remains not affected.
             <table>
                 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
                 <tr>
@@ -441,7 +441,7 @@ setLicense();
                     <td>Sometimes text entities in a PDF page can be duplicated meaning that they have (almost) the same location. Such duplications do not make a difference in the text itself (while maybe changing its look) but hinder search of PdfText anchors. For this reason, PDF pages are stripped from such duplicates. </td>
                 </tr>
             </table>
-            These parameters by default are <code>True</code> and switching them off is highly unrecommended. For this reason, they can only be edited manually in template data, not from GUI.
+            These parameters by default are <code>True</code> and switching them off is highly unrecommended. For this reason, they can only be edited directly in the template data, not from GUI.
 
 
 
@@ -479,7 +479,7 @@ setLicense();
                 </tr>
                 <tr>
                     <td class='title_column'><a name='GetValue'><code>GetValue(string fieldName, ValueTypes valueType)</code></a></td>
-                    <td>Extract a field from the page. The kind of returned object depends on valueType which is usually is not be supplied and the field's default valueType is used. Pay attention, that a field must always be referred to by name and not as a Field object. It is because a field can have multiple definitions which are multiple Field objects united under the same name. When some anchor of the field, if any, was not found, NULL is returned.</td>
+                    <td>Extract a field from the page. The kind of returned object depends on valueType which is usually not supplied and the field's default valueType is used instead. Pay attention, that a field must always be referred to by its name and not as a Field object. It is because a field can have multiple definitions that it is a bunch of Field objects united under the same name. When some anchor of the field, if any, was not found, NULL is returned.</td>
                 </tr>
             </table>
         <p>There can be more auxiliary properties and methods which are not mentioned here. Their use can be understood from the code.
@@ -506,16 +506,13 @@ pageCollection = new PageCollection(pdfFile);
 foreach(page in pageCollection)
 {
     //find the right template for the page
-    if(pageCollection.ActiveTemplate == null)
-    {
-        foreach(template in templates)
-        {
-            pageCollection.ActiveTemplate = template;
-            if(page.IsCondition("TemplateCorrespondsToPage"))
-                break;
-            pageCollection.ActiveTemplate = null;
-        }
-    }
+	foreach(template in templates)
+	{
+		pageCollection.ActiveTemplate = template;
+		if(page.IsCondition("TemplateCorrespondsToPage"))
+			break;
+		pageCollection.ActiveTemplate = null;
+	}
     
     if(pageCollection.ActiveTemplate == null)
     {
@@ -624,7 +621,7 @@ foreach(page in pageCollection)
                 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
                 <tr>
                     <td class='title_column'><a name='PdfPageImageResolution'>PdfPageImageResolution</a></td>
-                    <td>It is the resolution with which PdfDocumentParser converts PDF pages into images. It influences on the quality of PDF view in Template Editor.
+                    <td>It is the resolution with which PdfDocumentParser converts PDF pages into images. It influences the quality of PDF view in Template Editor.
         <p>What is more important, it also impacts on work of OctText anchors and fields. It must be not less than 300dpi (even if the resolution of input documents is lower), otherwise OCR will not work properly. The higher the resolution, the better quality of OCR is. On the other hand, increasing the resolution increases processing time.
         <p>
             Usually there is no need to touch it.</td></tr>
