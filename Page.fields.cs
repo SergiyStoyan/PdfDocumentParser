@@ -276,6 +276,12 @@ namespace Cliver.PdfDocumentParser
             return value;
         }
 
+        public static void NormalizeText(List<string> values)
+        {
+            for (int i = 0; i < values.Count; i++)
+                values[i] = NormalizeText(values[i]);
+        }
+
         internal static Bitmap GetScaledImage2Pdf(Image image)
         {
             var b = new Bitmap((int)Math.Round(image.Width * Settings.Constants.Image2PdfResolutionRatio, 0), (int)Math.Round(image.Height * Settings.Constants.Image2PdfResolutionRatio, 0), PixelFormat.Format24bppRgb);
