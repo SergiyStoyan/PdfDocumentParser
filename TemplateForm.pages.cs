@@ -236,7 +236,6 @@ namespace Cliver.PdfDocumentParser
                             return Page.NormalizeText((string)v);
                         if (field.DefaultValueType == Template.Field.ValueTypes.PdfTextLines)
                             return Page.NormalizeText(string.Join("\r\n", (List<string>)v));
-                        //if (field.DefaultValueType == Template.Field.ValueTypes.PdfTextCharBoxs)
                         return Page.NormalizeText(Serialization.Json.Serialize(v));
                         //drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
                         //if (field.DefaultValueType == Template.Field.ValueTypes.OcrText)
