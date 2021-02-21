@@ -379,9 +379,11 @@ namespace Cliver.PdfDocumentParser
                 //    if (fn != null)
                 //        throw new Exception("Field '" + fn + "' is a column of table field " + f0.Name + " so " + f0.Name + " must have number of definitions not less then that of " + fn + ".");
                 //}
-                string fn = t.Fields.Where(x => x.ColumnOfTable != null && (x.DefaultValueType != Template.Field.ValueTypes.PdfText && x.DefaultValueType != Template.Field.ValueTypes.PdfTextLines)).FirstOrDefault()?.Name;
-                if (fn != null)
-                    throw new Exception("Field '" + fn + "' is a column of a table field. Its default value type can be either " + Template.Field.ValueTypes.PdfText + " or " + Template.Field.ValueTypes.PdfTextLines);
+
+                //it is done only to avoid unneeded OCR
+                //string fn = t.Fields.Where(x => x.ColumnOfTable != null && (x.DefaultValueType != Template.Field.ValueTypes.PdfText && x.DefaultValueType != Template.Field.ValueTypes.PdfTextLines)).FirstOrDefault()?.Name;
+                //if (fn != null)
+                //    throw new Exception("Field '" + fn + "' is a column of a table field. Its default value type can be either " + Template.Field.ValueTypes.PdfText + " or " + Template.Field.ValueTypes.PdfTextLines);
             }
 
             if (saving)
