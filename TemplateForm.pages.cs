@@ -199,13 +199,52 @@ namespace Cliver.PdfDocumentParser
                     case Template.Field.ValueTypes.OcrText:
                     case Template.Field.ValueTypes.OcrTextLines:
                     case Template.Field.ValueTypes.OcrCharBoxs:
+                        if (field.ColumnOfTable != null)
+                        {
+                            if (!fai.TableFieldActualInfo.Found)
+                                return null;
+                            drawBoxes(Settings.Appearance.TableBoxColor, Settings.Appearance.TableBoxBorderWidth, new List<RectangleF> { (RectangleF)fai.TableFieldActualInfo.ActualRectangle });
+                            if (ShowFieldTextLineSeparators.Checked)
+                            {
+                                RectangleF tableAR = (RectangleF)fai.TableFieldActualInfo.ActualRectangle;
+                                List<Ocr.Line> lines = Ocr.GetLines(Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateOcrCharBoxs, tableAR), pages.ActiveTemplate.TextAutoInsertSpace).ToList();
+                                List<RectangleF> lineBoxes = new List<RectangleF>();
+                                for (int i = 1; i < lines.Count; i++)
+                                {
+                                    if (lines[i].Bottom < tableAR.Top || lines[i].Top > tableAR.Bottom
+                                        || lines[i].Bottom < r.Top || lines[i].Top > r.Bottom
+                                        )
+                                        continue;
+                                    lineBoxes.Add(new RectangleF { X = r.X, Y = lines[i].Top, Width = r.Width, Height = 0 });
+                                }
+                                drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.TextLineSeparatorWidth, lineBoxes);
+                            }
+                        }
+                        else
+                        {
+                            if (ShowFieldTextLineSeparators.Checked)
+                            {
+                                List<Ocr.Line> lines = Ocr.GetLines(Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateOcrCharBoxs, r), pages.ActiveTemplate.TextAutoInsertSpace).ToList();
+                                List<RectangleF> lineBoxes = new List<RectangleF>();
+                                for (int i = 1; i < lines.Count; i++)
+                                    lineBoxes.Add(new RectangleF { X = r.X, Y = lines[i].Top, Width = r.Width, Height = 0 });
+                                drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.TextLineSeparatorWidth, lineBoxes);
+                            }
+                        }
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
-                        if (field.DefaultValueType == Template.Field.ValueTypes.OcrText)
+                        if (field.DefaultValueType == Template.Field.ValueTypes.PdfText)
                             return Page.NormalizeText((string)v);
-                        if (field.DefaultValueType == Template.Field.ValueTypes.OcrTextLines)
+                        if (field.DefaultValueType == Template.Field.ValueTypes.PdfTextLines)
                             return Page.NormalizeText(string.Join("\r\n", (List<string>)v));
-                        //if (field.DefaultValueType == Template.Field.ValueTypes.OcrTextCharBoxs)
+                        //if (field.DefaultValueType == Template.Field.ValueTypes.PdfTextCharBoxs)
                         return Page.NormalizeText(Serialization.Json.Serialize(v));
+                        //drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
+                        //if (field.DefaultValueType == Template.Field.ValueTypes.OcrText)
+                        //    return Page.NormalizeText((string)v);
+                        //if (field.DefaultValueType == Template.Field.ValueTypes.OcrTextLines)
+                        //    return Page.NormalizeText(string.Join("\r\n", (List<string>)v));
+                        ////if (field.DefaultValueType == Template.Field.ValueTypes.OcrTextCharBoxs)
+                        //return Page.NormalizeText(Serialization.Json.Serialize(v));
                     case Template.Field.ValueTypes.Image:
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
                         return v;
