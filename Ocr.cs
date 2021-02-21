@@ -33,6 +33,11 @@ namespace Cliver.PdfDocumentParser
                     _engine.Dispose();
                     _engine = null;
                 }
+                if (lastPage != null)
+                {
+                    lastPage.Dispose();
+                    lastPage = null;
+                }
             }
         }
 
@@ -49,13 +54,36 @@ namespace Cliver.PdfDocumentParser
         }
         Tesseract.TesseractEngine _engine = null;
 
+        Tesseract.Page getPage(Bitmap b)
+        {
+            if (lastBitmap != b)
+            {
+                lastBitmap = b;
+                lastPage?.Dispose();
+                lastPage = engine.Process(b, PageSegMode.SingleBlock);
+            }
+            return lastPage;
+        }
+        Bitmap lastBitmap = null;
+        Tesseract.Page lastPage = null;
+
         public int DetectOrientationAngle(Bitmap b, out float confidence)
         {
-            using (var page = engine.Process(b, PageSegMode.OsdOnly))
-            {
-                page.DetectBestOrientation(out int o, out confidence);
-                return o;
-            }
+            Tesseract.Page page = getPage(b);
+            page.DetectBestOrientation(out int o, out confidence);
+            return o;
+        }
+
+        public Orientation DetectOrientation(Bitmap b)
+        {
+            Tesseract.Page page = getPage(b);
+            return page.AnalyseLayout().GetProperties().Orientation;
+        }
+
+        public float DetectDeskewAngle(Bitmap b)
+        {
+            Tesseract.Page page = getPage(b);
+            return page.AnalyseLayout().GetProperties().DeskewAngle;
         }
 
         public string GetTextSurroundedByRectangle(Bitmap b, RectangleF r)
@@ -72,45 +100,24 @@ namespace Cliver.PdfDocumentParser
 
         public string GetHtml(Bitmap b)
         {
-            using (var page = engine.Process(b, PageSegMode.SingleBlock))
-            {
-                return page.GetHOCRText(0, false);
-            }
+            Tesseract.Page page = getPage(b);
+            return page.GetHOCRText(0, false);
         }
-
-        public static string GetText(List<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace)
-        {
-            List<string> ls = new List<string>();
-            foreach (Line l in GetLines(cbs, textAutoInsertSpace))
-            {
-                StringBuilder sb = new StringBuilder();
-                foreach (CharBox cb in l.CharBoxs)
-                    sb.Append(cb.Char);
-                ls.Add(sb.ToString());
-            }
-            return string.Join("\r\n", ls);
-        }
-
-        //public static string GetText(List<CharBox> orderedCbs)
-        //{
-        //    return orderedCbs.Aggregate(new StringBuilder(), (sb, n) => sb.Append(n.Char)).ToString();
-        //}
 
         public List<CharBox> GetCharBoxs(Bitmap b)
         {
             List<CharBox> cbs = new List<CharBox>();
-            using (var page = engine.Process(b, PageSegMode.SingleBlock))
-            {
-                //string t = page.GetHOCRText(1, true);
-                //var dfg = page.GetThresholdedImage();                        
-                //Tesseract.Orientation o;
-                //float c;
-                // page.DetectBestOrientation(out o, out c);
-                //  var l = page.AnalyseLayout();
-                //var ti =   l.GetBinaryImage(Tesseract.PageIteratorLevel.Para);
-                //Tesseract.Rect r;
-                // l.TryGetBoundingBox(Tesseract.PageIteratorLevel.Block, out r);
-                using (var i = page.GetIterator())
+            Tesseract.Page page = getPage(b);
+            //string t = page.GetHOCRText(1, true);
+            //var dfg = page.GetThresholdedImage();                        
+            //Tesseract.Orientation o;
+            //float c;
+            // page.DetectBestOrientation(out o, out c);
+            //  var l = page.AnalyseLayout();
+            //var ti =   l.GetBinaryImage(Tesseract.PageIteratorLevel.Para);
+            //Tesseract.Rect r;
+            // l.TryGetBoundingBox(Tesseract.PageIteratorLevel.Block, out r);
+            using (var i = page.GetIterator())
                 {
                     //int j = 0;
                     //i.Begin();
@@ -181,8 +188,25 @@ namespace Cliver.PdfDocumentParser
                     //    } while (i.Next(PageIteratorLevel.Para, PageIteratorLevel.TextLine));
                     //} while (i.Next(PageIteratorLevel.Block, PageIteratorLevel.Para));
                 }
-            }
             return cbs;
+        }
+
+        //public static string GetText(List<CharBox> orderedCbs)
+        //{
+        //    return orderedCbs.Aggregate(new StringBuilder(), (sb, n) => sb.Append(n.Char)).ToString();
+        //}
+
+        public static string GetText(List<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace)
+        {
+            List<string> ls = new List<string>();
+            foreach (Line l in GetLines(cbs, textAutoInsertSpace))
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (CharBox cb in l.CharBoxs)
+                    sb.Append(cb.Char);
+                ls.Add(sb.ToString());
+            }
+            return string.Join("\r\n", ls);
         }
 
         public class CharBox : Page.CharBox
@@ -212,7 +236,7 @@ namespace Cliver.PdfDocumentParser
 
         public static List<Line> GetLines(IEnumerable<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace)
         {
-            bool spaceAutoInsert = textAutoInsertSpace!=null&& textAutoInsertSpace.Threshold > 0;
+            bool spaceAutoInsert = textAutoInsertSpace != null && textAutoInsertSpace.Threshold > 0;
             cbs = cbs.OrderBy(a => a.R.X).ToList();
             List<Line> lines = new List<Line>();
             foreach (CharBox cb in cbs)
@@ -252,7 +276,7 @@ namespace Cliver.PdfDocumentParser
                     l.CharBoxs.Add(cb);
                     lines.Add(l);
                 }
-                CONTINUE:;
+            CONTINUE:;
             }
             return lines;
         }
