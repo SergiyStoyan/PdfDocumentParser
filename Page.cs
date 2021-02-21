@@ -166,6 +166,18 @@ namespace Cliver.PdfDocumentParser
 
                     if (PageCollection.ActiveTemplate.AutoDeskew)
                     {
+                        ////long images processing:
+                        //Bitmap b2 = new Bitmap(b.Width, b.Height);
+                        //using (Graphics g2 = Graphics.FromImage(b2))
+                        //{
+                        //    //detect blocks by find contours in Emgu
+                        //    foreach (Bitmap block in blocks)
+                        //    {
+                        //        Bitmap block2 = deskew(block);
+                        //        block.Dispose();
+                        //        g2.DrawImage(block2, x, y);
+                        //    }
+                        //}
                         using (ImageMagick.MagickImage image = new ImageMagick.MagickImage(b))
                         {
                             //image.Density = new PointD(600, 600);

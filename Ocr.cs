@@ -66,7 +66,7 @@ namespace Cliver.PdfDocumentParser
             if (cachedPageBitmap != b)
             {
                 cachedPage?.Dispose();
-                cachedPage = engine.Process(b, PageSegMode.SingleBlock);
+                cachedPage = engine.Process(b, PageSegMode.SparseTextOsd);
                 cachedPageBitmap = b;
             }
             return cachedPage;
@@ -320,5 +320,34 @@ namespace Cliver.PdfDocumentParser
             }
             return orderedCbs;
         }
+
+        //public Bitmap CardinalDeskew(Bitmap b)//!!!debug
+        //{
+        //    Bitmap b2 = new Bitmap(b.Width, b.Height);
+        //    using (Graphics g = Graphics.FromImage(b2))
+        //    {
+        //        Tesseract.Page page = getPage(b);
+        //        Tesseract.PixToBitmapConverter c = new PixToBitmapConverter();
+        //        using (var i = page.GetIterator())
+        //        {
+        //            do
+        //            {
+        //                string t = i.GetText(PageIteratorLevel.Block);
+
+        //                Pix p = i.GetImage(PageIteratorLevel.Block, 0, out int x, out int y).Deskew(out Scew scew);
+        //              //p=  p.Rotate(scew.Angle, RotationMethod.AreaMap);
+        //                Bitmap b_ = c.Convert(p);
+        //                //System.Drawing.Imaging.BitmapData bd = b2.LockBits(new Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+        //                 //   System.Runtime.InteropServices.Marshal.Copy(bd.Scan0, rawImageData, 0, w * h);
+        //                 //bitmap.UnlockBits(bd);                        
+        //                    g.DrawImage(b_, x, y);                 
+
+        //                //string t3 = i.GetText(PageIteratorLevel.Para);
+        //            } while (i.Next(PageIteratorLevel.Block));
+        //        }
+        //    }
+        //    b.Dispose();
+        //    return b2;
+        //}
     }
 }
