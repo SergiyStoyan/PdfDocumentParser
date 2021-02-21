@@ -32,7 +32,7 @@ namespace Cliver.SampleParser
                 return;
             }
 
-            string output_records_file = Settings.General.InputFolder + "\\_output.csv";
+            string output_records_file = FileSystemRoutines.CreateDirectory(Settings.General.OutputFolder) + "\\_output.csv";
             if (File.Exists(output_records_file))
                 File.Delete(output_records_file);
             TextWriter tw = new StreamWriter(output_records_file, false);
@@ -51,10 +51,9 @@ namespace Cliver.SampleParser
 
             tw.WriteLine(FieldPreparation.GetCsvHeaderLine(headers, FieldPreparation.FieldSeparator.COMMA));
 
-            List<string> files = FileSystemRoutines.GetFiles(Settings.General.InputFolder, Settings.General.ReadInputFolderRecursively);
+            List<string> files = FileSystemRoutines.GetFiles(Settings.General.InputFolder, false);
             files.Remove(output_records_file);
-            if (Settings.General.IgnoreHiddenFiles)
-                files = files.Select(f => new FileInfo(f)).Where(fi => !fi.Attributes.HasFlag(FileAttributes.Hidden)).Select(fi => fi.FullName).ToList();
+            files = files.Select(f => new FileInfo(f)).Where(fi => !fi.Attributes.HasFlag(FileAttributes.Hidden)).Select(fi => fi.FullName).ToList();
 
             int processed_files = 0;
             int total_files = files.Count;

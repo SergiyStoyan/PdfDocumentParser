@@ -52,7 +52,7 @@ namespace Cliver.PdfDocumentParser
         ///// <summary>
         ///// !!!passing Template.Field is deceitful for 2 reasons:
         ///// - it may belong to another template than ActiveTemplate;
-        ///// - it implies that a Template.Field object is equivalent to a field while it is a defintion;
+        ///// - it implies that a Template.Field object is equivalent to a field while it is just one of its defintions;
         ///// </summary>
         ///// <param name="field"></param>
         ///// <returns></returns>
@@ -146,17 +146,20 @@ namespace Cliver.PdfDocumentParser
                     case Template.Field.ValueTypes.OcrText:
                         if (ActualField.ColumnOfTable == null)
                             return Ocr.This.GetTextSurroundedByRectangle(page.ActiveTemplateBitmap, r);
-                        throw new Exception("This code has to be debugged!");
+                        //throw new Exception("This code has to be debugged!");
                         return string.Join("\r\n", getOcrTextLinesAsTableColumn());
                     case Template.Field.ValueTypes.OcrTextLines:
-                        throw new Exception("This code has to be debugged!");
+                        //throw new Exception("This code has to be debugged!");
                         if (ActualField.ColumnOfTable == null)
                             return Regex.Split(Ocr.This.GetTextSurroundedByRectangle(page.ActiveTemplateBitmap, r), "$", RegexOptions.Multiline);
                         return getOcrTextLinesAsTableColumn();
                     case Template.Field.ValueTypes.OcrCharBoxs:
                         return Ocr.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, r);
                     case Template.Field.ValueTypes.Image:
-                        using (Bitmap b = page.GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
+                        Bitmap b = page.GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio);
+                        if (b == null)
+                            return null;
+                        using (b)
                         {
                             return Page.GetScaledImage2Pdf(b);
                         }
@@ -274,6 +277,12 @@ namespace Cliver.PdfDocumentParser
             value = Regex.Replace(value, @"\s+", " ");
             value = value.Trim();
             return value;
+        }
+
+        public static void NormalizeText(List<string> values)
+        {
+            for (int i = 0; i < values.Count; i++)
+                values[i] = NormalizeText(values[i]);
         }
 
         internal static Bitmap GetScaledImage2Pdf(Image image)

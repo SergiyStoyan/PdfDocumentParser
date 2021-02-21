@@ -42,8 +42,6 @@ namespace Cliver.SampleParser
 
             Message.Owner = this;
 
-            InputFolder.Text = Settings.General.InputFolder;
-
             LoadTemplates();
 
             Active.ValueType = typeof(bool);
@@ -160,7 +158,7 @@ namespace Cliver.SampleParser
                         case "FileFilterRegex":
                             t.FileFilterRegex = (Regex)r.Cells["FileFilterRegex"].Value;
                             Settings.Template2s.Touch();
-                            return;                            return;
+                            return; return;
                     }
                 }
                 catch (Exception ex)
@@ -271,7 +269,7 @@ namespace Cliver.SampleParser
             if (t == null)
                 return;
 
-         Template2Form   tf = new Template2Form(t);
+            Template2Form tf = new Template2Form(t);
             if (tf.ShowDialog() != DialogResult.OK)
                 return;
             r.Cells["Active"].Value = t.Active;
@@ -426,19 +424,6 @@ namespace Cliver.SampleParser
             }
         }
 
-        private void bInputFolder_Click(object sender, EventArgs e)
-        {
-            FolderBrowserDialog d = new FolderBrowserDialog();
-            if (string.IsNullOrWhiteSpace(d.SelectedPath))
-                if (string.IsNullOrWhiteSpace(Settings.General.InputFolder))
-                    d.SelectedPath = Log.AppDir;
-                else
-                    d.SelectedPath = Settings.General.InputFolder;
-            if (d.ShowDialog() != System.Windows.Forms.DialogResult.OK)
-                return;
-            InputFolder.Text = d.SelectedPath;
-        }
-
         private void bRun_Click(object sender, EventArgs e)
         {
             if (processorThread != null && processorThread.IsAlive)
@@ -454,9 +439,6 @@ namespace Cliver.SampleParser
 
             if (!saveTemplatesFromTableIfTouched(false))
                 return;
-
-            Settings.General.InputFolder = InputFolder.Text;
-            Settings.General.Save();
 
             bRun.Enabled = false;
             processorThread = Cliver.ThreadRoutines.Start(
@@ -535,6 +517,16 @@ namespace Cliver.SampleParser
         {
             PdfDocumentParser.SettingsForm sf = new PdfDocumentParser.SettingsForm();
             sf.ShowDialog();
+        }
+
+        private void bInput_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(Cliver.FileSystemRoutines.CreateDirectory(Settings.General.InputFolder));
+        }
+
+        private void bOutput_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(Cliver.FileSystemRoutines.CreateDirectory(Settings.General.OutputFolder));
         }
     }
 }

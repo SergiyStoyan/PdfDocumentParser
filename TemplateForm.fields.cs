@@ -583,7 +583,7 @@ namespace Cliver.PdfDocumentParser
                 }
 
                 fields.CurrentCell = fields[0, row.Index];
-                Template.Field f = (Template.Field)row.Tag;
+                //Template.Field f = (Template.Field)row.Tag;
                 //setCurrentAnchorRow(f.LeftAnchorId, true);
                 //setCurrentAnchorRow(f.TopAnchorId, false);
                 //setCurrentAnchorRow(f.RightAnchorId, false);

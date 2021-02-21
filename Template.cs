@@ -32,20 +32,6 @@ namespace Cliver.PdfDocumentParser
         public bool IgnoreInvisiblePdfChars = true;//used but not edited
         public bool IgnoreDuplicatedPdfChars = true;//used but not edited
 
-        public PageRotations PageRotation = PageRotations.NONE;
-        public enum PageRotations
-        {
-            NONE,
-            Clockwise90,
-            Clockwise180,
-            Clockwise270,
-            AutoDetection
-        }
-
-        public bool AutoDeskew = false;
-        public int AutoDeskewThreshold = 1;
-        public int CvImageScalePyramidStep = 2;
-
         public List<Anchor> Anchors;
 
         public List<Condition> Conditions;

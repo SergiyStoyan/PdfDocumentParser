@@ -114,7 +114,7 @@ setLicense();
 
 
             <h1><a name="template">Template</a></h1>
-        <p>Template is intended for parsing documents that comply with the same layout (e.g. reports issued by the same company). It contains information what data should be extracted, where and how.
+        <p>A template is intended for parsing documents that comply with the same layout (e.g. reports issued by the same company). It contains information what data should be extracted, where and how.
         <p>Obviously, applying a template to documents with layouts different from that it was designed for, brings to incorrect parsing.
         <p>
             Creating and modifying templates is preformed with <a href='#templateEditor'>
@@ -124,7 +124,7 @@ setLicense();
 
                 <h2><a name='anchor'>Anchor</a></h2>
         <p>
-            Anchor is a fragment of either text or image captured on a PDF page in order to be searched on any page needed afterwards. An anchor can be used in the following ways:
+            An anchor is a fragment of either text or image captured on a PDF page in order to be searched on any page needed afterwards. An anchor can be used in the following ways:
             <ul>
                 <li><a href="#field">fields</a> can be linked to it;</li>
                 <li>it can be engaged in <a href="#condition">conditions</a>;</li>
@@ -242,7 +242,7 @@ setLicense();
 
 
             <h3>Compound anchor</h3>
-        <p>Compound anchor is a chain of successively linked anchors. It is represented by the last anchor in the chain which gives one's position to it. It is used just like a simple anchor.
+        <p>A compound anchor is a chain of successively linked anchors. It is represented by the last anchor in the chain which gives one's position to it. It is used just like a simple anchor.
         <p>Compound anchors are used when more conditioned search is required.
         <p>A compound anchor is not found when some of its anchors is not found.
         <p>
@@ -265,7 +265,7 @@ setLicense();
 
 
             <h2><a name="condition">Condition</a></h2>
-        <p>Condition is defined by a boolean expression that depends on anchors. It is intended to be used in a custom application for deciding which actions should be performed on a PDF page. It is checked by method <a href='#IsCondition'><code>IsCondition(<condition name>)</code></a>.
+        <p>A condition is defined by a boolean expression that depends on anchors. It is intended to be used in a custom application for deciding which actions should be performed on a PDF page. It is checked by method <a href='#IsCondition'><code>IsCondition(<condition name>)</code></a>.
         <p>Conditions are identified by their names.
         <p>
             The condition collection is dictated by logic of the application.
@@ -303,7 +303,7 @@ setLicense();
 
 
             <h2><a name="field">Field</a></h2>
-        <p>Field defines certain text or image that is to be extracted from a PDF page. It is retrieved by method <a href='#GetValue'><code>GetValue()</code></a>.
+        <p>A field defines certain text or image that is to be extracted from a PDF page. It is retrieved by method <a href='#GetValue'><code>GetValue()</code></a>.
         <p>
             Fields are identified by their names. The field collection is dictated by logic of the application.
 
@@ -405,11 +405,11 @@ setLicense();
                 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
                 <tr>
                     <td class='title_column'><a name='AutoDeskew'>Auto-Deskew</a></td>
-                    <td>It is used for scanned documents. It is always advisable to keep it active in templates targeted to scanned documents. </td>
+                    <td>It is intended for scanned documents. It is always advisable to keep it active in templates targeted to scanned documents. </td>
                 </tr>
                 <tr>
                     <td class='title_column'><a name='PageRotation'>Rotate Pages</a></td>
-                    <td>It is used mostly for scanned documents. A page must be correctly oriented to get OCR working properly on it.</td>
+                    <td>It is intended mostly for scanned documents. A page must be correctly oriented to get OCR working properly on it.</td>
                 </tr>
             </table>
 

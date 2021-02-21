@@ -68,7 +68,7 @@ namespace Cliver.SampleParser
                     {
                         Name = "",
                         PageRotation = PdfDocumentParser.Template.PageRotations.NONE,
-                        AutoDeskew = false,
+                        Deskew = false,
                         Anchors = new List<Template.Anchor>(),
                         Conditions = new List<Template.Condition> {
                             new Template.Condition { Name = Template2.ConditionNames.DocumentFirstPage },

@@ -80,10 +80,7 @@ namespace Cliver.PdfDocumentParser
                 textAutoInsertSpaceThreshold.Value = (decimal)t.TextAutoInsertSpace.Threshold;
                 textAutoInsertSpaceRepresentative.Text = Regex.Escape(t.TextAutoInsertSpace.Representative);
 
-                pageRotation.SelectedIndex = (int)t.PageRotation;
-                autoDeskew.Checked = t.AutoDeskew;
-                autoDeskewThreshold.Value = t.AutoDeskewThreshold;
-                CvImageScalePyramidStep.Value = t.CvImageScalePyramidStep;
+                bitmapPreparationForm.SetUI(t, false);
 
                 anchors.Rows.Clear();
                 if (t.Anchors != null)
@@ -192,7 +189,7 @@ namespace Cliver.PdfDocumentParser
 
         private void showAsJson_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Template t = getTemplateFromUI(false);
+            Template t = GetTemplateFromUI(false);
             TextForm tf = new TextForm("Template JSON object", Serialization.Json.Serialize(t), true);
             while (tf.ShowDialog() == DialogResult.OK)
                 try
@@ -202,7 +199,7 @@ namespace Cliver.PdfDocumentParser
                     setUIFromTemplate(t2);
                     break;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Message.Error2("Updating template:", ex);
                 }
@@ -217,7 +214,7 @@ namespace Cliver.PdfDocumentParser
         {
             try
             {
-                templateManager.Template = getTemplateFromUI(true);
+                templateManager.Template = GetTemplateFromUI(true);
                 templateManager.Save();
                 DialogResult = DialogResult.OK;
                 Close();
@@ -228,7 +225,7 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        Template getTemplateFromUI(bool saving)
+        internal Template GetTemplateFromUI(bool saving)
         {
             Template t = new Template();
 
@@ -243,10 +240,7 @@ namespace Cliver.PdfDocumentParser
                 Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text),
             };
 
-            t.PageRotation = (Template.PageRotations)pageRotation.SelectedIndex;
-            t.AutoDeskew = autoDeskew.Checked;
-            t.AutoDeskewThreshold = (int)autoDeskewThreshold.Value;
-            t.CvImageScalePyramidStep = (int)CvImageScalePyramidStep.Value;
+            bitmapPreparationForm.SetTemplate(t);
 
             bool? removeNotLinkedAnchors = null;
             List<int> conditionAnchorIds = null;
@@ -273,10 +267,9 @@ namespace Cliver.PdfDocumentParser
                     if (!a.IsSet())
                         throw new Exception("Anchor[Id=" + a.Id + "] is not set!");
 
-                    bool engaged = false;
-                    if (conditionAnchorIds.Contains(a.Id))
-                        engaged = true;
-                    if (!engaged)
+                    if (!conditionAnchorIds.Contains(a.Id))
+                    {
+                        bool engaged = false;
                         foreach (DataGridViewRow rr in anchors.Rows)
                         {
                             Template.Anchor a_ = (Template.Anchor)rr.Tag;
@@ -288,27 +281,36 @@ namespace Cliver.PdfDocumentParser
                                 break;
                             }
                         }
-                    if (!engaged)
-                        foreach (DataGridViewRow rr in fields.Rows)
+                        if (!engaged)
                         {
-                            Template.Field m = (Template.Field)rr.Tag;
-                            if (m != null && (m.LeftAnchor?.Id == a.Id || m.TopAnchor?.Id == a.Id || m.RightAnchor?.Id == a.Id || m.BottomAnchor?.Id == a.Id))
+                            foreach (DataGridViewRow rr in fields.Rows)
                             {
-                                engaged = true;
-                                break;
+                                Template.Field m = (Template.Field)rr.Tag;
+                                if (m != null && (m.LeftAnchor?.Id == a.Id || m.TopAnchor?.Id == a.Id || m.RightAnchor?.Id == a.Id || m.BottomAnchor?.Id == a.Id))
+                                {
+                                    engaged = true;
+                                    break;
+                                }
+                            }
+                            if (!engaged)
+                            {
+                                if (a.Id != t.ScalingAnchorId)
+                                {
+                                    if (removeNotLinkedAnchors == null)
+                                        removeNotLinkedAnchors = Message.YesNo("The template contains not linked anchor[s]. Should they be removed?");
+                                    if (removeNotLinkedAnchors == true)
+                                        continue;
+                                }
                             }
                         }
-                    if (!engaged)
-                    {
-                        if (removeNotLinkedAnchors == null)
-                            removeNotLinkedAnchors = Message.YesNo("The template contains not linked anchor[s]. Should they be removed?");
-                        if (removeNotLinkedAnchors == true)
-                            continue;
                     }
                 }
                 t.Anchors.Add((Template.Anchor)Serialization.Json.Clone2(a));
             }
             t.Anchors = t.Anchors.OrderBy(a => a.Id).ToList();
+
+            if (saving)
+                t.GetScalingAnchor();//check is it is correct;
 
             t.Conditions = new List<Template.Condition>();
             foreach (DataGridViewRow r in conditions.Rows)
@@ -379,9 +381,11 @@ namespace Cliver.PdfDocumentParser
                 //    if (fn != null)
                 //        throw new Exception("Field '" + fn + "' is a column of table field " + f0.Name + " so " + f0.Name + " must have number of definitions not less then that of " + fn + ".");
                 //}
-                string fn = t.Fields.Where(x => x.ColumnOfTable != null && (x.DefaultValueType != Template.Field.ValueTypes.PdfText && x.DefaultValueType != Template.Field.ValueTypes.PdfTextLines)).FirstOrDefault()?.Name;
-                if (fn != null)
-                    throw new Exception("Field '" + fn + "' is a column of a table field. Its default value type can be either " + Template.Field.ValueTypes.PdfText + " or " + Template.Field.ValueTypes.PdfTextLines);
+
+                //it is done only to avoid unneeded OCR
+                //string fn = t.Fields.Where(x => x.ColumnOfTable != null && (x.DefaultValueType != Template.Field.ValueTypes.PdfText && x.DefaultValueType != Template.Field.ValueTypes.PdfTextLines)).FirstOrDefault()?.Name;
+                //if (fn != null)
+                //    throw new Exception("Field '" + fn + "' is a column of a table field. Its default value type can be either " + Template.Field.ValueTypes.PdfText + " or " + Template.Field.ValueTypes.PdfTextLines);
             }
 
             if (saving)
