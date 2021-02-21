@@ -30,19 +30,10 @@
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.bAbout = new System.Windows.Forms.Button();
-            this.bInputFolder = new System.Windows.Forms.Button();
-            this.InputFolder = new System.Windows.Forms.TextBox();
             this.bExit = new System.Windows.Forms.Button();
             this.bRun = new System.Windows.Forms.Button();
             this.progress = new System.Windows.Forms.ProgressBar();
-            this.label1 = new System.Windows.Forms.Label();
             this.template2s = new System.Windows.Forms.DataGridView();
-            this.bLog = new System.Windows.Forms.Button();
-            this.bSettings = new System.Windows.Forms.Button();
-            this.lProgress = new System.Windows.Forms.Label();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-            this.saveTemplates = new System.Windows.Forms.Button();
             this.Selected = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Edit = new System.Windows.Forms.DataGridViewButtonColumn();
             this.Copy = new System.Windows.Forms.DataGridViewButtonColumn();
@@ -54,6 +45,12 @@
             this.Comment = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ModifiedTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FileFilterRegex = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.bLog = new System.Windows.Forms.Button();
+            this.bSettings = new System.Windows.Forms.Button();
+            this.lProgress = new System.Windows.Forms.Label();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.saveTemplates = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.template2s)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
@@ -69,26 +66,6 @@
             this.bAbout.Text = "About";
             this.bAbout.UseVisualStyleBackColor = true;
             this.bAbout.Click += new System.EventHandler(this.bAbout_Click);
-            // 
-            // bInputFolder
-            // 
-            this.bInputFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bInputFolder.Location = new System.Drawing.Point(768, 8);
-            this.bInputFolder.Name = "bInputFolder";
-            this.bInputFolder.Size = new System.Drawing.Size(24, 23);
-            this.bInputFolder.TabIndex = 1;
-            this.bInputFolder.Text = "...";
-            this.bInputFolder.UseVisualStyleBackColor = true;
-            this.bInputFolder.Click += new System.EventHandler(this.bInputFolder_Click);
-            // 
-            // InputFolder
-            // 
-            this.InputFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.InputFolder.Location = new System.Drawing.Point(92, 10);
-            this.InputFolder.Name = "InputFolder";
-            this.InputFolder.Size = new System.Drawing.Size(670, 20);
-            this.InputFolder.TabIndex = 0;
             // 
             // bExit
             // 
@@ -121,15 +98,6 @@
             this.progress.Size = new System.Drawing.Size(783, 12);
             this.progress.TabIndex = 7;
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 13);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(66, 13);
-            this.label1.TabIndex = 8;
-            this.label1.Text = "Input Folder:";
-            // 
             // template2s
             // 
             this.template2s.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -148,77 +116,12 @@
             this.Comment,
             this.ModifiedTime,
             this.FileFilterRegex});
-            this.template2s.Location = new System.Drawing.Point(15, 37);
+            this.template2s.Location = new System.Drawing.Point(15, 12);
             this.template2s.MultiSelect = false;
             this.template2s.Name = "template2s";
             this.template2s.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.template2s.Size = new System.Drawing.Size(777, 440);
+            this.template2s.Size = new System.Drawing.Size(777, 465);
             this.template2s.TabIndex = 4;
-            // 
-            // bLog
-            // 
-            this.bLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bLog.Location = new System.Drawing.Point(165, 3);
-            this.bLog.Name = "bLog";
-            this.bLog.Size = new System.Drawing.Size(75, 23);
-            this.bLog.TabIndex = 4;
-            this.bLog.Text = "Log";
-            this.bLog.UseVisualStyleBackColor = true;
-            this.bLog.Click += new System.EventHandler(this.bLog_Click);
-            // 
-            // bSettings
-            // 
-            this.bSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bSettings.Location = new System.Drawing.Point(84, 3);
-            this.bSettings.Name = "bSettings";
-            this.bSettings.Size = new System.Drawing.Size(75, 23);
-            this.bSettings.TabIndex = 3;
-            this.bSettings.Text = "Settings";
-            this.bSettings.UseVisualStyleBackColor = true;
-            this.bSettings.Click += new System.EventHandler(this.bSettings_Click);
-            // 
-            // lProgress
-            // 
-            this.lProgress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lProgress.AutoSize = true;
-            this.lProgress.Location = new System.Drawing.Point(12, 489);
-            this.lProgress.Name = "lProgress";
-            this.lProgress.Size = new System.Drawing.Size(22, 13);
-            this.lProgress.TabIndex = 15;
-            this.lProgress.Text = "     ";
-            // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.flowLayoutPanel1.Controls.Add(this.bAbout);
-            this.flowLayoutPanel1.Controls.Add(this.bSettings);
-            this.flowLayoutPanel1.Controls.Add(this.bLog);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 527);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(505, 30);
-            this.flowLayoutPanel1.TabIndex = 17;
-            // 
-            // flowLayoutPanel2
-            // 
-            this.flowLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.flowLayoutPanel2.Controls.Add(this.bExit);
-            this.flowLayoutPanel2.Controls.Add(this.bRun);
-            this.flowLayoutPanel2.Controls.Add(this.saveTemplates);
-            this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(539, 527);
-            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(256, 31);
-            this.flowLayoutPanel2.TabIndex = 18;
-            // 
-            // saveTemplates
-            // 
-            this.saveTemplates.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.saveTemplates.Location = new System.Drawing.Point(16, 3);
-            this.saveTemplates.Name = "saveTemplates";
-            this.saveTemplates.Size = new System.Drawing.Size(75, 23);
-            this.saveTemplates.TabIndex = 33;
-            this.saveTemplates.Text = "Save";
-            this.saveTemplates.UseVisualStyleBackColor = true;
             // 
             // Selected
             // 
@@ -308,6 +211,71 @@
             this.FileFilterRegex.ReadOnly = true;
             this.FileFilterRegex.Width = 50;
             // 
+            // bLog
+            // 
+            this.bLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.bLog.Location = new System.Drawing.Point(165, 3);
+            this.bLog.Name = "bLog";
+            this.bLog.Size = new System.Drawing.Size(75, 23);
+            this.bLog.TabIndex = 4;
+            this.bLog.Text = "Log";
+            this.bLog.UseVisualStyleBackColor = true;
+            this.bLog.Click += new System.EventHandler(this.bLog_Click);
+            // 
+            // bSettings
+            // 
+            this.bSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.bSettings.Location = new System.Drawing.Point(84, 3);
+            this.bSettings.Name = "bSettings";
+            this.bSettings.Size = new System.Drawing.Size(75, 23);
+            this.bSettings.TabIndex = 3;
+            this.bSettings.Text = "Settings";
+            this.bSettings.UseVisualStyleBackColor = true;
+            this.bSettings.Click += new System.EventHandler(this.bSettings_Click);
+            // 
+            // lProgress
+            // 
+            this.lProgress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lProgress.AutoSize = true;
+            this.lProgress.Location = new System.Drawing.Point(12, 489);
+            this.lProgress.Name = "lProgress";
+            this.lProgress.Size = new System.Drawing.Size(22, 13);
+            this.lProgress.TabIndex = 15;
+            this.lProgress.Text = "     ";
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.flowLayoutPanel1.Controls.Add(this.bAbout);
+            this.flowLayoutPanel1.Controls.Add(this.bSettings);
+            this.flowLayoutPanel1.Controls.Add(this.bLog);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 527);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(505, 30);
+            this.flowLayoutPanel1.TabIndex = 17;
+            // 
+            // flowLayoutPanel2
+            // 
+            this.flowLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.flowLayoutPanel2.Controls.Add(this.bExit);
+            this.flowLayoutPanel2.Controls.Add(this.bRun);
+            this.flowLayoutPanel2.Controls.Add(this.saveTemplates);
+            this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(539, 527);
+            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(256, 31);
+            this.flowLayoutPanel2.TabIndex = 18;
+            // 
+            // saveTemplates
+            // 
+            this.saveTemplates.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.saveTemplates.Location = new System.Drawing.Point(16, 3);
+            this.saveTemplates.Name = "saveTemplates";
+            this.saveTemplates.Size = new System.Drawing.Size(75, 23);
+            this.saveTemplates.TabIndex = 33;
+            this.saveTemplates.Text = "Save";
+            this.saveTemplates.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -317,10 +285,7 @@
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.lProgress);
             this.Controls.Add(this.template2s);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.progress);
-            this.Controls.Add(this.InputFolder);
-            this.Controls.Add(this.bInputFolder);
             this.MinimumSize = new System.Drawing.Size(785, 567);
             this.Name = "MainForm";
             this.Text = "MainForm";
@@ -335,12 +300,9 @@
         #endregion
 
         private System.Windows.Forms.Button bAbout;
-        private System.Windows.Forms.Button bInputFolder;
-        private System.Windows.Forms.TextBox InputFolder;
         private System.Windows.Forms.Button bExit;
         private System.Windows.Forms.Button bRun;
         private System.Windows.Forms.ProgressBar progress;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView template2s;
         private System.Windows.Forms.Button bLog;
         private System.Windows.Forms.Button bSettings;

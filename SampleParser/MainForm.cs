@@ -42,8 +42,6 @@ namespace Cliver.SampleParser
 
             Message.Owner = this;
 
-            InputFolder.Text = Settings.General.InputFolder;
-
             LoadTemplates();
 
             Active.ValueType = typeof(bool);
@@ -426,19 +424,6 @@ namespace Cliver.SampleParser
             }
         }
 
-        private void bInputFolder_Click(object sender, EventArgs e)
-        {
-            FolderBrowserDialog d = new FolderBrowserDialog();
-            if (string.IsNullOrWhiteSpace(d.SelectedPath))
-                if (string.IsNullOrWhiteSpace(Settings.General.InputFolder))
-                    d.SelectedPath = Log.AppDir;
-                else
-                    d.SelectedPath = Settings.General.InputFolder;
-            if (d.ShowDialog() != System.Windows.Forms.DialogResult.OK)
-                return;
-            InputFolder.Text = d.SelectedPath;
-        }
-
         private void bRun_Click(object sender, EventArgs e)
         {
             if (processorThread != null && processorThread.IsAlive)
@@ -454,9 +439,6 @@ namespace Cliver.SampleParser
 
             if (!saveTemplatesFromTableIfTouched(false))
                 return;
-
-            Settings.General.InputFolder = InputFolder.Text;
-            Settings.General.Save();
 
             bRun.Enabled = false;
             processorThread = Cliver.ThreadRoutines.Start(

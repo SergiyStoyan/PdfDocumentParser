@@ -52,8 +52,8 @@ namespace Cliver.SampleParser
 
         void load_settings()
         {
-            IgnoreHiddenFiles.Checked = Settings.General.IgnoreHiddenFiles;
-            ReadInputFolderRecursively.Checked = Settings.General.ReadInputFolderRecursively;
+            InputFolder.Text = Settings.General.InputFolder;
+            OutputFolder.Text = Settings.General.OutputFolder;
         }
 
         private void bCancel_Click(object sender, EventArgs e)
@@ -65,11 +65,18 @@ namespace Cliver.SampleParser
         {
             try
             {
-                Settings.General.IgnoreHiddenFiles = IgnoreHiddenFiles.Checked;
-                Settings.General.ReadInputFolderRecursively = ReadInputFolderRecursively.Checked;
-                
+                Settings.GeneralSettings g2 = Settings.General.CreateClone();
+
+                g2.InputFolder = InputFolder.Text;
+                if (string.IsNullOrWhiteSpace(g2.InputFolder))
+                    throw new Exception("Input Folder is not set.");
+
+                if (string.IsNullOrWhiteSpace(g2.OutputFolder))
+                    throw new Exception("Output Folder is not set.");
+                g2.OutputFolder = OutputFolder.Text;
+
+                Settings.General = g2;
                 Settings.General.Save();
-                Settings.General.Reload();
 
                 Close();
             }
@@ -82,9 +89,35 @@ namespace Cliver.SampleParser
         private void bReset_Click(object sender, EventArgs e)
         {
             Settings.General.Reset();
-            PdfDocumentParser.Settings.Appearance.Reset();
-            PdfDocumentParser.Settings.Constants.Reset();
             load_settings();
+        }
+
+        private void bInputFolder_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog d = new FolderBrowserDialog();
+            d.RootFolder = Environment.SpecialFolder.Desktop;
+            if (string.IsNullOrWhiteSpace(d.SelectedPath))
+                if (string.IsNullOrWhiteSpace(Settings.General.InputFolder))
+                    d.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                else
+                    d.SelectedPath = Settings.General.InputFolder;
+            if (d.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                return;
+            InputFolder.Text = d.SelectedPath;
+        }
+
+        private void bOutputFolder_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog d = new FolderBrowserDialog();
+            d.RootFolder = Environment.SpecialFolder.Desktop;
+            if (string.IsNullOrWhiteSpace(d.SelectedPath))
+                if (string.IsNullOrWhiteSpace(Settings.General.OutputFolder))
+                    d.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                else
+                    d.SelectedPath = Settings.General.OutputFolder;
+            if (d.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                return;
+            OutputFolder.Text = d.SelectedPath;
         }
     }
 }

@@ -23,29 +23,19 @@ namespace Cliver.SampleParser
 {
     public partial class Settings
     {
-        public static readonly GeneralSettings General;
+        public static GeneralSettings General;
 
         public class GeneralSettings : Cliver.UserSettings
         {
-            public string InputFolder = @"d:\_d\_projects\PdfDocumentParser\_test_files";
-            public bool IgnoreHiddenFiles = true;
-            public bool ReadInputFolderRecursively = false;
-
-            public System.Drawing.Color StampColor = System.Drawing.Color.Red;
-            
-            public List<string> OrderedOutputFieldNames = new List<string>();
-
-            public bool UseActiveSelectPattern = false;
-            public bool UseNameSelectPattern = true;
-            public bool UseGroupSelectPattern = false;
-            public bool UseCommentSelectPattern = false;
-            public bool UseOrderWeightPattern = false; 
-            public bool SortSelectedUp = true;
+            public string InputFolder;
+            public string OutputFolder;
 
             protected override void Loaded()
             {
                 if (string.IsNullOrWhiteSpace(InputFolder))
                     InputFolder = ProgramRoutines.GetAppDirectory();
+                if (string.IsNullOrWhiteSpace(OutputFolder))
+                    OutputFolder = ProgramRoutines.GetAppDirectory();
             }
 
             protected override void Saving()
