@@ -105,7 +105,7 @@ namespace Cliver.PdfDocumentParser
             r.Intersect(new Rectangle(0, 0, b.Width, b.Height));
             if (Math.Abs(r.Width) < Settings.Constants.CoordinateDeviationMargin || Math.Abs(r.Height) < Settings.Constants.CoordinateDeviationMargin)
                 return null;
-            using (var page = engine.Process(b, new Rect((int)r.X, (int)r.Y, (int)r.Width, (int)r.Height), PageSegMode.SparseTextOsd))
+            using (var page = engine.Process(b, new Rect((int)r.X, (int)r.Y, (int)r.Width, (int)r.Height), PageSegMode.SingleBlock))
             {
                 return page.GetText();
             }
@@ -113,7 +113,7 @@ namespace Cliver.PdfDocumentParser
 
         public string GetHtml(Bitmap b)
         {
-            using (Tesseract.Page page = engine.Process(b, PageSegMode.SparseTextOsd))
+            using (Tesseract.Page page = engine.Process(b, PageSegMode.SingleBlock))
             {
                 return page.GetHOCRText(0, false);
             }
@@ -122,7 +122,7 @@ namespace Cliver.PdfDocumentParser
         public List<CharBox> GetCharBoxs(Bitmap b)
         {
             List<CharBox> cbs = new List<CharBox>();
-            using (Tesseract.Page page = engine.Process(b, PageSegMode.SparseTextOsd))
+            using (Tesseract.Page page = engine.Process(b, PageSegMode.SingleBlock))
             {
                 //string t = page.GetHOCRText(1, true);
                 //var dfg = page.GetThresholdedImage();                        
