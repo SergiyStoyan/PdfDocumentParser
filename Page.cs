@@ -126,23 +126,25 @@ namespace Cliver.PdfDocumentParser
                     //...change one random pixel to a random color on the clone... seems to trigger a copy of all pixel data from the original.
                     //Bitmap b = Bitmap.Clone(new Rectangle(0, 0, Bitmap.Width, Bitmap.Height), System.Drawing.Imaging.PixelFormat.Undefined);!!!throws from Tesseract: A generic error occurred in GDI+.
                     Bitmap b = new Bitmap(Bitmap);
+                                        
+                    //Template.Anchor.CvImage ai = (Template.Anchor.CvImage)PageCollection.ActiveTemplate.Anchors[0];//!!!test
+                    //PageCollection.ActiveTemplate.SubtractingImages = new List<Template.CvImage>() { new Template.CvImage { Image = ai.Image, ScaleDeviation = ai.ScaleDeviation, Threshold = ai.Threshold } };
 
-                    if (PageCollection.ActiveTemplate.SubtractingImages?.Any() == true)
-                    {
-                        foreach (Template.CvImage cvi in PageCollection.ActiveTemplate.SubtractingImages)
-                        {
-                            CvImage cvPage = new CvImage(b);
-                            List<CvImage.Match> ms = cvi.Image.FindWithinImage(cvPage, new Size(0, 0), cvi.Threshold, cvi.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
-                            foreach (CvImage.Match m in ms)
-                            {
-                                for (int x = m.Rectangle.X; x < m.Rectangle.Width; x++)
-                                {
-                                    for (int y = m.Rectangle.Y; y < m.Rectangle.Height; y++)
-                                        b.SetPixel(x, y, Color.White);
-                                }
-                            }
-                        }
-                    }
+                    //if (PageCollection.ActiveTemplate.SubtractingImages?.Any() == true)
+                    //{
+                    //    foreach (Template.CvImage cvi in PageCollection.ActiveTemplate.SubtractingImages)
+                    //    {
+                    //        CvImage cvPage = new CvImage(b);
+                    //        List<CvImage.Match> ms = cvi.Image.FindWithinImage(cvPage, new Size(cvi.Image.Width, cvi.Image.Height), cvi.Threshold, cvi.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
+
+                    //        foreach (CvImage.Match m in ms)
+                    //        {
+                    //            for (int x = (int)(m.Rectangle.X / Settings.Constants.Image2PdfResolutionRatio); x < m.Rectangle.Right / Settings.Constants.Image2PdfResolutionRatio; x++)
+                    //                for (int y = (int)(m.Rectangle.Y / Settings.Constants.Image2PdfResolutionRatio); y < m.Rectangle.Bottom / Settings.Constants.Image2PdfResolutionRatio; y++)
+                    //                    b.SetPixel(x, y, Color.White);
+                    //        }
+                    //    }
+                    //}
 
                     switch (PageCollection.ActiveTemplate.PageRotation)
                     {
