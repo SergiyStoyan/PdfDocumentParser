@@ -156,7 +156,10 @@ namespace Cliver.PdfDocumentParser
                     case Template.Field.ValueTypes.OcrCharBoxs:
                         return Ocr.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, r);
                     case Template.Field.ValueTypes.Image:
-                        using (Bitmap b = page.GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
+                        Bitmap b = page.GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio);
+                        if (b == null)
+                            return null;
+                        using (b)
                         {
                             return Page.GetScaledImage2Pdf(b);
                         }

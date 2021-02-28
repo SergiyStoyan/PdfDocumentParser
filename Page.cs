@@ -107,6 +107,8 @@ namespace Cliver.PdfDocumentParser
         {
             Rectangle r = new Rectangle(0, 0, ActiveTemplateBitmap.Width, ActiveTemplateBitmap.Height);
             r.Intersect(new Rectangle((int)x, (int)y, (int)w, (int)h));
+            if (r.Width < 1 || r.Height < 1)
+                return null;
             return ActiveTemplateBitmap.Clone(r, System.Drawing.Imaging.PixelFormat.Undefined);
             //return ImageRoutines.GetCopy(ActiveTemplateBitmap, new RectangleF(x, y, w, h));
         }
