@@ -46,6 +46,14 @@ namespace Cliver.PdfDocumentParser
         public int AutoDeskewThreshold = 1;
         public int CvImageScalePyramidStep = 2;
 
+        public List<CvImage> SubtractingImages;
+        public class CvImage
+        {
+            public PdfDocumentParser.CvImage Image;
+            public float Threshold = 0.70f;
+            public float ScaleDeviation = 0.05f;
+        }
+
         public List<Anchor> Anchors;
 
         public List<Condition> Conditions;

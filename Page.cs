@@ -127,6 +127,23 @@ namespace Cliver.PdfDocumentParser
                     //Bitmap b = Bitmap.Clone(new Rectangle(0, 0, Bitmap.Width, Bitmap.Height), System.Drawing.Imaging.PixelFormat.Undefined);!!!throws from Tesseract: A generic error occurred in GDI+.
                     Bitmap b = new Bitmap(Bitmap);
 
+                    if (PageCollection.ActiveTemplate.SubtractingImages?.Any() == true)
+                    {
+                        foreach (Template.CvImage cvi in PageCollection.ActiveTemplate.SubtractingImages)
+                        {
+                            CvImage cvPage = new CvImage(b);
+                            List<CvImage.Match> ms = cvi.Image.FindWithinImage(cvPage, new Size(0, 0), cvi.Threshold, cvi.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
+                            foreach (CvImage.Match m in ms)
+                            {
+                                for (int x = m.Rectangle.X; x < m.Rectangle.Width; x++)
+                                {
+                                    for (int y = m.Rectangle.Y; y < m.Rectangle.Height; y++)
+                                        b.SetPixel(x, y, Color.White);
+                                }
+                            }
+                        }
+                    }
+
                     switch (PageCollection.ActiveTemplate.PageRotation)
                     {
                         case Template.PageRotations.NONE:

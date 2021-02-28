@@ -51,8 +51,8 @@ namespace Cliver.PdfDocumentParser
                     {
                         drawingMode = DrawingModes.movingImage;
                         Cursor.Current = Cursors.SizeAll;
-                        screenMousePosition = Control.MousePosition;
-                        //imageScrollPostion = new Point(splitContainer1.Panel2.HorizontalScroll.Value, splitContainer1.Panel2.VerticalScroll.Value);
+                        screenMousePosition0 = Control.MousePosition;
+                        imageScrollPostion0 = new Point(splitContainer1.Panel2.HorizontalScroll.Value, splitContainer1.Panel2.VerticalScroll.Value);//to avoid jerking
                     }
                     else
                     {
@@ -79,25 +79,24 @@ namespace Cliver.PdfDocumentParser
             Point p;
 
             if (drawingMode == DrawingModes.movingImage)
-            {
-                 p = Control.MousePosition;
-                int h = splitContainer1.Panel2.HorizontalScroll.Value + screenMousePosition.X - p.X;
+            { 
+                p = Control.MousePosition;
+                int h = imageScrollPostion0.X + screenMousePosition0.X - p.X;
                 if (h < splitContainer1.Panel2.HorizontalScroll.Minimum)
                     h = splitContainer1.Panel2.HorizontalScroll.Minimum;
                 else if (h > splitContainer1.Panel2.HorizontalScroll.Maximum)
                     h = splitContainer1.Panel2.HorizontalScroll.Maximum;
                 splitContainer1.Panel2.HorizontalScroll.Value = h;
-                int v = splitContainer1.Panel2.VerticalScroll.Value + screenMousePosition.Y - p.Y;
+                int v = imageScrollPostion0.Y + screenMousePosition0.Y - p.Y;
                 if (v < splitContainer1.Panel2.VerticalScroll.Minimum)
                     v = splitContainer1.Panel2.VerticalScroll.Minimum;
                 else if (v > splitContainer1.Panel2.VerticalScroll.Maximum)
                     v = splitContainer1.Panel2.VerticalScroll.Maximum;
                 splitContainer1.Panel2.VerticalScroll.Value = v;
-                screenMousePosition = Control.MousePosition;
                 return;
             }
 
-             p = new Point((int)(e.X / (float)pictureScale.Value), (int)(e.Y / (float)pictureScale.Value));
+            p = new Point((int)(e.X / (float)pictureScale.Value), (int)(e.Y / (float)pictureScale.Value));
 
             switch (drawingMode)
             {
@@ -434,7 +433,8 @@ namespace Cliver.PdfDocumentParser
         }
         TemplateManager templateManager;
         Point selectionBoxPoint0, selectionBoxPoint1, selectionBoxPoint2;
-        Point screenMousePosition;
+        Point screenMousePosition0;
+        Point imageScrollPostion0;
 
         enum DrawingModes
         {
