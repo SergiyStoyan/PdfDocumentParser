@@ -98,6 +98,7 @@
             this.lShowOutput.TabStop = true;
             this.lShowOutput.Text = "Output Folder:";
             this.lShowOutput.UseCompatibleTextRendering = true;
+            this.lShowOutput.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lShowOutput_LinkClicked);
             // 
             // lShowInput
             // 
@@ -111,6 +112,7 @@
             this.lShowInput.TabStop = true;
             this.lShowInput.Text = "Input Folder:";
             this.lShowInput.UseCompatibleTextRendering = true;
+            this.lShowInput.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lShowInput_LinkClicked);
             // 
             // OutputFolder
             // 

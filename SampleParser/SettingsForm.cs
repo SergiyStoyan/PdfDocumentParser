@@ -119,5 +119,15 @@ namespace Cliver.SampleParser
                 return;
             OutputFolder.Text = d.SelectedPath;
         }
+
+        private void lShowInput_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(Cliver.FileSystemRoutines.CreateDirectory(InputFolder.Text));
+        }
+
+        private void lShowOutput_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(Cliver.FileSystemRoutines.CreateDirectory(OutputFolder.Text));
+        }
     }
 }
