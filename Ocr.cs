@@ -15,7 +15,7 @@ namespace Cliver.PdfDocumentParser
     /// <summary>
     /// OCR routines
     /// </summary>
-    internal class Ocr : IDisposable
+    public class Ocr : IDisposable
     {
         public static Ocr This = new Ocr();
 
