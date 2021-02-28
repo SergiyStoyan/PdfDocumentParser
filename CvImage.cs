@@ -123,12 +123,11 @@ namespace Cliver.PdfDocumentParser
             return image;
         }
 
-        public System.Drawing.Point? FindWithinImage(CvImage cvImage, float threshold, float scaleDeviation, int scaleStep/*, out float detectedScale*/)
+        public System.Drawing.Rectangle? FindWithinImage(CvImage cvImage, float threshold, float scaleDeviation, int scaleStep/*, out float detectedScale*/)
         {
-            System.Drawing.Point? p;
-            p = findWithinImage(image, cvImage.image, threshold);
+            System.Drawing.Point? p = findWithinImage(image, cvImage.image, threshold);
             if (p != null)
-                return p;
+                return new Rectangle((Point)p, new Size(image.Width, image.Height));
             //running through pyramid
             int stepCount = Convert.ToInt32(scaleDeviation * Width / scaleStep);
             for (int i = 1; i <= stepCount; i++)
@@ -137,11 +136,11 @@ namespace Cliver.PdfDocumentParser
                 Image<Gray, byte> template = image.Resize(1 + scaleDelta, Inter.Linear);
                 p = findWithinImage(template, cvImage.image, threshold);
                 if (p != null)
-                    return p;
+                    return new Rectangle((Point)p, new Size(template.Width, template.Height));
                 template = image.Resize(1 - scaleDelta, Inter.Linear);
                 p = findWithinImage(template, cvImage.image, threshold);
                 if (p != null)
-                    return p;
+                    return new Rectangle((Point)p, new Size(template.Width, template.Height));
             }
             return null;
         }
