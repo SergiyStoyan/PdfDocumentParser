@@ -352,7 +352,7 @@
       <Version>4.2.4</Version>
     </PackageReference>
     <PackageReference Include="iTextSharp">
-      <Version>5.5.13.1</Version>
+      <Version>5.5.13.2</Version>
     </PackageReference>
     <PackageReference Include="Magick.NET-Q16-AnyCPU">
       <Version>7.16.0</Version>
