@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.bAbout = new System.Windows.Forms.Button();
             this.bExit = new System.Windows.Forms.Button();
             this.bRun = new System.Windows.Forms.Button();
@@ -51,6 +51,8 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.saveTemplates = new System.Windows.Forms.Button();
+            this.bInput = new System.Windows.Forms.Button();
+            this.bOutput = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.template2s)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
@@ -169,8 +171,8 @@
             // Name_
             // 
             this.Name_.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            this.Name_.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            this.Name_.DefaultCellStyle = dataGridViewCellStyle2;
             this.Name_.HeaderText = "Name";
             this.Name_.Name = "Name_";
             this.Name_.Width = 60;
@@ -249,6 +251,8 @@
             this.flowLayoutPanel1.Controls.Add(this.bAbout);
             this.flowLayoutPanel1.Controls.Add(this.bSettings);
             this.flowLayoutPanel1.Controls.Add(this.bLog);
+            this.flowLayoutPanel1.Controls.Add(this.bInput);
+            this.flowLayoutPanel1.Controls.Add(this.bOutput);
             this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 527);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(505, 30);
@@ -275,6 +279,28 @@
             this.saveTemplates.TabIndex = 33;
             this.saveTemplates.Text = "Save";
             this.saveTemplates.UseVisualStyleBackColor = true;
+            // 
+            // bInput
+            // 
+            this.bInput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.bInput.Location = new System.Drawing.Point(246, 3);
+            this.bInput.Name = "bInput";
+            this.bInput.Size = new System.Drawing.Size(75, 23);
+            this.bInput.TabIndex = 5;
+            this.bInput.Text = "Input";
+            this.bInput.UseVisualStyleBackColor = true;
+            this.bInput.Click += new System.EventHandler(this.bInput_Click);
+            // 
+            // bOutput
+            // 
+            this.bOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.bOutput.Location = new System.Drawing.Point(327, 3);
+            this.bOutput.Name = "bOutput";
+            this.bOutput.Size = new System.Drawing.Size(75, 23);
+            this.bOutput.TabIndex = 6;
+            this.bOutput.Text = "Output";
+            this.bOutput.UseVisualStyleBackColor = true;
+            this.bOutput.Click += new System.EventHandler(this.bOutput_Click);
             // 
             // MainForm
             // 
@@ -321,5 +347,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Comment;
         private System.Windows.Forms.DataGridViewTextBoxColumn ModifiedTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn FileFilterRegex;
+        private System.Windows.Forms.Button bInput;
+        private System.Windows.Forms.Button bOutput;
     }
 }

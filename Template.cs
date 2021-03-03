@@ -5,6 +5,10 @@
 //********************************************************************************************
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using Emgu.CV;
+using Emgu.CV.CvEnum;
+using Emgu.CV.Structure;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -52,6 +56,32 @@ namespace Cliver.PdfDocumentParser
             public PdfDocumentParser.CvImage Image;
             public float Threshold = 0.70f;
             public float ScaleDeviation = 0.05f;
+        }
+
+        public string BitmapPreprocessorClassDefinition = null;
+        public bool BitmapPreprocessorClassDefinitionIsActive = false;
+
+        internal BitmapPreprocessor BitmapPreprocessor
+        {
+            get
+            {
+                if (bitmapPreprocessor == null)
+                {
+                    if (string.IsNullOrWhiteSpace(BitmapPreprocessorClassDefinition) || !BitmapPreprocessorClassDefinitionIsActive)
+                        bitmapPreprocessor = new DefaultBitmapPreprocessor();
+                    else
+                        bitmapPreprocessor = BitmapPreprocessor.CompileBitmapPreprocessor(this);
+                }
+                return bitmapPreprocessor;
+            }
+        }
+        BitmapPreprocessor bitmapPreprocessor;
+        internal class DefaultBitmapPreprocessor : BitmapPreprocessor
+        {
+            public override Bitmap GetProcessed(Bitmap bitmap)
+            {
+                return bitmap;
+            }
         }
 
         public List<Anchor> Anchors;

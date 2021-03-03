@@ -80,9 +80,7 @@ namespace Cliver.PdfDocumentParser
                 textAutoInsertSpaceThreshold.Value = (decimal)t.TextAutoInsertSpace.Threshold;
                 textAutoInsertSpaceRepresentative.Text = Regex.Escape(t.TextAutoInsertSpace.Representative);
 
-                pageRotation.SelectedIndex = (int)t.PageRotation;
-                autoDeskew.Checked = t.AutoDeskew;
-                autoDeskewThreshold.Value = t.AutoDeskewThreshold;
+                bitmapPreparationForm.SetUI(t);
                 CvImageScalePyramidStep.Value = t.CvImageScalePyramidStep;
 
                 anchors.Rows.Clear();
@@ -202,7 +200,7 @@ namespace Cliver.PdfDocumentParser
                     setUIFromTemplate(t2);
                     break;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Message.Error2("Updating template:", ex);
                 }
@@ -243,9 +241,7 @@ namespace Cliver.PdfDocumentParser
                 Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text),
             };
 
-            t.PageRotation = (Template.PageRotations)pageRotation.SelectedIndex;
-            t.AutoDeskew = autoDeskew.Checked;
-            t.AutoDeskewThreshold = (int)autoDeskewThreshold.Value;
+            bitmapPreparationForm.SetTemplate(t);
             t.CvImageScalePyramidStep = (int)CvImageScalePyramidStep.Value;
 
             bool? removeNotLinkedAnchors = null;

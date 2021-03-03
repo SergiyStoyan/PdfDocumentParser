@@ -158,7 +158,7 @@ namespace Cliver.SampleParser
                         case "FileFilterRegex":
                             t.FileFilterRegex = (Regex)r.Cells["FileFilterRegex"].Value;
                             Settings.Template2s.Touch();
-                            return;                            return;
+                            return; return;
                     }
                 }
                 catch (Exception ex)
@@ -269,7 +269,7 @@ namespace Cliver.SampleParser
             if (t == null)
                 return;
 
-         Template2Form   tf = new Template2Form(t);
+            Template2Form tf = new Template2Form(t);
             if (tf.ShowDialog() != DialogResult.OK)
                 return;
             r.Cells["Active"].Value = t.Active;
@@ -517,6 +517,16 @@ namespace Cliver.SampleParser
         {
             PdfDocumentParser.SettingsForm sf = new PdfDocumentParser.SettingsForm();
             sf.ShowDialog();
+        }
+
+        private void bInput_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(Cliver.FileSystemRoutines.CreateDirectory(Settings.General.InputFolder));
+        }
+
+        private void bOutput_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(Cliver.FileSystemRoutines.CreateDirectory(Settings.General.OutputFolder));
         }
     }
 }

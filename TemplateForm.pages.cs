@@ -19,7 +19,7 @@ namespace Cliver.PdfDocumentParser
     {
         PageCollection pages = null;
 
-        void reloadPageBitmaps()
+        internal void ReloadPageBitmaps()
         {
             if (pages == null)
                 return;

@@ -28,14 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.autoDeskew = new System.Windows.Forms.CheckBox();
-            this.label21 = new System.Windows.Forms.Label();
             this.bPrevPage = new System.Windows.Forms.Button();
             this.name = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
             this.fields = new System.Windows.Forms.DataGridView();
             this.Name_ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.LeftAnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
@@ -70,7 +66,6 @@
             this.CheckConditionsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.pageRotation = new System.Windows.Forms.ComboBox();
             this.Configure = new System.Windows.Forms.LinkLabel();
             this.label16 = new System.Windows.Forms.Label();
             this.cancel = new System.Windows.Forms.Button();
@@ -86,14 +81,13 @@
             this.picture = new System.Windows.Forms.PictureBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.bScannedDocumentSettings = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.CvImageScalePyramidStep = new System.Windows.Forms.NumericUpDown();
             this.label19 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.textAutoInsertSpaceRepresentative = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.autoDeskewThreshold = new System.Windows.Forms.NumericUpDown();
             this.testFile = new System.Windows.Forms.TextBox();
             this.bTestFile = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
@@ -137,30 +131,9 @@
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CvImageScalePyramidStep)).BeginInit();
             this.groupBox2.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.autoDeskewThreshold)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureScale)).BeginInit();
             this.flowLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // autoDeskew
-            // 
-            this.autoDeskew.AutoSize = true;
-            this.autoDeskew.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.autoDeskew.Location = new System.Drawing.Point(205, 24);
-            this.autoDeskew.Name = "autoDeskew";
-            this.autoDeskew.Size = new System.Drawing.Size(15, 14);
-            this.autoDeskew.TabIndex = 52;
-            this.autoDeskew.UseVisualStyleBackColor = true;
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(133, 24);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(74, 13);
-            this.label21.TabIndex = 63;
-            this.label21.Text = "Auto-Deskew:";
             // 
             // bPrevPage
             // 
@@ -200,24 +173,6 @@
             this.label6.Size = new System.Drawing.Size(54, 13);
             this.label6.TabIndex = 40;
             this.label6.Text = "Template:";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(223, 24);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(124, 13);
-            this.label14.TabIndex = 61;
-            this.label14.Text = "Auto-Deskew Threshold:";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(3, 24);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(75, 13);
-            this.label9.TabIndex = 50;
-            this.label9.Text = "Rotate Pages:";
             // 
             // fields
             // 
@@ -353,11 +308,11 @@
             this.flowLayoutPanel4.Controls.Add(this.ShowOcrText);
             this.flowLayoutPanel4.Controls.Add(this.label13);
             this.flowLayoutPanel4.Controls.Add(this.ShowAsJson);
-            this.flowLayoutPanel4.Location = new System.Drawing.Point(1, 79);
+            this.flowLayoutPanel4.Location = new System.Drawing.Point(1, 83);
             this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel4.Name = "flowLayoutPanel4";
             this.flowLayoutPanel4.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
-            this.flowLayoutPanel4.Size = new System.Drawing.Size(588, 23);
+            this.flowLayoutPanel4.Size = new System.Drawing.Size(588, 29);
             this.flowLayoutPanel4.TabIndex = 51;
             // 
             // ShowPdfText
@@ -601,21 +556,6 @@
             this.label11.TabIndex = 50;
             this.label11.Text = "Conditions:";
             // 
-            // pageRotation
-            // 
-            this.pageRotation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.pageRotation.FormattingEnabled = true;
-            this.pageRotation.Items.AddRange(new object[] {
-            "",
-            "↻ 90°",
-            "↻ 180°",
-            "↺ 90°",
-            "Auto"});
-            this.pageRotation.Location = new System.Drawing.Point(77, 20);
-            this.pageRotation.Name = "pageRotation";
-            this.pageRotation.Size = new System.Drawing.Size(52, 21);
-            this.pageRotation.TabIndex = 51;
-            // 
             // Configure
             // 
             this.Configure.AutoSize = true;
@@ -782,6 +722,7 @@
             // 
             // splitContainer2.Panel1
             // 
+            this.splitContainer2.Panel1.Controls.Add(this.bScannedDocumentSettings);
             this.splitContainer2.Panel1.Controls.Add(this.groupBox3);
             this.splitContainer2.Panel1.Controls.Add(this.groupBox2);
             this.splitContainer2.Panel1.Controls.Add(this.anchorsContainer);
@@ -794,7 +735,6 @@
             this.splitContainer2.Panel1.Controls.Add(this.label8);
             this.splitContainer2.Panel1.Controls.Add(this.label6);
             this.splitContainer2.Panel1.Controls.Add(this.tCurrentPage);
-            this.splitContainer2.Panel1.Controls.Add(this.groupBox1);
             this.splitContainer2.Panel1.Controls.Add(this.testFile);
             this.splitContainer2.Panel1.Controls.Add(this.bTestFile);
             this.splitContainer2.Panel1.Controls.Add(this.label2);
@@ -816,15 +756,25 @@
             this.splitContainer2.SplitterDistance = 484;
             this.splitContainer2.TabIndex = 32;
             // 
+            // bScannedDocumentSettings
+            // 
+            this.bScannedDocumentSettings.Location = new System.Drawing.Point(0, 116);
+            this.bScannedDocumentSettings.Name = "bScannedDocumentSettings";
+            this.bScannedDocumentSettings.Size = new System.Drawing.Size(432, 23);
+            this.bScannedDocumentSettings.TabIndex = 69;
+            this.bScannedDocumentSettings.Text = "Scanned Document Settings";
+            this.bScannedDocumentSettings.UseVisualStyleBackColor = true;
+            this.bScannedDocumentSettings.Click += new System.EventHandler(this.bScannedDocumentSettings_Click);
+            // 
             // groupBox3
             // 
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.CvImageScalePyramidStep);
             this.groupBox3.Controls.Add(this.label19);
-            this.groupBox3.Location = new System.Drawing.Point(266, 159);
+            this.groupBox3.Location = new System.Drawing.Point(266, 149);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(165, 44);
+            this.groupBox3.Size = new System.Drawing.Size(165, 54);
             this.groupBox3.TabIndex = 68;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "CvImage";
@@ -861,9 +811,9 @@
             this.groupBox2.Controls.Add(this.label15);
             this.groupBox2.Controls.Add(this.textAutoInsertSpaceThreshold);
             this.groupBox2.Controls.Add(this.label12);
-            this.groupBox2.Location = new System.Drawing.Point(0, 159);
+            this.groupBox2.Location = new System.Drawing.Point(0, 149);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(260, 44);
+            this.groupBox2.Size = new System.Drawing.Size(260, 54);
             this.groupBox2.TabIndex = 64;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Text Auto-Insert Space";
@@ -883,40 +833,6 @@
             this.label15.Size = new System.Drawing.Size(57, 13);
             this.label15.TabIndex = 66;
             this.label15.Text = "Substitute:";
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.autoDeskewThreshold);
-            this.groupBox1.Controls.Add(this.autoDeskew);
-            this.groupBox1.Controls.Add(this.pageRotation);
-            this.groupBox1.Controls.Add(this.label21);
-            this.groupBox1.Controls.Add(this.label14);
-            this.groupBox1.Controls.Add(this.label9);
-            this.groupBox1.Location = new System.Drawing.Point(0, 109);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(432, 48);
-            this.groupBox1.TabIndex = 1;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Scanned Document Settings";
-            // 
-            // autoDeskewThreshold
-            // 
-            this.autoDeskewThreshold.Location = new System.Drawing.Point(346, 21);
-            this.autoDeskewThreshold.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.autoDeskewThreshold.Name = "autoDeskewThreshold";
-            this.autoDeskewThreshold.Size = new System.Drawing.Size(52, 20);
-            this.autoDeskewThreshold.TabIndex = 62;
-            this.autoDeskewThreshold.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
             // 
             // testFile
             // 
@@ -1154,9 +1070,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.CvImageScalePyramidStep)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.autoDeskewThreshold)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureScale)).EndInit();
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel2.PerformLayout();
@@ -1165,15 +1078,10 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.CheckBox autoDeskew;
-        private System.Windows.Forms.Label label21;
         private System.Windows.Forms.Button bPrevPage;
         private System.Windows.Forms.TextBox name;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Label label9;
         private System.Windows.Forms.DataGridView fields;
         private System.Windows.Forms.Label selectionCoordinates;
         private System.Windows.Forms.Button bNextPage;
@@ -1196,7 +1104,6 @@
         private System.Windows.Forms.CheckBox CheckConditionsAutomaticallyWhenPageChanged;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.ComboBox pageRotation;
         private System.Windows.Forms.LinkLabel Configure;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Button cancel;
@@ -1212,8 +1119,6 @@
         private System.Windows.Forms.PictureBox picture;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.NumericUpDown autoDeskewThreshold;
         private System.Windows.Forms.TextBox testFile;
         private System.Windows.Forms.Button bTestFile;
         private System.Windows.Forms.Label label2;
@@ -1248,5 +1153,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Value;
         private System.Windows.Forms.CheckBox ShowFieldTextLineSeparators;
         private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Button bScannedDocumentSettings;
     }
 }

@@ -25,6 +25,8 @@ namespace Cliver.PdfDocumentParser
 
             this.templateManager = templateManager;
 
+            this.bitmapPreparationForm = new BitmapPreparationForm(this);
+
             initializeAnchorsTable();
             initializeConditionsTable();
             initializeFieldsTable();
@@ -377,18 +379,6 @@ namespace Cliver.PdfDocumentParser
                     setScaledImage();
             };
 
-            pageRotation.SelectedIndexChanged += delegate
-            {
-                reloadPageBitmaps();
-                //showPage(currentPageI);
-            };
-
-            autoDeskew.CheckedChanged += delegate
-            {
-                reloadPageBitmaps();
-                //showPage(currentPageI);
-            };
-
             Load += delegate
             {
                 //Application.DoEvents();//make form be drawn completely
@@ -501,6 +491,15 @@ namespace Cliver.PdfDocumentParser
             Right,
             Bottom
         }
+
+        private void bScannedDocumentSettings_Click(object sender, EventArgs e)
+        {
+            bitmapPreparationForm.Tag = getTemplateFromUI(false);
+            bitmapPreparationForm.Show();
+            bitmapPreparationForm.Activate();
+        }
+        readonly BitmapPreparationForm bitmapPreparationForm;
+
         readonly Dictionary<object, ResizebleBox> owners2resizebleBox = new Dictionary<object, ResizebleBox>();
         internal class ResizebleBox
         {

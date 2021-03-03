@@ -164,6 +164,7 @@
     </Compile>
     <Compile Include="BooleanEngine.cs" />
     <Compile Include="CvImage.cs" />
+    <Compile Include="BitmapPreprocessor.cs" />
     <Compile Include="Ocr.Page.cs" />
     <Compile Include="Page.deskew.cs" />
     <Compile Include="Page.conditions.cs" />
@@ -173,6 +174,12 @@
     <Compile Include="Page.cs" />
     <Compile Include="Template.Anchor.cs" />
     <Compile Include="Template.Field.cs" />
+    <Compile Include="BitmapPreparationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BitmapPreparationForm.Designer.cs">
+      <DependentUpon>BitmapPreparationForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="TemplateForm.TemplateManager.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -313,6 +320,9 @@
     <EmbeddedResource Include="TableRowControl.resx">
       <DependentUpon>TableRowControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="BitmapPreparationForm.resx">
+      <DependentUpon>BitmapPreparationForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TemplateForm.resx">
       <DependentUpon>TemplateForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -335,11 +345,17 @@
     <PackageReference Include="Emgu.CV.runtime.windows">
       <Version>4.3.0.3890</Version>
     </PackageReference>
+    <PackageReference Include="ICSharpCode.TextEditor.Extended">
+      <Version>4.2.4</Version>
+    </PackageReference>
     <PackageReference Include="iTextSharp">
       <Version>5.5.13.1</Version>
     </PackageReference>
     <PackageReference Include="Magick.NET-Q16-AnyCPU">
       <Version>7.16.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp">
+      <Version>3.9.0-5.final</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.3</Version>
