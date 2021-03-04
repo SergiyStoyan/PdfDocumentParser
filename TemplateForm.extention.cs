@@ -244,9 +244,6 @@ namespace Cliver.PdfDocumentParser
             bitmapPreparationForm.SetTemplate(t);
             t.CvImageScalePyramidStep = (int)CvImageScalePyramidStep.Value;
 
-            if (saving)
-                t.GetScaleDetectingAnchor();//check is it is correct;
-
             bool? removeNotLinkedAnchors = null;
             List<int> conditionAnchorIds = null;
             if (saving)
@@ -272,47 +269,50 @@ namespace Cliver.PdfDocumentParser
                     if (!a.IsSet())
                         throw new Exception("Anchor[Id=" + a.Id + "] is not set!");
 
-                    if (conditionAnchorIds.Contains(a.Id))
-                        continue;
-
-                    bool engaged = false;
-                    foreach (DataGridViewRow rr in anchors.Rows)
+                    if (!conditionAnchorIds.Contains(a.Id))
                     {
-                        Template.Anchor a_ = (Template.Anchor)rr.Tag;
-                        if (a_ == null)
-                            continue;
-                        if (a_.ParentAnchorId == a.Id)
+                        bool engaged = false;
+                        foreach (DataGridViewRow rr in anchors.Rows)
                         {
-                            engaged = true;
-                            break;
+                            Template.Anchor a_ = (Template.Anchor)rr.Tag;
+                            if (a_ == null)
+                                continue;
+                            if (a_.ParentAnchorId == a.Id)
+                            {
+                                engaged = true;
+                                break;
+                            }
+                        }
+                        if (!engaged)
+                        {
+                            foreach (DataGridViewRow rr in fields.Rows)
+                            {
+                                Template.Field m = (Template.Field)rr.Tag;
+                                if (m != null && (m.LeftAnchor?.Id == a.Id || m.TopAnchor?.Id == a.Id || m.RightAnchor?.Id == a.Id || m.BottomAnchor?.Id == a.Id))
+                                {
+                                    engaged = true;
+                                    break;
+                                }
+                            }
+                            if (!engaged)
+                            {
+                                if (a.Id != t.ScaleDetectingAnchorId)
+                                {
+                                    if (removeNotLinkedAnchors == null)
+                                        removeNotLinkedAnchors = Message.YesNo("The template contains not linked anchor[s]. Should they be removed?");
+                                    if (removeNotLinkedAnchors == true)
+                                        continue;
+                                }
+                            }
                         }
                     }
-                    if (engaged)
-                        continue;
-
-                    foreach (DataGridViewRow rr in fields.Rows)
-                    {
-                        Template.Field m = (Template.Field)rr.Tag;
-                        if (m != null && (m.LeftAnchor?.Id == a.Id || m.TopAnchor?.Id == a.Id || m.RightAnchor?.Id == a.Id || m.BottomAnchor?.Id == a.Id))
-                        {
-                            engaged = true;
-                            break;
-                        }
-                    }
-                    if (engaged)
-                        continue;
-
-                    if (a.Id == t.ScaleDetectingAnchorId)
-                        continue;
-
-                    if (removeNotLinkedAnchors == null)
-                        removeNotLinkedAnchors = Message.YesNo("The template contains not linked anchor[s]. Should they be removed?");
-                    if (removeNotLinkedAnchors == true)
-                        continue;
                 }
                 t.Anchors.Add((Template.Anchor)Serialization.Json.Clone2(a));
             }
             t.Anchors = t.Anchors.OrderBy(a => a.Id).ToList();
+
+            if (saving)
+                t.GetScaleDetectingAnchor();//check is it is correct;
 
             t.Conditions = new List<Template.Condition>();
             foreach (DataGridViewRow r in conditions.Rows)

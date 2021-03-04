@@ -72,14 +72,12 @@ namespace Cliver.PdfDocumentParser
                 bitmapPreprocessorClassDefinition.Enabled = PreprocessBitmap.Checked = t.PreprocessBitmap;
                 changed = false;
             }
-            if (!changed
-                && t.GetScaleDetectingAnchor() != (Template.Anchor.CvImage)DetectingScaleAnchor.SelectedItem
-                )
+            if (!changed && t.ScaleDetectingAnchorId != (int?)DetectingScaleAnchor.SelectedItem)
                 changed = true;
             DetectingScaleAnchor.Items.Clear();
             DetectingScaleAnchor.Items.Add("");
             DetectingScaleAnchor.Items.AddRange(t.Anchors.Where(a => a is Template.Anchor.CvImage).Select(a => (object)a.Id).ToArray());
-            DetectingScaleAnchor.SelectedItem = t.GetScaleDetectingAnchor();
+            DetectingScaleAnchor.SelectedItem = t.GetScaleDetectingAnchor()?.Id;
         }
         string defaultBitmapPreprocessor = @"using System;
 using System.Drawing;
@@ -116,7 +114,7 @@ namespace Cliver.PdfDocumentParser
             t.PageRotation = (Template.PageRotations)pageRotation.SelectedIndex;
             t.AutoDeskew = autoDeskew.Checked;
             t.AutoDeskewThreshold = (int)autoDeskewThreshold.Value;
-            t.ScaleDetectingAnchorId = DetectingScaleAnchor.SelectedItem == null ? -1 : (int)DetectingScaleAnchor.SelectedItem;
+            t.ScaleDetectingAnchorId = DetectingScaleAnchor.SelectedItem is int ? (int)DetectingScaleAnchor.SelectedItem : -1;
             t.BitmapPreprocessorClassDefinition = bitmapPreprocessorClassDefinition.Text;
             t.PreprocessBitmap = PreprocessBitmap.Checked;
         }
@@ -162,13 +160,6 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        private void bOK_Click(object sender, EventArgs e)
-        {
-            if (!applyTemplate())
-                return;
-            Close();
-        }
-
         private void bCancel_Click(object sender, EventArgs e)
         {
             Close();
@@ -177,6 +168,7 @@ namespace Cliver.PdfDocumentParser
         private void bApply_Click(object sender, EventArgs e)
         {
             applyTemplate();
+            Close();
         }
 
         private void bSaveDafault_Click(object sender, EventArgs e)

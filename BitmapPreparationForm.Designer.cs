@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.bCancel = new System.Windows.Forms.Button();
-            this.bOK = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.bApply = new System.Windows.Forms.Button();
             this.defaultBitmapPreprocessorClassDefinitions = new System.Windows.Forms.ComboBox();
@@ -58,25 +57,13 @@
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 50;
-            this.bCancel.Text = "Cancel";
+            this.bCancel.Text = "Close";
             this.bCancel.UseVisualStyleBackColor = true;
             this.bCancel.Click += new System.EventHandler(this.bCancel_Click);
-            // 
-            // bOK
-            // 
-            this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bOK.Location = new System.Drawing.Point(600, 3);
-            this.bOK.Name = "bOK";
-            this.bOK.Size = new System.Drawing.Size(75, 23);
-            this.bOK.TabIndex = 49;
-            this.bOK.Text = "OK";
-            this.bOK.UseVisualStyleBackColor = true;
-            this.bOK.Click += new System.EventHandler(this.bOK_Click);
             // 
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.Controls.Add(this.bCancel);
-            this.flowLayoutPanel1.Controls.Add(this.bOK);
             this.flowLayoutPanel1.Controls.Add(this.bApply);
             this.flowLayoutPanel1.Controls.Add(this.defaultBitmapPreprocessorClassDefinitions);
             this.flowLayoutPanel1.Controls.Add(this.bRemove);
@@ -91,7 +78,7 @@
             // bApply
             // 
             this.bApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bApply.Location = new System.Drawing.Point(519, 3);
+            this.bApply.Location = new System.Drawing.Point(600, 3);
             this.bApply.Name = "bApply";
             this.bApply.Size = new System.Drawing.Size(75, 23);
             this.bApply.TabIndex = 51;
@@ -109,7 +96,7 @@
             "↻ 180°",
             "↺ 90°",
             "Auto"});
-            this.defaultBitmapPreprocessorClassDefinitions.Location = new System.Drawing.Point(292, 3);
+            this.defaultBitmapPreprocessorClassDefinitions.Location = new System.Drawing.Point(373, 3);
             this.defaultBitmapPreprocessorClassDefinitions.Name = "defaultBitmapPreprocessorClassDefinitions";
             this.defaultBitmapPreprocessorClassDefinitions.Size = new System.Drawing.Size(221, 21);
             this.defaultBitmapPreprocessorClassDefinitions.TabIndex = 85;
@@ -118,7 +105,7 @@
             // bRemove
             // 
             this.bRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bRemove.Location = new System.Drawing.Point(252, 3);
+            this.bRemove.Location = new System.Drawing.Point(333, 3);
             this.bRemove.Name = "bRemove";
             this.bRemove.Size = new System.Drawing.Size(34, 23);
             this.bRemove.TabIndex = 52;
@@ -129,7 +116,7 @@
             // bSaveDafault
             // 
             this.bSaveDafault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bSaveDafault.Location = new System.Drawing.Point(212, 3);
+            this.bSaveDafault.Location = new System.Drawing.Point(293, 3);
             this.bSaveDafault.Name = "bSaveDafault";
             this.bSaveDafault.Size = new System.Drawing.Size(34, 23);
             this.bSaveDafault.TabIndex = 53;
@@ -301,7 +288,6 @@
 
         #endregion
         private System.Windows.Forms.Button bCancel;
-        private System.Windows.Forms.Button bOK;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label21;

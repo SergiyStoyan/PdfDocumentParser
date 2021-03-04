@@ -132,7 +132,7 @@ namespace Cliver.PdfDocumentParser
             int stepCount = Convert.ToInt32(scaleDeviation * Width / scaleStep);
             for (int i = 1; i <= stepCount; i++)
             {
-                float scaleDelta = scaleStep * i / Width;
+                float scaleDelta = (float)scaleStep * i / Width;
                 float scale = 1 + scaleDelta;
                 Image<Gray, byte> template = image.Resize(scale, Inter.Linear);
                 p_s = findBestMatchWithinImage(template, cvImage.image);
@@ -176,7 +176,7 @@ namespace Cliver.PdfDocumentParser
             int stepCount = Convert.ToInt32(scaleDeviation * Width / scaleStep);
             for (int i = 1; i <= stepCount; i++)
             {
-                float scaleDelta = scaleStep * i / Width;
+                float scaleDelta = (float)scaleStep * i / Width;
                 float scale = 1 + scaleDelta;
                 Image<Gray, byte> template = image.Resize(scale, Inter.Linear);
                 p_s = findBestMatchWithinImage(template, cvImage.image);
@@ -200,7 +200,7 @@ namespace Cliver.PdfDocumentParser
         //    int stepCount = Convert.ToInt32(scaleDeviation * Width / scaleStep);
         //    for (int i = 1; i <= stepCount; i++)
         //    {
-        //        float scaleDelta = scaleStep * i / Width;
+        //        float scaleDelta = (float)scaleStep * i / Width;
         //        float scale = 1 + scaleDelta;
         //        Image<Gray, byte> template = image.Resize(scale, Inter.Linear);
         //        List<Match> ms = findMatchsWithinImage(template, padding, cvImage.image, threshold);
@@ -213,7 +213,7 @@ namespace Cliver.PdfDocumentParser
         //    }
         //    for (int i = 1; i <= stepCount; i++)
         //    {
-        //        float scaleDelta = scaleStep * i / Width;
+        //        float scaleDelta = (float)scaleStep * i / Width;
         //        float scale = 1 - scaleDelta;
         //        Image<Gray, byte> template = image.Resize(scale, Inter.Linear);
         //        List<Match> ms = findMatchsWithinImage(template, padding, cvImage.image, threshold);
