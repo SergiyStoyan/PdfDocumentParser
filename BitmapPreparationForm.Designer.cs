@@ -118,22 +118,22 @@
             // bRemove
             // 
             this.bRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bRemove.Location = new System.Drawing.Point(211, 3);
+            this.bRemove.Location = new System.Drawing.Point(252, 3);
             this.bRemove.Name = "bRemove";
-            this.bRemove.Size = new System.Drawing.Size(75, 23);
+            this.bRemove.Size = new System.Drawing.Size(34, 23);
             this.bRemove.TabIndex = 52;
-            this.bRemove.Text = "Remove";
+            this.bRemove.Text = "-";
             this.bRemove.UseVisualStyleBackColor = true;
             this.bRemove.Click += new System.EventHandler(this.bRemove_Click);
             // 
             // bSaveDafault
             // 
             this.bSaveDafault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bSaveDafault.Location = new System.Drawing.Point(130, 3);
+            this.bSaveDafault.Location = new System.Drawing.Point(212, 3);
             this.bSaveDafault.Name = "bSaveDafault";
-            this.bSaveDafault.Size = new System.Drawing.Size(75, 23);
+            this.bSaveDafault.Size = new System.Drawing.Size(34, 23);
             this.bSaveDafault.TabIndex = 53;
-            this.bSaveDafault.Text = "Add";
+            this.bSaveDafault.Text = "+";
             this.bSaveDafault.UseVisualStyleBackColor = true;
             this.bSaveDafault.Click += new System.EventHandler(this.bSaveDafault_Click);
             // 
