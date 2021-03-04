@@ -340,10 +340,10 @@ namespace Cliver.PdfDocumentParser
                                 return false;
                             ci0 = new CvImage(b);
                         }
-                        Rectangle? r_ = civ.Image.FindWithinImage(ci0, civ.Threshold, civ.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
-                        if (r_ == null)
+                        CvImage.Match m = civ.Image.FindFirstMatchWithinImage(ci0, civ.Threshold, civ.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
+                        if (m == null)
                             return false;
-                        Point p = r_.Value.Location;
+                        Point p = m.Rectangle.Location;
                         return !proceedOnFound(new PointF(searchRectanglePosition.X + p.X, searchRectanglePosition.Y + p.Y));
                         //foreach (CvImage.Match m in civ.Image.FindWithinImage(ci0,new Size(20,20), civ.Threshold, civ.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep))
                         //    return !proceedOnFound(new PointF(searchRectanglePosition.X + m.Rectangle.X, searchRectanglePosition.Y + m.Rectangle.Y));

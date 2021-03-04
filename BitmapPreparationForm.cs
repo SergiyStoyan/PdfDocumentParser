@@ -6,6 +6,7 @@
 using System;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace Cliver.PdfDocumentParser
@@ -28,13 +29,20 @@ namespace Cliver.PdfDocumentParser
 
             this.templateForm = templateForm;
 
+            Template template = null;
+            Activated += delegate
+            {
+                template = templateForm.GetTemplateFromUI(false);
+            };
+
             pageRotation.SelectedIndexChanged += delegate { changed = true; };
             autoDeskew.CheckedChanged += delegate { changed = true; };
             autoDeskewThreshold.ValueChanged += delegate { changed = true; };
+            DetectingScaleAnchor.SelectedIndexChanged += delegate { changed = true; };
             bitmapPreprocessorClassDefinition.TextChanged += delegate { changed = true; };
-            BitmapPreprocessorClassDefinitionIsActive.CheckedChanged += delegate
+            PreprocessBitmap.CheckedChanged += delegate
             {
-                bitmapPreprocessorClassDefinition.Enabled = BitmapPreprocessorClassDefinitionIsActive.Checked;
+                bitmapPreprocessorClassDefinition.Enabled = PreprocessBitmap.Checked;
                 if (bitmapPreprocessorClassDefinition.Enabled && string.IsNullOrWhiteSpace(bitmapPreprocessorClassDefinition.Text))
                 {
                     string className = Regex.Replace(template.Name, @"[\W]", "_");
@@ -51,15 +59,26 @@ namespace Cliver.PdfDocumentParser
         //    public string Value { set; get; }
         //}
 
-        internal void SetUI(Template t)
+        internal void SetUI(Template t, bool updateDependentOnly = false)
         {
             Text = "Bitmap preparation for '" + t.Name + "'";
-            pageRotation.SelectedIndex = (int)t.PageRotation;
-            autoDeskew.Checked = t.AutoDeskew;
-            autoDeskewThreshold.Value = t.AutoDeskewThreshold;
-            bitmapPreprocessorClassDefinition.Text = t.BitmapPreprocessorClassDefinition;
-            bitmapPreprocessorClassDefinition.Enabled = BitmapPreprocessorClassDefinitionIsActive.Checked = t.BitmapPreprocessorClassDefinitionIsActive;
-            changed = false;
+            if (!updateDependentOnly)
+            {
+                pageRotation.SelectedIndex = (int)t.PageRotation;
+                autoDeskew.Checked = t.AutoDeskew;
+                autoDeskewThreshold.Value = t.AutoDeskewThreshold;
+                bitmapPreprocessorClassDefinition.Text = t.BitmapPreprocessorClassDefinition;
+                bitmapPreprocessorClassDefinition.Enabled = PreprocessBitmap.Checked = t.PreprocessBitmap;
+                changed = false;
+            }
+            if (!changed
+                && t.GetScaleDetectingAnchor() != (Template.Anchor.CvImage)DetectingScaleAnchor.SelectedItem
+                )
+                changed = true;
+            DetectingScaleAnchor.Items.Clear();
+            DetectingScaleAnchor.Items.Add("");
+            DetectingScaleAnchor.Items.AddRange(t.Anchors.Where(a => a is Template.Anchor.CvImage).Select(a => (object)a.Id).ToArray());
+            DetectingScaleAnchor.SelectedItem = t.GetScaleDetectingAnchor();
         }
         string defaultBitmapPreprocessor = @"using System;
 using System.Drawing;
@@ -96,15 +115,15 @@ namespace Cliver.PdfDocumentParser
             t.PageRotation = (Template.PageRotations)pageRotation.SelectedIndex;
             t.AutoDeskew = autoDeskew.Checked;
             t.AutoDeskewThreshold = (int)autoDeskewThreshold.Value;
+            Template.Anchor.CvImage detectingScaleAnchor = DetectingScaleAnchor.SelectedItem as Template.Anchor.CvImage;
+            t.ScaleDetectingAnchorId = detectingScaleAnchor == null ? -1 : detectingScaleAnchor.Id;
             t.BitmapPreprocessorClassDefinition = bitmapPreprocessorClassDefinition.Text;
-            t.BitmapPreprocessorClassDefinitionIsActive = BitmapPreprocessorClassDefinitionIsActive.Checked;
-            template = t;
+            t.PreprocessBitmap = PreprocessBitmap.Checked;
         }
-        Template template;
 
         void validate()
         {
-            if (BitmapPreprocessorClassDefinitionIsActive.Checked)
+            if (PreprocessBitmap.Checked)
             {
                 bitmapPreprocessorClassDefinition.Document.MarkerStrategy.RemoveAll(marker => true);
                 try

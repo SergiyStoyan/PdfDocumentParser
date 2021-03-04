@@ -21,7 +21,7 @@ namespace Cliver.PdfDocumentParser
             InitializeComponent();
 
             Icon = Win.AssemblyRoutines.GetAppIcon();
-            Text = Program.FullName + ": Template Editor";
+            Text = Program.FullName + " - Template Editor";
 
             this.templateManager = templateManager;
 
@@ -494,7 +494,7 @@ namespace Cliver.PdfDocumentParser
 
         private void bScannedDocumentSettings_Click(object sender, EventArgs e)
         {
-            bitmapPreparationForm.Tag = getTemplateFromUI(false);
+            bitmapPreparationForm.Tag = GetTemplateFromUI(false);
             bitmapPreparationForm.Show();
             bitmapPreparationForm.Activate();
         }

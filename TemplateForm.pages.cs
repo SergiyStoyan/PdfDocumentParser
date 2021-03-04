@@ -24,7 +24,7 @@ namespace Cliver.PdfDocumentParser
             if (pages == null)
                 return;
             pages.Clear();
-            pages.ActiveTemplate = getTemplateFromUI(false);
+            pages.ActiveTemplate = GetTemplateFromUI(false);
             showPage(currentPageI);
         }
 
@@ -35,7 +35,7 @@ namespace Cliver.PdfDocumentParser
             if (scaledCurrentPageBitmap != null)
                 scaledCurrentPageBitmap.Dispose();
             if (pages[currentPageI].ActiveTemplateBitmap == null)
-                pages.ActiveTemplate = getTemplateFromUI(false);
+                pages.ActiveTemplate = GetTemplateFromUI(false);
             scaledCurrentPageBitmap = Win.ImageRoutines.GetScaled(pages[currentPageI].ActiveTemplateBitmap, (float)pictureScale.Value * Settings.Constants.Image2PdfResolutionRatio);
             if (picture.Image != null)
                 picture.Image.Dispose();
@@ -48,7 +48,7 @@ namespace Cliver.PdfDocumentParser
             if (pages == null)
                 return false;
 
-            pages.ActiveTemplate = getTemplateFromUI(false);
+            pages.ActiveTemplate = GetTemplateFromUI(false);
             Template.Anchor a = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == anchorId);
             if (a == null)
                 throw new Exception("Anchor[Id=" + a.Id + "] does not exist.");
@@ -135,7 +135,7 @@ namespace Cliver.PdfDocumentParser
                 if (field.Rectangle == null)
                     return null;
 
-                pages.ActiveTemplate = getTemplateFromUI(false);
+                pages.ActiveTemplate = GetTemplateFromUI(false);
 
                 if (field.LeftAnchor != null && !findAndDrawAnchor(field.LeftAnchor.Id))
                     return null;

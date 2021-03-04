@@ -129,27 +129,6 @@ namespace Cliver.PdfDocumentParser
                     //Bitmap b = Bitmap.Clone(new Rectangle(0, 0, Bitmap.Width, Bitmap.Height), System.Drawing.Imaging.PixelFormat.Undefined);!!!throws from Tesseract: A generic error occurred in GDI+.
                     Bitmap b = new Bitmap(Bitmap);
 
-                    //Template.Anchor.CvImage ai = (Template.Anchor.CvImage)PageCollection.ActiveTemplate.Anchors[0];//!!!test
-                    //PageCollection.ActiveTemplate.SubtractingImages = new List<Template.CvImage>() { new Template.CvImage { Image = ai.Image, ScaleDeviation = ai.ScaleDeviation, Threshold = ai.Threshold } };
-                    if (PageCollection.ActiveTemplate.SubtractingImages?.Any() == true)//needs more precise matching!
-                    {
-                        foreach (Template.CvImage cvi in PageCollection.ActiveTemplate.SubtractingImages)
-                        {
-                            for (; ; )
-                            {
-                                CvImage cvPage = new CvImage(b);
-                                //List<CvImage.Match> ms = cvi.Image.FindWithinImage(cvPage, new Size(cvi.Image.Width, cvi.Image.Height), cvi.Threshold, cvi.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
-                                Rectangle? r_ = cvi.Image.FindWithinImage(cvPage, cvi.Threshold, cvi.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
-                                if (r_ == null)
-                                    continue;
-                                Rectangle r = (Rectangle)r_;
-                                for (int x = (int)(r.X / Settings.Constants.Image2PdfResolutionRatio); x < r.Right / Settings.Constants.Image2PdfResolutionRatio; x++)
-                                    for (int y = (int)(r.Y / Settings.Constants.Image2PdfResolutionRatio); y < r.Bottom / Settings.Constants.Image2PdfResolutionRatio; y++)
-                                        b.SetPixel(x, y, Color.White);
-                            }
-                        }
-                    }
-
                     switch (PageCollection.ActiveTemplate.PageRotation)
                     {
                         case Template.PageRotations.NONE:
@@ -218,7 +197,45 @@ namespace Cliver.PdfDocumentParser
                         }
                     }
 
+                    b = PageCollection.ActiveTemplate.BitmapPreprocessor.GetProcessed(b);
+
+                    //Template.Anchor.CvImage ai = (Template.Anchor.CvImage)PageCollection.ActiveTemplate.Anchors[0];//!!!test
+                    //PageCollection.ActiveTemplate.SubtractingImages = new List<Template.CvImage>() { new Template.CvImage { Image = ai.Image, ScaleDeviation = ai.ScaleDeviation, Threshold = ai.Threshold } };
+                    if (PageCollection.ActiveTemplate.SubtractingImages?.Any() == true)//!!!needs test/debug!
+                    {
+                        foreach (Template.CvImage cvi in PageCollection.ActiveTemplate.SubtractingImages)
+                        {
+                            for (; ; )
+                            {
+                                CvImage cvPage = new CvImage(b);
+                                //List<CvImage.Match> ms = cvi.Image.FindWithinImage(cvPage, new Size(cvi.Image.Width, cvi.Image.Height), cvi.Threshold, cvi.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
+                                CvImage.Match m = cvi.Image.FindBestMatchWithinImage(cvPage, cvi.Threshold, cvi.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
+                                if (m == null)
+                                    continue;
+                                Rectangle r = m.Rectangle;
+                                for (int x = (int)(r.X / Settings.Constants.Image2PdfResolutionRatio); x < r.Right / Settings.Constants.Image2PdfResolutionRatio; x++)
+                                    for (int y = (int)(r.Y / Settings.Constants.Image2PdfResolutionRatio); y < r.Bottom / Settings.Constants.Image2PdfResolutionRatio; y++)
+                                        b.SetPixel(x, y, Color.White);
+                            }
+                        }
+                    }
+
                     _activeTemplateBitmap = b;
+
+                    if (PageCollection.ActiveTemplate.ScaleDetectingAnchorId > 0)
+                    {
+                        Template.Anchor.CvImage sda = PageCollection.ActiveTemplate.GetScaleDetectingAnchor();
+                        CvImage.Match m = sda.Image.FindBestMatchWithinImage(ActiveTemplateCvImage, sda.Threshold, sda.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
+                        if (m != null)
+                        {
+                            _activeTemplateBitmap = Win.ImageRoutines.GetScaled(ActiveTemplateBitmap, m.Scale);
+                            b.Dispose();
+                            _activeTemplateImageData = null;
+                            _activeTemplateOcrCharBoxs = null;
+                            _activeTemplateCvImage?.Dispose();
+                            _activeTemplateCvImage = null;
+                        }
+                    }
                 }
                 return _activeTemplateBitmap;
             }

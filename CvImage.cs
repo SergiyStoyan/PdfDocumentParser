@@ -123,57 +123,11 @@ namespace Cliver.PdfDocumentParser
             return image;
         }
 
-        public System.Drawing.Rectangle? FindWithinImage(CvImage cvImage, float threshold, float scaleDeviation, int scaleStep/*, out float detectedScale*/)
+        public Match FindFirstMatchWithinImage(CvImage cvImage, float threshold, float scaleDeviation, int scaleStep)
         {
-            System.Drawing.Point? p = findWithinImage(image, cvImage.image, threshold);
-            if (p != null)
-                return new Rectangle((Point)p, new Size(image.Width, image.Height));
-            //running through pyramid
-            int stepCount = Convert.ToInt32(scaleDeviation * Width / scaleStep);
-            for (int i = 1; i <= stepCount; i++)
-            {
-                double scaleDelta = scaleStep * i / Width;
-                Image<Gray, byte> template = image.Resize(1 + scaleDelta, Inter.Linear);
-                p = findWithinImage(template, cvImage.image, threshold);
-                if (p != null)
-                    return new Rectangle((Point)p, new Size(template.Width, template.Height));
-                template = image.Resize(1 - scaleDelta, Inter.Linear);
-                p = findWithinImage(template, cvImage.image, threshold);
-                if (p != null)
-                    return new Rectangle((Point)p, new Size(template.Width, template.Height));
-            }
-            return null;
-        }
-
-        static System.Drawing.Point? findWithinImage(Image<Gray, byte> template, Image<Gray, byte> image, float threshold = 0.7f)
-        {
-            if (template.Width > image.Width || template.Height > image.Height)//otherwise MatchTemplate() throws an exception
-                return null;
-            using (Image<Gray, float> match = image.MatchTemplate(template, TemplateMatchingType.CcoeffNormed))
-            {
-                match.MinMax(out double[] min, out double[] max, out Point[] minPoint, out Point[] maxPoint);
-
-                if (max[0] > threshold)
-                    return maxPoint[0];
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Run through pyramid and detect the best scale.
-        /// </summary>
-        /// <param name="cvImage"></param>
-        /// <param name="padding"></param>
-        /// <param name="threshold"></param>
-        /// <param name="scaleDeviation"></param>
-        /// <param name="scaleStep"></param>
-        /// <param name="bestScale"></param>
-        /// <returns></returns>
-        public List<Match> FindWithinImage(CvImage cvImage, Size padding, float threshold, float scaleDeviation, int scaleStep, out float bestScale)
-        {
-            bestScale = 1;
-            List<Match> bestMatches = findWithinImage(image, padding, cvImage.image, threshold);
-            float bestScore = bestMatches.Max(a => a.Score);
+            Tuple<Point, float> p_s = findBestMatchWithinImage(image, cvImage.image);
+            if (p_s != null && p_s.Item2 > threshold)
+                return new Match { Rectangle = new Rectangle(p_s.Item1, new Size(image.Width, image.Height)), Scale = 1, Score = p_s.Item2 };
             //running through pyramid
             int stepCount = Convert.ToInt32(scaleDeviation * Width / scaleStep);
             for (int i = 1; i <= stepCount; i++)
@@ -181,69 +135,105 @@ namespace Cliver.PdfDocumentParser
                 float scaleDelta = scaleStep * i / Width;
                 float scale = 1 + scaleDelta;
                 Image<Gray, byte> template = image.Resize(scale, Inter.Linear);
-                List<Match> ms = findWithinImage(template, padding, cvImage.image, threshold);
-                float s = ms.Max(a => a.Score);
-                if (bestScore > s)
-                    break;
-                bestScale = scale;
-                bestMatches = ms;
-                bestScore = s;
+                p_s = findBestMatchWithinImage(template, cvImage.image);
+                if (p_s != null && p_s.Item2 > threshold)
+                    return new Match { Rectangle = new Rectangle(p_s.Item1, new Size(template.Width, template.Height)), Scale = scale, Score = p_s.Item2 };
+                scale = 1 - scaleDelta;
+                template = image.Resize(scale, Inter.Linear);
+                p_s = findBestMatchWithinImage(template, cvImage.image);
+                if (p_s != null && p_s.Item2 > threshold)
+                    return new Match { Rectangle = new Rectangle(p_s.Item1, new Size(template.Width, template.Height)), Scale = scale, Score = p_s.Item2 };
             }
-            for (int i = 1; i <= stepCount; i++)
-            {
-                float scaleDelta = scaleStep * i / Width;
-                float scale = 1 - scaleDelta;
-                Image<Gray, byte> template = image.Resize(scale, Inter.Linear);
-                List<Match> ms = findWithinImage(template, padding, cvImage.image, threshold);
-                float s = ms.Max(a => a.Score);
-                if (bestScore > s)
-                    break;
-                bestScale = scale;
-                bestMatches = ms;
-                bestScore = s;
-            }
-            return bestMatches;
+            return null;
         }
 
-        /// <summary>
-        /// Runs through pyramid only until something is found. 
-        /// </summary>
-        /// <param name="cvImage"></param>
-        /// <param name="padding"></param>
-        /// <param name="threshold"></param>
-        /// <param name="scaleDeviation"></param>
-        /// <param name="scaleStep"></param>
-        /// <returns></returns>
-        public List<Match> FindWithinImage(CvImage cvImage, Size padding, float threshold, float scaleDeviation, int scaleStep)
+        static Tuple<Point, float> findBestMatchWithinImage(Image<Gray, byte> template, Image<Gray, byte> image)
         {
-            List<Match> ms;
-            ms = findWithinImage(image, padding, cvImage.image, threshold);
-            if (ms.Count > 0)
-                return ms;
+            if (template.Width > image.Width || template.Height > image.Height)//otherwise MatchTemplate() throws an exception
+                return null;
+            using (Image<Gray, float> match = image.MatchTemplate(template, TemplateMatchingType.CcoeffNormed))
+            {
+                match.MinMax(out double[] min, out double[] max, out Point[] minPoint, out Point[] maxPoint);
+                return new Tuple<Point, float>(maxPoint[0], (float)max[0]);
+            }
+        }
+
+        public class Match
+        {
+            //public Point Point;
+            public Rectangle Rectangle;
+            public float Scale;
+            public float Score;
+        }
+
+        public Match FindBestMatchWithinImage(CvImage cvImage, float threshold, float scaleDeviation, int scaleStep)
+        {
+            Match bestMatch = null;
+            Tuple<Point, float> p_s = findBestMatchWithinImage(image, cvImage.image);
+            if (p_s != null && p_s.Item2 > threshold)
+                bestMatch = new Match { Rectangle = new Rectangle(p_s.Item1, new Size(image.Width, image.Height)), Scale = 1, Score = p_s.Item2 };
             //running through pyramid
             int stepCount = Convert.ToInt32(scaleDeviation * Width / scaleStep);
             for (int i = 1; i <= stepCount; i++)
             {
                 float scaleDelta = scaleStep * i / Width;
-                Image<Gray, byte> template = image.Resize(1 + scaleDelta, Inter.Linear);
-                ms = findWithinImage(template, padding, cvImage.image, threshold);
-                if (ms.Count > 0)
-                    return ms;
-                template = image.Resize(1 - scaleDelta, Inter.Linear);
-                ms = findWithinImage(template, padding, cvImage.image, threshold);
-                if (ms.Count > 0)
-                    return ms;
+                float scale = 1 + scaleDelta;
+                Image<Gray, byte> template = image.Resize(scale, Inter.Linear);
+                p_s = findBestMatchWithinImage(template, cvImage.image);
+                if (p_s != null && (bestMatch == null || p_s.Item2 > bestMatch.Score))
+                    bestMatch = new Match { Rectangle = new Rectangle(p_s.Item1, new Size(template.Width, template.Height)), Scale = scale, Score = p_s.Item2 };
+                scale = 1 - scaleDelta;
+                template = image.Resize(scale, Inter.Linear);
+                p_s = findBestMatchWithinImage(template, cvImage.image);
+                if (p_s != null && (bestMatch == null || p_s.Item2 > bestMatch.Score))
+                    bestMatch = new Match { Rectangle = new Rectangle(p_s.Item1, new Size(template.Width, template.Height)), Scale = scale, Score = p_s.Item2 };
             }
-            return ms;
+            return bestMatch;
         }
 
-        public List<Match> FindWithinImage(CvImage cvImage, Size padding, float threshold, float scale)
-        {
-            Image<Gray, byte> template = image.Resize(scale, Inter.Linear);
-            return findWithinImage(template, padding, cvImage.image, threshold);
-        }
+        //public List<Match> FindBestMatchesWithinImage(CvImage cvImage, Size padding, float threshold, float scaleDeviation, int scaleStep)
+        //{
+        //    bestScale = 1;
+        //    List<Match> bestMatches = findMatchsWithinImage(image, padding, cvImage.image, threshold);
+        //    float bestScore = bestMatches.Max(a => a.Score);
+        //    //running through pyramid
+        //    int stepCount = Convert.ToInt32(scaleDeviation * Width / scaleStep);
+        //    for (int i = 1; i <= stepCount; i++)
+        //    {
+        //        float scaleDelta = scaleStep * i / Width;
+        //        float scale = 1 + scaleDelta;
+        //        Image<Gray, byte> template = image.Resize(scale, Inter.Linear);
+        //        List<Match> ms = findMatchsWithinImage(template, padding, cvImage.image, threshold);
+        //        float s = ms.Max(a => a.Score);
+        //        if (bestScore > s)
+        //            break;
+        //        bestScale = scale;
+        //        bestMatches = ms;
+        //        bestScore = s;
+        //    }
+        //    for (int i = 1; i <= stepCount; i++)
+        //    {
+        //        float scaleDelta = scaleStep * i / Width;
+        //        float scale = 1 - scaleDelta;
+        //        Image<Gray, byte> template = image.Resize(scale, Inter.Linear);
+        //        List<Match> ms = findMatchsWithinImage(template, padding, cvImage.image, threshold);
+        //        float s = ms.Max(a => a.Score);
+        //        if (bestScore > s)
+        //            break;
+        //        bestScale = scale;
+        //        bestMatches = ms;
+        //        bestScore = s;
+        //    }
+        //    return bestMatches;
+        //}
 
-        static List<Match> findWithinImage(Image<Gray, byte> template, Size padding, Image<Gray, byte> image, float threshold = 0.7f)
+        //public List<Match> FindWithinImage(CvImage cvImage, Size padding, float threshold, float scale)
+        //{
+        //    Image<Gray, byte> template = image.Resize(scale, Inter.Linear);
+        //    return findWithinImage(template, padding, cvImage.image, threshold);
+        //}
+
+        static List<Match> findMatchsWithinImage(Image<Gray, byte> template, Size padding, Image<Gray, byte> image, float threshold = 0.7f)
         {
             if (template.Width > image.Width || template.Height > image.Height)//otherwise MatchTemplate() throws an exception
                 return null;
@@ -279,12 +269,6 @@ namespace Cliver.PdfDocumentParser
                 }
                 return paddedMatchRs2bestMatchP.Values.ToList();
             }
-        }
-
-        public class Match
-        {
-            public Rectangle Rectangle;
-            public float Score;
         }
 
         public Image GetImage()

@@ -172,6 +172,7 @@
     <Compile Include="Page.fields.cs" />
     <Compile Include="PageCollection.cs" />
     <Compile Include="Page.cs" />
+    <Compile Include="Template.imagePreprocessing.cs" />
     <Compile Include="Template.Anchor.cs" />
     <Compile Include="Template.Field.cs" />
     <Compile Include="BitmapPreparationForm.cs">
@@ -342,11 +343,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Emgu.CV.Bitmap">
-      <Version>4.5.1.4349</Version>
+    <PackageReference Include="Emgu.CV">
+      <Version>4.3.0.3890</Version>
     </PackageReference>
     <PackageReference Include="Emgu.CV.runtime.windows">
-      <Version>4.5.1.4349</Version>
+      <Version>4.3.0.3890</Version>
     </PackageReference>
     <PackageReference Include="ICSharpCode.TextEditor.Extended">
       <Version>4.2.4</Version>

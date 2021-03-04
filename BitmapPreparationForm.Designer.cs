@@ -43,7 +43,10 @@
             this.label21 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.BitmapPreprocessorClassDefinitionIsActive = new System.Windows.Forms.CheckBox();
+            this.PreprocessBitmap = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.DetectingScaleAnchor = new System.Windows.Forms.ComboBox();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.autoDeskewThreshold)).BeginInit();
             this.SuspendLayout();
@@ -141,25 +144,25 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.bitmapPreprocessorClassDefinition.AutoHideScrollbars = false;
             this.bitmapPreprocessorClassDefinition.Highlighting = null;
-            this.bitmapPreprocessorClassDefinition.Location = new System.Drawing.Point(1, 107);
+            this.bitmapPreprocessorClassDefinition.Location = new System.Drawing.Point(1, 78);
             this.bitmapPreprocessorClassDefinition.Margin = new System.Windows.Forms.Padding(1);
             this.bitmapPreprocessorClassDefinition.Name = "bitmapPreprocessorClassDefinition";
             this.bitmapPreprocessorClassDefinition.ShowVRuler = false;
-            this.bitmapPreprocessorClassDefinition.Size = new System.Drawing.Size(759, 171);
+            this.bitmapPreprocessorClassDefinition.Size = new System.Drawing.Size(759, 200);
             this.bitmapPreprocessorClassDefinition.TabIndex = 78;
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(12, 93);
+            this.label9.Location = new System.Drawing.Point(12, 60);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(182, 13);
+            this.label9.Size = new System.Drawing.Size(63, 13);
             this.label9.TabIndex = 77;
-            this.label9.Text = "Bitmap Preprocessor Class Definition:";
+            this.label9.Text = "Preprocess:";
             // 
             // autoDeskewThreshold
             // 
-            this.autoDeskewThreshold.Location = new System.Drawing.Point(255, 52);
+            this.autoDeskewThreshold.Location = new System.Drawing.Point(412, 12);
             this.autoDeskewThreshold.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -178,7 +181,7 @@
             // 
             this.autoDeskew.AutoSize = true;
             this.autoDeskew.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.autoDeskew.Location = new System.Drawing.Point(92, 55);
+            this.autoDeskew.Location = new System.Drawing.Point(249, 15);
             this.autoDeskew.Name = "autoDeskew";
             this.autoDeskew.Size = new System.Drawing.Size(15, 14);
             this.autoDeskew.TabIndex = 81;
@@ -194,7 +197,7 @@
             "↻ 180°",
             "↺ 90°",
             "Auto"});
-            this.pageRotation.Location = new System.Drawing.Point(93, 12);
+            this.pageRotation.Location = new System.Drawing.Point(93, 11);
             this.pageRotation.Name = "pageRotation";
             this.pageRotation.Size = new System.Drawing.Size(52, 21);
             this.pageRotation.TabIndex = 80;
@@ -202,7 +205,7 @@
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(12, 55);
+            this.label21.Location = new System.Drawing.Point(169, 15);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(74, 13);
             this.label21.TabIndex = 84;
@@ -211,7 +214,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(132, 55);
+            this.label14.Location = new System.Drawing.Point(289, 15);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(124, 13);
             this.label14.TabIndex = 82;
@@ -226,22 +229,58 @@
             this.label1.TabIndex = 79;
             this.label1.Text = "Rotate Pages:";
             // 
-            // BitmapPreprocessorClassDefinitionIsActive
+            // PreprocessBitmap
             // 
-            this.BitmapPreprocessorClassDefinitionIsActive.AutoSize = true;
-            this.BitmapPreprocessorClassDefinitionIsActive.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.BitmapPreprocessorClassDefinitionIsActive.Location = new System.Drawing.Point(211, 93);
-            this.BitmapPreprocessorClassDefinitionIsActive.Name = "BitmapPreprocessorClassDefinitionIsActive";
-            this.BitmapPreprocessorClassDefinitionIsActive.Size = new System.Drawing.Size(15, 14);
-            this.BitmapPreprocessorClassDefinitionIsActive.TabIndex = 85;
-            this.BitmapPreprocessorClassDefinitionIsActive.UseVisualStyleBackColor = true;
+            this.PreprocessBitmap.AutoSize = true;
+            this.PreprocessBitmap.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.PreprocessBitmap.Location = new System.Drawing.Point(93, 60);
+            this.PreprocessBitmap.Name = "PreprocessBitmap";
+            this.PreprocessBitmap.Size = new System.Drawing.Size(15, 14);
+            this.PreprocessBitmap.TabIndex = 85;
+            this.PreprocessBitmap.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(492, 14);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(123, 13);
+            this.label2.TabIndex = 87;
+            this.label2.Text = "Detecting Scale Anchor:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(138, 60);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(105, 13);
+            this.label3.TabIndex = 88;
+            this.label3.Text = "Preprocessing Code:";
+            // 
+            // DetectingScaleAnchor
+            // 
+            this.DetectingScaleAnchor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.DetectingScaleAnchor.FormattingEnabled = true;
+            this.DetectingScaleAnchor.Items.AddRange(new object[] {
+            "",
+            "↻ 90°",
+            "↻ 180°",
+            "↺ 90°",
+            "Auto"});
+            this.DetectingScaleAnchor.Location = new System.Drawing.Point(623, 11);
+            this.DetectingScaleAnchor.Name = "DetectingScaleAnchor";
+            this.DetectingScaleAnchor.Size = new System.Drawing.Size(52, 21);
+            this.DetectingScaleAnchor.TabIndex = 89;
             // 
             // BitmapPreparationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(759, 310);
-            this.Controls.Add(this.BitmapPreprocessorClassDefinitionIsActive);
+            this.Controls.Add(this.DetectingScaleAnchor);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.PreprocessBitmap);
             this.Controls.Add(this.autoDeskewThreshold);
             this.Controls.Add(this.autoDeskew);
             this.Controls.Add(this.pageRotation);
@@ -276,6 +315,9 @@
         private System.Windows.Forms.Button bRemove;
         private System.Windows.Forms.Button bSaveDafault;
         private System.Windows.Forms.ComboBox defaultBitmapPreprocessorClassDefinitions;
-        private System.Windows.Forms.CheckBox BitmapPreprocessorClassDefinitionIsActive;
+        private System.Windows.Forms.CheckBox PreprocessBitmap;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox DetectingScaleAnchor;
     }
 }

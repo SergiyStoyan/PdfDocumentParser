@@ -190,7 +190,7 @@ namespace Cliver.PdfDocumentParser
 
         private void showAsJson_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Template t = getTemplateFromUI(false);
+            Template t = GetTemplateFromUI(false);
             TextForm tf = new TextForm("Template JSON object", Serialization.Json.Serialize(t), true);
             while (tf.ShowDialog() == DialogResult.OK)
                 try
@@ -215,7 +215,7 @@ namespace Cliver.PdfDocumentParser
         {
             try
             {
-                templateManager.Template = getTemplateFromUI(true);
+                templateManager.Template = GetTemplateFromUI(true);
                 templateManager.Save();
                 DialogResult = DialogResult.OK;
                 Close();
@@ -226,7 +226,7 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        Template getTemplateFromUI(bool saving)
+        internal Template GetTemplateFromUI(bool saving)
         {
             Template t = new Template();
 
