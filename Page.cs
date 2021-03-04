@@ -226,7 +226,7 @@ namespace Cliver.PdfDocumentParser
                     {
                         Template.Anchor.CvImage sda = PageCollection.ActiveTemplate.GetScaleDetectingAnchor();
                         CvImage.Match m = sda.Image.FindBestMatchWithinImage(ActiveTemplateCvImage, sda.Threshold, sda.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
-                        if (m != null)
+                        if (m != null && m.Scale != 1)
                         {
                             _activeTemplateBitmap = Win.ImageRoutines.GetScaled(ActiveTemplateBitmap, m.Scale);
                             b.Dispose();

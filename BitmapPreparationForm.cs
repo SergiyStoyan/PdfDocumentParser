@@ -33,6 +33,7 @@ namespace Cliver.PdfDocumentParser
             Activated += delegate
             {
                 template = templateForm.GetTemplateFromUI(false);
+                SetUI(template, true);
             };
 
             pageRotation.SelectedIndexChanged += delegate { changed = true; };
@@ -59,10 +60,10 @@ namespace Cliver.PdfDocumentParser
         //    public string Value { set; get; }
         //}
 
-        internal void SetUI(Template t, bool updateDependentOnly = false)
+        internal void SetUI(Template t, bool updateDependentValuesOnly)
         {
             Text = "Bitmap preparation for '" + t.Name + "'";
-            if (!updateDependentOnly)
+            if (!updateDependentValuesOnly)
             {
                 pageRotation.SelectedIndex = (int)t.PageRotation;
                 autoDeskew.Checked = t.AutoDeskew;
@@ -115,8 +116,7 @@ namespace Cliver.PdfDocumentParser
             t.PageRotation = (Template.PageRotations)pageRotation.SelectedIndex;
             t.AutoDeskew = autoDeskew.Checked;
             t.AutoDeskewThreshold = (int)autoDeskewThreshold.Value;
-            Template.Anchor.CvImage detectingScaleAnchor = DetectingScaleAnchor.SelectedItem as Template.Anchor.CvImage;
-            t.ScaleDetectingAnchorId = detectingScaleAnchor == null ? -1 : detectingScaleAnchor.Id;
+            t.ScaleDetectingAnchorId = DetectingScaleAnchor.SelectedItem == null ? -1 : (int)DetectingScaleAnchor.SelectedItem;
             t.BitmapPreprocessorClassDefinition = bitmapPreprocessorClassDefinition.Text;
             t.PreprocessBitmap = PreprocessBitmap.Checked;
         }
