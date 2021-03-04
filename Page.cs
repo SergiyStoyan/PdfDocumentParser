@@ -87,7 +87,10 @@ namespace Cliver.PdfDocumentParser
             if (PageCollection.ActiveTemplate == null)
                 return;
 
-            if (newTemplate == null || newTemplate.PageRotation != PageCollection.ActiveTemplate.PageRotation || newTemplate.Deskew != PageCollection.ActiveTemplate.Deskew)
+            if (newTemplate == null
+                || newTemplate.PageRotation != PageCollection.ActiveTemplate.PageRotation
+                || !Serialization.Json.IsEqual(newTemplate.Deskew, PageCollection.ActiveTemplate.Deskew)
+                )
             {
                 _activeTemplateImageData = null;
                 _activeTemplateBitmap?.Dispose();
@@ -96,10 +99,15 @@ namespace Cliver.PdfDocumentParser
                 _activeTemplateCvImage?.Dispose();
                 _activeTemplateCvImage = null;
             }
+            else if (newTemplate.TesseractPageSegMode != PageCollection.ActiveTemplate.TesseractPageSegMode)
+            {
+                _activeTemplateOcrCharBoxs = null;
+            }
+
             if (!Serialization.Json.IsEqual(PageCollection.ActiveTemplate, newTemplate))
             {
                 anchorIds2anchorActualInfo.Clear();
-                fieldNames2fieldActualInfo.Clear();
+                fieldNames2fieldActualInfos.Clear();
             }
         }
 
@@ -143,7 +151,15 @@ namespace Cliver.PdfDocumentParser
                             b.RotateFlip(RotateFlipType.Rotate270FlipNone);
                             break;
                         case Template.PageRotations.AutoDetection:
-                            int o = Ocr.This.DetectOrientationAngle(b, out float confidence);
+                            int o = 0;
+                            try
+                            {
+                                o = Ocr.This.DetectOrientationAngle(b, out float confidence);
+                            }
+                            catch (Tesseract.TesseractException e)//on page with no text
+                            {
+                                Log.Warning2(e);
+                            }
                             if (o <= 45) { }
                             else if (o <= 135)
                                 b.RotateFlip(RotateFlipType.Rotate270FlipNone);
@@ -151,93 +167,93 @@ namespace Cliver.PdfDocumentParser
                                 b.RotateFlip(RotateFlipType.Rotate180FlipNone);
                             else if (o <= 315)
                                 b.RotateFlip(RotateFlipType.Rotate90FlipNone);
-                            //Bitmap b2 = new Bitmap(b.Width, b.Height);
-                            //using (var gr = Graphics.FromImage(b2))
+                            //Tesseract.Orientation o = Ocr.This.DetectOrientation(b);
+                            //switch (o)
                             //{
-                            //    gr.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                            //    gr.TranslateTransform(b.Width / 2, b.Height / 2);
-                            //    gr.RotateTransform(-(float)o);
-                            //    gr.DrawImage(b, -b.Width / 2, -b.Height / 2, b.Width, b.Height);
+                            //    case Tesseract.Orientation.PageLeft:
+                            //        b.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                            //        break;
+                            //    case Tesseract.Orientation.PageDown:
+                            //        b.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                            //        break;
+                            //    case Tesseract.Orientation.PageRight:
+                            //        b.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                            //        break;
+                            //    case Tesseract.Orientation.PageUp:
+                            //        break;
+                            //    default:
+                            //        throw new Exception("Unknown option: " + o);
                             //}
-                            //b.Dispose();
-                            //b = b2;
                             break;
                         default:
                             throw new Exception("Unknown option: " + PageCollection.ActiveTemplate.PageRotation);
                     }
 
-                    if (PageCollection.ActiveTemplate.Deskew)
+                    if (PageCollection.ActiveTemplate.Deskew != null)
                     {
-                        ////long images processing:
-                        //Bitmap b2 = new Bitmap(b.Width, b.Height);
-                        //using (Graphics g2 = Graphics.FromImage(b2))
+                        //using (ImageMagick.MagickImage image = new ImageMagick.MagickImage(b))
                         //{
-                        //    //detect blocks by find contours in Emgu
-                        //    foreach (Bitmap block in blocks)
-                        //    {
-                        //        Bitmap block2 = deskew(block);
-                        //        block.Dispose();
-                        //        g2.DrawImage(block2, x, y);
-                        //    }
+                        //    //image.Density = new PointD(600, 600);
+                        //    //image.AutoLevel();
+                        //    //image.Negate();
+                        //    //image.AdaptiveThreshold(10, 10, new ImageMagick.Percentage(20));
+                        //    //image.Negate();
+                        //    image.Deskew(new ImageMagick.Percentage(PageCollection.ActiveTemplate.DeskewThreshold));
+                        //    //image.AutoThreshold(AutoThresholdMethod.OTSU);
+                        //    //image.Despeckle();
+                        //    //image.WhiteThreshold(new Percentage(20));
+                        //    //image.Trim();
+                        //    b.Dispose();
+                        //    b = image.ToBitmap();
                         //}
-                        using (ImageMagick.MagickImage image = new ImageMagick.MagickImage(b))
-                        {
-                            //image.Density = new PointD(600, 600);
-                            //image.AutoLevel();
-                            //image.Negate();
-                            //image.AdaptiveThreshold(10, 10, new ImageMagick.Percentage(20));
-                            //image.Negate();
-                            image.Deskew(new ImageMagick.Percentage(PageCollection.ActiveTemplate.DeskewThreshold));
-                            //image.AutoThreshold(AutoThresholdMethod.OTSU);
-                            //image.Despeckle();
-                            //image.WhiteThreshold(new Percentage(20));
-                            //image.Trim();
-                            b.Dispose();
-                            b = image.ToBitmap();
-                        }
+                        Deskewer.Deskew(ref b, PageCollection.ActiveTemplate.Deskew);
                     }
 
                     b = PageCollection.ActiveTemplate.BitmapPreprocessor.GetProcessed(b);
 
                     //Template.Anchor.CvImage ai = (Template.Anchor.CvImage)PageCollection.ActiveTemplate.Anchors[0];//!!!test
                     //PageCollection.ActiveTemplate.SubtractingImages = new List<Template.CvImage>() { new Template.CvImage { Image = ai.Image, ScaleDeviation = ai.ScaleDeviation, Threshold = ai.Threshold } };
-                    if (PageCollection.ActiveTemplate.SubtractingImages?.Any() == true)//!!!needs test/debug!
-                    {
-                        foreach (Template.CvImage cvi in PageCollection.ActiveTemplate.SubtractingImages)
-                        {
-                            for (; ; )
-                            {
-                                CvImage cvPage = new CvImage(b);
-                                //List<CvImage.Match> ms = cvi.Image.FindWithinImage(cvPage, new Size(cvi.Image.Width, cvi.Image.Height), cvi.Threshold, cvi.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
-                                CvImage.Match m = cvi.Image.FindBestMatchWithinImage(cvPage, cvi.Threshold, cvi.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
-                                if (m == null)
-                                    continue;
-                                Rectangle r = m.Rectangle;
-                                for (int x = (int)(r.X / Settings.Constants.Image2PdfResolutionRatio); x < r.Right / Settings.Constants.Image2PdfResolutionRatio; x++)
-                                    for (int y = (int)(r.Y / Settings.Constants.Image2PdfResolutionRatio); y < r.Bottom / Settings.Constants.Image2PdfResolutionRatio; y++)
-                                        b.SetPixel(x, y, Color.White);
-                            }
-                        }
-                    }
+                    //if (PageCollection.ActiveTemplate.SubtractingImages?.Any() == true)//!!!needs test/debug!
+                    //{
+                    //    foreach (Template.CvImage cvi in PageCollection.ActiveTemplate.SubtractingImages)
+                    //    {
+                    //        for (; ; )
+                    //        {
+                    //            CvImage cvPage = new CvImage(b);
+                    //            //List<CvImage.Match> ms = cvi.Image.FindWithinImage(cvPage, new Size(cvi.Image.Width, cvi.Image.Height), cvi.Threshold, cvi.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
+                    //            CvImage.Match m = cvi.Image.FindBestMatchWithinImage(cvPage, cvi.Threshold, cvi.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
+                    //            if (m == null)
+                    //                continue;
+                    //            Rectangle r = m.Rectangle;
+                    //            for (int x = (int)(r.X / Settings.Constants.Image2PdfResolutionRatio); x < r.Right / Settings.Constants.Image2PdfResolutionRatio; x++)
+                    //                for (int y = (int)(r.Y / Settings.Constants.Image2PdfResolutionRatio); y < r.Bottom / Settings.Constants.Image2PdfResolutionRatio; y++)
+                    //                    b.SetPixel(x, y, Color.White);
+                    //        }
+                    //    }
+                    //}
 
                     _activeTemplateBitmap = b;
-
                     if (PageCollection.ActiveTemplate.ScalingAnchorId > 0)
                     {
-                        Template.Anchor.CvImage sda = PageCollection.ActiveTemplate.GetScalingAnchor();
-                        CvImage.Match m = sda.Image.FindBestMatchWithinImage(ActiveTemplateCvImage, sda.Threshold, sda.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
-                        if (m != null && m.Scale != 1)
+                        DetectedImageScale = detectScaleByScalingAnchor();
+                        if (DetectedImageScale == 0)
+                            Log.Warning("Could not detect image scale.");
+                        else if (DetectedImageScale != 1)
                         {
-                            _activeTemplateBitmap = Win.ImageRoutines.GetScaled(ActiveTemplateBitmap, 1f / m.Scale);
-                            b.Dispose();
+                            _activeTemplateBitmap = Win.ImageRoutines.GetScaled(b, 1f / DetectedImageScale);
+                            b?.Dispose();
                             _activeTemplateCvImage?.Dispose();
                             _activeTemplateCvImage = null;
                         }
+                        Log.Inform("Detected image scale: " + DetectedImageScale);
                     }
+                    else
+                        DetectedImageScale = -1;
                 }
                 return _activeTemplateBitmap;
             }
         }
+        public float DetectedImageScale { get; private set; } = -1;
 
         Bitmap _activeTemplateBitmap = null;
 
@@ -280,12 +296,32 @@ namespace Cliver.PdfDocumentParser
             {
                 if (_activeTemplateOcrCharBoxs == null)
                 {
-                    _activeTemplateOcrCharBoxs = Ocr.This.GetCharBoxs(ActiveTemplateBitmap);
+                    _activeTemplateOcrCharBoxs = Ocr.This.GetCharBoxs(ActiveTemplateBitmap, PageCollection.ActiveTemplate.TesseractPageSegMode);
                 }
                 return _activeTemplateOcrCharBoxs;
             }
         }
         List<Ocr.CharBox> _activeTemplateOcrCharBoxs;
+
+        float detectScaleByScalingAnchor()
+        {
+            Template.Anchor.CvImage sda = PageCollection.ActiveTemplate.GetScalingAnchor();
+            CvImage searchRectangleCI;
+            if (sda.SearchRectangleMargin >= 0)
+            {
+                RectangleF sr = getSearchRectangle(sda.Rectangle(), sda.SearchRectangleMargin);
+                Bitmap b = GetRectangleFromActiveTemplateBitmap(sr.X / Settings.Constants.Image2PdfResolutionRatio, sr.Y / Settings.Constants.Image2PdfResolutionRatio, sr.Width / Settings.Constants.Image2PdfResolutionRatio, sr.Height / Settings.Constants.Image2PdfResolutionRatio);
+                if (b == null)
+                    throw new Exception("The scaling anchor's rectangle is null.");
+                searchRectangleCI = new CvImage(b);
+            }
+            else
+                searchRectangleCI = ActiveTemplateCvImage;
+            CvImage.Match m = sda.Image.FindBestMatchWithinImage(searchRectangleCI, sda.Threshold, sda.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
+            if (m != null)
+                return m.Scale;
+            return 0;
+        }
 
         public Bitmap GetActiveTemplateBitmapCopy()
         {

@@ -15,6 +15,8 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class Template
     {
+        public Tesseract.PageSegMode TesseractPageSegMode = Tesseract.PageSegMode.SingleBlock;
+
         public PageRotations PageRotation = PageRotations.NONE;
         public enum PageRotations
         {
@@ -25,8 +27,8 @@ namespace Cliver.PdfDocumentParser
             AutoDetection
         }
 
-        public bool Deskew = false;
-        public int DeskewThreshold = 1;
+        public Deskewer.Config Deskew = null;
+
         public int CvImageScalePyramidStep = 2;
         public int ScalingAnchorId = -1;
 
@@ -35,13 +37,13 @@ namespace Cliver.PdfDocumentParser
             return (Anchor.CvImage)Anchors.FirstOrDefault(a => a.Id == ScalingAnchorId);
         }
 
-        public List<CvImage> SubtractingImages;
-        public class CvImage
-        {
-            public PdfDocumentParser.CvImage Image;
-            public float Threshold = 0.70f;
-            public float ScaleDeviation = 0.05f;
-        }
+        //public List<CvImage> SubtractingImages;
+        //public class CvImage
+        //{
+        //    public PdfDocumentParser.CvImage Image;
+        //    public float Threshold = 0.70f;
+        //    public float ScaleDeviation = 0.05f;
+        //}
 
         public string BitmapPreprocessorClassDefinition = null;
         public bool PreprocessBitmap = false;

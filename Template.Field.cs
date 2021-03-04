@@ -90,6 +90,7 @@ namespace Cliver.PdfDocumentParser
                 OcrTextLines = 4,
                 OcrCharBoxs = 5,
                 Image = 6,
+                OcrTextLineImages = 7,
             }
 
             public bool IsSet()

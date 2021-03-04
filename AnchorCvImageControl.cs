@@ -30,6 +30,7 @@ namespace Cliver.PdfDocumentParser
         {
             if (_object == null)
                 _object = new Template.Anchor.CvImage();
+            _object.FindBestImageMatch = FindBestImageMatch.Checked;
             _object.Threshold = (float)Threshold.Value;
             _object.ScaleDeviation = (float)ScaleDeviation.Value;
             _object.SearchRectangleMargin = SearchRectangleMargin.Enabled ? (int)SearchRectangleMargin.Value : -1;
@@ -43,6 +44,7 @@ namespace Cliver.PdfDocumentParser
             _object = (Template.Anchor.CvImage)row.Tag;
             if (_object == null)
                 _object = new Template.Anchor.CvImage();
+            FindBestImageMatch.Checked = _object.FindBestImageMatch;
             Threshold.Value = (decimal)_object.Threshold;
             ScaleDeviation.Value = (decimal)_object.ScaleDeviation;
             pictureBox.Image = null;

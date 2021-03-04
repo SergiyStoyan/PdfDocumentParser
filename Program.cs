@@ -14,16 +14,9 @@ using System.Runtime.InteropServices;
 TBD: 
 
 for scan preprocessing:
-- binarization control;
-- filter out colors control;
-- invoices still have hand marks on them which hinder OCR. Solution: hand-writng filtering must be done;
-- scans inevitably differ slightly by size which sometimes leads to template malfunction. Solution: scale factor must be detected and took to account;
-- long-image scans in 1 pdf page have altering skew which leads to template malfunction. Solution: split the scan on blocks, deskew them and stitch them;
-- ?multiple cvimage search for parent anchor (to avoid shifting search by pixels, set a buffer rectangle around matches);
+- invoices still have hand marks on them which hinder OCR. Solution: a)filter out colors control, b)manual eraser;
 - line filtering (when test overlaps a line);
-- tesseract modes switch in template;
 
-- enhance template with C# code processor (if a processor is defined, the output field dictionary is filled by it) https://www.codeproject.com/Articles/1215168/Using-Roslyn-for-Compiling-Code-into-Separate-Net
 - ?implement anchor row-separator which requires multiple anchor matching (needed for GCG statement) - verdict: it's better to have multiple field extraction and use it as a separator in a custom processor;
 - move to IText7;
 - provide multiple field extraction on page;

@@ -80,6 +80,12 @@ namespace Cliver.PdfDocumentParser
                 textAutoInsertSpaceThreshold.Value = (decimal)t.TextAutoInsertSpace.Threshold;
                 textAutoInsertSpaceRepresentative.Text = Regex.Escape(t.TextAutoInsertSpace.Representative);
 
+                CvImageScalePyramidStep.Value = t.CvImageScalePyramidStep;
+                TesseractPageSegMode.SelectedItem = t.TesseractPageSegMode;
+
+                SingleFieldFromFieldImage.Checked = t.FieldOcrMode.HasFlag(Template.FieldOcrModes.SingleFieldFromFieldImage);
+                ColumnFieldFromFieldImage.Checked = t.FieldOcrMode.HasFlag(Template.FieldOcrModes.ColumnFieldFromFieldImage);
+
                 bitmapPreparationForm.SetUI(t, false);
 
                 anchors.Rows.Clear();
@@ -182,8 +188,8 @@ namespace Cliver.PdfDocumentParser
         {
             if (pages == null)
                 return;
-            //TextForm tf = new TextForm("OCR Text", PdfDocumentParser.Ocr.This.GetHtml(pages[currentPageI].Bitmap), true);
-            TextForm tf = new TextForm("OCR Text", PdfDocumentParser.Ocr.GetText(pages[currentPageI].ActiveTemplateOcrCharBoxs, new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) }), false);
+            List<string> ls = Ocr.GetTextLines(pages[currentPageI].ActiveTemplateOcrCharBoxs, new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) });
+            TextForm tf = new TextForm("OCR Text", string.Join("\r\n", ls), false);
             tf.ShowDialog();
         }
 
@@ -239,6 +245,18 @@ namespace Cliver.PdfDocumentParser
                 Threshold = (float)textAutoInsertSpaceThreshold.Value,
                 Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text),
             };
+
+            t.CvImageScalePyramidStep = (int)CvImageScalePyramidStep.Value;
+            t.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
+
+            if (SingleFieldFromFieldImage.Checked)
+                t.FieldOcrMode |= Template.FieldOcrModes.SingleFieldFromFieldImage;
+            else
+                t.FieldOcrMode &= ~Template.FieldOcrModes.SingleFieldFromFieldImage;
+            if (ColumnFieldFromFieldImage.Checked)
+                t.FieldOcrMode |= Template.FieldOcrModes.ColumnFieldFromFieldImage;
+            else
+                t.FieldOcrMode &= ~Template.FieldOcrModes.ColumnFieldFromFieldImage;
 
             bitmapPreparationForm.SetTemplate(t);
 
@@ -297,7 +315,7 @@ namespace Cliver.PdfDocumentParser
                                 if (a.Id != t.ScalingAnchorId)
                                 {
                                     if (removeNotLinkedAnchors == null)
-                                        removeNotLinkedAnchors = Message.YesNo("The template contains not linked anchor[s]. Should they be removed?");
+                                        removeNotLinkedAnchors = Message.YesNo("The template contains not linked anchor[s]. Remove them?");
                                     if (removeNotLinkedAnchors == true)
                                         continue;
                                 }

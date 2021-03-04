@@ -61,39 +61,29 @@ namespace Cliver.PdfDocumentParser
         internal class AnchorActualInfo
         {
             readonly public Template.Anchor Anchor;
-            public PointF Position { get; private set; } = new PointF(-1, -1);
-            public bool Found { get { return Position.X >= 0; } }
-            readonly public SizeF Shift;
+            public PointF Position
+            {
+                get
+                {
+                    return position;
+                }
+                private set
+                {
+                    position = value;
+                    Found = Position.X >= 0;
+                    if (Found)
+                        Shift = new SizeF(Position.X - Anchor.Position.X, Position.Y - Anchor.Position.Y);
+                }
+            }
+            PointF position = new PointF(-1, -1);
+            public bool Found;
+            public SizeF Shift { get; private set; }
+            public AnchorActualInfo ParentAnchorActualInfo { get; private set; }
 
             internal AnchorActualInfo(Template.Anchor anchor, Page page)
             {
                 Anchor = anchor;
 
-                //if (anchor.Type == Template.Anchor.Types.Script)//it is a special type of Anchor which is treated separately
-                //{
-                //    if (anchor.ParentAnchorId != null)
-                //        throw new Exception("Anchor [" + anchor.Id + "] cannot be linked to another anchor.");
-                //    Template.Anchor a = page.PageCollection.ActiveTemplate.Anchors.FirstOrDefault(x => x.ParentAnchorId == anchor.Id);
-                //    if (a != null)
-                //        throw new Exception("Anchor [" + anchor.Id + "] cannot be linked by another anchor but it is linked by anchor[" + a.Id + "]");
-
-                //    Template.Anchor.Script s = (Template.Anchor.Script)anchor;
-                //    if (!BooleanEngine.Parse(s.Expression, page))
-                //        return;
-                //    foreach (int rai in BooleanEngine.GetAnchorIds(s.Expression))
-                //    {//RULE OF RESULTING ANCHOR: the first anchor in the expression that is found
-                //        AnchorActualInfo aai = page.GetAnchorActualInfo(rai);
-                //        if (aai.Found)
-                //        {
-                //            Rectangless = aai.Rectangless;
-                //            Shift = aai.Shift;
-                //            break;
-                //        }
-                //    }
-                //    if (Rectangless.Count < 1)
-                //        throw new Exception("No resulting anchor found for anchor[" + anchor.Id + "]. This means that its expression is malformed!");
-                //return;
-                //}
                 for (int? id = anchor.ParentAnchorId; id != null;)
                 {
                     Template.Anchor pa = page.PageCollection.ActiveTemplate.Anchors.Find(x => x.Id == id);
@@ -102,32 +92,41 @@ namespace Cliver.PdfDocumentParser
                     id = pa.ParentAnchorId;
                 }
 
-                page.findAnchor(Anchor, (PointF p) =>
+                findAnchor(page, (PointF p) =>
                 {
                     Position = p;
                     return false;
                 });
-
-                if (Found)
-                    Shift = new SizeF(Position.X - Anchor.Position.X, Position.Y - Anchor.Position.Y);
             }
-        }
 
-        void findAnchor(Template.Anchor a, Func<PointF, bool> proceedOnFound)
-        {
-            if (a.ParentAnchorId != null)
+            void findAnchor(Page page, Func<PointF, bool> findNext)
             {
-                Template.Anchor pa = PageCollection.ActiveTemplate.Anchors.Find(x => x.Id == a.ParentAnchorId);
-                findAnchor(pa, (PointF p) =>
-                 {
-                     return !_findAnchor(a, p, proceedOnFound);
-                 });
+                if (Anchor.ParentAnchorId != null)
+                {
+                    Template.Anchor pa = page.PageCollection.ActiveTemplate.Anchors.Find(x => x.Id == Anchor.ParentAnchorId);
+                    AnchorActualInfo paai = new AnchorActualInfo(pa);
+                    paai.findAnchor(page, (PointF p) =>
+                    {
+                        bool found = page.findAnchor(Anchor, p, findNext);
+                        if (found)
+                        {
+                            paai.Position = p;
+                            ParentAnchorActualInfo = paai;
+                        }
+                        return !found;
+                    });
+                }
+                else
+                    page.findAnchor(Anchor, new PointF(), findNext);
             }
-            else
-                _findAnchor(a, new PointF(), proceedOnFound);
+
+            AnchorActualInfo(Template.Anchor anchor)
+            {
+                Anchor = anchor;
+            }
         }
 
-        bool _findAnchor(Template.Anchor a, PointF parentAnchorPoint0, Func<PointF, bool> proceedOnFound)
+        bool findAnchor(Template.Anchor a, PointF parentAnchorPoint0, Func<PointF, bool> findNext)
         {
             if (!a.IsSet())
                 return false;
@@ -163,7 +162,7 @@ namespace Cliver.PdfDocumentParser
                                 {
                                     RectangleF actualR = new RectangleF(i, j, rectangle.Width, rectangle.Height);
                                     if (PdfCharBoxs.FirstOrDefault(x => actualR.Contains(x.R) && (!PageCollection.ActiveTemplate.IgnoreInvisiblePdfChars || !Pdf.InvisibleCharacters.Contains(x.Char))) == null
-                                        && !proceedOnFound(actualR.Location)
+                                        && !findNext(actualR.Location)
                                         )
                                         return true;
                                 }
@@ -201,7 +200,7 @@ namespace Cliver.PdfDocumentParser
                                 RectangleF actualR = new RectangleF(rectangle.X + shift.Width, rectangle.Y + shift.Height, rectangle.Width, rectangle.Height);
                                 if (//check that the found rectangle contains only the anchor's boxes
                                     PdfCharBoxs.FirstOrDefault(x => actualR.Contains(x.R) && !tcbs.Contains(x) && (!PageCollection.ActiveTemplate.IgnoreInvisiblePdfChars || !Pdf.InvisibleCharacters.Contains(x.Char))) == null
-                                    && !proceedOnFound(actualR.Location)
+                                    && !findNext(actualR.Location)
                                 )
                                     return true;
                             }
@@ -221,7 +220,7 @@ namespace Cliver.PdfDocumentParser
                                 {
                                     RectangleF actualR = new RectangleF(i, j, rectangle.Width, rectangle.Height);
                                     if (ActiveTemplateOcrCharBoxs.FirstOrDefault(x => actualR.Contains(x.R)) == null
-                                        && !proceedOnFound(actualR.Location)
+                                        && !findNext(actualR.Location)
                                         )
                                         return true;
                                 }
@@ -252,11 +251,10 @@ namespace Cliver.PdfDocumentParser
                             //searchRectangleOcrCharBoxs.ForEach(x => { x.R.X += contaningRectangle.X; x.R.Y += contaningRectangle.Y; });
                             //RectangleF mainElementSearchRectangle = new RectangleF(searchRectangle.X - searchRectanglePosition.X, searchRectangle.Y - searchRectanglePosition.Y, searchRectangle.Width, searchRectangle.Height);
                             //tcb0s = searchRectangleOcrCharBoxs.Where(x => x.Char == cbs[0].Char && contaningRectangle.Contains(x.R));
-
                             Bitmap b = GetRectangleFromActiveTemplateBitmap(searchRectangle.X / Settings.Constants.Image2PdfResolutionRatio, searchRectangle.Y / Settings.Constants.Image2PdfResolutionRatio, searchRectangle.Width / Settings.Constants.Image2PdfResolutionRatio, searchRectangle.Height / Settings.Constants.Image2PdfResolutionRatio);
                             if (b == null)
                                 return false;
-                            searchRectangleOcrCharBoxs = Ocr.This.GetCharBoxs(b);
+                            searchRectangleOcrCharBoxs = Ocr.This.GetCharBoxs(b, PageCollection.ActiveTemplate.TesseractPageSegMode);
                             PointF searchRectanglePosition = new PointF(searchRectangle.X < 0 ? 0 : searchRectangle.X, searchRectangle.Y < 0 ? 0 : searchRectangle.Y);
                             searchRectangleOcrCharBoxs.ForEach(x => { x.R.X += searchRectanglePosition.X; x.R.Y += searchRectanglePosition.Y; });
                             tcb0s = searchRectangleOcrCharBoxs.Where(x => x.Char == cbs[0].Char && searchRectangle.Contains(x.R));
@@ -288,7 +286,7 @@ namespace Cliver.PdfDocumentParser
                                 RectangleF actualR = new RectangleF(rectangle.X + shift.Width, rectangle.Y + shift.Height, rectangle.Width, rectangle.Height);
                                 if (//check that the found rectangle contains only the anchor's boxes
                                     searchRectangleOcrCharBoxs.FirstOrDefault(x => actualR.Contains(x.R) && !tcbs.Contains(x)) == null
-                                    && !proceedOnFound(actualR.Location)
+                                    && !findNext(actualR.Location)
                                 )
                                     return true;
                             }
@@ -320,7 +318,7 @@ namespace Cliver.PdfDocumentParser
                         if (p_ == null)
                             return false;
                         Point p = (Point)p_;
-                        return !proceedOnFound(new PointF(searchRectanglePosition.X + p.X, searchRectanglePosition.Y + p.Y));
+                        return !findNext(new PointF(searchRectanglePosition.X + p.X, searchRectanglePosition.Y + p.Y));
                     }
                 case Template.Anchor.Types.CvImage:
                     {
@@ -340,14 +338,27 @@ namespace Cliver.PdfDocumentParser
                                 return false;
                             ci0 = new CvImage(b);
                         }
-                        CvImage.Match m = civ.Image.FindFirstMatchWithinImage(ci0, civ.Threshold, civ.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
-                        if (m == null)
-                            return false;
-                        Point p = m.Rectangle.Location;
-                        return !proceedOnFound(new PointF(searchRectanglePosition.X + p.X, searchRectanglePosition.Y + p.Y));
-                        //foreach (CvImage.Match m in civ.Image.FindWithinImage(ci0,new Size(20,20), civ.Threshold, civ.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep))
-                        //    return !proceedOnFound(new PointF(searchRectanglePosition.X + m.Rectangle.X, searchRectanglePosition.Y + m.Rectangle.Y));
-                        //return false;
+                        if (civ.FindBestImageMatch)
+                        {
+                            //CvImage.Match m = civ.Image.FindFirstMatchWithinImage(ci0, civ.Threshold, civ.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
+                            CvImage.Match m = civ.Image.FindBestMatchWithinImage(ci0, civ.Threshold, civ.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
+                            if (m == null)
+                                return false;
+                            Point p = m.Rectangle.Location;
+                            return !findNext(new PointF(searchRectanglePosition.X + p.X, searchRectanglePosition.Y + p.Y));
+                        }
+                        else
+                        {//!!!this returns rather the first match than the best match
+                            bool found = false;
+                            civ.Image.FindMatchesWithinImage(ci0, civ.Threshold, civ.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep,
+                                (CvImage.Match m) =>
+                                {
+                                    found = !findNext(new PointF(searchRectanglePosition.X + m.Rectangle.X, searchRectanglePosition.Y + m.Rectangle.Y));
+                                    return !found;
+                                }
+                                );
+                            return found;
+                        }
                     }
                 default:
                     throw new Exception("Unknown option: " + a.Type);

@@ -282,6 +282,7 @@ namespace Cliver.PdfDocumentParser
                 switch (f.DefaultValueType)
                 {
                     case Template.Field.ValueTypes.Image:
+                    case Template.Field.ValueTypes.OcrTextLineImages:
                         Clipboard.SetData(f.DefaultValueType.ToString(), (Image)o);
                         break;
                     case Template.Field.ValueTypes.PdfText:
@@ -613,7 +614,7 @@ namespace Cliver.PdfDocumentParser
             DataGridViewCell c = row.Cells["Value"];
             if (c.Value != null && c.Value is IDisposable)
                 ((IDisposable)c.Value).Dispose();
-            if (f.DefaultValueType == Template.Field.ValueTypes.Image)
+            if (f.DefaultValueType == Template.Field.ValueTypes.Image || f.DefaultValueType == Template.Field.ValueTypes.OcrTextLineImages)
             {
                 if (!(c is DataGridViewImageCell))
                 {
