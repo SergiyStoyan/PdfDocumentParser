@@ -81,7 +81,6 @@ namespace Cliver.PdfDocumentParser
                 textAutoInsertSpaceRepresentative.Text = Regex.Escape(t.TextAutoInsertSpace.Representative);
 
                 bitmapPreparationForm.SetUI(t, false);
-                CvImageScalePyramidStep.Value = t.CvImageScalePyramidStep;
 
                 anchors.Rows.Clear();
                 if (t.Anchors != null)
@@ -242,7 +241,6 @@ namespace Cliver.PdfDocumentParser
             };
 
             bitmapPreparationForm.SetTemplate(t);
-            t.CvImageScalePyramidStep = (int)CvImageScalePyramidStep.Value;
 
             bool? removeNotLinkedAnchors = null;
             List<int> conditionAnchorIds = null;
@@ -296,7 +294,7 @@ namespace Cliver.PdfDocumentParser
                             }
                             if (!engaged)
                             {
-                                if (a.Id != t.ScaleDetectingAnchorId)
+                                if (a.Id != t.ScalingAnchorId)
                                 {
                                     if (removeNotLinkedAnchors == null)
                                         removeNotLinkedAnchors = Message.YesNo("The template contains not linked anchor[s]. Should they be removed?");
@@ -312,7 +310,7 @@ namespace Cliver.PdfDocumentParser
             t.Anchors = t.Anchors.OrderBy(a => a.Id).ToList();
 
             if (saving)
-                t.GetScaleDetectingAnchor();//check is it is correct;
+                t.GetScalingAnchor();//check is it is correct;
 
             t.Conditions = new List<Template.Condition>();
             foreach (DataGridViewRow r in conditions.Rows)

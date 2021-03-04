@@ -87,7 +87,7 @@ namespace Cliver.PdfDocumentParser
             if (PageCollection.ActiveTemplate == null)
                 return;
 
-            if (newTemplate == null || newTemplate.PageRotation != PageCollection.ActiveTemplate.PageRotation || newTemplate.AutoDeskew != PageCollection.ActiveTemplate.AutoDeskew)
+            if (newTemplate == null || newTemplate.PageRotation != PageCollection.ActiveTemplate.PageRotation || newTemplate.Deskew != PageCollection.ActiveTemplate.Deskew)
             {
                 _activeTemplateImageData = null;
                 _activeTemplateBitmap?.Dispose();
@@ -166,7 +166,7 @@ namespace Cliver.PdfDocumentParser
                             throw new Exception("Unknown option: " + PageCollection.ActiveTemplate.PageRotation);
                     }
 
-                    if (PageCollection.ActiveTemplate.AutoDeskew)
+                    if (PageCollection.ActiveTemplate.Deskew)
                     {
                         ////long images processing:
                         //Bitmap b2 = new Bitmap(b.Width, b.Height);
@@ -187,7 +187,7 @@ namespace Cliver.PdfDocumentParser
                             //image.Negate();
                             //image.AdaptiveThreshold(10, 10, new ImageMagick.Percentage(20));
                             //image.Negate();
-                            image.Deskew(new ImageMagick.Percentage(PageCollection.ActiveTemplate.AutoDeskewThreshold));
+                            image.Deskew(new ImageMagick.Percentage(PageCollection.ActiveTemplate.DeskewThreshold));
                             //image.AutoThreshold(AutoThresholdMethod.OTSU);
                             //image.Despeckle();
                             //image.WhiteThreshold(new Percentage(20));
@@ -222,16 +222,14 @@ namespace Cliver.PdfDocumentParser
 
                     _activeTemplateBitmap = b;
 
-                    if (PageCollection.ActiveTemplate.ScaleDetectingAnchorId > 0)
+                    if (PageCollection.ActiveTemplate.ScalingAnchorId > 0)
                     {
-                        Template.Anchor.CvImage sda = PageCollection.ActiveTemplate.GetScaleDetectingAnchor();
+                        Template.Anchor.CvImage sda = PageCollection.ActiveTemplate.GetScalingAnchor();
                         CvImage.Match m = sda.Image.FindBestMatchWithinImage(ActiveTemplateCvImage, sda.Threshold, sda.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
                         if (m != null && m.Scale != 1)
                         {
-                            _activeTemplateBitmap = Win.ImageRoutines.GetScaled(ActiveTemplateBitmap, m.Scale);
+                            _activeTemplateBitmap = Win.ImageRoutines.GetScaled(ActiveTemplateBitmap, 1f / m.Scale);
                             b.Dispose();
-                            _activeTemplateImageData = null;
-                            _activeTemplateOcrCharBoxs = null;
                             _activeTemplateCvImage?.Dispose();
                             _activeTemplateCvImage = null;
                         }

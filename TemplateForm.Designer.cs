@@ -82,9 +82,6 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.bScannedDocumentSettings = new System.Windows.Forms.Button();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.CvImageScalePyramidStep = new System.Windows.Forms.NumericUpDown();
-            this.label19 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.textAutoInsertSpaceRepresentative = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
@@ -128,8 +125,6 @@
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.CvImageScalePyramidStep)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureScale)).BeginInit();
             this.flowLayoutPanel2.SuspendLayout();
@@ -723,7 +718,6 @@
             // splitContainer2.Panel1
             // 
             this.splitContainer2.Panel1.Controls.Add(this.bScannedDocumentSettings);
-            this.splitContainer2.Panel1.Controls.Add(this.groupBox3);
             this.splitContainer2.Panel1.Controls.Add(this.groupBox2);
             this.splitContainer2.Panel1.Controls.Add(this.anchorsContainer);
             this.splitContainer2.Panel1.Controls.Add(this.selectionCoordinates);
@@ -765,45 +759,6 @@
             this.bScannedDocumentSettings.Text = "Scanned Document Settings";
             this.bScannedDocumentSettings.UseVisualStyleBackColor = true;
             this.bScannedDocumentSettings.Click += new System.EventHandler(this.bScannedDocumentSettings_Click);
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox3.Controls.Add(this.CvImageScalePyramidStep);
-            this.groupBox3.Controls.Add(this.label19);
-            this.groupBox3.Location = new System.Drawing.Point(266, 149);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(165, 54);
-            this.groupBox3.TabIndex = 68;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "CvImage";
-            // 
-            // CvImageScalePyramidStep
-            // 
-            this.CvImageScalePyramidStep.Location = new System.Drawing.Point(114, 21);
-            this.CvImageScalePyramidStep.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.CvImageScalePyramidStep.Name = "CvImageScalePyramidStep";
-            this.CvImageScalePyramidStep.Size = new System.Drawing.Size(35, 20);
-            this.CvImageScalePyramidStep.TabIndex = 66;
-            this.CvImageScalePyramidStep.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(10, 21);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(102, 13);
-            this.label19.TabIndex = 65;
-            this.label19.Text = "Scale Pyramid Step:";
             // 
             // groupBox2
             // 
@@ -1065,9 +1020,6 @@
             this.splitContainer2.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.CvImageScalePyramidStep)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureScale)).EndInit();
@@ -1140,9 +1092,6 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn Type3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Position3;
         private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.NumericUpDown CvImageScalePyramidStep;
-        private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Name_;
         private System.Windows.Forms.DataGridViewComboBoxColumn LeftAnchorId;
         private System.Windows.Forms.DataGridViewComboBoxColumn TopAnchorId;

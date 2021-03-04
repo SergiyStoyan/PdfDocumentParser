@@ -25,14 +25,14 @@ namespace Cliver.PdfDocumentParser
             AutoDetection
         }
 
-        public bool AutoDeskew = false;
-        public int AutoDeskewThreshold = 1;
+        public bool Deskew = false;
+        public int DeskewThreshold = 1;
         public int CvImageScalePyramidStep = 2;
-        public int ScaleDetectingAnchorId = -1;
+        public int ScalingAnchorId = -1;
 
-        public Anchor.CvImage GetScaleDetectingAnchor()
+        public Anchor.CvImage GetScalingAnchor()
         {
-            return (Anchor.CvImage)Anchors.FirstOrDefault(a => a.Id == ScaleDetectingAnchorId);
+            return (Anchor.CvImage)Anchors.FirstOrDefault(a => a.Id == ScalingAnchorId);
         }
 
         public List<CvImage> SubtractingImages;
