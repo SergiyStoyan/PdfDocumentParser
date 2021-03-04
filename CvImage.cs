@@ -123,6 +123,39 @@ namespace Cliver.PdfDocumentParser
             return image;
         }
 
+        public class Match
+        {
+            //public Point Point;
+            public Rectangle Rectangle;
+            public float Scale;
+            public float Score;
+        }
+
+        public Match FindBestMatchWithinImage(CvImage cvImage, float threshold, float scaleDeviation, int scaleStep)
+        {
+            Match bestMatch = null;
+            Tuple<Point, float> p_s = findBestMatchWithinImage(image, cvImage.image);
+            if (p_s != null && p_s.Item2 > threshold)
+                bestMatch = new Match { Rectangle = new Rectangle(p_s.Item1, new Size(image.Width, image.Height)), Scale = 1, Score = p_s.Item2 };
+            //running through pyramid
+            int stepCount = Convert.ToInt32(scaleDeviation * Width / scaleStep);
+            for (int i = 1; i <= stepCount; i++)
+            {
+                float scaleDelta = (float)scaleStep * i / Width;
+                float scale = 1 + scaleDelta;
+                Image<Gray, byte> template = image.Resize(scale, Inter.Linear);
+                p_s = findBestMatchWithinImage(template, cvImage.image);
+                if (p_s != null && (bestMatch == null || p_s.Item2 > bestMatch.Score))
+                    bestMatch = new Match { Rectangle = new Rectangle(p_s.Item1, new Size(template.Width, template.Height)), Scale = scale, Score = p_s.Item2 };
+                scale = 1 - scaleDelta;
+                template = image.Resize(scale, Inter.Linear);
+                p_s = findBestMatchWithinImage(template, cvImage.image);
+                if (p_s != null && (bestMatch == null || p_s.Item2 > bestMatch.Score))
+                    bestMatch = new Match { Rectangle = new Rectangle(p_s.Item1, new Size(template.Width, template.Height)), Scale = scale, Score = p_s.Item2 };
+            }
+            return bestMatch;
+        }
+
         public Match FindFirstMatchWithinImage(CvImage cvImage, float threshold, float scaleDeviation, int scaleStep)
         {
             Tuple<Point, float> p_s = findBestMatchWithinImage(image, cvImage.image);
@@ -156,39 +189,6 @@ namespace Cliver.PdfDocumentParser
                 match.MinMax(out double[] min, out double[] max, out Point[] minPoint, out Point[] maxPoint);
                 return new Tuple<Point, float>(maxPoint[0], (float)max[0]);
             }
-        }
-
-        public class Match
-        {
-            //public Point Point;
-            public Rectangle Rectangle;
-            public float Scale;
-            public float Score;
-        }
-
-        public Match FindBestMatchWithinImage(CvImage cvImage, float threshold, float scaleDeviation, int scaleStep)
-        {
-            Match bestMatch = null;
-            Tuple<Point, float> p_s = findBestMatchWithinImage(image, cvImage.image);
-            if (p_s != null && p_s.Item2 > threshold)
-                bestMatch = new Match { Rectangle = new Rectangle(p_s.Item1, new Size(image.Width, image.Height)), Scale = 1, Score = p_s.Item2 };
-            //running through pyramid
-            int stepCount = Convert.ToInt32(scaleDeviation * Width / scaleStep);
-            for (int i = 1; i <= stepCount; i++)
-            {
-                float scaleDelta = (float)scaleStep * i / Width;
-                float scale = 1 + scaleDelta;
-                Image<Gray, byte> template = image.Resize(scale, Inter.Linear);
-                p_s = findBestMatchWithinImage(template, cvImage.image);
-                if (p_s != null && (bestMatch == null || p_s.Item2 > bestMatch.Score))
-                    bestMatch = new Match { Rectangle = new Rectangle(p_s.Item1, new Size(template.Width, template.Height)), Scale = scale, Score = p_s.Item2 };
-                scale = 1 - scaleDelta;
-                template = image.Resize(scale, Inter.Linear);
-                p_s = findBestMatchWithinImage(template, cvImage.image);
-                if (p_s != null && (bestMatch == null || p_s.Item2 > bestMatch.Score))
-                    bestMatch = new Match { Rectangle = new Rectangle(p_s.Item1, new Size(template.Width, template.Height)), Scale = scale, Score = p_s.Item2 };
-            }
-            return bestMatch;
         }
 
         //public List<Match> FindBestMatchesWithinImage(CvImage cvImage, Size padding, float threshold, float scaleDeviation, int scaleStep)
@@ -225,12 +225,6 @@ namespace Cliver.PdfDocumentParser
         //        bestScore = s;
         //    }
         //    return bestMatches;
-        //}
-
-        //public List<Match> FindWithinImage(CvImage cvImage, Size padding, float threshold, float scale)
-        //{
-        //    Image<Gray, byte> template = image.Resize(scale, Inter.Linear);
-        //    return findWithinImage(template, padding, cvImage.image, threshold);
         //}
 
         static List<Match> findMatchsWithinImage(Image<Gray, byte> template, Size padding, Image<Gray, byte> image, float threshold = 0.7f)
