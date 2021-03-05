@@ -166,7 +166,7 @@
     <Compile Include="CvImage.cs" />
     <Compile Include="BitmapPreprocessor.cs" />
     <Compile Include="Ocr.Page.cs" />
-    <Compile Include="Page.deskew.cs" />
+    <Compile Include="Deskewer.cs" />
     <Compile Include="Page.conditions.cs" />
     <Compile Include="Page.anchors.cs" />
     <Compile Include="Page.fields.cs" />
