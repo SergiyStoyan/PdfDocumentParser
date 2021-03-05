@@ -38,7 +38,8 @@ namespace Cliver.PdfDocumentParser
 
             PageRotation.SelectedIndexChanged += delegate { changed = true; };
             Deskew.CheckedChanged += delegate { changed = true; };
-            DeskewThreshold.ValueChanged += delegate { changed = true; };
+            DeskewBlockMaxHeight.ValueChanged += delegate { changed = true; };
+            DeskewMinBlockSpan.ValueChanged += delegate { changed = true; };
             ScalingAnchor.SelectedIndexChanged += delegate { changed = true; };
             CvImageScalePyramidStep.ValueChanged += delegate { changed = true; };
             bitmapPreprocessorClassDefinition.TextChanged += delegate { changed = true; };
@@ -68,7 +69,8 @@ namespace Cliver.PdfDocumentParser
             {
                 PageRotation.SelectedIndex = (int)t.PageRotation;
                 Deskew.Checked = t.Deskew;
-                DeskewThreshold.Value = t.DeskewThreshold;
+                DeskewBlockMaxHeight.Value = t.DeskewBlockMaxHeight;
+                DeskewMinBlockSpan.Value = t.DeskewMinBlockSpan;
                 CvImageScalePyramidStep.Value = t.CvImageScalePyramidStep;
                 bitmapPreprocessorClassDefinition.Text = t.BitmapPreprocessorClassDefinition;
                 bitmapPreprocessorClassDefinition.Enabled = PreprocessBitmap.Checked = t.PreprocessBitmap;
@@ -115,7 +117,8 @@ namespace Cliver.PdfDocumentParser
                 validate();
             t.PageRotation = (Template.PageRotations)PageRotation.SelectedIndex;
             t.Deskew = Deskew.Checked;
-            t.DeskewThreshold = (int)DeskewThreshold.Value;
+            t.DeskewBlockMaxHeight = (int)DeskewBlockMaxHeight.Value;
+            t.DeskewMinBlockSpan = (int)DeskewMinBlockSpan.Value;
             t.ScalingAnchorId = ScalingAnchor.SelectedItem is int ? (int)ScalingAnchor.SelectedItem : -1;
             t.CvImageScalePyramidStep = (int)CvImageScalePyramidStep.Value;
             t.BitmapPreprocessorClassDefinition = bitmapPreprocessorClassDefinition.Text;

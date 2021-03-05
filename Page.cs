@@ -168,33 +168,22 @@ namespace Cliver.PdfDocumentParser
 
                     if (PageCollection.ActiveTemplate.Deskew)
                     {
-                        ////long images processing:
-                        //Bitmap b2 = new Bitmap(b.Width, b.Height);
-                        //using (Graphics g2 = Graphics.FromImage(b2))
+                        //using (ImageMagick.MagickImage image = new ImageMagick.MagickImage(b))
                         //{
-                        //    //detect blocks by find contours in Emgu
-                        //    foreach (Bitmap block in blocks)
-                        //    {
-                        //        Bitmap block2 = deskew(block);
-                        //        block.Dispose();
-                        //        g2.DrawImage(block2, x, y);
-                        //    }
+                        //    //image.Density = new PointD(600, 600);
+                        //    //image.AutoLevel();
+                        //    //image.Negate();
+                        //    //image.AdaptiveThreshold(10, 10, new ImageMagick.Percentage(20));
+                        //    //image.Negate();
+                        //    image.Deskew(new ImageMagick.Percentage(PageCollection.ActiveTemplate.DeskewThreshold));
+                        //    //image.AutoThreshold(AutoThresholdMethod.OTSU);
+                        //    //image.Despeckle();
+                        //    //image.WhiteThreshold(new Percentage(20));
+                        //    //image.Trim();
+                        //    b.Dispose();
+                        //    b = image.ToBitmap();
                         //}
-                        using (ImageMagick.MagickImage image = new ImageMagick.MagickImage(b))
-                        {
-                            //image.Density = new PointD(600, 600);
-                            //image.AutoLevel();
-                            //image.Negate();
-                            //image.AdaptiveThreshold(10, 10, new ImageMagick.Percentage(20));
-                            //image.Negate();
-                            image.Deskew(new ImageMagick.Percentage(PageCollection.ActiveTemplate.DeskewThreshold));
-                            //image.AutoThreshold(AutoThresholdMethod.OTSU);
-                            //image.Despeckle();
-                            //image.WhiteThreshold(new Percentage(20));
-                            //image.Trim();
-                            b.Dispose();
-                            b = image.ToBitmap();
-                        }
+                        Deskewer.DeskewAsColumnOfBlocks(ref b, PageCollection.ActiveTemplate.DeskewBlockMaxHeight, PageCollection.ActiveTemplate.DeskewMinBlockSpan);
                     }
 
                     b = PageCollection.ActiveTemplate.BitmapPreprocessor.GetProcessed(b);
