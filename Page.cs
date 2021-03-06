@@ -143,7 +143,15 @@ namespace Cliver.PdfDocumentParser
                             b.RotateFlip(RotateFlipType.Rotate270FlipNone);
                             break;
                         case Template.PageRotations.AutoDetection:
-                            int o = Ocr.This.DetectOrientationAngle(b, out float confidence);
+                            int o = 0;
+                            try
+                            {
+                                o = Ocr.This.DetectOrientationAngle(b, out float confidence);
+                            }
+                            catch (Tesseract.TesseractException e)//on page with no text
+                            {
+                                Log.Warning(e);
+                            }
                             if (o <= 45) { }
                             else if (o <= 135)
                                 b.RotateFlip(RotateFlipType.Rotate270FlipNone);
@@ -151,16 +159,23 @@ namespace Cliver.PdfDocumentParser
                                 b.RotateFlip(RotateFlipType.Rotate180FlipNone);
                             else if (o <= 315)
                                 b.RotateFlip(RotateFlipType.Rotate90FlipNone);
-                            //Bitmap b2 = new Bitmap(b.Width, b.Height);
-                            //using (var gr = Graphics.FromImage(b2))
+                            //Tesseract.Orientation o = Ocr.This.DetectOrientation(b);
+                            //switch (o)
                             //{
-                            //    gr.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                            //    gr.TranslateTransform(b.Width / 2, b.Height / 2);
-                            //    gr.RotateTransform(-(float)o);
-                            //    gr.DrawImage(b, -b.Width / 2, -b.Height / 2, b.Width, b.Height);
+                            //    case Tesseract.Orientation.PageLeft:
+                            //        b.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                            //        break;
+                            //    case Tesseract.Orientation.PageDown:
+                            //        b.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                            //        break;
+                            //    case Tesseract.Orientation.PageRight:
+                            //        b.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                            //        break;
+                            //    case Tesseract.Orientation.PageUp:
+                            //        break;
+                            //    default:
+                            //        throw new Exception("Unknown option: " + o);
                             //}
-                            //b.Dispose();
-                            //b = b2;
                             break;
                         default:
                             throw new Exception("Unknown option: " + PageCollection.ActiveTemplate.PageRotation);

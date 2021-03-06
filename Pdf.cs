@@ -261,7 +261,7 @@ namespace Cliver.PdfDocumentParser
                         if (spaceAutoInsert && /*cb.Char != " " &&*/ lines[i].CharBoxs.Count > 0)
                         {
                             CharBox cb0 = lines[i].CharBoxs[lines[i].CharBoxs.Count - 1];
-                            if (/*cb0.Char != " " && */cb.R.Left - cb0.R.Right > (cb0.R.Width + cb0.R.Height + cb.R.Width + cb.R.Height) * textAutoInsertSpace.Threshold / 100)
+                            if (/*cb0.Char != " " && */cb.R.Left - cb0.R.Right > (cb0.R.Width / cb0.R.Height + cb.R.Width / cb.R.Height) * textAutoInsertSpace.Threshold)
                             {
                                 float spaceWidth = (cb.R.Width + cb.R.Width) / 2;
                                 int spaceNumber = (int)Math.Ceiling((cb.R.Left - cb0.R.Right) / spaceWidth);

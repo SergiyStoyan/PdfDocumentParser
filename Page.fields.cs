@@ -314,7 +314,13 @@ namespace Cliver.PdfDocumentParser
 
         internal static Bitmap GetScaledImage2Pdf(Image image)
         {
-            var b = new Bitmap((int)Math.Round(image.Width * Settings.Constants.Image2PdfResolutionRatio, 0), (int)Math.Round(image.Height * Settings.Constants.Image2PdfResolutionRatio, 0), PixelFormat.Format24bppRgb);
+            int w = (int)Math.Round(image.Width * Settings.Constants.Image2PdfResolutionRatio, 0);
+            int h = (int)Math.Round(image.Height * Settings.Constants.Image2PdfResolutionRatio, 0);
+            if (w == 0)
+                w = 1;
+            if (h == 0)
+                h = 1;
+            Bitmap b = new Bitmap(w, h, PixelFormat.Format24bppRgb);
             using (var g = Graphics.FromImage(b))
             {
                 g.CompositingMode = CompositingMode.SourceCopy;
