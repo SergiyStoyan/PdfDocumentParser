@@ -81,6 +81,8 @@
             this.picture = new System.Windows.Forms.PictureBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.label9 = new System.Windows.Forms.Label();
+            this.detectedImageScale = new System.Windows.Forms.TextBox();
             this.bScannedDocumentSettings = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.textAutoInsertSpaceRepresentative = new System.Windows.Forms.TextBox();
@@ -101,8 +103,6 @@
             this.moveDownField = new System.Windows.Forms.LinkLabel();
             this.copy2ClipboardField = new System.Windows.Forms.LinkLabel();
             this.ExtractFieldsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.detectedImageScale = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).BeginInit();
             this.flowLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).BeginInit();
@@ -754,6 +754,25 @@
             this.splitContainer2.SplitterDistance = 484;
             this.splitContainer2.TabIndex = 32;
             // 
+            // label9
+            // 
+            this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(274, 121);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(116, 13);
+            this.label9.TabIndex = 70;
+            this.label9.Text = "Detected Image Scale:";
+            // 
+            // detectedImageScale
+            // 
+            this.detectedImageScale.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.detectedImageScale.Location = new System.Drawing.Point(391, 118);
+            this.detectedImageScale.Name = "detectedImageScale";
+            this.detectedImageScale.ReadOnly = true;
+            this.detectedImageScale.Size = new System.Drawing.Size(41, 20);
+            this.detectedImageScale.TabIndex = 71;
+            // 
             // bScannedDocumentSettings
             // 
             this.bScannedDocumentSettings.Location = new System.Drawing.Point(0, 116);
@@ -984,25 +1003,6 @@
             this.ExtractFieldsAutomaticallyWhenPageChanged.TabIndex = 56;
             this.ExtractFieldsAutomaticallyWhenPageChanged.Text = "Extract When Page Changed]";
             this.ExtractFieldsAutomaticallyWhenPageChanged.UseVisualStyleBackColor = true;
-            // 
-            // label9
-            // 
-            this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(274, 121);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(116, 13);
-            this.label9.TabIndex = 70;
-            this.label9.Text = "Detected Image Scale:";
-            // 
-            // detectedImageScale
-            // 
-            this.detectedImageScale.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.detectedImageScale.Location = new System.Drawing.Point(391, 118);
-            this.detectedImageScale.Name = "detectedImageScale";
-            this.detectedImageScale.ReadOnly = true;
-            this.detectedImageScale.Size = new System.Drawing.Size(41, 20);
-            this.detectedImageScale.TabIndex = 71;
             // 
             // TemplateForm
             // 

@@ -29,7 +29,7 @@ namespace Cliver.PdfDocumentParser
 
         public bool Deskew = false;
         public int DeskewBlockMaxHeight = 3000;
-        public int DeskewMinBlockSpan = 30;
+        public int DeskewBlockMinSpan = 30;
         //public int DeskewThreshold = 1;
 
         public int CvImageScalePyramidStep = 2;
