@@ -775,6 +775,8 @@
             // 
             // bScannedDocumentSettings
             // 
+            this.bScannedDocumentSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.bScannedDocumentSettings.Location = new System.Drawing.Point(0, 116);
             this.bScannedDocumentSettings.Name = "bScannedDocumentSettings";
             this.bScannedDocumentSettings.Size = new System.Drawing.Size(265, 23);

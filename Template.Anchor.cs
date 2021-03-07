@@ -101,7 +101,7 @@ namespace Cliver.PdfDocumentParser
                 public PdfDocumentParser.CvImage Image;
 
                 public float Threshold = 0.70f;
-                public float ScaleDeviation = 0.0f;//since automatic rescaling is it not needed
+                public float ScaleDeviation = 0.0f;//when automatic rescaling it is not needed
 
                 override public bool IsSet()
                 {

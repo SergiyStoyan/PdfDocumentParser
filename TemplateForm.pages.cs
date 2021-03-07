@@ -247,6 +247,9 @@ namespace Cliver.PdfDocumentParser
                     case Template.Field.ValueTypes.Image:
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
                         return v;
+                    case Template.Field.ValueTypes.OcrTextLineImages:
+                        drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
+                        return v;
                     default:
                         throw new Exception("Unknown option: " + field.DefaultValueType);
                 }
