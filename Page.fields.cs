@@ -145,11 +145,11 @@ namespace Cliver.PdfDocumentParser
                         return Pdf.GetCharBoxsSurroundedByRectangle(page.PdfCharBoxs, r);
                     case Template.Field.ValueTypes.OcrText:
                         if (ActualField.ColumnOfTable == null)
-                            return Ocr.This.GetTextSurroundedByRectangle(page.ActiveTemplateBitmap, r);
+                            return Ocr.This.GetTextSurroundedByRectangle(page.ActiveTemplateBitmap, r, page.PageCollection.ActiveTemplate.TesseractPageSegMode);
                         return string.Join("\r\n", getOcrTextLinesAsTableColumn());
                     case Template.Field.ValueTypes.OcrTextLines:
                         if (ActualField.ColumnOfTable == null)
-                            return Regex.Split(Ocr.This.GetTextSurroundedByRectangle(page.ActiveTemplateBitmap, r), "$", RegexOptions.Multiline);
+                            return Regex.Split(Ocr.This.GetTextSurroundedByRectangle(page.ActiveTemplateBitmap, r, page.PageCollection.ActiveTemplate.TesseractPageSegMode), "$", RegexOptions.Multiline);
                         return getOcrTextLinesAsTableColumn();
                     case Template.Field.ValueTypes.OcrCharBoxs:
                         return Ocr.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, r);

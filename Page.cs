@@ -87,7 +87,11 @@ namespace Cliver.PdfDocumentParser
             if (PageCollection.ActiveTemplate == null)
                 return;
 
-            if (newTemplate == null || newTemplate.PageRotation != PageCollection.ActiveTemplate.PageRotation || newTemplate.Deskew != PageCollection.ActiveTemplate.Deskew)
+            if (newTemplate == null
+                || newTemplate.PageRotation != PageCollection.ActiveTemplate.PageRotation
+                || newTemplate.Deskew != PageCollection.ActiveTemplate.Deskew
+                || newTemplate.TesseractPageSegMode != PageCollection.ActiveTemplate.TesseractPageSegMode
+                )
             {
                 _activeTemplateImageData = null;
                 _activeTemplateBitmap?.Dispose();
@@ -205,24 +209,24 @@ namespace Cliver.PdfDocumentParser
 
                     //Template.Anchor.CvImage ai = (Template.Anchor.CvImage)PageCollection.ActiveTemplate.Anchors[0];//!!!test
                     //PageCollection.ActiveTemplate.SubtractingImages = new List<Template.CvImage>() { new Template.CvImage { Image = ai.Image, ScaleDeviation = ai.ScaleDeviation, Threshold = ai.Threshold } };
-                    if (PageCollection.ActiveTemplate.SubtractingImages?.Any() == true)//!!!needs test/debug!
-                    {
-                        foreach (Template.CvImage cvi in PageCollection.ActiveTemplate.SubtractingImages)
-                        {
-                            for (; ; )
-                            {
-                                CvImage cvPage = new CvImage(b);
-                                //List<CvImage.Match> ms = cvi.Image.FindWithinImage(cvPage, new Size(cvi.Image.Width, cvi.Image.Height), cvi.Threshold, cvi.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
-                                CvImage.Match m = cvi.Image.FindBestMatchWithinImage(cvPage, cvi.Threshold, cvi.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
-                                if (m == null)
-                                    continue;
-                                Rectangle r = m.Rectangle;
-                                for (int x = (int)(r.X / Settings.Constants.Image2PdfResolutionRatio); x < r.Right / Settings.Constants.Image2PdfResolutionRatio; x++)
-                                    for (int y = (int)(r.Y / Settings.Constants.Image2PdfResolutionRatio); y < r.Bottom / Settings.Constants.Image2PdfResolutionRatio; y++)
-                                        b.SetPixel(x, y, Color.White);
-                            }
-                        }
-                    }
+                    //if (PageCollection.ActiveTemplate.SubtractingImages?.Any() == true)//!!!needs test/debug!
+                    //{
+                    //    foreach (Template.CvImage cvi in PageCollection.ActiveTemplate.SubtractingImages)
+                    //    {
+                    //        for (; ; )
+                    //        {
+                    //            CvImage cvPage = new CvImage(b);
+                    //            //List<CvImage.Match> ms = cvi.Image.FindWithinImage(cvPage, new Size(cvi.Image.Width, cvi.Image.Height), cvi.Threshold, cvi.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
+                    //            CvImage.Match m = cvi.Image.FindBestMatchWithinImage(cvPage, cvi.Threshold, cvi.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
+                    //            if (m == null)
+                    //                continue;
+                    //            Rectangle r = m.Rectangle;
+                    //            for (int x = (int)(r.X / Settings.Constants.Image2PdfResolutionRatio); x < r.Right / Settings.Constants.Image2PdfResolutionRatio; x++)
+                    //                for (int y = (int)(r.Y / Settings.Constants.Image2PdfResolutionRatio); y < r.Bottom / Settings.Constants.Image2PdfResolutionRatio; y++)
+                    //                    b.SetPixel(x, y, Color.White);
+                    //        }
+                    //    }
+                    //}
 
                     _activeTemplateBitmap = b;
 
@@ -230,18 +234,27 @@ namespace Cliver.PdfDocumentParser
                     {
                         Template.Anchor.CvImage sda = PageCollection.ActiveTemplate.GetScalingAnchor();
                         CvImage.Match m = sda.Image.FindBestMatchWithinImage(ActiveTemplateCvImage, sda.Threshold, sda.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
-                        if (m != null && m.Scale != 1)
+                        if (m != null)
                         {
-                            _activeTemplateBitmap = Win.ImageRoutines.GetScaled(ActiveTemplateBitmap, 1f / m.Scale);
-                            b.Dispose();
-                            _activeTemplateCvImage?.Dispose();
-                            _activeTemplateCvImage = null;
+                            DetectedImageScale = m.Scale;
+                            if (DetectedImageScale != 1)
+                            {
+                                _activeTemplateBitmap = Win.ImageRoutines.GetScaled(ActiveTemplateBitmap, 1f / m.Scale);
+                                b.Dispose();
+                                _activeTemplateCvImage?.Dispose();
+                                _activeTemplateCvImage = null;
+                            }
                         }
+                        else
+                            DetectedImageScale = 0;
                     }
+                    else
+                        DetectedImageScale = -1;
                 }
                 return _activeTemplateBitmap;
             }
         }
+        public float DetectedImageScale { get; private set; } = -1;
 
         Bitmap _activeTemplateBitmap = null;
 
@@ -284,7 +297,7 @@ namespace Cliver.PdfDocumentParser
             {
                 if (_activeTemplateOcrCharBoxs == null)
                 {
-                    _activeTemplateOcrCharBoxs = Ocr.This.GetCharBoxs(ActiveTemplateBitmap);
+                    _activeTemplateOcrCharBoxs = Ocr.This.GetCharBoxs(ActiveTemplateBitmap, PageCollection.ActiveTemplate.TesseractPageSegMode);
                 }
                 return _activeTemplateOcrCharBoxs;
             }

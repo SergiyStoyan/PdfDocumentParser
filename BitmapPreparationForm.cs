@@ -36,6 +36,24 @@ namespace Cliver.PdfDocumentParser
                 SetUI(template, true);
             };
 
+            TesseractPageSegMode.Items.AddRange(new object[] {
+                Tesseract.PageSegMode.Auto,
+                Tesseract.PageSegMode.AutoOnly,
+                Tesseract.PageSegMode.AutoOsd,
+                Tesseract.PageSegMode.CircleWord,
+                Tesseract.PageSegMode.Count,
+                Tesseract.PageSegMode.OsdOnly,
+                Tesseract.PageSegMode.RawLine,
+                Tesseract.PageSegMode.SingleBlock,
+                Tesseract.PageSegMode.SingleBlockVertText,
+                Tesseract.PageSegMode.SingleChar,
+                Tesseract.PageSegMode.SingleColumn,
+                Tesseract.PageSegMode.SingleLine,
+                Tesseract.PageSegMode.SingleWord,
+                Tesseract.PageSegMode.SparseText,
+                Tesseract.PageSegMode.SparseTextOsd
+            });
+
             PageRotation.SelectedIndexChanged += delegate { changed = true; };
             Deskew.CheckedChanged += delegate { changed = true; };
             DeskewBlockMaxHeight.ValueChanged += delegate { changed = true; };
@@ -43,6 +61,7 @@ namespace Cliver.PdfDocumentParser
             ScalingAnchor.SelectedIndexChanged += delegate { changed = true; };
             CvImageScalePyramidStep.ValueChanged += delegate { changed = true; };
             bitmapPreprocessorClassDefinition.TextChanged += delegate { changed = true; };
+            TesseractPageSegMode.SelectedIndexChanged += delegate { changed = true; };
             PreprocessBitmap.CheckedChanged += delegate
             {
                 bitmapPreprocessorClassDefinition.Enabled = PreprocessBitmap.Checked;
@@ -74,6 +93,7 @@ namespace Cliver.PdfDocumentParser
                 CvImageScalePyramidStep.Value = t.CvImageScalePyramidStep;
                 bitmapPreprocessorClassDefinition.Text = t.BitmapPreprocessorClassDefinition;
                 bitmapPreprocessorClassDefinition.Enabled = PreprocessBitmap.Checked = t.PreprocessBitmap;
+                TesseractPageSegMode.SelectedItem = t.TesseractPageSegMode;
                 changed = false;
             }
             if (!changed && t.ScalingAnchorId != (int?)ScalingAnchor.SelectedItem)
@@ -123,6 +143,7 @@ namespace Cliver.PdfDocumentParser
             t.CvImageScalePyramidStep = (int)CvImageScalePyramidStep.Value;
             t.BitmapPreprocessorClassDefinition = bitmapPreprocessorClassDefinition.Text;
             t.PreprocessBitmap = PreprocessBitmap.Checked;
+            t.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
         }
 
         void validate()

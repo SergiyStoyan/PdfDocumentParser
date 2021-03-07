@@ -99,30 +99,30 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public string GetTextSurroundedByRectangle(Bitmap b, RectangleF r)
+        public string GetTextSurroundedByRectangle(Bitmap b, RectangleF r, PageSegMode pageSegMode)
         {
             r = new RectangleF(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio);
             r.Intersect(new Rectangle(0, 0, b.Width, b.Height));
             if (Math.Abs(r.Width) < Settings.Constants.CoordinateDeviationMargin || Math.Abs(r.Height) < Settings.Constants.CoordinateDeviationMargin)
                 return null;
-            using (var page = engine.Process(b, new Rect((int)r.X, (int)r.Y, (int)r.Width, (int)r.Height), PageSegMode.SingleBlock))
+            using (var page = engine.Process(b, new Rect((int)r.X, (int)r.Y, (int)r.Width, (int)r.Height), pageSegMode))
             {
                 return page.GetText();
             }
         }
 
-        public string GetHtml(Bitmap b)
+        public string GetHtml(Bitmap b, PageSegMode pageSegMode)
         {
-            using (Tesseract.Page page = engine.Process(b, PageSegMode.SingleBlock))
+            using (Tesseract.Page page = engine.Process(b, pageSegMode))
             {
                 return page.GetHOCRText(0, false);
             }
         }
 
-        public List<CharBox> GetCharBoxs(Bitmap b)
+        public List<CharBox> GetCharBoxs(Bitmap b, PageSegMode pageSegMode)
         {
             List<CharBox> cbs = new List<CharBox>();
-            using (Tesseract.Page page = engine.Process(b, PageSegMode.SingleBlock))
+            using (Tesseract.Page page = engine.Process(b, pageSegMode))
             {
                 //string t = page.GetHOCRText(1, true);
                 //var dfg = page.GetThresholdedImage();                        

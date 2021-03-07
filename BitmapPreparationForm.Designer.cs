@@ -50,6 +50,8 @@
             this.label19 = new System.Windows.Forms.Label();
             this.DeskewMinBlockSpan = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
+            this.TesseractPageSegMode = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewBlockMaxHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CvImageScalePyramidStep)).BeginInit();
@@ -317,11 +319,31 @@
             this.label4.TabIndex = 95;
             this.label4.Text = "Deskew Block Max Height:";
             // 
+            // TesseractPageSegMode
+            // 
+            this.TesseractPageSegMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.TesseractPageSegMode.FormattingEnabled = true;
+            this.TesseractPageSegMode.Location = new System.Drawing.Point(489, 44);
+            this.TesseractPageSegMode.Name = "TesseractPageSegMode";
+            this.TesseractPageSegMode.Size = new System.Drawing.Size(78, 21);
+            this.TesseractPageSegMode.TabIndex = 98;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(396, 47);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(87, 13);
+            this.label5.TabIndex = 97;
+            this.label5.Text = "Tesseract Mode:";
+            // 
             // BitmapPreparationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(732, 347);
+            this.Controls.Add(this.TesseractPageSegMode);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.DeskewMinBlockSpan);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.CvImageScalePyramidStep);
@@ -373,5 +395,7 @@
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.NumericUpDown DeskewMinBlockSpan;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ComboBox TesseractPageSegMode;
+        private System.Windows.Forms.Label label5;
     }
 }

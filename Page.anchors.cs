@@ -256,7 +256,7 @@ namespace Cliver.PdfDocumentParser
                             Bitmap b = GetRectangleFromActiveTemplateBitmap(searchRectangle.X / Settings.Constants.Image2PdfResolutionRatio, searchRectangle.Y / Settings.Constants.Image2PdfResolutionRatio, searchRectangle.Width / Settings.Constants.Image2PdfResolutionRatio, searchRectangle.Height / Settings.Constants.Image2PdfResolutionRatio);
                             if (b == null)
                                 return false;
-                            searchRectangleOcrCharBoxs = Ocr.This.GetCharBoxs(b);
+                            searchRectangleOcrCharBoxs = Ocr.This.GetCharBoxs(b, PageCollection.ActiveTemplate.TesseractPageSegMode);
                             PointF searchRectanglePosition = new PointF(searchRectangle.X < 0 ? 0 : searchRectangle.X, searchRectangle.Y < 0 ? 0 : searchRectangle.Y);
                             searchRectangleOcrCharBoxs.ForEach(x => { x.R.X += searchRectanglePosition.X; x.R.Y += searchRectanglePosition.Y; });
                             tcb0s = searchRectangleOcrCharBoxs.Where(x => x.Char == cbs[0].Char && searchRectangle.Contains(x.R));

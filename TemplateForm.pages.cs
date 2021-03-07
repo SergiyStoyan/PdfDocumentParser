@@ -237,13 +237,13 @@ namespace Cliver.PdfDocumentParser
                         if (field.DefaultValueType == Template.Field.ValueTypes.PdfTextLines)
                             return Page.NormalizeText(string.Join("\r\n", (List<string>)v));
                         return Page.NormalizeText(Serialization.Json.Serialize(v));
-                        //drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
-                        //if (field.DefaultValueType == Template.Field.ValueTypes.OcrText)
-                        //    return Page.NormalizeText((string)v);
-                        //if (field.DefaultValueType == Template.Field.ValueTypes.OcrTextLines)
-                        //    return Page.NormalizeText(string.Join("\r\n", (List<string>)v));
-                        ////if (field.DefaultValueType == Template.Field.ValueTypes.OcrTextCharBoxs)
-                        //return Page.NormalizeText(Serialization.Json.Serialize(v));
+                    //drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
+                    //if (field.DefaultValueType == Template.Field.ValueTypes.OcrText)
+                    //    return Page.NormalizeText((string)v);
+                    //if (field.DefaultValueType == Template.Field.ValueTypes.OcrTextLines)
+                    //    return Page.NormalizeText(string.Join("\r\n", (List<string>)v));
+                    ////if (field.DefaultValueType == Template.Field.ValueTypes.OcrTextCharBoxs)
+                    //return Page.NormalizeText(Serialization.Json.Serialize(v));
                     case Template.Field.ValueTypes.Image:
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
                         return v;
@@ -311,6 +311,22 @@ namespace Cliver.PdfDocumentParser
             {
                 if (string.IsNullOrWhiteSpace(testFile.Text) || 0 >= pageI || totalPageNumber < pageI)
                     return;
+
+                if (pages[pageI].DetectedImageScale < 0)
+                {
+                    detectedImageScale.BackColor = SystemColors.Control;
+                    detectedImageScale.Text = null;
+                }
+                else if (pages[pageI].DetectedImageScale == 0)
+                {
+                    detectedImageScale.BackColor = Color.Pink;
+                    detectedImageScale.Text = "Not found";
+                }
+                else
+                {
+                    detectedImageScale.BackColor = Color.LightGreen;
+                    detectedImageScale.Text = pages[pageI].DetectedImageScale.ToString();
+                }
 
                 foreach (DataGridViewRow r in fields.Rows)
                     setFieldRowValue(r, true);

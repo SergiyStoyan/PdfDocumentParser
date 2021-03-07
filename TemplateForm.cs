@@ -81,7 +81,7 @@ namespace Cliver.PdfDocumentParser
             Point p;
 
             if (drawingMode == DrawingModes.movingImage)
-            { 
+            {
                 p = Control.MousePosition;
                 int h = imageScrollPostion0.X + screenMousePosition0.X - p.X;
                 if (h < splitContainer1.Panel2.HorizontalScroll.Minimum)
@@ -204,7 +204,8 @@ namespace Cliver.PdfDocumentParser
                                                     selectedOcrCharBoxs.AddRange(Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateOcrCharBoxs, r.GetSystemRectangleF()));
                                                 else
                                                 {
-                                                    foreach (Ocr.CharBox cb in Ocr.This.GetCharBoxs(pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio)))
+                                                    Template t = GetTemplateFromUI(false);
+                                                    foreach (Ocr.CharBox cb in Ocr.This.GetCharBoxs(pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio), t.TesseractPageSegMode))
                                                     {
                                                         cb.R.X += r.X;
                                                         cb.R.Y += r.Y;
