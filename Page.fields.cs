@@ -92,29 +92,37 @@ namespace Cliver.PdfDocumentParser
         }
         Dictionary<string, FieldActualInfo> fieldNames2fieldActualInfo = new Dictionary<string, FieldActualInfo>();
 
-        internal class FieldActualInfo
+        internal class FieldActualInfo : IDisposable
         {
             ~FieldActualInfo()
             {
+                Dispose();
+            }
+
+            public void Dispose()
+            {
+                if (valueTypes2cachedValue.Count < 1)
+                    return;
                 foreach (object o in valueTypes2cachedValue.Values)
                     if (o is IDisposable)
                         ((IDisposable)o).Dispose();
+                valueTypes2cachedValue.Clear();
             }
 
-            readonly public Template.Field ActualField;
-            readonly public RectangleF? ActualRectangle;
-            readonly public FieldActualInfo TableFieldActualInfo = null;
-            public bool Found { get { return ActualRectangle != null; } }
+            readonly internal Template.Field ActualField;
+            readonly internal RectangleF? ActualRectangle;
+            readonly internal FieldActualInfo TableFieldActualInfo = null;
+            internal bool Found { get { return ActualRectangle != null; } }
 
-            public object GetValue(Template.Field.ValueTypes valueType)
+            internal object GetValue(Template.Field.ValueTypes valueType)
             {
-                return getValue(valueType, false);
-            }
+                //    return getValue(valueType, true);//test; if works, remove
+                //}
 
-            object getValue(Template.Field.ValueTypes valueType, bool cached)
-            {
-                if (!cached)
-                    return getValue_(valueType);
+                //object getValue(Template.Field.ValueTypes valueType, bool cached)
+                //{
+                //    if (!cached)
+                //        return getValue_(valueType);
                 if (!valueTypes2cachedValue.TryGetValue(valueType, out object o))
                 {//!!!to cache Table field values to re-use them internally only!!!
                     o = getValue_(valueType);
@@ -152,7 +160,10 @@ namespace Cliver.PdfDocumentParser
                             return Regex.Split(Ocr.This.GetTextSurroundedByRectangle(page.ActiveTemplateBitmap, r, page.PageCollection.ActiveTemplate.TesseractPageSegMode), "$", RegexOptions.Multiline);
                         return getOcrTextLinesAsTableColumn();
                     case Template.Field.ValueTypes.OcrCharBoxs:
-                        return Ocr.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, r);
+                        //return Ocr.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, r);
+                        if (ActualField.ColumnOfTable == null)
+                            return Ocr.This.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateBitmap, r, page.PageCollection.ActiveTemplate.TesseractPageSegMode);
+                        return getOcrCharBoxsAsTableColumn();
                     case Template.Field.ValueTypes.Image:
                         Bitmap b = page.GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio);
                         if (b == null)
@@ -172,7 +183,7 @@ namespace Cliver.PdfDocumentParser
             List<string> getPdfTextLinesAsTableColumn()
             {
                 RectangleF ar = (RectangleF)ActualRectangle;
-                List<Pdf.CharBox> cbs = (List<Pdf.CharBox>)TableFieldActualInfo.getValue(Template.Field.ValueTypes.PdfCharBoxs, true);
+                List<Pdf.CharBox> cbs = (List<Pdf.CharBox>)TableFieldActualInfo.GetValue(Template.Field.ValueTypes.PdfCharBoxs);
                 List<string> ls = new List<string>();
                 foreach (Pdf.Line l in Pdf.GetLines(cbs, page.PageCollection.ActiveTemplate.TextAutoInsertSpace))
                 {
@@ -192,7 +203,7 @@ namespace Cliver.PdfDocumentParser
                 if (!TableFieldActualInfo.Found)
                     return null;
                 RectangleF ar = (RectangleF)ActualRectangle;
-                List<Ocr.CharBox> cbs = (List<Ocr.CharBox>)TableFieldActualInfo.getValue(Template.Field.ValueTypes.OcrCharBoxs, true);
+                List<Ocr.CharBox> cbs = (List<Ocr.CharBox>)TableFieldActualInfo.GetValue(Template.Field.ValueTypes.OcrCharBoxs);
                 List<string> ls = new List<string>();
                 foreach (Ocr.Line l in Ocr.GetLines(cbs, page.PageCollection.ActiveTemplate.TextAutoInsertSpace))
                 {
@@ -203,6 +214,17 @@ namespace Cliver.PdfDocumentParser
                     ls.Add(sb.ToString());
                 }
                 return ls;
+            }
+
+            List<Ocr.CharBox> getOcrCharBoxsAsTableColumn()
+            {
+                if (ActualRectangle == null)
+                    return null;
+                if (!TableFieldActualInfo.Found)
+                    return null;
+                RectangleF ar = (RectangleF)ActualRectangle;
+                List<Ocr.CharBox> cbs = (List<Ocr.CharBox>)TableFieldActualInfo.GetValue(Template.Field.ValueTypes.OcrCharBoxs);
+                return cbs.Where(a => a.R.Left >= ar.Left && a.R.Right <= ar.Right && a.R.Top >= ar.Top && a.R.Bottom <= ar.Bottom).ToList();
             }
 
             List<Bitmap> getOcrTextLineImages()
@@ -216,7 +238,7 @@ namespace Cliver.PdfDocumentParser
                 if (ActualField.ColumnOfTable == null)
                     cbs = Ocr.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, ar);
                 else
-                    cbs = (List<Ocr.CharBox>)TableFieldActualInfo.getValue(Template.Field.ValueTypes.OcrCharBoxs, true);
+                    cbs = (List<Ocr.CharBox>)TableFieldActualInfo.GetValue(Template.Field.ValueTypes.OcrCharBoxs);
                 List<Bitmap> ls = new List<Bitmap>();
                 foreach (Ocr.Line l in Ocr.GetLines(cbs, page.PageCollection.ActiveTemplate.TextAutoInsertSpace))
                 {

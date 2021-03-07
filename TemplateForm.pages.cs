@@ -207,7 +207,9 @@ namespace Cliver.PdfDocumentParser
                             if (ShowFieldTextLineSeparators.Checked)
                             {
                                 RectangleF tableAR = (RectangleF)fai.TableFieldActualInfo.ActualRectangle;
-                                List<Ocr.Line> lines = Ocr.GetLines(Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateOcrCharBoxs, tableAR), pages.ActiveTemplate.TextAutoInsertSpace).ToList();
+                                //List<Ocr.Line> lines = Ocr.GetLines(Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateOcrCharBoxs, tableAR), pages.ActiveTemplate.TextAutoInsertSpace).ToList();
+                                //List<Ocr.Line> lines = Ocr.GetLines(Ocr.This.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateBitmap, tableAR, pages.ActiveTemplate.TesseractPageSegMode), pages.ActiveTemplate.TextAutoInsertSpace).ToList();
+                                List<Ocr.Line> lines = Ocr.GetLines((List<Ocr.CharBox>)fai.TableFieldActualInfo.GetValue(Template.Field.ValueTypes.OcrCharBoxs), pages.ActiveTemplate.TextAutoInsertSpace).ToList();
                                 List<RectangleF> lineBoxes = new List<RectangleF>();
                                 for (int i = 1; i < lines.Count; i++)
                                 {
@@ -224,7 +226,8 @@ namespace Cliver.PdfDocumentParser
                         {
                             if (ShowFieldTextLineSeparators.Checked)
                             {
-                                List<Ocr.Line> lines = Ocr.GetLines(Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateOcrCharBoxs, r), pages.ActiveTemplate.TextAutoInsertSpace).ToList();
+                                //List<Ocr.Line> lines = Ocr.GetLines(Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateOcrCharBoxs, r), pages.ActiveTemplate.TextAutoInsertSpace).ToList();
+                                List<Ocr.Line> lines = Ocr.GetLines(Ocr.This.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateBitmap, r, pages.ActiveTemplate.TesseractPageSegMode), pages.ActiveTemplate.TextAutoInsertSpace).ToList();
                                 List<RectangleF> lineBoxes = new List<RectangleF>();
                                 for (int i = 1; i < lines.Count; i++)
                                     lineBoxes.Add(new RectangleF { X = r.X, Y = lines[i].Top, Width = r.Width, Height = 0 });
@@ -232,9 +235,9 @@ namespace Cliver.PdfDocumentParser
                             }
                         }
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
-                        if (field.DefaultValueType == Template.Field.ValueTypes.PdfText)
+                        if (field.DefaultValueType == Template.Field.ValueTypes.OcrText)
                             return Page.NormalizeText((string)v);
-                        if (field.DefaultValueType == Template.Field.ValueTypes.PdfTextLines)
+                        if (field.DefaultValueType == Template.Field.ValueTypes.OcrTextLines)
                             return Page.NormalizeText(string.Join("\r\n", (List<string>)v));
                         return Page.NormalizeText(Serialization.Json.Serialize(v));
                     //drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });

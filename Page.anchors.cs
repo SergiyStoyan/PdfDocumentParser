@@ -69,31 +69,6 @@ namespace Cliver.PdfDocumentParser
             {
                 Anchor = anchor;
 
-                //if (anchor.Type == Template.Anchor.Types.Script)//it is a special type of Anchor which is treated separately
-                //{
-                //    if (anchor.ParentAnchorId != null)
-                //        throw new Exception("Anchor [" + anchor.Id + "] cannot be linked to another anchor.");
-                //    Template.Anchor a = page.PageCollection.ActiveTemplate.Anchors.FirstOrDefault(x => x.ParentAnchorId == anchor.Id);
-                //    if (a != null)
-                //        throw new Exception("Anchor [" + anchor.Id + "] cannot be linked by another anchor but it is linked by anchor[" + a.Id + "]");
-
-                //    Template.Anchor.Script s = (Template.Anchor.Script)anchor;
-                //    if (!BooleanEngine.Parse(s.Expression, page))
-                //        return;
-                //    foreach (int rai in BooleanEngine.GetAnchorIds(s.Expression))
-                //    {//RULE OF RESULTING ANCHOR: the first anchor in the expression that is found
-                //        AnchorActualInfo aai = page.GetAnchorActualInfo(rai);
-                //        if (aai.Found)
-                //        {
-                //            Rectangless = aai.Rectangless;
-                //            Shift = aai.Shift;
-                //            break;
-                //        }
-                //    }
-                //    if (Rectangless.Count < 1)
-                //        throw new Exception("No resulting anchor found for anchor[" + anchor.Id + "]. This means that its expression is malformed!");
-                //return;
-                //}
                 for (int? id = anchor.ParentAnchorId; id != null;)
                 {
                     Template.Anchor pa = page.PageCollection.ActiveTemplate.Anchors.Find(x => x.Id == id);
