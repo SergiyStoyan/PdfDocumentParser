@@ -19,23 +19,6 @@ namespace Cliver.PdfDocumentParser
 {
     class Deskewer
     {
-        //public static void Deskew(string imageFile)
-        //{
-        //    ImageDeskew id = new ImageDeskew(imageFile);
-        //    Bitmap b = id.DeskewAsColumnOfBlocks(1000, 30);
-        //}
-
-        //public Deskewer(string imageFile)
-        //{
-        //    image = new Image<Gray, byte>(imageFile);
-        //}
-        //public readonly Image<Gray, byte> image;
-
-        //public Deskewer(Bitmap bitmap)
-        //{
-        //    image = bitmap.ToImage<Gray, byte>();
-        //}
-
         static public void DeskewAsSingleBlock(ref Bitmap bitmap)//good
         {
             using (Image<Rgb, byte> image = bitmap.ToImage<Rgb, byte>())
