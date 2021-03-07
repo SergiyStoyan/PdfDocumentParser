@@ -318,6 +318,15 @@ namespace Cliver.PdfDocumentParser
                 if (string.IsNullOrWhiteSpace(testFile.Text) || 0 >= pageI || totalPageNumber < pageI)
                     return;
 
+                foreach (DataGridViewRow r in fields.Rows)
+                    setFieldRowValue(r, true);
+
+                currentPageI = pageI;
+                tCurrentPage.Text = currentPageI.ToString();
+
+                setScaledImage();
+                enableNavigationButtons();
+
                 if (pages[pageI].DetectedImageScale < 0)
                 {
                     detectedImageScale.BackColor = SystemColors.Control;
@@ -333,15 +342,6 @@ namespace Cliver.PdfDocumentParser
                     detectedImageScale.BackColor = Color.LightGreen;
                     detectedImageScale.Text = pages[pageI].DetectedImageScale.ToString();
                 }
-
-                foreach (DataGridViewRow r in fields.Rows)
-                    setFieldRowValue(r, true);
-
-                currentPageI = pageI;
-                tCurrentPage.Text = currentPageI.ToString();
-
-                setScaledImage();
-                enableNavigationButtons();
 
                 anchors.CurrentCell = null;//1-st row is autoselected
                 conditions.CurrentCell = null;//1-st row is autoselected
