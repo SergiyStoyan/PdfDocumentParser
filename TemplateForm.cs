@@ -25,7 +25,7 @@ namespace Cliver.PdfDocumentParser
 
             this.templateManager = templateManager;
 
-            this.bitmapPreparationForm = new BitmapPreparationForm(this);
+            this.bitmapPreparationForm = new ScanTemplateForm(this);
 
             initializeAnchorsTable();
             initializeConditionsTable();
@@ -505,7 +505,7 @@ namespace Cliver.PdfDocumentParser
             bitmapPreparationForm.Show();
             bitmapPreparationForm.Activate();
         }
-        readonly BitmapPreparationForm bitmapPreparationForm;
+        readonly ScanTemplateForm bitmapPreparationForm;
 
         readonly Dictionary<object, ResizebleBox> owners2resizebleBox = new Dictionary<object, ResizebleBox>();
         internal class ResizebleBox

@@ -11,9 +11,9 @@ using System.Collections.Generic;
 
 namespace Cliver.PdfDocumentParser
 {
-    public partial class BitmapPreparationForm : Form
+    public partial class ScanTemplateForm : Form
     {
-        public BitmapPreparationForm(TemplateForm templateForm)
+        public ScanTemplateForm(TemplateForm templateForm)
         {
             InitializeComponent();
 

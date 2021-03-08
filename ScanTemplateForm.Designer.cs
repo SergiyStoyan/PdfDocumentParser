@@ -1,6 +1,6 @@
 ﻿namespace Cliver.PdfDocumentParser
 {
-    partial class BitmapPreparationForm
+    partial class ScanTemplateForm
     {
         /// <summary>
         /// Required designer variable.

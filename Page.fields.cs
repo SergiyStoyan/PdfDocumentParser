@@ -339,10 +339,10 @@ namespace Cliver.PdfDocumentParser
                 {
                     if (!TableFieldActualInfo.Found)
                         return null;
-                    cbs = Ocr.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, ar);
+                    cbs = (List<Ocr.CharBox>)TableFieldActualInfo.GetValue(Template.Field.ValueTypes.OcrCharBoxs);
                 }
                 else
-                    cbs = (List<Ocr.CharBox>)TableFieldActualInfo.GetValue(Template.Field.ValueTypes.OcrCharBoxs);
+                    cbs = Ocr.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, ar);
                 List<Bitmap> ls = new List<Bitmap>();
                 foreach (Ocr.Line l in Ocr.GetLines(cbs, page.PageCollection.ActiveTemplate.TextAutoInsertSpace))
                 {
