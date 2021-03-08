@@ -39,31 +39,33 @@
             this.DeskewBlockMaxHeight = new System.Windows.Forms.NumericUpDown();
             this.Deskew = new System.Windows.Forms.CheckBox();
             this.PageRotation = new System.Windows.Forms.ComboBox();
-            this.label21 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.PreprocessBitmap = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.ScalingAnchor = new System.Windows.Forms.ComboBox();
-            this.CvImageScalePyramidStep = new System.Windows.Forms.NumericUpDown();
-            this.label19 = new System.Windows.Forms.Label();
             this.DeskewBlockMinSpan = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
             this.TesseractPageSegMode = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.ParseOcrFieldFromFieldImage = new System.Windows.Forms.CheckBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.CvImageScalePyramidStep = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewBlockMaxHeight)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.CvImageScalePyramidStep)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewBlockMinSpan)).BeginInit();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.CvImageScalePyramidStep)).BeginInit();
             this.SuspendLayout();
             // 
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bCancel.Location = new System.Drawing.Point(656, 3);
+            this.bCancel.Location = new System.Drawing.Point(764, 3);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 50;
@@ -82,13 +84,13 @@
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 316);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(734, 31);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(842, 31);
             this.flowLayoutPanel1.TabIndex = 60;
             // 
             // bApply
             // 
             this.bApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bApply.Location = new System.Drawing.Point(575, 3);
+            this.bApply.Location = new System.Drawing.Point(683, 3);
             this.bApply.Name = "bApply";
             this.bApply.Size = new System.Drawing.Size(75, 23);
             this.bApply.TabIndex = 51;
@@ -106,7 +108,7 @@
             "↻ 180°",
             "↺ 90°",
             "Auto"});
-            this.defaultBitmapPreprocessorClassDefinitions.Location = new System.Drawing.Point(348, 3);
+            this.defaultBitmapPreprocessorClassDefinitions.Location = new System.Drawing.Point(456, 3);
             this.defaultBitmapPreprocessorClassDefinitions.Name = "defaultBitmapPreprocessorClassDefinitions";
             this.defaultBitmapPreprocessorClassDefinitions.Size = new System.Drawing.Size(221, 21);
             this.defaultBitmapPreprocessorClassDefinitions.TabIndex = 85;
@@ -115,7 +117,7 @@
             // bRemove
             // 
             this.bRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bRemove.Location = new System.Drawing.Point(308, 3);
+            this.bRemove.Location = new System.Drawing.Point(416, 3);
             this.bRemove.Name = "bRemove";
             this.bRemove.Size = new System.Drawing.Size(34, 23);
             this.bRemove.TabIndex = 52;
@@ -126,7 +128,7 @@
             // bSaveDafault
             // 
             this.bSaveDafault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bSaveDafault.Location = new System.Drawing.Point(268, 3);
+            this.bSaveDafault.Location = new System.Drawing.Point(376, 3);
             this.bSaveDafault.Name = "bSaveDafault";
             this.bSaveDafault.Size = new System.Drawing.Size(34, 23);
             this.bSaveDafault.TabIndex = 53;
@@ -145,7 +147,7 @@
             this.bitmapPreprocessorClassDefinition.Margin = new System.Windows.Forms.Padding(1);
             this.bitmapPreprocessorClassDefinition.Name = "bitmapPreprocessorClassDefinition";
             this.bitmapPreprocessorClassDefinition.ShowVRuler = false;
-            this.bitmapPreprocessorClassDefinition.Size = new System.Drawing.Size(734, 218);
+            this.bitmapPreprocessorClassDefinition.Size = new System.Drawing.Size(842, 218);
             this.bitmapPreprocessorClassDefinition.TabIndex = 78;
             // 
             // label9
@@ -196,17 +198,8 @@
             "Auto"});
             this.PageRotation.Location = new System.Drawing.Point(12, 26);
             this.PageRotation.Name = "PageRotation";
-            this.PageRotation.Size = new System.Drawing.Size(52, 21);
+            this.PageRotation.Size = new System.Drawing.Size(74, 21);
             this.PageRotation.TabIndex = 80;
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(13, 23);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(40, 13);
-            this.label21.TabIndex = 84;
-            this.label21.Text = "Active:";
             // 
             // label14
             // 
@@ -266,34 +259,8 @@
             "Auto"});
             this.ScalingAnchor.Location = new System.Drawing.Point(99, 26);
             this.ScalingAnchor.Name = "ScalingAnchor";
-            this.ScalingAnchor.Size = new System.Drawing.Size(52, 21);
+            this.ScalingAnchor.Size = new System.Drawing.Size(98, 21);
             this.ScalingAnchor.TabIndex = 89;
-            // 
-            // CvImageScalePyramidStep
-            // 
-            this.CvImageScalePyramidStep.Location = new System.Drawing.Point(213, 27);
-            this.CvImageScalePyramidStep.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.CvImageScalePyramidStep.Name = "CvImageScalePyramidStep";
-            this.CvImageScalePyramidStep.Size = new System.Drawing.Size(47, 20);
-            this.CvImageScalePyramidStep.TabIndex = 94;
-            this.CvImageScalePyramidStep.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(210, 10);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(102, 13);
-            this.label19.TabIndex = 93;
-            this.label19.Text = "Scale Pyramid Step:";
             // 
             // DeskewBlockMinSpan
             // 
@@ -304,7 +271,7 @@
             0,
             0});
             this.DeskewBlockMinSpan.Name = "DeskewBlockMinSpan";
-            this.DeskewBlockMinSpan.Size = new System.Drawing.Size(46, 20);
+            this.DeskewBlockMinSpan.Size = new System.Drawing.Size(57, 20);
             this.DeskewBlockMinSpan.TabIndex = 96;
             this.DeskewBlockMinSpan.Value = new decimal(new int[] {
             30,
@@ -325,7 +292,7 @@
             // 
             this.TesseractPageSegMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.TesseractPageSegMode.FormattingEnabled = true;
-            this.TesseractPageSegMode.Location = new System.Drawing.Point(328, 26);
+            this.TesseractPageSegMode.Location = new System.Drawing.Point(215, 26);
             this.TesseractPageSegMode.Name = "TesseractPageSegMode";
             this.TesseractPageSegMode.Size = new System.Drawing.Size(127, 21);
             this.TesseractPageSegMode.TabIndex = 98;
@@ -333,7 +300,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(325, 10);
+            this.label5.Location = new System.Drawing.Point(212, 10);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(87, 13);
             this.label5.TabIndex = 97;
@@ -347,23 +314,74 @@
             this.groupBox1.Controls.Add(this.DeskewBlockMinSpan);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label14);
-            this.groupBox1.Location = new System.Drawing.Point(491, 1);
+            this.groupBox1.Location = new System.Drawing.Point(635, 1);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(195, 92);
             this.groupBox1.TabIndex = 99;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Deskew";
             // 
+            // ParseOcrFieldFromFieldImage
+            // 
+            this.ParseOcrFieldFromFieldImage.AutoSize = true;
+            this.ParseOcrFieldFromFieldImage.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ParseOcrFieldFromFieldImage.Location = new System.Drawing.Point(577, 12);
+            this.ParseOcrFieldFromFieldImage.Name = "ParseOcrFieldFromFieldImage";
+            this.ParseOcrFieldFromFieldImage.Size = new System.Drawing.Size(15, 14);
+            this.ParseOcrFieldFromFieldImage.TabIndex = 100;
+            this.ParseOcrFieldFromFieldImage.UseVisualStyleBackColor = true;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(13, 23);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(40, 13);
+            this.label21.TabIndex = 84;
+            this.label21.Text = "Active:";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(373, 13);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(172, 13);
+            this.label6.TabIndex = 101;
+            this.label6.Text = "Parse Ocr Field From Field\'s Image:";
+            // 
+            // CvImageScalePyramidStep
+            // 
+            this.CvImageScalePyramidStep.Location = new System.Drawing.Point(549, 29);
+            this.CvImageScalePyramidStep.Name = "CvImageScalePyramidStep";
+            this.CvImageScalePyramidStep.Size = new System.Drawing.Size(43, 20);
+            this.CvImageScalePyramidStep.TabIndex = 103;
+            this.CvImageScalePyramidStep.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(373, 34);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(147, 13);
+            this.label7.TabIndex = 102;
+            this.label7.Text = "CvImage Scale Pyramid Step:";
+            // 
             // BitmapPreparationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(734, 347);
+            this.ClientSize = new System.Drawing.Size(842, 347);
+            this.Controls.Add(this.CvImageScalePyramidStep);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.ParseOcrFieldFromFieldImage);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.TesseractPageSegMode);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.CvImageScalePyramidStep);
-            this.Controls.Add(this.label19);
             this.Controls.Add(this.ScalingAnchor);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -377,10 +395,10 @@
             this.Text = "Scanned Document Settings";
             this.flowLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.DeskewBlockMaxHeight)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.CvImageScalePyramidStep)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewBlockMinSpan)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.CvImageScalePyramidStep)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -390,7 +408,6 @@
         private System.Windows.Forms.Button bCancel;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label21;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button bApply;
@@ -405,12 +422,15 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox ScalingAnchor;
-        private System.Windows.Forms.NumericUpDown CvImageScalePyramidStep;
-        private System.Windows.Forms.Label label19;
         private System.Windows.Forms.NumericUpDown DeskewBlockMinSpan;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox TesseractPageSegMode;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.CheckBox ParseOcrFieldFromFieldImage;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.NumericUpDown CvImageScalePyramidStep;
+        private System.Windows.Forms.Label label7;
     }
 }

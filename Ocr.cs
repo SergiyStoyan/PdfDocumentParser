@@ -228,12 +228,7 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        //public static string GetText(List<CharBox> orderedCbs)
-        //{
-        //    return orderedCbs.Aggregate(new StringBuilder(), (sb, n) => sb.Append(n.Char)).ToString();
-        //}
-
-        public static string GetText(List<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace)
+        public static List<string> GetTextLines(List<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace)
         {
             List<string> ls = new List<string>();
             foreach (Line l in GetLines(cbs, textAutoInsertSpace))
@@ -243,7 +238,7 @@ namespace Cliver.PdfDocumentParser
                     sb.Append(cb.Char);
                 ls.Add(sb.ToString());
             }
-            return string.Join("\r\n", ls);
+            return ls;
         }
 
         public class CharBox : Page.CharBox
@@ -320,6 +315,8 @@ namespace Cliver.PdfDocumentParser
 
         public class Line
         {
+            public float Left { get { return CharBoxs[0].R.Left; } }
+            public float Right { get { return CharBoxs[CharBoxs.Count - 1].R.Right; } }
             public float Top;
             public float Bottom;
             public List<CharBox> CharBoxs = new List<CharBox>();

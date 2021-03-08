@@ -32,6 +32,8 @@ namespace Cliver.PdfDocumentParser
         public bool IgnoreInvisiblePdfChars = true;//used but not edited
         public bool IgnoreDuplicatedPdfChars = true;//used but not edited
 
+        public bool ParseOcrFieldFromFieldImage = false;//otherwise parse from the page's char boxes
+
         public List<Anchor> Anchors;
 
         public List<Condition> Conditions;

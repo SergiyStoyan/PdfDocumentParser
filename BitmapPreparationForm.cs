@@ -60,6 +60,7 @@ namespace Cliver.PdfDocumentParser
             DeskewBlockMinSpan.ValueChanged += delegate { changed = true; };
             ScalingAnchor.SelectedIndexChanged += delegate { changed = true; };
             CvImageScalePyramidStep.ValueChanged += delegate { changed = true; };
+            ParseOcrFieldFromFieldImage.CheckedChanged += delegate { changed = true; };
             bitmapPreprocessorClassDefinition.TextChanged += delegate { changed = true; };
             TesseractPageSegMode.SelectedIndexChanged += delegate { changed = true; };
             PreprocessBitmap.CheckedChanged += delegate
@@ -91,6 +92,7 @@ namespace Cliver.PdfDocumentParser
                 DeskewBlockMaxHeight.Value = t.DeskewBlockMaxHeight;
                 DeskewBlockMinSpan.Value = t.DeskewBlockMinSpan;
                 CvImageScalePyramidStep.Value = t.CvImageScalePyramidStep;
+                ParseOcrFieldFromFieldImage.Checked = t.ParseOcrFieldFromFieldImage;
                 bitmapPreprocessorClassDefinition.Text = t.BitmapPreprocessorClassDefinition;
                 bitmapPreprocessorClassDefinition.Enabled = PreprocessBitmap.Checked = t.PreprocessBitmap;
                 TesseractPageSegMode.SelectedItem = t.TesseractPageSegMode;
@@ -141,6 +143,7 @@ namespace Cliver.PdfDocumentParser
             t.DeskewBlockMinSpan = (int)DeskewBlockMinSpan.Value;
             t.ScalingAnchorId = ScalingAnchor.SelectedItem is int ? (int)ScalingAnchor.SelectedItem : -1;
             t.CvImageScalePyramidStep = (int)CvImageScalePyramidStep.Value;
+            t.ParseOcrFieldFromFieldImage = ParseOcrFieldFromFieldImage.Checked;
             t.BitmapPreprocessorClassDefinition = bitmapPreprocessorClassDefinition.Text;
             t.PreprocessBitmap = PreprocessBitmap.Checked;
             t.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
