@@ -258,12 +258,9 @@ namespace Cliver.PdfDocumentParser
                 foreach (Ocr.Line l in Ocr.GetLines(cbs, page.PageCollection.ActiveTemplate.TextAutoInsertSpace))
                 {
                     RectangleF r = new RectangleF(ar.X, l.Top, ar.Width, l.Bottom - l.Top);
-                    Bitmap b = page.GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio);
-                    if (b == null)
-                        return null;
-                    using (b)
+                    using (Bitmap b = page.GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
                     {
-                        ls.Add(GetScaledImage2Pdf(b));
+                        ls.Add(b == null ? b : GetScaledImage2Pdf(b));
                     }
                 }
                 return ls;

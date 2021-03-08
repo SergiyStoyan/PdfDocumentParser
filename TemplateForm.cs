@@ -204,7 +204,10 @@ namespace Cliver.PdfDocumentParser
                                                     selectedOcrCharBoxs.AddRange(Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateOcrCharBoxs, r.GetSystemRectangleF()));
                                                 else
                                                 {
-                                                    foreach (Ocr.CharBox cb in Ocr.This.GetCharBoxs(pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio), pages.ActiveTemplate.TesseractPageSegMode))
+                                                    Bitmap b = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio);
+                                                    if (b == null)
+                                                        throw new Exception("Selected image is empty.");
+                                                    foreach (Ocr.CharBox cb in Ocr.This.GetCharBoxs(b, pages.ActiveTemplate.TesseractPageSegMode))
                                                     {
                                                         cb.R.X += r.X;
                                                         cb.R.Y += r.Y;
@@ -225,6 +228,8 @@ namespace Cliver.PdfDocumentParser
                                                 Template.Anchor.ImageData id = (Template.Anchor.ImageData)a;
                                                 using (Bitmap b = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
                                                 {
+                                                    if (b == null)
+                                                        throw new Exception("Selected image is empty.");
                                                     id.Image = new ImageData(b);
                                                 }
                                             }
@@ -234,6 +239,8 @@ namespace Cliver.PdfDocumentParser
                                                 Template.Anchor.CvImage ci = (Template.Anchor.CvImage)a;
                                                 using (Bitmap b = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
                                                 {
+                                                    if (b == null)
+                                                        throw new Exception("Selected image is empty.");
                                                     ci.Image = new CvImage(b);
                                                 }
                                             }
