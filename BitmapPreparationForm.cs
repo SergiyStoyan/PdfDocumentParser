@@ -96,7 +96,7 @@ namespace Cliver.PdfDocumentParser
                 TesseractPageSegMode.SelectedItem = t.TesseractPageSegMode;
                 changed = false;
             }
-            if (!changed && t.ScalingAnchorId != (int?)ScalingAnchor.SelectedItem)
+            if (!changed && t.ScalingAnchorId != ScalingAnchor.SelectedItem as int?)
                 changed = true;
             ScalingAnchor.Items.Clear();
             ScalingAnchor.Items.Add("");
