@@ -149,7 +149,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.name.Location = new System.Drawing.Point(51, 2);
             this.name.Name = "name";
-            this.name.Size = new System.Drawing.Size(214, 20);
+            this.name.Size = new System.Drawing.Size(248, 20);
             this.name.TabIndex = 39;
             // 
             // label8
@@ -191,7 +191,7 @@
             this.fields.Name = "fields";
             this.fields.RowHeadersWidth = 30;
             this.fields.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.fields.Size = new System.Drawing.Size(432, 126);
+            this.fields.Size = new System.Drawing.Size(432, 204);
             this.fields.TabIndex = 30;
             // 
             // Name_
@@ -269,7 +269,7 @@
             // 
             this.selectionCoordinates.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.selectionCoordinates.AutoSize = true;
-            this.selectionCoordinates.Location = new System.Drawing.Point(272, 5);
+            this.selectionCoordinates.Location = new System.Drawing.Point(310, 5);
             this.selectionCoordinates.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.selectionCoordinates.Name = "selectionCoordinates";
             this.selectionCoordinates.Size = new System.Drawing.Size(119, 13);
@@ -414,7 +414,7 @@
             // anchorsContainer.Panel2
             // 
             this.anchorsContainer.Panel2.Controls.Add(this.splitContainer3);
-            this.anchorsContainer.Size = new System.Drawing.Size(432, 263);
+            this.anchorsContainer.Size = new System.Drawing.Size(432, 185);
             this.anchorsContainer.SplitterDistance = 228;
             this.anchorsContainer.TabIndex = 52;
             // 
@@ -432,7 +432,7 @@
             this.anchors.Name = "anchors";
             this.anchors.RowHeadersWidth = 30;
             this.anchors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.anchors.Size = new System.Drawing.Size(228, 263);
+            this.anchors.Size = new System.Drawing.Size(228, 185);
             this.anchors.TabIndex = 50;
             // 
             // Id3
@@ -485,8 +485,8 @@
             this.splitContainer3.Panel2.Controls.Add(this.CheckConditionsAutomaticallyWhenPageChanged);
             this.splitContainer3.Panel2.Controls.Add(this.label4);
             this.splitContainer3.Panel2.Controls.Add(this.label11);
-            this.splitContainer3.Size = new System.Drawing.Size(200, 263);
-            this.splitContainer3.SplitterDistance = 165;
+            this.splitContainer3.Size = new System.Drawing.Size(200, 185);
+            this.splitContainer3.SplitterDistance = 116;
             this.splitContainer3.TabIndex = 0;
             // 
             // conditions
@@ -503,7 +503,7 @@
             this.conditions.Name = "conditions";
             this.conditions.RowHeadersWidth = 30;
             this.conditions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.conditions.Size = new System.Drawing.Size(200, 76);
+            this.conditions.Size = new System.Drawing.Size(200, 47);
             this.conditions.TabIndex = 0;
             // 
             // Name2
@@ -632,7 +632,7 @@
             this.panel1.Controls.Add(this.flowLayoutPanel1);
             this.panel1.Controls.Add(this.flowLayoutPanel3);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 164);
+            this.panel1.Location = new System.Drawing.Point(0, 242);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(432, 31);
             this.panel1.TabIndex = 29;
@@ -751,14 +751,14 @@
             this.splitContainer2.Panel2.Controls.Add(this.ExtractFieldsAutomaticallyWhenPageChanged);
             this.splitContainer2.Panel2.Controls.Add(this.label5);
             this.splitContainer2.Size = new System.Drawing.Size(432, 683);
-            this.splitContainer2.SplitterDistance = 484;
+            this.splitContainer2.SplitterDistance = 406;
             this.splitContainer2.TabIndex = 32;
             // 
             // label9
             // 
             this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(274, 121);
+            this.label9.Location = new System.Drawing.Point(254, 121);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(116, 13);
             this.label9.TabIndex = 70;
@@ -767,10 +767,10 @@
             // detectedImageScale
             // 
             this.detectedImageScale.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.detectedImageScale.Location = new System.Drawing.Point(391, 118);
+            this.detectedImageScale.Location = new System.Drawing.Point(373, 118);
             this.detectedImageScale.Name = "detectedImageScale";
             this.detectedImageScale.ReadOnly = true;
-            this.detectedImageScale.Size = new System.Drawing.Size(41, 20);
+            this.detectedImageScale.Size = new System.Drawing.Size(59, 20);
             this.detectedImageScale.TabIndex = 71;
             // 
             // bScannedDocumentSettings
@@ -779,7 +779,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.bScannedDocumentSettings.Location = new System.Drawing.Point(0, 116);
             this.bScannedDocumentSettings.Name = "bScannedDocumentSettings";
-            this.bScannedDocumentSettings.Size = new System.Drawing.Size(265, 23);
+            this.bScannedDocumentSettings.Size = new System.Drawing.Size(245, 23);
             this.bScannedDocumentSettings.TabIndex = 69;
             this.bScannedDocumentSettings.Text = "Scanned Document Settings";
             this.bScannedDocumentSettings.UseVisualStyleBackColor = true;
