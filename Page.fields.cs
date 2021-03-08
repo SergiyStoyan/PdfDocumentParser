@@ -50,7 +50,7 @@ namespace Cliver.PdfDocumentParser
         }
 
         ///// <summary>
-        ///// !!!passing Template.Field is deceitful for 2 reasons:
+        ///// !!!passing Template.Field would be deceitful for 2 reasons:
         ///// - it may belong to another template than ActiveTemplate;
         ///// - it implies that a Template.Field object is equivalent to a field while it is just one of its defintions;
         ///// </summary>
@@ -67,30 +67,45 @@ namespace Cliver.PdfDocumentParser
 
         internal FieldActualInfo GetFieldActualInfo(Template.Field field)
         {
-            return new FieldActualInfo(this, field, getFieldActualRectangle(field), field.ColumnOfTable != null ? getFoundFieldActualInfo(field.ColumnOfTable) : null);
+            List<FieldActualInfo> fais = getFieldActualInfos(field.Name);
+            FieldActualInfo fai = fais.Find(a => a.ActualField == field);
+            if (fai == null)
+            {
+                RectangleF? ar = getFieldActualRectangle(field);
+                fai = new FieldActualInfo(this, field, ar, field.ColumnOfTable != null ? getFoundFieldActualInfo(field.ColumnOfTable) : null);
+                fais.Add(fai);
+            }
+            return fai;
         }
 
         FieldActualInfo getFoundFieldActualInfo(string fieldName)
         {
-            if (!fieldNames2fieldActualInfo.TryGetValue(fieldName, out FieldActualInfo fai))
+            return getFieldActualInfos(fieldName)[0];
+        }
+
+        List<FieldActualInfo> getFieldActualInfos(string fieldName)
+        {
+            if (!fieldNames2fieldActualInfos.TryGetValue(fieldName, out List<FieldActualInfo> fais))
             {
-                RectangleF? ar = null;
-                Template.Field af = null;
+                fais = new List<FieldActualInfo>();
+                fieldNames2fieldActualInfos[fieldName] = fais;
                 foreach (Template.Field f in PageCollection.ActiveTemplate.Fields.Where(x => x.Name == fieldName))
                 {
-                    ar = getFieldActualRectangle(f);
-                    af = f;
+                    RectangleF? ar = getFieldActualRectangle(f);
+                    FieldActualInfo fai = new FieldActualInfo(this, f, ar, f.ColumnOfTable != null ? getFoundFieldActualInfo(f.ColumnOfTable) : null);
                     if (ar != null)
+                    {
+                        fais.Insert(0, fai);
                         break;
+                    }
+                    fais.Add(fai);
                 }
-                if (af == null)
+                if (fais.Count < 1)
                     throw new Exception("Field[name=" + fieldName + "] does not exist.");
-                fai = new FieldActualInfo(this, af, ar, af.ColumnOfTable != null ? getFoundFieldActualInfo(af.ColumnOfTable) : null);
-                fieldNames2fieldActualInfo[fieldName] = fai;
             }
-            return fai;
+            return fais;
         }
-        Dictionary<string, FieldActualInfo> fieldNames2fieldActualInfo = new Dictionary<string, FieldActualInfo>();
+        Dictionary<string, List<FieldActualInfo>> fieldNames2fieldActualInfos = new Dictionary<string, List<FieldActualInfo>>();
 
         internal class FieldActualInfo : IDisposable
         {

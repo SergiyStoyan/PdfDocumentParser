@@ -103,7 +103,7 @@ namespace Cliver.PdfDocumentParser
             if (!Serialization.Json.IsEqual(PageCollection.ActiveTemplate, newTemplate))
             {
                 anchorIds2anchorActualInfo.Clear();
-                fieldNames2fieldActualInfo.Clear();
+                fieldNames2fieldActualInfos.Clear();
             }
         }
 
