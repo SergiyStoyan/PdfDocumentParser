@@ -59,8 +59,8 @@ namespace Cliver.PdfDocumentParser
             DeskewBlockMaxHeight.ValueChanged += delegate { changed = true; };
             DeskewBlockMinSpan.ValueChanged += delegate { changed = true; };
             ScalingAnchor.SelectedIndexChanged += delegate { changed = true; };
-            CvImageScalePyramidStep.ValueChanged += delegate { changed = true; };
-            ParseOcrFieldFromFieldImage.CheckedChanged += delegate { changed = true; };
+            SingleFieldFromFieldImage.CheckedChanged += delegate { changed = true; };
+            ColumnFieldFromFieldImage.CheckedChanged += delegate { changed = true; };
             bitmapPreprocessorClassDefinition.TextChanged += delegate { changed = true; };
             TesseractPageSegMode.SelectedIndexChanged += delegate { changed = true; };
             PreprocessBitmap.CheckedChanged += delegate
@@ -91,8 +91,8 @@ namespace Cliver.PdfDocumentParser
                 Deskew.Checked = t.Deskew;
                 DeskewBlockMaxHeight.Value = t.DeskewBlockMaxHeight;
                 DeskewBlockMinSpan.Value = t.DeskewBlockMinSpan;
-                CvImageScalePyramidStep.Value = t.CvImageScalePyramidStep;
-                ParseOcrFieldFromFieldImage.Checked = t.ParseOcrFieldFromFieldImage;
+                SingleFieldFromFieldImage.Checked = t.FieldOcrMode.HasFlag(Template.FieldOcrModes.SingleFieldFromFieldImage);
+                ColumnFieldFromFieldImage.Checked = t.FieldOcrMode.HasFlag(Template.FieldOcrModes.ColumnFieldFromFieldImage);
                 bitmapPreprocessorClassDefinition.Text = t.BitmapPreprocessorClassDefinition;
                 bitmapPreprocessorClassDefinition.Enabled = PreprocessBitmap.Checked = t.PreprocessBitmap;
                 TesseractPageSegMode.SelectedItem = t.TesseractPageSegMode;
@@ -142,8 +142,14 @@ namespace Cliver.PdfDocumentParser
             t.DeskewBlockMaxHeight = (int)DeskewBlockMaxHeight.Value;
             t.DeskewBlockMinSpan = (int)DeskewBlockMinSpan.Value;
             t.ScalingAnchorId = ScalingAnchor.SelectedItem is int ? (int)ScalingAnchor.SelectedItem : -1;
-            t.CvImageScalePyramidStep = (int)CvImageScalePyramidStep.Value;
-            t.ParseOcrFieldFromFieldImage = ParseOcrFieldFromFieldImage.Checked;
+            if (SingleFieldFromFieldImage.Checked)
+                t.FieldOcrMode |= Template.FieldOcrModes.SingleFieldFromFieldImage;
+            else
+                t.FieldOcrMode &= ~Template.FieldOcrModes.SingleFieldFromFieldImage;
+            if (ColumnFieldFromFieldImage.Checked)
+                t.FieldOcrMode |= Template.FieldOcrModes.ColumnFieldFromFieldImage;
+            else
+                t.FieldOcrMode &= ~Template.FieldOcrModes.ColumnFieldFromFieldImage;
             t.BitmapPreprocessorClassDefinition = bitmapPreprocessorClassDefinition.Text;
             t.PreprocessBitmap = PreprocessBitmap.Checked;
             t.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;

@@ -229,28 +229,19 @@ namespace Cliver.PdfDocumentParser
                     //}
 
                     _activeTemplateBitmap = b;
-
                     if (PageCollection.ActiveTemplate.ScalingAnchorId > 0)
                     {
-                        Template.Anchor.CvImage sda = PageCollection.ActiveTemplate.GetScalingAnchor();
-                        CvImage.Match m = sda.Image.FindBestMatchWithinImage(ActiveTemplateCvImage, sda.Threshold, sda.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
-                        if (m != null)
-                        {
-                            DetectedImageScale = m.Scale;
-                            if (DetectedImageScale != 1)
-                            {
-                                _activeTemplateBitmap = Win.ImageRoutines.GetScaled(ActiveTemplateBitmap, 1f / m.Scale);
-                                b.Dispose();
-                                _activeTemplateCvImage?.Dispose();
-                                _activeTemplateCvImage = null;
-                            }
-                            Log.Inform("Detected image scale: " + DetectedImageScale);
-                        }
-                        else
-                        {
-                            DetectedImageScale = 0;
+                        DetectedImageScale = detectScaleByScalingAnchor();
+                        if (DetectedImageScale == 0)
                             Log.Warning("Could not detect image scale.");
+                        if (DetectedImageScale < 1)
+                        {
+                            _activeTemplateBitmap = Win.ImageRoutines.GetScaled(b, 1f / DetectedImageScale);
+                            b?.Dispose();
+                            _activeTemplateCvImage?.Dispose();
+                            _activeTemplateCvImage = null;
                         }
+                        Log.Inform("Detected image scale: " + DetectedImageScale);
                     }
                     else
                         DetectedImageScale = -1;
@@ -307,6 +298,26 @@ namespace Cliver.PdfDocumentParser
             }
         }
         List<Ocr.CharBox> _activeTemplateOcrCharBoxs;
+
+        float detectScaleByScalingAnchor()
+        {
+            Template.Anchor.CvImage sda = PageCollection.ActiveTemplate.GetScalingAnchor();
+            CvImage searchRectangleCI;
+            if (sda.SearchRectangleMargin >= 0)
+            {
+                RectangleF sr = getSearchRectangle(sda.Rectangle(), sda.SearchRectangleMargin);
+                Bitmap b = GetRectangleFromActiveTemplateBitmap(sr.X / Settings.Constants.Image2PdfResolutionRatio, sr.Y / Settings.Constants.Image2PdfResolutionRatio, sr.Width / Settings.Constants.Image2PdfResolutionRatio, sr.Height / Settings.Constants.Image2PdfResolutionRatio);
+                if (b == null)
+                    throw new Exception("The scaling anchor's rectangle is null.");
+                searchRectangleCI = new CvImage(b);
+            }
+            else
+                searchRectangleCI = ActiveTemplateCvImage;
+            CvImage.Match m = sda.Image.FindBestMatchWithinImage(searchRectangleCI, sda.Threshold, sda.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
+            if (m != null)
+                return m.Scale;
+            return 0;
+        }
 
         public Bitmap GetActiveTemplateBitmapCopy()
         {

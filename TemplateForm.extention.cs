@@ -80,6 +80,8 @@ namespace Cliver.PdfDocumentParser
                 textAutoInsertSpaceThreshold.Value = (decimal)t.TextAutoInsertSpace.Threshold;
                 textAutoInsertSpaceRepresentative.Text = Regex.Escape(t.TextAutoInsertSpace.Representative);
 
+                CvImageScalePyramidStep.Value = t.CvImageScalePyramidStep;
+
                 bitmapPreparationForm.SetUI(t, false);
 
                 anchors.Rows.Clear();
@@ -239,6 +241,8 @@ namespace Cliver.PdfDocumentParser
                 Threshold = (float)textAutoInsertSpaceThreshold.Value,
                 Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text),
             };
+
+            t.CvImageScalePyramidStep = (int)CvImageScalePyramidStep.Value;
 
             bitmapPreparationForm.SetTemplate(t);
 

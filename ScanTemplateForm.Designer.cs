@@ -50,16 +50,17 @@
             this.TesseractPageSegMode = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.ParseOcrFieldFromFieldImage = new System.Windows.Forms.CheckBox();
             this.label21 = new System.Windows.Forms.Label();
+            this.SingleFieldFromFieldImage = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.CvImageScalePyramidStep = new System.Windows.Forms.NumericUpDown();
-            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.ColumnFieldFromFieldImage = new System.Windows.Forms.CheckBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewBlockMaxHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewBlockMinSpan)).BeginInit();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.CvImageScalePyramidStep)).BeginInit();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // bCancel
@@ -314,22 +315,12 @@
             this.groupBox1.Controls.Add(this.DeskewBlockMinSpan);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label14);
-            this.groupBox1.Location = new System.Drawing.Point(578, 1);
+            this.groupBox1.Location = new System.Drawing.Point(564, 10);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(195, 92);
+            this.groupBox1.Size = new System.Drawing.Size(193, 83);
             this.groupBox1.TabIndex = 99;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Deskew";
-            // 
-            // ParseOcrFieldFromFieldImage
-            // 
-            this.ParseOcrFieldFromFieldImage.AutoSize = true;
-            this.ParseOcrFieldFromFieldImage.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ParseOcrFieldFromFieldImage.Location = new System.Drawing.Point(533, 9);
-            this.ParseOcrFieldFromFieldImage.Name = "ParseOcrFieldFromFieldImage";
-            this.ParseOcrFieldFromFieldImage.Size = new System.Drawing.Size(15, 14);
-            this.ParseOcrFieldFromFieldImage.TabIndex = 100;
-            this.ParseOcrFieldFromFieldImage.UseVisualStyleBackColor = true;
             // 
             // label21
             // 
@@ -340,45 +331,63 @@
             this.label21.TabIndex = 84;
             this.label21.Text = "Active:";
             // 
+            // SingleFieldFromFieldImage
+            // 
+            this.SingleFieldFromFieldImage.AutoSize = true;
+            this.SingleFieldFromFieldImage.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.SingleFieldFromFieldImage.Location = new System.Drawing.Point(172, 26);
+            this.SingleFieldFromFieldImage.Name = "SingleFieldFromFieldImage";
+            this.SingleFieldFromFieldImage.Size = new System.Drawing.Size(15, 14);
+            this.SingleFieldFromFieldImage.TabIndex = 100;
+            this.SingleFieldFromFieldImage.UseVisualStyleBackColor = true;
+            // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(329, 10);
+            this.label6.Location = new System.Drawing.Point(15, 27);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(175, 13);
+            this.label6.Size = new System.Drawing.Size(147, 13);
             this.label6.TabIndex = 101;
-            this.label6.Text = "Parse Ocr Fields From Field Images:";
+            this.label6.Text = "Single Field From Field Image:";
             // 
-            // CvImageScalePyramidStep
+            // label8
             // 
-            this.CvImageScalePyramidStep.Location = new System.Drawing.Point(505, 26);
-            this.CvImageScalePyramidStep.Name = "CvImageScalePyramidStep";
-            this.CvImageScalePyramidStep.Size = new System.Drawing.Size(43, 20);
-            this.CvImageScalePyramidStep.TabIndex = 103;
-            this.CvImageScalePyramidStep.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(15, 49);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(153, 13);
+            this.label8.TabIndex = 105;
+            this.label8.Text = "Column Field From Field Image:";
             // 
-            // label7
+            // ColumnFieldFromFieldImage
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(329, 31);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(147, 13);
-            this.label7.TabIndex = 102;
-            this.label7.Text = "CvImage Scale Pyramid Step:";
+            this.ColumnFieldFromFieldImage.AutoSize = true;
+            this.ColumnFieldFromFieldImage.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ColumnFieldFromFieldImage.Location = new System.Drawing.Point(172, 48);
+            this.ColumnFieldFromFieldImage.Name = "ColumnFieldFromFieldImage";
+            this.ColumnFieldFromFieldImage.Size = new System.Drawing.Size(15, 14);
+            this.ColumnFieldFromFieldImage.TabIndex = 104;
+            this.ColumnFieldFromFieldImage.UseVisualStyleBackColor = true;
             // 
-            // BitmapPreparationForm
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.SingleFieldFromFieldImage);
+            this.groupBox2.Controls.Add(this.label8);
+            this.groupBox2.Controls.Add(this.ColumnFieldFromFieldImage);
+            this.groupBox2.Controls.Add(this.label6);
+            this.groupBox2.Location = new System.Drawing.Point(338, 10);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(200, 72);
+            this.groupBox2.TabIndex = 106;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Field Ocr Parse Mode";
+            // 
+            // ScanTemplateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(789, 406);
-            this.Controls.Add(this.CvImageScalePyramidStep);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.ParseOcrFieldFromFieldImage);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.TesseractPageSegMode);
             this.Controls.Add(this.label5);
@@ -391,14 +400,15 @@
             this.Controls.Add(this.bitmapPreprocessorClassDefinition);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.flowLayoutPanel1);
-            this.Name = "BitmapPreparationForm";
+            this.Name = "ScanTemplateForm";
             this.Text = "Scanned Document Settings";
             this.flowLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.DeskewBlockMaxHeight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewBlockMinSpan)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.CvImageScalePyramidStep)).EndInit();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -428,9 +438,10 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.CheckBox ParseOcrFieldFromFieldImage;
+        private System.Windows.Forms.CheckBox SingleFieldFromFieldImage;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.NumericUpDown CvImageScalePyramidStep;
-        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.CheckBox ColumnFieldFromFieldImage;
+        private System.Windows.Forms.GroupBox groupBox2;
     }
 }

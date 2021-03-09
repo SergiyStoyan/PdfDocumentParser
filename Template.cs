@@ -32,7 +32,16 @@ namespace Cliver.PdfDocumentParser
         public bool IgnoreInvisiblePdfChars = true;//used but not edited
         public bool IgnoreDuplicatedPdfChars = true;//used but not edited
 
-        public bool ParseOcrFieldFromFieldImage = false;//otherwise parse from the page's char boxes
+        public enum FieldOcrModes
+        {
+            SingleFieldFromPageCharBoxs = 0b0000001,//default
+            SingleFieldFromFieldImage = 0b0000010,
+            //TableFieldFromPageCharBoxs = 0b00100,//default
+            //TableFieldFromFieldImage = 0b0001000,
+            ColumnFieldFromTableCharBoxs = 0b0010000,//default
+            ColumnFieldFromFieldImage = 0b0100000,
+        }
+        public FieldOcrModes FieldOcrMode = FieldOcrModes.SingleFieldFromFieldImage | FieldOcrModes.ColumnFieldFromTableCharBoxs;
 
         public List<Anchor> Anchors;
 

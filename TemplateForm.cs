@@ -173,10 +173,17 @@ namespace Cliver.PdfDocumentParser
                         case SettingModes.SetAnchor:
                             {
                                 if (currentAnchorControl == null)
-                                    break;
+                                    break; 
 
                                 //currentAnchorControl.SetTagFromControl();???
                                 Template.Anchor a = (Template.Anchor)currentAnchorControl.Row.Tag;
+
+                                if (pages[currentPageI].DetectedImageScale >= 0 && pages[currentPageI].DetectedImageScale < 1&& a.Id == GetTemplateFromUI(false).ScalingAnchorId)
+                                {
+                                    Message.Exclaim("When the detected image scale is not 1, changing coordinates of the scaling anchor must not be done. Either switch off scaling by anchor and relad the page or open a page where the detected image scale is 1.");
+                                    break;
+                                }
+
                                 a.Position = new Template.PointF { X = r.X, Y = r.Y };
                                 try
                                 {
