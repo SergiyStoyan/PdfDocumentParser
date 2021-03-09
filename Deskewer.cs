@@ -17,24 +17,24 @@ using Emgu.CV.Features2D;
 
 namespace Cliver.PdfDocumentParser
 {
-    class Deskewer
+    public class Deskewer
     {
-        static public void DeskewAsSingleBlock(ref Bitmap bitmap)//good
+        static public void DeskewAsSingleBlock(ref Bitmap bitmap, Size structuringElementSize)//good
         {
             using (Image<Rgb, byte> image = bitmap.ToImage<Rgb, byte>())
             {
                 bitmap.Dispose();
-                bitmap = deskew(image)?.ToBitmap();
+                bitmap = deskew(image, structuringElementSize)?.ToBitmap();
             }
         }
 
-        static Image<Rgb, byte> deskew(Image<Rgb, byte> image)//good
+        static Image<Rgb, byte> deskew(Image<Rgb, byte> image, Size structuringElementSize)//good
         {//https://becominghuman.ai/how-to-automatically-deskew-straighten-a-text-image-using-opencv-a0c30aed83df
             Image<Gray, byte> image2 = image.Convert<Gray, byte>();
             CvInvoke.BitwiseNot(image2, image2);//to negative
             CvInvoke.GaussianBlur(image2, image2, new Size(9, 9), 0);//remove small spots
             CvInvoke.Threshold(image2, image2, 125, 255, ThresholdType.Otsu | ThresholdType.Binary);
-            Mat se = CvInvoke.GetStructuringElement(ElementShape.Rectangle, new Size(30, 5), new Point(-1, -1));
+            Mat se = CvInvoke.GetStructuringElement(ElementShape.Rectangle, structuringElementSize, new Point(-1, -1));
             CvInvoke.Dilate(image2, image2, se, new Point(-1, -1), 1, BorderType.Constant, CvInvoke.MorphologyDefaultBorderValue);
             //Emgu.CV.CvInvoke.Erode(image, image, null, new Point(-1, -1), 1, BorderType.Constant, CvInvoke.MorphologyDefaultBorderValue);
             VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint();
@@ -66,7 +66,14 @@ namespace Cliver.PdfDocumentParser
             return image3;
         }
 
-        static public void DeskewAsColumnOfBlocks(ref Bitmap bitmap, int blockMaxHeight, int minBlockSpan)
+        public class Config
+        {
+            public int BlockMaxHeight = 3000;
+            public int BlockMinSpan = 30;
+            public Size StructuringElementSize = new Size(30, 1);
+        }
+
+        static public void DeskewAsColumnOfBlocks(ref Bitmap bitmap, Config config)
         {
             using (Image<Rgb, byte> image = bitmap.ToImage<Rgb, byte>())
             {
@@ -117,20 +124,20 @@ namespace Cliver.PdfDocumentParser
                         if (contours.Count > 0)
                         {
                             Contour minTop = contours.Aggregate((a, b) => a.BoundingRectangle.Top < b.BoundingRectangle.Top ? a : b);
-                            if (c.BoundingRectangle.Bottom + minBlockSpan <= minTop.BoundingRectangle.Top)
+                            if (c.BoundingRectangle.Bottom + config.BlockMinSpan <= minTop.BoundingRectangle.Top)
                                 lastSpan = new Tuple<Contour, Contour>(c, minTop);
                         }
 
-                        if (c.BoundingRectangle.Bottom > blockY + blockMaxHeight && lastSpan != null)
+                        if (c.BoundingRectangle.Bottom > blockY + config.BlockMaxHeight && lastSpan != null)
                         {
-                            blockBottom = lastSpan.Item1.BoundingRectangle.Bottom + minBlockSpan / 2;
+                            blockBottom = lastSpan.Item1.BoundingRectangle.Bottom + config.BlockMinSpan / 2;
                             break;
                         }
                     }
 
                     Rectangle blockRectangle = new Rectangle(0, blockY, image2.Width, blockBottom + 1 - blockY);
                     Image<Rgb, byte> blockImage = image.Copy(blockRectangle);
-                    blockImage = deskew(blockImage);
+                    blockImage = deskew(blockImage, config.StructuringElementSize);
                     deskewedimage.ROI = blockRectangle;
                     blockImage.CopyTo(deskewedimage);
                     deskewedimage.ROI = Rectangle.Empty;

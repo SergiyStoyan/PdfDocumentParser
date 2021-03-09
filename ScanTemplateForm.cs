@@ -25,8 +25,6 @@ namespace Cliver.PdfDocumentParser
 
             this.Icon = Win.AssemblyRoutines.GetAppIcon();
 
-            //defaultBitmapPreprocessorClassDefinitions.Items = 
-
             this.templateForm = templateForm;
 
             Template template = null;
@@ -36,24 +34,6 @@ namespace Cliver.PdfDocumentParser
                 SetUI(template, true);
             };
 
-            TesseractPageSegMode.Items.AddRange(new object[] {
-                Tesseract.PageSegMode.Auto,
-                Tesseract.PageSegMode.AutoOnly,
-                Tesseract.PageSegMode.AutoOsd,
-                Tesseract.PageSegMode.CircleWord,
-                Tesseract.PageSegMode.Count,
-                Tesseract.PageSegMode.OsdOnly,
-                Tesseract.PageSegMode.RawLine,
-                Tesseract.PageSegMode.SingleBlock,
-                Tesseract.PageSegMode.SingleBlockVertText,
-                Tesseract.PageSegMode.SingleChar,
-                Tesseract.PageSegMode.SingleColumn,
-                Tesseract.PageSegMode.SingleLine,
-                Tesseract.PageSegMode.SingleWord,
-                Tesseract.PageSegMode.SparseText,
-                Tesseract.PageSegMode.SparseTextOsd
-            });
-
             PageRotation.SelectedIndexChanged += delegate { changed = true; };
             Deskew.CheckedChanged += delegate { changed = true; };
             DeskewBlockMaxHeight.ValueChanged += delegate { changed = true; };
@@ -62,7 +42,6 @@ namespace Cliver.PdfDocumentParser
             SingleFieldFromFieldImage.CheckedChanged += delegate { changed = true; };
             ColumnFieldFromFieldImage.CheckedChanged += delegate { changed = true; };
             bitmapPreprocessorClassDefinition.TextChanged += delegate { changed = true; };
-            TesseractPageSegMode.SelectedIndexChanged += delegate { changed = true; };
             PreprocessBitmap.CheckedChanged += delegate
             {
                 bitmapPreprocessorClassDefinition.Enabled = PreprocessBitmap.Checked;
@@ -71,6 +50,11 @@ namespace Cliver.PdfDocumentParser
                     string className = Regex.Replace(template.Name, @"[\W]", "_");
                     bitmapPreprocessorClassDefinition.Text = Regex.Replace(defaultBitmapPreprocessor, @"Default_BitmapPreprocessor", className + "_BitmapPreprocessor", RegexOptions.Singleline);
                 }
+            };
+            Deskew.CheckedChanged += delegate
+            {
+                changed = true;
+                DeskewBlockMaxHeight.Enabled = DeskewBlockMinSpan.Enabled = DeskewStructuringElementX.Enabled = DeskewStructuringElementY.Enabled = Deskew.Checked;
             };
         }
         TemplateForm templateForm;
@@ -84,18 +68,22 @@ namespace Cliver.PdfDocumentParser
 
         internal void SetUI(Template t, bool updateSharedValuesOnly)
         {
-            Text = "Bitmap preparation for '" + t.Name + "'";
+            Text = "Scanned image preparation for '" + t.Name + "'";
             if (!updateSharedValuesOnly)
             {
                 PageRotation.SelectedIndex = (int)t.PageRotation;
-                Deskew.Checked = t.Deskew;
-                DeskewBlockMaxHeight.Value = t.DeskewBlockMaxHeight;
-                DeskewBlockMinSpan.Value = t.DeskewBlockMinSpan;
                 SingleFieldFromFieldImage.Checked = t.FieldOcrMode.HasFlag(Template.FieldOcrModes.SingleFieldFromFieldImage);
                 ColumnFieldFromFieldImage.Checked = t.FieldOcrMode.HasFlag(Template.FieldOcrModes.ColumnFieldFromFieldImage);
                 bitmapPreprocessorClassDefinition.Text = t.BitmapPreprocessorClassDefinition;
                 bitmapPreprocessorClassDefinition.Enabled = PreprocessBitmap.Checked = t.PreprocessBitmap;
-                TesseractPageSegMode.SelectedItem = t.TesseractPageSegMode;
+
+                Deskewer.Config dc = t.Deskew != null ? t.Deskew : new Deskewer.Config();
+                DeskewBlockMaxHeight.Value = dc.BlockMaxHeight;
+                DeskewBlockMinSpan.Value = dc.BlockMinSpan;
+                DeskewStructuringElementX.Value = dc.StructuringElementSize.Width;
+                DeskewStructuringElementY.Value = dc.StructuringElementSize.Height;
+                DeskewBlockMaxHeight.Enabled = DeskewBlockMinSpan.Enabled = DeskewStructuringElementX.Enabled = DeskewStructuringElementY.Enabled = Deskew.Checked = t.Deskew != null;
+
                 changed = false;
             }
             if (!changed && t.ScalingAnchorId != ScalingAnchor.SelectedItem as int?)
@@ -138,9 +126,6 @@ namespace Cliver.PdfDocumentParser
             if (changed)
                 validate();
             t.PageRotation = (Template.PageRotations)PageRotation.SelectedIndex;
-            t.Deskew = Deskew.Checked;
-            t.DeskewBlockMaxHeight = (int)DeskewBlockMaxHeight.Value;
-            t.DeskewBlockMinSpan = (int)DeskewBlockMinSpan.Value;
             t.ScalingAnchorId = ScalingAnchor.SelectedItem is int ? (int)ScalingAnchor.SelectedItem : -1;
             if (SingleFieldFromFieldImage.Checked)
                 t.FieldOcrMode |= Template.FieldOcrModes.SingleFieldFromFieldImage;
@@ -152,7 +137,18 @@ namespace Cliver.PdfDocumentParser
                 t.FieldOcrMode &= ~Template.FieldOcrModes.ColumnFieldFromFieldImage;
             t.BitmapPreprocessorClassDefinition = bitmapPreprocessorClassDefinition.Text;
             t.PreprocessBitmap = PreprocessBitmap.Checked;
-            t.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
+
+            if (Deskew.Checked)
+            {
+                t.Deskew = new Deskewer.Config
+                {
+                    BlockMaxHeight = (int)DeskewBlockMaxHeight.Value,
+                    BlockMinSpan = (int)DeskewBlockMinSpan.Value,
+                    StructuringElementSize = new System.Drawing.Size((int)DeskewStructuringElementX.Value, (int)DeskewStructuringElementY.Value)
+                };
+            }
+            else
+                t.Deskew = null;
         }
 
         void validate()

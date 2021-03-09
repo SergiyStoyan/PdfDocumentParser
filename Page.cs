@@ -89,8 +89,7 @@ namespace Cliver.PdfDocumentParser
 
             if (newTemplate == null
                 || newTemplate.PageRotation != PageCollection.ActiveTemplate.PageRotation
-                || newTemplate.Deskew != PageCollection.ActiveTemplate.Deskew
-                || newTemplate.TesseractPageSegMode != PageCollection.ActiveTemplate.TesseractPageSegMode
+                || !Serialization.Json.IsEqual(newTemplate.Deskew, PageCollection.ActiveTemplate.Deskew)
                 )
             {
                 _activeTemplateImageData = null;
@@ -100,6 +99,11 @@ namespace Cliver.PdfDocumentParser
                 _activeTemplateCvImage?.Dispose();
                 _activeTemplateCvImage = null;
             }
+            else if (newTemplate.TesseractPageSegMode != PageCollection.ActiveTemplate.TesseractPageSegMode)
+            {
+                _activeTemplateOcrCharBoxs = null;
+            }
+
             if (!Serialization.Json.IsEqual(PageCollection.ActiveTemplate, newTemplate))
             {
                 anchorIds2anchorActualInfo.Clear();
@@ -185,7 +189,7 @@ namespace Cliver.PdfDocumentParser
                             throw new Exception("Unknown option: " + PageCollection.ActiveTemplate.PageRotation);
                     }
 
-                    if (PageCollection.ActiveTemplate.Deskew)
+                    if (PageCollection.ActiveTemplate.Deskew != null)
                     {
                         //using (ImageMagick.MagickImage image = new ImageMagick.MagickImage(b))
                         //{
@@ -202,7 +206,7 @@ namespace Cliver.PdfDocumentParser
                         //    b.Dispose();
                         //    b = image.ToBitmap();
                         //}
-                        Deskewer.DeskewAsColumnOfBlocks(ref b, PageCollection.ActiveTemplate.DeskewBlockMaxHeight, PageCollection.ActiveTemplate.DeskewBlockMinSpan);
+                        Deskewer.DeskewAsColumnOfBlocks(ref b, PageCollection.ActiveTemplate.Deskew);
                     }
 
                     b = PageCollection.ActiveTemplate.BitmapPreprocessor.GetProcessed(b);

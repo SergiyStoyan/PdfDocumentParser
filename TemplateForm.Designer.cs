@@ -105,6 +105,8 @@
             this.moveDownField = new System.Windows.Forms.LinkLabel();
             this.copy2ClipboardField = new System.Windows.Forms.LinkLabel();
             this.ExtractFieldsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
+            this.TesseractPageSegMode = new System.Windows.Forms.ComboBox();
+            this.label19 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).BeginInit();
             this.flowLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).BeginInit();
@@ -722,6 +724,8 @@
             // 
             // splitContainer2.Panel1
             // 
+            this.splitContainer2.Panel1.Controls.Add(this.TesseractPageSegMode);
+            this.splitContainer2.Panel1.Controls.Add(this.label19);
             this.splitContainer2.Panel1.Controls.Add(this.CvImageScalePyramidStep);
             this.splitContainer2.Panel1.Controls.Add(this.label14);
             this.splitContainer2.Panel1.Controls.Add(this.label9);
@@ -761,7 +765,7 @@
             // 
             // CvImageScalePyramidStep
             // 
-            this.CvImageScalePyramidStep.Location = new System.Drawing.Point(414, 170);
+            this.CvImageScalePyramidStep.Location = new System.Drawing.Point(441, 183);
             this.CvImageScalePyramidStep.Name = "CvImageScalePyramidStep";
             this.CvImageScalePyramidStep.Size = new System.Drawing.Size(43, 20);
             this.CvImageScalePyramidStep.TabIndex = 105;
@@ -774,7 +778,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(266, 173);
+            this.label14.Location = new System.Drawing.Point(266, 185);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(147, 13);
             this.label14.TabIndex = 104;
@@ -1032,6 +1036,24 @@
             this.ExtractFieldsAutomaticallyWhenPageChanged.Text = "Extract When Page Changed]";
             this.ExtractFieldsAutomaticallyWhenPageChanged.UseVisualStyleBackColor = true;
             // 
+            // TesseractPageSegMode
+            // 
+            this.TesseractPageSegMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.TesseractPageSegMode.FormattingEnabled = true;
+            this.TesseractPageSegMode.Location = new System.Drawing.Point(357, 155);
+            this.TesseractPageSegMode.Name = "TesseractPageSegMode";
+            this.TesseractPageSegMode.Size = new System.Drawing.Size(127, 21);
+            this.TesseractPageSegMode.TabIndex = 107;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(266, 158);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(87, 13);
+            this.label19.TabIndex = 106;
+            this.label19.Text = "Tesseract Mode:";
+            // 
             // TemplateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1159,5 +1181,7 @@
         private System.Windows.Forms.TextBox detectedImageScale;
         private System.Windows.Forms.NumericUpDown CvImageScalePyramidStep;
         private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.ComboBox TesseractPageSegMode;
+        private System.Windows.Forms.Label label19;
     }
 }

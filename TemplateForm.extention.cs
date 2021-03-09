@@ -81,6 +81,7 @@ namespace Cliver.PdfDocumentParser
                 textAutoInsertSpaceRepresentative.Text = Regex.Escape(t.TextAutoInsertSpace.Representative);
 
                 CvImageScalePyramidStep.Value = t.CvImageScalePyramidStep;
+                TesseractPageSegMode.SelectedItem = t.TesseractPageSegMode;
 
                 bitmapPreparationForm.SetUI(t, false);
 
@@ -243,6 +244,7 @@ namespace Cliver.PdfDocumentParser
             };
 
             t.CvImageScalePyramidStep = (int)CvImageScalePyramidStep.Value;
+            t.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
 
             bitmapPreparationForm.SetTemplate(t);
 
@@ -301,7 +303,7 @@ namespace Cliver.PdfDocumentParser
                                 if (a.Id != t.ScalingAnchorId)
                                 {
                                     if (removeNotLinkedAnchors == null)
-                                        removeNotLinkedAnchors = Message.YesNo("The template contains not linked anchor[s]. Should they be removed?");
+                                        removeNotLinkedAnchors = Message.YesNo("The template contains not linked anchor[s]. Remove them?");
                                     if (removeNotLinkedAnchors == true)
                                         continue;
                                 }
