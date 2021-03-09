@@ -154,7 +154,7 @@ namespace Cliver.PdfDocumentParser
                             }
                             catch (Tesseract.TesseractException e)//on page with no text
                             {
-                                Log.Warning(e);
+                                Log.Warning2(e);
                             }
                             if (o <= 45) { }
                             else if (o <= 135)
@@ -244,9 +244,13 @@ namespace Cliver.PdfDocumentParser
                                 _activeTemplateCvImage?.Dispose();
                                 _activeTemplateCvImage = null;
                             }
+                            Log.Inform("Detected image scale: " + DetectedImageScale);
                         }
                         else
+                        {
                             DetectedImageScale = 0;
+                            Log.Warning("Could not detect image scale.");
+                        }
                     }
                     else
                         DetectedImageScale = -1;
