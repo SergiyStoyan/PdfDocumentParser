@@ -175,7 +175,7 @@ namespace Cliver.PdfDocumentParser
                                 if (currentAnchorControl == null)
                                     break;
 
-                                currentAnchorControl.SetTagFromControl();
+                                //currentAnchorControl.SetTagFromControl();???
                                 Template.Anchor a = (Template.Anchor)currentAnchorControl.Row.Tag;
                                 a.Position = new Template.PointF { X = r.X, Y = r.Y };
                                 try

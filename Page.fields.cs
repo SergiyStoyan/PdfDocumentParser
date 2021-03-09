@@ -49,13 +49,10 @@ namespace Cliver.PdfDocumentParser
             return fai.GetValue(valueType == null ? fai.ActualField.DefaultValueType : (Template.Field.ValueTypes)valueType);
         }
 
-        ///// <summary>
-        ///// !!!passing Template.Field would be deceitful for 2 reasons:
-        ///// - it may belong to another template than ActiveTemplate;
-        ///// - it implies that a Template.Field object is equivalent to a field while it is just one of its defintions;
-        ///// </summary>
-        ///// <param name="field"></param>
-        ///// <returns></returns>
+        // !!!passing Template.Field as parameter would be deceitful for these reasons:
+        // - it may belong to another template than ActiveTemplate;
+        // - it implies that a Template.Field object is equivalent to a field while it is just one of its defintions;
+        // - it may be the same by logic while being another as an object!
         //public object GetValue(Template.Field exactField, Template.Field.ValueTypes? valueType = null)
         //{
         //    RectangleF? ar = getFieldActualRectangle(exactField);
@@ -68,7 +65,9 @@ namespace Cliver.PdfDocumentParser
         internal FieldActualInfo GetFieldActualInfo(Template.Field field)
         {
             List<FieldActualInfo> fais = getFieldActualInfos(field.Name);
-            FieldActualInfo fai = fais.Find(a => a.ActualField == field);
+            //FieldActualInfo fai = fais.Find(a => a.ActualField == field);!!!while the fields can be same by logic, they are different objects!
+            string fs = Serialization.Json.Serialize(field, false, true);
+            FieldActualInfo fai = fais.Find(a => Serialization.Json.Serialize(a.ActualField, false, true) == fs);
             if (fai == null)
             {
                 RectangleF? ar = getFieldActualRectangle(field);
