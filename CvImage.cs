@@ -145,12 +145,12 @@ namespace Cliver.PdfDocumentParser
                 float scale = 1 + scaleDelta;
                 Image<Gray, byte> template = image.Resize(scale, Inter.Linear);
                 p_s = findBestMatchWithinImage(template, cvImage.image);
-                if (p_s != null && (bestMatch == null || p_s.Item2 > bestMatch.Score))
+                if (p_s != null && (bestMatch == null && p_s.Item2 > threshold || bestMatch != null && p_s.Item2 > bestMatch.Score))
                     bestMatch = new Match { Rectangle = new Rectangle(p_s.Item1, new Size(template.Width, template.Height)), Scale = scale, Score = p_s.Item2 };
                 scale = 1 - scaleDelta;
                 template = image.Resize(scale, Inter.Linear);
                 p_s = findBestMatchWithinImage(template, cvImage.image);
-                if (p_s != null && (bestMatch == null || p_s.Item2 > bestMatch.Score))
+                if (p_s != null && (bestMatch == null && p_s.Item2 > threshold || bestMatch != null && p_s.Item2 > bestMatch.Score))
                     bestMatch = new Match { Rectangle = new Rectangle(p_s.Item1, new Size(template.Width, template.Height)), Scale = scale, Score = p_s.Item2 };
             }
             return bestMatch;

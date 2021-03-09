@@ -234,7 +234,7 @@ namespace Cliver.PdfDocumentParser
                         DetectedImageScale = detectScaleByScalingAnchor();
                         if (DetectedImageScale == 0)
                             Log.Warning("Could not detect image scale.");
-                        if (DetectedImageScale < 1)
+                        else if (DetectedImageScale != 1)
                         {
                             _activeTemplateBitmap = Win.ImageRoutines.GetScaled(b, 1f / DetectedImageScale);
                             b?.Dispose();
