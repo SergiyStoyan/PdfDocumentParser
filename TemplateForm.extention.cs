@@ -83,6 +83,9 @@ namespace Cliver.PdfDocumentParser
                 CvImageScalePyramidStep.Value = t.CvImageScalePyramidStep;
                 TesseractPageSegMode.SelectedItem = t.TesseractPageSegMode;
 
+                SingleFieldFromFieldImage.Checked = t.FieldOcrMode.HasFlag(Template.FieldOcrModes.SingleFieldFromFieldImage);
+                ColumnFieldFromFieldImage.Checked = t.FieldOcrMode.HasFlag(Template.FieldOcrModes.ColumnFieldFromFieldImage);
+
                 bitmapPreparationForm.SetUI(t, false);
 
                 anchors.Rows.Clear();
@@ -245,6 +248,15 @@ namespace Cliver.PdfDocumentParser
 
             t.CvImageScalePyramidStep = (int)CvImageScalePyramidStep.Value;
             t.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
+
+            if (SingleFieldFromFieldImage.Checked)
+                t.FieldOcrMode |= Template.FieldOcrModes.SingleFieldFromFieldImage;
+            else
+                t.FieldOcrMode &= ~Template.FieldOcrModes.SingleFieldFromFieldImage;
+            if (ColumnFieldFromFieldImage.Checked)
+                t.FieldOcrMode |= Template.FieldOcrModes.ColumnFieldFromFieldImage;
+            else
+                t.FieldOcrMode &= ~Template.FieldOcrModes.ColumnFieldFromFieldImage;
 
             bitmapPreparationForm.SetTemplate(t);
 

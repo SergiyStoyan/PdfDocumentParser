@@ -81,6 +81,8 @@
             this.picture = new System.Windows.Forms.PictureBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.TesseractPageSegMode = new System.Windows.Forms.ComboBox();
+            this.label19 = new System.Windows.Forms.Label();
             this.CvImageScalePyramidStep = new System.Windows.Forms.NumericUpDown();
             this.label14 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
@@ -105,8 +107,9 @@
             this.moveDownField = new System.Windows.Forms.LinkLabel();
             this.copy2ClipboardField = new System.Windows.Forms.LinkLabel();
             this.ExtractFieldsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
-            this.TesseractPageSegMode = new System.Windows.Forms.ComboBox();
-            this.label19 = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.SingleFieldFromFieldImage = new System.Windows.Forms.CheckBox();
+            this.ColumnFieldFromFieldImage = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).BeginInit();
             this.flowLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).BeginInit();
@@ -135,6 +138,7 @@
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureScale)).BeginInit();
             this.flowLayoutPanel2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // bPrevPage
@@ -310,11 +314,11 @@
             this.flowLayoutPanel4.Controls.Add(this.ShowOcrText);
             this.flowLayoutPanel4.Controls.Add(this.label13);
             this.flowLayoutPanel4.Controls.Add(this.ShowAsJson);
-            this.flowLayoutPanel4.Location = new System.Drawing.Point(1, 83);
+            this.flowLayoutPanel4.Location = new System.Drawing.Point(1, 79);
             this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel4.Name = "flowLayoutPanel4";
             this.flowLayoutPanel4.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
-            this.flowLayoutPanel4.Size = new System.Drawing.Size(588, 29);
+            this.flowLayoutPanel4.Size = new System.Drawing.Size(588, 25);
             this.flowLayoutPanel4.TabIndex = 51;
             // 
             // ShowPdfText
@@ -385,7 +389,7 @@
             0,
             0,
             65536});
-            this.textAutoInsertSpaceThreshold.Location = new System.Drawing.Point(61, 21);
+            this.textAutoInsertSpaceThreshold.Location = new System.Drawing.Point(71, 19);
             this.textAutoInsertSpaceThreshold.Name = "textAutoInsertSpaceThreshold";
             this.textAutoInsertSpaceThreshold.Size = new System.Drawing.Size(52, 20);
             this.textAutoInsertSpaceThreshold.TabIndex = 64;
@@ -398,7 +402,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(3, 23);
+            this.label12.Location = new System.Drawing.Point(9, 21);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(57, 13);
             this.label12.TabIndex = 65;
@@ -724,6 +728,7 @@
             // 
             // splitContainer2.Panel1
             // 
+            this.splitContainer2.Panel1.Controls.Add(this.groupBox1);
             this.splitContainer2.Panel1.Controls.Add(this.TesseractPageSegMode);
             this.splitContainer2.Panel1.Controls.Add(this.label19);
             this.splitContainer2.Panel1.Controls.Add(this.CvImageScalePyramidStep);
@@ -763,9 +768,27 @@
             this.splitContainer2.SplitterDistance = 396;
             this.splitContainer2.TabIndex = 32;
             // 
+            // TesseractPageSegMode
+            // 
+            this.TesseractPageSegMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.TesseractPageSegMode.FormattingEnabled = true;
+            this.TesseractPageSegMode.Location = new System.Drawing.Point(405, 154);
+            this.TesseractPageSegMode.Name = "TesseractPageSegMode";
+            this.TesseractPageSegMode.Size = new System.Drawing.Size(79, 21);
+            this.TesseractPageSegMode.TabIndex = 107;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(315, 160);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(87, 13);
+            this.label19.TabIndex = 106;
+            this.label19.Text = "Tesseract Mode:";
+            // 
             // CvImageScalePyramidStep
             // 
-            this.CvImageScalePyramidStep.Location = new System.Drawing.Point(441, 183);
+            this.CvImageScalePyramidStep.Location = new System.Drawing.Point(441, 179);
             this.CvImageScalePyramidStep.Name = "CvImageScalePyramidStep";
             this.CvImageScalePyramidStep.Size = new System.Drawing.Size(43, 20);
             this.CvImageScalePyramidStep.TabIndex = 105;
@@ -778,17 +801,17 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(266, 185);
+            this.label14.Location = new System.Drawing.Point(315, 182);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(147, 13);
+            this.label14.Size = new System.Drawing.Size(117, 13);
             this.label14.TabIndex = 104;
-            this.label14.Text = "CvImage Scale Pyramid Step:";
+            this.label14.Text = "CvImage Pyramid Step:";
             // 
             // label9
             // 
             this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(306, 121);
+            this.label9.Location = new System.Drawing.Point(306, 114);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(116, 13);
             this.label9.TabIndex = 70;
@@ -797,7 +820,7 @@
             // detectedImageScale
             // 
             this.detectedImageScale.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.detectedImageScale.Location = new System.Drawing.Point(425, 118);
+            this.detectedImageScale.Location = new System.Drawing.Point(425, 111);
             this.detectedImageScale.Name = "detectedImageScale";
             this.detectedImageScale.ReadOnly = true;
             this.detectedImageScale.Size = new System.Drawing.Size(59, 20);
@@ -807,7 +830,7 @@
             // 
             this.bScannedDocumentSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.bScannedDocumentSettings.Location = new System.Drawing.Point(0, 116);
+            this.bScannedDocumentSettings.Location = new System.Drawing.Point(0, 109);
             this.bScannedDocumentSettings.Name = "bScannedDocumentSettings";
             this.bScannedDocumentSettings.Size = new System.Drawing.Size(297, 23);
             this.bScannedDocumentSettings.TabIndex = 69;
@@ -821,24 +844,24 @@
             this.groupBox2.Controls.Add(this.label15);
             this.groupBox2.Controls.Add(this.textAutoInsertSpaceThreshold);
             this.groupBox2.Controls.Add(this.label12);
-            this.groupBox2.Location = new System.Drawing.Point(0, 149);
+            this.groupBox2.Location = new System.Drawing.Point(0, 138);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(260, 54);
+            this.groupBox2.Size = new System.Drawing.Size(133, 69);
             this.groupBox2.TabIndex = 64;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Text Auto-Insert Space";
+            this.groupBox2.Text = "Auto-Inserting Space";
             // 
             // textAutoInsertSpaceRepresentative
             // 
-            this.textAutoInsertSpaceRepresentative.Location = new System.Drawing.Point(180, 21);
+            this.textAutoInsertSpaceRepresentative.Location = new System.Drawing.Point(71, 41);
             this.textAutoInsertSpaceRepresentative.Name = "textAutoInsertSpaceRepresentative";
-            this.textAutoInsertSpaceRepresentative.Size = new System.Drawing.Size(65, 20);
+            this.textAutoInsertSpaceRepresentative.Size = new System.Drawing.Size(52, 20);
             this.textAutoInsertSpaceRepresentative.TabIndex = 67;
             // 
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(125, 23);
+            this.label15.Location = new System.Drawing.Point(10, 44);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(57, 13);
             this.label15.TabIndex = 66;
@@ -1036,23 +1059,36 @@
             this.ExtractFieldsAutomaticallyWhenPageChanged.Text = "Extract When Page Changed]";
             this.ExtractFieldsAutomaticallyWhenPageChanged.UseVisualStyleBackColor = true;
             // 
-            // TesseractPageSegMode
+            // groupBox1
             // 
-            this.TesseractPageSegMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.TesseractPageSegMode.FormattingEnabled = true;
-            this.TesseractPageSegMode.Location = new System.Drawing.Point(357, 155);
-            this.TesseractPageSegMode.Name = "TesseractPageSegMode";
-            this.TesseractPageSegMode.Size = new System.Drawing.Size(127, 21);
-            this.TesseractPageSegMode.TabIndex = 107;
+            this.groupBox1.Controls.Add(this.SingleFieldFromFieldImage);
+            this.groupBox1.Controls.Add(this.ColumnFieldFromFieldImage);
+            this.groupBox1.Location = new System.Drawing.Point(139, 138);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(167, 69);
+            this.groupBox1.TabIndex = 108;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Field OCR Parse Mode";
             // 
-            // label19
+            // SingleFieldFromFieldImage
             // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(266, 158);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(87, 13);
-            this.label19.TabIndex = 106;
-            this.label19.Text = "Tesseract Mode:";
+            this.SingleFieldFromFieldImage.AutoSize = true;
+            this.SingleFieldFromFieldImage.Location = new System.Drawing.Point(14, 21);
+            this.SingleFieldFromFieldImage.Name = "SingleFieldFromFieldImage";
+            this.SingleFieldFromFieldImage.Size = new System.Drawing.Size(141, 17);
+            this.SingleFieldFromFieldImage.TabIndex = 100;
+            this.SingleFieldFromFieldImage.Text = "Single Field By Its Image";
+            this.SingleFieldFromFieldImage.UseVisualStyleBackColor = true;
+            // 
+            // ColumnFieldFromFieldImage
+            // 
+            this.ColumnFieldFromFieldImage.AutoSize = true;
+            this.ColumnFieldFromFieldImage.Location = new System.Drawing.Point(14, 43);
+            this.ColumnFieldFromFieldImage.Name = "ColumnFieldFromFieldImage";
+            this.ColumnFieldFromFieldImage.Size = new System.Drawing.Size(147, 17);
+            this.ColumnFieldFromFieldImage.TabIndex = 104;
+            this.ColumnFieldFromFieldImage.Text = "Column Field By Its Image";
+            this.ColumnFieldFromFieldImage.UseVisualStyleBackColor = true;
             // 
             // TemplateForm
             // 
@@ -1099,6 +1135,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureScale)).EndInit();
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel2.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1183,5 +1221,8 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.ComboBox TesseractPageSegMode;
         private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckBox SingleFieldFromFieldImage;
+        private System.Windows.Forms.CheckBox ColumnFieldFromFieldImage;
     }
 }

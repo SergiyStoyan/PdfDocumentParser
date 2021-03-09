@@ -39,8 +39,6 @@ namespace Cliver.PdfDocumentParser
             DeskewBlockMaxHeight.ValueChanged += delegate { changed = true; };
             DeskewBlockMinSpan.ValueChanged += delegate { changed = true; };
             ScalingAnchor.SelectedIndexChanged += delegate { changed = true; };
-            SingleFieldFromFieldImage.CheckedChanged += delegate { changed = true; };
-            ColumnFieldFromFieldImage.CheckedChanged += delegate { changed = true; };
             bitmapPreprocessorClassDefinition.TextChanged += delegate { changed = true; };
             PreprocessBitmap.CheckedChanged += delegate
             {
@@ -72,8 +70,6 @@ namespace Cliver.PdfDocumentParser
             if (!updateSharedValuesOnly)
             {
                 PageRotation.SelectedIndex = (int)t.PageRotation;
-                SingleFieldFromFieldImage.Checked = t.FieldOcrMode.HasFlag(Template.FieldOcrModes.SingleFieldFromFieldImage);
-                ColumnFieldFromFieldImage.Checked = t.FieldOcrMode.HasFlag(Template.FieldOcrModes.ColumnFieldFromFieldImage);
                 bitmapPreprocessorClassDefinition.Text = t.BitmapPreprocessorClassDefinition;
                 bitmapPreprocessorClassDefinition.Enabled = PreprocessBitmap.Checked = t.PreprocessBitmap;
 
@@ -127,14 +123,6 @@ namespace Cliver.PdfDocumentParser
                 validate();
             t.PageRotation = (Template.PageRotations)PageRotation.SelectedIndex;
             t.ScalingAnchorId = ScalingAnchor.SelectedItem is int ? (int)ScalingAnchor.SelectedItem : -1;
-            if (SingleFieldFromFieldImage.Checked)
-                t.FieldOcrMode |= Template.FieldOcrModes.SingleFieldFromFieldImage;
-            else
-                t.FieldOcrMode &= ~Template.FieldOcrModes.SingleFieldFromFieldImage;
-            if (ColumnFieldFromFieldImage.Checked)
-                t.FieldOcrMode |= Template.FieldOcrModes.ColumnFieldFromFieldImage;
-            else
-                t.FieldOcrMode &= ~Template.FieldOcrModes.ColumnFieldFromFieldImage;
             t.BitmapPreprocessorClassDefinition = bitmapPreprocessorClassDefinition.Text;
             t.PreprocessBitmap = PreprocessBitmap.Checked;
 

@@ -51,24 +51,18 @@
             this.DeskewStructuringElementY = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.SingleFieldFromFieldImage = new System.Windows.Forms.CheckBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.ColumnFieldFromFieldImage = new System.Windows.Forms.CheckBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewBlockMaxHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewBlockMinSpan)).BeginInit();
             this.gDeskew.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewStructuringElementX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewStructuringElementY)).BeginInit();
-            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bCancel.Location = new System.Drawing.Point(692, 3);
+            this.bCancel.Location = new System.Drawing.Point(614, 3);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 50;
@@ -87,13 +81,13 @@
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 375);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(770, 31);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(692, 31);
             this.flowLayoutPanel1.TabIndex = 60;
             // 
             // bApply
             // 
             this.bApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bApply.Location = new System.Drawing.Point(611, 3);
+            this.bApply.Location = new System.Drawing.Point(533, 3);
             this.bApply.Name = "bApply";
             this.bApply.Size = new System.Drawing.Size(75, 23);
             this.bApply.TabIndex = 51;
@@ -111,7 +105,7 @@
             "↻ 180°",
             "↺ 90°",
             "Auto"});
-            this.defaultBitmapPreprocessorClassDefinitions.Location = new System.Drawing.Point(384, 3);
+            this.defaultBitmapPreprocessorClassDefinitions.Location = new System.Drawing.Point(306, 3);
             this.defaultBitmapPreprocessorClassDefinitions.Name = "defaultBitmapPreprocessorClassDefinitions";
             this.defaultBitmapPreprocessorClassDefinitions.Size = new System.Drawing.Size(221, 21);
             this.defaultBitmapPreprocessorClassDefinitions.TabIndex = 85;
@@ -120,7 +114,7 @@
             // bRemove
             // 
             this.bRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bRemove.Location = new System.Drawing.Point(344, 3);
+            this.bRemove.Location = new System.Drawing.Point(266, 3);
             this.bRemove.Name = "bRemove";
             this.bRemove.Size = new System.Drawing.Size(34, 23);
             this.bRemove.TabIndex = 52;
@@ -131,7 +125,7 @@
             // bSaveDafault
             // 
             this.bSaveDafault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bSaveDafault.Location = new System.Drawing.Point(304, 3);
+            this.bSaveDafault.Location = new System.Drawing.Point(226, 3);
             this.bSaveDafault.Name = "bSaveDafault";
             this.bSaveDafault.Size = new System.Drawing.Size(34, 23);
             this.bSaveDafault.TabIndex = 53;
@@ -150,7 +144,7 @@
             this.bitmapPreprocessorClassDefinition.Margin = new System.Windows.Forms.Padding(1);
             this.bitmapPreprocessorClassDefinition.Name = "bitmapPreprocessorClassDefinition";
             this.bitmapPreprocessorClassDefinition.ShowVRuler = false;
-            this.bitmapPreprocessorClassDefinition.Size = new System.Drawing.Size(770, 277);
+            this.bitmapPreprocessorClassDefinition.Size = new System.Drawing.Size(692, 277);
             this.bitmapPreprocessorClassDefinition.TabIndex = 78;
             // 
             // DeskewBlockMaxHeight
@@ -158,6 +152,11 @@
             this.DeskewBlockMaxHeight.Location = new System.Drawing.Point(109, 20);
             this.DeskewBlockMaxHeight.Maximum = new decimal(new int[] {
             100000,
+            0,
+            0,
+            0});
+            this.DeskewBlockMaxHeight.Minimum = new decimal(new int[] {
+            100,
             0,
             0,
             0});
@@ -180,9 +179,9 @@
             "↻ 180°",
             "↺ 90°",
             "Auto"});
-            this.PageRotation.Location = new System.Drawing.Point(12, 26);
+            this.PageRotation.Location = new System.Drawing.Point(88, 12);
             this.PageRotation.Name = "PageRotation";
-            this.PageRotation.Size = new System.Drawing.Size(74, 21);
+            this.PageRotation.Size = new System.Drawing.Size(60, 21);
             this.PageRotation.TabIndex = 80;
             // 
             // label14
@@ -197,7 +196,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(11, 10);
+            this.label1.Location = new System.Drawing.Point(9, 15);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(75, 13);
             this.label1.TabIndex = 79;
@@ -216,7 +215,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(97, 10);
+            this.label2.Location = new System.Drawing.Point(171, 15);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(89, 13);
             this.label2.TabIndex = 87;
@@ -241,9 +240,9 @@
             "↻ 180°",
             "↺ 90°",
             "Auto"});
-            this.ScalingAnchor.Location = new System.Drawing.Point(100, 26);
+            this.ScalingAnchor.Location = new System.Drawing.Point(264, 12);
             this.ScalingAnchor.Name = "ScalingAnchor";
-            this.ScalingAnchor.Size = new System.Drawing.Size(98, 21);
+            this.ScalingAnchor.Size = new System.Drawing.Size(44, 21);
             this.ScalingAnchor.TabIndex = 89;
             // 
             // DeskewBlockMinSpan
@@ -251,6 +250,11 @@
             this.DeskewBlockMinSpan.Location = new System.Drawing.Point(109, 42);
             this.DeskewBlockMinSpan.Maximum = new decimal(new int[] {
             1000,
+            0,
+            0,
+            0});
+            this.DeskewBlockMinSpan.Minimum = new decimal(new int[] {
+            1,
             0,
             0,
             0});
@@ -283,12 +287,12 @@
             this.gDeskew.Controls.Add(this.DeskewBlockMinSpan);
             this.gDeskew.Controls.Add(this.label4);
             this.gDeskew.Controls.Add(this.label14);
-            this.gDeskew.Location = new System.Drawing.Point(417, 10);
+            this.gDeskew.Location = new System.Drawing.Point(336, 10);
             this.gDeskew.Name = "gDeskew";
             this.gDeskew.Size = new System.Drawing.Size(341, 72);
             this.gDeskew.TabIndex = 99;
             this.gDeskew.TabStop = false;
-            this.gDeskew.Text = "Deskew";
+            this.gDeskew.Text = "Deskew:";
             // 
             // Deskew
             // 
@@ -329,7 +333,7 @@
             this.DeskewStructuringElementY.Size = new System.Drawing.Size(35, 20);
             this.DeskewStructuringElementY.TabIndex = 100;
             this.DeskewStructuringElementY.Value = new decimal(new int[] {
-            30,
+            1,
             0,
             0,
             0});
@@ -352,63 +356,11 @@
             this.label10.TabIndex = 97;
             this.label10.Text = "Structuring Element X:";
             // 
-            // SingleFieldFromFieldImage
-            // 
-            this.SingleFieldFromFieldImage.AutoSize = true;
-            this.SingleFieldFromFieldImage.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.SingleFieldFromFieldImage.Location = new System.Drawing.Point(162, 26);
-            this.SingleFieldFromFieldImage.Name = "SingleFieldFromFieldImage";
-            this.SingleFieldFromFieldImage.Size = new System.Drawing.Size(15, 14);
-            this.SingleFieldFromFieldImage.TabIndex = 100;
-            this.SingleFieldFromFieldImage.UseVisualStyleBackColor = true;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(10, 27);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(147, 13);
-            this.label6.TabIndex = 101;
-            this.label6.Text = "Single Field From Field Image:";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(10, 49);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(153, 13);
-            this.label8.TabIndex = 105;
-            this.label8.Text = "Column Field From Field Image:";
-            // 
-            // ColumnFieldFromFieldImage
-            // 
-            this.ColumnFieldFromFieldImage.AutoSize = true;
-            this.ColumnFieldFromFieldImage.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ColumnFieldFromFieldImage.Location = new System.Drawing.Point(162, 48);
-            this.ColumnFieldFromFieldImage.Name = "ColumnFieldFromFieldImage";
-            this.ColumnFieldFromFieldImage.Size = new System.Drawing.Size(15, 14);
-            this.ColumnFieldFromFieldImage.TabIndex = 104;
-            this.ColumnFieldFromFieldImage.UseVisualStyleBackColor = true;
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.SingleFieldFromFieldImage);
-            this.groupBox2.Controls.Add(this.label8);
-            this.groupBox2.Controls.Add(this.ColumnFieldFromFieldImage);
-            this.groupBox2.Controls.Add(this.label6);
-            this.groupBox2.Location = new System.Drawing.Point(213, 10);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(188, 72);
-            this.groupBox2.TabIndex = 106;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Field Ocr Parse Mode";
-            // 
             // ScanTemplateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(770, 406);
-            this.Controls.Add(this.groupBox2);
+            this.ClientSize = new System.Drawing.Size(692, 406);
             this.Controls.Add(this.gDeskew);
             this.Controls.Add(this.ScalingAnchor);
             this.Controls.Add(this.label3);
@@ -427,8 +379,6 @@
             this.gDeskew.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewStructuringElementX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewStructuringElementY)).EndInit();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -453,11 +403,6 @@
         private System.Windows.Forms.NumericUpDown DeskewBlockMinSpan;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.GroupBox gDeskew;
-        private System.Windows.Forms.CheckBox SingleFieldFromFieldImage;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.CheckBox ColumnFieldFromFieldImage;
-        private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.NumericUpDown DeskewStructuringElementY;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label10;

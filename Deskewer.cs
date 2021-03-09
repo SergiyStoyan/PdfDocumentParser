@@ -68,7 +68,7 @@ namespace Cliver.PdfDocumentParser
 
         public class Config
         {
-            public int BlockMaxHeight = 3000;
+            public int BlockMaxHeight = 1000;
             public int BlockMinSpan = 30;
             public Size StructuringElementSize = new Size(30, 1);
         }
