@@ -13,9 +13,10 @@ using System.Runtime.InteropServices;
 /*
 TBD: 
 
+!bug in displaying compound anchors Editor: it shows the free parent anchor while shoud the chained one.
+
 for scan preprocessing:
 - invoices still have hand marks on them which hinder OCR. Solution: a)filter out colors control, b)manual eraser;
-- ?multiple cvimage search for parent anchor (to avoid shifting search by pixels, set a buffer rectangle around matches);
 - line filtering (when test overlaps a line);
 
 - ?implement anchor row-separator which requires multiple anchor matching (needed for GCG statement) - verdict: it's better to have multiple field extraction and use it as a separator in a custom processor;

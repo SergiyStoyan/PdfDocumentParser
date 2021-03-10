@@ -191,10 +191,10 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public bool FindMatchesWithinImage(CvImage cvImage, float threshold, float scaleDeviation, int scaleStep, Func<Match, bool> proceedOnMatch)
+        public bool FindMatchesWithinImage(CvImage cvImage, float threshold, float scaleDeviation, int scaleStep, Func<Match, bool> getNext)
         {
             foreach (Match m in findMatchsWithinImage(image, 1, cvImage.image, threshold))
-                if (!proceedOnMatch(m))
+                if (!getNext(m))
                     return true;
             //running through pyramid
             int stepCount = Convert.ToInt32(scaleDeviation * Width / scaleStep);
@@ -204,12 +204,12 @@ namespace Cliver.PdfDocumentParser
                 float scale = 1 + scaleDelta;
                 Image<Gray, byte> template = image.Resize(scale, Inter.Linear);
                 foreach (Match m in findMatchsWithinImage(template, scale, cvImage.image, threshold))
-                    if (!proceedOnMatch(m))
+                    if (!getNext(m))
                         return true;
                 scale = 1 - scaleDelta;
                 template = image.Resize(scale, Inter.Linear);
                 foreach (Match m in findMatchsWithinImage(template, scale, cvImage.image, threshold))
-                    if (!proceedOnMatch(m))
+                    if (!getNext(m))
                         return true;
             }
             return false;
@@ -282,7 +282,6 @@ namespace Cliver.PdfDocumentParser
             }
             return ms;
         }
-
 
         static List<Match> findMatchsWithinImage(Image<Gray, byte> template, Size padding, Image<Gray, byte> image, float threshold)
         {

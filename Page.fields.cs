@@ -92,7 +92,7 @@ namespace Cliver.PdfDocumentParser
                 {
                     RectangleF? ar = getFieldActualRectangle(f);
                     FieldActualInfo fai = new FieldActualInfo(this, f, ar, f.ColumnOfTable != null ? getFoundFieldActualInfo(f.ColumnOfTable) : null);
-                    if (ar != null)
+                    if (fai.Found)
                     {
                         fais.Insert(0, fai);
                         break;
@@ -149,17 +149,22 @@ namespace Cliver.PdfDocumentParser
             {
                 if (ActualRectangle == null || TableFieldActualInfo?.Found == false)
                     return null;
-                RectangleF r = (RectangleF)ActualRectangle;
                 switch (valueType)
                 {
                     case Template.Field.ValueTypes.PdfText:
-                        return string.Join("\r\n", getPdfTextLines());
+                        {
+                            List<string> ss = getPdfTextLines();
+                            return ss == null ? null : string.Join("\r\n", ss);
+                        }
                     case Template.Field.ValueTypes.PdfTextLines:
                         return getPdfTextLines();
                     case Template.Field.ValueTypes.PdfCharBoxs:
                         return getPdfCharBoxs();
                     case Template.Field.ValueTypes.OcrText:
-                        return string.Join("\r\n", getOcrTextLines());
+                        {
+                            List<string> ss = getOcrTextLines();
+                            return ss == null ? null : string.Join("\r\n", ss);
+                        }
                     case Template.Field.ValueTypes.OcrTextLines:
                         return getOcrTextLines();
                     case Template.Field.ValueTypes.OcrCharBoxs:
@@ -221,7 +226,12 @@ namespace Cliver.PdfDocumentParser
                 if (ActualField.ColumnOfTable == null)
                 {
                     if (page.PageCollection.ActiveTemplate.FieldOcrMode.HasFlag(Template.FieldOcrModes.SingleFieldFromFieldImage))
-                        return Regex.Split(Ocr.This.GetTextSurroundedByRectangle(page.ActiveTemplateBitmap, ar, page.PageCollection.ActiveTemplate.TesseractPageSegMode), "$", RegexOptions.Multiline).ToList();
+                    {
+                        string s = Ocr.This.GetTextSurroundedByRectangle(page.ActiveTemplateBitmap, ar, page.PageCollection.ActiveTemplate.TesseractPageSegMode);
+                        if (s == null)
+                            return null;
+                        return Regex.Split(s, "$", RegexOptions.Multiline).ToList();
+                    }
                     else
                         return Ocr.GetTextLinesSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, ar, page.PageCollection.ActiveTemplate.TextAutoInsertSpace);
                 }
