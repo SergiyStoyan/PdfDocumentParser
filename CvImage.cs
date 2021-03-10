@@ -191,43 +191,100 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        //public List<Match> FindBestMatchesWithinImage(CvImage cvImage, Size padding, float threshold, float scaleDeviation, int scaleStep)
-        //{
-        //    bestScale = 1;
-        //    List<Match> bestMatches = findMatchsWithinImage(image, padding, cvImage.image, threshold);
-        //    float bestScore = bestMatches.Max(a => a.Score);
-        //    //running through pyramid
-        //    int stepCount = Convert.ToInt32(scaleDeviation * Width / scaleStep);
-        //    for (int i = 1; i <= stepCount; i++)
-        //    {
-        //        float scaleDelta = (float)scaleStep * i / Width;
-        //        float scale = 1 + scaleDelta;
-        //        Image<Gray, byte> template = image.Resize(scale, Inter.Linear);
-        //        List<Match> ms = findMatchsWithinImage(template, padding, cvImage.image, threshold);
-        //        float s = ms.Max(a => a.Score);
-        //        if (bestScore > s)
-        //            break;
-        //        bestScale = scale;
-        //        bestMatches = ms;
-        //        bestScore = s;
-        //    }
-        //    for (int i = 1; i <= stepCount; i++)
-        //    {
-        //        float scaleDelta = (float)scaleStep * i / Width;
-        //        float scale = 1 - scaleDelta;
-        //        Image<Gray, byte> template = image.Resize(scale, Inter.Linear);
-        //        List<Match> ms = findMatchsWithinImage(template, padding, cvImage.image, threshold);
-        //        float s = ms.Max(a => a.Score);
-        //        if (bestScore > s)
-        //            break;
-        //        bestScale = scale;
-        //        bestMatches = ms;
-        //        bestScore = s;
-        //    }
-        //    return bestMatches;
-        //}
+        public bool FindMatchesWithinImage(CvImage cvImage, float threshold, float scaleDeviation, int scaleStep, Func<Match, bool> proceedOnMatch)
+        {
+            foreach (Match m in findMatchsWithinImage(image, 1, cvImage.image, threshold))
+                if (!proceedOnMatch(m))
+                    return true;
+            //running through pyramid
+            int stepCount = Convert.ToInt32(scaleDeviation * Width / scaleStep);
+            for (int i = 1; i <= stepCount; i++)
+            {
+                float scaleDelta = (float)scaleStep * i / Width;
+                float scale = 1 + scaleDelta;
+                Image<Gray, byte> template = image.Resize(scale, Inter.Linear);
+                foreach (Match m in findMatchsWithinImage(template, scale, cvImage.image, threshold))
+                    if (!proceedOnMatch(m))
+                        return true;
+                scale = 1 - scaleDelta;
+                template = image.Resize(scale, Inter.Linear);
+                foreach (Match m in findMatchsWithinImage(template, scale, cvImage.image, threshold))
+                    if (!proceedOnMatch(m))
+                        return true;
+            }
+            return false;
+        }
 
-        static List<Match> findMatchsWithinImage(Image<Gray, byte> template, Size padding, Image<Gray, byte> image, float threshold = 0.7f)
+        static List<Match> findMatchsWithinImage1(Image<Gray, byte> template, float scale, Image<Gray, byte> image, float threshold)//!!!needs fixing
+        {
+            List<Match> ms = new List<Match>();
+            if (template.Width > image.Width || template.Height > image.Height)//otherwise MatchTemplate() throws an exception
+                return ms;
+            using (Image<Gray, float> matchData = image.MatchTemplate(template, TemplateMatchingType.CcoeffNormed))
+            {
+                CvInvoke.Threshold(matchData, matchData, threshold, 1, ThresholdType.ToZero);
+                //    while (true)
+                //    {
+                //        double minval = 0, maxval = 0;
+                //        Point minloc = new Point(), maxloc = new Point();
+                //        CvInvoke.MinMaxLoc(matchData, ref minval, ref maxval, ref minloc, ref maxloc);
+                //        if (maxval <= threshold)
+                //            break;
+                //        ms.Add(new Match { Rectangle = new Rectangle(maxloc, new Size(template.Width, template.Height)), Scale = scale, Score = (float)maxval });
+                //        //Fill in the res Mat so you don't find the same area again in the MinMaxLoc
+                //        Mat outputMask = new Mat(matchData.Rows + 2, matchData.Cols + 2, DepthType.Cv8U, 1);
+                //        CvInvoke.FloodFill(matchData, outputMask, maxloc, new MCvScalar(0), out Rectangle r, new MCvScalar(0.1), new MCvScalar(1.0));
+                //    }
+                for (; ; )
+                {
+                    matchData.MinMax(out double[] mins, out double[] maxs, out Point[] minPoints, out Point[] maxPoints);
+                    if (maxs[0] <= threshold)
+                        break;
+                    ms.Add(new Match { Rectangle = new Rectangle(maxPoints[0], new Size(template.Width, template.Height)), Scale = scale, Score = (float)maxs[0] });
+                    //Fill in the res Mat so you don't find the same area again in the MinMaxLoc
+                    Mat outputMask = new Mat(matchData.Rows + 2, matchData.Cols + 2, DepthType.Cv8U, 1);
+                    CvInvoke.FloodFill(matchData, outputMask, maxPoints[0], new MCvScalar(0), out _, new MCvScalar(1), new MCvScalar(1));
+                }
+                return ms;
+            }
+        }
+
+        static List<Match> findMatchsWithinImage(Image<Gray, byte> template, float scale, Image<Gray, byte> image, float threshold)
+        {
+            List<Match> ms = new List<Match>();
+            if (template.Width > image.Width || template.Height > image.Height)//otherwise MatchTemplate() throws an exception
+                return ms;
+
+            using (Image<Gray, float> match = image.MatchTemplate(template, TemplateMatchingType.CcoeffNormed))
+            {
+                float[,,] matches = match.Data;
+                int xLenght = matches.GetLength(1);
+                int yLenght = matches.GetLength(0);
+                float[,] extremums = new float[yLenght + 2, xLenght + 2];
+                for (int x = 0; x < xLenght; x++)
+                    for (int y = 0; y < yLenght; y++)
+                        extremums[y + 1, x + 1] = matches[y, x, 0];
+
+                for (int x = 1; x <= xLenght; x++)
+                {
+                    for (int y = 1; y <= yLenght; y++)
+                    {
+                        float score = extremums[y, x];
+                        if (score <= threshold)
+                            continue;
+                        if (extremums[y - 1, x - 1] <= score && extremums[y - 1, x] <= score && extremums[y - 1, x + 1] <= score
+                            && extremums[y, x - 1] <= score && extremums[y, x + 1] < score
+                            && extremums[y + 1, x - 1] <= score && extremums[y + 1, x] <= score && extremums[y + 1, x + 1] <= score
+                            )
+                            ms.Add(new Match { Rectangle = new Rectangle(new Point(x - 1, y - 1), template.Size), Scale = scale, Score = score });
+                    }
+                }
+            }
+            return ms;
+        }
+
+
+        static List<Match> findMatchsWithinImage(Image<Gray, byte> template, Size padding, Image<Gray, byte> image, float threshold)
         {
             if (template.Width > image.Width || template.Height > image.Height)//otherwise MatchTemplate() throws an exception
                 return null;

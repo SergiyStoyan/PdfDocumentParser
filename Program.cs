@@ -14,9 +14,7 @@ using System.Runtime.InteropServices;
 TBD: 
 
 for scan preprocessing:
-- binarization control;
-- filter out colors control;
-- invoices still have hand marks on them which hinder OCR. Solution: hand-writng filtering must be done;
+- invoices still have hand marks on them which hinder OCR. Solution: a)filter out colors control, b)manual eraser;
 - ?multiple cvimage search for parent anchor (to avoid shifting search by pixels, set a buffer rectangle around matches);
 - line filtering (when test overlaps a line);
 

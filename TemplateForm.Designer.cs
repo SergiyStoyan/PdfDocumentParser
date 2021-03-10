@@ -314,7 +314,7 @@
             this.flowLayoutPanel4.Controls.Add(this.ShowOcrText);
             this.flowLayoutPanel4.Controls.Add(this.label13);
             this.flowLayoutPanel4.Controls.Add(this.ShowAsJson);
-            this.flowLayoutPanel4.Location = new System.Drawing.Point(1, 79);
+            this.flowLayoutPanel4.Location = new System.Drawing.Point(1, 77);
             this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel4.Name = "flowLayoutPanel4";
             this.flowLayoutPanel4.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
@@ -811,7 +811,7 @@
             // 
             this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(306, 114);
+            this.label9.Location = new System.Drawing.Point(306, 111);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(116, 13);
             this.label9.TabIndex = 70;
@@ -820,7 +820,7 @@
             // detectedImageScale
             // 
             this.detectedImageScale.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.detectedImageScale.Location = new System.Drawing.Point(425, 111);
+            this.detectedImageScale.Location = new System.Drawing.Point(425, 108);
             this.detectedImageScale.Name = "detectedImageScale";
             this.detectedImageScale.ReadOnly = true;
             this.detectedImageScale.Size = new System.Drawing.Size(59, 20);
@@ -830,7 +830,7 @@
             // 
             this.bScannedDocumentSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.bScannedDocumentSettings.Location = new System.Drawing.Point(0, 109);
+            this.bScannedDocumentSettings.Location = new System.Drawing.Point(0, 106);
             this.bScannedDocumentSettings.Name = "bScannedDocumentSettings";
             this.bScannedDocumentSettings.Size = new System.Drawing.Size(297, 23);
             this.bScannedDocumentSettings.TabIndex = 69;
