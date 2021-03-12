@@ -89,7 +89,8 @@ namespace Cliver.PdfDocumentParser
                 DeskewContourMaxCount.Value = dc.ContourMaxCount;
                 DeskewBlockMinGap.Value = dc.BlockMinGap;
                 DeskewContourMaxCount.Enabled = DeskewAngleMaxDeviation.Enabled = DeskewSingleBlock.Enabled = DeskewColumnOfBlocks.Enabled = DeskewStructuringElementX.Enabled = DeskewStructuringElementY.Enabled = Deskew.Checked = t.Deskew != null;
-                DeskewSingleBlock.Checked = t.Deskew.Mode.HasFlag(Deskewer.Modes.SingleBlock) || !t.Deskew.Mode.HasFlag(Deskewer.Modes.ColumnOfBlocks);
+                if (t.Deskew != null)
+                    DeskewSingleBlock.Checked = t.Deskew.Mode.HasFlag(Deskewer.Modes.SingleBlock) || !t.Deskew.Mode.HasFlag(Deskewer.Modes.ColumnOfBlocks);
                 DeskewColumnOfBlocks.Checked = !DeskewSingleBlock.Checked;
 
                 changed = false;
