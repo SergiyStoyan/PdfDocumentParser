@@ -28,9 +28,11 @@ namespace Cliver.PdfDocumentParser
         }
         public enum Modes
         {
-            SingleBlock,
-            ColumnOfBlocks,
-            RowOfBlocks,
+            SingleBlock = 1,//default
+            ColumnOfBlocks = 2,
+            RowOfBlocks = 4,
+            ByBlockWithMaxLength = 7,//default
+            ByMostUnidirectedBlocks = 8,
         }
 
         static public void Deskew(ref Bitmap bitmap, Config config)
@@ -56,11 +58,11 @@ namespace Cliver.PdfDocumentParser
             using (Image<Rgb, byte> image = bitmap.ToImage<Rgb, byte>())
             {
                 bitmap.Dispose();
-                bitmap = deskew(image, structuringElementSize)?.ToBitmap();
+                bitmap = deskew(image, structuringElementSize, true)?.ToBitmap();
             }
         }
 
-        static Image<Rgb, byte> deskew(Image<Rgb, byte> image, Size structuringElementSize)//good
+        static Image<Rgb, byte> deskew(Image<Rgb, byte> image, Size structuringElementSize, bool byMostUnidirectedBlocks)//good
         {//https://becominghuman.ai/how-to-automatically-deskew-straighten-a-text-image-using-opencv-a0c30aed83df
             Image<Gray, byte> image2 = image.Convert<Gray, byte>();
             CvInvoke.BitwiseNot(image2, image2);//to negative
@@ -74,23 +76,69 @@ namespace Cliver.PdfDocumentParser
             CvInvoke.FindContours(image2, contours, hierarchy, RetrType.External, ChainApproxMethod.ChainApproxSimple);
             if (contours.Size < 1)
                 return null;
-            int maxW = 0;
             double angle = 0;
-            for (int i = 0; i < contours.Size; i++)
+            if (byMostUnidirectedBlocks)
             {
-                RotatedRect rr = CvInvoke.MinAreaRect(contours[i]);
-                Rectangle r = rr.MinAreaRect();
-                int w = r.Width > r.Height ? r.Width : r.Height;
-                if (maxW < w)
+                int blockMaxCount = 10;
+                List<(double angle, int w)> as_ = new List<(double angle, int w)>();
+                for (int i = 0; i < contours.Size; i++)
                 {
-                    maxW = w;
-                    angle = rr.Angle;
+                    RotatedRect rr = CvInvoke.MinAreaRect(contours[i]);
+                    Rectangle r = rr.MinAreaRect();
+                    int w = r.Width > r.Height ? r.Width : r.Height;
+                    double a = rr.Angle;
+                    if (a > 45)
+                        a -= 90;
+                    else if (a < -45)
+                        a += 90;
+                    as_.Add((angle: a, w: w));
+                }
+                as_ = as_.OrderByDescending(a => a.w).Take(blockMaxCount).OrderBy(a => a.angle).ToList();
+                if (as_.Count < 1)
+                    angle = 0;
+                else if (as_.Count < 2)
+                    angle = as_[0].angle;
+                else
+                {
+                    double angleMaxDeviation = 1;
+                    List<List<int>> dss = new List<List<int>>();
+                    List<int> ds = new List<int>();
+                    for (int i = 1; i < as_.Count; i++)
+                        if (Math.Abs(as_[i].angle - as_[i - 1].angle) < angleMaxDeviation)
+                            ds.Add(i);
+                        else
+                        {
+                            dss.Add(ds);
+                            ds = new List<int>();
+                        }
+                    dss.Add(ds);
+                    ds = dss.OrderByDescending(a => a.Count).FirstOrDefault();
+                    if (ds.Count < 1)
+                        angle = 0;
+                    else
+                        // angle = as_[ds.OrderBy(a => Math.Abs(as_[a].angle - as_[a - 1].angle)).FirstOrDefault()].angle;
+                        angle = (as_[ds[0] - 1].angle + ds.Sum(a => as_[a].angle)) / (1 + ds.Count);
                 }
             }
-            if (angle > 45)
-                angle -= 90;
-            else if (angle < -45)
-                angle += 90;
+            else//by the most lengthy block
+            {
+                int maxW = 0;
+                for (int i = 0; i < contours.Size; i++)
+                {
+                    RotatedRect rr = CvInvoke.MinAreaRect(contours[i]);
+                    Rectangle r = rr.MinAreaRect();
+                    int w = r.Width > r.Height ? r.Width : r.Height;
+                    if (maxW < w)
+                    {
+                        maxW = w;
+                        angle = rr.Angle;
+                    }
+                }
+                if (angle > 45)
+                    angle -= 90;
+                else if (angle < -45)
+                    angle += 90;
+            }
             RotationMatrix2D rotationMat = new RotationMatrix2D();
             CvInvoke.GetRotationMatrix2D(new PointF((float)image.Width / 2, (float)image.Height / 2), angle, 1, rotationMat);
             Image<Rgb, byte> image3 = new Image<Rgb, byte>(image.Size);
@@ -162,7 +210,7 @@ namespace Cliver.PdfDocumentParser
 
                     Rectangle blockRectangle = new Rectangle(0, blockY, image2.Width, blockBottom + 1 - blockY);
                     Image<Rgb, byte> blockImage = image.Copy(blockRectangle);
-                    blockImage = deskew(blockImage, structuringElementSize);
+                    blockImage = deskew(blockImage, structuringElementSize, true);
                     deskewedimage.ROI = blockRectangle;
                     blockImage.CopyTo(deskewedimage);
                     deskewedimage.ROI = Rectangle.Empty;
