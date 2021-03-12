@@ -68,24 +68,24 @@ namespace Cliver.PdfDocumentParser
             if (!set)
                 return false;
             getAnchor(a.Id, out DataGridViewRow r);
-            if (!pages[currentPageI].GetAnchorActualInfo(a.Id).Found)
+            Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(a.Id);
+            if (!aai.Found)
             {
                 setRowStatus(statuses.ERROR, r, "Not found");
                 return false;
             }
             setRowStatus(statuses.SUCCESS, r, "Found");
 
-            for (Template.Anchor a_ = a; a_ != null; a_ = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == a_.ParentAnchorId))
+            for (Page.AnchorActualInfo aai_ = aai; aai_ != null; aai_ = aai_.ParentAnchorActualInfo)
             {
-                SizeF shift = pages[currentPageI].GetAnchorActualInfo(a_.Id).Shift;
-                RectangleF r_ = a_.Rectangle();
-                r_.X += shift.Width;
-                r_.Y += shift.Height;
-                if (a_ == a)
+                RectangleF r_ = aai_.Anchor.Rectangle();
+                r_.X += aai_.Shift.Width;
+                r_.Y += aai_.Shift.Height;
+                if (aai_ == aai)
                     if (currentAnchorControl != null)
                     {
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r_ });
-                        owners2resizebleBox[a_] = new ResizebleBox(a_, r_, Settings.Appearance.SelectionBoxBorderWidth);
+                        owners2resizebleBox[aai_.Anchor] = new ResizebleBox(aai_.Anchor, r_, Settings.Appearance.SelectionBoxBorderWidth);
                     }
                     else
                         drawBoxes(Settings.Appearance.AnchorBoxColor, Settings.Appearance.AnchorBoxBorderWidth, new List<RectangleF> { r_ });
@@ -93,18 +93,18 @@ namespace Cliver.PdfDocumentParser
                     drawBoxes(Settings.Appearance.AscendantAnchorBoxColor, Settings.Appearance.AscendantAnchorBoxBorderWidth, new List<RectangleF> { r_ });
 
                 List<RectangleF> bs = null;
-                switch (a_.Type)
+                switch (aai_.Anchor.Type)
                 {
                     case Template.Anchor.Types.PdfText:
                         {
-                            var pt = (Template.Anchor.PdfText)a_;
-                            bs = pt.CharBoxs.Select(x => new RectangleF(x.Rectangle.X + shift.Width, x.Rectangle.Y + shift.Height, x.Rectangle.Width, x.Rectangle.Height)).ToList();
+                            var pt = (Template.Anchor.PdfText)aai_.Anchor;
+                            bs = pt.CharBoxs.Select(x => new RectangleF(x.Rectangle.X + aai_.Shift.Width, x.Rectangle.Y + aai_.Shift.Height, x.Rectangle.Width, x.Rectangle.Height)).ToList();
                         }
                         break;
                     case Template.Anchor.Types.OcrText:
                         {
-                            var ot = (Template.Anchor.OcrText)a_;
-                            bs = ot.CharBoxs.Select(x => new RectangleF(x.Rectangle.X + shift.Width, x.Rectangle.Y + shift.Height, x.Rectangle.Width, x.Rectangle.Height)).ToList();
+                            var ot = (Template.Anchor.OcrText)aai_.Anchor;
+                            bs = ot.CharBoxs.Select(x => new RectangleF(x.Rectangle.X + aai_.Shift.Width, x.Rectangle.Y + aai_.Shift.Height, x.Rectangle.Width, x.Rectangle.Height)).ToList();
                         }
                         break;
                     case Template.Anchor.Types.ImageData:
@@ -114,10 +114,10 @@ namespace Cliver.PdfDocumentParser
                         //bs = new List<System.Drawing.RectangleF> { rs[0] };
                         break;
                     default:
-                        throw new Exception("Unknown option: " + a_.Type);
+                        throw new Exception("Unknown option: " + aai_.Anchor.Type);
                 }
                 if (bs != null)
-                    if (a_ == a)
+                    if (aai_.Anchor == a)
                         drawBoxes(Settings.Appearance.AnchorBoxColor, Settings.Appearance.AnchorBoxBorderWidth, bs);
                     else
                         drawBoxes(Settings.Appearance.AscendantAnchorBoxColor, Settings.Appearance.AscendantAnchorBoxBorderWidth, bs);

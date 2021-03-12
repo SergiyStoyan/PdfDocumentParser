@@ -61,10 +61,24 @@ namespace Cliver.PdfDocumentParser
         internal class AnchorActualInfo
         {
             readonly public Template.Anchor Anchor;
-            public PointF Position { get; private set; } = new PointF(-1, -1);
-            public bool Found { get { return Position.X >= 0; } }
-            readonly public SizeF Shift;
-            readonly public AnchorActualInfo parentAnchorActualInfo;
+            public PointF Position
+            {
+                get
+                {
+                    return position;
+                }
+                private set
+                {
+                    position = value;
+                    Found = Position.X >= 0;
+                    if (Found)
+                        Shift = new SizeF(Position.X - Anchor.Position.X, Position.Y - Anchor.Position.Y);
+                }
+            }
+            PointF position = new PointF(-1, -1);
+            public bool Found;
+            public SizeF Shift { get; private set; }
+            public AnchorActualInfo ParentAnchorActualInfo { get; private set; }
 
             internal AnchorActualInfo(Template.Anchor anchor, Page page)
             {
@@ -78,32 +92,41 @@ namespace Cliver.PdfDocumentParser
                     id = pa.ParentAnchorId;
                 }
 
-                page.findAnchor(Anchor, (PointF p) =>
+                findAnchor(page, (PointF p) =>
                 {
                     Position = p;
                     return false;
                 });
-
-                if (Found)
-                    Shift = new SizeF(Position.X - Anchor.Position.X, Position.Y - Anchor.Position.Y);
             }
-        }
 
-        void findAnchor(Template.Anchor a, Func<PointF, bool> findNext)
-        {
-            if (a.ParentAnchorId != null)
+            void findAnchor(Page page, Func<PointF, bool> findNext)
             {
-                Template.Anchor pa = PageCollection.ActiveTemplate.Anchors.Find(x => x.Id == a.ParentAnchorId);
-                findAnchor(pa, (PointF p) =>
-                 {
-                     return !_findAnchor(a, p, findNext);
-                 });
+                if (Anchor.ParentAnchorId != null)
+                {
+                    Template.Anchor pa = page.PageCollection.ActiveTemplate.Anchors.Find(x => x.Id == Anchor.ParentAnchorId);
+                    AnchorActualInfo paai = new AnchorActualInfo(pa);
+                    paai.findAnchor(page, (PointF p) =>
+                    {
+                        bool found = page.findAnchor(Anchor, p, findNext);
+                        if (found)
+                        {
+                            paai.Position = p;
+                            ParentAnchorActualInfo = paai;
+                        }
+                        return !found;
+                    });
+                }
+                else
+                    page.findAnchor(Anchor, new PointF(), findNext);
             }
-            else
-                _findAnchor(a, new PointF(), findNext);
+
+            AnchorActualInfo(Template.Anchor anchor)
+            {
+                Anchor = anchor;
+            }
         }
 
-        bool _findAnchor(Template.Anchor a, PointF parentAnchorPoint0, Func<PointF, bool> findNext)
+        bool findAnchor(Template.Anchor a, PointF parentAnchorPoint0, Func<PointF, bool> findNext)
         {
             if (!a.IsSet())
                 return false;
