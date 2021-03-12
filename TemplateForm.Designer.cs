@@ -81,6 +81,9 @@
             this.picture = new System.Windows.Forms.PictureBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.SingleFieldFromFieldImage = new System.Windows.Forms.CheckBox();
+            this.ColumnFieldFromFieldImage = new System.Windows.Forms.CheckBox();
             this.TesseractPageSegMode = new System.Windows.Forms.ComboBox();
             this.label19 = new System.Windows.Forms.Label();
             this.CvImageScalePyramidStep = new System.Windows.Forms.NumericUpDown();
@@ -107,9 +110,6 @@
             this.moveDownField = new System.Windows.Forms.LinkLabel();
             this.copy2ClipboardField = new System.Windows.Forms.LinkLabel();
             this.ExtractFieldsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.SingleFieldFromFieldImage = new System.Windows.Forms.CheckBox();
-            this.ColumnFieldFromFieldImage = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).BeginInit();
             this.flowLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).BeginInit();
@@ -134,11 +134,11 @@
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CvImageScalePyramidStep)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureScale)).BeginInit();
             this.flowLayoutPanel2.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // bPrevPage
@@ -768,6 +768,37 @@
             this.splitContainer2.SplitterDistance = 396;
             this.splitContainer2.TabIndex = 32;
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.SingleFieldFromFieldImage);
+            this.groupBox1.Controls.Add(this.ColumnFieldFromFieldImage);
+            this.groupBox1.Location = new System.Drawing.Point(139, 138);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(167, 69);
+            this.groupBox1.TabIndex = 108;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Field OCR Parse Mode";
+            // 
+            // SingleFieldFromFieldImage
+            // 
+            this.SingleFieldFromFieldImage.AutoSize = true;
+            this.SingleFieldFromFieldImage.Location = new System.Drawing.Point(14, 21);
+            this.SingleFieldFromFieldImage.Name = "SingleFieldFromFieldImage";
+            this.SingleFieldFromFieldImage.Size = new System.Drawing.Size(141, 17);
+            this.SingleFieldFromFieldImage.TabIndex = 100;
+            this.SingleFieldFromFieldImage.Text = "Single Field By Its Image";
+            this.SingleFieldFromFieldImage.UseVisualStyleBackColor = true;
+            // 
+            // ColumnFieldFromFieldImage
+            // 
+            this.ColumnFieldFromFieldImage.AutoSize = true;
+            this.ColumnFieldFromFieldImage.Location = new System.Drawing.Point(14, 43);
+            this.ColumnFieldFromFieldImage.Name = "ColumnFieldFromFieldImage";
+            this.ColumnFieldFromFieldImage.Size = new System.Drawing.Size(147, 17);
+            this.ColumnFieldFromFieldImage.TabIndex = 104;
+            this.ColumnFieldFromFieldImage.Text = "Column Field By Its Image";
+            this.ColumnFieldFromFieldImage.UseVisualStyleBackColor = true;
+            // 
             // TesseractPageSegMode
             // 
             this.TesseractPageSegMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -1059,37 +1090,6 @@
             this.ExtractFieldsAutomaticallyWhenPageChanged.Text = "Extract When Page Changed]";
             this.ExtractFieldsAutomaticallyWhenPageChanged.UseVisualStyleBackColor = true;
             // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.SingleFieldFromFieldImage);
-            this.groupBox1.Controls.Add(this.ColumnFieldFromFieldImage);
-            this.groupBox1.Location = new System.Drawing.Point(139, 138);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(167, 69);
-            this.groupBox1.TabIndex = 108;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Field OCR Parse Mode";
-            // 
-            // SingleFieldFromFieldImage
-            // 
-            this.SingleFieldFromFieldImage.AutoSize = true;
-            this.SingleFieldFromFieldImage.Location = new System.Drawing.Point(14, 21);
-            this.SingleFieldFromFieldImage.Name = "SingleFieldFromFieldImage";
-            this.SingleFieldFromFieldImage.Size = new System.Drawing.Size(141, 17);
-            this.SingleFieldFromFieldImage.TabIndex = 100;
-            this.SingleFieldFromFieldImage.Text = "Single Field By Its Image";
-            this.SingleFieldFromFieldImage.UseVisualStyleBackColor = true;
-            // 
-            // ColumnFieldFromFieldImage
-            // 
-            this.ColumnFieldFromFieldImage.AutoSize = true;
-            this.ColumnFieldFromFieldImage.Location = new System.Drawing.Point(14, 43);
-            this.ColumnFieldFromFieldImage.Name = "ColumnFieldFromFieldImage";
-            this.ColumnFieldFromFieldImage.Size = new System.Drawing.Size(147, 17);
-            this.ColumnFieldFromFieldImage.TabIndex = 104;
-            this.ColumnFieldFromFieldImage.Text = "Column Field By Its Image";
-            this.ColumnFieldFromFieldImage.UseVisualStyleBackColor = true;
-            // 
             // TemplateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1129,14 +1129,14 @@
             this.splitContainer2.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CvImageScalePyramidStep)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureScale)).EndInit();
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel2.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }

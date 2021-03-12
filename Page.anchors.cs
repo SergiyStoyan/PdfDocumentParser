@@ -64,6 +64,7 @@ namespace Cliver.PdfDocumentParser
             public PointF Position { get; private set; } = new PointF(-1, -1);
             public bool Found { get { return Position.X >= 0; } }
             readonly public SizeF Shift;
+            readonly public AnchorActualInfo parentAnchorActualInfo;
 
             internal AnchorActualInfo(Template.Anchor anchor, Page page)
             {
@@ -314,21 +315,27 @@ namespace Cliver.PdfDocumentParser
                                 return false;
                             ci0 = new CvImage(b);
                         }
-                        //CvImage.Match m = civ.Image.FindFirstMatchWithinImage(ci0, civ.Threshold, civ.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
-                        //if (m == null)
-                        //    return false;
-                        //Point p = m.Rectangle.Location;
-                        //return !findNext(new PointF(searchRectanglePosition.X + p.X, searchRectanglePosition.Y + p.Y));
-                        //!!!looping changes results because returns first match vs best match
-                        bool found = false;
-                        civ.Image.FindMatchesWithinImage(ci0, civ.Threshold, civ.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep,
-                            (CvImage.Match m) =>
-                            {
-                                found = !findNext(new PointF(searchRectanglePosition.X + m.Rectangle.X, searchRectanglePosition.Y + m.Rectangle.Y));
-                                return !found;
-                            }
-                            );
-                        return found;
+                        if (civ.FindBestImageMatch)
+                        {
+                            //CvImage.Match m = civ.Image.FindFirstMatchWithinImage(ci0, civ.Threshold, civ.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
+                            CvImage.Match m = civ.Image.FindBestMatchWithinImage(ci0, civ.Threshold, civ.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep);
+                            if (m == null)
+                                return false;
+                            Point p = m.Rectangle.Location;
+                            return !findNext(new PointF(searchRectanglePosition.X + p.X, searchRectanglePosition.Y + p.Y));
+                        }
+                        else
+                        {//!!!this returns rather the first match than the best match
+                            bool found = false;
+                            civ.Image.FindMatchesWithinImage(ci0, civ.Threshold, civ.ScaleDeviation, PageCollection.ActiveTemplate.CvImageScalePyramidStep,
+                                (CvImage.Match m) =>
+                                {
+                                    found = !findNext(new PointF(searchRectanglePosition.X + m.Rectangle.X, searchRectanglePosition.Y + m.Rectangle.Y));
+                                    return !found;
+                                }
+                                );
+                            return found;
+                        }
                     }
                 default:
                     throw new Exception("Unknown option: " + a.Type);

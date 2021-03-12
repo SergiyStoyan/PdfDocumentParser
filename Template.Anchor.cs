@@ -102,6 +102,7 @@ namespace Cliver.PdfDocumentParser
 
                 public float Threshold = 0.70f;
                 public float ScaleDeviation = 0.05f;//when automatic rescaling it is not needed
+                public bool FindBestImageMatch = false;
 
                 override public bool IsSet()
                 {
