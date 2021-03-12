@@ -23,7 +23,7 @@ namespace Cliver.PdfDocumentParser
                   this.Visible = false;
               };
 
-            this.Icon = Win.AssemblyRoutines.GetAppIcon();
+            Icon = Win.AssemblyRoutines.GetAppIcon();
 
             this.templateForm = templateForm;
 
