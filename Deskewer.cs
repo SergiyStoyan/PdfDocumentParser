@@ -23,7 +23,7 @@ namespace Cliver.PdfDocumentParser
         {
             public Modes Mode = Modes.SingleBlock;
             public int BlockMaxLength = 1000;
-            public int BlockMinSpan = 20;
+            public int BlockMinGap = 20;
             public Size StructuringElementSize = new Size(30, 1);
             public int ContourMaxCount = 10;
             public float AngleMaxDeviation = 1;
@@ -45,7 +45,7 @@ namespace Cliver.PdfDocumentParser
                     DeskewAsSingleBlock(ref bitmap, config.StructuringElementSize, config.ContourMaxCount, config.AngleMaxDeviation);
                     break;
                 case Modes.ColumnOfBlocks:
-                    DeskewAsColumnOfBlocks(ref bitmap, config.BlockMaxLength, config.BlockMinSpan, config.StructuringElementSize, config.ContourMaxCount, config.AngleMaxDeviation);
+                    DeskewAsColumnOfBlocks(ref bitmap, config.BlockMaxLength, config.BlockMinGap, config.StructuringElementSize, config.ContourMaxCount, config.AngleMaxDeviation);
                     break;
                 case Modes.RowOfBlocks:
                     throw new Exception("not implemented");
@@ -136,7 +136,7 @@ namespace Cliver.PdfDocumentParser
             return image3;
         }
 
-        static public void DeskewAsColumnOfBlocks(ref Bitmap bitmap, int blockMaxLength, int blockMinSpan, Size structuringElementSize, int contourMaxCount, double angleMaxDeviation)
+        static public void DeskewAsColumnOfBlocks(ref Bitmap bitmap, int blockMaxLength, int blockMinGap, Size structuringElementSize, int contourMaxCount, double angleMaxDeviation)
         {
             using (Image<Rgb, byte> image = bitmap.ToImage<Rgb, byte>())
             {
@@ -188,13 +188,13 @@ namespace Cliver.PdfDocumentParser
                         if (contours.Count > 0)
                         {
                             Contour minTop = contours.Aggregate((a, b) => a.BoundingRectangle.Top < b.BoundingRectangle.Top ? a : b);
-                            if (c.BoundingRectangle.Bottom + blockMinSpan <= minTop.BoundingRectangle.Top)
+                            if (c.BoundingRectangle.Bottom + blockMinGap <= minTop.BoundingRectangle.Top)
                                 lastSpan = new Tuple<Contour, Contour>(c, minTop);
                         }
 
                         if (c.BoundingRectangle.Bottom > blockY + blockMaxLength && lastSpan != null)
                         {
-                            blockBottom = lastSpan.Item1.BoundingRectangle.Bottom + blockMinSpan / 2;
+                            blockBottom = lastSpan.Item1.BoundingRectangle.Bottom + blockMinGap / 2;
                             break;
                         }
                     }

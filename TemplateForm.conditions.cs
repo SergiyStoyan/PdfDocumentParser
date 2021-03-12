@@ -133,6 +133,8 @@ namespace Cliver.PdfDocumentParser
                 }
 
                 setCurrentFieldRow(null);
+
+                setConditionStatus(currentConditionRow);
             }
             finally
             {
