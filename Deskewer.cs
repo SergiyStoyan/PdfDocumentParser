@@ -55,16 +55,18 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        static public void DeskewAsSingleBlock(ref Bitmap bitmap, Size structuringElementSize, int contourMaxCount, double angleMaxDeviation, int offsetX = 50)//good
+        static public void DeskewAsSingleBlock(ref Bitmap bitmap, Size structuringElementSize, int contourMaxCount, double angleMaxDeviation)//good
         {
             using (Image<Rgb, byte> image = bitmap.ToImage<Rgb, byte>())
             {
                 bitmap.Dispose();
-                bitmap = deskew(image, structuringElementSize, contourMaxCount, angleMaxDeviation, offsetX)?.ToBitmap();
+                Image<Rgb, byte> deskewedImage = deskew(image, structuringElementSize, contourMaxCount, angleMaxDeviation, new Size(30, 30));
+                deskewedImage.ROI = getNonBlack(deskewedImage);//crop
+                bitmap = deskewedImage?.ToBitmap();
             }
         }
 
-        static Image<Rgb, byte> deskew(Image<Rgb, byte> image, Size structuringElementSize, int contourMaxCount, double angleMaxDeviation, int offsetX)//good
+        static Image<Rgb, byte> deskew(Image<Rgb, byte> image, Size structuringElementSize, int contourMaxCount, double angleMaxDeviation, Size offset)//good
         {//https://becominghuman.ai/how-to-automatically-deskew-straighten-a-text-image-using-opencv-a0c30aed83df
             Image<Gray, byte> image2 = image.Convert<Gray, byte>();
             CvInvoke.BitwiseNot(image2, image2);//to negative
@@ -73,11 +75,18 @@ namespace Cliver.PdfDocumentParser
             Mat se = CvInvoke.GetStructuringElement(ElementShape.Rectangle, structuringElementSize, new Point(-1, -1));
             CvInvoke.Dilate(image2, image2, se, new Point(-1, -1), 1, BorderType.Constant, CvInvoke.MorphologyDefaultBorderValue);
             //Emgu.CV.CvInvoke.Erode(image, image, null, new Point(-1, -1), 1, BorderType.Constant, CvInvoke.MorphologyDefaultBorderValue);
+
+            Image<Rgb, byte> image3 = new Image<Rgb, byte>(image.Width + 2 * offset.Width, image.Height + 2 * offset.Height);
+            image3.ROI = new Rectangle(new Point(offset.Width, offset.Height), image.Size);
+            image.CopyTo(image3);
+            image3.ROI = Rectangle.Empty;
+
             VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint();
             Mat hierarchy = new Mat();
             CvInvoke.FindContours(image2, contours, hierarchy, RetrType.External, ChainApproxMethod.ChainApproxSimple);
             if (contours.Size < 1)
                 return null;
+
             double angle = 0;
             //when contourMaxCount == 1, it just looks by the most lengthy block
             List<(double angle, int w)> cs = new List<(double angle, int w)>();
@@ -118,26 +127,22 @@ namespace Cliver.PdfDocumentParser
                     // angle = as_[ds.OrderBy(a => Math.Abs(as_[a].angle - as_[a - 1].angle)).FirstOrDefault()].angle;
                     angle = (cs[ds[0] - 1].angle + ds.Sum(a => cs[a].angle)) / (1 + ds.Count);
             }
-            Image<Rgb, byte> image3 = new Image<Rgb, byte>(image.Width + 2 * offsetX, image.Height);
-            image3.ROI = new Rectangle(new Point(offsetX, 0), image.Size);
-            image.CopyTo(image3);
-            image3.ROI = Rectangle.Empty;
             if (angle == 0)
-                return image;
+                return image3;
+
             RotationMatrix2D rotationMat = new RotationMatrix2D();
             CvInvoke.GetRotationMatrix2D(new PointF((float)image3.Width / 2, (float)image3.Height / 2), angle, 1, rotationMat);
             CvInvoke.WarpAffine(image3, image3, rotationMat, image3.Size);
             return image3;
         }
 
-        static public void DeskewAsColumnOfBlocks(ref Bitmap bitmap, int blockMaxLength, int blockMinSpan, Size structuringElementSize, int contourMaxCount, double angleMaxDeviation, int offsetX = 50)
+        static public void DeskewAsColumnOfBlocks(ref Bitmap bitmap, int blockMaxLength, int blockMinSpan, Size structuringElementSize, int contourMaxCount, double angleMaxDeviation)
         {
             using (Image<Rgb, byte> image = bitmap.ToImage<Rgb, byte>())
             {
                 bitmap.Dispose();
-
-                //return image.ToBitmap();
-                Image<Rgb, byte> deskewedImage = new Image<Rgb, byte>(new Size(image.Width + 2 * offsetX, image.Height));
+                Size offset = new Size(50, 50);
+                Image<Rgb, byte> deskewedImage = new Image<Rgb, byte>(new Size(image.Width + 2 * offset.Width, image.Height));
                 //int lastBlockBottomLeft = -1;
                 //int lastBlockBottomRight = -1;
                 Image<Gray, byte> image2 = image.Convert<Gray, byte>();
@@ -196,7 +201,7 @@ namespace Cliver.PdfDocumentParser
 
                     Rectangle blockRectangle = new Rectangle(0, blockY, image2.Width, blockBottom + 1 - blockY);
                     Image<Rgb, byte> blockImage = image.Copy(blockRectangle);
-                    Image<Rgb, byte> deskewedBlockImage = deskew(blockImage, structuringElementSize, contourMaxCount, angleMaxDeviation, offsetX);
+                    Image<Rgb, byte> deskewedBlockImage = deskew(blockImage, structuringElementSize, contourMaxCount, angleMaxDeviation, offset);
                     //int blockTopLeft = findOffsetLeft(deskewedBlockImage, 10).X;
                     //int blockTopRight = findOffsetRight(deskewedBlockImage, 10).X;
                     //if (lastBlockBottomLeft < 0)
@@ -205,7 +210,8 @@ namespace Cliver.PdfDocumentParser
                     //    lastBlockBottomRight = blockTopRight;
                     //deskewedBlockImage.ROI = new Rectangle(blockTopLeft, 0, blockTopRight - blockTopLeft, deskewedBlockImage.Height);
                     //deskewedImage.ROI = new Rectangle(lastBlockBottomLeft - ((blockTopRight - blockTopLeft) - (lastBlockBottomRight - lastBlockBottomLeft)) / 2, blockRectangle.Y, blockTopRight - blockTopLeft, deskewedBlockImage.Height);
-                    deskewedImage.ROI = new Rectangle(0, blockRectangle.Y, deskewedBlockImage.Width, deskewedBlockImage.Height);
+                    deskewedBlockImage.ROI = new Rectangle(0, offset.Height, deskewedBlockImage.Width, deskewedBlockImage.Height - 2 * offset.Height);
+                    deskewedImage.ROI = new Rectangle(0, blockRectangle.Y, deskewedBlockImage.ROI.Width, deskewedBlockImage.ROI.Height);
                     deskewedBlockImage.CopyTo(deskewedImage);
                     deskewedImage.ROI = Rectangle.Empty;
                     //lastBlockBottomLeft = findOffsetLeft(deskewedBlockImage, -10).X;
@@ -213,55 +219,90 @@ namespace Cliver.PdfDocumentParser
                     // break;
                     blockY = blockBottom + 1;
                 }
-                int offsetLeft = findOffsetLeft(deskewedImage, deskewedImage.Height).X;
-                int offsetRight = findOffsetRight(deskewedImage, deskewedImage.Height).X;
-                deskewedImage.ROI = new Rectangle(offsetLeft, 0, offsetRight - offsetLeft, deskewedImage.Height);
+                deskewedImage.ROI = getNonBlack(deskewedImage);//crop
                 bitmap = deskewedImage?.ToBitmap();
             }
         }
 
-        static Point findOffsetLeft(Image<Rgb, byte> image, int maxHeight)
+        static Rectangle getNonBlack(Image<Rgb, byte> image)
         {
-            int width = image.Data.GetLength(1);
-            int height = image.Data.GetLength(0);
-            int y1, y2;
-            if (maxHeight >= 0)
-            {
-                y1 = height > maxHeight ? maxHeight : height - 1;
-                y2 = 0;
-            }
-            else
-            {
-                y1 = height - 1;
-                y2 = height > -maxHeight ? height + maxHeight : 0;
-            }
-            for (int x = 0; x < width; x++)
-                for (int y = y1; y >= y2; y--)
-                    if (image.Data[y, x, 0] > 0 || image.Data[y, x, 1] > 0 || image.Data[y, x, 2] > 0)
-                        return new Point(x, y);
-            return Point.Empty;
+            int offsetLeft = findOffset(image, Side.Left, image.Height).X;
+            int offsetRight = findOffset(image, Side.Right, image.Height).X;
+            int offsetTop = findOffset(image, Side.Top, image.Width).Y;
+            int offsetBottom = findOffset(image, Side.Bottom, image.Width).Y;
+            return new Rectangle(offsetLeft, offsetTop, offsetRight - offsetLeft + 1, offsetBottom - offsetTop + 1);
         }
 
-        static Point findOffsetRight(Image<Rgb, byte> image, int maxHeight)
+        static Point findOffset(Image<Rgb, byte> image, Side side, int maxLenght)
         {
             int width = image.Data.GetLength(1);
             int height = image.Data.GetLength(0);
-            int y1, y2;
-            if (maxHeight >= 0)
+            switch (side)
             {
-                y1 = height > maxHeight ? maxHeight : height - 1;
-                y2 = 0;
+                case Side.Left:
+                case Side.Right:
+                    int y1, y2;
+                    if (maxLenght >= 0)
+                    {
+                        y1 = 0;
+                        y2 = height > maxLenght ? maxLenght : height;
+                    }
+                    else
+                    {
+                        y1 = height > -maxLenght ? height + maxLenght : 0 - 1;
+                        y2 = height;
+                    }
+                    if (side == Side.Left)
+                    {
+                        for (int x = 0; x < width; x++)
+                            for (int y = y1; y < y2; y++)
+                                if (image.Data[y, x, 0] > 0 || image.Data[y, x, 1] > 0 || image.Data[y, x, 2] > 0)
+                                    return new Point(x, y);
+                    }
+                    else
+                        for (int x = width - 1; x >= 0; x--)
+                            for (int y = y1; y < y2; y++)
+                                if (image.Data[y, x, 0] > 0 || image.Data[y, x, 1] > 0 || image.Data[y, x, 2] > 0)
+                                    return new Point(x, y);
+                    break;
+                case Side.Top:
+                case Side.Bottom:
+                    int x1, x2;
+                    if (maxLenght >= 0)
+                    {
+                        x1 = 0;
+                        x2 = width > maxLenght ? maxLenght : width;
+                    }
+                    else
+                    {
+                        x1 = width > -maxLenght ? width + maxLenght : 0 - 1;
+                        x2 = width;
+                    }
+                    if (side == Side.Top)
+                    {
+                        for (int y = 0; y < height; y++)
+                            for (int x = x1; x < x2; x++)
+                                if (image.Data[y, x, 0] > 0 || image.Data[y, x, 1] > 0 || image.Data[y, x, 2] > 0)
+                                    return new Point(x, y);
+                    }
+                    else
+                        for (int y = height - 1; y >= 0; y--)
+                            for (int x = x1; x < x2; x++)
+                                if (image.Data[y, x, 0] > 0 || image.Data[y, x, 1] > 0 || image.Data[y, x, 2] > 0)
+                                    return new Point(x, y);
+                    break;
+                default:
+                    throw new Exception("Uknown option: " + side);
+
             }
-            else
-            {
-                y1 = height - 1;
-                y2 = height > -maxHeight ? height + maxHeight : 0;
-            }
-            for (int x = width - 1; x >= 0; x--)
-                for (int y = y1; y >= y2; y--)
-                    if (image.Data[y, x, 0] > 0 || image.Data[y, x, 1] > 0 || image.Data[y, x, 2] > 0)
-                        return new Point(x, y);
             return Point.Empty;
+        }
+        enum Side
+        {
+            Left,
+            Right,
+            Top,
+            Bottom
         }
 
         //public Bitmap DeskewByBlocks(Size blockMaxSize, int minBlockSpan)//!!!not completed
