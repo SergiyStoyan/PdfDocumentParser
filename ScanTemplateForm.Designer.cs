@@ -51,6 +51,10 @@
             this.DeskewStructuringElementY = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
+            this.DeskewSingleBlock = new System.Windows.Forms.RadioButton();
+            this.DeskewColumnOfBlocks = new System.Windows.Forms.RadioButton();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewBlockMaxHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewBlockMinSpan)).BeginInit();
@@ -62,7 +66,7 @@
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bCancel.Location = new System.Drawing.Point(614, 3);
+            this.bCancel.Location = new System.Drawing.Point(759, 3);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 50;
@@ -81,13 +85,13 @@
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 375);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(692, 31);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(837, 31);
             this.flowLayoutPanel1.TabIndex = 60;
             // 
             // bApply
             // 
             this.bApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bApply.Location = new System.Drawing.Point(533, 3);
+            this.bApply.Location = new System.Drawing.Point(678, 3);
             this.bApply.Name = "bApply";
             this.bApply.Size = new System.Drawing.Size(75, 23);
             this.bApply.TabIndex = 51;
@@ -105,7 +109,7 @@
             "↻ 180°",
             "↺ 90°",
             "Auto"});
-            this.defaultBitmapPreprocessorClassDefinitions.Location = new System.Drawing.Point(306, 3);
+            this.defaultBitmapPreprocessorClassDefinitions.Location = new System.Drawing.Point(451, 3);
             this.defaultBitmapPreprocessorClassDefinitions.Name = "defaultBitmapPreprocessorClassDefinitions";
             this.defaultBitmapPreprocessorClassDefinitions.Size = new System.Drawing.Size(221, 21);
             this.defaultBitmapPreprocessorClassDefinitions.TabIndex = 85;
@@ -114,7 +118,7 @@
             // bRemove
             // 
             this.bRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bRemove.Location = new System.Drawing.Point(266, 3);
+            this.bRemove.Location = new System.Drawing.Point(411, 3);
             this.bRemove.Name = "bRemove";
             this.bRemove.Size = new System.Drawing.Size(34, 23);
             this.bRemove.TabIndex = 52;
@@ -125,7 +129,7 @@
             // bSaveDafault
             // 
             this.bSaveDafault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bSaveDafault.Location = new System.Drawing.Point(226, 3);
+            this.bSaveDafault.Location = new System.Drawing.Point(371, 3);
             this.bSaveDafault.Name = "bSaveDafault";
             this.bSaveDafault.Size = new System.Drawing.Size(34, 23);
             this.bSaveDafault.TabIndex = 53;
@@ -144,12 +148,12 @@
             this.bitmapPreprocessorClassDefinition.Margin = new System.Windows.Forms.Padding(1);
             this.bitmapPreprocessorClassDefinition.Name = "bitmapPreprocessorClassDefinition";
             this.bitmapPreprocessorClassDefinition.ShowVRuler = false;
-            this.bitmapPreprocessorClassDefinition.Size = new System.Drawing.Size(692, 277);
+            this.bitmapPreprocessorClassDefinition.Size = new System.Drawing.Size(837, 277);
             this.bitmapPreprocessorClassDefinition.TabIndex = 78;
             // 
             // DeskewBlockMaxHeight
             // 
-            this.DeskewBlockMaxHeight.Location = new System.Drawing.Point(109, 20);
+            this.DeskewBlockMaxHeight.Location = new System.Drawing.Point(416, 19);
             this.DeskewBlockMaxHeight.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -187,7 +191,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(13, 26);
+            this.label14.Location = new System.Drawing.Point(320, 25);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(94, 13);
             this.label14.TabIndex = 82;
@@ -206,7 +210,7 @@
             // 
             this.PreprocessBitmap.AutoSize = true;
             this.PreprocessBitmap.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.PreprocessBitmap.Location = new System.Drawing.Point(12, 78);
+            this.PreprocessBitmap.Location = new System.Drawing.Point(120, 79);
             this.PreprocessBitmap.Name = "PreprocessBitmap";
             this.PreprocessBitmap.Size = new System.Drawing.Size(15, 14);
             this.PreprocessBitmap.TabIndex = 85;
@@ -224,7 +228,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(33, 78);
+            this.label3.Location = new System.Drawing.Point(9, 78);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(105, 13);
             this.label3.TabIndex = 88;
@@ -247,7 +251,7 @@
             // 
             // DeskewBlockMinSpan
             // 
-            this.DeskewBlockMinSpan.Location = new System.Drawing.Point(109, 42);
+            this.DeskewBlockMinSpan.Location = new System.Drawing.Point(416, 41);
             this.DeskewBlockMinSpan.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -270,7 +274,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(13, 48);
+            this.label4.Location = new System.Drawing.Point(320, 47);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(85, 13);
             this.label4.TabIndex = 95;
@@ -278,6 +282,10 @@
             // 
             // gDeskew
             // 
+            this.gDeskew.Controls.Add(this.label5);
+            this.gDeskew.Controls.Add(this.label6);
+            this.gDeskew.Controls.Add(this.DeskewColumnOfBlocks);
+            this.gDeskew.Controls.Add(this.DeskewSingleBlock);
             this.gDeskew.Controls.Add(this.Deskew);
             this.gDeskew.Controls.Add(this.DeskewStructuringElementX);
             this.gDeskew.Controls.Add(this.DeskewStructuringElementY);
@@ -289,7 +297,7 @@
             this.gDeskew.Controls.Add(this.label14);
             this.gDeskew.Location = new System.Drawing.Point(336, 10);
             this.gDeskew.Name = "gDeskew";
-            this.gDeskew.Size = new System.Drawing.Size(341, 72);
+            this.gDeskew.Size = new System.Drawing.Size(487, 72);
             this.gDeskew.TabIndex = 99;
             this.gDeskew.TabStop = false;
             this.gDeskew.Text = "Deskew:";
@@ -306,7 +314,7 @@
             // 
             // DeskewStructuringElementX
             // 
-            this.DeskewStructuringElementX.Location = new System.Drawing.Point(292, 20);
+            this.DeskewStructuringElementX.Location = new System.Drawing.Point(137, 20);
             this.DeskewStructuringElementX.Minimum = new decimal(new int[] {
             1,
             0,
@@ -323,7 +331,7 @@
             // 
             // DeskewStructuringElementY
             // 
-            this.DeskewStructuringElementY.Location = new System.Drawing.Point(292, 41);
+            this.DeskewStructuringElementY.Location = new System.Drawing.Point(137, 41);
             this.DeskewStructuringElementY.Minimum = new decimal(new int[] {
             1,
             0,
@@ -341,7 +349,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(174, 47);
+            this.label7.Location = new System.Drawing.Point(19, 47);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(112, 13);
             this.label7.TabIndex = 99;
@@ -350,17 +358,55 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(174, 25);
+            this.label10.Location = new System.Drawing.Point(19, 25);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(112, 13);
             this.label10.TabIndex = 97;
             this.label10.Text = "Structuring Element X:";
             // 
+            // DeskewSingleBlock
+            // 
+            this.DeskewSingleBlock.AutoSize = true;
+            this.DeskewSingleBlock.Location = new System.Drawing.Point(198, 24);
+            this.DeskewSingleBlock.Name = "DeskewSingleBlock";
+            this.DeskewSingleBlock.Size = new System.Drawing.Size(14, 13);
+            this.DeskewSingleBlock.TabIndex = 103;
+            this.DeskewSingleBlock.UseVisualStyleBackColor = true;
+            // 
+            // DeskewColumnOfBlocks
+            // 
+            this.DeskewColumnOfBlocks.AutoSize = true;
+            this.DeskewColumnOfBlocks.Checked = true;
+            this.DeskewColumnOfBlocks.Location = new System.Drawing.Point(198, 47);
+            this.DeskewColumnOfBlocks.Name = "DeskewColumnOfBlocks";
+            this.DeskewColumnOfBlocks.Size = new System.Drawing.Size(14, 13);
+            this.DeskewColumnOfBlocks.TabIndex = 104;
+            this.DeskewColumnOfBlocks.TabStop = true;
+            this.DeskewColumnOfBlocks.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(214, 47);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(91, 13);
+            this.label5.TabIndex = 100;
+            this.label5.Text = "Column Of Blocks";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(214, 25);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(66, 13);
+            this.label6.TabIndex = 101;
+            this.label6.Text = "Single Block";
+            // 
             // ScanTemplateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(692, 406);
+            this.ClientSize = new System.Drawing.Size(837, 406);
             this.Controls.Add(this.gDeskew);
             this.Controls.Add(this.ScalingAnchor);
             this.Controls.Add(this.label3);
@@ -408,5 +454,9 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.NumericUpDown DeskewStructuringElementX;
         private System.Windows.Forms.CheckBox Deskew;
+        private System.Windows.Forms.RadioButton DeskewSingleBlock;
+        private System.Windows.Forms.RadioButton DeskewColumnOfBlocks;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
     }
 }

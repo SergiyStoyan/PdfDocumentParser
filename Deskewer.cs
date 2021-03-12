@@ -19,6 +19,38 @@ namespace Cliver.PdfDocumentParser
 {
     public class Deskewer
     {
+        public class Config
+        {
+            public Modes Mode = Modes.SingleBlock;
+            public int BlockMaxHeight = 1000;
+            public int BlockMinSpan = 20;
+            public Size StructuringElementSize = new Size(30, 1);
+        }
+        public enum Modes
+        {
+            SingleBlock,
+            ColumnOfBlocks,
+            RowOfBlocks,
+        }
+
+        static public void Deskew(ref Bitmap bitmap, Config config)
+        {
+            switch (config.Mode)
+            {
+                case Modes.SingleBlock:
+                    DeskewAsSingleBlock(ref bitmap, config.StructuringElementSize);
+                    break;
+                case Modes.ColumnOfBlocks:
+                    DeskewAsColumnOfBlocks(ref bitmap, config.BlockMaxHeight, config.BlockMinSpan, config.StructuringElementSize);
+                    break;
+                case Modes.RowOfBlocks:
+                    throw new Exception("not implemented");
+                    break;
+                default:
+                    throw new Exception("Unknown option: " + config.Mode);
+            }
+        }
+
         static public void DeskewAsSingleBlock(ref Bitmap bitmap, Size structuringElementSize)//good
         {
             using (Image<Rgb, byte> image = bitmap.ToImage<Rgb, byte>())
@@ -66,14 +98,7 @@ namespace Cliver.PdfDocumentParser
             return image3;
         }
 
-        public class Config
-        {
-            public int BlockMaxHeight = 1000;
-            public int BlockMinSpan = 30;
-            public Size StructuringElementSize = new Size(30, 1);
-        }
-
-        static public void DeskewAsColumnOfBlocks(ref Bitmap bitmap, Config config)
+        static public void DeskewAsColumnOfBlocks(ref Bitmap bitmap, int blockMaxHeight, int blockMinSpan, Size structuringElementSize)
         {
             using (Image<Rgb, byte> image = bitmap.ToImage<Rgb, byte>())
             {
@@ -124,20 +149,20 @@ namespace Cliver.PdfDocumentParser
                         if (contours.Count > 0)
                         {
                             Contour minTop = contours.Aggregate((a, b) => a.BoundingRectangle.Top < b.BoundingRectangle.Top ? a : b);
-                            if (c.BoundingRectangle.Bottom + config.BlockMinSpan <= minTop.BoundingRectangle.Top)
+                            if (c.BoundingRectangle.Bottom + blockMinSpan <= minTop.BoundingRectangle.Top)
                                 lastSpan = new Tuple<Contour, Contour>(c, minTop);
                         }
 
-                        if (c.BoundingRectangle.Bottom > blockY + config.BlockMaxHeight && lastSpan != null)
+                        if (c.BoundingRectangle.Bottom > blockY + blockMaxHeight && lastSpan != null)
                         {
-                            blockBottom = lastSpan.Item1.BoundingRectangle.Bottom + config.BlockMinSpan / 2;
+                            blockBottom = lastSpan.Item1.BoundingRectangle.Bottom + blockMinSpan / 2;
                             break;
                         }
                     }
 
                     Rectangle blockRectangle = new Rectangle(0, blockY, image2.Width, blockBottom + 1 - blockY);
                     Image<Rgb, byte> blockImage = image.Copy(blockRectangle);
-                    blockImage = deskew(blockImage, config.StructuringElementSize);
+                    blockImage = deskew(blockImage, structuringElementSize);
                     deskewedimage.ROI = blockRectangle;
                     blockImage.CopyTo(deskewedimage);
                     deskewedimage.ROI = Rectangle.Empty;

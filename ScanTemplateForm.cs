@@ -35,9 +35,6 @@ namespace Cliver.PdfDocumentParser
             };
 
             PageRotation.SelectedIndexChanged += delegate { changed = true; };
-            Deskew.CheckedChanged += delegate { changed = true; };
-            DeskewBlockMaxHeight.ValueChanged += delegate { changed = true; };
-            DeskewBlockMinSpan.ValueChanged += delegate { changed = true; };
             ScalingAnchor.SelectedIndexChanged += delegate { changed = true; };
             bitmapPreprocessorClassDefinition.TextChanged += delegate { changed = true; };
             PreprocessBitmap.CheckedChanged += delegate
@@ -52,8 +49,17 @@ namespace Cliver.PdfDocumentParser
             Deskew.CheckedChanged += delegate
             {
                 changed = true;
-                DeskewBlockMaxHeight.Enabled = DeskewBlockMinSpan.Enabled = DeskewStructuringElementX.Enabled = DeskewStructuringElementY.Enabled = Deskew.Checked;
+                DeskewSingleBlock.Enabled = DeskewColumnOfBlocks.Enabled = DeskewStructuringElementX.Enabled = DeskewStructuringElementY.Enabled = Deskew.Checked;
+                DeskewBlockMaxHeight.Enabled = DeskewBlockMinSpan.Enabled = DeskewColumnOfBlocks.Checked;
             };
+            DeskewSingleBlock.CheckedChanged += delegate { changed = true; };
+            DeskewColumnOfBlocks.CheckedChanged += delegate
+            {
+                changed = true;
+                DeskewBlockMaxHeight.Enabled = DeskewBlockMinSpan.Enabled = DeskewColumnOfBlocks.Checked;
+            };
+            DeskewBlockMaxHeight.ValueChanged += delegate { changed = true; };
+            DeskewBlockMinSpan.ValueChanged += delegate { changed = true; };
         }
         TemplateForm templateForm;
         bool changed = false;
@@ -78,7 +84,9 @@ namespace Cliver.PdfDocumentParser
                 DeskewBlockMinSpan.Value = dc.BlockMinSpan;
                 DeskewStructuringElementX.Value = dc.StructuringElementSize.Width;
                 DeskewStructuringElementY.Value = dc.StructuringElementSize.Height;
-                DeskewBlockMaxHeight.Enabled = DeskewBlockMinSpan.Enabled = DeskewStructuringElementX.Enabled = DeskewStructuringElementY.Enabled = Deskew.Checked = t.Deskew != null;
+                DeskewSingleBlock.Enabled = DeskewColumnOfBlocks.Enabled = DeskewStructuringElementX.Enabled = DeskewStructuringElementY.Enabled = Deskew.Checked = t.Deskew != null;
+                DeskewSingleBlock.Checked = t.Deskew.Mode.HasFlag(Deskewer.Modes.SingleBlock) || !t.Deskew.Mode.HasFlag(Deskewer.Modes.ColumnOfBlocks);
+                DeskewColumnOfBlocks.Checked = !DeskewSingleBlock.Checked;
 
                 changed = false;
             }
@@ -130,6 +138,7 @@ namespace Cliver.PdfDocumentParser
             {
                 t.Deskew = new Deskewer.Config
                 {
+                    Mode = DeskewColumnOfBlocks.Checked ? Deskewer.Modes.ColumnOfBlocks : Deskewer.Modes.SingleBlock,
                     BlockMaxHeight = (int)DeskewBlockMaxHeight.Value,
                     BlockMinSpan = (int)DeskewBlockMinSpan.Value,
                     StructuringElementSize = new System.Drawing.Size((int)DeskewStructuringElementX.Value, (int)DeskewStructuringElementY.Value)

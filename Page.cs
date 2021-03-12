@@ -206,7 +206,7 @@ namespace Cliver.PdfDocumentParser
                         //    b.Dispose();
                         //    b = image.ToBitmap();
                         //}
-                        Deskewer.DeskewAsColumnOfBlocks(ref b, PageCollection.ActiveTemplate.Deskew);
+                        Deskewer.Deskew(ref b, PageCollection.ActiveTemplate.Deskew);
                     }
 
                     b = PageCollection.ActiveTemplate.BitmapPreprocessor.GetProcessed(b);
