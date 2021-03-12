@@ -126,7 +126,7 @@ namespace Cliver.PdfDocumentParser
             readonly internal Template.Field ActualField;
             readonly internal RectangleF? ActualRectangle;
             readonly internal FieldActualInfo TableFieldActualInfo = null;
-            internal bool Found { get { return ActualRectangle != null; } }
+            readonly internal bool Found;
 
             internal object GetValue(Template.Field.ValueTypes valueType)
             {
@@ -370,13 +370,14 @@ namespace Cliver.PdfDocumentParser
                 ActualField = actualfield;
                 ActualRectangle = actualRectangle;
                 TableFieldActualInfo = tableFieldActualInfo;
+                Found = ActualRectangle != null;
             }
         }
 
         public class CharBox
         {
             public string Char;
-            public System.Drawing.RectangleF R;
+            public RectangleF R;
         }
 
         RectangleF? getFieldActualRectangle(Template.Field field)
@@ -413,13 +414,14 @@ namespace Cliver.PdfDocumentParser
             }
             if (field.BottomAnchor != null)
             {
-                Page.AnchorActualInfo aai = GetAnchorActualInfo(field.BottomAnchor.Id);
+                AnchorActualInfo aai = GetAnchorActualInfo(field.BottomAnchor.Id);
                 if (!aai.Found)
                     return null;
                 r.Height += aai.Shift.Height - field.BottomAnchor.Shift;
             }
-            if (r.Width <= 0 || r.Height <= 0)
-                return null;
+            //when all the anchors found then not null even if it is collapsed
+            //if (r.Width <= 0 || r.Height <= 0)
+            //    return null;
             return r;
         }
 

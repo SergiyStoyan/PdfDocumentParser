@@ -17,7 +17,78 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public class Ocr : IDisposable
     {
-        public static Ocr This = new Ocr();
+        public static Ocr This
+        {
+            get
+            {
+                if (_This == null)
+                    _This = new Ocr();
+                return _This;
+            }
+        }
+        static Ocr _This = null;
+
+        Ocr()
+        {
+            engine = new TesseractEngine(@"./tessdata", config.language, config.engineMode);
+            if (config.variables != null)
+            {
+                string m1 = "Could not set Tesseract variable: ";
+                foreach (var v in config.variables)
+                    if (v.value is string)
+                    {
+                        if (!engine.SetVariable(v.name, (string)v.value))
+                            throw new Exception(m1 + v.ToString());
+                    }
+                    else if (v.value is int)
+                    {
+                        if (!engine.SetVariable(v.name, (int)v.value))
+                            throw new Exception(m1 + v.ToString());
+                    }
+                    else if (v.value is double)
+                    {
+                        if (!engine.SetVariable(v.name, (double)v.value))
+                            throw new Exception(m1 + v.ToString());
+                    }
+                    else if (v.value is bool)
+                    {
+                        if (!engine.SetVariable(v.name, (bool)v.value))
+                            throw new Exception(m1 + v.ToString());
+                    }
+                    else
+                        throw new Exception(m1 + v.ToString() + " Not supported type.");
+            }
+        }
+        static Config config = new Config();
+        //new Config
+        //{
+        //    language = "eng",
+        //    engineMode = EngineMode.Default,
+        //    variables = new List<(string name, object value)> {
+        //                (name: "load_system_dawg", value: false),
+        //                (name: "load_freq_dawg", value: false),
+        //                (name: "tessedit_char_whitelist", "0123456789.,"),
+        //                //(name: "psm", 11)
+        //            }
+        //};
+        class Config
+        {
+            public string language = "eng";
+            public EngineMode engineMode = EngineMode.Default;
+            public List<(string name, object value)> variables = null;
+        }
+
+        static void Initialize(string language = "eng", EngineMode engineMode = EngineMode.Default, List<(string name, object value)> variables = null)
+        {
+            Config newConfig = new Config { language = language, engineMode = engineMode, variables = variables };
+            if (newConfig.IsEqualByJson(config))
+                return;
+            config = newConfig;
+            _This?.Dispose();
+            _This = null;
+        }
+
+        TesseractEngine engine = null;
 
         ~Ocr()
         {
@@ -28,7 +99,7 @@ namespace Cliver.PdfDocumentParser
         {
             lock (this)
             {
-                if (_engine != null)
+                if (engine != null)
                 {
                     //if (cachedPage != null)
                     //{
@@ -42,24 +113,11 @@ namespace Cliver.PdfDocumentParser
                     //    cachedPageBitmap = null;
                     //    cachedPage = null;
                     //}
-                    _engine.Dispose();
-                    _engine = null;
+                    engine.Dispose();
+                    engine = null;
                 }
             }
         }
-
-        Tesseract.TesseractEngine engine
-        {
-            get
-            {
-                if (_engine == null)
-                    _engine = new Tesseract.TesseractEngine(@"./tessdata", "eng", Tesseract.EngineMode.Default);
-                //if(!_engine.SetVariable("preserve_interword_spaces", 1))
-                //    throw new Exception("Not set!");
-                return _engine;
-            }
-        }
-        Tesseract.TesseractEngine _engine = null;
 
         //Tesseract.Page getPage(Bitmap b)
         //{
@@ -186,25 +244,25 @@ namespace Cliver.PdfDocumentParser
                     Rect r;
                     if (i.TryGetBoundingBox(PageIteratorLevel.Symbol, out r))
                     {
-                        if (i.IsAtBeginningOf(PageIteratorLevel.Word))
-                        {
-                            //if (i.IsAtBeginningOf(PageIteratorLevel.Para))
-                            //{
-                            //    cbs.Add(new CharBox
-                            //    {
-                            //        Char = "\r\n",
-                            //        AutoInserted = true,
-                            //        R = new RectangleF(r.X1 * Settings.Constants.Image2PdfResolutionRatio - Settings.Constants.CoordinateDeviationMargin * 2, r.Y1 * Settings.Constants.Image2PdfResolutionRatio, r.Width * Settings.Constants.Image2PdfResolutionRatio, r.Height * Settings.Constants.Image2PdfResolutionRatio)
-                            //    });
-                            //}//seems to work not well
+                        //if (i.IsAtBeginningOf(PageIteratorLevel.Word))
+                        //{
+                        //if (i.IsAtBeginningOf(PageIteratorLevel.Para))
+                        //{
+                        //    cbs.Add(new CharBox
+                        //    {
+                        //        Char = "\r\n",
+                        //        AutoInserted = true,
+                        //        R = new RectangleF(r.X1 * Settings.Constants.Image2PdfResolutionRatio - Settings.Constants.CoordinateDeviationMargin * 2, r.Y1 * Settings.Constants.Image2PdfResolutionRatio, r.Width * Settings.Constants.Image2PdfResolutionRatio, r.Height * Settings.Constants.Image2PdfResolutionRatio)
+                        //    });
+                        //}//seems to work not well
 
-                            //cbs.Add(new CharBox//worked well before autoinsert was moved
-                            //{
-                            //    Char = " ",
-                            //    AutoInserted = true,
-                            //    R = new RectangleF(r.X1 * Settings.Constants.Image2PdfResolutionRatio - Settings.Constants.CoordinateDeviationMargin * 2, r.Y1 * Settings.Constants.Image2PdfResolutionRatio, r.Width * Settings.Constants.Image2PdfResolutionRatio, r.Height * Settings.Constants.Image2PdfResolutionRatio)
-                            //});
-                        }
+                        //cbs.Add(new CharBox//worked well before autoinsert was moved
+                        //{
+                        //    Char = " ",
+                        //    AutoInserted = true,
+                        //    R = new RectangleF(r.X1 * Settings.Constants.Image2PdfResolutionRatio - Settings.Constants.CoordinateDeviationMargin * 2, r.Y1 * Settings.Constants.Image2PdfResolutionRatio, r.Width * Settings.Constants.Image2PdfResolutionRatio, r.Height * Settings.Constants.Image2PdfResolutionRatio)
+                        //});
+                        //}
                         cbs.Add(new CharBox
                         {
                             Char = i.GetText(PageIteratorLevel.Symbol),
