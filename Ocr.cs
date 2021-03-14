@@ -32,28 +32,53 @@ namespace Cliver.PdfDocumentParser
         {
             engine = new TesseractEngine(@"./tessdata", config.language, config.engineMode);
             if (config.variables != null)
+            {
+                string m1 = "Could not set Tesseract variable: ";
                 foreach (var v in config.variables)
-                    if (!engine.SetVariable(v.name, v.value))
-                        throw new Exception("Could not set: " + v.ToString());
+                    if (v.value is string)
+                    {
+                        if (!engine.SetVariable(v.name, (string)v.value))
+                            throw new Exception(m1 + v.ToString());
+                    }
+                    else if (v.value is int)
+                    {
+                        if (!engine.SetVariable(v.name, (int)v.value))
+                            throw new Exception(m1 + v.ToString());
+                    }
+                    else if (v.value is double)
+                    {
+                        if (!engine.SetVariable(v.name, (double)v.value))
+                            throw new Exception(m1 + v.ToString());
+                    }
+                    else if (v.value is bool)
+                    {
+                        if (!engine.SetVariable(v.name, (bool)v.value))
+                            throw new Exception(m1 + v.ToString());
+                    }
+                    else
+                        throw new Exception(m1 + v.ToString() + " Not supported type.");
+            }
         }
-        static Config config = new Config { language = "eng", engineMode = EngineMode.Default };
-        //static Config config = new Config
-        //      {
-        //            language = "eng",
-        //            engineMode = EngineMode.Default,
-        //            variables = new List<(string name, string value)> {
-        //                (name: "load_system_dawg", value: "false"),
-        //                (name: "load_freq_dawg", value: "false"),
+        static Config config = new Config();
+        //new Config
+        //{
+        //    language = "eng",
+        //    engineMode = EngineMode.Default,
+        //    variables = new List<(string name, object value)> {
+        //                (name: "load_system_dawg", value: false),
+        //                (name: "load_freq_dawg", value: false),
+        //                (name: "tessedit_char_whitelist", "0123456789.,"),
+        //                //(name: "psm", 11)
         //            }
-        //      };
+        //};
         class Config
         {
             public string language = "eng";
             public EngineMode engineMode = EngineMode.Default;
-            public List<(string name, string value)> variables = null;
+            public List<(string name, object value)> variables = null;
         }
 
-        static void Initialize(string language = "eng", EngineMode engineMode = EngineMode.Default, List<(string name, string value)> variables = null)
+        static void Initialize(string language = "eng", EngineMode engineMode = EngineMode.Default, List<(string name, object value)> variables = null)
         {
             Config newConfig = new Config { language = language, engineMode = engineMode, variables = variables };
             if (newConfig.IsEqualByJson(config))
