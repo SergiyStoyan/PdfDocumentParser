@@ -272,6 +272,8 @@ namespace Cliver.PdfDocumentParser
 
             copy2ClipboardField.LinkClicked += delegate
             {
+                if (pages == null)
+                    return;
                 if (fields.SelectedRows.Count < 1)
                     return;
                 DataGridViewRow r = fields.SelectedRows[fields.SelectedRows.Count - 1];

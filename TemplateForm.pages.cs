@@ -315,6 +315,9 @@ namespace Cliver.PdfDocumentParser
         {
             try
             {
+                if (pages == null)
+                    return;
+
                 if (string.IsNullOrWhiteSpace(testFile.Text) || 0 >= pageI || totalPageNumber < pageI)
                     return;
 

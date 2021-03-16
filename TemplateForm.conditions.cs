@@ -210,6 +210,8 @@ namespace Cliver.PdfDocumentParser
 
         void setConditionStatus(DataGridViewRow r)
         {
+            if (pages == null)
+                return;
             Template.Condition c = (Template.Condition)r.Tag;
             if (c == null)
                 return;
