@@ -117,8 +117,8 @@ namespace Cliver.PdfDocumentParser
             r.Intersect(new Rectangle((int)x, (int)y, (int)w, (int)h));
             if (r.Width < 1 || r.Height < 1)
                 return null;
-            return ActiveTemplateBitmap.Clone(r, System.Drawing.Imaging.PixelFormat.Undefined);
-            //return ImageRoutines.GetCopy(ActiveTemplateBitmap, new RectangleF(x, y, w, h));
+            return ActiveTemplateBitmap.Clone(r, ActiveTemplateBitmap.PixelFormat);
+            //return Cliver.Win.ImageRoutines.GetCopy(ActiveTemplateBitmap, r);
         }
 
         internal Bitmap ActiveTemplateBitmap
@@ -134,8 +134,15 @@ namespace Cliver.PdfDocumentParser
                     //Using the Graphics class to modify the clone (created with .Clone()) will not modify the original.
                     //Similarly, using the LockBits method yields different memory blocks for the original and clone.
                     //...change one random pixel to a random color on the clone... seems to trigger a copy of all pixel data from the original.
-                    //Bitmap b = Bitmap.Clone(new Rectangle(0, 0, Bitmap.Width, Bitmap.Height), System.Drawing.Imaging.PixelFormat.Undefined);!!!throws from Tesseract: A generic error occurred in GDI+.
-                    Bitmap b = new Bitmap(Bitmap);
+                    Bitmap b = Bitmap.Clone(new Rectangle(0, 0, Bitmap.Width, Bitmap.Height), Bitmap.PixelFormat);//!!!throws from Tesseract: A generic error occurred in GDI+.
+                    //Bitmap b = new Bitmap(Bitmap);//!!!it sets to 96dpi
+                    //Bitmap b;
+                    //using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
+                    //{
+                    //    Bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+                    //    ms.Close();//!!!it seems to be critical
+                    //    b = new Bitmap(ms);
+                    //}
 
                     switch (PageCollection.ActiveTemplate.PageRotation)
                     {
@@ -241,7 +248,7 @@ namespace Cliver.PdfDocumentParser
                         else if (DetectedImageScale != 1)
                         {
                             _activeTemplateBitmap = Win.ImageRoutines.GetScaled(b, 1f / DetectedImageScale);
-                            b?.Dispose();
+                            b.Dispose();
                             _activeTemplateCvImage?.Dispose();
                             _activeTemplateCvImage = null;
                         }

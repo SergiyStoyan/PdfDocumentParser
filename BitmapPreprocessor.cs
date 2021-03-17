@@ -16,13 +16,7 @@ namespace Cliver.PdfDocumentParser
 {
     public abstract class BitmapPreprocessor
     {
-        public virtual Bitmap GetProcessed(Bitmap bitmap)
-        {
-            using (bitmap)
-            {
-                return bitmap;
-            }
-        }
+        public abstract Bitmap GetProcessed(Bitmap bitmap);
 
         //internal protected Template Template { get; set; }
 

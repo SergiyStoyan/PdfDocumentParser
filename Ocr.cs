@@ -59,21 +59,21 @@ namespace Cliver.PdfDocumentParser
                         throw new Exception(m1 + v.ToString() + " Not supported type.");
             }
         }
-        static Config config = new Config();
-        //new Config
-        //{
-        //    language = "eng",
-        //    engineMode = EngineMode.Default,
-        //    variables = new List<(string name, object value)> {
-        //                (name: "load_system_dawg", value: false),
-        //                (name: "load_freq_dawg", value: false),
-        //                (name: "tessedit_char_whitelist", "0123456789.,"),
-        //                //(name: "psm", 11)
-        //            }
-        //};
-        class Config
+        static Config config = //new Config();
+        new Config
+        {
+            language = "eng",
+            engineMode = EngineMode.TesseractOnly,
+            variables = new List<(string name, object value)> {
+                        (name: "load_system_dawg", value: false),
+                        (name: "load_freq_dawg", value: false),
+                        //(name: "tessedit_char_whitelist", "0123456789.,"),
+                    }
+        };
+        public class Config
         {
             public string language = "eng";
+            //public string language = "superior";
             public EngineMode engineMode = EngineMode.Default;
             public List<(string name, object value)> variables = null;
         }
@@ -160,7 +160,7 @@ namespace Cliver.PdfDocumentParser
         public string GetTextSurroundedByRectangle(Bitmap b, RectangleF r, PageSegMode pageSegMode)
         {
             if (!getScaled(b, ref r))
-                return null;
+                return string.Empty;
             using (Tesseract.Page page = engine.Process(b, new Rect((int)r.X, (int)r.Y, (int)r.Width, (int)r.Height), pageSegMode))
             {
                 return page.GetText();
@@ -369,6 +369,29 @@ namespace Cliver.PdfDocumentParser
             CONTINUE:;
             }
             return lines;
+        }
+
+        internal static List<Line> GetLinesWithAdjacentBorders(IEnumerable<CharBox> cbs, RectangleF ar)
+        {
+            List<Line> ls = GetLines(cbs, null);
+            for (int i = 0; i < ls.Count; i++)
+            {
+                Line l = ls[i];
+                if (ar.Top > l.Top)
+                    continue;
+                if (ar.Bottom < l.Bottom)
+                    continue;
+                if (i == 0)
+                    l.Top = (l.Bottom - l.Top) < (l.Top - ar.Top) ? (l.Bottom + l.Top) / 2 : ar.Top;
+                if (i < ls.Count - 1)
+                {
+                    l.Bottom = (ls[i + 1].Top + l.Bottom) / 2;
+                    ls[i + 1].Top = l.Bottom;
+                }
+                else
+                    l.Bottom = (l.Bottom - l.Top) < (ar.Bottom - l.Bottom) ? (l.Bottom + l.Top) / 2 : ar.Bottom;
+            }
+            return ls;
         }
 
         public class Line

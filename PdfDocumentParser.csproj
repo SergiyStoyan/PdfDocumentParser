@@ -168,6 +168,7 @@
     <Compile Include="Deskewer.cs" />
     <Compile Include="Page.conditions.cs" />
     <Compile Include="Page.anchors.cs" />
+    <Compile Include="Page.text.cs" />
     <Compile Include="Page.fields.cs" />
     <Compile Include="PageCollection.cs" />
     <Compile Include="Page.cs" />
