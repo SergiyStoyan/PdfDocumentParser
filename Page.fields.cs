@@ -419,7 +419,7 @@ namespace Cliver.PdfDocumentParser
                     return null;
                 r.Height += aai.Shift.Height - field.BottomAnchor.Shift;
             }
-            //when all the anchors found then not null even if it is collapsed
+            //!!!???when all the anchors found then not null even if it is collapsed
             //if (r.Width <= 0 || r.Height <= 0)
             //    return null;
             return r;
