@@ -27,6 +27,7 @@ namespace Cliver.PdfDocumentParser
             public Size StructuringElementSize = new Size(30, 1);
             public int ContourMaxCount = 10;
             public float AngleMaxDeviation = 1;
+            //public Color SeamColor = Color.Yellow;
         }
         public enum Modes
         {
@@ -36,16 +37,21 @@ namespace Cliver.PdfDocumentParser
             ByBlockWithMaxLength = 7,//default
             ByMostUnidirectedBlocks = 8,
         }
+            
+        //public Size Offset = new Size(50, 50);
 
         static public void Deskew(ref Bitmap bitmap, Config config)
         {
+            int blockMaxLength = (int)(config.BlockMaxLength / Settings.Constants.Image2PdfResolutionRatio);
+            int blockMinGap = (int)(config.BlockMinGap / Settings.Constants.Image2PdfResolutionRatio);
+            Size structuringElementSize = new Size((int)(config.StructuringElementSize.Width / Settings.Constants.Image2PdfResolutionRatio), (int)(config.StructuringElementSize.Height / Settings.Constants.Image2PdfResolutionRatio));
             switch (config.Mode)
             {
                 case Modes.SingleBlock:
-                    DeskewAsSingleBlock(ref bitmap, config.StructuringElementSize, config.ContourMaxCount, config.AngleMaxDeviation);
+                    DeskewAsSingleBlock(ref bitmap, structuringElementSize, config.ContourMaxCount, config.AngleMaxDeviation);
                     break;
                 case Modes.ColumnOfBlocks:
-                    DeskewAsColumnOfBlocks(ref bitmap, config.BlockMaxLength, config.BlockMinGap, config.StructuringElementSize, config.ContourMaxCount, config.AngleMaxDeviation);
+                    DeskewAsColumnOfBlocks(ref bitmap, blockMaxLength, blockMinGap, structuringElementSize, config.ContourMaxCount, config.AngleMaxDeviation);
                     break;
                 case Modes.RowOfBlocks:
                     throw new Exception("not implemented");
@@ -136,13 +142,14 @@ namespace Cliver.PdfDocumentParser
             return image3;
         }
 
-        static public void DeskewAsColumnOfBlocks(ref Bitmap bitmap, int blockMaxLength, int blockMinGap, Size structuringElementSize, int contourMaxCount, double angleMaxDeviation)
+        static public void DeskewAsColumnOfBlocks(ref Bitmap bitmap, int blockMaxLength, int blockMinGap, Size structuringElementSize, int contourMaxCount, double angleMaxDeviation/*, Color seamColor*/)
         {
             using (Image<Rgb, byte> image = bitmap.ToImage<Rgb, byte>())
             {
                 bitmap.Dispose();
                 Size offset = new Size(50, 50);
-                Image<Rgb, byte> deskewedImage = new Image<Rgb, byte>(new Size(image.Width + 2 * offset.Width, image.Height));
+                Image<Rgb, byte> deskewedImage = new Image<Rgb, byte>(image.Width + 2 * offset.Width, image.Height/* + 2 * offset.Height*//*, new Rgb(seamColor)*/);
+
                 //int lastBlockBottomLeft = -1;
                 //int lastBlockBottomRight = -1;
                 Image<Gray, byte> image2 = image.Convert<Gray, byte>();

@@ -242,15 +242,15 @@ namespace Cliver.PdfDocumentParser
                 List<string> ls = new List<string>();
                 if (page.PageCollection.ActiveTemplate.FieldOcrMode.HasFlag(Template.FieldOcrModes.ColumnFieldFromFieldImage))
                 {
-                    foreach (Ocr.Line l in Ocr.GetLines(cbs, page.PageCollection.ActiveTemplate.TextAutoInsertSpace))
+                    List<Ocr.Line> ols = Ocr.GetLinesWithAdjacentBorders(cbs, TableFieldActualInfo.ActualRectangle.Value);
+                    foreach (Ocr.Line l in ols)
                     {
                         float x = ar.X > TableFieldActualInfo.ActualRectangle.Value.X ? ar.X : TableFieldActualInfo.ActualRectangle.Value.X;
-                        float y = ar.Top > l.Top ? ar.Top : l.Top;
                         RectangleF r = new RectangleF(
                             x,
-                            y,
+                            l.Top,
                            (ar.Right < TableFieldActualInfo.ActualRectangle.Value.Right ? ar.Right : TableFieldActualInfo.ActualRectangle.Value.Right) - x,
-                           (ar.Bottom < l.Bottom ? ar.Bottom : l.Bottom) - y
+                           l.Bottom - l.Top
                             );
                         ls.Add(Ocr.This.GetTextSurroundedByRectangle(page.ActiveTemplateBitmap, r, page.PageCollection.ActiveTemplate.TesseractPageSegMode));
                     }
@@ -353,7 +353,8 @@ namespace Cliver.PdfDocumentParser
                 else
                     cbs = Ocr.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, ar);
                 List<Bitmap> ls = new List<Bitmap>();
-                foreach (Ocr.Line l in Ocr.GetLines(cbs, page.PageCollection.ActiveTemplate.TextAutoInsertSpace))
+                List<Ocr.Line> ols = Ocr.GetLinesWithAdjacentBorders(cbs, TableFieldActualInfo == null ? ar : TableFieldActualInfo.ActualRectangle.Value);
+                foreach (Ocr.Line l in ols)
                 {
                     RectangleF r = new RectangleF(ar.X, l.Top, ar.Width, l.Bottom - l.Top);
                     using (Bitmap b = page.GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
@@ -372,12 +373,6 @@ namespace Cliver.PdfDocumentParser
                 TableFieldActualInfo = tableFieldActualInfo;
                 Found = ActualRectangle != null;
             }
-        }
-
-        public class CharBox
-        {
-            public string Char;
-            public RectangleF R;
         }
 
         RectangleF? getFieldActualRectangle(Template.Field field)
@@ -423,27 +418,6 @@ namespace Cliver.PdfDocumentParser
             //if (r.Width <= 0 || r.Height <= 0)
             //    return null;
             return r;
-        }
-
-        /// <summary>
-        /// Auxiliary method which can be applied to a string during post-processing
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static string NormalizeText(string value)
-        {
-            if (value == null)
-                return null;
-            value = FieldPreparation.ReplaceNonPrintableChars(value);
-            value = Regex.Replace(value, @"\s+", " ");
-            value = value.Trim();
-            return value;
-        }
-
-        public static void NormalizeText(List<string> values)
-        {
-            for (int i = 0; i < values.Count; i++)
-                values[i] = NormalizeText(values[i]);
         }
 
         internal static Bitmap GetScaledImage2Pdf(Image image)
