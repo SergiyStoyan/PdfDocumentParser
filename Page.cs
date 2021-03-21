@@ -136,10 +136,10 @@ namespace Cliver.PdfDocumentParser
                     //...change one random pixel to a random color on the clone... seems to trigger a copy of all pixel data from the original.
                     //Bitmap b = Bitmap.Clone(new Rectangle(0, 0, Bitmap.Width, Bitmap.Height), Bitmap.PixelFormat);!!!throws from Tesseract: A generic error occurred in GDI+.
                     Bitmap b;
-                    using (System.IO.MemoryStream memory = new System.IO.MemoryStream())
+                    using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
                     {
-                        Bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
-                        b = new Bitmap(memory);
+                        Bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+                        b = new Bitmap(ms);
                     }
 
                     switch (PageCollection.ActiveTemplate.PageRotation)
