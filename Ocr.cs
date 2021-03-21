@@ -74,6 +74,7 @@ namespace Cliver.PdfDocumentParser
         class Config
         {
             public string language = "eng";
+            //public string language = "superior";
             public EngineMode engineMode = EngineMode.Default;
             public List<(string name, object value)> variables = null;
         }
