@@ -127,6 +127,7 @@ namespace Cliver.PdfDocumentParser
                         p.WaitForExit();
                         try
                         {
+                            ms.Close();//!!!it is critical for further cloning the bitmap!
                             return new System.Drawing.Bitmap(ms);
                         }
                         catch (Exception e)
@@ -145,7 +146,7 @@ namespace Cliver.PdfDocumentParser
                     p.StartInfo.Arguments = "-dNOPROMPT -r" + resolution + " -dDownScaleFactor=" + dDownScaleFactor + " -dBATCH -dFirstPage=" + pageI + " -dLastPage=" + pageI + " -sDEVICE=png16m -dNOPAUSE -sOutputFile=\"" + bufferFile + "\" -q \"" + pdfFile + "\"";
                     p.Start();
                     p.WaitForExit();
-                    System.Drawing.Bitmap b;
+                    System.Drawing.Bitmap b;// = (System.Drawing.Bitmap)System.Drawing.Image.FromFile(bufferFile);
                     using (var bt = new System.Drawing.Bitmap(bufferFile))//to free the file
                     {
                         b = new System.Drawing.Bitmap(bt);
