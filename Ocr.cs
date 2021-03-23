@@ -59,18 +59,17 @@ namespace Cliver.PdfDocumentParser
                         throw new Exception(m1 + v.ToString() + " Not supported type.");
             }
         }
-        static Config config = new Config();
-        //new Config
-        //{
-        //    language = "eng",
-        //    engineMode = EngineMode.Default,
-        //    variables = new List<(string name, object value)> {
-        //                (name: "load_system_dawg", value: false),
-        //                (name: "load_freq_dawg", value: false),
-        //                (name: "tessedit_char_whitelist", "0123456789.,"),
-        //                //(name: "psm", 11)
-        //            }
-        //};
+        static Config config = //new Config();
+        new Config
+        {
+            language = "eng",
+            engineMode = EngineMode.Default,
+            variables = new List<(string name, object value)> {
+                        (name: "load_system_dawg", value: false),
+                        (name: "load_freq_dawg", value: false),
+                        //(name: "tessedit_char_whitelist", "0123456789.,"),
+                    }
+        };
         public class Config
         {
             public string language = "eng";

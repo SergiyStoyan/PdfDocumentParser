@@ -124,6 +124,7 @@ namespace Cliver.PdfDocumentParser
                 //Emgu.CV.CvInvoke.Threshold(image, image, 125, 255, ThresholdType.Otsu | ThresholdType.Binary);
                 //Emgu.CV.CvInvoke.Erode(image, image, null, new Point(-1, -1), 1, BorderType.Constant, CvInvoke.MorphologyDefaultBorderValue);
                 //CvInvoke.Dilate(image, image, null, new Point(-1, -1), 1, BorderType.Constant, CvInvoke.MorphologyDefaultBorderValue);
+                //CvInvoke.Erode(image, image, null, new Point(-1, -1), 1, BorderType.Constant, CvInvoke.MorphologyDefaultBorderValue);
                 return image.ToBitmap();
             }
         }
@@ -203,8 +204,8 @@ namespace Cliver.PdfDocumentParser
 
         private void bApply_Click(object sender, EventArgs e)
         {
-            applyTemplate();
-            Close();
+            if (applyTemplate())
+                Close();
         }
 
         private void bSaveDafault_Click(object sender, EventArgs e)
