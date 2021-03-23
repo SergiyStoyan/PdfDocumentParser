@@ -63,7 +63,7 @@ namespace Cliver.PdfDocumentParser
         new Config
         {
             language = "eng",
-            engineMode = EngineMode.Default,
+            engineMode = EngineMode.TesseractOnly,
             variables = new List<(string name, object value)> {
                         (name: "load_system_dawg", value: false),
                         (name: "load_freq_dawg", value: false),
