@@ -160,7 +160,7 @@ namespace Cliver.PdfDocumentParser
         public string GetTextSurroundedByRectangle(Bitmap b, RectangleF r, PageSegMode pageSegMode)
         {
             if (!getScaled(b, ref r))
-                return null;
+                return string.Empty;
             using (Tesseract.Page page = engine.Process(b, new Rect((int)r.X, (int)r.Y, (int)r.Width, (int)r.Height), pageSegMode))
             {
                 return page.GetText();

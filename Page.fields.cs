@@ -228,8 +228,6 @@ namespace Cliver.PdfDocumentParser
                     if (page.PageCollection.ActiveTemplate.FieldOcrMode.HasFlag(Template.FieldOcrModes.SingleFieldFromFieldImage))
                     {
                         string s = Ocr.This.GetTextSurroundedByRectangle(page.ActiveTemplateBitmap, ar, page.PageCollection.ActiveTemplate.TesseractPageSegMode);
-                        if (s == null)
-                            return null;
                         return Regex.Split(s, "$", RegexOptions.Multiline).ToList();
                     }
                     else
