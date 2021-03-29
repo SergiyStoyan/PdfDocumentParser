@@ -127,7 +127,6 @@ namespace Cliver.PdfDocumentParser
                         p.WaitForExit();
                         try
                         {
-                            ms.Close();//!!!it is critical for further cloning the bitmap!
                             return new System.Drawing.Bitmap(ms);
                         }
                         catch (Exception e)
@@ -149,7 +148,8 @@ namespace Cliver.PdfDocumentParser
                     System.Drawing.Bitmap b;// = (System.Drawing.Bitmap)System.Drawing.Image.FromFile(bufferFile);
                     using (var bt = new System.Drawing.Bitmap(bufferFile))//to free the file
                     {
-                        b = new System.Drawing.Bitmap(bt);
+                        b = new System.Drawing.Bitmap(bt);//!!!sets 96dpi
+                        b.SetResolution(bt.HorizontalResolution, bt.VerticalResolution);
                     }
                     File.Delete(bufferFile);
                     return b;
@@ -262,7 +262,7 @@ namespace Cliver.PdfDocumentParser
                         if (spaceAutoInsert && /*cb.Char != " " &&*/ lines[i].CharBoxs.Count > 0)
                         {
                             CharBox cb0 = lines[i].CharBoxs[lines[i].CharBoxs.Count - 1];
-                            if (/*cb0.Char != " " && */cb.R.Left - cb0.R.Right > (cb0.R.Width / cb0.R.Height + cb.R.Width / cb.R.Height) * textAutoInsertSpace.Threshold)
+                            if (/*cb0.Char != " " && */cb.R.Left - cb0.R.Right > (/*cb0.R.Width*/0.8 / cb0.R.Height + /*cb.R.Width*/0.8 / cb.R.Height) * textAutoInsertSpace.Threshold)
                             {
                                 float spaceWidth = (cb.R.Width + cb.R.Width) / 2;
                                 int spaceNumber = (int)Math.Ceiling((cb.R.Left - cb0.R.Right) / spaceWidth);
@@ -283,7 +283,7 @@ namespace Cliver.PdfDocumentParser
                     l.CharBoxs.Add(cb);
                     lines.Add(l);
                 }
-                CONTINUE:;
+            CONTINUE:;
             }
             return lines;
         }

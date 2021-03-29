@@ -13,9 +13,14 @@ using System.Runtime.InteropServices;
 /*
 TBD: 
 
-for scan preprocessing:
-- invoices still have hand marks on them which hinder OCR. Solution: a)filter out colors control, b)manual eraser;
-- line filtering (when test overlaps a line);
+for scan processing:
+- invoices still have hand marks on them which hinder OCR. Solution: filter out colors control;
+- line filtering (when text overlaps a line);
+- each field has its own tesseract config;
+- OcrColumnLines - provide cropping by anchors;
+- to preserve normal lines, provide column removal from table;
+
+- check that margins etc are scaled by resolution;
 
 - ?implement anchor row-separator which requires multiple anchor matching (needed for GCG statement) - verdict: it's better to have multiple field extraction and use it as a separator in a custom processor;
 - move to IText7;

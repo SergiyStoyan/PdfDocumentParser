@@ -19,11 +19,11 @@ namespace Cliver.PdfDocumentParser
     {
         PageCollection pages = null;
 
-        internal void ReloadPageBitmaps()
+        internal void ReloadPageActiveTemplateBitmap()
         {
             if (pages == null)
                 return;
-            pages.Clear();
+            //pages.Clear();
             pages.ActiveTemplate = GetTemplateFromUI(false);
             showPage(currentPageI);
         }

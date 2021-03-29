@@ -373,7 +373,7 @@ namespace Cliver.PdfDocumentParser
 
             if (a.Id == GetTemplateFromUI(false).ScalingAnchorId)
             {
-                ReloadPageBitmaps();
+                ReloadPageActiveTemplateBitmap();
                 return;
             }
 
