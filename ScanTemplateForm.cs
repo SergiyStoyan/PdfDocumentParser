@@ -56,7 +56,7 @@ namespace Cliver.PdfDocumentParser
             DeskewColumnOfBlocks.CheckedChanged += delegate
             {
                 changed = true;
-                DeskewContourMaxCount.Enabled = DeskewAngleMaxDeviation.Enabled = DeskewBlockMaxHeight.Enabled = DeskewBlockMinGap.Enabled = DeskewColumnOfBlocks.Checked;
+                DeskewBlockMaxHeight.Enabled = DeskewBlockMinGap.Enabled = DeskewColumnOfBlocks.Checked;
             };
             DeskewBlockMaxHeight.ValueChanged += delegate { changed = true; };
             DeskewBlockMinGap.ValueChanged += delegate { changed = true; };
@@ -186,7 +186,7 @@ namespace Cliver.PdfDocumentParser
                 {
                     validate();
                     changed = false;
-                    templateForm.ReloadPageBitmaps();
+                    templateForm.ReloadPageActiveTemplateBitmap();
                 }
                 return true;
             }

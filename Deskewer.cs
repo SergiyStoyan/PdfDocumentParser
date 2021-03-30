@@ -37,7 +37,7 @@ namespace Cliver.PdfDocumentParser
             ByBlockWithMaxLength = 7,//default
             ByMostUnidirectedBlocks = 8,
         }
-            
+
         //public Size Offset = new Size(50, 50);
 
         static public void Deskew(ref Bitmap bitmap, Config config)
@@ -70,13 +70,14 @@ namespace Cliver.PdfDocumentParser
                 deskewedImage.ROI = getNonBlack(deskewedImage);//crop
                 bitmap = deskewedImage?.ToBitmap();
             }
+            bitmap.SetResolution(Settings.Constants.PdfPageImageResolution, Settings.Constants.PdfPageImageResolution);
         }
 
         static Image<Rgb, byte> deskew(Image<Rgb, byte> image, Size structuringElementSize, int contourMaxCount, double angleMaxDeviation, Size offset)//good
         {//https://becominghuman.ai/how-to-automatically-deskew-straighten-a-text-image-using-opencv-a0c30aed83df
             Image<Gray, byte> image2 = image.Convert<Gray, byte>();
             CvInvoke.BitwiseNot(image2, image2);//to negative
-            CvInvoke.GaussianBlur(image2, image2, new Size(9, 9), 0);//remove small spots
+            //CvInvoke.GaussianBlur(image2, image2, new Size((int)(9f / Settings.Constants.Image2PdfResolutionRatio), (int)(9f / Settings.Constants.Image2PdfResolutionRatio)), 0);//remove small spots
             CvInvoke.Threshold(image2, image2, 125, 255, ThresholdType.Otsu | ThresholdType.Binary);
             Mat se = CvInvoke.GetStructuringElement(ElementShape.Rectangle, structuringElementSize, new Point(-1, -1));
             CvInvoke.Dilate(image2, image2, se, new Point(-1, -1), 1, BorderType.Constant, CvInvoke.MorphologyDefaultBorderValue);
@@ -89,7 +90,7 @@ namespace Cliver.PdfDocumentParser
 
             VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint();
             Mat hierarchy = new Mat();
-            CvInvoke.FindContours(image2, contours, hierarchy, RetrType.External, ChainApproxMethod.ChainApproxSimple);
+            CvInvoke.FindContours(image2, contours, hierarchy, RetrType.List, ChainApproxMethod.ChainApproxSimple);
             if (contours.Size < 1)
                 return null;
 
@@ -111,7 +112,7 @@ namespace Cliver.PdfDocumentParser
             cs = cs.OrderByDescending(a => a.w).Take(contourMaxCount).OrderBy(a => a.angle).ToList();
             if (cs.Count < 1)
                 angle = 0;
-            else if (cs.Count < 2)//done the most lengthy block
+            else if (cs.Count < 2)//use the most lengthy block
                 angle = cs[0].angle;
             else
             {
@@ -229,6 +230,7 @@ namespace Cliver.PdfDocumentParser
                 deskewedImage.ROI = getNonBlack(deskewedImage);//crop
                 bitmap = deskewedImage?.ToBitmap();
             }
+            bitmap.SetResolution(Settings.Constants.PdfPageImageResolution, Settings.Constants.PdfPageImageResolution);
         }
 
         static Rectangle getNonBlack(Image<Rgb, byte> image)

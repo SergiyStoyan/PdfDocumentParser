@@ -46,10 +46,6 @@
             this.DeskewBlockMinGap = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
             this.gDeskew = new System.Windows.Forms.GroupBox();
-            this.DeskewContourMaxCount = new System.Windows.Forms.NumericUpDown();
-            this.DeskewAngleMaxDeviation = new System.Windows.Forms.NumericUpDown();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.DeskewColumnOfBlocks = new System.Windows.Forms.RadioButton();
@@ -59,14 +55,18 @@
             this.DeskewStructuringElementY = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
+            this.DeskewContourMaxCount = new System.Windows.Forms.NumericUpDown();
+            this.DeskewAngleMaxDeviation = new System.Windows.Forms.NumericUpDown();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewBlockMaxHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewBlockMinGap)).BeginInit();
             this.gDeskew.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DeskewContourMaxCount)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DeskewAngleMaxDeviation)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewStructuringElementX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewStructuringElementY)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DeskewContourMaxCount)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DeskewAngleMaxDeviation)).BeginInit();
             this.SuspendLayout();
             // 
             // bCancel
@@ -159,7 +159,7 @@
             // 
             // DeskewBlockMaxHeight
             // 
-            this.DeskewBlockMaxHeight.Location = new System.Drawing.Point(416, 19);
+            this.DeskewBlockMaxHeight.Location = new System.Drawing.Point(602, 19);
             this.DeskewBlockMaxHeight.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -197,7 +197,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(320, 25);
+            this.label14.Location = new System.Drawing.Point(506, 25);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(94, 13);
             this.label14.TabIndex = 82;
@@ -257,7 +257,7 @@
             // 
             // DeskewBlockMinGap
             // 
-            this.DeskewBlockMinGap.Location = new System.Drawing.Point(416, 41);
+            this.DeskewBlockMinGap.Location = new System.Drawing.Point(602, 41);
             this.DeskewBlockMinGap.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -280,7 +280,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(320, 47);
+            this.label4.Location = new System.Drawing.Point(506, 47);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(80, 13);
             this.label4.TabIndex = 95;
@@ -312,73 +312,10 @@
             this.gDeskew.TabStop = false;
             this.gDeskew.Text = "Deskew:";
             // 
-            // DeskewContourMaxCount
-            // 
-            this.DeskewContourMaxCount.Location = new System.Drawing.Point(596, 19);
-            this.DeskewContourMaxCount.Maximum = new decimal(new int[] {
-            999,
-            0,
-            0,
-            0});
-            this.DeskewContourMaxCount.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.DeskewContourMaxCount.Name = "DeskewContourMaxCount";
-            this.DeskewContourMaxCount.Size = new System.Drawing.Size(57, 20);
-            this.DeskewContourMaxCount.TabIndex = 106;
-            this.DeskewContourMaxCount.Value = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            // 
-            // DeskewAngleMaxDeviation
-            // 
-            this.DeskewAngleMaxDeviation.DecimalPlaces = 3;
-            this.DeskewAngleMaxDeviation.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.DeskewAngleMaxDeviation.Location = new System.Drawing.Point(596, 41);
-            this.DeskewAngleMaxDeviation.Maximum = new decimal(new int[] {
-            45,
-            0,
-            0,
-            0});
-            this.DeskewAngleMaxDeviation.Name = "DeskewAngleMaxDeviation";
-            this.DeskewAngleMaxDeviation.Size = new System.Drawing.Size(57, 20);
-            this.DeskewAngleMaxDeviation.TabIndex = 108;
-            this.DeskewAngleMaxDeviation.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(483, 47);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(108, 13);
-            this.label8.TabIndex = 107;
-            this.label8.Text = "Angle Max Deviation:";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(483, 25);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(101, 13);
-            this.label9.TabIndex = 105;
-            this.label9.Text = "Contour Max Count:";
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(214, 47);
+            this.label5.Location = new System.Drawing.Point(400, 47);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(91, 13);
             this.label5.TabIndex = 100;
@@ -387,7 +324,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(214, 25);
+            this.label6.Location = new System.Drawing.Point(400, 25);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(66, 13);
             this.label6.TabIndex = 101;
@@ -397,7 +334,7 @@
             // 
             this.DeskewColumnOfBlocks.AutoSize = true;
             this.DeskewColumnOfBlocks.Checked = true;
-            this.DeskewColumnOfBlocks.Location = new System.Drawing.Point(198, 47);
+            this.DeskewColumnOfBlocks.Location = new System.Drawing.Point(384, 47);
             this.DeskewColumnOfBlocks.Name = "DeskewColumnOfBlocks";
             this.DeskewColumnOfBlocks.Size = new System.Drawing.Size(14, 13);
             this.DeskewColumnOfBlocks.TabIndex = 104;
@@ -407,7 +344,7 @@
             // DeskewSingleBlock
             // 
             this.DeskewSingleBlock.AutoSize = true;
-            this.DeskewSingleBlock.Location = new System.Drawing.Point(198, 24);
+            this.DeskewSingleBlock.Location = new System.Drawing.Point(384, 24);
             this.DeskewSingleBlock.Name = "DeskewSingleBlock";
             this.DeskewSingleBlock.Size = new System.Drawing.Size(14, 13);
             this.DeskewSingleBlock.TabIndex = 103;
@@ -475,6 +412,69 @@
             this.label10.TabIndex = 97;
             this.label10.Text = "Structuring Element X:";
             // 
+            // DeskewContourMaxCount
+            // 
+            this.DeskewContourMaxCount.Location = new System.Drawing.Point(302, 18);
+            this.DeskewContourMaxCount.Maximum = new decimal(new int[] {
+            999,
+            0,
+            0,
+            0});
+            this.DeskewContourMaxCount.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.DeskewContourMaxCount.Name = "DeskewContourMaxCount";
+            this.DeskewContourMaxCount.Size = new System.Drawing.Size(57, 20);
+            this.DeskewContourMaxCount.TabIndex = 110;
+            this.DeskewContourMaxCount.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            // 
+            // DeskewAngleMaxDeviation
+            // 
+            this.DeskewAngleMaxDeviation.DecimalPlaces = 3;
+            this.DeskewAngleMaxDeviation.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.DeskewAngleMaxDeviation.Location = new System.Drawing.Point(302, 40);
+            this.DeskewAngleMaxDeviation.Maximum = new decimal(new int[] {
+            45,
+            0,
+            0,
+            0});
+            this.DeskewAngleMaxDeviation.Name = "DeskewAngleMaxDeviation";
+            this.DeskewAngleMaxDeviation.Size = new System.Drawing.Size(57, 20);
+            this.DeskewAngleMaxDeviation.TabIndex = 112;
+            this.DeskewAngleMaxDeviation.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(189, 46);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(108, 13);
+            this.label8.TabIndex = 111;
+            this.label8.Text = "Angle Max Deviation:";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(189, 24);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(101, 13);
+            this.label9.TabIndex = 109;
+            this.label9.Text = "Contour Max Count:";
+            // 
             // ScanTemplateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -496,10 +496,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.DeskewBlockMinGap)).EndInit();
             this.gDeskew.ResumeLayout(false);
             this.gDeskew.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DeskewContourMaxCount)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DeskewAngleMaxDeviation)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewStructuringElementX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewStructuringElementY)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DeskewContourMaxCount)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DeskewAngleMaxDeviation)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

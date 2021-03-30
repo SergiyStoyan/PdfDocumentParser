@@ -127,7 +127,6 @@ namespace Cliver.PdfDocumentParser
                         p.WaitForExit();
                         try
                         {
-                            ms.Close();//!!!it is critical for further cloning the bitmap!
                             return new System.Drawing.Bitmap(ms);
                         }
                         catch (Exception e)
@@ -149,7 +148,8 @@ namespace Cliver.PdfDocumentParser
                     System.Drawing.Bitmap b;// = (System.Drawing.Bitmap)System.Drawing.Image.FromFile(bufferFile);
                     using (var bt = new System.Drawing.Bitmap(bufferFile))//to free the file
                     {
-                        b = new System.Drawing.Bitmap(bt);
+                        b = new System.Drawing.Bitmap(bt);//!!!sets 96dpi
+                        b.SetResolution(resolution, resolution);
                     }
                     File.Delete(bufferFile);
                     return b;
@@ -283,7 +283,7 @@ namespace Cliver.PdfDocumentParser
                     l.CharBoxs.Add(cb);
                     lines.Add(l);
                 }
-                CONTINUE:;
+            CONTINUE:;
             }
             return lines;
         }

@@ -134,13 +134,14 @@ namespace Cliver.PdfDocumentParser
                     //Using the Graphics class to modify the clone (created with .Clone()) will not modify the original.
                     //Similarly, using the LockBits method yields different memory blocks for the original and clone.
                     //...change one random pixel to a random color on the clone... seems to trigger a copy of all pixel data from the original.
-                    Bitmap b = Bitmap.Clone(new Rectangle(0, 0, Bitmap.Width, Bitmap.Height), Bitmap.PixelFormat);//!!!throws from Tesseract: A generic error occurred in GDI+.
-                    //Bitmap b = new Bitmap(Bitmap);//!!!it sets to 96dpi
+                    //Bitmap b = Bitmap.Clone(new Rectangle(0, 0, Bitmap.Width, Bitmap.Height), Bitmap.PixelFormat);//!!!throws from Tesseract: A generic error occurred in GDI+.
+                    Bitmap b = new Bitmap(Bitmap);//!!!it sets to 96dpi
+                    b.SetResolution(Bitmap.HorizontalResolution, Bitmap.VerticalResolution);
                     //Bitmap b;
                     //using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
                     //{
                     //    Bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
-                    //    ms.Close();//!!!it seems to be critical
+                    //    //ms.Close();//!!!it seems to be critical
                     //    b = new Bitmap(ms);
                     //}
 
