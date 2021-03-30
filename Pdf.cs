@@ -149,7 +149,7 @@ namespace Cliver.PdfDocumentParser
                     using (var bt = new System.Drawing.Bitmap(bufferFile))//to free the file
                     {
                         b = new System.Drawing.Bitmap(bt);//!!!sets 96dpi
-                        b.SetResolution(resolution, resolution);
+                        b.SetResolution(bt.HorizontalResolution, bt.VerticalResolution);
                     }
                     File.Delete(bufferFile);
                     return b;
