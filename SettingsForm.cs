@@ -108,5 +108,13 @@ namespace Cliver.PdfDocumentParser
             if (cd.ShowDialog() == DialogResult.OK)
                 AscendantAnchorBoxColor.ForeColor = cd.Color;
         }
+
+        private void TableBoxColor_Click(object sender, EventArgs e)
+        {
+            ColorDialog cd = new ColorDialog();
+            cd.Color = Settings.Appearance.TableBoxColor;
+            if (cd.ShowDialog() == DialogResult.OK)
+                TableBoxColor.ForeColor = cd.Color;
+        }
     }
 }

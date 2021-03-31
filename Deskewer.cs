@@ -27,7 +27,7 @@ namespace Cliver.PdfDocumentParser
             public Size StructuringElementSize = new Size(30, 1);
             public int ContourMaxCount = 10;
             public float AngleMaxDeviation = 1;
-            //public Color SeamColor = Color.Yellow;
+            public Color SeamColor = Color.LightGreen;
         }
         public enum Modes
         {
@@ -48,10 +48,10 @@ namespace Cliver.PdfDocumentParser
             switch (config.Mode)
             {
                 case Modes.SingleBlock:
-                    DeskewAsSingleBlock(ref bitmap, structuringElementSize, config.ContourMaxCount, config.AngleMaxDeviation);
+                    DeskewAsSingleBlock(ref bitmap, structuringElementSize, config.ContourMaxCount, config.AngleMaxDeviation, config.SeamColor);
                     break;
                 case Modes.ColumnOfBlocks:
-                    DeskewAsColumnOfBlocks(ref bitmap, blockMaxLength, blockMinGap, structuringElementSize, config.ContourMaxCount, config.AngleMaxDeviation);
+                    DeskewAsColumnOfBlocks(ref bitmap, blockMaxLength, blockMinGap, structuringElementSize, config.ContourMaxCount, config.AngleMaxDeviation, config.SeamColor);
                     break;
                 case Modes.RowOfBlocks:
                     throw new Exception("not implemented");
@@ -61,19 +61,21 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        static public void DeskewAsSingleBlock(ref Bitmap bitmap, Size structuringElementSize, int contourMaxCount, double angleMaxDeviation)//good
+        static public void DeskewAsSingleBlock(ref Bitmap bitmap, Size structuringElementSize, int contourMaxCount, double angleMaxDeviation, Color seamColor)//good
         {
+            (float H, float V) dpi = (H: bitmap.HorizontalResolution, V: bitmap.VerticalResolution);
             using (Image<Rgb, byte> image = bitmap.ToImage<Rgb, byte>())
             {
                 bitmap.Dispose();
-                Image<Rgb, byte> deskewedImage = deskew(image, structuringElementSize, contourMaxCount, angleMaxDeviation, new Size(30, 30));
-                deskewedImage.ROI = getNonBlack(deskewedImage);//crop
+                Rgb seamRgb = new Rgb(seamColor);
+                Image<Rgb, byte> deskewedImage = deskew(image, structuringElementSize, contourMaxCount, angleMaxDeviation, new Size(30, 30), seamRgb);
+                deskewedImage.ROI = getCropped(deskewedImage, seamRgb);//crop
                 bitmap = deskewedImage?.ToBitmap();
             }
-            bitmap.SetResolution(Settings.Constants.PdfPageImageResolution, Settings.Constants.PdfPageImageResolution);
+            bitmap.SetResolution(dpi.H, dpi.V);
         }
 
-        static Image<Rgb, byte> deskew(Image<Rgb, byte> image, Size structuringElementSize, int contourMaxCount, double angleMaxDeviation, Size offset)//good
+        static Image<Rgb, byte> deskew(Image<Rgb, byte> image, Size structuringElementSize, int contourMaxCount, double angleMaxDeviation, Size offset, Rgb seamRgb)//good
         {//https://becominghuman.ai/how-to-automatically-deskew-straighten-a-text-image-using-opencv-a0c30aed83df
             Image<Gray, byte> image2 = image.Convert<Gray, byte>();
             CvInvoke.BitwiseNot(image2, image2);//to negative
@@ -83,7 +85,7 @@ namespace Cliver.PdfDocumentParser
             CvInvoke.Dilate(image2, image2, se, new Point(-1, -1), 1, BorderType.Constant, CvInvoke.MorphologyDefaultBorderValue);
             //Emgu.CV.CvInvoke.Erode(image, image, null, new Point(-1, -1), 1, BorderType.Constant, CvInvoke.MorphologyDefaultBorderValue);
 
-            Image<Rgb, byte> image3 = new Image<Rgb, byte>(image.Width + 2 * offset.Width, image.Height + 2 * offset.Height);
+            Image<Rgb, byte> image3 = new Image<Rgb, byte>(image.Width + 2 * offset.Width, image.Height + 2 * offset.Height, seamRgb);
             image3.ROI = new Rectangle(new Point(offset.Width, offset.Height), image.Size);
             image.CopyTo(image3);
             image3.ROI = Rectangle.Empty;
@@ -139,17 +141,20 @@ namespace Cliver.PdfDocumentParser
 
             RotationMatrix2D rotationMat = new RotationMatrix2D();
             CvInvoke.GetRotationMatrix2D(new PointF((float)image3.Width / 2, (float)image3.Height / 2), angle, 1, rotationMat);
-            CvInvoke.WarpAffine(image3, image3, rotationMat, image3.Size);
+            //image3.ROI = new Rectangle(new Point(offset.Width, offset.Height), image.Size);
+            CvInvoke.WarpAffine(image3, image3, rotationMat, image3.Size, borderValue: seamRgb.MCvScalar);
             return image3;
         }
 
-        static public void DeskewAsColumnOfBlocks(ref Bitmap bitmap, int blockMaxLength, int blockMinGap, Size structuringElementSize, int contourMaxCount, double angleMaxDeviation/*, Color seamColor*/)
+        static public void DeskewAsColumnOfBlocks(ref Bitmap bitmap, int blockMaxLength, int blockMinGap, Size structuringElementSize, int contourMaxCount, double angleMaxDeviation, Color seamColor)
         {
+            (float H, float V) dpi = (H: bitmap.HorizontalResolution, V: bitmap.VerticalResolution);
+            Rgb seamRgb = new Rgb(seamColor);
             using (Image<Rgb, byte> image = bitmap.ToImage<Rgb, byte>())
             {
                 bitmap.Dispose();
                 Size offset = new Size(50, 50);
-                Image<Rgb, byte> deskewedImage = new Image<Rgb, byte>(image.Width + 2 * offset.Width, image.Height/* + 2 * offset.Height*//*, new Rgb(seamColor)*/);
+                Image<Rgb, byte> deskewedImage = new Image<Rgb, byte>(image.Width + 2 * offset.Width, image.Height/* + 2 * offset.Height*/, new Rgb(seamColor));
 
                 //int lastBlockBottomLeft = -1;
                 //int lastBlockBottomRight = -1;
@@ -209,7 +214,7 @@ namespace Cliver.PdfDocumentParser
 
                     Rectangle blockRectangle = new Rectangle(0, blockY, image2.Width, blockBottom + 1 - blockY);
                     Image<Rgb, byte> blockImage = image.Copy(blockRectangle);
-                    Image<Rgb, byte> deskewedBlockImage = deskew(blockImage, structuringElementSize, contourMaxCount, angleMaxDeviation, offset);
+                    Image<Rgb, byte> deskewedBlockImage = deskew(blockImage, structuringElementSize, contourMaxCount, angleMaxDeviation, offset, seamRgb);
                     //int blockTopLeft = findOffsetLeft(deskewedBlockImage, 10).X;
                     //int blockTopRight = findOffsetRight(deskewedBlockImage, 10).X;
                     //if (lastBlockBottomLeft < 0)
@@ -227,22 +232,22 @@ namespace Cliver.PdfDocumentParser
                     // break;
                     blockY = blockBottom + 1;
                 }
-                deskewedImage.ROI = getNonBlack(deskewedImage);//crop
+                deskewedImage.ROI = getCropped(deskewedImage, seamRgb);//crop
                 bitmap = deskewedImage?.ToBitmap();
             }
-            bitmap.SetResolution(Settings.Constants.PdfPageImageResolution, Settings.Constants.PdfPageImageResolution);
+            bitmap.SetResolution(dpi.H, dpi.V);
         }
 
-        static Rectangle getNonBlack(Image<Rgb, byte> image)
+        static Rectangle getCropped(Image<Rgb, byte> image, Rgb cropRgb)
         {
-            int offsetLeft = findOffset(image, Side.Left, image.Height).X;
-            int offsetRight = findOffset(image, Side.Right, image.Height).X;
-            int offsetTop = findOffset(image, Side.Top, image.Width).Y;
-            int offsetBottom = findOffset(image, Side.Bottom, image.Width).Y;
+            int offsetLeft = findOffset(image, Side.Left, image.Height, cropRgb).X;
+            int offsetRight = findOffset(image, Side.Right, image.Height, cropRgb).X;
+            int offsetTop = findOffset(image, Side.Top, image.Width, cropRgb).Y;
+            int offsetBottom = findOffset(image, Side.Bottom, image.Width, cropRgb).Y;
             return new Rectangle(offsetLeft, offsetTop, offsetRight - offsetLeft + 1, offsetBottom - offsetTop + 1);
         }
 
-        static Point findOffset(Image<Rgb, byte> image, Side side, int maxLenght)
+        static Point findOffset(Image<Rgb, byte> image, Side side, int maxLenght, Rgb cropRgb)
         {
             int width = image.Data.GetLength(1);
             int height = image.Data.GetLength(0);
@@ -265,13 +270,13 @@ namespace Cliver.PdfDocumentParser
                     {
                         for (int x = 0; x < width; x++)
                             for (int y = y1; y < y2; y++)
-                                if (image.Data[y, x, 0] > 0 || image.Data[y, x, 1] > 0 || image.Data[y, x, 2] > 0)
+                                if (image.Data[y, x, 0] != cropRgb.Red || image.Data[y, x, 1] != cropRgb.Green || image.Data[y, x, 2] != cropRgb.Blue)
                                     return new Point(x, y);
                     }
                     else
                         for (int x = width - 1; x >= 0; x--)
                             for (int y = y1; y < y2; y++)
-                                if (image.Data[y, x, 0] > 0 || image.Data[y, x, 1] > 0 || image.Data[y, x, 2] > 0)
+                                if (image.Data[y, x, 0] != cropRgb.Red || image.Data[y, x, 1] != cropRgb.Green || image.Data[y, x, 2] != cropRgb.Blue)
                                     return new Point(x, y);
                     break;
                 case Side.Top:
@@ -291,13 +296,13 @@ namespace Cliver.PdfDocumentParser
                     {
                         for (int y = 0; y < height; y++)
                             for (int x = x1; x < x2; x++)
-                                if (image.Data[y, x, 0] > 0 || image.Data[y, x, 1] > 0 || image.Data[y, x, 2] > 0)
+                                if (image.Data[y, x, 0] != cropRgb.Red || image.Data[y, x, 1] != cropRgb.Green || image.Data[y, x, 2] != cropRgb.Blue)
                                     return new Point(x, y);
                     }
                     else
                         for (int y = height - 1; y >= 0; y--)
                             for (int x = x1; x < x2; x++)
-                                if (image.Data[y, x, 0] > 0 || image.Data[y, x, 1] > 0 || image.Data[y, x, 2] > 0)
+                                if (image.Data[y, x, 0] != cropRgb.Red || image.Data[y, x, 1] != cropRgb.Green || image.Data[y, x, 2] != cropRgb.Blue)
                                     return new Point(x, y);
                     break;
                 default:

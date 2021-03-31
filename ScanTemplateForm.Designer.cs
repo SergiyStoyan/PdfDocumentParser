@@ -46,6 +46,10 @@
             this.DeskewBlockMinGap = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
             this.gDeskew = new System.Windows.Forms.GroupBox();
+            this.DeskewContourMaxCount = new System.Windows.Forms.NumericUpDown();
+            this.DeskewAngleMaxDeviation = new System.Windows.Forms.NumericUpDown();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.DeskewColumnOfBlocks = new System.Windows.Forms.RadioButton();
@@ -55,24 +59,22 @@
             this.DeskewStructuringElementY = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.DeskewContourMaxCount = new System.Windows.Forms.NumericUpDown();
-            this.DeskewAngleMaxDeviation = new System.Windows.Forms.NumericUpDown();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.DeskewSeamColor = new System.Windows.Forms.Button();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewBlockMaxHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewBlockMinGap)).BeginInit();
             this.gDeskew.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DeskewStructuringElementX)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DeskewStructuringElementY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewContourMaxCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewAngleMaxDeviation)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DeskewStructuringElementX)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DeskewStructuringElementY)).BeginInit();
             this.SuspendLayout();
             // 
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bCancel.Location = new System.Drawing.Point(787, 3);
+            this.bCancel.Location = new System.Drawing.Point(863, 3);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 50;
@@ -91,13 +93,13 @@
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 375);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(865, 31);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(941, 31);
             this.flowLayoutPanel1.TabIndex = 60;
             // 
             // bApply
             // 
             this.bApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bApply.Location = new System.Drawing.Point(706, 3);
+            this.bApply.Location = new System.Drawing.Point(782, 3);
             this.bApply.Name = "bApply";
             this.bApply.Size = new System.Drawing.Size(75, 23);
             this.bApply.TabIndex = 51;
@@ -115,7 +117,7 @@
             "↻ 180°",
             "↺ 90°",
             "Auto"});
-            this.defaultBitmapPreprocessorClassDefinitions.Location = new System.Drawing.Point(479, 3);
+            this.defaultBitmapPreprocessorClassDefinitions.Location = new System.Drawing.Point(555, 3);
             this.defaultBitmapPreprocessorClassDefinitions.Name = "defaultBitmapPreprocessorClassDefinitions";
             this.defaultBitmapPreprocessorClassDefinitions.Size = new System.Drawing.Size(221, 21);
             this.defaultBitmapPreprocessorClassDefinitions.TabIndex = 85;
@@ -124,7 +126,7 @@
             // bRemove
             // 
             this.bRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bRemove.Location = new System.Drawing.Point(439, 3);
+            this.bRemove.Location = new System.Drawing.Point(515, 3);
             this.bRemove.Name = "bRemove";
             this.bRemove.Size = new System.Drawing.Size(34, 23);
             this.bRemove.TabIndex = 52;
@@ -135,7 +137,7 @@
             // bSaveDafault
             // 
             this.bSaveDafault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bSaveDafault.Location = new System.Drawing.Point(399, 3);
+            this.bSaveDafault.Location = new System.Drawing.Point(475, 3);
             this.bSaveDafault.Name = "bSaveDafault";
             this.bSaveDafault.Size = new System.Drawing.Size(34, 23);
             this.bSaveDafault.TabIndex = 53;
@@ -154,7 +156,7 @@
             this.bitmapPreprocessorClassDefinition.Margin = new System.Windows.Forms.Padding(1);
             this.bitmapPreprocessorClassDefinition.Name = "bitmapPreprocessorClassDefinition";
             this.bitmapPreprocessorClassDefinition.ShowVRuler = false;
-            this.bitmapPreprocessorClassDefinition.Size = new System.Drawing.Size(865, 277);
+            this.bitmapPreprocessorClassDefinition.Size = new System.Drawing.Size(941, 277);
             this.bitmapPreprocessorClassDefinition.TabIndex = 78;
             // 
             // DeskewBlockMaxHeight
@@ -288,6 +290,8 @@
             // 
             // gDeskew
             // 
+            this.gDeskew.Controls.Add(this.label11);
+            this.gDeskew.Controls.Add(this.DeskewSeamColor);
             this.gDeskew.Controls.Add(this.DeskewContourMaxCount);
             this.gDeskew.Controls.Add(this.DeskewAngleMaxDeviation);
             this.gDeskew.Controls.Add(this.label8);
@@ -307,10 +311,73 @@
             this.gDeskew.Controls.Add(this.label14);
             this.gDeskew.Location = new System.Drawing.Point(181, 14);
             this.gDeskew.Name = "gDeskew";
-            this.gDeskew.Size = new System.Drawing.Size(672, 72);
+            this.gDeskew.Size = new System.Drawing.Size(747, 72);
             this.gDeskew.TabIndex = 99;
             this.gDeskew.TabStop = false;
             this.gDeskew.Text = "Deskew:";
+            // 
+            // DeskewContourMaxCount
+            // 
+            this.DeskewContourMaxCount.Location = new System.Drawing.Point(302, 18);
+            this.DeskewContourMaxCount.Maximum = new decimal(new int[] {
+            999,
+            0,
+            0,
+            0});
+            this.DeskewContourMaxCount.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.DeskewContourMaxCount.Name = "DeskewContourMaxCount";
+            this.DeskewContourMaxCount.Size = new System.Drawing.Size(57, 20);
+            this.DeskewContourMaxCount.TabIndex = 110;
+            this.DeskewContourMaxCount.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            // 
+            // DeskewAngleMaxDeviation
+            // 
+            this.DeskewAngleMaxDeviation.DecimalPlaces = 3;
+            this.DeskewAngleMaxDeviation.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.DeskewAngleMaxDeviation.Location = new System.Drawing.Point(302, 40);
+            this.DeskewAngleMaxDeviation.Maximum = new decimal(new int[] {
+            45,
+            0,
+            0,
+            0});
+            this.DeskewAngleMaxDeviation.Name = "DeskewAngleMaxDeviation";
+            this.DeskewAngleMaxDeviation.Size = new System.Drawing.Size(57, 20);
+            this.DeskewAngleMaxDeviation.TabIndex = 112;
+            this.DeskewAngleMaxDeviation.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(189, 46);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(108, 13);
+            this.label8.TabIndex = 111;
+            this.label8.Text = "Angle Max Deviation:";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(189, 24);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(101, 13);
+            this.label9.TabIndex = 109;
+            this.label9.Text = "Contour Max Count:";
             // 
             // label5
             // 
@@ -412,74 +479,33 @@
             this.label10.TabIndex = 97;
             this.label10.Text = "Structuring Element X:";
             // 
-            // DeskewContourMaxCount
+            // label11
             // 
-            this.DeskewContourMaxCount.Location = new System.Drawing.Point(302, 18);
-            this.DeskewContourMaxCount.Maximum = new decimal(new int[] {
-            999,
-            0,
-            0,
-            0});
-            this.DeskewContourMaxCount.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.DeskewContourMaxCount.Name = "DeskewContourMaxCount";
-            this.DeskewContourMaxCount.Size = new System.Drawing.Size(57, 20);
-            this.DeskewContourMaxCount.TabIndex = 110;
-            this.DeskewContourMaxCount.Value = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
+            this.label11.AutoSize = true;
+            this.label11.BackColor = System.Drawing.SystemColors.Control;
+            this.label11.Location = new System.Drawing.Point(674, 25);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(64, 13);
+            this.label11.TabIndex = 113;
+            this.label11.Text = "Seam Color:";
             // 
-            // DeskewAngleMaxDeviation
+            // DeskewSeamColor
             // 
-            this.DeskewAngleMaxDeviation.DecimalPlaces = 3;
-            this.DeskewAngleMaxDeviation.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.DeskewAngleMaxDeviation.Location = new System.Drawing.Point(302, 40);
-            this.DeskewAngleMaxDeviation.Maximum = new decimal(new int[] {
-            45,
-            0,
-            0,
-            0});
-            this.DeskewAngleMaxDeviation.Name = "DeskewAngleMaxDeviation";
-            this.DeskewAngleMaxDeviation.Size = new System.Drawing.Size(57, 20);
-            this.DeskewAngleMaxDeviation.TabIndex = 112;
-            this.DeskewAngleMaxDeviation.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(189, 46);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(108, 13);
-            this.label8.TabIndex = 111;
-            this.label8.Text = "Angle Max Deviation:";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(189, 24);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(101, 13);
-            this.label9.TabIndex = 109;
-            this.label9.Text = "Contour Max Count:";
+            this.DeskewSeamColor.BackColor = System.Drawing.Color.LightGreen;
+            this.DeskewSeamColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DeskewSeamColor.ForeColor = System.Drawing.SystemColors.Control;
+            this.DeskewSeamColor.Location = new System.Drawing.Point(677, 41);
+            this.DeskewSeamColor.Name = "DeskewSeamColor";
+            this.DeskewSeamColor.Size = new System.Drawing.Size(61, 18);
+            this.DeskewSeamColor.TabIndex = 114;
+            this.DeskewSeamColor.UseVisualStyleBackColor = false;
+            this.DeskewSeamColor.Click += new System.EventHandler(this.DeskewSeamColor_Click);
             // 
             // ScanTemplateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(865, 406);
+            this.ClientSize = new System.Drawing.Size(941, 406);
             this.Controls.Add(this.gDeskew);
             this.Controls.Add(this.ScalingAnchor);
             this.Controls.Add(this.label3);
@@ -496,10 +522,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.DeskewBlockMinGap)).EndInit();
             this.gDeskew.ResumeLayout(false);
             this.gDeskew.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DeskewStructuringElementX)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DeskewStructuringElementY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewContourMaxCount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewAngleMaxDeviation)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DeskewStructuringElementX)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DeskewStructuringElementY)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -537,5 +563,7 @@
         private System.Windows.Forms.NumericUpDown DeskewAngleMaxDeviation;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Button DeskewSeamColor;
     }
 }

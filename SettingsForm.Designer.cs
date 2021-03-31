@@ -36,6 +36,8 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.About = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.TextLineSeparatorWidth = new System.Windows.Forms.NumericUpDown();
+            this.label9 = new System.Windows.Forms.Label();
             this.TableBoxBorderWidth = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
             this.AscendantAnchorBoxBorderWidth = new System.Windows.Forms.NumericUpDown();
@@ -54,11 +56,10 @@
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.CoordinateDeviationMargin = new System.Windows.Forms.NumericUpDown();
-            this.TextLineSeparatorWidth = new System.Windows.Forms.NumericUpDown();
-            this.label9 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.PdfPageImageResolution)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TextLineSeparatorWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TableBoxBorderWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AscendantAnchorBoxBorderWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AnchorBoxBorderWidth)).BeginInit();
@@ -66,7 +67,6 @@
             this.panel2.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CoordinateDeviationMargin)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.TextLineSeparatorWidth)).BeginInit();
             this.SuspendLayout();
             // 
             // PdfPageImageResolution
@@ -178,6 +178,33 @@
             this.groupBox3.TabIndex = 59;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Appearance";
+            // 
+            // TextLineSeparatorWidth
+            // 
+            this.TextLineSeparatorWidth.Location = new System.Drawing.Point(234, 193);
+            this.TextLineSeparatorWidth.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.TextLineSeparatorWidth.Name = "TextLineSeparatorWidth";
+            this.TextLineSeparatorWidth.Size = new System.Drawing.Size(42, 20);
+            this.TextLineSeparatorWidth.TabIndex = 65;
+            this.TextLineSeparatorWidth.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.BackColor = System.Drawing.SystemColors.Control;
+            this.label9.Location = new System.Drawing.Point(15, 195);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(134, 13);
+            this.label9.TabIndex = 64;
+            this.label9.Text = "Text Line Separator Width:";
             // 
             // TableBoxBorderWidth
             // 
@@ -310,6 +337,7 @@
             this.TableBoxColor.TabIndex = 58;
             this.TableBoxColor.Text = "...";
             this.TableBoxColor.UseVisualStyleBackColor = false;
+            this.TableBoxColor.Click += new System.EventHandler(this.TableBoxColor_Click);
             // 
             // AscendantAnchorBoxColor
             // 
@@ -415,33 +443,6 @@
             0,
             196608});
             // 
-            // TextLineSeparatorWidth
-            // 
-            this.TextLineSeparatorWidth.Location = new System.Drawing.Point(234, 193);
-            this.TextLineSeparatorWidth.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.TextLineSeparatorWidth.Name = "TextLineSeparatorWidth";
-            this.TextLineSeparatorWidth.Size = new System.Drawing.Size(42, 20);
-            this.TextLineSeparatorWidth.TabIndex = 65;
-            this.TextLineSeparatorWidth.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.BackColor = System.Drawing.SystemColors.Control;
-            this.label9.Location = new System.Drawing.Point(15, 195);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(134, 13);
-            this.label9.TabIndex = 64;
-            this.label9.Text = "Text Line Separator Width:";
-            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -456,6 +457,7 @@
             this.flowLayoutPanel1.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TextLineSeparatorWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TableBoxBorderWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.AscendantAnchorBoxBorderWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.AnchorBoxBorderWidth)).EndInit();
@@ -464,7 +466,6 @@
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CoordinateDeviationMargin)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.TextLineSeparatorWidth)).EndInit();
             this.ResumeLayout(false);
 
         }
