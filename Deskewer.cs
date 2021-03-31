@@ -149,12 +149,12 @@ namespace Cliver.PdfDocumentParser
         static public void DeskewAsColumnOfBlocks(ref Bitmap bitmap, int blockMaxLength, int blockMinGap, Size structuringElementSize, int contourMaxCount, double angleMaxDeviation, Color seamColor)
         {
             (float H, float V) dpi = (H: bitmap.HorizontalResolution, V: bitmap.VerticalResolution);
-            Rgb seamRgb = new Rgb(seamColor);
             using (Image<Rgb, byte> image = bitmap.ToImage<Rgb, byte>())
             {
                 bitmap.Dispose();
                 Size offset = new Size(50, 50);
-                Image<Rgb, byte> deskewedImage = new Image<Rgb, byte>(image.Width + 2 * offset.Width, image.Height/* + 2 * offset.Height*/, new Rgb(seamColor));
+                Rgb seamRgb = new Rgb(seamColor);
+                Image<Rgb, byte> deskewedImage = new Image<Rgb, byte>(image.Width + 2 * offset.Width, image.Height/* + 2 * offset.Height*/, seamRgb);
 
                 //int lastBlockBottomLeft = -1;
                 //int lastBlockBottomRight = -1;
@@ -249,8 +249,6 @@ namespace Cliver.PdfDocumentParser
 
         static Point findOffset(Image<Rgb, byte> image, Side side, int maxLenght, Rgb cropRgb)
         {
-            int width = image.Data.GetLength(1);
-            int height = image.Data.GetLength(0);
             switch (side)
             {
                 case Side.Left:
@@ -259,22 +257,22 @@ namespace Cliver.PdfDocumentParser
                     if (maxLenght >= 0)
                     {
                         y1 = 0;
-                        y2 = height > maxLenght ? maxLenght : height;
+                        y2 = image.Height > maxLenght ? maxLenght : image.Height;
                     }
                     else
                     {
-                        y1 = height > -maxLenght ? height + maxLenght : 0 - 1;
-                        y2 = height;
+                        y1 = image.Height > -maxLenght ? image.Height + maxLenght : 0 - 1;
+                        y2 = image.Height;
                     }
                     if (side == Side.Left)
                     {
-                        for (int x = 0; x < width; x++)
+                        for (int x = 0; x < image.Width; x++)
                             for (int y = y1; y < y2; y++)
                                 if (image.Data[y, x, 0] != cropRgb.Red || image.Data[y, x, 1] != cropRgb.Green || image.Data[y, x, 2] != cropRgb.Blue)
                                     return new Point(x, y);
                     }
                     else
-                        for (int x = width - 1; x >= 0; x--)
+                        for (int x = image.Width - 1; x >= 0; x--)
                             for (int y = y1; y < y2; y++)
                                 if (image.Data[y, x, 0] != cropRgb.Red || image.Data[y, x, 1] != cropRgb.Green || image.Data[y, x, 2] != cropRgb.Blue)
                                     return new Point(x, y);
@@ -285,22 +283,22 @@ namespace Cliver.PdfDocumentParser
                     if (maxLenght >= 0)
                     {
                         x1 = 0;
-                        x2 = width > maxLenght ? maxLenght : width;
+                        x2 = image.Width > maxLenght ? maxLenght : image.Width;
                     }
                     else
                     {
-                        x1 = width > -maxLenght ? width + maxLenght : 0 - 1;
-                        x2 = width;
+                        x1 = image.Width > -maxLenght ? image.Width + maxLenght : 0 - 1;
+                        x2 = image.Width;
                     }
                     if (side == Side.Top)
                     {
-                        for (int y = 0; y < height; y++)
+                        for (int y = 0; y < image.Height; y++)
                             for (int x = x1; x < x2; x++)
                                 if (image.Data[y, x, 0] != cropRgb.Red || image.Data[y, x, 1] != cropRgb.Green || image.Data[y, x, 2] != cropRgb.Blue)
                                     return new Point(x, y);
                     }
                     else
-                        for (int y = height - 1; y >= 0; y--)
+                        for (int y = image.Height - 1; y >= 0; y--)
                             for (int x = x1; x < x2; x++)
                                 if (image.Data[y, x, 0] != cropRgb.Red || image.Data[y, x, 1] != cropRgb.Green || image.Data[y, x, 2] != cropRgb.Blue)
                                     return new Point(x, y);
