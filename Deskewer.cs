@@ -22,8 +22,8 @@ namespace Cliver.PdfDocumentParser
         public class Config
         {
             public Modes Mode = Modes.SingleBlock;
-            public int BlockMaxLength = 1000;
-            public int BlockMinGap = 20;
+            public int BlockMaxLength = 400;
+            public int BlockMinGap = 6;
             public Size StructuringElementSize = new Size(30, 1);
             public int ContourMaxCount = 10;
             public float AngleMaxDeviation = 1;
@@ -34,8 +34,8 @@ namespace Cliver.PdfDocumentParser
             SingleBlock = 1,//default
             ColumnOfBlocks = 2,
             RowOfBlocks = 4,
-            ByBlockWithMaxLength = 7,//default
-            ByMostUnidirectedBlocks = 8,
+            //ByBlockWithMaxLength = 7,//default
+            //ByMostUnidirectedBlocks = 8,
         }
 
         //public Size Offset = new Size(50, 50);
