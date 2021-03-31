@@ -22,23 +22,21 @@ namespace Cliver.PdfDocumentParser
         public class Config
         {
             public Modes Mode = Modes.SingleBlock;
-            public int BlockMaxLength = 1000;
-            public int BlockMinGap = 20;
+            public int BlockMaxLength = 400;
+            public int BlockMinGap = 6;
             public Size StructuringElementSize = new Size(30, 1);
             public int ContourMaxCount = 10;
             public float AngleMaxDeviation = 1;
-            public Color SeamColor = Color.LightGreen;
+            public Color MarginColor = Color.FromArgb(255, 210, 210);
         }
         public enum Modes
         {
             SingleBlock = 1,//default
             ColumnOfBlocks = 2,
             RowOfBlocks = 4,
-            ByBlockWithMaxLength = 7,//default
-            ByMostUnidirectedBlocks = 8,
+            //ByBlockWithMaxLength = 7,//default
+            //ByMostUnidirectedBlocks = 8,
         }
-
-        //public Size Offset = new Size(50, 50);
 
         static public void Deskew(ref Bitmap bitmap, Config config)
         {
@@ -48,10 +46,10 @@ namespace Cliver.PdfDocumentParser
             switch (config.Mode)
             {
                 case Modes.SingleBlock:
-                    DeskewAsSingleBlock(ref bitmap, structuringElementSize, config.ContourMaxCount, config.AngleMaxDeviation, config.SeamColor);
+                    DeskewAsSingleBlock(ref bitmap, structuringElementSize, config.ContourMaxCount, config.AngleMaxDeviation, config.MarginColor);
                     break;
                 case Modes.ColumnOfBlocks:
-                    DeskewAsColumnOfBlocks(ref bitmap, blockMaxLength, blockMinGap, structuringElementSize, config.ContourMaxCount, config.AngleMaxDeviation, config.SeamColor);
+                    DeskewAsColumnOfBlocks(ref bitmap, blockMaxLength, blockMinGap, structuringElementSize, config.ContourMaxCount, config.AngleMaxDeviation, config.MarginColor);
                     break;
                 case Modes.RowOfBlocks:
                     throw new Exception("not implemented");
@@ -61,21 +59,30 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        static public void DeskewAsSingleBlock(ref Bitmap bitmap, Size structuringElementSize, int contourMaxCount, double angleMaxDeviation, Color seamColor)//good
+        static public void DeskewAsSingleBlock(ref Bitmap bitmap, Size structuringElementSize, int contourMaxCount, double angleMaxDeviation, Color marginColor)//good
         {
             (float H, float V) dpi = (H: bitmap.HorizontalResolution, V: bitmap.VerticalResolution);
             using (Image<Rgb, byte> image = bitmap.ToImage<Rgb, byte>())
             {
                 bitmap.Dispose();
-                Rgb seamRgb = new Rgb(seamColor);
-                Image<Rgb, byte> deskewedImage = deskew(image, structuringElementSize, contourMaxCount, angleMaxDeviation, new Size(30, 30), seamRgb);
-                deskewedImage.ROI = getCropped(deskewedImage, seamRgb);//crop
+                Rgb marginRgb = new Rgb(marginColor);
+                Image<Rgb, byte> deskewedImage = deskew(image, structuringElementSize, contourMaxCount, angleMaxDeviation, getScaledBlockMargin(), marginRgb);
+                deskewedImage.ROI = getCropped(deskewedImage, marginRgb);//crop
                 bitmap = deskewedImage?.ToBitmap();
             }
             bitmap.SetResolution(dpi.H, dpi.V);
         }
 
-        static Image<Rgb, byte> deskew(Image<Rgb, byte> image, Size structuringElementSize, int contourMaxCount, double angleMaxDeviation, Size offset, Rgb seamRgb)//good
+        /// <summary>
+        /// Margin added to a block while deskewing it. It is cropped in the end.
+        /// </summary>
+        static public Size BlockMargin = new Size(5, 5);
+        static Size getScaledBlockMargin()
+        {
+            return new Size((int)(BlockMargin.Width / Settings.Constants.Image2PdfResolutionRatio), (int)(BlockMargin.Height / Settings.Constants.Image2PdfResolutionRatio));
+        }
+
+        static Image<Rgb, byte> deskew(Image<Rgb, byte> image, Size structuringElementSize, int contourMaxCount, double angleMaxDeviation, Size margin, Rgb marginRgb)//good
         {//https://becominghuman.ai/how-to-automatically-deskew-straighten-a-text-image-using-opencv-a0c30aed83df
             Image<Gray, byte> image2 = image.Convert<Gray, byte>();
             CvInvoke.BitwiseNot(image2, image2);//to negative
@@ -85,8 +92,8 @@ namespace Cliver.PdfDocumentParser
             CvInvoke.Dilate(image2, image2, se, new Point(-1, -1), 1, BorderType.Constant, CvInvoke.MorphologyDefaultBorderValue);
             //Emgu.CV.CvInvoke.Erode(image, image, null, new Point(-1, -1), 1, BorderType.Constant, CvInvoke.MorphologyDefaultBorderValue);
 
-            Image<Rgb, byte> image3 = new Image<Rgb, byte>(image.Width + 2 * offset.Width, image.Height + 2 * offset.Height, seamRgb);
-            image3.ROI = new Rectangle(new Point(offset.Width, offset.Height), image.Size);
+            Image<Rgb, byte> image3 = new Image<Rgb, byte>(image.Width + 2 * margin.Width, image.Height + 2 * margin.Height, marginRgb);
+            image3.ROI = new Rectangle(new Point(margin.Width, margin.Height), image.Size);
             image.CopyTo(image3);
             image3.ROI = Rectangle.Empty;
 
@@ -142,19 +149,19 @@ namespace Cliver.PdfDocumentParser
             RotationMatrix2D rotationMat = new RotationMatrix2D();
             CvInvoke.GetRotationMatrix2D(new PointF((float)image3.Width / 2, (float)image3.Height / 2), angle, 1, rotationMat);
             //image3.ROI = new Rectangle(new Point(offset.Width, offset.Height), image.Size);
-            CvInvoke.WarpAffine(image3, image3, rotationMat, image3.Size, borderValue: seamRgb.MCvScalar);
+            CvInvoke.WarpAffine(image3, image3, rotationMat, image3.Size, borderValue: marginRgb.MCvScalar);
             return image3;
         }
 
-        static public void DeskewAsColumnOfBlocks(ref Bitmap bitmap, int blockMaxLength, int blockMinGap, Size structuringElementSize, int contourMaxCount, double angleMaxDeviation, Color seamColor)
+        static public void DeskewAsColumnOfBlocks(ref Bitmap bitmap, int blockMaxLength, int blockMinGap, Size structuringElementSize, int contourMaxCount, double angleMaxDeviation, Color marginColor)
         {
             (float H, float V) dpi = (H: bitmap.HorizontalResolution, V: bitmap.VerticalResolution);
             using (Image<Rgb, byte> image = bitmap.ToImage<Rgb, byte>())
             {
                 bitmap.Dispose();
-                Size offset = new Size(50, 50);
-                Rgb seamRgb = new Rgb(seamColor);
-                Image<Rgb, byte> deskewedImage = new Image<Rgb, byte>(image.Width + 2 * offset.Width, image.Height/* + 2 * offset.Height*/, seamRgb);
+                Size margin = getScaledBlockMargin();
+                Rgb marginRgb = new Rgb(marginColor);
+                Image<Rgb, byte> deskewedImage = new Image<Rgb, byte>(image.Width + 2 * margin.Width, image.Height /*+ 2 * margin.Height*/, marginRgb);
 
                 //int lastBlockBottomLeft = -1;
                 //int lastBlockBottomRight = -1;
@@ -214,7 +221,7 @@ namespace Cliver.PdfDocumentParser
 
                     Rectangle blockRectangle = new Rectangle(0, blockY, image2.Width, blockBottom + 1 - blockY);
                     Image<Rgb, byte> blockImage = image.Copy(blockRectangle);
-                    Image<Rgb, byte> deskewedBlockImage = deskew(blockImage, structuringElementSize, contourMaxCount, angleMaxDeviation, offset, seamRgb);
+                    Image<Rgb, byte> deskewedBlockImage = deskew(blockImage, structuringElementSize, contourMaxCount, angleMaxDeviation, margin, marginRgb);
                     //int blockTopLeft = findOffsetLeft(deskewedBlockImage, 10).X;
                     //int blockTopRight = findOffsetRight(deskewedBlockImage, 10).X;
                     //if (lastBlockBottomLeft < 0)
@@ -223,7 +230,7 @@ namespace Cliver.PdfDocumentParser
                     //    lastBlockBottomRight = blockTopRight;
                     //deskewedBlockImage.ROI = new Rectangle(blockTopLeft, 0, blockTopRight - blockTopLeft, deskewedBlockImage.Height);
                     //deskewedImage.ROI = new Rectangle(lastBlockBottomLeft - ((blockTopRight - blockTopLeft) - (lastBlockBottomRight - lastBlockBottomLeft)) / 2, blockRectangle.Y, blockTopRight - blockTopLeft, deskewedBlockImage.Height);
-                    deskewedBlockImage.ROI = new Rectangle(0, offset.Height, deskewedBlockImage.Width, deskewedBlockImage.Height - 2 * offset.Height);
+                    deskewedBlockImage.ROI = new Rectangle(0, margin.Height, deskewedBlockImage.Width, deskewedBlockImage.Height - 2 * margin.Height);
                     deskewedImage.ROI = new Rectangle(0, blockRectangle.Y, deskewedBlockImage.ROI.Width, deskewedBlockImage.ROI.Height);
                     deskewedBlockImage.CopyTo(deskewedImage);
                     deskewedImage.ROI = Rectangle.Empty;
@@ -232,7 +239,7 @@ namespace Cliver.PdfDocumentParser
                     // break;
                     blockY = blockBottom + 1;
                 }
-                deskewedImage.ROI = getCropped(deskewedImage, seamRgb);//crop
+                deskewedImage.ROI = getCropped(deskewedImage, marginRgb);//crop
                 bitmap = deskewedImage?.ToBitmap();
             }
             bitmap.SetResolution(dpi.H, dpi.V);

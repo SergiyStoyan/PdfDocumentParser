@@ -11,7 +11,7 @@
 <body>
     <script src="prism.js"></script>
     <div class='header'>
-        <div class='mainHeader'>Pdf Document Parser 6.2</div>
+        <div class='mainHeader'>Pdf Document Parser 6.6</div>
     </div>
 
     <div class='content'>
@@ -400,16 +400,25 @@ setLicense();
 
             <h3>Scanned document preprocessing</h3>
         <p>
-            The following options are used for preprocessing scanned PDF pages. It influences OcrText or CvImage/ImageData anchors and OcrText or Image fields while PdfText type remains not affected.
+            The following options are used for preprocessing scanned PDF pages. It influences Ocr, Image type anchors and Ocr, Image type fields while Pdf types remain unaffected.
             <table>
-                <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
+                <tr><th class='title_column'>Option</th><th>Description</th></tr>
                 <tr>
-                    <td class='title_column'><a name='AutoDeskew'>Auto-Deskew</a></td>
-                    <td>It is intended for scanned documents. It is always advisable to keep it active in templates targeted to scanned documents. </td>
+                    <td class='title_column'><a name='Deskew'>Deskew</a></td>
+                    <td>It is always advisable to keep it active in templates targeted to scanned documents. If deskew results are not good, tune the parameters. 
+					<br>When the scanned images are long like POS printouts and have altering skew, toggle to Column Of Blocks - it will deskew the image by blocks arranged vertically.</td>
                 </tr>
                 <tr>
                     <td class='title_column'><a name='PageRotation'>Rotate Pages</a></td>
                     <td>It is intended mostly for scanned documents. A page must be correctly oriented to get OCR working properly on it.</td>
+                </tr>
+                <tr>
+                    <td class='title_column'><a name='ScaleByAnchor'>Scale By Anchor</a></td>
+                    <td>When scans for the same template can differ by their scale then they should be resized to conform to the scale expected by the template. It can be done automatically by an anchor: create a CvImage anchor and select an image common for all scans. (!)The larger is the image, the better is the scaling. Then select this anchor in Scale By Anchor dropdown.</td>
+                </tr>
+                <tr>
+                    <td class='title_column'><a name='PreprocesingCode'>Preprocesing Code</a></td>
+                    <td>A template can have its own custom image preprocessing code. An example using Emgu.CV is provided by default.</td>
                 </tr>
             </table>
 
