@@ -27,7 +27,7 @@ namespace Cliver.PdfDocumentParser
             public Size StructuringElementSize = new Size(30, 1);
             public int ContourMaxCount = 10;
             public float AngleMaxDeviation = 1;
-            public Color SeamColor = Color.LightGreen;
+            public Color SeamColor = Color.FromArgb(255, 210, 210);
         }
         public enum Modes
         {
