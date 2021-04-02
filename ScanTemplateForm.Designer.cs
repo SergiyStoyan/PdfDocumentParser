@@ -46,6 +46,8 @@
             this.DeskewBlockMinGap = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
             this.gDeskew = new System.Windows.Forms.GroupBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.DeskewMarginColor = new System.Windows.Forms.Button();
             this.DeskewContourMaxCount = new System.Windows.Forms.NumericUpDown();
             this.DeskewAngleMaxDeviation = new System.Windows.Forms.NumericUpDown();
             this.label8 = new System.Windows.Forms.Label();
@@ -59,8 +61,6 @@
             this.DeskewStructuringElementY = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.DeskewSeamColor = new System.Windows.Forms.Button();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewBlockMaxHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewBlockMinGap)).BeginInit();
@@ -291,7 +291,7 @@
             // gDeskew
             // 
             this.gDeskew.Controls.Add(this.label11);
-            this.gDeskew.Controls.Add(this.DeskewSeamColor);
+            this.gDeskew.Controls.Add(this.DeskewMarginColor);
             this.gDeskew.Controls.Add(this.DeskewContourMaxCount);
             this.gDeskew.Controls.Add(this.DeskewAngleMaxDeviation);
             this.gDeskew.Controls.Add(this.label8);
@@ -315,6 +315,28 @@
             this.gDeskew.TabIndex = 99;
             this.gDeskew.TabStop = false;
             this.gDeskew.Text = "Deskew:";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.BackColor = System.Drawing.SystemColors.Control;
+            this.label11.Location = new System.Drawing.Point(674, 25);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(69, 13);
+            this.label11.TabIndex = 113;
+            this.label11.Text = "Margin Color:";
+            // 
+            // DeskewMarginColor
+            // 
+            this.DeskewMarginColor.BackColor = System.Drawing.Color.LightGreen;
+            this.DeskewMarginColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DeskewMarginColor.ForeColor = System.Drawing.SystemColors.Control;
+            this.DeskewMarginColor.Location = new System.Drawing.Point(677, 41);
+            this.DeskewMarginColor.Name = "DeskewMarginColor";
+            this.DeskewMarginColor.Size = new System.Drawing.Size(61, 18);
+            this.DeskewMarginColor.TabIndex = 114;
+            this.DeskewMarginColor.UseVisualStyleBackColor = false;
+            this.DeskewMarginColor.Click += new System.EventHandler(this.DeskewMarginColor_Click);
             // 
             // DeskewContourMaxCount
             // 
@@ -479,28 +501,6 @@
             this.label10.TabIndex = 97;
             this.label10.Text = "Structuring Element X:";
             // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.BackColor = System.Drawing.SystemColors.Control;
-            this.label11.Location = new System.Drawing.Point(674, 25);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(64, 13);
-            this.label11.TabIndex = 113;
-            this.label11.Text = "Seam Color:";
-            // 
-            // DeskewSeamColor
-            // 
-            this.DeskewSeamColor.BackColor = System.Drawing.Color.LightGreen;
-            this.DeskewSeamColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.DeskewSeamColor.ForeColor = System.Drawing.SystemColors.Control;
-            this.DeskewSeamColor.Location = new System.Drawing.Point(677, 41);
-            this.DeskewSeamColor.Name = "DeskewSeamColor";
-            this.DeskewSeamColor.Size = new System.Drawing.Size(61, 18);
-            this.DeskewSeamColor.TabIndex = 114;
-            this.DeskewSeamColor.UseVisualStyleBackColor = false;
-            this.DeskewSeamColor.Click += new System.EventHandler(this.DeskewSeamColor_Click);
-            // 
             // ScanTemplateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -564,6 +564,6 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Button DeskewSeamColor;
+        private System.Windows.Forms.Button DeskewMarginColor;
     }
 }

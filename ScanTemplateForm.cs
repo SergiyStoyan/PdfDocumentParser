@@ -49,7 +49,7 @@ namespace Cliver.PdfDocumentParser
             Deskew.CheckedChanged += delegate
             {
                 changed = true;
-                DeskewSeamColor.Enabled = DeskewSingleBlock.Enabled = DeskewColumnOfBlocks.Enabled = DeskewStructuringElementX.Enabled = DeskewStructuringElementY.Enabled = Deskew.Checked;
+                DeskewMarginColor.Enabled = DeskewSingleBlock.Enabled = DeskewColumnOfBlocks.Enabled = DeskewStructuringElementX.Enabled = DeskewStructuringElementY.Enabled = Deskew.Checked;
                 DeskewContourMaxCount.Enabled = DeskewAngleMaxDeviation.Enabled = DeskewBlockMaxHeight.Enabled = DeskewBlockMinGap.Enabled = DeskewColumnOfBlocks.Checked;
             };
             DeskewSingleBlock.CheckedChanged += delegate { changed = true; };
@@ -62,7 +62,7 @@ namespace Cliver.PdfDocumentParser
             DeskewBlockMinGap.ValueChanged += delegate { changed = true; };
             DeskewContourMaxCount.ValueChanged += delegate { changed = true; };
             DeskewAngleMaxDeviation.ValueChanged += delegate { changed = true; };
-            DeskewSeamColor.BackColorChanged += delegate { changed = true; };
+            DeskewMarginColor.BackColorChanged += delegate { changed = true; };
         }
         TemplateForm templateForm;
         bool changed = false;
@@ -89,8 +89,8 @@ namespace Cliver.PdfDocumentParser
                 DeskewStructuringElementY.Value = dc.StructuringElementSize.Height;
                 DeskewContourMaxCount.Value = dc.ContourMaxCount;
                 DeskewBlockMinGap.Value = dc.BlockMinGap;
-                DeskewSeamColor.BackColor = dc.SeamColor;
-                DeskewSeamColor.Enabled = DeskewContourMaxCount.Enabled = DeskewAngleMaxDeviation.Enabled = DeskewSingleBlock.Enabled = DeskewColumnOfBlocks.Enabled = DeskewStructuringElementX.Enabled = DeskewStructuringElementY.Enabled = Deskew.Checked = t.Deskew != null;
+                DeskewMarginColor.BackColor = dc.MarginColor;
+                DeskewMarginColor.Enabled = DeskewContourMaxCount.Enabled = DeskewAngleMaxDeviation.Enabled = DeskewSingleBlock.Enabled = DeskewColumnOfBlocks.Enabled = DeskewStructuringElementX.Enabled = DeskewStructuringElementY.Enabled = Deskew.Checked = t.Deskew != null;
                 if (t.Deskew != null)
                     DeskewSingleBlock.Checked = t.Deskew.Mode.HasFlag(Deskewer.Modes.SingleBlock) || !t.Deskew.Mode.HasFlag(Deskewer.Modes.ColumnOfBlocks);
                 DeskewColumnOfBlocks.Checked = !DeskewSingleBlock.Checked;
@@ -152,7 +152,7 @@ namespace Cliver.PdfDocumentParser
                     StructuringElementSize = new System.Drawing.Size((int)DeskewStructuringElementX.Value, (int)DeskewStructuringElementY.Value),
                     ContourMaxCount = (int)DeskewContourMaxCount.Value,
                     AngleMaxDeviation = (float)DeskewAngleMaxDeviation.Value,
-                    SeamColor = DeskewSeamColor.BackColor
+                    MarginColor = DeskewMarginColor.BackColor
                 };
             }
             else
@@ -226,12 +226,12 @@ namespace Cliver.PdfDocumentParser
 
         }
 
-        private void DeskewSeamColor_Click(object sender, EventArgs e)
+        private void DeskewMarginColor_Click(object sender, EventArgs e)
         {
             ColorDialog cd = new ColorDialog();
-            cd.Color = DeskewSeamColor.BackColor;
+            cd.Color = DeskewMarginColor.BackColor;
             if (cd.ShowDialog() == DialogResult.OK)
-                DeskewSeamColor.BackColor = cd.Color;
+                DeskewMarginColor.BackColor = cd.Color;
         }
     }
 }
