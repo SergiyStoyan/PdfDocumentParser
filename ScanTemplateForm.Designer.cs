@@ -422,21 +422,21 @@
             // DeskewColumnOfBlocks
             // 
             this.DeskewColumnOfBlocks.AutoSize = true;
-            this.DeskewColumnOfBlocks.Checked = true;
             this.DeskewColumnOfBlocks.Location = new System.Drawing.Point(384, 47);
             this.DeskewColumnOfBlocks.Name = "DeskewColumnOfBlocks";
             this.DeskewColumnOfBlocks.Size = new System.Drawing.Size(14, 13);
             this.DeskewColumnOfBlocks.TabIndex = 104;
-            this.DeskewColumnOfBlocks.TabStop = true;
             this.DeskewColumnOfBlocks.UseVisualStyleBackColor = true;
             // 
             // DeskewSingleBlock
             // 
             this.DeskewSingleBlock.AutoSize = true;
+            this.DeskewSingleBlock.Checked = true;
             this.DeskewSingleBlock.Location = new System.Drawing.Point(384, 24);
             this.DeskewSingleBlock.Name = "DeskewSingleBlock";
             this.DeskewSingleBlock.Size = new System.Drawing.Size(14, 13);
             this.DeskewSingleBlock.TabIndex = 103;
+            this.DeskewSingleBlock.TabStop = true;
             this.DeskewSingleBlock.UseVisualStyleBackColor = true;
             // 
             // Deskew

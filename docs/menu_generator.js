@@ -1,9 +1,10 @@
 /************************************************************************
-by Sergey Stoyan, 2018
+Version 1.1.0
+by Sergey Stoyan, 2018-2021
 
 This vanilla javascript generates a dynamic menu for content of a hosting html file when it is open in web browser.
 Only this script with no dependency is required.
-It can work either online or locally. 
+It can work either online or locally.
 Tested on Chrome and IE.
 
 
@@ -340,7 +341,7 @@ var convert = function(mode){
                 {//display also children until some one is not empty
                     //var level = (item['id'].match(/_/ig) || []).length + 1;
                     var i = orderedItemIds.indexOf(item['id']);
-                    while(!/\S/.test(items[orderedItemIds[i]]['content'].innerText)){
+                    while(!/\S/.test(items[orderedItemIds[i]]['content'].textContent)){
                         i++;
                         if(i >= orderedItemIds.length)// || level >= (item['id'].match(/_/ig) || []).length + 1)
                             break;
@@ -454,7 +455,8 @@ var convert = function(mode){
 
 var loadInMenuMode = function(){
     var localPath = window.location.href.replace(/#.*/, '');
-    window.location.href = localPath;
+    //window.location.href = localPath;
+    window.location = localPath + "#";//Chrome bug: it does not drop anchor if no new anchor
     location.reload();
     return false;
 };
