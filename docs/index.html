@@ -414,7 +414,7 @@ setLicense();
                 </tr>
                 <tr>
                     <td class='title_column'><a name='ScaleByAnchor'>Scale By Anchor</a></td>
-                    <td>When scans for the same template can differ by their scale then they should be resized to conform to the scale expected by the template. It can be done automatically by an anchor: create a CvImage anchor and select an image common for all scans. (!)The larger is the image, the better is the scaling. Then select this anchor in Scale By Anchor dropdown.</td>
+                    <td>When scans for the same template can differ by their scale then they should be resized to conform to the scale expected by the template. It is done automatically by an image anchor: create a CvImage anchor and select an image that is common for all the scans. (!)A larger image provides a precisier scaling. Then select this anchor in the Scale By Anchor dropdown. Now, PdfDocumentParser engine will rescale scans respectively if their scaling anchor is bigger or smaller then the initial one.</td>
                 </tr>
                 <tr>
                     <td class='title_column'><a name='PreprocesingCode'>Preprocesing Code</a></td>
@@ -938,7 +938,7 @@ foreach(page in pageCollection)
 
     <div class='footer'>
         <script src='copyright.js'></script>
-        &nbsp;2018 - 2020&nbsp;&nbsp;<a href="javascript:window.location.href = '&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#115;&#101;&#114;&#103;&#101;&#121;&#46;&#115;&#116;&#111;&#121;&#97;&#110;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;'" target="_top">Sergey Stoyan</a>
+        &nbsp;2018 - 2021&nbsp;&nbsp;<a href="javascript:window.location.href = '&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#115;&#101;&#114;&#103;&#101;&#121;&#46;&#115;&#116;&#111;&#121;&#97;&#110;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;'" target="_top">Sergey Stoyan</a>
       
     </div>
 
