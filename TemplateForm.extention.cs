@@ -195,7 +195,7 @@ namespace Cliver.PdfDocumentParser
 
         private void showAsJson_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Template t = GetTemplateFromUI(false);
+            Template t = GetTemplateFromUI(true);
             TextForm tf = new TextForm("Template JSON object", Serialization.Json.Serialize(t), true);
             while (tf.ShowDialog() == DialogResult.OK)
                 try
