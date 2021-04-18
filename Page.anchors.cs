@@ -155,8 +155,8 @@ namespace Cliver.PdfDocumentParser
                             cbs = cbs.Where(x => !Pdf.InvisibleCharacters.Contains(x.Char)).ToList();
                         if (cbs.Count < 1)
                         {
-                            int w = (int)(Bitmap.Width * Settings.Constants.Image2PdfResolutionRatio - rectangle.Width);
-                            int h = (int)(Bitmap.Height * Settings.Constants.Image2PdfResolutionRatio - rectangle.Height);
+                            int w = Size.Width;
+                            int h = Size.Height;
                             for (int i = 0; i < w; i++)
                                 for (int j = 0; j < h; j++)
                                 {

@@ -25,10 +25,16 @@ namespace Cliver.PdfDocumentParser
             return new PdfReader(pdfFile);
         }
 
-        public static System.Drawing.SizeF GetPageSizeF(this PdfReader pr, int pageI)
+        //public static System.Drawing.SizeF GetPageSizeF(this PdfReader pr, int pageI)
+        //{
+        //    iTextSharp.text.Rectangle r = pr.GetPageSize(pageI);
+        //    return new System.Drawing.SizeF(r.Width, r.Height);
+        //}
+
+        public static System.Drawing.Size GetPageSize(PdfReader pdfReader, int pageI)
         {
-            iTextSharp.text.Rectangle r = pr.GetPageSize(pageI);
-            return new System.Drawing.SizeF(r.Width, r.Height);
+            iTextSharp.text.Rectangle r = pdfReader.GetPageSize(pageI);
+            return new System.Drawing.Size((int)r.Width, (int)r.Height);
         }
 
         static public RenderFilter[] CreateFilters(this PdfReader pr, float x, float y, float w, float h)
@@ -138,8 +144,6 @@ namespace Cliver.PdfDocumentParser
                 else//some pdf's require this because gs puts errors to stdout
                 {
                     string bufferFileDir = System.IO.Path.GetTempPath() + Log.ProcessName;
-                    if (Directory.Exists(bufferFileDir))
-                        Directory.Delete(bufferFileDir, true);
                     Directory.CreateDirectory(bufferFileDir);
                     string bufferFile = bufferFileDir + "\\buffer.png";
                     p.StartInfo.Arguments = "-dNOPROMPT -r" + resolution + " -dDownScaleFactor=" + dDownScaleFactor + " -dBATCH -dFirstPage=" + pageI + " -dLastPage=" + pageI + " -sDEVICE=png16m -dNOPAUSE -sOutputFile=\"" + bufferFile + "\" -q \"" + pdfFile + "\"";
@@ -151,7 +155,7 @@ namespace Cliver.PdfDocumentParser
                         b = new System.Drawing.Bitmap(bt);//!!!sets 96dpi
                         b.SetResolution(bt.HorizontalResolution, bt.VerticalResolution);
                     }
-                    File.Delete(bufferFile);
+                    Directory.Delete(bufferFileDir, true);
                     return b;
                 }
             }
