@@ -20,8 +20,6 @@ for scan processing:
 - OcrColumnLines - provide cropping by anchors;
 - to preserve normal lines, provide column removal from table;
 
-- check that margins etc are scaled by resolution;
-
 - ?implement anchor row-separator which requires multiple anchor matching (needed for GCG statement) - verdict: it's better to have multiple field extraction and use it as a separator in a custom processor;
 - move to IText7;
 - provide multiple field extraction on page;
