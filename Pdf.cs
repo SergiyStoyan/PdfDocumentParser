@@ -212,24 +212,11 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public static string GetText(IEnumerable<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace)
-        {
-            List<string> ls = new List<string>();
-            foreach (Line l in GetLines(cbs, textAutoInsertSpace))
-            {
-                StringBuilder sb = new StringBuilder();
-                foreach (CharBox cb in l.CharBoxs)
-                    sb.Append(cb.Char);
-                ls.Add(sb.ToString());
-            }
-            return string.Join("\r\n", ls);
-        }
-
         public static List<string> GetTextLinesSurroundedByRectangle(IEnumerable<CharBox> cbs, System.Drawing.RectangleF r, TextAutoInsertSpace textAutoInsertSpace)
         {
             cbs = GetCharBoxsSurroundedByRectangle(cbs, r);
             List<string> ls = new List<string>();
-            foreach (Line l in GetLines(cbs, textAutoInsertSpace))
+            foreach (Page.Line<CharBox> l in Page.GetLines(cbs, textAutoInsertSpace))
                 ls.Add(l.ToString());
             return ls;
         }
@@ -241,70 +228,6 @@ namespace Cliver.PdfDocumentParser
             if (excludeInvisibleCharacters)
                 cbs = cbs.Where(a => !InvisibleCharacters.Contains(a.Char)).ToList();
             return cbs.ToList();
-        }
-
-        public static List<Line> GetLines(IEnumerable<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace/*, bool removeDuplicates - no need because input collection is already filtered*/)
-        {
-            //if (removeDuplicates)
-            //    cbs = RemoveDuplicates(cbs);
-            bool spaceAutoInsert = textAutoInsertSpace != null && textAutoInsertSpace.Threshold > 0;
-            cbs = cbs.OrderBy(a => a.R.X).ToList();
-            List<Line> lines = new List<Line>();
-            foreach (CharBox cb in cbs)
-            {
-                for (int i = 0; i < lines.Count; i++)
-                {
-                    if (cb.R.Bottom < lines[i].Top)
-                    {
-                        Line l = new Line { Top = cb.R.Top, Bottom = cb.R.Bottom };
-                        l.CharBoxs.Add(cb);
-                        lines.Insert(i, l);
-                        goto CONTINUE;
-                    }
-                    if (cb.R.Bottom - cb.R.Height / 2 <= lines[i].Bottom)
-                    {
-                        if (spaceAutoInsert && /*cb.Char != " " &&*/ lines[i].CharBoxs.Count > 0)
-                        {
-                            CharBox cb0 = lines[i].CharBoxs[lines[i].CharBoxs.Count - 1];
-                            if (/*cb0.Char != " " && */cb.R.Left - cb0.R.Right > (/*cb0.R.Width*/0.8 / cb0.R.Height + /*cb.R.Width*/0.8 / cb.R.Height) * textAutoInsertSpace.Threshold)
-                            {
-                                float spaceWidth = (cb.R.Width + cb.R.Width) / 2;
-                                int spaceNumber = (int)Math.Ceiling((cb.R.Left - cb0.R.Right) / spaceWidth);
-                                for (int j = 0; j < spaceNumber; j++)
-                                    lines[i].CharBoxs.Add(new CharBox { Char = textAutoInsertSpace.Representative, R = new System.Drawing.RectangleF(cb0.R.Right + spaceWidth * j, cb0.R.Y, spaceWidth, cb.R.Height) });
-                            }
-                        }
-                        lines[i].CharBoxs.Add(cb);
-                        if (lines[i].Top > cb.R.Top)
-                            lines[i].Top = cb.R.Top;
-                        if (lines[i].Bottom < cb.R.Bottom)
-                            lines[i].Bottom = cb.R.Bottom;
-                        goto CONTINUE;
-                    }
-                }
-                {
-                    Line l = new Line { Top = cb.R.Top, Bottom = cb.R.Bottom };
-                    l.CharBoxs.Add(cb);
-                    lines.Add(l);
-                }
-            CONTINUE:;
-            }
-            return lines;
-        }
-
-        public class Line
-        {
-            public float Top;
-            public float Bottom;
-            public List<CharBox> CharBoxs = new List<CharBox>();
-
-            public override string ToString()
-            {
-                StringBuilder sb = new StringBuilder();
-                foreach (CharBox cb in CharBoxs)
-                    sb.Append(cb.Char);
-                return sb.ToString();
-            }
         }
 
         public static List<CharBox> GetCharBoxsFromPage(PdfReader pdfReader, int pageI, bool removeDuplicates)

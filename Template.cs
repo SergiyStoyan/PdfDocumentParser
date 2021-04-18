@@ -25,9 +25,7 @@ namespace Cliver.PdfDocumentParser
 
         public string Name;
 
-        //public float TextAutoInsertSpaceThreshold = 6;
-        //public string TextAutoInsertSpaceSubstitute = "\t";
-        public TextAutoInsertSpace TextAutoInsertSpace = new TextAutoInsertSpace { Representative = " ", Threshold = 4f };
+        public TextAutoInsertSpace TextAutoInsertSpace = new TextAutoInsertSpace { Representative = " " };
 
         public bool IgnoreInvisiblePdfChars = true;//used but not edited
         public bool IgnoreDuplicatedPdfChars = true;//used but not edited
