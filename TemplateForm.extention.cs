@@ -180,7 +180,7 @@ namespace Cliver.PdfDocumentParser
             if (pages == null)
                 return;
             //TextForm tf = new TextForm("Pdf Entity Text", PdfTextExtractor.GetTextFromPage(pages.PdfReader, currentPageI), false);
-            TextForm tf = new TextForm("Pdf Entity Text", Pdf.GetText(pages[currentPageI].PdfCharBoxs, new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) }), false);
+            TextForm tf = new TextForm("Pdf Entity Text", Page.GetText(pages[currentPageI].PdfCharBoxs, new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) }), false);
             tf.ShowDialog();
         }
 
@@ -188,7 +188,7 @@ namespace Cliver.PdfDocumentParser
         {
             if (pages == null)
                 return;
-            List<string> ls = Ocr.GetTextLines(pages[currentPageI].ActiveTemplateOcrCharBoxs, new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) });
+            List<string> ls = Page.GetTextLines(pages[currentPageI].ActiveTemplateOcrCharBoxs, new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) });
             TextForm tf = new TextForm("OCR Text", string.Join("\r\n", ls), false);
             tf.ShowDialog();
         }

@@ -190,7 +190,7 @@ namespace Cliver.PdfDocumentParser
 
                 List<string> ls = new List<string>();
                 List<Pdf.CharBox> cbs = (List<Pdf.CharBox>)TableFieldActualInfo.GetValue(Template.Field.ValueTypes.PdfCharBoxs);
-                foreach (Pdf.Line l in Pdf.GetLines(cbs, page.PageCollection.ActiveTemplate.TextAutoInsertSpace))
+                foreach (Line<Pdf.CharBox> l in GetLines(cbs, page.PageCollection.ActiveTemplate.TextAutoInsertSpace))
                 {
                     StringBuilder sb = new StringBuilder();
                     foreach (Pdf.CharBox cb in l.CharBoxs)
@@ -240,8 +240,8 @@ namespace Cliver.PdfDocumentParser
                 List<string> ls = new List<string>();
                 if (page.PageCollection.ActiveTemplate.FieldOcrMode.HasFlag(Template.FieldOcrModes.ColumnFieldFromFieldImage))
                 {
-                    List<Ocr.Line> ols = Ocr.GetLinesWithAdjacentBorders(cbs, TableFieldActualInfo.ActualRectangle.Value);
-                    foreach (Ocr.Line l in ols)
+                    List<Line<Ocr.CharBox>> ols = GetLinesWithAdjacentBorders(cbs, TableFieldActualInfo.ActualRectangle.Value);
+                    foreach (Line<Ocr.CharBox> l in ols)
                     {
                         float x = ar.X > TableFieldActualInfo.ActualRectangle.Value.X ? ar.X : TableFieldActualInfo.ActualRectangle.Value.X;
                         RectangleF r = new RectangleF(
@@ -255,7 +255,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 else
                 {
-                    foreach (Ocr.Line l in Ocr.GetLines(cbs, page.PageCollection.ActiveTemplate.TextAutoInsertSpace))
+                    foreach (Line<Ocr.CharBox> l in GetLines(cbs, page.PageCollection.ActiveTemplate.TextAutoInsertSpace))
                     {
                         StringBuilder sb = new StringBuilder();
                         foreach (Ocr.CharBox cb in l.CharBoxs)
@@ -351,8 +351,8 @@ namespace Cliver.PdfDocumentParser
                 else
                     cbs = Ocr.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, ar);
                 List<Bitmap> ls = new List<Bitmap>();
-                List<Ocr.Line> ols = Ocr.GetLinesWithAdjacentBorders(cbs, TableFieldActualInfo == null ? ar : TableFieldActualInfo.ActualRectangle.Value);
-                foreach (Ocr.Line l in ols)
+                List<Line<Ocr.CharBox>> ols = GetLinesWithAdjacentBorders(cbs, TableFieldActualInfo == null ? ar : TableFieldActualInfo.ActualRectangle.Value);
+                foreach (Line<Ocr.CharBox> l in ols)
                 {
                     RectangleF r = new RectangleF(ar.X, l.Top, ar.Width, l.Bottom - l.Top);
                     using (Bitmap b = page.GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
