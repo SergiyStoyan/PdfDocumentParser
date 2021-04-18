@@ -137,13 +137,6 @@ namespace Cliver.PdfDocumentParser
                     //Bitmap b = Bitmap.Clone(new Rectangle(0, 0, Bitmap.Width, Bitmap.Height), Bitmap.PixelFormat);//!!!throws from Tesseract: A generic error occurred in GDI+.
                     Bitmap b = new Bitmap(Bitmap);//!!!it sets to 96dpi
                     b.SetResolution(Bitmap.HorizontalResolution, Bitmap.VerticalResolution);
-                    //Bitmap b;
-                    //using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
-                    //{
-                    //    Bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
-                    //    //ms.Close();//!!!it seems to be critical
-                    //    b = new Bitmap(ms);
-                    //}
 
                     switch (PageCollection.ActiveTemplate.PageRotation)
                     {
@@ -298,6 +291,17 @@ namespace Cliver.PdfDocumentParser
         }
         List<Pdf.CharBox> _pdfCharBoxs;
 
+        internal Size Size
+        {
+            get
+            {
+                if (_size == Size.Empty)
+                    _size = Pdf.GetPageSize(PageCollection.PdfReader, Number);
+                return _size;
+            }
+        }
+        Size _size = Size.Empty;
+
         internal List<Ocr.CharBox> ActiveTemplateOcrCharBoxs
         {
             get
@@ -329,11 +333,6 @@ namespace Cliver.PdfDocumentParser
             if (m != null)
                 return m.Scale;
             return 0;
-        }
-
-        public Bitmap GetActiveTemplateBitmapCopy()
-        {
-            return GetScaledImage2Pdf(ActiveTemplateBitmap);
         }
 
         public Color GetColor(float x, float y)

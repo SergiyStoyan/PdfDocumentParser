@@ -331,7 +331,7 @@ namespace Cliver.PdfDocumentParser
                     return null;
                 using (b)
                 {
-                    return GetScaledImage2Pdf(b);
+                    return GetImageScaled2Pdf(b);
                 }
             }
 
@@ -357,7 +357,7 @@ namespace Cliver.PdfDocumentParser
                     RectangleF r = new RectangleF(ar.X, l.Top, ar.Width, l.Bottom - l.Top);
                     using (Bitmap b = page.GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
                     {
-                        ls.Add(b == null ? b : GetScaledImage2Pdf(b));
+                        ls.Add(b == null ? b : GetImageScaled2Pdf(b));
                     }
                 }
                 return ls;
@@ -418,7 +418,7 @@ namespace Cliver.PdfDocumentParser
             return r;
         }
 
-        internal static Bitmap GetScaledImage2Pdf(Image image)
+        internal static Bitmap GetImageScaled2Pdf(Image image)
         {
             int w = (int)Math.Round(image.Width * Settings.Constants.Image2PdfResolutionRatio, 0);
             int h = (int)Math.Round(image.Height * Settings.Constants.Image2PdfResolutionRatio, 0);
@@ -436,6 +436,7 @@ namespace Cliver.PdfDocumentParser
                 g.CompositingQuality = CompositingQuality.HighQuality;
                 g.DrawImage(image, 0, 0, b.Width, b.Height);
             }
+            b.SetResolution(image.HorizontalResolution, image.VerticalResolution);
             return b;
         }
     }

@@ -59,7 +59,7 @@ namespace Cliver.PdfDocumentParser
 
         public ImageData(Bitmap bitmap)
         {
-            bitmap = Page.GetScaledImage2Pdf(bitmap);
+            bitmap = Page.GetImageScaled2Pdf(bitmap);
 
             Hash = getBitmapHash(bitmap);
             Width = Hash.GetLength(0);
