@@ -37,25 +37,25 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        static HashSet<string> assemblyPaths = new HashSet<string>
-        {
-            typeof(object).Assembly.Location, //mscorlib
-            //MetadataReference.CreateFromFile(typeof(DynamicObject).Assembly.Location), //System.Core
-            //MetadataReference.CreateFromFile(typeof(RuntimeBinderException).Assembly.Location),//Microsoft.CSharp
-            //MetadataReference.CreateFromFile(typeof(Action).Assembly.Location), //System.Runtime
-            //MetadataReference.CreateFromFile(typeof(System.Collections.Generic.List<>).Assembly.Location),
-            //MetadataReference.CreateFromFile(typeof(System.Linq.Enumerable).Assembly.Location),
-            //MetadataReference.CreateFromFile(typeof(System.Text.RegularExpressions.Regex).Assembly.Location),
-            typeof(System.Drawing.Size).Assembly.Location,
-            typeof(System.Drawing.Point).Assembly.Location,
-            typeof(System.Drawing.Bitmap).Assembly.Location,
-            //MetadataReference.CreateFromFile(typeof(Cliver.DateTimeRoutines).Assembly.Location),
-            typeof(Emgu.CV.Structure.Gray).Assembly.Location,
-            typeof(Emgu.CV.IColor).Assembly.Location,
-            typeof(Emgu.CV.CvInvoke).Assembly.Location,
-            typeof(Emgu.CV.CvEnum.AdaptiveThresholdType).Assembly.Location,
-            Assembly.GetExecutingAssembly().Location,
-        };
+        //static HashSet<string> assemblyPaths = new HashSet<string>
+        //{
+        //    typeof(object).Assembly.Location, //mscorlib
+        //    //MetadataReference.CreateFromFile(typeof(DynamicObject).Assembly.Location), //System.Core
+        //    //MetadataReference.CreateFromFile(typeof(RuntimeBinderException).Assembly.Location),//Microsoft.CSharp
+        //    //MetadataReference.CreateFromFile(typeof(Action).Assembly.Location), //System.Runtime
+        //    //MetadataReference.CreateFromFile(typeof(System.Collections.Generic.List<>).Assembly.Location),
+        //    //MetadataReference.CreateFromFile(typeof(System.Linq.Enumerable).Assembly.Location),
+        //    //MetadataReference.CreateFromFile(typeof(System.Text.RegularExpressions.Regex).Assembly.Location),
+        //    typeof(System.Drawing.Size).Assembly.Location,
+        //    typeof(System.Drawing.Point).Assembly.Location,
+        //    typeof(System.Drawing.Bitmap).Assembly.Location,
+        //    //MetadataReference.CreateFromFile(typeof(Cliver.DateTimeRoutines).Assembly.Location),
+        //    typeof(Emgu.CV.Structure.Gray).Assembly.Location,
+        //    typeof(Emgu.CV.IColor).Assembly.Location,
+        //    typeof(Emgu.CV.CvInvoke).Assembly.Location,
+        //    typeof(Emgu.CV.CvEnum.AdaptiveThresholdType).Assembly.Location,
+        //    Assembly.GetExecutingAssembly().Location,
+        //};
         static List<MetadataReference> references = new List<MetadataReference>();
         static BitmapPreprocessor()
         {
