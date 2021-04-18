@@ -87,6 +87,111 @@ namespace Cliver.PdfDocumentParser
                     Message.Error2(ex);
                 }
             };
+
+            deleteCondition.LinkClicked += delegate
+            {
+                deleteSelectedCondition();
+            };
+
+            moveUpCondition.LinkClicked += delegate
+            {
+                moveUpSelectedCondition();
+            };
+
+            moveDownCondition.LinkClicked += delegate
+            {
+                moveDownSelectedCondition();
+            };
+
+            newCondition.LinkClicked += delegate
+            {
+                createNewCondition();
+            };
+        }
+
+        void deleteSelectedCondition()
+        {
+            try
+            {
+                if (conditions.SelectedRows.Count < 1)
+                    return;
+                DataGridViewRow r0 = conditions.SelectedRows[conditions.SelectedRows.Count - 1];
+                if (r0.Tag == null)
+                    return;
+                Template.Condition c0 = (Template.Condition)r0.Tag;
+                if (!Message.YesNo("Proceed with removing condition '" + c0.Name + "'?"))
+                    return;
+                fields.Rows.Remove(r0);
+            }
+            catch (Exception e)
+            {
+                Win.LogMessage.Error(e);
+            }
+            finally
+            {
+                settingCurrentConditionRow = false;
+            }
+        }
+
+        void moveUpSelectedCondition()
+        {
+            try
+            {
+                if (conditions.SelectedRows.Count < 1)
+                    return;
+                DataGridViewRow r = conditions.SelectedRows[conditions.SelectedRows.Count - 1];
+                int i2 = r.Index - 1;
+                if (i2 < 0)
+                    return;
+                settingCurrentConditionRow = true;//required due to fields-column error calculation when selected row changes
+                conditions.Rows.Remove(r);
+                conditions.Rows.Insert(i2, r);
+                settingCurrentConditionRow = false;
+                r.Selected = true;
+            }
+            catch (Exception e)
+            {
+                Win.LogMessage.Error(e);
+            }
+            finally
+            {
+                settingCurrentConditionRow = false;
+            }
+        }
+
+        void moveDownSelectedCondition()
+        {
+            try
+            {
+                if (conditions.SelectedRows.Count < 1)
+                    return;
+                DataGridViewRow r = conditions.SelectedRows[conditions.SelectedRows.Count - 1];
+                int i2 = r.Index + 1;
+                if (i2 > conditions.Rows.Count - 1)
+                    return;
+                settingCurrentConditionRow = true;//required due to fields-column error calculation when selected row changes
+                conditions.Rows.Remove(r);
+                conditions.Rows.Insert(i2, r);
+                settingCurrentConditionRow = false;
+                r.Selected = true;
+            }
+            catch (Exception e)
+            {
+                Win.LogMessage.Error(e);
+            }
+            finally
+            {
+                settingCurrentConditionRow = false;
+            }
+        }
+
+        void createNewCondition()
+        {
+            Template.Condition c = new Template.Condition { Name = "" };
+            int i = conditions.CurrentRow?.Index >= 0 ? conditions.CurrentRow.Index + 1 : conditions.Rows.Count;
+            conditions.Rows.Insert(i, 1);
+            setConditionRow(conditions.Rows[i], c);
+            conditions.Rows[i].Selected = true;
         }
 
         void setCurrentConditionRow(DataGridViewRow row)

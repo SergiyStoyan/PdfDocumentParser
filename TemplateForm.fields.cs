@@ -203,7 +203,7 @@ namespace Cliver.PdfDocumentParser
                     {
                         string n = FieldPreparation.Normalize((string)r.Cells["Name_"].Value);
                         if (string.IsNullOrWhiteSpace(n))
-                            throw new Exception("Name cannot be empty!");
+                            throw new Exception("Field name cannot be empty!");
                         //foreach (DataGridViewRow rr in fields.Rows)
                         //{
                         //    if (r == rr)
@@ -411,6 +411,11 @@ namespace Cliver.PdfDocumentParser
             {
                 moveDownSelectedField();
             };
+
+            newField.LinkClicked += delegate
+             {
+                 createNewField();
+             };
         }
 
         void duplicateSelectedField()
@@ -486,9 +491,9 @@ namespace Cliver.PdfDocumentParser
                         unique = false;
                         break;
                     }
-                if (unique)
+                if (unique && !Message.YesNo("This field definition is the last for '" + f0.Name + "' and thus, the field will not exist anymore. Proceed?"))
                 {
-                    Message.Inform("This field definition cannot be deleted because it is the last of the field.");
+                    //Message.Inform("This field definition cannot be deleted because it is the last of the field.");
                     return;
                 }
                 fields.Rows.Remove(r0);
@@ -513,12 +518,12 @@ namespace Cliver.PdfDocumentParser
                 int i2 = r.Index - 1;
                 if (i2 < 0)
                     return;
-                int minI = int.MaxValue;
-                foreach (DataGridViewRow rr in fields.Rows)
-                    if (rr != r && rr.Tag != null && ((Template.Field)rr.Tag).Name == ((Template.Field)r.Tag).Name && rr.Index < minI)
-                        minI = rr.Index;
-                if (i2 < minI)
-                    return;
+                //int minI = int.MaxValue;
+                //foreach (DataGridViewRow rr in fields.Rows)
+                //    if (rr != r && rr.Tag != null && ((Template.Field)rr.Tag).Name == ((Template.Field)r.Tag).Name && rr.Index < minI)
+                //        minI = rr.Index;
+                //if (i2 < minI)
+                //    return;
                 settingCurrentFieldRow = true;//required due to fields-column error calculation when selected row changes
                 fields.Rows.Remove(r);
                 fields.Rows.Insert(i2, r);
@@ -545,12 +550,12 @@ namespace Cliver.PdfDocumentParser
                 int i2 = r.Index + 1;
                 if (i2 > fields.Rows.Count - 1)
                     return;
-                int maxI = 0;
-                foreach (DataGridViewRow rr in fields.Rows)
-                    if (rr != r && rr.Tag != null && ((Template.Field)rr.Tag).Name == ((Template.Field)r.Tag).Name && rr.Index > maxI)
-                        maxI = rr.Index;
-                if (i2 > maxI + 1)
-                    return;
+                //int maxI = 0;
+                //foreach (DataGridViewRow rr in fields.Rows)
+                //    if (rr != r && rr.Tag != null && ((Template.Field)rr.Tag).Name == ((Template.Field)r.Tag).Name && rr.Index > maxI)
+                //        maxI = rr.Index;
+                //if (i2 > maxI + 1)
+                //    return;
                 settingCurrentFieldRow = true;//required due to fields-column error calculation when selected row changes
                 fields.Rows.Remove(r);
                 fields.Rows.Insert(i2, r);
@@ -565,6 +570,15 @@ namespace Cliver.PdfDocumentParser
             {
                 settingCurrentFieldRow = false;
             }
+        }
+
+        void createNewField()
+        {
+            Template.Field f = new Template.Field { Name = "" };
+            int i = fields.CurrentRow?.Index >= 0 ? fields.CurrentRow.Index + 1 : fields.Rows.Count;
+            fields.Rows.Insert(i, 1);
+            setFieldRow(fields.Rows[i], f);
+            fields.Rows[i].Selected = true;
         }
 
         void setCurrentFieldRow(DataGridViewRow row)
