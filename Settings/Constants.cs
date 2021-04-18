@@ -18,7 +18,7 @@ namespace Cliver.PdfDocumentParser
 
             public int PdfPageImageResolution = 300;//tesseract requires at least 300
             public float CoordinateDeviationMargin = 1f;
-            public const int PdfResolution = 72;//72 is resolution of the most pdf's. All template parameters are measured for PdfResolution!
+            public const int PdfResolution = 72;//It is the basic resolution. All template parameters that depend on bitmap are scaled to it!
 
             [Newtonsoft.Json.JsonIgnore]
             public float Image2PdfResolutionRatio { get; private set; }
