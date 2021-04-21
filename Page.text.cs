@@ -19,6 +19,9 @@ namespace Cliver.PdfDocumentParser
         public class CharBox
         {
             public string Char;
+            /// <summary>
+            /// (!)Y is the distance from the page's top to the char's top. But it is actually culculated from the char's baseline which is its bottom. It is because the baseline is considred most reliable position given by iText, while ascentLine or descentLine are not.
+            /// </summary>
             public RectangleF R;
         }
 

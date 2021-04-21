@@ -191,7 +191,7 @@ namespace Cliver.PdfDocumentParser
         {
             PdfPage p = pdfDocument.GetPage(pageI);
             Rectangle r = p.GetPageSize();
-            CharBoxExtractionStrategy s = new CharBoxExtractionStrategy(new System.Drawing.SizeF(r.GetWidth(), r.GetHeight()));
+            CharBoxExtractionStrategy s = new CharBoxExtractionStrategy(new System.Drawing.RectangleF(r.GetX(), r.GetY(), r.GetWidth(), r.GetHeight()));
             PdfTextExtractor.GetTextFromPage(p, s);
             if (removeDuplicates)
                 s.CharBoxs = RemoveDuplicates(s.CharBoxs);
@@ -201,11 +201,11 @@ namespace Cliver.PdfDocumentParser
         {
             public List<CharBox> CharBoxs = new List<CharBox>();
 
-            public CharBoxExtractionStrategy(System.Drawing.SizeF pageSize) : base()
+            public CharBoxExtractionStrategy(System.Drawing.RectangleF pageSize) : base()
             {
                 this.pageSize = pageSize;
             }
-            System.Drawing.SizeF pageSize;
+            System.Drawing.RectangleF pageSize;
             Dictionary<string, PdfFont> fontNames2font = new Dictionary<string, PdfFont>();
 
             public override void EventOccurred(IEventData data, EventType type)
@@ -221,41 +221,37 @@ namespace Cliver.PdfDocumentParser
                 IList<TextRenderInfo> cris = tri.GetCharacterRenderInfos();
                 foreach (TextRenderInfo cri in cris)
                 {
-                    PdfFont f2 = cri.GetFont();
-                    string fn = f2.ToString();
-                    if (!fontNames2font.TryGetValue(fn, out PdfFont f))
+                    PdfFont f = cri.GetFont();
+                    string fn = f.ToString();
+                    if (!fontNames2font.TryGetValue(fn, out PdfFont font))
                     {
-                        f = f2;
-                        fontNames2font[fn] = f;
+                        font = f;
+                        fontNames2font[fn] = font;
                     }
-                    //Vector bottomLeft1 = cri.GetDescentLine().GetStartPoint();
-                    //cri.GetTextMatrix().
-                    Vector bottomLeft = cri.GetBaseline().GetStartPoint();
-                    Vector topRight = cri.GetAscentLine().GetEndPoint();
-
-                    //float rise = cri.GetRise();
-                    //float h = cri.GetCharSpacing();
-                    //float j = cri.GetHorizontalScaling();
-                    //float k = cri.GetLeading();
-                    //float l = cri.GetSingleSpaceWidth();
-                    //float t = cri.GetWordSpacing();
-                    //Rectangle r = cri.GetBaseline().GetBoundingRectangle();
-                    //TextChunk tc = new TextChunk("", cri.GetGraphicsState().GetUnderColorRemovalFunction);
-                    //float d = bottomLeft1.Get(Vector.I2) - bottomLeft.Get(Vector.I2);
+                    float fontSize = cri.GetFontSize();
+                    LineSegment baseLine = cri.GetBaseline();
+                    Vector bottomLeft = baseLine.GetStartPoint();
+                    Vector bottomRight = baseLine.GetEndPoint();
+                    float fontHeightFromBaseLine;
+                    //if (font.IsEmbedded())
+                    fontHeightFromBaseLine = Math.Abs/*sometimes it is negative in iText7*/(cri.GetFontSize()) * 0.75f/*convertion from PX to PT*/;//!!!this calculation is heuristic and coincides with cri.GetAscentLine().GetEndPoint().Get(Vector.I2) - bottomLeft.Get(Vector.I2) in iText5 
+                    //else
+                    //    fontHeightFromBaseLine = cri.GetAscentLine().GetEndPoint().Get(Vector.I2) - bottomLeft.Get(Vector.I2);
                     float x = bottomLeft.Get(Vector.I1);
-                    float y = topRight.Get(Vector.I2);
+                    //float y = topRight.Get(Vector.I2);
                     CharBox cb = new CharBox
                     {
                         Char = cri.GetText(),
                         R = new System.Drawing.RectangleF
                         {
-                            X = x,
-                            Y = pageSize.Height - y,// - d,
-                            Width = topRight.Get(Vector.I1) - x,
-                            Height = y - bottomLeft.Get(Vector.I2)// + d,
+                            X = x - pageSize.X,
+                            Y = pageSize.Height + pageSize.Y - bottomLeft.Get(Vector.I2) - fontHeightFromBaseLine,
+                            Width = bottomRight.Get(Vector.I1) - x,
+                            //Height = y - bottomLeft.Get(Vector.I2)// + d,
+                            Height = fontHeightFromBaseLine
                         },
                         Font = f,
-                        FontSize = cri.GetFontSize()
+                        FontSize = fontSize
                     };
                     cbs.Add(cb);
                 }
