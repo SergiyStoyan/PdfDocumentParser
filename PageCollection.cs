@@ -3,8 +3,7 @@
 //        sergey.stoyan@gmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
-//using iTextSharp.text;
-using iTextSharp.text.pdf;
+using iText.Kernel.Pdf;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -17,20 +16,24 @@ namespace Cliver.PdfDocumentParser
         {
             PdfFile = pdfFile;
             PdfReader = new PdfReader(pdfFile);
-            TotalCount = PdfReader.NumberOfPages;
+            PdfDocument = new PdfDocument(PdfReader);
+            TotalCount = PdfDocument.GetNumberOfPages();
             getValue = (int pageI) => { return new Page(this, pageI); };
         }
 
         public readonly string PdfFile;
         public readonly PdfReader PdfReader;
+        public readonly PdfDocument PdfDocument;
         public readonly int TotalCount;
 
         public override void Dispose()
         {
             lock (this)
             {
+                if (PdfDocument != null)
+                    PdfDocument.Close();
                 if (PdfReader != null)
-                    PdfReader.Dispose();
+                    PdfReader.Close();
                 base.Dispose();
             }
         }
