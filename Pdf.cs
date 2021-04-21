@@ -191,7 +191,7 @@ namespace Cliver.PdfDocumentParser
         {
             PdfPage p = pdfDocument.GetPage(pageI);
             Rectangle r = p.GetPageSize();
-            CharBoxExtractionStrategy s = new CharBoxExtractionStrategy(new System.Drawing.SizeF(r.GetWidth(), r.GetHeight()));
+            CharBoxExtractionStrategy s = new CharBoxExtractionStrategy(new System.Drawing.RectangleF(r.GetX(), r.GetY(), r.GetWidth(), r.GetHeight()));
             PdfTextExtractor.GetTextFromPage(p, s);
             if (removeDuplicates)
                 s.CharBoxs = RemoveDuplicates(s.CharBoxs);
@@ -201,11 +201,11 @@ namespace Cliver.PdfDocumentParser
         {
             public List<CharBox> CharBoxs = new List<CharBox>();
 
-            public CharBoxExtractionStrategy(System.Drawing.SizeF pageSize) : base()
+            public CharBoxExtractionStrategy(System.Drawing.RectangleF pageSize) : base()
             {
                 this.pageSize = pageSize;
             }
-            System.Drawing.SizeF pageSize;
+            System.Drawing.RectangleF pageSize;
             Dictionary<string, PdfFont> fontNames2font = new Dictionary<string, PdfFont>();
 
             public override void EventOccurred(IEventData data, EventType type)
@@ -249,8 +249,8 @@ namespace Cliver.PdfDocumentParser
                         Char = cri.GetText(),
                         R = new System.Drawing.RectangleF
                         {
-                            X = x,
-                            Y = pageSize.Height - y,// - d,
+                            X = x - pageSize.X,
+                            Y = pageSize.Height - y - pageSize.Y,// - d,
                             Width = topRight.Get(Vector.I1) - x,
                             Height = y - bottomLeft.Get(Vector.I2)// + d,
                         },
