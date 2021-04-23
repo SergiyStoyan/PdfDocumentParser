@@ -57,7 +57,7 @@ namespace Cliver.PdfDocumentParser
                     if (string.IsNullOrWhiteSpace(BitmapPreprocessorClassDefinition) || !PreprocessBitmap)
                         bitmapPreprocessor = new EmptyBitmapPreprocessor();
                     else
-                        bitmapPreprocessor = BitmapPreprocessor.CompileBitmapPreprocessor(this);
+                        bitmapPreprocessor = BitmapPreprocessor.CreateBitmapPreprocessor(this);
                 }
                 return bitmapPreprocessor;
             }

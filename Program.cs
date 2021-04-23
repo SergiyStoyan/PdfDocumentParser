@@ -12,6 +12,7 @@ using System.Runtime.InteropServices;
 
 /*
 TBD: 
+- each field has its own config control (just as anchors);
 
 for scan processing:
 - invoices still have hand marks on them which hinder OCR. Solution: filter out colors control;
@@ -21,7 +22,6 @@ for scan processing:
 - to preserve normal lines, provide column removal from table;
 
 - ?implement anchor row-separator which requires multiple anchor matching (needed for GCG statement) - verdict: it's better to have multiple field extraction and use it as a separator in a custom processor;
-- move to IText7;
 - provide multiple field extraction on page;
 
 - ?migrate to WPF;
