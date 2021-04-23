@@ -217,27 +217,34 @@ namespace Cliver.PdfDocumentParser
                 if (tri == null)
                     return;
 
+                PdfFont f = tri.GetFont();
+                string fn = f.ToString();
+                if (!fontNames2font.TryGetValue(fn, out PdfFont font))
+                {
+                    font = f;
+                    fontNames2font[fn] = font;
+                }
+                float fontSize = Math.Abs/*sometimes it is negative in iText7*/(tri.GetFontSize());
+                //if (font.GetAscent("I", fontSize) == 0)
+                //    fontSize = 0;
+
                 List<CharBox> cbs = new List<CharBox>();
                 IList<TextRenderInfo> cris = tri.GetCharacterRenderInfos();
                 foreach (TextRenderInfo cri in cris)
                 {
-                    PdfFont f = cri.GetFont();
-                    string fn = f.ToString();
-                    if (!fontNames2font.TryGetValue(fn, out PdfFont font))
-                    {
-                        font = f;
-                        fontNames2font[fn] = font;
-                    }
-                    float fontSize = cri.GetFontSize();
-                    LineSegment baseLine = cri.GetBaseline();
-                    Vector bottomLeft = baseLine.GetStartPoint();
-                    Vector bottomRight = baseLine.GetEndPoint();
-                    float fontHeightFromBaseLine;
-                    //if (font.IsEmbedded())
-                    fontHeightFromBaseLine = Math.Abs/*sometimes it is negative in iText7*/(cri.GetFontSize()) * 0.75f/*convertion from PX to PT*/;//!!!this calculation is heuristic and coincides with cri.GetAscentLine().GetEndPoint().Get(Vector.I2) - bottomLeft.Get(Vector.I2) in iText5 
-                    //else
-                    //    fontHeightFromBaseLine = cri.GetAscentLine().GetEndPoint().Get(Vector.I2) - bottomLeft.Get(Vector.I2);
-                    float x = bottomLeft.Get(Vector.I1);
+                    Vector baseLeft = cri.GetBaseline().GetStartPoint();
+                    Vector topRight = cri.GetAscentLine().GetEndPoint();
+                    //float rise = cri.GetRise();
+                    //if (rise != 0)
+                    //    rise = rise;
+                    float fontHeightFromBaseLine = topRight.Get(Vector.I2) - baseLeft.Get(Vector.I2);
+                    //if (fontSize > 0)
+                    //{
+                    //    float fontHeightFromBaseLine2 = fontSize * 0.75f/*(?)convertion from PX to PT*/;//!!!this calculation is heuristic and coincides with cri.GetAscentLine().GetEndPoint().Get(Vector.I2) - bottomLeft.Get(Vector.I2) in iText5 
+                    //    if (fontHeightFromBaseLine > fontHeightFromBaseLine2)
+                    //        fontHeightFromBaseLine = fontHeightFromBaseLine2;
+                    //}
+                    float x = baseLeft.Get(Vector.I1);
                     //float y = topRight.Get(Vector.I2);
                     CharBox cb = new CharBox
                     {
@@ -245,12 +252,12 @@ namespace Cliver.PdfDocumentParser
                         R = new System.Drawing.RectangleF
                         {
                             X = x - pageSize.X,
-                            Y = pageSize.Height + pageSize.Y - bottomLeft.Get(Vector.I2) - fontHeightFromBaseLine,
-                            Width = bottomRight.Get(Vector.I1) - x,
+                            Y = pageSize.Height + pageSize.Y - baseLeft.Get(Vector.I2) - fontHeightFromBaseLine,
+                            Width = topRight.Get(Vector.I1) - x,
                             //Height = y - bottomLeft.Get(Vector.I2)// + d,
                             Height = fontHeightFromBaseLine
                         },
-                        Font = f,
+                        Font = font,
                         FontSize = fontSize
                     };
                     cbs.Add(cb);
