@@ -23,97 +23,11 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public static partial class Pdf
     {
-        //static public PdfReader CreatePdfReader(string pdfFile)
-        //{
-        //    PdfReader.unethicalreading = true;
-        //    return new PdfReader(pdfFile);
-        //}
-
-        //public static System.Drawing.SizeF GetPageSizeF(this PdfReader pr, int pageI)
-        //{
-        //    iTextSharp.text.Rectangle r = pr.GetPageSize(pageI);
-        //    return new System.Drawing.SizeF(r.Width, r.Height);
-        //}
-
         public static System.Drawing.Size GetPageSize(PdfDocument pdfDocument, int pageI)
         {
             Rectangle r = pdfDocument.GetPage(pageI).GetPageSize();
             return new System.Drawing.Size((int)r.GetWidth(), (int)r.GetHeight());
         }
-
-        //static public RenderFilter[] CreateFilters(this PdfReader pr, float x, float y, float w, float h)
-        //{
-        //    return new RenderFilter[] { new RegionTextRenderFilter(new System.util.RectangleJ(x, y, w, h)) };
-        //}
-
-        //static public Dictionary<string, string> ExtractTexts(this PdfReader pr, int pageI, Dictionary<string, RenderFilter[]> fieldNames2filters)
-        //{
-        //    Dictionary<string, string> fieldNames2texts = new Dictionary<string, string>();
-        //    foreach (string fn in fieldNames2filters.Keys)
-        //        fieldNames2texts[fn] = pr.ExtractText(pageI, fieldNames2filters[fn]);
-        //    return fieldNames2texts;
-        //}
-
-        //public static string ExtractText(this PdfReader pr, int pageI, float x, float y, float w, float h)
-        //{
-        //    RenderFilter[] rf = new RenderFilter[] { new RegionTextRenderFilter(new System.util.RectangleJ(x, y, w, h)) };
-        //    return ExtractText(pr, pageI, rf);
-        //}
-
-        //public static string ExtractText(this PdfReader pr, int pageI, RenderFilter[] f)
-        //{
-        //    ITextExtractionStrategy s = new FilteredTextRenderListener(new LocationTextExtractionStrategy(), f);
-        //    return PdfTextExtractor.GetTextFromPage(pr, pageI, new LimitedTextStrategy2(s));
-        //    //return PdfTextExtractor.GetTextFromPage(pr, pageI, new LimitedTextStrategy(new LocationTextExtractionStrategy(), f));
-        //}
-        //public class LimitedTextStrategy : FilteredTextRenderListener
-        //{
-        //    public LimitedTextStrategy(ITextExtractionStrategy strategy, RenderFilter[] filters):base(strategy, filters)
-        //    {
-        //    }
-        //    public void RenderText(TextRenderInfo renderInfo)
-        //    {
-        //        foreach (TextRenderInfo info in renderInfo.GetCharacterRenderInfos())
-        //        {
-        //            base.RenderText(info);
-        //        }
-        //    }
-        //}
-        //public class LimitedTextStrategy2 : iTextSharp.text.pdf.parser.ITextExtractionStrategy
-        //{
-        //    public readonly ITextExtractionStrategy textextractionstrategy;
-
-        //    public LimitedTextStrategy2(ITextExtractionStrategy strategy)
-        //    {
-        //        this.textextractionstrategy = strategy;
-        //    }
-        //    public void RenderText(TextRenderInfo renderInfo)
-        //    {
-        //        foreach (TextRenderInfo info in renderInfo.GetCharacterRenderInfos())
-        //        {
-        //            this.textextractionstrategy.RenderText(info);
-        //        }
-        //    }
-        //    public string GetResultantText()
-        //    {
-        //        return this.textextractionstrategy.GetResultantText();
-        //    }
-
-        //    public void BeginTextBlock()
-        //    {
-        //        this.textextractionstrategy.BeginTextBlock();
-
-        //    }
-        //    public void EndTextBlock()
-        //    {
-        //        this.textextractionstrategy.EndTextBlock();
-
-        //    }
-        //    public void RenderImage(ImageRenderInfo renderInfo)
-        //    {
-        //        this.textextractionstrategy.RenderImage(renderInfo);
-        //    }
-        //}
 
         static public System.Drawing.Bitmap RenderBitmap(string pdfFile, int pageI, int resolution, bool byFile = false)
         {
@@ -165,28 +79,6 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        //static public List<LocationTextExtractionStrategy.TextChunk> GetTextChunks(this PdfReader pr, int pageI)
-        //{
-        //    ChunkLocationTextExtractionStrategy2 s = new ChunkLocationTextExtractionStrategy2();
-        //    PdfTextExtractor.GetTextFromPage(pr, pageI, s);
-        //    return s.TextChunks;
-        //}
-        //public class ChunkLocationTextExtractionStrategy2 : LocationTextExtractionStrategy
-        //{
-        //    public List<TextChunk> TextChunks = new List<TextChunk>();
-
-        //    public override void RenderText(TextRenderInfo renderInfo)
-        //    {
-        //        base.RenderText(renderInfo);
-
-        //        //Vector bottomLeft = renderInfo.GetDescentLine().GetStartPoint();
-        //        Vector bottomLeft = renderInfo.GetBaseline().GetStartPoint();
-        //        Vector topRight = renderInfo.GetAscentLine().GetEndPoint();
-        //        TextChunk tc = new TextChunk(renderInfo.GetText(), bottomLeft, topRight, renderInfo.GetSingleSpaceWidth());
-        //        TextChunks.Add(tc);
-        //    }
-        //}
-
         static public List<CharBox> GetCharBoxsFromPage(PdfDocument pdfDocument, int pageI, bool removeDuplicates)
         {
             PdfPage p = pdfDocument.GetPage(pageI);
@@ -206,7 +98,6 @@ namespace Cliver.PdfDocumentParser
                 this.pageSize = pageSize;
             }
             System.Drawing.RectangleF pageSize;
-            Dictionary<string, PdfFont> fontNames2font = new Dictionary<string, PdfFont>();
 
             public override void EventOccurred(IEventData data, EventType type)
             {
@@ -217,13 +108,7 @@ namespace Cliver.PdfDocumentParser
                 if (tri == null)
                     return;
 
-                PdfFont f = tri.GetFont();
-                string fn = f.ToString();
-                if (!fontNames2font.TryGetValue(fn, out PdfFont font))
-                {
-                    font = f;
-                    fontNames2font[fn] = font;
-                }
+                PdfFont font = tri.GetFont();//it has been checked that it returns the same font object.
                 float fontSize = Math.Abs/*sometimes it is negative in iText7*/(tri.GetFontSize());
                 //if (font.GetAscent("I", fontSize) == 0)
                 //    fontSize = 0;
@@ -252,7 +137,7 @@ namespace Cliver.PdfDocumentParser
                         R = new System.Drawing.RectangleF
                         {
                             X = x - pageSize.X,
-                            Y = pageSize.Height + pageSize.Y - baseLeft.Get(Vector.I2) - fontHeightFromBaseLine,
+                            Y = pageSize.Height + pageSize.Y - baseLeft.Get(Vector.I2) - fontHeightFromBaseLine,//(!)basic positioning point is char's baseLine, not ascentLine
                             Width = topRight.Get(Vector.I1) - x,
                             //Height = y - bottomLeft.Get(Vector.I2)// + d,
                             Height = fontHeightFromBaseLine
@@ -283,60 +168,6 @@ namespace Cliver.PdfDocumentParser
                 cbs = cbs.Where(a => !InvisibleCharacters.Contains(a.Char)).ToList();
             return cbs.ToList();
         }
-
-        //public static List<CharBox> GetCharBoxsFromPage(PdfReader pdfReader, int pageI, bool removeDuplicates)
-        //{
-        //    var cbs = pdfReader.GetCharacterTextChunks(pageI).Select(x => new Pdf.CharBox
-        //    {
-        //        R = new System.Drawing.RectangleF
-        //        {
-        //            X = x.StartLocation[Vector.I1],
-        //            Y = pdfReader.GetPageSize(pageI).Height - x.EndLocation[Vector.I2],
-        //            Width = x.EndLocation[Vector.I1] - x.StartLocation[Vector.I1],
-        //            Height = x.EndLocation[Vector.I2] - x.StartLocation[Vector.I2],
-        //        },
-        //        Char = x.Text
-        //    });
-        //    if (removeDuplicates)
-        //        cbs = RemoveDuplicates(cbs);
-        //    return cbs.ToList();
-        //}
-
-        //public static string ExtractText(this PdfPage page, Rectangle rect)
-        //{
-        //    var filter = new IEventFilter[1];
-        //    filter[0] = new TextRegionEventFilter(rect);
-        //    var filteredTextEventListener = new FilteredTextEventListener(new LocationTextExtractionStrategy(), filter);
-        //    var str = PdfTextExtractor.GetTextFromPage(page, filteredTextEventListener);
-        //    return str;
-        //}
-        //public static string GetResultantText(this LocationTextExtractionStrategy strategy, Rectangle rect)
-        //{
-        //    IList<TextChunk> locationalResult = (IList<TextChunk>)locationalResultField.GetValue(strategy);
-        //    List<TextChunk> nonMatching = new List<TextChunk>();
-        //    foreach (TextChunk chunk in locationalResult)
-        //    {
-        //        ITextChunkLocation location = chunk.GetLocation();
-        //        Vector start = location.GetStartLocation();
-        //        Vector end = location.GetEndLocation();
-        //        if (!rect.IntersectsLine(start.Get(Vector.I1), start.Get(Vector.I2), end.Get(Vector.I1), end.Get(Vector.I2)))
-        //        {
-        //            nonMatching.Add(chunk);
-        //        }
-        //    }
-        //    nonMatching.ForEach(c => locationalResult.Remove(c));
-        //    try
-        //    {
-        //        return strategy.GetResultantText();
-        //    }
-        //    finally
-        //    {
-        //        nonMatching.ForEach(c => locationalResult.Add(c));
-        //    }
-        //}
-
-        //static FieldInfo locationalResultField = typeof(LocationTextExtractionStrategy).GetField("locationalResult", BindingFlags.NonPublic | BindingFlags.Instance);
-
 
         public static List<CharBox> RemoveDuplicates(IEnumerable<CharBox> cbs)
         {
