@@ -12,6 +12,7 @@ using System.Runtime.InteropServices;
 
 /*
 TBD: 
+- each field has its own config control (just as anchors);
 
 for scan processing:
 - invoices still have hand marks on them which hinder OCR. Solution: filter out colors control;
