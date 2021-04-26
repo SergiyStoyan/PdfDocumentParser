@@ -113,6 +113,7 @@ namespace Cliver.PdfDocumentParser
             }
             return assembly.GetTypes();
         }
+        //static Dictionary<string, Type[]> compiledTypesDefinitions2Types = new Dictionary<string, Type[]>();
 
         public static IEnumerable<Type> FindSubTypes(string baseTypeName, Type[] types)
         {
