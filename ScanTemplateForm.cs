@@ -166,11 +166,11 @@ namespace Cliver.PdfDocumentParser
                 bitmapPreprocessorClassDefinition.Document.MarkerStrategy.RemoveAll(marker => true);
                 try
                 {
-                    BitmapPreprocessor.GetCompiledBitmapPreprocessorType(bitmapPreprocessorClassDefinition.Text);//checking
+                    BitmapPreprocessor.CompileBitmapPreprocessorType(bitmapPreprocessorClassDefinition.Text);//checking
                 }
-                catch (BitmapPreprocessor.CompilationException ex)
+                catch (Compiler.Exception ex)
                 {
-                    foreach (BitmapPreprocessor.CompilationError ce in ex.Data.Values)
+                    foreach (Compiler.Error ce in ex.Data.Values)
                     {
                         ICSharpCode.TextEditor.Document.TextMarker tm = new ICSharpCode.TextEditor.Document.TextMarker(ce.P1, ce.P2 - ce.P1, ICSharpCode.TextEditor.Document.TextMarkerType.WaveLine, System.Drawing.Color.Red);
                         tm.ToolTip = ce.Message;

@@ -1,0 +1,130 @@
+//********************************************************************************************
+//Author: Sergey Stoyan
+//        sergey.stoyan@gmail.com
+//        http://www.cliversoft.com
+//********************************************************************************************
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.IO;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using System.Reflection;
+using System.Drawing;
+
+namespace Cliver.PdfDocumentParser
+{
+    /// <summary>
+    /// Tool for compiling types from C# code string
+    /// </summary>
+    public class Compiler
+    {
+        [Serializable]
+        public class Error
+        {
+            public int P1;
+            public int P2;
+            public string Message;
+        }
+
+        public class Exception : System.Exception
+        {
+            public Exception(List<Error> compilationErrors) : base(string.Join("\r\n", compilationErrors.Select(a => a.Message)))
+            {
+                for (int i = 0; i < compilationErrors.Count; i++)
+                    Data[i] = compilationErrors[i];
+            }
+        }
+
+        //static HashSet<string> assemblyPaths = new HashSet<string>
+        //{
+        //    typeof(object).Assembly.Location, //mscorlib
+        //    //MetadataReference.CreateFromFile(typeof(DynamicObject).Assembly.Location), //System.Core
+        //    //MetadataReference.CreateFromFile(typeof(RuntimeBinderException).Assembly.Location),//Microsoft.CSharp
+        //    //MetadataReference.CreateFromFile(typeof(Action).Assembly.Location), //System.Runtime
+        //    //MetadataReference.CreateFromFile(typeof(System.Collections.Generic.List<>).Assembly.Location),
+        //    //MetadataReference.CreateFromFile(typeof(System.Linq.Enumerable).Assembly.Location),
+        //    //MetadataReference.CreateFromFile(typeof(System.Text.RegularExpressions.Regex).Assembly.Location),
+        //    typeof(System.Drawing.Size).Assembly.Location,
+        //    typeof(System.Drawing.Point).Assembly.Location,
+        //    typeof(System.Drawing.Bitmap).Assembly.Location,
+        //    //MetadataReference.CreateFromFile(typeof(Cliver.DateTimeRoutines).Assembly.Location),
+        //    typeof(Emgu.CV.Structure.Gray).Assembly.Location,
+        //    typeof(Emgu.CV.IColor).Assembly.Location,
+        //    typeof(Emgu.CV.CvInvoke).Assembly.Location,
+        //    typeof(Emgu.CV.CvEnum.AdaptiveThresholdType).Assembly.Location,
+        //    Assembly.GetExecutingAssembly().Location,
+        //};
+        static List<MetadataReference> references = new List<MetadataReference>();
+        static Compiler()
+        {
+            //    foreach (string ap in assemblyPaths)
+            //        references.Add(MetadataReference.CreateFromFile(ap));
+
+            //foreach (AssemblyName an in typeof(Emgu.CV.Structure.Gray).Assembly.GetReferencedAssemblies())
+            //    assemblyPaths.Add(Assembly.Load(an.FullName).Location);
+            //references.Add(MetadataReference.CreateFromFile(Assembly.Load("netstandard, Version=2.0.0.0").Location)); //netstandard
+            //references.Add(MetadataReference.CreateFromFile(Assembly.Load("netstandard").Location)); //netstandard
+
+            Dictionary<string, Assembly> assemblNames2assemby = new Dictionary<string, Assembly>();
+            getAllAssemblies(assemblNames2assemby, Assembly.GetExecutingAssembly());
+            foreach (Assembly a in assemblNames2assemby.Values)
+                references.Add(MetadataReference.CreateFromFile(a.Location));
+        }
+        static void getAllAssemblies(Dictionary<string, Assembly> assemblNames2assemby, Assembly assembly)
+        {
+            assemblNames2assemby[assembly.FullName] = assembly;
+            foreach (AssemblyName an in assembly.GetReferencedAssemblies())
+                if (!assemblNames2assemby.ContainsKey(an.FullName))
+                {
+                    Assembly a = Assembly.Load(an);
+                    getAllAssemblies(assemblNames2assemby, a);
+                }
+        }
+
+        /// <summary>
+        /// Compile 
+        /// </summary>
+        /// <param name="typeDefinition"></param>
+        /// <param name="typeName"></param>
+        /// <returns></returns>
+        public static Type[] Compile(string typesDefinition)
+        {
+            SyntaxTree st = SyntaxFactory.ParseSyntaxTree(typesDefinition);
+            CSharpCompilation compilation = CSharpCompilation.Create("emitted.dll",//the file seems not to be really created
+                syntaxTrees: new SyntaxTree[] { st },
+                references: references,
+                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
+                );
+            Assembly assembly;
+            using (var ms = new MemoryStream())
+            {
+                var result = compilation.Emit(ms);
+                if (!result.Success)
+                {
+                    List<Error> compilationErrors = new List<Error>();
+                    IEnumerable<Diagnostic> failures = result.Diagnostics.Where(diagnostic => diagnostic.IsWarningAsError || diagnostic.Severity == DiagnosticSeverity.Error);
+                    foreach (Diagnostic diagnostic in failures)
+                        compilationErrors.Add(new Error { Message = diagnostic.GetMessage(), P1 = diagnostic.Location.SourceSpan.Start, P2 = diagnostic.Location.SourceSpan.End });
+                    throw new Exception(compilationErrors);
+                }
+                ms.Seek(0, SeekOrigin.Begin);
+                assembly = Assembly.Load(ms.ToArray());
+            }
+            return assembly.GetTypes();
+        }
+
+        public static IEnumerable<Type> FindSubTypes(string baseTypeName, Type[] types)
+        {
+            return types.Where(t => !t.IsAbstract && t.BaseType.FullName.Contains(baseTypeName));
+        }
+
+        public static Type FindFirstSubType(string baseTypeName, Type[] types)
+        {
+            Type t = FindSubTypes(baseTypeName, types).FirstOrDefault();
+            if (t == null)
+                throw new System.Exception("No '" + baseTypeName + "' sub-type is found in the hot-compiled assembly.");
+            return t;
+        }
+    }
+}

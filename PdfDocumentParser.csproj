@@ -163,6 +163,7 @@
       <DependentUpon>AnchorControl.cs</DependentUpon>
     </Compile>
     <Compile Include="BooleanEngine.cs" />
+    <Compile Include="Compiler.cs" />
     <Compile Include="CvImage.cs" />
     <Compile Include="BitmapPreprocessor.cs" />
     <Compile Include="Deskewer.cs" />
