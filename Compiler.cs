@@ -15,7 +15,7 @@ using System.Diagnostics;
 namespace Cliver.PdfDocumentParser
 {
     /// <summary>
-    /// Tool for compiling types from C# code string
+    /// Tool for hot-compiling assembly from C# code string
     /// </summary>
     public class Compiler
     {
