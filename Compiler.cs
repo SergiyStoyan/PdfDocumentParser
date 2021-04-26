@@ -142,23 +142,17 @@ namespace Cliver.PdfDocumentParser
 
         public static Type FindFirstSubType(string baseTypeName, Type[] types)
         {
-            Type t = FindSubTypes(baseTypeName, types).FirstOrDefault();
-            if (t == null)
-                throw new System.Exception("No '" + baseTypeName + "' sub-type is found in the hot-compiled assembly.");
-            return t;
+            return FindSubTypes(baseTypeName, types).FirstOrDefault();
         }
 
         public static IEnumerable<Type> FindSubTypes(Type baseType, Type[] types)
         {
             return types.Where(t => !t.IsAbstract && t.BaseType == baseType);
         }
-         
+
         public static Type FindFirstSubType(Type baseType, Type[] types)
         {
-            Type t = FindSubTypes(baseType, types).FirstOrDefault();
-            if (t == null)
-                throw new System.Exception("No '" + baseType.Name + "' sub-type is found in the hot-compiled assembly.");
-            return t;
+            return FindSubTypes(baseType, types).FirstOrDefault();
         }
     }
 }
