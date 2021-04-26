@@ -18,7 +18,7 @@ namespace Cliver.PdfDocumentParser
 
         public static Type CompileBitmapPreprocessorType(string bitmapPreprocessorClassDefinition)
         {
-            return Compiler.FindFirstSubType("BitmapPreprocessor", Compiler.Compile(bitmapPreprocessorClassDefinition));
+            return Compiler.FindFirstSubType(typeof(BitmapPreprocessor), Compiler.Compile(bitmapPreprocessorClassDefinition));
         }
 
         public static BitmapPreprocessor CreateBitmapPreprocessor(Template template)

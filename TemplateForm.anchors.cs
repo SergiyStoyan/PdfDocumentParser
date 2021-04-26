@@ -371,11 +371,11 @@ namespace Cliver.PdfDocumentParser
             if (currentAnchorControl != null && row == currentAnchorControl.Row)
                 setCurrentAnchorRow(a.Id, false);
 
-            if (a.Id == GetTemplateFromUI(false).ScalingAnchorId)
-            {
-                ReloadPageActiveTemplateBitmap();
-                return;
-            }
+            //if (a.Id == GetTemplateFromUI(false).ScalingAnchorId)
+            //{
+            //    ReloadPageActiveTemplateBitmap();
+            //    return;
+            //}
 
             setConditionsStatus();
         }
