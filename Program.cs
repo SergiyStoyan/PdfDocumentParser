@@ -24,6 +24,8 @@ for scan processing:
 - ?implement anchor row-separator which requires multiple anchor matching (needed for GCG statement) - verdict: it's better to have multiple field extraction and use it as a separator in a custom processor;
 - provide multiple field extraction on page;
 
+- ?migrate to iText7 (!!! 7.1.15 has the following bugs: -some pdf's are read in wrong encoding; -wrong and sometimes very wrong GetAscentLine(); -new PdfReader(file) locks file forever if read error;)
+
 - ?migrate to WPF;
 - ?change anchor id->name (involves condition expressions)
  */

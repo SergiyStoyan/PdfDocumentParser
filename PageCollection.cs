@@ -3,8 +3,8 @@
 //        sergey.stoyan@gmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
-using iText.Kernel.Pdf;
-using System.IO;
+//using iTextSharp.text;
+using iTextSharp.text.pdf;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -16,28 +16,21 @@ namespace Cliver.PdfDocumentParser
         public PageCollection(string pdfFile) : base()
         {
             PdfFile = pdfFile;
-            using (Stream s = new FileStream(pdfFile, FileMode.Open))//it is because of the bug in iText7: new PdfReader(file) keeps the fie locked if error
-            {
-                PdfReader = new PdfReader(s);
-            }
-            PdfDocument = new PdfDocument(PdfReader);
-            TotalCount = PdfDocument.GetNumberOfPages();
+            PdfReader = new PdfReader(pdfFile);
+            TotalCount = PdfReader.NumberOfPages;
             getValue = (int pageI) => { return new Page(this, pageI); };
         }
 
         public readonly string PdfFile;
         public readonly PdfReader PdfReader;
-        public readonly PdfDocument PdfDocument;
         public readonly int TotalCount;
 
         public override void Dispose()
         {
             lock (this)
             {
-                if (PdfDocument != null)
-                    PdfDocument.Close();
                 if (PdfReader != null)
-                    PdfReader.Close();
+                    PdfReader.Dispose();
                 base.Dispose();
             }
         }
