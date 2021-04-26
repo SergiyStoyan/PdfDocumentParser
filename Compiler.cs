@@ -82,7 +82,7 @@ namespace Cliver.PdfDocumentParser
         //    var y = references;
         //    sw3.Stop();
         //}
-        static List<MetadataReference> getReferences()
+        static List<MetadataReference> getAllReferences()
         {
             List<MetadataReference> references = new List<MetadataReference>();
             Dictionary<string, Assembly> assemblNames2assemby = new Dictionary<string, Assembly>();
@@ -106,14 +106,14 @@ namespace Cliver.PdfDocumentParser
         /// Compile 
         /// </summary>
         /// <param name="typeDefinition"></param>
-        /// <param name="typeName"></param>
+        /// <param name="references"></param>
         /// <returns></returns>
-        public static Type[] Compile(string typesDefinition)
+        public static Type[] Compile(string typesDefinition, IEnumerable<MetadataReference> references = null)
         {
             SyntaxTree st = SyntaxFactory.ParseSyntaxTree(typesDefinition);
-            CSharpCompilation compilation = CSharpCompilation.Create("emitted.dll",//the file seems not to be really created
+            CSharpCompilation compilation = CSharpCompilation.Create("emitted.dll",//no file seems to be really created
                 syntaxTrees: new SyntaxTree[] { st },
-                references: getReferences(),
+                references: references != null ? references : getAllReferences(),
                 options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
                 );
             Assembly assembly;
@@ -140,19 +140,9 @@ namespace Cliver.PdfDocumentParser
             return types.Where(t => !t.IsAbstract && t.BaseType.FullName.Contains(baseTypeName));
         }
 
-        public static Type FindFirstSubType(string baseTypeName, Type[] types)
-        {
-            return FindSubTypes(baseTypeName, types).FirstOrDefault();
-        }
-
         public static IEnumerable<Type> FindSubTypes(Type baseType, Type[] types)
         {
-            return types.Where(t => !t.IsAbstract && t.BaseType == baseType);
-        }
-
-        public static Type FindFirstSubType(Type baseType, Type[] types)
-        {
-            return FindSubTypes(baseType, types).FirstOrDefault();
+            return types.Where(t => !t.IsAbstract && baseType.IsAssignableFrom(t));
         }
     }
 }

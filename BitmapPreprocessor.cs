@@ -18,7 +18,7 @@ namespace Cliver.PdfDocumentParser
 
         public static Type CompileBitmapPreprocessorType(string bitmapPreprocessorClassDefinition)
         {
-            Type t = Compiler.FindFirstSubType(typeof(BitmapPreprocessor), Compiler.Compile(bitmapPreprocessorClassDefinition));
+            Type t = Compiler.FindSubTypes(typeof(BitmapPreprocessor), Compiler.Compile(bitmapPreprocessorClassDefinition)).FirstOrDefault();
             if (t == null)
                 throw new Exception("No sub-type of '" + typeof(BitmapPreprocessor).Name + "' was found in the hot-compiled type definition.");
             return t;
