@@ -10,7 +10,7 @@ using System.IO;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using System.Reflection;
-using System.Drawing;
+using System.Diagnostics;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -55,21 +55,41 @@ namespace Cliver.PdfDocumentParser
         //    typeof(Emgu.CV.CvEnum.AdaptiveThresholdType).Assembly.Location,
         //    Assembly.GetExecutingAssembly().Location,
         //};
-        static List<MetadataReference> references = new List<MetadataReference>();
-        static Compiler()
+        //static List<MetadataReference> _references = new List<MetadataReference>();
+        //static Compiler()
+        //{
+        //    //    foreach (string ap in assemblyPaths)
+        //    //        references.Add(MetadataReference.CreateFromFile(ap));
+
+        //    //foreach (AssemblyName an in typeof(Emgu.CV.Structure.Gray).Assembly.GetReferencedAssemblies())
+        //    //    assemblyPaths.Add(Assembly.Load(an.FullName).Location);
+        //    //references.Add(MetadataReference.CreateFromFile(Assembly.Load("netstandard, Version=2.0.0.0").Location)); //netstandard
+        //    //references.Add(MetadataReference.CreateFromFile(Assembly.Load("netstandard").Location)); //netstandard
+        //}
+
+        //public static void Test()
+        //{
+        //    Stopwatch sw0 = new Stopwatch();
+        //    sw0.Start();
+        //    var f = references;
+        //    sw0.Stop();
+        //    Stopwatch sw1 = new Stopwatch();
+        //    sw1.Start();
+        //    var r = references;
+        //    sw1.Stop();
+        //    Stopwatch sw3 = new Stopwatch();
+        //    sw3.Start();
+        //    var y = references;
+        //    sw3.Stop();
+        //}
+        static List<MetadataReference> getReferences()
         {
-            //    foreach (string ap in assemblyPaths)
-            //        references.Add(MetadataReference.CreateFromFile(ap));
-
-            //foreach (AssemblyName an in typeof(Emgu.CV.Structure.Gray).Assembly.GetReferencedAssemblies())
-            //    assemblyPaths.Add(Assembly.Load(an.FullName).Location);
-            //references.Add(MetadataReference.CreateFromFile(Assembly.Load("netstandard, Version=2.0.0.0").Location)); //netstandard
-            //references.Add(MetadataReference.CreateFromFile(Assembly.Load("netstandard").Location)); //netstandard
-
+            List<MetadataReference> references = new List<MetadataReference>();
             Dictionary<string, Assembly> assemblNames2assemby = new Dictionary<string, Assembly>();
             getAllAssemblies(assemblNames2assemby, Assembly.GetExecutingAssembly());
             foreach (Assembly a in assemblNames2assemby.Values)
                 references.Add(MetadataReference.CreateFromFile(a.Location));
+            return references;
         }
         static void getAllAssemblies(Dictionary<string, Assembly> assemblNames2assemby, Assembly assembly)
         {
@@ -93,7 +113,7 @@ namespace Cliver.PdfDocumentParser
             SyntaxTree st = SyntaxFactory.ParseSyntaxTree(typesDefinition);
             CSharpCompilation compilation = CSharpCompilation.Create("emitted.dll",//the file seems not to be really created
                 syntaxTrees: new SyntaxTree[] { st },
-                references: references,
+                references: getReferences(),
                 options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
                 );
             Assembly assembly;
@@ -113,6 +133,7 @@ namespace Cliver.PdfDocumentParser
             }
             return assembly.GetTypes();
         }
+        //static Dictionary<string, Type[]> compiledTypesDefinitions2Types = new Dictionary<string, Type[]>();
 
         public static IEnumerable<Type> FindSubTypes(string baseTypeName, Type[] types)
         {
@@ -124,6 +145,19 @@ namespace Cliver.PdfDocumentParser
             Type t = FindSubTypes(baseTypeName, types).FirstOrDefault();
             if (t == null)
                 throw new System.Exception("No '" + baseTypeName + "' sub-type is found in the hot-compiled assembly.");
+            return t;
+        }
+
+        public static IEnumerable<Type> FindSubTypes(Type baseType, Type[] types)
+        {
+            return types.Where(t => !t.IsAbstract && t.BaseType == baseType);
+        }
+         
+        public static Type FindFirstSubType(Type baseType, Type[] types)
+        {
+            Type t = FindSubTypes(baseType, types).FirstOrDefault();
+            if (t == null)
+                throw new System.Exception("No '" + baseType.Name + "' sub-type is found in the hot-compiled assembly.");
             return t;
         }
     }
