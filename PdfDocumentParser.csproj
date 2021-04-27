@@ -173,6 +173,7 @@
     <Compile Include="Page.fields.cs" />
     <Compile Include="PageCollection.cs" />
     <Compile Include="Page.cs" />
+    <Compile Include="Pdf.iText7.cs" />
     <Compile Include="Template.scan.cs" />
     <Compile Include="Template.Anchor.cs" />
     <Compile Include="Template.Field.cs" />
@@ -353,8 +354,8 @@
     <PackageReference Include="ICSharpCode.TextEditor.Extended">
       <Version>4.2.4</Version>
     </PackageReference>
-    <PackageReference Include="itext7">
-      <Version>7.1.15</Version>
+    <PackageReference Include="iTextSharp">
+      <Version>5.5.13.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp">
       <Version>3.10.0-1.final</Version>

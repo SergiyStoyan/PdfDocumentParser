@@ -8,13 +8,10 @@ using System.Linq;
 using System.Text;
 using System.Collections.Generic;
 using System.IO;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.text.pdf.parser;
 using System.Diagnostics;
-using iText.Kernel.Pdf;
-using iText.Kernel.Pdf.Canvas.Parser.Listener;
-using iText.Kernel.Pdf.Canvas.Parser.Data;
-using iText.Kernel.Pdf.Canvas.Parser;
-using iText.Kernel.Geom;
-using iText.Kernel.Font;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -23,10 +20,16 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public static partial class Pdf
     {
-        public static System.Drawing.Size GetPageSize(PdfDocument pdfDocument, int pageI)
+        static public PdfReader CreatePdfReader(string pdfFile)
         {
-            Rectangle r = pdfDocument.GetPage(pageI).GetPageSize();
-            return new System.Drawing.Size((int)r.GetWidth(), (int)r.GetHeight());
+            PdfReader.unethicalreading = true;
+            return new PdfReader(pdfFile);
+        }
+
+        public static System.Drawing.Size GetPageSize(PdfReader pdfReader, int pageI)
+        {
+            iTextSharp.text.Rectangle r = pdfReader.GetPageSize(pageI);
+            return new System.Drawing.Size((int)r.Width, (int)r.Height);
         }
 
         static public System.Drawing.Bitmap RenderBitmap(string pdfFile, int pageI, int resolution, bool byFile = false)
@@ -79,71 +82,49 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        static public List<CharBox> GetCharBoxsFromPage(PdfDocument pdfDocument, int pageI, bool removeDuplicates)
+        static public List<CharBox> GetCharBoxsFromPage(PdfReader pdfReader, int pageI, bool removeDuplicates)
         {
-            PdfPage p = pdfDocument.GetPage(pageI);
-            Rectangle r = p.GetPageSize();
-            CharBoxExtractionStrategy s = new CharBoxExtractionStrategy(new System.Drawing.RectangleF(r.GetX(), r.GetY(), r.GetWidth(), r.GetHeight()));
-            PdfTextExtractor.GetTextFromPage(p, s);
+            Rectangle r = pdfReader.GetPageSize(pageI);
+            CharBoxExtractionStrategy s = new CharBoxExtractionStrategy(new System.Drawing.RectangleF(r.Left, r.Bottom, r.Width, r.Height));
+            PdfTextExtractor.GetTextFromPage(pdfReader, pageI, s);
             if (removeDuplicates)
                 s.CharBoxs = RemoveDuplicates(s.CharBoxs);
             return s.CharBoxs;
         }
         public class CharBoxExtractionStrategy : LocationTextExtractionStrategy
         {
-            public List<CharBox> CharBoxs = new List<CharBox>();
-
             public CharBoxExtractionStrategy(System.Drawing.RectangleF pageSize) : base()
             {
                 this.pageSize = pageSize;
             }
             System.Drawing.RectangleF pageSize;
 
-            public override void EventOccurred(IEventData data, EventType type)
+            public List<CharBox> CharBoxs = new List<CharBox>();
+
+            public override void RenderText(TextRenderInfo renderInfo)
             {
-                base.EventOccurred(data, type);
-
-                TextRenderInfo tri = data as TextRenderInfo;
-                //if (type != EventType.RENDER_TEXT)
-                if (tri == null)
-                    return;
-
-                PdfFont font = tri.GetFont();//it has been checked that it returns the same font object.
-                float fontSize = Math.Abs/*sometimes it is negative in iText7*/(tri.GetFontSize());
-                //if (font.GetAscent("I", fontSize) == 0)
-                //    fontSize = 0;
+                base.RenderText(renderInfo);
 
                 List<CharBox> cbs = new List<CharBox>();
-                IList<TextRenderInfo> cris = tri.GetCharacterRenderInfos();
+                IList<TextRenderInfo> cris = renderInfo.GetCharacterRenderInfos();
                 foreach (TextRenderInfo cri in cris)
                 {
                     Vector baseLeft = cri.GetBaseline().GetStartPoint();
                     Vector topRight = cri.GetAscentLine().GetEndPoint();
-                    //float rise = cri.GetRise();
-                    //if (rise != 0)
-                    //    rise = rise;
-                    float fontHeightFromBaseLine = topRight.Get(Vector.I2) - baseLeft.Get(Vector.I2);
-                    //if (fontSize > 0)
-                    //{
-                    //    float fontHeightFromBaseLine2 = fontSize * 0.75f/*(?)convertion from PX to PT*/;//!!!this calculation is heuristic and coincides with cri.GetAscentLine().GetEndPoint().Get(Vector.I2) - bottomLeft.Get(Vector.I2) in iText5 
-                    //    if (fontHeightFromBaseLine > fontHeightFromBaseLine2)
-                    //        fontHeightFromBaseLine = fontHeightFromBaseLine2;
-                    //}
-                    float x = baseLeft.Get(Vector.I1);
-                    //float y = topRight.Get(Vector.I2);
+                    float x = baseLeft[Vector.I1];
+                    float y = topRight[Vector.I2];
                     CharBox cb = new CharBox
                     {
                         Char = cri.GetText(),
                         R = new System.Drawing.RectangleF
                         {
                             X = x - pageSize.X,
-                            Y = pageSize.Height + pageSize.Y - baseLeft.Get(Vector.I2) - fontHeightFromBaseLine,//(!)basic positioning point is char's baseLine, not ascentLine
-                            Width = topRight.Get(Vector.I1) - x,
-                            //Height = y - bottomLeft.Get(Vector.I2)// + d,
-                            Height = fontHeightFromBaseLine
+                            Y = pageSize.Height + pageSize.Y - y,//(!)basic positioning point is char's baseLine, not ascentLine
+                            Width = topRight[Vector.I1] - x,
+                            Height = y - baseLeft[Vector.I2],
                         },
-                        Font = font,
-                        FontSize = fontSize
+                        //Font = font,
+                        //FontSize = fontSize
                     };
                     cbs.Add(cb);
                 }

@@ -289,7 +289,7 @@ namespace Cliver.PdfDocumentParser
             get
             {
                 if (_pdfCharBoxs == null)
-                    _pdfCharBoxs = Pdf.GetCharBoxsFromPage(PageCollection.PdfDocument, Number, true);
+                    _pdfCharBoxs = Pdf.GetCharBoxsFromPage(PageCollection.PdfReader, Number, true);
                 return _pdfCharBoxs;
             }
         }
@@ -300,7 +300,7 @@ namespace Cliver.PdfDocumentParser
             get
             {
                 if (_size == Size.Empty)
-                    _size = Pdf.GetPageSize(PageCollection.PdfDocument, Number);
+                    _size = Pdf.GetPageSize(PageCollection.PdfReader, Number);
                 return _size;
             }
         }
