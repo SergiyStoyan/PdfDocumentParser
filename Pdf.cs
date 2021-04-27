@@ -20,12 +20,6 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public static partial class Pdf
     {
-        static public PdfReader CreatePdfReader(string pdfFile)
-        {
-            PdfReader.unethicalreading = true;
-            return new PdfReader(pdfFile);
-        }
-
         public static System.Drawing.Size GetPageSize(PdfReader pdfReader, int pageI)
         {
             iTextSharp.text.Rectangle r = pdfReader.GetPageSize(pageI);

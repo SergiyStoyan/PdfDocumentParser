@@ -16,6 +16,7 @@ namespace Cliver.PdfDocumentParser
         public PageCollection(string pdfFile) : base()
         {
             PdfFile = pdfFile;
+            //PdfReader.unethicalreading = true;
             PdfReader = new PdfReader(pdfFile);
             TotalCount = PdfReader.NumberOfPages;
             getValue = (int pageI) => { return new Page(this, pageI); };
