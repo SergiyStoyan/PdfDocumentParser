@@ -388,11 +388,11 @@ setLicense();
             <table>
                 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
                 <tr>
-                    <td class='title_column'><a name='Representative'>Representative</a></td>
+                    <td class='title_column'><a name='Representative'>TextAutoInsertSpace.Representative</a></td>
                     <td>Character which is inserted into output as an auto-detected space.</td>
                 </tr>
                 <tr>
-                    <td class='title_column'><a name='Threshold'>Threshold</a></td>
+                    <td class='title_column'><a name='Threshold'>TextAutoInsertSpace.Threshold</a></td>
                     <td>Space detection can be tuned by this parameter. When needed, it should be tuned experimentally. </td>
                 </tr>
             </table>
@@ -409,15 +409,15 @@ setLicense();
 					<br>When the scanned images are long like POS printouts and have altering skew, toggle to Column Of Blocks - it will deskew the image by blocks arranged vertically.</td>
                 </tr>
                 <tr>
-                    <td class='title_column'><a name='PageRotation'>Rotate Pages</a></td>
+                    <td class='title_column'><a name='PageRotation'>PageRotation</a></td>
                     <td>It is intended mostly for scanned documents. A page must be correctly oriented to get OCR working properly on it.</td>
                 </tr>
                 <tr>
-                    <td class='title_column'><a name='ScaleByAnchor'>Scale By Anchor</a></td>
+                    <td class='title_column'><a name='ScaleByAnchor'>ScalingAnchorId</a></td>
                     <td>When scans for the same template can differ by their scale then they should be resized to conform to the scale expected by the template. It is done automatically by an image anchor: create a CvImage anchor and select an image that is common for all the scans. (!)A larger image provides a precisier scaling. Then select this anchor in the Scale By Anchor dropdown. Now, PdfDocumentParser engine will rescale scans respectively if their scaling anchor is bigger or smaller then the initial one.</td>
                 </tr>
                 <tr>
-                    <td class='title_column'><a name='PreprocesingCode'>Preprocesing Code</a></td>
+                    <td class='title_column'><a name='PreprocesingCode'>BitmapPreprocessorClassDefinition</a></td>
                     <td>A template can have its own custom image preprocessing code. An example using Emgu.CV is provided by default.</td>
                 </tr>
             </table>
@@ -429,7 +429,7 @@ setLicense();
             <table>
                 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
                 <tr>
-                    <td class='title_column'><a name='CvImageScalePyramidStep'>Scale Pyramid Step</a></td>
+                    <td class='title_column'><a name='CvImageScalePyramidStep'>CvImageScalePyramidStep</a></td>
                     <td>It is the scale pyramid step set in pixels of the PDF resolution (which is by default 72dpi). The bigger step, the faster perfomance... and the higher chance to overlook the match.</td>
                 </tr>
             </table>

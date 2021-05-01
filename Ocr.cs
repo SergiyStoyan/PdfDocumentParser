@@ -148,13 +148,13 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public float DetectDeskewAngle(Bitmap b)
-        {
-            using (Tesseract.Page page = engine.Process(b, PageSegMode.OsdOnly))
-            {
-                return page.AnalyseLayout().GetProperties().DeskewAngle;
-            }
-        }
+        //public float DetectDeskewAngle(Bitmap b)
+        //{
+        //    using (Tesseract.Page page = engine.Process(b, PageSegMode.OsdOnly))
+        //    {
+        //        return page.AnalyseLayout().GetProperties().DeskewAngle;
+        //    }
+        //}
 
         public string GetTextSurroundedByRectangle(Bitmap b, RectangleF r, PageSegMode pageSegMode)
         {
