@@ -92,8 +92,7 @@ namespace Cliver.PdfDocumentParser
                 || !Serialization.Json.IsEqual(newTemplate.Deskew, PageCollection.ActiveTemplate.Deskew)
                 || newTemplate.ScalingAnchorId != PageCollection.ActiveTemplate.ScalingAnchorId
                 || newTemplate.ScalingAnchorId > 0 && !Serialization.Json.IsEqual(newTemplate.GetScalingAnchor(), PageCollection.ActiveTemplate.GetScalingAnchor())
-                || newTemplate.PreprocessBitmap != PageCollection.ActiveTemplate.PreprocessBitmap
-                || newTemplate.PreprocessBitmap && newTemplate.BitmapPreprocessorClassDefinition != PageCollection.ActiveTemplate.BitmapPreprocessorClassDefinition
+                || newTemplate.BitmapPreprocessorClassDefinition != PageCollection.ActiveTemplate.BitmapPreprocessorClassDefinition
                 )
             {
                 _activeTemplateImageData = null;

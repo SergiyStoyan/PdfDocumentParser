@@ -36,11 +36,11 @@ namespace Cliver.PdfDocumentParser
 
             PageRotation.SelectedIndexChanged += delegate { changed = true; };
             ScalingAnchor.SelectedIndexChanged += delegate { changed = true; };
+            bitmapPreprocessorClassDefinition.SetHighlighting("C#");
             bitmapPreprocessorClassDefinition.TextChanged += delegate { changed = true; };
-            PreprocessBitmap.CheckedChanged += delegate
+            bitmapPreprocessorClassDefinition.Enter += delegate
             {
-                bitmapPreprocessorClassDefinition.Enabled = PreprocessBitmap.Checked;
-                if (bitmapPreprocessorClassDefinition.Enabled && string.IsNullOrWhiteSpace(bitmapPreprocessorClassDefinition.Text))
+                if (string.IsNullOrWhiteSpace(bitmapPreprocessorClassDefinition.Text))
                 {
                     string className = Regex.Replace(template.Name, @"[\W]", "_");
                     bitmapPreprocessorClassDefinition.Text = Regex.Replace(defaultBitmapPreprocessor, @"Default_BitmapPreprocessor", className + "_BitmapPreprocessor", RegexOptions.Singleline);
@@ -80,7 +80,6 @@ namespace Cliver.PdfDocumentParser
             {
                 PageRotation.SelectedIndex = (int)t.PageRotation;
                 bitmapPreprocessorClassDefinition.Text = t.BitmapPreprocessorClassDefinition;
-                bitmapPreprocessorClassDefinition.Enabled = PreprocessBitmap.Checked = t.PreprocessBitmap;
 
                 Deskewer.Config dc = t.Deskew != null ? t.Deskew : new Deskewer.Config();
                 DeskewBlockMaxHeight.Value = dc.BlockMaxLength;
@@ -140,7 +139,6 @@ namespace Cliver.PdfDocumentParser
             t.PageRotation = (Template.PageRotations)PageRotation.SelectedIndex;
             t.ScalingAnchorId = ScalingAnchor.SelectedItem is int ? (int)ScalingAnchor.SelectedItem : -1;
             t.BitmapPreprocessorClassDefinition = bitmapPreprocessorClassDefinition.Text;
-            t.PreprocessBitmap = PreprocessBitmap.Checked;
 
             if (Deskew.Checked)
             {
@@ -161,9 +159,10 @@ namespace Cliver.PdfDocumentParser
 
         void validate()
         {
-            if (PreprocessBitmap.Checked)
-            {
-                bitmapPreprocessorClassDefinition.Document.MarkerStrategy.RemoveAll(marker => true);
+            if (!changed)
+                return;
+            bitmapPreprocessorClassDefinition.Document.MarkerStrategy.RemoveAll(marker => true);
+            if (!string.IsNullOrWhiteSpace(Compiler.RemoveComments(bitmapPreprocessorClassDefinition.Text)))
                 try
                 {
                     BitmapPreprocessor.CompileBitmapPreprocessorType(bitmapPreprocessorClassDefinition.Text);//checking
@@ -178,7 +177,6 @@ namespace Cliver.PdfDocumentParser
                     }
                     throw ex;
                 }
-            }
         }
 
         private bool applyTemplate()
@@ -209,16 +207,6 @@ namespace Cliver.PdfDocumentParser
         {
             if (applyTemplate())
                 Close();
-        }
-
-        private void bSaveDafault_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void bRemove_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void defaults_SelectedIndexChanged(object sender, EventArgs e)

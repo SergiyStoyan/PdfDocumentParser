@@ -146,11 +146,11 @@ namespace Cliver.PdfDocumentParser
             return types.Where(t => !t.IsAbstract && baseType.IsAssignableFrom(t));
         }
 
-        public static string GetOnlyCode(string typesDefinition)
+        public static string RemoveComments(string typesDefinition)
         {
             typesDefinition = Regex.Replace(typesDefinition, @"^\s*//.*","", RegexOptions.IgnoreCase | RegexOptions.Multiline);
-            typesDefinition = Regex.Replace(typesDefinition, @"/\*.*?\*/", "", RegexOptions.IgnoreCase | RegexOptions.Singleline);
-            return Regex.Replace(typesDefinition, @"\s+", "", RegexOptions.Singleline);
+            return Regex.Replace(typesDefinition, @"/\*.*?\*/", "", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+            //return Regex.Replace(typesDefinition, @"\s+", "", RegexOptions.Singleline);
         }
     }
 }
