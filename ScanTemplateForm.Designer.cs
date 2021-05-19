@@ -32,14 +32,12 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.bApply = new System.Windows.Forms.Button();
             this.defaultBitmapPreprocessorClassDefinitions = new System.Windows.Forms.ComboBox();
-            this.bRemove = new System.Windows.Forms.Button();
-            this.bSaveDafault = new System.Windows.Forms.Button();
+            this.bAddClassDefinition = new System.Windows.Forms.Button();
             this.bitmapPreprocessorClassDefinition = new ICSharpCode.TextEditor.TextEditorControl();
             this.DeskewBlockMaxHeight = new System.Windows.Forms.NumericUpDown();
             this.PageRotation = new System.Windows.Forms.ComboBox();
             this.label14 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.PreprocessBitmap = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.ScalingAnchor = new System.Windows.Forms.ComboBox();
@@ -87,8 +85,7 @@
             this.flowLayoutPanel1.Controls.Add(this.bCancel);
             this.flowLayoutPanel1.Controls.Add(this.bApply);
             this.flowLayoutPanel1.Controls.Add(this.defaultBitmapPreprocessorClassDefinitions);
-            this.flowLayoutPanel1.Controls.Add(this.bRemove);
-            this.flowLayoutPanel1.Controls.Add(this.bSaveDafault);
+            this.flowLayoutPanel1.Controls.Add(this.bAddClassDefinition);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 375);
@@ -123,27 +120,15 @@
             this.defaultBitmapPreprocessorClassDefinitions.TabIndex = 85;
             this.defaultBitmapPreprocessorClassDefinitions.SelectedIndexChanged += new System.EventHandler(this.defaults_SelectedIndexChanged);
             // 
-            // bRemove
+            // bAddClassDefinition
             // 
-            this.bRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bRemove.Location = new System.Drawing.Point(515, 3);
-            this.bRemove.Name = "bRemove";
-            this.bRemove.Size = new System.Drawing.Size(34, 23);
-            this.bRemove.TabIndex = 52;
-            this.bRemove.Text = "-";
-            this.bRemove.UseVisualStyleBackColor = true;
-            this.bRemove.Click += new System.EventHandler(this.bRemove_Click);
-            // 
-            // bSaveDafault
-            // 
-            this.bSaveDafault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bSaveDafault.Location = new System.Drawing.Point(475, 3);
-            this.bSaveDafault.Name = "bSaveDafault";
-            this.bSaveDafault.Size = new System.Drawing.Size(34, 23);
-            this.bSaveDafault.TabIndex = 53;
-            this.bSaveDafault.Text = "+";
-            this.bSaveDafault.UseVisualStyleBackColor = true;
-            this.bSaveDafault.Click += new System.EventHandler(this.bSaveDafault_Click);
+            this.bAddClassDefinition.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.bAddClassDefinition.Location = new System.Drawing.Point(515, 3);
+            this.bAddClassDefinition.Name = "bAddClassDefinition";
+            this.bAddClassDefinition.Size = new System.Drawing.Size(34, 23);
+            this.bAddClassDefinition.TabIndex = 53;
+            this.bAddClassDefinition.Text = "+";
+            this.bAddClassDefinition.UseVisualStyleBackColor = true;
             // 
             // bitmapPreprocessorClassDefinition
             // 
@@ -151,7 +136,6 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.bitmapPreprocessorClassDefinition.AutoHideScrollbars = false;
-            this.bitmapPreprocessorClassDefinition.Highlighting = null;
             this.bitmapPreprocessorClassDefinition.Location = new System.Drawing.Point(1, 97);
             this.bitmapPreprocessorClassDefinition.Margin = new System.Windows.Forms.Padding(1);
             this.bitmapPreprocessorClassDefinition.Name = "bitmapPreprocessorClassDefinition";
@@ -213,16 +197,6 @@
             this.label1.Size = new System.Drawing.Size(75, 13);
             this.label1.TabIndex = 79;
             this.label1.Text = "Rotate Pages:";
-            // 
-            // PreprocessBitmap
-            // 
-            this.PreprocessBitmap.AutoSize = true;
-            this.PreprocessBitmap.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.PreprocessBitmap.Location = new System.Drawing.Point(120, 79);
-            this.PreprocessBitmap.Name = "PreprocessBitmap";
-            this.PreprocessBitmap.Size = new System.Drawing.Size(15, 14);
-            this.PreprocessBitmap.TabIndex = 85;
-            this.PreprocessBitmap.UseVisualStyleBackColor = true;
             // 
             // label2
             // 
@@ -510,7 +484,6 @@
             this.Controls.Add(this.ScalingAnchor);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.PreprocessBitmap);
             this.Controls.Add(this.PageRotation);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.bitmapPreprocessorClassDefinition);
@@ -540,10 +513,8 @@
         private ICSharpCode.TextEditor.TextEditorControl bitmapPreprocessorClassDefinition;
         private System.Windows.Forms.NumericUpDown DeskewBlockMaxHeight;
         private System.Windows.Forms.ComboBox PageRotation;
-        private System.Windows.Forms.Button bRemove;
-        private System.Windows.Forms.Button bSaveDafault;
+        private System.Windows.Forms.Button bAddClassDefinition;
         private System.Windows.Forms.ComboBox defaultBitmapPreprocessorClassDefinitions;
-        private System.Windows.Forms.CheckBox PreprocessBitmap;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox ScalingAnchor;

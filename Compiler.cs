@@ -11,6 +11,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using System.Reflection;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -143,6 +144,13 @@ namespace Cliver.PdfDocumentParser
         public static IEnumerable<Type> FindSubTypes(Type baseType, Type[] types)
         {
             return types.Where(t => !t.IsAbstract && baseType.IsAssignableFrom(t));
+        }
+
+        public static string RemoveComments(string typesDefinition)
+        {
+            typesDefinition = Regex.Replace(typesDefinition, @"^\s*//.*","", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+            return Regex.Replace(typesDefinition, @"/\*.*?\*/", "", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+            //return Regex.Replace(typesDefinition, @"\s+", "", RegexOptions.Singleline);
         }
     }
 }
