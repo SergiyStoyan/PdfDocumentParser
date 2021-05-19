@@ -148,7 +148,9 @@ namespace Cliver.PdfDocumentParser
 
         public static string RemoveComments(string typesDefinition)
         {
-            typesDefinition = Regex.Replace(typesDefinition, @"^\s*//.*","", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+            if (typesDefinition == null)
+                return null;
+            typesDefinition = Regex.Replace(typesDefinition, @"^\s*//.*", "", RegexOptions.IgnoreCase | RegexOptions.Multiline);
             return Regex.Replace(typesDefinition, @"/\*.*?\*/", "", RegexOptions.IgnoreCase | RegexOptions.Singleline);
             //return Regex.Replace(typesDefinition, @"\s+", "", RegexOptions.Singleline);
         }
