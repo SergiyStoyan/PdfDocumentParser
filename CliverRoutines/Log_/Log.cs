@@ -217,9 +217,9 @@ namespace Cliver
                         return;
                 }
                 List<string> baseDirs = new List<string> {
-                                Log.AppDir,
                                 CompanyUserDataDir,
                                 CompanyCommonDataDir,
+                                Log.AppDir,
                                 Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
                                 Path.GetTempPath() + Path.DirectorySeparatorChar + CompanyName + Path.DirectorySeparatorChar,
                                 };

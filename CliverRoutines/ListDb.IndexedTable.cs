@@ -19,27 +19,27 @@ namespace Cliver
             public long ID;
         }
 
-        public static IndexedTable<D> GetIndexedTable<D>(string directory = null) where D : IndexedDocument, new()
+        public static IndexedTable<DocumentType> GetIndexedTable<DocumentType>(string directory = null) where DocumentType : IndexedDocument, new()
         {
-            return IndexedTable<D>.Get(directory);
+            return IndexedTable<DocumentType>.Get(directory);
         }
 
-        public class IndexedTable<D> : Table<D>, IDisposable where D : IndexedDocument, new()
+        public class IndexedTable<DocumentType> : Table<DocumentType>, IDisposable where DocumentType : IndexedDocument, new()
         {
-            new public static IndexedTable<D> Get(string directory = null)
+            new public static IndexedTable<DocumentType> Get(string directory = null)
             {
-                directory = get_normalized_directory(directory);
+                directory = getNormalizedDirectory(directory);
                 WeakReference wr;
-                string key = directory + System.IO.Path.DirectorySeparatorChar + typeof(D).Name;
-                if (!table_keys2table.TryGetValue(key, out wr)
+                string key = directory + System.IO.Path.DirectorySeparatorChar + typeof(DocumentType).Name;
+                if (!tableKeys2table.TryGetValue(key, out wr)
                     || !wr.IsAlive
                     )
                 {
-                    IndexedTable<D> t = new IndexedTable<D>(directory, key);
+                    IndexedTable<DocumentType> t = new IndexedTable<DocumentType>(directory, key);
                     wr = new WeakReference(t);
-                    table_keys2table[key] = wr;
+                    tableKeys2table[key] = wr;
                 }
-                return (IndexedTable<D>)wr.Target;
+                return (IndexedTable<DocumentType>)wr.Target;
             }
 
             IndexedTable(string directory, string key) : base(directory, key)
@@ -51,32 +51,32 @@ namespace Cliver
             /// </summary>
             /// <param name="document"></param>
             /// <returns></returns>
-            override public Results Save(D document)
+            override public Results Save(DocumentType document)
             {
-                int i = ((List<D>)this).IndexOf(document);
+                int i = ((List<DocumentType>)this).IndexOf(document);
                 if (i >= 0)
                 {
-                    file_writer.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
-                    log_writer.WriteLine("replaced: " + i);
+                    fileWriter.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
+                    logWriter.WriteLine("replaced: " + i);
                     return Results.UPDATED;
                 }
                 else
                 {
-                    set_new_id(document);
-                    file_writer.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
-                    ((List<D>)this).Add(document);
-                    log_writer.WriteLine("added: " + (base.Count - 1));
+                    setNewId(document);
+                    fileWriter.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
+                    ((List<DocumentType>)this).Add(document);
+                    logWriter.WriteLine("added: " + (base.Count - 1));
                     return Results.ADDED;
                 }
             }
 
-            void set_new_id(D document)
+            void setNewId(DocumentType document)
             {
-                System.Reflection.PropertyInfo pi = typeof(D).GetProperty("ID");
+                System.Reflection.PropertyInfo pi = typeof(DocumentType).GetProperty("ID");
                 pi.SetValue(document, DateTime.Now.Ticks);
             }
 
-            public D GetById(int document_id)
+            public DocumentType GetById(int document_id)
             {
                 return this.Where(x => x.ID == document_id).FirstOrDefault();
             }
@@ -85,23 +85,23 @@ namespace Cliver
             /// Table works as an ordered HashSet
             /// </summary>
             /// <param name="document"></param>
-            override public Results Add(D document)
+            override public Results Add(DocumentType document)
             {
                 int i = base.IndexOf(document);
                 if (i >= 0)
                 {
-                    file_writer.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
-                    ((List<D>)this).RemoveAt(i);
-                    ((List<D>)this).Add(document);
-                    log_writer.WriteLine("deleted: " + i + "\r\nadded: " + (base.Count - 1));
+                    fileWriter.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
+                    ((List<DocumentType>)this).RemoveAt(i);
+                    ((List<DocumentType>)this).Add(document);
+                    logWriter.WriteLine("deleted: " + i + "\r\nadded: " + (base.Count - 1));
                     return Results.MOVED2TOP;
                 }
                 else
                 {
-                    set_new_id(document);
-                    file_writer.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
-                    ((List<D>)this).Add(document);
-                    log_writer.WriteLine("added: " + (base.Count - 1));
+                    setNewId(document);
+                    fileWriter.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
+                    ((List<DocumentType>)this).Add(document);
+                    logWriter.WriteLine("added: " + (base.Count - 1));
                     return Results.ADDED;
                 }
             }
@@ -110,23 +110,23 @@ namespace Cliver
             /// Table works as an ordered HashSet
             /// </summary>
             /// <param name="document"></param>
-            override public Results Insert(int index, D document)
+            override public Results Insert(int index, DocumentType document)
             {
                 int i = base.IndexOf(document);
                 if (i >= 0)
                 {
-                    file_writer.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
-                    ((List<D>)this).RemoveAt(i);
-                    ((List<D>)this).Insert(index, document);
-                    log_writer.WriteLine("replaced: " + i);
+                    fileWriter.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
+                    ((List<DocumentType>)this).RemoveAt(i);
+                    ((List<DocumentType>)this).Insert(index, document);
+                    logWriter.WriteLine("replaced: " + i);
                     return Results.MOVED;
                 }
                 else
                 {
-                    set_new_id(document);
-                    file_writer.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
-                    ((List<D>)this).Insert(index, document);
-                    log_writer.WriteLine("inserted: " + index);
+                    setNewId(document);
+                    fileWriter.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
+                    ((List<DocumentType>)this).Insert(index, document);
+                    logWriter.WriteLine("inserted: " + index);
                     return Results.INSERTED;
                 }
             }

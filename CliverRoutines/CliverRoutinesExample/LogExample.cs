@@ -15,7 +15,6 @@ namespace Example
             Log.Session.Get("GAME")["client"].Inform("write out of box4");
             Log.Session.Get("GAME").Rename("Game");
 
-
             //optional; initialize log            
             Log.Initialize(Log.Mode.FOLDER_PER_SESSION);//if permissions allow it, log will be created in the executable directory
 

@@ -21,7 +21,7 @@ namespace Cliver
             public string A = DateTime.Now.ToString() + "\r\n" + DateTime.Now.Ticks.ToString();
             public string B = "test";
             public long C = DateTime.Now.Ticks;
-            public DateTime D = DateTime.Now;
+            public DateTime DocumentType = DateTime.Now;
 
             static public void Test()
             {
@@ -40,39 +40,39 @@ namespace Cliver
 
         //public class Document
         //{
-            //[Newtonsoft.Json.JsonIgnoreAttribute]
-            //public string test;
+        //[Newtonsoft.Json.JsonIgnoreAttribute]
+        //public string test;
         //}
 
         //public class IgnoredField : Attribute
         //{
         //}
 
-        public static Table<D> GetTable<D>(string directory = null) where D : new()
+        public static Table<DocumentType> GetTable<DocumentType>(string directory = null) where DocumentType : new()
         {
-            return Table<D>.Get(directory);
+            return Table<DocumentType>.Get(directory);
         }
 
-        public class Table<D> : List<D>, IDisposable where D : new()
+        public class Table<DocumentType> : List<DocumentType>, IDisposable where DocumentType : new()
         {
-            public static Table<D> Get(string directory = null)
+            public static Table<DocumentType> Get(string directory = null)
             {
-                directory = get_normalized_directory(directory);
+                directory = getNormalizedDirectory(directory);
                 WeakReference wr;
-                string key = directory + System.IO.Path.DirectorySeparatorChar + typeof(D).Name;
-                if (!table_keys2table.TryGetValue(key, out wr)
+                string key = directory + System.IO.Path.DirectorySeparatorChar + typeof(DocumentType).Name;
+                if (!tableKeys2table.TryGetValue(key, out wr)
                     || !wr.IsAlive
                     )
                 {
-                    Table<D> t = new Table<D>(directory, key);
+                    Table<DocumentType> t = new Table<DocumentType>(directory, key);
                     wr = new WeakReference(t);
-                    table_keys2table[key] = wr;
+                    tableKeys2table[key] = wr;
                 }
-                return (Table<D>)wr.Target;
+                return (Table<DocumentType>)wr.Target;
             }
-            protected static Dictionary<string, WeakReference> table_keys2table = new Dictionary<string, WeakReference>();
+            protected static Dictionary<string, WeakReference> tableKeys2table = new Dictionary<string, WeakReference>();
 
-            protected static string get_normalized_directory(string directory = null)
+            protected static string getNormalizedDirectory(string directory = null)
             {
                 if (directory == null)
                     directory = Cliver.Log.AppCompanyCommonDataDir;
@@ -80,11 +80,10 @@ namespace Cliver
             }
 
             public readonly string Log = null;
-            protected TextWriter log_writer;
+            protected TextWriter logWriter;
             public readonly string File = null;
-            protected TextWriter file_writer;
-            readonly string new_file;
-            //public Type DocumentType;
+            protected TextWriter fileWriter;
+            readonly string newFile;
             public Modes Mode = Modes.FLUSH_TABLE_ON_CLOSE;
             public readonly string Name;
             protected readonly string key;
@@ -97,28 +96,28 @@ namespace Cliver
                 FLUSH_TABLE_ON_START = 4,
             }
 
-            public delegate void SavedHandler(D document, bool as_new);
+            public delegate void SavedHandler(DocumentType document, bool asNew);
             public event SavedHandler Saved = null;
 
-            public delegate void RemovedHandler(D document, bool sucess);
+            public delegate void RemovedHandler(DocumentType document, bool sucess);
             public event RemovedHandler Removed = null;
 
             protected Table(string directory, string key)
             {
-                directory = get_normalized_directory(directory);
+                directory = getNormalizedDirectory(directory);
                 this.key = key;
 
-                Name = typeof(D).Name + "s";
+                Name = typeof(DocumentType).Name + "s";
 
                 File = directory + System.IO.Path.DirectorySeparatorChar + Name + ".listdb";
-                new_file = File + ".new";
+                newFile = File + ".new";
                 Log = directory + System.IO.Path.DirectorySeparatorChar + Name + ".listdb.log";
 
-                if (System.IO.File.Exists(new_file))
+                if (System.IO.File.Exists(newFile))
                 {
                     if (System.IO.File.Exists(File))
                         System.IO.File.Delete(File);
-                    System.IO.File.Move(new_file, File);
+                    System.IO.File.Move(newFile, File);
                     if (System.IO.File.Exists(Log))
                         System.IO.File.Delete(Log);
                 }
@@ -137,7 +136,7 @@ namespace Cliver
                                     int p1 = int.Parse(m.Groups[1].Value);
                                     for (int i = 0; i < p1; i++)
                                     {
-                                        D d = JsonConvert.DeserializeObject<D>(fr.ReadLine());
+                                        DocumentType d = JsonConvert.DeserializeObject<DocumentType>(fr.ReadLine());
                                         base.Add(d);
                                     }
                                     continue;
@@ -151,7 +150,7 @@ namespace Cliver
                                 m = Regex.Match(l, @"replaced:\s+(\d+)");
                                 if (m.Success)
                                 {
-                                    D d = JsonConvert.DeserializeObject<D>(fr.ReadLine());
+                                    DocumentType d = JsonConvert.DeserializeObject<DocumentType>(fr.ReadLine());
                                     int p1 = int.Parse(m.Groups[1].Value);
                                     if (p1 >= base.Count)
                                         throw new Exception("Log file broken.");
@@ -162,7 +161,7 @@ namespace Cliver
                                 m = Regex.Match(l, @"added:\s+(\d+)");
                                 if (m.Success)
                                 {
-                                    D d = JsonConvert.DeserializeObject<D>(fr.ReadLine());
+                                    DocumentType d = JsonConvert.DeserializeObject<DocumentType>(fr.ReadLine());
                                     int p1 = int.Parse(m.Groups[1].Value);
                                     if (p1 != base.Count)
                                         throw new Exception("Log file broken.");
@@ -172,7 +171,7 @@ namespace Cliver
                                 m = Regex.Match(l, @"inserted:\s+(\d+)");
                                 if (m.Success)
                                 {
-                                    D d = JsonConvert.DeserializeObject<D>(fr.ReadLine());
+                                    DocumentType d = JsonConvert.DeserializeObject<DocumentType>(fr.ReadLine());
                                     int p1 = int.Parse(m.Groups[1].Value);
                                     if (p1 >= base.Count)
                                         throw new Exception("Log file broken.");
@@ -195,17 +194,17 @@ namespace Cliver
                         else
                         {
                             for (string s = fr.ReadLine(); s != null; s = fr.ReadLine())
-                                base.Add(JsonConvert.DeserializeObject<D>(s));
+                                base.Add(JsonConvert.DeserializeObject<DocumentType>(s));
                         }
                         if (fr.ReadLine() != null)
                             throw new Exception("Log file broken.");
                     }
                 }
 
-                file_writer = new StreamWriter(File, true);
-                ((StreamWriter)file_writer).AutoFlush = true;
-                log_writer = new StreamWriter(Log, true);
-                ((StreamWriter)log_writer).AutoFlush = true;
+                fileWriter = new StreamWriter(File, true);
+                ((StreamWriter)fileWriter).AutoFlush = true;
+                logWriter = new StreamWriter(Log, true);
+                ((StreamWriter)logWriter).AutoFlush = true;
             }
 
             ~Table()
@@ -223,15 +222,15 @@ namespace Cliver
                             return;
                         disposed = true;
 
-                        if (table_keys2table.ContainsKey(key))
-                            table_keys2table.Remove(key);
+                        if (tableKeys2table.ContainsKey(key))
+                            tableKeys2table.Remove(key);
 
                         if ((Mode & Modes.FLUSH_TABLE_ON_CLOSE) == Modes.FLUSH_TABLE_ON_CLOSE)
                             Flush();
-                        if (file_writer != null)
-                            file_writer.Dispose();
-                        if (log_writer != null)
-                            log_writer.Dispose();
+                        if (fileWriter != null)
+                            fileWriter.Dispose();
+                        if (logWriter != null)
+                            logWriter.Dispose();
                     }
                     catch
                     {
@@ -243,41 +242,41 @@ namespace Cliver
 
             public void Flush()
             {
-                log_writer.WriteLine("flushing");
+                logWriter.WriteLine("flushing");
 
-                using (TextWriter new_file_writer = new StreamWriter(new_file, false))
+                using (TextWriter newFileWriter = new StreamWriter(newFile, false))
                 {
-                    foreach (D d in this)
-                        new_file_writer.WriteLine(JsonConvert.SerializeObject(d, Formatting.None));
-                    new_file_writer.Flush();
+                    foreach (DocumentType d in this)
+                        newFileWriter.WriteLine(JsonConvert.SerializeObject(d, Formatting.None));
+                    newFileWriter.Flush();
                 }
 
-                if (file_writer != null)
-                    file_writer.Dispose();
+                if (fileWriter != null)
+                    fileWriter.Dispose();
                 if (System.IO.File.Exists(File))
                     System.IO.File.Delete(File);
-                System.IO.File.Move(new_file, File);
-                file_writer = new StreamWriter(File, true);
-                ((StreamWriter)file_writer).AutoFlush = true;
+                System.IO.File.Move(newFile, File);
+                fileWriter = new StreamWriter(File, true);
+                ((StreamWriter)fileWriter).AutoFlush = true;
 
-                if (log_writer != null)
-                    log_writer.Dispose();
-                log_writer = new StreamWriter(Log, false);
-                ((StreamWriter)log_writer).AutoFlush = true;
-                log_writer.WriteLine("flushed: [" + base.Count + "]");
+                if (logWriter != null)
+                    logWriter.Dispose();
+                logWriter = new StreamWriter(Log, false);
+                ((StreamWriter)logWriter).AutoFlush = true;
+                logWriter.WriteLine("flushed: [" + base.Count + "]");
             }
 
             public void Drop()
             {
                 base.Clear();
 
-                if (file_writer != null)
-                    file_writer.Dispose();
+                if (fileWriter != null)
+                    fileWriter.Dispose();
                 if (System.IO.File.Exists(File))
                     System.IO.File.Delete(File);
 
-                if (log_writer != null)
-                    log_writer.Dispose();
+                if (logWriter != null)
+                    logWriter.Dispose();
                 if (System.IO.File.Exists(Log))
                     System.IO.File.Delete(Log);
             }
@@ -286,13 +285,13 @@ namespace Cliver
             {
                 base.Clear();
 
-                if (file_writer != null)
-                    file_writer.Dispose();
-                file_writer = new StreamWriter(File, false);
+                if (fileWriter != null)
+                    fileWriter.Dispose();
+                fileWriter = new StreamWriter(File, false);
 
-                if (log_writer != null)
-                    log_writer.Dispose();
-                log_writer = new StreamWriter(Log, false);
+                if (logWriter != null)
+                    logWriter.Dispose();
+                logWriter = new StreamWriter(Log, false);
             }
 
             /// <summary>
@@ -300,21 +299,21 @@ namespace Cliver
             /// </summary>
             /// <param name="document"></param>
             /// <returns></returns>
-            virtual  public Results Save(D document)
+            virtual public Results Save(DocumentType document)
             {
                 int i = base.IndexOf(document);
                 if (i >= 0)
                 {
-                    file_writer.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
-                    log_writer.WriteLine("replaced: " + i);
+                    fileWriter.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
+                    logWriter.WriteLine("replaced: " + i);
                     Saved?.Invoke(document, false);
                     return Results.UPDATED;
                 }
                 else
                 {
-                    file_writer.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
+                    fileWriter.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
                     base.Add(document);
-                    log_writer.WriteLine("added: " + (base.Count - 1));
+                    logWriter.WriteLine("added: " + (base.Count - 1));
                     Saved?.Invoke(document, true);
                     return Results.ADDED;
                 }
@@ -332,29 +331,29 @@ namespace Cliver
             /// Table works as an ordered HashSet
             /// </summary>
             /// <param name="document"></param>
-            new virtual public Results Add(D document)
+            new virtual public Results Add(DocumentType document)
             {
                 int i = base.IndexOf(document);
                 if (i >= 0)
                 {
-                    file_writer.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
+                    fileWriter.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
                     base.RemoveAt(i);
                     base.Add(document);
-                    log_writer.WriteLine("deleted: " + i + "\r\nadded: " + (base.Count - 1));
+                    logWriter.WriteLine("deleted: " + i + "\r\nadded: " + (base.Count - 1));
                     Saved?.Invoke(document, false);
                     return Results.MOVED2TOP;
                 }
                 else
                 {
-                    file_writer.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
+                    fileWriter.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
                     base.Add(document);
-                    log_writer.WriteLine("added: " + (base.Count - 1));
+                    logWriter.WriteLine("added: " + (base.Count - 1));
                     Saved?.Invoke(document, true);
                     return Results.ADDED;
                 }
             }
 
-            new public void AddRange(IEnumerable<D> documents)
+            new public void AddRange(IEnumerable<DocumentType> documents)
             {
                 throw new Exception("TBD");
                 //base.AddRange(documents);
@@ -364,41 +363,41 @@ namespace Cliver
             /// Table works as an ordered HashSet
             /// </summary>
             /// <param name="document"></param>
-            new virtual public Results Insert(int index, D document)
+            new virtual public Results Insert(int index, DocumentType document)
             {
                 int i = base.IndexOf(document);
                 if (i >= 0)
                 {
-                    file_writer.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
+                    fileWriter.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
                     base.RemoveAt(i);
                     base.Insert(index, document);
-                    log_writer.WriteLine("replaced: " + i);
+                    logWriter.WriteLine("replaced: " + i);
                     Saved?.Invoke(document, false);
                     return Results.MOVED;
                 }
                 else
                 {
-                    file_writer.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
+                    fileWriter.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
                     base.Insert(index, document);
-                    log_writer.WriteLine("inserted: " + index);
+                    logWriter.WriteLine("inserted: " + index);
                     Saved?.Invoke(document, true);
                     return Results.INSERTED;
                 }
             }
 
-            new public void InsertRange(int index, IEnumerable<D> documents)
+            new public void InsertRange(int index, IEnumerable<DocumentType> documents)
             {
                 throw new Exception("TBD");
                 //base.InsertRange(index, documents);
             }
 
-            new public bool Remove(D document)
+            new public bool Remove(DocumentType document)
             {
                 int i = base.IndexOf(document);
                 if (i >= 0)
                 {
                     base.RemoveAt(i);
-                    log_writer.WriteLine("deleted: " + i);
+                    logWriter.WriteLine("deleted: " + i);
                     Removed?.Invoke(document, true);
                     return true;
                 }
@@ -406,7 +405,7 @@ namespace Cliver
                 return false;
             }
 
-            new public int RemoveAll(Predicate<D> match)
+            new public int RemoveAll(Predicate<DocumentType> match)
             {
                 throw new Exception("TBD");
                 //return base.RemoveAll(match);
@@ -415,7 +414,7 @@ namespace Cliver
             new public void RemoveAt(int index)
             {
                 base.RemoveAt(index);
-                log_writer.WriteLine("deleted: " + index);
+                logWriter.WriteLine("deleted: " + index);
             }
 
             new public void RemoveRange(int index, int count)
@@ -423,28 +422,28 @@ namespace Cliver
                 for (int i = index; i < count; i++)
                 {
                     base.RemoveAt(i);
-                    log_writer.WriteLine("deleted: " + i);
+                    logWriter.WriteLine("deleted: " + i);
                 }
             }
 
-            //public D? GetPrevious(D document)
+            //public DocumentType? GetPrevious(DocumentType document)
             //{
             //    if (document == null)
             //        return null;
             //    int i = IndexOf(document);
             //    if (i < 1)
             //        return null;
-            //    return (D?)this[i - 1];
+            //    return (DocumentType?)this[i - 1];
             //}
 
-            //public D? GetNext(D document)
+            //public DocumentType? GetNext(DocumentType document)
             //{
             //    if (document == null)
             //        return null;
             //    int i = this.IndexOf(document);
             //    if (i + 1 >= this.Count)
             //        return null;
-            //    return (D?)this[i + 1];
+            //    return (DocumentType?)this[i + 1];
             //}
         }
     }

@@ -5,14 +5,12 @@
 //        stoyan@cliversoft.com
 //        http://www.cliversoft.com
 //********************************************************************************************
+#define COMPILE_GetObject_SetObject1 //!!!Stopwatch shows that compiling is not faster. Probably the reflection was improved.
 
 using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using System.IO;
 using System.Reflection;
 using System.Linq;
-using System.Diagnostics;
+using System.Linq.Expressions;
 
 namespace Cliver
 {
@@ -51,10 +49,9 @@ namespace Cliver
         {
             lock (this)
             {
-                return getObject();
+                return (Settings)getObject();
             }
         }
-        abstract protected Settings getObject();
 
         internal void SetObject(Settings settings)
         {
@@ -63,15 +60,43 @@ namespace Cliver
                 setObject(settings);
             }
         }
-        abstract protected void setObject(Settings settings);
 
         internal readonly SettingsAttribute Attribute;
 
-        protected SettingsMemberInfo(MemberInfo settingsTypeMemberInfo, Type type)
+#if !COMPILE_GetObject_SetObject
+        abstract protected object getObject();
+        abstract protected void setObject(Settings settings);
+
+        protected SettingsMemberInfo(MemberInfo settingsTypeMemberInfo, Type settingType)
         {
-            Type = type;
+#else
+        readonly Func<object> getObject;
+        readonly Action<Settings> setObject;
+
+        protected SettingsMemberInfo(MemberInfo settingsTypeMemberInfo, Type settingType, Func<object> getObject, Action<Settings> setObject)
+        {
+            this.getObject = getObject;
+            this.setObject = setObject;
+#endif
+            Type = settingType;
             FullName = settingsTypeMemberInfo.DeclaringType.FullName + "." + settingsTypeMemberInfo.Name;
-            Settings s = (Settings)Activator.CreateInstance(Type);
+            /*//version with static __StorageDir
+            string storageDir;
+            for (; ; )
+            {
+                PropertyInfo fi = settingType.GetProperty(nameof(Settings.__StorageDir), BindingFlags.Static | BindingFlags.Public);
+                if (fi != null)
+                {
+                    storageDir = (string)fi.GetValue(null);
+                    break;
+                }
+                settingType = settingType.BaseType;
+                if (settingType == null)
+                    throw new Exception("Settings type " + Type.ToString() + " or some of its ancestors must define the public static getter " + nameof(Settings.__StorageDir));
+            }
+            File = storageDir + System.IO.Path.DirectorySeparatorChar + FullName + "." + Config.FILE_EXTENSION;
+            */
+            Settings s = (Settings)Activator.CreateInstance(Type); //!!!slightly slowler than calling a static by reflection. Doesn't run slower for a bigger class though.
             File = s.__StorageDir + System.IO.Path.DirectorySeparatorChar + FullName + "." + Config.FILE_EXTENSION;
             InitFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + FullName + "." + Config.FILE_EXTENSION;
             Attribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsAttribute>(false).FirstOrDefault();
@@ -81,9 +106,10 @@ namespace Cliver
 
     public class SettingsFieldInfo : SettingsMemberInfo
     {
-        override protected Settings getObject()
+#if !COMPILE_GetObject_SetObject
+        override protected object getObject()
         {
-            return (Settings)FieldInfo.GetValue(null);
+            return FieldInfo.GetValue(null);
         }
 
         override protected void setObject(Settings settings)
@@ -97,13 +123,38 @@ namespace Cliver
         {
             FieldInfo = settingsTypeFieldInfo;
         }
+#else
+        internal SettingsFieldInfo(FieldInfo settingsTypeFieldInfo) : base(
+            settingsTypeFieldInfo,
+            settingsTypeFieldInfo.FieldType,
+            getGetValue(settingsTypeFieldInfo),
+            getSetValue(settingsTypeFieldInfo)
+            )
+        {
+        }
+        protected static Func<object> getGetValue(FieldInfo fieldInfo)
+        {
+            MemberExpression me = Expression.Field(null, fieldInfo);
+            return Expression.Lambda<Func<object>>(me).Compile();
+
+        }
+        protected static Action<Settings> getSetValue(FieldInfo fieldInfo)
+        {
+            ParameterExpression pe = Expression.Parameter(typeof(object));
+            UnaryExpression ue = Expression.Convert(pe, fieldInfo.FieldType);
+            MemberExpression me = Expression.Field(null, fieldInfo);
+            BinaryExpression be = Expression.Assign(me, ue);
+            return Expression.Lambda<Action<Settings>>(be, pe).Compile();
+        }
+#endif
     }
 
     public class SettingsPropertyInfo : SettingsMemberInfo
     {
-        override protected Settings getObject()
+#if !COMPILE_GetObject_SetObject
+        override protected object getObject()
         {
-            return (Settings)PropertyInfo.GetValue(null);
+            return PropertyInfo.GetValue(null);
         }
 
         override protected void setObject(Settings settings)
@@ -117,5 +168,27 @@ namespace Cliver
         {
             PropertyInfo = settingsTypePropertyInfo;
         }
+#else
+        internal SettingsPropertyInfo(PropertyInfo settingsTypePropertyInfo) : base(
+            settingsTypePropertyInfo,
+            settingsTypePropertyInfo.PropertyType,
+            getGetValue(settingsTypePropertyInfo.GetGetMethod(true)),
+            getSetValue(settingsTypePropertyInfo.GetSetMethod(true))
+            )
+        {
+        }
+        protected static Func<object> getGetValue(MethodInfo methodInfo)
+        {
+            MethodCallExpression mce = Expression.Call(methodInfo);
+            return Expression.Lambda<Func<object>>(mce).Compile();
+        }
+        protected static Action<Settings> getSetValue(MethodInfo methodInfo)
+        {
+            ParameterExpression pe = Expression.Parameter(typeof(object));
+            UnaryExpression ue = Expression.Convert(pe, methodInfo.GetParameters().First().ParameterType);
+            MethodCallExpression mce = Expression.Call(methodInfo, ue);
+            return Expression.Lambda<Action<Settings>>(mce, pe).Compile();
+        }
+#endif
     }
 }

@@ -83,11 +83,11 @@ namespace Cliver
         {
             return __Info != null
                 && Config.GetSettingsFieldInfo(__Info.FullName).GetObject() == this;//is referenced by the field
-                                                                                    //&& __Info.GetObject() == this;//is referenced by the field//!!!if Config was reloaded and __Info was recreated, it still would work
+                                                                                    //&& __Info.GetObject() == this;//is referenced by the field//!!!if Config was reloaded and __Info was recreated, it still would work which is wrong
         }
 
         /// <summary>
-        /// Serializes this Settings object to the storage file according to __Info.
+        /// Serializes this Settings object to the storage file.
         /// (!)Calling this method on a detached Settings object throws an exception because otherwise it would lead to a confusing effect. 
         /// </summary>
         public void Save()
@@ -95,7 +95,7 @@ namespace Cliver
             lock (this)
             {
                 if (!IsAttached())//while technically it is possible, it can lead to a confusion.
-                    throw new Exception("This method cannot be performed because this Settings object is not attached to the Settings field.");
+                    throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info?.Type + ")");
                 save();
             }
         }
@@ -105,19 +105,25 @@ namespace Cliver
             Cliver.Serialization.Json.Save(__Info.File, this, __Info.Indented, true);
             Saved();
         }
-        internal void Save(SettingsMemberInfo settingsFieldInfo)//this avoids a redundant operation and provides an appropriate exception message
+        internal void Save(SettingsMemberInfo settingsFieldInfo)//avoids a redundant check and provides an appropriate exception message
         {
             lock (this)
             {
                 if (__Info != settingsFieldInfo)//which can only happen if there are several settings fields of the same type
-                    throw new Exception("Value of Settings field '" + settingsFieldInfo.FullName + "' is not attached to it.");
+                    throw new Exception("The value of Settings field '" + settingsFieldInfo.FullName + "' is not attached to it.");
                 save();
             }
         }
 
+        //for custom decryption
+        //virtual protected void Deserializing(ref string json) { }  TBD
+
         virtual protected void Loaded() { }
 
         virtual protected void Saving() { }
+
+        //for custom encryption
+        //virtual protected void Serialized(ref string json) { }  TBD
 
         virtual protected void Saved() { }
 
@@ -128,7 +134,7 @@ namespace Cliver
         //}
 
         /// <summary>
-        /// Replaces the value of the field defined by __Info with a new object initiated with default values. 
+        /// Replaces the value of the field defined by __Info with a new object initiated with the default values. 
         /// Tries to load it from the initial file located in the app's directory. 
         /// If this file does not exist, it creates an object with the hardcoded values.
         /// (!)Calling this method on a detached Settings object throws an exception because otherwise it would lead to a confusing effect. 
@@ -136,12 +142,12 @@ namespace Cliver
         public void Reset(/*bool ignoreInitFile = false*/)
         {
             if (!IsAttached())//while technically it is possible, it is a way of confusion: called on one object it would replace another one!
-                throw new Exception("This method cannot be performed because this Settings object is not attached to the Settings field.");
+                throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info?.Type + ")");
             __Info.SetObject(Create(__Info, true, true));
         }
 
         /// <summary>
-        /// Replaces the value of the field defined by __Info with a new object initiated with stored values.
+        /// Replaces the value of the field defined by __Info with a new object initiated with the stored values.
         /// Tries to load it from the storage file.
         /// If this file does not exist, it tries to load it from the initial file located in the app's directory. 
         /// If this file does not exist, it creates an object with the hardcoded values.
@@ -151,7 +157,7 @@ namespace Cliver
         public void Reload(bool throwExceptionIfCouldNotLoadFromStorageFile = false)
         {
             if (!IsAttached())//while technically it is possible, it is a way of confusion: called on one object it would replace another one!
-                throw new Exception("This method cannot be performed because this Settings object is not attached to the Settings field.");
+                throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info?.Type + ")");
             __Info.SetObject(Create(__Info, false, throwExceptionIfCouldNotLoadFromStorageFile));
         }
 
@@ -164,19 +170,27 @@ namespace Cliver
             lock (this)
             {
                 if (__Info == null)//was created outside Config
-                    throw new Exception("This method cannot be performed on a Settings object which has __Info not defined.");
+                    throw new Exception("This method cannot be performed on this Settings object because its __Info is not defined.");
                 return !Serialization.Json.IsEqual(this, Create(__Info, false, false));
             }
         }
 
+        /*//version with static __StorageDir
         /// <summary>
-        /// Folder where storage files for this Settings derived type are to be saved by Config.
+        /// (!)A Settings derivative or some of its ancestors must hide this public static getter with a new definition to change the storage directory.
+        /// It specifies the storage folder for the type which defines this property. 
+        /// </summary>
+        public static string __StorageDir { get { return Log.AppCompanyUserDataDir + Path.DirectorySeparatorChar + Config.CONFIG_FOLDER_NAME; } }
+        */
+
+        /// <summary>
+        /// Storage folder for this Settings derivative.
         /// Each Settings derived class must have it defined. 
         /// Despite of the fact it is not static, actually it is instance independent as only the initial value is used.
-        /// (It is not static due to badly awkwardness of C#.)
+        /// (It is not static as C# has no static polymorphism.)
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
-        public abstract string __StorageDir { get; }
+        public abstract string __StorageDir { get; protected set; }
     }
 
     /// <summary>
@@ -187,12 +201,19 @@ namespace Cliver
         /// <summary>
         /// Indicates that the Settings field will be stored with indention.
         /// /// </summary>
-        readonly public bool Indented = true;
+        readonly public bool Indented;
         /// <summary>
         /// Indicates that the Settings field should not be initiated by Config by default.
-        /// Such a field should be initiated explisitly when needed by Config.Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
+        /// Such a field should be initiated explicitly when needed by Config.Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
         /// </summary>
-        readonly public bool Optional = false;
+        readonly public bool Optional;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="indented">Indicates that the Settings field be stored with indention</param>
+        /// <param name="optional">Indicates that the Settings field should not be initiated by Config by default.
+        /// Such a field should be initiated explicitly when needed by Config.Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)</param>
         public SettingsAttribute(bool indented = true, bool optional = false)
         {
             Indented = indented;
@@ -206,7 +227,14 @@ namespace Cliver
     /// </summary>
     public class AppSettings : Settings
     {
-        sealed public override string __StorageDir { get { return StorageDir; } }
+        /*//version with static __StorageDir
+        /// <summary>
+        /// (!)A Settings derivative or some of its ancestors must define this public static getter to specify the storage directory.
+        /// </summary>
+        new public static string __StorageDir { get; private set; } = Log.AppCompanyCommonDataDir + Path.DirectorySeparatorChar + Config.CONFIG_FOLDER_NAME; 
+        */
+
+        sealed public override string __StorageDir { get; protected set; } = StorageDir;
         public static readonly string StorageDir = Log.AppCompanyCommonDataDir + Path.DirectorySeparatorChar + Config.CONFIG_FOLDER_NAME;
     }
 
@@ -215,7 +243,14 @@ namespace Cliver
     /// </summary>
     public class UserSettings : Settings
     {
-        sealed public override string __StorageDir { get { return StorageDir; } }
+        /*//version with static __StorageDir
+        /// <summary>
+        /// (!)A Settings derivative or some of its ancestors must define this public static getter to specify the storage directory.
+        /// </summary>
+        new public static string __StorageDir { get; private set; } = Log.AppCompanyUserDataDir + Path.DirectorySeparatorChar + Config.CONFIG_FOLDER_NAME;
+        */
+
+        sealed public override string __StorageDir { get; protected set; } = StorageDir;
         public static readonly string StorageDir = Log.AppCompanyUserDataDir + Path.DirectorySeparatorChar + Config.CONFIG_FOLDER_NAME;
     }
 }

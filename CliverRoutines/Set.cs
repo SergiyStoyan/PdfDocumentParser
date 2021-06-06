@@ -118,7 +118,7 @@ namespace Cliver
         {
             SetExample empty = new SetExample(EnumExample.EMPTY);
             SetExample v1 = new SetExample(EnumExample.VALUE1);
-            SetExample v2 = new SetExample(EnumExample.VALUE2, EnumExample.VALUE3);
+            SetExample v23 = new SetExample(EnumExample.VALUE2, EnumExample.VALUE3);
             SetExample v123 = new SetExample(EnumExample.VALUE1, EnumExample.VALUE2, EnumExample.VALUE3);
             SetExample se = empty.Append(v123).Remove<SetExample>(EnumExample.VALUE3);
         }

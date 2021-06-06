@@ -10,6 +10,9 @@ namespace Example
 
         public static void Run()
         {
+            var watch = new System.Diagnostics.Stopwatch();
+            watch.Start();
+
             //mandatory; initialize settings
             Config.Reload();
 
@@ -24,11 +27,13 @@ namespace Example
 
             editSmtpInDialog();
 
-            User user = new User { Name = "Tom2", Email = "tom@company.com" };
+            User user = new User { Name = "Tom3", Email = "tom@company.com" };
             user.Notify("test");
             Settings.General.Users[user.Name] = user;
 
             Config.Save();
+
+            watch.Stop();
         }
 
         // bogus editor
@@ -40,7 +45,7 @@ namespace Example
 
                 //expose smtp2 in an editing dialog and get new values
                 smtp2.Host = "smtp.server.com";
-                smtp2.Port = 29;
+                smtp2.Port = 30;
 
                 if (!isValid(smtp2))
                     return;
@@ -59,7 +64,7 @@ namespace Example
         {
             return true;
         }
-        
+
         // bogus mailer
         public static void Email(string host, int port, string password, string message)
         {
