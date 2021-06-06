@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CliverSoft")]
 [assembly: AssemblyProduct("Common C# Windows Routines Lib")]
-[assembly: AssemblyCopyright("Copyright © 2006-2020, CliverSoft")]
+[assembly: AssemblyCopyright("Copyright © 2006-2021, CliverSoft")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
