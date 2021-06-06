@@ -14,13 +14,13 @@ namespace Cliver.Win
 {
     /// <summary>
     /// Inheritor of this class is stored in CommonApplicationData folder.
-    /// It is Windows adapted version of AppSettings which provides necessary routines.
+    /// It is a Windows adapted version of AppSettings which provides necessary routines.
     /// </summary>
     public class AppSettings : Cliver.AppSettings
     {
         /// <summary>
-        /// By default Environment.SpecialFolder.CommonApplicationData does not have writting permission
-        /// so use this method to set it.
+        /// By default Environment.SpecialFolder.CommonApplicationData does not have writting permission.
+        /// Use this method to set it up.
         /// </summary>
         /// <param name="userIdentityName"></param>
         public static void AllowReadWriteConfigDir(string userIdentityName = null)
@@ -32,8 +32,8 @@ namespace Cliver.Win
         }
 
         /// <summary>
-        /// By default Environment.SpecialFolder.CommonApplicationData does not have writting permission
-        /// so use this method to set it.
+        /// By default Environment.SpecialFolder.CommonApplicationData does not have writting permission.
+        /// Use this method to set it up.
         /// </summary>
         public static void AllowReadWriteConfigDirToEveryone()
         {

@@ -34,7 +34,7 @@ namespace Cliver.PdfDocumentParser
 
         public Anchor.CvImage GetScalingAnchor()
         {
-            return (Anchor.CvImage)Anchors.FirstOrDefault(a => a.Id == ScalingAnchorId);
+            return (Anchor.CvImage)Anchors?.FirstOrDefault(a => a.Id == ScalingAnchorId);
         }
 
         //public List<CvImage> SubtractingImages;

@@ -41,7 +41,7 @@ namespace Cliver.PdfDocumentParser
 
             virtual public Template.Field CreateDefaultField()
             {
-                return new Template.Field { DefaultValueType = Template.Field.ValueTypes.PdfText };
+                return new Template.Field.PdfText { };
             }
 
             /// <summary>
@@ -51,6 +51,9 @@ namespace Cliver.PdfDocumentParser
             /// <param name="testFileDefaultFolder"></param>
             public TemplateManager(Template template, string lastTestFile, string testFileDefaultFolder)
             {
+                if (template.Editor == null)
+                    template.Editor = new Template.EditorSettings { };
+
                 Template = template;
                 LastTestFile = lastTestFile;
                 TestFileDefaultFolder = testFileDefaultFolder;

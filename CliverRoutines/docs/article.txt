@@ -1,20 +1,20 @@
 <h2>Introduction</h2>
 
-<p>CliverRoutines is a cross-platform C# lib which provides:</p>
+<p>CliverRoutines contains:</p>
 
 <ul>
-	<li>settings manager which supersedes .NET ConfigurationManager;</li>
+	<li>application settings manager&nbsp;superseding&nbsp;.NET ConfigurationManager;</li>
 	<li>logger with threading and session support;</li>
 	<li>auxiliary routines;</li>
 </ul>
 
-<p>CliverRoutines has been developed on .NET Standard 2.0 and supposed to run on any platform supported by .NET Core, Xamarin or Mono.</p>
+<p>CliverRoutines has been developed in .NET Standard 2.0 and supposed to run on any platform adopting C# including&nbsp;.NET, Xamarin,&nbsp;Mono.</p>
 
 <p>This article is a brief&nbsp;overview. For details refer to <a href="https://sergeystoyan.github.io/CliverRoutines/#1">the documentation</a>&nbsp;and <a href="https://github.com/sergeystoyan/CliverRoutines/">the source code</a>.</p>
 
 <h2>Background</h2>
 
-<p>Every time I was using .NET ConfigurationManager&nbsp;it was a pain whether it was&nbsp;needed to store custom types, or initialize&nbsp;settings with long&nbsp;data,&nbsp;or use overrided settings. In general, to make ConfigurationManager do&nbsp;something custom,&nbsp;means run into&nbsp;awkward coding full of&nbsp;restrictions. Not to mention that editing settings&nbsp;though the Visual Studio settings table is&nbsp;terribly unhandy.</p>
+<p>Every time I was using .NET ConfigurationManager it was a pain whether it was needed to store custom types, or initialize settings with long data, or override settings. In general, trying to make ConfigurationManager do something custom, throws into awkward coding full of restrictions. Not to mention that editing settings though the Visual Studio settings table is terribly unhandy.</p>
 
 <p>That&#39;s why years ago I developed the settings manager <code>Cliver.Config</code>. The idea&nbsp;behind it appeared so suitable that since then I&nbsp;have&nbsp;never looked back. It has been&nbsp;used in many apps of any complexity on Windows and Xamarin.Mac and always proved to be simple in use,&nbsp;capable and&nbsp;robust.</p>
 
@@ -22,11 +22,13 @@
 
 <h2>Config</h2>
 
-<p><a href="#_localAnchor_config"><code>Cliver.Config</code></a>&nbsp;is a replacement for .NET ConfigurationManager. Its features:</p>
+<p><a href="#_localAnchor_config"><code>Cliver.Config</code></a>&nbsp;is an application settings manager intended as a replacement for .NET ConfigurationManager.</p>
+
+<p><strong>Features:</strong></p>
 
 <ul>
 	<li>cross-platform;</li>
-	<li>natively enables setting&nbsp;types of any complexity and functionality;</li>
+	<li>enables setting&nbsp;types of any complexity and functionality;</li>
 	<li>settings are easily modified&nbsp;directly in code;</li>
 	<li>enables settings polymorphism;</li>
 	<li>thread-safe;</li>
@@ -35,7 +37,7 @@
 
 <p><b>Idea:</b></p>
 
-<p>Setting types are ordinary C# classes that you define in your code&nbsp;according to your needs thus achieving a great flexibility.&nbsp;<code>Cliver.Config</code>&nbsp;automatically detects&nbsp;fields/properties of those types&nbsp;and facilitates their serialization/deserialization on disk.</p>
+<p>Setting types are ordinary C# classes that you define in your code&nbsp;according to your needs thus achieving a great flexibility.&nbsp;<code>Cliver.Config</code>&nbsp;automatically detects&nbsp;fields/properties of those types&nbsp;and facilitates their serialization/deserialization to/from disk.</p>
 
 <p>While&nbsp;<code>Cliver.Config</code>&nbsp;was designed primarily as a settings manager, in conjunction with&nbsp;<code>System.Linq</code>&nbsp;it can be used as a simple nosql database.</p>
 
@@ -44,7 +46,7 @@
 <p>Reference CliverRoutines in your project.<br />
 Set your project&#39;s company name because it co-defines the storage directory.</p>
 
-<p>Define a&nbsp;settings type&nbsp;according to your needs. Generally a settings type is an ordinary class which inherits from&nbsp;<code>Cliver.Settings</code>&nbsp;or one of its derivatives, e.g.&nbsp;<code>Cliver.UserSettings</code>.&nbsp;</p>
+<p>Define settings types according to your needs. Generally a settings type is an ordinary class that inherits from&nbsp;<code>Cliver.Settings</code>&nbsp;or one of its derivatives, e.g.&nbsp;<code>Cliver.UserSettings</code>.&nbsp;</p>
 
 <p>(!)Fields or properties to be serialized/deserialized, must be non-static (<code>public</code> modifier is optional).</p>
 
@@ -52,7 +54,7 @@ Set your project&#39;s company name because it co-defines the storage directory.
 
 <pre lang="cs">
 //settings type
-public class GeneralSettings : Cliver.UserSettings //it is serialized to the user-specific data directory
+public class GeneralSettings : Cliver.UserSettings //serialized to the user-specific data directory
 {
 	public int Host;
 	public int Port = 25;
@@ -74,10 +76,10 @@ public class Settings
 }
 </pre>
 
-<p>To make&nbsp;<code>Cliver.Config</code>&nbsp;detect all such fields/properties in your code and initialize them,&nbsp;do this call&nbsp;at the beginning of the application:</p>
+<p>Add this call&nbsp;at the beginning of your application, to make&nbsp;<code>Cliver.Config</code>&nbsp;detect all such fields/properties in code&nbsp;and initialize them:</p>
 
 <pre lang="cs">
-//it can be called multiple times where every call re-initializes settings
+//it can be called multiple times; every call re-initializes settings
 Cliver.Config.Reload();//mandatory call before using settings 
 </pre>
 
@@ -99,20 +101,22 @@ Settings.General.Reset();
 notify(Settings.General.Host, Settings.General.Port, Settings.General.Clients);
 </pre>
 
-<p>To see live&nbsp;examples, refer to CliverRoutinesExample project in CliverRoutines solution.<br />
+<p>Live&nbsp;examples can be found in&nbsp;CliverRoutinesExample project in CliverRoutines solution.<br />
 For the complete usage options, review&nbsp;<code>Cliver.Config</code>&nbsp;API.</p>
 
 <h2>Log</h2>
 
-<p><a href="#_localAnchor_log"><code>Cliver.Log</code></a>&nbsp;features:</p>
+<p><a href="#_localAnchor_log"><code>Cliver.Log</code></a>&nbsp;is a&nbsp;logger&nbsp;designed&nbsp;with&nbsp;usability&nbsp;in mind.</p>
+
+<p><strong>Features:</strong></p>
 
 <ul>
 	<li>cross-platform;</li>
 	<li>thread-safe;</li>
-	<li>session oriented:&nbsp;an application can write multiple log sessions successively or simultaneously. It is helpful when an application performs multiple independent tasks;</li>
-	<li>thread oriented:&nbsp;it can automatically write a log per thread;</li>
+	<li>session oriented -&nbsp;an application can write multiple log sessions successively or simultaneously. It is helpful when an application performs multiple independent tasks;</li>
+	<li>thread oriented -&nbsp;it can automatically write a log per thread;</li>
 	<li>auto-cleanup of old logs;</li>
-	<li>printing call&nbsp;stack info;</li>
+	<li>diagnostic output;</li>
 </ul>
 
 <h3>Usage&nbsp;</h3>
@@ -126,11 +130,9 @@ Set your project&#39;s company name because it co-defines the log directory.</p>
 using Cliver;
 ...
 
-//optional initialization. It can be called many times where every call closes all the logs and re-initializes the engine.
+//it can be called many times; every call closes all the logs and re-initializes the engine.
 Log.Initialize(Log.Mode.FOLDER_PER_SESSION); //this call is not mandatory if you are ok with default settings.
 </pre>
-
-<p>Now the logger can be used.</p>
 
 <p>Trivial logging when everything is written to the same file:</p>
 
@@ -148,7 +150,7 @@ Log.Session game1Session = Log.Session.Get(&quot;Game1&quot;);
 game1Session.Warning(&quot;test message&quot;);
 
 //to the log named &quot;Test&quot;
-game1Session[&quot;Test&quot;].Inform(&quot;test message&quot;);
+game1Session[&quot;Test&quot;].Warning(&quot;test message&quot;);
 </pre>
 
 <p>In this example, each&nbsp;thread writes its own log:</p>
@@ -157,11 +159,11 @@ game1Session[&quot;Test&quot;].Inform(&quot;test message&quot;);
 using Cliver;
 ...
 
+//each download thread writes its own log in the default (Head) session
 static void download(string uri)
 {
 	try
-	{
-		//each download thread writes its own log in the default (Head) session
+	{		
 		Log.Thread.Inform(&quot;test message&quot;); //It is a shortcut for Log.Head.Thread.Inform()
 	}
 	catch (Exception e)
@@ -179,7 +181,7 @@ static void Main(string[] args)
 }
 </pre>
 
-<p>To see live&nbsp;examples, refer to CliverRoutinesExample project in CliverRoutines solution.<br />
+<p>Live&nbsp;examples can be found in&nbsp;CliverRoutinesExample project in CliverRoutines solution.<br />
 For the complete usage options, review&nbsp;<code>Cliver.Log</code>&nbsp;API.</p>
 
 <h2>Enjoy!</h2>

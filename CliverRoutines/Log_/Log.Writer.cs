@@ -8,43 +8,21 @@
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace Cliver
 {
     public partial class Log
     {
-        public abstract partial class Writer
+        /// <summary>
+        /// The base log writer. 
+        /// </summary>
+        abstract public partial class Writer
         {
-            internal Writer(string name, Session session)
+            internal Writer(string name)
             {
                 Name = name;
-                Session = session;
-                SetFile();
             }
-
-            /// <summary>
-            /// Message importance level.
-            /// </summary>
-            public Level Level
-            {
-                get
-                {
-                    return level;
-                }
-                set
-                {
-                    lock (this)
-                    {
-                        if (level == Level.NONE && value > Level.NONE)
-                        {
-                            setWorkDir(true);
-                            Directory.CreateDirectory(Session.Dir);
-                        }
-                        level = value;
-                    }
-                }
-            }
-            Level level = Log.DefaultLevel;
 
             /// <summary>
             /// Log name.
@@ -52,47 +30,24 @@ namespace Cliver
             public readonly string Name;
 
             /// <summary>
-            /// Log file path.
+            /// Message importance level.
             /// </summary>
-            public string File { get; private set; } = null;
-
-            internal void SetFile()
-            {
-                lock (this)
-                {
-                    string file2 = Session.Dir + System.IO.Path.DirectorySeparatorChar;
-                    if (Log.mode.HasFlag(Mode.FOLDER_PER_SESSION))
-                    {
-                        file2 += DateTime.Now.ToString("yyMMddHHmmss");
-                    }
-                    else //if (Log.mode.HasFlag(Mode.ONE_FOLDER))//default
-                    {
-                        //file2 += (string.IsNullOrWhiteSpace(Session.Name) ? "" : Session.Name + "_") + Session.TimeMark;//separates session name from log name
-                        file2 += Session.TimeMark + (string.IsNullOrWhiteSpace(Session.Name) ? "" : "_" + Session.Name);
-                    }
-                    file2 += (string.IsNullOrWhiteSpace(Name) ? "" : "_" + Name) + (fileCounter > 0 ? "[" + fileCounter + "]" : "") + "." + FileExtension;
-
-                    if (File == file2)
-                        return;
-                    if (logWriter != null)
-                        logWriter.Close();
-                    File = file2;
-                }
-            }
-            int fileCounter = 0;
+            abstract public Level Level { get; set; }
+            protected Level level = Log.DefaultLevel;
 
             /// <summary>
-            /// Session to which this log belongs.
+            /// Log file path.
             /// </summary>
-            public readonly Session Session;
+            public string File { get; protected set; } = null;
+
+            abstract internal void SetFile();
+            protected int fileCounter = 0;
 
             /// <summary>
             /// Maximum log file length in bytes.
             /// If negative than no effect.
             /// </summary>
             public int MaxFileSize = Log.DefaultMaxFileSize;
-
-            public const string MAIN_THREAD_LOG_NAME = "";
 
             /// <summary>
             /// Close the log
@@ -176,7 +131,7 @@ namespace Cliver
                     logWriter.Flush();
                 }
             }
-            TextWriter logWriter = null;
+            protected TextWriter logWriter = null;
 
             /// <summary>
             /// Called for Writing. 

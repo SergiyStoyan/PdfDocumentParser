@@ -33,14 +33,14 @@ namespace Cliver
                 Default.Error(message);
             }
 
-            public void Trace(object message = null)
+            public void Trace(object object_ = null)
             {
-                Default.Trace(message);
+                Default.Trace(object_);
             }
 
             public void Exit(string message)
             {
-                Default.Error(message);
+                Default.Exit(message);
             }
 
             public void Exit(Exception e)
@@ -70,7 +70,7 @@ namespace Cliver
 
             public void Write(string message)
             {
-                Default.Write(MessageType.LOG, message);
+                Default.Write(message);
             }
 
             public void Error2(Exception e)
@@ -125,12 +125,12 @@ namespace Cliver
 
             public void Debug(string message)
             {
-                Default.Write(MessageType.DEBUG, message);
+                Default.Debug(message);
             }
 
             public void Debug0(string message)
             {
-                Default.Write(MessageType.DEBUG, message, GetStackString());
+                Default.Debug0(message);
             }
         }
     }

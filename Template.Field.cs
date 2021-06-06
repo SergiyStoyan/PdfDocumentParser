@@ -4,6 +4,7 @@
 //        http://www.cliversoft.com
 //********************************************************************************************
 
+using System;
 using System.Collections.Generic;
 
 namespace Cliver.PdfDocumentParser
@@ -18,7 +19,7 @@ namespace Cliver.PdfDocumentParser
         //    return Fields.Where(x => x.Name == fieldName);
         //}
 
-        public class Field
+        abstract public class Field
         {
             public string Name;
 
@@ -77,21 +78,55 @@ namespace Cliver.PdfDocumentParser
 
             public Field()
             {
+                if (this is PdfText)
+                    Type = Types.PdfText;
+                else if (this is PdfTextLines)
+                    Type = Types.PdfTextLines;
+                else if (this is PdfCharBoxs)
+                    Type = Types.PdfCharBoxs;
+                else if (this is OcrText)
+                    Type = Types.OcrText;
+                else if (this is OcrTextLines)
+                    Type = Types.OcrTextLines;
+                else if (this is OcrCharBoxs)
+                    Type = Types.OcrCharBoxs;
+                else if (this is Image)
+                    Type = Types.Image;
+                else if (this is OcrTextLineImages)
+                    Type = Types.OcrTextLineImages;
+                else
+                    Type = Types.PdfText;
+                //throw new Exception("Unknown option: " + this.GetType());
             }
 
-            public ValueTypes DefaultValueType = ValueTypes.PdfText;
-
-            public enum ValueTypes
+            [Newtonsoft.Json.JsonIgnore]
+            public readonly Types Type;
+            public enum Types
             {
-                PdfText = 0,
-                PdfTextLines = 1,
-                PdfCharBoxs = 2,
-                OcrText = 3,
-                OcrTextLines = 4,
-                OcrCharBoxs = 5,
-                Image = 6,
-                OcrTextLineImages = 7,
+                PdfText,
+                PdfTextLines,
+                PdfCharBoxs,
+                OcrText,
+                OcrTextLines,
+                OcrCharBoxs,
+                Image,
+                OcrTextLineImages,
             }
+
+            //!!!remove when old templates converted
+            //public ValueTypes DefaultValueType = ValueTypes.PdfText;
+            ////!!!remove when old templates converted
+            //public enum ValueTypes
+            //{
+            //    PdfText = 0,
+            //    PdfTextLines = 1,
+            //    PdfCharBoxs = 2,
+            //    OcrText = 3,
+            //    OcrTextLines = 4,
+            //    OcrCharBoxs = 5,
+            //    Image = 6,
+            //    OcrTextLineImages = 7,
+            //}
 
             public bool IsSet()
             {
@@ -104,6 +139,75 @@ namespace Cliver.PdfDocumentParser
             /// Not all field types supported!
             /// </summary>
             public string ColumnOfTable = null;
+
+            virtual internal object GetValue()
+            {
+                return null;
+            }
+
+            public class PdfText : Field
+            {
+                internal override object GetValue()
+                {
+                    throw new System.NotImplementedException();
+                }
+            }
+
+            public class PdfTextLines : Field
+            {
+                internal override object GetValue()
+                {
+                    throw new System.NotImplementedException();
+                }
+            }
+
+            public class PdfCharBoxs : Field
+            {
+                internal override object GetValue()
+                {
+                    throw new System.NotImplementedException();
+                }
+            }
+
+            public class OcrText : Field
+            {
+                internal override object GetValue()
+                {
+                    throw new System.NotImplementedException();
+                }
+            }
+
+            public class OcrTextLines : Field
+            {
+                internal override object GetValue()
+                {
+                    throw new System.NotImplementedException();
+                }
+            }
+
+            public class OcrCharBoxs : Field
+            {
+                internal override object GetValue()
+                {
+                    throw new System.NotImplementedException();
+                }
+            }
+
+            public class Image : Field
+            {
+                internal override object GetValue()
+                {
+                    throw new System.NotImplementedException();
+                }
+            }
+
+            public class OcrTextLineImages : Field
+            {
+                internal override object GetValue()
+                {
+                    throw new System.NotImplementedException();
+                }
+            }
         }
     }
 }

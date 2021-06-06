@@ -16,16 +16,16 @@ namespace Cliver
     /// <summary>
     /// Features:
     /// - auto-generating values;
-    /// - auto-disposing IDisposable values which have left the dictionary;
+    /// - auto-disposing IDisposable values that have left the dictionary;
     /// </summary>
-    /// <typeparam name="KT"></typeparam>
-    /// <typeparam name="VT"></typeparam>
+    /// <typeparam name="KT">key type</typeparam>
+    /// <typeparam name="VT">value type</typeparam>
     public class HandyDictionary<KT, VT> : IDisposable, IEnumerable<KeyValuePair<KT, VT>> //where VT: class
     {
         /// <summary>
         /// Create HandyDictionary with auto-generating value function.
         /// </summary>
-        /// <param name="getValue"></param>
+        /// <param name="getValue">method creating an object for a key</param>
         public HandyDictionary(GetValue getValue)
         {
             this.getValue = getValue;
@@ -36,13 +36,16 @@ namespace Cliver
         /// <summary>
         /// Create HandyDictionary without auto-generating value function.
         /// </summary>
-        /// <param name="defaultValue"></param>
+        /// <param name="defaultValue">the default value returned for an unset key</param>
         public HandyDictionary(VT defaultValue)
         {
             this.defaultValue = defaultValue;
         }
         protected VT defaultValue;
 
+        /// <summary>
+        /// Create HandyDictionary without auto-generating value function.
+        /// </summary>
         public HandyDictionary()
         {
             defaultValue = default;
@@ -65,6 +68,9 @@ namespace Cliver
             }
         }
 
+        /// <summary>
+        /// Clear the dictionary and dispose disposable elements.
+        /// </summary>
         virtual public void Clear()
         {
             lock (this)
@@ -76,6 +82,9 @@ namespace Cliver
             }
         }
 
+        /// <summary>
+        /// Remove the element by the key and dispose it if disposable.
+        /// </summary>
         public void Remove(KT key)
         {
             lock (this)

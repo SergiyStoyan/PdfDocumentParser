@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -33,8 +35,8 @@ namespace Cliver.PdfDocumentParser
             BottomAnchorId.ValueMember = "Id";
             BottomAnchorId.DisplayMember = "Name";
 
-            Type.ValueType = typeof(Template.Field.ValueTypes);
-            Type.DataSource = Enum.GetValues(typeof(Template.Field.ValueTypes));
+            Type.ValueType = typeof(Template.Field.Types);
+            Type.DataSource = Enum.GetValues(typeof(Template.Field.Types));
 
             fields.EnableHeadersVisualStyles = false;//needed to set row headers
 
@@ -96,16 +98,40 @@ namespace Cliver.PdfDocumentParser
                     {
                         case "Type":
                             {
-                                //foreach (DataGridViewRow r in fields.Rows)
-                                //{
-                                //    if (r.Tag != null && ((Template.Field)r.Tag).Name == f.Name)
-                                //    {
-                                //        f = (Template.Field)r.Tag;
-                                //        f.DefaultValueType = (Template.Field.ValueTypes)row.Cells["Type"].Value;
-                                //        setFieldRow(r, f);
-                                //    }
-                                //}
-                                f.DefaultValueType = (Template.Field.ValueTypes)row.Cells["Type"].Value;
+                                Template.Field.Types t2 = (Template.Field.Types)row.Cells["Type"].Value;
+                                if (t2 == f.Type)
+                                    break;
+                                string s = f.ToStringByJson();
+                                switch (t2)
+                                {
+                                    case Template.Field.Types.PdfText:
+                                        f = Serialization.Json.Deserialize<Template.Field.PdfText>(s);
+                                        break;
+                                    case Template.Field.Types.PdfTextLines:
+                                        f = Serialization.Json.Deserialize<Template.Field.PdfTextLines>(s);
+                                        break;
+                                    case Template.Field.Types.PdfCharBoxs:
+                                        f = Serialization.Json.Deserialize<Template.Field.PdfCharBoxs>(s);
+                                        break;
+                                    case Template.Field.Types.OcrText:
+                                        //f2 = new Template.Field.OcrText();
+                                        f = Serialization.Json.Deserialize<Template.Field.OcrText>(s);
+                                        break;
+                                    case Template.Field.Types.OcrTextLines:
+                                        f = Serialization.Json.Deserialize<Template.Field.OcrTextLines>(s);
+                                        break;
+                                    case Template.Field.Types.OcrCharBoxs:
+                                        f = Serialization.Json.Deserialize<Template.Field.OcrCharBoxs>(s);
+                                        break;
+                                    case Template.Field.Types.OcrTextLineImages:
+                                        f = Serialization.Json.Deserialize<Template.Field.OcrTextLineImages>(s);
+                                        break;
+                                    case Template.Field.Types.Image:
+                                        f = Serialization.Json.Deserialize<Template.Field.Image>(s);
+                                        break;
+                                    default:
+                                        throw new Exception("Unknown option: " + t2);
+                                }
                                 setFieldRow(row, f);
                                 break;
                             }
@@ -281,26 +307,26 @@ namespace Cliver.PdfDocumentParser
                     return;
                 Template.Field f = (Template.Field)r.Tag;
                 object o = pages[currentPageI].GetValue(f.Name);
-                switch (f.DefaultValueType)
+                switch (f.Type)
                 {
-                    case Template.Field.ValueTypes.Image:
-                    case Template.Field.ValueTypes.OcrTextLineImages:
-                        Clipboard.SetData(f.DefaultValueType.ToString(), (Image)o);
+                    case Template.Field.Types.Image:
+                    case Template.Field.Types.OcrTextLineImages:
+                        Clipboard.SetData(f.Type.ToString(), (Image)o);
                         break;
-                    case Template.Field.ValueTypes.PdfText:
-                    case Template.Field.ValueTypes.OcrText:
+                    case Template.Field.Types.PdfText:
+                    case Template.Field.Types.OcrText:
                         Clipboard.SetText((string)o);
                         break;
-                    case Template.Field.ValueTypes.PdfTextLines:
-                    case Template.Field.ValueTypes.OcrTextLines:
+                    case Template.Field.Types.PdfTextLines:
+                    case Template.Field.Types.OcrTextLines:
                         Clipboard.SetText(string.Join("\r\n", (List<string>)o));
                         break;
-                    case Template.Field.ValueTypes.PdfCharBoxs:
-                    case Template.Field.ValueTypes.OcrCharBoxs:
+                    case Template.Field.Types.PdfCharBoxs:
+                    case Template.Field.Types.OcrCharBoxs:
                         Clipboard.SetText(Serialization.Json.Serialize(o));
                         break;
                     default:
-                        throw new Exception("Unknown option: " + f.DefaultValueType);
+                        throw new Exception("Unknown option: " + f.Type);
                 }
             };
 
@@ -491,7 +517,7 @@ namespace Cliver.PdfDocumentParser
                         unique = false;
                         break;
                     }
-                if (unique && !Message.YesNo("This field definition is the last for '" + f0.Name + "' and thus, the field will not exist anymore. Proceed?"))
+                if (unique && !Message.YesNo("This field '" + f0.Name + "' will be removed completely because it is the last definition for it.\r\nProceed?", this, Message.Icons.Exclamation))
                 {
                     //Message.Inform("This field definition cannot be deleted because it is the last of the field.");
                     return;
@@ -574,7 +600,7 @@ namespace Cliver.PdfDocumentParser
 
         void createNewField()
         {
-            Template.Field f = new Template.Field { Name = "" };
+            Template.Field f = new Template.Field.PdfText { Name = "" };
             int i = fields.CurrentRow?.Index >= 0 ? fields.CurrentRow.Index + 1 : fields.Rows.Count;
             fields.Rows.Insert(i, 1);
             setFieldRow(fields.Rows[i], f);
@@ -596,6 +622,7 @@ namespace Cliver.PdfDocumentParser
                 {
                     fields.ClearSelection();
                     fields.CurrentCell = null;
+                    currentFieldControl = null;
                     return;
                 }
 
@@ -607,7 +634,47 @@ namespace Cliver.PdfDocumentParser
                 //setCurrentAnchorRow(f.BottomAnchorId, false);
                 setCurrentAnchorRow(null, true);
                 setCurrentConditionRow(null);
-                setFieldRowValue(row, false);
+                object v = setFieldRowValue(row, false);
+                Template.Field f = (Template.Field)row.Tag;
+
+                List<Template.Field> fs = new List<Template.Field>();
+                foreach (DataGridViewRow r in fields.Rows)
+                {
+                    if (r.Tag == null)
+                        continue;
+                    fs.Add((Template.Field)r.Tag);
+                }
+                Template.Field.Types t = ((Template.Field)row.Tag).Type;
+                switch (t)
+                {
+                    case Template.Field.Types.PdfText:
+                        currentFieldControl = new FieldPdfTextControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) });
+                        break;
+                    case Template.Field.Types.PdfTextLines:
+                        currentFieldControl = new FieldPdfTextLinesControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) });
+                        break;
+                    case Template.Field.Types.PdfCharBoxs:
+                        currentFieldControl = new FieldPdfCharBoxsControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) });
+                        break;
+                    case Template.Field.Types.OcrText:
+                        currentFieldControl = new FieldOcrTextControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) });
+                        break;
+                    case Template.Field.Types.OcrTextLines:
+                        currentFieldControl = new FieldOcrTextLinesControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) });
+                        break;
+                    case Template.Field.Types.OcrCharBoxs:
+                        currentFieldControl = new FieldOcrCharBoxsControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) });
+                        break;
+                    case Template.Field.Types.OcrTextLineImages:
+                        currentFieldControl = new FieldOcrTextLineImagesControl();
+                        break;
+                    case Template.Field.Types.Image:
+                        currentFieldControl = new FieldImageControl();
+                        break;
+                    default:
+                        throw new Exception("Unknown option: " + t);
+                }
+                currentFieldControl.Initialize(row, v, fs, (DataGridViewRow r) => { setFieldRow(r, f); });
             }
             finally
             {
@@ -617,20 +684,20 @@ namespace Cliver.PdfDocumentParser
         bool settingCurrentFieldRow = false;
         DataGridViewRow currentFieldRow = null;
 
-        bool setFieldRowValue(DataGridViewRow row, bool setEmpty)
+        object setFieldRowValue(DataGridViewRow row, bool setEmpty)
         {
             Template.Field f = (Template.Field)row.Tag;
             if (f == null)
-                return false;
+                return null;
             if (!f.IsSet())
             {
                 setRowStatus(statuses.WARNING, row, "Not set");
-                return false;
+                return null;
             }
             DataGridViewCell c = row.Cells["Value"];
             if (c.Value != null && c.Value is IDisposable)
                 ((IDisposable)c.Value).Dispose();
-            if (f.DefaultValueType == Template.Field.ValueTypes.Image || f.DefaultValueType == Template.Field.ValueTypes.OcrTextLineImages)
+            if (f.Type == Template.Field.Types.Image || f.Type == Template.Field.Types.OcrTextLineImages)
             {
                 if (!(c is DataGridViewImageCell))
                 {
@@ -652,24 +719,53 @@ namespace Cliver.PdfDocumentParser
             {
                 c.Value = null;
                 setRowStatus(statuses.NEUTRAL, row, "");
-                return false;
+                return null;
             }
             clearImageFromBoxes();
             object v = extractFieldAndDrawSelectionBox(f);
-            c.Value = v;
+
+            if (v != null)
+                switch (f.Type)
+                {
+                    case Template.Field.Types.PdfText:
+                        c.Value = Page.NormalizeText((string)v);
+                        break;
+                    case Template.Field.Types.PdfTextLines:
+                        c.Value = Page.NormalizeText(string.Join("\r\n", (List<string>)v));
+                        break;
+                    case Template.Field.Types.PdfCharBoxs:
+                        c.Value = Page.NormalizeText(Serialization.Json.Serialize(v));
+                        break;
+                    case Template.Field.Types.OcrText:
+                        c.Value = Page.NormalizeText((string)v);
+                        break;
+                    case Template.Field.Types.OcrTextLines:
+                        c.Value = Page.NormalizeText(string.Join("\r\n", (List<string>)v));
+                        break;
+                    case Template.Field.Types.OcrCharBoxs:
+                        c.Value = Page.NormalizeText(Serialization.Json.Serialize(v));
+                        break;
+                    default:
+                        c.Value = v;
+                        break;
+                }
+            else
+                c.Value = v;
+
             if (c.Value != null)
                 setRowStatus(statuses.SUCCESS, row, "Found");
             else
                 setRowStatus(statuses.ERROR, row, "Not found");
-            return v != null;
+
+            return v;
         }
 
         void setFieldRow(DataGridViewRow row, Template.Field f)
         {
             row.Tag = f;
             row.Cells["Name_"].Value = f.Name;
-            row.Cells["Rectangle"].Value = Serialization.Json.Serialize(f.Rectangle);
-            row.Cells["Type"].Value = f.DefaultValueType;
+            //row.Cells["Rectangle"].Value = Serialization.Json.Serialize(f.Rectangle);
+            row.Cells["Type"].Value = f.Type;
             row.Cells["LeftAnchorId"].Value = f.LeftAnchor?.Id;
             row.Cells["TopAnchorId"].Value = f.TopAnchor?.Id;
             row.Cells["RightAnchorId"].Value = f.RightAnchor?.Id;
@@ -678,8 +774,26 @@ namespace Cliver.PdfDocumentParser
             if (loadingTemplate)
                 return;
 
-            if (row == currentFieldRow)
+            if (currentFieldControl != null && row == currentFieldRow)
                 setCurrentFieldRow(row);
+        }
+
+        FieldControl currentFieldControl
+        {
+            get
+            {
+                if (splitContainer4.Panel2.Controls.Count < 1)
+                    return null;
+                return (FieldControl)splitContainer4.Panel2.Controls[0];
+            }
+            set
+            {
+                splitContainer4.Panel2.Controls.Clear();
+                if (value == null)
+                    return;
+                splitContainer4.Panel2.Controls.Add(value);
+                value.Dock = DockStyle.Fill;
+            }
         }
     }
 }

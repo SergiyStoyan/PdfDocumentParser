@@ -8,6 +8,8 @@
 
 using System;
 using System.IO;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Cliver
 {
@@ -26,7 +28,7 @@ namespace Cliver
         {
             if (settings.__Info == null)
                 throw new Exception("This method cannot be performed on a Settings object which has __Info not defined.");
-            return (S)Settings.Create(settings.__Info, true, true);
+            return (S)Settings.Create(settings.__Info, true);
         }
 
         /// <summary>
@@ -38,13 +40,12 @@ namespace Cliver
         /// </summary>
         /// <typeparam name="S"></typeparam>
         /// <param name="settings"></param>
-        /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
         /// <returns></returns>
-        public static S CreateReloadedClone<S>(this S settings, bool throwExceptionIfCouldNotLoadFromStorageFile = false) where S : Settings, new()
+        public static S CreateReloadedClone<S>(this S settings) where S : Settings, new()
         {
             if (settings.__Info == null)
                 throw new Exception("This method cannot be performed on a Settings object which has __Info not defined.");
-            return (S)Settings.Create(settings.__Info, false, throwExceptionIfCouldNotLoadFromStorageFile);
+            return (S)Settings.Create(settings.__Info, false);
         }
 
         /// <summary>
@@ -70,8 +71,8 @@ namespace Cliver
         {
             lock (settingsFieldFullNames2SettingsFieldInfo)
             {
-                foreach (SettingsMemberInfo sfi in EnumSettingsFieldInfos())
-                //foreach (SettingsMemberInfo sfi in settingsFieldFullNames2SettingsFieldInfo.Values)
+                set_settingsFieldFullNames2SettingsFieldInfo();
+                foreach (SettingsFieldInfo sfi in settingsFieldFullNames2SettingsFieldInfo.Values)
                 {
                     string file2 = toDirectory + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(sfi.File);
                     if (File.Exists(sfi.File))//it can be absent if default settings are used still
@@ -80,7 +81,7 @@ namespace Cliver
                         File.Copy(sfi.InitFile, file2);
                     else
                     {
-                        Settings s = Settings.Create(sfi, true, true);
+                        Settings s = Settings.Create(sfi, true);
                         s.Save(sfi);
                         File.Move(sfi.File, file2);
                     }
@@ -95,9 +96,9 @@ namespace Cliver
         //}
 
         //// ???what would it be needed for?
-        //public static S CreateReloadedInstance<S>(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false) where S : Settings, new()
+        //public static S CreateReloadedInstance<S>(string settingsFieldFullName) where S : Settings, new()
         //{
-        //    return (S)Settings.Create(GetSettingsFieldInfo(settingsFieldFullName), false, throwExceptionIfCouldNotLoadFromStorageFile);
+        //    return (S)Settings.Create(GetSettingsFieldInfo(settingsFieldFullName), false);
         //}
 
         /// <summary>
@@ -106,21 +107,36 @@ namespace Cliver
         /// <param name="settingsFieldFullName">full name of Settings field; it equals to the name of its storage file without extention</param>
         public static void Reset(string settingsFieldFullName)
         {
-            SettingsMemberInfo sfi = GetSettingsFieldInfo(settingsFieldFullName);
-            Settings s = Settings.Create(sfi, true, true);
-            sfi.SetObject(s);
+            GetSettingsFieldInfo(settingsFieldFullName).ResetObject();
+        }
+
+        /// <summary>
+        /// Can be used to initialize an optional Settings field.
+        /// </summary>
+        /// <param name="settingsFieldHostingType">full type name of the class hosting the Settings field</param>
+        /// <param name="settingsFieldName">name of the Settings field</param>
+        public static void Reset(Type settingsFieldHostingType, string settingsFieldName)
+        {
+            Reset(settingsFieldHostingType.FullName + "." + settingsFieldName);
         }
 
         /// <summary>
         /// Can be used to initialize an optional Settings field.
         /// </summary>
         /// <param name="settingsFieldFullName">full name of Settings field; it equals to the name of its storage file without extention</param>
-        /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
-        public static void Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
+        public static void Reload(string settingsFieldFullName)
         {
-            SettingsMemberInfo sfi = GetSettingsFieldInfo(settingsFieldFullName);
-            Settings s = Settings.Create(sfi, false, throwExceptionIfCouldNotLoadFromStorageFile);
-            sfi.SetObject(s);
+            GetSettingsFieldInfo(settingsFieldFullName).ReloadObject();
+        }
+
+        /// <summary>
+        /// Can be used to initialize an optional Settings field.
+        /// </summary>
+        /// <param name="settingsFieldHostingType">full type name of the class hosting the Settings field</param>
+        /// <param name="settingsFieldName">name of the Settings field</param>
+        public static void Reload(Type settingsFieldHostingType, string settingsFieldName)
+        {
+            Reload(settingsFieldHostingType.FullName + "." + settingsFieldName);
         }
 
         ///// <summary>
@@ -131,9 +147,25 @@ namespace Cliver
         ///// <returns>The Settings object which is set to the field</returns>
         //static public Settings GetSettings(string settingsFieldFullName)
         //{
-        //    SettingsMemberInfo sf = GetSettingsFieldInfo(settingsFieldFullName);
+        //    SettingsFieldInfo sf = GetSettingsFieldInfo(settingsFieldFullName);
         //    return sf.GetObject();
         //}
 
+        //!!!non-linked SettingsFieldInfo's must not be allowed in the custom code
+        ///// <summary>
+        ///// Get SettingsFieldInfos for the Settings type.
+        ///// </summary>
+        ///// <param name="settingsType">Settings type</param>
+        ///// <param name="fresh">if TRUE then the app is re-parsed looking up for the required Settings type</param>
+        ///// <returns>usually it would be only 1 element in the list</returns>
+        //public static List<SettingsFieldInfo> GetSettingsFieldInfos(Type settingsType, bool fresh = false)
+        //{
+        //    if (fresh)
+        //        return EnumSettingsFieldInfos().Where(a => a.Type == settingsType).ToList();
+        //    lock (settingsFieldFullNames2SettingsFieldInfo)
+        //    {
+        //        return settingsFieldFullNames2SettingsFieldInfo.Values.Where(a => a.Type == settingsType).ToList();
+        //    }
+        //}
     }
 }

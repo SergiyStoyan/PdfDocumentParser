@@ -146,10 +146,6 @@
     <Compile Include="AnchorOcrTextControl.Designer.cs">
       <DependentUpon>AnchorOcrTextControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="AnchorScriptControl.cs" />
-    <Compile Include="AnchorScriptControl.Designer.cs">
-      <DependentUpon>AnchorScriptControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="AnchorPdfTextControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -167,6 +163,54 @@
     <Compile Include="CvImage.cs" />
     <Compile Include="BitmapPreprocessor.cs" />
     <Compile Include="Deskewer.cs" />
+    <Compile Include="FieldPdfTextControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FieldPdfTextControl.Designer.cs">
+      <DependentUpon>FieldPdfTextControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FieldPdfTextLinesControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FieldPdfTextLinesControl.Designer.cs">
+      <DependentUpon>FieldPdfTextLinesControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FieldPdfCharBoxsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FieldPdfCharBoxsControl.Designer.cs">
+      <DependentUpon>FieldPdfCharBoxsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FieldOcrTextControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FieldOcrTextControl.Designer.cs">
+      <DependentUpon>FieldOcrTextControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FieldOcrCharBoxsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FieldOcrCharBoxsControl.Designer.cs">
+      <DependentUpon>FieldOcrCharBoxsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FieldImageControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FieldImageControl.Designer.cs">
+      <DependentUpon>FieldImageControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FieldOcrTextLineImagesControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FieldOcrTextLineImagesControl.Designer.cs">
+      <DependentUpon>FieldOcrTextLineImagesControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FieldOcrTextLinesControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FieldOcrTextLinesControl.Designer.cs">
+      <DependentUpon>FieldOcrTextLinesControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Page.conditions.cs" />
     <Compile Include="Page.anchors.cs" />
     <Compile Include="Page.text.cs" />
@@ -201,11 +245,11 @@
     <Compile Include="Settings\Constants.cs" />
     <Compile Include="Settings\Appearance.cs" />
     <Compile Include="ImageData.cs" />
-    <Compile Include="TableRowControl.cs">
+    <Compile Include="FieldControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="TableRowControl.Designer.cs">
-      <DependentUpon>TableRowControl.cs</DependentUpon>
+    <Compile Include="FieldControl.Designer.cs">
+      <DependentUpon>FieldControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Template.cs" />
     <Compile Include="TemplateForm.conditions.cs">
@@ -307,11 +351,32 @@
     <EmbeddedResource Include="AnchorOcrTextControl.resx">
       <DependentUpon>AnchorOcrTextControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AnchorScriptControl.resx">
-      <DependentUpon>AnchorScriptControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="AnchorPdfTextControl.resx">
       <DependentUpon>AnchorPdfTextControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FieldPdfTextControl.resx">
+      <DependentUpon>FieldPdfTextControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FieldPdfTextLinesControl.resx">
+      <DependentUpon>FieldPdfTextLinesControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FieldPdfCharBoxsControl.resx">
+      <DependentUpon>FieldPdfCharBoxsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FieldOcrTextControl.resx">
+      <DependentUpon>FieldOcrTextControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FieldOcrCharBoxsControl.resx">
+      <DependentUpon>FieldOcrCharBoxsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FieldImageControl.resx">
+      <DependentUpon>FieldImageControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FieldOcrTextLineImagesControl.resx">
+      <DependentUpon>FieldOcrTextLineImagesControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FieldOcrTextLinesControl.resx">
+      <DependentUpon>FieldOcrTextLinesControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -320,8 +385,8 @@
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TableRowControl.resx">
-      <DependentUpon>TableRowControl.cs</DependentUpon>
+    <EmbeddedResource Include="FieldControl.resx">
+      <DependentUpon>FieldControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ScanTemplateForm.resx">
       <DependentUpon>ScanTemplateForm.cs</DependentUpon>

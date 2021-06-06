@@ -19,15 +19,53 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class Page
     {
+        public string GetText(string fieldName)
+        {
+            FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
+            if (!fai.Found)
+                return null;
+            if (fai.ActualField.Type.ToString().StartsWith("Pdf"))
+                return (string)fai.GetValue(Template.Field.Types.PdfText);
+            return (string)fai.GetValue(Template.Field.Types.OcrText);
+        }
+
+        public List<string> GetTextLines(string fieldName)
+        {
+            FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
+            if (!fai.Found)
+                return null;
+            if (fai.ActualField.Type.ToString().StartsWith("Pdf"))
+                return (List<string>)fai.GetValue(Template.Field.Types.PdfTextLines);
+            return (List<string>)fai.GetValue(Template.Field.Types.OcrTextLines);
+        }
+
+        public Bitmap GetImage(string fieldName)
+        {
+            FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
+            if (!fai.Found)
+                return null;
+            return (Bitmap)fai.GetValue(Template.Field.Types.Image);
+        }
+
+        //public List<Image> GetTextLineImages(string fieldName)
+        //{
+        //    FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
+        //    if (!fai.Found)
+        //        return null;
+        //    if (fai.ActualField.DefaultValueType.ToString().StartsWith("Pdf"))
+        //        return (List<string>)fai.GetValue(Template.Field.Types.PdfTextLines);
+        //    return (List<Image>)fai.GetValue(Template.Field.Types.OcrTextLineImages);
+        //}
+
         /// <summary>
         /// Tries field definitions of the given name in turn until some is found on the page.
         /// </summary>
         /// <param name="fieldName">field is referenced by name because there may be several field-definitions for the same name</param>
-        /// <param name="valueType">if not set then DefaultValueType is used</param>
+        /// <param name="type">if not set then DefaultValueType is used</param>
         /// <returns></returns>
-        public object GetValue(string fieldName, Template.Field.ValueTypes? valueType = null)
+        public object GetValue(string fieldName, Template.Field.Types? type = null)
         {
-            return GetValue(fieldName, out _, valueType);
+            return GetValue(fieldName, out _, type);
         }
 
         /// <summary>
@@ -35,9 +73,9 @@ namespace Cliver.PdfDocumentParser
         /// </summary>
         /// <param name="fieldName">field is referenced by name because there may be several field-definitions for the same name</param>
         /// <param name="actualField">actual field definition which was found on the page</param>
-        /// <param name="valueType">if not set then DefaultValueType is used</param>
+        /// <param name="type">if not set then DefaultValueType is used</param>
         /// <returns></returns>
-        public object GetValue(string fieldName, out Template.Field actualField, Template.Field.ValueTypes? valueType = null)
+        public object GetValue(string fieldName, out Template.Field actualField, Template.Field.Types? type = null)
         {
             FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
             if (!fai.Found)
@@ -46,20 +84,27 @@ namespace Cliver.PdfDocumentParser
                 return null;
             }
             actualField = fai.ActualField;
-            return fai.GetValue(valueType == null ? fai.ActualField.DefaultValueType : (Template.Field.ValueTypes)valueType);
+            return fai.GetValue(type == null ? fai.ActualField.Type : (Template.Field.Types)type);
         }
 
-        // !!!passing Template.Field as parameter would be deceitful for these reasons:
-        // - it may belong to another template than ActiveTemplate;
-        // - it implies that a Template.Field object is equivalent to a field while it is just one of its defintions;
-        // - it may be the same by logic while being another as an object!
-        //public object GetValue(Template.Field exactField, Template.Field.ValueTypes? valueType = null)
+        /// <summary>
+        /// It is helpful when a field has more than 1 definition and its image is required.
+        /// !!!Only must be used for the field returned by GetValue(string fieldName, out Template.Field actualField, Template.Field.Types? type = null)
+        /// ATTENTION: using Template.Field as a parameter may be deceitful for these reasons:
+        /// - it may belong to another template than ActiveTemplate;
+        /// - it implies that a Template.Field object is equivalent to a field while it is just one of its defintions;
+        /// - it may be the same by logic while being another as an object;
+        /// </summary>
+        /// <param name="exactField"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        //public Bitmap GetImage(Template.Field exactField)
         //{
         //    RectangleF? ar = getFieldActualRectangle(exactField);
         //    FieldActualInfo fai = new FieldActualInfo(this, exactField, ar, exactField.ColumnOfTable != null ? getFoundFieldActualInfo(exactField.ColumnOfTable) : null);
         //    if (!fai.Found)
         //        return null;
-        //    return fai.GetValue(valueType == null ? fai.ActualField.DefaultValueType : (Template.Field.ValueTypes)valueType);
+        //    return (Bitmap)fai.GetValue(Template.Field.Types.Image);
         //}
 
         internal FieldActualInfo GetFieldActualInfo(Template.Field field)
@@ -88,6 +133,8 @@ namespace Cliver.PdfDocumentParser
             {
                 fais = new List<FieldActualInfo>();
                 fieldNames2fieldActualInfos[fieldName] = fais;
+                if (PageCollection.ActiveTemplate == null)
+                    throw new Exception("ActiveTemplate is not set for the PageCollection.");
                 foreach (Template.Field f in PageCollection.ActiveTemplate.Fields.Where(x => x.Name == fieldName))
                 {
                     RectangleF? ar = getFieldActualRectangle(f);
@@ -115,12 +162,12 @@ namespace Cliver.PdfDocumentParser
 
             public void Dispose()
             {
-                if (valueTypes2cachedValue.Count < 1)
+                if (types2cachedValue.Count < 1)
                     return;
-                foreach (object o in valueTypes2cachedValue.Values)
+                foreach (object o in types2cachedValue.Values)
                     if (o is IDisposable)
                         ((IDisposable)o).Dispose();
-                valueTypes2cachedValue.Clear();
+                types2cachedValue.Clear();
             }
 
             readonly internal Template.Field ActualField;
@@ -128,53 +175,53 @@ namespace Cliver.PdfDocumentParser
             readonly internal FieldActualInfo TableFieldActualInfo = null;
             readonly internal bool Found;
 
-            internal object GetValue(Template.Field.ValueTypes valueType)
+            internal object GetValue(Template.Field.Types type)
             {
-                //    return getValue(valueType, true);//test; if works, remove
+                //    return getValue(type, true);//test; if works, remove
                 //}
 
-                //object getValue(Template.Field.ValueTypes valueType, bool cached)
+                //object getValue(Template.Field.Types type, bool cached)
                 //{
                 //    if (!cached)
-                //        return getValue_(valueType);
-                if (!valueTypes2cachedValue.TryGetValue(valueType, out object o))
+                //        return getValue_(type);
+                if (!types2cachedValue.TryGetValue(type, out object o))
                 {//!!!to cache Table field values to re-use them internally only!!!
-                    o = getValue_(valueType);
-                    valueTypes2cachedValue[valueType] = o;
+                    o = getValue_(type);
+                    types2cachedValue[type] = o;
                 }
                 return o;
             }
-            Dictionary<Template.Field.ValueTypes, object> valueTypes2cachedValue = new Dictionary<Template.Field.ValueTypes, object>();//!!!cache Table field values for internal reuse only!!! 
-            object getValue_(Template.Field.ValueTypes valueType)
+            Dictionary<Template.Field.Types, object> types2cachedValue = new Dictionary<Template.Field.Types, object>();//!!!cache Table field values for internal reuse only!!! 
+            object getValue_(Template.Field.Types type)
             {
                 if (ActualRectangle == null || TableFieldActualInfo?.Found == false)
                     return null;
-                switch (valueType)
+                switch (type)
                 {
-                    case Template.Field.ValueTypes.PdfText:
+                    case Template.Field.Types.PdfText:
                         {
                             List<string> ss = getPdfTextLines();
                             return ss == null ? null : string.Join("\r\n", ss);
                         }
-                    case Template.Field.ValueTypes.PdfTextLines:
+                    case Template.Field.Types.PdfTextLines:
                         return getPdfTextLines();
-                    case Template.Field.ValueTypes.PdfCharBoxs:
+                    case Template.Field.Types.PdfCharBoxs:
                         return getPdfCharBoxs();
-                    case Template.Field.ValueTypes.OcrText:
+                    case Template.Field.Types.OcrText:
                         {
                             List<string> ss = getOcrTextLines();
                             return ss == null ? null : string.Join("\r\n", ss);
                         }
-                    case Template.Field.ValueTypes.OcrTextLines:
+                    case Template.Field.Types.OcrTextLines:
                         return getOcrTextLines();
-                    case Template.Field.ValueTypes.OcrCharBoxs:
+                    case Template.Field.Types.OcrCharBoxs:
                         return getOcrCharBoxs();
-                    case Template.Field.ValueTypes.Image:
+                    case Template.Field.Types.Image:
                         return getImage();
-                    case Template.Field.ValueTypes.OcrTextLineImages:
+                    case Template.Field.Types.OcrTextLineImages:
                         return getOcrTextLineImages();
                     default:
-                        throw new Exception("Unknown option: " + valueType);
+                        throw new Exception("Unknown option: " + type);
                 }
             }
             readonly Page page;
@@ -189,7 +236,7 @@ namespace Cliver.PdfDocumentParser
                     return Pdf.GetTextLinesSurroundedByRectangle(page.PdfCharBoxs, ar, page.PageCollection.ActiveTemplate.TextAutoInsertSpace);
 
                 List<string> ls = new List<string>();
-                List<Pdf.CharBox> cbs = (List<Pdf.CharBox>)TableFieldActualInfo.GetValue(Template.Field.ValueTypes.PdfCharBoxs);
+                List<Pdf.CharBox> cbs = (List<Pdf.CharBox>)TableFieldActualInfo.GetValue(Template.Field.Types.PdfCharBoxs);
                 foreach (Line<Pdf.CharBox> l in GetLines(cbs, page.PageCollection.ActiveTemplate.TextAutoInsertSpace))
                 {
                     StringBuilder sb = new StringBuilder();
@@ -212,7 +259,7 @@ namespace Cliver.PdfDocumentParser
 
                 if (!TableFieldActualInfo.Found)
                     return null;
-                List<Pdf.CharBox> cbs = (List<Pdf.CharBox>)TableFieldActualInfo.GetValue(Template.Field.ValueTypes.PdfCharBoxs);
+                List<Pdf.CharBox> cbs = (List<Pdf.CharBox>)TableFieldActualInfo.GetValue(Template.Field.Types.PdfCharBoxs);
                 return cbs.Where(a => a.R.Left >= ar.Left && a.R.Right <= ar.Right && a.R.Top >= ar.Top && a.R.Bottom <= ar.Bottom).ToList();
             }
 
@@ -236,7 +283,7 @@ namespace Cliver.PdfDocumentParser
 
                 if (!TableFieldActualInfo.Found)
                     return null;
-                List<Ocr.CharBox> cbs = (List<Ocr.CharBox>)TableFieldActualInfo.GetValue(Template.Field.ValueTypes.OcrCharBoxs);
+                List<Ocr.CharBox> cbs = (List<Ocr.CharBox>)TableFieldActualInfo.GetValue(Template.Field.Types.OcrCharBoxs);
                 List<string> ls = new List<string>();
                 if (page.PageCollection.ActiveTemplate.FieldOcrMode.HasFlag(Template.FieldOcrModes.ColumnFieldFromFieldImage))
                 {
@@ -297,7 +344,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 else
                 {
-                    List<Ocr.CharBox> cbs = (List<Ocr.CharBox>)TableFieldActualInfo.GetValue(Template.Field.ValueTypes.OcrCharBoxs);
+                    List<Ocr.CharBox> cbs = (List<Ocr.CharBox>)TableFieldActualInfo.GetValue(Template.Field.Types.OcrCharBoxs);
                     return cbs.Where(a => /*!check: ar.Contains(a.R)*/ a.R.Left >= ar.Left && a.R.Right <= ar.Right && a.R.Top >= ar.Top && a.R.Bottom <= ar.Bottom).ToList();
                 }
             }
@@ -346,7 +393,7 @@ namespace Cliver.PdfDocumentParser
                 {
                     if (!TableFieldActualInfo.Found)
                         return null;
-                    cbs = (List<Ocr.CharBox>)TableFieldActualInfo.GetValue(Template.Field.ValueTypes.OcrCharBoxs);
+                    cbs = (List<Ocr.CharBox>)TableFieldActualInfo.GetValue(Template.Field.Types.OcrCharBoxs);
                 }
                 else
                     cbs = Ocr.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, ar);

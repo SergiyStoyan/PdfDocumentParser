@@ -86,7 +86,7 @@
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE</DefineConstants>
     <DocumentationFile>bin\Release\CliverWinRoutines.xml</DocumentationFile>
-    <DebugSymbols>false</DebugSymbols>
+    <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
     <NoWarn>
@@ -96,7 +96,7 @@
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
-    <DebugType>none</DebugType>
+    <DebugType>pdbonly</DebugType>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -148,7 +148,8 @@
     <Compile Include="BaseForm\BaseForm.designer.cs">
       <DependentUpon>BaseForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AppSettings.cs" />
+    <Compile Include="Config\AppSettings.cs" />
+    <Compile Include="Config\Encrypted.cs" />
     <Compile Include="Microsoft\Win32\NativeMethods.cs" />
     <Compile Include="Microsoft\Win32\SafeFileMappingHandle.cs" />
     <Compile Include="WinApi\Handles.cs" />
@@ -157,6 +158,7 @@
     <Compile Include="Microsoft\Win32\SafeThreadHandle.cs" />
     <Compile Include="Microsoft\Win32\UnsafeNativeMethods.cs" />
     <Compile Include="WinApi\WinApi.cs" />
+    <Compile Include="WinRoutines\ConsoleRoutines.cs" />
     <Compile Include="WinRoutines\Crypto.cs" />
     <Compile Include="WinRoutines\ProcessRoutines2.CreateProcess.cs" />
     <Compile Include="WinRoutines\ProgramRoutines.cs" />
@@ -175,6 +177,7 @@
     <Compile Include="InternetDateTime.cs" />
     <Compile Include="WinRoutines\AssemblyRoutines.cs" />
     <Compile Include="WinRoutines\SessionRoutines.cs" />
+    <Compile Include="WinRoutines\Wmi.cs" />
     <Compile Include="WinRoutines\ThreadRoutines.cs" />
     <Compile Include="WinRoutines\ProcessRoutines.GetLockingProcesses.cs" />
     <Compile Include="WinRoutines\Firewall.cs" />

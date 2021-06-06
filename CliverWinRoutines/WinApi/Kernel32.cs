@@ -56,13 +56,16 @@ namespace Cliver.WinApi
 
 
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern IntPtr GetStdHandle(StdHandles whichHandle);
+        public static extern SafeFileHandle GetStdHandle(StdHandles whichHandle);
         public enum StdHandles : int
         {
             STD_INPUT_HANDLE = -10,
             STD_OUTPUT_HANDLE = -11,
             STD_ERROR_HANDLE = -12,
         }
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern bool SetStdHandle(StdHandles nStdHandle, SafeFileHandle hHandle);
 
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern int GetCurrentThreadId();

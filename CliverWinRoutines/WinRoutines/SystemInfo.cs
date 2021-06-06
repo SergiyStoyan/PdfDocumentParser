@@ -14,6 +14,7 @@ using System.IO;
 using System.Management;
 using System.Diagnostics;
 using System.Linq;
+using Microsoft.Win32;
 
 namespace Cliver.Win
 {
@@ -23,7 +24,7 @@ namespace Cliver.Win
         {
             Screen s = Screen.FromPoint(windowPosition);
             if (s != null)
-                return getWorkingArea ? new Size(s.WorkingArea.Width, s.WorkingArea.Height): new Size(s.Bounds.Width, s.Bounds.Height);
+                return getWorkingArea ? new Size(s.WorkingArea.Width, s.WorkingArea.Height) : new Size(s.Bounds.Width, s.Bounds.Height);
             return new Size();
         }
 
@@ -62,12 +63,46 @@ namespace Cliver.Win
             return files;
         }
 
+        static public string GetMachineGuid()
+        {
+            string location = @"SOFTWARE\Microsoft\Cryptography";
+            string name = "MachineGuid";
+
+            using (RegistryKey bk = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64))
+            {
+                if (bk != null)
+                    using (RegistryKey rk = bk.OpenSubKey(location))
+                    {
+                        if (rk != null)
+                        {
+                            object machineGuid = rk.GetValue(name);
+                            if (machineGuid != null)
+                                return machineGuid.ToString();
+                        }
+                    }
+            }
+            using (RegistryKey bk = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32))
+            {
+                if (bk != null)
+                    using (RegistryKey rk = bk.OpenSubKey(location))
+                    {
+                        if (rk != null)
+                        {
+                            object machineGuid = rk.GetValue(name);
+                            if (machineGuid != null)
+                                return machineGuid.ToString();
+                        }
+                    }
+            }
+            return null;
+        }
+
         public static string GetWindowsVersion()
         {
             List<string> vs = new List<string>();
             using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT Caption, Version, CSDVersion FROM Win32_OperatingSystem"))
                 foreach (var os in searcher.Get())
-                    vs.Add("" + os["Caption"] + ", " + os["Version"] + ", " + os["CSDVersion"]);
+                    vs.Add(os["Caption"]?.ToString() + ", " + os["Version"]?.ToString() + ", " + os["CSDVersion"]?.ToString());
             if (vs.Count > 0)
                 return vs[0];
             return Environment.OSVersion.ToString();
@@ -87,31 +122,28 @@ namespace Cliver.Win
             }
         }
 
-        public static List<string> GetMACs()
+        public static IEnumerable<string> GetMACs()
         {
-            List<string> ms = new List<string>();
-            using (ManagementObjectSearcher mos = new ManagementObjectSearcher("Select * From Win32_NetworkAdapterConfiguration"))
-                foreach (ManagementObject mac in mos.Get())
-                {
-                    ms.Add(mac["MACAddress"].ToString());
-                }
-            return ms;
+            return Wmi.GetProperty("Win32_NetworkAdapterConfiguration", "MACAddress");
+            //using (ManagementObjectSearcher mos = new ManagementObjectSearcher("Select * From Win32_NetworkAdapterConfiguration"))
+            //    foreach (ManagementObject mac in mos.Get())
+            //        yield return mac["MACAddress"]?.ToString();
         }
 
-        public static List<string> GetMotherboardIds()
+        public static IEnumerable<string> GetMotherboardIds()
         {
-            List<string> ms = new List<string>();
-            using (ManagementObjectSearcher mos = new ManagementObjectSearcher("Select * From Win32_BaseBoard"))
-                foreach (ManagementObject mac in mos.Get())
-                {
-                    ms.Add(mac["SerialNumber"].ToString());
-                }
-            return ms;
+            return Wmi.GetProperty("Win32_BaseBoard", "SerialNumber").Concat(Wmi.GetProperty("Win32_BIOS", "SerialNumber"));
+            //List<string> ms = new List<string>();
+            //using (ManagementObjectSearcher mos = new ManagementObjectSearcher("Select * From Win32_BaseBoard"))
+            //    foreach (ManagementObject mac in mos.Get())
+            //    {
+            //        ms.Add(mac["SerialNumber"]?.ToString());
+            //    }
+            //return ms;
         }
 
-        public static List<ProcessorInfo> GetProcessorInfos()
+        public static IEnumerable<ProcessorInfo> GetProcessorInfos()
         {
-            List<ProcessorInfo> pis = new List<ProcessorInfo>();
             using (ManagementObjectSearcher mos = new ManagementObjectSearcher("select * from Win32_Processor")
                 //win32CompSys = new ManagementObjectSearcher("select * from Win32_ComputerSystem"),
                 //win32Memory = new ManagementObjectSearcher("select * from Win32_PhysicalMemory")
@@ -119,17 +151,16 @@ namespace Cliver.Win
             {
                 foreach (ManagementObject mo in mos.Get())
                 {
-                    pis.Add(new ProcessorInfo
+                    yield return new ProcessorInfo
                     {
-                        Id = mo["ProcessorID"].ToString(),
-                        ClockSpeed = mo["CurrentClockSpeed"].ToString(),
-                        ProcName = mo["Name"].ToString(),
-                        Manufacturer = mo["Manufacturer"].ToString(),
-                        Version = mo["Version"].ToString(),
-                    });
+                        Id = mo["ProcessorID"]?.ToString(),
+                        ClockSpeed = mo["CurrentClockSpeed"]?.ToString(),
+                        ProcName = mo["Name"]?.ToString(),
+                        Manufacturer = mo["Manufacturer"]?.ToString(),
+                        Version = mo["Version"]?.ToString(),
+                    };
                 }
             }
-            return pis;
         }
         public class ProcessorInfo
         {

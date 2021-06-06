@@ -5,21 +5,19 @@
 //        stoyan@cliversoft.com
 //        http://www.cliversoft.com
 //********************************************************************************************
+#define COMPILE_GetObject_SetObject1 //!!!Stopwatch shows that compiling is not faster. Probably the reflection was improved.
 
 using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using System.IO;
 using System.Reflection;
 using System.Linq;
-using System.Diagnostics;
+using System.Linq.Expressions;
 
 namespace Cliver
 {
     /// <summary>
     /// Settings attributes which are defined by a Settings field.
     /// </summary>
-    abstract public class SettingsMemberInfo
+    abstract public class SettingsFieldInfo
     {
         /// <summary>
         /// Settings' full name is the string that is used in code to refer to this field/property. 
@@ -38,23 +36,43 @@ namespace Cliver
         public readonly string InitFile;
 
         /// <summary>
-        /// Whether serialization to string is to be done with indention.
-        /// </summary>
-        public bool Indented;
-
-        /// <summary>
         /// Settings derived type.
         /// </summary>
         public readonly Type Type;
+
+        /// <summary>
+        /// Version info of the Settings type defined in the present code.
+        /// </summary>
+        public readonly uint TypeVersion = 0;
+
+        /// <summary>
+        /// Encryption engine.
+        /// </summary>
+        public readonly StringEndec Endec = null;
+
+        /// <summary>
+        /// When TRUE, the Settings field is not initialized by default and needs an explicit initializing. 
+        /// Such a field, when needed, must be initiated explicitly by Config.Reload(string settingsFieldFullName)
+        /// </summary>
+        public readonly bool Optional = false;
+
+        /// <summary>
+        /// When TRUE, the Settings field is serialized with indention.
+        /// </summary>
+        public readonly bool Indented = true;
+
+        /// <summary>
+        /// When FALSE, those serializable fields/properties of the Settings field whose values are NULL, are ignored while serializing.
+        /// </summary>
+        public readonly bool NullSerialized = false;
 
         internal Settings GetObject()
         {
             lock (this)
             {
-                return getObject();
+                return (Settings)getObject();
             }
         }
-        abstract protected Settings getObject();
 
         internal void SetObject(Settings settings)
         {
@@ -63,27 +81,170 @@ namespace Cliver
                 setObject(settings);
             }
         }
+
+#if !COMPILE_GetObject_SetObject
+        abstract protected object getObject();
         abstract protected void setObject(Settings settings);
 
-        internal readonly SettingsAttribute Attribute;
-
-        protected SettingsMemberInfo(MemberInfo settingsTypeMemberInfo, Type type)
+        protected SettingsFieldInfo(MemberInfo settingsTypeMemberInfo, Type settingsType)
         {
-            Type = type;
+#else
+        readonly Func<object> getObject;
+        readonly Action<Settings> setObject;
+
+        protected SettingsFieldInfo(MemberInfo settingsTypeMemberInfo, Type settingsType, Func<object> getObject, Action<Settings> setObject)
+        {
+            this.getObject = getObject;
+            this.setObject = setObject;
+#endif
+            Type = settingsType;
             FullName = settingsTypeMemberInfo.DeclaringType.FullName + "." + settingsTypeMemberInfo.Name;
-            Settings s = (Settings)Activator.CreateInstance(Type);
+            /*//version with static __StorageDir
+            string storageDir;
+            for (; ; )
+            {
+                PropertyInfo fi = settingType.GetProperty(nameof(Settings.__StorageDir), BindingFlags.Static | BindingFlags.Public);
+                if (fi != null)
+                {
+                    storageDir = (string)fi.GetValue(null);
+                    break;
+                }
+                settingType = settingType.BaseType;
+                if (settingType == null)
+                    throw new Exception("Settings type " + Type.ToString() + " or some of its ancestors must define the public static getter " + nameof(Settings.__StorageDir));
+            }
+            File = storageDir + System.IO.Path.DirectorySeparatorChar + FullName + "." + Config.FILE_EXTENSION;
+            */
+            Settings s = (Settings)Activator.CreateInstance(Type); //!!!slightly slowler than calling a static by reflection. Doesn't run yet slower for a bigger class though.
             File = s.__StorageDir + System.IO.Path.DirectorySeparatorChar + FullName + "." + Config.FILE_EXTENSION;
             InitFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + FullName + "." + Config.FILE_EXTENSION;
-            Attribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsAttribute>(false).FirstOrDefault();
-            Indented = Attribute == null ? true : Attribute.Indented;
+
+            SettingsAttributes.EncryptedAttribute encryptedAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsAttributes.EncryptedAttribute>(false).FirstOrDefault();
+            if (encryptedAttribute == null)
+                encryptedAttribute = settingsType.GetCustomAttributes<SettingsAttributes.EncryptedAttribute>(true).FirstOrDefault();
+            if (encryptedAttribute != null)
+                Endec = encryptedAttribute.Endec;
+
+            SettingsAttributes.ConfigAttribute configAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsAttributes.ConfigAttribute>(false).FirstOrDefault();
+            if (configAttribute == null)
+                configAttribute = settingsType.GetCustomAttributes<SettingsAttributes.ConfigAttribute>(true).FirstOrDefault();
+            if (configAttribute != null)
+            {
+                Optional = configAttribute.Optional;
+                Indented = configAttribute.Indented;
+                NullSerialized = configAttribute.NullSerialized;
+            }
+
+            SettingsAttributes.TypeVersionAttribute typeVersion = settingsType.GetCustomAttributes<SettingsAttributes.TypeVersionAttribute>(true).FirstOrDefault();
+            if (typeVersion != null)
+                TypeVersion = typeVersion.Value;
+        }
+
+        #region Type Version support
+
+        /// <summary>
+        /// Read the storage file as a JObject in order to migrate to the current format.
+        /// </summary>
+        /// <returns></returns>
+        public Newtonsoft.Json.Linq.JObject ReadStorageFileAsJObject()
+        {
+            lock (this)
+            {
+                string file = File;
+                if (!System.IO.File.Exists(file))
+                    file = InitFile;
+                if (!System.IO.File.Exists(file))
+                    return null;
+                string s = System.IO.File.ReadAllText(file);
+                if (Endec != null)
+                    s = Endec.Decrypt(s);
+                return Newtonsoft.Json.Linq.JObject.Parse(s);
+            }
+        }
+
+        /// <summary>
+        /// Write the JObject to the storage file in order to migrate to the current format.
+        /// </summary>
+        /// <returns></returns>
+        public void WriteStorageFileAsJObject(Newtonsoft.Json.Linq.JObject o)
+        {
+            lock (this)
+            {
+                string s = o.ToString();
+                if (Endec != null)
+                    s = Endec.Decrypt(s);
+                System.IO.File.WriteAllText(File, s);
+            }
+        }
+
+        /// <summary>
+        /// Read the storage file as a string in order to migrate to the current format.
+        /// </summary>
+        /// <returns></returns>
+        public string ReadStorageFileAsString()
+        {
+            lock (this)
+            {
+                string file = File;
+                if (!System.IO.File.Exists(file))
+                    file = InitFile;
+                if (!System.IO.File.Exists(file))
+                    return null;
+                string s = System.IO.File.ReadAllText(file);
+                if (Endec != null)
+                    s = Endec.Decrypt(s);
+                return s;
+            }
+        }
+
+        /// <summary>
+        /// Write the string to the storage file in order to migrate to the current format.
+        /// </summary>
+        /// <returns></returns>
+        public void WriteStorageFileAsString(string s)
+        {
+            lock (this)
+            {
+                if (Endec != null)
+                    s = Endec.Decrypt(s);
+                System.IO.File.WriteAllText(File, s);
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Replaces the value of the field with a new object initiated with the default values. 
+        /// Tries to load it from the initial file located in the app's directory. 
+        /// If this file does not exist, it creates an object with the hardcoded values.
+        /// </summary>
+        internal Settings ResetObject()
+        {
+            Settings s = Settings.Create(this, true);
+            SetObject(s);
+            return s;
+        }
+
+        /// <summary>
+        /// Replaces the value of the field a new object initiated with the stored values.
+        /// Tries to load it from the storage file.
+        /// If this file does not exist, it tries to load it from the initial file located in the app's directory. 
+        /// If this file does not exist, it creates an object with the hardcoded values.
+        /// </summary>
+        internal Settings ReloadObject()
+        {
+            Settings s = Settings.Create(this, false);
+            SetObject(s);
+            return s;
         }
     }
 
-    public class SettingsFieldInfo : SettingsMemberInfo
+    public class SettingsFieldFieldInfo : SettingsFieldInfo
     {
-        override protected Settings getObject()
+#if !COMPILE_GetObject_SetObject
+        override protected object getObject()
         {
-            return (Settings)FieldInfo.GetValue(null);
+            return FieldInfo.GetValue(null);
         }
 
         override protected void setObject(Settings settings)
@@ -93,17 +254,42 @@ namespace Cliver
 
         readonly FieldInfo FieldInfo;
 
-        internal SettingsFieldInfo(FieldInfo settingsTypeFieldInfo) : base(settingsTypeFieldInfo, settingsTypeFieldInfo.FieldType)
+        internal SettingsFieldFieldInfo(FieldInfo settingsTypeFieldInfo) : base(settingsTypeFieldInfo, settingsTypeFieldInfo.FieldType)
         {
             FieldInfo = settingsTypeFieldInfo;
         }
+#else
+        internal SettingsFieldInfo(FieldInfo settingsTypeFieldInfo) : base(
+            settingsTypeFieldInfo,
+            settingsTypeFieldInfo.FieldType,
+            getGetValue(settingsTypeFieldInfo),
+            getSetValue(settingsTypeFieldInfo)
+            )
+        {
+        }
+        protected static Func<object> getGetValue(FieldInfo fieldInfo)
+        {
+            MemberExpression me = Expression.Field(null, fieldInfo);
+            return Expression.Lambda<Func<object>>(me).Compile();
+
+        }
+        protected static Action<Settings> getSetValue(FieldInfo fieldInfo)
+        {
+            ParameterExpression pe = Expression.Parameter(typeof(object));
+            UnaryExpression ue = Expression.Convert(pe, fieldInfo.FieldType);
+            MemberExpression me = Expression.Field(null, fieldInfo);
+            BinaryExpression be = Expression.Assign(me, ue);
+            return Expression.Lambda<Action<Settings>>(be, pe).Compile();
+        }
+#endif
     }
 
-    public class SettingsPropertyInfo : SettingsMemberInfo
+    public class SettingsFieldPropertyInfo : SettingsFieldInfo
     {
-        override protected Settings getObject()
+#if !COMPILE_GetObject_SetObject
+        override protected object getObject()
         {
-            return (Settings)PropertyInfo.GetValue(null);
+            return PropertyInfo.GetValue(null);
         }
 
         override protected void setObject(Settings settings)
@@ -113,9 +299,31 @@ namespace Cliver
 
         readonly PropertyInfo PropertyInfo;
 
-        internal SettingsPropertyInfo(PropertyInfo settingsTypePropertyInfo) : base(settingsTypePropertyInfo, settingsTypePropertyInfo.PropertyType)
+        internal SettingsFieldPropertyInfo(PropertyInfo settingsTypePropertyInfo) : base(settingsTypePropertyInfo, settingsTypePropertyInfo.PropertyType)
         {
             PropertyInfo = settingsTypePropertyInfo;
         }
+#else
+        internal SettingsPropertyInfo(PropertyInfo settingsTypePropertyInfo) : base(
+            settingsTypePropertyInfo,
+            settingsTypePropertyInfo.PropertyType,
+            getGetValue(settingsTypePropertyInfo.GetGetMethod(true)),
+            getSetValue(settingsTypePropertyInfo.GetSetMethod(true))
+            )
+        {
+        }
+        protected static Func<object> getGetValue(MethodInfo methodInfo)
+        {
+            MethodCallExpression mce = Expression.Call(methodInfo);
+            return Expression.Lambda<Func<object>>(mce).Compile();
+        }
+        protected static Action<Settings> getSetValue(MethodInfo methodInfo)
+        {
+            ParameterExpression pe = Expression.Parameter(typeof(object));
+            UnaryExpression ue = Expression.Convert(pe, methodInfo.GetParameters().First().ParameterType);
+            MethodCallExpression mce = Expression.Call(methodInfo, ue);
+            return Expression.Lambda<Action<Settings>>(mce, pe).Compile();
+        }
+#endif
     }
 }

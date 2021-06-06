@@ -17,6 +17,23 @@ namespace Cliver.Win
 {
     public class Crypto
     {
+        public static string GetKeyFromComputerSystemInfo()
+        {
+            string key = SystemInfo.GetMotherboardIds().FirstOrDefault();
+            if (key != null)
+                return key;
+            var pi = SystemInfo.GetProcessorInfos().FirstOrDefault();
+            if (pi != null)
+                return pi.Id;
+            key = SystemInfo.GetMachineGuid();
+            if (key != null)
+                return key;
+            key = SystemInfo.GetMACs().FirstOrDefault();
+            if (key != null)
+                return key;
+            throw new Exception("Could not create the default key");
+        }
+
         public class ProtectedData
         {
             public static DataProtectionScope DataProtectionScope = DataProtectionScope.CurrentUser;
@@ -41,14 +58,7 @@ namespace Cliver.Win
             /// </summary>
             public ProtectedData()
             {
-                string key = SystemInfo.GetMotherboardIds().FirstOrDefault();
-                if (key == null)
-                {
-                    var pi = SystemInfo.GetProcessorInfos().FirstOrDefault();
-                    key = pi != null ? pi.Id : throw new Exception("Could not create the default key");
-                }
-
-                this.key = Encoding.UTF8.GetBytes(key);
+                key = Encoding.UTF8.GetBytes(GetKeyFromComputerSystemInfo());
             }
 
             public string Encrypt(string str)

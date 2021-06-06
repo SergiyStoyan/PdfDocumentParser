@@ -10,11 +10,11 @@ using System.Net;
 
 namespace Cliver
 {
-    class WebClient : System.Net.WebClient
+    public class WebClient : System.Net.WebClient
     {
         protected override WebResponse GetWebResponse(WebRequest request, IAsyncResult asyncResult)
         {
-            WebResponse response = null;
+            WebResponse response;
             try
             {
                 response = base.GetWebResponse(request, asyncResult);
@@ -28,7 +28,7 @@ namespace Cliver
         }
         protected override WebResponse GetWebResponse(WebRequest request)
         {
-            WebResponse response = null;
+            WebResponse response;
             try
             {
                 response = base.GetWebResponse(request);

@@ -105,29 +105,32 @@ namespace Cliver.PdfDocumentParser
                         setAnchorParentAnchorIdList(r);
                 }
 
-                for (int i = 0; i < t.Conditions.Count; i++)
-                {
-                    for (int j = i + 1; j < t.Conditions.Count; j++)
-                        if (t.Conditions[i].Name == t.Conditions[j].Name)
-                            t.Conditions.RemoveAt(j);
-                }
                 conditions.Rows.Clear();
-                foreach (Template.Condition c in t.Conditions)
+                if (t.Conditions != null)
                 {
-                    int i = conditions.Rows.Add();
-                    var row = conditions.Rows[i];
-                    setConditionRow(row, c);
+                    for (int i = 0; i < t.Conditions.Count; i++)
+                    {
+                        for (int j = i + 1; j < t.Conditions.Count; j++)
+                            if (t.Conditions[i].Name == t.Conditions[j].Name)
+                                t.Conditions.RemoveAt(j);
+                    }
+                    foreach (Template.Condition c in t.Conditions)
+                    {
+                        int i = conditions.Rows.Add();
+                        var row = conditions.Rows[i];
+                        setConditionRow(row, c);
+                    }
                 }
 
-                //for (int i = 0; i < t.Fields.Count; i++)
-                //{
-                //    for (int j = i + 1; j < t.Fields.Count; j++)
-                //        if (t.Fields[i].Name == t.Fields[j].Name)
-                //            t.Fields.RemoveAt(j);
-                //}
                 fields.Rows.Clear();
                 if (t.Fields != null)
                 {
+                    //for (int i = 0; i < t.Fields.Count; i++)
+                    //{
+                    //    for (int j = i + 1; j < t.Fields.Count; j++)
+                    //        if (t.Fields[i].Name == t.Fields[j].Name)
+                    //            t.Fields.RemoveAt(j);
+                    //}
                     foreach (Template.Field f in t.Fields)
                     {
                         int i = fields.Rows.Add();
@@ -216,7 +219,7 @@ namespace Cliver.PdfDocumentParser
             templateManager.HelpRequest();
         }
 
-        private void Save_Click(object sender, EventArgs e)
+        private void OK_Click(object sender, EventArgs e)
         {
             try
             {
@@ -224,6 +227,19 @@ namespace Cliver.PdfDocumentParser
                 templateManager.Save();
                 DialogResult = DialogResult.OK;
                 Close();
+            }
+            catch (Exception ex)
+            {
+                Message.Error2(ex);
+            }
+        }
+
+        private void Save_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                templateManager.Template = GetTemplateFromUI(true);
+                templateManager.Save();
             }
             catch (Exception ex)
             {
@@ -342,7 +358,7 @@ namespace Cliver.PdfDocumentParser
                         throw new Exception("Condition[name=" + c.Name + "] is not set!");
                     BooleanEngine.Check(c.Value, t.Anchors.Select(x => x.Id));
                 }
-                t.Conditions.Add(Serialization.Json.Clone(c));
+                t.Conditions.Add((Template.Condition)Serialization.Json.Clone2(c));
             }
             if (saving)
             {
@@ -363,7 +379,7 @@ namespace Cliver.PdfDocumentParser
                     foreach (int? ai in new List<int?> { f.LeftAnchor?.Id, f.TopAnchor?.Id, f.RightAnchor?.Id, f.BottomAnchor?.Id })
                         if (ai != null && t.Anchors.FirstOrDefault(x => x.Id == ai) == null)
                             throw new Exception("Anchor[Id=" + ai + " does not exist.");
-                t.Fields.Add(Serialization.Json.Clone(f));
+                t.Fields.Add((Template.Field)Serialization.Json.Clone2(f));
             }
             if (saving)
             {

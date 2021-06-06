@@ -506,8 +506,7 @@ setLicense();
 
             <h3><a name='pseudoCode2'>Single-page documents</a></h3>
             An algorithm of parsing a PDF file where pages has no logical relation between each other and so every page requires choosing a template:
-<pre>
-<code class="language-csharp">//pseudo-code: processing a PDF file where every page is a new document.
+<script type="text/plain" class="language-csharp">//pseudo-code: processing a PDF file where every page is a new document.
 //Note: the classes and methods are not real and serve for simplicity and clarity only.
 
 pageCollection = new PageCollection(pdfFile);
@@ -536,8 +535,7 @@ foreach(page in pageCollection)
     object value2 = page.GetValue("field2");
     //doing something with value2...
             <...>
-}</code>
-</pre>
+}</script>
         <p>
             Notice that the above algorithm assumes that only one template can be applied to a PDF page while it is not mandatory in general.
 
@@ -546,8 +544,7 @@ foreach(page in pageCollection)
             Here is a more advanced algorithm designed for parsing a PDF file that contains multi-page documents.
         <p>
             Notice that term 'document' is used here for a range of pages that are to be processed with the same single template. However, generally speaking, there is no problem to process a document with many templates.
-<pre>
-<code class="language-csharp">//pseudo-code: processing a PDF file that contains multi-page documents.
+<script type="text/plain" class="language-csharp">//pseudo-code: processing a PDF file that contains multi-page documents.
 //Note: the classes and methods are not real and serve for simplicity and clarity only.
 
 pageCollection = new PageCollection(pdfFile);
@@ -585,8 +582,7 @@ foreach(page in pageCollection)
         if(page.IsCondition("DocumentLastPage"))
             pageCollection.ActiveTemplate = null;
     }
-}</code>
-</pre>
+}</script>
 
 
 
@@ -673,8 +669,7 @@ foreach(page in pageCollection)
 
             <h2>Algorithm</h2>
             When fields and conditions are predetermined, we can outline the algorithm of processing a PDF file:
-<pre>
-<code class="language-csharp">//pseudo-code: parsing a document
+<script type="text/plain" class="language-csharp">//pseudo-code: parsing a document
 //Note: the classes and methods are not real and serve for simplicity and clarity only.
 
 string InvoiceId, TotalAmount;
@@ -705,8 +700,7 @@ foreach(page in pageCollection)
             pageCollection.ActiveTemplate = null;
         }
     }
-}</code>
-</pre>
+}</script>
 
             Refer to <a href='#sampleParser'>SampleParser</a> as live code.
 

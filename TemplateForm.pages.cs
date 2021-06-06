@@ -151,12 +151,12 @@ namespace Cliver.PdfDocumentParser
                     return null;
                 RectangleF r = (RectangleF)fai.ActualRectangle;
                 owners2resizebleBox[field] = new ResizebleBox(field, r, Settings.Appearance.SelectionBoxBorderWidth);
-                object v = fai.GetValue(field.DefaultValueType);
-                switch (field.DefaultValueType)
+                object v = fai.GetValue(field.Type);
+                switch (field.Type)
                 {
-                    case Template.Field.ValueTypes.PdfText:
-                    case Template.Field.ValueTypes.PdfTextLines:
-                    case Template.Field.ValueTypes.PdfCharBoxs:
+                    case Template.Field.Types.PdfText:
+                    case Template.Field.Types.PdfTextLines:
+                    case Template.Field.Types.PdfCharBoxs:
                         if (field.ColumnOfTable != null)
                         {
                             if (!fai.TableFieldActualInfo.Found)
@@ -190,15 +190,10 @@ namespace Cliver.PdfDocumentParser
                             }
                         }
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
-                        if (field.DefaultValueType == Template.Field.ValueTypes.PdfText)
-                            return Page.NormalizeText((string)v);
-                        if (field.DefaultValueType == Template.Field.ValueTypes.PdfTextLines)
-                            return Page.NormalizeText(string.Join("\r\n", (List<string>)v));
-                        //if (field.DefaultValueType == Template.Field.ValueTypes.PdfTextCharBoxs)
-                        return Page.NormalizeText(Serialization.Json.Serialize(v));
-                    case Template.Field.ValueTypes.OcrText:
-                    case Template.Field.ValueTypes.OcrTextLines:
-                    case Template.Field.ValueTypes.OcrCharBoxs:
+                        return v;
+                    case Template.Field.Types.OcrText:
+                    case Template.Field.Types.OcrTextLines:
+                    case Template.Field.Types.OcrCharBoxs:
                         if (field.ColumnOfTable != null)
                         {
                             if (!fai.TableFieldActualInfo.Found)
@@ -209,7 +204,7 @@ namespace Cliver.PdfDocumentParser
                                 RectangleF tableAR = (RectangleF)fai.TableFieldActualInfo.ActualRectangle;
                                 //List<Ocr.Line> lines = Ocr.GetLines(Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateOcrCharBoxs, tableAR), pages.ActiveTemplate.TextAutoInsertSpace).ToList();
                                 //List<Ocr.Line> lines = Ocr.GetLines(Ocr.This.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateBitmap, tableAR, pages.ActiveTemplate.TesseractPageSegMode), pages.ActiveTemplate.TextAutoInsertSpace).ToList();
-                                List<Page.Line<Ocr.CharBox>> ols = Page.GetLinesWithAdjacentBorders((List<Ocr.CharBox>)fai.TableFieldActualInfo.GetValue(Template.Field.ValueTypes.OcrCharBoxs), tableAR);
+                                List<Page.Line<Ocr.CharBox>> ols = Page.GetLinesWithAdjacentBorders((List<Ocr.CharBox>)fai.TableFieldActualInfo.GetValue(Template.Field.Types.OcrCharBoxs), tableAR);
                                 if (ols.Count > 0)
                                     ols.RemoveAt(0);
                                 List<RectangleF> lineBoxes = new List<RectangleF>();
@@ -233,26 +228,15 @@ namespace Cliver.PdfDocumentParser
                             }
                         }
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
-                        if (field.DefaultValueType == Template.Field.ValueTypes.OcrText)
-                            return Page.NormalizeText((string)v);
-                        if (field.DefaultValueType == Template.Field.ValueTypes.OcrTextLines)
-                            return Page.NormalizeText(string.Join("\r\n", (List<string>)v));
-                        return Page.NormalizeText(Serialization.Json.Serialize(v));
-                    //drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
-                    //if (field.DefaultValueType == Template.Field.ValueTypes.OcrText)
-                    //    return Page.NormalizeText((string)v);
-                    //if (field.DefaultValueType == Template.Field.ValueTypes.OcrTextLines)
-                    //    return Page.NormalizeText(string.Join("\r\n", (List<string>)v));
-                    ////if (field.DefaultValueType == Template.Field.ValueTypes.OcrTextCharBoxs)
-                    //return Page.NormalizeText(Serialization.Json.Serialize(v));
-                    case Template.Field.ValueTypes.Image:
+                        return v;
+                    case Template.Field.Types.Image:
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
                         return v;
-                    case Template.Field.ValueTypes.OcrTextLineImages:
+                    case Template.Field.Types.OcrTextLineImages:
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
                         return v;
                     default:
-                        throw new Exception("Unknown option: " + field.DefaultValueType);
+                        throw new Exception("Unknown option: " + field.Type);
                 }
             }
             catch (Exception ex)
@@ -365,7 +349,7 @@ namespace Cliver.PdfDocumentParser
                         string fn = ((Template.Field)row.Tag).Name;
                         if (foundFieldNames.Contains(fn))
                             continue;
-                        if (setFieldRowValue(row, false))
+                        if (setFieldRowValue(row, false) != null)
                             foundFieldNames.Add(fn);
                     }
                 }

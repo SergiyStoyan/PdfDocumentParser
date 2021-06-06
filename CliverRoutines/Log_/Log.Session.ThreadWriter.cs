@@ -35,7 +35,7 @@ namespace Cliver
             /// <summary>
             /// Thread log.
             /// </summary>
-            public class ThreadWriter : Writer
+            public partial class ThreadWriter : Writer
             {
                 ThreadWriter(Session session, int id, System.Threading.Thread thread)
                     : base(id.ToString(), session)

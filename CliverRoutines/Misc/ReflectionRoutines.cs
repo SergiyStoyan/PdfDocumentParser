@@ -16,21 +16,15 @@ namespace Cliver
 {
     public static class ReflectionRoutines
     {
-        static public bool IsSubclassOfRawGeneric(this Type type, Type generic_type)
+        static public bool IsSubclassOfRawGeneric(Type type, Type genericType)
         {
-            while (type != null && type != typeof(object))
-            {
-                var cur = type.IsGenericType ? type.GetGenericTypeDefinition() : type;
-                if (generic_type == cur)
-                {
+            for (; type != null && type != typeof(object); type = type.BaseType)
+                if (genericType == (type.IsGenericType ? type.GetGenericTypeDefinition() : type))
                     return true;
-                }
-                type = type.BaseType;
-            }
             return false;
         }
 
-        public static Dictionary<string, FieldInfo> GetFields(this object o, BindingFlags bindingFlags = BindingFlags.Public)
+        public static Dictionary<string, FieldInfo> GetFields(object o, BindingFlags bindingFlags = BindingFlags.Public)
         {
             Dictionary<string, FieldInfo> ns2fi = new Dictionary<string, FieldInfo>();
             foreach (FieldInfo fi in o.GetType().GetFields(bindingFlags))

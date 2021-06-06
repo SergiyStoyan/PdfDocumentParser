@@ -211,9 +211,9 @@ namespace Cliver.Win
             try
             {
                 Advapi32.STARTUPINFO si = new Advapi32.STARTUPINFO();
-                si.hStdInput = processParameters.StdIn != null ? processParameters.StdIn : new SafeFileHandle(Kernel32.GetStdHandle(Kernel32.StdHandles.STD_INPUT_HANDLE), true);
-                si.hStdOutput = processParameters.StdOut != null ? processParameters.StdOut : new SafeFileHandle(Kernel32.GetStdHandle(Kernel32.StdHandles.STD_OUTPUT_HANDLE), true);
-                si.hStdError = processParameters.StdErr != null ? processParameters.StdErr : new SafeFileHandle(Kernel32.GetStdHandle(Kernel32.StdHandles.STD_ERROR_HANDLE), true);
+                si.hStdInput = processParameters.StdIn != null ? processParameters.StdIn : Kernel32.GetStdHandle(Kernel32.StdHandles.STD_INPUT_HANDLE);
+                si.hStdOutput = processParameters.StdOut != null ? processParameters.StdOut :Kernel32.GetStdHandle(Kernel32.StdHandles.STD_OUTPUT_HANDLE);
+                si.hStdError = processParameters.StdErr != null ? processParameters.StdErr : Kernel32.GetStdHandle(Kernel32.StdHandles.STD_ERROR_HANDLE);
                 if (processParameters.StdIn != null || processParameters.StdOut != null || processParameters.StdErr != null)
                     si.dwFlags |= Advapi32.dwFlags.STARTF_USESTDHANDLES;
                 si.dwFlags |= Advapi32.dwFlags.STARTF_USESHOWWINDOW; //it is needed if hiding the window when CREATE_NEW_CONSOLE

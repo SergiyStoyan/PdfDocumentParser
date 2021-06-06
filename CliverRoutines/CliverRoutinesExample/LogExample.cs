@@ -15,14 +15,17 @@ namespace Example
             Log.Session.Get("GAME")["client"].Inform("write out of box4");
             Log.Session.Get("GAME").Rename("Game");
 
+            //a session-less log which will be continued with the next launch of the application
+            Log.Get("history").Inform("session-less log");
 
-            //optional; initialize log            
-            Log.Initialize(Log.Mode.FOLDER_PER_SESSION);//if permissions allow it, log will be created in the executable directory
+            //optional initialization. You will like to perform it at the very beginning of the app.            
+            Log.Initialize(Log.Mode.FOLDER_PER_SESSION);
 
             //trivial usage: everything is written to the same file
             Log.Inform("write to the default log of the default session");
+            Log.Inform("Root log folder: " + Log.RootDir);
 
-            //more sophisticated usage is below
+            //more sophisticated usage
             Log.Head["Action1"].Inform0("write to log 'Action1' of the default session");
 
             //writing thread logs to the default session
@@ -31,7 +34,7 @@ namespace Example
 
             //writing to an explicitly created session
             Log.Session logSession_Task = Log.Session.Get("TASK");//create if not exists
-            logSession_Task.Inform("write to the default log of the session '"+ logSession_Task.Name+"'");
+            logSession_Task.Inform("write to the default log of the session '" + logSession_Task.Name + "'");
             Log.Writer log_Task_Subtask = logSession_Task["Subtask"];//create if not exists
             log_Task_Subtask.Error("write to log '" + log_Task_Subtask.Name + "' of session '" + logSession_Task.Name + "''");
             logSession_Task.Trace("write to the default log of the session '" + logSession_Task.Name + "'");

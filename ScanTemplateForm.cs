@@ -100,7 +100,8 @@ namespace Cliver.PdfDocumentParser
                 changed = true;
             ScalingAnchor.Items.Clear();
             ScalingAnchor.Items.Add("");
-            ScalingAnchor.Items.AddRange(t.Anchors.Where(a => a is Template.Anchor.CvImage).Select(a => (object)a.Id).ToArray());
+            if (t.Anchors != null)
+                ScalingAnchor.Items.AddRange(t.Anchors.Where(a => a is Template.Anchor.CvImage).Select(a => (object)a.Id).ToArray());
             ScalingAnchor.SelectedItem = t.GetScalingAnchor()?.Id;
         }
         string defaultBitmapPreprocessor = @"using System;
