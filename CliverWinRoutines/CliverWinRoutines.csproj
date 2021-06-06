@@ -157,6 +157,7 @@
     <Compile Include="Microsoft\Win32\SafeThreadHandle.cs" />
     <Compile Include="Microsoft\Win32\UnsafeNativeMethods.cs" />
     <Compile Include="WinApi\WinApi.cs" />
+    <Compile Include="WinRoutines\ConsoleRoutines.cs" />
     <Compile Include="WinRoutines\Crypto.cs" />
     <Compile Include="WinRoutines\ProcessRoutines2.CreateProcess.cs" />
     <Compile Include="WinRoutines\ProgramRoutines.cs" />
