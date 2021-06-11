@@ -211,6 +211,7 @@ namespace Cliver
     /// <summary>
     /// Settings field attribute.
     /// </summary>
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class SettingsAttribute : Attribute
     {
         /// <summary>
@@ -235,11 +236,18 @@ namespace Cliver
         /// <param name="indented">Indicates that the Settings field be stored with indention</param>
         /// <param name="optional">Indicates that the Settings field should not be initiated by Config by default.
         /// Such a field should be initiated explicitly when needed by Config.Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)</param>
-        public SettingsAttribute(bool indented = true, bool optional = false, StringCrypto crypto = null)
+        /// <param name="typeHostingStringCryptoGetter">Type of a class that exposes the getter for StringCrypto. Used for encrypting.</param>
+        /// <param name="stringCryptoGetter">Name of the getter for StringCrypto. Used for encrypting.</param>
+        public SettingsAttribute(bool indented = true, bool optional = false, Type typeHostingStringCryptoGetter = null, string stringCryptoGetter = null)
         {
             Indented = indented;
             Optional = optional;
-            Crypto = crypto;
+            if (typeHostingStringCryptoGetter != null)
+            {
+                if (stringCryptoGetter == null)
+                    throw new Exception("stringCryptoGetter is not set while typeHostingStringCryptoGetter is.");
+                Crypto = (StringCrypto)typeHostingStringCryptoGetter.GetProperty(stringCryptoGetter).GetValue(null);
+            }
         }
     }
 
