@@ -238,8 +238,8 @@ namespace Cliver
         /// <param name="indented">Indicates that the Settings field be stored with indention</param>
         /// <param name="optional">Indicates that the Settings field should not be initiated by Config by default.
         /// Such a field should be initiated explicitly when needed by Config.Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)</param>
-        /// <param name="typeHostingStringCryptoGetter">Type of a class that exposes the getter for StringCrypto. Used for encrypting.</param>
-        /// <param name="stringCryptoGetter">Name of the getter for StringCrypto. Used for encrypting.</param>
+        /// <param name="typeHostingStringCryptoGetter">Type of a class that exposes a getter for StringCrypto instance. Used for encrypting.</param>
+        /// <param name="stringCryptoGetter">Name of the getter for StringCrypto instance. Used for encrypting.</param>
         public SettingsAttribute(bool indented = true, bool optional = false, Type typeHostingStringCryptoGetter = null, string stringCryptoGetter = null)
         {
             Indented = indented;
