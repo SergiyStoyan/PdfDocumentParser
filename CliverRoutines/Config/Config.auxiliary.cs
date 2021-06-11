@@ -113,12 +113,33 @@ namespace Cliver
         /// <summary>
         /// Can be used to initialize an optional Settings field.
         /// </summary>
+        /// <param name="settingsFieldHostingType">full type name of the class hosting the Settings field</param>
+        /// <param name="settingsFieldName">name of the Settings field</param>
+        public static void Reset(Type settingsFieldHostingType, string settingsFieldName)
+        {
+            Reset(settingsFieldHostingType.FullName + "." + settingsFieldName);
+        }
+
+        /// <summary>
+        /// Can be used to initialize an optional Settings field.
+        /// </summary>
         /// <param name="settingsFieldFullName">full name of Settings field; it equals to the name of its storage file without extention</param>
         /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
         public static void Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
         {
             SettingsMemberInfo sfi = GetSettingsFieldInfo(settingsFieldFullName);
             sfi.SetObject(Settings.Create(sfi, false, throwExceptionIfCouldNotLoadFromStorageFile));
+        }
+
+        /// <summary>
+        /// Can be used to initialize an optional Settings field.
+        /// </summary>
+        /// <param name="settingsFieldHostingType">full type name of the class hosting the Settings field</param>
+        /// <param name="settingsFieldName">name of the Settings field</param>
+        /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
+        public static void Reload(Type settingsFieldHostingType, string settingsFieldName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
+        {
+            Reload(settingsFieldHostingType.FullName + "." + settingsFieldName, throwExceptionIfCouldNotLoadFromStorageFile);
         }
 
         ///// <summary>
