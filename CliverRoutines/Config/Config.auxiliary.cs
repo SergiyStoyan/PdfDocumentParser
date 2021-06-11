@@ -107,8 +107,7 @@ namespace Cliver
         public static void Reset(string settingsFieldFullName)
         {
             SettingsMemberInfo sfi = GetSettingsFieldInfo(settingsFieldFullName);
-            Settings s = Settings.Create(sfi, true, true);
-            sfi.SetObject(s);
+            sfi.SetObject(Settings.Create(sfi, true, true));
         }
 
         /// <summary>
@@ -119,8 +118,7 @@ namespace Cliver
         public static void Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
         {
             SettingsMemberInfo sfi = GetSettingsFieldInfo(settingsFieldFullName);
-            Settings s = Settings.Create(sfi, false, throwExceptionIfCouldNotLoadFromStorageFile);
-            sfi.SetObject(s);
+            sfi.SetObject(Settings.Create(sfi, false, throwExceptionIfCouldNotLoadFromStorageFile));
         }
 
         ///// <summary>

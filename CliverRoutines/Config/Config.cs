@@ -59,8 +59,7 @@ namespace Cliver
                 {
                     if (settingsFieldInfo.Attribute?.Optional == true && RequiredOptionalFieldFullNamesRegex?.IsMatch(settingsFieldInfo.FullName) == false)
                         continue;
-                    Settings settings = Settings.Create(settingsFieldInfo, reset, throwExceptionIfCouldNotLoadFromStorageFile);
-                    settingsFieldInfo.SetObject(settings);
+                    settingsFieldInfo.SetObject(Settings.Create(settingsFieldInfo, reset, throwExceptionIfCouldNotLoadFromStorageFile));
                     settingsFieldFullNames2SettingsFieldInfo[settingsFieldInfo.FullName] = settingsFieldInfo;
                 }
             }

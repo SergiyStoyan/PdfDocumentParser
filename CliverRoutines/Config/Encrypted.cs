@@ -59,42 +59,56 @@ namespace Cliver
                 }
             }
         }
-        static protected ICrypto crypto { get; set; }
-        public interface ICrypto
+
+        public void Initialize(StringCrypto crypto)
         {
-            string Encrypt(string s);
-            string Decrypt(string s);
+            if (crypto != null)
+                throw new Exception("Crypto engine is already initialized and cannot be re-set.");
+            _crypto = crypto;
         }
+        StringCrypto crypto
+        {
+            get { return _crypto != null ? _crypto : defaultCrypto;}
+        }
+        StringCrypto _crypto;
+
+        static public void InitializeDefault(StringCrypto crypto)
+        {
+            if (defaultCrypto != null)
+                throw new Exception("Default Crypto engine is already initialized and cannot be re-set.");
+            defaultCrypto = crypto;
+        }
+        static StringCrypto defaultCrypto;
     }
 
-    /// <summary>
-    /// A property of this type is implicitly encrypted when it is a memeber of a Settings class.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class EncryptedByRijndael<T> : Encrypted<T> where T : class
-    {
-        static public void Initialize(string key)
-        {
-            crypto = new RijndaelCrypto(key);
-        }
+    ///// <summary>
+    ///// A property of this type is implicitly encrypted when it is a memeber of a Settings class.
+    ///// </summary>
+    ///// <typeparam name="T"></typeparam>
+    //public class EncryptedByRijndael<T> : Encrypted<T> where T : class
+    //{
+    //    static public void Initialize(string key)
+    //    {
+    //        Initialize(new RijndaelCrypto(key));
+    //    }
 
-        class RijndaelCrypto : ICrypto
-        {
-            public RijndaelCrypto(string key)
-            {
-                crypto = new Cliver.Crypto.Rijndael(key);
-            }
-            Crypto.Rijndael crypto;
+    //    class RijndaelCrypto : IStringCrypto
+    //    {
+    //        public RijndaelCrypto(string key)
+    //        {
+    //            crypto = new Cliver.Crypto.Rijndael(key);
+    //        }
+    //        Crypto.Rijndael crypto;
 
-            public string Encrypt(string s)
-            {
-                return crypto.Encrypt(s);
-            }
+    //        public string Encrypt(string s)
+    //        {
+    //            return crypto.Encrypt(s);
+    //        }
 
-            public string Decrypt(string s)
-            {
-                return crypto.Decrypt(s);
-            }
-        }
-    }
+    //        public string Decrypt(string s)
+    //        {
+    //            return crypto.Decrypt(s);
+    //        }
+    //    }
+    //}
 }

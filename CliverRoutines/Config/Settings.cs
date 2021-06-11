@@ -78,7 +78,7 @@ namespace Cliver
         static Settings load(SettingsMemberInfo settingsFieldInfo)
         {
             string s = File.ReadAllText(settingsFieldInfo.File);
-            s = settingsFieldInfo.Attribute?.Encryptor?.Decrypt(s);
+            s = settingsFieldInfo.Attribute?.Crypto?.Decrypt(s);
             return (Settings)Serialization.Json.Deserialize(settingsFieldInfo.Type, s, true, true);
         }
 
@@ -109,7 +109,7 @@ namespace Cliver
         {
             Saving();
             string s = Serialization.Json.Serialize(this, __Info.Indented, true);
-            s = __Info.Attribute?.Encryptor?.Encrypt(s);
+            s = __Info.Attribute?.Crypto?.Encrypt(s);
             FileSystemRoutines.CreateDirectory(PathRoutines.GetFileDir(__Info.File));
             File.WriteAllText(__Info.File, s);
             Saved();
@@ -227,7 +227,7 @@ namespace Cliver
         /// <summary>
         /// Optional encrypt/decrypt facility for the Settings field.
         /// </summary>
-        readonly public Encryptor Encryptor;
+        readonly public StringCrypto Crypto;
 
         /// <summary>
         /// 
@@ -235,18 +235,37 @@ namespace Cliver
         /// <param name="indented">Indicates that the Settings field be stored with indention</param>
         /// <param name="optional">Indicates that the Settings field should not be initiated by Config by default.
         /// Such a field should be initiated explicitly when needed by Config.Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)</param>
-        public SettingsAttribute(bool indented = true, bool optional = false, Encryptor encryptor = null)
+        public SettingsAttribute(bool indented = true, bool optional = false, StringCrypto crypto = null)
         {
             Indented = indented;
             Optional = optional;
-            Encryptor = encryptor;
+            Crypto = crypto;
         }
     }
 
-    public abstract class Encryptor
+    public abstract class StringCrypto
     {
-        public abstract string Encrypt(string plainString);
-        public abstract string Decrypt(string encypted);
+        public abstract string Encrypt(string s);
+        public abstract string Decrypt(string s);
+
+        public class Rijndael : StringCrypto
+        {
+            public Rijndael(string key)
+            {
+                crypto = new Cliver.Crypto.Rijndael(key);
+            }
+            Crypto.Rijndael crypto;
+
+            override public string Encrypt(string s)
+            {
+                return crypto.Encrypt(s);
+            }
+
+            override public string Decrypt(string s)
+            {
+                return crypto.Decrypt(s);
+            }
+        }
     }
 
     /// <summary>

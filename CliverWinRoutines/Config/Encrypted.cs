@@ -19,23 +19,23 @@ namespace Cliver.Win
     {
         static Encrypted()
         {
-            crypto = new Crypto();
+            InitializeDefault(new StringCrypto());
         }
 
-        class Crypto : ICrypto
+        class StringCrypto : Cliver.StringCrypto
         {
-            public Crypto()
+            public StringCrypto()
             {
                 crypto = new Win.Crypto.ProtectedData();
             }
             Win.Crypto.ProtectedData crypto;
 
-            public string Encrypt(string s)
+            override public string Encrypt(string s)
             {
                 return crypto.Encrypt(s);
             }
 
-            public string Decrypt(string s)
+            override public string Decrypt(string s)
             {
                 return crypto.Decrypt(s);
             }
