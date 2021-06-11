@@ -21,24 +21,24 @@ namespace Cliver.Win
         {
             InitializeDefault(new StringCrypto());
         }
+    }
 
-        class StringCrypto : Cliver.StringCrypto
+    class StringCrypto : Cliver.StringCrypto
+    {
+        public StringCrypto()
         {
-            public StringCrypto()
-            {
-                crypto = new Win.Crypto.ProtectedData();
-            }
-            Win.Crypto.ProtectedData crypto;
+            crypto = new Win.Crypto.ProtectedData();
+        }
+        Win.Crypto.ProtectedData crypto;
 
-            override public string Encrypt(string s)
-            {
-                return crypto.Encrypt(s);
-            }
+        override public string Encrypt(string s)
+        {
+            return crypto.Encrypt(s);
+        }
 
-            override public string Decrypt(string s)
-            {
-                return crypto.Decrypt(s);
-            }
+        override public string Decrypt(string s)
+        {
+            return crypto.Decrypt(s);
         }
     }
 }
