@@ -78,7 +78,8 @@ namespace Cliver
         static Settings load(SettingsMemberInfo settingsFieldInfo)
         {
             string s = File.ReadAllText(settingsFieldInfo.File);
-            s = settingsFieldInfo.Attribute?.Crypto?.Decrypt(s);
+            if (settingsFieldInfo.Attribute?.Crypto != null)
+                s = settingsFieldInfo.Attribute.Crypto.Decrypt(s);
             return (Settings)Serialization.Json.Deserialize(settingsFieldInfo.Type, s, true, true);
         }
 
@@ -109,7 +110,8 @@ namespace Cliver
         {
             Saving();
             string s = Serialization.Json.Serialize(this, __Info.Indented, true);
-            s = __Info.Attribute?.Crypto?.Encrypt(s);
+            if (__Info.Attribute?.Crypto != null)
+                s = __Info.Attribute.Crypto.Encrypt(s);
             FileSystemRoutines.CreateDirectory(PathRoutines.GetFileDir(__Info.File));
             File.WriteAllText(__Info.File, s);
             Saved();
