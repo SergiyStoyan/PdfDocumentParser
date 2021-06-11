@@ -12,7 +12,7 @@ using System.IO;
 namespace Cliver.Win
 {
     /// <summary>
-    /// A property of this type is implicitly encrypted when it is a memeber of a Settings class.
+    /// A property of this type is implicitly encrypted when it is a member of a Settings class.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class Encrypted<T> : Cliver.Encrypted<T> where T : class
