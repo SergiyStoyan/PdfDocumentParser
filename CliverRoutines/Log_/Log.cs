@@ -252,10 +252,10 @@ namespace Cliver
             }
         }
 
-    /// <summary>
-    ///Actual base directory for logging.
-    /// </summary>
-    public static string BaseDir { get; private set; }
+        /// <summary>
+        ///Actual base directory for logging.
+        /// </summary>
+        public static string BaseDir { get; private set; }
     }
 
     /// <summary>
