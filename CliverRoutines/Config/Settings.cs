@@ -238,17 +238,27 @@ namespace Cliver
         /// <param name="indented">Indicates that the Settings field be stored with indention</param>
         /// <param name="optional">Indicates that the Settings field should not be initiated by Config by default.
         /// When needed, such a field should be initiated explicitly by Config.Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)</param>
-        /// <param name="stringCryptoGetterHostingType">Class that exposes the StringCrypto getter. Used for encrypting.</param>
-        /// <param name="stringCryptoGetter">Name of the StringCrypto getter. The getter must be public static. Used for encrypting.</param>
-        public SettingsAttribute(bool indented = true, bool optional = false, Type stringCryptoGetterHostingType = null, string stringCryptoGetter = null)
+        public SettingsAttribute(bool indented = true, bool optional = false)
         {
             Indented = indented;
             Optional = optional;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="stringCryptoGetterHostingType">Class that exposes the StringCrypto getter. Used for encrypting.</param>
+        /// <param name="stringCryptoGetterName">Name of the StringCrypto getter. The getter must be public static. Used for encrypting.</param>
+        /// <param name="indented">Indicates that the Settings field be stored with indention</param>
+        /// <param name="optional">Indicates that the Settings field should not be initiated by Config by default.
+        /// When needed, such a field should be initiated explicitly by Config.Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)</param>
+        public SettingsAttribute(Type stringCryptoGetterHostingType, string stringCryptoGetterName, bool indented = true, bool optional = false) : this(indented, optional)
+        {
             if (stringCryptoGetterHostingType != null)
             {
-                if (stringCryptoGetter == null)
+                if (stringCryptoGetterName == null)
                     throw new Exception("stringCryptoGetter is not set while stringCryptoGetterHostingType is.");
-                Crypto = (StringCrypto)stringCryptoGetterHostingType.GetProperty(stringCryptoGetter).GetValue(null);
+                Crypto = (StringCrypto)stringCryptoGetterHostingType.GetProperty(stringCryptoGetterName).GetValue(null);
             }
         }
     }
