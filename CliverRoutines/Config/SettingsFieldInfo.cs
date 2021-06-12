@@ -61,9 +61,9 @@ namespace Cliver
             }
         }
 
-        internal readonly Settings.ConfigAttribute ConfigAttribute;
-        internal readonly Settings.CryptoAttribute CryptoAttribute;
-        internal readonly Settings.FormatVersionAttribute FormatVersionAttribute;
+        internal readonly SettingsFieldAttribute.ConfigAttribute ConfigAttribute;
+        internal readonly SettingsFieldAttribute.CryptoAttribute CryptoAttribute;
+        //public readonly SettingsTypeAttribute.FormatVersionAttribute FormatVersionAttribute;
 
 #if !COMPILE_GetObject_SetObject
         abstract protected object getObject();
@@ -101,10 +101,10 @@ namespace Cliver
             Settings s = (Settings)Activator.CreateInstance(Type); //!!!slightly slowler than calling a static by reflection. Doesn't run slower for a bigger class though.
             File = s.__StorageDir + System.IO.Path.DirectorySeparatorChar + FullName + "." + Config.FILE_EXTENSION;
             InitFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + FullName + "." + Config.FILE_EXTENSION;
-            ConfigAttribute = settingsTypeMemberInfo.GetCustomAttributes<Settings.ConfigAttribute>(false).FirstOrDefault();
+            ConfigAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.ConfigAttribute>(false).FirstOrDefault();
             Indented = ConfigAttribute == null ? true : ConfigAttribute.Indented;
-            CryptoAttribute = settingsTypeMemberInfo.GetCustomAttributes<Settings.CryptoAttribute>(false).FirstOrDefault();
-            FormatVersionAttribute = settingsTypeMemberInfo.GetCustomAttributes<Settings.FormatVersionAttribute>(false).FirstOrDefault();
+            CryptoAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.CryptoAttribute>(false).FirstOrDefault();
+            //FormatVersionAttribute = settingType.GetCustomAttributes<SettingsTypeAttribute.FormatVersionAttribute>(false).FirstOrDefault();
         }
     }
 

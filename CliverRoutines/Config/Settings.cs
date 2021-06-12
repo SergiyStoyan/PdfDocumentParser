@@ -46,6 +46,13 @@ namespace Cliver
         {
             Settings settings = create(settingsFieldInfo, reset, throwExceptionIfCouldNotLoadFromStorageFile);
             settings.__Info = settingsFieldInfo;
+            //if (settings.__Info.FormatVersionAttribute?.IsFormatVersionSupported(settings) == false)
+            //{
+            //    if (settings.GetType().GetMethod(nameof(settings.OnFormatVersionIsNotSupported)).DeclaringType == settings.GetType())
+            //        settings.OnFormatVersionIsNotSupported();
+            //    else
+            //        throw new Exception("Unsupported format of " + settings.GetType().FullName + ": " + settings.__Info.FormatVersionAttribute.FormatVersion);
+            //}
             settings.Loaded();
             return settings;
         }
@@ -126,21 +133,21 @@ namespace Cliver
             }
         }
 
-        ///// <summary>
-        ///// Override for custom decryption
-        ///// </summary>
-        ///// <param name="json"></param>
-        //virtual protected void Deserializing(ref string json) { }  
+        public bool IsFormatVersionSupported(int minSupportedFormatVersion, int maxSupportedFormatVersion, bool throwException = true)
+        {
+            System.Reflection.FieldInfo fi = GetType().GetField("__FormatVersion");
+            if (fi == null)
+                throw new Exception(GetType().FullName + " does not expose property FormatVersion.");
+            int formatVersion = (int)fi.GetValue(this);
+            bool supported = (formatVersion >= minSupportedFormatVersion && formatVersion <= maxSupportedFormatVersion);
+            if (!supported && throwException)
+                throw new Exception("Unsupported format of " + GetType().FullName + ": " + formatVersion);
+            return supported;
+        }
 
         virtual protected void Loaded() { }
 
         virtual protected void Saving() { }
-
-        ///// <summary>
-        ///// Override for custom decryption
-        ///// </summary>
-        ///// <param name="json"></param>
-        //virtual protected void Serialized(ref string json) { }  
 
         virtual protected void Saved() { }
 
@@ -208,7 +215,10 @@ namespace Cliver
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         public abstract string __StorageDir { get; protected set; }
+    }
 
+    public class SettingsFieldAttribute
+    {
         /// <summary>
         /// Settings field attribute.
         /// </summary>
@@ -243,7 +253,7 @@ namespace Cliver
         /// Settings field attribute. Used for decrypting.
         /// </summary>
         [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-        public class CryptoAttribute : Attribute
+        public class CryptoAttribute : System.Attribute
         {
             /// <summary>
             /// Optional encrypt/decrypt facility for the Settings field.
@@ -260,29 +270,32 @@ namespace Cliver
                 Crypto = (IStringCrypto)iStringCryptoGetterHostingType.GetProperty(iStringCryptoGetterName).GetValue(null);
             }
         }
+    }
 
-        /// <summary>
-        /// Settings field attribute. Used to check if the storage file format is supported.
-        /// </summary>
-        [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-        public class FormatVersionAttribute : Attribute
-        {
-            public readonly int SupportedFormatVersionMax;
-            public readonly int SupportedFormatVersionMin;
-            public readonly int FormatVersion;
+    public class SettingsTypeAttribute
+    {
+        ///// <summary>
+        ///// Settings type attribute. Used to check if the storage file format is supported.
+        ///// </summary>
+        //[AttributeUsage(AttributeTargets.Class)]
+        //public class FormatVersionAttribute : System.Attribute
+        //{
+        //    public readonly int SupportedFormatVersionMax;
+        //    public readonly int SupportedFormatVersionMin;
+        //    public readonly int FormatVersion;
 
-            public bool IsSupported(Settings settings, out string message)
-            {
-                throw new Exception("TBD");
-            }
+        //    public bool IsFormatVersionSupported(Settings settings)
+        //    {
+        //        return FormatVersion >= SupportedFormatVersionMin && FormatVersion <= SupportedFormatVersionMax;
+        //    }
 
-            public FormatVersionAttribute(int formatVersion, int supportedFormatVersionMax, int supportedFormatVersionMin)
-            {
-                SupportedFormatVersionMax = supportedFormatVersionMax;
-                SupportedFormatVersionMin = supportedFormatVersionMin;
-                FormatVersion = formatVersion;
-            }
-        }
+        //    public FormatVersionAttribute(int formatVersion, int supportedFormatVersionMax, int supportedFormatVersionMin)
+        //    {
+        //        SupportedFormatVersionMax = supportedFormatVersionMax;
+        //        SupportedFormatVersionMin = supportedFormatVersionMin;
+        //        FormatVersion = formatVersion;
+        //    }
+        //}
     }
 
     /// <summary>
