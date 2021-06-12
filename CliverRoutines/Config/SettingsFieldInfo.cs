@@ -36,7 +36,7 @@ namespace Cliver
         public readonly string InitFile;
 
         /// <summary>
-        /// Whether serialization to string is to be done with indention.
+        /// Whether serialization to file is to be done with indention.
         /// </summary>
         public bool Indented = true;
 
@@ -61,7 +61,7 @@ namespace Cliver
             }
         }
 
-        internal readonly IStringCrypto Crypto;
+        internal readonly IStringCrypto Crypto = null;
         internal readonly bool Optional = false;
 
 #if !COMPILE_GetObject_SetObject
@@ -105,7 +105,6 @@ namespace Cliver
                 Indented = indentedAttribute.Indented;
             Crypto = settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.CryptoAttribute>(false).FirstOrDefault()?.Crypto;
             Optional = settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.OptionalAttribute>(false).Any();
-            //FormatVersionAttribute = settingType.GetCustomAttributes<SettingsTypeAttribute.FormatVersionAttribute>(false).FirstOrDefault();
         }
     }
 
