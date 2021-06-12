@@ -61,7 +61,7 @@ namespace Cliver
             if (!reset && File.Exists(settingsFieldInfo.File))
                 try
                 {
-                    return load(settingsFieldInfo);
+                    return loadFromFile(settingsFieldInfo);
                 }
                 catch (Exception e)
                 {
@@ -73,7 +73,7 @@ namespace Cliver
                 FileSystemRoutines.CopyFile(settingsFieldInfo.InitFile, settingsFieldInfo.File, true);
                 try
                 {
-                    return load(settingsFieldInfo);
+                    return loadFromFile(settingsFieldInfo);
                 }
                 catch (Exception e)
                 {
@@ -82,7 +82,7 @@ namespace Cliver
             }
             return (Settings)Activator.CreateInstance(settingsFieldInfo.Type);
         }
-        static Settings load(SettingsMemberInfo settingsFieldInfo)
+        static Settings loadFromFile(SettingsMemberInfo settingsFieldInfo)
         {
             string s = File.ReadAllText(settingsFieldInfo.File);
             if (settingsFieldInfo.Crypto != null)
@@ -133,26 +133,47 @@ namespace Cliver
             }
         }
 
+        #region Type Version support
+
+        //virtual public int __TypeVersion { get; } = 0;
+
         /// <summary>
         /// Check if this Settings type corresponds to the content of the storage file.
-        /// Indicates if the format was updated and data migration is required.
+        /// Used when the engaged types were updated and data migration is required.
         /// </summary>
         /// <param name="minSupportedFormatVersion"></param>
         /// <param name="maxSupportedFormatVersion"></param>
         /// <param name="throwException"></param>
         /// <returns></returns>
-        public bool IsTypeFormatSupported(int minSupportedFormatVersion, int maxSupportedFormatVersion, bool throwException = true)
+        public bool IsTypeVersionSupported(int minSupportedTypeVersion, int maxSupportedTypeVersion, bool throwException = true)
         {
-            System.Reflection.FieldInfo fi = GetType().GetField(__TypeFormatVersion_FieldName);
+            //bool supported = (__TypeVersion >= minSupportedTypeVersion && __TypeVersion <= maxSupportedTypeVersion);
+            //if (!supported && throwException)
+            //    throw new Exception("Unsupported format of " + GetType().FullName + ": " + __TypeVersion);
+
+            System.Reflection.FieldInfo fi = GetType().GetField(__TypeVersion_FieldName);
             if (fi == null)
-                throw new Exception(GetType().FullName + " does not expose field " + __TypeFormatVersion_FieldName + ".");
-            int formatVersion = (int)fi.GetValue(this);
-            bool supported = (formatVersion >= minSupportedFormatVersion && formatVersion <= maxSupportedFormatVersion);
+                throw new Exception(GetType().FullName + " does not define field " + __TypeVersion_FieldName + ".");
+            int typeVersion = (int)fi.GetValue(this);
+            bool supported = typeVersion >= minSupportedTypeVersion && typeVersion <= maxSupportedTypeVersion;
             if (!supported && throwException)
-                throw new Exception("Unsupported format of " + GetType().FullName + ": " + formatVersion);
+                throw new Exception("Unsupported format of " + GetType().FullName + ": " + typeVersion);
             return supported;
         }
-        public const string __TypeFormatVersion_FieldName = "__TypeFormatVersion";
+        public const string __TypeVersion_FieldName = "__TypeVersion";
+
+        /// <summary>
+        /// Get the old format data in order to migrate to the current format.
+        /// </summary>
+        /// <returns></returns>
+        public Newtonsoft.Json.Linq.JObject GetJObjectFromStorageFile()
+        {
+            string s = File.ReadAllText(settingsFieldInfo.File);
+            if (settingsFieldInfo.Crypto != null)
+                s = settingsFieldInfo.Crypto.Decrypt(s);
+            return Newtonsoft.Json.Linq.JObject.Parse(s);
+        }
+        #endregion
 
         virtual protected void Loaded() { }
 
