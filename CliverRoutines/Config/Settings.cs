@@ -85,8 +85,8 @@ namespace Cliver
         static Settings load(SettingsMemberInfo settingsFieldInfo)
         {
             string s = File.ReadAllText(settingsFieldInfo.File);
-            if (settingsFieldInfo.CryptoAttribute != null)
-                s = settingsFieldInfo.CryptoAttribute.Crypto.Decrypt(s);
+            if (settingsFieldInfo.Crypto != null)
+                s = settingsFieldInfo.Crypto.Decrypt(s);
             return (Settings)Serialization.Json.Deserialize(settingsFieldInfo.Type, s, true, true);
         }
 
@@ -117,8 +117,8 @@ namespace Cliver
         {
             Saving();
             string s = Serialization.Json.Serialize(this, __Info.Indented, true);
-            if (__Info.CryptoAttribute != null)
-                s = __Info.CryptoAttribute.Crypto.Encrypt(s);
+            if (__Info.Crypto != null)
+                s = __Info.Crypto.Encrypt(s);
             FileSystemRoutines.CreateDirectory(PathRoutines.GetFileDir(__Info.File));
             File.WriteAllText(__Info.File, s);
             Saved();
@@ -133,17 +133,18 @@ namespace Cliver
             }
         }
 
-        public bool IsFormatVersionSupported(int minSupportedFormatVersion, int maxSupportedFormatVersion, bool throwException = true)
+        public bool IsTypeFormatSupported(int minSupportedFormatVersion, int maxSupportedFormatVersion, bool throwException = true)
         {
-            System.Reflection.FieldInfo fi = GetType().GetField("__FormatVersion");
+            System.Reflection.FieldInfo fi = GetType().GetField(__TypeFormatVersion_FieldName);
             if (fi == null)
-                throw new Exception(GetType().FullName + " does not expose property FormatVersion.");
+                throw new Exception(GetType().FullName + " does not expose property " + __TypeFormatVersion_FieldName + ".");
             int formatVersion = (int)fi.GetValue(this);
             bool supported = (formatVersion >= minSupportedFormatVersion && formatVersion <= maxSupportedFormatVersion);
             if (!supported && throwException)
                 throw new Exception("Unsupported format of " + GetType().FullName + ": " + formatVersion);
             return supported;
         }
+        public const string __TypeFormatVersion_FieldName = "__TypeFormatVersion";
 
         virtual protected void Loaded() { }
 
@@ -220,10 +221,19 @@ namespace Cliver
     public class SettingsFieldAttribute
     {
         /// <summary>
-        /// Settings field attribute.
+        /// Settings field attribute that indicates that the Settings field should not be initiated by Config by default.
+        /// Such a field should be initiated explicitly when needed by Config.Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
         /// </summary>
         [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-        public class ConfigAttribute : Attribute
+        public class OptionalAttribute : Attribute
+        {
+        }
+
+        /// <summary>
+        /// Settings field attribute that indicates that the Settings field will be stored with indention.
+        /// </summary>
+        [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
+        public class IndentedAttribute : Attribute
         {
             /// <summary>
             /// Indicates that the Settings field will be stored with indention.
@@ -231,21 +241,12 @@ namespace Cliver
             readonly public bool Indented;
 
             /// <summary>
-            /// Indicates that the Settings field should not be initiated by Config by default.
-            /// Such a field should be initiated explicitly when needed by Config.Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
-            /// </summary>
-            readonly public bool Optional;
-
-            /// <summary>
             /// 
             /// </summary>
             /// <param name="indented">Indicates that the Settings field be stored with indention</param>
-            /// <param name="optional">Indicates that the Settings field should not be initiated by Config by default.
-            /// When needed, such a field should be initiated explicitly by Config.Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)</param>
-            public ConfigAttribute(bool indented = true, bool optional = false)
+            public IndentedAttribute(bool indented = true)
             {
                 Indented = indented;
-                Optional = optional;
             }
         }
 
