@@ -89,7 +89,7 @@ namespace Cliver
                 s = settingsFieldInfo.Crypto.Decrypt(s);
             Settings settings = (Settings)Serialization.Json.Deserialize(settingsFieldInfo.Type, s, true, true);
             if (settings.__TypeVersion < settings.__MinSupportedTypeVersion || settings.__TypeVersion > settings.__MaxSupportedTypeVersion)
-                settings.TypeVersionIsNotSupportedHandler();
+                settings.UnsupportedTypeVersionHandler();
             return settings;
         }
 
@@ -145,9 +145,9 @@ namespace Cliver
         virtual public int __MaxSupportedTypeVersion { get; } = 0;
 
         /// <summary>
-        /// Called by Config if the storage file content does not correspond to the Settings type.
+        /// Called by Config if the storage file content does not match the Settings type version.
         /// </summary>
-        virtual protected void TypeVersionIsNotSupportedHandler()
+        virtual protected void UnsupportedTypeVersionHandler()
         {
             throw new Exception("Unsupported version of " + GetType().FullName + ": " + __TypeVersion);
         }
