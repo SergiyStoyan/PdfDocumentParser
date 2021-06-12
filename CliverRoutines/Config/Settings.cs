@@ -87,7 +87,10 @@ namespace Cliver
             string s = File.ReadAllText(settingsFieldInfo.File);
             if (settingsFieldInfo.Crypto != null)
                 s = settingsFieldInfo.Crypto.Decrypt(s);
-            return (Settings)Serialization.Json.Deserialize(settingsFieldInfo.Type, s, true, true);
+            Settings settings = (Settings)Serialization.Json.Deserialize(settingsFieldInfo.Type, s, true, true);
+            if (settings.__TypeVersion < settings.__MinSupportedTypeVersion || settings.__TypeVersion > settings.__MaxSupportedTypeVersion)
+                settings.TypeVersionIsNotSupportedHandler();
+            return settings;
         }
 
         /// <summary>
@@ -135,38 +138,44 @@ namespace Cliver
 
         #region Type Version support
 
-        //virtual public int __TypeVersion { get; } = 0;
-        //[Newtonsoft.Json.JsonIgnore]
-        //virtual public int __SupportedTypeVersionMin { get; } = 0;
-        //[Newtonsoft.Json.JsonIgnore]
-        //virtual public int __SupportedTypeVersionMax { get; } = 0;
-
-        //public virtual void TypeVersionIsNotSupported_Handler() { }
+        virtual public int __TypeVersion { get; set; } = 0;
+        [Newtonsoft.Json.JsonIgnore]
+        virtual public int __MinSupportedTypeVersion { get; } = 0;
+        [Newtonsoft.Json.JsonIgnore]
+        virtual public int __MaxSupportedTypeVersion { get; } = 0;
 
         /// <summary>
-        /// Check if this Settings type corresponds to the content of the storage file.
-        /// Used when the engaged types were updated and data migration is required.
+        /// Called by Config if the storage file content does not correspond to the Settings type.
         /// </summary>
-        /// <param name="minSupportedFormatVersion"></param>
-        /// <param name="maxSupportedFormatVersion"></param>
-        /// <param name="throwException"></param>
-        /// <returns></returns>
-        public bool IsTypeVersionSupported(int minSupportedTypeVersion, int maxSupportedTypeVersion, bool throwException = true)
+        virtual protected void TypeVersionIsNotSupportedHandler()
         {
-            //bool supported = (__TypeVersion >= minSupportedTypeVersion && __TypeVersion <= maxSupportedTypeVersion);
-            //if (!supported && throwException)
-            //    throw new Exception("Unsupported format of " + GetType().FullName + ": " + __TypeVersion);
-
-            System.Reflection.FieldInfo fi = GetType().GetField(__TypeVersion_FieldName);
-            if (fi == null)
-                throw new Exception(GetType().FullName + " does not define field " + __TypeVersion_FieldName + ".");
-            int typeVersion = (int)fi.GetValue(this);
-            bool supported = typeVersion >= minSupportedTypeVersion && typeVersion <= maxSupportedTypeVersion;
-            if (!supported && throwException)
-                throw new Exception("Unsupported format of " + GetType().FullName + ": " + typeVersion);
-            return supported;
+            throw new Exception("Unsupported version of " + GetType().FullName + ": " + __TypeVersion);
         }
-        public const string __TypeVersion_FieldName = "__TypeVersion";
+
+        ///// <summary>
+        ///// Check if this Settings type corresponds to the content of the storage file.
+        ///// Used when the engaged types were updated and data migration is required.
+        ///// </summary>
+        ///// <param name="minSupportedFormatVersion"></param>
+        ///// <param name="maxSupportedFormatVersion"></param>
+        ///// <param name="throwException"></param>
+        ///// <returns></returns>
+        //public bool IsTypeVersionSupported(int minSupportedTypeVersion, int maxSupportedTypeVersion, bool throwException = true)
+        //{
+        //    //bool supported = (__TypeVersion >= minSupportedTypeVersion && __TypeVersion <= maxSupportedTypeVersion);
+        //    //if (!supported && throwException)
+        //    //    throw new Exception("Unsupported format of " + GetType().FullName + ": " + __TypeVersion);
+
+        //    System.Reflection.FieldInfo fi = GetType().GetField(__TypeVersion_FieldName);
+        //    if (fi == null)
+        //        throw new Exception(GetType().FullName + " does not define field " + __TypeVersion_FieldName + ".");
+        //    int typeVersion = (int)fi.GetValue(this);
+        //    bool supported = typeVersion >= minSupportedTypeVersion && typeVersion <= maxSupportedTypeVersion;
+        //    if (!supported && throwException)
+        //        throw new Exception("Unsupported version of " + GetType().FullName + ": " + typeVersion);
+        //    return supported;
+        //}
+        //public const string __TypeVersion_FieldName = "__TypeVersion";
 
         /// <summary>
         /// Get the old format data in order to migrate to the current format.

@@ -24,7 +24,7 @@ namespace Cliver
         public string _Value { get; set; } = null;
 
         /// <summary>
-        /// Decrypted value which is to be used by the custom code.
+        /// Decrypted value that is to be used in the custom code.
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         public T Value
