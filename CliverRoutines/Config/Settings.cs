@@ -136,6 +136,12 @@ namespace Cliver
         #region Type Version support
 
         //virtual public int __TypeVersion { get; } = 0;
+        //[Newtonsoft.Json.JsonIgnore]
+        //virtual public int __SupportedTypeVersionMin { get; } = 0;
+        //[Newtonsoft.Json.JsonIgnore]
+        //virtual public int __SupportedTypeVersionMax { get; } = 0;
+
+        //public virtual void TypeVersionIsNotSupported_Handler() { }
 
         /// <summary>
         /// Check if this Settings type corresponds to the content of the storage file.
@@ -280,7 +286,7 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Settings field attribute. Used for decrypting.
+        /// Settings field attribute that is used for encrypting.
         /// </summary>
         [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
         public class CryptoAttribute : System.Attribute
