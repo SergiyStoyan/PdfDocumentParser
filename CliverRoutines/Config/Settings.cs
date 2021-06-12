@@ -134,9 +134,8 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Check if this Settings type corresponds to the one in the storage file.
+        /// Check if this Settings type corresponds to the content of the storage file.
         /// Indicates if the format was updated and data migration is required.
-        /// Optional.
         /// </summary>
         /// <param name="minSupportedFormatVersion"></param>
         /// <param name="maxSupportedFormatVersion"></param>
