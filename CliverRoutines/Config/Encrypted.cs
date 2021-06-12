@@ -60,55 +60,49 @@ namespace Cliver
             }
         }
 
-        public void Initialize(StringCrypto crypto)
+        public void Initialize(IStringCrypto crypto)
         {
             if (crypto != null)
                 throw new Exception("Crypto engine is already initialized and cannot be re-set.");
             _crypto = crypto;
         }
-        StringCrypto crypto
+        IStringCrypto crypto
         {
             get { return _crypto != null ? _crypto : defaultCrypto;}
         }
-        StringCrypto _crypto;
+        IStringCrypto _crypto;
 
-        static public void InitializeDefault(StringCrypto crypto)
+        static public void InitializeDefault(IStringCrypto crypto)
         {
             if (defaultCrypto != null)
                 throw new Exception("Default Crypto engine is already initialized and cannot be re-set.");
             defaultCrypto = crypto;
         }
-        static StringCrypto defaultCrypto;
+        static IStringCrypto defaultCrypto;
     }
 
-    ///// <summary>
-    ///// A property of this type is implicitly encrypted when it is a member of a Settings class.
-    ///// </summary>
-    ///// <typeparam name="T"></typeparam>
-    //public class EncryptedByRijndael<T> : Encrypted<T> where T : class
-    //{
-    //    static public void Initialize(string key)
-    //    {
-    //        Initialize(new RijndaelCrypto(key));
-    //    }
+    public abstract class IStringCrypto
+    {
+        public abstract string Encrypt(string s);
+        public abstract string Decrypt(string s);
 
-    //    class RijndaelCrypto : IStringCrypto
-    //    {
-    //        public RijndaelCrypto(string key)
-    //        {
-    //            crypto = new Cliver.Crypto.Rijndael(key);
-    //        }
-    //        Crypto.Rijndael crypto;
+        public class Rijndael : IStringCrypto
+        {
+            public Rijndael(string key)
+            {
+                crypto = new Cliver.Crypto.Rijndael(key);
+            }
+            Crypto.Rijndael crypto;
 
-    //        public string Encrypt(string s)
-    //        {
-    //            return crypto.Encrypt(s);
-    //        }
+            override public string Encrypt(string s)
+            {
+                return crypto.Encrypt(s);
+            }
 
-    //        public string Decrypt(string s)
-    //        {
-    //            return crypto.Decrypt(s);
-    //        }
-    //    }
-    //}
+            override public string Decrypt(string s)
+            {
+                return crypto.Decrypt(s);
+            }
+        }
+    }
 }

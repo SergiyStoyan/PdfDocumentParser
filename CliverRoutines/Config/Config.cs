@@ -57,7 +57,7 @@ namespace Cliver
                 settingsFieldFullNames2SettingsFieldInfo.Clear();
                 foreach (SettingsMemberInfo settingsFieldInfo in EnumSettingsFieldInfos())
                 {
-                    if (settingsFieldInfo.Attribute?.Optional == true && RequiredOptionalFieldFullNamesRegex?.IsMatch(settingsFieldInfo.FullName) == false)
+                    if (settingsFieldInfo.ConfigAttribute?.Optional == true && RequiredOptionalFieldFullNamesRegex?.IsMatch(settingsFieldInfo.FullName) == false)
                         continue;
                     settingsFieldInfo.SetObject(Settings.Create(settingsFieldInfo, reset, throwExceptionIfCouldNotLoadFromStorageFile));
                     settingsFieldFullNames2SettingsFieldInfo[settingsFieldInfo.FullName] = settingsFieldInfo;

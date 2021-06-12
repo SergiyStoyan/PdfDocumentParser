@@ -78,8 +78,8 @@ namespace Cliver
         static Settings load(SettingsMemberInfo settingsFieldInfo)
         {
             string s = File.ReadAllText(settingsFieldInfo.File);
-            if (settingsFieldInfo.Attribute?.Crypto != null)
-                s = settingsFieldInfo.Attribute.Crypto.Decrypt(s);
+            if (settingsFieldInfo.CryptoAttribute != null)
+                s = settingsFieldInfo.CryptoAttribute.Crypto.Decrypt(s);
             return (Settings)Serialization.Json.Deserialize(settingsFieldInfo.Type, s, true, true);
         }
 
@@ -110,8 +110,8 @@ namespace Cliver
         {
             Saving();
             string s = Serialization.Json.Serialize(this, __Info.Indented, true);
-            if (__Info.Attribute?.Crypto != null)
-                s = __Info.Attribute.Crypto.Encrypt(s);
+            if (__Info.CryptoAttribute != null)
+                s = __Info.CryptoAttribute.Crypto.Encrypt(s);
             FileSystemRoutines.CreateDirectory(PathRoutines.GetFileDir(__Info.File));
             File.WriteAllText(__Info.File, s);
             Saved();
@@ -208,82 +208,79 @@ namespace Cliver
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         public abstract string __StorageDir { get; protected set; }
-    }
-
-    /// <summary>
-    /// Settings field attribute.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-    public class SettingsAttribute : Attribute
-    {
-        /// <summary>
-        /// Indicates that the Settings field will be stored with indention.
-        /// /// </summary>
-        readonly public bool Indented;
 
         /// <summary>
-        /// Indicates that the Settings field should not be initiated by Config by default.
-        /// Such a field should be initiated explicitly when needed by Config.Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
+        /// Settings field attribute.
         /// </summary>
-        readonly public bool Optional;
-
-        /// <summary>
-        /// Optional encrypt/decrypt facility for the Settings field.
-        /// </summary>
-        readonly public StringCrypto Crypto;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="indented">Indicates that the Settings field be stored with indention</param>
-        /// <param name="optional">Indicates that the Settings field should not be initiated by Config by default.
-        /// When needed, such a field should be initiated explicitly by Config.Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)</param>
-        public SettingsAttribute(bool indented = true, bool optional = false)
+        [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
+        public class ConfigAttribute : Attribute
         {
-            Indented = indented;
-            Optional = optional;
+            /// <summary>
+            /// Indicates that the Settings field will be stored with indention.
+            /// /// </summary>
+            readonly public bool Indented;
+
+            /// <summary>
+            /// Indicates that the Settings field should not be initiated by Config by default.
+            /// Such a field should be initiated explicitly when needed by Config.Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
+            /// </summary>
+            readonly public bool Optional;
+
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="indented">Indicates that the Settings field be stored with indention</param>
+            /// <param name="optional">Indicates that the Settings field should not be initiated by Config by default.
+            /// When needed, such a field should be initiated explicitly by Config.Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)</param>
+            public ConfigAttribute(bool indented = true, bool optional = false)
+            {
+                Indented = indented;
+                Optional = optional;
+            }
+        }
+
+        /// <summary>
+        /// Settings field attribute. Used for decrypting.
+        /// </summary>
+        [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
+        public class CryptoAttribute : Attribute
+        {
+            /// <summary>
+            /// Optional encrypt/decrypt facility for the Settings field.
+            /// </summary>
+            readonly public IStringCrypto Crypto;
+
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="iStringCryptoGetterHostingType">Class that exposes the IStringCrypto getter.</param>
+            /// <param name="iStringCryptoGetterName">Name of the IStringCrypto getter. The getter must be public static.</param>
+            public CryptoAttribute(Type iStringCryptoGetterHostingType, string iStringCryptoGetterName)
+            {
+                Crypto = (IStringCrypto)iStringCryptoGetterHostingType.GetProperty(iStringCryptoGetterName).GetValue(null);
+            }
         }
 
         /// <summary>
-        /// 
+        /// Settings field attribute. Used to check if the storage file format is supported.
         /// </summary>
-        /// <param name="stringCryptoGetterHostingType">Class that exposes the StringCrypto getter. Used for encrypting.</param>
-        /// <param name="stringCryptoGetterName">Name of the StringCrypto getter. The getter must be public static. Used for encrypting.</param>
-        /// <param name="indented">Indicates that the Settings field be stored with indention</param>
-        /// <param name="optional">Indicates that the Settings field should not be initiated by Config by default.
-        /// When needed, such a field should be initiated explicitly by Config.Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)</param>
-        public SettingsAttribute(Type stringCryptoGetterHostingType, string stringCryptoGetterName, bool indented = true, bool optional = false) : this(indented, optional)
+        [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
+        public class FormatVersionAttribute : Attribute
         {
-            if (stringCryptoGetterHostingType != null)
-            {
-                if (stringCryptoGetterName == null)
-                    throw new Exception("stringCryptoGetter is not set while stringCryptoGetterHostingType is.");
-                Crypto = (StringCrypto)stringCryptoGetterHostingType.GetProperty(stringCryptoGetterName).GetValue(null);
-            }
-        }
-    }
+            public readonly int SupportedFormatVersionMax;
+            public readonly int SupportedFormatVersionMin;
+            public readonly int FormatVersion;
 
-    public abstract class StringCrypto
-    {
-        public abstract string Encrypt(string s);
-        public abstract string Decrypt(string s);
-
-        public class Rijndael : StringCrypto
-        {
-            public Rijndael(string key)
+            public bool IsSupported(Settings settings, out string message)
             {
-                crypto = new Cliver.Crypto.Rijndael(key);
-            }
-            Crypto.Rijndael crypto;
-
-            override public string Encrypt(string s)
-            {
-                return crypto.Encrypt(s);
+                throw new Exception("TBD");
             }
 
-            override public string Decrypt(string s)
+            public FormatVersionAttribute(int formatVersion, int supportedFormatVersionMax, int supportedFormatVersionMin)
             {
-                return crypto.Decrypt(s);
+                SupportedFormatVersionMax = supportedFormatVersionMax;
+                SupportedFormatVersionMin = supportedFormatVersionMin;
+                FormatVersion = formatVersion;
             }
         }
     }
