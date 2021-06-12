@@ -136,8 +136,17 @@ namespace Cliver
             }
         }
 
+        ///// <summary>
+        ///// Whether serialization to file is to be done with indention.
+        ///// </summary>
+        //virtual public bool __Indented { get; } = true;
+
         #region Type Version support
 
+        /// <summary>
+        /// Actual version of this Settings type.
+        /// It indicates if the storage file content is obsolete.
+        /// </summary>
         virtual public int __TypeVersion { get; set; } = 0;
         [Newtonsoft.Json.JsonIgnore]
         virtual public int __MinSupportedTypeVersion { get; } = 0;
@@ -256,7 +265,7 @@ namespace Cliver
         /// Storage folder for this Settings derivative.
         /// Each Settings derived class must have it defined. 
         /// Despite of the fact it is not static, actually it is instance independent as only the initial value is used.
-        /// (It is not static as C# has no static polymorphism.)
+        /// (It is not static because C# does not support static polymorphism.)
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         public abstract string __StorageDir { get; protected set; }
