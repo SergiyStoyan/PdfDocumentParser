@@ -133,11 +133,20 @@ namespace Cliver
             }
         }
 
+        /// <summary>
+        /// Check if this Settings type corresponds to the one in the storage file.
+        /// Indicates if the format was updated and data migration is required.
+        /// Optional.
+        /// </summary>
+        /// <param name="minSupportedFormatVersion"></param>
+        /// <param name="maxSupportedFormatVersion"></param>
+        /// <param name="throwException"></param>
+        /// <returns></returns>
         public bool IsTypeFormatSupported(int minSupportedFormatVersion, int maxSupportedFormatVersion, bool throwException = true)
         {
             System.Reflection.FieldInfo fi = GetType().GetField(__TypeFormatVersion_FieldName);
             if (fi == null)
-                throw new Exception(GetType().FullName + " does not expose property " + __TypeFormatVersion_FieldName + ".");
+                throw new Exception(GetType().FullName + " does not expose field " + __TypeFormatVersion_FieldName + ".");
             int formatVersion = (int)fi.GetValue(this);
             bool supported = (formatVersion >= minSupportedFormatVersion && formatVersion <= maxSupportedFormatVersion);
             if (!supported && throwException)
