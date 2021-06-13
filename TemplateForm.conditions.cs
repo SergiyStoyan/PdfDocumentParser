@@ -121,7 +121,7 @@ namespace Cliver.PdfDocumentParser
                 Template.Condition c0 = (Template.Condition)r0.Tag;
                 if (!Message.YesNo("Proceed with removing condition '" + c0.Name + "'?"))
                     return;
-                fields.Rows.Remove(r0);
+                conditions.Rows.Remove(r0);
             }
             catch (Exception e)
             {
