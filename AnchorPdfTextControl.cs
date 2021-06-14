@@ -39,10 +39,8 @@ namespace Cliver.PdfDocumentParser
 
         }
 
-        public override void Initialize(DataGridViewRow row, Action<DataGridViewRow> onLeft)
+        protected override void initialize(DataGridViewRow row)
         {
-            base.Initialize(row, onLeft);
-
             anchor = (Template.Anchor.PdfText)row.Tag;
             if (anchor == null)
                 anchor = new Template.Anchor.PdfText();

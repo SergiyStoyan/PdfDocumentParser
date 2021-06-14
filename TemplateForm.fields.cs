@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -609,10 +610,17 @@ namespace Cliver.PdfDocumentParser
                 setCurrentAnchorRow(null, true);
                 setCurrentConditionRow(null);
                 object v = setFieldRowValue(row, false);
-
-                currentFieldControl = new FieldControl();
                 Template.Field f = (Template.Field)row.Tag;
-                currentFieldControl.Initialize(row, (DataGridViewRow r) => { setFieldRow(r, f); });
+
+                List<Template.Field> fs = new List<Template.Field>();
+                foreach (DataGridViewRow r in fields.Rows)
+                {
+                    if (r.Tag == null)
+                        continue;
+                    fs.Add((Template.Field)r.Tag);
+                }
+                currentFieldControl = new FieldGeneralControl();
+                currentFieldControl.Initialize(row, v, fs, (DataGridViewRow r) => { setFieldRow(r, f); });
             }
             finally
             {
@@ -687,13 +695,13 @@ namespace Cliver.PdfDocumentParser
                 setCurrentFieldRow(row);
         }
 
-        FieldControl currentFieldControl
+        FieldGeneralControl currentFieldControl
         {
             get
             {
                 if (splitContainer4.Panel2.Controls.Count < 1)
                     return null;
-                return (FieldControl)splitContainer4.Panel2.Controls[0];
+                return (FieldGeneralControl)splitContainer4.Panel2.Controls[0];
             }
             set
             {

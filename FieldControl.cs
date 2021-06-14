@@ -1,67 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//********************************************************************************************
+//Author: Sergey Stoyan
+//        sergey.stoyan@gmail.com
+//        http://www.cliversoft.com
+//********************************************************************************************
+using System;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace Cliver.PdfDocumentParser
 {
-    public partial class FieldControl : TableRowControl
+    public partial class FieldControl : UserControl
     {
         public FieldControl()
         {
             InitializeComponent();
-        }
 
-        override protected object getObject()
-        {
-            if (field == null)
-                field = new Template.Field();
-            field.ColumnOfTable = (string)ColumnOfTable.SelectedItem;
-            return field;
-        }
-
-        //virtual public void SetValue(object value)
-        //{
-        //    string
-        //    Value.Text = value;
-        //}
-
-        public override void Initialize(DataGridViewRow row, Action<DataGridViewRow> onLeft)
-        {
-            base.Initialize(row, onLeft);
-
-            field = (Template.Field)row.Tag;
-            if (field == null)
-                field = new Template.Field();
-            ColumnOfTable.SelectedItem = field.ColumnOfTable;
-            Rectangle.Text = Serialization.Json.Serialize(field.Rectangle);
-
-            switch (field.DefaultValueType)
+            Leave += delegate (object sender, EventArgs e)
             {
-                case Template.Field.ValueTypes.PdfText:
-                case Template.Field.ValueTypes.PdfTextLines:
-                case Template.Field.ValueTypes.PdfCharBoxs:
-                    Value.Text = (string)row.Cells["Value"].Value;
-                    break;
-                case Template.Field.ValueTypes.OcrText:
-                case Template.Field.ValueTypes.OcrTextLines:
-                case Template.Field.ValueTypes.OcrCharBoxs:
-                    Value.Text = (string)row.Cells["Value"].Value;
-                    break;
-                case Template.Field.ValueTypes.Image:
-                    break;
-                case Template.Field.ValueTypes.OcrTextLineImages:
-                    break;
-                default:
-                    throw new Exception("Unknown option: " + field.DefaultValueType);
-            }
+                SetTagFromControl();
+            };
+        }
+        public DataGridViewRow Row;
+        //protected TemplateForm templateForm;
+        protected Action<DataGridViewRow> onLeft = null;
+        protected IEnumerable<Template.Field> fields = null;
+
+        public void Initialize(DataGridViewRow row, object value, IEnumerable<Template.Field> fields /*, TemplateForm templateForm*/, Action<DataGridViewRow> onLeft)
+        {
+            Row = row;
+            this.fields = fields;
+            //this.templateForm = templateForm;
+            this.onLeft = onLeft;
+            initialize(row, value);
         }
 
-        Template.Field field;
+        virtual protected void initialize(DataGridViewRow row, object value/*, TemplateForm templateForm*/)
+        {
+            throw new Exception("Not overridden!");
+        }
+
+        virtual protected object getObject()
+        {
+            throw new Exception("Not overridden!");
+        }
+
+        virtual public void SetTagFromControl()
+        {
+            Row.Tag = getObject();
+            onLeft?.Invoke(Row);
+        }
     }
 }

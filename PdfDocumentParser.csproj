@@ -163,11 +163,11 @@
     <Compile Include="CvImage.cs" />
     <Compile Include="BitmapPreprocessor.cs" />
     <Compile Include="Deskewer.cs" />
-    <Compile Include="FieldControl.cs">
+    <Compile Include="FieldGeneralControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="FieldControl.Designer.cs">
-      <DependentUpon>FieldControl.cs</DependentUpon>
+    <Compile Include="FieldGeneralControl.Designer.cs">
+      <DependentUpon>FieldGeneralControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Page.conditions.cs" />
     <Compile Include="Page.anchors.cs" />
@@ -203,11 +203,11 @@
     <Compile Include="Settings\Constants.cs" />
     <Compile Include="Settings\Appearance.cs" />
     <Compile Include="ImageData.cs" />
-    <Compile Include="TableRowControl.cs">
+    <Compile Include="FieldControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="TableRowControl.Designer.cs">
-      <DependentUpon>TableRowControl.cs</DependentUpon>
+    <Compile Include="FieldControl.Designer.cs">
+      <DependentUpon>FieldControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Template.cs" />
     <Compile Include="TemplateForm.conditions.cs">
@@ -312,8 +312,8 @@
     <EmbeddedResource Include="AnchorPdfTextControl.resx">
       <DependentUpon>AnchorPdfTextControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FieldControl.resx">
-      <DependentUpon>FieldControl.cs</DependentUpon>
+    <EmbeddedResource Include="FieldGeneralControl.resx">
+      <DependentUpon>FieldGeneralControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -322,8 +322,8 @@
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TableRowControl.resx">
-      <DependentUpon>TableRowControl.cs</DependentUpon>
+    <EmbeddedResource Include="FieldControl.resx">
+      <DependentUpon>FieldControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ScanTemplateForm.resx">
       <DependentUpon>ScanTemplateForm.cs</DependentUpon>

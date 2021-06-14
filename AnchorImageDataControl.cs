@@ -37,10 +37,8 @@ namespace Cliver.PdfDocumentParser
             return anchor;
         }
 
-        public override void Initialize(DataGridViewRow row, Action<DataGridViewRow> onLeft)
+        protected override void initialize(DataGridViewRow row)
         {
-            base.Initialize(row, onLeft);
-
             anchor = (Template.Anchor.ImageData)row.Tag;
             if (anchor == null)
                 anchor = new Template.Anchor.ImageData();
