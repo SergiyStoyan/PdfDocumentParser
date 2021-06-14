@@ -21,47 +21,47 @@ namespace Cliver.PdfDocumentParser
                 SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked;
                 if (SearchRectangleMargin.Value >= 0)
                     return;
-                SearchRectangleMargin.Value = cSearchRectangleMargin.Checked ? ((_object == null || _object.ParentAnchorId != null) ? (decimal)Settings.Constants.CoordinateDeviationMargin : 100) : -1;
+                SearchRectangleMargin.Value = cSearchRectangleMargin.Checked ? ((anchor == null || anchor.ParentAnchorId != null) ? (decimal)Settings.Constants.CoordinateDeviationMargin : 100) : -1;
             };
         }
         float imageScale = 1;
 
         override protected object getObject()
         {
-            if (_object == null)
-                _object = new Template.Anchor.CvImage();
-            _object.FindBestImageMatch = FindBestImageMatch.Checked;
-            _object.Threshold = (float)Threshold.Value;
-            _object.ScaleDeviation = (float)ScaleDeviation.Value;
-            _object.SearchRectangleMargin = SearchRectangleMargin.Enabled ? (int)SearchRectangleMargin.Value : -1;
-            return _object;
+            if (anchor == null)
+                anchor = new Template.Anchor.CvImage();
+            anchor.FindBestImageMatch = FindBestImageMatch.Checked;
+            anchor.Threshold = (float)Threshold.Value;
+            anchor.ScaleDeviation = (float)ScaleDeviation.Value;
+            anchor.SearchRectangleMargin = SearchRectangleMargin.Enabled ? (int)SearchRectangleMargin.Value : -1;
+            return anchor;
         }
 
         public override void Initialize(DataGridViewRow row, Action<DataGridViewRow> onLeft)
         {
             base.Initialize(row, onLeft);
 
-            _object = (Template.Anchor.CvImage)row.Tag;
-            if (_object == null)
-                _object = new Template.Anchor.CvImage();
-            FindBestImageMatch.Checked = _object.FindBestImageMatch;
-            Threshold.Value = (decimal)_object.Threshold;
-            ScaleDeviation.Value = (decimal)_object.ScaleDeviation;
+            anchor = (Template.Anchor.CvImage)row.Tag;
+            if (anchor == null)
+                anchor = new Template.Anchor.CvImage();
+            FindBestImageMatch.Checked = anchor.FindBestImageMatch;
+            Threshold.Value = (decimal)anchor.Threshold;
+            ScaleDeviation.Value = (decimal)anchor.ScaleDeviation;
             pictureBox.Image = null;
-            if (_object.Image != null)
+            if (anchor.Image != null)
             {
-                System.Drawing.Image i = _object.Image.GetImage();
+                System.Drawing.Image i = anchor.Image.GetImage();
                 pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
                 pictureBox.Width = (int)(i.Width * imageScale);
                 pictureBox.Height = (int)(i.Height * imageScale);
                 pictureBox.Image = i;
             }
 
-            SearchRectangleMargin.Value = _object.SearchRectangleMargin;
+            SearchRectangleMargin.Value = anchor.SearchRectangleMargin;
             SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked;
             cSearchRectangleMargin.Checked = SearchRectangleMargin.Value >= 0;
         }
 
-        Template.Anchor.CvImage _object;
+        Template.Anchor.CvImage anchor;
     }
 }

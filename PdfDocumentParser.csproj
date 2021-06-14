@@ -146,10 +146,6 @@
     <Compile Include="AnchorOcrTextControl.Designer.cs">
       <DependentUpon>AnchorOcrTextControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="AnchorScriptControl.cs" />
-    <Compile Include="AnchorScriptControl.Designer.cs">
-      <DependentUpon>AnchorScriptControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="AnchorPdfTextControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -167,6 +163,12 @@
     <Compile Include="CvImage.cs" />
     <Compile Include="BitmapPreprocessor.cs" />
     <Compile Include="Deskewer.cs" />
+    <Compile Include="FieldControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FieldControl.Designer.cs">
+      <DependentUpon>FieldControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Page.conditions.cs" />
     <Compile Include="Page.anchors.cs" />
     <Compile Include="Page.text.cs" />
@@ -307,11 +309,11 @@
     <EmbeddedResource Include="AnchorOcrTextControl.resx">
       <DependentUpon>AnchorOcrTextControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AnchorScriptControl.resx">
-      <DependentUpon>AnchorScriptControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="AnchorPdfTextControl.resx">
       <DependentUpon>AnchorPdfTextControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FieldControl.resx">
+      <DependentUpon>FieldControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

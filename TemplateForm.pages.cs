@@ -365,7 +365,7 @@ namespace Cliver.PdfDocumentParser
                         string fn = ((Template.Field)row.Tag).Name;
                         if (foundFieldNames.Contains(fn))
                             continue;
-                        if (setFieldRowValue(row, false))
+                        if (setFieldRowValue(row, false) != null)
                             foundFieldNames.Add(fn);
                     }
                 }

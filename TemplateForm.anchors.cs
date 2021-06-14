@@ -239,7 +239,6 @@ namespace Cliver.PdfDocumentParser
                     anchors.ClearSelection();
                     anchors.CurrentCell = null;
                     currentAnchorControl = null;
-
                     return;
                 }
 

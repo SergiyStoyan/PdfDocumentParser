@@ -596,6 +596,7 @@ namespace Cliver.PdfDocumentParser
                 {
                     fields.ClearSelection();
                     fields.CurrentCell = null;
+                    currentFieldControl = null;
                     return;
                 }
 
@@ -607,7 +608,11 @@ namespace Cliver.PdfDocumentParser
                 //setCurrentAnchorRow(f.BottomAnchorId, false);
                 setCurrentAnchorRow(null, true);
                 setCurrentConditionRow(null);
-                setFieldRowValue(row, false);
+                object v = setFieldRowValue(row, false);
+
+                currentFieldControl = new FieldControl();
+                Template.Field f = (Template.Field)row.Tag;
+                currentFieldControl.Initialize(row, (DataGridViewRow r) => { setFieldRow(r, f); });
             }
             finally
             {
@@ -617,15 +622,15 @@ namespace Cliver.PdfDocumentParser
         bool settingCurrentFieldRow = false;
         DataGridViewRow currentFieldRow = null;
 
-        bool setFieldRowValue(DataGridViewRow row, bool setEmpty)
+        object setFieldRowValue(DataGridViewRow row, bool setEmpty)
         {
             Template.Field f = (Template.Field)row.Tag;
             if (f == null)
-                return false;
+                return null;
             if (!f.IsSet())
             {
                 setRowStatus(statuses.WARNING, row, "Not set");
-                return false;
+                return null;
             }
             DataGridViewCell c = row.Cells["Value"];
             if (c.Value != null && c.Value is IDisposable)
@@ -652,7 +657,7 @@ namespace Cliver.PdfDocumentParser
             {
                 c.Value = null;
                 setRowStatus(statuses.NEUTRAL, row, "");
-                return false;
+                return null;
             }
             clearImageFromBoxes();
             object v = extractFieldAndDrawSelectionBox(f);
@@ -661,14 +666,14 @@ namespace Cliver.PdfDocumentParser
                 setRowStatus(statuses.SUCCESS, row, "Found");
             else
                 setRowStatus(statuses.ERROR, row, "Not found");
-            return v != null;
+            return v;
         }
 
         void setFieldRow(DataGridViewRow row, Template.Field f)
         {
             row.Tag = f;
             row.Cells["Name_"].Value = f.Name;
-            row.Cells["Rectangle"].Value = Serialization.Json.Serialize(f.Rectangle);
+            //row.Cells["Rectangle"].Value = Serialization.Json.Serialize(f.Rectangle);
             row.Cells["Type"].Value = f.DefaultValueType;
             row.Cells["LeftAnchorId"].Value = f.LeftAnchor?.Id;
             row.Cells["TopAnchorId"].Value = f.TopAnchor?.Id;
@@ -678,8 +683,26 @@ namespace Cliver.PdfDocumentParser
             if (loadingTemplate)
                 return;
 
-            if (row == currentFieldRow)
+            if (currentFieldControl != null && row == currentFieldRow)
                 setCurrentFieldRow(row);
+        }
+
+        FieldControl currentFieldControl
+        {
+            get
+            {
+                if (splitContainer4.Panel2.Controls.Count < 1)
+                    return null;
+                return (FieldControl)splitContainer4.Panel2.Controls[0];
+            }
+            set
+            {
+                splitContainer4.Panel2.Controls.Clear();
+                if (value == null)
+                    return;
+                splitContainer4.Panel2.Controls.Add(value);
+                value.Dock = DockStyle.Fill;
+            }
         }
     }
 }

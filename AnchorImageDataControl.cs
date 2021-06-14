@@ -21,47 +21,47 @@ namespace Cliver.PdfDocumentParser
                 SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked;
                 if (SearchRectangleMargin.Value >= 0)
                     return;
-                SearchRectangleMargin.Value = cSearchRectangleMargin.Checked ? ((_object == null || _object.ParentAnchorId != null) ? (decimal)Settings.Constants.CoordinateDeviationMargin : 100) : -1;
+                SearchRectangleMargin.Value = cSearchRectangleMargin.Checked ? ((anchor == null || anchor.ParentAnchorId != null) ? (decimal)Settings.Constants.CoordinateDeviationMargin : 100) : -1;
             };
         }
         float imageScale = 1;
 
         override protected object getObject()
         {
-            if (_object == null)
-                _object = new Template.Anchor.ImageData();
-            _object.FindBestImageMatch = FindBestImageMatch.Checked;
-            _object.BrightnessTolerance = (float)BrightnessTolerance.Value;
-            _object.DifferentPixelNumberTolerance = (float)DifferentPixelNumberTolerance.Value;
-            _object.SearchRectangleMargin = SearchRectangleMargin.Enabled ? (int)SearchRectangleMargin.Value : -1;
-            return _object;
+            if (anchor == null)
+                anchor = new Template.Anchor.ImageData();
+            anchor.FindBestImageMatch = FindBestImageMatch.Checked;
+            anchor.BrightnessTolerance = (float)BrightnessTolerance.Value;
+            anchor.DifferentPixelNumberTolerance = (float)DifferentPixelNumberTolerance.Value;
+            anchor.SearchRectangleMargin = SearchRectangleMargin.Enabled ? (int)SearchRectangleMargin.Value : -1;
+            return anchor;
         }
 
         public override void Initialize(DataGridViewRow row, Action<DataGridViewRow> onLeft)
         {
             base.Initialize(row, onLeft);
 
-            _object = (Template.Anchor.ImageData)row.Tag;
-            if (_object == null)
-                _object = new Template.Anchor.ImageData();
-            FindBestImageMatch.Checked = _object.FindBestImageMatch;
-            BrightnessTolerance.Value = (decimal)_object.BrightnessTolerance;
-            DifferentPixelNumberTolerance.Value = (decimal)_object.DifferentPixelNumberTolerance;
+            anchor = (Template.Anchor.ImageData)row.Tag;
+            if (anchor == null)
+                anchor = new Template.Anchor.ImageData();
+            FindBestImageMatch.Checked = anchor.FindBestImageMatch;
+            BrightnessTolerance.Value = (decimal)anchor.BrightnessTolerance;
+            DifferentPixelNumberTolerance.Value = (decimal)anchor.DifferentPixelNumberTolerance;
             pictureBox.Image = null;
-            if (_object.Image != null)
+            if (anchor.Image != null)
             {
-                System.Drawing.Image i = _object.Image.GetImage();
+                System.Drawing.Image i = anchor.Image.GetImage();
                 pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
                 pictureBox.Width = (int)(i.Width * imageScale);
                 pictureBox.Height = (int)(i.Height * imageScale);
                 pictureBox.Image = i;
             }
 
-            SearchRectangleMargin.Value = _object.SearchRectangleMargin;
+            SearchRectangleMargin.Value = anchor.SearchRectangleMargin;
             SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked;
             cSearchRectangleMargin.Checked = SearchRectangleMargin.Value >= 0;
         }
 
-        Template.Anchor.ImageData _object;
+        Template.Anchor.ImageData anchor;
     }
 }

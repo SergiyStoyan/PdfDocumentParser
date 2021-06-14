@@ -23,51 +23,51 @@ namespace Cliver.PdfDocumentParser
                 SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked;
                 if (SearchRectangleMargin.Value >= 0)
                     return;
-                SearchRectangleMargin.Value = cSearchRectangleMargin.Checked ? ((_object == null || _object.ParentAnchorId != null) ? (decimal)Settings.Constants.CoordinateDeviationMargin : 100) : -1;
+                SearchRectangleMargin.Value = cSearchRectangleMargin.Checked ? ((anchor == null || anchor.ParentAnchorId != null) ? (decimal)Settings.Constants.CoordinateDeviationMargin : 100) : -1;
             };
         }
         TextAutoInsertSpace textAutoInsertSpace;
 
         override protected object getObject()
         {
-            if (_object == null)
-                _object = new Template.Anchor.OcrText();
-            _object.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
-            _object.PositionDeviation = (float)PositionDeviation.Value;
-            _object.SearchRectangleMargin = SearchRectangleMargin.Enabled ? (int)SearchRectangleMargin.Value : -1;
-            _object.OcrEntirePage = OcrEntirePage.Checked;
-            return _object;
+            if (anchor == null)
+                anchor = new Template.Anchor.OcrText();
+            anchor.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
+            anchor.PositionDeviation = (float)PositionDeviation.Value;
+            anchor.SearchRectangleMargin = SearchRectangleMargin.Enabled ? (int)SearchRectangleMargin.Value : -1;
+            anchor.OcrEntirePage = OcrEntirePage.Checked;
+            return anchor;
         }
 
         public override void Initialize(DataGridViewRow row, Action<DataGridViewRow> onLeft)
         {
             base.Initialize(row, onLeft);
 
-            _object = (Template.Anchor.OcrText)row.Tag;
-            if (_object == null)
-                _object = new Template.Anchor.OcrText();
+            anchor = (Template.Anchor.OcrText)row.Tag;
+            if (anchor == null)
+                anchor = new Template.Anchor.OcrText();
             StringBuilder sb = new StringBuilder();
-            foreach (var l in Page.GetLines(_object.CharBoxs.Select(x => new Ocr.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() }), textAutoInsertSpace))
+            foreach (var l in Page.GetLines(anchor.CharBoxs.Select(x => new Ocr.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() }), textAutoInsertSpace))
             {
                 foreach (var cb in l.CharBoxs)
                     sb.Append(cb.Char);
                 sb.Append("\r\n");
             }
             text.Text = sb.ToString();
-            PositionDeviationIsAbsolute.Checked = _object.PositionDeviationIsAbsolute;
+            PositionDeviationIsAbsolute.Checked = anchor.PositionDeviationIsAbsolute;
             try
             {
-                PositionDeviation.Value = (decimal)_object.PositionDeviation;
+                PositionDeviation.Value = (decimal)anchor.PositionDeviation;
             }
             catch { }
 
-            SearchRectangleMargin.Value = _object.SearchRectangleMargin;
+            SearchRectangleMargin.Value = anchor.SearchRectangleMargin;
             SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked;
             cSearchRectangleMargin.Checked = SearchRectangleMargin.Value >= 0;
 
-            OcrEntirePage.Checked = _object.OcrEntirePage;
+            OcrEntirePage.Checked = anchor.OcrEntirePage;
         }
 
-        Template.Anchor.OcrText _object;
+        Template.Anchor.OcrText anchor;
     }
 }

@@ -27,7 +27,7 @@ namespace Cliver.PdfDocumentParser
 
         virtual protected object getObject()
         {
-            throw new Exception("Not overrrided!");
+            throw new Exception("Not overridden!");
         }
 
         virtual public void SetTagFromControl()
