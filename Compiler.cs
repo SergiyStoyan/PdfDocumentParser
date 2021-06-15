@@ -83,11 +83,11 @@ namespace Cliver.PdfDocumentParser
         //    var y = references;
         //    sw3.Stop();
         //}
-        static public List<MetadataReference> GetAllReferences()
+        static public List<MetadataReference> GetAllReferences(Assembly startAssembly)
         {
             List<MetadataReference> references = new List<MetadataReference>();
             Dictionary<string, Assembly> assemblNames2assemby = new Dictionary<string, Assembly>();
-            getAllAssemblies(assemblNames2assemby, Assembly.GetCallingAssembly());
+            getAllAssemblies(assemblNames2assemby, startAssembly);
             foreach (Assembly a in assemblNames2assemby.Values)
                 references.Add(MetadataReference.CreateFromFile(a.Location));
             return references;
@@ -114,7 +114,7 @@ namespace Cliver.PdfDocumentParser
             SyntaxTree st = SyntaxFactory.ParseSyntaxTree(typesDefinition);
             CSharpCompilation compilation = CSharpCompilation.Create("emitted.dll",//no file seems to be really created
                 syntaxTrees: new SyntaxTree[] { st },
-                references: references != null ? references : GetAllReferences(),
+                references: references != null ? references : GetAllReferences(Assembly.GetCallingAssembly()),
                 options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
                 );
             Assembly assembly;
