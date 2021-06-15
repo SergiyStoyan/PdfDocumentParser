@@ -119,7 +119,7 @@ namespace Cliver
         void save()
         {
             Saving();
-            string s = Serialization.Json.Serialize(this, __Info.Storage.Indented, __Info.Storage.IgnoreNullValues, __Info.Storage.IgnoreDefaultValues);
+            string s = Serialization.Json.Serialize(this, __Info.Storage.Indented, __Info.Storage.IgnoreNullValues, false/*!!!default values always must be stored*/);
             if (__Info.Crypto != null)
                 s = __Info.Crypto.Encrypt(s);
             FileSystemRoutines.CreateDirectory(PathRoutines.GetFileDir(__Info.File));
@@ -272,20 +272,20 @@ namespace Cliver
             /// Indicates whether null values in the Settings field are to be stored explicitly or not.
             /// </summary>
             public bool IgnoreNullValues = true;
-            /// <summary>
-            /// Indicates whether default values in the Settings field are to be stored explicitly or not.
-            /// </summary>
-            public bool IgnoreDefaultValues = true;
+            ///// <summary>!!!it never must be used as brings to losing changes
+            ///// Indicates whether default values in the Settings field are to be stored explicitly or not.
+            ///// </summary>
+            //public bool IgnoreDefaultValues = false;
 
             /// <summary>
             /// 
             /// </summary>
             /// <param name="indented">Indicates that the Settings field be stored with indention</param>
-            public StorageAttribute(bool indented = true, bool ignoreNullValues = true, bool ignoreDefaultValues = true)
+            public StorageAttribute(bool indented = true, bool ignoreNullValues = true/*, bool ignoreDefaultValues = true*/)
             {
                 Indented = indented;
                 IgnoreNullValues = ignoreNullValues;
-                IgnoreDefaultValues = ignoreDefaultValues;
+                //IgnoreDefaultValues = ignoreDefaultValues;
             }
         }
 
