@@ -30,8 +30,6 @@ namespace Cliver.PdfDocumentParser
                     Type = Types.ImageData;
                 else if (this is CvImage)
                     Type = Types.CvImage;
-                //else if (this is Script)
-                //    Type = Types.Script;
                 else
                     throw new Exception("Unknown type: " + this.GetType());
             }
@@ -43,7 +41,6 @@ namespace Cliver.PdfDocumentParser
                 CvImage,
                 OcrText,
                 ImageData,
-                //Script
             }
 
             abstract public bool IsSet();

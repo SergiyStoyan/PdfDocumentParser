@@ -77,10 +77,53 @@ namespace Cliver.PdfDocumentParser
 
             public Field()
             {
+                //if (this is PdfText)
+                //    Type = Types.PdfText;
+                //else if (this is PdfTextLines)
+                //    Type = Types.PdfTextLines;
+                //else if (this is PdfCharBoxs)
+                //    Type = Types.PdfCharBoxs;
+                //else if (this is OcrText)
+                //    Type = Types.OcrText;
+                //else if (this is OcrTextLines)
+                //    Type = Types.OcrTextLines;
+                //else if (this is OcrCharBoxs)
+                //    Type = Types.OcrCharBoxs;
+                //else if (this is Image)
+                //    Type = Types.Image;
+                //else if (this is OcrTextLineImages)
+                //    Type = Types.OcrTextLineImages;
+                //else
+                //    //throw new Exception("Unknown type: " + this.GetType());
+                //    Type = Types.Base;
             }
 
+            //[Newtonsoft.Json.JsonIgnore]
+            //public readonly Types Type;
+            //public enum Types
+            //{
+            //    /// <summary>
+            //    /// for backward compatibility
+            //    /// </summary>
+            //    Base,
+            //    PdfText,
+            //    PdfTextLines ,
+            //    PdfCharBoxs ,
+            //    OcrText ,
+            //    OcrTextLines,
+            //    OcrCharBoxs ,
+            //    Image ,
+            //    OcrTextLineImages ,
+            //}
+
+            ///// <summary>
+            ///// Remains for backward compatibility. It makes sense only for the base type Field.
+            ///// </summary>
             public ValueTypes DefaultValueType = ValueTypes.PdfText;
 
+            /// <summary>
+            /// Remains for backward compatibility. It makes sense only for the base type Field.
+            /// </summary>
             public enum ValueTypes
             {
                 PdfText = 0,
@@ -104,6 +147,39 @@ namespace Cliver.PdfDocumentParser
             /// Not all field types supported!
             /// </summary>
             public string ColumnOfTable = null;
+        }
+
+        public class PdfText : Field
+        {
+        }
+
+        public class PdfTextLines : Field
+        {
+        }
+
+        public class PdfCharBoxs : Field
+        {
+        }
+
+        public class OcrText : Field
+        {
+        }
+
+        public class OcrTextLines : Field
+        {
+        }
+
+        public class OcrCharBoxs : Field
+        {
+        }
+
+        public class Image : Field
+        {
+        }
+
+        public class OcrTextLineImages : Field
+        {
+
         }
     }
 }

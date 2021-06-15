@@ -36,9 +36,9 @@ namespace Cliver
         public readonly string InitFile;
 
         /// <summary>
-        /// Whether serialization to file is to be done with indention.
+        /// Keeps storage features for the Settings field.
         /// </summary>
-        public bool Indented = true;
+        public readonly SettingsFieldAttribute.StorageAttribute Storage;
 
         /// <summary>
         /// Settings derived type.
@@ -100,9 +100,8 @@ namespace Cliver
             Settings s = (Settings)Activator.CreateInstance(Type); //!!!slightly slowler than calling a static by reflection. Doesn't run slower for a bigger class though.
             File = s.__StorageDir + System.IO.Path.DirectorySeparatorChar + FullName + "." + Config.FILE_EXTENSION;
             InitFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + FullName + "." + Config.FILE_EXTENSION;
-            SettingsFieldAttribute.IndentedAttribute indentedAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.IndentedAttribute>(false).FirstOrDefault();
-            if (indentedAttribute != null)
-                Indented = indentedAttribute.Indented;
+            SettingsFieldAttribute.StorageAttribute storageAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.StorageAttribute>(false).FirstOrDefault();
+            Storage = storageAttribute != null ? storageAttribute : new SettingsFieldAttribute.StorageAttribute();
             Crypto = settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.CryptoAttribute>(false).FirstOrDefault()?.Crypto;
             Optional = settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.OptionalAttribute>(false).Any();
         }

@@ -119,7 +119,7 @@ namespace Cliver
         void save()
         {
             Saving();
-            string s = Serialization.Json.Serialize(this, __Info.Indented, true);
+            string s = Serialization.Json.Serialize(this, __Info.Storage.Indented, __Info.Storage.IgnoreNullValues, __Info.Storage.IgnoreDefaultValues);
             if (__Info.Crypto != null)
                 s = __Info.Crypto.Encrypt(s);
             FileSystemRoutines.CreateDirectory(PathRoutines.GetFileDir(__Info.File));
@@ -146,6 +146,7 @@ namespace Cliver
         /// <summary>
         /// Actual version of this Settings type.
         /// It indicates if the storage file content is obsolete.
+        /// When 0, this field is excluded from storage by default. To include it, set [StorageAttribute(ignoreDefaultValues: false)]
         /// </summary>
         virtual public int __TypeVersion { get; set; } = 0;
         [Newtonsoft.Json.JsonIgnore]
@@ -160,31 +161,6 @@ namespace Cliver
         {
             throw new Exception("Unsupported version of " + GetType().FullName + ": " + __TypeVersion);
         }
-
-        ///// <summary>
-        ///// Check if this Settings type corresponds to the content of the storage file.
-        ///// Used when the engaged types were updated and data migration is required.
-        ///// </summary>
-        ///// <param name="minSupportedFormatVersion"></param>
-        ///// <param name="maxSupportedFormatVersion"></param>
-        ///// <param name="throwException"></param>
-        ///// <returns></returns>
-        //public bool IsTypeVersionSupported(int minSupportedTypeVersion, int maxSupportedTypeVersion, bool throwException = true)
-        //{
-        //    //bool supported = (__TypeVersion >= minSupportedTypeVersion && __TypeVersion <= maxSupportedTypeVersion);
-        //    //if (!supported && throwException)
-        //    //    throw new Exception("Unsupported format of " + GetType().FullName + ": " + __TypeVersion);
-
-        //    System.Reflection.FieldInfo fi = GetType().GetField(__TypeVersion_FieldName);
-        //    if (fi == null)
-        //        throw new Exception(GetType().FullName + " does not define field " + __TypeVersion_FieldName + ".");
-        //    int typeVersion = (int)fi.GetValue(this);
-        //    bool supported = typeVersion >= minSupportedTypeVersion && typeVersion <= maxSupportedTypeVersion;
-        //    if (!supported && throwException)
-        //        throw new Exception("Unsupported version of " + GetType().FullName + ": " + typeVersion);
-        //    return supported;
-        //}
-        //public const string __TypeVersion_FieldName = "__TypeVersion";
 
         /// <summary>
         /// Get the old format data in order to migrate to the current format.
@@ -283,23 +259,33 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Settings field attribute that indicates that the Settings field will be stored with indention.
+        /// Settings field attribute that set storage features for the Settings field.
         /// </summary>
         [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-        public class IndentedAttribute : Attribute
+        public class StorageAttribute : Attribute
         {
             /// <summary>
-            /// Indicates that the Settings field will be stored with indention.
+            /// Indicates whether the Settings field will be stored with indention or not.
             /// /// </summary>
-            readonly public bool Indented;
+            public bool Indented = true;
+            /// <summary>
+            /// Indicates whether null values in the Settings field are to be stored explicitly or not.
+            /// </summary>
+            public bool IgnoreNullValues = true;
+            /// <summary>
+            /// Indicates whether default values in the Settings field are to be stored explicitly or not.
+            /// </summary>
+            public bool IgnoreDefaultValues = true;
 
             /// <summary>
             /// 
             /// </summary>
             /// <param name="indented">Indicates that the Settings field be stored with indention</param>
-            public IndentedAttribute(bool indented = true)
+            public StorageAttribute(bool indented = true, bool ignoreNullValues = true, bool ignoreDefaultValues = true)
             {
                 Indented = indented;
+                IgnoreNullValues = ignoreNullValues;
+                IgnoreDefaultValues = ignoreDefaultValues;
             }
         }
 
@@ -321,7 +307,10 @@ namespace Cliver
             /// <param name="iStringCryptoGetterName">Name of the IStringCrypto getter. The getter must be public static.</param>
             public CryptoAttribute(Type iStringCryptoGetterHostingType, string iStringCryptoGetterName)
             {
-                Crypto = (IStringCrypto)iStringCryptoGetterHostingType.GetProperty(iStringCryptoGetterName).GetValue(null);
+                System.Reflection.PropertyInfo pi = iStringCryptoGetterHostingType.GetProperty(iStringCryptoGetterName);
+                if (pi == null)
+                    throw new Exception(iStringCryptoGetterHostingType.FullName + " does not expose property " + iStringCryptoGetterName + "\r\nMake sure that " + GetType().Name + " is set properly.");
+                Crypto = (IStringCrypto)pi.GetValue(null);
             }
         }
     }

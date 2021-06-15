@@ -19,6 +19,44 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class Page
     {
+        public string GetText(string fieldName)
+        {
+            FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
+            if (!fai.Found)
+                return null;
+            if (fai.ActualField.DefaultValueType.ToString().StartsWith("Pdf"))
+                return (string)fai.GetValue(Template.Field.ValueTypes.PdfText);
+            return (string)fai.GetValue(Template.Field.ValueTypes.OcrText);
+        }
+
+        public List<string> GetTextLines(string fieldName)
+        {
+            FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
+            if (!fai.Found)
+                return null;
+            if (fai.ActualField.DefaultValueType.ToString().StartsWith("Pdf"))
+                return (List<string>)fai.GetValue(Template.Field.ValueTypes.PdfTextLines);
+            return (List<string>)fai.GetValue(Template.Field.ValueTypes.OcrTextLines);
+        }
+
+        public Image GetImage(string fieldName)
+        {
+            FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
+            if (!fai.Found)
+                return null;
+            return (Image)fai.GetValue(Template.Field.ValueTypes.Image);
+        }
+
+        //public List<Image> GetTextLineImages(string fieldName)
+        //{
+        //    FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
+        //    if (!fai.Found)
+        //        return null;
+        //    if (fai.ActualField.DefaultValueType.ToString().StartsWith("Pdf"))
+        //        return (List<string>)fai.GetValue(Template.Field.ValueTypes.PdfTextLines);
+        //    return (List<Image>)fai.GetValue(Template.Field.ValueTypes.OcrTextLineImages);
+        //}
+
         /// <summary>
         /// Tries field definitions of the given name in turn until some is found on the page.
         /// </summary>
