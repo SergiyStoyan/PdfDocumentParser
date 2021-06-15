@@ -87,18 +87,25 @@ namespace Cliver.PdfDocumentParser
             return fai.GetValue(valueType == null ? fai.ActualField.DefaultValueType : (Template.Field.ValueTypes)valueType);
         }
 
-        // !!!passing Template.Field as parameter would be deceitful for these reasons:
-        // - it may belong to another template than ActiveTemplate;
-        // - it implies that a Template.Field object is equivalent to a field while it is just one of its defintions;
-        // - it may be the same by logic while being another as an object!
-        //public object GetValue(Template.Field exactField, Template.Field.ValueTypes? valueType = null)
-        //{
-        //    RectangleF? ar = getFieldActualRectangle(exactField);
-        //    FieldActualInfo fai = new FieldActualInfo(this, exactField, ar, exactField.ColumnOfTable != null ? getFoundFieldActualInfo(exactField.ColumnOfTable) : null);
-        //    if (!fai.Found)
-        //        return null;
-        //    return fai.GetValue(valueType == null ? fai.ActualField.DefaultValueType : (Template.Field.ValueTypes)valueType);
-        //}
+        /// <summary>
+        /// It is helpful when a field has more than 1 definition and its image is required.
+        /// !!!Only must be used for the field returned by GetValue(string fieldName, out Template.Field actualField, Template.Field.ValueTypes? valueType = null)
+        /// ATTENTION: using Template.Field as a parameter may be deceitful for these reasons:
+        /// - it may belong to another template than ActiveTemplate;
+        /// - it implies that a Template.Field object is equivalent to a field while it is just one of its defintions;
+        /// - it may be the same by logic while being another as an object;
+        /// </summary>
+        /// <param name="exactField"></param>
+        /// <param name="valueType"></param>
+        /// <returns></returns>
+        public object GetValue(Template.Field exactField, Template.Field.ValueTypes? valueType = null)
+        {
+            RectangleF? ar = getFieldActualRectangle(exactField);
+            FieldActualInfo fai = new FieldActualInfo(this, exactField, ar, exactField.ColumnOfTable != null ? getFoundFieldActualInfo(exactField.ColumnOfTable) : null);
+            if (!fai.Found)
+                return null;
+            return fai.GetValue(valueType == null ? fai.ActualField.DefaultValueType : (Template.Field.ValueTypes)valueType);
+        }
 
         internal FieldActualInfo GetFieldActualInfo(Template.Field field)
         {
