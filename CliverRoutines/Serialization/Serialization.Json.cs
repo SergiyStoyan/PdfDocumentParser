@@ -39,7 +39,7 @@ namespace Cliver
             //        );
             //}
 
-            public static string Serialize(object o, bool indented = true, bool polymorphic = true, bool ignoreNullValues = true, bool ignoreDefaultValues = true)
+            public static string Serialize(object o, bool indented = true, bool polymorphic = true, bool ignoreNullValues = true, bool ignoreDefaultValues = false)
             {
                 if (o == null)
                     return null;

@@ -146,7 +146,6 @@ namespace Cliver
         /// <summary>
         /// Actual version of this Settings type.
         /// It indicates if the storage file content is obsolete.
-        /// When 0, this field is excluded from storage by default. To include it, set [StorageAttribute(ignoreDefaultValues: false)]
         /// </summary>
         virtual public int __TypeVersion { get; set; } = 0;
         [Newtonsoft.Json.JsonIgnore]
