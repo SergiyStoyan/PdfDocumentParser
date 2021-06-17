@@ -54,22 +54,25 @@ namespace Cliver
 
         public static string CreateDirectory(string directory, bool unique = false)
         {
-            if (!Directory.Exists(directory))
-                Directory.CreateDirectory(directory);
+            DirectoryInfo di = new DirectoryInfo(directory);
+            if (!di.Exists)
+                di.Create();
             else if (unique)
             {
-                int i = 1;
-                string p = directory + "_" + i;
-                for (; Directory.Exists(p); p = directory + "_" + (++i)) ;
-                directory = p;
-                Directory.CreateDirectory(directory);
+                int i = 0;
+                do
+                {
+                    di = new DirectoryInfo(directory + "_" + (++i));
+                }
+                while (di.Exists);
+                di.Create();
             }
-            return directory;
+            return di.FullName;
         }
 
         public static void ClearDirectory(string directory, bool recursive = true)
         {
-            if(!Directory.Exists(directory))
+            if (!Directory.Exists(directory))
             {
                 Directory.CreateDirectory(directory);
                 return;
