@@ -492,7 +492,7 @@ namespace Cliver.PdfDocumentParser
                         unique = false;
                         break;
                     }
-                if (unique && !Message.YesNo("This field definition is the last for '" + f0.Name + "' and thus, the field will not exist anymore. Proceed?"))
+                if (unique && !Message.YesNo("This field '" + f0.Name + "' will be removed completely because it is the last definition for it.\r\nProceed?", this, Message.Icons.Exclamation))
                 {
                     //Message.Inform("This field definition cannot be deleted because it is the last of the field.");
                     return;
