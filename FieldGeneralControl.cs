@@ -17,10 +17,13 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class FieldGeneralControl : FieldControl
     {
-        public FieldGeneralControl()
+        public FieldGeneralControl(TextAutoInsertSpace textAutoInsertSpace)
         {
             InitializeComponent();
+
+            this.textAutoInsertSpace = textAutoInsertSpace;
         }
+        TextAutoInsertSpace textAutoInsertSpace;
 
         override protected object getObject()
         {
@@ -70,14 +73,42 @@ namespace Cliver.PdfDocumentParser
             switch (field.DefaultValueType)
             {
                 case Template.Field.ValueTypes.PdfText:
+                    Value.Text = Page.NormalizeText((string)value);
+                    break;
                 case Template.Field.ValueTypes.PdfTextLines:
+                    {
+                        List<string> vs = (List<string>)value;
+                        Page.NormalizeText(vs);
+                        Value.Text = string.Join("\r\n", vs);
+                    }
+                    break;
                 case Template.Field.ValueTypes.PdfCharBoxs:
-                    Value.Text = (string)value;
+                    {
+                        List<Page.Line<Pdf.CharBox>> cbss = Page.GetLines((List<Pdf.CharBox>)value, textAutoInsertSpace);
+                        List<string> ls = new List<string>();
+                        foreach (var cbs in cbss)
+                            ls.Add(Serialization.Json.Serialize(cbs.CharBoxs));
+                        Value.Text = string.Join("\r\n", ls);
+                    }
                     break;
                 case Template.Field.ValueTypes.OcrText:
+                    Value.Text = Page.NormalizeText((string)value);
+                    break;
                 case Template.Field.ValueTypes.OcrTextLines:
+                    {
+                        List<string> vs = (List<string>)value;
+                        Page.NormalizeText(vs);
+                        Value.Text = string.Join("\r\n", vs);
+                    }
+                    break;
                 case Template.Field.ValueTypes.OcrCharBoxs:
-                    Value.Text = (string)value;
+                    {
+                        List<Page.Line<Ocr.CharBox>> cbss = Page.GetLines((List<Ocr.CharBox>)value, textAutoInsertSpace);
+                        List<string> ls = new List<string>();
+                        foreach (var cbs in cbss)
+                            ls.Add(Serialization.Json.Serialize(cbs.CharBoxs));
+                        Value.Text = string.Join("\r\n", ls);
+                    }
                     break;
                 case Template.Field.ValueTypes.Image:
                     break;

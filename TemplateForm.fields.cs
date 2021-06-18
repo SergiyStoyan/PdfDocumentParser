@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -619,7 +620,7 @@ namespace Cliver.PdfDocumentParser
                         continue;
                     fs.Add((Template.Field)r.Tag);
                 }
-                currentFieldControl = new FieldGeneralControl();
+                currentFieldControl = new FieldGeneralControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) });
                 currentFieldControl.Initialize(row, v, fs, (DataGridViewRow r) => { setFieldRow(r, f); });
             }
             finally
@@ -669,11 +670,37 @@ namespace Cliver.PdfDocumentParser
             }
             clearImageFromBoxes();
             object v = extractFieldAndDrawSelectionBox(f);
-            c.Value = v;
+
+            switch (f.DefaultValueType)
+            {
+                case Template.Field.ValueTypes.PdfText:
+                    c.Value = Page.NormalizeText((string)v);
+                    break;
+                case Template.Field.ValueTypes.PdfTextLines:
+                    c.Value = Page.NormalizeText(string.Join("\r\n", (List<string>)v));
+                    break;
+                case Template.Field.ValueTypes.PdfCharBoxs:
+                    c.Value = Page.NormalizeText(Serialization.Json.Serialize(v));
+                    break;
+                case Template.Field.ValueTypes.OcrText:
+                    c.Value = Page.NormalizeText((string)v);
+                    break;
+                case Template.Field.ValueTypes.OcrTextLines:
+                    c.Value = Page.NormalizeText(string.Join("\r\n", (List<string>)v));
+                    break;
+                case Template.Field.ValueTypes.OcrCharBoxs:
+                    c.Value = Page.NormalizeText(Serialization.Json.Serialize(v));
+                    break;
+                default:
+                    c.Value = v;
+                    break;
+            }
+
             if (c.Value != null)
                 setRowStatus(statuses.SUCCESS, row, "Found");
             else
                 setRowStatus(statuses.ERROR, row, "Not found");
+
             return v;
         }
 
