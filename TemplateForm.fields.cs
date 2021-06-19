@@ -671,30 +671,33 @@ namespace Cliver.PdfDocumentParser
             clearImageFromBoxes();
             object v = extractFieldAndDrawSelectionBox(f);
 
-            switch (f.DefaultValueType)
-            {
-                case Template.Field.ValueTypes.PdfText:
-                    c.Value = Page.NormalizeText((string)v);
-                    break;
-                case Template.Field.ValueTypes.PdfTextLines:
-                    c.Value = Page.NormalizeText(string.Join("\r\n", (List<string>)v));
-                    break;
-                case Template.Field.ValueTypes.PdfCharBoxs:
-                    c.Value = Page.NormalizeText(Serialization.Json.Serialize(v));
-                    break;
-                case Template.Field.ValueTypes.OcrText:
-                    c.Value = Page.NormalizeText((string)v);
-                    break;
-                case Template.Field.ValueTypes.OcrTextLines:
-                    c.Value = Page.NormalizeText(string.Join("\r\n", (List<string>)v));
-                    break;
-                case Template.Field.ValueTypes.OcrCharBoxs:
-                    c.Value = Page.NormalizeText(Serialization.Json.Serialize(v));
-                    break;
-                default:
-                    c.Value = v;
-                    break;
-            }
+            if (v != null)
+                switch (f.DefaultValueType)
+                {
+                    case Template.Field.ValueTypes.PdfText:
+                        c.Value = Page.NormalizeText((string)v);
+                        break;
+                    case Template.Field.ValueTypes.PdfTextLines:
+                        c.Value = Page.NormalizeText(string.Join("\r\n", (List<string>)v));
+                        break;
+                    case Template.Field.ValueTypes.PdfCharBoxs:
+                        c.Value = Page.NormalizeText(Serialization.Json.Serialize(v));
+                        break;
+                    case Template.Field.ValueTypes.OcrText:
+                        c.Value = Page.NormalizeText((string)v);
+                        break;
+                    case Template.Field.ValueTypes.OcrTextLines:
+                        c.Value = Page.NormalizeText(string.Join("\r\n", (List<string>)v));
+                        break;
+                    case Template.Field.ValueTypes.OcrCharBoxs:
+                        c.Value = Page.NormalizeText(Serialization.Json.Serialize(v));
+                        break;
+                    default:
+                        c.Value = v;
+                        break;
+                }
+            else
+                c.Value = v;
 
             if (c.Value != null)
                 setRowStatus(statuses.SUCCESS, row, "Found");

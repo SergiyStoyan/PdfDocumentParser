@@ -70,53 +70,54 @@ namespace Cliver.PdfDocumentParser
 
             Rectangle.Text = Serialization.Json.Serialize(field.Rectangle);
 
-            switch (field.DefaultValueType)
-            {
-                case Template.Field.ValueTypes.PdfText:
-                    Value.Text = Page.NormalizeText((string)value);
-                    break;
-                case Template.Field.ValueTypes.PdfTextLines:
-                    {
-                        List<string> vs = (List<string>)value;
-                        Page.NormalizeText(vs);
-                        Value.Text = string.Join("\r\n", vs);
-                    }
-                    break;
-                case Template.Field.ValueTypes.PdfCharBoxs:
-                    {
-                        List<Page.Line<Pdf.CharBox>> cbss = Page.GetLines((List<Pdf.CharBox>)value, textAutoInsertSpace);
-                        List<string> ls = new List<string>();
-                        foreach (var cbs in cbss)
-                            ls.Add(Serialization.Json.Serialize(cbs.CharBoxs));
-                        Value.Text = string.Join("\r\n", ls);
-                    }
-                    break;
-                case Template.Field.ValueTypes.OcrText:
-                    Value.Text = Page.NormalizeText((string)value);
-                    break;
-                case Template.Field.ValueTypes.OcrTextLines:
-                    {
-                        List<string> vs = (List<string>)value;
-                        Page.NormalizeText(vs);
-                        Value.Text = string.Join("\r\n", vs);
-                    }
-                    break;
-                case Template.Field.ValueTypes.OcrCharBoxs:
-                    {
-                        List<Page.Line<Ocr.CharBox>> cbss = Page.GetLines((List<Ocr.CharBox>)value, textAutoInsertSpace);
-                        List<string> ls = new List<string>();
-                        foreach (var cbs in cbss)
-                            ls.Add(Serialization.Json.Serialize(cbs.CharBoxs));
-                        Value.Text = string.Join("\r\n", ls);
-                    }
-                    break;
-                case Template.Field.ValueTypes.Image:
-                    break;
-                case Template.Field.ValueTypes.OcrTextLineImages:
-                    break;
-                default:
-                    throw new Exception("Unknown option: " + field.DefaultValueType);
-            }
+            if (value != null)
+                switch (field.DefaultValueType)
+                {
+                    case Template.Field.ValueTypes.PdfText:
+                        Value.Text = Page.NormalizeText((string)value);
+                        break;
+                    case Template.Field.ValueTypes.PdfTextLines:
+                        {
+                            List<string> vs = (List<string>)value;
+                            Page.NormalizeText(vs);
+                            Value.Text = string.Join("\r\n", vs);
+                        }
+                        break;
+                    case Template.Field.ValueTypes.PdfCharBoxs:
+                        {
+                            List<Page.Line<Pdf.CharBox>> cbss = Page.GetLines((List<Pdf.CharBox>)value, textAutoInsertSpace);
+                            List<string> ls = new List<string>();
+                            foreach (var cbs in cbss)
+                                ls.Add(Serialization.Json.Serialize(cbs.CharBoxs));
+                            Value.Text = string.Join("\r\n", ls);
+                        }
+                        break;
+                    case Template.Field.ValueTypes.OcrText:
+                        Value.Text = Page.NormalizeText((string)value);
+                        break;
+                    case Template.Field.ValueTypes.OcrTextLines:
+                        {
+                            List<string> vs = (List<string>)value;
+                            Page.NormalizeText(vs);
+                            Value.Text = string.Join("\r\n", vs);
+                        }
+                        break;
+                    case Template.Field.ValueTypes.OcrCharBoxs:
+                        {
+                            List<Page.Line<Ocr.CharBox>> cbss = Page.GetLines((List<Ocr.CharBox>)value, textAutoInsertSpace);
+                            List<string> ls = new List<string>();
+                            foreach (var cbs in cbss)
+                                ls.Add(Serialization.Json.Serialize(cbs.CharBoxs));
+                            Value.Text = string.Join("\r\n", ls);
+                        }
+                        break;
+                    case Template.Field.ValueTypes.Image:
+                        break;
+                    case Template.Field.ValueTypes.OcrTextLineImages:
+                        break;
+                    default:
+                        throw new Exception("Unknown option: " + field.DefaultValueType);
+                }
         }
 
         Template.Field field;
