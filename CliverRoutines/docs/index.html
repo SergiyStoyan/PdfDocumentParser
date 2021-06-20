@@ -676,7 +676,7 @@ Settings.General.Save();</code>
 
 
             <h3><a name=''>Upgrading settings type</a></h3>
-Sometimes, when you upgrade an application, a <a href='#settings_class'>settings type</a> in it can be changed that way that the new application cannot deserialize properly a <a href='#storage_file'>storage file</a> produced by the old application. To migrate from the old data to the new
+Sometimes, when you upgrade an application, a <a href='#settings_class'>settings type</a> in it can be changed that way that the new application cannot deserialize properly a <a href='#storage_file'>storage file</a> produced by the old application. To provide smooth migration of the old data to the new format, the field __TypeVersion 
 
 
   can pass a <a href='#settings_field'>settings field</a> to another process. It should be done through serialization.
