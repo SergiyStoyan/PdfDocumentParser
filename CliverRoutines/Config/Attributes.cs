@@ -90,9 +90,9 @@ namespace Cliver
             public readonly int MinSupportedTypeVersion;
             public readonly int Value;
 
-            public bool IsFormatVersionSupported(Settings settings)
+            public bool IsTypeVersionSupported(Settings settings)
             {
-                return settings.__TypeVersion >= MinSupportedTypeVersion;
+                return settings.__TypeVersion >= MinSupportedTypeVersion && settings.__TypeVersion <= Value;
             }
 
             public TypeVersionAttribute(int value, int minSupportedTypeVersion)

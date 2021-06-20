@@ -45,7 +45,9 @@ namespace Cliver
         /// </summary>
         public readonly Type Type;
 
-        //public readonly int MaxSupportedTypeVersion = 0;
+        /// <summary>
+        /// Keeps type version info.
+        /// </summary>
         public readonly SettingsTypeAttribute.TypeVersionAttribute TypeVersion;
 
         internal Settings GetObject()

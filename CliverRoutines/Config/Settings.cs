@@ -88,7 +88,7 @@ namespace Cliver
             if (settingsFieldInfo.Crypto != null)
                 s = settingsFieldInfo.Crypto.Decrypt(s);
             Settings settings = (Settings)Serialization.Json.Deserialize(settingsFieldInfo.Type, s, true, true);
-            if (settings.__TypeVersion < settingsFieldInfo.TypeVersion.MinSupportedTypeVersion || settings.__TypeVersion > settingsFieldInfo.TypeVersion.Value)
+            if (!settingsFieldInfo.TypeVersion.IsTypeVersionSupported(settings))
             {
                 settings.__Info = settingsFieldInfo;
                 UnsupportedTypeVersionHandlerResult mode = settings.UnsupportedTypeVersionHandler();
