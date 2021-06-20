@@ -88,7 +88,7 @@ namespace Cliver
             if (settingsFieldInfo.Crypto != null)
                 s = settingsFieldInfo.Crypto.Decrypt(s);
             Settings settings = (Settings)Serialization.Json.Deserialize(settingsFieldInfo.Type, s, true, true);
-            if (settings.__TypeVersion < settingsFieldInfo.TypeVersion.MinSupportedTypeVersion)
+            if (settings.__TypeVersion < settingsFieldInfo.TypeVersion.MinSupportedTypeVersion || settings.__TypeVersion > settingsFieldInfo.TypeVersion.Value)
             {
                 settings.__Info = settingsFieldInfo;
                 UnsupportedTypeVersionHandlerResult mode = settings.UnsupportedTypeVersionHandler();
@@ -266,38 +266,5 @@ namespace Cliver
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         public abstract string __StorageDir { get; protected set; }
-    }
-
-    /// <summary>
-    /// Instances of this class are to be stored in CommonApplicationData folder.
-    /// CliverWinRoutines lib contains AppSettings adapted for Windows.
-    /// </summary>
-    public class AppSettings : Settings
-    {
-        /*//version with static __StorageDir
-        /// <summary>
-        /// (!)A Settings derivative or some of its ancestors must define this public static getter to specify the storage directory.
-        /// </summary>
-        new public static string __StorageDir { get; private set; } = Log.AppCompanyCommonDataDir + Path.DirectorySeparatorChar + Config.CONFIG_FOLDER_NAME; 
-        */
-
-        sealed public override string __StorageDir { get; protected set; } = StorageDir;
-        public static readonly string StorageDir = Log.AppCompanyCommonDataDir + Path.DirectorySeparatorChar + Config.CONFIG_FOLDER_NAME;
-    }
-
-    /// <summary>
-    /// Instances of this class are to be stored in LocalApplicationData folder.
-    /// </summary>
-    public class UserSettings : Settings
-    {
-        /*//version with static __StorageDir
-        /// <summary>
-        /// (!)A Settings derivative or some of its ancestors must define this public static getter to specify the storage directory.
-        /// </summary>
-        new public static string __StorageDir { get; private set; } = Log.AppCompanyUserDataDir + Path.DirectorySeparatorChar + Config.CONFIG_FOLDER_NAME;
-        */
-
-        sealed public override string __StorageDir { get; protected set; } = StorageDir;
-        public static readonly string StorageDir = Log.AppCompanyUserDataDir + Path.DirectorySeparatorChar + Config.CONFIG_FOLDER_NAME;
     }
 }

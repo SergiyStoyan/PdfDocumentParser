@@ -13,13 +13,14 @@ namespace Example
             var watch = new System.Diagnostics.Stopwatch();
             watch.Start();
 
-            //mandatory; initialize settings
+            //(!)mandatory; initialize settings
             Config.Reload();
 
             //modify
             Settings.Server.Port = 10;
             //save on disk
-            Settings.Server.Save(); //the path where the settings are saved is stored here:  Settings.Server.__Info.File
+            Settings.Server.Save();
+            Log.Inform("The settings are saved to: " + Settings.Server.__Info.File);
             //or, decline changes
             Settings.Server.Reload();
             //or, reset to initial values
@@ -52,7 +53,8 @@ namespace Example
                     return;
 
                 Settings.Server = server2;
-                Settings.Server.Save();   //the path where the settings are saved is stored here:  Settings.Server.__Info.File
+                Settings.Server.Save();
+                Log.Inform("The settings are saved to: " + Settings.Server.__Info.File);
             }
             catch (Exception e)
             {
