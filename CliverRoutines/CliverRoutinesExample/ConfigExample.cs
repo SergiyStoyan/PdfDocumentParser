@@ -17,15 +17,15 @@ namespace Example
             Config.Reload();
 
             //modify
-            Settings.Smtp.Port = 10;
+            Settings.Server.Port = 10;
             //save on disk
-            Settings.Smtp.Save(); //settings are saved here:     Settings.Smtp.__Info.File
+            Settings.Server.Save(); //the path where the settings are saved is stored here:  Settings.Server.__Info.File
             //or, decline changes
-            Settings.Smtp.Reload();
+            Settings.Server.Reload();
             //or, reset to initial values
-            Settings.Smtp.Reset();
+            Settings.Server.Reset();
 
-            editSmtpInDialog();
+            editServerByDialog();
 
             User user = new User { Name = "Tom3", Email = "tom@company.com" };
             user.Notify("test");
@@ -37,21 +37,22 @@ namespace Example
         }
 
         // bogus editor
-        static void editSmtpInDialog()
+        static void editServerByDialog()
         {
             try
             {
-                SmtpSettings smtp2 = Config.CreateReloadedClone(Settings.Smtp);
+                ServerSettings server2 = Config.CreateReloadedClone(Settings.Server);
 
-                //expose smtp2 in an editing dialog and get new values
-                smtp2.Host = "smtp.server.com";
-                smtp2.Port = 30;
+                //expose server2 in an editing dialog and get new values
+                server2.Host = "ftp.server.com";
+                server2.Port = 30;
+                server2.Password.Value = "test";
 
-                if (!isValid(smtp2))
+                if (!isValid(server2))
                     return;
 
-                Settings.Smtp = smtp2;
-                Settings.Smtp.Save();   //settings are saved here:     Settings.Smtp.__Info.File
+                Settings.Server = server2;
+                Settings.Server.Save();   //the path where the settings are saved is stored here:  Settings.Server.__Info.File
             }
             catch (Exception e)
             {
@@ -60,13 +61,13 @@ namespace Example
         }
 
         // bogus validator
-        static bool isValid(SmtpSettings smtp)
+        static bool isValid(ServerSettings server)
         {
             return true;
         }
 
-        // bogus mailer
-        public static void Email(string host, int port, string password, string message)
+        // bogus messenger
+        public static void Message(string host, int port, string password, string message)
         {
             Log.Inform("sent message:\r\n" + message);
         }

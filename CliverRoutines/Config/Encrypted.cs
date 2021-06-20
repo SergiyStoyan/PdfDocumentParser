@@ -17,6 +17,11 @@ namespace Cliver
     /// <typeparam name="T"></typeparam>
     public class Encrypted<T> where T : class
     {
+        public Encrypted(T value = null)
+        {
+            Value = value;
+        }
+
         /// <summary>
         /// Encypted value used while serializing. 
         /// It must not be called from the custom code.
@@ -68,7 +73,13 @@ namespace Cliver
         }
         IStringCrypto crypto
         {
-            get { return _crypto != null ? _crypto : defaultCrypto;}
+            get
+            {
+                IStringCrypto c = _crypto != null ? _crypto : defaultCrypto;
+                if (c == null)
+                    throw new Exception("Crypto engine is not initialized. It can be done by either Initialize() or InitializeDefault() of Cliver.Encrypted class.");
+                return c;
+            }
         }
         IStringCrypto _crypto;
 

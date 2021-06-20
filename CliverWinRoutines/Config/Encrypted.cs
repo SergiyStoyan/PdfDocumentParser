@@ -21,6 +21,8 @@ namespace Cliver.Win
         {
             InitializeDefault(new StringCrypto());
         }
+
+        public Encrypted(T value = null) : base(value) { }
     }
 
     public class StringCrypto : Cliver.IStringCrypto

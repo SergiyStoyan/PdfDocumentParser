@@ -266,16 +266,16 @@ Cliver.Config.Reload();//mandatory</code>
 The <a href='#storage_file'>storage file</a> path of <a href='#settings_field'>settings field</a> <code>Settings.General</code> will be:
 			<table style="table-layout:fixed;">
 			<tr>
-			<td style="border:0;">storage file path:</td>
+			<td bgcolor="#efefef">storage file path:</td>
 			<td bgcolor="#ddf" style="margin:0;padding:0;border:0;border-collapse:collapse;">C:\Users\serge\AppData\Local\</td>
 			<td bgcolor="#def" style="margin:0;padding:0;border:0;border-collapse:collapse;">Supersoft\App\config\</td>
 			<td bgcolor="#dff" style="margin:0;padding:0;border:0;border-collapse:collapse;">App.Settings.General.json</td>
 				</tr>
 				<tr>
-			<td>predetermined by:</td>
-			<td style="width:10px;"><code>Cliver.UserSettings</code></td>
-			<td style="width:10px;">application name 'App' and company name 'Supersoft'</td>
-			<td style="width:10px;">the full path of field <code>General</code> in the application</td>
+			<td bgcolor="#efefef">predetermined by:</td>
+			<td bgcolor="#ddf" style="width:10px;"><code>Cliver.UserSettings</code></td>
+			<td bgcolor="#def" style="width:10px;">application name 'App' and company name 'Supersoft'</td>
+			<td bgcolor="#dff" style="width:10px;">the full path of field <code>General</code> in the application</td>
 			</tr>
 			</table>
 			
@@ -316,7 +316,7 @@ The <a href='#storage_file'>storage file</a> path of <a href='#settings_field'>s
 	}
 }</code>
 </pre>
-The <a href='#initial_file'>initial file</a> name of <a href='#settings_field'>settings field</a> <code>Settings.General</code> will be 'App.Settings.General.json'.
+Name of the <a href='#initial_file'>initial file</a> of the <a href='#settings_field'>settings field</a> <code>Settings.General</code> will be 'App.Settings.General.json'.
 
 
 
@@ -424,6 +424,8 @@ connect(Settings.General.ClientPort, server.Host, server.Port);</code>
 
 
 
+<h2>Attributes</h2>
+<p><a href='#config'><code>Cliver.Config</code></a> provides attributes for <a href='#settings_field'>settings fields</a> and <a href='#settings_class'>settings types</a>. Those attributes allow to alter the engine's behavior. See the API and annotations for details.
 
 
 
@@ -553,59 +555,77 @@ ScopeSettings.Scope.Save();</code>
 
 
 
-            <h3><a name='storing_password'>Storing password</a></h3>
-            How to store and use passwords:
+
+
+
+<h3><a name=''>Encrypting</a></h3>
+
+            <h4><a name=''>Settings field</a></h4>
+<a href='#settings_field'>A settings field</a> can be serialized as an encrypted string by adding the attribute <code>SettingsFieldAttribute.Crypto</code> to it:
 <pre>
-<code class="language-csharp">public class GeneralSettings : Cliver.Win.UserSettings
+<code class="language-csharp">public class CredentialsSettings : Cliver.UserSettings
 {   	            
-	//password will be stored on disk as an ecrypted string
-	public string _EncryptedPassword = null;
-	
-	//it is internal so not to be serialized; otheriwse if public, use attribute [Newtonsoft.Json.JsonIgnore]
-	internal string Password
-	{
-		get
-		{
-			if (string.IsNullOrEmpty(_EncryptedPassword))
-				return null;
-			try
-			{
-				return crypto.Decrypt(_EncryptedPassword);
-			}
-			catch(Exception e)
-			{
-				Cliver.Log.Error("Could not decrypt password.", e);
-				return null;
-			}
-		}
-		set
-		{
-			if (string.IsNullOrEmpty(value))
-				_EncryptedPassword = null;
-			else
-				_EncryptedPassword = crypto.Encrypt(value);
-		}
-	}
-	//on Widnows
-    Cliver.Win.Crypto.ProtectedData crypto = new Cliver.Win.Crypto.ProtectedData();
-	//cross-platform
-    Cliver.Crypto.Rijndael crypto = new Cliver.Crypto.Rijndael("random key");
+    public string Key = "key";
+    public string Token = "123";
 }
 
 public class Settings
 {
-	public static readonly GeneralSettings General;
+	//a Crypto instance needed by SettingsFieldAttribute.Crypto attribute
+	public static IStringCrypto.Rijndael Crypto { get; } = new IStringCrypto.Rijndael("123");
+	
+	//an alternative by CliverWinRoutines if you are on Windows
+	//public static Win.StringCrypto Crypto { get; } = new Win.StringCrypto();   
+
+	//specify the class and the property that expose your IStringCrypto instance which is used for encryption
+	[SettingsFieldAttribute.Crypto(typeof(Settings), nameof(Crypto))]
+	//it will be serialized as encrypted string
+	public static CredentialsSettings Credentials;
+}</code>
+</pre>
+
+<p>Now <code>Settings.Credentials</code> will be stored in <a href='#storage_file'>the storage file</a> as a string encrypted by <code>IStringCrypto</code> instance that you provided.
+
+
+
+
+
+
+
+
+            <h4><a name=''>Serializable field</a></h4>
+It is possible to encrypt not a <a href='#settings_field'>settings field</a> as a whole but only its certain members (otherwise called as <a href='#serializable_field'>serializable fields</a>). See below how it is done:
+<pre>
+<code class="language-csharp"> class ServerSettings : Cliver.UserSettings//UserSettings based class is serialized in the user directory
+{
+	static ServerSettings()
+	{
+		//if you are not on Windows and cannot use CliverWinRoutines, you have to initialize IStringCrypto with a key
+		Cliver.Encrypted<string>.InitializeDefault(new Cliver.IStringCrypto.Rijndael("123"));
+	}
+
+	public string Host = "";
+	public int Port = 123;
+	public Cliver.Encrypted<string> Password = new Cliver.Encrypted<string>();
+	//public Cliver.Win.Encrypted<string> Password = new Cliver.Win.Encrypted<string>();//Windows alternative provided by CliverWinRoutines     
+}
+
+public class Settings
+{
+	public static readonly ServerSettings Server;
 }</code>
 </pre>
 
 <p>Now, use it when required:
 <pre>
-<code class="language-csharp">Settings.General.Password = password;
-Settings.General.Save();
+<code class="language-csharp">Settings.Server.Password.Value = password;
+Settings.Server.Save();
 
 ...
-connect(General.Password);</code>
+connect(Settings.Server.Password);</code>
 </pre>
+
+<p>With this way of encryption, the value is kept encrypted almost all the process time, being decrypted only when called explicitly. It is more secure against RAM sniffers.
 
 
 
@@ -643,6 +663,28 @@ GeneralSettings general2 = Cliver.Serialization.Json.Deserialize(generalStr);
 general2.__Info = Settings.General.__Info;
 Settings.General = general2;
 Settings.General.Save();</code>
+</pre>
+
+
+
+
+
+
+
+
+
+
+
+            <h3><a name=''>Upgrading settings type</a></h3>
+Sometimes, when you upgrade an application, a <a href='#settings_class'>settings type</a> in it can be changed that way that the new application cannot deserialize properly a <a href='#storage_file'>storage file</a> produced by the old application. To migrate from the old data to the new
+
+
+  can pass a <a href='#settings_field'>settings field</a> to another process. It should be done through serialization.
+
+<p>
+<pre>
+<code class="language-csharp">
+</code>
 </pre>
 
 

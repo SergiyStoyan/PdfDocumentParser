@@ -45,6 +45,9 @@ namespace Cliver
         /// </summary>
         public readonly Type Type;
 
+        //public readonly int MaxSupportedTypeVersion = 0;
+        public readonly SettingsTypeAttribute.TypeVersionAttribute TypeVersion;
+
         internal Settings GetObject()
         {
             lock (this)
@@ -104,6 +107,9 @@ namespace Cliver
             Storage = storageAttribute != null ? storageAttribute : new SettingsFieldAttribute.StorageAttribute();
             Crypto = settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.CryptoAttribute>(false).FirstOrDefault()?.Crypto;
             Optional = settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.OptionalAttribute>(false).Any();
+            //MaxSupportedTypeVersion = ((Settings)Activator.CreateInstance(settingType)).__TypeVersion;
+            SettingsTypeAttribute.TypeVersionAttribute typeVersion = settingsTypeMemberInfo.GetCustomAttributes<SettingsTypeAttribute.TypeVersionAttribute>(false).FirstOrDefault();
+            TypeVersion = typeVersion != null ? typeVersion : new SettingsTypeAttribute.TypeVersionAttribute(0, 0);
         }
     }
 
