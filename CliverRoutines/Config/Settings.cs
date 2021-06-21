@@ -126,7 +126,7 @@ namespace Cliver
             lock (this)
             {
                 if (!IsAttached())//while technically it is possible, it can lead to a confusion.
-                    throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info?.Type + ")");
+                    throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info?.Type.FullName + ")");
                 save();
             }
         }
@@ -161,16 +161,8 @@ namespace Cliver
         /// <summary>
         /// The actual version of the Settings type restored from a storage file.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(DefaultValueHandling = Newtonsoft.Json.DefaultValueHandling.Ignore)]//!!!needed due to private setter
+        [Newtonsoft.Json.JsonProperty(DefaultValueHandling = Newtonsoft.Json.DefaultValueHandling.Ignore)]//it serves 2 aims: - ignore when 0; - forces setting through the private setter (yes, it does!)
         public uint __TypeVersion { get; private set; } = 0;
-        ///// <summary>
-        ///// Method used by Newtonsoft.Json not to serialize the field when it is not used.
-        ///// </summary>
-        ///// <returns></returns>
-        //public bool ShouldSerialize__TypeVersion()
-        //{
-        //    return __Info.TypeVersion.Value != 0;
-        //}
 
         /// <summary>
         /// Called by Config if the storage file content does not match the Settings type version.
