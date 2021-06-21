@@ -15,7 +15,7 @@ namespace Example
         //Here is your chance to upgrade the data to the current format.
         override protected UnsupportedTypeVersionHandlerCommand UnsupportedTypeVersionHandler()
         {
-            //some approaches are considered below:
+            //different approaches are considered below:
             if (__TypeVersion < 200301)
             {
                 Newtonsoft.Json.Linq.JObject o = GetJObjectFromStorageFile();

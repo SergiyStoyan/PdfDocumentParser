@@ -571,15 +571,15 @@ ScopeSettings.Scope.Save();</code>
 }
 
 public class Settings
-{	
-	//a Crypto instance needed by SettingsFieldAttribute.Crypto attribute
+{       
+	//a Crypto object used by SettingsFieldAttribute.Crypto attribute
 	public static IStringCrypto.Rijndael Crypto { get; } = new IStringCrypto.Rijndael("123");
 	//an alternative by CliverWinRoutines which does not require a key:
 	//public static Win.StringCrypto Crypto { get; } = new Win.StringCrypto();   
 
-	//specify the class and the property that expose a IStringCrypto instance to be used for encryption
+	//specify the class and the property that expose a IStringCrypto object which will be used for encryption
 	[SettingsFieldAttribute.Crypto(iStringCryptoGetterHostingType: typeof(Settings), iStringCryptoGetterName: nameof(Crypto))]
-	//this data is to be serialized as encrypted string
+	//Settings field to be serialized as encrypted string
 	internal static CredentialsSettings Credentials;
 }</code>
 </pre>
@@ -594,7 +594,7 @@ public class Settings
 
 
             <h4><a name=''>Serializable field</a></h4>
-Also, it is possible to encrypt not a <a href='#settings_field'>settings field</a> as a whole but its certain members (<a href='#serializable_field'>serializable fields</a>) separately. How it is done, see below:
+Also, it is possible to encrypt a <a href='#settings_field'>settings field</a> not as a whole but its certain members (<a href='#serializable_field'>serializable fields</a>) separately. How it is done:
 <pre>
 <code class="language-csharp">class ServerSettings : Cliver.UserSettings//UserSettings based class is serialized in the user directory
 {
@@ -691,7 +691,7 @@ class TemplatesSettings : Cliver.UserSettings//UserSettings based class is seria
 	//Here is your chance to upgrade the data to the current format
 	override protected UnsupportedTypeVersionHandlerCommand UnsupportedTypeVersionHandler()
 	{
-		//some approaches are considered below:
+		//different approaches are considered below:
 		if (__TypeVersion < 200301)
 		{
 			Newtonsoft.Json.Linq.JObject o = GetJObjectFromStorageFile();
@@ -718,7 +718,9 @@ class TemplatesSettings : Cliver.UserSettings//UserSettings based class is seria
 		{
 			//alter the data in the object itself
 			//...
-			return UnsupportedTypeVersionHandlerCommand.UpdateTypeVersion_Save_Reload;
+			//save
+			Save();//(!)when saving, the current type version is set
+			return UnsupportedTypeVersionHandlerCommand.Proceed;
 		}
 		//__TypeVersion > __Info.TypeVersion.Value
 		Console.WriteLine("WARNING: The application might not support properly the newer type version " + __TypeVersion + " data stored in " + __Info.File + ".");

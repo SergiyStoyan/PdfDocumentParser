@@ -21,14 +21,14 @@ namespace Example
 
 
 
-        //a Crypto instance needed by SettingsFieldAttribute.Crypto attribute
+        //a Crypto object used by SettingsFieldAttribute.Crypto attribute
         public static IStringCrypto.Rijndael Crypto { get; } = new IStringCrypto.Rijndael("123");
         //an alternative by CliverWinRoutines which does not require a key:
         //public static Win.StringCrypto Crypto { get; } = new Win.StringCrypto();   
 
-        //specify the class and the property that expose a IStringCrypto instance to be used for encryption
+        //specify the class and the property that expose a IStringCrypto object which will be used for encryption
         [SettingsFieldAttribute.Crypto(iStringCryptoGetterHostingType: typeof(Settings), iStringCryptoGetterName: nameof(Crypto))]
-        //this data is to be serialized as encrypted string
+        //Settings field to be serialized as encrypted string
         internal static CredentialsSettings Credentials;
 
 
