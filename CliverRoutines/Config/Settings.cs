@@ -80,7 +80,9 @@ namespace Cliver
                     throw new Exception("Error while loading settings " + settingsFieldInfo.FullName + " from initial file " + settingsFieldInfo.InitFile, e);
                 }
             }
-            return (Settings)Activator.CreateInstance(settingsFieldInfo.Type);
+            Settings settings = (Settings)Activator.CreateInstance(settingsFieldInfo.Type);
+            settings.__TypeVersion = settingsFieldInfo.TypeVersion.Value;
+            return settings;
         }
         static Settings loadFromFile(SettingsMemberInfo settingsFieldInfo)
         {
@@ -91,19 +93,16 @@ namespace Cliver
             if (!settingsFieldInfo.TypeVersion.IsTypeVersionSupported(settings))
             {
                 settings.__Info = settingsFieldInfo;
-                UnsupportedTypeVersionHandlerResult mode = settings.UnsupportedTypeVersionHandler();
+                UnsupportedTypeVersionHandlerCommand mode = settings.UnsupportedTypeVersionHandler();
                 switch (mode)
                 {
-                    case UnsupportedTypeVersionHandlerResult.Save_Reload:
-                        settings.__TypeVersion = settingsFieldInfo.TypeVersion.Value;
-                        settings.Save();
+                    case UnsupportedTypeVersionHandlerCommand.Reload:
+                        settings = loadFromFile(settingsFieldInfo);
                         break;
-                    case UnsupportedTypeVersionHandlerResult.NotSave_Reload:
-                        break;
+                    case UnsupportedTypeVersionHandlerCommand.Proceed:
                     default:
                         throw new Exception("Uknown option: " + mode);
                 }
-                return loadFromFile(settingsFieldInfo);
             }
             return settings;
         }
@@ -133,6 +132,7 @@ namespace Cliver
         }
         void save()
         {
+            __TypeVersion = settingsFieldInfo.TypeVersion.Value;
             Saving();
             string s = Serialization.Json.Serialize(this, __Info.Storage.Indented, __Info.Storage.IgnoreNullValues, false/*!!!default values always must be stored*/);
             if (__Info.Crypto != null)
@@ -159,27 +159,31 @@ namespace Cliver
         #region Type Version support
 
         /// <summary>
-        /// Actual version of this Settings type.
-        /// It indicates if the storage file content is obsolete.
+        /// The actual version of the Settings type restored from a storage file.
         /// </summary>
-        public int __TypeVersion { get; private set; } = 0;
-        //[Newtonsoft.Json.JsonIgnore]
-        //virtual public int __MinSupportedTypeVersion { get; } = 0;
-        //[Newtonsoft.Json.JsonIgnore]
-        //virtual public int __MaxSupportedTypeVersion { get; } = 0;
+        [Newtonsoft.Json.JsonProperty(DefaultValueHandling = Newtonsoft.Json.DefaultValueHandling.Ignore)]//!!!needed due to private setter
+        public uint __TypeVersion { get; private set; } = 0;
+        ///// <summary>
+        ///// Method used by Newtonsoft.Json not to serialize the field when it is not used.
+        ///// </summary>
+        ///// <returns></returns>
+        //public bool ShouldSerialize__TypeVersion()
+        //{
+        //    return __Info.TypeVersion.Value != 0;
+        //}
 
         /// <summary>
         /// Called by Config if the storage file content does not match the Settings type version.
         /// Here you should amend the data to comply with the current version.
         /// </summary>
-        virtual protected UnsupportedTypeVersionHandlerResult UnsupportedTypeVersionHandler()
+        virtual protected UnsupportedTypeVersionHandlerCommand UnsupportedTypeVersionHandler()
         {
             throw new Exception("Unsupported version of " + GetType().FullName + ": " + __TypeVersion);
         }
-        public enum UnsupportedTypeVersionHandlerResult
+        public enum UnsupportedTypeVersionHandlerCommand
         {
-            NotSave_Reload,
-            Save_Reload
+            Reload,
+            Proceed
         }
 
 

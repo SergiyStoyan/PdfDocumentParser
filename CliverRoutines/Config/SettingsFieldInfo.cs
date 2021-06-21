@@ -73,18 +73,18 @@ namespace Cliver
         abstract protected object getObject();
         abstract protected void setObject(Settings settings);
 
-        protected SettingsMemberInfo(MemberInfo settingsTypeMemberInfo, Type settingType)
+        protected SettingsMemberInfo(MemberInfo settingsTypeMemberInfo, Type settingsType)
         {
 #else
         readonly Func<object> getObject;
         readonly Action<Settings> setObject;
 
-        protected SettingsMemberInfo(MemberInfo settingsTypeMemberInfo, Type settingType, Func<object> getObject, Action<Settings> setObject)
+        protected SettingsMemberInfo(MemberInfo settingsTypeMemberInfo, Type settingsType, Func<object> getObject, Action<Settings> setObject)
         {
             this.getObject = getObject;
             this.setObject = setObject;
 #endif
-            Type = settingType;
+            Type = settingsType;
             FullName = settingsTypeMemberInfo.DeclaringType.FullName + "." + settingsTypeMemberInfo.Name;
             /*//version with static __StorageDir
             string storageDir;
@@ -109,8 +109,8 @@ namespace Cliver
             Storage = storageAttribute != null ? storageAttribute : new SettingsFieldAttribute.StorageAttribute();
             Crypto = settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.CryptoAttribute>(false).FirstOrDefault()?.Crypto;
             Optional = settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.OptionalAttribute>(false).Any();
-            //MaxSupportedTypeVersion = ((Settings)Activator.CreateInstance(settingType)).__TypeVersion;
-            SettingsTypeAttribute.TypeVersionAttribute typeVersion = settingsTypeMemberInfo.GetCustomAttributes<SettingsTypeAttribute.TypeVersionAttribute>(false).FirstOrDefault();
+            
+            SettingsTypeAttribute.TypeVersionAttribute typeVersion = settingsType.GetCustomAttributes<SettingsTypeAttribute.TypeVersionAttribute>(false).FirstOrDefault();
             TypeVersion = typeVersion != null ? typeVersion : new SettingsTypeAttribute.TypeVersionAttribute(0, 0);
         }
     }

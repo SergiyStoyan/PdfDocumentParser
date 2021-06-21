@@ -42,7 +42,7 @@ namespace Cliver
             //public bool IgnoreDefaultValues = false;
 
             /// <summary>
-            /// 
+            /// Settings field attribute that set storage features for the Settings field.
             /// </summary>
             /// <param name="indented">Indicates that the Settings field be stored with indention</param>
             public StorageAttribute(bool indented = true, bool ignoreNullValues = true/*, bool ignoreDefaultValues = true*/)
@@ -65,7 +65,7 @@ namespace Cliver
             readonly public IStringCrypto Crypto;
 
             /// <summary>
-            /// 
+            /// Settings field attribute that is used for encrypting.
             /// </summary>
             /// <param name="iStringCryptoGetterHostingType">Class that exposes the IStringCrypto getter.</param>
             /// <param name="iStringCryptoGetterName">Name of the IStringCrypto getter. The getter must be public static.</param>
@@ -87,19 +87,32 @@ namespace Cliver
         [AttributeUsage(AttributeTargets.Class)]
         public class TypeVersionAttribute : System.Attribute
         {
-            public readonly int MinSupportedTypeVersion;
-            public readonly int Value;
+            public readonly uint MinSupportedTypeVersion;
+            public readonly uint Value;
 
             public bool IsTypeVersionSupported(Settings settings)
             {
                 return settings.__TypeVersion >= MinSupportedTypeVersion && settings.__TypeVersion <= Value;
             }
 
-            public TypeVersionAttribute(int value, int minSupportedTypeVersion)
+            /// <summary>
+            /// Settings type attribute. Used to check if the storage file format is supported.
+            /// </summary>
+            /// <param name="value">Version of the Settings type to which this attribute is applied</param>
+            /// <param name="minSupportedTypeVersion">Can be less or equal to the value.</param>
+            public TypeVersionAttribute(uint value, uint minSupportedTypeVersion)
             {
-                MinSupportedTypeVersion = minSupportedTypeVersion;
+                if (value < minSupportedTypeVersion)
+                    throw new Exception("Value (" + value + ") cannot be less than minSupportedTypeVersion (" + minSupportedTypeVersion + ")");
                 Value = value;
+                MinSupportedTypeVersion = minSupportedTypeVersion;
             }
+
+            /// <summary>
+            /// Settings type attribute. Used to check if the storage file format is supported.
+            /// </summary>
+            /// <param name="value">Version of the Settings type to which this attribute is applied</param>
+            public TypeVersionAttribute(uint value) : this(value, value) { }
         }
     }
 }

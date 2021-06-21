@@ -17,6 +17,7 @@ namespace Example
             Config.Reload();
 
             //modify
+            Settings.Server.Host = "1.1.1.1";
             Settings.Server.Port = 10;
             //save on disk
             Settings.Server.Save();
@@ -31,6 +32,12 @@ namespace Example
             User user = new User { Name = "Tom3", Email = "tom@company.com" };
             user.Notify("test");
             Settings.General.Users[user.Name] = user;
+
+            Log.Inform("Settings.Credentials.Key: " + Settings.Credentials.Key);
+            Settings.Credentials.Key = "test2";
+            Log.Inform("Settings.Credentials.Key: " + Settings.Credentials.Key);
+
+            Log.Inform("Settings.Templates.__TypeVersion: " + Settings.Templates.__TypeVersion);
 
             Config.Save();
 

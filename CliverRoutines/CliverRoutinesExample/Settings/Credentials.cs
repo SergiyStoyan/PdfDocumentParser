@@ -7,7 +7,7 @@ namespace Example
 {
     class CredentialsSettings : Cliver.UserSettings//UserSettings based class is serialized in the user directory
     {
-        public string Key = "key";
+        public string Key = "test";
         public string Token = "123";
 
         protected override void Loaded()

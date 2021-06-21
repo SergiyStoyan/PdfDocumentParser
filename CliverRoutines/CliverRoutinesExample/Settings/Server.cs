@@ -17,7 +17,8 @@ namespace Example
         public string Host = "";
         public int Port = 123;
         public Cliver.Encrypted<string> Password = new Encrypted<string>();
-        //public Cliver.Win.Encrypted<string> Password = new Cliver.Win.Encrypted<string>();//Windows alternative provided by CliverWinRoutines   
+        //Windows alternative provided by CliverWinRoutines:
+        //public Cliver.Win.Encrypted<string> Password = new Cliver.Win.Encrypted<string>();  
 
         protected override void Loaded()
         {

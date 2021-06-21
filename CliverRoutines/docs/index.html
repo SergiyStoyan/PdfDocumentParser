@@ -79,9 +79,9 @@ setLicense();
 <p><b>Features:</b>
 
 <br> - cross-platform;
-<br> - natively enables setting types of any complexity and functionality;
+<br> - natively supports types of any complexity and functionality;
 <br> - settings are easily modified directly in code;
-<br> - enables settings polymorphism;
+<br> - natively supports settings polymorphism;
 <br> - supports encryption;
 <br> - thread-safe;
 <br> - serializes data in JSON;
@@ -571,17 +571,16 @@ ScopeSettings.Scope.Save();</code>
 }
 
 public class Settings
-{
+{	
 	//a Crypto instance needed by SettingsFieldAttribute.Crypto attribute
 	public static IStringCrypto.Rijndael Crypto { get; } = new IStringCrypto.Rijndael("123");
-	
-	//an alternative by CliverWinRoutines if you are on Windows
+	//an alternative by CliverWinRoutines which does not require a key:
 	//public static Win.StringCrypto Crypto { get; } = new Win.StringCrypto();   
 
-	//specify the class and the property that expose your IStringCrypto instance which is used for encryption
-	[SettingsFieldAttribute.Crypto(typeof(Settings), nameof(Crypto))]
-	//it will be serialized as encrypted string
-	public static CredentialsSettings Credentials;
+	//specify the class and the property that expose a IStringCrypto instance to be used for encryption
+	[SettingsFieldAttribute.Crypto(iStringCryptoGetterHostingType: typeof(Settings), iStringCryptoGetterName: nameof(Crypto))]
+	//this data is to be serialized as encrypted string
+	internal static CredentialsSettings Credentials;
 }</code>
 </pre>
 
@@ -595,9 +594,9 @@ public class Settings
 
 
             <h4><a name=''>Serializable field</a></h4>
-It is possible to encrypt not a <a href='#settings_field'>settings field</a> as a whole but only its certain members (otherwise called as <a href='#serializable_field'>serializable fields</a>). See below how it is done:
+Also, it is possible to encrypt not a <a href='#settings_field'>settings field</a> as a whole but its certain members (<a href='#serializable_field'>serializable fields</a>) separately. How it is done, see below:
 <pre>
-<code class="language-csharp"> class ServerSettings : Cliver.UserSettings//UserSettings based class is serialized in the user directory
+<code class="language-csharp">class ServerSettings : Cliver.UserSettings//UserSettings based class is serialized in the user directory
 {
 	static ServerSettings()
 	{
@@ -608,7 +607,8 @@ It is possible to encrypt not a <a href='#settings_field'>settings field</a> as 
 	public string Host = "";
 	public int Port = 123;
 	public Cliver.Encrypted<string> Password = new Cliver.Encrypted<string>();
-	//public Cliver.Win.Encrypted<string> Password = new Cliver.Win.Encrypted<string>();//Windows alternative provided by CliverWinRoutines     
+	//Windows alternative provided by CliverWinRoutines:
+	//public Cliver.Win.Encrypted<string> Password = new Cliver.Win.Encrypted<string>();    
 }
 
 public class Settings
@@ -617,16 +617,16 @@ public class Settings
 }</code>
 </pre>
 
-<p>Now, use it when required:
+<p>Now you can use like this:
 <pre>
 <code class="language-csharp">Settings.Server.Password.Value = password;
 Settings.Server.Save();
 
 ...
-connect(Settings.Server.Password);</code>
+connect(Settings.Server.Host, Settings.Server.Password.Value);</code>
 </pre>
 
-<p>With this way of encryption, the value is kept encrypted almost all the process time, being decrypted only when called explicitly. It is more secure against RAM sniffers.
+<p>With this encryption, the value is kept encrypted almost all the process time, being decrypted only when called explicitly. It is more secure against RAM sniffers.
 
 
 
@@ -677,15 +677,62 @@ Settings.General.Save();</code>
 
 
             <h3><a name=''>Upgrading settings type</a></h3>
-Sometimes, when you upgrade an application, a <a href='#settings_class'>settings type</a> in it can be changed that way that the new application cannot deserialize properly a <a href='#storage_file'>storage file</a> produced by the old application. To provide smooth migration of the old data to the new format, the field __TypeVersion 
-
-
-  can pass a <a href='#settings_field'>settings field</a> to another process. It should be done through serialization.
+Sometimes, when you upgrade an application, a <a href='#settings_class'>settings type</a> in it is changed that way that the new application cannot deserialize properly a <a href='#storage_file'>storage file</a> produced by an older application. To turn on the automatic data version monitoring of a certain <a href='#settings_class'>settings type</a>, add the attribute <code>TypeVersion</code> to it. When the type version of the storage file does not correspond to the version set by the attribute, the engine will call a handler within which you can provide a smooth migration of the old data to the new format. See the example below:
 
 <p>
 <pre>
-<code class="language-csharp">
-</code>
+<code class="language-csharp">//Example how to check the type version and migrate to the current type if needed.
+//When this attribute is set, Config engine checks if the version set by the attribute corresponds to the version in the storage file.
+[SettingsTypeAttribute.TypeVersion(value: 210601, minSupportedTypeVersion: 210601)]
+class TemplatesSettings : Cliver.UserSettings//UserSettings based class is serialized in the user directory
+{
+	public Dictionary<string, Template> Names2Template = new Dictionary<string, Template>();
+
+	//Here is your chance to upgrade the data to the current format
+	override protected UnsupportedTypeVersionHandlerCommand UnsupportedTypeVersionHandler()
+	{
+		//some approaches are considered below:
+		if (__TypeVersion < 200301)
+		{
+			Newtonsoft.Json.Linq.JObject o = GetJObjectFromStorageFile();
+			//edit the old data as a JObject
+			//...
+			//set the current version
+			o["__TypeVersion"] = __Info.TypeVersion.Value;
+			//save
+			System.IO.File.WriteAllText(__Info.File, o.ToString());
+			return UnsupportedTypeVersionHandlerCommand.Reload;
+		}
+		if (__TypeVersion < 200901)
+		{
+			string s = System.IO.File.ReadAllText(__Info.File);
+			//edit the old data as a serialized string
+			//...
+			//set the current version
+			s = System.Text.RegularExpressions.Regex.Replace(s, @"(?<=\""__TypeVersion\""\:\s*)\d+", __Info.TypeVersion.Value.ToString(), System.Text.RegularExpressions.RegexOptions.Singleline);
+			//save
+			System.IO.File.WriteAllText(__Info.File, s);
+			return UnsupportedTypeVersionHandlerCommand.Reload;
+		}
+		if (__TypeVersion < __Info.TypeVersion.Value)
+		{
+			//alter the data in the object itself
+			//...
+			return UnsupportedTypeVersionHandlerCommand.UpdateTypeVersion_Save_Reload;
+		}
+		//__TypeVersion > __Info.TypeVersion.Value
+		Console.WriteLine("WARNING: The application might not support properly the newer type version " + __TypeVersion + " data stored in " + __Info.File + ".");
+		Console.WriteLine("The expected version is " + __Info.TypeVersion.Value);
+		Console.WriteLine("Consider to update the application.");
+		return UnsupportedTypeVersionHandlerCommand.Proceed;
+	}
+}
+
+public class Template
+{
+	public string Name;
+	public List<string> Words = new List<string>();
+}</code>
 </pre>
 
 
