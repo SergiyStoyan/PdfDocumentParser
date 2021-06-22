@@ -60,7 +60,7 @@ namespace Cliver
             {
                 get
                 {
-                    lock (this.names2NamedWriter)//this lock is needed if Session::Close(string new_name) is being performed
+                    lock (names2NamedWriter)//this lock is needed if Session::Close(string new_name) is being performed
                     {
                         return name;
                     }
@@ -75,7 +75,7 @@ namespace Cliver
             {
                 get
                 {
-                    lock (this.names2NamedWriter)//this lock is needed if Session::Close(string new_name) is being performed
+                    lock (names2NamedWriter)//this lock is needed if Session::Close(string new_name) is being performed
                     {
                         if (dir == null)
                             dir = getDir(name);
