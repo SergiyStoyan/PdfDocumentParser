@@ -16,7 +16,7 @@ namespace Cliver
     {
         /// <summary>
         /// The base session-less log writer that is enherited by the NamedWriter and ThreadWriter. 
-        /// By itself, it allows to write a session-less named log directly to WorkDir. It exists through all the process and cannot be closed.
+        /// Also, by itself, it allows to write a session-less named log directly to WorkDir. 
         /// </summary>
         public partial class Writer
         {
@@ -27,6 +27,7 @@ namespace Cliver
                     if (!names2Writer.TryGetValue(name, out Writer w))
                     {
                         w = new Writer(name);
+                        w.SetFile();
                         names2Writer.Add(name, w);
                     }
                     return w;
@@ -37,7 +38,6 @@ namespace Cliver
             internal Writer(string name)
             {
                 Name = name;
-                SetFile();
             }
 
             /// <summary>
@@ -92,8 +92,6 @@ namespace Cliver
             /// If negative than no effect.
             /// </summary>
             public int MaxFileSize = Log.DefaultMaxFileSize;
-
-            public const string MAIN_THREAD_LOG_NAME = "";
 
             /// <summary>
             /// Close the log

@@ -50,34 +50,19 @@ namespace Cliver
                 Write(MessageType.TRACE, message == null ? null : message.ToString(), GetStackString());
             }
 
-            public void Exit(string message)
+            virtual public void Exit(string message)
             {
-                lock (this)
-                {
-                    if (Name != MAIN_THREAD_LOG_NAME)
-                        Main.Write("EXITING: due to thread #" + Name + ". See the respective Log");
-                    Write(MessageType.EXIT, message, GetStackString());
-                }
+                Write(MessageType.EXIT, message, GetStackString());
             }
 
-            public void Exit2(string message)
+            virtual public void Exit2(string message)
             {
-                lock (this)
-                {
-                    if (Name != MAIN_THREAD_LOG_NAME)
-                        Main.Write("EXITING: due to thread #" + Name + ". See the respective Log");
-                    Write(MessageType.EXIT, message);
-                }
+                Write(MessageType.EXIT, message);
             }
 
-            public void Exit(Exception e)
+            virtual public void Exit(Exception e)
             {
-                lock (this)
-                {
-                    if (Name != MAIN_THREAD_LOG_NAME)
-                        Main.Write("EXITING: due to thread #" + Name + ". See the respective log.");
-                    Write(MessageType.EXIT, GetExceptionMessage(e, !(e is Exception2)));
-                }
+                Write(MessageType.EXIT, GetExceptionMessage(e, !(e is Exception2)));
             }
 
             public void Warning(string message)

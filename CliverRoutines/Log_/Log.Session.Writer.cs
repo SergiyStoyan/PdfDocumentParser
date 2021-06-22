@@ -20,6 +20,7 @@ namespace Cliver
                 internal Writer(string name, Session session) : base(name)
                 {
                     Session = session;
+                    SetFile();
                 }
 
                 /// <summary>
