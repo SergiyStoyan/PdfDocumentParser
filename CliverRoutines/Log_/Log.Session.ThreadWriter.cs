@@ -13,7 +13,7 @@ namespace Cliver
 {
     public partial class Log
     {
-        public partial class Session
+        public partial class Session 
         {
             /// <summary>
             /// Get log for this thread.

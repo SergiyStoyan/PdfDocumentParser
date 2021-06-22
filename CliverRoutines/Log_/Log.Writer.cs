@@ -8,24 +8,42 @@
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace Cliver
 {
     public partial class Log
     {
-        public abstract partial class Writer
+        /// <summary>
+        /// The base session-less log writer that is enherited by the NamedWriter and ThreadWriter. 
+        /// By itself, it allows to write a session-less named log directly to WorkDir. It exists through all the process and cannot be closed.
+        /// </summary>
+        public partial class Writer
         {
-            internal Writer(string name, Session session)
+            static public Writer Get(string name)
+            {
+                lock (names2Writer)
+                {
+                    if (!names2Writer.TryGetValue(name, out Writer w))
+                    {
+                        w = new Writer(name);
+                        names2Writer.Add(name, w);
+                    }
+                    return w;
+                }
+            }
+            static Dictionary<string, Writer> names2Writer = new Dictionary<string, Writer>();
+
+            internal Writer(string name)
             {
                 Name = name;
-                Session = session;
                 SetFile();
             }
 
             /// <summary>
             /// Message importance level.
             /// </summary>
-            public Level Level
+            virtual public Level Level
             {
                 get
                 {
@@ -36,15 +54,12 @@ namespace Cliver
                     lock (this)
                     {
                         if (level == Level.NONE && value > Level.NONE)
-                        {
                             setWorkDir(true);
-                            Directory.CreateDirectory(Session.Dir);
-                        }
                         level = value;
                     }
                 }
             }
-            Level level = Log.DefaultLevel;
+            protected Level level = Log.DefaultLevel;
 
             /// <summary>
             /// Log name.
@@ -54,23 +69,14 @@ namespace Cliver
             /// <summary>
             /// Log file path.
             /// </summary>
-            public string File { get; private set; } = null;
+            public string File { get; protected set; } = null;
 
-            internal void SetFile()
+            virtual internal void SetFile()
             {
                 lock (this)
                 {
-                    string file2 = Session.Dir + System.IO.Path.DirectorySeparatorChar;
-                    if (Log.mode.HasFlag(Mode.FOLDER_PER_SESSION))
-                    {
-                        file2 += DateTime.Now.ToString("yyMMddHHmmss");
-                    }
-                    else //if (Log.mode.HasFlag(Mode.ONE_FOLDER))//default
-                    {
-                        //file2 += (string.IsNullOrWhiteSpace(Session.Name) ? "" : Session.Name + "_") + Session.TimeMark;//separates session name from log name
-                        file2 += Session.TimeMark + (string.IsNullOrWhiteSpace(Session.Name) ? "" : "_" + Session.Name);
-                    }
-                    file2 += (string.IsNullOrWhiteSpace(Name) ? "" : "_" + Name) + (fileCounter > 0 ? "[" + fileCounter + "]" : "") + "." + FileExtension;
+                    //(!)it must differ from the session files to avoid overlapping
+                    string file2 = WorkDir + System.IO.Path.DirectorySeparatorChar + "__" + Name + (fileCounter > 0 ? "[" + fileCounter + "]" : "") + "." + FileExtension;
 
                     if (File == file2)
                         return;
@@ -79,12 +85,7 @@ namespace Cliver
                     File = file2;
                 }
             }
-            int fileCounter = 0;
-
-            /// <summary>
-            /// Session to which this log belongs.
-            /// </summary>
-            public readonly Session Session;
+            protected int fileCounter = 0;
 
             /// <summary>
             /// Maximum log file length in bytes.
@@ -176,7 +177,7 @@ namespace Cliver
                     logWriter.Flush();
                 }
             }
-            TextWriter logWriter = null;
+            protected TextWriter logWriter = null;
 
             /// <summary>
             /// Called for Writing. 

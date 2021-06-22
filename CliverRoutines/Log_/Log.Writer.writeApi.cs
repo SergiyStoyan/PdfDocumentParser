@@ -13,7 +13,7 @@ namespace Cliver
 {
     public partial class Log
     {
-        public abstract partial class Writer : IWriteApi
+        public partial class Writer : IWriteApi
         {
             public void Error(Exception e)
             {

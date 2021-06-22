@@ -59,8 +59,7 @@ namespace Cliver
                 {
                     lock (session.names2NamedWriter)
                     {
-                        NamedWriter nw = null;
-                        if (!session.names2NamedWriter.TryGetValue(name, out nw))
+                        if (!session.names2NamedWriter.TryGetValue(name, out NamedWriter nw))
                         {
                             nw = new NamedWriter(session, name);
                             session.names2NamedWriter.Add(name, nw);
