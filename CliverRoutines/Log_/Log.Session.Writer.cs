@@ -50,7 +50,7 @@ namespace Cliver
                 {
                     lock (this)
                     {
-                        string file2 = Session.Dir + System.IO.Path.DirectorySeparatorChar;
+                        string file2 = Session.Dir + Path.DirectorySeparatorChar;
                         if (Log.mode.HasFlag(Mode.FOLDER_PER_SESSION))
                         {
                             file2 += DateTime.Now.ToString("yyMMddHHmmss");

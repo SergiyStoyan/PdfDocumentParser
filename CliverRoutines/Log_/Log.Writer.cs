@@ -15,51 +15,14 @@ namespace Cliver
     public partial class Log
     {
         /// <summary>
-        /// The base session-less log writer that is enherited by the NamedWriter and ThreadWriter. 
-        /// Also, by itself, it allows to write a session-less named log directly to WorkDir. 
+        /// The base log writer. 
         /// </summary>
-        public partial class Writer
+        abstract public partial class Writer
         {
-            static public Writer Get(string name)
-            {
-                lock (names2Writer)
-                {
-                    if (!names2Writer.TryGetValue(name, out Writer w))
-                    {
-                        w = new Writer(name);
-                        w.SetFile();
-                        names2Writer.Add(name, w);
-                    }
-                    return w;
-                }
-            }
-            static Dictionary<string, Writer> names2Writer = new Dictionary<string, Writer>();
-
             internal Writer(string name)
             {
                 Name = name;
             }
-
-            /// <summary>
-            /// Message importance level.
-            /// </summary>
-            virtual public Level Level
-            {
-                get
-                {
-                    return level;
-                }
-                set
-                {
-                    lock (this)
-                    {
-                        if (level == Level.NONE && value > Level.NONE)
-                            setWorkDir(true);
-                        level = value;
-                    }
-                }
-            }
-            protected Level level = Log.DefaultLevel;
 
             /// <summary>
             /// Log name.
@@ -67,24 +30,17 @@ namespace Cliver
             public readonly string Name;
 
             /// <summary>
+            /// Message importance level.
+            /// </summary>
+            abstract public Level Level { get; set; }
+            protected Level level = Log.DefaultLevel;
+
+            /// <summary>
             /// Log file path.
             /// </summary>
             public string File { get; protected set; } = null;
 
-            virtual internal void SetFile()
-            {
-                lock (this)
-                {
-                    //(!)it must differ from the session files to avoid overlapping
-                    string file2 = WorkDir + System.IO.Path.DirectorySeparatorChar + "__" + Name + (fileCounter > 0 ? "[" + fileCounter + "]" : "") + "." + FileExtension;
-
-                    if (File == file2)
-                        return;
-                    if (logWriter != null)
-                        logWriter.Close();
-                    File = file2;
-                }
-            }
+            abstract internal void SetFile();
             protected int fileCounter = 0;
 
             /// <summary>
