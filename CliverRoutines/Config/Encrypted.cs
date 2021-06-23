@@ -8,11 +8,12 @@
 
 using System;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace Cliver
 {
     /// <summary>
-    /// A property of this type is implicitly encrypted when it is a member of a Settings class.
+    /// A field/property of this type is implicitly encrypted when it is a member of a Settings class.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class Encrypted<T> where T : class
@@ -26,10 +27,11 @@ namespace Cliver
         /// Encypted value used while serializing. 
         /// It must not be called from the custom code.
         /// </summary>
-        public string _Value { get; set; } = null;
+        [Newtonsoft.Json.JsonProperty]//forces serialization for private 
+        string _Value { get; set; } = null;
 
         /// <summary>
-        /// Decrypted value that is to be used in the custom code.
+        /// Decrypted value to be used in the custom code.
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         public T Value

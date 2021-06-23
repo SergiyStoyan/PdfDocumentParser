@@ -12,7 +12,7 @@ using System.IO;
 namespace Cliver
 {
     /// <summary>
-    /// Atribute which can be applied to a Settings field.
+    /// Attribute that can be applied to a Settings field.
     /// </summary>
     public class SettingsFieldAttribute
     {
@@ -68,7 +68,7 @@ namespace Cliver
 
 
     /// <summary>
-    /// Atribute which can be applied to a Settings type.
+    /// Attribute that can be applied to a Settings type.
     /// </summary>
     public class SettingsTypeAttribute
     {
@@ -119,18 +119,18 @@ namespace Cliver
     }
 
     /// <summary>
-    /// Atribute which can be applied either to a Settings field or a Settings type.
+    /// Attribute that can be applied either to a Settings field or a Settings type.
     /// </summary>
     public class SettingsAttribute
     {
         /// <summary>
-        /// Provides the Settings field or the Settings type with encryption facility.
+        /// Provides the Settings field or Settings type with encryption facility.
         /// </summary>
         [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Class)]
         public class EncryptedAttribute : System.Attribute
         {
             /// <summary>
-            /// Eencrypt/decrypt engine.
+            /// Encrypt/decrypt engine.
             /// </summary>
             readonly public StringEndec Endec;
 
