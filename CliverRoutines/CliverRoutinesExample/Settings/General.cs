@@ -8,8 +8,8 @@ namespace Example
     partial class Settings
     {
         //Settings type field/property can be declared anywhere in the code. It must be static to be processed by Config.
-        //It can be declared readonly which is optional because the logic of the app may require replacing the value (!!!this is not supported by some versions of .NET)
-        [SettingsFieldAttribute.Indented(false)]//the data is serialized without indention
+        //Optionally it can be declared readonly (!!!this is not supported by some versions of .NET)
+        [SettingsFieldAttribute.Indented(false)]//the data will be serialized without indention
         internal static GeneralSettings General;
     }
 

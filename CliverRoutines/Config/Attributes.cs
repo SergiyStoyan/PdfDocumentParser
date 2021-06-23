@@ -17,8 +17,8 @@ namespace Cliver
     public class SettingsFieldAttribute
     {
         /// <summary>
-        /// It makes the Settings field not be initiated by Config by default.
-        /// Such a field, when needed, must be initiated explicitly by Config.Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
+        /// Whether the Settings field be initiated by Config implicitly.
+        /// An optional field, when needed, must be initiated explicitly by Config.Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
         /// </summary>
         [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
         public class OptionalAttribute : Attribute
@@ -32,7 +32,7 @@ namespace Cliver
         }
 
         /// <summary>
-        /// It makes the Settings field be serialized without indention.
+        /// Whether the Settings field to be serialized with indention.
         /// </summary>
         [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
         public class IndentedAttribute : Attribute
@@ -46,7 +46,7 @@ namespace Cliver
         }
 
         /// <summary>
-        /// It makes those serializable fields/properties of the Settings field whose values are NULL, be serialized.
+        /// Whether those serializable fields/properties of the Settings field whose values are NULL, be serialized.
         /// </summary>
         [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
         public class NullSerializedAttribute : Attribute
@@ -73,7 +73,7 @@ namespace Cliver
     public class SettingsTypeAttribute
     {
         /// <summary>
-        /// It checks if the storage file format is supported.
+        /// Check if the type version of the data stored in the storage file is supported.
         /// </summary>
         [AttributeUsage(AttributeTargets.Class)]
         public class TypeVersionAttribute : Attribute
@@ -124,7 +124,7 @@ namespace Cliver
     public class SettingsAttribute
     {
         /// <summary>
-        /// It provides the Settings field or the Settings type with encryption facility.
+        /// Provides the Settings field or the Settings type with encryption facility.
         /// </summary>
         [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Class)]
         public class EncryptedAttribute : System.Attribute
