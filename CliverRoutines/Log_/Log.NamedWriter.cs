@@ -15,10 +15,15 @@ namespace Cliver
     public partial class Log
     {
         /// <summary> 
-        /// The session-less named log writer that allows to write a named log directly to WorkDir. 
+        /// A session-less named log writer that allows to write the same log file directly to WorkDir. 
         /// </summary>
         public partial class NamedWriter : Writer
         {
+            /// <summary>
+            /// Creates or retrieves a session-less named log writer that allows to write the same log file directly to WorkDir. 
+            /// </summary>
+            /// <param name="name"></param>
+            /// <returns></returns>
             static public NamedWriter Get(string name)
             {
                 lock (names2NamedWriter)

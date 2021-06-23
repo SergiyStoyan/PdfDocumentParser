@@ -15,6 +15,9 @@ namespace Cliver
     {
         public partial class Session
         {
+            /// <summary>
+            /// The underlaying class for Session.NamedWriter and Session.ThreadWriter
+            /// </summary>
             public abstract partial class Writer : Log.Writer
             {
                 internal Writer(string name, Session session) : base(name)
@@ -22,6 +25,11 @@ namespace Cliver
                     Session = session;
                     SetFile();
                 }
+
+                /// <summary>
+                /// Session to which this log belongs.
+                /// </summary>
+                public readonly Session Session;
 
                 /// <summary>
                 /// Message importance level.
@@ -69,11 +77,6 @@ namespace Cliver
                         File = file2;
                     }
                 }
-
-                /// <summary>
-                /// Session to which this log belongs.
-                /// </summary>
-                public readonly Session Session;
             }
         }
     }

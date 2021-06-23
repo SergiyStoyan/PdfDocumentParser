@@ -31,20 +31,23 @@ namespace Cliver
             {
                 lock (this.names2NamedWriter)
                 {
-                    string dir;
-                    if (Log.mode.HasFlag(Mode.FOLDER_PER_SESSION))
+                    lock (threadIds2TreadWriter)
                     {
-                        //string dir0 = WorkDir + System.IO.Path.DirectorySeparatorChar + (string.IsNullOrEmpty(NamePrefix) ? "" : NamePrefix + "_") + (string.IsNullOrWhiteSpace(name) ? "" : name + "_") + TimeMark;
-                        string dir0 = WorkDir + System.IO.Path.DirectorySeparatorChar + NamePrefix + TimeMark + (string.IsNullOrWhiteSpace(name) ? "" : "_" + name);
-                        dir = dir0;
-                        for (int count = 1; Directory.Exists(dir); count++)
-                            dir = dir0 + "_" + count.ToString();
+                        string dir;
+                        if (Log.mode.HasFlag(Mode.FOLDER_PER_SESSION))
+                        {
+                            //string dir0 = WorkDir + System.IO.Path.DirectorySeparatorChar + (string.IsNullOrEmpty(NamePrefix) ? "" : NamePrefix + "_") + (string.IsNullOrWhiteSpace(name) ? "" : name + "_") + TimeMark;
+                            string dir0 = WorkDir + System.IO.Path.DirectorySeparatorChar + NamePrefix + TimeMark + (string.IsNullOrWhiteSpace(name) ? "" : "_" + name);
+                            dir = dir0;
+                            for (int count = 1; Directory.Exists(dir); count++)
+                                dir = dir0 + "_" + count.ToString();
+                        }
+                        else //if (Log.mode.HasFlag(Mode.ONE_FOLDER))//default
+                        {
+                            dir = WorkDir;
+                        }
+                        return dir;
                     }
-                    else //if (Log.mode.HasFlag(Mode.ONE_FOLDER))//default
-                    {
-                        dir = WorkDir;
-                    }
-                    return dir;
                 }
             }
 
