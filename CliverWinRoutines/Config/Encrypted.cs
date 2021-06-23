@@ -19,15 +19,15 @@ namespace Cliver.Win
     {
         static Encrypted()
         {
-            InitializeDefault(new StringCrypto());
+            InitializeDefault(new StringEndec());
         }
 
         public Encrypted(T value = null) : base(value) { }
     }
 
-    public class StringCrypto : Cliver.IStringCrypto
+    public class StringEndec : Cliver.StringEndec
     {
-        public StringCrypto()
+        public StringEndec()
         {
             crypto = new Win.Crypto.ProtectedData();
         }

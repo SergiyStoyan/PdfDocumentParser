@@ -14,7 +14,7 @@ namespace Example
     {
         static ServerSettings()
         {
-            //if you are not on Windows and cannot use CliverWinRoutines, you have to initialize StringEndec with a key
+            //if you are not on Windows and cannot use CliverWinRoutines, you have to initialize StringEndec explicitly with a key
             Cliver.Encrypted<string>.InitializeDefault(new Cliver.StringEndec.Rijndael("123"));
         }
 
