@@ -573,18 +573,18 @@ ScopeSettings.Scope.Save();</code>
 public class Settings
 {       
 	//a Crypto object used by SettingsFieldAttribute.Crypto attribute
-	public static IStringCrypto.Rijndael Crypto { get; } = new IStringCrypto.Rijndael("123");
+	public static StringCrypto.Rijndael Crypto { get; } = new StringCrypto.Rijndael("123");
 	//an alternative by CliverWinRoutines which does not require a key:
 	//public static Win.StringCrypto Crypto { get; } = new Win.StringCrypto();   
 
-	//specify the class and the property that expose a IStringCrypto object which will be used for encryption
-	[SettingsFieldAttribute.Crypto(iStringCryptoGetterHostingType: typeof(Settings), iStringCryptoGetterName: nameof(Crypto))]
+	//specify the class and the property that expose a StringCrypto object which will be used for encryption
+	[SettingsFieldAttribute.Crypto(stringCryptoGetterHostingType: typeof(Settings), stringCryptoGetterName: nameof(Crypto))]
 	//Settings field to be serialized as encrypted string
 	internal static CredentialsSettings Credentials;
 }</code>
 </pre>
 
-<p>Now <code>Settings.Credentials</code> will be stored in <a href='#storage_file'>the storage file</a> as a string encrypted by <code>IStringCrypto</code> instance that you provided.
+<p>Now <code>Settings.Credentials</code> will be stored in <a href='#storage_file'>the storage file</a> as a string encrypted by <code>StringCrypto</code> instance that you provided.
 
 
 
@@ -600,8 +600,8 @@ Also, it is possible to encrypt a <a href='#settings_field'>settings field</a> n
 {
 	static ServerSettings()
 	{
-		//if you are not on Windows and cannot use CliverWinRoutines, you have to initialize IStringCrypto with a key
-		Cliver.Encrypted<string>.InitializeDefault(new Cliver.IStringCrypto.Rijndael("123"));
+		//if you are not on Windows and cannot use CliverWinRoutines, you have to initialize StringCrypto with a key
+		Cliver.Encrypted<string>.InitializeDefault(new Cliver.StringCrypto.Rijndael("123"));
 	}
 
 	public string Host = "";

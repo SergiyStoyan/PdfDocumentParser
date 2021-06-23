@@ -14,8 +14,8 @@ namespace Cliver
     public class SettingsFieldAttribute
     {
         /// <summary>
-        /// Settings field attribute that indicates that the Settings field should not be initiated by Config by default.
-        /// Such a field should be initiated explicitly when needed by Config.Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
+        /// It makes the Settings field not be initiated by Config by default.
+        /// Such a field, when needed, must be initiated explicitly by Config.Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
         /// </summary>
         [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
         public class OptionalAttribute : Attribute
@@ -23,58 +23,60 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Settings field attribute that set storage features for the Settings field.
+        /// It makes the Settings field be serialized without indention.
         /// </summary>
         [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-        public class StorageAttribute : Attribute
+        public class NotIndentedAttribute : Attribute
         {
-            /// <summary>
-            /// Indicates whether the Settings field will be stored with indention or not.
-            /// /// </summary>
-            public bool Indented = true;
-            /// <summary>
-            /// Indicates whether null values in the Settings field are to be stored explicitly or not.
-            /// </summary>
-            public bool IgnoreNullValues = true;
-            ///// <summary>!!!it never must be used as brings to losing changes
-            ///// Indicates whether default values in the Settings field are to be stored explicitly or not.
-            ///// </summary>
-            //public bool IgnoreDefaultValues = false;
-
-            /// <summary>
-            /// Settings field attribute that set storage features for the Settings field.
-            /// </summary>
-            /// <param name="indented">Indicates that the Settings field be stored with indention</param>
-            public StorageAttribute(bool indented = true, bool ignoreNullValues = true/*, bool ignoreDefaultValues = true*/)
-            {
-                Indented = indented;
-                IgnoreNullValues = ignoreNullValues;
-                //IgnoreDefaultValues = ignoreDefaultValues;
-            }
         }
 
         /// <summary>
-        /// Settings field attribute that is used for encrypting.
+        /// It makes those serializable fields/properties of the Settings field whose values are NULL, be serialized.
+        /// </summary>
+        [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
+        public class SerializeNullValuesAttribute : Attribute
+        {
+        }
+
+        //!!!it never must be used as brings to losing changes
+        //[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
+        //public class IgnoreDefaultValuesAttribute : Attribute
+        //{
+        //}
+
+        /// <summary>
+        /// It provides the Settings field with encryption facility.
         /// </summary>
         [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
         public class CryptoAttribute : System.Attribute
         {
             /// <summary>
-            /// Optional encrypt/decrypt facility for the Settings field.
+            /// Eencrypt/decrypt engine.
             /// </summary>
-            readonly public IStringCrypto Crypto;
+            readonly public StringCrypto Crypto;
 
             /// <summary>
             /// Settings field attribute that is used for encrypting.
             /// </summary>
-            /// <param name="iStringCryptoGetterHostingType">Class that exposes the IStringCrypto getter.</param>
-            /// <param name="iStringCryptoGetterName">Name of the IStringCrypto getter. The getter must be public static.</param>
-            public CryptoAttribute(Type iStringCryptoGetterHostingType, string iStringCryptoGetterName)
+            /// <param name="stringCryptoGetterHostingType">Class that exposes the StringCrypto getter.</param>
+            /// <param name="stringCryptoGetterName">Name of the StringCrypto getter. The getter must be public static.</param>
+            public CryptoAttribute(Type stringCryptoGetterHostingType, string stringCryptoGetterName)
             {
-                System.Reflection.PropertyInfo pi = iStringCryptoGetterHostingType.GetProperty(iStringCryptoGetterName);
-                if (pi == null)
-                    throw new Exception(iStringCryptoGetterHostingType.FullName + " does not expose property " + iStringCryptoGetterName + "\r\nMake sure that " + GetType().Name + " is set properly.");
-                Crypto = (IStringCrypto)pi.GetValue(null);
+                try
+                {
+                    if (stringCryptoGetterHostingType == null)
+                        throw new Exception("stringCryptoGetterHostingType cannot be NULL.");
+                    if (string.IsNullOrWhiteSpace(stringCryptoGetterName))
+                        throw new Exception("stringCryptoGetterName cannot be empty.");
+                    System.Reflection.PropertyInfo pi = stringCryptoGetterHostingType.GetProperty(stringCryptoGetterName, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+                    if (pi == null)
+                        throw new Exception(stringCryptoGetterHostingType.FullName + " class does not expose property '" + stringCryptoGetterName + "'");
+                    Crypto = (StringCrypto)pi.GetValue(null);
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("Wrong parameters of the attribute " + GetType().FullName, e);
+                }
             }
         }
     }
@@ -82,12 +84,16 @@ namespace Cliver
     public class SettingsTypeAttribute
     {
         /// <summary>
-        /// Settings type attribute. Used to check if the storage file format is supported.
+        /// It checks if the storage file format is supported.
         /// </summary>
         [AttributeUsage(AttributeTargets.Class)]
-        public class TypeVersionAttribute : System.Attribute
+        public class TypeVersionAttribute : Attribute
         {
             public readonly uint MinSupportedTypeVersion;
+
+            /// <summary>
+            /// The version of the Settings type to which this attribute is applied.
+            /// </summary>
             public readonly uint Value;
 
             public bool IsTypeVersionSupported(Settings settings)
@@ -98,20 +104,27 @@ namespace Cliver
             /// <summary>
             /// Settings type attribute. Used to check if the storage file format is supported.
             /// </summary>
-            /// <param name="value">Version of the Settings type to which this attribute is applied</param>
-            /// <param name="minSupportedTypeVersion">Can be less or equal to the value.</param>
+            /// <param name="value">Version of the Settings type to which this attribute is applied.</param>
+            /// <param name="minSupportedTypeVersion">It must be less than or equal to the value.</param>
             public TypeVersionAttribute(uint value, uint minSupportedTypeVersion)
             {
-                if (value < minSupportedTypeVersion)
-                    throw new Exception("Value (" + value + ") cannot be less than minSupportedTypeVersion (" + minSupportedTypeVersion + ")");
-                Value = value;
-                MinSupportedTypeVersion = minSupportedTypeVersion;
+                try
+                {
+                    if (value < minSupportedTypeVersion)
+                        throw new Exception("Value (" + value + ") cannot be less than minSupportedTypeVersion (" + minSupportedTypeVersion + ")");
+                    Value = value;
+                    MinSupportedTypeVersion = minSupportedTypeVersion;
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("Wrong parameters of the attribute " + GetType().FullName, e);
+                }
             }
 
             /// <summary>
             /// Settings type attribute. Used to check if the storage file format is supported.
             /// </summary>
-            /// <param name="value">Version of the Settings type to which this attribute is applied</param>
+            /// <param name="value">Version of the Settings type to which this attribute is applied.</param>
             public TypeVersionAttribute(uint value) : this(value, value) { }
         }
     }

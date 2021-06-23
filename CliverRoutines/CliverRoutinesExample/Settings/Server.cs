@@ -10,8 +10,8 @@ namespace Example
     {
         static ServerSettings()
         {
-            //if you are not on Windows and cannot use CliverWinRoutines, you have to initialize IStringCrypto with a key
-            Cliver.Encrypted<string>.InitializeDefault(new Cliver.IStringCrypto.Rijndael("123"));
+            //if you are not on Windows and cannot use CliverWinRoutines, you have to initialize StringCrypto with a key
+            Cliver.Encrypted<string>.InitializeDefault(new Cliver.StringCrypto.Rijndael("123"));
         }
 
         public string Host = "";

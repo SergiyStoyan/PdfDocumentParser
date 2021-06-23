@@ -65,39 +65,39 @@ namespace Cliver
             }
         }
 
-        public void Initialize(IStringCrypto crypto)
+        public void Initialize(StringCrypto crypto)
         {
             if (crypto != null)
                 throw new Exception("Crypto engine is already initialized and cannot be re-set.");
             _crypto = crypto;
         }
-        IStringCrypto crypto
+        StringCrypto crypto
         {
             get
             {
-                IStringCrypto c = _crypto != null ? _crypto : defaultCrypto;
+                StringCrypto c = _crypto != null ? _crypto : defaultCrypto;
                 if (c == null)
                     throw new Exception("Crypto engine is not initialized. It can be done by either Initialize() or InitializeDefault() of Cliver.Encrypted class.");
                 return c;
             }
         }
-        IStringCrypto _crypto;
+        StringCrypto _crypto;
 
-        static public void InitializeDefault(IStringCrypto crypto)
+        static public void InitializeDefault(StringCrypto crypto)
         {
             if (defaultCrypto != null)
                 throw new Exception("Default Crypto engine is already initialized and cannot be re-set.");
             defaultCrypto = crypto;
         }
-        static IStringCrypto defaultCrypto;
+        static StringCrypto defaultCrypto;
     }
 
-    public abstract class IStringCrypto
+    public abstract class StringCrypto
     {
         public abstract string Encrypt(string s);
         public abstract string Decrypt(string s);
 
-        public class Rijndael : IStringCrypto
+        public class Rijndael : StringCrypto
         {
             public Rijndael(string key)
             {

@@ -36,11 +36,6 @@ namespace Cliver
         public readonly string InitFile;
 
         /// <summary>
-        /// Keeps storage features for the Settings field.
-        /// </summary>
-        public readonly SettingsFieldAttribute.StorageAttribute Storage;
-
-        /// <summary>
         /// Settings derived type.
         /// </summary>
         public readonly Type Type;
@@ -49,6 +44,27 @@ namespace Cliver
         /// Keeps type version info.
         /// </summary>
         public readonly SettingsTypeAttribute.TypeVersionAttribute TypeVersion;
+
+        /// <summary>
+        /// Encryption engine.
+        /// </summary>
+        public readonly StringCrypto Crypto = null;
+
+        /// <summary>
+        /// When TRUE, the Settings field is not initialized by default and needs an explicit initializing. 
+        /// Such a field, when needed, must be initiated explicitly by Config.Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
+        /// </summary>
+        public readonly bool Optional = false;
+
+        /// <summary>
+        /// When TRUE, the Settings field is serialized with indention.
+        /// </summary>
+        public readonly bool Indented = true;
+
+        /// <summary>
+        /// When FALSE, those serializable fields/properties of the Settings field whose values are NULL, are ignored while serializing.
+        /// </summary>
+        public readonly bool SerializeNullValues = false;
 
         internal Settings GetObject()
         {
@@ -65,9 +81,6 @@ namespace Cliver
                 setObject(settings);
             }
         }
-
-        internal readonly IStringCrypto Crypto = null;
-        internal readonly bool Optional = false;
 
 #if !COMPILE_GetObject_SetObject
         abstract protected object getObject();
@@ -105,11 +118,12 @@ namespace Cliver
             Settings s = (Settings)Activator.CreateInstance(Type); //!!!slightly slowler than calling a static by reflection. Doesn't run slower for a bigger class though.
             File = s.__StorageDir + System.IO.Path.DirectorySeparatorChar + FullName + "." + Config.FILE_EXTENSION;
             InitFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + FullName + "." + Config.FILE_EXTENSION;
-            SettingsFieldAttribute.StorageAttribute storageAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.StorageAttribute>(false).FirstOrDefault();
-            Storage = storageAttribute != null ? storageAttribute : new SettingsFieldAttribute.StorageAttribute();
+
             Crypto = settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.CryptoAttribute>(false).FirstOrDefault()?.Crypto;
             Optional = settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.OptionalAttribute>(false).Any();
-            
+            Indented = !settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.NotIndentedAttribute>(false).Any();
+            SerializeNullValues = settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.SerializeNullValuesAttribute>(false).Any();
+
             SettingsTypeAttribute.TypeVersionAttribute typeVersion = settingsType.GetCustomAttributes<SettingsTypeAttribute.TypeVersionAttribute>(false).FirstOrDefault();
             TypeVersion = typeVersion != null ? typeVersion : new SettingsTypeAttribute.TypeVersionAttribute(0, 0);
         }

@@ -134,7 +134,7 @@ namespace Cliver
         {
             __TypeVersion = settingsFieldInfo.TypeVersion.Value;
             Saving();
-            string s = Serialization.Json.Serialize(this, __Info.Storage.Indented, __Info.Storage.IgnoreNullValues, false/*!!!default values always must be stored*/);
+            string s = Serialization.Json.Serialize(this, __Info.Indented, !__Info.SerializeNullValues, false/*!!!default values always must be stored*/);
             if (__Info.Crypto != null)
                 s = __Info.Crypto.Encrypt(s);
             FileSystemRoutines.CreateDirectory(PathRoutines.GetFileDir(__Info.File));
@@ -151,11 +151,6 @@ namespace Cliver
             }
         }
 
-        ///// <summary>
-        ///// Whether serialization to file is to be done with indention.
-        ///// </summary>
-        //virtual public bool __Indented { get; } = true;
-
         #region Type Version support
 
         /// <summary>
@@ -166,11 +161,11 @@ namespace Cliver
 
         /// <summary>
         /// Called by Config if the storage file content does not match the Settings type version.
-        /// Here you should amend the data to comply with the current version.
+        /// Here is your chance to amend the data to migrate to the current version.
         /// </summary>
         virtual protected UnsupportedTypeVersionHandlerCommand UnsupportedTypeVersionHandler()
         {
-            throw new Exception("Unsupported version of " + GetType().FullName + ": " + __TypeVersion);
+            throw new Exception("Unsupported version of " + __Info.FullName + ": " + __TypeVersion + "\r\nin the file: " + __Info.File);
         }
         public enum UnsupportedTypeVersionHandlerCommand
         {
