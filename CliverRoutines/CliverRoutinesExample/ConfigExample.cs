@@ -54,6 +54,8 @@ namespace Example
                 //expose server2 in an editing dialog and get new values
                 server2.Host = "ftp.server.com";
                 server2.Port = 30;
+                if (server2.Password == null)
+                    server2.Password = new Encrypted<string>();
                 server2.Password.Value = "test";
 
                 if (!isValid(server2))
