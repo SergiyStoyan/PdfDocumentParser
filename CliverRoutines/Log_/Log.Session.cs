@@ -29,26 +29,20 @@ namespace Cliver
 
             string getDir(string name)
             {
-                lock (this.names2NamedWriter)
+                string dir;
+                if (Log.mode.HasFlag(Mode.FOLDER_PER_SESSION))
                 {
-                    lock (threadIds2TreadWriter)
-                    {
-                        string dir;
-                        if (Log.mode.HasFlag(Mode.FOLDER_PER_SESSION))
-                        {
-                            //string dir0 = WorkDir + System.IO.Path.DirectorySeparatorChar + (string.IsNullOrEmpty(NamePrefix) ? "" : NamePrefix + "_") + (string.IsNullOrWhiteSpace(name) ? "" : name + "_") + TimeMark;
-                            string dir0 = WorkDir + System.IO.Path.DirectorySeparatorChar + NamePrefix + TimeMark + (string.IsNullOrWhiteSpace(name) ? "" : "_" + name);
-                            dir = dir0;
-                            for (int count = 1; Directory.Exists(dir); count++)
-                                dir = dir0 + "_" + count.ToString();
-                        }
-                        else //if (Log.mode.HasFlag(Mode.ONE_FOLDER))//default
-                        {
-                            dir = WorkDir;
-                        }
-                        return dir;
-                    }
+                    //string dir0 = WorkDir + System.IO.Path.DirectorySeparatorChar + (string.IsNullOrEmpty(NamePrefix) ? "" : NamePrefix + "_") + (string.IsNullOrWhiteSpace(name) ? "" : name + "_") + TimeMark;
+                    string dir0 = WorkDir + System.IO.Path.DirectorySeparatorChar + NamePrefix + TimeMark + (string.IsNullOrWhiteSpace(name) ? "" : "_" + name);
+                    dir = dir0;
+                    for (int count = 1; Directory.Exists(dir); count++)
+                        dir = dir0 + "_" + count.ToString();
                 }
+                else //if (Log.mode.HasFlag(Mode.ONE_FOLDER))//default
+                {
+                    dir = WorkDir;
+                }
+                return dir;
             }
 
             /// <summary>
@@ -207,28 +201,28 @@ namespace Cliver
             {
                 lock (names2NamedWriter)
                 {
-                    if (names2NamedWriter.Values.FirstOrDefault(a => !a.IsClosed) == null && threadIds2TreadWriter.Values.FirstOrDefault(a => !a.IsClosed) == null)
-                        return;
-
-                    Write("Closing the log session...");
-
-                    foreach (NamedWriter nw in names2NamedWriter.Values)
-                        nw.Close();
-                    //names2NamedWriter.Clear(); !!! clearing writers will bring to duplicating them if they are referenced in the calling code.
-
                     lock (threadIds2TreadWriter)
                     {
+                        if (names2NamedWriter.Values.FirstOrDefault(a => !a.IsClosed) == null && threadIds2TreadWriter.Values.FirstOrDefault(a => !a.IsClosed) == null)
+                            return;
+
+                        Write("Closing the log session...");
+
+                        foreach (NamedWriter nw in names2NamedWriter.Values)
+                            nw.Close();
+                        //names2NamedWriter.Clear(); !!! clearing writers will bring to duplicating them if they are referenced in the calling code.
+
                         foreach (ThreadWriter tw in threadIds2TreadWriter.Values)
                             tw.Close();
                         //threadIds2TreadWriter.Clear(); !!!clearing writers will bring to duplicating them if they are referenced in the calling code.
-                    }
 
-                    if (!reuse)
-                    {
-                        dir = null;
-                        CreatedTime = DateTime.MinValue;
-                        timeMark = null;
-                        //names2Session.Remove(name);!!!removing session will bring to duplicating it if it is referenced in the calling code.
+                        if (!reuse)
+                        {
+                            dir = null;
+                            CreatedTime = DateTime.MinValue;
+                            timeMark = null;
+                            //names2Session.Remove(name);!!!removing session will bring to duplicating it if it is referenced in the calling code.
+                        }
                     }
                 }
             }
