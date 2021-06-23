@@ -5,6 +5,10 @@ using Cliver;
 
 namespace Example
 {
+    partial class Settings
+    {
+        public static ServerSettings Server { get; set; }
+    }
 
     class ServerSettings : Cliver.UserSettings//UserSettings based class is serialized in the user directory
     {

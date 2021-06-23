@@ -5,6 +5,11 @@ using Cliver;
 
 namespace Example
 {
+    partial class Settings
+    {
+        internal static TemplatesSettings Templates;
+    }
+
     //Example how to check the type version and migrate to the current type if needed.
     //When this attribute is set, Config engine checks if the version set by the attribute corresponds to the version in the storage file.
     [SettingsTypeAttribute.TypeVersion(value: 210601, minSupportedTypeVersion: 210601)]
