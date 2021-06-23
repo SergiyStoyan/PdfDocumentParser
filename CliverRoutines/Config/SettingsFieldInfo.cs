@@ -48,7 +48,7 @@ namespace Cliver
         /// <summary>
         /// Encryption engine.
         /// </summary>
-        public readonly StringCrypto Crypto = null;
+        public readonly StringEndec Endec = null;
 
         /// <summary>
         /// When TRUE, the Settings field is not initialized by default and needs an explicit initializing. 
@@ -64,7 +64,7 @@ namespace Cliver
         /// <summary>
         /// When FALSE, those serializable fields/properties of the Settings field whose values are NULL, are ignored while serializing.
         /// </summary>
-        public readonly bool SerializeNullValues = false;
+        public readonly bool NullSerialized = false;
 
         internal Settings GetObject()
         {
@@ -119,10 +119,23 @@ namespace Cliver
             File = s.__StorageDir + System.IO.Path.DirectorySeparatorChar + FullName + "." + Config.FILE_EXTENSION;
             InitFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + FullName + "." + Config.FILE_EXTENSION;
 
-            Crypto = settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.CryptoAttribute>(false).FirstOrDefault()?.Crypto;
-            Optional = settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.OptionalAttribute>(false).Any();
-            Indented = !settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.NotIndentedAttribute>(false).Any();
-            SerializeNullValues = settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.SerializeNullValuesAttribute>(false).Any();
+            SettingsAttribute.EncryptedAttribute encryptedAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsAttribute.EncryptedAttribute>(false).FirstOrDefault();
+            if (encryptedAttribute == null)
+                encryptedAttribute = settingsType.GetCustomAttributes<SettingsAttribute.EncryptedAttribute>(false).FirstOrDefault();
+            if (encryptedAttribute != null)
+                Endec = encryptedAttribute.Endec;
+
+            SettingsFieldAttribute.OptionalAttribute optionalAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.OptionalAttribute>(false).FirstOrDefault();
+            if (optionalAttribute != null)
+                Optional = optionalAttribute.Value;
+
+            SettingsFieldAttribute.IndentedAttribute indentedAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.IndentedAttribute>(false).FirstOrDefault();
+            if (indentedAttribute != null)
+                Indented = indentedAttribute.Value;
+
+            SettingsFieldAttribute.NullSerializedAttribute nullSerializedAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.NullSerializedAttribute>(false).FirstOrDefault();
+            if (nullSerializedAttribute != null)
+                NullSerialized = nullSerializedAttribute.Value;
 
             SettingsTypeAttribute.TypeVersionAttribute typeVersion = settingsType.GetCustomAttributes<SettingsTypeAttribute.TypeVersionAttribute>(false).FirstOrDefault();
             TypeVersion = typeVersion != null ? typeVersion : new SettingsTypeAttribute.TypeVersionAttribute(0, 0);

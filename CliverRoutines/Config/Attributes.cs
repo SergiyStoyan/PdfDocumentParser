@@ -11,6 +11,9 @@ using System.IO;
 
 namespace Cliver
 {
+    /// <summary>
+    /// Atribute which can be applied to a Settings field.
+    /// </summary>
     public class SettingsFieldAttribute
     {
         /// <summary>
@@ -20,22 +23,40 @@ namespace Cliver
         [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
         public class OptionalAttribute : Attribute
         {
+            public readonly bool Value;
+
+            public OptionalAttribute(bool value = false)
+            {
+                Value = value;
+            }
         }
 
         /// <summary>
         /// It makes the Settings field be serialized without indention.
         /// </summary>
         [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-        public class NotIndentedAttribute : Attribute
+        public class IndentedAttribute : Attribute
         {
+            public readonly bool Value;
+
+            public IndentedAttribute(bool value = true)
+            {
+                Value = value;
+            }
         }
 
         /// <summary>
         /// It makes those serializable fields/properties of the Settings field whose values are NULL, be serialized.
         /// </summary>
         [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-        public class SerializeNullValuesAttribute : Attribute
+        public class NullSerializedAttribute : Attribute
         {
+            public readonly bool Value;
+
+            public NullSerializedAttribute(bool value = false)
+            {
+                Value = value;
+            }
         }
 
         //!!!it never must be used as brings to losing changes
@@ -43,44 +64,12 @@ namespace Cliver
         //public class IgnoreDefaultValuesAttribute : Attribute
         //{
         //}
-
-        /// <summary>
-        /// It provides the Settings field with encryption facility.
-        /// </summary>
-        [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-        public class CryptoAttribute : System.Attribute
-        {
-            /// <summary>
-            /// Eencrypt/decrypt engine.
-            /// </summary>
-            readonly public StringCrypto Crypto;
-
-            /// <summary>
-            /// Settings field attribute that is used for encrypting.
-            /// </summary>
-            /// <param name="stringCryptoGetterHostingType">Class that exposes the StringCrypto getter.</param>
-            /// <param name="stringCryptoGetterName">Name of the StringCrypto getter. The getter must be public static.</param>
-            public CryptoAttribute(Type stringCryptoGetterHostingType, string stringCryptoGetterName)
-            {
-                try
-                {
-                    if (stringCryptoGetterHostingType == null)
-                        throw new Exception("stringCryptoGetterHostingType cannot be NULL.");
-                    if (string.IsNullOrWhiteSpace(stringCryptoGetterName))
-                        throw new Exception("stringCryptoGetterName cannot be empty.");
-                    System.Reflection.PropertyInfo pi = stringCryptoGetterHostingType.GetProperty(stringCryptoGetterName, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
-                    if (pi == null)
-                        throw new Exception(stringCryptoGetterHostingType.FullName + " class does not expose property '" + stringCryptoGetterName + "'");
-                    Crypto = (StringCrypto)pi.GetValue(null);
-                }
-                catch (Exception e)
-                {
-                    throw new Exception("Wrong parameters of the attribute " + GetType().FullName, e);
-                }
-            }
-        }
     }
 
+
+    /// <summary>
+    /// Atribute which can be applied to a Settings type.
+    /// </summary>
     public class SettingsTypeAttribute
     {
         /// <summary>
@@ -126,6 +115,48 @@ namespace Cliver
             /// </summary>
             /// <param name="value">Version of the Settings type to which this attribute is applied.</param>
             public TypeVersionAttribute(uint value) : this(value, value) { }
+        }
+    }
+
+    /// <summary>
+    /// Atribute which can be applied either to a Settings field or a Settings type.
+    /// </summary>
+    public class SettingsAttribute
+    {
+        /// <summary>
+        /// It provides the Settings field or the Settings type with encryption facility.
+        /// </summary>
+        [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Class)]
+        public class EncryptedAttribute : System.Attribute
+        {
+            /// <summary>
+            /// Eencrypt/decrypt engine.
+            /// </summary>
+            readonly public StringEndec Endec;
+
+            /// <summary>
+            /// Settings field attribute that is used for encrypting.
+            /// </summary>
+            /// <param name="stringEndecGetterHostingType">Class that exposes the StringEndec getter.</param>
+            /// <param name="stringEndecGetterName">Name of the StringEndec getter. The getter must be public static.</param>
+            public EncryptedAttribute(Type stringEndecGetterHostingType, string stringEndecGetterName)
+            {
+                try
+                {
+                    if (stringEndecGetterHostingType == null)
+                        throw new Exception("stringEndecGetterHostingType cannot be NULL.");
+                    if (string.IsNullOrWhiteSpace(stringEndecGetterName))
+                        throw new Exception("stringEndecGetterName cannot be empty.");
+                    System.Reflection.PropertyInfo pi = stringEndecGetterHostingType.GetProperty(stringEndecGetterName, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+                    if (pi == null)
+                        throw new Exception(stringEndecGetterHostingType.FullName + " class does not expose property '" + stringEndecGetterName + "'");
+                    Endec = (StringEndec)pi.GetValue(null);
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("Wrong parameters of the attribute " + GetType().FullName, e);
+                }
+            }
         }
     }
 }

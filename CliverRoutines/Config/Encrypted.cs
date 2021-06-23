@@ -40,7 +40,7 @@ namespace Cliver
                     return null;
                 try
                 {
-                    string s = crypto.Decrypt(_Value);
+                    string s = endec.Decrypt(_Value);
                     if (typeof(T) == typeof(string))
                         return s as T;
                     return Serialization.Json.Deserialize<T>(s);
@@ -58,61 +58,64 @@ namespace Cliver
                 else
                 {
                     if (typeof(T) == typeof(string))
-                        _Value = crypto.Encrypt(value as string);
+                        _Value = endec.Encrypt(value as string);
                     else
-                        _Value = crypto.Encrypt(Serialization.Json.Serialize(value));
+                        _Value = endec.Encrypt(Serialization.Json.Serialize(value));
                 }
             }
         }
 
-        public void Initialize(StringCrypto crypto)
+        public void Initialize(StringEndec endec)
         {
-            if (crypto != null)
-                throw new Exception("Crypto engine is already initialized and cannot be re-set.");
-            _crypto = crypto;
+            if (endec != null)
+                throw new Exception("StringEndec instance is already set and cannot be re-set.");
+            _endec = endec;
         }
-        StringCrypto crypto
+        StringEndec endec
         {
             get
             {
-                StringCrypto c = _crypto != null ? _crypto : defaultCrypto;
+                StringEndec c = _endec != null ? _endec : defaultEndec;
                 if (c == null)
-                    throw new Exception("Crypto engine is not initialized. It can be done by either Initialize() or InitializeDefault() of Cliver.Encrypted class.");
+                    throw new Exception("StringEndec instance is not set. It can be done by either Initialize() or InitializeDefault() of Cliver.Encrypted class.");
                 return c;
             }
         }
-        StringCrypto _crypto;
+        StringEndec _endec;
 
-        static public void InitializeDefault(StringCrypto crypto)
+        static public void InitializeDefault(StringEndec endec)
         {
-            if (defaultCrypto != null)
-                throw new Exception("Default Crypto engine is already initialized and cannot be re-set.");
-            defaultCrypto = crypto;
+            if (defaultEndec != null)
+                throw new Exception("Default StringEndec instance is already set and cannot be re-set.");
+            defaultEndec = endec;
         }
-        static StringCrypto defaultCrypto;
+        static StringEndec defaultEndec;
     }
 
-    public abstract class StringCrypto
+    /// <summary>
+    /// Abstract string encrypting/decrypting class
+    /// </summary>
+    public abstract class StringEndec
     {
         public abstract string Encrypt(string s);
         public abstract string Decrypt(string s);
 
-        public class Rijndael : StringCrypto
+        public class Rijndael : StringEndec
         {
             public Rijndael(string key)
             {
-                crypto = new Cliver.Crypto.Rijndael(key);
+                endec = new Cliver.Crypto.Rijndael(key);
             }
-            Crypto.Rijndael crypto;
+            Crypto.Rijndael endec;
 
             override public string Encrypt(string s)
             {
-                return crypto.Encrypt(s);
+                return endec.Encrypt(s);
             }
 
             override public string Decrypt(string s)
             {
-                return crypto.Decrypt(s);
+                return endec.Decrypt(s);
             }
         }
     }

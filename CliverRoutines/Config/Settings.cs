@@ -87,8 +87,8 @@ namespace Cliver
         static Settings loadFromFile(SettingsMemberInfo settingsFieldInfo)
         {
             string s = File.ReadAllText(settingsFieldInfo.File);
-            if (settingsFieldInfo.Crypto != null)
-                s = settingsFieldInfo.Crypto.Decrypt(s);
+            if (settingsFieldInfo.Endec != null)
+                s = settingsFieldInfo.Endec.Decrypt(s);
             Settings settings = (Settings)Serialization.Json.Deserialize(settingsFieldInfo.Type, s, true, true);
             if (!settingsFieldInfo.TypeVersion.IsTypeVersionSupported(settings))
             {
@@ -134,9 +134,9 @@ namespace Cliver
         {
             __TypeVersion = settingsFieldInfo.TypeVersion.Value;
             Saving();
-            string s = Serialization.Json.Serialize(this, __Info.Indented, !__Info.SerializeNullValues, false/*!!!default values always must be stored*/);
-            if (__Info.Crypto != null)
-                s = __Info.Crypto.Encrypt(s);
+            string s = Serialization.Json.Serialize(this, __Info.Indented, !__Info.NullSerialized, false/*!!!default values always must be stored*/);
+            if (__Info.Endec != null)
+                s = __Info.Endec.Encrypt(s);
             FileSystemRoutines.CreateDirectory(PathRoutines.GetFileDir(__Info.File));
             File.WriteAllText(__Info.File, s);
             Saved();
@@ -181,8 +181,8 @@ namespace Cliver
         public Newtonsoft.Json.Linq.JObject GetJObjectFromStorageFile()
         {
             string s = File.ReadAllText(settingsFieldInfo.File);
-            if (settingsFieldInfo.Crypto != null)
-                s = settingsFieldInfo.Crypto.Decrypt(s);
+            if (settingsFieldInfo.Endec != null)
+                s = settingsFieldInfo.Endec.Decrypt(s);
             return Newtonsoft.Json.Linq.JObject.Parse(s);
         }
         #endregion
