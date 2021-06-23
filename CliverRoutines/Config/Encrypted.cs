@@ -16,24 +16,28 @@ namespace Cliver
     /// A field/property of this type is implicitly encrypted when it is a member of a Settings class.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class Encrypted<T> where T : class
+    //[JsonConverter(typeof(EncryptedConverter))]
+    public class Encrypted<T> /*: EncryptedBase*/ where T : class
     {
-        public Encrypted(T value = null)
+        public Encrypted()
+        {
+        }
+
+        public Encrypted(T value)
         {
             Value = value;
         }
 
         /// <summary>
-        /// Encypted value used while serializing. 
-        /// It must not be called from the custom code.
+        /// Encypted value. It must not be called from the custom code.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty]//forces serialization for private 
+        [JsonProperty]//forces serialization for private 
         string _Value { get; set; } = null;
 
         /// <summary>
         /// Decrypted value to be used in the custom code.
         /// </summary>
-        [Newtonsoft.Json.JsonIgnore]
+        [JsonIgnore]
         public T Value
         {
             get
@@ -93,6 +97,31 @@ namespace Cliver
         }
         static StringEndec defaultEndec;
     }
+    /*public abstract class EncryptedBase
+    {
+        internal string _Value { get; set; } = null;
+
+    }
+    public class EncryptedConverter : JsonConverter
+    {
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            EncryptedBase e = (EncryptedBase)value;
+            writer.WriteValue(e._Value);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            object e = existingValue != null ? existingValue : Activator.CreateInstance(objectType);
+            ((EncryptedBase)e)._Value = (string)reader.Value;
+            return existingValue;
+        }
+
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(Encrypted<>);
+        }
+    }*/
 
     /// <summary>
     /// Abstract string encrypting/decrypting class
