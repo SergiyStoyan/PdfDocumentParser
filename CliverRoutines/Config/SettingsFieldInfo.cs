@@ -207,6 +207,28 @@ namespace Cliver
         }
 
         #endregion
+
+        /// <summary>
+        /// Replaces the value of the field with a new object initiated with the default values. 
+        /// Tries to load it from the initial file located in the app's directory. 
+        /// If this file does not exist, it creates an object with the hardcoded values.
+        /// </summary>
+        public void ResetObject(/*bool ignoreInitFile = false*/)
+        {
+            SetObject(Settings.Create(this, true, true));
+        }
+
+        /// <summary>
+        /// Replaces the value of the field a new object initiated with the stored values.
+        /// Tries to load it from the storage file.
+        /// If this file does not exist, it tries to load it from the initial file located in the app's directory. 
+        /// If this file does not exist, it creates an object with the hardcoded values.
+        /// </summary>
+        /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
+        public void ReloadObject(bool throwExceptionIfCouldNotLoadFromStorageFile = false)
+        {
+            SetObject(Settings.Create(this, false, throwExceptionIfCouldNotLoadFromStorageFile));
+        }
     }
 
     public class SettingsFieldFieldInfo : SettingsFieldInfo
