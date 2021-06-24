@@ -147,15 +147,16 @@ namespace Cliver
             File.WriteAllText(__Info.File, s);
             Saved();
         }
-        internal void Save(SettingsFieldInfo settingsFieldInfo)//checks that __Info was not replaced and provides an appropriate exception message
+        internal void Save(SettingsFieldInfo correctSettingsFieldInfo)//checks that __Info was not replaced and provides an appropriate exception message
         {
             lock (this)
             {
-                if (__Info != settingsFieldInfo)//it can happen when:
+                if (__Info != correctSettingsFieldInfo)
+                    //it can happen when:
                     //- there are several settings fields of the same type and their __Info's were exchanged from the custom code;
                     //- Config was reloaded while a old object was preserved;
                     //All this will lead to a confusion.
-                    throw new Exception("The value of Settings field '" + settingsFieldInfo.FullName + "' is not attached to it.");
+                    throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + correctSettingsFieldInfo?.FullName + ").");
                 save();
             }
         }
@@ -168,9 +169,9 @@ namespace Cliver
         /// </summary>
         public void Reset(/*bool ignoreInitFile = false*/)
         {
-            if (!IsAttached())//while technically it is possible, it could lead to a confusion: called on one object it might replace another one!
-                throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info?.FullName + ")");
-            __Info.SetObject(Create(__Info, true, true));
+            if (!IsAttached())//while technically it is possible, it could lead to a confusion: called on one object it might replace an other one!
+                throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info?.FullName + ").");
+            __Info.ResetObject();
         }
 
         /// <summary>
@@ -183,13 +184,13 @@ namespace Cliver
         /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
         public void Reload(bool throwExceptionIfCouldNotLoadFromStorageFile = false)
         {
-            if (!IsAttached())//while technically it is possible, it could lead to a confusion: called on one object it might replace another one!
-                throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info?.FullName + ")");
-            __Info.SetObject(Create(__Info, false, throwExceptionIfCouldNotLoadFromStorageFile));
+            if (!IsAttached())//while technically it is possible, it could lead to a confusion: called on one object it might replace an other one!
+                throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info?.FullName + ").");
+            __Info.ReloadObject(throwExceptionIfCouldNotLoadFromStorageFile);
         }
 
         /// <summary>
-        /// Compares serializable properties of this object with the ones stored in the file or the default ones.
+        /// Compares serializable fields/properties of this object with the ones stored in the file or the default ones.
         /// </summary>
         /// <returns>False if the values are identical.</returns>
         public bool IsChanged()
@@ -198,9 +199,7 @@ namespace Cliver
             {
                 if (__Info == null)//was created outside Config
                     throw new Exception("This method cannot be performed on this Settings object because its __Info is not set.");
-
                 Settings settings = create(__Info, false, false);
-                settings.__Info = __Info;
                 return !Serialization.Json.IsEqual(this, settings);
             }
         }
