@@ -57,7 +57,7 @@ namespace Cliver
         public static string TimePattern = "[dd-MM-yy HH:mm:ss] ";
 
         /// <summary>
-        /// Whether thread log indexes of closed logs should be reused.
+        /// Whether thread log indexes of closed logs can be reused.
         /// </summary>
         public static bool ReuseThreadLogIndexes = false;
 
@@ -67,7 +67,7 @@ namespace Cliver
         public static string FileExtension = "log";
 
         /// <summary>
-        /// Suffix to the log folder name.
+        /// Suffix to the Dir folder name.
         /// </summary>
         public static string DirNameSuffix = @"_Logs";
 
