@@ -55,7 +55,7 @@ namespace Cliver
             lock (settingsFieldFullNames2SettingsFieldInfo)
             {
                 settingsFieldFullNames2SettingsFieldInfo.Clear();
-                foreach (SettingsMemberInfo settingsFieldInfo in EnumSettingsFieldInfos())
+                foreach (SettingsFieldInfo settingsFieldInfo in EnumSettingsFieldInfos())
                 {
                     if (settingsFieldInfo.Optional == true && RequiredOptionalFieldFullNamesRegex?.IsMatch(settingsFieldInfo.FullName) == false)
                         continue;
@@ -64,7 +64,7 @@ namespace Cliver
                 }
             }
         }
-        static Dictionary<string, SettingsMemberInfo> settingsFieldFullNames2SettingsFieldInfo = new Dictionary<string, SettingsMemberInfo>();
+        static Dictionary<string, SettingsFieldInfo> settingsFieldFullNames2SettingsFieldInfo = new Dictionary<string, SettingsFieldInfo>();
 
         class SettingsTypeComparer : IComparer<Type>
         {
@@ -94,7 +94,7 @@ namespace Cliver
         /// Enumerates through all the Settings fields available in the application.
         /// </summary>
         /// <returns></returns>
-        public static IEnumerable<SettingsMemberInfo> EnumSettingsFieldInfos()
+        public static IEnumerable<SettingsFieldInfo> EnumSettingsFieldInfos()
         {
             List<Assembly> assemblies;
             if (ExplicitlyTrackedAssemblies != null)
@@ -135,13 +135,13 @@ namespace Cliver
                         if (fi != null)
                         {
                             if (!fi.Name.StartsWith("<")/*it is a compiled property*/ && settingsTypes.Contains(fi.FieldType))
-                                yield return new SettingsFieldInfo(fi);
+                                yield return new SettingsFieldFieldInfo(fi);
                         }
                         else
                         {
                             PropertyInfo pi = settingsTypeMemberInfo as PropertyInfo;
                             if (pi != null && settingsTypes.Contains(pi.PropertyType))
-                                yield return new SettingsPropertyInfo(pi);
+                                yield return new SettingsFieldPropertyInfo(pi);
                         }
                     }
             }
@@ -177,7 +177,7 @@ namespace Cliver
         {
             lock (settingsFieldFullNames2SettingsFieldInfo)
             {
-                foreach (SettingsMemberInfo settingsFieldInfo in settingsFieldFullNames2SettingsFieldInfo.Values)
+                foreach (SettingsFieldInfo settingsFieldInfo in settingsFieldFullNames2SettingsFieldInfo.Values)
                     settingsFieldInfo.GetObject()?.Save(settingsFieldInfo);
             }
         }
@@ -187,11 +187,11 @@ namespace Cliver
         /// </summary>
         /// <param name="settingsFieldFullName">full name of Settings field; it equals to the name of its storage file without extention</param>
         /// <returns>Settings field's properties</returns>
-        public static SettingsMemberInfo GetSettingsFieldInfo(string settingsFieldFullName)
+        public static SettingsFieldInfo GetSettingsFieldInfo(string settingsFieldFullName)
         {//!!! before altering this method, pay attention that it is used by the engine !!!
             lock (settingsFieldFullNames2SettingsFieldInfo)
             {
-                if (!settingsFieldFullNames2SettingsFieldInfo.TryGetValue(settingsFieldFullName, out SettingsMemberInfo sfi))
+                if (!settingsFieldFullNames2SettingsFieldInfo.TryGetValue(settingsFieldFullName, out SettingsFieldInfo sfi))
                 {
                     sfi = EnumSettingsFieldInfos().FirstOrDefault(a => a.FullName == settingsFieldFullName);
                     if (sfi == null)

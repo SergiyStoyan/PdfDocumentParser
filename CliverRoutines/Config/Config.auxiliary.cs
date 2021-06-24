@@ -70,8 +70,8 @@ namespace Cliver
         {
             lock (settingsFieldFullNames2SettingsFieldInfo)
             {
-                foreach (SettingsMemberInfo sfi in EnumSettingsFieldInfos())
-                //foreach (SettingsMemberInfo sfi in settingsFieldFullNames2SettingsFieldInfo.Values)
+                foreach (SettingsFieldInfo sfi in EnumSettingsFieldInfos())
+                //foreach (SettingsFieldInfo sfi in settingsFieldFullNames2SettingsFieldInfo.Values)
                 {
                     string file2 = toDirectory + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(sfi.File);
                     if (File.Exists(sfi.File))//it can be absent if default settings are used still
@@ -106,7 +106,7 @@ namespace Cliver
         /// <param name="settingsFieldFullName">full name of Settings field; it equals to the name of its storage file without extention</param>
         public static void Reset(string settingsFieldFullName)
         {
-            SettingsMemberInfo sfi = GetSettingsFieldInfo(settingsFieldFullName);
+            SettingsFieldInfo sfi = GetSettingsFieldInfo(settingsFieldFullName);
             sfi.SetObject(Settings.Create(sfi, true, true));
         }
 
@@ -127,7 +127,7 @@ namespace Cliver
         /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
         public static void Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
         {
-            SettingsMemberInfo sfi = GetSettingsFieldInfo(settingsFieldFullName);
+            SettingsFieldInfo sfi = GetSettingsFieldInfo(settingsFieldFullName);
             sfi.SetObject(Settings.Create(sfi, false, throwExceptionIfCouldNotLoadFromStorageFile));
         }
 
@@ -150,7 +150,7 @@ namespace Cliver
         ///// <returns>The Settings object which is set to the field</returns>
         //static public Settings GetSettings(string settingsFieldFullName)
         //{
-        //    SettingsMemberInfo sf = GetSettingsFieldInfo(settingsFieldFullName);
+        //    SettingsFieldInfo sf = GetSettingsFieldInfo(settingsFieldFullName);
         //    return sf.GetObject();
         //}
 

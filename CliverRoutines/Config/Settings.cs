@@ -25,7 +25,7 @@ namespace Cliver
         /// For some rare needs (for instance when a Settings object was created by deserialization/cloning and so has empty __Info), setting __Info from an application is allowed (with caution!).
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
-        public SettingsMemberInfo __Info
+        public SettingsFieldInfo __Info
         {
             get
             {
@@ -34,22 +34,22 @@ namespace Cliver
             set
             {
                 if (value == null)
-                    throw new Exception("SettingsMemberInfo cannot be set to NULL.");//to ensure that no __Info object can be lost in the custom application scope
+                    throw new Exception("SettingsFieldInfo cannot be set to NULL.");//to ensure that no __Info object can be lost in the custom application scope
                 if (value.Type != GetType())
-                    throw new Exception("Disaccording SettingsMemberInfo Type field. It must be: " + GetType().FullName + " but set: " + value.Type.FullName);
+                    throw new Exception("Disaccording SettingsFieldInfo Type field. It must be: " + GetType().FullName + " but set: " + value.Type.FullName);
                 settingsFieldInfo = value;
             }
         }
-        SettingsMemberInfo settingsFieldInfo = null;
+        SettingsFieldInfo settingsFieldInfo = null;
 
-        internal static Settings Create(SettingsMemberInfo settingsFieldInfo, bool reset, bool throwExceptionIfCouldNotLoadFromStorageFile)
+        internal static Settings Create(SettingsFieldInfo settingsFieldInfo, bool reset, bool throwExceptionIfCouldNotLoadFromStorageFile)
         {
             Settings settings = create(settingsFieldInfo, reset, throwExceptionIfCouldNotLoadFromStorageFile);
             settings.__Info = settingsFieldInfo;
             settings.Loaded();
             return settings;
         }
-        internal static Settings create(SettingsMemberInfo settingsFieldInfo, bool reset, bool throwExceptionIfCouldNotLoadFromStorageFile)
+        internal static Settings create(SettingsFieldInfo settingsFieldInfo, bool reset, bool throwExceptionIfCouldNotLoadFromStorageFile)
         {
             if (!reset && File.Exists(settingsFieldInfo.File))
                 try
@@ -77,7 +77,7 @@ namespace Cliver
             settings.__TypeVersion = settingsFieldInfo.TypeVersion.Value;
             return settings;
         }
-        static Settings loadFromFile(SettingsMemberInfo settingsFieldInfo)
+        static Settings loadFromFile(SettingsFieldInfo settingsFieldInfo)
         {
             string s = File.ReadAllText(settingsFieldInfo.File);
             if (settingsFieldInfo.Endec != null)
@@ -107,18 +107,18 @@ namespace Cliver
         {
             return __Info != null
                 //&& __Info.GetObject() == this;!!!if Config was reloaded and __Info was recreated, it still would work which is wrong
-                && Config.GetSettingsFieldInfo(__Info.FullName).GetObject() == this;//is referenced by the field
+                && Config.GetSettingsFieldInfo(__Info.FullName)?.GetObject() == this;//is referenced by the field
         }
 
         /// <summary>
         /// Serializes this Settings object to the storage file.
-        /// (!)Calling this method on a detached Settings object throws an exception because otherwise it would lead to a confusing effect. 
+        /// (!)Calling this method on a detached Settings object throws an exception because otherwise it could lead to a confusing effect. 
         /// </summary>
         public void Save()
         {
             lock (this)
             {
-                if (!IsAttached())//while technically it is possible, it can lead to a confusion.
+                if (!IsAttached())//this check is necessary because __Info can be freely replaced from the custom code and thus it can lead to a confusion.
                     throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info.FullName + ")");
                 save();
             }
@@ -134,7 +134,7 @@ namespace Cliver
             File.WriteAllText(__Info.File, s);
             Saved();
         }
-        internal void Save(SettingsMemberInfo settingsFieldInfo)//avoids a redundant check and provides an appropriate exception message
+        internal void Save(SettingsFieldInfo settingsFieldInfo)//avoids a redundant check and provides an appropriate exception message
         {
             lock (this)
             {
@@ -182,7 +182,7 @@ namespace Cliver
         /// </summary>
         public void Reset(/*bool ignoreInitFile = false*/)
         {
-            if (!IsAttached())//while technically it is possible, it is a way of confusion: called on one object it would replace another one!
+            if (!IsAttached())//while technically it is possible, it would lead to a confusion: called on one object it might replace another one!
                 throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info?.FullName + ")");
             __Info.SetObject(Create(__Info, true, true));
         }
@@ -197,8 +197,8 @@ namespace Cliver
         /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
         public void Reload(bool throwExceptionIfCouldNotLoadFromStorageFile = false)
         {
-            if (!IsAttached())//while technically it is possible, it is a way of confusion: called on one object it would replace another one!
-                throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info?.Type + ")");
+            if (!IsAttached())//while technically it is possible, it would lead to a confusion: called on one object it might replace another one!
+                throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info?.FullName + ")");
             __Info.SetObject(Create(__Info, false, throwExceptionIfCouldNotLoadFromStorageFile));
         }
 

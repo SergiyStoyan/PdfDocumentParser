@@ -17,7 +17,7 @@ namespace Cliver
     /// <summary>
     /// Settings attributes which are defined by a Settings field.
     /// </summary>
-    abstract public class SettingsMemberInfo
+    abstract public class SettingsFieldInfo
     {
         /// <summary>
         /// Settings' full name is the string that is used in code to refer to this field/property. 
@@ -86,13 +86,13 @@ namespace Cliver
         abstract protected object getObject();
         abstract protected void setObject(Settings settings);
 
-        protected SettingsMemberInfo(MemberInfo settingsTypeMemberInfo, Type settingsType)
+        protected SettingsFieldInfo(MemberInfo settingsTypeMemberInfo, Type settingsType)
         {
 #else
         readonly Func<object> getObject;
         readonly Action<Settings> setObject;
 
-        protected SettingsMemberInfo(MemberInfo settingsTypeMemberInfo, Type settingsType, Func<object> getObject, Action<Settings> setObject)
+        protected SettingsFieldInfo(MemberInfo settingsTypeMemberInfo, Type settingsType, Func<object> getObject, Action<Settings> setObject)
         {
             this.getObject = getObject;
             this.setObject = setObject;
@@ -209,7 +209,7 @@ namespace Cliver
         #endregion
     }
 
-    public class SettingsFieldInfo : SettingsMemberInfo
+    public class SettingsFieldFieldInfo : SettingsFieldInfo
     {
 #if !COMPILE_GetObject_SetObject
         override protected object getObject()
@@ -224,7 +224,7 @@ namespace Cliver
 
         readonly FieldInfo FieldInfo;
 
-        internal SettingsFieldInfo(FieldInfo settingsTypeFieldInfo) : base(settingsTypeFieldInfo, settingsTypeFieldInfo.FieldType)
+        internal SettingsFieldFieldInfo(FieldInfo settingsTypeFieldInfo) : base(settingsTypeFieldInfo, settingsTypeFieldInfo.FieldType)
         {
             FieldInfo = settingsTypeFieldInfo;
         }
@@ -254,7 +254,7 @@ namespace Cliver
 #endif
     }
 
-    public class SettingsPropertyInfo : SettingsMemberInfo
+    public class SettingsFieldPropertyInfo : SettingsFieldInfo
     {
 #if !COMPILE_GetObject_SetObject
         override protected object getObject()
@@ -269,7 +269,7 @@ namespace Cliver
 
         readonly PropertyInfo PropertyInfo;
 
-        internal SettingsPropertyInfo(PropertyInfo settingsTypePropertyInfo) : base(settingsTypePropertyInfo, settingsTypePropertyInfo.PropertyType)
+        internal SettingsFieldPropertyInfo(PropertyInfo settingsTypePropertyInfo) : base(settingsTypePropertyInfo, settingsTypePropertyInfo.PropertyType)
         {
             PropertyInfo = settingsTypePropertyInfo;
         }
