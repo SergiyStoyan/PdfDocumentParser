@@ -55,7 +55,6 @@ namespace Example
             //__TypeVersion > __Info.TypeVersion.Value
             Console.WriteLine("WARNING: The application might not support properly the newer type version " + __TypeVersion + " data stored in " + __Info.File + ".");
             Console.WriteLine("The expected version: " + __Info.TypeVersion.Value);
-            Console.WriteLine("Consider to update the application.");
             while (true)
             {
                 Console.WriteLine("\r\nProceed? [Y/N]");
