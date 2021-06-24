@@ -6,6 +6,7 @@
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
+using System.Linq;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
@@ -39,6 +40,24 @@ namespace Cliver
             }
             static Dictionary<string, NamedWriter> names2NamedWriter = new Dictionary<string, NamedWriter>();
 
+            /// <summary>
+            /// Close all the session-less log files. 
+            /// </summary>
+            static public void CloseAll()
+            {
+                lock (names2NamedWriter)
+                {
+                    if (names2NamedWriter.Values.FirstOrDefault(a => !a.IsClosed) == null)
+                        return;
+
+                    Log.Write("Closing the log session...");
+
+                    foreach (NamedWriter nw in names2NamedWriter.Values)
+                        nw.Close();
+                    //names2NamedWriter.Clear(); !!! clearing writers will bring to duplicating them if they are referenced in the calling code.
+                }
+            }
+
             NamedWriter(string name) : base(name) { }
 
             override public Level Level
@@ -52,7 +71,7 @@ namespace Cliver
                     lock (this)
                     {
                         if (level == Level.NONE && value > Level.NONE)
-                            setWorkDir(true);
+                            setDir(true);
                         level = value;
                     }
                 }
@@ -63,7 +82,7 @@ namespace Cliver
                 lock (this)
                 {
                     //(!)it must differ from the session files to avoid sharing
-                    string file2 = WorkDir + Path.DirectorySeparatorChar + "__" + Name + (fileCounter > 0 ? "[" + fileCounter + "]" : "") + "." + FileExtension;
+                    string file2 = Log.Dir + Path.DirectorySeparatorChar + "_" + Name + (fileCounter > 0 ? "[" + fileCounter + "]" : "") + "." + FileExtension;
 
                     if (File == file2)
                         return;

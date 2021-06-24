@@ -15,12 +15,15 @@ namespace Example
             Log.Session.Get("GAME")["client"].Inform("write out of box4");
             Log.Session.Get("GAME").Rename("Game");
 
-            //optional initialization            
-            Log.Initialize(Log.Mode.FOLDER_PER_SESSION);//if permissions allow, logs will be created in the user data directory
+            //a session-less log which will be continued with each app's start
+            Log.Get("throughout").Inform("session-less log");
+
+            //optional initialization. You will like to perform it at the very beginning of the app.            
+            Log.Initialize(Log.Mode.FOLDER_PER_SESSION);
 
             //trivial usage: everything is written to the same file
             Log.Inform("write to the default log of the default session");
-            Log.Inform("Log folder: " + Log.WorkDir);
+            Log.Inform("Log folder: " + Log.Dir);
 
             //more sophisticated usage
             Log.Head["Action1"].Inform0("write to log 'Action1' of the default session");
