@@ -100,7 +100,6 @@ namespace Cliver
     /*public abstract class EncryptedBase
     {
         internal string _Value { get; set; } = null;
-
     }
     public class EncryptedConverter : JsonConverter
     {
