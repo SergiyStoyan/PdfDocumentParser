@@ -25,7 +25,7 @@ namespace Cliver
         {
             public readonly bool Value;
 
-            public OptionalAttribute(bool value = false)
+            public OptionalAttribute(bool value = true)
             {
                 Value = value;
             }
@@ -53,7 +53,7 @@ namespace Cliver
         {
             public readonly bool Value;
 
-            public NullSerializedAttribute(bool value = false)
+            public NullSerializedAttribute(bool value = true)
             {
                 Value = value;
             }
