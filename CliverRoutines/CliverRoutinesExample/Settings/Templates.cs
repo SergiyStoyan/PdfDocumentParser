@@ -5,13 +5,14 @@ using Cliver;
 
 namespace Example
 {
+    //An example of upgrading of a Settings type 
     partial class Settings
     {
         internal static TemplatesSettings Templates;
     }
 
     //Example how to check the type version and migrate to the current type if needed.
-    //When this attribute is set, Config engine checks if the version set by the attribute accords with the version saved in the storage file.
+    //When this attribute is set, Config checks if the version set by the attribute accords with the version saved in the storage file.
     [SettingsTypeAttribute.TypeVersion(value: 210601, minSupportedTypeVersion: 210601)]
     class TemplatesSettings : Cliver.UserSettings//UserSettings based class is serialized in the user directory
     {
@@ -53,9 +54,17 @@ namespace Example
             }
             //__TypeVersion > __Info.TypeVersion.Value
             Console.WriteLine("WARNING: The application might not support properly the newer type version " + __TypeVersion + " data stored in " + __Info.File + ".");
-            Console.WriteLine("The expected version is " + __Info.TypeVersion.Value);
+            Console.WriteLine("The expected version: " + __Info.TypeVersion.Value);
             Console.WriteLine("Consider to update the application.");
-            return UnsupportedTypeVersionHandlerCommand.Proceed;
+            while (true)
+            {
+                Console.WriteLine("\r\nProceed? [Y/N]");
+                ConsoleKey k = Console.ReadKey().Key;
+                if (k == ConsoleKey.Y)
+                    return UnsupportedTypeVersionHandlerCommand.Proceed;
+                if (k == ConsoleKey.N)
+                    Log.Exit("Too new type version " + __TypeVersion + " detected in " + __Info.File + ".");
+            }
         }
     }
 

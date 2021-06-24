@@ -5,6 +5,7 @@ using Cliver;
 
 namespace Example
 {
+    //An example of encypting of a serializable field
     partial class Settings
     {
         public static ServerSettings Server { get; set; }
@@ -20,18 +21,9 @@ namespace Example
 
         public string Host = "";
         public int Port = 123;
+        //This field is encrypted. It decrypts its value only when explicitly called.
         public Cliver.Encrypted<string> Password = new Encrypted<string>();
         //Windows alternative provided by CliverWinRoutines:
         //public Cliver.Win.Encrypted<string> Password = new Cliver.Win.Encrypted<string>();  
-
-        protected override void Loaded()
-        {
-            ConfigExample.Log.Inform("Settings loaded: " + __Info.FullName);
-        }
-
-        protected override void Saved()
-        {
-            ConfigExample.Log.Inform("Settings saved: " + __Info.FullName);
-        }
     }
 }

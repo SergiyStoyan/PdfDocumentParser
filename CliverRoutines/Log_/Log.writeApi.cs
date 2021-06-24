@@ -89,7 +89,7 @@ namespace Cliver
         /// <param name="message"></param>
         static public void Exit(string message)
         {
-            Head.Error(message);
+            Head.Exit(message);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Cliver
         /// <param name="message"></param>
         static public void Exit2(string message)
         {
-            Head.Error2(message);
+            Head.Exit2(message);
         }
 
         /// <summary>

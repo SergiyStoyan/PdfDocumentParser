@@ -5,6 +5,7 @@ using Cliver;
 
 namespace Example
 {
+    //An example of encryption of a Settings type
     partial class Settings
     {
         internal static CredentialsSettings Credentials;

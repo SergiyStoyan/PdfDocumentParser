@@ -40,7 +40,7 @@ namespace Cliver
 
             public void Exit(string message)
             {
-                Default.Error(message);
+                Default.Exit(message);
             }
 
             public void Exit(Exception e)

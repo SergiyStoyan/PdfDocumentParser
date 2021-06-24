@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using Cliver;
 
+
 namespace Example
 {
+    //An ordinary example of a Settings type
     partial class Settings
     {
         //Settings type field/property can be declared anywhere in the code. It must be static to be processed by Config.
