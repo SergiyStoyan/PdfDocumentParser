@@ -21,7 +21,7 @@ namespace Cliver
         /// <summary>
         /// This info identifies a certain Settings field/property in the application to which this object belongs. 
         /// All __Info instances are paired one-to-one with all Settings fields in the application. 
-        /// Cloned Settings objects share the same __Info instance which means that while multiple Settings objects can reference the same Settings field, the field references only one of them (attached object).
+        /// Cloned Settings objects share the same __Info instance which means that while multiple Settings objects can reference the same Settings field, the field can reference only one of them (which is called as 'attached object').
         /// For some rare needs (for instance when a Settings object was created by deserialization/cloning and so has empty __Info), setting __Info from an application is allowed (with caution!).
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
@@ -46,17 +46,10 @@ namespace Cliver
         {
             Settings settings = create(settingsFieldInfo, reset, throwExceptionIfCouldNotLoadFromStorageFile);
             settings.__Info = settingsFieldInfo;
-            //if (settings.__Info.FormatVersionAttribute?.IsFormatVersionSupported(settings) == false)
-            //{
-            //    if (settings.GetType().GetMethod(nameof(settings.OnFormatVersionIsNotSupported)).DeclaringType == settings.GetType())
-            //        settings.OnFormatVersionIsNotSupported();
-            //    else
-            //        throw new Exception("Unsupported format of " + settings.GetType().FullName + ": " + settings.__Info.FormatVersionAttribute.FormatVersion);
-            //}
             settings.Loaded();
             return settings;
         }
-        static Settings create(SettingsMemberInfo settingsFieldInfo, bool reset, bool throwExceptionIfCouldNotLoadFromStorageFile)
+        internal static Settings create(SettingsMemberInfo settingsFieldInfo, bool reset, bool throwExceptionIfCouldNotLoadFromStorageFile)
         {
             if (!reset && File.Exists(settingsFieldInfo.File))
                 try
@@ -113,8 +106,8 @@ namespace Cliver
         public bool IsAttached()
         {
             return __Info != null
+                //&& __Info.GetObject() == this;!!!if Config was reloaded and __Info was recreated, it still would work which is wrong
                 && Config.GetSettingsFieldInfo(__Info.FullName).GetObject() == this;//is referenced by the field
-                                                                                    //&& __Info.GetObject() == this;//is referenced by the field//!!!if Config was reloaded and __Info was recreated, it still would work which is wrong
         }
 
         /// <summary>
@@ -126,13 +119,13 @@ namespace Cliver
             lock (this)
             {
                 if (!IsAttached())//while technically it is possible, it can lead to a confusion.
-                    throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info?.Type.FullName + ")");
+                    throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info.FullName + ")");
                 save();
             }
         }
         void save()
         {
-            __TypeVersion = settingsFieldInfo.TypeVersion.Value;
+            __TypeVersion = __Info.TypeVersion.Value;
             Saving();
             string s = Serialization.Json.Serialize(this, __Info.Indented, !__Info.NullSerialized, false/*!!!default values always must be stored*/);
             if (__Info.Endec != null)
@@ -145,7 +138,7 @@ namespace Cliver
         {
             lock (this)
             {
-                if (__Info != settingsFieldInfo)//which can only happen if there are several settings fields of the same type
+                if (__Info != settingsFieldInfo)//which can only happen if there are several settings fields of the same type (e.g. if Config was reloaded)
                     throw new Exception("The value of Settings field '" + settingsFieldInfo.FullName + "' is not attached to it.");
                 save();
             }
@@ -154,7 +147,7 @@ namespace Cliver
         #region Type Version support
 
         /// <summary>
-        /// The actual version of the Settings type restored from a storage file.
+        /// Actual version of the Settings type as it is restored from the storage file.
         /// </summary>
         [Newtonsoft.Json.JsonProperty(DefaultValueHandling = Newtonsoft.Json.DefaultValueHandling.Ignore)]//it serves 2 aims: - ignore when 0; - forces setting through the private setter (yes, it does!)
         public uint __TypeVersion { get; private set; } = 0;
@@ -173,18 +166,6 @@ namespace Cliver
             Proceed
         }
 
-
-        /// <summary>
-        /// Get the old format data in order to migrate to the current format.
-        /// </summary>
-        /// <returns></returns>
-        public Newtonsoft.Json.Linq.JObject GetJObjectFromStorageFile()
-        {
-            string s = File.ReadAllText(settingsFieldInfo.File);
-            if (settingsFieldInfo.Endec != null)
-                s = settingsFieldInfo.Endec.Decrypt(s);
-            return Newtonsoft.Json.Linq.JObject.Parse(s);
-        }
         #endregion
 
         virtual protected void Loaded() { }
@@ -192,12 +173,6 @@ namespace Cliver
         virtual protected void Saving() { }
 
         virtual protected void Saved() { }
-
-        //void importValues(Settings s)!!!Declined because such copying may bring to a mess in the object's state (if any)
-        //{
-        //    foreach (FieldInfo settingsTypeFieldInfo in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance))
-        //        settingsTypeFieldInfo.SetValue(this, settingsTypeFieldInfo.GetValue(s));
-        //}
 
         /// <summary>
         /// Replaces the value of the field defined by __Info with a new object initiated with the default values. 
@@ -208,7 +183,7 @@ namespace Cliver
         public void Reset(/*bool ignoreInitFile = false*/)
         {
             if (!IsAttached())//while technically it is possible, it is a way of confusion: called on one object it would replace another one!
-                throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info?.Type + ")");
+                throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info?.FullName + ")");
             __Info.SetObject(Create(__Info, true, true));
         }
 
@@ -236,8 +211,11 @@ namespace Cliver
             lock (this)
             {
                 if (__Info == null)//was created outside Config
-                    throw new Exception("This method cannot be performed on this Settings object because its __Info is not defined.");
-                return !Serialization.Json.IsEqual(this, Create(__Info, false, false));
+                    throw new Exception("This method cannot be performed on this Settings object because its __Info is not set.");
+
+                Settings settings = create(__Info, false, false);
+                settings.__Info = __Info;
+                return !Serialization.Json.IsEqual(this, settings);
             }
         }
 

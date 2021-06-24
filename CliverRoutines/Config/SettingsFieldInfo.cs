@@ -41,7 +41,7 @@ namespace Cliver
         public readonly Type Type;
 
         /// <summary>
-        /// Keeps type version info.
+        /// Version info of the Settings type defined in the present code.
         /// </summary>
         public readonly SettingsTypeAttribute.TypeVersionAttribute TypeVersion;
 
@@ -140,6 +140,73 @@ namespace Cliver
             SettingsTypeAttribute.TypeVersionAttribute typeVersion = settingsType.GetCustomAttributes<SettingsTypeAttribute.TypeVersionAttribute>(false).FirstOrDefault();
             TypeVersion = typeVersion != null ? typeVersion : new SettingsTypeAttribute.TypeVersionAttribute(0, 0);
         }
+
+        #region Type Version support
+
+        /// <summary>
+        /// Read the storage file as a JObject in order to migrate to the current format.
+        /// </summary>
+        /// <returns></returns>
+        public Newtonsoft.Json.Linq.JObject ReadStorageFileAsJObject()
+        {
+            lock (this)
+            {
+                if (!System.IO.File.Exists(File))
+                    return null;
+                string s = System.IO.File.ReadAllText(File);
+                if (Endec != null)
+                    s = Endec.Decrypt(s);
+                return Newtonsoft.Json.Linq.JObject.Parse(s);
+            }
+        }
+
+        /// <summary>
+        /// Write the JObject to the storage file in order to migrate to the current format.
+        /// </summary>
+        /// <returns></returns>
+        public void WriteStorageFileAsJObject(Newtonsoft.Json.Linq.JObject o)
+        {
+            lock (this)
+            {
+                string s = o.ToString();
+                if (Endec != null)
+                    s = Endec.Decrypt(s);
+                System.IO.File.WriteAllText(File, s);
+            }
+        }
+
+        /// <summary>
+        /// Read the storage file as a string in order to migrate to the current format.
+        /// </summary>
+        /// <returns></returns>
+        public string ReadStorageFileAsString()
+        {
+            lock (this)
+            {
+                if (!System.IO.File.Exists(File))
+                    return null;
+                string s = System.IO.File.ReadAllText(File);
+                if (Endec != null)
+                    s = Endec.Decrypt(s);
+                return s;
+            }
+        }
+
+        /// <summary>
+        /// Write the string to the storage file in order to migrate to the current format.
+        /// </summary>
+        /// <returns></returns>
+        public void WriteStorageFileAsString(string s)
+        {
+            lock (this)
+            {
+                if (Endec != null)
+                    s = Endec.Decrypt(s);
+                System.IO.File.WriteAllText(File, s);
+            }
+        }
+
+        #endregion
     }
 
     public class SettingsFieldInfo : SettingsMemberInfo

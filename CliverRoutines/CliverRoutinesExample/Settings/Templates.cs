@@ -11,7 +11,7 @@ namespace Example
     }
 
     //Example how to check the type version and migrate to the current type if needed.
-    //When this attribute is set, Config engine checks if the version set by the attribute corresponds to the version in the storage file.
+    //When this attribute is set, Config engine checks if the version set by the attribute accords with the version saved in the storage file.
     [SettingsTypeAttribute.TypeVersion(value: 210601, minSupportedTypeVersion: 210601)]
     class TemplatesSettings : Cliver.UserSettings//UserSettings based class is serialized in the user directory
     {
@@ -23,24 +23,24 @@ namespace Example
             //different approaches are considered below:
             if (__TypeVersion < 200301)
             {
-                Newtonsoft.Json.Linq.JObject o = GetJObjectFromStorageFile();
+                Newtonsoft.Json.Linq.JObject o = __Info.ReadStorageFileAsJObject();
                 //edit the old data as a JObject
                 //...
                 //set the current version
                 o["__TypeVersion"] = __Info.TypeVersion.Value;
                 //save
-                System.IO.File.WriteAllText(__Info.File, o.ToString());
+                __Info.WriteStorageFileAsJObject(o);
                 return UnsupportedTypeVersionHandlerCommand.Reload;
             }
             if (__TypeVersion < 200901)
             {
-                string s = System.IO.File.ReadAllText(__Info.File);
+                string s = __Info.ReadStorageFileAsString();
                 //edit the old data as a serialized string
                 //...
                 //set the current version
                 s = System.Text.RegularExpressions.Regex.Replace(s, @"(?<=\""__TypeVersion\""\:\s*)\d+", __Info.TypeVersion.Value.ToString(), System.Text.RegularExpressions.RegexOptions.Singleline);
                 //save
-                System.IO.File.WriteAllText(__Info.File, s);
+                __Info.WriteStorageFileAsString(s);
                 return UnsupportedTypeVersionHandlerCommand.Reload;
             }
             if (__TypeVersion < __Info.TypeVersion.Value)
