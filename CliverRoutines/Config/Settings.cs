@@ -36,7 +36,7 @@ namespace Cliver
                 if (value == null)
                     throw new Exception("SettingsFieldInfo cannot be set to NULL.");//to ensure that no __Info object can be lost in the custom application scope
                 if (value.Type != GetType())
-                    throw new Exception("Disaccording SettingsFieldInfo Type field. It must be: " + GetType().FullName + " but set: " + value.Type.FullName);
+                    throw new Exception("Disaccording SettingsFieldInfo Type field. It must be: " + GetType().FullName + " while trying: " + value.Type.FullName);
                 settingsFieldInfo = value;
             }
         }
@@ -110,16 +110,29 @@ namespace Cliver
                 && Config.GetSettingsFieldInfo(__Info.FullName)?.GetObject() == this;//is referenced by the field
         }
 
+        ///// <summary>
+        ///// Serializes this Settings object to the storage file.
+        ///// (!)Calling this method on a detached Settings object throws an exception because otherwise it could lead to a confusing effect. 
+        ///// </summary>
+        //public void Save()
+        //{
+        //    lock (this)
+        //    {
+        //        if (!IsAttached())//this check is necessary because an operation on storage file logically belongs to a Settings field and not to a Settings object.
+        //            //__Info can be freely replaced from the custom code and thus it can lead to a confusion.
+        //            throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info.FullName + ")");
+        //        save();
+        //    }
+        //}
         /// <summary>
         /// Serializes this Settings object to the storage file.
-        /// (!)Calling this method on a detached Settings object throws an exception because otherwise it could lead to a confusing effect. 
         /// </summary>
         public void Save()
         {
             lock (this)
             {
-                if (!IsAttached())//this check is necessary because __Info can be freely replaced from the custom code and thus it can lead to a confusion.
-                    throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info.FullName + ")");
+                if (__Info == null)
+                    throw new Exception("This method cannot be performed on this Settings object because its __Info is not set.");
                 save();
             }
         }
@@ -134,13 +147,61 @@ namespace Cliver
             File.WriteAllText(__Info.File, s);
             Saved();
         }
-        internal void Save(SettingsFieldInfo settingsFieldInfo)//avoids a redundant check and provides an appropriate exception message
+        internal void Save(SettingsFieldInfo settingsFieldInfo)//checks that __Info was not replaced and provides an appropriate exception message
         {
             lock (this)
             {
-                if (__Info != settingsFieldInfo)//which can only happen if there are several settings fields of the same type (e.g. if Config was reloaded)
+                if (__Info != settingsFieldInfo)//it can happen when:
+                    //- there are several settings fields of the same type and their __Info's were exchanged from the custom code;
+                    //- Config was reloaded while a old object was preserved;
+                    //All this will lead to a confusion.
                     throw new Exception("The value of Settings field '" + settingsFieldInfo.FullName + "' is not attached to it.");
                 save();
+            }
+        }
+
+        /// <summary>
+        /// Replaces the value of the field defined by __Info with a new object initiated with the default values. 
+        /// Tries to load it from the initial file located in the app's directory. 
+        /// If this file does not exist, it creates an object with the hardcoded values.
+        /// (!)Calling this method on a detached Settings object throws an exception because otherwise it could lead to a confusing effect. 
+        /// </summary>
+        public void Reset(/*bool ignoreInitFile = false*/)
+        {
+            if (!IsAttached())//while technically it is possible, it could lead to a confusion: called on one object it might replace another one!
+                throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info?.FullName + ")");
+            __Info.SetObject(Create(__Info, true, true));
+        }
+
+        /// <summary>
+        /// Replaces the value of the field defined by __Info with a new object initiated with the stored values.
+        /// Tries to load it from the storage file.
+        /// If this file does not exist, it tries to load it from the initial file located in the app's directory. 
+        /// If this file does not exist, it creates an object with the hardcoded values.
+        /// (!)Calling this method on a detached Settings object throws an exception because otherwise it could lead to a confusing effect. 
+        /// </summary>
+        /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
+        public void Reload(bool throwExceptionIfCouldNotLoadFromStorageFile = false)
+        {
+            if (!IsAttached())//while technically it is possible, it could lead to a confusion: called on one object it might replace another one!
+                throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info?.FullName + ")");
+            __Info.SetObject(Create(__Info, false, throwExceptionIfCouldNotLoadFromStorageFile));
+        }
+
+        /// <summary>
+        /// Compares serializable properties of this object with the ones stored in the file or the default ones.
+        /// </summary>
+        /// <returns>False if the values are identical.</returns>
+        public bool IsChanged()
+        {
+            lock (this)
+            {
+                if (__Info == null)//was created outside Config
+                    throw new Exception("This method cannot be performed on this Settings object because its __Info is not set.");
+
+                Settings settings = create(__Info, false, false);
+                settings.__Info = __Info;
+                return !Serialization.Json.IsEqual(this, settings);
             }
         }
 
@@ -173,51 +234,6 @@ namespace Cliver
         virtual protected void Saving() { }
 
         virtual protected void Saved() { }
-
-        /// <summary>
-        /// Replaces the value of the field defined by __Info with a new object initiated with the default values. 
-        /// Tries to load it from the initial file located in the app's directory. 
-        /// If this file does not exist, it creates an object with the hardcoded values.
-        /// (!)Calling this method on a detached Settings object throws an exception because otherwise it would lead to a confusing effect. 
-        /// </summary>
-        public void Reset(/*bool ignoreInitFile = false*/)
-        {
-            if (!IsAttached())//while technically it is possible, it would lead to a confusion: called on one object it might replace another one!
-                throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info?.FullName + ")");
-            __Info.SetObject(Create(__Info, true, true));
-        }
-
-        /// <summary>
-        /// Replaces the value of the field defined by __Info with a new object initiated with the stored values.
-        /// Tries to load it from the storage file.
-        /// If this file does not exist, it tries to load it from the initial file located in the app's directory. 
-        /// If this file does not exist, it creates an object with the hardcoded values.
-        /// (!)Calling this method on a detached Settings object throws an exception because otherwise it would lead to a confusing effect. 
-        /// </summary>
-        /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
-        public void Reload(bool throwExceptionIfCouldNotLoadFromStorageFile = false)
-        {
-            if (!IsAttached())//while technically it is possible, it would lead to a confusion: called on one object it might replace another one!
-                throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info?.FullName + ")");
-            __Info.SetObject(Create(__Info, false, throwExceptionIfCouldNotLoadFromStorageFile));
-        }
-
-        /// <summary>
-        /// Compares serializable properties of this object with the ones stored in the file or the default ones.
-        /// </summary>
-        /// <returns>False if the values are identical.</returns>
-        public bool IsChanged()
-        {
-            lock (this)
-            {
-                if (__Info == null)//was created outside Config
-                    throw new Exception("This method cannot be performed on this Settings object because its __Info is not set.");
-
-                Settings settings = create(__Info, false, false);
-                settings.__Info = __Info;
-                return !Serialization.Json.IsEqual(this, settings);
-            }
-        }
 
         /*//version with static __StorageDir
         /// <summary>
