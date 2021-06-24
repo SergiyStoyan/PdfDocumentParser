@@ -75,12 +75,12 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Write message with the stack information.
+        /// Write object with the stack information.
         /// </summary>
-        /// <param name="message"></param>
-        static public void Trace(object message = null)
+        /// <param name="object_"></param>
+        static public void Trace(object object_ = null)
         {
-            Head.Trace(message);
+            Head.Trace(object_);
         }
 
         /// <summary>

@@ -45,9 +45,9 @@ namespace Cliver
                 Write(MessageType.ERROR, message, GetExceptionMessage2(e));
             }
 
-            public void Trace(object message = null)
+            public void Trace(object object_ = null)
             {
-                Write(MessageType.TRACE, message == null ? null : message.ToString(), GetStackString());
+                Write(MessageType.TRACE, object_?.ToString(), GetStackString());
             }
 
             virtual public void Exit(string message)
