@@ -16,7 +16,7 @@ namespace Example
     [SettingsTypeAttribute.TypeVersion(value: 210601, minSupportedTypeVersion: 210601)]
     class TemplatesSettings : Cliver.UserSettings//UserSettings based class is serialized in the user directory
     {
-        public Dictionary<string, Template> Names2Template = new Dictionary<string, Template>();
+        public List<Template> Templates = new List<Template> { new Template { Name = "test", Words = new List<string> { "apple", "box" } } };
 
         //Here is your chance to upgrade the data to the current format.
         override protected UnsupportedTypeVersionHandlerCommand UnsupportedTypeVersionHandler()
