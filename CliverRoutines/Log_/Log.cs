@@ -183,7 +183,7 @@ namespace Cliver
             {
                 Session.CloseAll();
                 NamedWriter.CloseAll();
-                Log.dir = null;
+                workDir = null;
                 headSession = null;
             }
         }
@@ -191,28 +191,28 @@ namespace Cliver
         /// <summary>
         ///Directory where logs and log sessions are written.
         /// </summary>
-        public static string Dir
+        public static string WorkDir
         {
             get
             {
-                if (Log.dir == null)
-                    setDir(DefaultLevel > Level.NONE);
-                return Log.dir;
+                if (workDir == null)
+                    setWorkDir(DefaultLevel > Level.NONE);
+                return workDir;
             }
         }
-        static string dir = null;
+        static string workDir = null;
         static Thread deletingOldLogsThread = null;
         public static Func<string, bool> DeleteOldLogsDialog = null;
 
-        static void setDir(bool create)
+        static void setWorkDir(bool create)
         {
             lock (lockObject)
             {
-                if (Log.dir != null)
+                if (workDir != null)
                 {
                     if (!create)
                         return;
-                    if (Directory.Exists(Log.dir))
+                    if (Directory.Exists(workDir))
                         return;
                 }
                 List<string> baseDirs = new List<string> {
@@ -227,26 +227,26 @@ namespace Cliver
                 foreach (string baseDir in baseDirs)
                 {
                     BaseDir = baseDir;
-                    Log.dir = BaseDir + Path.DirectorySeparatorChar + Log.ProcessName + DirNameSuffix;
+                    workDir = BaseDir + Path.DirectorySeparatorChar + Log.ProcessName + DirNameSuffix;
                     if (create)
                         try
                         {
-                            if (!Directory.Exists(Log.dir))
-                                FileSystemRoutines.CreateDirectory(Log.dir);
-                            string testFile = Log.dir + Path.DirectorySeparatorChar + "test";
+                            if (!Directory.Exists(workDir))
+                                FileSystemRoutines.CreateDirectory(workDir);
+                            string testFile = workDir + Path.DirectorySeparatorChar + "test";
                             File.WriteAllText(testFile, "test");
                             File.Delete(testFile);
                             break;
                         }
                         catch //(Exception e)
                         {
-                            Log.dir = null;
+                            workDir = null;
                         }
                 }
-                if (Log.dir == null)
+                if (workDir == null)
                     throw new Exception("Could not access any log directory.");
-                Log.dir = PathRoutines.GetNormalizedPath(Log.dir, false);
-                if (Directory.Exists(Log.dir) && deleteLogsOlderThanDays >= 0)
+                workDir = PathRoutines.GetNormalizedPath(workDir, false);
+                if (Directory.Exists(workDir) && deleteLogsOlderThanDays >= 0)
                     deletingOldLogsThread = ThreadRoutines.Start(() => { Log.DeleteOldLogs(deleteLogsOlderThanDays, DeleteOldLogsDialog); });//to avoid a concurrent loop while accessing the log file from the same thread 
             }
         }
@@ -257,11 +257,11 @@ namespace Cliver
         public static string BaseDir { get; private set; }
 
         /// <summary>
-        /// Creates or retrieves a session-less log writer which allows continuous writing to the same log file in Log.Dir. 
+        /// Creates or retrieves a session-less log writer which allows continuous writing to the same log file in Log.WorkDir. 
         /// </summary>
         /// <param name="name">log name</param>
-        /// <returns></returns>
-        static public Writer Get(string name)
+        /// <returns>wirter</returns>
+        static public NamedWriter Get(string name)
         {
             return NamedWriter.Get(name);
         }

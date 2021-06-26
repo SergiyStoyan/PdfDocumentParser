@@ -21,10 +21,10 @@ namespace Cliver
         public partial class NamedWriter : Writer
         {
             /// <summary>
-            /// Creates or retrieves a session-less named log writer that allows to write the same log file directly to WorkDir. 
+            /// Creates or retrieves a session-less log writer which allows continuous writing to the same log file in Log.WorkDir. 
             /// </summary>
-            /// <param name="name"></param>
-            /// <returns></returns>
+            /// <param name="name">log name</param>
+            /// <returns>wirter</returns>
             static public NamedWriter Get(string name)
             {
                 lock (names2NamedWriter)
@@ -43,14 +43,14 @@ namespace Cliver
             /// <summary>
             /// Close all the session-less log files. 
             /// </summary>
-            static public void CloseAll()
+            static internal void CloseAll()
             {
                 lock (names2NamedWriter)
                 {
                     if (names2NamedWriter.Values.FirstOrDefault(a => !a.IsClosed) == null)
                         return;
 
-                    Log.Write("Closing the log session...");
+                    Log.Write("Closing the session-less logs...");
 
                     foreach (NamedWriter nw in names2NamedWriter.Values)
                         nw.Close();
@@ -71,7 +71,7 @@ namespace Cliver
                     lock (this)
                     {
                         if (level == Level.NONE && value > Level.NONE)
-                            setDir(true);
+                            setWorkDir(true);
                         level = value;
                     }
                 }
@@ -82,7 +82,7 @@ namespace Cliver
                 lock (this)
                 {
                     //(!)it must differ from the session files to avoid sharing
-                    string file2 = Log.Dir + Path.DirectorySeparatorChar + "_" + Name + (fileCounter > 0 ? "[" + fileCounter + "]" : "") + "." + FileExtension;
+                    string file2 = Log.WorkDir + Path.DirectorySeparatorChar + "_" + Name + (fileCounter > 0 ? "[" + fileCounter + "]" : "") + "." + FileExtension;
 
                     if (File == file2)
                         return;
