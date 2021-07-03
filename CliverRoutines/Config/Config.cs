@@ -32,11 +32,11 @@ namespace Cliver
         /// </summary>
         public static List<string> RequiredOptionalFieldFullNames = null;
 
-        /// <summary>
-        /// Tells Config which optional (i.e. attributed with [Settings.Optional]) Settings types are to be initialized. 
-        /// It must be set before calling Reload() or Reset().
-        /// </summary>
-        public static List<Type> RequiredOptionalSettingsTypes = null;
+        ///// <summary>
+        ///// Tells Config which optional (i.e. attributed with [Settings.Optional]) Settings types are to be initialized. 
+        ///// It must be set before calling Reload() or Reset().
+        ///// </summary>
+        //public static List<Type> RequiredOptionalSettingsTypes = null;
 
         /// <summary>
         /// Tells Config in which order Settings fields ordered by their types are to be initalized.        
@@ -56,54 +56,20 @@ namespace Cliver
         public const string CONFIG_FOLDER_NAME = "config";
         public const string FILE_EXTENSION = "json";
 
-        static void loadOrReset(bool reset, bool throwExceptionIfCouldNotLoadFromStorageFile)
+        static void replenish_settingsFieldFullNames2SettingsFieldInfo()
         {
             lock (settingsFieldFullNames2SettingsFieldInfo)
             {
-                settingsFieldFullNames2SettingsFieldInfo.Clear();
-                HashSet<string> requiredOptionalFieldFullNames = RequiredOptionalFieldFullNames == null ? null : new HashSet<string>(RequiredOptionalFieldFullNames);
-                foreach (SettingsFieldInfo settingsFieldInfo in EnumSettingsFieldInfos())
-                {
-                    settingsFieldFullNames2SettingsFieldInfo[settingsFieldInfo.FullName] = settingsFieldInfo;
-                    bool foundInRequiredOptionalFieldFullNames = requiredOptionalFieldFullNames?.Remove(settingsFieldInfo.FullName) == true;
-                    if (!settingsFieldInfo.Optional || RequiredOptionalSettingsTypes?.Contains(settingsFieldInfo.Type) == true || foundInRequiredOptionalFieldFullNames)
-                        settingsFieldInfo.SetObject(Settings.Create(settingsFieldInfo, reset, throwExceptionIfCouldNotLoadFromStorageFile));
+                foreach (SettingsFieldInfo settingsFieldInfo in enumSettingsFieldInfos())
+                {//SettingsFieldInfo's parameters for a Settings field are expected to be always the same during the process lifetime so no need to re-create it.
+                    //Exporting of SettingsFieldInfo to the custom code is one more reason not to re-create it.
+                    if (!settingsFieldFullNames2SettingsFieldInfo.ContainsKey(settingsFieldInfo.FullName))//!!!we should not replace existing SettingsFieldInfo's
+                        settingsFieldFullNames2SettingsFieldInfo[settingsFieldInfo.FullName] = settingsFieldInfo;
                 }
-                if (requiredOptionalFieldFullNames?.Count > 0)
-                    throw new Exception("RequiredOptionalFieldFullNames contains name which was not found: '" + RequiredOptionalFieldFullNames[0] + "'");
             }
         }
         static Dictionary<string, SettingsFieldInfo> settingsFieldFullNames2SettingsFieldInfo = new Dictionary<string, SettingsFieldInfo>();
-
-        class SettingsTypeComparer : IComparer<Type>
-        {
-            public SettingsTypeComparer(List<Type> orderedTypes)
-            {
-                this.orderedTypes = orderedTypes;
-            }
-            readonly List<Type> orderedTypes;
-            public int Compare(Type a, Type b)
-            {
-                int ai = orderedTypes.IndexOf(a);
-                int bi = orderedTypes.IndexOf(b);
-                if (ai < 0)
-                    if (bi < 0)
-                        return 0;
-                    else
-                        return 1;
-                if (bi < 0)
-                    return -1;
-                if (a == b)
-                    return 0;
-                return ai < bi ? -1 : 1;
-            }
-        }
-
-        /// <summary>
-        /// Enumerates through all the Settings fields available in the application.
-        /// </summary>
-        /// <returns></returns>
-        public static IEnumerable<SettingsFieldInfo> EnumSettingsFieldInfos()
+        static IEnumerable<SettingsFieldInfo> enumSettingsFieldInfos()
         {
             List<Assembly> assemblies;
             if (ExplicitlyTrackedAssemblies != null)
@@ -131,11 +97,6 @@ namespace Cliver
             {
                 Type[] types = assembly.GetTypes();
                 IEnumerable<Type> settingsTypes = types.Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(Settings))).Distinct();
-                if (InitializationOrderedSettingsTypes != null)
-                {
-                    SettingsTypeComparer settingsTypeComparer = new SettingsTypeComparer(InitializationOrderedSettingsTypes);
-                    settingsTypes = settingsTypes.OrderBy(t => t, settingsTypeComparer);
-                }
                 foreach (Type type in types)
                     //!!!while FieldInfo can see property, it loses its attributes if any. So we need to retrieve by GetMembers().
                     foreach (MemberInfo settingsTypeMemberInfo in type.GetMembers(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)/*.Where(f => settingsTypes.Contains(f.Member)*/ /* && f.FieldType.IsAssignableFrom(settingsType)*/)
@@ -153,6 +114,53 @@ namespace Cliver
                                 yield return new SettingsFieldPropertyInfo(pi);
                         }
                     }
+            }
+        }
+
+        class SettingsTypeComparer : IComparer<Type>
+        {
+            public SettingsTypeComparer(List<Type> orderedTypes)
+            {
+                this.orderedTypes = orderedTypes;
+            }
+            readonly List<Type> orderedTypes;
+            public int Compare(Type a, Type b)
+            {
+                int ai = orderedTypes.IndexOf(a);
+                int bi = orderedTypes.IndexOf(b);
+                if (ai < 0)
+                    if (bi < 0)
+                        return 0;
+                    else
+                        return 1;
+                if (bi < 0)
+                    return -1;
+                if (a == b)
+                    return 0;
+                return ai < bi ? -1 : 1;
+            }
+        }
+
+        static void loadOrReset(bool reset, bool throwExceptionIfCouldNotLoadFromStorageFile)
+        {
+            lock (settingsFieldFullNames2SettingsFieldInfo)
+            {
+                replenish_settingsFieldFullNames2SettingsFieldInfo();
+                IEnumerable<SettingsFieldInfo> settingsFieldInfos = settingsFieldFullNames2SettingsFieldInfo.Values;
+                if (InitializationOrderedSettingsTypes != null)
+                {
+                    SettingsTypeComparer settingsTypeComparer = new SettingsTypeComparer(InitializationOrderedSettingsTypes);
+                    settingsFieldInfos = settingsFieldInfos.OrderBy(a => a.Type, settingsTypeComparer);
+                }
+                HashSet<string> requiredOptionalFieldFullNames = RequiredOptionalFieldFullNames == null ? null : new HashSet<string>(RequiredOptionalFieldFullNames);
+                foreach (SettingsFieldInfo settingsFieldInfo in settingsFieldInfos)
+                {
+                    bool foundInRequiredOptionalFieldFullNames = requiredOptionalFieldFullNames?.Remove(settingsFieldInfo.FullName) == true;
+                    if (!settingsFieldInfo.Optional /*|| RequiredOptionalSettingsTypes?.Contains(settingsFieldInfo.Type) == true*/ || foundInRequiredOptionalFieldFullNames)
+                        settingsFieldInfo.SetObject(Settings.Create(settingsFieldInfo, reset, throwExceptionIfCouldNotLoadFromStorageFile));
+                }
+                if (requiredOptionalFieldFullNames?.Count > 0)
+                    throw new Exception("RequiredOptionalFieldFullNames contains name which was not found: '" + RequiredOptionalFieldFullNames[0] + "'");
             }
         }
 
@@ -202,14 +210,19 @@ namespace Cliver
             {
                 if (!settingsFieldFullNames2SettingsFieldInfo.TryGetValue(settingsFieldFullName, out SettingsFieldInfo settingsFieldInfo))
                 {
-                    foreach (SettingsFieldInfo sfi in EnumSettingsFieldInfos())
-                        if (!settingsFieldFullNames2SettingsFieldInfo.ContainsKey(sfi.FullName))
-                            settingsFieldFullNames2SettingsFieldInfo[sfi.FullName] = sfi;
-
+                    replenish_settingsFieldFullNames2SettingsFieldInfo();
                     if (!settingsFieldFullNames2SettingsFieldInfo.TryGetValue(settingsFieldFullName, out settingsFieldInfo))
                         throw new Exception("Settings field with full name: '" + settingsFieldFullName + "' does not exist.");
                 }
                 return settingsFieldInfo;
+                //if (!settingsFieldFullNames2SettingsFieldInfo.TryGetValue(settingsFieldFullName, out SettingsFieldInfo sfi))
+                //{
+                //    sfi = EnumSettingsFieldInfos().FirstOrDefault(a => a.FullName == settingsFieldFullName);
+                //    if (sfi == null)
+                //        throw new Exception("Settings field with full name: '" + settingsFieldFullName + "' was not found.");
+                //    settingsFieldFullNames2SettingsFieldInfo[settingsFieldFullName] = sfi;
+                //}
+                //return sfi;
             }
         }
     }

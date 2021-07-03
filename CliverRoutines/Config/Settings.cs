@@ -36,7 +36,9 @@ namespace Cliver
                 if (value == null)
                     throw new Exception("SettingsFieldInfo cannot be set to NULL.");//to ensure that no __Info object can be lost in the custom application scope
                 if (value.Type != GetType())
-                    throw new Exception("Disaccording SettingsFieldInfo Type field. It must be: " + GetType().FullName + " while trying: " + value.Type.FullName);
+                    throw new Exception("Disaccording SettingsFieldInfo Type field. It must be '" + GetType().FullName + "' while trying '" + value.Type.FullName + "'");
+                if (Config.GetSettingsFieldInfo(value.FullName) != value)
+                    throw new Exception("The SettingsFieldInfo value is not registered in Config. Probably it was created before the re-initialization.");
                 settingsFieldInfo = value;
             }
         }

@@ -68,30 +68,25 @@ namespace Cliver
         /// Copies storage files of all the Settings fields in the application to the specified directory.
         /// </summary>
         /// <param name="toDirectory">folder where files are to be copied</param>
-        /// <param name="fresh">if TRUE then the app is re-parsed for Settings fields</param>
-        static public void ExportStorageFiles(string toDirectory, bool fresh = false)
+        static public void ExportStorageFiles(string toDirectory)
         {
-            void process(SettingsFieldInfo sfi)
-            {
-                string file2 = toDirectory + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(sfi.File);
-                if (File.Exists(sfi.File))//it can be absent if default settings are used still
-                    File.Copy(sfi.File, file2);
-                else if (File.Exists(sfi.InitFile))
-                    File.Copy(sfi.InitFile, file2);
-                else
-                {
-                    Settings s = Settings.Create(sfi, true, true);
-                    s.Save(sfi);
-                    File.Move(sfi.File, file2);
-                }
-            }
-            if (fresh)
-                foreach (SettingsFieldInfo sfi in EnumSettingsFieldInfos())
-                    process(sfi);
             lock (settingsFieldFullNames2SettingsFieldInfo)
             {
+                replenish_settingsFieldFullNames2SettingsFieldInfo();
                 foreach (SettingsFieldInfo sfi in settingsFieldFullNames2SettingsFieldInfo.Values)
-                    process(sfi);
+                {
+                    string file2 = toDirectory + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(sfi.File);
+                    if (File.Exists(sfi.File))//it can be absent if default settings are used still
+                        File.Copy(sfi.File, file2);
+                    else if (File.Exists(sfi.InitFile))
+                        File.Copy(sfi.InitFile, file2);
+                    else
+                    {
+                        Settings s = Settings.Create(sfi, true, true);
+                        s.Save(sfi);
+                        File.Move(sfi.File, file2);
+                    }
+                }
             }
         }
 
@@ -161,20 +156,21 @@ namespace Cliver
         //    return sf.GetObject();
         //}
 
-        /// <summary>
-        /// Get SettingsFieldInfos for the Settings type.
-        /// </summary>
-        /// <param name="settingsType">Settings type</param>
-        /// <param name="fresh">if TRUE then the app is re-parsed for Settings fields</param>
-        /// <returns></returns>
-        public static List<SettingsFieldInfo> GetSettingsFieldInfos(Type settingsType, bool fresh = false)
-        {
-            if (fresh)
-                return EnumSettingsFieldInfos().Where(a => a.Type == settingsType).ToList();
-            lock (settingsFieldFullNames2SettingsFieldInfo)
-            {
-                return settingsFieldFullNames2SettingsFieldInfo.Values.Where(a => a.Type == settingsType).ToList();
-            }
-        }
+        //!!!non-linked SettingsFieldInfo's must not be allowed in the custom code
+        ///// <summary>
+        ///// Get SettingsFieldInfos for the Settings type.
+        ///// </summary>
+        ///// <param name="settingsType">Settings type</param>
+        ///// <param name="fresh">if TRUE then the app is re-parsed looking up for the required Settings type</param>
+        ///// <returns>usually it would be only 1 element in the list</returns>
+        //public static List<SettingsFieldInfo> GetSettingsFieldInfos(Type settingsType, bool fresh = false)
+        //{
+        //    if (fresh)
+        //        return EnumSettingsFieldInfos().Where(a => a.Type == settingsType).ToList();
+        //    lock (settingsFieldFullNames2SettingsFieldInfo)
+        //    {
+        //        return settingsFieldFullNames2SettingsFieldInfo.Values.Where(a => a.Type == settingsType).ToList();
+        //    }
+        //}
     }
 }
