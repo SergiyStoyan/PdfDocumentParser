@@ -30,7 +30,7 @@ namespace Cliver
         /// Tells Config which optional (i.e. attributed with [Settings.Optional]) Settings fields are to be initialized. 
         /// It must be set before calling Reload() or Reset().
         /// </summary>
-        public static Regex RequiredOptionalFieldFullNamesRegex = null;
+        public static List<string> RequiredOptionalFieldFullNames = null;
 
         /// <summary>
         /// Tells Config which optional (i.e. attributed with [Settings.Optional]) Settings types are to be initialized. 
@@ -61,12 +61,16 @@ namespace Cliver
             lock (settingsFieldFullNames2SettingsFieldInfo)
             {
                 settingsFieldFullNames2SettingsFieldInfo.Clear();
+                HashSet<string> requiredOptionalFieldFullNames = new HashSet<string>(RequiredOptionalFieldFullNames);
                 foreach (SettingsFieldInfo settingsFieldInfo in EnumSettingsFieldInfos())
                 {
                     settingsFieldFullNames2SettingsFieldInfo[settingsFieldInfo.FullName] = settingsFieldInfo;
-                    if (!settingsFieldInfo.Optional || RequiredOptionalSettingsTypes?.Contains(settingsFieldInfo.Type) == true || RequiredOptionalFieldFullNamesRegex?.IsMatch(settingsFieldInfo.FullName) == true)
+                    bool foundInRequiredOptionalFieldFullNames = requiredOptionalFieldFullNames.Remove(settingsFieldInfo.FullName);
+                    if (!settingsFieldInfo.Optional || RequiredOptionalSettingsTypes?.Contains(settingsFieldInfo.Type) == true || foundInRequiredOptionalFieldFullNames)
                         settingsFieldInfo.SetObject(Settings.Create(settingsFieldInfo, reset, throwExceptionIfCouldNotLoadFromStorageFile));
                 }
+                if (requiredOptionalFieldFullNames.Count > 0)
+                    throw new Exception("RequiredOptionalFieldFullNames contains name which is not found: " + RequiredOptionalFieldFullNames[0]);
             }
         }
         static Dictionary<string, SettingsFieldInfo> settingsFieldFullNames2SettingsFieldInfo = new Dictionary<string, SettingsFieldInfo>();
