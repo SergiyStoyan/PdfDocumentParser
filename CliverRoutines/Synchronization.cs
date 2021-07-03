@@ -25,7 +25,7 @@ namespace Cliver
             throw new Exception("TBD: A newer settings " + settings.__Info.FullName + " have been downloaded from the remote storage. Upon closing this message they will be updated in the application.");
         }
 
-        abstract protected Regex appSetupFileFilter { get; }// = new Regex(Program.Name + @"\.Setup\-(\d+\.\d+\.\d+)");
+        abstract protected Regex appSetupFileFilter { get; }// = new Regex(System.Diagnostics.Process.GetCurrentProcess().ProcessName + @"\.Setup\-(\d+\.\d+\.\d+)", RegexOptions.IgnoreCase);
 
         abstract protected Version programVersion { get; }// = Program.Version;
 
