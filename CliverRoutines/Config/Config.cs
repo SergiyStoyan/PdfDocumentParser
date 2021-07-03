@@ -60,16 +60,16 @@ namespace Cliver
         {
             lock (settingsFieldFullNames2SettingsFieldInfo)
             {
-                foreach (SettingsFieldInfo settingsFieldInfo in enumSettingsFieldInfos())
-                {//SettingsFieldInfo's parameters for a Settings field are expected to be always the same during the process lifetime so no need to re-create it.
-                    //Exporting of SettingsFieldInfo to the custom code is one more reason not to re-create it.
-                    if (!settingsFieldFullNames2SettingsFieldInfo.ContainsKey(settingsFieldInfo.FullName))//!!!we should not replace existing SettingsFieldInfo's
+                foreach (SettingsFieldInfo settingsFieldInfo in getSettingsFieldInfos())
+                {//SettingsFieldInfo's parameters for a Settings field are expected to be unchangable so no need to re-create it.
+                    //!!!Exposing of SettingsFieldInfo to the custom code is one more reason not to re-create it.
+                    if (!settingsFieldFullNames2SettingsFieldInfo.ContainsKey(settingsFieldInfo.FullName))//!!!do not replace existing SettingsFieldInfo's
                         settingsFieldFullNames2SettingsFieldInfo[settingsFieldInfo.FullName] = settingsFieldInfo;
                 }
             }
         }
         static Dictionary<string, SettingsFieldInfo> settingsFieldFullNames2SettingsFieldInfo = new Dictionary<string, SettingsFieldInfo>();
-        static IEnumerable<SettingsFieldInfo> enumSettingsFieldInfos()
+        static IEnumerable<SettingsFieldInfo> getSettingsFieldInfos()
         {
             List<Assembly> assemblies;
             if (ExplicitlyTrackedAssemblies != null)
