@@ -267,7 +267,6 @@ namespace Cliver.PdfDocumentParser
         {
             if (pages == null)
                 return;
-            pages.ActiveTemplate = GetTemplateFromUI(false);
             foreach (DataGridViewRow r in conditions.Rows)
                 setConditionStatus(r);
 
@@ -290,7 +289,6 @@ namespace Cliver.PdfDocumentParser
             if (pages == null)
                 return;
 
-            pages.ActiveTemplate = GetTemplateFromUI(false);
             a = pages.ActiveTemplate.Anchors.FirstOrDefault(x => x.Id == anchorId);
             if (a == null)
                 throw new Exception("Anchor[Id=" + a.Id + "] does not exist.");
@@ -327,6 +325,7 @@ namespace Cliver.PdfDocumentParser
             }
             try
             {
+                pages.ActiveTemplate = GetTemplateFromUI(false);
                 if (pages[currentPageI].IsCondition(c.Name))
                     setRowStatus(statuses.SUCCESS, r, "True");
                 else
