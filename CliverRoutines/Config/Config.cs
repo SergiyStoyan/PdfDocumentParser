@@ -61,7 +61,7 @@ namespace Cliver
             lock (settingsFieldFullNames2SettingsFieldInfo)
             {
                 if (settingsFieldFullNames2SettingsFieldInfo_set)
-                {
+                {//ExplicitlyTrackedAssemblies is the only parameter that can change SettingsFieldInfo collection
                     if (lastExplicitlyTrackedAssemblies?.Count == ExplicitlyTrackedAssemblies?.Count)
                     {
                         if (ExplicitlyTrackedAssemblies == null)
@@ -81,7 +81,7 @@ namespace Cliver
             }
         }
         static bool settingsFieldFullNames2SettingsFieldInfo_set = false;
-        static List<Assembly> lastExplicitlyTrackedAssemblies = null;//it is the only parameter that can change SettingsFieldInfo collection
+        static List<Assembly> lastExplicitlyTrackedAssemblies = null;
         static Dictionary<string, SettingsFieldInfo> settingsFieldFullNames2SettingsFieldInfo = new Dictionary<string, SettingsFieldInfo>();
         static IEnumerable<SettingsFieldInfo> getSettingsFieldInfos()
         {
@@ -226,17 +226,9 @@ namespace Cliver
                 {
                     set_settingsFieldFullNames2SettingsFieldInfo();
                     if (!settingsFieldFullNames2SettingsFieldInfo.TryGetValue(settingsFieldFullName, out settingsFieldInfo))
-                        throw new Exception("Settings field with full name: '" + settingsFieldFullName + "' was not found.");
+                        throw new Exception("Settings field with full name '" + settingsFieldFullName + "' was not found.");
                 }
                 return settingsFieldInfo;
-                //if (!settingsFieldFullNames2SettingsFieldInfo.TryGetValue(settingsFieldFullName, out SettingsFieldInfo sfi))
-                //{
-                //    sfi = EnumSettingsFieldInfos().FirstOrDefault(a => a.FullName == settingsFieldFullName);
-                //    if (sfi == null)
-                //        throw new Exception("Settings field with full name: '" + settingsFieldFullName + "' was not found.");
-                //    settingsFieldFullNames2SettingsFieldInfo[settingsFieldFullName] = sfi;
-                //}
-                //return sfi;
             }
         }
     }
