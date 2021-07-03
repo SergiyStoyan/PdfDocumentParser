@@ -12,9 +12,13 @@ using System.Linq;
 
 namespace Cliver
 {
+    /// <summary>
+    /// Template for syncronizing Settings storage files and application setup files through a cloud service. (The local system is required to have the service synchronizing app running.)  
+    /// </summary>
     abstract public class Synchronization
     {
-        abstract protected IEnumerable<Cliver.Settings> synchronizedSettingss { get; }
+        //abstract protected List<string> synchronizedSettingsFieldFullNames { get; }
+        abstract protected List<Type> synchronizedSettingsTypes { get; }
 
         virtual protected void onNewerSettingsFile(Settings settings)
         {
@@ -65,23 +69,26 @@ namespace Cliver
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(parameters.SynchronizationFolder))
-                    throw new Exception("SynchronizationFolder is not set.");
-                //if (string.IsNullOrWhiteSpace(parameters.UploadFolderName))
-                //    throw new Exception("UploadFolderName is not set.");
-                //if (string.IsNullOrWhiteSpace(parameters.DownloadFolderName))
-                //    throw new Exception("DownloadFolderName is not set.");
-                this.parameters = parameters;
-                downloadFolder = FileSystemRoutines.CreateDirectory(parameters.SynchronizationFolder + "\\" + parameters.DownloadFolderName);
-                uploadFolder = FileSystemRoutines.CreateDirectory(parameters.SynchronizationFolder + "\\" + parameters.UploadFolderName);
-                //if (PathRoutines.IsDirWithinDir(downloadFolder, uploadFolder))
-                //    throw new Exception("DownloadFolder cannot be within UploadFolder: \r\n" + downloadFolder + "\r\n" + uploadFolder);
-                //if (PathRoutines.IsDirWithinDir(downloadFolder, uploadFolder))
-                //    throw new Exception("UploadFolder cannot be within DownloadFolder: \r\n" + uploadFolder + "\r\n" + downloadFolder);
-                appSetupFolder = FileSystemRoutines.CreateDirectory(parameters.SynchronizationFolder);
+                if (parameters.Synchronize)
+                {
+                    if (string.IsNullOrWhiteSpace(parameters.SynchronizationFolder))
+                        throw new Exception("SynchronizationFolder is not set.");
+                    //if (string.IsNullOrWhiteSpace(parameters.UploadFolderName))
+                    //    throw new Exception("UploadFolderName is not set.");
+                    //if (string.IsNullOrWhiteSpace(parameters.DownloadFolderName))
+                    //    throw new Exception("DownloadFolderName is not set.");
+                    this.parameters = parameters;
+                    downloadFolder = FileSystemRoutines.CreateDirectory(parameters.SynchronizationFolder + "\\" + parameters.DownloadFolderName);
+                    uploadFolder = FileSystemRoutines.CreateDirectory(parameters.SynchronizationFolder + "\\" + parameters.UploadFolderName);
+                    //if (PathRoutines.IsDirWithinDir(downloadFolder, uploadFolder))
+                    //    throw new Exception("DownloadFolder cannot be within UploadFolder: \r\n" + downloadFolder + "\r\n" + uploadFolder);
+                    //if (PathRoutines.IsDirWithinDir(downloadFolder, uploadFolder))
+                    //    throw new Exception("UploadFolder cannot be within DownloadFolder: \r\n" + uploadFolder + "\r\n" + downloadFolder);
+                    appSetupFolder = FileSystemRoutines.CreateDirectory(parameters.SynchronizationFolder);
 
-                if (parameters.Synchronize && pollingThread?.IsAlive != true)
-                    pollingThread = ThreadRoutines.Start(polling);
+                    if (pollingThread?.IsAlive != true)
+                        pollingThread = ThreadRoutines.Start(polling);
+                }
             }
             catch (Exception e)
             {
@@ -101,12 +108,28 @@ namespace Cliver
             {
                 while (parameters.Synchronize)
                 {
-                    foreach (Settings settings in synchronizedSettingss)
+                    //foreach (string ssfn in synchronizedSettingsFieldFullNames)
+                    //{
+                    //    SettingsFieldInfo sfi = Config.GetSettingsFieldInfo(ssfn);
+                    //    Settings settings = sfi.GetObject();
+                    //    if (settings == null)
+                    //        continue;
+                    //    pollUploadSettingsFile(settings);
+                    //    pollDownloadSettingsFile(settings);
+                    //}
+                    foreach (Type sst in synchronizedSettingsTypes)
                     {
-                        //if (settings.__Info.File == null)//at the start it is null
-                        //    return;
-                        pollUploadSettingsFile(settings);
-                        pollDownloadSettingsFile(settings);
+                        List<SettingsFieldInfo> sfis = Config.GetSettingsFieldInfos(sst);
+                        if (sfis.Count < 1)
+                            throw new Exception("Settings type " + sst.FullName + " was not found.");
+                        foreach (SettingsFieldInfo sfi in sfis)
+                        {
+                            Settings settings = sfi.GetObject();
+                            if (settings == null)
+                                continue;
+                            pollUploadSettingsFile(settings);
+                            pollDownloadSettingsFile(settings);
+                        }
                     }
 
                     string appSetupFile = null;

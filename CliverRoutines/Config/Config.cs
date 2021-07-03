@@ -33,6 +33,12 @@ namespace Cliver
         public static Regex RequiredOptionalFieldFullNamesRegex = null;
 
         /// <summary>
+        /// Tells Config which optional (i.e. attributed with [Settings.Optional]) Settings types are to be initialized. 
+        /// It must be set before calling Reload() or Reset().
+        /// </summary>
+        public static List<Type> RequiredOptionalSettingsTypes = null;
+
+        /// <summary>
         /// Tells Config in which order Settings fields ordered by their types are to be initalized.        
         /// It may be necessary due to dependencies between Settings types.
         /// Types listed here will be initialized first in the provided order.
@@ -57,10 +63,9 @@ namespace Cliver
                 settingsFieldFullNames2SettingsFieldInfo.Clear();
                 foreach (SettingsFieldInfo settingsFieldInfo in EnumSettingsFieldInfos())
                 {
-                    if (settingsFieldInfo.Optional == true && RequiredOptionalFieldFullNamesRegex?.IsMatch(settingsFieldInfo.FullName) == false)
-                        continue;
-                    settingsFieldInfo.SetObject(Settings.Create(settingsFieldInfo, reset, throwExceptionIfCouldNotLoadFromStorageFile));
                     settingsFieldFullNames2SettingsFieldInfo[settingsFieldInfo.FullName] = settingsFieldInfo;
+                    if (!settingsFieldInfo.Optional || RequiredOptionalSettingsTypes?.Contains(settingsFieldInfo.Type) == true || RequiredOptionalFieldFullNamesRegex?.IsMatch(settingsFieldInfo.FullName) == true)
+                        settingsFieldInfo.SetObject(Settings.Create(settingsFieldInfo, reset, throwExceptionIfCouldNotLoadFromStorageFile));
                 }
             }
         }
@@ -191,14 +196,16 @@ namespace Cliver
         {//!!! before altering this method, pay attention that it is used by the engine !!!
             lock (settingsFieldFullNames2SettingsFieldInfo)
             {
-                if (!settingsFieldFullNames2SettingsFieldInfo.TryGetValue(settingsFieldFullName, out SettingsFieldInfo sfi))
+                if (!settingsFieldFullNames2SettingsFieldInfo.TryGetValue(settingsFieldFullName, out SettingsFieldInfo settingsFieldInfo))
                 {
-                    sfi = EnumSettingsFieldInfos().FirstOrDefault(a => a.FullName == settingsFieldFullName);
-                    if (sfi == null)
+                    foreach (SettingsFieldInfo sfi in EnumSettingsFieldInfos())
+                        if (!settingsFieldFullNames2SettingsFieldInfo.ContainsKey(sfi.FullName))
+                            settingsFieldFullNames2SettingsFieldInfo[sfi.FullName] = sfi;
+
+                    if (!settingsFieldFullNames2SettingsFieldInfo.TryGetValue(settingsFieldFullName, out settingsFieldInfo))
                         throw new Exception("Settings field with full name: '" + settingsFieldFullName + "' does not exist.");
-                    settingsFieldFullNames2SettingsFieldInfo[settingsFieldFullName] = sfi;
                 }
-                return sfi;
+                return settingsFieldInfo;
             }
         }
     }

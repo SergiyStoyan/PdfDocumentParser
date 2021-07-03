@@ -43,7 +43,7 @@ namespace Cliver
         /// <summary>
         /// Version info of the Settings type defined in the present code.
         /// </summary>
-        public readonly SettingsTypeAttribute.TypeVersionAttribute TypeVersion;
+        public readonly SettingsAttributes.TypeVersionAttribute TypeVersion;
 
         /// <summary>
         /// Encryption engine.
@@ -119,26 +119,32 @@ namespace Cliver
             File = s.__StorageDir + System.IO.Path.DirectorySeparatorChar + FullName + "." + Config.FILE_EXTENSION;
             InitFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + FullName + "." + Config.FILE_EXTENSION;
 
-            SettingsAttribute.EncryptedAttribute encryptedAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsAttribute.EncryptedAttribute>(false).FirstOrDefault();
+            SettingsAttributes.EncryptedAttribute encryptedAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsAttributes.EncryptedAttribute>(false).FirstOrDefault();
             if (encryptedAttribute == null)
-                encryptedAttribute = settingsType.GetCustomAttributes<SettingsAttribute.EncryptedAttribute>(false).FirstOrDefault();
+                encryptedAttribute = settingsType.GetCustomAttributes<SettingsAttributes.EncryptedAttribute>(false).FirstOrDefault();
             if (encryptedAttribute != null)
                 Endec = encryptedAttribute.Endec;
 
-            SettingsFieldAttribute.OptionalAttribute optionalAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.OptionalAttribute>(false).FirstOrDefault();
+            SettingsAttributes.OptionalAttribute optionalAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsAttributes.OptionalAttribute>(false).FirstOrDefault();
+            if (optionalAttribute == null)
+                optionalAttribute = settingsType.GetCustomAttributes<SettingsAttributes.OptionalAttribute>(false).FirstOrDefault();
             if (optionalAttribute != null)
                 Optional = optionalAttribute.Value;
 
-            SettingsFieldAttribute.IndentedAttribute indentedAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.IndentedAttribute>(false).FirstOrDefault();
+            SettingsAttributes.IndentedAttribute indentedAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsAttributes.IndentedAttribute>(false).FirstOrDefault();
+            if (indentedAttribute == null)
+                indentedAttribute = settingsType.GetCustomAttributes<SettingsAttributes.IndentedAttribute>(false).FirstOrDefault();
             if (indentedAttribute != null)
                 Indented = indentedAttribute.Value;
 
-            SettingsFieldAttribute.NullSerializedAttribute nullSerializedAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsFieldAttribute.NullSerializedAttribute>(false).FirstOrDefault();
+            SettingsAttributes.NullSerializedAttribute nullSerializedAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsAttributes.NullSerializedAttribute>(false).FirstOrDefault();
+            if (nullSerializedAttribute == null)
+                nullSerializedAttribute = settingsType.GetCustomAttributes<SettingsAttributes.NullSerializedAttribute>(false).FirstOrDefault();
             if (nullSerializedAttribute != null)
                 NullSerialized = nullSerializedAttribute.Value;
 
-            SettingsTypeAttribute.TypeVersionAttribute typeVersion = settingsType.GetCustomAttributes<SettingsTypeAttribute.TypeVersionAttribute>(false).FirstOrDefault();
-            TypeVersion = typeVersion != null ? typeVersion : new SettingsTypeAttribute.TypeVersionAttribute(0, 0);
+            SettingsAttributes.TypeVersionAttribute typeVersion = settingsType.GetCustomAttributes<SettingsAttributes.TypeVersionAttribute>(false).FirstOrDefault();
+            TypeVersion = typeVersion != null ? typeVersion : new SettingsAttributes.TypeVersionAttribute(0, 0);
         }
 
         #region Type Version support
