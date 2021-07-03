@@ -216,7 +216,7 @@ namespace Cliver.PdfDocumentParser
             templateManager.HelpRequest();
         }
 
-        private void Save_Click(object sender, EventArgs e)
+        private void OK_Click(object sender, EventArgs e)
         {
             try
             {
@@ -224,6 +224,19 @@ namespace Cliver.PdfDocumentParser
                 templateManager.Save();
                 DialogResult = DialogResult.OK;
                 Close();
+            }
+            catch (Exception ex)
+            {
+                Message.Error2(ex);
+            }
+        }
+
+        private void Save_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                templateManager.Template = GetTemplateFromUI(true);
+                templateManager.Save();
             }
             catch (Exception ex)
             {

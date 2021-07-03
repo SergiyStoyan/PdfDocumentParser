@@ -417,8 +417,9 @@ namespace Cliver.PdfDocumentParser
                 //BeginInvoke((Action<Template>)setUIFromTemplate, templateManager.Template);           
             };
 
-            save.Click += Save_Click;
-            cancel.Click += delegate { Close(); };
+            bSave.Click += Save_Click;
+            bOK.Click += OK_Click;
+            bCancel.Click += delegate { Close(); };
             Help.LinkClicked += Help_LinkClicked;
             Configure.LinkClicked += Configure_LinkClicked;
             About.LinkClicked += About_LinkClicked;

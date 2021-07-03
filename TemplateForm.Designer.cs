@@ -33,6 +33,13 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.fields = new System.Windows.Forms.DataGridView();
+            this.Name_ = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.LeftAnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.TopAnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.RightAnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.BottomAnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Type = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.selectionCoordinates = new System.Windows.Forms.Label();
             this.bNextPage = new System.Windows.Forms.Button();
             this.lTotalPages = new System.Windows.Forms.Label();
@@ -64,8 +71,8 @@
             this.moveDownCondition = new System.Windows.Forms.LinkLabel();
             this.Configure = new System.Windows.Forms.LinkLabel();
             this.label16 = new System.Windows.Forms.Label();
-            this.cancel = new System.Windows.Forms.Button();
-            this.save = new System.Windows.Forms.Button();
+            this.bCancel = new System.Windows.Forms.Button();
+            this.bOK = new System.Windows.Forms.Button();
             this.Help = new System.Windows.Forms.LinkLabel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -95,6 +102,7 @@
             this.pictureScale = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
+            this.splitContainer4 = new System.Windows.Forms.SplitContainer();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.ExtractFieldsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
@@ -105,14 +113,7 @@
             this.deleteField = new System.Windows.Forms.LinkLabel();
             this.moveUpField = new System.Windows.Forms.LinkLabel();
             this.moveDownField = new System.Windows.Forms.LinkLabel();
-            this.splitContainer4 = new System.Windows.Forms.SplitContainer();
-            this.Name_ = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.LeftAnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.TopAnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.RightAnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.BottomAnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Type = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.bSave = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).BeginInit();
             this.flowLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).BeginInit();
@@ -142,10 +143,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.CvImageScalePyramidStep)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureScale)).BeginInit();
-            this.flowLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer4)).BeginInit();
             this.splitContainer4.Panel1.SuspendLayout();
             this.splitContainer4.SuspendLayout();
+            this.flowLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // bPrevPage
@@ -208,6 +209,70 @@
             this.fields.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.fields.Size = new System.Drawing.Size(314, 232);
             this.fields.TabIndex = 30;
+            // 
+            // Name_
+            // 
+            this.Name_.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Name_.HeaderText = "Name";
+            this.Name_.MinimumWidth = 12;
+            this.Name_.Name = "Name_";
+            this.Name_.Width = 60;
+            // 
+            // LeftAnchorId
+            // 
+            this.LeftAnchorId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.LeftAnchorId.HeaderText = "LA";
+            this.LeftAnchorId.MinimumWidth = 12;
+            this.LeftAnchorId.Name = "LeftAnchorId";
+            this.LeftAnchorId.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.LeftAnchorId.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.LeftAnchorId.ToolTipText = "Left Anchor";
+            this.LeftAnchorId.Width = 45;
+            // 
+            // TopAnchorId
+            // 
+            this.TopAnchorId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.TopAnchorId.HeaderText = "TA";
+            this.TopAnchorId.MinimumWidth = 12;
+            this.TopAnchorId.Name = "TopAnchorId";
+            this.TopAnchorId.ToolTipText = "Top Anchor";
+            this.TopAnchorId.Width = 27;
+            // 
+            // RightAnchorId
+            // 
+            this.RightAnchorId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.RightAnchorId.HeaderText = "RA";
+            this.RightAnchorId.MinimumWidth = 12;
+            this.RightAnchorId.Name = "RightAnchorId";
+            this.RightAnchorId.ToolTipText = "Right Anchor";
+            this.RightAnchorId.Width = 28;
+            // 
+            // BottomAnchorId
+            // 
+            this.BottomAnchorId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.BottomAnchorId.HeaderText = "BA";
+            this.BottomAnchorId.MinimumWidth = 12;
+            this.BottomAnchorId.Name = "BottomAnchorId";
+            this.BottomAnchorId.ToolTipText = "Bottom Anchor";
+            this.BottomAnchorId.Width = 27;
+            // 
+            // Type
+            // 
+            this.Type.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Type.HeaderText = "Type";
+            this.Type.MinimumWidth = 12;
+            this.Type.Name = "Type";
+            this.Type.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Type.Width = 37;
+            // 
+            // Value
+            // 
+            this.Value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Value.FillWeight = 1000F;
+            this.Value.HeaderText = "Value";
+            this.Value.MinimumWidth = 12;
+            this.Value.Name = "Value";
+            this.Value.ReadOnly = true;
             // 
             // selectionCoordinates
             // 
@@ -567,25 +632,25 @@
             this.label16.TabIndex = 26;
             this.label16.Text = "|";
             // 
-            // cancel
+            // bCancel
             // 
-            this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.cancel.Location = new System.Drawing.Point(92, 3);
-            this.cancel.Name = "cancel";
-            this.cancel.Size = new System.Drawing.Size(75, 23);
-            this.cancel.TabIndex = 21;
-            this.cancel.Text = "Cancel";
-            this.cancel.UseVisualStyleBackColor = true;
+            this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.bCancel.Location = new System.Drawing.Point(186, 3);
+            this.bCancel.Name = "bCancel";
+            this.bCancel.Size = new System.Drawing.Size(75, 23);
+            this.bCancel.TabIndex = 21;
+            this.bCancel.Text = "Cancel";
+            this.bCancel.UseVisualStyleBackColor = true;
             // 
-            // save
+            // bOK
             // 
-            this.save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.save.Location = new System.Drawing.Point(11, 3);
-            this.save.Name = "save";
-            this.save.Size = new System.Drawing.Size(75, 23);
-            this.save.TabIndex = 20;
-            this.save.Text = "OK";
-            this.save.UseVisualStyleBackColor = true;
+            this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.bOK.Location = new System.Drawing.Point(105, 3);
+            this.bOK.Name = "bOK";
+            this.bOK.Size = new System.Drawing.Size(75, 23);
+            this.bOK.TabIndex = 20;
+            this.bOK.Text = "OK";
+            this.bOK.UseVisualStyleBackColor = true;
             // 
             // Help
             // 
@@ -601,12 +666,13 @@
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.flowLayoutPanel1.Controls.Add(this.cancel);
-            this.flowLayoutPanel1.Controls.Add(this.save);
+            this.flowLayoutPanel1.Controls.Add(this.bCancel);
+            this.flowLayoutPanel1.Controls.Add(this.bOK);
+            this.flowLayoutPanel1.Controls.Add(this.bSave);
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(361, 0);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(267, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(170, 31);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(264, 31);
             this.flowLayoutPanel1.TabIndex = 27;
             // 
             // panel1
@@ -942,6 +1008,19 @@
             this.label10.TabIndex = 49;
             this.label10.Text = "Anchors:";
             // 
+            // splitContainer4
+            // 
+            this.splitContainer4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer4.Location = new System.Drawing.Point(0, 20);
+            this.splitContainer4.Name = "splitContainer4";
+            // 
+            // splitContainer4.Panel1
+            // 
+            this.splitContainer4.Panel1.Controls.Add(this.fields);
+            this.splitContainer4.Size = new System.Drawing.Size(532, 232);
+            this.splitContainer4.SplitterDistance = 314;
+            this.splitContainer4.TabIndex = 60;
+            // 
             // flowLayoutPanel2
             // 
             this.flowLayoutPanel2.Controls.Add(this.label1);
@@ -1065,82 +1144,15 @@
             this.moveDownField.Text = "Down";
             this.moveDownField.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // splitContainer4
+            // bSave
             // 
-            this.splitContainer4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer4.Location = new System.Drawing.Point(0, 20);
-            this.splitContainer4.Name = "splitContainer4";
-            // 
-            // splitContainer4.Panel1
-            // 
-            this.splitContainer4.Panel1.Controls.Add(this.fields);
-            this.splitContainer4.Size = new System.Drawing.Size(532, 232);
-            this.splitContainer4.SplitterDistance = 314;
-            this.splitContainer4.TabIndex = 60;
-            // 
-            // Name_
-            // 
-            this.Name_.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Name_.HeaderText = "Name";
-            this.Name_.MinimumWidth = 12;
-            this.Name_.Name = "Name_";
-            this.Name_.Width = 60;
-            // 
-            // LeftAnchorId
-            // 
-            this.LeftAnchorId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.LeftAnchorId.HeaderText = "LA";
-            this.LeftAnchorId.MinimumWidth = 12;
-            this.LeftAnchorId.Name = "LeftAnchorId";
-            this.LeftAnchorId.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.LeftAnchorId.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.LeftAnchorId.ToolTipText = "Left Anchor";
-            this.LeftAnchorId.Width = 45;
-            // 
-            // TopAnchorId
-            // 
-            this.TopAnchorId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.TopAnchorId.HeaderText = "TA";
-            this.TopAnchorId.MinimumWidth = 12;
-            this.TopAnchorId.Name = "TopAnchorId";
-            this.TopAnchorId.ToolTipText = "Top Anchor";
-            this.TopAnchorId.Width = 27;
-            // 
-            // RightAnchorId
-            // 
-            this.RightAnchorId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.RightAnchorId.HeaderText = "RA";
-            this.RightAnchorId.MinimumWidth = 12;
-            this.RightAnchorId.Name = "RightAnchorId";
-            this.RightAnchorId.ToolTipText = "Right Anchor";
-            this.RightAnchorId.Width = 28;
-            // 
-            // BottomAnchorId
-            // 
-            this.BottomAnchorId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.BottomAnchorId.HeaderText = "BA";
-            this.BottomAnchorId.MinimumWidth = 12;
-            this.BottomAnchorId.Name = "BottomAnchorId";
-            this.BottomAnchorId.ToolTipText = "Bottom Anchor";
-            this.BottomAnchorId.Width = 27;
-            // 
-            // Type
-            // 
-            this.Type.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Type.HeaderText = "Type";
-            this.Type.MinimumWidth = 12;
-            this.Type.Name = "Type";
-            this.Type.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Type.Width = 37;
-            // 
-            // Value
-            // 
-            this.Value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Value.FillWeight = 1000F;
-            this.Value.HeaderText = "Value";
-            this.Value.MinimumWidth = 12;
-            this.Value.Name = "Value";
-            this.Value.ReadOnly = true;
+            this.bSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.bSave.Location = new System.Drawing.Point(24, 3);
+            this.bSave.Name = "bSave";
+            this.bSave.Size = new System.Drawing.Size(75, 23);
+            this.bSave.TabIndex = 22;
+            this.bSave.Text = "Save";
+            this.bSave.UseVisualStyleBackColor = true;
             // 
             // TemplateForm
             // 
@@ -1188,11 +1200,11 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureScale)).EndInit();
-            this.flowLayoutPanel2.ResumeLayout(false);
-            this.flowLayoutPanel2.PerformLayout();
             this.splitContainer4.Panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer4)).EndInit();
             this.splitContainer4.ResumeLayout(false);
+            this.flowLayoutPanel2.ResumeLayout(false);
+            this.flowLayoutPanel2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1222,8 +1234,8 @@
         private System.Windows.Forms.CheckBox CheckConditionsAutomaticallyWhenPageChanged;
         private System.Windows.Forms.LinkLabel Configure;
         private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.Button cancel;
-        private System.Windows.Forms.Button save;
+        private System.Windows.Forms.Button bCancel;
+        private System.Windows.Forms.Button bOK;
         private System.Windows.Forms.LinkLabel Help;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Panel panel1;
@@ -1283,5 +1295,6 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn BottomAnchorId;
         private System.Windows.Forms.DataGridViewComboBoxColumn Type;
         private System.Windows.Forms.DataGridViewTextBoxColumn Value;
+        private System.Windows.Forms.Button bSave;
     }
 }
