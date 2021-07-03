@@ -38,7 +38,7 @@ namespace Cliver
                 if (value.Type != GetType())
                     throw new Exception("Disaccording SettingsFieldInfo Type field. It must be '" + GetType().FullName + "' while trying '" + value.Type.FullName + "'");
                 if (Config.GetSettingsFieldInfo(value.FullName) != value)
-                    throw new Exception("The SettingsFieldInfo value is not registered in Config. Probably it was created before the re-initialization.");
+                    throw new Exception("This SettingsFieldInfo object is not registered in Config. Probably it was created before the re-initialization.");
                 settingsFieldInfo = value;
             }
         }

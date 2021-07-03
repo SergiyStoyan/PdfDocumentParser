@@ -72,7 +72,7 @@ namespace Cliver
         {
             lock (settingsFieldFullNames2SettingsFieldInfo)
             {
-                replenish_settingsFieldFullNames2SettingsFieldInfo();
+                set_settingsFieldFullNames2SettingsFieldInfo();
                 foreach (SettingsFieldInfo sfi in settingsFieldFullNames2SettingsFieldInfo.Values)
                 {
                     string file2 = toDirectory + System.IO.Path.DirectorySeparatorChar + PathRoutines.GetFileName(sfi.File);

@@ -56,10 +56,22 @@ namespace Cliver
         public const string CONFIG_FOLDER_NAME = "config";
         public const string FILE_EXTENSION = "json";
 
-        static void replenish_settingsFieldFullNames2SettingsFieldInfo()
+        static void set_settingsFieldFullNames2SettingsFieldInfo()
         {
             lock (settingsFieldFullNames2SettingsFieldInfo)
             {
+                if (settingsFieldFullNames2SettingsFieldInfo_set)
+                {
+                    if (lastExplicitlyTrackedAssemblies?.Count == ExplicitlyTrackedAssemblies?.Count)
+                    {
+                        if (ExplicitlyTrackedAssemblies == null)
+                            return;
+                        if (!lastExplicitlyTrackedAssemblies.Except(ExplicitlyTrackedAssemblies).Any() && !ExplicitlyTrackedAssemblies.Except(lastExplicitlyTrackedAssemblies).Any())
+                            return;
+                    }
+                }
+                settingsFieldFullNames2SettingsFieldInfo_set = true;
+                lastExplicitlyTrackedAssemblies = ExplicitlyTrackedAssemblies?.ToList();
                 foreach (SettingsFieldInfo settingsFieldInfo in getSettingsFieldInfos())
                 {//SettingsFieldInfo's parameters for a Settings field are expected to be unchangable so no need to re-create it.
                     //!!!Exposing of SettingsFieldInfo to the custom code is one more reason not to re-create it.
@@ -68,6 +80,8 @@ namespace Cliver
                 }
             }
         }
+        static bool settingsFieldFullNames2SettingsFieldInfo_set = false;
+        static List<Assembly> lastExplicitlyTrackedAssemblies = null;//it is the only parameter that can change SettingsFieldInfo collection
         static Dictionary<string, SettingsFieldInfo> settingsFieldFullNames2SettingsFieldInfo = new Dictionary<string, SettingsFieldInfo>();
         static IEnumerable<SettingsFieldInfo> getSettingsFieldInfos()
         {
@@ -145,7 +159,7 @@ namespace Cliver
         {
             lock (settingsFieldFullNames2SettingsFieldInfo)
             {
-                replenish_settingsFieldFullNames2SettingsFieldInfo();
+                set_settingsFieldFullNames2SettingsFieldInfo();
                 IEnumerable<SettingsFieldInfo> settingsFieldInfos = settingsFieldFullNames2SettingsFieldInfo.Values;
                 if (InitializationOrderedSettingsTypes != null)
                 {
@@ -210,9 +224,9 @@ namespace Cliver
             {
                 if (!settingsFieldFullNames2SettingsFieldInfo.TryGetValue(settingsFieldFullName, out SettingsFieldInfo settingsFieldInfo))
                 {
-                    replenish_settingsFieldFullNames2SettingsFieldInfo();
+                    set_settingsFieldFullNames2SettingsFieldInfo();
                     if (!settingsFieldFullNames2SettingsFieldInfo.TryGetValue(settingsFieldFullName, out settingsFieldInfo))
-                        throw new Exception("Settings field with full name: '" + settingsFieldFullName + "' does not exist.");
+                        throw new Exception("Settings field with full name: '" + settingsFieldFullName + "' was not found.");
                 }
                 return settingsFieldInfo;
                 //if (!settingsFieldFullNames2SettingsFieldInfo.TryGetValue(settingsFieldFullName, out SettingsFieldInfo sfi))
