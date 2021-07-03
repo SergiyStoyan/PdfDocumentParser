@@ -35,23 +35,49 @@ namespace Cliver
         public class Parameters
         {
             public string SynchronizationFolder = null;
-            public string DownloadFolderName = "_download";
-            public string UploadFolderName = "_upload";
+            public readonly string DownloadFolderName = "_download";
+            public readonly string UploadFolderName = "_upload";
             public bool Synchronize = false;
             public int PollingPeriodMss = 10000;
+
+            public void Validate(out string downloadFolder, out string uploadFolder, out string appSetupFolder)
+            {
+                if (string.IsNullOrWhiteSpace(SynchronizationFolder))
+                    throw new Exception("SynchronizationFolder is not set.");
+                //if (string.IsNullOrWhiteSpace(UploadFolderName))
+                //    throw new Exception("UploadFolderName is not set.");
+                //if (string.IsNullOrWhiteSpace(DownloadFolderName))
+                //    throw new Exception("DownloadFolderName is not set.");
+
+                downloadFolder = FileSystemRoutines.CreateDirectory(SynchronizationFolder + "\\" + DownloadFolderName);
+                uploadFolder = FileSystemRoutines.CreateDirectory(SynchronizationFolder + "\\" + UploadFolderName);
+
+                //if (PathRoutines.IsDirWithinDir(downloadFolder, uploadFolder))
+                //    throw new Exception("DownloadFolder cannot be within UploadFolder: \r\n" + downloadFolder + "\r\n" + uploadFolder);
+                //if (PathRoutines.IsDirWithinDir(downloadFolder, uploadFolder))
+                //    throw new Exception("UploadFolder cannot be within DownloadFolder: \r\n" + uploadFolder + "\r\n" + downloadFolder);
+
+                appSetupFolder = FileSystemRoutines.CreateDirectory(SynchronizationFolder);
+            }
         }
 
-        public void Switch(Parameters parameters)
+        virtual public void Switch(Parameters parameters)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(parameters.SynchronizationFolder))
                     throw new Exception("SynchronizationFolder is not set.");
-                if (string.IsNullOrWhiteSpace(parameters.SynchronizationFolder))
-                    throw new Exception("SynchronizationFolder is not set.");
+                //if (string.IsNullOrWhiteSpace(parameters.UploadFolderName))
+                //    throw new Exception("UploadFolderName is not set.");
+                //if (string.IsNullOrWhiteSpace(parameters.DownloadFolderName))
+                //    throw new Exception("DownloadFolderName is not set.");
                 this.parameters = parameters;
                 downloadFolder = FileSystemRoutines.CreateDirectory(parameters.SynchronizationFolder + "\\" + parameters.DownloadFolderName);
                 uploadFolder = FileSystemRoutines.CreateDirectory(parameters.SynchronizationFolder + "\\" + parameters.UploadFolderName);
+                //if (PathRoutines.IsDirWithinDir(downloadFolder, uploadFolder))
+                //    throw new Exception("DownloadFolder cannot be within UploadFolder: \r\n" + downloadFolder + "\r\n" + uploadFolder);
+                //if (PathRoutines.IsDirWithinDir(downloadFolder, uploadFolder))
+                //    throw new Exception("UploadFolder cannot be within DownloadFolder: \r\n" + uploadFolder + "\r\n" + downloadFolder);
                 appSetupFolder = FileSystemRoutines.CreateDirectory(parameters.SynchronizationFolder);
 
                 if (parameters.Synchronize && pollingThread?.IsAlive != true)
