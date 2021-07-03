@@ -17,8 +17,8 @@ namespace Cliver
     /// </summary>
     abstract public class Synchronization
     {
-        //abstract protected List<string> synchronizedSettingsFieldFullNames { get; }
-        abstract protected List<Type> synchronizedSettingsTypes { get; }
+        abstract protected List<string> synchronizedSettingsFieldFullNames { get; }
+        //abstract protected List<Type> synchronizedSettingsTypes { get; }
 
         virtual protected void onNewerSettingsFile(Settings settings)
         {
@@ -43,26 +43,6 @@ namespace Cliver
             public readonly string UploadFolderName = "_upload";
             public bool Synchronize = false;
             public int PollingPeriodMss = 10000;
-
-            public void Validate(out string downloadFolder, out string uploadFolder, out string appSetupFolder)
-            {
-                if (string.IsNullOrWhiteSpace(SynchronizationFolder))
-                    throw new Exception("SynchronizationFolder is not set.");
-                //if (string.IsNullOrWhiteSpace(UploadFolderName))
-                //    throw new Exception("UploadFolderName is not set.");
-                //if (string.IsNullOrWhiteSpace(DownloadFolderName))
-                //    throw new Exception("DownloadFolderName is not set.");
-
-                downloadFolder = FileSystemRoutines.CreateDirectory(SynchronizationFolder + "\\" + DownloadFolderName);
-                uploadFolder = FileSystemRoutines.CreateDirectory(SynchronizationFolder + "\\" + UploadFolderName);
-
-                //if (PathRoutines.IsDirWithinDir(downloadFolder, uploadFolder))
-                //    throw new Exception("DownloadFolder cannot be within UploadFolder: \r\n" + downloadFolder + "\r\n" + uploadFolder);
-                //if (PathRoutines.IsDirWithinDir(downloadFolder, uploadFolder))
-                //    throw new Exception("UploadFolder cannot be within DownloadFolder: \r\n" + uploadFolder + "\r\n" + downloadFolder);
-
-                appSetupFolder = FileSystemRoutines.CreateDirectory(SynchronizationFolder);
-            }
         }
 
         virtual public void Switch(Parameters parameters)
@@ -108,29 +88,29 @@ namespace Cliver
             {
                 while (parameters.Synchronize)
                 {
-                    //foreach (string ssfn in synchronizedSettingsFieldFullNames)
-                    //{
-                    //    SettingsFieldInfo sfi = Config.GetSettingsFieldInfo(ssfn);
-                    //    Settings settings = sfi.GetObject();
-                    //    if (settings == null)
-                    //        continue;
-                    //    pollUploadSettingsFile(settings);
-                    //    pollDownloadSettingsFile(settings);
-                    //}
-                    foreach (Type sst in synchronizedSettingsTypes)
+                    foreach (string ssfn in synchronizedSettingsFieldFullNames)
                     {
-                        List<SettingsFieldInfo> sfis = Config.GetSettingsFieldInfos(sst);
-                        if (sfis.Count < 1)
-                            throw new Exception("Settings type " + sst.FullName + " was not found.");
-                        foreach (SettingsFieldInfo sfi in sfis)
-                        {
-                            Settings settings = sfi.GetObject();
-                            if (settings == null)
-                                continue;
-                            pollUploadSettingsFile(settings);
-                            pollDownloadSettingsFile(settings);
-                        }
+                        SettingsFieldInfo sfi = Config.GetSettingsFieldInfo(ssfn);
+                        Settings settings = sfi.GetObject();
+                        if (settings == null)
+                            continue;
+                        pollUploadSettingsFile(settings);
+                        pollDownloadSettingsFile(settings);
                     }
+                    //foreach (Type sst in synchronizedSettingsTypes)
+                    //{
+                    //    List<SettingsFieldInfo> sfis = Config.GetSettingsFieldInfos(sst);
+                    //    if (sfis.Count < 1)
+                    //        throw new Exception("Settings type " + sst.FullName + " was not found.");
+                    //    foreach (SettingsFieldInfo sfi in sfis)
+                    //    {
+                    //        Settings settings = sfi.GetObject();
+                    //        if (settings == null)
+                    //            continue;
+                    //        pollUploadSettingsFile(settings);
+                    //        pollDownloadSettingsFile(settings);
+                    //    }
+                    //}
 
                     string appSetupFile = null;
                     foreach (string file in Directory.GetFiles(appSetupFolder))

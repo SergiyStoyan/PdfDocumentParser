@@ -61,16 +61,16 @@ namespace Cliver
             lock (settingsFieldFullNames2SettingsFieldInfo)
             {
                 settingsFieldFullNames2SettingsFieldInfo.Clear();
-                HashSet<string> requiredOptionalFieldFullNames = new HashSet<string>(RequiredOptionalFieldFullNames);
+                HashSet<string> requiredOptionalFieldFullNames = RequiredOptionalFieldFullNames == null ? null : new HashSet<string>(RequiredOptionalFieldFullNames);
                 foreach (SettingsFieldInfo settingsFieldInfo in EnumSettingsFieldInfos())
                 {
                     settingsFieldFullNames2SettingsFieldInfo[settingsFieldInfo.FullName] = settingsFieldInfo;
-                    bool foundInRequiredOptionalFieldFullNames = requiredOptionalFieldFullNames.Remove(settingsFieldInfo.FullName);
+                    bool foundInRequiredOptionalFieldFullNames = requiredOptionalFieldFullNames?.Remove(settingsFieldInfo.FullName) == true;
                     if (!settingsFieldInfo.Optional || RequiredOptionalSettingsTypes?.Contains(settingsFieldInfo.Type) == true || foundInRequiredOptionalFieldFullNames)
                         settingsFieldInfo.SetObject(Settings.Create(settingsFieldInfo, reset, throwExceptionIfCouldNotLoadFromStorageFile));
                 }
-                if (requiredOptionalFieldFullNames.Count > 0)
-                    throw new Exception("RequiredOptionalFieldFullNames contains name which is not found: " + RequiredOptionalFieldFullNames[0]);
+                if (requiredOptionalFieldFullNames?.Count > 0)
+                    throw new Exception("RequiredOptionalFieldFullNames contains name which was not found: '" + RequiredOptionalFieldFullNames[0] + "'");
             }
         }
         static Dictionary<string, SettingsFieldInfo> settingsFieldFullNames2SettingsFieldInfo = new Dictionary<string, SettingsFieldInfo>();
