@@ -60,7 +60,7 @@ namespace Cliver
         {
             lock (settingsFieldFullNames2SettingsFieldInfo)
             {
-                if (settingsFieldFullNames2SettingsFieldInfo_set)
+                if (settingsFieldFullNames2SettingsFieldInfo_is_set)
                 {//ExplicitlyTrackedAssemblies is the only parameter that can change SettingsFieldInfo collection
                     if (lastExplicitlyTrackedAssemblies?.Count == ExplicitlyTrackedAssemblies?.Count)
                     {
@@ -70,8 +70,9 @@ namespace Cliver
                             return;
                     }
                 }
-                settingsFieldFullNames2SettingsFieldInfo_set = true;
+                settingsFieldFullNames2SettingsFieldInfo_is_set = true;
                 lastExplicitlyTrackedAssemblies = ExplicitlyTrackedAssemblies?.ToList();
+
                 foreach (SettingsFieldInfo settingsFieldInfo in getSettingsFieldInfos())
                 {//SettingsFieldInfo's parameters for a Settings field are expected to be unchangable so no need to re-create it.
                     //!!!Exposing of SettingsFieldInfo to the custom code is one more reason not to re-create it.
@@ -80,7 +81,7 @@ namespace Cliver
                 }
             }
         }
-        static bool settingsFieldFullNames2SettingsFieldInfo_set = false;
+        static bool settingsFieldFullNames2SettingsFieldInfo_is_set = false;
         static List<Assembly> lastExplicitlyTrackedAssemblies = null;
         static Dictionary<string, SettingsFieldInfo> settingsFieldFullNames2SettingsFieldInfo = new Dictionary<string, SettingsFieldInfo>();
         static IEnumerable<SettingsFieldInfo> getSettingsFieldInfos()

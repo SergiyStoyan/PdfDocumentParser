@@ -42,7 +42,7 @@ namespace Cliver
             public readonly string DownloadFolderName = "_download";
             public readonly string UploadFolderName = "_upload";
             public bool Synchronize = false;
-            public int PollingPeriodMss = 10000;
+            public int PollingPeriodMss = 60000;
         }
 
         virtual public void Switch(Parameters parameters)
