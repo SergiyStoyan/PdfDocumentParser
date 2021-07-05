@@ -417,6 +417,11 @@ namespace Cliver.PdfDocumentParser
                 //BeginInvoke((Action<Template>)setUIFromTemplate, templateManager.Template);           
             };
 
+            FormClosed += delegate
+              {
+                  bitmapPreparationForm.Close();
+              };
+
             bSave.Click += Save_Click;
             bOK.Click += OK_Click;
             bCancel.Click += delegate { Close(); };
