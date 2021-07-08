@@ -589,6 +589,7 @@ namespace Cliver
                         month = 6;
                         break;
                     case "Jul":
+                    case "JUL":
                         month = 7;
                         break;
                     case "Aug":

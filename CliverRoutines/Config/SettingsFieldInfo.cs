@@ -121,29 +121,29 @@ namespace Cliver
 
             SettingsAttributes.EncryptedAttribute encryptedAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsAttributes.EncryptedAttribute>(false).FirstOrDefault();
             if (encryptedAttribute == null)
-                encryptedAttribute = settingsType.GetCustomAttributes<SettingsAttributes.EncryptedAttribute>(false).FirstOrDefault();
+                encryptedAttribute = settingsType.GetCustomAttributes<SettingsAttributes.EncryptedAttribute>(true).FirstOrDefault();
             if (encryptedAttribute != null)
                 Endec = encryptedAttribute.Endec;
 
             SettingsAttributes.OptionalAttribute optionalAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsAttributes.OptionalAttribute>(false).FirstOrDefault();
             if (optionalAttribute == null)
-                optionalAttribute = settingsType.GetCustomAttributes<SettingsAttributes.OptionalAttribute>(false).FirstOrDefault();
+                optionalAttribute = settingsType.GetCustomAttributes<SettingsAttributes.OptionalAttribute>(true).FirstOrDefault();
             if (optionalAttribute != null)
                 Optional = optionalAttribute.Value;
 
             SettingsAttributes.IndentedAttribute indentedAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsAttributes.IndentedAttribute>(false).FirstOrDefault();
             if (indentedAttribute == null)
-                indentedAttribute = settingsType.GetCustomAttributes<SettingsAttributes.IndentedAttribute>(false).FirstOrDefault();
+                indentedAttribute = settingsType.GetCustomAttributes<SettingsAttributes.IndentedAttribute>(true).FirstOrDefault();
             if (indentedAttribute != null)
                 Indented = indentedAttribute.Value;
 
             SettingsAttributes.NullSerializedAttribute nullSerializedAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsAttributes.NullSerializedAttribute>(false).FirstOrDefault();
             if (nullSerializedAttribute == null)
-                nullSerializedAttribute = settingsType.GetCustomAttributes<SettingsAttributes.NullSerializedAttribute>(false).FirstOrDefault();
+                nullSerializedAttribute = settingsType.GetCustomAttributes<SettingsAttributes.NullSerializedAttribute>(true).FirstOrDefault();
             if (nullSerializedAttribute != null)
                 NullSerialized = nullSerializedAttribute.Value;
 
-            SettingsAttributes.TypeVersionAttribute typeVersion = settingsType.GetCustomAttributes<SettingsAttributes.TypeVersionAttribute>(false).FirstOrDefault();
+            SettingsAttributes.TypeVersionAttribute typeVersion = settingsType.GetCustomAttributes<SettingsAttributes.TypeVersionAttribute>(true).FirstOrDefault();
             TypeVersion = typeVersion != null ? typeVersion : new SettingsAttributes.TypeVersionAttribute(0, 0);
         }
 
