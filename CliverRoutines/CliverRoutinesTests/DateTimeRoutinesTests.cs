@@ -44,7 +44,7 @@ namespace CliverRoutinesTests
                 if (test.Test.TryParseDateOrTime(DateTimeRoutines.DateTimeFormat.USA_DATE, out t))
                 {
                     if (
-                        (!t.IsUtcOffsetFound || test.Answer.Kind != DateTimeKind.Utc || t.UtcDateTime != test.Answer) 
+                        (!t.IsUtcOffsetFound || test.Answer.Kind != DateTimeKind.Utc || t.UtcDateTime != test.Answer)
                         && (t.IsUtcOffsetFound || t.DateTime != test.Answer)
                         )
                         Assert.Fail(t.DateTime.ToString() + " <> " + test.Answer.ToString() + " and " + t.UtcDateTime.ToString() + " <> " + test.Answer.ToString());
