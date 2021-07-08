@@ -243,11 +243,11 @@ namespace Cliver
 
         public static string ReplaceNonPrintableChars(string s, string substitution = " ")
         {
-            return nonPrintablesRegex.Replace(s, substitution);
+            return NonPrintableCharsRegex.Replace(s, substitution);
         }
-        //static Regex RemoveNonPrintablesRegex = new Regex(@"[^\u0000-\u007F]", RegexOptions.Compiled | RegexOptions.Singleline);
-        readonly static Regex nonPrintablesRegex = new Regex(@"[^\u0000-\u00b0]", RegexOptions.Compiled | RegexOptions.Singleline);
-        //static Regex RemoveNonPrintablesRegex = new Regex(@"[^\x20-\x7E]", RegexOptions.Compiled | RegexOptions.Singleline);
+        //public static Regex NonPrintableCharsRegex = new Regex(@"[^\u0000-\u007F]", RegexOptions.Compiled | RegexOptions.Singleline);
+        //public static Regex NonPrintableCharsRegex = new Regex(@"[^\u0000-\u00b0]", RegexOptions.Compiled | RegexOptions.Singleline);
+        public static Regex NonPrintableCharsRegex = new Regex(@"\p{C}+", RegexOptions.Singleline);
 
         public static string Trim(string s, int length, string ending = "...")
         {

@@ -19,9 +19,9 @@ namespace Cliver
         {
             if (String.IsNullOrEmpty(a))
                 if (String.IsNullOrEmpty(b))
-                return 0;
-            else
-                return b.Length;
+                    return 0;
+                else
+                    return b.Length;
             if (String.IsNullOrEmpty(b))
                 return a.Length;
             int lengthA = a.Length;
