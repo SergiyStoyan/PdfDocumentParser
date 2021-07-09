@@ -157,9 +157,12 @@ namespace Cliver
         {
             lock (this)
             {
-                if (!System.IO.File.Exists(File))
+                string file = File;
+                if (!System.IO.File.Exists(file))
+                    file = InitFile;
+                if (!System.IO.File.Exists(file))
                     return null;
-                string s = System.IO.File.ReadAllText(File);
+                string s = System.IO.File.ReadAllText(file);
                 if (Endec != null)
                     s = Endec.Decrypt(s);
                 return Newtonsoft.Json.Linq.JObject.Parse(s);
@@ -189,9 +192,12 @@ namespace Cliver
         {
             lock (this)
             {
-                if (!System.IO.File.Exists(File))
+                string file = File;
+                if (!System.IO.File.Exists(file))
+                    file = InitFile;
+                if (!System.IO.File.Exists(file))
                     return null;
-                string s = System.IO.File.ReadAllText(File);
+                string s = System.IO.File.ReadAllText(file);
                 if (Endec != null)
                     s = Endec.Decrypt(s);
                 return s;
