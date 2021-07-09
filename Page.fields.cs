@@ -133,6 +133,8 @@ namespace Cliver.PdfDocumentParser
             {
                 fais = new List<FieldActualInfo>();
                 fieldNames2fieldActualInfos[fieldName] = fais;
+                if (PageCollection.ActiveTemplate == null)
+                    throw new Exception("ActiveTemplate is not set for the PageCollection.");
                 foreach (Template.Field f in PageCollection.ActiveTemplate.Fields.Where(x => x.Name == fieldName))
                 {
                     RectangleF? ar = getFieldActualRectangle(f);
