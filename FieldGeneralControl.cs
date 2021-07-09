@@ -64,6 +64,7 @@ namespace Cliver.PdfDocumentParser
 
             List<string> fieldNames = fields.Where(a => a.ColumnOfTable == null).Select(a => a.Name).Distinct().ToList();
             fieldNames.Remove(field.Name);
+            fieldNames.Insert(0, "");
             ColumnOfTable.DataSource = fieldNames;
 
             ColumnOfTable.SelectedItem = field.ColumnOfTable;

@@ -39,6 +39,7 @@
             // 
             this.ColumnOfTable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.ColumnOfTable.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ColumnOfTable.FormattingEnabled = true;
             this.ColumnOfTable.Location = new System.Drawing.Point(123, 3);
             this.ColumnOfTable.Name = "ColumnOfTable";
@@ -83,7 +84,7 @@
             this.Rectangle.Size = new System.Drawing.Size(107, 20);
             this.Rectangle.TabIndex = 5;
             // 
-            // FieldControl
+            // FieldGeneralControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -92,7 +93,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.Value);
             this.Controls.Add(this.ColumnOfTable);
-            this.Name = "FieldControl";
+            this.Name = "FieldGeneralControl";
             this.Size = new System.Drawing.Size(178, 180);
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -51,6 +51,9 @@ namespace Cliver.PdfDocumentParser
             /// <param name="testFileDefaultFolder"></param>
             public TemplateManager(Template template, string lastTestFile, string testFileDefaultFolder)
             {
+                if (template.Editor == null)
+                    template.Editor = new Template.EditorSettings { };
+
                 Template = template;
                 LastTestFile = lastTestFile;
                 TestFileDefaultFolder = testFileDefaultFolder;

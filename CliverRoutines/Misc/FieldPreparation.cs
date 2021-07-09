@@ -245,8 +245,6 @@ namespace Cliver
         {
             return NonPrintableCharsRegex.Replace(s, substitution);
         }
-        //public static Regex NonPrintableCharsRegex = new Regex(@"[^\u0000-\u007F]", RegexOptions.Compiled | RegexOptions.Singleline);
-        //public static Regex NonPrintableCharsRegex = new Regex(@"[^\u0000-\u00b0]", RegexOptions.Compiled | RegexOptions.Singleline);
         public static Regex NonPrintableCharsRegex = new Regex(@"\p{C}+", RegexOptions.Singleline);
 
         public static string Trim(string s, int length, string ending = "...")

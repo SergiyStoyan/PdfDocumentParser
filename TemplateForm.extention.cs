@@ -105,29 +105,32 @@ namespace Cliver.PdfDocumentParser
                         setAnchorParentAnchorIdList(r);
                 }
 
-                for (int i = 0; i < t.Conditions.Count; i++)
-                {
-                    for (int j = i + 1; j < t.Conditions.Count; j++)
-                        if (t.Conditions[i].Name == t.Conditions[j].Name)
-                            t.Conditions.RemoveAt(j);
-                }
                 conditions.Rows.Clear();
-                foreach (Template.Condition c in t.Conditions)
+                if (t.Conditions != null)
                 {
-                    int i = conditions.Rows.Add();
-                    var row = conditions.Rows[i];
-                    setConditionRow(row, c);
+                    for (int i = 0; i < t.Conditions.Count; i++)
+                    {
+                        for (int j = i + 1; j < t.Conditions.Count; j++)
+                            if (t.Conditions[i].Name == t.Conditions[j].Name)
+                                t.Conditions.RemoveAt(j);
+                    }
+                    foreach (Template.Condition c in t.Conditions)
+                    {
+                        int i = conditions.Rows.Add();
+                        var row = conditions.Rows[i];
+                        setConditionRow(row, c);
+                    }
                 }
 
-                //for (int i = 0; i < t.Fields.Count; i++)
-                //{
-                //    for (int j = i + 1; j < t.Fields.Count; j++)
-                //        if (t.Fields[i].Name == t.Fields[j].Name)
-                //            t.Fields.RemoveAt(j);
-                //}
                 fields.Rows.Clear();
                 if (t.Fields != null)
                 {
+                    //for (int i = 0; i < t.Fields.Count; i++)
+                    //{
+                    //    for (int j = i + 1; j < t.Fields.Count; j++)
+                    //        if (t.Fields[i].Name == t.Fields[j].Name)
+                    //            t.Fields.RemoveAt(j);
+                    //}
                     foreach (Template.Field f in t.Fields)
                     {
                         int i = fields.Rows.Add();
