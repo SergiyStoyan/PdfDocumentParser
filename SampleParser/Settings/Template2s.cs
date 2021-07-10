@@ -19,13 +19,13 @@ namespace Cliver.SampleParser
     {
         public static readonly Template2sSettings3 Template2s;
 
+        [SettingsAttributes.Indented(false)]
         public class Template2sSettings3 : Cliver.UserSettings
         {
             public List<Template2> Template2s = new List<Template2>();
 
             protected override void Loaded()
             {
-                __Info.Indented = false;
             }
 
             protected override void Saving()
