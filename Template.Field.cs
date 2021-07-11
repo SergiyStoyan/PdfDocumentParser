@@ -19,7 +19,8 @@ namespace Cliver.PdfDocumentParser
         //    return Fields.Where(x => x.Name == fieldName);
         //}
 
-        /*abstract*/ public class Field
+        /*abstract*/
+        public class Field
         {
             public string Name;
 
@@ -96,7 +97,7 @@ namespace Cliver.PdfDocumentParser
                     Type = Types.OcrTextLineImages;
                 else
                     Type = Types.PdfText;
-                    //throw new Exception("Unknown option: " + this.GetType());
+                //throw new Exception("Unknown option: " + this.GetType());
             }
 
             [Newtonsoft.Json.JsonIgnore]
@@ -113,14 +114,9 @@ namespace Cliver.PdfDocumentParser
                 OcrTextLineImages,
             }
 
-            ///// <summary>
-            ///// Remains for backward compatibility. It makes sense only for the base type Field.
-            ///// </summary>
+            //!!!remove when old templates converted
             public ValueTypes DefaultValueType = ValueTypes.PdfText;
-
-            /// <summary>
-            /// Remains for backward compatibility. It makes sense only for the base type Field.
-            /// </summary>
+            //!!!remove when old templates converted
             public enum ValueTypes
             {
                 PdfText = 0,
