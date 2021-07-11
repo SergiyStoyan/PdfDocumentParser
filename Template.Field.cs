@@ -19,7 +19,7 @@ namespace Cliver.PdfDocumentParser
         //    return Fields.Where(x => x.Name == fieldName);
         //}
 
-        /*abstract*/
+        //abstract - uncomment when old templates converted
         public class Field
         {
             public string Name;
@@ -115,19 +115,19 @@ namespace Cliver.PdfDocumentParser
             }
 
             //!!!remove when old templates converted
-            public ValueTypes DefaultValueType = ValueTypes.PdfText;
-            //!!!remove when old templates converted
-            public enum ValueTypes
-            {
-                PdfText = 0,
-                PdfTextLines = 1,
-                PdfCharBoxs = 2,
-                OcrText = 3,
-                OcrTextLines = 4,
-                OcrCharBoxs = 5,
-                Image = 6,
-                OcrTextLineImages = 7,
-            }
+            //public ValueTypes DefaultValueType = ValueTypes.PdfText;
+            ////!!!remove when old templates converted
+            //public enum ValueTypes
+            //{
+            //    PdfText = 0,
+            //    PdfTextLines = 1,
+            //    PdfCharBoxs = 2,
+            //    OcrText = 3,
+            //    OcrTextLines = 4,
+            //    OcrCharBoxs = 5,
+            //    Image = 6,
+            //    OcrTextLineImages = 7,
+            //}
 
             public bool IsSet()
             {
