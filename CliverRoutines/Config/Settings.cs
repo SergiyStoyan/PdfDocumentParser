@@ -106,7 +106,7 @@ namespace Cliver
                         break;
                     case UnsupportedFormatHandlerCommand.Proceed:
                     default:
-                        throw new Exception("Uknown option: " + mode);
+                        throw new Exception("Unknown option: " + mode);
                 }
             }
             return settings;
@@ -137,13 +137,13 @@ namespace Cliver
         //    }
         //}
         /// <summary>
-        /// Serializes this Settings object to the storage file.
+        /// Serializes this Settings object to its storage file.
         /// </summary>
         public void Save()
         {
             lock (this)
             {
-                if (__Info == null)
+                if (__Info == null)//it can be called on a detached instance in order to be used by UnsupportedFormatHandler()
                     throw new Exception("This method cannot be performed on this Settings object because its __Info is not set.");
                 save();
             }
@@ -152,7 +152,7 @@ namespace Cliver
         {
             __TypeVersion = __Info.TypeVersion.Value;
             Saving();
-            string s = Serialization.Json.Serialize(this, __Info.Indented, !__Info.NullSerialized, false/*!!!default values always must be stored*/);
+            string s = Serialization.Json.Serialize(this, __Info.Indented, true, !__Info.NullSerialized, false/*!!!default values always must be stored*/);
             if (__Info.Endec != null)
                 s = __Info.Endec.Encrypt(s);
             FileSystemRoutines.CreateDirectory(PathRoutines.GetFileDir(__Info.File));
@@ -166,9 +166,9 @@ namespace Cliver
                 if (__Info != correctSettingsFieldInfo)
                     //it can happen when:
                     //- there are several settings fields of the same type and their __Info's were exchanged from the custom code;
-                    //- Config was reloaded while a old object was preserved;
+                    //- Config was reloaded while an old object was preserved;
                     //All this will lead to a confusion.
-                    throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + correctSettingsFieldInfo?.FullName + ").");
+                    throw new Exception("Settings field '" + correctSettingsFieldInfo.FullName + "' cannot be saved because its object __Info has been altered.");
                 save();
             }
         }

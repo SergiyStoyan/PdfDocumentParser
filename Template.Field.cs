@@ -19,7 +19,6 @@ namespace Cliver.PdfDocumentParser
         //    return Fields.Where(x => x.Name == fieldName);
         //}
 
-        //abstract - uncomment when old templates converted
         abstract public class Field
         {
             public string Name;
