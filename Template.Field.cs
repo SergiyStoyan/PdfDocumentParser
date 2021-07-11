@@ -20,7 +20,7 @@ namespace Cliver.PdfDocumentParser
         //}
 
         //abstract - uncomment when old templates converted
-        public class Field
+        abstract public class Field
         {
             public string Name;
 

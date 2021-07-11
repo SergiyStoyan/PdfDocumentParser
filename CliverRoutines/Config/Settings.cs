@@ -84,17 +84,27 @@ namespace Cliver
             string s = File.ReadAllText(settingsFieldInfo.File);
             if (settingsFieldInfo.Endec != null)
                 s = settingsFieldInfo.Endec.Decrypt(s);
-            Settings settings = (Settings)Serialization.Json.Deserialize(settingsFieldInfo.Type, s, true, true);
-            if (!settingsFieldInfo.TypeVersion.IsTypeVersionSupported(settings))
+            Settings settings;
+            Exception exception = null;
+            try
+            {
+                settings = (Settings)Serialization.Json.Deserialize(settingsFieldInfo.Type, s, true, true);
+            }
+            catch (Exception e)
+            {
+                settings = (Settings)Activator.CreateInstance(settingsFieldInfo.Type);
+                exception = e;
+            }
+            if (exception != null || !settingsFieldInfo.TypeVersion.IsTypeVersionSupported(settings))
             {
                 settings.__Info = settingsFieldInfo;
-                UnsupportedTypeVersionHandlerCommand mode = settings.UnsupportedTypeVersionHandler();
+                UnsupportedFormatHandlerCommand mode = settings.UnsupportedFormatHandler(exception);
                 switch (mode)
                 {
-                    case UnsupportedTypeVersionHandlerCommand.Reload:
+                    case UnsupportedFormatHandlerCommand.Reload:
                         settings = loadFromFile(settingsFieldInfo);
                         break;
-                    case UnsupportedTypeVersionHandlerCommand.Proceed:
+                    case UnsupportedFormatHandlerCommand.Proceed:
                     default:
                         throw new Exception("Uknown option: " + mode);
                 }
@@ -215,14 +225,18 @@ namespace Cliver
         public uint __TypeVersion { get; private set; } = 0;
 
         /// <summary>
-        /// Called by Config if the storage file content does not match the Settings type version.
+        /// Called by Config if either: 
+        /// - the storage/init file content does not match the Settings type version;
+        /// - the storage/init file could not be deserialized;
         /// Here is your chance to amend the data to migrate to the current version.
         /// </summary>
-        virtual protected UnsupportedTypeVersionHandlerCommand UnsupportedTypeVersionHandler()
+        virtual protected UnsupportedFormatHandlerCommand UnsupportedFormatHandler(Exception deserializingException)
         {
-            throw new Exception("Unsupported version of " + __Info.FullName + ": " + __TypeVersion + "\r\nin the file: " + __Info.File);
+            if (deserializingException != null)
+                throw new Exception("Error while deserializing file " + __Info.File, deserializingException);
+            throw new Exception("Unsupported type version of " + __Info.FullName + ": " + __TypeVersion + "\r\nin the file: " + __Info.File);
         }
-        public enum UnsupportedTypeVersionHandlerCommand
+        public enum UnsupportedFormatHandlerCommand
         {
             Reload,
             Proceed

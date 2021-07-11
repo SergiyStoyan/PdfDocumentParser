@@ -358,7 +358,7 @@ namespace Cliver.PdfDocumentParser
                         throw new Exception("Condition[name=" + c.Name + "] is not set!");
                     BooleanEngine.Check(c.Value, t.Anchors.Select(x => x.Id));
                 }
-                t.Conditions.Add(Serialization.Json.Clone(c));
+                t.Conditions.Add((Template.Condition)Serialization.Json.Clone2(c));
             }
             if (saving)
             {
@@ -379,7 +379,7 @@ namespace Cliver.PdfDocumentParser
                     foreach (int? ai in new List<int?> { f.LeftAnchor?.Id, f.TopAnchor?.Id, f.RightAnchor?.Id, f.BottomAnchor?.Id })
                         if (ai != null && t.Anchors.FirstOrDefault(x => x.Id == ai) == null)
                             throw new Exception("Anchor[Id=" + ai + " does not exist.");
-                t.Fields.Add(Serialization.Json.Clone(f));
+                t.Fields.Add((Template.Field)Serialization.Json.Clone2(f));
             }
             if (saving)
             {
