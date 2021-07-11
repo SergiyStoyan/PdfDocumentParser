@@ -1,6 +1,6 @@
 ﻿namespace Cliver.PdfDocumentParser
 {
-    partial class FieldGeneralControl
+    partial class FieldOcrCharBoxsControl
     {
         /// <summary> 
         /// Required designer variable.

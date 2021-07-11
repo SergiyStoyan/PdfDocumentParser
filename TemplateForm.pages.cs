@@ -151,12 +151,12 @@ namespace Cliver.PdfDocumentParser
                     return null;
                 RectangleF r = (RectangleF)fai.ActualRectangle;
                 owners2resizebleBox[field] = new ResizebleBox(field, r, Settings.Appearance.SelectionBoxBorderWidth);
-                object v = fai.GetValue(field.DefaultValueType);
-                switch (field.DefaultValueType)
+                object v = fai.GetValue(field.Type);
+                switch (field.Type)
                 {
-                    case Template.Field.ValueTypes.PdfText:
-                    case Template.Field.ValueTypes.PdfTextLines:
-                    case Template.Field.ValueTypes.PdfCharBoxs:
+                    case Template.Field.Types.PdfText:
+                    case Template.Field.Types.PdfTextLines:
+                    case Template.Field.Types.PdfCharBoxs:
                         if (field.ColumnOfTable != null)
                         {
                             if (!fai.TableFieldActualInfo.Found)
@@ -191,9 +191,9 @@ namespace Cliver.PdfDocumentParser
                         }
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
                         return v;
-                    case Template.Field.ValueTypes.OcrText:
-                    case Template.Field.ValueTypes.OcrTextLines:
-                    case Template.Field.ValueTypes.OcrCharBoxs:
+                    case Template.Field.Types.OcrText:
+                    case Template.Field.Types.OcrTextLines:
+                    case Template.Field.Types.OcrCharBoxs:
                         if (field.ColumnOfTable != null)
                         {
                             if (!fai.TableFieldActualInfo.Found)
@@ -204,7 +204,7 @@ namespace Cliver.PdfDocumentParser
                                 RectangleF tableAR = (RectangleF)fai.TableFieldActualInfo.ActualRectangle;
                                 //List<Ocr.Line> lines = Ocr.GetLines(Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateOcrCharBoxs, tableAR), pages.ActiveTemplate.TextAutoInsertSpace).ToList();
                                 //List<Ocr.Line> lines = Ocr.GetLines(Ocr.This.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateBitmap, tableAR, pages.ActiveTemplate.TesseractPageSegMode), pages.ActiveTemplate.TextAutoInsertSpace).ToList();
-                                List<Page.Line<Ocr.CharBox>> ols = Page.GetLinesWithAdjacentBorders((List<Ocr.CharBox>)fai.TableFieldActualInfo.GetValue(Template.Field.ValueTypes.OcrCharBoxs), tableAR);
+                                List<Page.Line<Ocr.CharBox>> ols = Page.GetLinesWithAdjacentBorders((List<Ocr.CharBox>)fai.TableFieldActualInfo.GetValue(Template.Field.Types.OcrCharBoxs), tableAR);
                                 if (ols.Count > 0)
                                     ols.RemoveAt(0);
                                 List<RectangleF> lineBoxes = new List<RectangleF>();
@@ -229,14 +229,14 @@ namespace Cliver.PdfDocumentParser
                         }
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
                         return v;
-                    case Template.Field.ValueTypes.Image:
+                    case Template.Field.Types.Image:
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
                         return v;
-                    case Template.Field.ValueTypes.OcrTextLineImages:
+                    case Template.Field.Types.OcrTextLineImages:
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
                         return v;
                     default:
-                        throw new Exception("Unknown option: " + field.DefaultValueType);
+                        throw new Exception("Unknown option: " + field.Type);
                 }
             }
             catch (Exception ex)

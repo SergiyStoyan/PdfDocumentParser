@@ -31,7 +31,7 @@ namespace Cliver.PdfDocumentParser
                 else if (this is CvImage)
                     Type = Types.CvImage;
                 else
-                    throw new Exception("Unknown type: " + this.GetType());
+                    throw new Exception("Unknown option: " + this.GetType());
             }
             [Newtonsoft.Json.JsonIgnore]
             public readonly Types Type;
