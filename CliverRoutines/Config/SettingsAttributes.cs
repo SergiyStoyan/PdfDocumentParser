@@ -49,7 +49,7 @@ namespace Cliver
 
             public bool IsTypeVersionSupported(Settings settings)
             {
-                return /*settings.__TypeVersion >= MinSupportedTypeVersion &&*/ settings.__TypeVersion <= Value;
+                return /*settings.__TypeVersion >= MinSupportedTypeVersion &&*/ settings.__TypeVersion == Value;
             }
 
             /// <summary>
