@@ -144,16 +144,16 @@ namespace Cliver
             }
         }
 
-        /// <summary>
-        /// Folder of the head session.
-        /// </summary>
-        public static string Dir
-        {
-            get
-            {
-                return Head.Dir;
-            }
-        }
+        ///// <summary>
+        ///// The head session's directory.
+        ///// </summary>
+        //public static string Dir
+        //{
+        //    get
+        //    {
+        //        return Head.Dir;
+        //    }
+        //}
 
         /// <summary>
         /// Message importance levels.
