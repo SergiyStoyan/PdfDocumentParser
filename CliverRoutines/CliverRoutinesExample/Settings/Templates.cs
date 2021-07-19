@@ -75,7 +75,7 @@ namespace Example
             }
             while (true)
             {
-                Console.WriteLine("\r\nPlease choose the option:\r\nExit - [E]\r\nReset the settings to default - [R]\r\nProceed as is - [P]");
+                Console.WriteLine("\r\nPlease choose an option:\r\nExit - [E]\r\nReset the settings to default - [R]\r\nProceed as is - [P]");
                 ConsoleKey k = Console.ReadKey().Key;
                 switch (k)
                 {

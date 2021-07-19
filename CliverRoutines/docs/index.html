@@ -707,7 +707,7 @@ class TemplatesSettings : Cliver.UserSettings//UserSettings based class is seria
 			}
 
 			//upgrading to the last version
-			if (__TypeVersion < __Info.TypeVersion.Value)
+			if (__TypeVersion < __Info.TypeVersion)
 			{
 				//alter the data in the object itself
 				foreach (Template t in Templates)
@@ -724,12 +724,12 @@ class TemplatesSettings : Cliver.UserSettings//UserSettings based class is seria
 		else //__TypeVersion > __Info.TypeVersion.Value     
 		{
 			Console.WriteLine("WARNING: The application might not support properly the newer type version " + __TypeVersion + " data stored in " + __Info.File);
-			Console.WriteLine("The expected version: " + __Info.TypeVersion.Value);
+			Console.WriteLine("The expected version: " + __Info.TypeVersion);
 			Console.WriteLine("Consider upgrading the application.");
 		}
 		while (true)
 		{
-			Console.WriteLine("\r\nPlease choose the option:\r\nExit - [E]\r\nReset the settings to default - [R]\r\nProceed as is - [P]");
+			Console.WriteLine("\r\nPlease choose an option:\r\nExit - [E]\r\nReset the settings to default - [R]\r\nProceed as is - [P]");
 			ConsoleKey k = Console.ReadKey().Key;
 			switch (k)
 			{
