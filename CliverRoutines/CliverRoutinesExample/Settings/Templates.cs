@@ -26,10 +26,10 @@ namespace Example
 
             //upgrading to version 200601
             if (deserializingException?.Message.Contains("Could not create an instance of type Example.Template+Field") == true || __TypeVersion < 200601)
-            {//remove property Fields which does not exist anymore
+            {//remove property Field which does not exist anymore
                 Newtonsoft.Json.Linq.JObject o = __Info.ReadStorageFileAsJObject();
                 for (int i = o["Templates"].Count() - 1; i >= 0; i--)
-                    o["Templates"][i]["Fields"].Remove();
+                    o["Templates"][i]["Field"]?.Remove();
                 //set the current version
                 o["__TypeVersion"] = 200601;
                 //save
@@ -37,32 +37,29 @@ namespace Example
                 return UnsupportedFormatHandlerCommand.Reload;//this method will be called again because __TypeVersion is still obsolete
             }
 
-            if (deserializingException == null)//the field was deserialized but its __TypeVersion is not acceptable.
+            //upgrading to version 210301
+            if (deserializingException == null && __TypeVersion < 210301)//the object was deserialized but its __TypeVersion is not acceptable
             {
-                //upgrading to version 210301
-                if (__TypeVersion < 210301)
-                {
-                    string s = __Info.ReadStorageFileAsString();
-                    //edit the old data as a serialized string. Appropriate for altering the raw data.
-                    //...
-                    //set the current version
-                    s = Regex.Replace(s, @"(?<=\""__TypeVersion\""\:\s*)\d+", "210301", System.Text.RegularExpressions.RegexOptions.Singleline);
-                    //save
-                    __Info.WriteStorageFileAsString(s);
-                    return UnsupportedFormatHandlerCommand.Reload;//this method will be called again because __TypeVersion is still obsolete
-                }
+                string s = __Info.ReadStorageFileAsString();
+                //edit the old data as a serialized string. Appropriate for altering the raw data.
+                //...
+                //set the current version
+                s = Regex.Replace(s, @"(?<=\""__TypeVersion\""\:\s*)\d+", "210301", System.Text.RegularExpressions.RegexOptions.Singleline);
+                //save
+                __Info.WriteStorageFileAsString(s);
+                return UnsupportedFormatHandlerCommand.Reload;//this method will be called again because __TypeVersion is still obsolete
+            }
 
-                //upgrading to the last version
-                if (__TypeVersion < __Info.TypeVersion)
-                {
-                    //alter the data in the object itself
-                    foreach (Template t in Templates)
-                        t.Name = Regex.Replace(t.Name, @"^test", "_TEST_");
-                    //...
-                    //save
-                    Save();//(!)when saving, the current type version is set
-                    return UnsupportedFormatHandlerCommand.Proceed;
-                }
+            //upgrading to the last version
+            if (deserializingException == null && __TypeVersion < __Info.TypeVersion)//the object was deserialized but its __TypeVersion is not acceptable
+            {
+                //alter the data in the object itself
+                foreach (Template t in Templates)
+                    t.Name = Regex.Replace(t.Name, @"^test", "_TEST_");
+                //...
+                //save
+                Save();//(!)when saving, the current type version is set
+                return UnsupportedFormatHandlerCommand.Proceed;
             }
 
             if (deserializingException != null)
