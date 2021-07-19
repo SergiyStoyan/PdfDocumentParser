@@ -105,10 +105,10 @@ namespace Cliver
         /// Can be used to initialize an optional Settings field.
         /// </summary>
         /// <param name="settingsFieldFullName">full name of Settings field; it equals to the name of its storage file without extention</param>
-        public static void Reset(string settingsFieldFullName)
+        public static Settings Reset(string settingsFieldFullName)
         {
             SettingsFieldInfo sfi = GetSettingsFieldInfo(settingsFieldFullName);
-            sfi.SetObject(Settings.Create(sfi, true));
+            return sfi.ResetObject();
         }
 
         /// <summary>
@@ -116,19 +116,19 @@ namespace Cliver
         /// </summary>
         /// <param name="settingsFieldHostingType">full type name of the class hosting the Settings field</param>
         /// <param name="settingsFieldName">name of the Settings field</param>
-        public static void Reset(Type settingsFieldHostingType, string settingsFieldName)
+        public static Settings Reset(Type settingsFieldHostingType, string settingsFieldName)
         {
-            Reset(settingsFieldHostingType.FullName + "." + settingsFieldName);
+            return Reset(settingsFieldHostingType.FullName + "." + settingsFieldName);
         }
 
         /// <summary>
         /// Can be used to initialize an optional Settings field.
         /// </summary>
         /// <param name="settingsFieldFullName">full name of Settings field; it equals to the name of its storage file without extention</param>
-        public static void Reload(string settingsFieldFullName)
+        public static Settings Reload(string settingsFieldFullName)
         {
             SettingsFieldInfo sfi = GetSettingsFieldInfo(settingsFieldFullName);
-            sfi.SetObject(Settings.Create(sfi, false));
+            return sfi.ReloadObject();
         }
 
         /// <summary>
@@ -136,9 +136,9 @@ namespace Cliver
         /// </summary>
         /// <param name="settingsFieldHostingType">full type name of the class hosting the Settings field</param>
         /// <param name="settingsFieldName">name of the Settings field</param>
-        public static void Reload(Type settingsFieldHostingType, string settingsFieldName)
+        public static Settings Reload(Type settingsFieldHostingType, string settingsFieldName)
         {
-            Reload(settingsFieldHostingType.FullName + "." + settingsFieldName);
+            return Reload(settingsFieldHostingType.FullName + "." + settingsFieldName);
         }
 
         ///// <summary>
