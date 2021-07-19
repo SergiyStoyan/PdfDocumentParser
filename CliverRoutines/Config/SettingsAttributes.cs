@@ -39,16 +39,17 @@ namespace Cliver
         [AttributeUsage(AttributeTargets.Class)]
         public class TypeVersionAttribute : Attribute
         {
-            public readonly uint MinSupportedTypeVersion;
+            //public readonly uint MinSupportedTypeVersion;
 
             /// <summary>
             /// The version of the Settings type to which this attribute is applied.
             /// </summary>
             public readonly uint Value;
+            //public readonly Version Value;
 
             public bool IsTypeVersionSupported(Settings settings)
             {
-                return settings.__TypeVersion >= MinSupportedTypeVersion && settings.__TypeVersion <= Value;
+                return /*settings.__TypeVersion >= MinSupportedTypeVersion &&*/ settings.__TypeVersion <= Value;
             }
 
             /// <summary>
@@ -56,26 +57,48 @@ namespace Cliver
             /// </summary>
             /// <param name="value">Version of the Settings type to which this attribute is applied.</param>
             /// <param name="minSupportedTypeVersion">It must be less than or equal to the value.</param>
-            public TypeVersionAttribute(uint value, uint minSupportedTypeVersion)
-            {
-                try
-                {
-                    if (value < minSupportedTypeVersion)
-                        throw new Exception("Value (" + value + ") cannot be less than minSupportedTypeVersion (" + minSupportedTypeVersion + ")");
-                    Value = value;
-                    MinSupportedTypeVersion = minSupportedTypeVersion;
-                }
-                catch (Exception e)
-                {
-                    throw new Exception("Wrong parameters of the attribute " + GetType().FullName, e);
-                }
-            }
+            //public TypeVersionAttribute(uint value, uint minSupportedTypeVersion)
+            //{
+            //    try
+            //    {
+            //        if (value < minSupportedTypeVersion)
+            //            throw new Exception("Value (" + value + ") cannot be less than minSupportedTypeVersion (" + minSupportedTypeVersion + ")");
+            //        Value = value;
+            //        MinSupportedTypeVersion = minSupportedTypeVersion;
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        throw new Exception("Wrong parameters of the attribute " + GetType().FullName, e);
+            //    }
+            //}
 
             /// <summary>
             /// Settings type attribute. Used to check if the storage file format is supported.
             /// </summary>
             /// <param name="value">Version of the Settings type to which this attribute is applied.</param>
-            public TypeVersionAttribute(uint value) : this(value, value) { }
+            public TypeVersionAttribute(uint value)
+            {
+                Value = value;
+            }
+
+            ///// <summary>
+            ///// Settings type attribute. Used to check if the storage file format is supported.
+            ///// </summary>
+            ///// <param name="value">Version of the Settings type to which this attribute is applied.</param>
+            //public TypeVersionAttribute(Version value)
+            //{
+            //    Value = value;
+            //}
+
+            //public TypeVersionAttribute(int major, int minor, int build, int revision = 0)
+            //{
+            //    Value = new Version(major, minor, build, revision);
+            //}
+
+            //public TypeVersionAttribute(string version)
+            //{
+            //    Value = new Version(version);
+            //}
         }
 
         ///// <summary>

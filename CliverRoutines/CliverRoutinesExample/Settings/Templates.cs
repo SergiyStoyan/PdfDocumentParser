@@ -15,7 +15,7 @@ namespace Example
 
     //Example how to check the type version and migrate to the current type if needed.
     //When this attribute is set, Config checks if the version set by the attribute accords with the version saved in the storage file.
-    [SettingsAttributes.TypeVersion(value: 210701, minSupportedTypeVersion: 210701)]
+    [SettingsAttributes.TypeVersion(210701)]
     class TemplatesSettings : Cliver.UserSettings//UserSettings based class is serialized in the user directory
     {
         public List<Template> Templates = new List<Template> { new Template { Name = "test", Words = new List<string> { "apple", "box" } } };
@@ -24,6 +24,7 @@ namespace Example
         override protected UnsupportedFormatHandlerCommand UnsupportedFormatHandler(Exception deserializingException)
         {//successive upgrading from version to version using different approaches:
 
+            //upgrading to version 200601
             if (deserializingException?.Message.Contains("Could not create an instance of type Example.Template+Field") == true || __TypeVersion < 200601)
             {//remove property Fields which does not exist anymore
                 Newtonsoft.Json.Linq.JObject o = __Info.ReadStorageFileAsJObject();
@@ -38,6 +39,7 @@ namespace Example
 
             if (deserializingException == null)//the field was deserialized but its __TypeVersion is not acceptable.
             {
+                //upgrading to version 210301
                 if (__TypeVersion < 210301)
                 {
                     string s = __Info.ReadStorageFileAsString();
@@ -50,6 +52,7 @@ namespace Example
                     return UnsupportedFormatHandlerCommand.Reload;//this method will be called again because __TypeVersion is still obsolete
                 }
 
+                //upgrading to the last version
                 if (__TypeVersion < __Info.TypeVersion.Value)
                 {
                     //alter the data in the object itself

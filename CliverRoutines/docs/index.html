@@ -431,9 +431,9 @@ class GeneralSettings : Cliver.UserSettings//UserSettings based class is seriali
 		 
             <h2><a name='config_Tips'>Tips</a></h2>
 
-            <h3><a name='restoring_predefined_collections'>(!)Predefining collections</a></h3>
+            <h3><a name='restoring_predefined_collections'>(!)Predefined collections</a></h3>
 			
-			Pay attention that when you predefine a collection of values in your code, it will be doubled every time when it is saved/restored. It is how Newtonsoft.Json works by default.
+			Pay attention that when you predefine a collection of values in your code, it will be doubled every time when it is saved/restored. It is how <code>Newtonsoft.Json</code> works by default.
 			<br>To alter this behavior, add the attribute as in the example below:
 
 <script type="text/plain" class="language-csharp">public class GeneralSettings : Cliver.UserSettings
@@ -444,9 +444,9 @@ class GeneralSettings : Cliver.UserSettings//UserSettings based class is seriali
 }</script>
 			
 			
-            <h3><a name=''>Ignoring fields/properties</a></h3>
+            <h3><a name=''>Ignored fields/properties</a></h3>
 
-            To make a certain field or property not serializable, make it <code>non-public</code>. Otherwise, reference Newtonsoft.Json and add the attribute as in the example:
+            To make a certain field or property not serializable, make it <code>non-public</code>. Otherwise, reference <code>Newtonsoft.Json</code> and add the attribute as in the example:
 <script type="text/plain" class="language-csharp">public class GeneralSettings : Cliver.UserSettings
 {   	
 	//this field will not be serialized
@@ -649,13 +649,16 @@ Settings.General.Save();</script>
 
 
             <h3><a name=''>Upgrading settings type</a></h3>
-Sometimes, when you upgrade an application, a <a href='#settings_class'>settings type</a> in it is changed that way that the new application cannot deserialize properly a <a href='#storage_file'>storage file</a> produced by an older application. When it happens, the engine calls method <code>UnsupportedFormatHandler</code> which you can override. This method is called in the following cases:
-<br>- deserialization engine thew an exception meaning that the <a href='#settings_field'>settings field</a> could not be deserialized and contains a default value;
-<br>- the <a href='#settings_field'>settings field</a> was deserialized but its type version is out of the acceptable range meaning that some restored data may be deteriorated and needs amending. This can be the case only when attribute <code>TypeVersion</code> is specified for the <a href='#settings_class'>settings type</a>;
+Sometimes, when you upgrade an application, a <a href='#settings_class'>settings type</a> in it is changed that way that the new application cannot deserialize properly a <a href='#storage_file'>storage file</a> produced by an older application. When it happens, <a href='#config'><code>Cliver.Config</code></a> engine calls method <code>UnsupportedFormatHandler</code> which you can override.
 
-<p>By adding the attribute <code>TypeVersion</code> to a certain <a href='#settings_class'>settings type</a> you assign a version to its declaration in the code. When you alter the decalration, you should also alter its version specified in the attribute. Now, when the type version of the storage file does not correspond to the version set by the attribute, the engine will call <code>UnsupportedFormatHandler</code>.
+<p><code>UnsupportedFormatHandler</code> is called in the following cases:
+<br>- deserialization engine thew an exception meaning that the <a href='#settings_field'>settings field</a> could not be deserialized and is set to a default value;
+<br>- the <a href='#settings_field'>settings field</a> was deserialized but its type version is still out of the acceptable range meaning that some restored data may be deteriorated and need amending. This can be the case only if attribute <code>TypeVersion</code> is specified;
 
-<p>For either reason <code>UnsupportedFormatHandler</code> was called, you can provide a smooth migration of the old data to the new format. See the example below:
+<p><b>TypeVersion attribute</b>
+<br>By adding the attribute <code>TypeVersion</code> to a certain <a href='#settings_class'>settings type</a> you assign a version to its declaration in the code. When the application serializes an instance of this <a href='#settings_class'>settings type</a>, its version is stored in the <a href='#storage_file'>storage file</a> as <code>__TypeVersion</code> property. Each time when you alter the <a href='#settings_class'>settings type</a>'s decalration, you should also alter its version specified by the attribute. So now, when a newer application tries to read an older <a href='#storage_file'>storage file</a> or vice versa, an older application tried to read a newer <a href='#storage_file'>storage file</a>, the type version in the <a href='#storage_file'>storage file</a> will not correspond to the version set by the attribute and therefore <a href='#config'><code>Cliver.Config</code></a> engine will call <code>UnsupportedFormatHandler</code>.
+
+<p>For either reason <code>UnsupportedFormatHandler</code> was called, within it you can provide a smooth migration of the old data to the new format. See the example below:
 
 <p>
 <script type="text/plain" class="language-csharp">//An example of upgrading of a Settings type 
@@ -666,7 +669,7 @@ partial class Settings
 
 //Example how to check the type version and migrate to the current type if needed.
 //When this attribute is set, Config checks if the version set by the attribute accords with the version saved in the storage file.
-[SettingsAttributes.TypeVersion(value: 210701, minSupportedTypeVersion: 210701)]
+[SettingsAttributes.TypeVersion(210701)]
 class TemplatesSettings : Cliver.UserSettings//UserSettings based class is serialized in the user directory
 {
 	public List<Template> Templates = new List<Template> { new Template { Name = "test", Words = new List<string> { "apple", "box" } } };
@@ -675,6 +678,7 @@ class TemplatesSettings : Cliver.UserSettings//UserSettings based class is seria
 	override protected UnsupportedFormatHandlerCommand UnsupportedFormatHandler(Exception deserializingException)
 	{//successive upgrading from version to version using different approaches:
 
+		//upgrading to version 200601
 		if (deserializingException?.Message.Contains("Could not create an instance of type Example.Template+Field") == true || __TypeVersion < 200601)
 		{//remove property Fields which does not exist anymore
 			Newtonsoft.Json.Linq.JObject o = __Info.ReadStorageFileAsJObject();
@@ -689,6 +693,7 @@ class TemplatesSettings : Cliver.UserSettings//UserSettings based class is seria
 
 		if (deserializingException == null)//the field was deserialized but its __TypeVersion is not acceptable.
 		{
+			//upgrading to version 210301
 			if (__TypeVersion < 210301)
 			{
 				string s = __Info.ReadStorageFileAsString();
@@ -701,6 +706,7 @@ class TemplatesSettings : Cliver.UserSettings//UserSettings based class is seria
 				return UnsupportedFormatHandlerCommand.Reload;//this method will be called again because __TypeVersion is still obsolete
 			}
 
+			//upgrading to the last version
 			if (__TypeVersion < __Info.TypeVersion.Value)
 			{
 				//alter the data in the object itself

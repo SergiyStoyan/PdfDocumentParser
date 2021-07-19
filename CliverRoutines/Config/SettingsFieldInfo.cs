@@ -154,7 +154,7 @@ namespace Cliver
             }
 
             SettingsAttributes.TypeVersionAttribute typeVersion = settingsType.GetCustomAttributes<SettingsAttributes.TypeVersionAttribute>(true).FirstOrDefault();
-            TypeVersion = typeVersion != null ? typeVersion : new SettingsAttributes.TypeVersionAttribute(0, 0);
+            TypeVersion = typeVersion != null ? typeVersion : new SettingsAttributes.TypeVersionAttribute(0);
         }
 
         #region Type Version support

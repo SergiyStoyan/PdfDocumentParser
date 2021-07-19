@@ -56,19 +56,19 @@ namespace Cliver
             if (!reset && File.Exists(settingsFieldInfo.File))
                 //try
                 //{
-                    return loadFromFile(settingsFieldInfo);
-                //}
-                //catch (Exception e)
-                //{
-                //    if (throwExceptionIfCouldNotLoadFromStorageFile)
-                //        throw new Exception("Error while loading settings " + settingsFieldInfo.FullName + " from file " + settingsFieldInfo.File, e);
-                //}
+                return loadFromFile(settingsFieldInfo);
+            //}
+            //catch (Exception e)
+            //{
+            //    if (throwExceptionIfCouldNotLoadFromStorageFile)
+            //        throw new Exception("Error while loading settings " + settingsFieldInfo.FullName + " from file " + settingsFieldInfo.File, e);
+            //}
             if (File.Exists(settingsFieldInfo.InitFile))
             {
                 FileSystemRoutines.CopyFile(settingsFieldInfo.InitFile, settingsFieldInfo.File, true);
                 //try
                 //{
-                    return loadFromFile(settingsFieldInfo);
+                return loadFromFile(settingsFieldInfo);
                 //}
                 //catch (Exception e)
                 //{
@@ -227,6 +227,7 @@ namespace Cliver
         /// </summary>
         [Newtonsoft.Json.JsonProperty(DefaultValueHandling = Newtonsoft.Json.DefaultValueHandling.Ignore)]//it serves 2 aims: - ignore when 0; - forces setting through the private setter (yes, it does!)
         public uint __TypeVersion { get; private set; } = 0;
+        //public Version __TypeVersion { get; private set; } = null;
 
         /// <summary>
         /// Called by Config if either: 
