@@ -76,7 +76,7 @@ namespace Cliver
                 //}
             }
             Settings settings = (Settings)Activator.CreateInstance(settingsFieldInfo.Type);
-            settings.__TypeVersion = settingsFieldInfo.TypeVersion.Value;
+            settings.__TypeVersion = settingsFieldInfo.TypeVersion;
             return settings;
         }
         static Settings loadFromFile(SettingsFieldInfo settingsFieldInfo)
@@ -95,7 +95,7 @@ namespace Cliver
                 settings = (Settings)Activator.CreateInstance(settingsFieldInfo.Type);
                 exception = e;
             }
-            if (exception != null || !settingsFieldInfo.TypeVersion.IsTypeVersionSupported(settings))
+            if (exception != null || settingsFieldInfo.TypeVersion != settings.__TypeVersion)
             {
                 settings.__Info = settingsFieldInfo;
                 UnsupportedFormatHandlerCommand mode = settings.UnsupportedFormatHandler(exception);
@@ -154,7 +154,7 @@ namespace Cliver
         }
         void save()
         {
-            __TypeVersion = __Info.TypeVersion.Value;
+            __TypeVersion = __Info.TypeVersion;
             Saving();
             string s = Serialization.Json.Serialize(this, __Info.Indented, true, !__Info.NullSerialized, false/*!!!default values always must be stored*/);
             if (__Info.Endec != null)

@@ -53,7 +53,7 @@ namespace Example
                 }
 
                 //upgrading to the last version
-                if (__TypeVersion < __Info.TypeVersion.Value)
+                if (__TypeVersion < __Info.TypeVersion)
                 {
                     //alter the data in the object itself
                     foreach (Template t in Templates)
@@ -70,7 +70,7 @@ namespace Example
             else //__TypeVersion > __Info.TypeVersion.Value     
             {
                 Console.WriteLine("WARNING: The application might not support properly the newer type version " + __TypeVersion + " data stored in " + __Info.File);
-                Console.WriteLine("The expected version: " + __Info.TypeVersion.Value);
+                Console.WriteLine("The expected version: " + __Info.TypeVersion);
                 Console.WriteLine("Consider upgrading the application.");
             }
             while (true)

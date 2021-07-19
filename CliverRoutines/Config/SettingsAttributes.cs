@@ -47,10 +47,10 @@ namespace Cliver
             public readonly uint Value;
             //public readonly Version Value;
 
-            public bool IsTypeVersionSupported(Settings settings)
-            {
-                return /*settings.__TypeVersion >= MinSupportedTypeVersion &&*/ settings.__TypeVersion == Value;
-            }
+            //public bool IsTypeVersionSupported(Settings settings)
+            //{
+            //    return settings.__TypeVersion >= MinSupportedTypeVersion && settings.__TypeVersion <= Value;
+            //}
 
             /// <summary>
             /// Settings type attribute. Used to check if the storage file format is supported.

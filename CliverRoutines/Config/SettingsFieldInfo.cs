@@ -43,7 +43,7 @@ namespace Cliver
         /// <summary>
         /// Version info of the Settings type defined in the present code.
         /// </summary>
-        public readonly SettingsAttributes.TypeVersionAttribute TypeVersion;
+        public readonly uint TypeVersion = 0;
 
         /// <summary>
         /// Encryption engine.
@@ -154,7 +154,8 @@ namespace Cliver
             }
 
             SettingsAttributes.TypeVersionAttribute typeVersion = settingsType.GetCustomAttributes<SettingsAttributes.TypeVersionAttribute>(true).FirstOrDefault();
-            TypeVersion = typeVersion != null ? typeVersion : new SettingsAttributes.TypeVersionAttribute(0);
+            if (typeVersion != null)
+                TypeVersion = typeVersion.Value;
         }
 
         #region Type Version support
