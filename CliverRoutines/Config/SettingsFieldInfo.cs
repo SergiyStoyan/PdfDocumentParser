@@ -227,7 +227,7 @@ namespace Cliver
         /// </summary>
         public void ResetObject(/*bool ignoreInitFile = false*/)
         {
-            SetObject(Settings.Create(this, true, true));
+            SetObject(Settings.Create(this, true/*, true*/));
         }
 
         /// <summary>
@@ -237,9 +237,9 @@ namespace Cliver
         /// If this file does not exist, it creates an object with the hardcoded values.
         /// </summary>
         /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
-        public void ReloadObject(bool throwExceptionIfCouldNotLoadFromStorageFile = false)
+        public void ReloadObject(/*bool throwExceptionIfCouldNotLoadFromStorageFile = false*/)
         {
-            SetObject(Settings.Create(this, false, throwExceptionIfCouldNotLoadFromStorageFile));
+            SetObject(Settings.Create(this, false/*, throwExceptionIfCouldNotLoadFromStorageFile*/));
         }
     }
 

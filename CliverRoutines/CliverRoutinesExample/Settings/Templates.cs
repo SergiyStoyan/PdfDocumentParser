@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Cliver;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Example
 {
@@ -21,9 +22,8 @@ namespace Example
 
         //Here is your chance to upgrade the data to the current format.
         override protected UnsupportedFormatHandlerCommand UnsupportedFormatHandler(Exception deserializingException)
-        {//consequent upgrading from version to version using different approaches follows:
+        {//successive upgrading from version to version using different approaches:
 
-            //if deserializingException==NULL then the file could be deserialized but its __TypeVersion is not acceptable.
             if (deserializingException?.Message.Contains("Could not create an instance of type Example.Template+Field") == true || __TypeVersion < 200601)
             {//remove property Fields which does not exist anymore
                 Newtonsoft.Json.Linq.JObject o = __Info.ReadStorageFileAsJObject();
@@ -36,15 +36,15 @@ namespace Example
                 return UnsupportedFormatHandlerCommand.Reload;//this method will be called again because __TypeVersion is still obsolete
             }
 
-            if (deserializingException == null)
+            if (deserializingException == null)//the field was deserialized but its __TypeVersion is not acceptable.
             {
                 if (__TypeVersion < 210301)
                 {
                     string s = __Info.ReadStorageFileAsString();
-                    //edit the old data as a serialized string
+                    //edit the old data as a serialized string. Appropriate for altering the raw data.
                     //...
                     //set the current version
-                    s = System.Text.RegularExpressions.Regex.Replace(s, @"(?<=\""__TypeVersion\""\:\s*)\d+", "210301", System.Text.RegularExpressions.RegexOptions.Singleline);
+                    s = Regex.Replace(s, @"(?<=\""__TypeVersion\""\:\s*)\d+", "210301", System.Text.RegularExpressions.RegexOptions.Singleline);
                     //save
                     __Info.WriteStorageFileAsString(s);
                     return UnsupportedFormatHandlerCommand.Reload;//this method will be called again because __TypeVersion is still obsolete
@@ -53,6 +53,8 @@ namespace Example
                 if (__TypeVersion < __Info.TypeVersion.Value)
                 {
                     //alter the data in the object itself
+                    foreach (Template t in Templates)
+                        t.Name = Regex.Replace(t.Name, @"^test", "_TEST_");
                     //...
                     //save
                     Save();//(!)when saving, the current type version is set

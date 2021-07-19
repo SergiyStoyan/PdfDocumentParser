@@ -28,7 +28,7 @@ namespace Cliver
         {
             if (settings.__Info == null)
                 throw new Exception("This method cannot be performed on a Settings object which has __Info not defined.");
-            return (S)Settings.Create(settings.__Info, true, true);
+            return (S)Settings.Create(settings.__Info, true/*, true*/);
         }
 
         /// <summary>
@@ -42,11 +42,11 @@ namespace Cliver
         /// <param name="settings"></param>
         /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
         /// <returns></returns>
-        public static S CreateReloadedClone<S>(this S settings, bool throwExceptionIfCouldNotLoadFromStorageFile = false) where S : Settings, new()
+        public static S CreateReloadedClone<S>(this S settings/*, bool throwExceptionIfCouldNotLoadFromStorageFile = false*/) where S : Settings, new()
         {
             if (settings.__Info == null)
                 throw new Exception("This method cannot be performed on a Settings object which has __Info not defined.");
-            return (S)Settings.Create(settings.__Info, false, throwExceptionIfCouldNotLoadFromStorageFile);
+            return (S)Settings.Create(settings.__Info, false/*, throwExceptionIfCouldNotLoadFromStorageFile*/);
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Cliver
                         File.Copy(sfi.InitFile, file2);
                     else
                     {
-                        Settings s = Settings.Create(sfi, true, true);
+                        Settings s = Settings.Create(sfi, true/*, true*/);
                         s.Save(sfi);
                         File.Move(sfi.File, file2);
                     }
@@ -109,7 +109,7 @@ namespace Cliver
         public static void Reset(string settingsFieldFullName)
         {
             SettingsFieldInfo sfi = GetSettingsFieldInfo(settingsFieldFullName);
-            sfi.SetObject(Settings.Create(sfi, true, true));
+            sfi.SetObject(Settings.Create(sfi, true/*, true*/));
         }
 
         /// <summary>
@@ -127,10 +127,10 @@ namespace Cliver
         /// </summary>
         /// <param name="settingsFieldFullName">full name of Settings field; it equals to the name of its storage file without extention</param>
         /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
-        public static void Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
+        public static void Reload(string settingsFieldFullName/*, bool throwExceptionIfCouldNotLoadFromStorageFile = false*/)
         {
             SettingsFieldInfo sfi = GetSettingsFieldInfo(settingsFieldFullName);
-            sfi.SetObject(Settings.Create(sfi, false, throwExceptionIfCouldNotLoadFromStorageFile));
+            sfi.SetObject(Settings.Create(sfi, false/*, throwExceptionIfCouldNotLoadFromStorageFile*/));
         }
 
         /// <summary>
@@ -139,9 +139,9 @@ namespace Cliver
         /// <param name="settingsFieldHostingType">full type name of the class hosting the Settings field</param>
         /// <param name="settingsFieldName">name of the Settings field</param>
         /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
-        public static void Reload(Type settingsFieldHostingType, string settingsFieldName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
+        public static void Reload(Type settingsFieldHostingType, string settingsFieldName/*, bool throwExceptionIfCouldNotLoadFromStorageFile = false*/)
         {
-            Reload(settingsFieldHostingType.FullName + "." + settingsFieldName, throwExceptionIfCouldNotLoadFromStorageFile);
+            Reload(settingsFieldHostingType.FullName + "." + settingsFieldName/*, throwExceptionIfCouldNotLoadFromStorageFile*/);
         }
 
         ///// <summary>

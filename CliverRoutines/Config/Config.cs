@@ -156,7 +156,7 @@ namespace Cliver
             }
         }
 
-        static void loadOrReset(bool reset, bool throwExceptionIfCouldNotLoadFromStorageFile)
+        static void loadOrReset(bool reset/*, bool throwExceptionIfCouldNotLoadFromStorageFile*/)
         {
             lock (settingsFieldFullNames2SettingsFieldInfo)
             {
@@ -172,7 +172,7 @@ namespace Cliver
                 {
                     bool foundInRequiredOptionalFieldFullNames = requiredOptionalFieldFullNames?.Remove(settingsFieldInfo.FullName) == true;
                     if (!settingsFieldInfo.Optional /*|| RequiredOptionalSettingsTypes?.Contains(settingsFieldInfo.Type) == true*/ || foundInRequiredOptionalFieldFullNames)
-                        settingsFieldInfo.SetObject(Settings.Create(settingsFieldInfo, reset, throwExceptionIfCouldNotLoadFromStorageFile));
+                        settingsFieldInfo.SetObject(Settings.Create(settingsFieldInfo, reset/*, throwExceptionIfCouldNotLoadFromStorageFile*/));
                 }
                 if (requiredOptionalFieldFullNames?.Count > 0)
                     throw new Exception("RequiredOptionalFieldFullNames contains name which was not found: '" + RequiredOptionalFieldFullNames[0] + "'");
@@ -187,9 +187,9 @@ namespace Cliver
         /// Only if this file does not exist, it resets to the hardcoded values.
         /// </summary>
         /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
-        static public void Reload(bool throwExceptionIfCouldNotLoadFromStorageFile = false)
+        static public void Reload(/*bool throwExceptionIfCouldNotLoadFromStorageFile = false*/)
         {
-            loadOrReset(false, throwExceptionIfCouldNotLoadFromStorageFile);
+            loadOrReset(false/*, throwExceptionIfCouldNotLoadFromStorageFile*/);
         }
 
         /// <summary>
@@ -199,7 +199,7 @@ namespace Cliver
         /// </summary>
         static public void Reset()
         {
-            loadOrReset(true, true);
+            loadOrReset(true/*, true*/);
         }
 
         /// <summary>

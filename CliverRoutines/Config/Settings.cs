@@ -44,36 +44,36 @@ namespace Cliver
         }
         SettingsFieldInfo settingsFieldInfo = null;
 
-        internal static Settings Create(SettingsFieldInfo settingsFieldInfo, bool reset, bool throwExceptionIfCouldNotLoadFromStorageFile)
+        internal static Settings Create(SettingsFieldInfo settingsFieldInfo, bool reset/*, bool throwExceptionIfCouldNotLoadFromStorageFile*/)
         {
-            Settings settings = create(settingsFieldInfo, reset, throwExceptionIfCouldNotLoadFromStorageFile);
+            Settings settings = create(settingsFieldInfo, reset/*, throwExceptionIfCouldNotLoadFromStorageFile*/);
             settings.__Info = settingsFieldInfo;
             settings.Loaded();
             return settings;
         }
-        internal static Settings create(SettingsFieldInfo settingsFieldInfo, bool reset, bool throwExceptionIfCouldNotLoadFromStorageFile)
+        internal static Settings create(SettingsFieldInfo settingsFieldInfo, bool reset/*, bool throwExceptionIfCouldNotLoadFromStorageFile*/)
         {
             if (!reset && File.Exists(settingsFieldInfo.File))
-                try
-                {
+                //try
+                //{
                     return loadFromFile(settingsFieldInfo);
-                }
-                catch (Exception e)
-                {
-                    if (throwExceptionIfCouldNotLoadFromStorageFile)
-                        throw new Exception("Error while loading settings " + settingsFieldInfo.FullName + " from file " + settingsFieldInfo.File, e);
-                }
+                //}
+                //catch (Exception e)
+                //{
+                //    if (throwExceptionIfCouldNotLoadFromStorageFile)
+                //        throw new Exception("Error while loading settings " + settingsFieldInfo.FullName + " from file " + settingsFieldInfo.File, e);
+                //}
             if (File.Exists(settingsFieldInfo.InitFile))
             {
                 FileSystemRoutines.CopyFile(settingsFieldInfo.InitFile, settingsFieldInfo.File, true);
-                try
-                {
+                //try
+                //{
                     return loadFromFile(settingsFieldInfo);
-                }
-                catch (Exception e)
-                {
-                    throw new Exception("Error while loading settings " + settingsFieldInfo.FullName + " from initial file " + settingsFieldInfo.InitFile, e);
-                }
+                //}
+                //catch (Exception e)
+                //{
+                //    throw new Exception("Error while loading settings " + settingsFieldInfo.FullName + " from initial file " + settingsFieldInfo.InitFile, e);
+                //}
             }
             Settings settings = (Settings)Activator.CreateInstance(settingsFieldInfo.Type);
             settings.__TypeVersion = settingsFieldInfo.TypeVersion.Value;
@@ -105,9 +105,10 @@ namespace Cliver
                         settings = loadFromFile(settingsFieldInfo);
                         break;
                     case UnsupportedFormatHandlerCommand.Reset:
-                        settings = create(settingsFieldInfo, true, false);
+                        settings = create(settingsFieldInfo, true/*, false*/);
                         break;
                     case UnsupportedFormatHandlerCommand.Proceed:
+                        break;
                     default:
                         throw new Exception("Unknown option: " + mode);
                 }
@@ -197,11 +198,11 @@ namespace Cliver
         /// (!)Calling this method on a detached Settings object throws an exception because otherwise it could lead to a confusing effect. 
         /// </summary>
         /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
-        public void Reload(bool throwExceptionIfCouldNotLoadFromStorageFile = false)
+        public void Reload(/*bool throwExceptionIfCouldNotLoadFromStorageFile = false*/)
         {
             if (!IsAttached())//while technically it is possible, it could lead to a confusion: called on one object it might replace an other one!
                 throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info?.FullName + ").");
-            __Info.ReloadObject(throwExceptionIfCouldNotLoadFromStorageFile);
+            __Info.ReloadObject(/*throwExceptionIfCouldNotLoadFromStorageFile*/);
         }
 
         /// <summary>
@@ -214,7 +215,7 @@ namespace Cliver
             {
                 if (__Info == null)//was created outside Config
                     throw new Exception("This method cannot be performed on this Settings object because its __Info is not set.");
-                Settings settings = create(__Info, false, false);
+                Settings settings = create(__Info, false/*, false*/);
                 return !Serialization.Json.IsEqual(this, settings);
             }
         }
@@ -236,7 +237,7 @@ namespace Cliver
         virtual protected UnsupportedFormatHandlerCommand UnsupportedFormatHandler(Exception deserializingException)
         {
             if (deserializingException != null)
-                throw new Exception("Error while deserializing file " + __Info.File, deserializingException);
+                throw new Exception("Error while deserializing settings " + settingsFieldInfo.FullName + " from file " + settingsFieldInfo.InitFile, deserializingException);
             throw new Exception("Unsupported type version of " + __Info.FullName + ": " + __TypeVersion + "\r\nin the file: " + __Info.File);
         }
         public enum UnsupportedFormatHandlerCommand
