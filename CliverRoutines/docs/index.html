@@ -953,7 +953,7 @@ static void Main(string[] args)
 
 
     <h2><a name='log_Sessionless_log'>Sessionless log</a></h2>
-    <p>A <a href='#log_Sessionless_log'>session-less log</a> is a named log that is created within the <a href="log_root_directory">root directory</a> and is continued with the next launch of the application.
+    <p>A <a href='#log_Sessionless_log'>session-less log</a> is a named log that is created within the <a href="log_root_directory">root directory</a> and does not belongs to a <a href='#log_session'>session</a> so that it is continued with the next launch of the application.
 	
 	<p>Usage example:
 <script type="text/plain" class="language-csharp">Log.Get("history").Inform("session-less log");</script>
