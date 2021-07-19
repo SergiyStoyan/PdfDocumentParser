@@ -10,7 +10,7 @@ namespace Example
     partial class Settings
     {
         //Settings type field/property can be declared anywhere in the code. It must be static to be processed by Config.
-        //Optionally it can be declared readonly (!!!this is not supported by some versions of .NET)
+        //Optionally, depending on .NET version, it can be declared as readonly.
         internal static GeneralSettings General;
     }
 

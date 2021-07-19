@@ -79,9 +79,9 @@ setLicense();
 <p><b>Features:</b>
 
 <br> - cross-platform;
-<br> - natively supports types of any complexity and functionality;
+<br> - natively supports types of any complexity;
 <br> - settings are easily modified directly in code;
-<br> - natively supports settings polymorphism;
+<br> - natively supports polymorphism;
 <br> - supports encryption;
 <br> - thread-safe;
 <br> - serializes data in JSON;
@@ -89,7 +89,7 @@ setLicense();
 
 <p><b>Idea:</b> 
 
-<br><a href='#settings_class'>Settings types</a> are ordinary C# classes that you define in your code according to your needs thus achieving a great flexibility. <a href='#config'><code>Cliver.Config</code></a> automatically detects <a href='#settings_field'>fields/properties</a> having those types and facilitates their serialization/deserialization to/from disk.
+<br><a href='#settings_class'>Settings types</a> are ordinary C# classes that you define in your code according to your needs thus achieving a great flexibility. <a href='#config'><code>Cliver.Config</code></a> automatically detects static <a href='#settings_field'>fields/properties</a> that are of those types and facilitates their serialization/deserialization to/from disk.
 
 <p>While <a href='#config'><code>Cliver.Config</code></a> was designed primarily as a settings manager, in conjunction with <code>System.Linq</code> it can be used as a simple nosql database.			
 
@@ -137,10 +137,10 @@ setLicense();
 			
 
 <h3><a name='serializable_field'>Serializable fields</a></h3>
-<a href='#serializable_field'>Serializable fields</a> are fields or properties of a <a href='#settings_class'>settings class</a> that are (!)<code>public</code> and non-static. Optionally they can be <code>readonly</code>.
+<a href='#serializable_field'>Serializable fields</a> are fields or properties of a <a href='#settings_class'>settings class</a> that are (!)<code>public</code> and non-static. Also, depending on .NET version, optionally they can be declared <code>readonly</code>.
 
-<p>Serialization/deserialization is performed by <a href='https://www.newtonsoft.com/json'>Newtonsoft.Json</a> engine.			
-Hence, you can apply attributes provided by Newtonsoft.Json to <a href='#serializable_field'>serializable fields</a> to alter their serialization behavior. To do so, you have to reference Newtonsoft.Json in your project. (!)To avoid compilation problems, make sure that it is the same version that is referenced by CliverRoutines. For more info refer to <a href='https://www.newtonsoft.com/json'>Newtonsoft.Json</a> documentation. 			
+<p>Serialization/deserialization is performed by <a href='https://www.newtonsoft.com/json' target='_blank'>Newtonsoft.Json</a> engine.			
+Hence, you can apply attributes provided by Newtonsoft.Json to <a href='#serializable_field'>serializable fields</a> to alter their serialization behavior. To do so, you have to reference Newtonsoft.Json in your project. (!)To avoid compilation problems, make sure that it is the same version that is referenced by CliverRoutines. For more info refer to <a href='https://www.newtonsoft.com/json' target='_blank'>Newtonsoft.Json</a> documentation. 			
 			
 <p>(!)While a <a href='#settings_class'>settings class</a> can implement any logic and members, remember that nevertheless there are restrictions for what and how can be serialized. For instance, data which depend on the current application state like <code>events, FieldInfo</code> types will be lost through serialization.
 
@@ -200,7 +200,7 @@ Hence, you can apply attributes provided by Newtonsoft.Json to <a href='#seriali
 	public class Settings
 	{
 		//settings field
-		public static readonly GeneralSettings General; //readonly is optional; it can be a property
+		public static GeneralSettings General; //it can be property; //depending on .NET version, it can be readonly;
 	}
 }</script>
 
@@ -211,9 +211,8 @@ Hence, you can apply attributes provided by Newtonsoft.Json to <a href='#seriali
 		
 <h3>Initialization</h3>
         <br> Detection and initialization of <a href='#settings_field'>settings field</a>s must be triggered from your code. It can be preceded by optional configuration of <a href='#config'><code>Cliver.Config</code></a> (see its API).
-<script type="text/plain" class="language-csharp">//configure. It must be done before initializing the settings.
-Cliver.Config.ExplicitlyTrackedAssemblies = new List<System.Reflection.Assembly> { Assembly.GetExecutingAssembly() };//optional
-
+<script type="text/plain" class="language-csharp">//optional configuration
+...
 //detect and initialize settings fields. 
 Cliver.Config.Reload();//mandatory</script>			   
 				
@@ -226,7 +225,9 @@ Cliver.Config.Reload();//mandatory</script>
 <br> - assemblies that are referenced by the calling assembly;
 <br>The search scope is limited this way in order not to load more assemblies which inevitably takes place when enumerating through them. 
  
-<p>If needed, the assembly scope can be assigned from your code explicitly (see the API).
+<p>If needed, the assembly scope can be assigned from your code explicitly by setting <code>Cliver.Config.ExplicitlyTrackedAssemblies</code> before initializing <a href='#config'><code>Cliver.Config</code></a> engine:
+<script type="text/plain" class="language-csharp">Cliver.Config.ExplicitlyTrackedAssemblies = new List<System.Reflection.Assembly> { Assembly.GetExecutingAssembly() };
+Cliver.Config.Reload();</script>		
 			
 			
 				   
@@ -254,7 +255,7 @@ Cliver.Config.Reload();//mandatory</script>
 	
 	public class Settings
 	{
-		public static readonly GeneralSettings General;
+		public static GeneralSettings General;
 	}
 }</script>
 The <a href='#storage_file'>storage file</a> path of <a href='#settings_field'>settings field</a> <code>Settings.General</code> will be:
@@ -305,7 +306,7 @@ The <a href='#storage_file'>storage file</a> path of <a href='#settings_field'>s
 {	
 	public class Settings
 	{
-		public static readonly GeneralSettings General;
+		public static GeneralSettings General;
 	}
 }</script>
 Name of the <a href='#initial_file'>initial file</a> of the <a href='#settings_field'>settings field</a> <code>Settings.General</code> will be 'App.Settings.General.json'.
@@ -314,8 +315,8 @@ Name of the <a href='#initial_file'>initial file</a> of the <a href='#settings_f
 
 			
 			
-<h3>Restoring order</h3>
-            <br><a href='#config'><code>Cliver.Config</code></a> performs restoring of a <a href='#settings_field'>settings field</a> in the following order:
+<h3>Loading</h3>
+            <br><a href='#config'><code>Cliver.Config</code></a> performs loading of a <a href='#settings_field'>settings field</a> in the following order:
 			
 			<p><code><b>Reload()</code></b>
 			<br> - from one's <a href='#storage_file'>storage file</a> if exists;
@@ -361,7 +362,7 @@ public class Server
 			<p>Somewhere, declare a <a href='#settings_field'>settings field</a> for the defined <a href='#settings_class'>settings type</a>:			
 <script type="text/plain" class="language-csharp">public class Settings
 {
-	public static readonly ConnectionSettings Connection;//readonly is optional; can be property
+	public static ConnectionSettings Connection;//it can be property; //depending on .NET version, it can be readonly;
 }</script>
 
 
@@ -594,7 +595,7 @@ Also, it is possible to encrypt a <a href='#settings_field'>settings field</a> n
 
 public class Settings
 {
-	public static readonly ServerSettings Server;
+	public static ServerSettings Server;
 }</script>
 
 <p>Now you can use like this:
@@ -749,6 +750,24 @@ public class Template
 	public string Name;
 	public List<string> Words = new List<string>();
 }</script>
+
+
+
+
+
+
+
+
+
+            <h3><a name='config_Type_loading_order'>Type loading order</a></h3>
+Sometimes, if <a href='#settings_class'>settings types</a> depend on each other, you may need to configure the order in which they are initialized. It can be done by setting <code>InitializationOrderedSettingsTypes</code> before calling <code>Reload()</code>:
+<script type="text/plain" class="language-csharp">Config.InitializationOrderedSettingsTypes = new System.Collections.Generic.List<Type> { typeof(GeneralSettings), typeof(TemplatesSettings) };
+Config.Reload();</script>
+
+
+
+
+
 
 
 

@@ -44,7 +44,21 @@ namespace Cliver
         /// Types listed here will be initialized first in the provided order.
         /// It must be set before calling Reload() or Reset().
         /// </summary>
-        public static List<Type> InitializationOrderedSettingsTypes = null;
+        public static List<Type> InitializationOrderedSettingsTypes
+        {
+            get
+            {
+                return initializationOrderedSettingsTypes;
+            }
+            set
+            {
+                Type t = value?.Find(a => !a.IsSubclassOf(typeof(Settings)));
+                if (t != null)
+                    throw new Exception("InitializationOrderedSettingsTypes cannot accept a non-Settings type: " + t.FullName);
+                initializationOrderedSettingsTypes = value?.Distinct().ToList();
+            }
+        }
+        static List<Type> initializationOrderedSettingsTypes = null;
 
         /// <summary>
         /// Tells Config in which assemblies to look for Settings fields.

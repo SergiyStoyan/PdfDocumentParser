@@ -12,7 +12,7 @@ namespace Example
         {
             var watch = new System.Diagnostics.Stopwatch();
             watch.Start();
-
+            
             //(!)mandatory; initialize settings
             Config.Reload();
 
