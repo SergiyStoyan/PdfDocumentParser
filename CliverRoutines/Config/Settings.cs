@@ -42,11 +42,6 @@ namespace Cliver
                     if (Config.GetSettingsFieldInfo(value.FullName) != value)
                         throw new Exception("This SettingsFieldInfo object is not registered in Config. Probably it was created before the re-initialization.");
                 }
-                //if (value != null
-                //    //&& __Info.GetObject() == this;!!!if Config was reloaded and __Info was recreated, it still would work which is wrong
-                //    && Config.GetSettingsFieldInfo(value.FullName)?.GetObject() != this//is referenced by the field
-                //    )
-                //    throw new Exception("This SettingsFieldInfo cannot be assigned to __Info of this Settings object because it is not attached to its Settings field (" + __Info?.FullName + ").");
                 settingsFieldInfo = value;
             }
         }
@@ -98,7 +93,7 @@ namespace Cliver
                         settings = loadFromFile(settingsFieldInfo);
                         break;
                     case UnsupportedFormatHandlerCommand.Reset:
-                        settings = create(settingsFieldInfo, true/*, false*/);
+                        settings = create(settingsFieldInfo, true);
                         break;
                     case UnsupportedFormatHandlerCommand.Proceed:
                         break;
@@ -119,20 +114,6 @@ namespace Cliver
                 && Config.GetSettingsFieldInfo(__Info.FullName)?.GetObject() == this;//is referenced by the field
         }
 
-        ///// <summary>
-        ///// Serializes this Settings object to the storage file.
-        ///// (!)Calling this method on a detached Settings object throws an exception because otherwise it could lead to a confusing effect. 
-        ///// </summary>
-        //public void Save()
-        //{
-        //    lock (this)
-        //    {
-        //        if (!IsAttached())//this check is necessary because an operation on storage file logically belongs to a Settings field and not to a Settings object.
-        //            //__Info can be freely replaced from the custom code and thus it can lead to a confusion.
-        //            throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info.FullName + ")");
-        //        save();
-        //    }
-        //}
         /// <summary>
         /// Serializes this Settings object to its storage file.
         /// </summary>
@@ -140,7 +121,7 @@ namespace Cliver
         {
             lock (this)
             {
-                if (__Info == null)//it can be called on a detached instance in order to be used by UnsupportedFormatHandler()
+                if (__Info == null)//it can be called on a detached instance in order to be used by UnsupportedFormatHandler(). Also, saving a detached object is not confusing.
                     throw new Exception("This method cannot be performed on this Settings object because its __Info is not set.");
                 save();
             }
@@ -165,7 +146,7 @@ namespace Cliver
                     //- there are several settings fields of the same type and their __Info's were exchanged from the custom code;
                     //- Config was reloaded while an old object was preserved;
                     //All this will lead to a confusion.
-                    throw new Exception("Settings field '" + correctSettingsFieldInfo.FullName + "' cannot be saved because its object __Info has been altered.");
+                    throw new Exception("Settings field '" + correctSettingsFieldInfo.FullName + "' cannot be saved because its __Info has been altered.");
                 save();
             }
         }
