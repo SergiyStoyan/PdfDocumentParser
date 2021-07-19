@@ -236,9 +236,9 @@ namespace Cliver
         /// Tries to load it from the initial file located in the app's directory. 
         /// If this file does not exist, it creates an object with the hardcoded values.
         /// </summary>
-        public void ResetObject(/*bool ignoreInitFile = false*/)
+        internal void ResetObject()
         {
-            SetObject(Settings.Create(this, true/*, true*/));
+            SetObject(Settings.Create(this, true));
         }
 
         /// <summary>
@@ -247,10 +247,10 @@ namespace Cliver
         /// If this file does not exist, it tries to load it from the initial file located in the app's directory. 
         /// If this file does not exist, it creates an object with the hardcoded values.
         /// </summary>
-        public void ReloadObject()
+        internal void ReloadObject()
         {
             SetObject(Settings.Create(this, false));
-        }
+        }       
     }
 
     public class SettingsFieldFieldInfo : SettingsFieldInfo

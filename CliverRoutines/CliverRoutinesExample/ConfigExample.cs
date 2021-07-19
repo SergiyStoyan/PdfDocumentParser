@@ -22,7 +22,7 @@ namespace Example
             //save on disk
             Settings.Server.Save();
             Log.Inform("The settings are saved to: " + Settings.Server.__Info.File);
-            //or, decline changes
+            //or, restore the previously saved values
             Settings.Server.Reload();
             //or, reset to initial values
             Settings.Server.Reset();

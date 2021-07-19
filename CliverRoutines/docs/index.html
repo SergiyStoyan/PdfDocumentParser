@@ -338,11 +338,11 @@ Name of the <a href='#initial_file'>initial file</a> of the <a href='#settings_f
 
 <h2><a name='config_usage'>Usage</a></h2>
 			Reference CliverRoutines in your project.
-			<br>Set your project's company name because it co-defines the storage directory.
+			<br>Set your project's company name because it co-defines the directory of the <a href='#storage_file'>storage files</a>.
 			
 			
 					
-<p>Define <a href='#settings_class'>settings types</a> according to your needs like this one:		
+<p>Define <a href='#settings_class'>settings types</a> according to your needs like this:		
 <script type="text/plain" class="language-csharp">//settings type
 public class ConnectionSettings : Cliver.UserSettings //it is serialized to the user data directory
 {
@@ -378,7 +378,7 @@ Settings.Connection.Servers.Add(new Server {Name = "host1", Host = "123.123.123.
 ...
 //save on disk
 Settings.Connection.Save();
-//or, restore the previous values instead of saving the new ones
+//or, restore the previously saved values
 Settings.Connection.Reload();
 //or, reset to the initial values
 Settings.Connection.Reset();

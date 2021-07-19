@@ -28,7 +28,7 @@ namespace Cliver
         {
             if (settings.__Info == null)
                 throw new Exception("This method cannot be performed on a Settings object which has __Info not defined.");
-            return (S)Settings.Create(settings.__Info, true/*, true*/);
+            return (S)Settings.Create(settings.__Info, true);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Cliver
                         File.Copy(sfi.InitFile, file2);
                     else
                     {
-                        Settings s = Settings.Create(sfi, true/*, true*/);
+                        Settings s = Settings.Create(sfi, true);
                         s.Save(sfi);
                         File.Move(sfi.File, file2);
                     }
@@ -108,7 +108,7 @@ namespace Cliver
         public static void Reset(string settingsFieldFullName)
         {
             SettingsFieldInfo sfi = GetSettingsFieldInfo(settingsFieldFullName);
-            sfi.SetObject(Settings.Create(sfi, true/*, true*/));
+            sfi.SetObject(Settings.Create(sfi, true));
         }
 
         /// <summary>

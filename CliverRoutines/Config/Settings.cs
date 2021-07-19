@@ -33,12 +33,20 @@ namespace Cliver
             }
             set
             {
-                if (value == null)
-                    throw new Exception("SettingsFieldInfo cannot be set to NULL.");//to ensure that no __Info object can be lost in the custom application scope
-                if (value.Type != GetType())
-                    throw new Exception("Disaccording SettingsFieldInfo Type field. It must be '" + GetType().FullName + "' while trying '" + value.Type.FullName + "'");
-                if (Config.GetSettingsFieldInfo(value.FullName) != value)
-                    throw new Exception("This SettingsFieldInfo object is not registered in Config. Probably it was created before the re-initialization.");
+                //if (value == null)
+                //    throw new Exception("SettingsFieldInfo cannot be set to NULL.");//to ensure that no __Info object can be lost in the custom application scope !!!it can be lost anyway
+                if (value != null)
+                {
+                    if (value.Type != GetType())
+                        throw new Exception("Disaccording SettingsFieldInfo Type field. It must be '" + GetType().FullName + "' while trying '" + value.Type.FullName + "'");
+                    if (Config.GetSettingsFieldInfo(value.FullName) != value)
+                        throw new Exception("This SettingsFieldInfo object is not registered in Config. Probably it was created before the re-initialization.");
+                }
+                //if (value != null
+                //    //&& __Info.GetObject() == this;!!!if Config was reloaded and __Info was recreated, it still would work which is wrong
+                //    && Config.GetSettingsFieldInfo(value.FullName)?.GetObject() != this//is referenced by the field
+                //    )
+                //    throw new Exception("This SettingsFieldInfo cannot be assigned to __Info of this Settings object because it is not attached to its Settings field (" + __Info?.FullName + ").");
                 settingsFieldInfo = value;
             }
         }
@@ -102,7 +110,7 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Indicates whether this Settings object is value of the Settings field defined in __Info.
+        /// Indicates whether this Settings object is the value of the Settings field defined by __Info.
         /// </summary>
         public bool IsAttached()
         {
