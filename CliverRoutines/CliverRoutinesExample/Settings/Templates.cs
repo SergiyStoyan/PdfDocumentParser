@@ -30,7 +30,7 @@ namespace Example
                 Newtonsoft.Json.Linq.JObject o = __Info.ReadStorageFileAsJObject();
                 for (int i = o["Templates"].Count() - 1; i >= 0; i--)
                     o["Templates"][i]["Field"]?.Remove();
-                //set the current version
+                //set the respective version
                 o["__TypeVersion"] = 200601;
                 //save
                 __Info.WriteStorageFileAsJObject(o);
@@ -41,10 +41,10 @@ namespace Example
             if (deserializingException == null && __TypeVersion < 210301)//the object was deserialized but its __TypeVersion is not acceptable
             {
                 string s = __Info.ReadStorageFileAsString();
-                //edit the old data as a serialized string. Appropriate for altering the raw data.
+                //edit the old data as a serialized string. Altering the raw data.
                 //...
-                //set the current version
-                s = Regex.Replace(s, @"(?<=\""__TypeVersion\""\:\s*)\d+", "210301", System.Text.RegularExpressions.RegexOptions.Singleline);
+                //set the respective version
+                s = Regex.Replace(s, @"(?<=\""__TypeVersion\""\:\s*)\d+", "210301", RegexOptions.Singleline);
                 //save
                 __Info.WriteStorageFileAsString(s);
                 return UnsupportedFormatHandlerCommand.Reload;//this method will be called again because __TypeVersion is still obsolete
