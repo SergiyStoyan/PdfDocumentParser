@@ -115,7 +115,7 @@ setLicense();
 <p>Example of a <a href='#settings_class'>settings type</a>:			
 <script type="text/plain" class="language-csharp">public class GeneralSettings : Cliver.UserSettings //serialized to the user data directory.
 {   	
-	public List&lt;string&gt; RecentFiles; 	
+	public List<string> RecentFiles; 	
 	public Color HighlightColor = Color.Orange;
 	
 	protected override void Loaded()
@@ -346,7 +346,7 @@ Name of the <a href='#initial_file'>initial file</a> of the <a href='#settings_f
 public class ConnectionSettings : Cliver.UserSettings //it is serialized to the user data directory
 {
 	public int ClientPort = 123;//serializable
-	public List&lt;Server&gt; Servers = new List&lt;Server&gt;();//serializable
+	public List<Server> Servers = new List<Server>();//serializable
 }
 
 public class Server
@@ -412,7 +412,7 @@ connect(Settings.General.ClientPort, server.Host, server.Port);</script>
 <p><code>Cliver.SettingsAttributes</code> provides attributes which are applicable to <a href='#settings_field'>settings fields</a> and/or <a href='#settings_class'>settings types</a>. Those attributes allow to alter <a href='#settings_field'>settings fields</a> features. Attrubute values of a <a href='#settings_field'>settings field</a> are exposed by its <code>__Info</code> property. For example:
 
 
-<script type="text/plain" class="language-csharp">[SettingsAttributes.Indented(false)]//to serialize without indention
+<script type="text/plain" class="language-csharp">[SettingsAttributes.Config(Indented = false)]//to serialize without indention
 class GeneralSettings : Cliver.UserSettings//UserSettings based class is serialized in the user directory
 {
 	public Dictionary<string, User> Users = new Dictionary<string, User>();
@@ -423,13 +423,13 @@ class GeneralSettings : Cliver.UserSettings//UserSettings based class is seriali
 	}
 }</script>
 
-<p>See the API and annotations for more details.
+<p>More examples can be found in <a href="#config_Tips">the tips</a>. Also, see the API and annotations for details.
 
 
 
 
 		 
-            <h2><a name=''>Tips</a></h2>
+            <h2><a name='config_Tips'>Tips</a></h2>
 
             <h3><a name='restoring_predefined_collections'>(!)Predefining collections</a></h3>
 			
@@ -439,8 +439,8 @@ class GeneralSettings : Cliver.UserSettings//UserSettings based class is seriali
 <script type="text/plain" class="language-csharp">public class GeneralSettings : Cliver.UserSettings
 {   	
 	//avoid doubling the collection's elements
-	[JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
-	public List&lt;string&gt; Options = new List&lt;string&gt;("apple", "pear", "banana"); 
+    [Newtonsoft.Json.JsonProperty(ObjectCreationHandling = Newtonsoft.Json.ObjectCreationHandling.Replace)]
+	public List<string> Options = new List<string>("apple", "pear", "banana"); 
 }</script>
 			
 			
@@ -539,7 +539,7 @@ ScopeSettings.Scope.Save();</script>
 
 
 
-<h3><a name=''>Encrypting</a></h3>
+<h3><a name='configEncrypting'>Encrypting</a></h3>
 
             <h4><a name=''>Settings field</a></h4>
 A whole <a href='#settings_field'>settings field</a> can be serialized as an encrypted string by adding the attribute <code>SettingsFieldAttribute.Crypto</code> either to the settings field or to its type declaration:
