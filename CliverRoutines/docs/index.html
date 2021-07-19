@@ -790,7 +790,7 @@ You can pass a <a href='#settings_field'>settings field</a> to another process. 
 
             <h2><a name='log_session'>Session</a></h2>
 
-        A <a href='#log_session'>session</a> is a collection of logs that is dedicated to a certain logical task. Every log belongs to some <a href='#log_session'>session</a>. 
+        A <a href='#log_session'>session</a> is a collection of logs that is dedicated to a certain logical task. Usually a log belongs to some <a href='#log_session'>session</a> (but can be a <a name='log_Sessionless_log'>sessionless log</a>). 
 			
 			<p>Depending on <a href='#log'><code>Cliver.Log</code></a> configuration, it is either:
 			<br> - all the <a href='#log_session'>sessions</a> share the same folder. Log files have their session name in their names;
@@ -846,19 +846,19 @@ Log.Inform("test message");//shortcut for Log.Head.Thread.Inform()</script>
 
 
 
-			<h3><a name="#base_directory">Work directory</a></h3>
+			<h3><a name="#log_root_directory">Root directory</a></h3>
 <br>
-			All <a href='#log_session'>sessions</a> are created within the <a href="base_directory">work directory</a> which is defined at the first logging or by <code>Log.Initialize()</code>
+			All <a href='#log_session'>sessions</a> are created within the <a href="log_root_directory">root directory</a> which is defined at the first logging or by <code>Log.Initialize()</code>
 			
 			
-			<p>By default, the <a href="base_directory">work directory</a> is defined in the order by which <a href='#log'><code>Cliver.Log</code></a> tries to write to:
+			<p>By default, the <a href="log_root_directory">root directory</a> is defined in the order by which <a href='#log'><code>Cliver.Log</code></a> tries to write to:
 			<br> - the user data folder;
 			<br> - the common data folder;
 			<br> - the folder where the application is located;
 			<br> - the user desktop folder;
 			<br> - the temp folder;
 			
-			<p>The <a href="base_directory">work directory</a> definition can be customized while initializing:
+			<p>The <a href="log_root_directory">root directory</a> definition can be customized while initializing:
 <script type="text/plain" class="language-csharp">//optional initialization before using logs
 Log.Initialize(Log.Mode.FOLDER_PER_SESSION, new List<string> { Log.AppCompanyCommonDataDir });//logs will be recorded to the common data folder</script>
 
@@ -948,6 +948,17 @@ static void Main(string[] args)
 	...
 	ThreadRoutines.Start(() => { download("http://file.com/N"); });
 }</script>
+
+
+
+
+    <h2><a name='log_Sessionless_log'>Sessionless log</a></h2>
+    <p>A <a href='#log_Sessionless_log'>session-less log</a> is a named log that is created within the <a href="log_root_directory">root directory</a> and is continued with the next launch of the application.
+	
+	<p>Usage example:
+<script type="text/plain" class="language-csharp">Log.Get("history").Inform("session-less log");</script>
+
+
 
 
 

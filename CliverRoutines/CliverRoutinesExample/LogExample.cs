@@ -15,8 +15,8 @@ namespace Example
             Log.Session.Get("GAME")["client"].Inform("write out of box4");
             Log.Session.Get("GAME").Rename("Game");
 
-            //a session-less log which will be continued with each app's start
-            Log.Get("throughout").Inform("session-less log");
+            //a session-less log which will be continued with the next launch of the application
+            Log.Get("history").Inform("session-less log");
 
             //optional initialization. You will like to perform it at the very beginning of the app.            
             Log.Initialize(Log.Mode.FOLDER_PER_SESSION);
