@@ -11,7 +11,7 @@
 <body>
     <script src="prism.js"></script>
     <div class='header'>
-        <div class='mainHeader'>CliverRoutines 5.*</div>
+        <div class='mainHeader'>CliverRoutines 6.*</div>
     </div>
 
     <div class='content'>
@@ -113,8 +113,7 @@ setLicense();
 			
 			
 <p>Example of a <a href='#settings_class'>settings type</a>:			
-<pre>
-<code class="language-csharp">public class GeneralSettings : Cliver.UserSettings //serialized to the user data directory.
+<script type="text/plain" class="language-csharp">public class GeneralSettings : Cliver.UserSettings //serialized to the user data directory.
 {   	
 	public List&lt;string&gt; RecentFiles; 	
 	public Color HighlightColor = Color.Orange;
@@ -129,8 +128,7 @@ setLicense();
 	{
 		RecentFiles = RecentFiles.Distinct();
 	}
-}</code>
-</pre>
+}</script>
 
 	
 	
@@ -197,15 +195,14 @@ Hence, you can apply attributes provided by Newtonsoft.Json to <a href='#seriali
 <br> Usually you will need only one <a href='#settings_field'>settings field</a> per <a href='#settings_class'>settings type</a>, but there is no problem to declare any number of <a href='#settings_field'>settings fields</a> of the same <a href='#settings_class'>settings type</a>.
 				   
 <p>Example of a <a href='#settings_field'>settings field</a>:
-<pre><code class="language-csharp">namespace App
+<script type="text/plain" class="language-csharp">namespace App
 {
 	public class Settings
 	{
 		//settings field
 		public static readonly GeneralSettings General; //readonly is optional; it can be a property
 	}
-}</code>
-</pre>
+}</script>
 
 
 
@@ -214,13 +211,11 @@ Hence, you can apply attributes provided by Newtonsoft.Json to <a href='#seriali
 		
 <h3>Initialization</h3>
         <br> Detection and initialization of <a href='#settings_field'>settings field</a>s must be triggered from your code. It can be preceded by optional configuration of <a href='#config'><code>Cliver.Config</code></a> (see its API).
-<pre>
-<code class="language-csharp">//configure. It must be done before initializing the settings.
+<script type="text/plain" class="language-csharp">//configure. It must be done before initializing the settings.
 Cliver.Config.ExplicitlyTrackedAssemblies = new List<System.Reflection.Assembly> { Assembly.GetExecutingAssembly() };//optional
 
 //detect and initialize settings fields. 
-Cliver.Config.Reload();//mandatory</code>
-</pre>			   
+Cliver.Config.Reload();//mandatory</script>			   
 				
 				
 				
@@ -250,8 +245,7 @@ Cliver.Config.Reload();//mandatory</code>
 			<p><a href='#storage_file'>Storage file</a> path is defined as follows: file directory is predetermined by the <a href='#settings_class'>settings type</a> and file name is predetermined by the <a href='#settings_field'>settings field</a>'s full path in the code.
 									
 <p>See the example:
-<pre>
-<code class="language-csharp">namespace App
+<script type="text/plain" class="language-csharp">namespace App
 {
 	public class GeneralSettings : Cliver.UserSettings
 	{   	
@@ -262,8 +256,7 @@ Cliver.Config.Reload();//mandatory</code>
 	{
 		public static readonly GeneralSettings General;
 	}
-}</code>
-</pre>
+}</script>
 The <a href='#storage_file'>storage file</a> path of <a href='#settings_field'>settings field</a> <code>Settings.General</code> will be:
 			<table style="table-layout:fixed;">
 			<tr>
@@ -308,15 +301,13 @@ The <a href='#storage_file'>storage file</a> path of <a href='#settings_field'>s
 			<p><a href='#initial_file'>Initial file</a> name is predetermined by the <a href='#settings_field'>settings field</a>'s full path in the code.
 									
 <p>See the example:
-<pre>
-<code class="language-csharp">namespace App
+<script type="text/plain" class="language-csharp">namespace App
 {	
 	public class Settings
 	{
 		public static readonly GeneralSettings General;
 	}
-}</code>
-</pre>
+}</script>
 Name of the <a href='#initial_file'>initial file</a> of the <a href='#settings_field'>settings field</a> <code>Settings.General</code> will be 'App.Settings.General.json'.
 
 
@@ -351,8 +342,7 @@ Name of the <a href='#initial_file'>initial file</a> of the <a href='#settings_f
 			
 					
 <p>Define <a href='#settings_class'>settings types</a> according to your needs like this one:		
-<pre>
-<code class="language-csharp">//settings type
+<script type="text/plain" class="language-csharp">//settings type
 public class ConnectionSettings : Cliver.UserSettings //it is serialized to the user data directory
 {
 	public int ClientPort = 123;//serializable
@@ -365,29 +355,23 @@ public class Server
 	public string Host;//serializable
 	public int Port;	//serializable	
 	internal string Status;//non-serializable
-}</code>
-</pre>
+}</script>
 			
 			
 			<p>Somewhere, declare a <a href='#settings_field'>settings field</a> for the defined <a href='#settings_class'>settings type</a>:			
-<pre>
-<code class="language-csharp">public class Settings
+<script type="text/plain" class="language-csharp">public class Settings
 {
 	public static readonly ConnectionSettings Connection;//readonly is optional; can be property
-}</code>
-</pre>
+}</script>
 
 
         <p>Add this call at the beginning of your application, to make <a href='#config'><code>Cliver.Config</code></a> detect all <a href='#settings_field'>settings fields</a> in the code and initialize them:
-<pre>
-<code class="language-csharp">//it can be called many times; every call re-initializes all the settings.
-Cliver.Config.Reload();//mandatory call before using settings</code>
-</pre>
+<script type="text/plain" class="language-csharp">//it can be called many times; every call re-initializes all the settings.
+Cliver.Config.Reload();//mandatory call before using settings</script>
 
 
          <p>      Now settings are ready to be used:
-<pre>
-<code class="language-csharp">//modify
+<script type="text/plain" class="language-csharp">//modify
 Settings.Connection.ClientPort = 234;
 Settings.Connection.Servers.Add(new Server {Name = "host1", Host = "123.123.123.123", Port = 345});
 ...
@@ -400,8 +384,7 @@ Settings.Connection.Reset();
 ...
 //pass to a function
 Server server = Settings.Connection.Servers.Find(a => a.Name == "host1");
-connect(Settings.General.ClientPort, server.Host, server.Port);</code>
-</pre>
+connect(Settings.General.ClientPort, server.Host, server.Port);</script>
 			<p>To find live examples, refer to CliverRoutinesExample project in CliverRoutines solution.
 			<br>For the complete usage options, review <a href='#config'><code>Cliver.Config</code></a> API and annotations. 
 
@@ -426,7 +409,7 @@ connect(Settings.General.ClientPort, server.Host, server.Port);</code>
 
 
 <h2>Attributes</h2>
-<p><a href='#config'><code>Cliver.Config</code></a> provides attributes for <a href='#settings_field'>settings fields</a> and <a href='#settings_class'>settings types</a>. Those attributes allow to alter the engine's behavior. See the API and annotations for details.
+<p><code>Cliver.SettingsAttributes</code> provides attributes which are applicable to <a href='#settings_field'>settings fields</a> and/or <a href='#settings_class'>settings types</a>. Those attributes allow to alter the engine's behavior. See the API and annotations for details.
 
 
 
@@ -442,21 +425,18 @@ connect(Settings.General.ClientPort, server.Host, server.Port);</code>
 			Pay attention that when you predefine a collection of values in your code, it will be doubled every time when it is saved/restored. It is how Newtonsoft.Json works by default.
 			<br>To alter this behavior, add the attribute as in the example below:
 
-<pre>
-<code class="language-csharp">public class GeneralSettings : Cliver.UserSettings
+<script type="text/plain" class="language-csharp">public class GeneralSettings : Cliver.UserSettings
 {   	
 	//avoid doubling the collection's elements
 	[JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
 	public List&lt;string&gt; Options = new List&lt;string&gt;("apple", "pear", "banana"); 
-}</code>
-</pre>
+}</script>
 			
 			
             <h3><a name=''>Ignoring fields/properties</a></h3>
 
             To make a certain field or property not serializable, make it <code>non-public</code>. Otherwise, reference Newtonsoft.Json and add the attribute as in the example:
-<pre>
-<code class="language-csharp">public class GeneralSettings : Cliver.UserSettings
+<script type="text/plain" class="language-csharp">public class GeneralSettings : Cliver.UserSettings
 {   	
 	//this field will not be serialized
 	internal string Password; 
@@ -464,8 +444,7 @@ connect(Settings.General.ClientPort, server.Host, server.Port);</code>
 	//this field will not be serialized
 	[Newtonsoft.Json.JsonIgnore]
 	public string Password2;
-}</code>
-</pre>	
+}</script>	
 
 
 
@@ -475,8 +454,7 @@ connect(Settings.General.ClientPort, server.Host, server.Port);</code>
 
 
             <p>Sometimes it is handy to modify not a <a href='#settings_field'>settings field</a> itself but its clone and then replace it:
-<pre>
-<code class="language-csharp">//create a clone
+<script type="text/plain" class="language-csharp">//create a clone
 GeneralSettings general2 = Settings.General.CreateClone();//!!!property __Info is not cloned here but references the same object.
 
 //modify
@@ -486,12 +464,10 @@ if(userOk())
 {
 	Settings.General = general2;//now general2 becomes attached
 	Settings.General.Save();
-}</code>
-</pre>
+}</script>
 
 <p>Or, consider the opposite case: you need to save an edited <a href='#settings_field'>settings field</a> while its clone is in use and must remain unchanged until the end of the process so that the changes will come into play after restart:
-<pre>
-<code class="language-csharp">//create a clone which should not be changed
+<script type="text/plain" class="language-csharp">//create a clone which should not be changed
 GeneralSettings general0 = Settings.General.CreateClone();
 //using it until the end of the process...
 
@@ -499,8 +475,7 @@ GeneralSettings general0 = Settings.General.CreateClone();
 //modify the original
 general.ClientPort = 123;
 //save it so that the changes will come into play after restart
-Settings.General.Save();</code>
-</pre>
+Settings.General.Save();</script>
 
 
 
@@ -509,8 +484,7 @@ Settings.General.Save();</code>
 Being ordinary C# classes, <a href='#settings_class'>settings types</a> support polymorphism. That is, you can build many <a href='#settings_class'>settings types</a> inheriting the same parent and easily switch between them depending on the application logic. See the example.
 
 <p>Define a base <a href='#settings_class'>settings type</a> and its derivatives:
-<pre>
-<code class="language-csharp">//base settings class which you will reference in your code
+<script type="text/plain" class="language-csharp">//base settings class which you will reference in your code
 abstract public class ScopeSettings : Cliver.UserSettings
 {
 	virtual public string HelpUri { get; set; }
@@ -532,24 +506,19 @@ public class Scope2Settings : ScopeSettings
 	override public string HelpUri { get; set; } = "http://www.help.com/help2.html";
 
 	public static Scope2Settings This;
-}</code>
-</pre>
+}</script>
 
 <p>Initialize <a href='#settings_field'>settings fields</a> and set the required scope:
-<pre>
-<code class="language-csharp">Config.Reload();
+<script type="text/plain" class="language-csharp">Config.Reload();
 //choose which scope to use?
-ScopeSettings.Scope = Scope1Settings.This;</code>
-</pre>
+ScopeSettings.Scope = Scope1Settings.This;</script>
 
 <p>Now, without regard to the actual scope, you can use <code>ScopeSettings.Scope</code> uniformly:
-<pre>
-<code class="language-csharp">...
+<script type="text/plain" class="language-csharp">...
 Process.Start(ScopeSettings.Scope.HelpUri);
 ...
 ScopeSettings.Scope.HelpUri = "http://www.help.com/help3.html"; 
-ScopeSettings.Scope.Save();</code>
-</pre>
+ScopeSettings.Scope.Save();</script>
 
 
 
@@ -562,27 +531,29 @@ ScopeSettings.Scope.Save();</code>
 <h3><a name=''>Encrypting</a></h3>
 
             <h4><a name=''>Settings field</a></h4>
-<a href='#settings_field'>A settings field</a> can be serialized as an encrypted string by adding the attribute <code>SettingsFieldAttribute.Crypto</code> to it:
-<pre>
-<code class="language-csharp">public class CredentialsSettings : Cliver.UserSettings
-{   	            
-    public string Key = "key";
-    public string Token = "123";
+A whole <a href='#settings_field'>settings field</a> can be serialized as an encrypted string by adding the attribute <code>SettingsFieldAttribute.Crypto</code> either to the settings field or to its type declaration:
+<script type="text/plain" class="language-csharp">//An example of encryption of a Settings type/field
+partial class Settings
+{
+	//Specify the class and the property that expose a StringEndec object to be used for encryption.
+	//This attribute can be applied to either a Settings type or a Settings field.
+	[SettingsAttributes.Encrypted(stringEndecGetterHostingType: typeof(Settings), stringEndecGetterName: nameof(Settings.Endec))]
+	//This object will be serialized as encrypted string
+	internal static CredentialsSettings Credentials;
+
+	//A StringEndec object passed into SettingsFieldAttribute.EncryptedAttribute
+	public static StringEndec.Rijndael Endec { get; } = new StringEndec.Rijndael("111");
+	//An alternative by CliverWinRoutines which does not require a key:
+	//public static Cliver.Win.StringEndec Endec { get; } = new Cliver.Win.StringEndec();   
 }
 
-public class Settings
-{       
-	//a Crypto object used by SettingsFieldAttribute.Crypto attribute
-	public static StringCrypto.Rijndael Crypto { get; } = new StringCrypto.Rijndael("123");
-	//an alternative by CliverWinRoutines which does not require a key:
-	//public static Win.StringCrypto Crypto { get; } = new Win.StringCrypto();   
-
-	//specify the class and the property that expose a StringCrypto object which will be used for encryption
-	[SettingsFieldAttribute.Crypto(stringCryptoGetterHostingType: typeof(Settings), stringCryptoGetterName: nameof(Crypto))]
-	//Settings field to be serialized as encrypted string
-	internal static CredentialsSettings Credentials;
-}</code>
-</pre>
+//Alternatively, the Encrypted attribute can be added to the type which will cause any field of this type to be serialized as encrypted string
+//[SettingsAttributes.Encrypted(stringEndecGetterHostingType: typeof(Settings), stringEndecGetterName: nameof(Settings.Endec))]
+class CredentialsSettings : Cliver.UserSettings
+{
+	public string Key = "test";
+	public string Token = "123";
+}</script>
 
 <p>Now <code>Settings.Credentials</code> will be stored in <a href='#storage_file'>the storage file</a> as a string encrypted by <code>StringCrypto</code> instance that you provided.
 
@@ -594,9 +565,8 @@ public class Settings
 
 
             <h4><a name=''>Serializable field</a></h4>
-Also, it is possible to encrypt a <a href='#settings_field'>settings field</a> not as a whole but its certain members (<a href='#serializable_field'>serializable fields</a>) separately. How it is done:
-<pre>
-<code class="language-csharp">class ServerSettings : Cliver.UserSettings//UserSettings based class is serialized in the user directory
+Also, it is possible to encrypt a <a href='#settings_field'>settings field</a> not as a whole but its certain members (i.e. <a href='#serializable_field'>serializable fields</a>) separately. How it is done:
+<script type="text/plain" class="language-csharp">class ServerSettings : Cliver.UserSettings//UserSettings based class is serialized in the user directory
 {
 	static ServerSettings()
 	{
@@ -614,17 +584,14 @@ Also, it is possible to encrypt a <a href='#settings_field'>settings field</a> n
 public class Settings
 {
 	public static readonly ServerSettings Server;
-}</code>
-</pre>
+}</script>
 
 <p>Now you can use like this:
-<pre>
-<code class="language-csharp">Settings.Server.Password.Value = password;
+<script type="text/plain" class="language-csharp">Settings.Server.Password.Value = password;
 Settings.Server.Save();
 
 ...
-connect(Settings.Server.Host, Settings.Server.Password.Value);</code>
-</pre>
+connect(Settings.Server.Host, Settings.Server.Password.Value);</script>
 
 <p>With this encryption, the value is kept encrypted almost all the process time, being decrypted only when called explicitly. It is more secure against RAM sniffers.
 
@@ -638,33 +605,27 @@ connect(Settings.Server.Host, Settings.Server.Password.Value);</code>
 You can pass a <a href='#settings_field'>settings field</a> to another process. It should be done through serialization.
 
 <p>In process 1:
-<pre>
-<code class="language-csharp">string generalStr = Cliver.Serialization.Json.Serialize(Settings.General);
+<script type="text/plain" class="language-csharp">string generalStr = Cliver.Serialization.Json.Serialize(Settings.General);
 
-//pass generalStr to process 2...</code>
-</pre>
+//pass generalStr to process 2...</script>
 
 <p>In process 2:
-<pre>
-<code class="language-csharp">//restore
+<script type="text/plain" class="language-csharp">//restore
 GeneralSettings general = Cliver.Serialization.Json.Deserialize(generalStr);
 //modify
 general.Files.Add("c:\\other.txt");
 //serialize
 generalStr = Cliver.Serialization.Json.Serialize(general);
 
-//pass generalStr back to process 1...</code>
-</pre>
+//pass generalStr back to process 1...</script>
 
 <p>In process 1:
-<pre>
-<code class="language-csharp">//accept modifications
+<script type="text/plain" class="language-csharp">//accept modifications
 GeneralSettings general2 = Cliver.Serialization.Json.Deserialize(generalStr);
-//!!!do not forget to restore __Info as it is distorted by serialization
+//!!!do not forget to restore __Info as it was distorted by serialization
 general2.__Info = Settings.General.__Info;
 Settings.General = general2;
-Settings.General.Save();</code>
-</pre>
+Settings.General.Save();</script>
 
 
 
@@ -677,56 +638,88 @@ Settings.General.Save();</code>
 
 
             <h3><a name=''>Upgrading settings type</a></h3>
-Sometimes, when you upgrade an application, a <a href='#settings_class'>settings type</a> in it is changed that way that the new application cannot deserialize properly a <a href='#storage_file'>storage file</a> produced by an older application. To turn on the automatic data version monitoring of a certain <a href='#settings_class'>settings type</a>, add the attribute <code>TypeVersion</code> to it. When the type version of the storage file does not correspond to the version set by the attribute, the engine will call a handler within which you can provide a smooth migration of the old data to the new format. See the example below:
+Sometimes, when you upgrade an application, a <a href='#settings_class'>settings type</a> in it is changed that way that the new application cannot deserialize properly a <a href='#storage_file'>storage file</a> produced by an older application. When it happens, the engine calls method <code>UnsupportedFormatHandler</code> which you can override. This method is called in the following cases:
+<br>- deserialization engine thew an exception meaning that the <a href='#settings_field'>settings field</a> could not be deserialized and contains a default value;
+<br>- the <a href='#settings_field'>settings field</a> was deserialized but its type version is out of the acceptable range meaning that some restored data may be deteriorated and needs amending. This can be the case only when attribute <code>TypeVersion</code> is specified for the <a href='#settings_class'>settings type</a>;
+
+<p>By adding the attribute <code>TypeVersion</code> to a certain <a href='#settings_class'>settings type</a> you assign a version to its declaration in the code. When you alter the decalration, you should also alter its version specified in the attribute. Now, when the type version of the storage file does not correspond to the version set by the attribute, the engine will call <code>UnsupportedFormatHandler</code>.
+
+<p>For either reason <code>UnsupportedFormatHandler</code> was called, you can provide a smooth migration of the old data to the new format. See the example below:
 
 <p>
-<pre>
-<code class="language-csharp">//Example how to check the type version and migrate to the current type if needed.
-//When this attribute is set, Config engine checks if the version set by the attribute corresponds to the version in the storage file.
-[SettingsTypeAttribute.TypeVersion(value: 210601, minSupportedTypeVersion: 210601)]
+<script type="text/plain" class="language-csharp">//An example of upgrading of a Settings type 
+partial class Settings
+{
+	internal static TemplatesSettings Templates;
+}
+
+//Example how to check the type version and migrate to the current type if needed.
+//When this attribute is set, Config checks if the version set by the attribute accords with the version saved in the storage file.
+[SettingsAttributes.TypeVersion(value: 210601, minSupportedTypeVersion: 210601)]
 class TemplatesSettings : Cliver.UserSettings//UserSettings based class is serialized in the user directory
 {
-	public Dictionary<string, Template> Names2Template = new Dictionary<string, Template>();
+	public List<Template> Templates = new List<Template> { new Template { Name = "test", Words = new List<string> { "apple", "box" } } };
 
-	//Here is your chance to upgrade the data to the current format
-	override protected UnsupportedTypeVersionHandlerCommand UnsupportedTypeVersionHandler()
-	{
-		//different approaches are considered below:
-		if (__TypeVersion < 200301)
-		{
-			Newtonsoft.Json.Linq.JObject o = GetJObjectFromStorageFile();
-			//edit the old data as a JObject
-			//...
-			//set the current version
-			o["__TypeVersion"] = __Info.TypeVersion.Value;
+	//Here is your chance to upgrade the data to the current format.
+	override protected UnsupportedFormatHandlerCommand UnsupportedFormatHandler(Exception deserializingException)
+	{//different approaches are considered below.
+		//if deserializingException==NULL then the file could be deserialized but its __TypeVersion is not acceptable.
+		if (deserializingException?.Message.Contains("Could not create an instance of type Example.Template+Field") == true || __TypeVersion < 200601)
+		{//remove property Fields which does not exist anymore
+			Newtonsoft.Json.Linq.JObject o = __Info.ReadStorageFileAsJObject();
+			for (int i = o["Templates"].Count() - 1; i >= 0; i--)
+				o["Templates"][i]["Fields"].Remove();
+			o["__TypeVersion"] = 210701;
 			//save
-			System.IO.File.WriteAllText(__Info.File, o.ToString());
-			return UnsupportedTypeVersionHandlerCommand.Reload;
+			__Info.WriteStorageFileAsJObject(o);
+			return UnsupportedFormatHandlerCommand.Reload;
 		}
-		if (__TypeVersion < 200901)
+
+		if (__TypeVersion < 210301)
 		{
-			string s = System.IO.File.ReadAllText(__Info.File);
+			string s = __Info.ReadStorageFileAsString();
 			//edit the old data as a serialized string
 			//...
 			//set the current version
 			s = System.Text.RegularExpressions.Regex.Replace(s, @"(?<=\""__TypeVersion\""\:\s*)\d+", __Info.TypeVersion.Value.ToString(), System.Text.RegularExpressions.RegexOptions.Singleline);
 			//save
-			System.IO.File.WriteAllText(__Info.File, s);
-			return UnsupportedTypeVersionHandlerCommand.Reload;
+			__Info.WriteStorageFileAsString(s);
+			return UnsupportedFormatHandlerCommand.Reload;
 		}
-		if (__TypeVersion < __Info.TypeVersion.Value)
+
+		if (deserializingException == null && __TypeVersion < __Info.TypeVersion.Value)
 		{
 			//alter the data in the object itself
 			//...
 			//save
 			Save();//(!)when saving, the current type version is set
-			return UnsupportedTypeVersionHandlerCommand.Proceed;
+			return UnsupportedFormatHandlerCommand.Proceed;
 		}
-		//__TypeVersion > __Info.TypeVersion.Value
-		Console.WriteLine("WARNING: The application might not support properly the newer type version " + __TypeVersion + " data stored in " + __Info.File + ".");
-		Console.WriteLine("The expected version is " + __Info.TypeVersion.Value);
-		Console.WriteLine("Consider to update the application.");
-		return UnsupportedTypeVersionHandlerCommand.Proceed;
+
+		if (deserializingException != null)
+			Console.WriteLine("EXCEPTION while deserializing " + __Info.File + ": " + Log.GetExceptionMessage(deserializingException));
+		else            //__TypeVersion > __Info.TypeVersion.Value     
+		{
+			Console.WriteLine("WARNING: The application might not support properly the newer type version " + __TypeVersion + " data stored in " + __Info.File + ".");
+			Console.WriteLine("The expected version: " + __Info.TypeVersion.Value);
+		}
+		while (true)
+		{
+			Console.WriteLine("\r\nPlease choose the option:\r\nExit - [E]\r\nReset the settings - [R]\r\nProceed as is - [P]");
+			ConsoleKey k = Console.ReadKey().Key;
+			switch (k)
+			{
+				case ConsoleKey.E:
+					Log.Exit("Settings " + __Info.FullName + " could not be loaded.");
+					break;
+				case ConsoleKey.R:
+					return UnsupportedFormatHandlerCommand.Reset;
+				case ConsoleKey.P:
+					return UnsupportedFormatHandlerCommand.Proceed;
+				default:
+					continue;
+			}
+		}
 	}
 }
 
@@ -734,8 +727,7 @@ public class Template
 {
 	public string Name;
 	public List<string> Words = new List<string>();
-}</code>
-</pre>
+}</script>
 
 
 
@@ -748,8 +740,7 @@ public class Template
 You can pass a <a href='#settings_field'>settings field</a> to another process. It should be done through serialization.
 
 <p>In process 1:
-<pre>
-<code class="language-csharp">string generalStr = Cliver.Serialization.Json.Serialize(Settings.General);
+<script type="text/plain" class="language-csharp">string generalStr = Cliver.Serialization.Json.Serialize(Settings.General);
 
 //pass generalStr to process 2...</code>
 </pre-->
@@ -786,8 +777,7 @@ You can pass a <a href='#settings_field'>settings field</a> to another process. 
 			<p> Multiple <a href='#log_session'>sessions</a> can be open simultaneously.
 			
 			<p>Using an explicitly created <a href='#log_session'>session</a>:
-<pre>
-<code class="language-csharp">using Cliver;
+<script type="text/plain" class="language-csharp">using Cliver;
 ...
 //make each session create its own folder
 Log.Initialize(Log.Mode.FOLDER_PER_SESSION);
@@ -798,8 +788,7 @@ Log.Session game1Log = Log.Session.Get("Game1");
 game1Log.Debug("message");
 ...
 //close all the file handlers beloning to the session.
-game1Log.Close(true);//optional call to free memory</code>
-</pre>			
+game1Log.Close(true);//optional call to free memory</script>			
 			
 
 
@@ -808,12 +797,10 @@ game1Log.Close(true);//optional call to free memory</code>
 
 			<p><a href='#log_default_session'>The default session</a> is used for the trivial logging which is sufficient for the most applications:
 
-<pre>
-<code class="language-csharp">using Cliver;
+<script type="text/plain" class="language-csharp">using Cliver;
 ...
 //write to the default log of the default session
-Log.Write("message");//shortcut for Log.Head.Write("message");</code>
-</pre>
+Log.Write("message");//shortcut for Log.Head.Write("message");</script>
 
 
 
@@ -822,16 +809,13 @@ Log.Write("message");//shortcut for Log.Head.Write("message");</code>
 <a href='#default_log'>The default log</a> of a <a href='#log_session'>session</a> is the log that is called without explicit reference. Depending on <a href='#log'><code>Cliver.Log</code></a> configuration, it can be either <a href='#main_log'>the main log</a> (by default) or <a href='#thread_log'>thread log</a>.
 		
     <p><a href='#default_log'>The default log</a> is handy as a shortcut for trivial logging when everything is written to the same file:
-<pre><code class="language-csharp">using Cliver;
+<script type="text/plain" class="language-csharp">using Cliver;
 ...
-Log.Inform("test message");//shortcut for Log.Head.Main.Inform()</code>
-</pre>
+Log.Inform("test message");//shortcut for Log.Head.Main.Inform()</script>
 
 			<p>Toggle <a href='#default_log'>the default log</a> to <a href='#thread_log'>thread log</a>:
-<pre>
-<code class="language-csharp">Log.Initialize(Log.Mode.DEFAULT_THREAD_LOG);//thread log will be used by default
-Log.Inform("test message");//shortcut for Log.Head.Thread.Inform()</code>
-</pre>
+<script type="text/plain" class="language-csharp">Log.Initialize(Log.Mode.DEFAULT_THREAD_LOG);//thread log will be used by default
+Log.Inform("test message");//shortcut for Log.Head.Thread.Inform()</script>
 
 
 
@@ -851,10 +835,8 @@ Log.Inform("test message");//shortcut for Log.Head.Thread.Inform()</code>
 			<br> - the temp folder;
 			
 			<p>The <a href="base_directory">work directory</a> definition can be customized while initializing:
-<pre>
-<code class="language-csharp">//optional initialization before using logs
-Log.Initialize(Log.Mode.FOLDER_PER_SESSION, new List<string> { Log.AppCompanyCommonDataDir });//logs will be recorded to the common data folder</code>
-</pre>
+<script type="text/plain" class="language-csharp">//optional initialization before using logs
+Log.Initialize(Log.Mode.FOLDER_PER_SESSION, new List<string> { Log.AppCompanyCommonDataDir });//logs will be recorded to the common data folder</script>
 
 
 
@@ -866,7 +848,7 @@ Log.Initialize(Log.Mode.FOLDER_PER_SESSION, new List<string> { Log.AppCompanyCom
 
 			
  <p>   Writing to a named log of <a href='#log_default_session'>the default session</a>:
-<pre><code class="language-csharp">//writig to the log "Inform" of the default session
+<script type="text/plain" class="language-csharp">//writig to the log "Inform" of the default session
 Log.Session.NamedWriter informLog = Log.Head["Inform"];
 Log.Session.NamedWriter errorLog = Log.Head["Error"];
 try
@@ -876,18 +858,16 @@ try
 catch (Exception e)
 {
 	errorLog.Error2("Failed", e);
-}</code>
-</pre>
+}</script>
 
  <p>   Writing to a named log of an explicitly created <a href='#log_session'>session</a>:
-<pre><code class="language-csharp">Log.Session game1Session = Log.Session.Get("Game1");
+<script type="text/plain" class="language-csharp">Log.Session game1Session = Log.Session.Get("Game1");
 
 //to the main log
 game1Session.Write("test message");
 
 //to the log named "Test"
-game1Session["Test"].Write("test message");</code>
-</pre>
+game1Session["Test"].Write("test message");</script>
 
 
 
@@ -899,18 +879,16 @@ game1Session["Test"].Write("test message");</code>
 		
     
     <p><a href='#main_log'>The main log</a> is handy as a ready-to-use log:
-<pre><code class="language-csharp">using Cliver;
+<script type="text/plain" class="language-csharp">using Cliver;
 ...
 
 //writing to the main log in the default (Head) session
-Log.Main.Inform0("test message");//It is a shortcut for Log.Head.Main.Inform()</code>
-</pre>
+Log.Main.Inform0("test message");//It is a shortcut for Log.Head.Main.Inform()</script>
 
 Or:
-<pre><code class="language-csharp">//writing to the main log of session "Game1"
+<script type="text/plain" class="language-csharp">//writing to the main log of session "Game1"
 Log.Session game1Session = Log.Session.Get("Game1");
-game1Session.Main.Inform0("test message");</code>
-</pre>
+game1Session.Main.Inform0("test message");</script>
 
 
 
@@ -923,8 +901,7 @@ game1Session.Main.Inform0("test message");</code>
 	<p>Each <a href='#thread_log'>thread log</a> has a unique ID which is a part of its file name. Depending on configuration, those ID's can be reused or be endlessly incremented for each new <a href='#thread_log'>thread log</a>.
 	
 	<p>In this example, each downloading thread writes its own log:
-<pre>
-<code class="language-csharp">using Cliver;
+<script type="text/plain" class="language-csharp">using Cliver;
 ...
 
 static void download(string uri)
@@ -946,8 +923,7 @@ static void Main(string[] args)
 	ThreadRoutines.Start(() => { download("http://file.com/1"); });
 	...
 	ThreadRoutines.Start(() => { download("http://file.com/N"); });
-}</code>
-</pre>
+}</script>
 
 
 
@@ -958,22 +934,18 @@ static void Main(string[] args)
 			
 		
         <p> At the beginning of the application, add optional initialization:
-<pre>
-<code class="language-csharp">using Cliver;
+<script type="text/plain" class="language-csharp">using Cliver;
 ...
 
 //optional configuration. See the API and annotations for options.
 Log.Level = Log.Level.WARNING;
 
 //optional initialization. It can be called many times; every call closes all the logs and re-initializes the engine.
-Log.Initialize(Log.Mode.FOLDER_PER_SESSION); //this call is not mandatory if you are ok with default settings.</code>
-</pre>
+Log.Initialize(Log.Mode.FOLDER_PER_SESSION); //this call is not mandatory if you are ok with default settings.</script>
 
 
          <p>      Write to log:
-<pre>
-<code class="language-csharp">Log.Inform("test message"); //trivial logging</code>
-</pre> 
+<script type="text/plain" class="language-csharp">Log.Inform("test message"); //trivial logging</script> 
 			<p>To see live examples, refer to CliverRoutinesExample project in CliverRoutines solution. 
 			<br>For the complete usage options, review <a href='#log'><code>Cliver.Log</code></a> API and annotations.
 		 
