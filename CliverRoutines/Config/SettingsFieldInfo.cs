@@ -52,7 +52,7 @@ namespace Cliver
 
         /// <summary>
         /// When TRUE, the Settings field is not initialized by default and needs an explicit initializing. 
-        /// Such a field, when needed, must be initiated explicitly by Config.Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
+        /// Such a field, when needed, must be initiated explicitly by Config.Reload(string settingsFieldFullName)
         /// </summary>
         public readonly bool Optional = false;
 
@@ -247,10 +247,9 @@ namespace Cliver
         /// If this file does not exist, it tries to load it from the initial file located in the app's directory. 
         /// If this file does not exist, it creates an object with the hardcoded values.
         /// </summary>
-        /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
-        public void ReloadObject(/*bool throwExceptionIfCouldNotLoadFromStorageFile = false*/)
+        public void ReloadObject()
         {
-            SetObject(Settings.Create(this, false/*, throwExceptionIfCouldNotLoadFromStorageFile*/));
+            SetObject(Settings.Create(this, false));
         }
     }
 

@@ -156,7 +156,7 @@ namespace Cliver
             }
         }
 
-        static void loadOrReset(bool reset/*, bool throwExceptionIfCouldNotLoadFromStorageFile*/)
+        static void loadOrReset(bool reset)
         {
             lock (settingsFieldFullNames2SettingsFieldInfo)
             {
@@ -172,7 +172,7 @@ namespace Cliver
                 {
                     bool foundInRequiredOptionalFieldFullNames = requiredOptionalFieldFullNames?.Remove(settingsFieldInfo.FullName) == true;
                     if (!settingsFieldInfo.Optional /*|| RequiredOptionalSettingsTypes?.Contains(settingsFieldInfo.Type) == true*/ || foundInRequiredOptionalFieldFullNames)
-                        settingsFieldInfo.SetObject(Settings.Create(settingsFieldInfo, reset/*, throwExceptionIfCouldNotLoadFromStorageFile*/));
+                        settingsFieldInfo.SetObject(Settings.Create(settingsFieldInfo, reset));
                 }
                 if (requiredOptionalFieldFullNames?.Count > 0)
                     throw new Exception("RequiredOptionalFieldFullNames contains name which was not found: '" + RequiredOptionalFieldFullNames[0] + "'");
@@ -181,15 +181,14 @@ namespace Cliver
 
         /// <summary>
         /// Reloads all the Settings fields in the application.
-        /// It's the usual method to be called in the beginning of an application to initiate Config.
+        /// It's the usual method to be called in the beginning of an application to initialize Config.
         /// First it tries to load each Settings object from its default storage directory. 
         /// If this file does not exist, it tries to load from the initial settings file in app's directory.
         /// Only if this file does not exist, it resets to the hardcoded values.
         /// </summary>
-        /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
-        static public void Reload(/*bool throwExceptionIfCouldNotLoadFromStorageFile = false*/)
+        static public void Reload()
         {
-            loadOrReset(false/*, throwExceptionIfCouldNotLoadFromStorageFile*/);
+            loadOrReset(false);
         }
 
         /// <summary>
@@ -199,7 +198,7 @@ namespace Cliver
         /// </summary>
         static public void Reset()
         {
-            loadOrReset(true/*, true*/);
+            loadOrReset(true);
         }
 
         /// <summary>

@@ -44,36 +44,21 @@ namespace Cliver
         }
         SettingsFieldInfo settingsFieldInfo = null;
 
-        internal static Settings Create(SettingsFieldInfo settingsFieldInfo, bool reset/*, bool throwExceptionIfCouldNotLoadFromStorageFile*/)
+        internal static Settings Create(SettingsFieldInfo settingsFieldInfo, bool reset)
         {
-            Settings settings = create(settingsFieldInfo, reset/*, throwExceptionIfCouldNotLoadFromStorageFile*/);
+            Settings settings = create(settingsFieldInfo, reset);
             settings.__Info = settingsFieldInfo;
             settings.Loaded();
             return settings;
         }
-        internal static Settings create(SettingsFieldInfo settingsFieldInfo, bool reset/*, bool throwExceptionIfCouldNotLoadFromStorageFile*/)
+        internal static Settings create(SettingsFieldInfo settingsFieldInfo, bool reset)
         {
             if (!reset && File.Exists(settingsFieldInfo.File))
-                //try
-                //{
                 return loadFromFile(settingsFieldInfo);
-            //}
-            //catch (Exception e)
-            //{
-            //    if (throwExceptionIfCouldNotLoadFromStorageFile)
-            //        throw new Exception("Error while loading settings " + settingsFieldInfo.FullName + " from file " + settingsFieldInfo.File, e);
-            //}
             if (File.Exists(settingsFieldInfo.InitFile))
             {
                 FileSystemRoutines.CopyFile(settingsFieldInfo.InitFile, settingsFieldInfo.File, true);
-                //try
-                //{
                 return loadFromFile(settingsFieldInfo);
-                //}
-                //catch (Exception e)
-                //{
-                //    throw new Exception("Error while loading settings " + settingsFieldInfo.FullName + " from initial file " + settingsFieldInfo.InitFile, e);
-                //}
             }
             Settings settings = (Settings)Activator.CreateInstance(settingsFieldInfo.Type);
             settings.__TypeVersion = settingsFieldInfo.TypeVersion;
@@ -197,12 +182,11 @@ namespace Cliver
         /// If this file does not exist, it creates an object with the hardcoded values.
         /// (!)Calling this method on a detached Settings object throws an exception because otherwise it could lead to a confusing effect. 
         /// </summary>
-        /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
-        public void Reload(/*bool throwExceptionIfCouldNotLoadFromStorageFile = false*/)
+        public void Reload()
         {
             if (!IsAttached())//while technically it is possible, it could lead to a confusion: called on one object it might replace an other one!
                 throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info?.FullName + ").");
-            __Info.ReloadObject(/*throwExceptionIfCouldNotLoadFromStorageFile*/);
+            __Info.ReloadObject();
         }
 
         /// <summary>
@@ -243,8 +227,17 @@ namespace Cliver
         }
         public enum UnsupportedFormatHandlerCommand
         {
+            /// <summary>
+            /// Read the storage file if it exists, otherwise reads the initial file if it exists, otherwise creates a default instance.
+            /// </summary>
             Reload,
+            /// <summary>
+            /// Read the initial file if it exists, otherwise creates a default instance.
+            /// </summary>
             Reset,
+            /// <summary>
+            /// The application proceeds with the cussrent instance as is.
+            /// </summary>
             Proceed
         }
 

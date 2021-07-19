@@ -18,7 +18,7 @@ namespace Cliver
         {
             /// <summary>
             /// Whether a Settings field/type be initiated by Config implicitly.
-            /// An optional field, when needed, must be initiated explicitly by Config.Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
+            /// An optional field, when needed, must be initiated explicitly by Config.Reload(string settingsFieldFullName)
             /// </summary>
             public bool Optional = false;
 
@@ -103,7 +103,7 @@ namespace Cliver
 
         ///// <summary>
         ///// Whether a Settings field or a Settings type be initiated by Config implicitly.
-        ///// An optional field, when needed, must be initiated explicitly by Config.Reload(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false)
+        ///// An optional field, when needed, must be initiated explicitly by Config.Reload(string settingsFieldFullName)
         ///// </summary>
         //[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Class)]
         //public class OptionalAttribute : Attribute

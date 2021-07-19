@@ -40,13 +40,12 @@ namespace Cliver
         /// </summary>
         /// <typeparam name="S"></typeparam>
         /// <param name="settings"></param>
-        /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
         /// <returns></returns>
-        public static S CreateReloadedClone<S>(this S settings/*, bool throwExceptionIfCouldNotLoadFromStorageFile = false*/) where S : Settings, new()
+        public static S CreateReloadedClone<S>(this S settings) where S : Settings, new()
         {
             if (settings.__Info == null)
                 throw new Exception("This method cannot be performed on a Settings object which has __Info not defined.");
-            return (S)Settings.Create(settings.__Info, false/*, throwExceptionIfCouldNotLoadFromStorageFile*/);
+            return (S)Settings.Create(settings.__Info, false);
         }
 
         /// <summary>
@@ -97,9 +96,9 @@ namespace Cliver
         //}
 
         //// ???what would it be needed for?
-        //public static S CreateReloadedInstance<S>(string settingsFieldFullName, bool throwExceptionIfCouldNotLoadFromStorageFile = false) where S : Settings, new()
+        //public static S CreateReloadedInstance<S>(string settingsFieldFullName) where S : Settings, new()
         //{
-        //    return (S)Settings.Create(GetSettingsFieldInfo(settingsFieldFullName), false, throwExceptionIfCouldNotLoadFromStorageFile);
+        //    return (S)Settings.Create(GetSettingsFieldInfo(settingsFieldFullName), false);
         //}
 
         /// <summary>
@@ -126,11 +125,10 @@ namespace Cliver
         /// Can be used to initialize an optional Settings field.
         /// </summary>
         /// <param name="settingsFieldFullName">full name of Settings field; it equals to the name of its storage file without extention</param>
-        /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
-        public static void Reload(string settingsFieldFullName/*, bool throwExceptionIfCouldNotLoadFromStorageFile = false*/)
+        public static void Reload(string settingsFieldFullName)
         {
             SettingsFieldInfo sfi = GetSettingsFieldInfo(settingsFieldFullName);
-            sfi.SetObject(Settings.Create(sfi, false/*, throwExceptionIfCouldNotLoadFromStorageFile*/));
+            sfi.SetObject(Settings.Create(sfi, false));
         }
 
         /// <summary>
@@ -138,10 +136,9 @@ namespace Cliver
         /// </summary>
         /// <param name="settingsFieldHostingType">full type name of the class hosting the Settings field</param>
         /// <param name="settingsFieldName">name of the Settings field</param>
-        /// <param name="throwExceptionIfCouldNotLoadFromStorageFile"></param>
-        public static void Reload(Type settingsFieldHostingType, string settingsFieldName/*, bool throwExceptionIfCouldNotLoadFromStorageFile = false*/)
+        public static void Reload(Type settingsFieldHostingType, string settingsFieldName)
         {
-            Reload(settingsFieldHostingType.FullName + "." + settingsFieldName/*, throwExceptionIfCouldNotLoadFromStorageFile*/);
+            Reload(settingsFieldHostingType.FullName + "." + settingsFieldName);
         }
 
         ///// <summary>
