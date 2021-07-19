@@ -125,24 +125,6 @@ namespace Cliver
             if (encryptedAttribute != null)
                 Endec = encryptedAttribute.Endec;
 
-            //SettingsAttributes.OptionalAttribute optionalAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsAttributes.OptionalAttribute>(false).FirstOrDefault();
-            //if (optionalAttribute == null)
-            //    optionalAttribute = settingsType.GetCustomAttributes<SettingsAttributes.OptionalAttribute>(true).FirstOrDefault();
-            //if (optionalAttribute != null)
-            //    Optional = optionalAttribute.Value;
-
-            //SettingsAttributes.IndentedAttribute indentedAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsAttributes.IndentedAttribute>(false).FirstOrDefault();
-            //if (indentedAttribute == null)
-            //    indentedAttribute = settingsType.GetCustomAttributes<SettingsAttributes.IndentedAttribute>(true).FirstOrDefault();
-            //if (indentedAttribute != null)
-            //    Indented = indentedAttribute.Value;
-
-            //SettingsAttributes.NullSerializedAttribute nullSerializedAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsAttributes.NullSerializedAttribute>(false).FirstOrDefault();
-            //if (nullSerializedAttribute == null)
-            //    nullSerializedAttribute = settingsType.GetCustomAttributes<SettingsAttributes.NullSerializedAttribute>(true).FirstOrDefault();
-            //if (nullSerializedAttribute != null)
-            //    NullSerialized = nullSerializedAttribute.Value;
-
             SettingsAttributes.ConfigAttribute configAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsAttributes.ConfigAttribute>(false).FirstOrDefault();
             if (configAttribute == null)
                 configAttribute = settingsType.GetCustomAttributes<SettingsAttributes.ConfigAttribute>(true).FirstOrDefault();

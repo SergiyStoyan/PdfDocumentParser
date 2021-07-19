@@ -31,6 +31,9 @@ namespace Cliver
             /// Whether the serializable fields/properties of a Settings field/type whose values are NULL, be serialized.
             /// </summary>
             public bool NullSerialized = false;
+
+            //!!!it never must be used as brings to losing changes
+            //public bool IgnoreDefaultValues;
         }
 
         /// <summary>
@@ -39,38 +42,10 @@ namespace Cliver
         [AttributeUsage(AttributeTargets.Class)]
         public class TypeVersionAttribute : Attribute
         {
-            //public readonly uint MinSupportedTypeVersion;
-
             /// <summary>
             /// The version of the Settings type to which this attribute is applied.
             /// </summary>
             public readonly uint Value;
-            //public readonly Version Value;
-
-            //public bool IsTypeVersionSupported(Settings settings)
-            //{
-            //    return settings.__TypeVersion >= MinSupportedTypeVersion && settings.__TypeVersion <= Value;
-            //}
-
-            /// <summary>
-            /// Settings type attribute. Used to check if the storage file format is supported.
-            /// </summary>
-            /// <param name="value">Version of the Settings type to which this attribute is applied.</param>
-            /// <param name="minSupportedTypeVersion">It must be less than or equal to the value.</param>
-            //public TypeVersionAttribute(uint value, uint minSupportedTypeVersion)
-            //{
-            //    try
-            //    {
-            //        if (value < minSupportedTypeVersion)
-            //            throw new Exception("Value (" + value + ") cannot be less than minSupportedTypeVersion (" + minSupportedTypeVersion + ")");
-            //        Value = value;
-            //        MinSupportedTypeVersion = minSupportedTypeVersion;
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        throw new Exception("Wrong parameters of the attribute " + GetType().FullName, e);
-            //    }
-            //}
 
             /// <summary>
             /// Settings type attribute. Used to check if the storage file format is supported.
@@ -100,55 +75,6 @@ namespace Cliver
             //    Value = new Version(version);
             //}
         }
-
-        ///// <summary>
-        ///// Whether a Settings field or a Settings type be initiated by Config implicitly.
-        ///// An optional field, when needed, must be initiated explicitly by Config.Reload(string settingsFieldFullName)
-        ///// </summary>
-        //[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Class)]
-        //public class OptionalAttribute : Attribute
-        //{
-        //    public readonly bool Value;
-
-        //    public OptionalAttribute(bool value = true)
-        //    {
-        //        Value = value;
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Whether a Settings field or a Settings type be serialized with indention.
-        ///// </summary>
-        //[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Class)]
-        //public class IndentedAttribute : Attribute
-        //{
-        //    public readonly bool Value;
-
-        //    public IndentedAttribute(bool value = true)
-        //    {
-        //        Value = value;
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Whether the serializable fields/properties of a Settings field or a Settings type whose values are NULL, be serialized.
-        ///// </summary>
-        //[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Class)]
-        //public class NullSerializedAttribute : Attribute
-        //{
-        //    public readonly bool Value;
-
-        //    public NullSerializedAttribute(bool value = true)
-        //    {
-        //        Value = value;
-        //    }
-        //}
-
-        //!!!it never must be used as brings to losing changes
-        //[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-        //public class IgnoreDefaultValuesAttribute : Attribute
-        //{
-        //}
 
         /// <summary>
         /// Provides a Settings field or a Settings type with encryption facility.

@@ -54,7 +54,7 @@ namespace Cliver
             settings.Loaded();
             return settings;
         }
-        internal static Settings create(SettingsFieldInfo settingsFieldInfo, bool reset)
+        static Settings create(SettingsFieldInfo settingsFieldInfo, bool reset)
         {
             if (!reset && File.Exists(settingsFieldInfo.File))
                 return loadFromFile(settingsFieldInfo);
@@ -90,7 +90,7 @@ namespace Cliver
                 switch (mode)
                 {
                     case UnsupportedFormatHandlerCommand.Reload:
-                        settings = loadFromFile(settingsFieldInfo);
+                        settings = create(settingsFieldInfo, false);
                         break;
                     case UnsupportedFormatHandlerCommand.Reset:
                         settings = create(settingsFieldInfo, true);
