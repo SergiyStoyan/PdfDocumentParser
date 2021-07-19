@@ -16,12 +16,12 @@ namespace Cliver
     public partial class Log
     {
         /// <summary> 
-        /// A session-less named log writer that allows to write the same log file directly to WorkDir. 
+        /// A session-less named log writer that allows to write the same log file directly to RootDir. 
         /// </summary>
         public partial class NamedWriter : Writer
         {
             /// <summary>
-            /// Creates or retrieves a session-less log writer which allows continuous writing to the same log file in Log.WorkDir. 
+            /// Creates or retrieves a session-less log writer which allows continuous writing to the same log file in Log.RootDir. 
             /// </summary>
             /// <param name="name">log name</param>
             /// <returns>wirter</returns>
@@ -71,7 +71,7 @@ namespace Cliver
                     lock (this)
                     {
                         if (level == Level.NONE && value > Level.NONE)
-                            setWorkDir(true);
+                            setRootDir(true);
                         level = value;
                     }
                 }
@@ -82,7 +82,7 @@ namespace Cliver
                 lock (this)
                 {
                     //(!)it must differ from the session files to avoid sharing
-                    string file2 = Log.WorkDir + Path.DirectorySeparatorChar + "_" + Name + (fileCounter > 0 ? "[" + fileCounter + "]" : "") + "." + FileExtension;
+                    string file2 = Log.RootDir + Path.DirectorySeparatorChar + "_" + Name + (fileCounter > 0 ? "[" + fileCounter + "]" : "") + "." + FileExtension;
 
                     if (File == file2)
                         return;

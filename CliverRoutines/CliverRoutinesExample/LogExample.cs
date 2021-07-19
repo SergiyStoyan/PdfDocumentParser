@@ -23,7 +23,7 @@ namespace Example
 
             //trivial usage: everything is written to the same file
             Log.Inform("write to the default log of the default session");
-            Log.Inform("Log folder: " + Log.Dir);
+            Log.Inform("Log folder: " + Log.RootDir);
 
             //more sophisticated usage
             Log.Head["Action1"].Inform0("write to log 'Action1' of the default session");

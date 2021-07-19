@@ -104,6 +104,9 @@ namespace Cliver
                     case UnsupportedFormatHandlerCommand.Reload:
                         settings = loadFromFile(settingsFieldInfo);
                         break;
+                    case UnsupportedFormatHandlerCommand.Reset:
+                        settings = create(settingsFieldInfo, true, false);
+                        break;
                     case UnsupportedFormatHandlerCommand.Proceed:
                     default:
                         throw new Exception("Unknown option: " + mode);
@@ -239,6 +242,7 @@ namespace Cliver
         public enum UnsupportedFormatHandlerCommand
         {
             Reload,
+            Reset,
             Proceed
         }
 

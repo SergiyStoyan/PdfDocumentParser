@@ -145,6 +145,17 @@ namespace Cliver
         }
 
         /// <summary>
+        /// Folder of the head session.
+        /// </summary>
+        public static string Dir
+        {
+            get
+            {
+                return Head.Dir;
+            }
+        }
+
+        /// <summary>
         /// Message importance levels.
         /// </summary>
         public enum Level
@@ -183,7 +194,7 @@ namespace Cliver
             {
                 Session.CloseAll();
                 NamedWriter.CloseAll();
-                workDir = null;
+                rootDir = null;
                 headSession = null;
             }
         }
@@ -191,28 +202,28 @@ namespace Cliver
         /// <summary>
         ///Directory where logs and log sessions are written.
         /// </summary>
-        public static string WorkDir
+        public static string RootDir 
         {
             get
             {
-                if (workDir == null)
-                    setWorkDir(DefaultLevel > Level.NONE);
-                return workDir;
+                if (rootDir == null)
+                    setRootDir(DefaultLevel > Level.NONE);
+                return rootDir;
             }
         }
-        static string workDir = null;
+        static string rootDir = null;
         static Thread deletingOldLogsThread = null;
         public static Func<string, bool> DeleteOldLogsDialog = null;
 
-        static void setWorkDir(bool create)
+        static void setRootDir(bool create)
         {
             lock (lockObject)
             {
-                if (workDir != null)
+                if (rootDir != null)
                 {
                     if (!create)
                         return;
-                    if (Directory.Exists(workDir))
+                    if (Directory.Exists(rootDir))
                         return;
                 }
                 List<string> baseDirs = new List<string> {
@@ -227,26 +238,26 @@ namespace Cliver
                 foreach (string baseDir in baseDirs)
                 {
                     BaseDir = baseDir;
-                    workDir = BaseDir + Path.DirectorySeparatorChar + Log.ProcessName + DirNameSuffix;
+                    rootDir = BaseDir + Path.DirectorySeparatorChar + Log.ProcessName + DirNameSuffix;
                     if (create)
                         try
                         {
-                            if (!Directory.Exists(workDir))
-                                FileSystemRoutines.CreateDirectory(workDir);
-                            string testFile = workDir + Path.DirectorySeparatorChar + "test";
+                            if (!Directory.Exists(rootDir))
+                                FileSystemRoutines.CreateDirectory(rootDir);
+                            string testFile = rootDir + Path.DirectorySeparatorChar + "test";
                             File.WriteAllText(testFile, "test");
                             File.Delete(testFile);
                             break;
                         }
                         catch //(Exception e)
                         {
-                            workDir = null;
+                            rootDir = null;
                         }
                 }
-                if (workDir == null)
+                if (rootDir == null)
                     throw new Exception("Could not access any log directory.");
-                workDir = PathRoutines.GetNormalizedPath(workDir, false);
-                if (Directory.Exists(workDir) && deleteLogsOlderThanDays >= 0)
+                rootDir = PathRoutines.GetNormalizedPath(rootDir, false);
+                if (Directory.Exists(rootDir) && deleteLogsOlderThanDays >= 0)
                     deletingOldLogsThread = ThreadRoutines.Start(() => { Log.DeleteOldLogs(deleteLogsOlderThanDays, DeleteOldLogsDialog); });//to avoid a concurrent loop while accessing the log file from the same thread 
             }
         }
@@ -257,7 +268,7 @@ namespace Cliver
         public static string BaseDir { get; private set; }
 
         /// <summary>
-        /// Creates or retrieves a session-less log writer which allows continuous writing to the same log file in Log.WorkDir. 
+        /// Creates or retrieves a session-less log writer which allows continuous writing to the same log file in Log.RootDir. 
         /// </summary>
         /// <param name="name">log name</param>
         /// <returns>wirter</returns>

@@ -11,7 +11,7 @@ namespace Example
     {
         //Settings type field/property can be declared anywhere in the code. It must be static to be processed by Config.
         //Optionally it can be declared readonly (!!!this is not supported by some versions of .NET)
-        [SettingsFieldAttribute.Indented(false)]//to serialize without indention
+        [SettingsAttributes.Indented(false)]//to serialize without indention
         internal static GeneralSettings General;
     }
 

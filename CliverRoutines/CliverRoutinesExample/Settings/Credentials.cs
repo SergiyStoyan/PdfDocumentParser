@@ -18,7 +18,7 @@ namespace Example
 
     //Specify the class and the property that expose a StringEndec object to be used for encryption.
     //This attribute can be applied to either a Settings type or a Settings field.
-    [SettingsAttribute.Encrypted(stringEndecGetterHostingType: typeof(Settings), stringEndecGetterName: nameof(Settings.Endec))]
+    [SettingsAttributes.Encrypted(stringEndecGetterHostingType: typeof(Settings), stringEndecGetterName: nameof(Settings.Endec))]
     //This type will be serialized as encrypted string
     class CredentialsSettings : Cliver.UserSettings
     {
