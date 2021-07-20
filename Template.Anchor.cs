@@ -91,6 +91,21 @@ namespace Cliver.PdfDocumentParser
                 {
                     return new System.Drawing.RectangleF(Position.X, Position.Y, Size.Width, Size.Height);
                 }
+
+                //TBI
+                public Ocr.Config OcrConfig;
+
+                //TBI
+                internal string OcrConfigKey
+                {
+                    get
+                    {
+                        if (ocrConfigKey == null)
+                            ocrConfigKey = OcrConfig?.ToStringByJson(false);
+                        return ocrConfigKey;
+                    }
+                }
+                string ocrConfigKey = null;
             }
 
             public class CvImage : Anchor

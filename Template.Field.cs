@@ -95,8 +95,7 @@ namespace Cliver.PdfDocumentParser
                 else if (this is OcrTextLineImages)
                     Type = Types.OcrTextLineImages;
                 else
-                    Type = Types.PdfText;
-                //throw new Exception("Unknown option: " + this.GetType());
+                    throw new Exception("Unknown option: " + this.GetType());
             }
 
             [Newtonsoft.Json.JsonIgnore]
@@ -113,21 +112,6 @@ namespace Cliver.PdfDocumentParser
                 OcrTextLineImages,
             }
 
-            //!!!remove when old templates converted
-            //public ValueTypes DefaultValueType = ValueTypes.PdfText;
-            ////!!!remove when old templates converted
-            //public enum ValueTypes
-            //{
-            //    PdfText = 0,
-            //    PdfTextLines = 1,
-            //    PdfCharBoxs = 2,
-            //    OcrText = 3,
-            //    OcrTextLines = 4,
-            //    OcrCharBoxs = 5,
-            //    Image = 6,
-            //    OcrTextLineImages = 7,
-            //}
-
             public bool IsSet()
             {
                 return Rectangle != null && Rectangle.Width > 0 && Rectangle.Height > 0;
@@ -140,73 +124,59 @@ namespace Cliver.PdfDocumentParser
             /// </summary>
             public string ColumnOfTable = null;
 
-            virtual internal object GetValue()
-            {
-                return null;
-            }
+            //virtual internal object GetValue()
+            //{
+            //    return null;
+            //}
 
             public class PdfText : Field
             {
-                internal override object GetValue()
-                {
-                    throw new System.NotImplementedException();
-                }
             }
 
             public class PdfTextLines : Field
             {
-                internal override object GetValue()
-                {
-                    throw new System.NotImplementedException();
-                }
             }
 
             public class PdfCharBoxs : Field
             {
-                internal override object GetValue()
-                {
-                    throw new System.NotImplementedException();
-                }
             }
 
             public class OcrText : Field
             {
-                internal override object GetValue()
+                //TBI
+                public TextAutoInsertSpace TextAutoInsertSpace;
+
+                //TBI
+                public Ocr.Config OcrConfig;
+                public FieldOcrModes OcrMode = FieldOcrModes.SingleFieldFromFieldImage | FieldOcrModes.ColumnFieldFromTableCharBoxs;
+
+                //TBI
+                internal string OcrConfigKey
                 {
-                    throw new System.NotImplementedException();
+                    get
+                    {
+                        if (ocrConfigKey == null)
+                            ocrConfigKey = OcrConfig?.ToStringByJson(false);
+                        return ocrConfigKey;
+                    }
                 }
+                string ocrConfigKey = null;
             }
 
             public class OcrTextLines : Field
             {
-                internal override object GetValue()
-                {
-                    throw new System.NotImplementedException();
-                }
             }
 
             public class OcrCharBoxs : Field
             {
-                internal override object GetValue()
-                {
-                    throw new System.NotImplementedException();
-                }
             }
 
             public class Image : Field
             {
-                internal override object GetValue()
-                {
-                    throw new System.NotImplementedException();
-                }
             }
 
             public class OcrTextLineImages : Field
-            {
-                internal override object GetValue()
-                {
-                    throw new System.NotImplementedException();
-                }
+            { 
             }
         }
     }
