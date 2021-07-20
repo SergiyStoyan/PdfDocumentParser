@@ -103,11 +103,15 @@ namespace Cliver
                     System.Reflection.PropertyInfo pi = stringEndecGetterHostingType.GetProperty(stringEndecGetterName, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
                     if (pi == null)
                         throw new Exception(stringEndecGetterHostingType.FullName + " class does not expose property '" + stringEndecGetterName + "'");
-                    Endec = (StringEndec)pi.GetValue(null);
+                    if (!pi.PropertyType.IsSubclassOf(typeof(StringEndec)))
+                        throw new Exception("Type of the property " + stringEndecGetterHostingType.FullName + "." + stringEndecGetterName + " is not " + typeof(StringEndec).FullName);
+                    Endec = pi.GetValue(null) as StringEndec;
+                    if (Endec == null)
+                        throw new Exception("Property " + stringEndecGetterHostingType.FullName + "." + stringEndecGetterName + " is NULL.");
                 }
                 catch (Exception e)
                 {
-                    throw new Exception("Wrong parameters of the attribute " + GetType().FullName, e);
+                    throw new Exception("Error in the attribute " + GetType().FullName, e);
                 }
             }
         }
