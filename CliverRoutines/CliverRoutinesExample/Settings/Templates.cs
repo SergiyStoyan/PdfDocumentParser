@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace Example
 {
-    //An example of upgrading of a Settings type 
+    //An example of upgrading a Settings type 
     partial class Settings
     {
         internal static TemplatesSettings Templates;
