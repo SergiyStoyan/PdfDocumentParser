@@ -557,7 +557,7 @@ Settings.This.Save();</script>
 
             <h4><a name=''>Settings field/type</a></h4>
 A whole <a href='#settings_field'>settings field</a> can be serialized as an encrypted string by adding the attribute <code>Encrypted</code> either to the <a href='#settings_field'>settings field</a> or to its <a href='#settings_class'>settings type</a> declaration:
-<script type="text/plain" class="language-csharp">//An example of encryption of a Settings type/field
+<script type="text/plain" class="language-csharp">//An example of encrypting a Settings type/field
 partial class Settings
 {
 	//Alternatively, the Encrypted attribute can be added directly to the field: 
@@ -566,13 +566,13 @@ partial class Settings
 	internal static CredentialsSettings Credentials;
 
 	//A StringEndec object passed into SettingsFieldAttribute.EncryptedAttribute
-	public static StringEndec.Rijndael Endec { get; } = new StringEndec.Rijndael("111");
+	internal static StringEndec.Rijndael Endec { get; } = new StringEndec.Rijndael("111");
 	//An alternative by CliverWinRoutines which does not require a key:
-	//public static Cliver.Win.StringEndec Endec { get; } = new Cliver.Win.StringEndec();   
+	//internal static Cliver.Win.StringEndec Endec { get; } = new Cliver.Win.StringEndec();   
 }
 
+//This attribute can be applied to either a Settings type or a Settings field. Being applied to a type, it causes any field of the type to be encrypted.
 //Specify the class and the property that expose a StringEndec object to be used for encryption.
-//This attribute can be applied to either a Settings type or a Settings field. Being applied to the type, it causes any field of this type to be encrypted.
 [SettingsAttributes.Encrypted(stringEndecGetterHostingType: typeof(Settings), stringEndecGetterName: nameof(Settings.Endec))]
 class CredentialsSettings : Cliver.UserSettings
 {

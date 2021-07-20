@@ -65,7 +65,7 @@ namespace Cliver
                     if (typeof(T) == typeof(string))
                         _Value = endec.Encrypt(value as string);
                     else
-                        _Value = endec.Encrypt(Serialization.Json.Serialize(value));
+                        _Value = endec.Encrypt(Serialization.Json.Serialize(value, false));
                 }
             }
         }
@@ -145,6 +145,42 @@ namespace Cliver
             override public string Decrypt(string s)
             {
                 return endec.Decrypt(s);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Abstract encrypting/decrypting class
+    /// </summary>
+    public abstract class Endec<T> 
+    {
+        public abstract string Encrypt(T o);
+        public abstract T Decrypt(string s);
+
+        public class Rijndael : Endec<T>
+        {
+            public Rijndael(string key)
+            {
+                endec = new Crypto.Rijndael(key);
+            }
+            Crypto.Rijndael endec;
+
+            override public string Encrypt(T o)
+            {
+                string s;
+                if (o is string)
+                    s = o.ToString();
+                else
+                    s = o.ToStringByJson(false, true);
+                return endec.Encrypt(s);
+            }
+
+            override public T Decrypt(string s)
+            {
+                string es = endec.Decrypt(s);
+                if (typeof(T) == typeof(string))
+                    return (T)Convert.ChangeType(es, typeof(T));
+                return Serialization.Json.Deserialize<T>(es);
             }
         }
     }
