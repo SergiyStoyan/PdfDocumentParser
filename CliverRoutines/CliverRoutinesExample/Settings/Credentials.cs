@@ -14,9 +14,9 @@ namespace Example
         internal static CredentialsSettings Credentials;
 
         //A StringEndec object passed into SettingsFieldAttribute.EncryptedAttribute
-        public static StringEndec.Rijndael Endec { get; } = new StringEndec.Rijndael("111");
+        internal static StringEndec.Rijndael Endec { get; } = new StringEndec.Rijndael("111");
         //An alternative by CliverWinRoutines which does not require a key:
-        //public static Cliver.Win.StringEndec Endec { get; } = new Cliver.Win.StringEndec();   
+        //internal static Cliver.Win.StringEndec Endec { get; } = new Cliver.Win.StringEndec();   
     }
 
     //Specify the class and the property that expose a StringEndec object to be used for encryption.
