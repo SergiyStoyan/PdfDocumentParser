@@ -39,12 +39,12 @@ namespace Cliver.PdfDocumentParser
             return (List<string>)fai.GetValue(Template.Field.Types.OcrTextLines);
         }
 
-        public Image GetImage(string fieldName)
+        public Bitmap GetImage(string fieldName)
         {
             FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
             if (!fai.Found)
                 return null;
-            return (Image)fai.GetValue(Template.Field.Types.Image);
+            return (Bitmap)fai.GetValue(Template.Field.Types.Image);
         }
 
         //public List<Image> GetTextLineImages(string fieldName)
