@@ -98,14 +98,14 @@ namespace Cliver.PdfDocumentParser
         /// <param name="exactField"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public object GetValue(Template.Field exactField, Template.Field.Types? type = null)
-        {
-            RectangleF? ar = getFieldActualRectangle(exactField);
-            FieldActualInfo fai = new FieldActualInfo(this, exactField, ar, exactField.ColumnOfTable != null ? getFoundFieldActualInfo(exactField.ColumnOfTable) : null);
-            if (!fai.Found)
-                return null;
-            return fai.GetValue(type == null ? fai.ActualField.Type : (Template.Field.Types)type);
-        }
+        //public Bitmap GetImage(Template.Field exactField)
+        //{
+        //    RectangleF? ar = getFieldActualRectangle(exactField);
+        //    FieldActualInfo fai = new FieldActualInfo(this, exactField, ar, exactField.ColumnOfTable != null ? getFoundFieldActualInfo(exactField.ColumnOfTable) : null);
+        //    if (!fai.Found)
+        //        return null;
+        //    return (Bitmap)fai.GetValue(Template.Field.Types.Image);
+        //}
 
         internal FieldActualInfo GetFieldActualInfo(Template.Field field)
         {
