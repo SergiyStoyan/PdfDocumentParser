@@ -46,7 +46,7 @@ namespace Cliver
         public readonly uint TypeVersion = 0;
 
         /// <summary>
-        /// Encryption engine.
+        /// Encryption/decryption engine.
         /// </summary>
         public readonly StringEndec Endec = null;
 

@@ -83,7 +83,7 @@ namespace Cliver
         public class EncryptedAttribute : System.Attribute
         {
             /// <summary>
-            /// Encrypt/decrypt engine.
+            /// Encryption/decryption engine.
             /// </summary>
             readonly public StringEndec Endec;
 
