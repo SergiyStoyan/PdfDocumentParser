@@ -115,17 +115,17 @@ namespace Cliver
             }
             File = storageDir + System.IO.Path.DirectorySeparatorChar + FullName + "." + Config.FILE_EXTENSION;
             */
-            Settings s = (Settings)Activator.CreateInstance(Type); //!!!slightly slowler than calling a static by reflection. Doesn't run yet slower for a bigger class though.
+            Settings s = (Settings)Activator.CreateInstance(Type); //!!!slightly slowler than calling a static by reflection. Doesn't run even more slower for a bigger class though.
             File = s.__StorageDir + System.IO.Path.DirectorySeparatorChar + FullName + "." + Config.FILE_EXTENSION;
             InitFile = Log.AppDir + System.IO.Path.DirectorySeparatorChar + FullName + "." + Config.FILE_EXTENSION;
 
-            SettingsAttributes.EncryptedAttribute encryptedAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsAttributes.EncryptedAttribute>(false).FirstOrDefault();
+            SettingsAttributes.EncryptedAttribute encryptedAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsAttributes.EncryptedAttribute>().FirstOrDefault();
             if (encryptedAttribute == null)
                 encryptedAttribute = settingsType.GetCustomAttributes<SettingsAttributes.EncryptedAttribute>(true).FirstOrDefault();
             if (encryptedAttribute != null)
                 Endec = encryptedAttribute.Endec;
 
-            SettingsAttributes.ConfigAttribute configAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsAttributes.ConfigAttribute>(false).FirstOrDefault();
+            SettingsAttributes.ConfigAttribute configAttribute = settingsTypeMemberInfo.GetCustomAttributes<SettingsAttributes.ConfigAttribute>().FirstOrDefault();
             if (configAttribute == null)
                 configAttribute = settingsType.GetCustomAttributes<SettingsAttributes.ConfigAttribute>(true).FirstOrDefault();
             if (configAttribute != null)
