@@ -507,7 +507,7 @@ Settings.General.Save();</script>
 
 
             <h3><a name=''>Polymorphism</a></h3>
-Being ordinary C# classes, <a href='#settings_class'>settings types</a> support polymorphism. That is, you can build many <a href='#settings_class'>settings types</a> inheriting the same parent and easily switch between them depending on the application logic. See the example.
+Being ordinary C# classes, <a href='#settings_class'>settings types</a> support polymorphism. That is, you can build many <a href='#settings_class'>settings types</a> inheriting from the same parent and easily switch between them depending on the application logic. See the example.
 
 <p>Define a base <a href='#settings_class'>settings type</a> and its derivatives:
 <script type="text/plain" class="language-csharp">//base settings class which you will reference in your code
@@ -515,8 +515,9 @@ abstract public class Settings : Cliver.UserSettings
 {
 	virtual public string Uri { get; set; }
 
-	//it is ignored by the serialization engine because ScopeSettings is abstract class
-	public static Settings This { get; internal set; }//a settings field can be nested in its own settings type
+	//a settings field which is nested in its own settings type
+	//it is ignored by the serialization engine because it is static
+	public static Settings This { get; internal set; }
 }
 
 //derivative1 implementing certain logic
@@ -524,7 +525,9 @@ public class Settings1 : Settings
 {
 	override public string Uri { get; set; } = "http://www.help.com/doc1.html";
 
-	public static Settings1 This;//a settings field can be nested in its own settings type
+	//a settings field which is nested in its own settings type
+	//it is ignored by the serialization engine because it is static
+	public static Settings1 This;
 }
 
 //derivative2 implementing certain logic
@@ -532,7 +535,9 @@ public class Settings2 : Settings
 {
 	override public string Uri { get; set; } = "http://www.help.com/doc2.html";
 
-	public static Settings2 This;//a settings field can be nested in its own settings type
+	//a settings field which is nested in its own settings type
+	//it is ignored by the serialization engine because it is static
+	public static Settings2 This;
 }</script>
 
 <p>Now, without regard to the actual derivative, you can use <code>Settings.This</code> uniformly:
