@@ -93,19 +93,19 @@ namespace Cliver.PdfDocumentParser
                 }
 
                 //TBI
-                public Ocr.Config OcrConfig;
+                public Ocr.Config TesseractConfig;
 
                 //TBI
-                internal string OcrConfigKey
+                internal string TesseractConfigKey
                 {
                     get
                     {
-                        if (ocrConfigKey == null)
-                            ocrConfigKey = OcrConfig?.ToStringByJson(false);
-                        return ocrConfigKey;
+                        if (tesseractConfig == null)
+                            tesseractConfig = TesseractConfig?.ToStringByJson(false);
+                        return tesseractConfig;
                     }
                 }
-                string ocrConfigKey = null;
+                string tesseractConfig = null;
             }
 
             public class CvImage : Anchor

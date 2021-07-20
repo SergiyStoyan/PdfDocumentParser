@@ -31,28 +31,28 @@ namespace Cliver.PdfDocumentParser
         Ocr()
         {
             engine = new TesseractEngine(@"./tessdata", config.language, config.engineMode);
-            if (config.variables != null)
+            if (config.variableNames2value != null)
             {
                 string m1 = "Could not set Tesseract variable: ";
-                foreach (var v in config.variables)
-                    if (v.value is string)
+                foreach (var v in config.variableNames2value)
+                    if (v.Value is string)
                     {
-                        if (!engine.SetVariable(v.name, (string)v.value))
+                        if (!engine.SetVariable(v.Key, (string)v.Value))
                             throw new Exception(m1 + v.ToString());
                     }
-                    else if (v.value is int)
+                    else if (v.Value is int)
                     {
-                        if (!engine.SetVariable(v.name, (int)v.value))
+                        if (!engine.SetVariable(v.Key, (int)v.Value))
                             throw new Exception(m1 + v.ToString());
                     }
-                    else if (v.value is double)
+                    else if (v.Value is double)
                     {
-                        if (!engine.SetVariable(v.name, (double)v.value))
+                        if (!engine.SetVariable(v.Key, (double)v.Value))
                             throw new Exception(m1 + v.ToString());
                     }
-                    else if (v.value is bool)
+                    else if (v.Value is bool)
                     {
-                        if (!engine.SetVariable(v.name, (bool)v.value))
+                        if (!engine.SetVariable(v.Key, (bool)v.Value))
                             throw new Exception(m1 + v.ToString());
                     }
                     else
@@ -64,9 +64,9 @@ namespace Cliver.PdfDocumentParser
         {
             language = "eng",
             engineMode = EngineMode.TesseractOnly,
-            variables = new List<(string name, object value)> {
-                        (name: "load_system_dawg", value: false),
-                        (name: "load_freq_dawg", value: false),
+            variableNames2value = new Dictionary<string, object> {
+                        { "load_system_dawg", false },
+                        { "load_freq_dawg", false },
                         //(name: "tessedit_char_whitelist", "0123456789.,"),
                     }
         };
@@ -74,12 +74,12 @@ namespace Cliver.PdfDocumentParser
         {
             public string language = "eng";
             public EngineMode engineMode = EngineMode.Default;
-            public List<(string name, object value)> variables = null;
+            public Dictionary<string, object> variableNames2value = null;
         }
 
-        static void Initialize(string language = "eng", EngineMode engineMode = EngineMode.Default, List<(string name, object value)> variables = null)
+        static void Initialize(string language = "eng", EngineMode engineMode = EngineMode.Default, Dictionary<string, object> variableNames2value = null)
         {
-            Config newConfig = new Config { language = language, engineMode = engineMode, variables = variables };
+            Config newConfig = new Config { language = language, engineMode = engineMode, variableNames2value = variableNames2value };
             if (newConfig.IsEqualByJson(config))
                 return;
             config = newConfig;

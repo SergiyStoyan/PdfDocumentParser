@@ -147,20 +147,20 @@ namespace Cliver.PdfDocumentParser
                 public TextAutoInsertSpace TextAutoInsertSpace;
 
                 //TBI
-                public Ocr.Config OcrConfig;
+                public Ocr.Config TesseractConfig;
                 public FieldOcrModes OcrMode = FieldOcrModes.SingleFieldFromFieldImage | FieldOcrModes.ColumnFieldFromTableCharBoxs;
 
                 //TBI
-                internal string OcrConfigKey
+                internal string TesseractConfigKey
                 {
                     get
                     {
-                        if (ocrConfigKey == null)
-                            ocrConfigKey = OcrConfig?.ToStringByJson(false);
-                        return ocrConfigKey;
+                        if (tesseractConfig == null)
+                            tesseractConfig = TesseractConfig?.ToStringByJson(false);
+                        return tesseractConfig;
                     }
                 }
-                string ocrConfigKey = null;
+                string tesseractConfig = null;
             }
 
             public class OcrTextLines : Field
