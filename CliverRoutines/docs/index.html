@@ -155,7 +155,7 @@ Hence, you can apply attributes provided by Newtonsoft.Json to <a href='#seriali
 <br> - property <code>__Info</code> which links an instance of <a href='#settings_class'>a settings type</a> to a certain <a href='#settings_field'>settings field</a>;
 <br> - serialization methods;
 <br> - auxiliary methods. Some of them can be redefined in your <a href='#settings_class'>settings class</a> if needed;
-<br>See the API for more info.
+<br>See the API for the complete info.
 
         <p>			Usually you will not inherit <a href='#cliver_settings'><code>Cliver.Settings</code></a> directly but rather use one of its derivatives provided by CliverRoutines: <a href="#cliver_usersettings"><code>Cliver.UserSettings</code></a> and <a href="#cliver_appsettings"><code>Cliver.AppSettings</code></a>.
 			<br>If your <a href='#settings_class'>settings class</a> inherits <a href='#cliver_settings'><code>Cliver.Settings</code></a> directly then you have to define the serialization directory in it.
@@ -187,12 +187,12 @@ Hence, you can apply attributes provided by Newtonsoft.Json to <a href='#seriali
 <br> - its type is a <a href='#settings_class'>settings type</a>;
 <br> - it is <code>static</code>;
 
-<br>It can have any access modifier.
-<br>Also, if the used .NET version supports setting readonly variables through reflection (which not all the versions do), it can be declared as <code>readonly</code>.
+<br>A <a href='#settings_field'>settings field</a> can have any access modifier.
+<br>Also, depending on .NET version, it can be declared as <code>readonly</code> (check if the used .NET version allows setting readonly variables through reflection).
 
 			
 <p><a href='#settings_field'>Settings fields</a> are automatically detected and initialized by <a href='#config'><code>Cliver.Config</code></a>.
-<p>Behavior of a <a href='#settings_field'>settings field</a> can be influenced by <a href='#config_Attributes'>attributes</a> applied to it or its <a href='#settings_class'>type</a>. 
+<p>Behavior of a <a href='#settings_field'>settings field</a> can be influenced by <a href='#config_Attributes'>the attributes</a> applied to it or its <a href='#settings_class'>type</a>. 
 
 <p>There can be any number of <a href='#settings_field'>settings fields</a> in your code.
 <br> Usually you need to have only one <a href='#settings_field'>settings field</a> per <a href='#settings_class'>settings type</a>, but there is no problem to declare any number of <a href='#settings_field'>settings fields</a> of the same <a href='#settings_class'>settings type</a>.
@@ -201,14 +201,21 @@ Hence, you can apply attributes provided by Newtonsoft.Json to <a href='#seriali
 <script type="text/plain" class="language-csharp">public partial class Archive
 {
 	//settings field
-	//it can be a field or a property
-	//depending on .NET version, it can be readonly
-	public static GeneralSettings General; 
+	public static HistorySettings History;//it can be either field or property
 }
 
 //settings type
-public class GeneralSettings : Cliver.UserSettings 
+public class HistorySettings : Cliver.UserSettings 
 {   	
+	...
+}</script>
+
+<p>Example of a <a href='#settings_field'>settings field</a> being a member of its own <a href='#settings_class'>type</a>:
+<script type="text/plain" class="language-csharp">//settings type
+public class HistorySettings : Cliver.UserSettings 
+{   	
+	//settings field
+	public static HistorySettings This;//it will be ignored by the serialization engine because it is static
 	...
 }</script>
 
@@ -218,22 +225,24 @@ public class GeneralSettings : Cliver.UserSettings
 
 		
 <h3>Initialization</h3>
-        <br> Detection and initialization of <a href='#settings_field'>settings field</a>s must be triggered from your code. It can be preceded by optional configuration of <a href='#config'><code>Cliver.Config</code></a> (example: <a href='#config_Load_order'>load order</a>. For the complete options refer to the API).
+<br> Detection and initialization of <a href='#settings_field'>settings field</a>s must be triggered from your code. It is done by calling either <code>Config.Reload()</code> or <code>Config.Reset()</code> method at the beginning of the application. 
+
+<p>The initialization can be preceded by optional configuration of the <a href='#config'><code>Cliver.Config</code></a> engine (examples: <a href='#config_Assembly_scope'>assembly scope</a>, <a href='#config_Load_order'>load order</a>. For the complete options, refer to the API).
 <script type="text/plain" class="language-csharp">//optional configuration
 ...
 //detect and initialize settings fields. 
-Cliver.Config.Reload();//mandatory</script>			   
+Cliver.Config.Reload();//mandatory;</script>			   
+
+<p>If needed, the initialization can be preformed more than once.
 				
 				
-				
-				
-<h3>Assembly scope</h3>
+<h3><a name='config_Assembly_scope'>Assembly scope</a></h3>
         <br>(!)When looking for <a href='#settings_field'>settings fields</a> in an application, <a href='#config'><code>Cliver.Config</code></a> searches within the following assemblies by default:
 <br> - the assembly that calls one of <a href='#config'><code>Cliver.Config</code></a>'s initializing methods;
 <br> - assemblies that are referenced by the calling assembly;
-<br>The search scope is limited this way in order not to load more assemblies which inevitably takes place when enumerating through them. 
+<br>The search scope is limited this way in order not to load more assemblies which inevitably takes place while enumerating through them. 
  
-<p>If needed, the assembly scope can be assigned from your code explicitly by setting <code>Cliver.Config.ExplicitlyTrackedAssemblies</code> before initializing <a href='#config'><code>Cliver.Config</code></a> engine:
+<p>If needed, the assembly scope can be configured explicitly in your code by setting <code>Cliver.Config.ExplicitlyTrackedAssemblies</code> before initializing <a href='#config'><code>Cliver.Config</code></a> engine:
 <script type="text/plain" class="language-csharp">Cliver.Config.ExplicitlyTrackedAssemblies = new List<System.Reflection.Assembly> { Assembly.GetExecutingAssembly() };
 Cliver.Config.Reload();</script>		
 			
@@ -296,7 +305,7 @@ The <a href='#storage_file'>storage file</a> path of <a href='#settings_field'>s
 			
 			
 <h3><a name='initial_file'>Initial file</a></h3>
-			<p>An <a href='#initial_file'>initial file</a> keeps data that is to override the initial values hard-coded in a <a href='#settings_class'>settings type</a>'s definition. Each <a href='#settings_field'>settings field</a> can have its own <a href='#initial_file'>initial file</a> and thus, can have its own initial value set. 
+			<p>An <a href='#initial_file'>initial file</a> keeps the data that is to override the values hard-coded in a <a href='#settings_class'>settings type</a>'s definition. Each <a href='#settings_field'>settings field</a> can have its own <a href='#initial_file'>initial file</a> and thus can have its own initial value set distinct from the hard-coded one. 
 			
 			<p>It is optional and has the same format as a <a href='#storage_file'>storage file</a>.
 			
@@ -305,10 +314,10 @@ The <a href='#storage_file'>storage file</a> path of <a href='#settings_field'>s
 			<p>It is supplied in the same directory as the application's entry assembly.
 		 
 			
-			<p>It is helpful when:
+			<p><a href='#initial_file'>Initial file</a> is used when:
 			<br> - initial settings data are too big to be kept in code;
-			<br> - initial settings data are managed better in file than in code;
-			<br> - the application has several <a href='#settings_field'>settings fields</a> of the same <a href='#settings_class'>settings type</a> and each of them must be initiated by its own value set;
+			<br> - initial settings data are managed better in a file than in code;
+			<br> - the application has several <a href='#settings_field'>settings fields</a> of the same <a href='#settings_class'>type</a> and each of them must be initiated by its own value set;
 						
 			
 			
@@ -562,7 +571,7 @@ Settings.This.Save();</script>
 <h3><a name='configEncrypting'>Encrypting</a></h3>
 
             <h4><a name=''>Settings field/type</a></h4>
-A whole <a href='#settings_field'>settings field</a> can be serialized as an encrypted string by adding the attribute <code>Encrypted</code> either to the <a href='#settings_field'>settings field</a> or to its <a href='#settings_class'>settings type</a> declaration:
+A whole <a href='#settings_field'>settings field</a> can be serialized as an encrypted string by adding the attribute <code>Encrypted</code> either to the <a href='#settings_field'>settings field</a> or to its <a href='#settings_class'>type</a> definition:
 <script type="text/plain" class="language-csharp">//An example of encrypting a Settings type/field
 partial class Settings
 {
@@ -676,7 +685,7 @@ Sometimes, when you upgrade an application, a <a href='#settings_class'>settings
 <br>- the <a href='#settings_field'>settings field</a> was deserialized but its type version is still not acceptable meaning that some restored data may be deteriorated and need amending. This can be the case only if attribute <code>TypeVersion</code> is specified;
 
 <p><b>TypeVersion attribute</b>
-<br>By adding the attribute <code>TypeVersion</code> to a certain <a href='#settings_class'>settings type</a> you assign a version to its declaration in the code. When the application serializes an instance of this <a href='#settings_class'>settings type</a>, its version is stored in the <a href='#storage_file'>storage file</a> as <code>__TypeVersion</code> property. Each time when you alter the <a href='#settings_class'>settings type</a>'s declaration, you should also alter its version specified by the attribute. Thus, when a newer application reads an older <a href='#storage_file'>storage file</a> or vice versa, an older application reads a newer <a href='#storage_file'>storage file</a>, the type version in the <a href='#storage_file'>storage file</a> does not correspond to the version set by the attribute and therefore <a href='#config'><code>Cliver.Config</code></a> engine will call <code>UnsupportedFormatHandler()</code>.
+<br>By adding the attribute <code>TypeVersion</code> to a certain <a href='#settings_class'>settings type</a> you assign a version to its definition in the code. When the application serializes an instance of this <a href='#settings_class'>settings type</a>, its version is stored in the <a href='#storage_file'>storage file</a> as <code>__TypeVersion</code> property. Each time when you alter the <a href='#settings_class'>settings type</a>'s definition, you should also alter its version specified by the attribute. Thus, when a newer application reads an older <a href='#storage_file'>storage file</a> or vice versa, an older application reads a newer <a href='#storage_file'>storage file</a>, the type version in the <a href='#storage_file'>storage file</a> does not correspond to the version set by the attribute and therefore <a href='#config'><code>Cliver.Config</code></a> engine will call <code>UnsupportedFormatHandler()</code>.
 
 <p>No matter why <code>UnsupportedFormatHandler()</code> was called, within it you can provide a smooth migration of the old data to the new format. See the example below:
 
