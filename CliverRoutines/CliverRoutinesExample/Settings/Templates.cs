@@ -13,6 +13,12 @@ namespace Example
         internal static TemplatesSettings Templates;
     }
 
+    public class Template
+    {
+        public string Name;
+        public List<string> Words = new List<string>();
+    }
+
     //Example how to check the type version and migrate to the current type if needed.
     //When this attribute is set, Config checks if the version set by the attribute accords with the version saved in the storage file.
     [SettingsAttributes.TypeVersion(210701)]
@@ -41,7 +47,7 @@ namespace Example
             if (deserializingException == null && __TypeVersion < 210301)//the object was deserialized but its __TypeVersion is not acceptable
             {
                 string s = __Info.ReadStorageFileAsString();
-                //edit the old data as a serialized string. Altering the raw data.
+                //edit the old data as a serialized string. It is the most low-level option of data altering.
                 //...
                 //set the respective version
                 s = Regex.Replace(s, @"(?<=\""__TypeVersion\""\:\s*)\d+", "210301", RegexOptions.Singleline);
@@ -88,11 +94,5 @@ namespace Example
                 }
             }
         }
-    }
-
-    public class Template
-    {
-        public string Name;
-        public List<string> Words = new List<string>();
     }
 }

@@ -516,7 +516,7 @@ Settings.General.Save();</script>
 
 
             <h3><a name=''>Polymorphism</a></h3>
-Being ordinary C# classes, <a href='#settings_class'>settings types</a> support polymorphism. That is, you can build many <a href='#settings_class'>settings types</a> inheriting from the same parent and easily switch between them depending on the application logic. See the example.
+Being ordinary C# classes, <a href='#settings_class'>settings types</a> allow polymorphism. That is, you can build many <a href='#settings_class'>settings types</a> inheriting from the same parent and easily switch between them depending on the application logic. See the example.
 
 <p>Define a base <a href='#settings_class'>settings type</a> and its derivatives:
 <script type="text/plain" class="language-csharp">//base settings class which you will reference in your code
@@ -687,13 +687,19 @@ Sometimes, when you upgrade an application, a <a href='#settings_class'>settings
 <p><b>TypeVersion attribute</b>
 <br>By adding the attribute <code>TypeVersion</code> to a certain <a href='#settings_class'>settings type</a> you assign a version to its definition in the code. When the application serializes an instance of this <a href='#settings_class'>settings type</a>, its version is stored in the <a href='#storage_file'>storage file</a> as <code>__TypeVersion</code> property. Each time when you alter the <a href='#settings_class'>settings type</a>'s definition, you should also alter its version specified by the attribute. Thus, when a newer application reads an older <a href='#storage_file'>storage file</a> or vice versa, an older application reads a newer <a href='#storage_file'>storage file</a>, the type version in the <a href='#storage_file'>storage file</a> does not correspond to the version set by the attribute and therefore <a href='#config'><code>Cliver.Config</code></a> engine will call <code>UnsupportedFormatHandler()</code>.
 
-<p>No matter why <code>UnsupportedFormatHandler()</code> was called, within it you can provide a smooth migration of the old data to the new format. See the example below:
+<p>No matter why <code>UnsupportedFormatHandler()</code> was called, within it you can provide a smooth migration of old data to the new format. See the example below:
 
 <p>
 <script type="text/plain" class="language-csharp">//An example of upgrading a Settings type 
 partial class Settings
 {
 	internal static TemplatesSettings Templates;
+}
+
+public class Template
+{
+	public string Name;
+	public List<string> Words = new List<string>();
 }
 
 //Example how to check the type version and migrate to the current type if needed.
@@ -724,7 +730,7 @@ class TemplatesSettings : Cliver.UserSettings//UserSettings based class is seria
 		if (deserializingException == null && __TypeVersion < 210301)//the object was deserialized but its __TypeVersion is not acceptable
 		{
 			string s = __Info.ReadStorageFileAsString();
-			//edit the old data as a serialized string. Altering the raw data.
+			//edit the old data as a serialized string. It is the most low-level option of data altering.
 			//...
 			//set the respective version
 			s = Regex.Replace(s, @"(?<=\""__TypeVersion\""\:\s*)\d+", "210301", RegexOptions.Singleline);
@@ -771,12 +777,6 @@ class TemplatesSettings : Cliver.UserSettings//UserSettings based class is seria
 			}
 		}
 	}
-}
-
-public class Template
-{
-	public string Name;
-	public List<string> Words = new List<string>();
 }</script>
 
 
