@@ -11,6 +11,7 @@ using System;
 using System.Reflection;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text.RegularExpressions;
 
 namespace Cliver
 {
@@ -209,6 +210,11 @@ namespace Cliver
                     s = Endec.Decrypt(s);
                 System.IO.File.WriteAllText(File, s);
             }
+        }
+
+        public void UpdateTypeVersionInStorageFileString(int typeVersion, ref string s)
+        {
+            s = Regex.Replace(s, @"(?<=\""__TypeVersion\""\:\s*)\d+", typeVersion.ToString(), RegexOptions.Singleline);
         }
 
         #endregion
