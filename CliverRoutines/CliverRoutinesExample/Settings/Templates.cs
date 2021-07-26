@@ -49,8 +49,8 @@ namespace Example
                 string s = __Info.ReadStorageFileAsString();
                 //edit the old data as a serialized string. It is the most low-level option of data altering.
                 //...
-                //set the respective version
-                s = Regex.Replace(s, @"(?<=\""__TypeVersion\""\:\s*)\d+", "210301", RegexOptions.Singleline);
+                //set the respective version                
+                __Info.UpdateTypeVersionInStorageFileString(210301, ref s);//s = Regex.Replace(s, @"(?<=\""__TypeVersion\""\:\s*)\d+", "210301", RegexOptions.Singleline);
                 //save
                 __Info.WriteStorageFileAsString(s);
                 return UnsupportedFormatHandlerCommand.Reload;//this method will be called again because __TypeVersion is still obsolete
