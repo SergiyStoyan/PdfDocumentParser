@@ -167,11 +167,11 @@ namespace Cliver
         /// Write the JObject to the storage file in order to migrate to the current format.
         /// </summary>
         /// <returns></returns>
-        public void WriteStorageFileAsJObject(Newtonsoft.Json.Linq.JObject o)
+        public void WriteStorageFileAsJObject(Newtonsoft.Json.Linq.JObject o, bool indented = true)
         {
             lock (this)
             {
-                string s = o.ToString();
+                string s = o.ToString(Indented ? Newtonsoft.Json.Formatting.Indented : Newtonsoft.Json.Formatting.None);
                 if (Endec != null)
                     s = Endec.Decrypt(s);
                 System.IO.File.WriteAllText(File, s);
