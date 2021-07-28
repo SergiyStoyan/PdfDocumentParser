@@ -45,7 +45,13 @@ namespace Cliver
         //        });
         //} public Dictionary<string, string> nameOfAlreadyAcessed = new Dictionary<string, string>();
 
-        public static string GetNameOfVariablePassedInAsParameter(string parameterName, int frame = 1)//!!!not debugged! It will not work for Release
+        /// <summary>
+        /// !!!not debugged! It will not work for Release
+        /// </summary>
+        /// <param name="parameterName"></param>
+        /// <param name="frame"></param>
+        /// <returns></returns>
+        public static string GetNameOfVariablePassedInAsParameter(string parameterName, int frame = 1)
         {
             MethodBase mb = System.Reflection.MethodBase.GetCurrentMethod();
             int parameterNumber = 0;
@@ -69,5 +75,39 @@ namespace Cliver
             }
             return null;
         }
+
+        //public static MethodInfo GetCallingStackMethodInfo(Regex namespaceRegex)
+        //{
+        //    Type myType = typeof(MyClass);
+        //    var n = myType.Namespace;
+        //    StackTrace st = new StackTrace(true);
+        //    int frameI = 1;
+        //    for (; ; frameI++)
+        //    {
+        //        StackFrame sf = st.GetFrame(frameI);
+        //        if (sf == null)
+        //            break;
+        //        MethodBase mb = sf.GetMethod();
+        //        Type dt = mb.DeclaringType;
+        //        if (dt != typeof(Log) && dt != typeof(Log.Writer) && dt != typeof(Log.Session) && TypesExcludedFromStack?.Find(x => x == dt) == null)
+        //            break;
+        //    }
+        //    List<string> frameSs = new List<string>();
+        //    if (frameCount < 0)
+        //        frameCount = 1000;
+        //    frameI += startFrame;
+        //    int endFrameI = frameI + frameCount - 1;
+        //    for (; frameI <= endFrameI; frameI++)
+        //    {
+        //        StackFrame sf = st.GetFrame(frameI);
+        //        if (sf == null || endOnEmptyFile && frameSs.Count > 0 && string.IsNullOrEmpty(sf.GetFileName()))//it seems to be passing out of the application
+        //            break;
+        //        MethodBase mb = sf.GetMethod();
+        //        Type dt = mb.DeclaringType;
+        //        frameSs.Add("method: " + dt?.ToString() + "::" + mb?.Name + " \r\nfile: " + sf.GetFileName() + " \r\nline: " + sf.GetFileLineNumber());
+        //    }
+        //    return string.Join("\r\n<=", frameSs);
+        //}
+        //static List<Type> TypesExcludedFromStack = null;
     }
 }

@@ -103,6 +103,9 @@ namespace Cliver.PdfDocumentParser
                 IList<TextRenderInfo> cris = renderInfo.GetCharacterRenderInfos();
                 foreach (TextRenderInfo cri in cris)
                 {
+                    GraphicsState gs = (GraphicsState)gsField.GetValue(renderInfo);
+                    Font font = new Font { Name = string.Join(", ", gs.Font.FullFontName[0]), Size = gs.FontSize };
+
                     Vector baseLeft = cri.GetBaseline().GetStartPoint();
                     Vector topRight = cri.GetAscentLine().GetEndPoint();
                     float x = baseLeft[Vector.I1];
@@ -117,13 +120,13 @@ namespace Cliver.PdfDocumentParser
                             Width = topRight[Vector.I1] - x,
                             Height = y - baseLeft[Vector.I2],
                         },
-                        //Font = font,
-                        //FontSize = fontSize
+                        Font = font
                     };
                     cbs.Add(cb);
                 }
                 CharBoxs.AddRange(cbs);
             }
+            static System.Reflection.FieldInfo gsField = typeof(TextRenderInfo).GetField("gs", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         }
 
         public static List<string> GetTextLinesSurroundedByRectangle(IEnumerable<CharBox> cbs, System.Drawing.RectangleF r, TextAutoInsertSpace textAutoInsertSpace)
@@ -170,9 +173,12 @@ namespace Cliver.PdfDocumentParser
         public class CharBox : Page.CharBox
         {
             //public bool AutoInserted = false;
-
-            public PdfFont Font;
-            public float FontSize;
+            public Font Font;
+        }
+        public class Font
+        {
+            public string Name;
+            public float Size;
         }
     }
 }
