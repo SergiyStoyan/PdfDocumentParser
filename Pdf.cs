@@ -99,13 +99,13 @@ namespace Cliver.PdfDocumentParser
             {
                 base.RenderText(renderInfo);
 
+                //GraphicsState gs = (GraphicsState)gsField.GetValue(renderInfo);//expensive???
+                //Font font = new Font { Name = string.Join(", ", gs.Font.FullFontName[0]), Size = gs.FontSize };
+
                 List<CharBox> cbs = new List<CharBox>();
                 IList<TextRenderInfo> cris = renderInfo.GetCharacterRenderInfos();
                 foreach (TextRenderInfo cri in cris)
                 {
-                    GraphicsState gs = (GraphicsState)gsField.GetValue(renderInfo);
-                    Font font = new Font { Name = string.Join(", ", gs.Font.FullFontName[0]), Size = gs.FontSize };
-
                     Vector baseLeft = cri.GetBaseline().GetStartPoint();
                     Vector topRight = cri.GetAscentLine().GetEndPoint();
                     float x = baseLeft[Vector.I1];
@@ -120,7 +120,7 @@ namespace Cliver.PdfDocumentParser
                             Width = topRight[Vector.I1] - x,
                             Height = y - baseLeft[Vector.I2],
                         },
-                        Font = font
+                        //Font = font
                     };
                     cbs.Add(cb);
                 }
