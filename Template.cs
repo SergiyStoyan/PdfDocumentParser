@@ -18,7 +18,7 @@ namespace Cliver.PdfDocumentParser
             public bool ExtractFieldsAutomaticallyWhenPageChanged = true;
             public bool ShowFieldTextLineSeparators = true;
             public bool CheckConditionsAutomaticallyWhenPageChanged = true;
-            public string TestFile;
+            //public string TestFile;
             public decimal TestPictureScale = 1.2m;
         }
         public EditorSettings Editor;

@@ -145,13 +145,13 @@ namespace Cliver.PdfDocumentParser
                 ShowFieldTextLineSeparators.Checked = t.Editor.ShowFieldTextLineSeparators;
                 CheckConditionsAutomaticallyWhenPageChanged.Checked = t.Editor.CheckConditionsAutomaticallyWhenPageChanged;
 
-                if (t.Editor.TestFile != null && File.Exists(t.Editor.TestFile))
-                    testFile.Text = t.Editor.TestFile;
-                else
-                {
-                    if (templateManager.LastTestFile != null && File.Exists(templateManager.LastTestFile))
-                        testFile.Text = templateManager.LastTestFile;
-                }
+                //if (t.Editor.TestFile != null && File.Exists(t.Editor.TestFile))
+                //    testFile.Text = t.Editor.TestFile;
+                //else
+                //{
+                if (templateManager.LastTestFile != null && File.Exists(templateManager.LastTestFile))
+                    testFile.Text = templateManager.LastTestFile;
+                //}
             }
             finally
             {
@@ -426,7 +426,7 @@ namespace Cliver.PdfDocumentParser
             {
                 t.Editor = new Template.EditorSettings
                 {
-                    TestFile = testFile.Text,
+                    //TestFile = testFile.Text,
                     TestPictureScale = pictureScale.Value,
                     ExtractFieldsAutomaticallyWhenPageChanged = ExtractFieldsAutomaticallyWhenPageChanged.Checked,
                     ShowFieldTextLineSeparators = ShowFieldTextLineSeparators.Checked,

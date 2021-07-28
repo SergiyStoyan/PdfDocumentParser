@@ -347,8 +347,6 @@ namespace Cliver.PdfDocumentParser
                     pages.Dispose();
                     pages = null;
                 }
-
-                templateManager.LastTestFile = testFile.Text;
             };
 
             this.EnumControls((Control c) =>
@@ -384,6 +382,8 @@ namespace Cliver.PdfDocumentParser
 
                     if (string.IsNullOrWhiteSpace(testFile.Text))
                         return;
+
+                    templateManager.LastTestFile = testFile.Text;
 
                     testFile.SelectionStart = testFile.Text.Length;
                     testFile.ScrollToCaret();
