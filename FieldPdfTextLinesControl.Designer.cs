@@ -33,7 +33,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.Rectangle = new System.Windows.Forms.TextBox();
-            this.SpecialParsingSettings = new System.Windows.Forms.CheckBox();
+            this.SpecialTextAutoInsertSpace = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -45,7 +45,7 @@
             this.ColumnOfTable.FormattingEnabled = true;
             this.ColumnOfTable.Location = new System.Drawing.Point(123, 0);
             this.ColumnOfTable.Name = "ColumnOfTable";
-            this.ColumnOfTable.Size = new System.Drawing.Size(96, 21);
+            this.ColumnOfTable.Size = new System.Drawing.Size(193, 21);
             this.ColumnOfTable.TabIndex = 0;
             // 
             // Value
@@ -55,7 +55,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Value.Location = new System.Drawing.Point(3, 66);
             this.Value.Name = "Value";
-            this.Value.Size = new System.Drawing.Size(216, 156);
+            this.Value.Size = new System.Drawing.Size(313, 156);
             this.Value.TabIndex = 2;
             this.Value.Text = "";
             // 
@@ -83,40 +83,40 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Rectangle.Location = new System.Drawing.Point(68, 24);
             this.Rectangle.Name = "Rectangle";
-            this.Rectangle.Size = new System.Drawing.Size(151, 20);
+            this.Rectangle.Size = new System.Drawing.Size(248, 20);
             this.Rectangle.TabIndex = 5;
             // 
-            // SpecialParsingSettings
+            // SpecialTextAutoInsertSpace
             // 
-            this.SpecialParsingSettings.AutoSize = true;
-            this.SpecialParsingSettings.Location = new System.Drawing.Point(134, 50);
-            this.SpecialParsingSettings.Name = "SpecialParsingSettings";
-            this.SpecialParsingSettings.Size = new System.Drawing.Size(15, 14);
-            this.SpecialParsingSettings.TabIndex = 6;
-            this.SpecialParsingSettings.UseVisualStyleBackColor = true;
+            this.SpecialTextAutoInsertSpace.AutoSize = true;
+            this.SpecialTextAutoInsertSpace.Location = new System.Drawing.Point(108, 50);
+            this.SpecialTextAutoInsertSpace.Name = "SpecialTextAutoInsertSpace";
+            this.SpecialTextAutoInsertSpace.Size = new System.Drawing.Size(15, 14);
+            this.SpecialTextAutoInsertSpace.TabIndex = 6;
+            this.SpecialTextAutoInsertSpace.UseVisualStyleBackColor = true;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(3, 50);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(124, 13);
+            this.label3.Size = new System.Drawing.Size(103, 13);
             this.label3.TabIndex = 7;
-            this.label3.Text = "Special Parsing Settings:";
+            this.label3.Text = "Special Text Space:";
             // 
-            // FieldOcrTextControl
+            // FieldPdfTextControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.SpecialParsingSettings);
+            this.Controls.Add(this.SpecialTextAutoInsertSpace);
             this.Controls.Add(this.Rectangle);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.Value);
             this.Controls.Add(this.ColumnOfTable);
-            this.Name = "FieldOcrTextControl";
-            this.Size = new System.Drawing.Size(222, 223);
+            this.Name = "FieldPdfTextControl";
+            this.Size = new System.Drawing.Size(319, 223);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -129,7 +129,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox Rectangle;
-        private System.Windows.Forms.CheckBox SpecialParsingSettings;
+        private System.Windows.Forms.CheckBox SpecialTextAutoInsertSpace;
         private System.Windows.Forms.Label label3;
     }
 }

@@ -71,6 +71,8 @@ namespace Cliver.PdfDocumentParser
 
             Rectangle.Text = Serialization.Json.Serialize(field.Rectangle);
 
+            SpecialTextAutoInsertSpace.Checked = field.TextAutoInsertSpace != null;
+
             if (value != null)
             {
                 List<Page.Line<Pdf.CharBox>> cbss = Page.GetLines((List<Pdf.CharBox>)value, textAutoInsertSpace);

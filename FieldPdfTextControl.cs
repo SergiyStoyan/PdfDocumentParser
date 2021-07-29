@@ -71,6 +71,8 @@ namespace Cliver.PdfDocumentParser
 
             Rectangle.Text = Serialization.Json.Serialize(field.Rectangle);
 
+            SpecialTextAutoInsertSpace.Checked = field.TextAutoInsertSpace != null;
+
             if (value != null)
                 Value.Text = Page.NormalizeText((string)value);
         }

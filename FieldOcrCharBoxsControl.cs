@@ -71,6 +71,9 @@ namespace Cliver.PdfDocumentParser
 
             Rectangle.Text = Serialization.Json.Serialize(field.Rectangle);
 
+            SpecialOcrSettings.Checked = field.OcrSettings != null;
+            SpecialOcrSettings.Checked = field.OcrSettings != null;
+
             if (value != null)
             {
                 List<Page.Line<Ocr.CharBox>> cbss = Page.GetLines((List<Ocr.CharBox>)value, textAutoInsertSpace);

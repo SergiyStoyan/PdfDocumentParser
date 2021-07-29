@@ -282,7 +282,7 @@ namespace Cliver.PdfDocumentParser
 
                 if (ActualField.ColumnOfTable == null)
                 {
-                    if (page.PageCollection.ActiveTemplate.FieldOcrMode.HasFlag(Template.FieldOcrModes.SingleFieldFromFieldImage))
+                    if (page.PageCollection.ActiveTemplate.FieldOcrMode.HasFlag(Template.Field.OcrModes.SingleFieldFromFieldImage))
                     {
                         string s = Ocr.This.GetTextSurroundedByRectangle(page.ActiveTemplateBitmap, ar, page.PageCollection.ActiveTemplate.TesseractPageSegMode);
                         return Regex.Split(s, "$", RegexOptions.Multiline).ToList();
@@ -295,7 +295,7 @@ namespace Cliver.PdfDocumentParser
                     return null;
                 List<Ocr.CharBox> cbs = (List<Ocr.CharBox>)TableFieldActualInfo.GetValue(Template.Field.Types.OcrCharBoxs);
                 List<string> ls = new List<string>();
-                if (page.PageCollection.ActiveTemplate.FieldOcrMode.HasFlag(Template.FieldOcrModes.ColumnFieldFromFieldImage))
+                if (page.PageCollection.ActiveTemplate.FieldOcrMode.HasFlag(Template.Field.OcrModes.ColumnFieldFromFieldImage))
                 {
                     List<Line<Ocr.CharBox>> ols = GetLinesWithAdjacentBorders(cbs, TableFieldActualInfo.ActualRectangle.Value);
                     foreach (Line<Ocr.CharBox> l in ols)
@@ -332,7 +332,7 @@ namespace Cliver.PdfDocumentParser
 
                 if (ActualField.ColumnOfTable == null)
                 {
-                    if (page.PageCollection.ActiveTemplate.FieldOcrMode.HasFlag(Template.FieldOcrModes.SingleFieldFromFieldImage))
+                    if (page.PageCollection.ActiveTemplate.FieldOcrMode.HasFlag(Template.Field.OcrModes.SingleFieldFromFieldImage))
                         return Ocr.This.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateBitmap, ar, page.PageCollection.ActiveTemplate.TesseractPageSegMode);
                     else
                         return Ocr.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, ar);
@@ -340,7 +340,7 @@ namespace Cliver.PdfDocumentParser
 
                 if (!TableFieldActualInfo.Found)
                     return null;
-                if (page.PageCollection.ActiveTemplate.FieldOcrMode.HasFlag(Template.FieldOcrModes.ColumnFieldFromFieldImage))
+                if (page.PageCollection.ActiveTemplate.FieldOcrMode.HasFlag(Template.Field.OcrModes.ColumnFieldFromFieldImage))
                 {
                     float x = ar.X > TableFieldActualInfo.ActualRectangle.Value.X ? ar.X : TableFieldActualInfo.ActualRectangle.Value.X;
                     float y = ar.Top > TableFieldActualInfo.ActualRectangle.Value.Top ? ar.Top : TableFieldActualInfo.ActualRectangle.Value.Top;

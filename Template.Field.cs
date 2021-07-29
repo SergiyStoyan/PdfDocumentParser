@@ -131,45 +131,78 @@ namespace Cliver.PdfDocumentParser
 
             public class PdfText : Field
             {
-                public PdfSpecialParsingSettings SpecialParsingSettings;
-            }
-
-            public class PdfSpecialParsingSettings
-            {
                 public TextAutoInsertSpace TextAutoInsertSpace;
             }
 
             public class PdfTextLines : Field
             {
-                public PdfSpecialParsingSettings SpecialParsingSettings;
+                public TextAutoInsertSpace TextAutoInsertSpace;
             }
 
             public class PdfCharBoxs : Field
             {
+                public TextAutoInsertSpace TextAutoInsertSpace;
             }
 
             public class OcrText : Field
             {
-                public OcrSpecialParsingSettings SpecialParsingSettings;
+                public OcrSettings OcrSettings;
+                public TextAutoInsertSpace TextAutoInsertSpace;
             }
 
-            public class OcrSpecialParsingSettings
+            public class OcrSettings
             {
-                public TextAutoInsertSpace TextAutoInsertSpace;
+                public OcrModes OcrMode = OcrModes.SingleFieldFromFieldImage | OcrModes.ColumnFieldFromTableCharBoxs;
+                
+                public Ocr.Config TesseractConfig;
 
-                public FieldOcrModes OcrMode = FieldOcrModes.SingleFieldFromFieldImage | FieldOcrModes.ColumnFieldFromTableCharBoxs;
+                internal string TesseractConfigKey
+                {
+                    get
+                    {
+                        if (tesseractConfigKey == null)
+                            tesseractConfigKey = TesseractConfig?.ToStringByJson(false);
+                        return tesseractConfigKey;
+                    }
+                }
+                string tesseractConfigKey = null;
+            }
+            //internal Template.Field.TesseractConfig GetOcrSpecialParsingSettingsFromGUI()
+            //{
+            //    Template.Field.OcrModes ocrMode = 0;
+            //    if (SingleFieldFromFieldImage.Checked)
+            //        ocrMode |= Template.Field.OcrModes.SingleFieldFromFieldImage;
+            //    if (ColumnFieldFromFieldImage.Checked)
+            //        ocrMode |= Template.Field.OcrModes.ColumnFieldFromFieldImage;
+            //    TextAutoInsertSpace textAutoInsertSpace = new TextAutoInsertSpace
+            //    {
+            //        Threshold = (float)textAutoInsertSpaceThreshold.Value,
+            //        Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text)
+            //    };
+            //    Ocr.Config ocrConfig = new Ocr.Config { };
+            //    return new Template.Field.TesseractConfig { OcrMode = ocrMode, TextAutoInsertSpace = textAutoInsertSpace, TesseractConfig = ocrConfig };
+            //}
 
-                public string TesseractConfigAsString;
+            public enum OcrModes
+            {
+                SingleFieldFromPageCharBoxs = 0b0000001,//default
+                SingleFieldFromFieldImage = 0b0000010,
+                //TableFieldFromPageCharBoxs = 0b00100,//default
+                //TableFieldFromFieldImage = 0b0001000,
+                ColumnFieldFromTableCharBoxs = 0b0010000,//default
+                ColumnFieldFromFieldImage = 0b0100000,
             }
 
             public class OcrTextLines : Field
             {
-                public OcrSpecialParsingSettings SpecialParsingSettings;
+                public OcrSettings OcrSettings;
+                public TextAutoInsertSpace TextAutoInsertSpace;
             }
 
             public class OcrCharBoxs : Field
             {
-                public OcrSpecialParsingSettings SpecialParsingSettings;
+                public OcrSettings OcrSettings;
+                public TextAutoInsertSpace TextAutoInsertSpace;
             }
 
             public class Image : Field

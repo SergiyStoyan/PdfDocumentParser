@@ -20,10 +20,6 @@ namespace Cliver.PdfDocumentParser
                 SetTagFromControl();
             };
         }
-        public DataGridViewRow Row;
-        //protected TemplateForm templateForm;
-        protected Action<DataGridViewRow> onLeft = null;
-        protected IEnumerable<Template.Field> fields = null;
 
         public void Initialize(DataGridViewRow row, object value, IEnumerable<Template.Field> fields /*, TemplateForm templateForm*/, Action<DataGridViewRow> onLeft)
         {
@@ -33,6 +29,10 @@ namespace Cliver.PdfDocumentParser
             this.onLeft = onLeft;
             initialize(row, value);
         }
+        public DataGridViewRow Row;
+        //protected TemplateForm templateForm;
+        protected Action<DataGridViewRow> onLeft = null;
+        protected IEnumerable<Template.Field> fields = null;
 
         virtual protected void initialize(DataGridViewRow row, object value/*, TemplateForm templateForm*/)
         {
