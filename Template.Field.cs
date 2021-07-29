@@ -129,24 +129,26 @@ namespace Cliver.PdfDocumentParser
             //    return null;
             //}
 
-            public class PdfText : Field
+            public class Pdf : Field
             {
                 public TextAutoInsertSpace TextAutoInsertSpace;
             }
 
-            public class PdfTextLines : Field
+            public class PdfText : Pdf
             {
-                public TextAutoInsertSpace TextAutoInsertSpace;
             }
 
-            public class PdfCharBoxs : Field
+            public class PdfTextLines : Pdf
             {
-                public TextAutoInsertSpace TextAutoInsertSpace;
             }
 
-            public class OcrText : Field
+            public class PdfCharBoxs : Pdf
             {
-                public OcrSettings OcrSettings;
+            }
+
+            public class Ocr : Field
+            {
+                public OcrSettings OcrSettings;//TBI
                 public TextAutoInsertSpace TextAutoInsertSpace;
             }
 
@@ -156,21 +158,6 @@ namespace Cliver.PdfDocumentParser
                 //public Ocr.Config Config;
                 public Tesseract.PageSegMode TesseractPageSegMode;
             }
-            //internal Template.Field.TesseractConfig GetOcrSpecialParsingSettingsFromGUI()
-            //{
-            //    Template.Field.OcrModes ocrMode = 0;
-            //    if (SingleFieldFromFieldImage.Checked)
-            //        ocrMode |= Template.Field.OcrModes.SingleFieldFromFieldImage;
-            //    if (ColumnFieldFromFieldImage.Checked)
-            //        ocrMode |= Template.Field.OcrModes.ColumnFieldFromFieldImage;
-            //    TextAutoInsertSpace textAutoInsertSpace = new TextAutoInsertSpace
-            //    {
-            //        Threshold = (float)textAutoInsertSpaceThreshold.Value,
-            //        Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text)
-            //    };
-            //    Ocr.Config ocrConfig = new Ocr.Config { };
-            //    return new Template.Field.TesseractConfig { OcrMode = ocrMode, TextAutoInsertSpace = textAutoInsertSpace, TesseractConfig = ocrConfig };
-            //}
 
             public enum OcrModes
             {
@@ -182,16 +169,16 @@ namespace Cliver.PdfDocumentParser
                 ColumnFieldFromFieldImage = 0b0100000,
             }
 
-            public class OcrTextLines : Field
+            public class OcrText : Ocr
             {
-                public OcrSettings OcrSettings;
-                public TextAutoInsertSpace TextAutoInsertSpace;
             }
 
-            public class OcrCharBoxs : Field
+            public class OcrTextLines : Ocr
             {
-                public OcrSettings OcrSettings;
-                public TextAutoInsertSpace TextAutoInsertSpace;
+            }
+
+            public class OcrCharBoxs : Ocr
+            {
             }
 
             public class Image : Field
@@ -199,7 +186,7 @@ namespace Cliver.PdfDocumentParser
             }
 
             public class OcrTextLineImages : Field
-            { 
+            {
             }
         }
     }

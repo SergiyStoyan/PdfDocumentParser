@@ -30,31 +30,9 @@ namespace Cliver.PdfDocumentParser
             if (field == null)
                 field = new Template.Field.PdfCharBoxs();
             field.ColumnOfTable = (string)ColumnOfTable.SelectedItem;
+            field.TextAutoInsertSpace = SpecialTextAutoInsertSpace.Checked ? templateForm.GetTextAutoInsertSpaceFromGUI() : null;
             return field;
         }
-
-        //virtual public void SetValue(object value)
-        //{
-        //    switch (field.DefaultValueType)
-        //    {
-        //        case Template.Field.ValueTypes.PdfText:
-        //        case Template.Field.ValueTypes.PdfTextLines:
-        //        case Template.Field.ValueTypes.PdfCharBoxs:
-        //            Value.Text = (string)value;
-        //            break;
-        //        case Template.Field.ValueTypes.OcrText:
-        //        case Template.Field.ValueTypes.OcrTextLines:
-        //        case Template.Field.ValueTypes.OcrCharBoxs:
-        //            Value.Text = (string)value;
-        //            break;
-        //        case Template.Field.ValueTypes.Image:
-        //            break;
-        //        case Template.Field.ValueTypes.OcrTextLineImages:
-        //            break;
-        //        default:
-        //            throw new Exception("Unknown option: " + field.DefaultValueType);
-        //    }
-        //}
 
         protected override void initialize(DataGridViewRow row, object value)
         {

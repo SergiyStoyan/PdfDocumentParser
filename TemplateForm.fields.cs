@@ -641,6 +641,8 @@ namespace Cliver.PdfDocumentParser
                 object v = setFieldRowValue(row, false);
                 Template.Field f = (Template.Field)row.Tag;
 
+                gAutoInsertingSpace.Enabled = f is Template.Field.Pdf;
+
                 List<Template.Field> fs = new List<Template.Field>();
                 foreach (DataGridViewRow r in fields.Rows)
                 {
@@ -678,7 +680,7 @@ namespace Cliver.PdfDocumentParser
                     default:
                         throw new Exception("Unknown option: " + t);
                 }
-                currentFieldControl.Initialize(row, v, fs, (DataGridViewRow r) => { setFieldRow(r, f); });
+                currentFieldControl.Initialize(row, v, fs, this, (DataGridViewRow r) => { setFieldRow(r, f); });
             }
             finally
             {
@@ -798,6 +800,15 @@ namespace Cliver.PdfDocumentParser
                 splitContainer4.Panel2.Controls.Add(value);
                 value.Dock = DockStyle.Fill;
             }
+        }
+
+        internal TextAutoInsertSpace GetTextAutoInsertSpaceFromGUI()
+        {
+            return new TextAutoInsertSpace
+            {
+                Threshold = (float)textAutoInsertSpaceThreshold.Value,
+                Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text)
+            };
         }
     }
 }

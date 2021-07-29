@@ -81,7 +81,7 @@ namespace Cliver.PdfDocumentParser
                 public SizeF Size;
                 public float PositionDeviation = 1f;
                 public bool PositionDeviationIsAbsolute = false;
-                public OcrSettings OcrSettings;
+                public OcrSettings OcrSettings;//TBI
 
                 override public bool IsSet()
                 {
