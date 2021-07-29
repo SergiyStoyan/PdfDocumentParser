@@ -157,8 +157,6 @@ namespace Cliver.PdfDocumentParser
                     case Template.Field.Types.PdfText:
                     case Template.Field.Types.PdfTextLines:
                     case Template.Field.Types.PdfCharBoxs:
-                        Template.Field.Pdf pf = (Template.Field.Pdf)field;
-                        TextAutoInsertSpace textAutoInsertSpace = pf.TextAutoInsertSpace != null ? pf.TextAutoInsertSpace : pages.ActiveTemplate.TextAutoInsertSpace;
                         if (field.ColumnOfTable != null)
                         {
                             if (!fai.TableFieldActualInfo.Found)
@@ -167,7 +165,7 @@ namespace Cliver.PdfDocumentParser
                             if (ShowFieldTextLineSeparators.Checked)
                             {
                                 RectangleF tableAR = (RectangleF)fai.TableFieldActualInfo.ActualRectangle;
-                                List<Page.Line<Pdf.CharBox>> lines = Page.GetLines(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, tableAR), textAutoInsertSpace).ToList();
+                                List<Page.Line<Pdf.CharBox>> lines = Page.GetLines(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, tableAR), null).ToList();
                                 List<RectangleF> lineBoxes = new List<RectangleF>();
                                 for (int i = 1; i < lines.Count; i++)
                                 {
@@ -184,7 +182,7 @@ namespace Cliver.PdfDocumentParser
                         {
                             if (ShowFieldTextLineSeparators.Checked)
                             {
-                                List<Page.Line<Pdf.CharBox>> lines = Page.GetLines(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, r), textAutoInsertSpace).ToList();
+                                List<Page.Line<Pdf.CharBox>> lines = Page.GetLines(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, r), null).ToList();
                                 List<RectangleF> lineBoxes = new List<RectangleF>();
                                 for (int i = 1; i < lines.Count; i++)
                                     lineBoxes.Add(new RectangleF { X = r.X, Y = lines[i].Top, Width = r.Width, Height = 0 });

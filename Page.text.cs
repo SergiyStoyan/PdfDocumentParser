@@ -27,7 +27,7 @@ namespace Cliver.PdfDocumentParser
 
         public static List<Line<CharBoxT>> GetLines<CharBoxT>(IEnumerable<CharBoxT> cbs, TextAutoInsertSpace textAutoInsertSpace) where CharBoxT : CharBox, new()
         {
-            bool spaceAutoInsert = textAutoInsertSpace != null && textAutoInsertSpace.Threshold > 0;
+            bool spaceAutoInsert = textAutoInsertSpace?.Threshold > 0;
             cbs = cbs.OrderBy(a => a.R.X).ToList();
             List<Line<CharBoxT>> lines = new List<Line<CharBoxT>>();
             foreach (CharBoxT cb in cbs)
