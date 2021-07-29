@@ -69,8 +69,6 @@ namespace Cliver.PdfDocumentParser
 
             ColumnOfTable.SelectedItem = field.ColumnOfTable;
 
-            Rectangle.Text = Serialization.Json.Serialize(field.Rectangle);
-
             SpecialOcrSettings.Checked = field.OcrSettings != null;
             SpecialOcrSettings.Checked = field.OcrSettings != null;
 

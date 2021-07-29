@@ -152,7 +152,7 @@ namespace Cliver.PdfDocumentParser
 
             public class OcrSettings
             {
-                public OcrModes OcrMode = OcrModes.SingleFieldFromFieldImage | OcrModes.ColumnFieldFromTableCharBoxs;
+                public OcrModes OcrMode;
                 
                 public Ocr.Config TesseractConfig;
 

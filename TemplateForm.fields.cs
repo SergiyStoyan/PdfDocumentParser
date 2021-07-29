@@ -768,7 +768,7 @@ namespace Cliver.PdfDocumentParser
         {
             row.Tag = f;
             row.Cells["Name_"].Value = f.Name;
-            //row.Cells["Rectangle"].Value = Serialization.Json.Serialize(f.Rectangle);
+            row.Cells["Rectangle"].Value = Serialization.Json.Serialize(f.Rectangle);
             row.Cells["Type"].Value = f.Type;
             row.Cells["LeftAnchorId"].Value = f.LeftAnchor?.Id;
             row.Cells["TopAnchorId"].Value = f.TopAnchor?.Id;
