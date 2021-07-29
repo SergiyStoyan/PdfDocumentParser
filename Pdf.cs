@@ -62,8 +62,15 @@ namespace Cliver.PdfDocumentParser
                     Directory.CreateDirectory(bufferFileDir);
                     string bufferFile = bufferFileDir + "\\buffer.png";
                     p.StartInfo.Arguments = "-dNOPROMPT -r" + resolution + " -dDownScaleFactor=" + dDownScaleFactor + " -dBATCH -dFirstPage=" + pageI + " -dLastPage=" + pageI + " -sDEVICE=png16m -dNOPAUSE -sOutputFile=\"" + bufferFile + "\" -q \"" + pdfFile + "\"";
+                    p.StartInfo.RedirectStandardError = true;
+                    p.StartInfo.UseShellExecute = false;
                     p.Start();
                     p.WaitForExit();
+                    string stderr = p.StandardError.ReadToEnd();
+                    if (!string.IsNullOrWhiteSpace(stderr))
+                        Log.Error(stderr);
+                    if (!File.Exists(bufferFile))
+                        throw new Exception("Could not create bufferFile " + bufferFile);
                     System.Drawing.Bitmap b;// = (System.Drawing.Bitmap)System.Drawing.Image.FromFile(bufferFile);
                     using (var bt = new System.Drawing.Bitmap(bufferFile))//to free the file
                     {
