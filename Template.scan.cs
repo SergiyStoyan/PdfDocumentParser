@@ -33,6 +33,7 @@ namespace Cliver.PdfDocumentParser
         public Deskewer.Config Deskew = null;
 
         public int CvImageScalePyramidStep = 2;
+
         public int ScalingAnchorId = -1;
 
         public Anchor.CvImage GetScalingAnchor()
