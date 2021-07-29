@@ -131,10 +131,17 @@ namespace Cliver.PdfDocumentParser
 
             public class PdfText : Field
             {
+                public PdfSpecialParsingSettings SpecialParsingSettings;
+            }
+
+            public class PdfSpecialParsingSettings
+            {
+                public TextAutoInsertSpace TextAutoInsertSpace;
             }
 
             public class PdfTextLines : Field
             {
+                public PdfSpecialParsingSettings SpecialParsingSettings;
             }
 
             public class PdfCharBoxs : Field
@@ -143,32 +150,26 @@ namespace Cliver.PdfDocumentParser
 
             public class OcrText : Field
             {
-                //TBI
+                public OcrSpecialParsingSettings SpecialParsingSettings;
+            }
+
+            public class OcrSpecialParsingSettings
+            {
                 public TextAutoInsertSpace TextAutoInsertSpace;
 
-                //TBI
-                public Ocr.Config TesseractConfig;
                 public FieldOcrModes OcrMode = FieldOcrModes.SingleFieldFromFieldImage | FieldOcrModes.ColumnFieldFromTableCharBoxs;
 
-                //TBI
-                internal string TesseractConfigKey
-                {
-                    get
-                    {
-                        if (tesseractConfig == null)
-                            tesseractConfig = TesseractConfig?.ToStringByJson(false);
-                        return tesseractConfig;
-                    }
-                }
-                string tesseractConfig = null;
+                public string TesseractConfigAsString;
             }
 
             public class OcrTextLines : Field
             {
+                public OcrSpecialParsingSettings SpecialParsingSettings;
             }
 
             public class OcrCharBoxs : Field
             {
+                public OcrSpecialParsingSettings SpecialParsingSettings;
             }
 
             public class Image : Field
