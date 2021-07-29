@@ -125,7 +125,8 @@ namespace Cliver.PdfDocumentParser
             }
             catch (Exception e)
             {
-                Win.LogMessage.Error(e);
+                Log.Error(e);
+                Message.Error(e, this);
             }
             finally
             {
@@ -151,7 +152,8 @@ namespace Cliver.PdfDocumentParser
             }
             catch (Exception e)
             {
-                Win.LogMessage.Error(e);
+                Log.Error(e);
+                Message.Error(e, this);
             }
             finally
             {
@@ -177,7 +179,8 @@ namespace Cliver.PdfDocumentParser
             }
             catch (Exception e)
             {
-                Win.LogMessage.Error(e);
+                Log.Error(e);
+                Message.Error(e, this);
             }
             finally
             {

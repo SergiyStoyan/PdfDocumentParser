@@ -241,8 +241,8 @@ namespace Cliver.PdfDocumentParser
             }
             catch (Exception ex)
             {
-                //Win.LogMessage.Error("Rectangle", ex);
-                Win.LogMessage.Error(ex);
+                Log.Error(ex);
+                Message.Error(ex, this);
             }
             return null;
         }
@@ -397,7 +397,7 @@ namespace Cliver.PdfDocumentParser
             }
             else
             {
-                Win.LogMessage.Error("Page is not a number.");
+                Message.Error("Page must be a number.", this);
                 tCurrentPage.Text = currentPageI.ToString();
             }
         }
