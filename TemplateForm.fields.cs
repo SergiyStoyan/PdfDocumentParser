@@ -43,7 +43,7 @@ namespace Cliver.PdfDocumentParser
             fields.DataError += delegate (object sender, DataGridViewDataErrorEventArgs e)
             {
                 DataGridViewRow r = fields.Rows[e.RowIndex];
-                Message.Error("fields[" + r.Index + "] has unacceptable value of " + fields.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message);
+                Message.Error("fields[" + r.Index + "] has unacceptable value of " + fields.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message, this);
             };
 
             fields.UserDeletingRow += delegate (object sender, DataGridViewRowCancelEventArgs e)
@@ -210,7 +210,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 catch (Exception ex)
                 {
-                    Message.Error2(ex);
+                    Message.Error2(ex, this);
                 }
             };
 
@@ -244,7 +244,7 @@ namespace Cliver.PdfDocumentParser
                 catch (Exception ex)
                 {
                     //Win.LogMessage.Error("Name", ex);
-                    Message.Error2(ex);
+                    Message.Error2(ex, this);
                     e.Cancel = true;
                 }
             };
@@ -464,7 +464,7 @@ namespace Cliver.PdfDocumentParser
                 //    if ((r.Tag as Template.Field.PdfText)?.ColumnOfTable == f0.Name)
                 //        cloningFieldRows.Add(r);
                 if (f0.ColumnOfTable != null
-                    && Message.YesNo("This field is a column of table " + f0.ColumnOfTable + ".\r\nWould you like new definions to be created for all the column fields of the table?")
+                    && Message.YesNo("This field is a column of table " + f0.ColumnOfTable + ".\r\nWould you like new definions to be created for all the column fields of the table?", this)
                     )
                 {
                     foreach (DataGridViewRow r in fields.Rows)

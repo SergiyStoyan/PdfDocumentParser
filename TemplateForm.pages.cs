@@ -366,7 +366,7 @@ namespace Cliver.PdfDocumentParser
             catch (Exception e)
             {
                 Log.Error(e);
-                Message.Error(e);
+                Message.Error(e, this);
             }
         }
         int currentPageI;

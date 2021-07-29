@@ -210,7 +210,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 catch (Exception ex)
                 {
-                    Message.Error2("Updating template:", ex);
+                    Message.Error2("Updating template:", ex, this);
                 }
         }
 
@@ -230,7 +230,7 @@ namespace Cliver.PdfDocumentParser
             }
             catch (Exception ex)
             {
-                Message.Error2(ex);
+                Message.Error2(ex, this);
             }
         }
 
@@ -243,7 +243,7 @@ namespace Cliver.PdfDocumentParser
             }
             catch (Exception ex)
             {
-                Message.Error2(ex);
+                Message.Error2(ex, this);
             }
         }
 
@@ -331,7 +331,7 @@ namespace Cliver.PdfDocumentParser
                                 if (a.Id != t.ScalingAnchorId)
                                 {
                                     if (removeNotLinkedAnchors == null)
-                                        removeNotLinkedAnchors = Message.YesNo("The template contains not linked anchor[s]. Remove them?");
+                                        removeNotLinkedAnchors = Message.YesNo("The template contains not linked anchor[s]. Remove them?", this);
                                     if (removeNotLinkedAnchors == true)
                                         continue;
                                 }

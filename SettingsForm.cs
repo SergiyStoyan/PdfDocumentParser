@@ -66,7 +66,7 @@ namespace Cliver.PdfDocumentParser
             }
             catch (Exception ex)
             {
-                Message.Error2(ex);
+                Message.Error2(ex, this);
             }
             Settings.Appearance.Reload();
             Settings.Constants.Reload();
