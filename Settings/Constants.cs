@@ -4,6 +4,8 @@
 //        http://www.cliversoft.com
 //********************************************************************************************
 
+using System.Collections.Generic;
+
 namespace Cliver.PdfDocumentParser
 {
     public partial class Settings
@@ -20,12 +22,27 @@ namespace Cliver.PdfDocumentParser
             public float CoordinateDeviationMargin = 1f;
             public const int PdfResolution = 72;//It is the basic resolution. All template parameters that depend on bitmap are scaled to it!
 
+            public Ocr.Config OcrConfig;
+
             [Newtonsoft.Json.JsonIgnore]
             public float Image2PdfResolutionRatio { get; private set; }
 
             protected override void Loaded()
             {
                 Image2PdfResolutionRatio = (float)PdfResolution / PdfPageImageResolution;
+
+                if (OcrConfig == null)
+                    OcrConfig = new Ocr.Config
+                    {
+                        Language = "eng",
+                        EngineMode = Tesseract.EngineMode.TesseractOnly,
+                        VariableNames2value = new Dictionary<string, object>
+                        {
+                            { "load_system_dawg", false },
+                            { "load_freq_dawg", false },
+                            //(name: "tessedit_char_whitelist", "0123456789.,"),
+                        }
+                    };
             }
 
             protected override void Saving()

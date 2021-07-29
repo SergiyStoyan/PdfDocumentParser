@@ -22,19 +22,30 @@ namespace Cliver.PdfDocumentParser
             get
             {
                 if (_This == null)
-                    _This = new Ocr();
+                    _This = new Ocr(Settings.Constants.OcrConfig);
                 return _This;
             }
         }
         static Ocr _This = null;
 
-        Ocr()
+        //public static Ocr Get(Config config)
+        //{
+        //    if (!ocrConfigKeys2ocr.TryGetValue(config.Key, out Ocr ocr))
+        //    {
+        //        ocr = new Ocr(config);
+        //        ocrConfigKeys2ocr[config.Key] = ocr;
+        //    }
+        //    return ocr;
+        //}
+        //static HandyDictionary<string, Ocr> ocrConfigKeys2ocr = new HandyDictionary<string, Ocr>();
+
+        Ocr(Config config)
         {
-            engine = new TesseractEngine(@"./tessdata", config.language, config.engineMode);
-            if (config.variableNames2value != null)
+            engine = new TesseractEngine(@"./tessdata", config.Language, config.EngineMode);
+            if (config.VariableNames2value != null)
             {
                 string m1 = "Could not set Tesseract variable: ";
-                foreach (var v in config.variableNames2value)
+                foreach (var v in config.VariableNames2value)
                     if (v.Value is string)
                     {
                         if (!engine.SetVariable(v.Key, (string)v.Value))
@@ -59,32 +70,22 @@ namespace Cliver.PdfDocumentParser
                         throw new Exception(m1 + v.ToString() + " Not supported type.");
             }
         }
-        static Config config = //new Config();
-        new Config
-        {
-            language = "eng",
-            engineMode = EngineMode.TesseractOnly,
-            variableNames2value = new Dictionary<string, object> {
-                        { "load_system_dawg", false },
-                        { "load_freq_dawg", false },
-                        //(name: "tessedit_char_whitelist", "0123456789.,"),
-                    }
-        };
         public class Config
         {
-            public string language = "eng";
-            public EngineMode engineMode = EngineMode.Default;
-            public Dictionary<string, object> variableNames2value = null;
-        }
+            public string Language = "eng";
+            public EngineMode EngineMode = EngineMode.Default;
+            public Dictionary<string, object> VariableNames2value = null;
 
-        static void Initialize(string language = "eng", EngineMode engineMode = EngineMode.Default, Dictionary<string, object> variableNames2value = null)
-        {
-            Config newConfig = new Config { language = language, engineMode = engineMode, variableNames2value = variableNames2value };
-            if (newConfig.IsEqualByJson(config))
-                return;
-            config = newConfig;
-            _This?.Dispose();
-            _This = null;
+            internal string Key
+            {
+                get
+                {
+                    if (key == null)
+                        key = this.ToStringByJson(false);
+                    return key;
+                }
+            }
+            string key = null;
         }
 
         TesseractEngine engine = null;

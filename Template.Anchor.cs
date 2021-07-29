@@ -81,6 +81,7 @@ namespace Cliver.PdfDocumentParser
                 public SizeF Size;
                 public float PositionDeviation = 1f;
                 public bool PositionDeviationIsAbsolute = false;
+                public OcrSettings OcrSettings;
 
                 override public bool IsSet()
                 {
@@ -91,21 +92,11 @@ namespace Cliver.PdfDocumentParser
                 {
                     return new System.Drawing.RectangleF(Position.X, Position.Y, Size.Width, Size.Height);
                 }
+            }
 
-                //TBI
-                public Ocr.Config TesseractConfig;
-
-                //TBI
-                internal string TesseractConfigKey
-                {
-                    get
-                    {
-                        if (tesseractConfig == null)
-                            tesseractConfig = TesseractConfig?.ToStringByJson(false);
-                        return tesseractConfig;
-                    }
-                }
-                string tesseractConfig = null;
+            public class OcrSettings
+            {
+                public Tesseract.PageSegMode TesseractPageSegMode;
             }
 
             public class CvImage : Anchor

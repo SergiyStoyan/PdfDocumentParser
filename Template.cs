@@ -30,8 +30,6 @@ namespace Cliver.PdfDocumentParser
         public bool IgnoreInvisiblePdfChars = true;//used but not edited
         public bool IgnoreDuplicatedPdfChars = true;//used but not edited
 
-        public Field.OcrModes FieldOcrMode = Field.OcrModes.SingleFieldFromFieldImage | Field.OcrModes.ColumnFieldFromTableCharBoxs;
-
         public List<Anchor> Anchors;
 
         public List<Condition> Conditions;

@@ -152,20 +152,9 @@ namespace Cliver.PdfDocumentParser
 
             public class OcrSettings
             {
-                public OcrModes OcrMode;
-                
-                public Ocr.Config TesseractConfig;
-
-                internal string TesseractConfigKey
-                {
-                    get
-                    {
-                        if (tesseractConfigKey == null)
-                            tesseractConfigKey = TesseractConfig?.ToStringByJson(false);
-                        return tesseractConfigKey;
-                    }
-                }
-                string tesseractConfigKey = null;
+                public OcrModes Mode;
+                //public Ocr.Config Config;
+                public Tesseract.PageSegMode TesseractPageSegMode;
             }
             //internal Template.Field.TesseractConfig GetOcrSpecialParsingSettingsFromGUI()
             //{
