@@ -148,15 +148,20 @@ namespace Cliver.PdfDocumentParser
 
             public class Ocr : Field
             {
-                public OcrSettings OcrSettings;//TBI
-                public TextAutoInsertSpace TextAutoInsertSpace;
+                public OcrSettings OcrSettings;
+                //public TextAutoInsertSpace TextAutoInsertSpace;
+
+                internal OcrModes GetOcrMode(Template t)
+                {
+                    return OcrSettings != null ? OcrSettings.Mode : t.FieldOcrMode;
+                }
             }
 
             public class OcrSettings
             {
                 public OcrModes Mode;
                 //public Ocr.Config Config;
-                public Tesseract.PageSegMode TesseractPageSegMode;
+                //public Tesseract.PageSegMode TesseractPageSegMode;
 
                 internal bool SingleFieldFromFieldImage
                 {
