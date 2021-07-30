@@ -21,16 +21,24 @@ namespace Cliver.PdfDocumentParser
         {
             InitializeComponent();
 
+            SpecialTextAutoInsertSpace.CheckedChanged += delegate { synchronizeControls(); };
+            synchronizeControls();
+
             this.textAutoInsertSpace = textAutoInsertSpace;
         }
         TextAutoInsertSpace textAutoInsertSpace;
+
+        void synchronizeControls()
+        {
+            panel2.Visible = SpecialTextAutoInsertSpace.Checked;
+        }
 
         override protected object getObject()
         {
             if (field == null)
                 field = new Template.Field.PdfCharBoxs();
             field.ColumnOfTable = (string)ColumnOfTable.SelectedItem;
-            //field.TextAutoInsertSpace = SpecialTextAutoInsertSpace.Checked ? templateForm.GetTextAutoInsertSpaceFromGUI() : null;
+            field.TextAutoInsertSpace = SpecialTextAutoInsertSpace.Checked ? new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = textAutoInsertSpaceRepresentative.Text, IgnoreSourceSpaces = textAutoInsertSpaceIgnoreSourceSpaces.Checked } : null;
             return field;
         }
 
@@ -48,6 +56,12 @@ namespace Cliver.PdfDocumentParser
             ColumnOfTable.SelectedItem = field.ColumnOfTable;
 
             SpecialTextAutoInsertSpace.Checked = field.TextAutoInsertSpace != null;
+            if (field.TextAutoInsertSpace != null)
+            {
+                textAutoInsertSpaceThreshold.Value = (decimal)field.TextAutoInsertSpace.Threshold;
+                textAutoInsertSpaceRepresentative.Text = field.TextAutoInsertSpace.Representative;
+                textAutoInsertSpaceIgnoreSourceSpaces.Checked = field.TextAutoInsertSpace.IgnoreSourceSpaces;
+            }
 
             if (value != null)
             {

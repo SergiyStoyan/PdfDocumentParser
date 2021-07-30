@@ -21,41 +21,26 @@ namespace Cliver.PdfDocumentParser
         {
             InitializeComponent();
 
+            SpecialTextAutoInsertSpace.CheckedChanged += delegate { synchronizeControls(); };
+            synchronizeControls();
+
             this.textAutoInsertSpace = textAutoInsertSpace;
         }
         TextAutoInsertSpace textAutoInsertSpace;
+
+        void synchronizeControls()
+        {
+            panel2.Visible = SpecialTextAutoInsertSpace.Checked;
+        }
 
         override protected object getObject()
         {
             if (field == null)
                 field = new Template.Field.PdfTextLines();
             field.ColumnOfTable = (string)ColumnOfTable.SelectedItem;
-            //field.TextAutoInsertSpace = SpecialTextAutoInsertSpace.Checked ? templateForm.GetTextAutoInsertSpaceFromGUI() : null;
+            field.TextAutoInsertSpace = SpecialTextAutoInsertSpace.Checked ? new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = textAutoInsertSpaceRepresentative.Text, IgnoreSourceSpaces = textAutoInsertSpaceIgnoreSourceSpaces.Checked } : null;
             return field;
         }
-
-        //virtual public void SetValue(object value)
-        //{
-        //    switch (field.DefaultValueType)
-        //    {
-        //        case Template.Field.ValueTypes.PdfText:
-        //        case Template.Field.ValueTypes.PdfTextLines:
-        //        case Template.Field.ValueTypes.PdfCharBoxs:
-        //            Value.Text = (string)value;
-        //            break;
-        //        case Template.Field.ValueTypes.OcrText:
-        //        case Template.Field.ValueTypes.OcrTextLines:
-        //        case Template.Field.ValueTypes.OcrCharBoxs:
-        //            Value.Text = (string)value;
-        //            break;
-        //        case Template.Field.ValueTypes.Image:
-        //            break;
-        //        case Template.Field.ValueTypes.OcrTextLineImages:
-        //            break;
-        //        default:
-        //            throw new Exception("Unknown option: " + field.DefaultValueType);
-        //    }
-        //}
 
         protected override void initialize(DataGridViewRow row, object value)
         {
@@ -71,6 +56,12 @@ namespace Cliver.PdfDocumentParser
             ColumnOfTable.SelectedItem = field.ColumnOfTable;
 
             SpecialTextAutoInsertSpace.Checked = field.TextAutoInsertSpace != null;
+            if (field.TextAutoInsertSpace != null)
+            {
+                textAutoInsertSpaceThreshold.Value = (decimal)field.TextAutoInsertSpace.Threshold;
+                textAutoInsertSpaceRepresentative.Text = field.TextAutoInsertSpace.Representative;
+                textAutoInsertSpaceIgnoreSourceSpaces.Checked = field.TextAutoInsertSpace.IgnoreSourceSpaces;
+            }
 
             if (value != null)
             {
