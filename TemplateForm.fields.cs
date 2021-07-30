@@ -801,14 +801,5 @@ namespace Cliver.PdfDocumentParser
                 value.Dock = DockStyle.Fill;
             }
         }
-
-        internal TextAutoInsertSpace GetTextAutoInsertSpaceFromGUI()
-        {
-            return new TextAutoInsertSpace
-            {
-                Threshold = (float)textAutoInsertSpaceThreshold.Value,
-                Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text)
-            };
-        }
     }
 }

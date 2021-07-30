@@ -30,7 +30,7 @@ namespace Cliver.PdfDocumentParser
             if (field == null)
                 field = new Template.Field.OcrText();
             field.ColumnOfTable = (string)ColumnOfTable.SelectedItem;
-            field.TextAutoInsertSpace = SpecialTextAutoInsertSpace.Checked ? templateForm.GetTextAutoInsertSpaceFromGUI() : null;
+            //field.TextAutoInsertSpace = SpecialTextAutoInsertSpace.Checked ? templateForm.GetTextAutoInsertSpaceFromGUI() : null;
             return field;
         }
 

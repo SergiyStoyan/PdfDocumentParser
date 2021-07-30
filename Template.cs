@@ -96,5 +96,6 @@ namespace Cliver.PdfDocumentParser
         public float Threshold = 6;
         public string Representative = "\t";
         //public string Substitute = " ";
+        public bool IgnoreSourceSpaces = false;
     }
 }
