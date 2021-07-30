@@ -63,6 +63,7 @@
             this.CvImageScalePyramidStep = new System.Windows.Forms.NumericUpDown();
             this.label13 = new System.Windows.Forms.Label();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.button1 = new System.Windows.Forms.Button();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewBlockMaxHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeskewBlockMinGap)).BeginInit();
@@ -78,7 +79,7 @@
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bCancel.Location = new System.Drawing.Point(731, 3);
+            this.bCancel.Location = new System.Drawing.Point(664, 3);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 50;
@@ -92,17 +93,18 @@
             this.flowLayoutPanel1.Controls.Add(this.bApply);
             this.flowLayoutPanel1.Controls.Add(this.defaultBitmapPreprocessorClassDefinitions);
             this.flowLayoutPanel1.Controls.Add(this.bAddClassDefinition);
+            this.flowLayoutPanel1.Controls.Add(this.button1);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 323);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(809, 31);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(742, 31);
             this.flowLayoutPanel1.TabIndex = 60;
             // 
             // bApply
             // 
             this.bApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bApply.Location = new System.Drawing.Point(650, 3);
+            this.bApply.Location = new System.Drawing.Point(583, 3);
             this.bApply.Name = "bApply";
             this.bApply.Size = new System.Drawing.Size(75, 23);
             this.bApply.TabIndex = 51;
@@ -113,14 +115,9 @@
             // defaultBitmapPreprocessorClassDefinitions
             // 
             this.defaultBitmapPreprocessorClassDefinitions.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.defaultBitmapPreprocessorClassDefinitions.Enabled = false;
             this.defaultBitmapPreprocessorClassDefinitions.FormattingEnabled = true;
-            this.defaultBitmapPreprocessorClassDefinitions.Items.AddRange(new object[] {
-            "",
-            "↻ 90°",
-            "↻ 180°",
-            "↺ 90°",
-            "Auto"});
-            this.defaultBitmapPreprocessorClassDefinitions.Location = new System.Drawing.Point(423, 3);
+            this.defaultBitmapPreprocessorClassDefinitions.Location = new System.Drawing.Point(356, 3);
             this.defaultBitmapPreprocessorClassDefinitions.Name = "defaultBitmapPreprocessorClassDefinitions";
             this.defaultBitmapPreprocessorClassDefinitions.Size = new System.Drawing.Size(221, 21);
             this.defaultBitmapPreprocessorClassDefinitions.TabIndex = 85;
@@ -129,7 +126,8 @@
             // bAddClassDefinition
             // 
             this.bAddClassDefinition.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bAddClassDefinition.Location = new System.Drawing.Point(383, 3);
+            this.bAddClassDefinition.Enabled = false;
+            this.bAddClassDefinition.Location = new System.Drawing.Point(316, 3);
             this.bAddClassDefinition.Name = "bAddClassDefinition";
             this.bAddClassDefinition.Size = new System.Drawing.Size(34, 23);
             this.bAddClassDefinition.TabIndex = 53;
@@ -142,15 +140,15 @@
             this.bitmapPreprocessorClassDefinition.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bitmapPreprocessorClassDefinition.Highlighting = null;
             this.bitmapPreprocessorClassDefinition.Location = new System.Drawing.Point(0, 108);
-            this.bitmapPreprocessorClassDefinition.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.bitmapPreprocessorClassDefinition.Margin = new System.Windows.Forms.Padding(1);
             this.bitmapPreprocessorClassDefinition.Name = "bitmapPreprocessorClassDefinition";
             this.bitmapPreprocessorClassDefinition.ShowVRuler = false;
-            this.bitmapPreprocessorClassDefinition.Size = new System.Drawing.Size(809, 215);
+            this.bitmapPreprocessorClassDefinition.Size = new System.Drawing.Size(742, 215);
             this.bitmapPreprocessorClassDefinition.TabIndex = 78;
             // 
             // DeskewBlockMaxHeight
             // 
-            this.DeskewBlockMaxHeight.Location = new System.Drawing.Point(596, 10);
+            this.DeskewBlockMaxHeight.Location = new System.Drawing.Point(596, 13);
             this.DeskewBlockMaxHeight.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -180,7 +178,7 @@
             "↻ 180°",
             "↺ 90°",
             "Auto"});
-            this.PageRotation.Location = new System.Drawing.Point(92, 8);
+            this.PageRotation.Location = new System.Drawing.Point(176, 8);
             this.PageRotation.Margin = new System.Windows.Forms.Padding(3, 8, 3, 3);
             this.PageRotation.Name = "PageRotation";
             this.PageRotation.Size = new System.Drawing.Size(60, 21);
@@ -198,7 +196,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(11, 8);
+            this.label1.Location = new System.Drawing.Point(95, 8);
             this.label1.Margin = new System.Windows.Forms.Padding(11, 8, 3, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(75, 13);
@@ -221,7 +219,7 @@
             this.label3.Location = new System.Drawing.Point(0, 95);
             this.label3.Margin = new System.Windows.Forms.Padding(11, 0, 3, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(809, 13);
+            this.label3.Size = new System.Drawing.Size(742, 13);
             this.label3.TabIndex = 88;
             this.label3.Text = "Preprocessing Code:";
             // 
@@ -243,7 +241,7 @@
             // 
             // DeskewBlockMinGap
             // 
-            this.DeskewBlockMinGap.Location = new System.Drawing.Point(596, 32);
+            this.DeskewBlockMinGap.Location = new System.Drawing.Point(596, 34);
             this.DeskewBlockMinGap.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -295,10 +293,10 @@
             this.gDeskew.Dock = System.Windows.Forms.DockStyle.Top;
             this.gDeskew.Location = new System.Drawing.Point(0, 35);
             this.gDeskew.Name = "gDeskew";
-            this.gDeskew.Size = new System.Drawing.Size(809, 60);
+            this.gDeskew.Size = new System.Drawing.Size(742, 60);
             this.gDeskew.TabIndex = 99;
             this.gDeskew.TabStop = false;
-            this.gDeskew.Text = "Deskew:";
+            this.gDeskew.Text = "- deskew -";
             // 
             // label11
             // 
@@ -315,7 +313,7 @@
             this.DeskewMarginColor.BackColor = System.Drawing.Color.LightGreen;
             this.DeskewMarginColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.DeskewMarginColor.ForeColor = System.Drawing.SystemColors.Control;
-            this.DeskewMarginColor.Location = new System.Drawing.Point(670, 32);
+            this.DeskewMarginColor.Location = new System.Drawing.Point(670, 37);
             this.DeskewMarginColor.Name = "DeskewMarginColor";
             this.DeskewMarginColor.Size = new System.Drawing.Size(61, 18);
             this.DeskewMarginColor.TabIndex = 114;
@@ -324,7 +322,7 @@
             // 
             // DeskewContourMaxCount
             // 
-            this.DeskewContourMaxCount.Location = new System.Drawing.Point(296, 9);
+            this.DeskewContourMaxCount.Location = new System.Drawing.Point(296, 13);
             this.DeskewContourMaxCount.Maximum = new decimal(new int[] {
             999,
             0,
@@ -352,7 +350,7 @@
             0,
             0,
             131072});
-            this.DeskewAngleMaxDeviation.Location = new System.Drawing.Point(296, 31);
+            this.DeskewAngleMaxDeviation.Location = new System.Drawing.Point(296, 34);
             this.DeskewAngleMaxDeviation.Maximum = new decimal(new int[] {
             45,
             0,
@@ -425,7 +423,7 @@
             // 
             // DeskewStructuringElementX
             // 
-            this.DeskewStructuringElementX.Location = new System.Drawing.Point(130, 11);
+            this.DeskewStructuringElementX.Location = new System.Drawing.Point(130, 13);
             this.DeskewStructuringElementX.Minimum = new decimal(new int[] {
             1,
             0,
@@ -442,7 +440,7 @@
             // 
             // DeskewStructuringElementY
             // 
-            this.DeskewStructuringElementY.Location = new System.Drawing.Point(130, 32);
+            this.DeskewStructuringElementY.Location = new System.Drawing.Point(130, 34);
             this.DeskewStructuringElementY.Minimum = new decimal(new int[] {
             1,
             0,
@@ -479,7 +477,7 @@
             // 
             this.Deskew.AutoSize = true;
             this.Deskew.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.Deskew.Location = new System.Drawing.Point(221, 8);
+            this.Deskew.Location = new System.Drawing.Point(66, 8);
             this.Deskew.Margin = new System.Windows.Forms.Padding(3, 8, 3, 3);
             this.Deskew.Name = "Deskew";
             this.Deskew.Size = new System.Drawing.Size(15, 14);
@@ -489,7 +487,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(166, 8);
+            this.label12.Location = new System.Drawing.Point(11, 8);
             this.label12.Margin = new System.Windows.Forms.Padding(11, 8, 3, 0);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(49, 13);
@@ -521,26 +519,37 @@
             // 
             // flowLayoutPanel2
             // 
-            this.flowLayoutPanel2.Controls.Add(this.label1);
-            this.flowLayoutPanel2.Controls.Add(this.PageRotation);
             this.flowLayoutPanel2.Controls.Add(this.label12);
             this.flowLayoutPanel2.Controls.Add(this.Deskew);
+            this.flowLayoutPanel2.Controls.Add(this.label1);
+            this.flowLayoutPanel2.Controls.Add(this.PageRotation);
             this.flowLayoutPanel2.Controls.Add(this.label2);
             this.flowLayoutPanel2.Controls.Add(this.ScalingAnchor);
             this.flowLayoutPanel2.Controls.Add(this.label13);
             this.flowLayoutPanel2.Controls.Add(this.CvImageScalePyramidStep);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(1);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(809, 35);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(742, 35);
             this.flowLayoutPanel2.TabIndex = 102;
+            // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button1.Enabled = false;
+            this.button1.Location = new System.Drawing.Point(276, 3);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(34, 23);
+            this.button1.TabIndex = 86;
+            this.button1.Text = "-";
+            this.button1.UseVisualStyleBackColor = true;
             // 
             // ScanTemplateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(809, 354);
+            this.ClientSize = new System.Drawing.Size(742, 354);
             this.Controls.Add(this.bitmapPreprocessorClassDefinition);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.gDeskew);
@@ -600,5 +609,6 @@
         private System.Windows.Forms.NumericUpDown CvImageScalePyramidStep;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+        private System.Windows.Forms.Button button1;
     }
 }

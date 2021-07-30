@@ -206,7 +206,7 @@
             this.fields.Name = "fields";
             this.fields.RowHeadersWidth = 30;
             this.fields.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.fields.Size = new System.Drawing.Size(323, 232);
+            this.fields.Size = new System.Drawing.Size(323, 230);
             this.fields.TabIndex = 30;
             // 
             // Name_
@@ -456,7 +456,7 @@
             // anchorsContainer.Panel2
             // 
             this.anchorsContainer.Panel2.Controls.Add(this.splitContainer3);
-            this.anchorsContainer.Size = new System.Drawing.Size(557, 235);
+            this.anchorsContainer.Size = new System.Drawing.Size(557, 226);
             this.anchorsContainer.SplitterDistance = 290;
             this.anchorsContainer.TabIndex = 52;
             // 
@@ -474,7 +474,7 @@
             this.anchors.Name = "anchors";
             this.anchors.RowHeadersWidth = 30;
             this.anchors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.anchors.Size = new System.Drawing.Size(290, 235);
+            this.anchors.Size = new System.Drawing.Size(290, 226);
             this.anchors.TabIndex = 50;
             // 
             // Id3
@@ -529,8 +529,8 @@
             // 
             this.splitContainer3.Panel2.Controls.Add(this.conditions);
             this.splitContainer3.Panel2.Controls.Add(this.flowLayoutPanel5);
-            this.splitContainer3.Size = new System.Drawing.Size(263, 235);
-            this.splitContainer3.SplitterDistance = 113;
+            this.splitContainer3.Size = new System.Drawing.Size(263, 226);
+            this.splitContainer3.SplitterDistance = 109;
             this.splitContainer3.TabIndex = 0;
             // 
             // conditions
@@ -547,7 +547,7 @@
             this.conditions.Name = "conditions";
             this.conditions.RowHeadersWidth = 30;
             this.conditions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.conditions.Size = new System.Drawing.Size(263, 101);
+            this.conditions.Size = new System.Drawing.Size(263, 96);
             this.conditions.TabIndex = 0;
             // 
             // Name2
@@ -728,7 +728,7 @@
             this.panel1.Controls.Add(this.flowLayoutPanel1);
             this.panel1.Controls.Add(this.flowLayoutPanel3);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 252);
+            this.panel1.Location = new System.Drawing.Point(0, 250);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(557, 31);
             this.panel1.TabIndex = 29;
@@ -843,7 +843,7 @@
             this.splitContainer2.Panel2.Controls.Add(this.panel1);
             this.splitContainer2.Panel2.Controls.Add(this.label5);
             this.splitContainer2.Size = new System.Drawing.Size(557, 680);
-            this.splitContainer2.SplitterDistance = 393;
+            this.splitContainer2.SplitterDistance = 395;
             this.splitContainer2.TabIndex = 32;
             // 
             // groupBox1
@@ -1020,7 +1020,7 @@
             // splitContainer4.Panel2
             // 
             this.splitContainer4.Panel2.AutoScroll = true;
-            this.splitContainer4.Size = new System.Drawing.Size(557, 232);
+            this.splitContainer4.Size = new System.Drawing.Size(557, 230);
             this.splitContainer4.SplitterDistance = 323;
             this.splitContainer4.TabIndex = 60;
             // 
