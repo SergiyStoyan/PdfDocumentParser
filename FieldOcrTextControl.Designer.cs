@@ -35,31 +35,33 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.SingleFieldFromFieldImage = new System.Windows.Forms.CheckBox();
+            this.ColumnFieldFromFieldImage = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.OcrSingleFieldFromFieldImage = new System.Windows.Forms.CheckBox();
-            this.OcrColumnFieldFromFieldImage = new System.Windows.Forms.CheckBox();
+            this.TesseractPageSegMode = new System.Windows.Forms.ComboBox();
+            this.label19 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // ColumnOfTable
             // 
-            this.ColumnOfTable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.ColumnOfTable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ColumnOfTable.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ColumnOfTable.FormattingEnabled = true;
             this.ColumnOfTable.Location = new System.Drawing.Point(123, 3);
             this.ColumnOfTable.MinimumSize = new System.Drawing.Size(80, 0);
             this.ColumnOfTable.Name = "ColumnOfTable";
-            this.ColumnOfTable.Size = new System.Drawing.Size(136, 21);
+            this.ColumnOfTable.Size = new System.Drawing.Size(326, 21);
             this.ColumnOfTable.TabIndex = 0;
             // 
             // Value
             // 
             this.Value.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Value.Location = new System.Drawing.Point(0, 61);
+            this.Value.Location = new System.Drawing.Point(0, 58);
             this.Value.Name = "Value";
-            this.Value.Size = new System.Drawing.Size(334, 220);
+            this.Value.Size = new System.Drawing.Size(524, 223);
             this.Value.TabIndex = 2;
             this.Value.Text = "";
             // 
@@ -76,7 +78,7 @@
             // 
             this.SpecialOcrSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.SpecialOcrSettings.AutoSize = true;
-            this.SpecialOcrSettings.Location = new System.Drawing.Point(277, 6);
+            this.SpecialOcrSettings.Location = new System.Drawing.Point(467, 6);
             this.SpecialOcrSettings.Name = "SpecialOcrSettings";
             this.SpecialOcrSettings.Size = new System.Drawing.Size(15, 14);
             this.SpecialOcrSettings.TabIndex = 6;
@@ -91,14 +93,14 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(334, 29);
+            this.panel1.Size = new System.Drawing.Size(524, 29);
             this.panel1.TabIndex = 8;
             // 
             // label3
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(264, 5);
+            this.label3.Location = new System.Drawing.Point(454, 5);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(13, 13);
             this.label3.TabIndex = 71;
@@ -106,14 +108,36 @@
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.OcrSingleFieldFromFieldImage);
-            this.panel2.Controls.Add(this.OcrColumnFieldFromFieldImage);
+            this.panel2.Controls.Add(this.TesseractPageSegMode);
+            this.panel2.Controls.Add(this.label19);
+            this.panel2.Controls.Add(this.SingleFieldFromFieldImage);
+            this.panel2.Controls.Add(this.ColumnFieldFromFieldImage);
             this.panel2.Controls.Add(this.label2);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 29);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(334, 32);
+            this.panel2.Size = new System.Drawing.Size(524, 29);
             this.panel2.TabIndex = 9;
+            // 
+            // SingleFieldFromFieldImage
+            // 
+            this.SingleFieldFromFieldImage.AutoSize = true;
+            this.SingleFieldFromFieldImage.Location = new System.Drawing.Point(43, 4);
+            this.SingleFieldFromFieldImage.Name = "SingleFieldFromFieldImage";
+            this.SingleFieldFromFieldImage.Size = new System.Drawing.Size(141, 17);
+            this.SingleFieldFromFieldImage.TabIndex = 105;
+            this.SingleFieldFromFieldImage.Text = "Single Field By Its Image";
+            this.SingleFieldFromFieldImage.UseVisualStyleBackColor = true;
+            // 
+            // ColumnFieldFromFieldImage
+            // 
+            this.ColumnFieldFromFieldImage.AutoSize = true;
+            this.ColumnFieldFromFieldImage.Location = new System.Drawing.Point(190, 4);
+            this.ColumnFieldFromFieldImage.Name = "ColumnFieldFromFieldImage";
+            this.ColumnFieldFromFieldImage.Size = new System.Drawing.Size(147, 17);
+            this.ColumnFieldFromFieldImage.TabIndex = 106;
+            this.ColumnFieldFromFieldImage.Text = "Column Field By Its Image";
+            this.ColumnFieldFromFieldImage.UseVisualStyleBackColor = true;
             // 
             // label2
             // 
@@ -124,27 +148,25 @@
             this.label2.TabIndex = 72;
             this.label2.Text = "OCR:";
             // 
-            // OcrSingleFieldFromFieldImage
+            // TesseractPageSegMode
             // 
-            this.OcrSingleFieldFromFieldImage.AutoSize = true;
-            this.OcrSingleFieldFromFieldImage.Location = new System.Drawing.Point(43, 4);
-            this.OcrSingleFieldFromFieldImage.Name = "OcrSingleFieldFromFieldImage";
-            this.OcrSingleFieldFromFieldImage.Size = new System.Drawing.Size(141, 17);
-            this.OcrSingleFieldFromFieldImage.TabIndex = 105;
-            this.OcrSingleFieldFromFieldImage.Text = "Single Field By Its Image";
-            this.OcrSingleFieldFromFieldImage.UseVisualStyleBackColor = true;
+            this.TesseractPageSegMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.TesseractPageSegMode.FormattingEnabled = true;
+            this.TesseractPageSegMode.Location = new System.Drawing.Point(436, 3);
+            this.TesseractPageSegMode.Name = "TesseractPageSegMode";
+            this.TesseractPageSegMode.Size = new System.Drawing.Size(79, 21);
+            this.TesseractPageSegMode.TabIndex = 109;
             // 
-            // OcrColumnFieldFromFieldImage
+            // label19
             // 
-            this.OcrColumnFieldFromFieldImage.AutoSize = true;
-            this.OcrColumnFieldFromFieldImage.Location = new System.Drawing.Point(190, 6);
-            this.OcrColumnFieldFromFieldImage.Name = "OcrColumnFieldFromFieldImage";
-            this.OcrColumnFieldFromFieldImage.Size = new System.Drawing.Size(147, 17);
-            this.OcrColumnFieldFromFieldImage.TabIndex = 106;
-            this.OcrColumnFieldFromFieldImage.Text = "Column Field By Its Image";
-            this.OcrColumnFieldFromFieldImage.UseVisualStyleBackColor = true;
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(343, 5);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(87, 13);
+            this.label19.TabIndex = 108;
+            this.label19.Text = "Tesseract Mode:";
             // 
-            // FieldOcrCharBoxsControl
+            // FieldOcrTextControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -152,8 +174,8 @@
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.MinimumSize = new System.Drawing.Size(300, 100);
-            this.Name = "FieldOcrCharBoxsControl";
-            this.Size = new System.Drawing.Size(334, 281);
+            this.Name = "FieldOcrTextControl";
+            this.Size = new System.Drawing.Size(524, 281);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -172,7 +194,9 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.CheckBox OcrSingleFieldFromFieldImage;
-        private System.Windows.Forms.CheckBox OcrColumnFieldFromFieldImage;
+        private System.Windows.Forms.CheckBox SingleFieldFromFieldImage;
+        private System.Windows.Forms.CheckBox ColumnFieldFromFieldImage;
+        private System.Windows.Forms.ComboBox TesseractPageSegMode;
+        private System.Windows.Forms.Label label19;
     }
 }

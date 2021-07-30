@@ -32,23 +32,24 @@ namespace Cliver.PdfDocumentParser
             initializeConditionsTable();
             initializeFieldsTable();
 
-            TesseractPageSegMode.Items.AddRange(new object[] {
-                Tesseract.PageSegMode.Auto,
-                Tesseract.PageSegMode.AutoOnly,
-                Tesseract.PageSegMode.AutoOsd,
-                Tesseract.PageSegMode.CircleWord,
-                Tesseract.PageSegMode.Count,
-                Tesseract.PageSegMode.OsdOnly,
-                Tesseract.PageSegMode.RawLine,
-                Tesseract.PageSegMode.SingleBlock,
-                Tesseract.PageSegMode.SingleBlockVertText,
-                Tesseract.PageSegMode.SingleChar,
-                Tesseract.PageSegMode.SingleColumn,
-                Tesseract.PageSegMode.SingleLine,
-                Tesseract.PageSegMode.SingleWord,
-                Tesseract.PageSegMode.SparseText,
-                Tesseract.PageSegMode.SparseTextOsd
-            });
+            //TesseractPageSegMode.Items.AddRange(new object[] {
+            //    Tesseract.PageSegMode.Auto,
+            //    Tesseract.PageSegMode.AutoOnly,
+            //    Tesseract.PageSegMode.AutoOsd,
+            //    Tesseract.PageSegMode.CircleWord,
+            //    Tesseract.PageSegMode.Count,
+            //    Tesseract.PageSegMode.OsdOnly,
+            //    Tesseract.PageSegMode.RawLine,
+            //    Tesseract.PageSegMode.SingleBlock,
+            //    Tesseract.PageSegMode.SingleBlockVertText,
+            //    Tesseract.PageSegMode.SingleChar,
+            //    Tesseract.PageSegMode.SingleColumn,
+            //    Tesseract.PageSegMode.SingleLine,
+            //    Tesseract.PageSegMode.SingleWord,
+            //    Tesseract.PageSegMode.SparseText,
+            //    Tesseract.PageSegMode.SparseTextOsd
+            //});
+            TesseractPageSegMode.DataSource = Enum.GetValues(typeof(Tesseract.PageSegMode));
 
             picture.MouseDown += delegate (object sender, MouseEventArgs e)
             {

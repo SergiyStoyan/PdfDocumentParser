@@ -158,11 +158,17 @@ namespace Cliver.PdfDocumentParser
                 return f?.OcrSettings != null ? f.OcrSettings.Mode : t.FieldOcrMode;
             }
 
+            internal Tesseract.PageSegMode GetTesseractPageSegMode(Template t)
+            {
+                Field.Ocr f = this as Template.Field.Ocr;
+                return f?.OcrSettings != null ? f.OcrSettings.TesseractPageSegMode : t.TesseractPageSegMode;
+            }
+
             public class OcrSettings
             {
                 public OcrModes Mode;
                 //public Ocr.Config Config;
-                //public Tesseract.PageSegMode TesseractPageSegMode;
+                public Tesseract.PageSegMode TesseractPageSegMode;
 
                 internal bool SingleFieldFromFieldImage
                 {

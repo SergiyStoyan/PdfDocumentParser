@@ -273,7 +273,6 @@ namespace Cliver.PdfDocumentParser
                 return cbs.Where(a => a.R.Left >= ar.Left && a.R.Right <= ar.Right && a.R.Top >= ar.Top && a.R.Bottom <= ar.Bottom).ToList();
             }
 
-
             List<string> getOcrTextLines()
             {
                 if (ActualRectangle == null)
@@ -284,7 +283,7 @@ namespace Cliver.PdfDocumentParser
                 {
                     if (ActualField.GetOcrMode(page.PageCollection.ActiveTemplate).HasFlag(Template.Field.OcrModes.SingleFieldFromFieldImage))
                     {
-                        string s = Ocr.This.GetTextSurroundedByRectangle(page.ActiveTemplateBitmap, ar, page.PageCollection.ActiveTemplate.TesseractPageSegMode);
+                        string s = Ocr.This.GetTextSurroundedByRectangle(page.ActiveTemplateBitmap, ar, ActualField.GetTesseractPageSegMode(page.PageCollection.ActiveTemplate));
                         return Regex.Split(s, "$", RegexOptions.Multiline).ToList();
                     }
                     else
@@ -307,7 +306,7 @@ namespace Cliver.PdfDocumentParser
                            (ar.Right < TableFieldActualInfo.ActualRectangle.Value.Right ? ar.Right : TableFieldActualInfo.ActualRectangle.Value.Right) - x,
                            l.Bottom - l.Top
                             );
-                        ls.Add(Ocr.This.GetTextSurroundedByRectangle(page.ActiveTemplateBitmap, r, page.PageCollection.ActiveTemplate.TesseractPageSegMode));
+                        ls.Add(Ocr.This.GetTextSurroundedByRectangle(page.ActiveTemplateBitmap, r, ActualField.GetTesseractPageSegMode(page.PageCollection.ActiveTemplate)));
                     }
                 }
                 else
@@ -333,7 +332,7 @@ namespace Cliver.PdfDocumentParser
                 if (ActualField.ColumnOfTable == null)
                 {
                     if (ActualField.GetOcrMode(page.PageCollection.ActiveTemplate).HasFlag(Template.Field.OcrModes.SingleFieldFromFieldImage))
-                        return Ocr.This.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateBitmap, ar, page.PageCollection.ActiveTemplate.TesseractPageSegMode);
+                        return Ocr.This.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateBitmap, ar, ActualField.GetTesseractPageSegMode(page.PageCollection.ActiveTemplate));
                     else
                         return Ocr.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, ar);
                 }
@@ -350,7 +349,7 @@ namespace Cliver.PdfDocumentParser
                        (ar.Right < TableFieldActualInfo.ActualRectangle.Value.Right ? ar.Right : TableFieldActualInfo.ActualRectangle.Value.Right) - x,
                        (ar.Bottom < TableFieldActualInfo.ActualRectangle.Value.Bottom ? ar.Bottom : TableFieldActualInfo.ActualRectangle.Value.Bottom) - y
                         );
-                    return Ocr.This.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateBitmap, ar, page.PageCollection.ActiveTemplate.TesseractPageSegMode);
+                    return Ocr.This.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateBitmap, ar, ActualField.GetTesseractPageSegMode(page.PageCollection.ActiveTemplate));
                 }
                 else
                 {

@@ -218,7 +218,7 @@ namespace Cliver.PdfDocumentParser
                             if (ShowFieldTextLineSeparators.Checked)
                             {
                                 //List<Ocr.Line> lines = Ocr.GetLines(Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateOcrCharBoxs, r), pages.ActiveTemplate.TextAutoInsertSpace).ToList();
-                                List<Page.Line<Ocr.CharBox>> ols = Page.GetLinesWithAdjacentBorders(Ocr.This.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateBitmap, r, pages.ActiveTemplate.TesseractPageSegMode), r);
+                                List<Page.Line<Ocr.CharBox>> ols = Page.GetLinesWithAdjacentBorders(Ocr.This.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateBitmap, r, field.GetTesseractPageSegMode(pages.ActiveTemplate)), r);
                                 if (ols.Count > 0)
                                     ols.RemoveAt(0);
                                 List<RectangleF> lineBoxes = new List<RectangleF>();

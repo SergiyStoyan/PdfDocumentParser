@@ -24,6 +24,8 @@ namespace Cliver.PdfDocumentParser
             SpecialOcrSettings.CheckedChanged += delegate { synchronizeControls(); };
             synchronizeControls();
 
+            TesseractPageSegMode.DataSource = Enum.GetValues(typeof(Tesseract.PageSegMode));
+
             this.textAutoInsertSpace = textAutoInsertSpace;
         }
         TextAutoInsertSpace textAutoInsertSpace;
@@ -42,8 +44,9 @@ namespace Cliver.PdfDocumentParser
             {
                 if (field.OcrSettings == null)
                     field.OcrSettings = new Template.Field.OcrSettings();
-                field.OcrSettings.SingleFieldFromFieldImage = OcrSingleFieldFromFieldImage.Checked;
-                field.OcrSettings.ColumnFieldFromFieldImage = OcrColumnFieldFromFieldImage.Checked;
+                field.OcrSettings.SingleFieldFromFieldImage = SingleFieldFromFieldImage.Checked;
+                field.OcrSettings.ColumnFieldFromFieldImage = ColumnFieldFromFieldImage.Checked;
+                field.OcrSettings.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
             }
             return field;
         }
@@ -64,8 +67,9 @@ namespace Cliver.PdfDocumentParser
             SpecialOcrSettings.Checked = field.OcrSettings != null;
             if (field.OcrSettings != null)
             {
-                OcrSingleFieldFromFieldImage.Checked = field.OcrSettings.SingleFieldFromFieldImage;
-                OcrColumnFieldFromFieldImage.Checked = field.OcrSettings.ColumnFieldFromFieldImage;
+                SingleFieldFromFieldImage.Checked = field.OcrSettings.SingleFieldFromFieldImage;
+                ColumnFieldFromFieldImage.Checked = field.OcrSettings.ColumnFieldFromFieldImage;
+                TesseractPageSegMode.SelectedItem = field.OcrSettings.TesseractPageSegMode;
             }
 
             if (value != null)
