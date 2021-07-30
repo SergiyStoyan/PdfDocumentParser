@@ -436,21 +436,5 @@ namespace Cliver.PdfDocumentParser
 
             return t;
         }
-
-        //internal Template.Field.TesseractConfig GetOcrSpecialParsingSettingsFromGUI()
-        //{
-        //    Template.Field.OcrModes ocrMode = 0;
-        //    if (SingleFieldFromFieldImage.Checked)
-        //        ocrMode |= Template.Field.OcrModes.SingleFieldFromFieldImage;
-        //    if (ColumnFieldFromFieldImage.Checked)
-        //        ocrMode |= Template.Field.OcrModes.ColumnFieldFromFieldImage;
-        //    TextAutoInsertSpace textAutoInsertSpace = new TextAutoInsertSpace
-        //    {
-        //        Threshold = (float)textAutoInsertSpaceThreshold.Value,
-        //        Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text)
-        //    };
-        //    Ocr.Config ocrConfig = new Ocr.Config { };
-        //    return new Template.Field.TesseractConfig { OcrMode = ocrMode, TextAutoInsertSpace = textAutoInsertSpace, TesseractConfig = ocrConfig };
-        //}
     }
 }

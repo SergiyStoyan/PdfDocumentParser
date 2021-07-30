@@ -21,23 +21,32 @@ namespace Cliver.PdfDocumentParser
         {
             InitializeComponent();
 
+            SpecialOcrSettings.CheckedChanged += delegate { synchronizeControls(); };
+            synchronizeControls();
+
             this.textAutoInsertSpace = textAutoInsertSpace;
         }
         TextAutoInsertSpace textAutoInsertSpace;
+
+        void synchronizeControls()
+        {
+            panel2.Visible = SpecialOcrSettings.Checked;
+        }
 
         override protected object getObject()
         {
             if (field == null)
                 field = new Template.Field.OcrCharBoxs();
             field.ColumnOfTable = (string)ColumnOfTable.SelectedItem;
-           // field.TextAutoInsertSpace = SpecialTextAutoInsertSpace.Checked ? templateForm.GetTextAutoInsertSpaceFromGUI() : null;
+            if (field.OcrSettings == null)
+                field.OcrSettings = new Template.Field.OcrSettings();
+            field.OcrSettings.SingleFieldFromFieldImage = OcrSingleFieldFromFieldImage.Checked;
+            field.OcrSettings.ColumnFieldFromFieldImage = OcrColumnFieldFromFieldImage.Checked;
             return field;
         }
 
         protected override void initialize(DataGridViewRow row, object value)
         {
-            SpecialTextAutoInsertSpace.Enabled = false;
-
             field = (Template.Field.OcrCharBoxs)row.Tag;
             if (field == null)
                 field = new Template.Field.OcrCharBoxs();
@@ -50,7 +59,11 @@ namespace Cliver.PdfDocumentParser
             ColumnOfTable.SelectedItem = field.ColumnOfTable;
 
             SpecialOcrSettings.Checked = field.OcrSettings != null;
-            SpecialOcrSettings.Checked = field.OcrSettings != null;
+            if (field.OcrSettings != null)
+            {
+                OcrSingleFieldFromFieldImage.Checked = field.OcrSettings.SingleFieldFromFieldImage;
+                OcrColumnFieldFromFieldImage.Checked = field.OcrSettings.ColumnFieldFromFieldImage;
+            }
 
             if (value != null)
             {

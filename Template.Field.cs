@@ -157,6 +157,25 @@ namespace Cliver.PdfDocumentParser
                 public OcrModes Mode;
                 //public Ocr.Config Config;
                 public Tesseract.PageSegMode TesseractPageSegMode;
+
+                internal bool SingleFieldFromFieldImage
+                {
+                    get { return Mode.HasFlag(OcrModes.SingleFieldFromFieldImage); }
+                    set
+                    {
+                        if (value) Mode |= OcrModes.SingleFieldFromFieldImage;
+                        else Mode &= ~OcrModes.SingleFieldFromFieldImage;
+                    }
+                }
+                internal bool ColumnFieldFromFieldImage
+                {
+                    get { return Mode.HasFlag(OcrModes.ColumnFieldFromFieldImage); }
+                    set
+                    {
+                        if (value) Mode |= OcrModes.ColumnFieldFromFieldImage;
+                        else Mode &= ~OcrModes.ColumnFieldFromFieldImage;
+                    }
+                }
             }
 
             public enum OcrModes

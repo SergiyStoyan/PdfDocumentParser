@@ -38,6 +38,8 @@ namespace Cliver.PdfDocumentParser
             if (field == null)
                 field = new Template.Field.PdfTextLines();
             field.ColumnOfTable = (string)ColumnOfTable.SelectedItem;
+            if (field.TextAutoInsertSpace == null)
+                field.TextAutoInsertSpace = new TextAutoInsertSpace();
             field.TextAutoInsertSpace = SpecialTextAutoInsertSpace.Checked ? new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = textAutoInsertSpaceRepresentative.Text, IgnoreSourceSpaces = textAutoInsertSpaceIgnoreSourceSpaces.Checked } : null;
             return field;
         }

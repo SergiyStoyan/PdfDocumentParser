@@ -33,6 +33,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.SpecialTextAutoInsertSpace = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
             this.textAutoInsertSpaceIgnoreSourceSpaces = new System.Windows.Forms.CheckBox();
@@ -41,7 +42,6 @@
             this.label15 = new System.Windows.Forms.Label();
             this.textAutoInsertSpaceThreshold = new System.Windows.Forms.NumericUpDown();
             this.label12 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).BeginInit();
@@ -49,7 +49,7 @@
             // 
             // ColumnOfTable
             // 
-            this.ColumnOfTable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.ColumnOfTable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ColumnOfTable.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ColumnOfTable.FormattingEnabled = true;
@@ -98,6 +98,16 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(333, 29);
             this.panel1.TabIndex = 8;
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(264, 5);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(13, 13);
+            this.label3.TabIndex = 71;
+            this.label3.Text = "+";
             // 
             // panel2
             // 
@@ -184,16 +194,7 @@
             this.label12.TabIndex = 69;
             this.label12.Text = "Threshold:";
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(264, 5);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(13, 13);
-            this.label3.TabIndex = 71;
-            this.label3.Text = "+";
-            // 
-            // FieldPdfTextControl
+            // FieldPdfCharBoxsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -201,7 +202,7 @@
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.MinimumSize = new System.Drawing.Size(300, 100);
-            this.Name = "FieldPdfTextControl";
+            this.Name = "FieldPdfCharBoxsControl";
             this.Size = new System.Drawing.Size(333, 281);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
