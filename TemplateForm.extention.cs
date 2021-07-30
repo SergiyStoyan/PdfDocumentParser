@@ -52,17 +52,12 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        class conditionComparer : IEqualityComparer<Template.Condition>
+        void highlightIfDeskew(bool deskew)
         {
-            bool IEqualityComparer<Template.Condition>.Equals(Template.Condition x, Template.Condition y)
-            {
-                return x.Name == y.Name;
-            }
-
-            int IEqualityComparer<Template.Condition>.GetHashCode(Template.Condition obj)
-            {
-                throw new NotImplementedException();
-            }
+            if (deskew)
+                bScannedDocumentSettings.BackColor = Color.Beige;
+            else
+                bScannedDocumentSettings.UseVisualStyleBackColor = true;
         }
 
         void setUIFromTemplate(Template t)
@@ -78,15 +73,14 @@ namespace Cliver.PdfDocumentParser
                 if (t.TextAutoInsertSpace == null)
                     t.TextAutoInsertSpace = new TextAutoInsertSpace();
                 textAutoInsertSpaceThreshold.Value = (decimal)t.TextAutoInsertSpace.Threshold;
-                textAutoInsertSpaceRepresentative.Text = Regex.Escape(t.TextAutoInsertSpace.Representative);
 
-                CvImageScalePyramidStep.Value = t.CvImageScalePyramidStep;
                 TesseractPageSegMode.SelectedItem = t.TesseractPageSegMode;
 
                 SingleFieldFromFieldImage.Checked = t.FieldOcrMode.HasFlag(Template.Field.OcrModes.SingleFieldFromFieldImage);
                 ColumnFieldFromFieldImage.Checked = t.FieldOcrMode.HasFlag(Template.Field.OcrModes.ColumnFieldFromFieldImage);
 
                 bitmapPreparationForm.SetUI(t, false);
+                highlightIfDeskew(t.Deskew != null);
 
                 anchors.Rows.Clear();
                 if (t.Anchors != null)
@@ -183,7 +177,7 @@ namespace Cliver.PdfDocumentParser
             if (pages == null)
                 return;
             //TextForm tf = new TextForm("Pdf Entity Text", PdfTextExtractor.GetTextFromPage(pages.PdfReader, currentPageI), false);
-            TextForm tf = new TextForm("Pdf Entity Text", Page.GetText(pages[currentPageI].PdfCharBoxs, new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) }), false);
+            TextForm tf = new TextForm("Pdf Entity Text", Page.GetText(pages[currentPageI].PdfCharBoxs, new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, IgnoreSourceSpaces = IgnoreSourceSpaces.Checked /*, Representative//default*/}), false);
             tf.ShowDialog();
         }
 
@@ -191,7 +185,7 @@ namespace Cliver.PdfDocumentParser
         {
             if (pages == null)
                 return;
-            List<string> ls = Page.GetTextLines(pages[currentPageI].ActiveTemplateOcrCharBoxs, new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) });
+            List<string> ls = Page.GetTextLines(pages[currentPageI].ActiveTemplateOcrCharBoxs, new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, IgnoreSourceSpaces = IgnoreSourceSpaces.Checked/*, Representative//default*/ });
             TextForm tf = new TextForm("OCR Text", string.Join("\r\n", ls), false);
             tf.ShowDialog();
         }
@@ -259,10 +253,10 @@ namespace Cliver.PdfDocumentParser
             t.TextAutoInsertSpace = new TextAutoInsertSpace
             {
                 Threshold = (float)textAutoInsertSpaceThreshold.Value,
-                Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text),
+                IgnoreSourceSpaces = IgnoreSourceSpaces.Checked,
+                //Representative//default
             };
 
-            t.CvImageScalePyramidStep = (int)CvImageScalePyramidStep.Value;
             t.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
 
             if (SingleFieldFromFieldImage.Checked)

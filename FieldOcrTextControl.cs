@@ -17,7 +17,7 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class FieldOcrTextControl : FieldControl
     {
-        public FieldOcrTextControl(TextAutoInsertSpace textAutoInsertSpace)
+        public FieldOcrTextControl()
         {
             InitializeComponent();
 
@@ -25,10 +25,7 @@ namespace Cliver.PdfDocumentParser
             synchronizeControls();
 
             TesseractPageSegMode.DataSource = Enum.GetValues(typeof(Tesseract.PageSegMode));
-
-            this.textAutoInsertSpace = textAutoInsertSpace;
         }
-        TextAutoInsertSpace textAutoInsertSpace;
 
         void synchronizeControls()
         {

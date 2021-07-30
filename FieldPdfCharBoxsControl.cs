@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -39,11 +40,7 @@ namespace Cliver.PdfDocumentParser
                 field = new Template.Field.PdfCharBoxs();
             field.ColumnOfTable = (string)ColumnOfTable.SelectedItem;
             if (SpecialTextAutoInsertSpace.Checked)
-            {
-                if (field.TextAutoInsertSpace == null)
-                    field.TextAutoInsertSpace = new TextAutoInsertSpace();
-                field.TextAutoInsertSpace = SpecialTextAutoInsertSpace.Checked ? new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = textAutoInsertSpaceRepresentative.Text, IgnoreSourceSpaces = textAutoInsertSpaceIgnoreSourceSpaces.Checked } : null;
-            }
+                field.TextAutoInsertSpace = new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text), IgnoreSourceSpaces = textAutoInsertSpaceIgnoreSourceSpaces.Checked };
             else
                 field.TextAutoInsertSpace = null;
             return field;
@@ -66,7 +63,7 @@ namespace Cliver.PdfDocumentParser
             if (field.TextAutoInsertSpace != null)
             {
                 textAutoInsertSpaceThreshold.Value = (decimal)field.TextAutoInsertSpace.Threshold;
-                textAutoInsertSpaceRepresentative.Text = field.TextAutoInsertSpace.Representative;
+                textAutoInsertSpaceRepresentative.Text = Regex.Escape(field.TextAutoInsertSpace.Representative);
                 textAutoInsertSpaceIgnoreSourceSpaces.Checked = field.TextAutoInsertSpace.IgnoreSourceSpaces;
             }
 

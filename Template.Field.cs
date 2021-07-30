@@ -134,6 +134,12 @@ namespace Cliver.PdfDocumentParser
                 public TextAutoInsertSpace TextAutoInsertSpace;
             }
 
+            internal TextAutoInsertSpace GetTextAutoInsertSpace(Template t)
+            {
+                Field.Pdf f = this as Template.Field.Pdf;
+                return f?.TextAutoInsertSpace != null ? f.TextAutoInsertSpace : t.TextAutoInsertSpace;
+            }
+
             public class PdfText : Pdf
             {
             }

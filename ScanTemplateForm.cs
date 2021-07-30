@@ -49,8 +49,7 @@ namespace Cliver.PdfDocumentParser
             Deskew.CheckedChanged += delegate
             {
                 changed = true;
-                DeskewMarginColor.Enabled = DeskewSingleBlock.Enabled = DeskewColumnOfBlocks.Enabled = DeskewStructuringElementX.Enabled = DeskewStructuringElementY.Enabled = Deskew.Checked;
-                DeskewContourMaxCount.Enabled = DeskewAngleMaxDeviation.Enabled = DeskewBlockMaxHeight.Enabled = DeskewBlockMinGap.Enabled = DeskewColumnOfBlocks.Checked;
+                gDeskew.Visible = Deskew.Checked;
             };
             DeskewSingleBlock.CheckedChanged += delegate { changed = true; };
             DeskewColumnOfBlocks.CheckedChanged += delegate
@@ -80,7 +79,9 @@ namespace Cliver.PdfDocumentParser
             {
                 PageRotation.SelectedIndex = (int)t.PageRotation;
                 bitmapPreprocessorClassDefinition.Text = t.BitmapPreprocessorClassDefinition;
+                CvImageScalePyramidStep.Value = t.CvImageScalePyramidStep;
 
+                gDeskew.Visible = Deskew.Checked = t.Deskew != null;
                 Deskewer.Config dc = t.Deskew != null ? t.Deskew : new Deskewer.Config();
                 DeskewBlockMaxHeight.Value = dc.BlockMaxLength;
                 DeskewBlockMinGap.Value = dc.BlockMinGap;
@@ -89,10 +90,10 @@ namespace Cliver.PdfDocumentParser
                 DeskewContourMaxCount.Value = dc.ContourMaxCount;
                 DeskewBlockMinGap.Value = dc.BlockMinGap;
                 DeskewMarginColor.BackColor = dc.MarginColor;
-                DeskewMarginColor.Enabled = DeskewContourMaxCount.Enabled = DeskewAngleMaxDeviation.Enabled = DeskewSingleBlock.Enabled = DeskewColumnOfBlocks.Enabled = DeskewStructuringElementX.Enabled = DeskewStructuringElementY.Enabled = Deskew.Checked = t.Deskew != null;
                 if (t.Deskew != null)
                     DeskewSingleBlock.Checked = t.Deskew.Mode.HasFlag(Deskewer.Modes.SingleBlock) || !t.Deskew.Mode.HasFlag(Deskewer.Modes.ColumnOfBlocks);
                 DeskewColumnOfBlocks.Checked = !DeskewSingleBlock.Checked;
+                DeskewBlockMaxHeight.Enabled = DeskewBlockMinGap.Enabled = DeskewColumnOfBlocks.Checked;
 
                 changed = false;
             }
@@ -140,6 +141,7 @@ namespace Cliver.PdfDocumentParser
             t.PageRotation = (Template.PageRotations)PageRotation.SelectedIndex;
             t.ScalingAnchorId = ScalingAnchor.SelectedItem is int ? (int)ScalingAnchor.SelectedItem : -1;
             t.BitmapPreprocessorClassDefinition = bitmapPreprocessorClassDefinition.Text;
+            t.CvImageScalePyramidStep = (int)CvImageScalePyramidStep.Value;
 
             if (Deskew.Checked)
             {
@@ -188,7 +190,7 @@ namespace Cliver.PdfDocumentParser
                 {
                     validate();
                     changed = false;
-                    templateForm.ReloadPageActiveTemplateBitmap();
+                    templateForm.ReloadPageActiveTemplateBitmap(Deskew.Checked);
                 }
                 return true;
             }

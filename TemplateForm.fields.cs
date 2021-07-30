@@ -648,26 +648,32 @@ namespace Cliver.PdfDocumentParser
                         continue;
                     fs.Add((Template.Field)r.Tag);
                 }
+
+                TextAutoInsertSpace getTextAutoInsertSpace()
+                {
+                    Template.Field.Pdf pf = f as Template.Field.Pdf;
+                    return pf?.TextAutoInsertSpace != null ? pf.TextAutoInsertSpace : new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, IgnoreSourceSpaces = IgnoreSourceSpaces.Checked/*, Representative//default*/ };
+                }
                 Template.Field.Types t = ((Template.Field)row.Tag).Type;
                 switch (t)
                 {
                     case Template.Field.Types.PdfText:
-                        currentFieldControl = new FieldPdfTextControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) });
+                        currentFieldControl = new FieldPdfTextControl();
                         break;
                     case Template.Field.Types.PdfTextLines:
-                        currentFieldControl = new FieldPdfTextLinesControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) });
+                        currentFieldControl = new FieldPdfTextLinesControl();
                         break;
                     case Template.Field.Types.PdfCharBoxs:
-                        currentFieldControl = new FieldPdfCharBoxsControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) });
+                        currentFieldControl = new FieldPdfCharBoxsControl(getTextAutoInsertSpace());
                         break;
                     case Template.Field.Types.OcrText:
-                        currentFieldControl = new FieldOcrTextControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) });
+                        currentFieldControl = new FieldOcrTextControl();
                         break;
                     case Template.Field.Types.OcrTextLines:
-                        currentFieldControl = new FieldOcrTextLinesControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) });
+                        currentFieldControl = new FieldOcrTextLinesControl();
                         break;
                     case Template.Field.Types.OcrCharBoxs:
-                        currentFieldControl = new FieldOcrCharBoxsControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) });
+                        currentFieldControl = new FieldOcrCharBoxsControl(getTextAutoInsertSpace());
                         break;
                     case Template.Field.Types.OcrTextLineImages:
                         currentFieldControl = new FieldOcrTextLineImagesControl();

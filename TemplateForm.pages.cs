@@ -19,8 +19,9 @@ namespace Cliver.PdfDocumentParser
     {
         PageCollection pages = null;
 
-        internal void ReloadPageActiveTemplateBitmap()
+        internal void ReloadPageActiveTemplateBitmap(bool deskew)
         {
+            highlightIfDeskew(deskew);
             if (pages == null)
                 return;
             //pages.Clear();
@@ -314,7 +315,7 @@ namespace Cliver.PdfDocumentParser
 
                 if (pages[pageI].DetectedImageScale < 0)
                 {
-                    detectedImageScale.BackColor = SystemColors.Control;
+                    detectedImageScale.BackColor = SystemColors.Window;
                     detectedImageScale.Text = null;
                 }
                 else if (pages[pageI].DetectedImageScale == 0)
