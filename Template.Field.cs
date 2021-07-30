@@ -150,11 +150,12 @@ namespace Cliver.PdfDocumentParser
             {
                 public OcrSettings OcrSettings;
                 //public TextAutoInsertSpace TextAutoInsertSpace;
+            }
 
-                internal OcrModes GetOcrMode(Template t)
-                {
-                    return OcrSettings != null ? OcrSettings.Mode : t.FieldOcrMode;
-                }
+            internal OcrModes GetOcrMode(Template t)
+            {
+                Field.Ocr f = this as Template.Field.Ocr;
+                return f?.OcrSettings != null ? f.OcrSettings.Mode : t.FieldOcrMode;
             }
 
             public class OcrSettings

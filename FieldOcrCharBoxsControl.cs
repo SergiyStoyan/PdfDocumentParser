@@ -38,10 +38,13 @@ namespace Cliver.PdfDocumentParser
             if (field == null)
                 field = new Template.Field.OcrCharBoxs();
             field.ColumnOfTable = (string)ColumnOfTable.SelectedItem;
-            if (field.OcrSettings == null)
-                field.OcrSettings = new Template.Field.OcrSettings();
-            field.OcrSettings.SingleFieldFromFieldImage = OcrSingleFieldFromFieldImage.Checked;
-            field.OcrSettings.ColumnFieldFromFieldImage = OcrColumnFieldFromFieldImage.Checked;
+            if (SpecialOcrSettings.Checked)
+            {
+                if (field.OcrSettings == null)
+                    field.OcrSettings = new Template.Field.OcrSettings();
+                field.OcrSettings.SingleFieldFromFieldImage = OcrSingleFieldFromFieldImage.Checked;
+                field.OcrSettings.ColumnFieldFromFieldImage = OcrColumnFieldFromFieldImage.Checked;
+            }
             return field;
         }
 
