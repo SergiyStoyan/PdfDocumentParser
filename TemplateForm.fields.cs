@@ -641,8 +641,6 @@ namespace Cliver.PdfDocumentParser
                 object v = setFieldRowValue(row, false);
                 Template.Field f = (Template.Field)row.Tag;
 
-                gAutoInsertingSpace.Enabled = f is Template.Field.Pdf;
-
                 List<Template.Field> fs = new List<Template.Field>();
                 foreach (DataGridViewRow r in fields.Rows)
                 {
