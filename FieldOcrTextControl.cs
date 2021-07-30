@@ -48,6 +48,8 @@ namespace Cliver.PdfDocumentParser
                 field.OcrSettings.ColumnFieldFromFieldImage = ColumnFieldFromFieldImage.Checked;
                 field.OcrSettings.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
             }
+            else
+                field.OcrSettings = null;
             return field;
         }
 

@@ -44,6 +44,8 @@ namespace Cliver.PdfDocumentParser
                     field.TextAutoInsertSpace = new TextAutoInsertSpace();
                 field.TextAutoInsertSpace = SpecialTextAutoInsertSpace.Checked ? new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = textAutoInsertSpaceRepresentative.Text, IgnoreSourceSpaces = textAutoInsertSpaceIgnoreSourceSpaces.Checked } : null;
             }
+            else
+                field.TextAutoInsertSpace = null;
             return field;
         }
 
