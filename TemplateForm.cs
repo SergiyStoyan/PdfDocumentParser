@@ -76,7 +76,7 @@ namespace Cliver.PdfDocumentParser
                         selectionBoxPoint2 = p;
                     }
                 }
-                selectionCoordinates.Text = selectionBoxPoint1.ToString();
+                showSelectionCoordinates(selectionBoxPoint1);
             };
 
             picture.MouseWheel += delegate (object sender, MouseEventArgs e)
@@ -115,7 +115,7 @@ namespace Cliver.PdfDocumentParser
             switch (drawingMode)
             {
                 case DrawingModes.NULL:
-                    selectionCoordinates.Text = p.ToString();
+                    showSelectionCoordinates(p);
 
                     if (findResizebleBox(p, out ResizebleBoxSides resizebleBoxSide) != null)
                         Cursor.Current = resizebleBoxSide == ResizebleBoxSides.Left || resizebleBoxSide == ResizebleBoxSides.Right ? Cursors.VSplit : Cursors.HSplit;
@@ -157,7 +157,7 @@ namespace Cliver.PdfDocumentParser
                         selectionBoxPoint1.Y = p.Y;
                     break;
             }
-            selectionCoordinates.Text = selectionBoxPoint1.ToString() + ":" + selectionBoxPoint2.ToString();
+            showSelectionCoordinates(selectionBoxPoint1, selectionBoxPoint2);
             RectangleF r = new RectangleF(selectionBoxPoint1.X, selectionBoxPoint1.Y, selectionBoxPoint2.X - selectionBoxPoint1.X, selectionBoxPoint2.Y - selectionBoxPoint1.Y);
             clearImageFromBoxes();
             drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<System.Drawing.RectangleF> { r });
@@ -460,6 +460,11 @@ namespace Cliver.PdfDocumentParser
         Point selectionBoxPoint0, selectionBoxPoint1, selectionBoxPoint2;
         Point screenMousePosition0;
         Point imageScrollPostion0;
+
+        void showSelectionCoordinates(Point p, Point? p2 = null)
+        {
+            selectionCoordinates.Text = "{" + p.X + "," + p.Y + "}" + (p2 != null ? ":{" + p2.Value.X + "," + p2.Value.Y + "}" : null);
+        }
 
         enum DrawingModes
         {

@@ -799,7 +799,7 @@ namespace Cliver.PdfDocumentParser
             {
                 if (splitContainer4.Panel2.Controls.Count < 1)
                     return null;
-                return (FieldControl)splitContainer4.Panel2.Controls[0];
+                return splitContainer4.Panel2.Controls[0] as FieldControl;
             }
             set
             {
