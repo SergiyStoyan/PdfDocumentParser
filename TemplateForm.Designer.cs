@@ -154,9 +154,9 @@
             0,
             0,
             65536});
-            this.textAutoInsertSpaceThreshold.Location = new System.Drawing.Point(142, 3);
+            this.textAutoInsertSpaceThreshold.Location = new System.Drawing.Point(164, 3);
             this.textAutoInsertSpaceThreshold.Name = "textAutoInsertSpaceThreshold";
-            this.textAutoInsertSpaceThreshold.Size = new System.Drawing.Size(52, 20);
+            this.textAutoInsertSpaceThreshold.Size = new System.Drawing.Size(41, 20);
             this.textAutoInsertSpaceThreshold.TabIndex = 64;
             this.textAutoInsertSpaceThreshold.Value = new decimal(new int[] {
             6,
@@ -377,9 +377,9 @@
             this.label14.Location = new System.Drawing.Point(3, 3);
             this.label14.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(70, 13);
+            this.label14.Size = new System.Drawing.Size(95, 13);
             this.label14.TabIndex = 105;
-            this.label14.Text = "Insert Space:";
+            this.label14.Text = "Auto-Insert Space:";
             // 
             // flowLayoutPanel2
             // 
@@ -657,8 +657,8 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(79, 3);
-            this.label12.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.label12.Location = new System.Drawing.Point(104, 3);
+            this.label12.Margin = new System.Windows.Forms.Padding(3, 3, 0, 0);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(57, 13);
             this.label12.TabIndex = 65;
@@ -1023,7 +1023,7 @@
             // IgnoreSourceSpaces
             // 
             this.IgnoreSourceSpaces.AutoSize = true;
-            this.IgnoreSourceSpaces.Location = new System.Drawing.Point(200, 3);
+            this.IgnoreSourceSpaces.Location = new System.Drawing.Point(211, 3);
             this.IgnoreSourceSpaces.Name = "IgnoreSourceSpaces";
             this.IgnoreSourceSpaces.Size = new System.Drawing.Size(132, 17);
             this.IgnoreSourceSpaces.TabIndex = 101;

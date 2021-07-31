@@ -29,7 +29,7 @@ namespace Cliver.PdfDocumentParser
 
         void synchronizeControls()
         {
-            panel2.Visible = SpecialOcrSettings.Checked;
+            gOcr.Visible = SpecialOcrSettings.Checked;
         }
 
         override protected object getObject()

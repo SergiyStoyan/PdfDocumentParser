@@ -28,7 +28,7 @@ namespace Cliver.PdfDocumentParser
 
         void synchronizeControls()
         {
-            panel2.Visible = SpecialTextAutoInsertSpace.Checked;
+            gSpacing.Visible = SpecialTextAutoInsertSpace.Checked;
         }
 
         override protected object getObject()
