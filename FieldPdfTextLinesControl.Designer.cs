@@ -33,7 +33,6 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.ColumnOfTable = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.textAutoInsertSpaceIgnoreSourceSpaces = new System.Windows.Forms.CheckBox();
             this.textAutoInsertSpaceRepresentative = new System.Windows.Forms.TextBox();
@@ -58,18 +57,19 @@
             // SpecialTextAutoInsertSpace
             // 
             this.SpecialTextAutoInsertSpace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.SpecialTextAutoInsertSpace.Appearance = System.Windows.Forms.Appearance.Button;
             this.SpecialTextAutoInsertSpace.AutoSize = true;
-            this.SpecialTextAutoInsertSpace.Location = new System.Drawing.Point(229, 6);
+            this.SpecialTextAutoInsertSpace.Location = new System.Drawing.Point(178, 1);
             this.SpecialTextAutoInsertSpace.Name = "SpecialTextAutoInsertSpace";
-            this.SpecialTextAutoInsertSpace.Size = new System.Drawing.Size(15, 14);
+            this.SpecialTextAutoInsertSpace.Size = new System.Drawing.Size(56, 23);
             this.SpecialTextAutoInsertSpace.TabIndex = 6;
+            this.SpecialTextAutoInsertSpace.Text = "Spacing";
             this.SpecialTextAutoInsertSpace.UseVisualStyleBackColor = true;
             // 
             // panel1
             // 
             this.panel1.Controls.Add(this.ColumnOfTable);
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.SpecialTextAutoInsertSpace);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
@@ -84,7 +84,7 @@
             this.ColumnOfTable.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ColumnOfTable.FormattingEnabled = true;
             this.ColumnOfTable.Location = new System.Drawing.Point(90, 2);
-            this.ColumnOfTable.MinimumSize = new System.Drawing.Size(80, 0);
+            this.ColumnOfTable.MinimumSize = new System.Drawing.Size(30, 0);
             this.ColumnOfTable.Name = "ColumnOfTable";
             this.ColumnOfTable.Size = new System.Drawing.Size(82, 21);
             this.ColumnOfTable.TabIndex = 72;
@@ -97,16 +97,6 @@
             this.label1.Size = new System.Drawing.Size(84, 13);
             this.label1.TabIndex = 73;
             this.label1.Text = "Column Of Field:";
-            // 
-            // label2
-            // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(179, 6);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(49, 13);
-            this.label2.TabIndex = 72;
-            this.label2.Text = "Spacing:";
             // 
             // label4
             // 
@@ -210,7 +200,6 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox textAutoInsertSpaceIgnoreSourceSpaces;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textAutoInsertSpaceRepresentative;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.NumericUpDown textAutoInsertSpaceThreshold;

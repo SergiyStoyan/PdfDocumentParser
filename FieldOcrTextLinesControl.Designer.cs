@@ -37,7 +37,6 @@
             this.label19 = new System.Windows.Forms.Label();
             this.SingleFieldFromFieldImage = new System.Windows.Forms.CheckBox();
             this.ColumnFieldFromFieldImage = new System.Windows.Forms.CheckBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.gOcr = new System.Windows.Forms.GroupBox();
             this.panel1.SuspendLayout();
             this.gOcr.SuspendLayout();
@@ -50,7 +49,7 @@
             this.ColumnOfTable.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ColumnOfTable.FormattingEnabled = true;
             this.ColumnOfTable.Location = new System.Drawing.Point(86, 3);
-            this.ColumnOfTable.MinimumSize = new System.Drawing.Size(80, 0);
+            this.ColumnOfTable.MinimumSize = new System.Drawing.Size(30, 0);
             this.ColumnOfTable.Name = "ColumnOfTable";
             this.ColumnOfTable.Size = new System.Drawing.Size(112, 21);
             this.ColumnOfTable.TabIndex = 0;
@@ -76,11 +75,13 @@
             // SpecialOcrSettings
             // 
             this.SpecialOcrSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.SpecialOcrSettings.Appearance = System.Windows.Forms.Appearance.Button;
             this.SpecialOcrSettings.AutoSize = true;
-            this.SpecialOcrSettings.Location = new System.Drawing.Point(243, 5);
+            this.SpecialOcrSettings.Location = new System.Drawing.Point(204, 3);
             this.SpecialOcrSettings.Name = "SpecialOcrSettings";
-            this.SpecialOcrSettings.Size = new System.Drawing.Size(15, 14);
+            this.SpecialOcrSettings.Size = new System.Drawing.Size(40, 23);
             this.SpecialOcrSettings.TabIndex = 6;
+            this.SpecialOcrSettings.Text = "OCR";
             this.SpecialOcrSettings.UseVisualStyleBackColor = true;
             // 
             // panel1
@@ -88,7 +89,6 @@
             this.panel1.Controls.Add(this.SpecialOcrSettings);
             this.panel1.Controls.Add(this.ColumnOfTable);
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.label2);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
@@ -116,7 +116,7 @@
             // SingleFieldFromFieldImage
             // 
             this.SingleFieldFromFieldImage.AutoSize = true;
-            this.SingleFieldFromFieldImage.Location = new System.Drawing.Point(119, 16);
+            this.SingleFieldFromFieldImage.Location = new System.Drawing.Point(117, 16);
             this.SingleFieldFromFieldImage.Name = "SingleFieldFromFieldImage";
             this.SingleFieldFromFieldImage.Size = new System.Drawing.Size(141, 17);
             this.SingleFieldFromFieldImage.TabIndex = 105;
@@ -126,22 +126,12 @@
             // ColumnFieldFromFieldImage
             // 
             this.ColumnFieldFromFieldImage.AutoSize = true;
-            this.ColumnFieldFromFieldImage.Location = new System.Drawing.Point(119, 35);
+            this.ColumnFieldFromFieldImage.Location = new System.Drawing.Point(117, 36);
             this.ColumnFieldFromFieldImage.Name = "ColumnFieldFromFieldImage";
             this.ColumnFieldFromFieldImage.Size = new System.Drawing.Size(147, 17);
             this.ColumnFieldFromFieldImage.TabIndex = 106;
             this.ColumnFieldFromFieldImage.Text = "Column Field By Its Image";
             this.ColumnFieldFromFieldImage.UseVisualStyleBackColor = true;
-            // 
-            // label2
-            // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(204, 6);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(33, 13);
-            this.label2.TabIndex = 72;
-            this.label2.Text = "OCR:";
             // 
             // gOcr
             // 
@@ -182,7 +172,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox SpecialOcrSettings;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox SingleFieldFromFieldImage;
         private System.Windows.Forms.CheckBox ColumnFieldFromFieldImage;
         private System.Windows.Forms.ComboBox TesseractPageSegMode;
