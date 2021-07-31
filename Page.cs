@@ -43,6 +43,11 @@ namespace Cliver.PdfDocumentParser
                     _activeTemplateBitmap.Dispose();
                     _activeTemplateBitmap = null;
                 }
+                if (_activeTemplateCvImage != null)
+                {
+                    _activeTemplateCvImage.Dispose();
+                    _activeTemplateCvImage = null;
+                }
                 if (_activeTemplateImageData != null)
                 {
                     //_activeTemplateImageData.Dispose();

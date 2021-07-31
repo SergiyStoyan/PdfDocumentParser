@@ -161,7 +161,7 @@ namespace Cliver.PdfDocumentParser
             }
             return fais;
         }
-        Dictionary<string, List<FieldActualInfo>> fieldNames2fieldActualInfos = new Dictionary<string, List<FieldActualInfo>>();
+        HandyDictionary<string, List<FieldActualInfo>> fieldNames2fieldActualInfos = new HandyDictionary<string, List<FieldActualInfo>>();
 
         internal class FieldActualInfo : IDisposable
         {

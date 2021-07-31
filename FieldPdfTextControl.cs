@@ -25,7 +25,6 @@ namespace Cliver.PdfDocumentParser
             SpecialTextAutoInsertSpace.CheckedChanged += delegate { synchronizeControls(); };
             synchronizeControls();
         }
-        TextAutoInsertSpace textAutoInsertSpace;
 
         void synchronizeControls()
         {

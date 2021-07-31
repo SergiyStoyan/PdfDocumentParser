@@ -16,6 +16,15 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class TemplateForm : Form
     {
+        ~TemplateForm()
+        {
+            scaledCurrentPageBitmap?.Dispose();
+            pages?.Dispose();
+            currentFieldRow?.Dispose();
+            bitmapPreparationForm?.Dispose();
+            currentConditionRow?.Dispose();
+        }
+
         public TemplateForm(TemplateManager templateManager)
         {
             InitializeComponent();
