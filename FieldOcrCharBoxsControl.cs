@@ -25,6 +25,7 @@ namespace Cliver.PdfDocumentParser
             synchronizeControls();
 
             TesseractPageSegMode.DataSource = Enum.GetValues(typeof(Tesseract.PageSegMode));
+            TesseractPageSegMode.SelectedItem = new Template.Field.OcrSettings().TesseractPageSegMode;
 
             this.textAutoInsertSpace = textAutoInsertSpace;
         }
@@ -32,7 +33,7 @@ namespace Cliver.PdfDocumentParser
 
         void synchronizeControls()
         {
-            panel2.Visible = SpecialOcrSettings.Checked;
+            gOcr.Visible = SpecialOcrSettings.Checked;
         }
 
         override protected object getObject()

@@ -25,6 +25,7 @@ namespace Cliver.PdfDocumentParser
             synchronizeControls();
 
             TesseractPageSegMode.DataSource = Enum.GetValues(typeof(Tesseract.PageSegMode));
+            TesseractPageSegMode.SelectedItem = new Template.Field.OcrSettings().TesseractPageSegMode;
         }
 
         void synchronizeControls()
