@@ -190,7 +190,7 @@ namespace Cliver.PdfDocumentParser
                 {
                     validate();
                     changed = false;
-                    templateForm.ReloadPageActiveTemplateBitmap(Deskew.Checked);
+                    templateForm.ReloadPageActiveTemplateBitmap();
                 }
                 return true;
             }

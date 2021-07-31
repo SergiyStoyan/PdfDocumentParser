@@ -52,12 +52,13 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        void highlightIfDeskew(bool deskew)
+        void highlightScanSettings(Template t)
         {
-            if (deskew)
+            if (t.Deskew != null)
                 bScannedDocumentSettings.BackColor = Color.Beige;
             else
                 bScannedDocumentSettings.UseVisualStyleBackColor = true;
+            detectedImageScale.Enabled = t.ScalingAnchorId > 0;
         }
 
         void setUIFromTemplate(Template t)
@@ -80,7 +81,7 @@ namespace Cliver.PdfDocumentParser
                 ColumnFieldFromFieldImage.Checked = t.FieldOcrMode.HasFlag(Template.Field.OcrModes.ColumnFieldFromFieldImage);
 
                 bitmapPreparationForm.SetUI(t, false);
-                highlightIfDeskew(t.Deskew != null);
+                highlightScanSettings(t);
 
                 anchors.Rows.Clear();
                 if (t.Anchors != null)

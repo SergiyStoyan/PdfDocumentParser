@@ -19,13 +19,13 @@ namespace Cliver.PdfDocumentParser
     {
         PageCollection pages = null;
 
-        internal void ReloadPageActiveTemplateBitmap(bool deskew)
+        internal void ReloadPageActiveTemplateBitmap()
         {
-            highlightIfDeskew(deskew);
             if (pages == null)
                 return;
             //pages.Clear();
             pages.ActiveTemplate = GetTemplateFromUI(false);
+            highlightScanSettings(pages.ActiveTemplate);
             showPage(currentPageI);
         }
 
