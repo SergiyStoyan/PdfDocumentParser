@@ -654,26 +654,31 @@ namespace Cliver.PdfDocumentParser
                     Template.Field.Pdf pf = f as Template.Field.Pdf;
                     return pf?.TextAutoInsertSpace != null ? pf.TextAutoInsertSpace : new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, IgnoreSourceSpaces = IgnoreSourceSpaces.Checked/*, Representative//default*/ };
                 }
+                Template.Field.OcrSettings getOcrSettings()
+                {
+                    Template.Field.Ocr of = f as Template.Field.Ocr;
+                    return of?.OcrSettings != null ? of.OcrSettings : new Template.Field.OcrSettings { TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem, SingleFieldFromFieldImage = SingleFieldFromFieldImage.Checked, ColumnFieldFromFieldImage = ColumnFieldFromFieldImage.Checked };
+                }
                 Template.Field.Types t = ((Template.Field)row.Tag).Type;
                 switch (t)
                 {
                     case Template.Field.Types.PdfText:
-                        currentFieldControl = new FieldPdfTextControl();
+                        currentFieldControl = new FieldPdfTextControl(getTextAutoInsertSpace());
                         break;
                     case Template.Field.Types.PdfTextLines:
-                        currentFieldControl = new FieldPdfTextLinesControl();
+                        currentFieldControl = new FieldPdfTextLinesControl(getTextAutoInsertSpace());
                         break;
                     case Template.Field.Types.PdfCharBoxs:
                         currentFieldControl = new FieldPdfCharBoxsControl(getTextAutoInsertSpace());
                         break;
                     case Template.Field.Types.OcrText:
-                        currentFieldControl = new FieldOcrTextControl();
+                        currentFieldControl = new FieldOcrTextControl(getOcrSettings());
                         break;
                     case Template.Field.Types.OcrTextLines:
-                        currentFieldControl = new FieldOcrTextLinesControl();
+                        currentFieldControl = new FieldOcrTextLinesControl(getOcrSettings());
                         break;
                     case Template.Field.Types.OcrCharBoxs:
-                        currentFieldControl = new FieldOcrCharBoxsControl(getTextAutoInsertSpace());
+                        currentFieldControl = new FieldOcrCharBoxsControl(getTextAutoInsertSpace(), getOcrSettings());
                         break;
                     case Template.Field.Types.OcrTextLineImages:
                         currentFieldControl = new FieldOcrTextLineImagesControl();

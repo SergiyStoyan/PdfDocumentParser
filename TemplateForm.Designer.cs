@@ -311,7 +311,7 @@
             this.conditions.Name = "conditions";
             this.conditions.RowHeadersWidth = 30;
             this.conditions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.conditions.Size = new System.Drawing.Size(232, 124);
+            this.conditions.Size = new System.Drawing.Size(232, 111);
             this.conditions.TabIndex = 0;
             // 
             // Value2
@@ -336,7 +336,7 @@
             this.splitContainer4.Panel1.Controls.Add(this.flowLayoutPanel7);
             this.splitContainer4.Panel1.Controls.Add(this.flowLayoutPanel5);
             this.splitContainer4.Size = new System.Drawing.Size(232, 551);
-            this.splitContainer4.SplitterDistance = 158;
+            this.splitContainer4.SplitterDistance = 145;
             this.splitContainer4.TabIndex = 33;
             // 
             // label1
@@ -684,7 +684,7 @@
             this.fields.Name = "fields";
             this.fields.RowHeadersWidth = 30;
             this.fields.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.fields.Size = new System.Drawing.Size(336, 262);
+            this.fields.Size = new System.Drawing.Size(336, 222);
             this.fields.TabIndex = 30;
             // 
             // Name_
@@ -810,7 +810,7 @@
             this.anchors.Name = "anchors";
             this.anchors.RowHeadersWidth = 30;
             this.anchors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.anchors.Size = new System.Drawing.Size(336, 190);
+            this.anchors.Size = new System.Drawing.Size(336, 230);
             this.anchors.TabIndex = 50;
             // 
             // Configure
@@ -865,7 +865,7 @@
             this.splitContainer3.Panel2.Controls.Add(this.flowLayoutPanel9);
             this.splitContainer3.Panel2.Controls.Add(this.flowLayoutPanel2);
             this.splitContainer3.Size = new System.Drawing.Size(336, 551);
-            this.splitContainer3.SplitterDistance = 203;
+            this.splitContainer3.SplitterDistance = 243;
             this.splitContainer3.TabIndex = 32;
             // 
             // label10

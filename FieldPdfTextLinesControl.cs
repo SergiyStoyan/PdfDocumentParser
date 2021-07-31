@@ -18,12 +18,16 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class FieldPdfTextLinesControl : FieldControl
     {
-        public FieldPdfTextLinesControl()
+        public FieldPdfTextLinesControl(TextAutoInsertSpace textAutoInsertSpace)
         {
             InitializeComponent();
 
             SpecialTextAutoInsertSpace.CheckedChanged += delegate { synchronizeControls(); };
             synchronizeControls();
+
+            textAutoInsertSpaceThreshold.Value = (decimal)textAutoInsertSpace.Threshold;
+            textAutoInsertSpaceRepresentative.Text = textAutoInsertSpace.Representative;
+            textAutoInsertSpaceIgnoreSourceSpaces.Checked = textAutoInsertSpace.IgnoreSourceSpaces;
         }
 
         void synchronizeControls()

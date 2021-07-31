@@ -17,7 +17,7 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class FieldOcrTextLinesControl : FieldControl
     {
-        public FieldOcrTextLinesControl()
+        public FieldOcrTextLinesControl(Template.Field.OcrSettings ocrSettings)
         {
             InitializeComponent();
 
@@ -25,7 +25,9 @@ namespace Cliver.PdfDocumentParser
             synchronizeControls();
 
             TesseractPageSegMode.DataSource = Enum.GetValues(typeof(Tesseract.PageSegMode));
-            TesseractPageSegMode.SelectedItem = new Template.Field.OcrSettings().TesseractPageSegMode;
+            TesseractPageSegMode.SelectedItem = ocrSettings.TesseractPageSegMode;
+            SingleFieldFromFieldImage.Checked = ocrSettings.SingleFieldFromFieldImage;
+            ColumnFieldFromFieldImage.Checked = ocrSettings.ColumnFieldFromFieldImage;
         }
 
         void synchronizeControls()
