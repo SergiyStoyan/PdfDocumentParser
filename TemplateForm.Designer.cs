@@ -164,7 +164,7 @@
             this.TesseractPageSegMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.TesseractPageSegMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.TesseractPageSegMode.FormattingEnabled = true;
-            this.TesseractPageSegMode.Location = new System.Drawing.Point(502, 61);
+            this.TesseractPageSegMode.Location = new System.Drawing.Point(502, 60);
             this.TesseractPageSegMode.Name = "TesseractPageSegMode";
             this.TesseractPageSegMode.Size = new System.Drawing.Size(79, 21);
             this.TesseractPageSegMode.TabIndex = 141;
@@ -216,7 +216,7 @@
             // 
             this.bScannedDocumentSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.bScannedDocumentSettings.Location = new System.Drawing.Point(10, 59);
+            this.bScannedDocumentSettings.Location = new System.Drawing.Point(10, 58);
             this.bScannedDocumentSettings.Name = "bScannedDocumentSettings";
             this.bScannedDocumentSettings.Size = new System.Drawing.Size(253, 23);
             this.bScannedDocumentSettings.TabIndex = 139;
@@ -457,7 +457,7 @@
             // 
             this.detectedImageScale.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.detectedImageScale.BackColor = System.Drawing.SystemColors.Window;
-            this.detectedImageScale.Location = new System.Drawing.Point(356, 62);
+            this.detectedImageScale.Location = new System.Drawing.Point(356, 61);
             this.detectedImageScale.Margin = new System.Windows.Forms.Padding(0);
             this.detectedImageScale.Name = "detectedImageScale";
             this.detectedImageScale.ReadOnly = true;
