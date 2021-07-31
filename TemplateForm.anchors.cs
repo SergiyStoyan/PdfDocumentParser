@@ -300,16 +300,16 @@ namespace Cliver.PdfDocumentParser
         {
             get
             {
-                if (splitContainer3.Panel1.Controls.Count < 1)
+                if (splitContainer4.Panel2.Controls.Count < 1)
                     return null;
-                return (AnchorControl)splitContainer3.Panel1.Controls[0];
+                return (AnchorControl)splitContainer4.Panel2.Controls[0];
             }
             set
             {
-                splitContainer3.Panel1.Controls.Clear();
+                splitContainer4.Panel2.Controls.Clear();
                 if (value == null)
                     return;
-                splitContainer3.Panel1.Controls.Add(value);
+                splitContainer4.Panel2.Controls.Add(value);
                 value.Dock = DockStyle.Fill;
             }
         }
