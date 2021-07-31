@@ -39,8 +39,8 @@
             this.Help = new System.Windows.Forms.LinkLabel();
             this.label3 = new System.Windows.Forms.Label();
             this.About = new System.Windows.Forms.LinkLabel();
-            this.splitContainer4 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.anchors = new System.Windows.Forms.DataGridView();
             this.Id3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ParentAnchorId3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
@@ -76,7 +76,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.ExtractFieldsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
             this.ShowFieldTextLineSeparators = new System.Windows.Forms.CheckBox();
-            this.splitContainer5 = new System.Windows.Forms.SplitContainer();
+            this.splitContainer4 = new System.Windows.Forms.SplitContainer();
             this.conditions = new System.Windows.Forms.DataGridView();
             this.Name2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Value2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -120,14 +120,14 @@
             this.splitContainer1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer4)).BeginInit();
-            this.splitContainer4.Panel1.SuspendLayout();
-            this.splitContainer4.Panel2.SuspendLayout();
-            this.splitContainer4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
+            this.splitContainer3.Panel1.SuspendLayout();
+            this.splitContainer3.Panel2.SuspendLayout();
+            this.splitContainer3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.anchors)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).BeginInit();
             this.flowLayoutPanel6.SuspendLayout();
@@ -135,9 +135,9 @@
             this.flowLayoutPanel9.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).BeginInit();
             this.flowLayoutPanel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer5)).BeginInit();
-            this.splitContainer5.Panel1.SuspendLayout();
-            this.splitContainer5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer4)).BeginInit();
+            this.splitContainer4.Panel1.SuspendLayout();
+            this.splitContainer4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.conditions)).BeginInit();
             this.flowLayoutPanel7.SuspendLayout();
             this.flowLayoutPanel5.SuspendLayout();
@@ -156,7 +156,7 @@
             // 
             this.splitContainer1.Panel1.Controls.Add(this.flowLayoutPanel1);
             this.splitContainer1.Panel1.Controls.Add(this.flowLayoutPanel3);
-            this.splitContainer1.Panel1.Controls.Add(this.splitContainer4);
+            this.splitContainer1.Panel1.Controls.Add(this.splitContainer2);
             this.splitContainer1.Panel1.Controls.Add(this.TesseractPageSegMode);
             this.splitContainer1.Panel1.Controls.Add(this.label19);
             this.splitContainer1.Panel1.Controls.Add(this.bScannedDocumentSettings);
@@ -188,7 +188,7 @@
             this.flowLayoutPanel1.Controls.Add(this.bOK);
             this.flowLayoutPanel1.Controls.Add(this.bSave);
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(361, 666);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(358, 666);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(264, 31);
             this.flowLayoutPanel1.TabIndex = 144;
@@ -232,11 +232,11 @@
             this.flowLayoutPanel3.Controls.Add(this.Help);
             this.flowLayoutPanel3.Controls.Add(this.label3);
             this.flowLayoutPanel3.Controls.Add(this.About);
-            this.flowLayoutPanel3.Location = new System.Drawing.Point(0, 668);
+            this.flowLayoutPanel3.Location = new System.Drawing.Point(9, 668);
             this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel3.Name = "flowLayoutPanel3";
             this.flowLayoutPanel3.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
-            this.flowLayoutPanel3.Size = new System.Drawing.Size(293, 29);
+            this.flowLayoutPanel3.Size = new System.Drawing.Size(284, 29);
             this.flowLayoutPanel3.TabIndex = 143;
             // 
             // Configure
@@ -290,48 +290,48 @@
             this.About.Text = "About";
             this.About.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // splitContainer4
-            // 
-            this.splitContainer4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer4.Location = new System.Drawing.Point(0, 115);
-            this.splitContainer4.Name = "splitContainer4";
-            // 
-            // splitContainer4.Panel1
-            // 
-            this.splitContainer4.Panel1.Controls.Add(this.splitContainer2);
-            // 
-            // splitContainer4.Panel2
-            // 
-            this.splitContainer4.Panel2.Controls.Add(this.splitContainer5);
-            this.splitContainer4.Size = new System.Drawing.Size(622, 550);
-            this.splitContainer4.SplitterDistance = 367;
-            this.splitContainer4.TabIndex = 142;
-            // 
             // splitContainer2
             // 
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer2.MinimumSize = new System.Drawing.Size(42, 62);
+            this.splitContainer2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer2.Location = new System.Drawing.Point(10, 117);
             this.splitContainer2.Name = "splitContainer2";
-            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
             // splitContainer2.Panel1
             // 
-            this.splitContainer2.Panel1.Controls.Add(this.anchors);
-            this.splitContainer2.Panel1.Controls.Add(this.label10);
+            this.splitContainer2.Panel1.Controls.Add(this.splitContainer3);
             // 
             // splitContainer2.Panel2
             // 
-            this.splitContainer2.Panel2.Controls.Add(this.fields);
-            this.splitContainer2.Panel2.Controls.Add(this.flowLayoutPanel6);
-            this.splitContainer2.Panel2.Controls.Add(this.flowLayoutPanel8);
-            this.splitContainer2.Panel2.Controls.Add(this.flowLayoutPanel9);
-            this.splitContainer2.Panel2.Controls.Add(this.flowLayoutPanel2);
-            this.splitContainer2.Size = new System.Drawing.Size(367, 550);
-            this.splitContainer2.SplitterDistance = 204;
-            this.splitContainer2.TabIndex = 32;
+            this.splitContainer2.Panel2.Controls.Add(this.splitContainer4);
+            this.splitContainer2.Size = new System.Drawing.Size(612, 548);
+            this.splitContainer2.SplitterDistance = 360;
+            this.splitContainer2.TabIndex = 142;
+            // 
+            // splitContainer3
+            // 
+            this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer3.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer3.MinimumSize = new System.Drawing.Size(42, 62);
+            this.splitContainer3.Name = "splitContainer3";
+            this.splitContainer3.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer3.Panel1
+            // 
+            this.splitContainer3.Panel1.Controls.Add(this.anchors);
+            this.splitContainer3.Panel1.Controls.Add(this.label10);
+            // 
+            // splitContainer3.Panel2
+            // 
+            this.splitContainer3.Panel2.Controls.Add(this.fields);
+            this.splitContainer3.Panel2.Controls.Add(this.flowLayoutPanel6);
+            this.splitContainer3.Panel2.Controls.Add(this.flowLayoutPanel8);
+            this.splitContainer3.Panel2.Controls.Add(this.flowLayoutPanel9);
+            this.splitContainer3.Panel2.Controls.Add(this.flowLayoutPanel2);
+            this.splitContainer3.Size = new System.Drawing.Size(360, 548);
+            this.splitContainer3.SplitterDistance = 202;
+            this.splitContainer3.TabIndex = 32;
             // 
             // anchors
             // 
@@ -347,7 +347,7 @@
             this.anchors.Name = "anchors";
             this.anchors.RowHeadersWidth = 30;
             this.anchors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.anchors.Size = new System.Drawing.Size(367, 191);
+            this.anchors.Size = new System.Drawing.Size(360, 189);
             this.anchors.TabIndex = 50;
             // 
             // Id3
@@ -393,7 +393,7 @@
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.Location = new System.Drawing.Point(0, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(367, 13);
+            this.label10.Size = new System.Drawing.Size(360, 13);
             this.label10.TabIndex = 49;
             this.label10.Text = "Anchors:";
             // 
@@ -417,7 +417,7 @@
             this.fields.Name = "fields";
             this.fields.RowHeadersWidth = 30;
             this.fields.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.fields.Size = new System.Drawing.Size(367, 260);
+            this.fields.Size = new System.Drawing.Size(360, 260);
             this.fields.TabIndex = 30;
             // 
             // Name_
@@ -503,7 +503,7 @@
             this.flowLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel6.Location = new System.Drawing.Point(0, 66);
             this.flowLayoutPanel6.Name = "flowLayoutPanel6";
-            this.flowLayoutPanel6.Size = new System.Drawing.Size(367, 16);
+            this.flowLayoutPanel6.Size = new System.Drawing.Size(360, 16);
             this.flowLayoutPanel6.TabIndex = 53;
             // 
             // copy2ClipboardField
@@ -587,7 +587,7 @@
             this.flowLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel8.Location = new System.Drawing.Point(0, 43);
             this.flowLayoutPanel8.Name = "flowLayoutPanel8";
-            this.flowLayoutPanel8.Size = new System.Drawing.Size(367, 23);
+            this.flowLayoutPanel8.Size = new System.Drawing.Size(360, 23);
             this.flowLayoutPanel8.TabIndex = 55;
             this.flowLayoutPanel8.WrapContents = false;
             // 
@@ -630,7 +630,7 @@
             this.flowLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel9.Location = new System.Drawing.Point(0, 20);
             this.flowLayoutPanel9.Name = "flowLayoutPanel9";
-            this.flowLayoutPanel9.Size = new System.Drawing.Size(367, 23);
+            this.flowLayoutPanel9.Size = new System.Drawing.Size(360, 23);
             this.flowLayoutPanel9.TabIndex = 56;
             this.flowLayoutPanel9.WrapContents = false;
             // 
@@ -692,7 +692,7 @@
             this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(1);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(367, 20);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(360, 20);
             this.flowLayoutPanel2.TabIndex = 0;
             this.flowLayoutPanel2.WrapContents = false;
             // 
@@ -728,22 +728,22 @@
             this.ShowFieldTextLineSeparators.Text = "Show Table Lines";
             this.ShowFieldTextLineSeparators.UseVisualStyleBackColor = true;
             // 
-            // splitContainer5
+            // splitContainer4
             // 
-            this.splitContainer5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer5.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer5.MinimumSize = new System.Drawing.Size(42, 62);
-            this.splitContainer5.Name = "splitContainer5";
-            this.splitContainer5.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.splitContainer4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer4.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer4.MinimumSize = new System.Drawing.Size(42, 62);
+            this.splitContainer4.Name = "splitContainer4";
+            this.splitContainer4.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
-            // splitContainer5.Panel1
+            // splitContainer4.Panel1
             // 
-            this.splitContainer5.Panel1.Controls.Add(this.conditions);
-            this.splitContainer5.Panel1.Controls.Add(this.flowLayoutPanel7);
-            this.splitContainer5.Panel1.Controls.Add(this.flowLayoutPanel5);
-            this.splitContainer5.Size = new System.Drawing.Size(251, 550);
-            this.splitContainer5.SplitterDistance = 159;
-            this.splitContainer5.TabIndex = 33;
+            this.splitContainer4.Panel1.Controls.Add(this.conditions);
+            this.splitContainer4.Panel1.Controls.Add(this.flowLayoutPanel7);
+            this.splitContainer4.Panel1.Controls.Add(this.flowLayoutPanel5);
+            this.splitContainer4.Size = new System.Drawing.Size(248, 548);
+            this.splitContainer4.SplitterDistance = 158;
+            this.splitContainer4.TabIndex = 33;
             // 
             // conditions
             // 
@@ -759,7 +759,7 @@
             this.conditions.Name = "conditions";
             this.conditions.RowHeadersWidth = 30;
             this.conditions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.conditions.Size = new System.Drawing.Size(251, 125);
+            this.conditions.Size = new System.Drawing.Size(248, 124);
             this.conditions.TabIndex = 0;
             // 
             // Name2
@@ -787,7 +787,7 @@
             this.flowLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 18);
             this.flowLayoutPanel7.Name = "flowLayoutPanel7";
-            this.flowLayoutPanel7.Size = new System.Drawing.Size(251, 16);
+            this.flowLayoutPanel7.Size = new System.Drawing.Size(248, 16);
             this.flowLayoutPanel7.TabIndex = 54;
             // 
             // newCondition
@@ -846,7 +846,7 @@
             this.flowLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel5.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel5.Name = "flowLayoutPanel5";
-            this.flowLayoutPanel5.Size = new System.Drawing.Size(251, 18);
+            this.flowLayoutPanel5.Size = new System.Drawing.Size(248, 18);
             this.flowLayoutPanel5.TabIndex = 59;
             this.flowLayoutPanel5.WrapContents = false;
             // 
@@ -876,7 +876,7 @@
             this.TesseractPageSegMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.TesseractPageSegMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.TesseractPageSegMode.FormattingEnabled = true;
-            this.TesseractPageSegMode.Location = new System.Drawing.Point(542, 87);
+            this.TesseractPageSegMode.Location = new System.Drawing.Point(542, 89);
             this.TesseractPageSegMode.Name = "TesseractPageSegMode";
             this.TesseractPageSegMode.Size = new System.Drawing.Size(79, 21);
             this.TesseractPageSegMode.TabIndex = 141;
@@ -885,7 +885,7 @@
             // 
             this.label19.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(452, 90);
+            this.label19.Location = new System.Drawing.Point(452, 92);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(87, 13);
             this.label19.TabIndex = 140;
@@ -895,9 +895,9 @@
             // 
             this.bScannedDocumentSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.bScannedDocumentSettings.Location = new System.Drawing.Point(-2, 86);
+            this.bScannedDocumentSettings.Location = new System.Drawing.Point(10, 88);
             this.bScannedDocumentSettings.Name = "bScannedDocumentSettings";
-            this.bScannedDocumentSettings.Size = new System.Drawing.Size(448, 23);
+            this.bScannedDocumentSettings.Size = new System.Drawing.Size(436, 23);
             this.bScannedDocumentSettings.TabIndex = 139;
             this.bScannedDocumentSettings.Text = "Scanned Document Settings";
             this.bScannedDocumentSettings.UseVisualStyleBackColor = true;
@@ -905,7 +905,7 @@
             // bNextPage
             // 
             this.bNextPage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bNextPage.Location = new System.Drawing.Point(565, 2);
+            this.bNextPage.Location = new System.Drawing.Point(565, 4);
             this.bNextPage.Name = "bNextPage";
             this.bNextPage.Size = new System.Drawing.Size(57, 23);
             this.bNextPage.TabIndex = 130;
@@ -916,7 +916,7 @@
             // 
             this.lTotalPages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lTotalPages.AutoSize = true;
-            this.lTotalPages.Location = new System.Drawing.Point(463, 8);
+            this.lTotalPages.Location = new System.Drawing.Point(463, 10);
             this.lTotalPages.Name = "lTotalPages";
             this.lTotalPages.Size = new System.Drawing.Size(32, 13);
             this.lTotalPages.TabIndex = 131;
@@ -925,7 +925,7 @@
             // bPrevPage
             // 
             this.bPrevPage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bPrevPage.Location = new System.Drawing.Point(503, 2);
+            this.bPrevPage.Location = new System.Drawing.Point(503, 4);
             this.bPrevPage.Name = "bPrevPage";
             this.bPrevPage.Size = new System.Drawing.Size(57, 23);
             this.bPrevPage.TabIndex = 129;
@@ -936,16 +936,16 @@
             // 
             this.name.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.name.Location = new System.Drawing.Point(54, 5);
+            this.name.Location = new System.Drawing.Point(63, 7);
             this.name.Name = "name";
-            this.name.Size = new System.Drawing.Size(233, 20);
+            this.name.Size = new System.Drawing.Size(224, 20);
             this.name.TabIndex = 132;
             // 
             // label8
             // 
             this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(397, 8);
+            this.label8.Location = new System.Drawing.Point(397, 10);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(35, 13);
             this.label8.TabIndex = 136;
@@ -954,7 +954,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(1, 7);
+            this.label6.Location = new System.Drawing.Point(7, 9);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(54, 13);
             this.label6.TabIndex = 133;
@@ -963,7 +963,7 @@
             // tCurrentPage
             // 
             this.tCurrentPage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.tCurrentPage.Location = new System.Drawing.Point(435, 5);
+            this.tCurrentPage.Location = new System.Drawing.Point(435, 7);
             this.tCurrentPage.Name = "tCurrentPage";
             this.tCurrentPage.Size = new System.Drawing.Size(26, 20);
             this.tCurrentPage.TabIndex = 137;
@@ -972,16 +972,16 @@
             // 
             this.testFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.testFile.Location = new System.Drawing.Point(54, 31);
+            this.testFile.Location = new System.Drawing.Point(63, 33);
             this.testFile.Name = "testFile";
-            this.testFile.Size = new System.Drawing.Size(538, 20);
+            this.testFile.Size = new System.Drawing.Size(529, 20);
             this.testFile.TabIndex = 127;
             this.testFile.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // bTestFile
             // 
             this.bTestFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bTestFile.Location = new System.Drawing.Point(598, 28);
+            this.bTestFile.Location = new System.Drawing.Point(598, 30);
             this.bTestFile.Name = "bTestFile";
             this.bTestFile.Size = new System.Drawing.Size(24, 23);
             this.bTestFile.TabIndex = 126;
@@ -991,7 +991,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(1, 33);
+            this.label2.Location = new System.Drawing.Point(7, 35);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(50, 13);
             this.label2.TabIndex = 128;
@@ -1006,7 +1006,7 @@
             0,
             0,
             65536});
-            this.pictureScale.Location = new System.Drawing.Point(332, 5);
+            this.pictureScale.Location = new System.Drawing.Point(332, 7);
             this.pictureScale.Maximum = new decimal(new int[] {
             10,
             0,
@@ -1030,7 +1030,7 @@
             // 
             this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(293, 8);
+            this.label7.Location = new System.Drawing.Point(293, 10);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(37, 13);
             this.label7.TabIndex = 134;
@@ -1048,7 +1048,7 @@
             this.flowLayoutPanel4.Controls.Add(this.detectedImageScale);
             this.flowLayoutPanel4.Controls.Add(this.label4);
             this.flowLayoutPanel4.Controls.Add(this.selectionCoordinates);
-            this.flowLayoutPanel4.Location = new System.Drawing.Point(0, 54);
+            this.flowLayoutPanel4.Location = new System.Drawing.Point(4, 56);
             this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel4.Name = "flowLayoutPanel4";
             this.flowLayoutPanel4.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
@@ -1176,14 +1176,14 @@
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel3.ResumeLayout(false);
             this.flowLayoutPanel3.PerformLayout();
-            this.splitContainer4.Panel1.ResumeLayout(false);
-            this.splitContainer4.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer4)).EndInit();
-            this.splitContainer4.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
+            this.splitContainer3.Panel1.ResumeLayout(false);
+            this.splitContainer3.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
+            this.splitContainer3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.anchors)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fields)).EndInit();
             this.flowLayoutPanel6.ResumeLayout(false);
@@ -1195,9 +1195,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).EndInit();
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel2.PerformLayout();
-            this.splitContainer5.Panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer5)).EndInit();
-            this.splitContainer5.ResumeLayout(false);
+            this.splitContainer4.Panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer4)).EndInit();
+            this.splitContainer4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.conditions)).EndInit();
             this.flowLayoutPanel7.ResumeLayout(false);
             this.flowLayoutPanel7.PerformLayout();
@@ -1240,8 +1240,8 @@
         private System.Windows.Forms.TextBox detectedImageScale;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label selectionCoordinates;
-        private System.Windows.Forms.SplitContainer splitContainer4;
         private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.SplitContainer splitContainer3;
         private System.Windows.Forms.DataGridView anchors;
         private System.Windows.Forms.DataGridViewTextBoxColumn Id3;
         private System.Windows.Forms.DataGridViewComboBoxColumn ParentAnchorId3;
@@ -1277,7 +1277,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox ExtractFieldsAutomaticallyWhenPageChanged;
         private System.Windows.Forms.CheckBox ShowFieldTextLineSeparators;
-        private System.Windows.Forms.SplitContainer splitContainer5;
+        private System.Windows.Forms.SplitContainer splitContainer4;
         private System.Windows.Forms.DataGridView conditions;
         private System.Windows.Forms.DataGridViewTextBoxColumn Name2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Value2;
