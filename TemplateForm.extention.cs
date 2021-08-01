@@ -383,7 +383,7 @@ namespace Cliver.PdfDocumentParser
 
                 var fs = t.Fields.GroupBy(x => x.Name).Where(x => x.GroupBy(a => a.Type).Count() > 1).FirstOrDefault();
                 if (fs != null)
-                    throw new Exception("The definitions of the field '" + fs.First().Name + "' are not of the same type!");
+                    throw new Exception("Definitions of the field '" + fs.First().Name + "' are not of the same type!");
             }
 
             if (saving)

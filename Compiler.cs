@@ -108,8 +108,9 @@ namespace Cliver.PdfDocumentParser
         /// </summary>
         /// <param name="typeDefinition"></param>
         /// <param name="references"></param>
+        /// <param name="dllFile"></param>
         /// <returns></returns>
-        public static Type[] Compile(string typesDefinition, IEnumerable<MetadataReference> references = null)
+        public static Type[] Compile(string typesDefinition, IEnumerable<MetadataReference> references = null, string dllFile = null)
         {
             SyntaxTree st = SyntaxFactory.ParseSyntaxTree(typesDefinition);
             CSharpCompilation compilation = CSharpCompilation.Create("emitted.dll",//no file seems to be really created
@@ -118,9 +119,8 @@ namespace Cliver.PdfDocumentParser
                 options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
                 );
             Assembly assembly;
-            using (var ms = new MemoryStream())
+            void checkEmitResult(Microsoft.CodeAnalysis.Emit.EmitResult result)
             {
-                var result = compilation.Emit(ms);
                 if (!result.Success)
                 {
                     List<Error> compilationErrors = new List<Error>();
@@ -129,12 +129,23 @@ namespace Cliver.PdfDocumentParser
                         compilationErrors.Add(new Error { Message = diagnostic.GetMessage(), P1 = diagnostic.Location.SourceSpan.Start, P2 = diagnostic.Location.SourceSpan.End });
                     throw new Exception(compilationErrors);
                 }
-                ms.Seek(0, SeekOrigin.Begin);
-                assembly = Assembly.Load(ms.ToArray());
+            }
+            if (dllFile == null)
+                using (var ms = new MemoryStream())
+                {
+                    Microsoft.CodeAnalysis.Emit.EmitResult result = compilation.Emit(ms);
+                    checkEmitResult(result);
+                    ms.Seek(0, SeekOrigin.Begin);
+                    assembly = Assembly.Load(ms.ToArray());
+                }
+            else
+            {
+                Microsoft.CodeAnalysis.Emit.EmitResult result = compilation.Emit(dllFile);
+                checkEmitResult(result);
+                assembly = Assembly.Load(dllFile);
             }
             return assembly.GetTypes();
         }
-        //static Dictionary<string, Type[]> compiledTypesDefinitions2Types = new Dictionary<string, Type[]>();
 
         public static IEnumerable<Type> FindSubTypes(string baseTypeName, Type[] types)
         {
