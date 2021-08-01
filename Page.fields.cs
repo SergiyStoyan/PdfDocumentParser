@@ -243,11 +243,11 @@ namespace Cliver.PdfDocumentParser
                 RectangleF ar = (RectangleF)ActualRectangle;
 
                 if (ActualField.ColumnOfTable == null)
-                    return Pdf.GetTextLinesSurroundedByRectangle(page.PdfCharBoxs, ar, page.PageCollection.ActiveTemplate.TextAutoInsertSpace);
+                    return Pdf.GetTextLinesSurroundedByRectangle(page.PdfCharBoxs, ar, ActualField.GetTextAutoInsertSpace(page.PageCollection.ActiveTemplate));
 
                 List<string> ls = new List<string>();
                 List<Pdf.CharBox> cbs = (List<Pdf.CharBox>)TableFieldActualInfo.GetValue(Template.Field.Types.PdfCharBoxs);
-                foreach (Line<Pdf.CharBox> l in GetLines(cbs, page.PageCollection.ActiveTemplate.TextAutoInsertSpace))
+                foreach (Line<Pdf.CharBox> l in GetLines(cbs, ActualField.GetTextAutoInsertSpace(page.PageCollection.ActiveTemplate)))
                 {
                     StringBuilder sb = new StringBuilder();
                     foreach (Pdf.CharBox cb in l.CharBoxs)
@@ -287,7 +287,7 @@ namespace Cliver.PdfDocumentParser
                         return Regex.Split(s, "$", RegexOptions.Multiline).ToList();
                     }
                     else
-                        return Ocr.GetTextLinesSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, ar, page.PageCollection.ActiveTemplate.TextAutoInsertSpace);
+                        return Ocr.GetTextLinesSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, ar, ActualField.GetTextAutoInsertSpace(page.PageCollection.ActiveTemplate));
                 }
 
                 if (!TableFieldActualInfo.Found)
@@ -311,7 +311,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 else
                 {
-                    foreach (Line<Ocr.CharBox> l in GetLines(cbs, page.PageCollection.ActiveTemplate.TextAutoInsertSpace))
+                    foreach (Line<Ocr.CharBox> l in GetLines(cbs, ActualField.GetTextAutoInsertSpace(page.PageCollection.ActiveTemplate)))
                     {
                         StringBuilder sb = new StringBuilder();
                         foreach (Ocr.CharBox cb in l.CharBoxs)
