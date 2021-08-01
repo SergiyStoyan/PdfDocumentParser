@@ -141,7 +141,7 @@ namespace Cliver.PdfDocumentParser
             {
             }
 
-            public class Pdf : Field
+            abstract public class Pdf : Field
             {
                 public TextAutoInsertSpace TextAutoInsertSpace;
             }
@@ -164,7 +164,7 @@ namespace Cliver.PdfDocumentParser
             {
             }
 
-            public class Ocr : Field
+            abstract public class Ocr : Field
             {
                 public OcrSettings OcrSettings;
                 //public TextAutoInsertSpace TextAutoInsertSpace;

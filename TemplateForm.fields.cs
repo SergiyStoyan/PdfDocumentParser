@@ -132,6 +132,10 @@ namespace Cliver.PdfDocumentParser
                                         throw new Exception("Unknown option: " + t2);
                                 }
                                 setFieldRow(row, f);
+
+                                foreach (DataGridViewRow rr in fields.Rows)
+                                    if (rr != row && rr.Tag != null && ((Template.Field)rr.Tag).Name == f.Name)
+                                        rr.Cells["Type"].Value = t2;
                                 break;
                             }
                         case "LeftAnchorId":
