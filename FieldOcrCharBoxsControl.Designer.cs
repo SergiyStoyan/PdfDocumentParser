@@ -51,7 +51,7 @@
             this.ColumnOfTable.Location = new System.Drawing.Point(86, 3);
             this.ColumnOfTable.MinimumSize = new System.Drawing.Size(30, 0);
             this.ColumnOfTable.Name = "ColumnOfTable";
-            this.ColumnOfTable.Size = new System.Drawing.Size(112, 21);
+            this.ColumnOfTable.Size = new System.Drawing.Size(135, 21);
             this.ColumnOfTable.TabIndex = 0;
             // 
             // Value
@@ -77,7 +77,7 @@
             this.SpecialOcrSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.SpecialOcrSettings.Appearance = System.Windows.Forms.Appearance.Button;
             this.SpecialOcrSettings.AutoSize = true;
-            this.SpecialOcrSettings.Location = new System.Drawing.Point(204, 3);
+            this.SpecialOcrSettings.Location = new System.Drawing.Point(227, 2);
             this.SpecialOcrSettings.Name = "SpecialOcrSettings";
             this.SpecialOcrSettings.Size = new System.Drawing.Size(40, 23);
             this.SpecialOcrSettings.TabIndex = 6;

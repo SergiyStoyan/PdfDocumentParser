@@ -24,7 +24,7 @@ namespace Cliver.PdfDocumentParser
             FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
             if (!fai.Found)
                 return null;
-            if (fai.ActualField.Type.ToString().StartsWith("Pdf"))
+            if (fai.ActualField is Template.Field.Pdf)
                 return (string)fai.GetValue(Template.Field.Types.PdfText);
             return (string)fai.GetValue(Template.Field.Types.OcrText);
         }
@@ -34,7 +34,7 @@ namespace Cliver.PdfDocumentParser
             FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
             if (!fai.Found)
                 return null;
-            if (fai.ActualField.Type.ToString().StartsWith("Pdf"))
+            if (fai.ActualField is Template.Field.Pdf)
                 return (List<string>)fai.GetValue(Template.Field.Types.PdfTextLines);
             return (List<string>)fai.GetValue(Template.Field.Types.OcrTextLines);
         }
@@ -44,7 +44,7 @@ namespace Cliver.PdfDocumentParser
             FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
             if (!fai.Found)
                 return null;
-            if (fai.ActualField.Type.ToString().StartsWith("Pdf"))
+            if (fai.ActualField is Template.Field.Pdf)
                 return (List<CharBox>)fai.GetValue(Template.Field.Types.PdfCharBoxs);
             return (List<CharBox>)fai.GetValue(Template.Field.Types.OcrCharBoxs);
         }

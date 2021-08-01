@@ -59,7 +59,7 @@
             this.SpecialTextAutoInsertSpace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.SpecialTextAutoInsertSpace.Appearance = System.Windows.Forms.Appearance.Button;
             this.SpecialTextAutoInsertSpace.AutoSize = true;
-            this.SpecialTextAutoInsertSpace.Location = new System.Drawing.Point(178, 1);
+            this.SpecialTextAutoInsertSpace.Location = new System.Drawing.Point(188, 1);
             this.SpecialTextAutoInsertSpace.Name = "SpecialTextAutoInsertSpace";
             this.SpecialTextAutoInsertSpace.Size = new System.Drawing.Size(56, 23);
             this.SpecialTextAutoInsertSpace.TabIndex = 6;
@@ -86,7 +86,7 @@
             this.ColumnOfTable.Location = new System.Drawing.Point(90, 2);
             this.ColumnOfTable.MinimumSize = new System.Drawing.Size(30, 0);
             this.ColumnOfTable.Name = "ColumnOfTable";
-            this.ColumnOfTable.Size = new System.Drawing.Size(82, 21);
+            this.ColumnOfTable.Size = new System.Drawing.Size(92, 21);
             this.ColumnOfTable.TabIndex = 72;
             // 
             // label1

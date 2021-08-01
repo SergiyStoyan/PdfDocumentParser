@@ -129,6 +129,18 @@ namespace Cliver.PdfDocumentParser
             //    return null;
             //}
 
+            public interface Text
+            {
+            }
+
+            public interface TextLines
+            {
+            }
+
+            public interface CharBoxs
+            {
+            }
+
             public class Pdf : Field
             {
                 public TextAutoInsertSpace TextAutoInsertSpace;
@@ -140,15 +152,15 @@ namespace Cliver.PdfDocumentParser
                 return f?.TextAutoInsertSpace != null ? f.TextAutoInsertSpace : t.TextAutoInsertSpace;
             }
 
-            public class PdfText : Pdf
+            public class PdfText : Pdf, Text
             {
             }
 
-            public class PdfTextLines : Pdf
+            public class PdfTextLines : Pdf, TextLines
             {
             }
 
-            public class PdfCharBoxs : Pdf
+            public class PdfCharBoxs : Pdf, CharBoxs
             {
             }
 
@@ -206,15 +218,15 @@ namespace Cliver.PdfDocumentParser
                 ColumnFieldFromFieldImage = 0b0100000,
             }
 
-            public class OcrText : Ocr
+            public class OcrText : Ocr, Text
             {
             }
 
-            public class OcrTextLines : Ocr
+            public class OcrTextLines : Ocr, TextLines
             {
             }
 
-            public class OcrCharBoxs : Ocr
+            public class OcrCharBoxs : Ocr, CharBoxs
             {
             }
 

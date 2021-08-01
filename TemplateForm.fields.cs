@@ -101,7 +101,7 @@ namespace Cliver.PdfDocumentParser
                                 Template.Field.Types t2 = (Template.Field.Types)row.Cells["Type"].Value;
                                 if (t2 == f.Type)
                                     break;
-                                string s = f.ToStringByJson();
+                                string s = Serialization.Json.Serialize(f);
                                 switch (t2)
                                 {
                                     case Template.Field.Types.PdfText:
@@ -114,7 +114,6 @@ namespace Cliver.PdfDocumentParser
                                         f = Serialization.Json.Deserialize<Template.Field.PdfCharBoxs>(s);
                                         break;
                                     case Template.Field.Types.OcrText:
-                                        //f2 = new Template.Field.OcrText();
                                         f = Serialization.Json.Deserialize<Template.Field.OcrText>(s);
                                         break;
                                     case Template.Field.Types.OcrTextLines:
@@ -306,24 +305,23 @@ namespace Cliver.PdfDocumentParser
                 if (r.Tag == null)
                     return;
                 Template.Field f = (Template.Field)r.Tag;
-                object o = pages[currentPageI].GetValue(f.Name);
-                switch (f.Type)
+                Type type = f.GetType();
+                switch (type)
                 {
-                    case Template.Field.Types.Image:
-                    case Template.Field.Types.OcrTextLineImages:
-                        Clipboard.SetData(f.Type.ToString(), (Image)o);
+                    case Type _ when f is Template.Field.Text:
+                        Clipboard.SetText(pages[currentPageI].GetText(f.Name));
                         break;
-                    case Template.Field.Types.PdfText:
-                    case Template.Field.Types.OcrText:
-                        Clipboard.SetText((string)o);
+                    case Type _ when f is Template.Field.TextLines:
+                        Clipboard.SetText(string.Join("\r\n", pages[currentPageI].GetTextLines(f.Name)));
                         break;
-                    case Template.Field.Types.PdfTextLines:
-                    case Template.Field.Types.OcrTextLines:
-                        Clipboard.SetText(string.Join("\r\n", (List<string>)o));
+                    case Type _ when f is Template.Field.CharBoxs:
+                        Clipboard.SetText(Serialization.Json.Serialize(pages[currentPageI].GetCharBoxes(f.Name)));
                         break;
-                    case Template.Field.Types.PdfCharBoxs:
-                    case Template.Field.Types.OcrCharBoxs:
-                        Clipboard.SetText(Serialization.Json.Serialize(o));
+                    case Type _ when f is Template.Field.Image:
+                        Clipboard.SetData(DataFormats.Bitmap, pages[currentPageI].GetImage(f.Name));
+                        break;
+                    case Type _ when f is Template.Field.OcrTextLineImages:
+                        Clipboard.SetData(typeof(List<Bitmap>).ToString(), (List<Bitmap>)pages[currentPageI].GetValue(f.Name));
                         break;
                     default:
                         throw new Exception("Unknown option: " + f.Type);
