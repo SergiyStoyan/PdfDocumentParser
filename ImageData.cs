@@ -333,7 +333,7 @@ namespace Cliver.PdfDocumentParser
         //}
         //#endregion
 
-        public Image GetImage()
+        public Bitmap GetBitmap()
         {
             Bitmap b = new Bitmap(Width, Height);
             for (int x = 0; x < Width; x++)

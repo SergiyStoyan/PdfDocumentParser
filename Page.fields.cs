@@ -297,6 +297,7 @@ namespace Cliver.PdfDocumentParser
                 if (ActualField.GetOcrMode(page.PageCollection.ActiveTemplate).HasFlag(Template.Field.OcrModes.ColumnFieldFromFieldImage))
                 {
                     List<Line<Ocr.CharBox>> ols = GetLinesWithAdjacentBorders(cbs, TableFieldActualInfo.ActualRectangle.Value);
+                    Tesseract.PageSegMode tesseractPageSegMode = ActualField.GetTesseractPageSegMode(page.PageCollection.ActiveTemplate);
                     foreach (Line<Ocr.CharBox> l in ols)
                     {
                         float x = ar.X > TableFieldActualInfo.ActualRectangle.Value.X ? ar.X : TableFieldActualInfo.ActualRectangle.Value.X;
@@ -306,7 +307,7 @@ namespace Cliver.PdfDocumentParser
                            (ar.Right < TableFieldActualInfo.ActualRectangle.Value.Right ? ar.Right : TableFieldActualInfo.ActualRectangle.Value.Right) - x,
                            l.Bottom - l.Top
                             );
-                        ls.Add(Ocr.This.GetTextSurroundedByRectangle(page.ActiveTemplateBitmap, r, ActualField.GetTesseractPageSegMode(page.PageCollection.ActiveTemplate)));
+                        ls.Add(Ocr.This.GetTextSurroundedByRectangle(page.ActiveTemplateBitmap, r, tesseractPageSegMode));
                     }
                 }
                 else

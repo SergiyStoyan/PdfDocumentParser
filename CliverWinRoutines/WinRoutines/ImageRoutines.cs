@@ -65,8 +65,14 @@ namespace Cliver.Win
 
         public static Bitmap GetScaled(Image image, Size max_size)
         {
-            float ratio;
-            return GetScaled(image, max_size, out ratio);
+            return GetScaled(image, max_size, out _);
+        }
+
+        public static void Scale(ref Bitmap bitmap, Size max_size)
+        {
+            Bitmap b = GetScaled(bitmap, max_size, out _);
+            bitmap.Dispose();
+            bitmap = b;
         }
 
         public static Bitmap GetScaled(Image image, float ratio)

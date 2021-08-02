@@ -321,7 +321,7 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public Image GetImage()
+        public Bitmap GetBitmap()
         {
             return image.ToBitmap();
         }

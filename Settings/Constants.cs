@@ -22,6 +22,8 @@ namespace Cliver.PdfDocumentParser
             public float CoordinateDeviationMargin = 1f;
             public const int PdfResolution = 72;//It is the basic resolution. All template parameters that depend on bitmap are scaled to it!
 
+            public int InitialSearchRectangleMargin = 100;
+
             public Ocr.Config OcrConfig;
 
             [Newtonsoft.Json.JsonIgnore]

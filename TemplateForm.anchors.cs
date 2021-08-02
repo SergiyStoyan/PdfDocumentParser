@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Text;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -117,6 +118,8 @@ namespace Cliver.PdfDocumentParser
                     //        setAnchorRow(row, a);
                     //        break;
                     //    }
+                    case "Pattern":
+                        return;
                     case "Type3":
                         {
                             Template.Anchor.Types t2 = (Template.Anchor.Types)row.Cells["Type3"].Value;
@@ -147,9 +150,32 @@ namespace Cliver.PdfDocumentParser
                             a = a2;
                             break;
                         }
-                    case "ParentAnchorId3":
+                    case "cSearchRectangleMargin":
                         {
-                            a.ParentAnchorId = (int?)row.Cells["ParentAnchorId3"].Value;
+                            if (!(bool)row.Cells["cSearchRectangleMargin"].Value)
+                            {
+                                a.SearchRectangleMargin = -1;
+                                row.Cells["SearchRectangleMargin"].ReadOnly = true;
+                                row.Cells["SearchRectangleMargin"].Value = "";
+                                break;
+                            }
+                            row.Cells["SearchRectangleMargin"].ReadOnly = false;
+                            if (!int.TryParse((string)row.Cells["SearchRectangleMargin"].Value, out int searchRectangleMargin) || searchRectangleMargin < 0)
+                                row.Cells["SearchRectangleMargin"].Value = Settings.Constants.InitialSearchRectangleMargin.ToString();
+                            break;
+                        }
+                    case "SearchRectangleMargin":
+                        {
+                            if (!(bool)row.Cells["cSearchRectangleMargin"].Value)
+                                break;
+                            if (!int.TryParse((string)row.Cells["SearchRectangleMargin"].Value, out int searchRectangleMargin) || searchRectangleMargin < 0)
+                            {
+                                Message.Error("SearchRectangleMargin must be a non-negative integer.");
+                                row.Cells["cSearchRectangleMargin"].Value = a.SearchRectangleMargin >= 0;
+                                row.Cells["SearchRectangleMargin"].Value = a.SearchRectangleMargin.ToString();
+                                break;
+                            }
+                            a.SearchRectangleMargin = searchRectangleMargin;
                             break;
                         }
                 }
@@ -333,38 +359,112 @@ namespace Cliver.PdfDocumentParser
             row.Cells["Id3"].Value = a.Id;
             row.Cells["Type3"].Value = a.Type;
             row.Cells["ParentAnchorId3"].Value = a.ParentAnchorId;
+            row.Cells["cSearchRectangleMargin"].Value = a.SearchRectangleMargin >= 0;
+
+            DataGridViewCell c = row.Cells["Pattern"];
+            if (c.Value != null && c.Value is IDisposable)
+                ((IDisposable)c.Value).Dispose();
+            if (a is Template.Anchor.CvImage || a is Template.Anchor.ImageData)
+            {
+                if (!(c is DataGridViewImageCell))
+                {
+                    c.Dispose();
+                    c = new DataGridViewImageCell();
+                    row.Cells["Pattern"] = c;
+                }
+            }
+            else
+            {
+                if (c is DataGridViewImageCell)
+                {
+                    c.Dispose();
+                    c = new DataGridViewTextBoxCell();
+                    row.Cells["Pattern"] = c;
+                }
+            }
+            row.Cells["Pattern"].ReadOnly = true;
+            switch (a.Type)
+            {
+                case Template.Anchor.Types.PdfText:
+                    {
+                        Template.Anchor.PdfText pt = (Template.Anchor.PdfText)a;
+                        if (pt.CharBoxs == null)
+                        {
+                            row.Cells["Pattern"].Value = null;
+                            break;
+                        }
+                        StringBuilder sb = new StringBuilder();
+                        foreach (var l in Page.GetLines(pt.CharBoxs.Select(x => new Pdf.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() }), new TextAutoInsertSpace { IgnoreSourceSpaces = IgnoreSourceSpaces.Checked, Threshold = (float)textAutoInsertSpaceThreshold.Value/*, Representative*/}))
+                        {
+                            foreach (var cb in l.CharBoxs)
+                                sb.Append(cb.Char);
+                            sb.Append("\r\n");
+                        }
+                        row.Cells["Pattern"].Value = sb.ToString();
+                    }
+                    break;
+                case Template.Anchor.Types.OcrText:
+                    {
+                        Template.Anchor.OcrText ot = (Template.Anchor.OcrText)a;
+                        if (ot.CharBoxs == null)
+                        {
+                            row.Cells["Pattern"].Value = null;
+                            break;
+                        }
+                        StringBuilder sb = new StringBuilder();
+                        foreach (var l in Page.GetLines(ot.CharBoxs.Select(x => new Ocr.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() }), new TextAutoInsertSpace { IgnoreSourceSpaces = IgnoreSourceSpaces.Checked, Threshold = (float)textAutoInsertSpaceThreshold.Value/*, Representative*/}))
+                        {
+                            foreach (var cb in l.CharBoxs)
+                                sb.Append(cb.Char);
+                            sb.Append("\r\n");
+                        }
+                        row.Cells["Pattern"].Value = sb.ToString();
+                    }
+                    break;
+                case Template.Anchor.Types.ImageData:
+                    {
+                        Template.Anchor.ImageData id = (Template.Anchor.ImageData)a;
+                        Bitmap b = null;
+                        if (id.Image != null)
+                        {
+                            b = id.Image.GetBitmap();
+                            Size s = row.Cells["Pattern"].Size;
+                            if (s.Width < b.Width || s.Height < b.Height)
+                                Win.ImageRoutines.Scale(ref b, s);
+                        }
+                        row.Cells["Pattern"].Value = b;
+                    }
+                    break;
+                case Template.Anchor.Types.CvImage:
+                    {
+                        Template.Anchor.CvImage ci = (Template.Anchor.CvImage)a;
+                        Bitmap b = null;
+                        if (ci.Image != null)
+                        {
+                            b = ci.Image.GetBitmap();
+                            Size s = row.Cells["Pattern"].Size;
+                            if (s.Width < b.Width || s.Height < b.Height)
+                                Win.ImageRoutines.Scale(ref b, s);
+                        }
+                        row.Cells["Pattern"].Value = b;
+                    }
+                    break;
+                default:
+                    throw new Exception("Unknown option: " + a.Type);
+            }
+
+            if ((bool)row.Cells["cSearchRectangleMargin"].Value)
+            {
+                row.Cells["SearchRectangleMargin"].ReadOnly = false;
+                row.Cells["SearchRectangleMargin"].Value = a.SearchRectangleMargin.ToString();
+            }
+            else
+            {
+                row.Cells["SearchRectangleMargin"].ReadOnly = true;
+                row.Cells["SearchRectangleMargin"].Value = "";
+            }
 
             Template.PointF p = a.Position;
-            //switch (a.Type)
-            //{
-            //    case Template.Anchor.Types.PdfText:
-            //        {
-            //            Template.Anchor.PdfText pt = (Template.Anchor.PdfText)a;
-            //        }
-            //        break;
-            //    case Template.Anchor.Types.OcrText:
-            //        {
-            //            Template.Anchor.OcrText ot = (Template.Anchor.OcrText)a;
-            //        }
-            //        break;
-            //    case Template.Anchor.Types.ImageData:
-            //        {
-            //            Template.Anchor.ImageData id = (Template.Anchor.ImageData)a;
-            //        }
-            //        break;
-            //    case Template.Anchor.Types.CvImage:
-            //        {
-            //            Template.Anchor.CvImage ci = (Template.Anchor.CvImage)a;
-            //        }
-            //        break;
-            //    //case Template.Anchor.Types.Script:
-            //    //    {
-            //    //        Template.Anchor.Script s = (Template.Anchor.Script)a;
-            //    //    }
-            //    //    break;
-            //    default:
-            //        throw new Exception("Unknown option: " + a.Type);
-            //}
             if (p != null)
                 row.Cells["Position3"].Value = Serialization.Json.Serialize(p);
 
@@ -373,12 +473,6 @@ namespace Cliver.PdfDocumentParser
 
             if (currentAnchorControl != null && row == currentAnchorControl.Row)
                 setCurrentAnchorRow(a.Id, false);
-
-            //if (a.Id == GetTemplateFromUI(false).ScalingAnchorId)
-            //{
-            //    ReloadPageActiveTemplateBitmap();
-            //    return;
-            //}
 
             setConditionsStatus();
         }
