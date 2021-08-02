@@ -150,17 +150,18 @@
             // 
             this.TesseractPageSegMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.TesseractPageSegMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.TesseractPageSegMode.DropDownWidth = 120;
             this.TesseractPageSegMode.FormattingEnabled = true;
-            this.TesseractPageSegMode.Location = new System.Drawing.Point(491, 60);
+            this.TesseractPageSegMode.Location = new System.Drawing.Point(478, 60);
             this.TesseractPageSegMode.Name = "TesseractPageSegMode";
-            this.TesseractPageSegMode.Size = new System.Drawing.Size(90, 21);
+            this.TesseractPageSegMode.Size = new System.Drawing.Size(103, 21);
             this.TesseractPageSegMode.TabIndex = 141;
             // 
             // label19
             // 
             this.label19.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(398, 63);
+            this.label19.Location = new System.Drawing.Point(392, 63);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(87, 13);
             this.label19.TabIndex = 140;
@@ -433,7 +434,7 @@
             // 
             this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(255, 63);
+            this.label9.Location = new System.Drawing.Point(252, 63);
             this.label9.Margin = new System.Windows.Forms.Padding(20, 0, 3, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(84, 13);
@@ -444,7 +445,7 @@
             // 
             this.detectedImageScale.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.detectedImageScale.BackColor = System.Drawing.SystemColors.Window;
-            this.detectedImageScale.Location = new System.Drawing.Point(341, 61);
+            this.detectedImageScale.Location = new System.Drawing.Point(336, 61);
             this.detectedImageScale.Margin = new System.Windows.Forms.Padding(0);
             this.detectedImageScale.Name = "detectedImageScale";
             this.detectedImageScale.ReadOnly = true;
@@ -1058,19 +1059,19 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.bNextPage);
+            this.splitContainer1.Panel1.Controls.Add(this.bPrevPage);
+            this.splitContainer1.Panel1.Controls.Add(this.TesseractPageSegMode);
+            this.splitContainer1.Panel1.Controls.Add(this.detectedImageScale);
             this.splitContainer1.Panel1.Controls.Add(this.label4);
             this.splitContainer1.Panel1.Controls.Add(this.selectionCoordinates);
             this.splitContainer1.Panel1.Controls.Add(this.label9);
-            this.splitContainer1.Panel1.Controls.Add(this.detectedImageScale);
             this.splitContainer1.Panel1.Controls.Add(this.splitContainer2);
             this.splitContainer1.Panel1.Controls.Add(this.flowLayoutPanel1);
             this.splitContainer1.Panel1.Controls.Add(this.flowLayoutPanel3);
-            this.splitContainer1.Panel1.Controls.Add(this.TesseractPageSegMode);
             this.splitContainer1.Panel1.Controls.Add(this.label19);
             this.splitContainer1.Panel1.Controls.Add(this.bScannedDocumentSettings);
-            this.splitContainer1.Panel1.Controls.Add(this.bNextPage);
             this.splitContainer1.Panel1.Controls.Add(this.lTotalPages);
-            this.splitContainer1.Panel1.Controls.Add(this.bPrevPage);
             this.splitContainer1.Panel1.Controls.Add(this.name);
             this.splitContainer1.Panel1.Controls.Add(this.label8);
             this.splitContainer1.Panel1.Controls.Add(this.label6);

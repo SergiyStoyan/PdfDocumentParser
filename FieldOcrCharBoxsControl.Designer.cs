@@ -33,11 +33,11 @@
             this.label1 = new System.Windows.Forms.Label();
             this.SpecialOcrSettings = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.TesseractPageSegMode = new System.Windows.Forms.ComboBox();
             this.label19 = new System.Windows.Forms.Label();
             this.SingleFieldFromFieldImage = new System.Windows.Forms.CheckBox();
             this.ColumnFieldFromFieldImage = new System.Windows.Forms.CheckBox();
             this.gOcr = new System.Windows.Forms.GroupBox();
+            this.TesseractPageSegMode = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
             this.gOcr.SuspendLayout();
             this.SuspendLayout();
@@ -95,15 +95,6 @@
             this.panel1.Size = new System.Drawing.Size(267, 29);
             this.panel1.TabIndex = 8;
             // 
-            // TesseractPageSegMode
-            // 
-            this.TesseractPageSegMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.TesseractPageSegMode.FormattingEnabled = true;
-            this.TesseractPageSegMode.Location = new System.Drawing.Point(16, 33);
-            this.TesseractPageSegMode.Name = "TesseractPageSegMode";
-            this.TesseractPageSegMode.Size = new System.Drawing.Size(79, 21);
-            this.TesseractPageSegMode.TabIndex = 109;
-            // 
             // label19
             // 
             this.label19.AutoSize = true;
@@ -116,7 +107,7 @@
             // SingleFieldFromFieldImage
             // 
             this.SingleFieldFromFieldImage.AutoSize = true;
-            this.SingleFieldFromFieldImage.Location = new System.Drawing.Point(117, 16);
+            this.SingleFieldFromFieldImage.Location = new System.Drawing.Point(129, 16);
             this.SingleFieldFromFieldImage.Name = "SingleFieldFromFieldImage";
             this.SingleFieldFromFieldImage.Size = new System.Drawing.Size(141, 17);
             this.SingleFieldFromFieldImage.TabIndex = 105;
@@ -126,7 +117,7 @@
             // ColumnFieldFromFieldImage
             // 
             this.ColumnFieldFromFieldImage.AutoSize = true;
-            this.ColumnFieldFromFieldImage.Location = new System.Drawing.Point(117, 36);
+            this.ColumnFieldFromFieldImage.Location = new System.Drawing.Point(129, 36);
             this.ColumnFieldFromFieldImage.Name = "ColumnFieldFromFieldImage";
             this.ColumnFieldFromFieldImage.Size = new System.Drawing.Size(147, 17);
             this.ColumnFieldFromFieldImage.TabIndex = 106;
@@ -146,6 +137,17 @@
             this.gOcr.TabIndex = 10;
             this.gOcr.TabStop = false;
             this.gOcr.Text = "OCR";
+            // 
+            // TesseractPageSegMode
+            // 
+            this.TesseractPageSegMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.TesseractPageSegMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.TesseractPageSegMode.DropDownWidth = 120;
+            this.TesseractPageSegMode.FormattingEnabled = true;
+            this.TesseractPageSegMode.Location = new System.Drawing.Point(16, 32);
+            this.TesseractPageSegMode.Name = "TesseractPageSegMode";
+            this.TesseractPageSegMode.Size = new System.Drawing.Size(103, 21);
+            this.TesseractPageSegMode.TabIndex = 142;
             // 
             // FieldOcrCharBoxsControl
             // 
@@ -174,8 +176,8 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.CheckBox SingleFieldFromFieldImage;
         private System.Windows.Forms.CheckBox ColumnFieldFromFieldImage;
-        private System.Windows.Forms.ComboBox TesseractPageSegMode;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.GroupBox gOcr;
+        private System.Windows.Forms.ComboBox TesseractPageSegMode;
     }
 }
