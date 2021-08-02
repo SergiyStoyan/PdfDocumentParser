@@ -35,7 +35,6 @@
             this.bCancel = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.About = new System.Windows.Forms.Button();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.TextLineSeparatorWidth = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
             this.TableBoxBorderWidth = new System.Windows.Forms.NumericUpDown();
@@ -53,25 +52,35 @@
             this.AnchorBoxColor = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.CoordinateDeviationMargin = new System.Windows.Forms.NumericUpDown();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.InitialSearchRectangleMargin = new System.Windows.Forms.NumericUpDown();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.OcrConfig = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.PdfPageImageResolution)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TextLineSeparatorWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TableBoxBorderWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AscendantAnchorBoxBorderWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AnchorBoxBorderWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SelectionBoxBorderWidth)).BeginInit();
             this.panel2.SuspendLayout();
-            this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CoordinateDeviationMargin)).BeginInit();
+            this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.InitialSearchRectangleMargin)).BeginInit();
             this.SuspendLayout();
             // 
             // PdfPageImageResolution
             // 
-            this.PdfPageImageResolution.Location = new System.Drawing.Point(234, 33);
+            this.PdfPageImageResolution.Location = new System.Drawing.Point(242, 25);
             this.PdfPageImageResolution.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -94,16 +103,16 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(16, 35);
+            this.label8.Location = new System.Drawing.Point(24, 27);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(194, 13);
+            this.label8.Size = new System.Drawing.Size(197, 13);
             this.label8.TabIndex = 46;
-            this.label8.Text = "Image Resolution (OCR requires>=300):";
+            this.label8.Text = "Image Resolution (OCR requires >=300):";
             // 
             // bReset
             // 
             this.bReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bReset.Location = new System.Drawing.Point(115, 3);
+            this.bReset.Location = new System.Drawing.Point(133, 3);
             this.bReset.Name = "bReset";
             this.bReset.Size = new System.Drawing.Size(75, 23);
             this.bReset.TabIndex = 48;
@@ -114,7 +123,7 @@
             // bSave
             // 
             this.bSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bSave.Location = new System.Drawing.Point(196, 3);
+            this.bSave.Location = new System.Drawing.Point(214, 3);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(75, 23);
             this.bSave.TabIndex = 49;
@@ -125,7 +134,7 @@
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bCancel.Location = new System.Drawing.Point(277, 3);
+            this.bCancel.Location = new System.Drawing.Point(295, 3);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 50;
@@ -141,15 +150,15 @@
             this.flowLayoutPanel1.Controls.Add(this.About);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 367);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 304);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(355, 31);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(373, 31);
             this.flowLayoutPanel1.TabIndex = 51;
             // 
             // About
             // 
             this.About.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.About.Location = new System.Drawing.Point(34, 3);
+            this.About.Location = new System.Drawing.Point(52, 3);
             this.About.Name = "About";
             this.About.Size = new System.Drawing.Size(75, 23);
             this.About.TabIndex = 51;
@@ -157,31 +166,9 @@
             this.About.UseVisualStyleBackColor = true;
             this.About.Click += new System.EventHandler(this.About_Click);
             // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.TextLineSeparatorWidth);
-            this.groupBox3.Controls.Add(this.label9);
-            this.groupBox3.Controls.Add(this.TableBoxBorderWidth);
-            this.groupBox3.Controls.Add(this.label6);
-            this.groupBox3.Controls.Add(this.AscendantAnchorBoxBorderWidth);
-            this.groupBox3.Controls.Add(this.AnchorBoxBorderWidth);
-            this.groupBox3.Controls.Add(this.SelectionBoxBorderWidth);
-            this.groupBox3.Controls.Add(this.label5);
-            this.groupBox3.Controls.Add(this.label7);
-            this.groupBox3.Controls.Add(this.label4);
-            this.groupBox3.Controls.Add(this.panel2);
-            this.groupBox3.Controls.Add(this.label1);
-            this.groupBox3.Controls.Add(this.label3);
-            this.groupBox3.Location = new System.Drawing.Point(13, 12);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(328, 223);
-            this.groupBox3.TabIndex = 59;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Appearance";
-            // 
             // TextLineSeparatorWidth
             // 
-            this.TextLineSeparatorWidth.Location = new System.Drawing.Point(234, 193);
+            this.TextLineSeparatorWidth.Location = new System.Drawing.Point(242, 204);
             this.TextLineSeparatorWidth.Minimum = new decimal(new int[] {
             1,
             0,
@@ -199,8 +186,8 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.BackColor = System.Drawing.SystemColors.Control;
-            this.label9.Location = new System.Drawing.Point(15, 195);
+            this.label9.BackColor = System.Drawing.Color.Transparent;
+            this.label9.Location = new System.Drawing.Point(23, 206);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(134, 13);
             this.label9.TabIndex = 64;
@@ -208,7 +195,7 @@
             // 
             // TableBoxBorderWidth
             // 
-            this.TableBoxBorderWidth.Location = new System.Drawing.Point(234, 141);
+            this.TableBoxBorderWidth.Location = new System.Drawing.Point(242, 139);
             this.TableBoxBorderWidth.Minimum = new decimal(new int[] {
             1,
             0,
@@ -226,8 +213,8 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.BackColor = System.Drawing.SystemColors.Control;
-            this.label6.Location = new System.Drawing.Point(15, 143);
+            this.label6.BackColor = System.Drawing.Color.Transparent;
+            this.label6.Location = new System.Drawing.Point(23, 141);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(58, 13);
             this.label6.TabIndex = 62;
@@ -235,7 +222,7 @@
             // 
             // AscendantAnchorBoxBorderWidth
             // 
-            this.AscendantAnchorBoxBorderWidth.Location = new System.Drawing.Point(234, 113);
+            this.AscendantAnchorBoxBorderWidth.Location = new System.Drawing.Point(242, 111);
             this.AscendantAnchorBoxBorderWidth.Minimum = new decimal(new int[] {
             1,
             0,
@@ -252,7 +239,7 @@
             // 
             // AnchorBoxBorderWidth
             // 
-            this.AnchorBoxBorderWidth.Location = new System.Drawing.Point(234, 85);
+            this.AnchorBoxBorderWidth.Location = new System.Drawing.Point(242, 83);
             this.AnchorBoxBorderWidth.Minimum = new decimal(new int[] {
             1,
             0,
@@ -269,7 +256,7 @@
             // 
             // SelectionBoxBorderWidth
             // 
-            this.SelectionBoxBorderWidth.Location = new System.Drawing.Point(234, 57);
+            this.SelectionBoxBorderWidth.Location = new System.Drawing.Point(242, 55);
             this.SelectionBoxBorderWidth.Minimum = new decimal(new int[] {
             1,
             0,
@@ -287,8 +274,8 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.BackColor = System.Drawing.SystemColors.Control;
-            this.label5.Location = new System.Drawing.Point(232, 24);
+            this.label5.BackColor = System.Drawing.Color.Transparent;
+            this.label5.Location = new System.Drawing.Point(240, 22);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(72, 13);
             this.label5.TabIndex = 58;
@@ -297,8 +284,8 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.BackColor = System.Drawing.SystemColors.Control;
-            this.label7.Location = new System.Drawing.Point(138, 24);
+            this.label7.BackColor = System.Drawing.Color.Transparent;
+            this.label7.Location = new System.Drawing.Point(146, 22);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(34, 13);
             this.label7.TabIndex = 57;
@@ -307,8 +294,8 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.BackColor = System.Drawing.SystemColors.Control;
-            this.label4.Location = new System.Drawing.Point(15, 115);
+            this.label4.BackColor = System.Drawing.Color.Transparent;
+            this.label4.Location = new System.Drawing.Point(23, 113);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(119, 13);
             this.label4.TabIndex = 56;
@@ -321,7 +308,7 @@
             this.panel2.Controls.Add(this.AscendantAnchorBoxColor);
             this.panel2.Controls.Add(this.SelectionBoxColor);
             this.panel2.Controls.Add(this.AnchorBoxColor);
-            this.panel2.Location = new System.Drawing.Point(141, 46);
+            this.panel2.Location = new System.Drawing.Point(149, 44);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(63, 123);
             this.panel2.TabIndex = 54;
@@ -381,8 +368,8 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.SystemColors.Control;
-            this.label1.Location = new System.Drawing.Point(16, 87);
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.Location = new System.Drawing.Point(24, 85);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(100, 13);
             this.label1.TabIndex = 52;
@@ -391,30 +378,17 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.BackColor = System.Drawing.SystemColors.Control;
-            this.label3.Location = new System.Drawing.Point(16, 59);
+            this.label3.BackColor = System.Drawing.Color.Transparent;
+            this.label3.Location = new System.Drawing.Point(24, 57);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(75, 13);
             this.label3.TabIndex = 51;
             this.label3.Text = "Selection Box:";
             // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.label2);
-            this.groupBox4.Controls.Add(this.CoordinateDeviationMargin);
-            this.groupBox4.Controls.Add(this.label8);
-            this.groupBox4.Controls.Add(this.PdfPageImageResolution);
-            this.groupBox4.Location = new System.Drawing.Point(13, 252);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(328, 97);
-            this.groupBox4.TabIndex = 60;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Image Processing";
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(16, 63);
+            this.label2.Location = new System.Drawing.Point(24, 55);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(164, 13);
             this.label2.TabIndex = 55;
@@ -423,7 +397,7 @@
             // CoordinateDeviationMargin
             // 
             this.CoordinateDeviationMargin.DecimalPlaces = 3;
-            this.CoordinateDeviationMargin.Location = new System.Drawing.Point(234, 61);
+            this.CoordinateDeviationMargin.Location = new System.Drawing.Point(242, 53);
             this.CoordinateDeviationMargin.Maximum = new decimal(new int[] {
             10,
             0,
@@ -443,29 +417,143 @@
             0,
             196608});
             // 
+            // tabControl1
+            // 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Location = new System.Drawing.Point(12, 12);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(349, 286);
+            this.tabControl1.TabIndex = 61;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.TextLineSeparatorWidth);
+            this.tabPage1.Controls.Add(this.panel2);
+            this.tabPage1.Controls.Add(this.label9);
+            this.tabPage1.Controls.Add(this.label3);
+            this.tabPage1.Controls.Add(this.TableBoxBorderWidth);
+            this.tabPage1.Controls.Add(this.label1);
+            this.tabPage1.Controls.Add(this.label6);
+            this.tabPage1.Controls.Add(this.label4);
+            this.tabPage1.Controls.Add(this.AscendantAnchorBoxBorderWidth);
+            this.tabPage1.Controls.Add(this.label7);
+            this.tabPage1.Controls.Add(this.AnchorBoxBorderWidth);
+            this.tabPage1.Controls.Add(this.label5);
+            this.tabPage1.Controls.Add(this.SelectionBoxBorderWidth);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(338, 260);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Appearance";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.OcrConfig);
+            this.tabPage2.Controls.Add(this.label11);
+            this.tabPage2.Controls.Add(this.label2);
+            this.tabPage2.Controls.Add(this.CoordinateDeviationMargin);
+            this.tabPage2.Controls.Add(this.PdfPageImageResolution);
+            this.tabPage2.Controls.Add(this.label8);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(341, 260);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Image Processing";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.InitialSearchRectangleMargin);
+            this.tabPage3.Controls.Add(this.label10);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(338, 260);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Anchors";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // InitialSearchRectangleMargin
+            // 
+            this.InitialSearchRectangleMargin.Location = new System.Drawing.Point(207, 38);
+            this.InitialSearchRectangleMargin.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.InitialSearchRectangleMargin.Name = "InitialSearchRectangleMargin";
+            this.InitialSearchRectangleMargin.Size = new System.Drawing.Size(69, 20);
+            this.InitialSearchRectangleMargin.TabIndex = 60;
+            this.InitialSearchRectangleMargin.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            196608});
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(27, 40);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(158, 13);
+            this.label10.TabIndex = 59;
+            this.label10.Text = "Initial Search Rectangle Margin:";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(24, 82);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(90, 13);
+            this.label11.TabIndex = 57;
+            this.label11.Text = "Tesseract Config:";
+            // 
+            // OcrConfig
+            // 
+            this.OcrConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.OcrConfig.Location = new System.Drawing.Point(27, 100);
+            this.OcrConfig.Name = "OcrConfig";
+            this.OcrConfig.Size = new System.Drawing.Size(287, 139);
+            this.OcrConfig.TabIndex = 58;
+            this.OcrConfig.Text = "";
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(355, 398);
-            this.Controls.Add(this.groupBox4);
-            this.Controls.Add(this.groupBox3);
+            this.ClientSize = new System.Drawing.Size(373, 335);
+            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Name = "SettingsForm";
             this.Text = "SettingsForm";
             ((System.ComponentModel.ISupportInitialize)(this.PdfPageImageResolution)).EndInit();
             this.flowLayoutPanel1.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TextLineSeparatorWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TableBoxBorderWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.AscendantAnchorBoxBorderWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.AnchorBoxBorderWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.SelectionBoxBorderWidth)).EndInit();
             this.panel2.ResumeLayout(false);
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CoordinateDeviationMargin)).EndInit();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.InitialSearchRectangleMargin)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -478,8 +566,6 @@
         private System.Windows.Forms.Button bSave;
         private System.Windows.Forms.Button bCancel;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown CoordinateDeviationMargin;
         private System.Windows.Forms.Button About;
@@ -500,5 +586,13 @@
         private System.Windows.Forms.Button TableBoxColor;
         private System.Windows.Forms.NumericUpDown TextLineSeparatorWidth;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.RichTextBox OcrConfig;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.NumericUpDown InitialSearchRectangleMargin;
+        private System.Windows.Forms.Label label10;
     }
 }
