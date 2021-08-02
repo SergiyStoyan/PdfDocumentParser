@@ -805,7 +805,11 @@ namespace Cliver.PdfDocumentParser
             }
             set
             {
-                splitContainer4.Panel2.Controls.Clear();
+                foreach (Control c in splitContainer4.Panel2.Controls)
+                {
+                    splitContainer4.Panel2.Controls.Remove(c);
+                    c.Dispose();
+                }
                 if (value == null)
                     return;
                 splitContainer4.Panel2.Controls.Add(value);

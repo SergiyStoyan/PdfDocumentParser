@@ -151,7 +151,7 @@ namespace Cliver.PdfDocumentParser
                     {
                         Template.Anchor.PdfText pt = (Template.Anchor.PdfText)a;
                         List<Template.Anchor.PdfText.CharBox> cbs = pt.CharBoxs;
-                        if (PageCollection.ActiveTemplate.IgnoreInvisiblePdfChars)
+                        if (pt.IgnoreInvisibleChars)
                             cbs = cbs.Where(x => !Pdf.InvisibleCharacters.Contains(x.Char)).ToList();
                         if (cbs.Count < 1)
                         {
@@ -161,7 +161,8 @@ namespace Cliver.PdfDocumentParser
                                 for (int j = 0; j < h; j++)
                                 {
                                     RectangleF actualR = new RectangleF(i, j, rectangle.Width, rectangle.Height);
-                                    if (PdfCharBoxs.FirstOrDefault(x => actualR.Contains(x.R) && (!PageCollection.ActiveTemplate.IgnoreInvisiblePdfChars || !Pdf.InvisibleCharacters.Contains(x.Char))) == null
+                                    if (//check that the rectangle contains nothing
+                                        PdfCharBoxs.FirstOrDefault(x => actualR.Contains(x.R) && (!pt.IgnoreInvisibleChars || !Pdf.InvisibleCharacters.Contains(x.Char))) == null
                                         && !findNext(actualR.Location)
                                         )
                                         return true;
@@ -199,7 +200,7 @@ namespace Cliver.PdfDocumentParser
                                 SizeF shift = new SizeF(tcbs[0].R.X - cbs[0].Rectangle.X, tcbs[0].R.Y - cbs[0].Rectangle.Y);
                                 RectangleF actualR = new RectangleF(rectangle.X + shift.Width, rectangle.Y + shift.Height, rectangle.Width, rectangle.Height);
                                 if (//check that the found rectangle contains only the anchor's boxes
-                                    PdfCharBoxs.FirstOrDefault(x => actualR.Contains(x.R) && !tcbs.Contains(x) && (!PageCollection.ActiveTemplate.IgnoreInvisiblePdfChars || !Pdf.InvisibleCharacters.Contains(x.Char))) == null
+                                 (pt.IgnoreOtherCharsInSearchMargin || PdfCharBoxs.FirstOrDefault(x => actualR.Contains(x.R) && !tcbs.Contains(x) && (!pt.IgnoreInvisibleChars || !Pdf.InvisibleCharacters.Contains(x.Char))) == null)
                                     && !findNext(actualR.Location)
                                 )
                                     return true;

@@ -38,6 +38,10 @@
             this.text = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.IgnoreOtherCharsInSearchMargin = new System.Windows.Forms.CheckBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.IgnoreInvisibleChars = new System.Windows.Forms.CheckBox();
+            this.label8 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.PositionDeviation)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SearchRectangleMargin)).BeginInit();
             this.SuspendLayout();
@@ -137,17 +141,17 @@
             this.text.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.text.Location = new System.Drawing.Point(6, 65);
+            this.text.Location = new System.Drawing.Point(6, 110);
             this.text.Multiline = true;
             this.text.Name = "text";
             this.text.ReadOnly = true;
-            this.text.Size = new System.Drawing.Size(216, 99);
+            this.text.Size = new System.Drawing.Size(216, 113);
             this.text.TabIndex = 86;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(3, 49);
+            this.label5.Location = new System.Drawing.Point(3, 94);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(44, 13);
             this.label5.TabIndex = 89;
@@ -162,11 +166,51 @@
             this.label4.TabIndex = 90;
             this.label4.Text = ")";
             // 
+            // IgnoreOtherCharsInSearchMargin
+            // 
+            this.IgnoreOtherCharsInSearchMargin.AutoSize = true;
+            this.IgnoreOtherCharsInSearchMargin.Location = new System.Drawing.Point(207, 50);
+            this.IgnoreOtherCharsInSearchMargin.Name = "IgnoreOtherCharsInSearchMargin";
+            this.IgnoreOtherCharsInSearchMargin.Size = new System.Drawing.Size(15, 14);
+            this.IgnoreOtherCharsInSearchMargin.TabIndex = 94;
+            this.IgnoreOtherCharsInSearchMargin.UseVisualStyleBackColor = true;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(3, 49);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(183, 13);
+            this.label7.TabIndex = 93;
+            this.label7.Text = "Ignore Other Chars In Search Margin:";
+            // 
+            // IgnoreInvisibleChars
+            // 
+            this.IgnoreInvisibleChars.AutoSize = true;
+            this.IgnoreInvisibleChars.Location = new System.Drawing.Point(207, 71);
+            this.IgnoreInvisibleChars.Name = "IgnoreInvisibleChars";
+            this.IgnoreInvisibleChars.Size = new System.Drawing.Size(15, 14);
+            this.IgnoreInvisibleChars.TabIndex = 96;
+            this.IgnoreInvisibleChars.UseVisualStyleBackColor = true;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(3, 71);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(111, 13);
+            this.label8.TabIndex = 95;
+            this.label8.Text = "Ignore Invisible Chars:";
+            // 
             // AnchorPdfTextControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.Controls.Add(this.IgnoreInvisibleChars);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.IgnoreOtherCharsInSearchMargin);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.PositionDeviationIsAbsolute);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label5);
@@ -178,7 +222,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.PositionDeviation);
             this.Name = "AnchorPdfTextControl";
-            this.Size = new System.Drawing.Size(225, 167);
+            this.Size = new System.Drawing.Size(225, 226);
             ((System.ComponentModel.ISupportInitialize)(this.PositionDeviation)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.SearchRectangleMargin)).EndInit();
             this.ResumeLayout(false);
@@ -197,5 +241,9 @@
         private System.Windows.Forms.TextBox text;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.CheckBox IgnoreOtherCharsInSearchMargin;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.CheckBox IgnoreInvisibleChars;
+        private System.Windows.Forms.Label label8;
     }
 }

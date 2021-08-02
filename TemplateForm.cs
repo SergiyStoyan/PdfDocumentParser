@@ -16,13 +16,35 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class TemplateForm : Form
     {
-        ~TemplateForm()
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
         {
+            if (disposing)
+            {
+                components?.Dispose();//auto-added
+                dispose(true);
+            }
+
+            base.Dispose(disposing);
+        }
+
+        void dispose(bool formClosed)
+        {
+            picture.Image?.Dispose();
+            picture.Image = null;
             scaledCurrentPageBitmap?.Dispose();
+            scaledCurrentPageBitmap = null;
             pages?.Dispose();
-            currentFieldRow?.Dispose();
-            bitmapPreparationForm?.Dispose();
-            currentConditionRow?.Dispose();
+            pages = null;
+            if (formClosed)
+            {
+                bitmapPreparationForm?.Dispose();
+                //currentAnchorControl?.Dispose();//auto-cleaned among the other components
+                //currentAnchorControl = null;
+            }
         }
 
         public TemplateForm(TemplateManager templateManager)
@@ -331,20 +353,6 @@ namespace Cliver.PdfDocumentParser
                 setUIFromTemplate(templateManager.Template);
             };
 
-            FormClosed += delegate
-            {
-                if (scaledCurrentPageBitmap != null)
-                {
-                    scaledCurrentPageBitmap.Dispose();
-                    scaledCurrentPageBitmap = null;
-                }
-                if (pages != null)
-                {
-                    pages.Dispose();
-                    pages = null;
-                }
-            };
-
             this.EnumControls((Control c) =>
             {
                 if (c is SplitContainer s)
@@ -360,21 +368,7 @@ namespace Cliver.PdfDocumentParser
             {
                 try
                 {
-                    if (picture.Image != null)
-                    {
-                        picture.Image.Dispose();
-                        picture.Image = null;
-                    }
-                    if (scaledCurrentPageBitmap != null)
-                    {
-                        scaledCurrentPageBitmap.Dispose();
-                        scaledCurrentPageBitmap = null;
-                    }
-                    if (pages != null)
-                    {
-                        pages.Dispose();
-                        pages = null;
-                    }
+                    dispose(false);
 
                     if (string.IsNullOrWhiteSpace(testFile.Text))
                         return;

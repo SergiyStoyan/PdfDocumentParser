@@ -27,8 +27,7 @@ namespace Cliver.PdfDocumentParser
 
         public TextAutoInsertSpace TextAutoInsertSpace = new TextAutoInsertSpace();
 
-        public bool IgnoreInvisiblePdfChars = true;//used but not edited
-        public bool IgnoreDuplicatedPdfChars = true;//used but not edited
+        //public bool IgnoreDuplicatedPdfChars = true;//used but not edited
 
         public List<Anchor> Anchors;
 

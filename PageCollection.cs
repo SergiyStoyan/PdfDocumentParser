@@ -30,8 +30,7 @@ namespace Cliver.PdfDocumentParser
         {
             lock (this)
             {
-                if (PdfReader != null)
-                    PdfReader.Dispose();
+                PdfReader?.Dispose();
                 base.Dispose();
             }
         }

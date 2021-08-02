@@ -33,9 +33,9 @@ namespace Cliver.PdfDocumentParser
         {
             if (pages == null)
                 return;
-            scaledCurrentPageBitmap?.Dispose();
             if (pages.ActiveTemplate == null)
                 pages.ActiveTemplate = GetTemplateFromUI(false);
+            scaledCurrentPageBitmap?.Dispose();
             scaledCurrentPageBitmap = Win.ImageRoutines.GetScaled(pages[currentPageI].ActiveTemplateBitmap, (float)pictureScale.Value * Settings.Constants.Image2PdfResolutionRatio);
             picture.Image?.Dispose();
             picture.Image = new Bitmap(scaledCurrentPageBitmap);
@@ -249,8 +249,7 @@ namespace Cliver.PdfDocumentParser
         void clearImageFromBoxes()
         {
             picture.Image?.Dispose();
-            if (scaledCurrentPageBitmap != null)
-                picture.Image = new Bitmap(scaledCurrentPageBitmap);
+            picture.Image = scaledCurrentPageBitmap != null ? new Bitmap(scaledCurrentPageBitmap) : null;
             drawnAnchorIds.Clear();
             owners2resizebleBox.Clear();
         }
@@ -287,8 +286,7 @@ namespace Cliver.PdfDocumentParser
                     gr.DrawRectangle(p, r_);
                 }
             }
-            if (picture.Image != null)
-                picture.Image.Dispose();
+            picture.Image?.Dispose();
             picture.Image = bm;
         }
 

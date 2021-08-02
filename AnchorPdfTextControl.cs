@@ -24,6 +24,8 @@ namespace Cliver.PdfDocumentParser
                 if (SearchRectangleMargin.Value >= 0)
                     return;
                 SearchRectangleMargin.Value = cSearchRectangleMargin.Checked ? ((anchor == null || anchor.ParentAnchorId != null) ? (decimal)Settings.Constants.CoordinateDeviationMargin : 100) : -1;
+
+                IgnoreOtherCharsInSearchMargin.Enabled = SearchRectangleMargin.Enabled;
             };
         }
         TextAutoInsertSpace textAutoInsertSpace;
@@ -35,8 +37,9 @@ namespace Cliver.PdfDocumentParser
             anchor.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
             anchor.PositionDeviation = (float)PositionDeviation.Value;
             anchor.SearchRectangleMargin = SearchRectangleMargin.Enabled ? (int)SearchRectangleMargin.Value : -1;
+            anchor.IgnoreOtherCharsInSearchMargin = IgnoreOtherCharsInSearchMargin.Checked;
+            anchor.IgnoreInvisibleChars = IgnoreInvisibleChars.Checked;
             return anchor;
-
         }
 
         protected override void initialize(DataGridViewRow row)
@@ -63,6 +66,10 @@ namespace Cliver.PdfDocumentParser
             SearchRectangleMargin.Value = anchor.SearchRectangleMargin;
             SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked;
             cSearchRectangleMargin.Checked = SearchRectangleMargin.Value >= 0;
+
+            IgnoreOtherCharsInSearchMargin.Checked = anchor.IgnoreOtherCharsInSearchMargin;
+            IgnoreInvisibleChars.Checked = anchor.IgnoreInvisibleChars;
+            IgnoreOtherCharsInSearchMargin.Enabled = SearchRectangleMargin.Enabled;
         }
 
         Template.Anchor.PdfText anchor;
