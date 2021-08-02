@@ -151,16 +151,16 @@
             this.TesseractPageSegMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.TesseractPageSegMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.TesseractPageSegMode.FormattingEnabled = true;
-            this.TesseractPageSegMode.Location = new System.Drawing.Point(502, 60);
+            this.TesseractPageSegMode.Location = new System.Drawing.Point(491, 60);
             this.TesseractPageSegMode.Name = "TesseractPageSegMode";
-            this.TesseractPageSegMode.Size = new System.Drawing.Size(79, 21);
+            this.TesseractPageSegMode.Size = new System.Drawing.Size(90, 21);
             this.TesseractPageSegMode.TabIndex = 141;
             // 
             // label19
             // 
             this.label19.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(412, 63);
+            this.label19.Location = new System.Drawing.Point(398, 63);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(87, 13);
             this.label19.TabIndex = 140;
@@ -205,7 +205,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.bScannedDocumentSettings.Location = new System.Drawing.Point(10, 58);
             this.bScannedDocumentSettings.Name = "bScannedDocumentSettings";
-            this.bScannedDocumentSettings.Size = new System.Drawing.Size(253, 23);
+            this.bScannedDocumentSettings.Size = new System.Drawing.Size(237, 23);
             this.bScannedDocumentSettings.TabIndex = 139;
             this.bScannedDocumentSettings.Text = "Scanned Document Settings";
             this.bScannedDocumentSettings.UseVisualStyleBackColor = true;
@@ -433,7 +433,7 @@
             // 
             this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(269, 63);
+            this.label9.Location = new System.Drawing.Point(255, 63);
             this.label9.Margin = new System.Windows.Forms.Padding(20, 0, 3, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(84, 13);
@@ -444,7 +444,7 @@
             // 
             this.detectedImageScale.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.detectedImageScale.BackColor = System.Drawing.SystemColors.Window;
-            this.detectedImageScale.Location = new System.Drawing.Point(356, 61);
+            this.detectedImageScale.Location = new System.Drawing.Point(341, 61);
             this.detectedImageScale.Margin = new System.Windows.Forms.Padding(0);
             this.detectedImageScale.Name = "detectedImageScale";
             this.detectedImageScale.ReadOnly = true;
@@ -525,16 +525,16 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.testFile.Location = new System.Drawing.Point(63, 33);
             this.testFile.Name = "testFile";
-            this.testFile.Size = new System.Drawing.Size(335, 20);
+            this.testFile.Size = new System.Drawing.Size(303, 20);
             this.testFile.TabIndex = 127;
             this.testFile.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // bTestFile
             // 
             this.bTestFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bTestFile.Location = new System.Drawing.Point(398, 31);
+            this.bTestFile.Location = new System.Drawing.Point(366, 31);
             this.bTestFile.Name = "bTestFile";
-            this.bTestFile.Size = new System.Drawing.Size(24, 23);
+            this.bTestFile.Size = new System.Drawing.Size(57, 23);
             this.bTestFile.TabIndex = 126;
             this.bTestFile.Text = "...";
             this.bTestFile.UseVisualStyleBackColor = true;
