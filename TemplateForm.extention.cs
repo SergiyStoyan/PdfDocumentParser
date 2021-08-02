@@ -186,6 +186,7 @@ namespace Cliver.PdfDocumentParser
         {
             if (pages == null)
                 return;
+            pages.ActiveTemplate = GetTemplateFromUI(false);
             List<string> ls = Page.GetTextLines(pages[currentPageI].ActiveTemplateOcrCharBoxs, new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, IgnoreSourceSpaces = IgnoreSourceSpaces.Checked/*, Representative//default*/ });
             TextForm tf = new TextForm("OCR Text", string.Join("\r\n", ls), false);
             tf.ShowDialog();

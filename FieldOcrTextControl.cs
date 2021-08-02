@@ -22,6 +22,7 @@ namespace Cliver.PdfDocumentParser
             InitializeComponent();
 
             SpecialOcrSettings.CheckedChanged += delegate { synchronizeControls(); };
+            ColumnOfTable.SelectedIndexChanged += delegate { synchronizeControls(); };
             synchronizeControls();
 
             TesseractPageSegMode.DataSource = Enum.GetValues(typeof(Tesseract.PageSegMode));
@@ -33,6 +34,8 @@ namespace Cliver.PdfDocumentParser
         void synchronizeControls()
         {
             gOcr.Visible = SpecialOcrSettings.Checked;
+            SingleFieldFromFieldImage.Enabled = ColumnOfTable.SelectedIndex < 0;
+            ColumnFieldFromFieldImage.Enabled = !SingleFieldFromFieldImage.Enabled;
         }
 
         override protected object getObject()

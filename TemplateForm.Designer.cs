@@ -89,12 +89,12 @@
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.label10 = new System.Windows.Forms.Label();
             this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
-            this.copy2ClipboardField = new System.Windows.Forms.LinkLabel();
-            this.deleteField = new System.Windows.Forms.LinkLabel();
+            this.newField = new System.Windows.Forms.LinkLabel();
+            this.duplicateField = new System.Windows.Forms.LinkLabel();
             this.moveDownField = new System.Windows.Forms.LinkLabel();
             this.moveUpField = new System.Windows.Forms.LinkLabel();
-            this.duplicateField = new System.Windows.Forms.LinkLabel();
-            this.newField = new System.Windows.Forms.LinkLabel();
+            this.deleteField = new System.Windows.Forms.LinkLabel();
+            this.copy2ClipboardField = new System.Windows.Forms.LinkLabel();
             this.flowLayoutPanel8 = new System.Windows.Forms.FlowLayoutPanel();
             this.label5 = new System.Windows.Forms.Label();
             this.SingleFieldFromFieldImage = new System.Windows.Forms.CheckBox();
@@ -461,7 +461,7 @@
             this.detectedImageScale.Margin = new System.Windows.Forms.Padding(0);
             this.detectedImageScale.Name = "detectedImageScale";
             this.detectedImageScale.ReadOnly = true;
-            this.detectedImageScale.Size = new System.Drawing.Size(42, 20);
+            this.detectedImageScale.Size = new System.Drawing.Size(53, 20);
             this.detectedImageScale.TabIndex = 71;
             // 
             // label4
@@ -841,27 +841,28 @@
             this.flowLayoutPanel6.Size = new System.Drawing.Size(336, 16);
             this.flowLayoutPanel6.TabIndex = 53;
             // 
-            // copy2ClipboardField
+            // newField
             // 
-            this.copy2ClipboardField.AutoSize = true;
-            this.copy2ClipboardField.Location = new System.Drawing.Point(208, 0);
-            this.copy2ClipboardField.Name = "copy2ClipboardField";
-            this.copy2ClipboardField.Size = new System.Drawing.Size(97, 13);
-            this.copy2ClipboardField.TabIndex = 32;
-            this.copy2ClipboardField.TabStop = true;
-            this.copy2ClipboardField.Text = "Value To Clipboard";
-            this.copy2ClipboardField.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.newField.AutoSize = true;
+            this.newField.LinkArea = new System.Windows.Forms.LinkArea(0, 3);
+            this.newField.Location = new System.Drawing.Point(3, 0);
+            this.newField.Name = "newField";
+            this.newField.Size = new System.Drawing.Size(29, 13);
+            this.newField.TabIndex = 68;
+            this.newField.TabStop = true;
+            this.newField.Text = "New";
+            this.newField.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // deleteField
+            // duplicateField
             // 
-            this.deleteField.AutoSize = true;
-            this.deleteField.Location = new System.Drawing.Point(164, 0);
-            this.deleteField.Name = "deleteField";
-            this.deleteField.Size = new System.Drawing.Size(38, 13);
-            this.deleteField.TabIndex = 29;
-            this.deleteField.TabStop = true;
-            this.deleteField.Text = "Delete";
-            this.deleteField.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.duplicateField.AutoSize = true;
+            this.duplicateField.Location = new System.Drawing.Point(38, 0);
+            this.duplicateField.Name = "duplicateField";
+            this.duplicateField.Size = new System.Drawing.Size(52, 13);
+            this.duplicateField.TabIndex = 28;
+            this.duplicateField.TabStop = true;
+            this.duplicateField.Text = "Duplicate";
+            this.duplicateField.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // moveDownField
             // 
@@ -886,28 +887,27 @@
             this.moveUpField.Text = "Up";
             this.moveUpField.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // duplicateField
+            // deleteField
             // 
-            this.duplicateField.AutoSize = true;
-            this.duplicateField.Location = new System.Drawing.Point(38, 0);
-            this.duplicateField.Name = "duplicateField";
-            this.duplicateField.Size = new System.Drawing.Size(52, 13);
-            this.duplicateField.TabIndex = 28;
-            this.duplicateField.TabStop = true;
-            this.duplicateField.Text = "Duplicate";
-            this.duplicateField.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.deleteField.AutoSize = true;
+            this.deleteField.Location = new System.Drawing.Point(164, 0);
+            this.deleteField.Name = "deleteField";
+            this.deleteField.Size = new System.Drawing.Size(38, 13);
+            this.deleteField.TabIndex = 29;
+            this.deleteField.TabStop = true;
+            this.deleteField.Text = "Delete";
+            this.deleteField.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // newField
+            // copy2ClipboardField
             // 
-            this.newField.AutoSize = true;
-            this.newField.LinkArea = new System.Windows.Forms.LinkArea(0, 3);
-            this.newField.Location = new System.Drawing.Point(3, 0);
-            this.newField.Name = "newField";
-            this.newField.Size = new System.Drawing.Size(29, 13);
-            this.newField.TabIndex = 68;
-            this.newField.TabStop = true;
-            this.newField.Text = "New";
-            this.newField.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.copy2ClipboardField.AutoSize = true;
+            this.copy2ClipboardField.Location = new System.Drawing.Point(208, 0);
+            this.copy2ClipboardField.Name = "copy2ClipboardField";
+            this.copy2ClipboardField.Size = new System.Drawing.Size(97, 13);
+            this.copy2ClipboardField.TabIndex = 32;
+            this.copy2ClipboardField.TabStop = true;
+            this.copy2ClipboardField.Text = "Value To Clipboard";
+            this.copy2ClipboardField.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // flowLayoutPanel8
             // 
