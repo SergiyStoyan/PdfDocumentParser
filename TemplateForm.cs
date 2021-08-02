@@ -223,14 +223,16 @@ namespace Cliver.PdfDocumentParser
                                                     selectedOcrCharBoxs.AddRange(Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateOcrCharBoxs, r.GetSystemRectangleF()));
                                                 else
                                                 {
-                                                    Bitmap b = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio);
-                                                    if (b == null)
-                                                        throw new Exception("Selected image is empty.");
-                                                    foreach (Ocr.CharBox cb in Ocr.This.GetCharBoxs(b, pages.ActiveTemplate.TesseractPageSegMode))
+                                                    using (Bitmap b = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
                                                     {
-                                                        cb.R.X += r.X;
-                                                        cb.R.Y += r.Y;
-                                                        selectedOcrCharBoxs.Add(cb);
+                                                        if (b == null)
+                                                            throw new Exception("Selected image is empty.");
+                                                        foreach (Ocr.CharBox cb in Ocr.This.GetCharBoxs(b, pages.ActiveTemplate.TesseractPageSegMode))
+                                                        {
+                                                            cb.R.X += r.X;
+                                                            cb.R.Y += r.Y;
+                                                            selectedOcrCharBoxs.Add(cb);
+                                                        }
                                                     }
                                                 }
                                                 foreach (Ocr.CharBox cb in selectedOcrCharBoxs)

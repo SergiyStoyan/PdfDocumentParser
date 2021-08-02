@@ -382,11 +382,10 @@ namespace Cliver.PdfDocumentParser
                 else
                     r = ar;
 
-                Bitmap b = page.GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio);
-                if (b == null)
-                    return null;
-                using (b)
+                using (Bitmap b = page.GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
                 {
+                    if (b == null)
+                        return null;
                     return GetImageScaled2Pdf(b);
                 }
             }

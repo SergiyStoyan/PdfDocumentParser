@@ -262,9 +262,9 @@ namespace Cliver.PdfDocumentParser
                 return _activeTemplateBitmap;
             }
         }
-        public float DetectedImageScale { get; private set; } = -1;
-
         Bitmap _activeTemplateBitmap = null;
+
+        public float DetectedImageScale { get; private set; } = -1;
 
         internal ImageData ActiveTemplateImageData
         {
@@ -330,10 +330,12 @@ namespace Cliver.PdfDocumentParser
             if (sda.SearchRectangleMargin >= 0)
             {
                 RectangleF sr = getSearchRectangle(sda.Rectangle(), sda.SearchRectangleMargin);
-                Bitmap b = GetRectangleFromActiveTemplateBitmap(sr.X / Settings.Constants.Image2PdfResolutionRatio, sr.Y / Settings.Constants.Image2PdfResolutionRatio, sr.Width / Settings.Constants.Image2PdfResolutionRatio, sr.Height / Settings.Constants.Image2PdfResolutionRatio);
-                if (b == null)
-                    throw new Exception("The scaling anchor's rectangle is null.");
-                searchRectangleCI = new CvImage(b);
+                using (Bitmap b = GetRectangleFromActiveTemplateBitmap(sr.X / Settings.Constants.Image2PdfResolutionRatio, sr.Y / Settings.Constants.Image2PdfResolutionRatio, sr.Width / Settings.Constants.Image2PdfResolutionRatio, sr.Height / Settings.Constants.Image2PdfResolutionRatio))
+                {
+                    if (b == null)
+                        throw new Exception("The scaling anchor's rectangle is null.");
+                    searchRectangleCI = new CvImage(b);
+                }
             }
             else
                 searchRectangleCI = ActiveTemplateCvImage;
