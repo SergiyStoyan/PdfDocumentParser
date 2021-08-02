@@ -127,7 +127,7 @@ namespace Cliver.PdfDocumentParser
                     ls[i + 1].Top = l.Bottom;
                 }
                 else
-                    l.Bottom = (l.Bottom - l.Top) < (ar.Bottom - l.Bottom) ? (l.Bottom + l.Top) / 2 : ar.Bottom;
+                    l.Bottom = (l.Bottom - l.Top) < (ar.Bottom - l.Bottom) ? l.Bottom : ar.Bottom;
             }
             return ls;
         }

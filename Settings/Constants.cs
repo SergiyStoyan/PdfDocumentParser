@@ -35,11 +35,11 @@ namespace Cliver.PdfDocumentParser
                     OcrConfig = new Ocr.Config
                     {
                         Language = "eng",
-                        EngineMode = Tesseract.EngineMode.TesseractOnly,
+                        EngineMode = Tesseract.EngineMode.Default,
                         VariableNames2value = new Dictionary<string, object>
                         {
-                            { "load_system_dawg", false },
-                            { "load_freq_dawg", false },
+                            { "load_system_dawg", false },//don't load dictionary
+                            { "load_freq_dawg", false },//don't load dictionary
                             //(name: "tessedit_char_whitelist", "0123456789.,"),
                         }
                     };

@@ -299,6 +299,8 @@ namespace Cliver.PdfDocumentParser
         }
         List<Pdf.CharBox> _pdfCharBoxs;
 
+        public bool IsScan { get { return PdfCharBoxs.Count < 1; } }
+
         internal Size Size
         {
             get
