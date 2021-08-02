@@ -38,7 +38,7 @@
             this.text = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.IgnoreOtherCharsInSearchMargin = new System.Windows.Forms.CheckBox();
+            this.IgnoreOtherCharsInRectangle = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
             this.IgnoreInvisibleChars = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -99,7 +99,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 27);
+            this.label3.Location = new System.Drawing.Point(3, 26);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(131, 13);
             this.label3.TabIndex = 83;
@@ -107,7 +107,7 @@
             // 
             // SearchRectangleMargin
             // 
-            this.SearchRectangleMargin.Location = new System.Drawing.Point(175, 25);
+            this.SearchRectangleMargin.Location = new System.Drawing.Point(175, 24);
             this.SearchRectangleMargin.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -130,7 +130,7 @@
             // cSearchRectangleMargin
             // 
             this.cSearchRectangleMargin.AutoSize = true;
-            this.cSearchRectangleMargin.Location = new System.Drawing.Point(151, 27);
+            this.cSearchRectangleMargin.Location = new System.Drawing.Point(151, 26);
             this.cSearchRectangleMargin.Name = "cSearchRectangleMargin";
             this.cSearchRectangleMargin.Size = new System.Drawing.Size(15, 14);
             this.cSearchRectangleMargin.TabIndex = 85;
@@ -141,17 +141,17 @@
             this.text.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.text.Location = new System.Drawing.Point(6, 110);
+            this.text.Location = new System.Drawing.Point(6, 105);
             this.text.Multiline = true;
             this.text.Name = "text";
             this.text.ReadOnly = true;
-            this.text.Size = new System.Drawing.Size(216, 113);
+            this.text.Size = new System.Drawing.Size(216, 118);
             this.text.TabIndex = 86;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(3, 94);
+            this.label5.Location = new System.Drawing.Point(3, 89);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(44, 13);
             this.label5.TabIndex = 89;
@@ -166,28 +166,28 @@
             this.label4.TabIndex = 90;
             this.label4.Text = ")";
             // 
-            // IgnoreOtherCharsInSearchMargin
+            // IgnoreOtherCharsInRectangle
             // 
-            this.IgnoreOtherCharsInSearchMargin.AutoSize = true;
-            this.IgnoreOtherCharsInSearchMargin.Location = new System.Drawing.Point(207, 50);
-            this.IgnoreOtherCharsInSearchMargin.Name = "IgnoreOtherCharsInSearchMargin";
-            this.IgnoreOtherCharsInSearchMargin.Size = new System.Drawing.Size(15, 14);
-            this.IgnoreOtherCharsInSearchMargin.TabIndex = 94;
-            this.IgnoreOtherCharsInSearchMargin.UseVisualStyleBackColor = true;
+            this.IgnoreOtherCharsInRectangle.AutoSize = true;
+            this.IgnoreOtherCharsInRectangle.Location = new System.Drawing.Point(175, 48);
+            this.IgnoreOtherCharsInRectangle.Name = "IgnoreOtherCharsInRectangle";
+            this.IgnoreOtherCharsInRectangle.Size = new System.Drawing.Size(15, 14);
+            this.IgnoreOtherCharsInRectangle.TabIndex = 94;
+            this.IgnoreOtherCharsInRectangle.UseVisualStyleBackColor = true;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(3, 49);
+            this.label7.Location = new System.Drawing.Point(3, 47);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(183, 13);
+            this.label7.Size = new System.Drawing.Size(163, 13);
             this.label7.TabIndex = 93;
-            this.label7.Text = "Ignore Other Chars In Search Margin:";
+            this.label7.Text = "Ignore Other Chars In Rectangle:";
             // 
             // IgnoreInvisibleChars
             // 
             this.IgnoreInvisibleChars.AutoSize = true;
-            this.IgnoreInvisibleChars.Location = new System.Drawing.Point(207, 71);
+            this.IgnoreInvisibleChars.Location = new System.Drawing.Point(175, 69);
             this.IgnoreInvisibleChars.Name = "IgnoreInvisibleChars";
             this.IgnoreInvisibleChars.Size = new System.Drawing.Size(15, 14);
             this.IgnoreInvisibleChars.TabIndex = 96;
@@ -196,7 +196,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(3, 71);
+            this.label8.Location = new System.Drawing.Point(3, 68);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(111, 13);
             this.label8.TabIndex = 95;
@@ -209,7 +209,7 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Controls.Add(this.IgnoreInvisibleChars);
             this.Controls.Add(this.label8);
-            this.Controls.Add(this.IgnoreOtherCharsInSearchMargin);
+            this.Controls.Add(this.IgnoreOtherCharsInRectangle);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.PositionDeviationIsAbsolute);
             this.Controls.Add(this.label4);
@@ -241,7 +241,7 @@
         private System.Windows.Forms.TextBox text;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.CheckBox IgnoreOtherCharsInSearchMargin;
+        private System.Windows.Forms.CheckBox IgnoreOtherCharsInRectangle;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.CheckBox IgnoreInvisibleChars;
         private System.Windows.Forms.Label label8;

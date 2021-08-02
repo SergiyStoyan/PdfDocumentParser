@@ -58,7 +58,7 @@ namespace Cliver.PdfDocumentParser
                 public float PositionDeviation = 1f;
                 public bool PositionDeviationIsAbsolute = false;
                 public bool IgnoreInvisibleChars = true;
-                public bool IgnoreOtherCharsInSearchMargin = false;
+                public bool IgnoreOtherCharsInRectangle = false;
 
                 override public bool IsSet()
                 {

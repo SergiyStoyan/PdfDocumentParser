@@ -200,7 +200,7 @@ namespace Cliver.PdfDocumentParser
                                 SizeF shift = new SizeF(tcbs[0].R.X - cbs[0].Rectangle.X, tcbs[0].R.Y - cbs[0].Rectangle.Y);
                                 RectangleF actualR = new RectangleF(rectangle.X + shift.Width, rectangle.Y + shift.Height, rectangle.Width, rectangle.Height);
                                 if (//check that the found rectangle contains only the anchor's boxes
-                                 (pt.IgnoreOtherCharsInSearchMargin || PdfCharBoxs.FirstOrDefault(x => actualR.Contains(x.R) && !tcbs.Contains(x) && (!pt.IgnoreInvisibleChars || !Pdf.InvisibleCharacters.Contains(x.Char))) == null)
+                                 (pt.IgnoreOtherCharsInRectangle || PdfCharBoxs.FirstOrDefault(x => actualR.Contains(x.R) && !tcbs.Contains(x) && (!pt.IgnoreInvisibleChars || !Pdf.InvisibleCharacters.Contains(x.Char))) == null)
                                     && !findNext(actualR.Location)
                                 )
                                     return true;
