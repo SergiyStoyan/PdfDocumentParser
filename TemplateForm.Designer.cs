@@ -1094,7 +1094,7 @@
             // 
             // SearchRectangleMargin
             // 
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.OldLace;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
             this.SearchRectangleMargin.DefaultCellStyle = dataGridViewCellStyle1;
             this.SearchRectangleMargin.HeaderText = "Margin";
             this.SearchRectangleMargin.Name = "SearchRectangleMargin";
