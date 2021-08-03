@@ -1093,10 +1093,9 @@
             // 
             // SearchRectangleMargin
             // 
-            this.SearchRectangleMargin.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.SearchRectangleMargin.HeaderText = "Margin";
             this.SearchRectangleMargin.Name = "SearchRectangleMargin";
-            this.SearchRectangleMargin.Width = 64;
+            this.SearchRectangleMargin.Width = 50;
             // 
             // Position3
             // 

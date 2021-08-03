@@ -626,7 +626,8 @@ namespace Cliver.PdfDocumentParser
                     return;
                 }
 
-                fields.CurrentCell = fields[0, row.Index];
+                if (fields.CurrentCell?.RowIndex != row.Index)
+                    fields.CurrentCell = fields[0, row.Index];
                 //Template.Field f = (Template.Field)row.Tag;
                 //setCurrentAnchorRow(f.LeftAnchorId, true);
                 //setCurrentAnchorRow(f.TopAnchorId, false);

@@ -35,7 +35,7 @@ namespace Cliver.PdfDocumentParser
             CoordinateDeviationMargin.Value = (decimal)Settings.Constants.CoordinateDeviationMargin;
             OcrConfig.Text = Settings.Constants.OcrConfig.ToStringByJson();
 
-            CoordinateDeviationMargin.Value = (decimal)Settings.Constants.CoordinateDeviationMargin;
+            InitialSearchRectangleMargin.Value = (decimal)Settings.Constants.InitialSearchRectangleMargin;
         }
 
         private void bCancel_Click(object sender, EventArgs e)
@@ -61,7 +61,7 @@ namespace Cliver.PdfDocumentParser
                 Settings.Constants.CoordinateDeviationMargin = (float)CoordinateDeviationMargin.Value;
                 Settings.Constants.OcrConfig = Serialization.Json.Deserialize<Ocr.Config>(OcrConfig.Text);
 
-                Settings.Constants.CoordinateDeviationMargin = (float)CoordinateDeviationMargin.Value;
+                Settings.Constants.InitialSearchRectangleMargin = (int)InitialSearchRectangleMargin.Value;
 
                 Settings.Appearance.Save();
                 Settings.Constants.Save();

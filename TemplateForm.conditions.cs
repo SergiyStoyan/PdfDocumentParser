@@ -214,7 +214,8 @@ namespace Cliver.PdfDocumentParser
                     return;
                 }
 
-                conditions.CurrentCell = conditions[0, row.Index];
+                if (conditions.CurrentCell?.RowIndex != row.Index)
+                    conditions.CurrentCell = conditions[0, row.Index];
 
                 Template.Condition c = (Template.Condition)row.Tag;
                 bool firstAnchor = true;

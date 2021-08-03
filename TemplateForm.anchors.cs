@@ -68,9 +68,20 @@ namespace Cliver.PdfDocumentParser
 
             anchors.CellBeginEdit += delegate (object sender, DataGridViewCellCancelEventArgs e)
             {
-                if (anchors.Columns[e.ColumnIndex].Name != "ParentAnchorId3")
+                string cn = anchors.Columns[e.ColumnIndex].Name;
+                if (cn == "SearchRectangleMargin")
+                {
+                    DataGridViewCell c = anchors[e.ColumnIndex, e.RowIndex];
+                    if (string.IsNullOrWhiteSpace((string)c.Value) || !int.TryParse((string)c.Value, out int searchRectangleMargin))
+                        c.Value = Settings.Constants.InitialSearchRectangleMargin.ToString();
+                    //c.Style.BackColor = SystemColors.Window;
                     return;
-                setAnchorParentAnchorIdList(anchors.Rows[e.RowIndex]);
+                }
+                if (cn == "ParentAnchorId3")
+                {
+                    setAnchorParentAnchorIdList(anchors.Rows[e.RowIndex]);
+                    return;
+                }
             };
 
             anchors.RowsAdded += delegate (object sender, DataGridViewRowsAddedEventArgs e)
@@ -104,8 +115,10 @@ namespace Cliver.PdfDocumentParser
             {
                 if (anchors.IsCurrentCellDirty)
                 {
-                    if (anchors.Columns[anchors.CurrentCell.ColumnIndex].Name != "SearchRectangleMargin")
-                        anchors.CommitEdit(DataGridViewDataErrorContexts.Commit);
+                    //string cn = anchors.Columns[anchors.CurrentCell.ColumnIndex].Name;
+                    //if (cn == "SearchRectangleMargin")
+                    //    return;
+                    anchors.CommitEdit(DataGridViewDataErrorContexts.Commit);
                 }
             };
 
@@ -118,8 +131,8 @@ namespace Cliver.PdfDocumentParser
                 {
                     if (r.Tag != null)
                     {
-                        if (!string.IsNullOrWhiteSpace((string)r.Cells["SearchRectangleMargin"].Value) && !int.TryParse((string)r.Cells["SearchRectangleMargin"].Value, out int searchRectangleMargin))
-                            throw new Exception("SearchRectangleMargin must be a non-negative integer.");
+                        //if (!string.IsNullOrWhiteSpace((string)r.Cells["SearchRectangleMargin"].Value) && !int.TryParse((string)r.Cells["SearchRectangleMargin"].Value, out int searchRectangleMargin))
+                        //    throw new Exception("SearchRectangleMargin must be a non-negative integer.");
                     }
                 }
                 catch (Exception ex)
@@ -142,6 +155,7 @@ namespace Cliver.PdfDocumentParser
                         return;
                     var row = anchors.Rows[e.RowIndex];
                     Template.Anchor a = (Template.Anchor)row.Tag;
+                    DataGridViewCell c = anchors[e.ColumnIndex, e.RowIndex];
                     switch (anchors.Columns[e.ColumnIndex].Name)
                     {
                         //case "Id3":
@@ -158,7 +172,7 @@ namespace Cliver.PdfDocumentParser
                             return;
                         case "Type3":
                             {
-                                Template.Anchor.Types t2 = (Template.Anchor.Types)row.Cells["Type3"].Value;
+                                Template.Anchor.Types t2 = (Template.Anchor.Types)c.Value;
                                 if (t2 == a.Type)
                                     break;
                                 Template.Anchor a2;
@@ -185,13 +199,11 @@ namespace Cliver.PdfDocumentParser
                             }
                         case "SearchRectangleMargin":
                             {
-                                if (string.IsNullOrWhiteSpace((string)row.Cells["SearchRectangleMargin"].Value))
+                                if (string.IsNullOrWhiteSpace((string)c.Value) || !int.TryParse((string)c.Value, out int searchRectangleMargin))
                                 {
                                     a.SearchRectangleMargin = -1;
                                     break;
                                 }
-                                if (!int.TryParse((string)row.Cells["SearchRectangleMargin"].Value, out int searchRectangleMargin))
-                                    return;
                                 a.SearchRectangleMargin = searchRectangleMargin < 0 ? -1 : searchRectangleMargin;
                                 break;
                             }
@@ -293,7 +305,8 @@ namespace Cliver.PdfDocumentParser
                 Template.Anchor a = getAnchor(anchorId, out DataGridViewRow row);
                 if (row == null || a == null)
                     throw new Exception("Anchor[Id=" + anchorId + "] does not exist.");
-                anchors.CurrentCell = anchors[0, row.Index];
+                if (anchors.CurrentCell?.RowIndex != row.Index)
+                    anchors.CurrentCell = anchors[0, row.Index];
 
                 if (clearSelection)
                     anchors.ClearSelection();
@@ -384,12 +397,12 @@ namespace Cliver.PdfDocumentParser
             if (a.SearchRectangleMargin < 0)
             {
                 row.Cells["SearchRectangleMargin"].Value = "";
-                row.Cells["SearchRectangleMargin"].Style.BackColor = SystemColors.Control;
+                //row.Cells["SearchRectangleMargin"].Style.BackColor = SystemColors.Window;
             }
             else
             {
                 row.Cells["SearchRectangleMargin"].Value = a.SearchRectangleMargin.ToString();
-                row.Cells["SearchRectangleMargin"].Style.BackColor = SystemColors.Window;
+                //row.Cells["SearchRectangleMargin"].Style.BackColor = SystemColors.Control;
             }
 
             DataGridViewCell c = row.Cells["Pattern"];
