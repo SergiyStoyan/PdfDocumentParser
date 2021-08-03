@@ -29,6 +29,8 @@ namespace Cliver.PdfDocumentParser
             ParentAnchorId3.ValueMember = "Id";
             ParentAnchorId3.DisplayMember = "Name";
 
+            Pattern.DefaultCellStyle.NullValue = null;//to avoid error when changing cell type to image
+
             anchors.EnableHeadersVisualStyles = false;//needed to set row headers
 
             anchors.CellPainting += delegate (object sender, DataGridViewCellPaintingEventArgs e)
@@ -77,11 +79,6 @@ namespace Cliver.PdfDocumentParser
 
             anchors.DataError += delegate (object sender, DataGridViewDataErrorEventArgs e)
             {
-                if (anchors.Columns[e.ColumnIndex].Name == "Pattern" && e.Exception is System.FormatException)
-                {//suppress error when changing cell type
-                    e.Cancel = true;
-                    return;
-                }
                 DataGridViewRow r = anchors.Rows[e.RowIndex];
                 Message.Error("Anchor[Id=" + r.Cells["Id3"].Value + "] has unacceptable value of " + anchors.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message, this);
             };
@@ -114,14 +111,15 @@ namespace Cliver.PdfDocumentParser
 
             anchors.RowValidating += delegate (object sender, DataGridViewCellCancelEventArgs e)
             {
+                if (loadingTemplate)
+                    return;
                 DataGridViewRow r = anchors.Rows[e.RowIndex];
                 try
                 {
                     if (r.Tag != null)
                     {
-                        if ((bool)r.Cells["cSearchRectangleMargin"].Value)
-                            if (!int.TryParse((string)r.Cells["SearchRectangleMargin"].Value, out int searchRectangleMargin) || searchRectangleMargin < 0)
-                                throw new Exception("SearchRectangleMargin must be a non-negative integer.");
+                        if (!string.IsNullOrWhiteSpace((string)r.Cells["SearchRectangleMargin"].Value) && !int.TryParse((string)r.Cells["SearchRectangleMargin"].Value, out int searchRectangleMargin))
+                            throw new Exception("SearchRectangleMargin must be a non-negative integer.");
                     }
                 }
                 catch (Exception ex)
@@ -131,91 +129,81 @@ namespace Cliver.PdfDocumentParser
                 }
             };
 
+            bool isWithinCellValueChanged = false;
             anchors.CellValueChanged += delegate (object sender, DataGridViewCellEventArgs e)
             {
-                if (loadingTemplate)
+                if (loadingTemplate || isWithinCellValueChanged)
                     return;
-                if (e.ColumnIndex < 0)//row's header
-                    return;
-                var row = anchors.Rows[e.RowIndex];
-                Template.Anchor a = (Template.Anchor)row.Tag;
-                switch (anchors.Columns[e.ColumnIndex].Name)
+                try
                 {
-                    //case "Id3":
-                    //    {
-                    //        int? anchorId = (int?)row.Cells["Id3"].Value;
-                    //        if (anchorId == null)
-                    //            break;
-                    //        Template.Anchor a = (Template.Anchor)row.Tag;
-                    //        a.Id = (int)anchorId;
-                    //        setAnchorRow(row, a);
-                    //        break;
-                    //    }
-                    case "Pattern":
+                    isWithinCellValueChanged = true;
+
+                    if (e.ColumnIndex < 0)//row's header
                         return;
-                    case "Type3":
-                        {
-                            Template.Anchor.Types t2 = (Template.Anchor.Types)row.Cells["Type3"].Value;
-                            if (t2 == a.Type)
-                                break;
-                            Template.Anchor a2;
-                            switch (t2)
+                    var row = anchors.Rows[e.RowIndex];
+                    Template.Anchor a = (Template.Anchor)row.Tag;
+                    switch (anchors.Columns[e.ColumnIndex].Name)
+                    {
+                        //case "Id3":
+                        //    {
+                        //        int? anchorId = (int?)row.Cells["Id3"].Value;
+                        //        if (anchorId == null)
+                        //            break;
+                        //        Template.Anchor a = (Template.Anchor)row.Tag;
+                        //        a.Id = (int)anchorId;
+                        //        setAnchorRow(row, a);
+                        //        break;
+                        //    }
+                        case "Pattern":
+                            return;
+                        case "Type3":
                             {
-                                case Template.Anchor.Types.PdfText:
-                                    a2 = new Template.Anchor.PdfText();
+                                Template.Anchor.Types t2 = (Template.Anchor.Types)row.Cells["Type3"].Value;
+                                if (t2 == a.Type)
                                     break;
-                                case Template.Anchor.Types.OcrText:
-                                    a2 = new Template.Anchor.OcrText();
-                                    break;
-                                case Template.Anchor.Types.ImageData:
-                                    a2 = new Template.Anchor.ImageData();
-                                    break;
-                                case Template.Anchor.Types.CvImage:
-                                    a2 = new Template.Anchor.CvImage();
-                                    break;
-                                //case Template.Anchor.Types.Script:
-                                //    a2 = new Template.Anchor.Script();
-                                //    break;
-                                default:
-                                    throw new Exception("Unknown option: " + t2);
+                                Template.Anchor a2;
+                                switch (t2)
+                                {
+                                    case Template.Anchor.Types.PdfText:
+                                        a2 = new Template.Anchor.PdfText();
+                                        break;
+                                    case Template.Anchor.Types.OcrText:
+                                        a2 = new Template.Anchor.OcrText();
+                                        break;
+                                    case Template.Anchor.Types.ImageData:
+                                        a2 = new Template.Anchor.ImageData();
+                                        break;
+                                    case Template.Anchor.Types.CvImage:
+                                        a2 = new Template.Anchor.CvImage();
+                                        break;
+                                    default:
+                                        throw new Exception("Unknown option: " + t2);
+                                }
+                                a2.Id = a.Id;
+                                a = a2;
+                                break;
                             }
-                            a2.Id = a.Id;
-                            a = a2;
-                            break;
-                        }
-                    case "cSearchRectangleMargin":
-                        {
-                            if (!(bool)row.Cells["cSearchRectangleMargin"].Value)
+                        case "SearchRectangleMargin":
                             {
-                                a.SearchRectangleMargin = -1;
-                                row.Cells["SearchRectangleMargin"].ReadOnly = true;
-                                row.Cells["SearchRectangleMargin"].Value = "";
+                                if (string.IsNullOrWhiteSpace((string)row.Cells["SearchRectangleMargin"].Value))
+                                {
+                                    a.SearchRectangleMargin = -1;
+                                    break;
+                                }
+                                if (!int.TryParse((string)row.Cells["SearchRectangleMargin"].Value, out int searchRectangleMargin))
+                                    return;
+                                a.SearchRectangleMargin = searchRectangleMargin < 0 ? -1 : searchRectangleMargin;
                                 break;
                             }
-                            row.Cells["SearchRectangleMargin"].ReadOnly = false;
-                            if (!int.TryParse((string)row.Cells["SearchRectangleMargin"].Value, out int searchRectangleMargin) || searchRectangleMargin < 0)
-                                row.Cells["SearchRectangleMargin"].Value = Settings.Constants.InitialSearchRectangleMargin.ToString();
-                            break;
-                        }
-                    case "SearchRectangleMargin":
-                        {
-                            if (!(bool)row.Cells["cSearchRectangleMargin"].Value)
-                                break;
-                            if (!int.TryParse((string)row.Cells["SearchRectangleMargin"].Value, out int searchRectangleMargin) || searchRectangleMargin < 0)
-                            //{
-                            //    Message.Error("SearchRectangleMargin must be a non-negative integer.");
-                            //    row.Cells["cSearchRectangleMargin"].Value = a.SearchRectangleMargin >= 0;
-                            //    row.Cells["SearchRectangleMargin"].Value = a.SearchRectangleMargin.ToString();
-                            //    break;
-                            //}
-                                return;
-                            a.SearchRectangleMargin = searchRectangleMargin;
-                            break;
-                        }
+                    }
+                    setAnchorRow(row, a);
+                    clearImageFromBoxes();
+                    findAndDrawAnchor(a.Id);
                 }
-                setAnchorRow(row, a);
-                clearImageFromBoxes();
-                findAndDrawAnchor(a.Id);
+                finally
+                {
+                    isWithinCellValueChanged = false;
+                }
             };
 
             anchors.SelectionChanged += delegate (object sender, EventArgs e)
@@ -393,7 +381,16 @@ namespace Cliver.PdfDocumentParser
             row.Cells["Id3"].Value = a.Id;
             row.Cells["Type3"].Value = a.Type;
             row.Cells["ParentAnchorId3"].Value = a.ParentAnchorId;
-            row.Cells["cSearchRectangleMargin"].Value = a.SearchRectangleMargin >= 0;
+            if (a.SearchRectangleMargin < 0)
+            {
+                row.Cells["SearchRectangleMargin"].Value = "";
+                row.Cells["SearchRectangleMargin"].Style.BackColor = SystemColors.Control;
+            }
+            else
+            {
+                row.Cells["SearchRectangleMargin"].Value = a.SearchRectangleMargin.ToString();
+                row.Cells["SearchRectangleMargin"].Style.BackColor = SystemColors.Window;
+            }
 
             DataGridViewCell c = row.Cells["Pattern"];
             if (c.Value != null && c.Value is IDisposable)
@@ -412,7 +409,7 @@ namespace Cliver.PdfDocumentParser
                 if (c is DataGridViewImageCell)
                 {
                     c.Dispose();
-                    c = new DataGridViewTextBoxCell();
+                    c = new DataGridViewTextBoxCell { };
                     row.Cells["Pattern"] = c;
                 }
             }
@@ -485,17 +482,6 @@ namespace Cliver.PdfDocumentParser
                     break;
                 default:
                     throw new Exception("Unknown option: " + a.Type);
-            }
-
-            if ((bool)row.Cells["cSearchRectangleMargin"].Value)
-            {
-                row.Cells["SearchRectangleMargin"].ReadOnly = false;
-                row.Cells["SearchRectangleMargin"].Value = a.SearchRectangleMargin.ToString();
-            }
-            else
-            {
-                row.Cells["SearchRectangleMargin"].ReadOnly = true;
-                row.Cells["SearchRectangleMargin"].Value = "";
             }
 
             Template.PointF p = a.Position;

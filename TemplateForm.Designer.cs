@@ -96,7 +96,6 @@
             this.ParentAnchorId3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Type3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Pattern = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cSearchRectangleMargin = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.SearchRectangleMargin = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Position3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).BeginInit();
@@ -715,7 +714,6 @@
             this.ParentAnchorId3,
             this.Type3,
             this.Pattern,
-            this.cSearchRectangleMargin,
             this.SearchRectangleMargin,
             this.Position3});
             this.anchors.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1093,19 +1091,11 @@
             this.Pattern.Name = "Pattern";
             this.Pattern.ReadOnly = true;
             // 
-            // cSearchRectangleMargin
-            // 
-            this.cSearchRectangleMargin.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.cSearchRectangleMargin.HeaderText = ">";
-            this.cSearchRectangleMargin.Name = "cSearchRectangleMargin";
-            this.cSearchRectangleMargin.Width = 21;
-            // 
             // SearchRectangleMargin
             // 
             this.SearchRectangleMargin.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.SearchRectangleMargin.HeaderText = "Margin";
             this.SearchRectangleMargin.Name = "SearchRectangleMargin";
-            this.SearchRectangleMargin.ReadOnly = true;
             this.SearchRectangleMargin.Width = 64;
             // 
             // Position3
@@ -1250,7 +1240,6 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn ParentAnchorId3;
         private System.Windows.Forms.DataGridViewComboBoxColumn Type3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Pattern;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn cSearchRectangleMargin;
         private System.Windows.Forms.DataGridViewTextBoxColumn SearchRectangleMargin;
         private System.Windows.Forms.DataGridViewTextBoxColumn Position3;
     }

@@ -37,6 +37,8 @@ namespace Cliver.PdfDocumentParser
 
             Type.ValueType = typeof(Template.Field.Types);
             Type.DataSource = Enum.GetValues(typeof(Template.Field.Types));
+           
+            Value.DefaultCellStyle.NullValue = null;//to avoid error when changing cell type to image
 
             fields.EnableHeadersVisualStyles = false;//needed to set row headers
 
@@ -782,6 +784,11 @@ namespace Cliver.PdfDocumentParser
 
             if (loadingTemplate)
                 return;
+
+            if (f.IsSet())
+                setRowStatus(statuses.NEUTRAL, row, "");
+            else
+                setRowStatus(statuses.WARNING, row, "Not set");
 
             if (currentFieldControl != null && row == currentFieldRow)
                 setCurrentFieldRow(row);
