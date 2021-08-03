@@ -687,6 +687,7 @@ namespace Cliver.PdfDocumentParser
                         throw new Exception("Unknown option: " + t);
                 }
                 currentFieldControl.Initialize(row, v, fs, this, (DataGridViewRow r) => { setFieldRow(r, f); });
+                settingsControlHeader.Text = "Field " + f?.Name + ":";
             }
             finally
             {
@@ -802,24 +803,50 @@ namespace Cliver.PdfDocumentParser
                 setCurrentFieldRow(row);
         }
 
+        //FieldControl currentFieldControl
+        //{
+        //    get
+        //    {
+        //        if (splitContainer4.Panel2.Controls.Count < 1)
+        //            return null;
+        //        return splitContainer4.Panel2.Controls[0] as FieldControl;
+        //    }
+        //    set
+        //    {
+        //        foreach (Control c in splitContainer4.Panel2.Controls)
+        //        {
+        //            splitContainer4.Panel2.Controls.Remove(c);
+        //            c.Dispose();
+        //        }
+        //        if (value == null)
+        //            return;
+        //        splitContainer4.Panel2.Controls.Add(value);
+        //        value.Dock = DockStyle.Fill;
+        //    }
+        //}
+
         FieldControl currentFieldControl
         {
             get
             {
-                if (splitContainer4.Panel2.Controls.Count < 1)
-                    return null;
-                return splitContainer4.Panel2.Controls[0] as FieldControl;
+                foreach (Control c in splitContainer4.Panel2.Controls)
+                    if (c is FieldControl)
+                        return c as FieldControl;
+                return null;
             }
             set
             {
                 foreach (Control c in splitContainer4.Panel2.Controls)
                 {
+                    if (c == settingsControlHeader)
+                        continue;
                     splitContainer4.Panel2.Controls.Remove(c);
                     c.Dispose();
                 }
                 if (value == null)
                     return;
                 splitContainer4.Panel2.Controls.Add(value);
+                value.BringToFront();
                 value.Dock = DockStyle.Fill;
             }
         }

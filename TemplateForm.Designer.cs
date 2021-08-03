@@ -68,6 +68,12 @@
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Rectangle = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.anchors = new System.Windows.Forms.DataGridView();
+            this.Id3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ParentAnchorId3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Type3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Pattern = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SearchRectangleMargin = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Position3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Configure = new System.Windows.Forms.LinkLabel();
             this.Help = new System.Windows.Forms.LinkLabel();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
@@ -93,18 +99,14 @@
             this.bSave = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.Id3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ParentAnchorId3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Type3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Pattern = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.SearchRectangleMargin = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Position3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.settingsControlHeader = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).BeginInit();
             this.flowLayoutPanel5.SuspendLayout();
             this.flowLayoutPanel7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.conditions)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer4)).BeginInit();
             this.splitContainer4.Panel1.SuspendLayout();
+            this.splitContainer4.Panel2.SuspendLayout();
             this.splitContainer4.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
@@ -319,6 +321,10 @@
             this.splitContainer4.Panel1.Controls.Add(this.conditions);
             this.splitContainer4.Panel1.Controls.Add(this.flowLayoutPanel7);
             this.splitContainer4.Panel1.Controls.Add(this.flowLayoutPanel5);
+            // 
+            // splitContainer4.Panel2
+            // 
+            this.splitContainer4.Panel2.Controls.Add(this.settingsControlHeader);
             this.splitContainer4.Size = new System.Drawing.Size(232, 580);
             this.splitContainer4.SplitterDistance = 152;
             this.splitContainer4.TabIndex = 33;
@@ -726,6 +732,57 @@
             this.anchors.Size = new System.Drawing.Size(336, 242);
             this.anchors.TabIndex = 50;
             // 
+            // Id3
+            // 
+            this.Id3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Id3.HeaderText = "Id";
+            this.Id3.MinimumWidth = 12;
+            this.Id3.Name = "Id3";
+            this.Id3.ReadOnly = true;
+            this.Id3.Width = 41;
+            // 
+            // ParentAnchorId3
+            // 
+            this.ParentAnchorId3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.ParentAnchorId3.HeaderText = "Parent";
+            this.ParentAnchorId3.MinimumWidth = 12;
+            this.ParentAnchorId3.Name = "ParentAnchorId3";
+            this.ParentAnchorId3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.ParentAnchorId3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.ParentAnchorId3.Width = 63;
+            // 
+            // Type3
+            // 
+            this.Type3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Type3.HeaderText = "Type";
+            this.Type3.MinimumWidth = 12;
+            this.Type3.Name = "Type3";
+            this.Type3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Type3.Width = 39;
+            // 
+            // Pattern
+            // 
+            this.Pattern.HeaderText = "Pattern";
+            this.Pattern.Name = "Pattern";
+            this.Pattern.ReadOnly = true;
+            // 
+            // SearchRectangleMargin
+            // 
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            this.SearchRectangleMargin.DefaultCellStyle = dataGridViewCellStyle1;
+            this.SearchRectangleMargin.HeaderText = "Margin";
+            this.SearchRectangleMargin.Name = "SearchRectangleMargin";
+            this.SearchRectangleMargin.Width = 50;
+            // 
+            // Position3
+            // 
+            this.Position3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Position3.HeaderText = "Position";
+            this.Position3.MinimumWidth = 12;
+            this.Position3.Name = "Position3";
+            this.Position3.ReadOnly = true;
+            this.Position3.Width = 69;
+            // 
             // Configure
             // 
             this.Configure.AutoSize = true;
@@ -1058,56 +1115,16 @@
             this.splitContainer1.SplitterDistance = 584;
             this.splitContainer1.TabIndex = 1;
             // 
-            // Id3
+            // settingsControlHeader
             // 
-            this.Id3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Id3.HeaderText = "Id";
-            this.Id3.MinimumWidth = 12;
-            this.Id3.Name = "Id3";
-            this.Id3.ReadOnly = true;
-            this.Id3.Width = 41;
-            // 
-            // ParentAnchorId3
-            // 
-            this.ParentAnchorId3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.ParentAnchorId3.HeaderText = "Parent";
-            this.ParentAnchorId3.MinimumWidth = 12;
-            this.ParentAnchorId3.Name = "ParentAnchorId3";
-            this.ParentAnchorId3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ParentAnchorId3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.ParentAnchorId3.Width = 63;
-            // 
-            // Type3
-            // 
-            this.Type3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Type3.HeaderText = "Type";
-            this.Type3.MinimumWidth = 12;
-            this.Type3.Name = "Type3";
-            this.Type3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Type3.Width = 39;
-            // 
-            // Pattern
-            // 
-            this.Pattern.HeaderText = "Pattern";
-            this.Pattern.Name = "Pattern";
-            this.Pattern.ReadOnly = true;
-            // 
-            // SearchRectangleMargin
-            // 
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            this.SearchRectangleMargin.DefaultCellStyle = dataGridViewCellStyle1;
-            this.SearchRectangleMargin.HeaderText = "Margin";
-            this.SearchRectangleMargin.Name = "SearchRectangleMargin";
-            this.SearchRectangleMargin.Width = 50;
-            // 
-            // Position3
-            // 
-            this.Position3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Position3.HeaderText = "Position";
-            this.Position3.MinimumWidth = 12;
-            this.Position3.Name = "Position3";
-            this.Position3.ReadOnly = true;
-            this.Position3.Width = 69;
+            this.settingsControlHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.settingsControlHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.settingsControlHeader.Location = new System.Drawing.Point(0, 0);
+            this.settingsControlHeader.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.settingsControlHeader.Name = "settingsControlHeader";
+            this.settingsControlHeader.Size = new System.Drawing.Size(232, 13);
+            this.settingsControlHeader.TabIndex = 50;
+            this.settingsControlHeader.Text = "...";
             // 
             // TemplateForm
             // 
@@ -1124,6 +1141,7 @@
             this.flowLayoutPanel7.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.conditions)).EndInit();
             this.splitContainer4.Panel1.ResumeLayout(false);
+            this.splitContainer4.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer4)).EndInit();
             this.splitContainer4.ResumeLayout(false);
             this.flowLayoutPanel2.ResumeLayout(false);
@@ -1244,5 +1262,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Pattern;
         private System.Windows.Forms.DataGridViewTextBoxColumn SearchRectangleMargin;
         private System.Windows.Forms.DataGridViewTextBoxColumn Position3;
+        private System.Windows.Forms.Label settingsControlHeader;
     }
 }

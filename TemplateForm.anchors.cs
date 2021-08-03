@@ -343,6 +343,7 @@ namespace Cliver.PdfDocumentParser
                         throw new Exception("Unknown option: " + t);
                 }
                 currentAnchorControl.Initialize(row, (DataGridViewRow r) => { setAnchorRow(r, a); });
+                settingsControlHeader.Text = "Anchor #" + a?.Id + ":";
             }
             finally
             {
@@ -355,20 +356,24 @@ namespace Cliver.PdfDocumentParser
         {
             get
             {
-                if (splitContainer4.Panel2.Controls.Count < 1)
-                    return null;
-                return splitContainer4.Panel2.Controls[0] as AnchorControl;
+                foreach (Control c in splitContainer4.Panel2.Controls)
+                    if (c is AnchorControl)
+                        return c as AnchorControl;
+                return null;
             }
             set
             {
                 foreach (Control c in splitContainer4.Panel2.Controls)
                 {
+                    if (c == settingsControlHeader)
+                        continue;
                     splitContainer4.Panel2.Controls.Remove(c);
                     c.Dispose();
                 }
                 if (value == null)
                     return;
                 splitContainer4.Panel2.Controls.Add(value);
+                value.BringToFront();
                 value.Dock = DockStyle.Fill;
             }
         }
