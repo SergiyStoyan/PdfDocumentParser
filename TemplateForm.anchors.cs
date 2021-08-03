@@ -390,25 +390,25 @@ namespace Cliver.PdfDocumentParser
             row.Cells["ParentAnchorId3"].Value = a.ParentAnchorId;
             row.Cells["SearchRectangleMargin"].Value = a.SearchRectangleMargin < 0 ? "" : a.SearchRectangleMargin.ToString();
 
-            DataGridViewCell c = row.Cells["Pattern"];
-            if (c.Value != null && c.Value is IDisposable)
-                ((IDisposable)c.Value).Dispose();
+            DataGridViewCell patternCell = row.Cells["Pattern"];
+            if (patternCell.Value != null && patternCell.Value is IDisposable)
+                ((IDisposable)patternCell.Value).Dispose();
             if (a is Template.Anchor.CvImage || a is Template.Anchor.ImageData)
             {
-                if (!(c is DataGridViewImageCell))
+                if (!(patternCell is DataGridViewImageCell))
                 {
-                    c.Dispose();
-                    c = new DataGridViewImageCell { };
-                    row.Cells["Pattern"] = c;
+                    patternCell.Dispose();
+                    patternCell = new DataGridViewImageCell { ImageLayout = DataGridViewImageCellLayout.NotSet };
+                    row.Cells["Pattern"] = patternCell;
                 }
             }
             else
             {
-                if (c is DataGridViewImageCell)
+                if (patternCell is DataGridViewImageCell)
                 {
-                    c.Dispose();
-                    c = new DataGridViewTextBoxCell { };
-                    row.Cells["Pattern"] = c;
+                    patternCell.Dispose();
+                    patternCell = new DataGridViewTextBoxCell { };
+                    row.Cells["Pattern"] = patternCell;
                 }
             }
             row.Cells["Pattern"].ReadOnly = true;
@@ -419,7 +419,7 @@ namespace Cliver.PdfDocumentParser
                         Template.Anchor.PdfText pt = (Template.Anchor.PdfText)a;
                         if (pt.CharBoxs == null)
                         {
-                            row.Cells["Pattern"].Value = null;
+                            patternCell.Value = null;
                             break;
                         }
                         StringBuilder sb = new StringBuilder();
@@ -429,7 +429,7 @@ namespace Cliver.PdfDocumentParser
                                 sb.Append(cb.Char);
                             sb.Append("\r\n");
                         }
-                        row.Cells["Pattern"].Value = sb.ToString();
+                        patternCell.Value = sb.ToString();
                     }
                     break;
                 case Template.Anchor.Types.OcrText:
@@ -437,7 +437,7 @@ namespace Cliver.PdfDocumentParser
                         Template.Anchor.OcrText ot = (Template.Anchor.OcrText)a;
                         if (ot.CharBoxs == null)
                         {
-                            row.Cells["Pattern"].Value = null;
+                            patternCell.Value = null;
                             break;
                         }
                         StringBuilder sb = new StringBuilder();
@@ -447,7 +447,7 @@ namespace Cliver.PdfDocumentParser
                                 sb.Append(cb.Char);
                             sb.Append("\r\n");
                         }
-                        row.Cells["Pattern"].Value = sb.ToString();
+                        patternCell.Value = sb.ToString();
                     }
                     break;
                 case Template.Anchor.Types.ImageData:
@@ -457,14 +457,16 @@ namespace Cliver.PdfDocumentParser
                         if (id.Image != null)
                         {
                             b = id.Image.GetBitmap();
-                            Size s = row.Cells["Pattern"].Size;
-                            if (s.Height < b.Height)
+                            Size s = patternCell.Size;
+                            if (s.Height < b.Height * pictureScale.Value)
                             {
                                 s.Width = int.MaxValue;
                                 Win.ImageRoutines.Scale(ref b, s);
                             }
+                            else if (pictureScale.Value != 1)
+                                Win.ImageRoutines.Scale(ref b, (float)pictureScale.Value);
                         }
-                        row.Cells["Pattern"].Value = b;
+                        patternCell.Value = b;
                     }
                     break;
                 case Template.Anchor.Types.CvImage:
@@ -474,14 +476,16 @@ namespace Cliver.PdfDocumentParser
                         if (ci.Image != null)
                         {
                             b = ci.Image.GetBitmap();
-                            Size s = row.Cells["Pattern"].Size;
-                            if (s.Height < b.Height)
+                            Size s = patternCell.Size;
+                            if (s.Height < b.Height * pictureScale.Value)
                             {
                                 s.Width = int.MaxValue;
                                 Win.ImageRoutines.Scale(ref b, s);
                             }
+                            else if (pictureScale.Value != 1)
+                                Win.ImageRoutines.Scale(ref b, (float)pictureScale.Value);
                         }
-                        row.Cells["Pattern"].Value = b;
+                        patternCell.Value = b;
                     }
                     break;
                 default:

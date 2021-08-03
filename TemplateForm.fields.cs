@@ -706,30 +706,30 @@ namespace Cliver.PdfDocumentParser
                 setRowStatus(statuses.WARNING, row, "Not set");
                 return null;
             }
-            DataGridViewCell c = row.Cells["Value"];
-            if (c.Value != null && c.Value is IDisposable)
-                ((IDisposable)c.Value).Dispose();
+            DataGridViewCell valueCell = row.Cells["Value"];
+            if (valueCell.Value != null && valueCell.Value is IDisposable)
+                ((IDisposable)valueCell.Value).Dispose();
             if (f is Template.Field.Image || f is Template.Field.OcrTextLineImages)
             {
-                if (!(c is DataGridViewImageCell))
+                if (!(valueCell is DataGridViewImageCell))
                 {
-                    c.Dispose();
-                    c = new DataGridViewImageCell();
-                    row.Cells["Value"] = c;
+                    valueCell.Dispose();
+                    valueCell = new DataGridViewImageCell();
+                    row.Cells["Value"] = valueCell;
                 }
             }
             else
             {
-                if (c is DataGridViewImageCell)
+                if (valueCell is DataGridViewImageCell)
                 {
-                    c.Dispose();
-                    c = new DataGridViewTextBoxCell();
-                    row.Cells["Value"] = c;
+                    valueCell.Dispose();
+                    valueCell = new DataGridViewTextBoxCell();
+                    row.Cells["Value"] = valueCell;
                 }
             }
             if (setEmpty)
             {
-                c.Value = null;
+                valueCell.Value = null;
                 setRowStatus(statuses.NEUTRAL, row, "");
                 return null;
             }
@@ -740,31 +740,43 @@ namespace Cliver.PdfDocumentParser
                 switch (f.Type)
                 {
                     case Template.Field.Types.PdfText:
-                        c.Value = Page.NormalizeText((string)v);
+                        valueCell.Value = Page.NormalizeText((string)v);
                         break;
                     case Template.Field.Types.PdfTextLines:
-                        c.Value = Page.NormalizeText(string.Join("\r\n", (List<string>)v));
+                        valueCell.Value = Page.NormalizeText(string.Join("\r\n", (List<string>)v));
                         break;
                     case Template.Field.Types.PdfCharBoxs:
-                        c.Value = Page.NormalizeText(Serialization.Json.Serialize(v));
+                        valueCell.Value = Page.NormalizeText(Serialization.Json.Serialize(v));
                         break;
                     case Template.Field.Types.OcrText:
-                        c.Value = Page.NormalizeText((string)v);
+                        valueCell.Value = Page.NormalizeText((string)v);
                         break;
                     case Template.Field.Types.OcrTextLines:
-                        c.Value = Page.NormalizeText(string.Join("\r\n", (List<string>)v));
+                        valueCell.Value = Page.NormalizeText(string.Join("\r\n", (List<string>)v));
                         break;
                     case Template.Field.Types.OcrCharBoxs:
-                        c.Value = Page.NormalizeText(Serialization.Json.Serialize(v));
+                        valueCell.Value = Page.NormalizeText(Serialization.Json.Serialize(v));
+                        break;
+                    case Template.Field.Types.Image:
+                        Bitmap b = (Bitmap)v;
+                        Size s = valueCell.Size;
+                        if (s.Height < b.Height * pictureScale.Value)
+                        {
+                            s.Width = int.MaxValue;
+                            Win.ImageRoutines.Scale(ref b, s);
+                        }
+                        else if (pictureScale.Value != 1)
+                            Win.ImageRoutines.Scale(ref b, (float)pictureScale.Value);
+                        valueCell.Value = v;
                         break;
                     default:
-                        c.Value = v;
+                        valueCell.Value = v;
                         break;
                 }
             else
-                c.Value = v;
+                valueCell.Value = v;
 
-            if (c.Value != null)
+            if (valueCell.Value != null)
                 setRowStatus(statuses.SUCCESS, row, "Found");
             else
                 setRowStatus(statuses.ERROR, row, "Not found");

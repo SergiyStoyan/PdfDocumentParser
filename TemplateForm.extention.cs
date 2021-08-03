@@ -69,7 +69,7 @@ namespace Cliver.PdfDocumentParser
 
                 name.Text = t.Name;
 
-                //imageResolution.Value = template.ImageResolution;
+                pictureScale.Value = t.Editor.TestPictureScale > 0 ? t.Editor.TestPictureScale : 1;
 
                 if (t.TextAutoInsertSpace == null)
                     t.TextAutoInsertSpace = new TextAutoInsertSpace();
@@ -133,8 +133,6 @@ namespace Cliver.PdfDocumentParser
                         setFieldRow(row, f);
                     }
                 }
-
-                pictureScale.Value = t.Editor.TestPictureScale > 0 ? t.Editor.TestPictureScale : 1;
 
                 ExtractFieldsAutomaticallyWhenPageChanged.Checked = t.Editor.ExtractFieldsAutomaticallyWhenPageChanged;
                 ShowFieldTextLineSeparators.Checked = t.Editor.ShowFieldTextLineSeparators;
