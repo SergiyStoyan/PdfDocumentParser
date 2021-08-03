@@ -15,6 +15,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.textAutoInsertSpaceThreshold = new System.Windows.Forms.NumericUpDown();
             this.TesseractPageSegMode = new System.Windows.Forms.ComboBox();
             this.label19 = new System.Windows.Forms.Label();
@@ -1093,6 +1094,8 @@
             // 
             // SearchRectangleMargin
             // 
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.OldLace;
+            this.SearchRectangleMargin.DefaultCellStyle = dataGridViewCellStyle1;
             this.SearchRectangleMargin.HeaderText = "Margin";
             this.SearchRectangleMargin.Name = "SearchRectangleMargin";
             this.SearchRectangleMargin.Width = 50;
