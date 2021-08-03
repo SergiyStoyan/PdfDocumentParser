@@ -786,11 +786,6 @@ namespace Cliver.PdfDocumentParser
             if (loadingTemplate)
                 return;
 
-            if (f.IsSet())
-                setRowStatus(statuses.NEUTRAL, row, "");
-            else
-                setRowStatus(statuses.WARNING, row, "Not set");
-
             if (currentFieldControl != null && row == currentFieldRow)
                 setCurrentFieldRow(row);
         }
