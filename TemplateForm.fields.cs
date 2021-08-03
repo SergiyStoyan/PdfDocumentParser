@@ -257,14 +257,6 @@ namespace Cliver.PdfDocumentParser
 
             fields.CellContentClick += delegate (object sender, DataGridViewCellEventArgs e)
             {
-                if (e.ColumnIndex < 0)//row's header
-                    return;
-                switch (fields.Columns[e.ColumnIndex].Name)
-                {
-                    case "Ocr":
-                        fields.EndEdit();
-                        break;
-                }
             };
 
             fields.SelectionChanged += delegate (object sender, EventArgs e)
@@ -714,7 +706,7 @@ namespace Cliver.PdfDocumentParser
             DataGridViewCell c = row.Cells["Value"];
             if (c.Value != null && c.Value is IDisposable)
                 ((IDisposable)c.Value).Dispose();
-            if (f.Type == Template.Field.Types.Image || f.Type == Template.Field.Types.OcrTextLineImages)
+            if (f is Template.Field.Image || f is Template.Field.OcrTextLineImages)
             {
                 if (!(c is DataGridViewImageCell))
                 {

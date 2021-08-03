@@ -77,6 +77,11 @@ namespace Cliver.PdfDocumentParser
 
             anchors.DataError += delegate (object sender, DataGridViewDataErrorEventArgs e)
             {
+                if (anchors.Columns[e.ColumnIndex].Name == "Pattern" && e.Exception is System.FormatException)
+                {//suppress error when changing cell type
+                    e.Cancel = true;
+                    return;
+                }
                 DataGridViewRow r = anchors.Rows[e.RowIndex];
                 Message.Error("Anchor[Id=" + r.Cells["Id3"].Value + "] has unacceptable value of " + anchors.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message, this);
             };
@@ -92,10 +97,38 @@ namespace Cliver.PdfDocumentParser
                     anchors.SelectedRows[0].Selected = false;//to avoid auto-creating row
             };
 
-            anchors.CurrentCellDirtyStateChanged += delegate
+            //anchors.CellFormatting += delegate (object sender, DataGridViewCellFormattingEventArgs e)
+            //  {
+            //      if (anchors.Columns[e.ColumnIndex].Name == "Pattern")
+            //          e.FormattingApplied = false;
+            //  };
+
+            anchors.CurrentCellDirtyStateChanged += delegate (object sender, EventArgs e)
             {
                 if (anchors.IsCurrentCellDirty)
-                    anchors.CommitEdit(DataGridViewDataErrorContexts.Commit);
+                {
+                    if (anchors.Columns[anchors.CurrentCell.ColumnIndex].Name != "SearchRectangleMargin")
+                        anchors.CommitEdit(DataGridViewDataErrorContexts.Commit);
+                }
+            };
+
+            anchors.RowValidating += delegate (object sender, DataGridViewCellCancelEventArgs e)
+            {
+                DataGridViewRow r = anchors.Rows[e.RowIndex];
+                try
+                {
+                    if (r.Tag != null)
+                    {
+                        if ((bool)r.Cells["cSearchRectangleMargin"].Value)
+                            if (!int.TryParse((string)r.Cells["SearchRectangleMargin"].Value, out int searchRectangleMargin) || searchRectangleMargin < 0)
+                                throw new Exception("SearchRectangleMargin must be a non-negative integer.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Message.Error2(ex, this);
+                    e.Cancel = true;
+                }
             };
 
             anchors.CellValueChanged += delegate (object sender, DataGridViewCellEventArgs e)
@@ -169,12 +202,13 @@ namespace Cliver.PdfDocumentParser
                             if (!(bool)row.Cells["cSearchRectangleMargin"].Value)
                                 break;
                             if (!int.TryParse((string)row.Cells["SearchRectangleMargin"].Value, out int searchRectangleMargin) || searchRectangleMargin < 0)
-                            {
-                                Message.Error("SearchRectangleMargin must be a non-negative integer.");
-                                row.Cells["cSearchRectangleMargin"].Value = a.SearchRectangleMargin >= 0;
-                                row.Cells["SearchRectangleMargin"].Value = a.SearchRectangleMargin.ToString();
-                                break;
-                            }
+                            //{
+                            //    Message.Error("SearchRectangleMargin must be a non-negative integer.");
+                            //    row.Cells["cSearchRectangleMargin"].Value = a.SearchRectangleMargin >= 0;
+                            //    row.Cells["SearchRectangleMargin"].Value = a.SearchRectangleMargin.ToString();
+                            //    break;
+                            //}
+                                return;
                             a.SearchRectangleMargin = searchRectangleMargin;
                             break;
                         }
@@ -369,7 +403,7 @@ namespace Cliver.PdfDocumentParser
                 if (!(c is DataGridViewImageCell))
                 {
                     c.Dispose();
-                    c = new DataGridViewImageCell();
+                    c = new DataGridViewImageCell { };
                     row.Cells["Pattern"] = c;
                 }
             }
