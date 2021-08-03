@@ -140,7 +140,6 @@
             // 
             // TesseractPageSegMode
             // 
-            this.TesseractPageSegMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.TesseractPageSegMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.TesseractPageSegMode.DropDownWidth = 120;
             this.TesseractPageSegMode.FormattingEnabled = true;
