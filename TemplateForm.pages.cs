@@ -299,6 +299,9 @@ namespace Cliver.PdfDocumentParser
         {
             try
             {
+                currentAnchorControl = null;
+                currentFieldControl = null;
+
                 if (pages == null)
                     return;
 

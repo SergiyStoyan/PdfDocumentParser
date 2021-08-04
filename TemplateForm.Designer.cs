@@ -15,7 +15,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.textAutoInsertSpaceThreshold = new System.Windows.Forms.NumericUpDown();
             this.TesseractPageSegMode = new System.Windows.Forms.ComboBox();
             this.label19 = new System.Windows.Forms.Label();
@@ -162,16 +162,16 @@
             this.TesseractPageSegMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.TesseractPageSegMode.DropDownWidth = 120;
             this.TesseractPageSegMode.FormattingEnabled = true;
-            this.TesseractPageSegMode.Location = new System.Drawing.Point(478, 60);
+            this.TesseractPageSegMode.Location = new System.Drawing.Point(485, 60);
             this.TesseractPageSegMode.Name = "TesseractPageSegMode";
-            this.TesseractPageSegMode.Size = new System.Drawing.Size(103, 21);
+            this.TesseractPageSegMode.Size = new System.Drawing.Size(96, 21);
             this.TesseractPageSegMode.TabIndex = 141;
             // 
             // label19
             // 
             this.label19.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(392, 63);
+            this.label19.Location = new System.Drawing.Point(395, 63);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(87, 13);
             this.label19.TabIndex = 140;
@@ -784,8 +784,8 @@
             // 
             // SearchRectangleMargin
             // 
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            this.SearchRectangleMargin.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            this.SearchRectangleMargin.DefaultCellStyle = dataGridViewCellStyle2;
             this.SearchRectangleMargin.HeaderText = "Margin";
             this.SearchRectangleMargin.Name = "SearchRectangleMargin";
             this.SearchRectangleMargin.Width = 50;

@@ -23,6 +23,11 @@ namespace Cliver.PdfDocumentParser
             /// (!)Y is the distance from the page's top to the char's top. But it is actually culculated from the char's baseline which is its bottom. It is because the baseline is considred most reliable position given by iText, while ascentLine or descentLine are not.
             /// </summary>
             public RectangleF R;
+
+            public override string ToString()
+            {
+                return Char + "," + R.ToString();
+            }
         }
 
         public static List<Line<CharBoxT>> GetLines<CharBoxT>(IEnumerable<CharBoxT> cbs, TextAutoInsertSpace textAutoInsertSpace) where CharBoxT : CharBox, new()
@@ -43,8 +48,12 @@ namespace Cliver.PdfDocumentParser
                         lines.Insert(i, l);
                         goto CONTINUE;
                     }
-                    if (cb.R.Bottom - cb.R.Height / 2 <= lines[i].Bottom)
+                    float yM = cb.R.Bottom - cb.R.Height / 2;
+                    float d1 = yM - lines[i].Bottom;
+                    if (d1 <= 0)
                     {
+                        if (i + 1 < lines.Count && d1 > lines[i + 1].Top - yM)
+                            continue;
                         if (spaceAutoInsert && /*cb.Char != " " &&*/ lines[i].CharBoxs.Count > 0)
                         {
                             CharBox cb0 = lines[i].CharBoxs[lines[i].CharBoxs.Count - 1];
@@ -82,12 +91,18 @@ namespace Cliver.PdfDocumentParser
             public float Bottom;
             public List<T> CharBoxs = new List<T>();
 
+            public void Calculate()
+            {
+                Top = CharBoxs.Min(a => a.R.Top);
+                Bottom = CharBoxs.Max(a => a.R.Bottom);
+            }
+
             public override string ToString()
             {
                 StringBuilder sb = new StringBuilder();
                 foreach (CharBox cb in CharBoxs)
                     sb.Append(cb.Char);
-                return sb.ToString();
+                return sb.ToString() + ",Left=" + Left + ",Right=" + Right + ",Top=" + Top + ",Bottom=" + Bottom + ",Height=" + (Bottom - Top);
             }
         }
 
