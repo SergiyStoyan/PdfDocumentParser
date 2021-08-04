@@ -331,8 +331,6 @@ namespace Cliver.PdfDocumentParser
                                 }
 
                                 setFieldRow(row, f);
-                                extractFieldAndDrawSelectionBox(f);
-                                //owners2resizebleBox[f] = new ResizebleBox(f, f.Rectangle.GetSystemRectangleF(), Settings.Appearance.SelectionBoxBorderWidth);
                             }
                             break;
                         case SettingModes.NULL:

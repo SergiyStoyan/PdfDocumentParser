@@ -107,7 +107,12 @@ namespace Cliver.PdfDocumentParser
                 _activeTemplateCvImage?.Dispose();
                 _activeTemplateCvImage = null;
             }
-            else if (newTemplate.TesseractPageSegMode != PageCollection.ActiveTemplate.TesseractPageSegMode)
+            else if (newTemplate.TesseractPageSegMode != PageCollection.ActiveTemplate.TesseractPageSegMode
+                || !Serialization.Json.IsEqual(
+                    newTemplate.Fields.Where(a => a is Template.Field.Ocr).Select(a => ((Template.Field.Ocr)a).OcrSettings?.TesseractPageSegMode).ToList(),
+                    PageCollection.ActiveTemplate.Fields.Where(a => a is Template.Field.Ocr).Select(a => ((Template.Field.Ocr)a).OcrSettings?.TesseractPageSegMode).ToList()
+                    )
+                )
             {
                 _activeTemplateOcrCharBoxs = null;
             }

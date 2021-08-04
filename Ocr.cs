@@ -149,31 +149,18 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        //public float DetectDeskewAngle(Bitmap b)
+        //!!!abandoned for GetCharBoxsSurroundedByRectangle() because:
+        //- it does not give good end lines;
+        //- it does not accept expilicitly TextAutoInsertSpace
+        //public string GetTextSurroundedByRectangle(Bitmap b, RectangleF r, PageSegMode pageSegMode)
         //{
-        //    using (Tesseract.Page page = engine.Process(b, PageSegMode.OsdOnly))
+        //    if (!getScaled(b, ref r))
+        //        return string.Empty;
+        //    using (Tesseract.Page page = engine.Process(b, new Rect((int)r.X, (int)r.Y, (int)r.Width, (int)r.Height), pageSegMode))
         //    {
-        //        return page.AnalyseLayout().GetProperties().DeskewAngle;
+        //        return page.GetText();
         //    }
         //}
-
-        public string GetTextSurroundedByRectangle(Bitmap b, RectangleF r, PageSegMode pageSegMode)
-        {
-            if (!getScaled(b, ref r))
-                return string.Empty;
-            using (Tesseract.Page page = engine.Process(b, new Rect((int)r.X, (int)r.Y, (int)r.Width, (int)r.Height), pageSegMode))
-            {
-                return page.GetText();
-            }
-        }
-        bool getScaled(Bitmap b, ref RectangleF r)
-        {
-            r = new RectangleF(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio);
-            r.Intersect(new Rectangle(0, 0, b.Width, b.Height));
-            if (Math.Abs(r.Width) < Settings.Constants.CoordinateDeviationMargin || Math.Abs(r.Height) < Settings.Constants.CoordinateDeviationMargin)
-                return false;
-            return true;
-        }
 
         public List<CharBox> GetCharBoxsSurroundedByRectangle(Bitmap b, RectangleF r, PageSegMode pageSegMode)
         {
@@ -183,6 +170,14 @@ namespace Cliver.PdfDocumentParser
             {
                 return getCharBoxs(page);
             }
+        }
+        bool getScaled(Bitmap b, ref RectangleF r)
+        {
+            r = new RectangleF(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio);
+            r.Intersect(new Rectangle(0, 0, b.Width, b.Height));
+            if (Math.Abs(r.Width) < Settings.Constants.CoordinateDeviationMargin || Math.Abs(r.Height) < Settings.Constants.CoordinateDeviationMargin)
+                return false;
+            return true;
         }
 
         public List<CharBox> GetCharBoxs(Bitmap b, PageSegMode pageSegMode)

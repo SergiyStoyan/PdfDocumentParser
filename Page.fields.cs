@@ -278,16 +278,19 @@ namespace Cliver.PdfDocumentParser
                 if (ActualRectangle == null)
                     return null;
                 RectangleF ar = (RectangleF)ActualRectangle;
+                TextAutoInsertSpace textAutoInsertSpace = ActualField.GetTextAutoInsertSpace(page.PageCollection.ActiveTemplate);
 
                 if (ActualField.ColumnOfTable == null)
                 {
                     if (ActualField.GetOcrMode(page.PageCollection.ActiveTemplate).HasFlag(Template.Field.OcrModes.SingleFieldFromFieldImage))
                     {
-                        string s = Ocr.This.GetTextSurroundedByRectangle(page.ActiveTemplateBitmap, ar, ActualField.GetTesseractPageSegMode(page.PageCollection.ActiveTemplate));
-                        return Regex.Split(s, "$", RegexOptions.Multiline).ToList();
+                        List<Ocr.CharBox> cs = Ocr.This.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateBitmap, ar, ActualField.GetTesseractPageSegMode(page.PageCollection.ActiveTemplate));
+                        if (cs == null)
+                            return null;
+                        return GetTextLines(cs, textAutoInsertSpace);
                     }
                     else
-                        return Ocr.GetTextLinesSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, ar, ActualField.GetTextAutoInsertSpace(page.PageCollection.ActiveTemplate));
+                        return Ocr.GetTextLinesSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, ar, textAutoInsertSpace);
                 }
 
                 if (!TableFieldActualInfo.Found)
@@ -307,12 +310,13 @@ namespace Cliver.PdfDocumentParser
                            (ar.Right < TableFieldActualInfo.ActualRectangle.Value.Right ? ar.Right : TableFieldActualInfo.ActualRectangle.Value.Right) - x,
                            l.Bottom - l.Top
                             );
-                        ls.Add(Ocr.This.GetTextSurroundedByRectangle(page.ActiveTemplateBitmap, r, tesseractPageSegMode));
+                        List<Ocr.CharBox> cs = Ocr.This.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateBitmap, r, tesseractPageSegMode);
+                        ls.Add(cs != null ? string.Join("", GetTextLines(cs, textAutoInsertSpace)) : "");
                     }
                 }
                 else
                 {
-                    foreach (Line<Ocr.CharBox> l in GetLines(cbs, ActualField.GetTextAutoInsertSpace(page.PageCollection.ActiveTemplate)))
+                    foreach (Line<Ocr.CharBox> l in GetLines(cbs, textAutoInsertSpace))
                     {
                         StringBuilder sb = new StringBuilder();
                         foreach (Ocr.CharBox cb in l.CharBoxs)

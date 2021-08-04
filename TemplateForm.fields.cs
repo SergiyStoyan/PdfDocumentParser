@@ -687,7 +687,7 @@ namespace Cliver.PdfDocumentParser
                         throw new Exception("Unknown option: " + t);
                 }
                 currentFieldControl.Initialize(row, v, fs, this, (DataGridViewRow r) => { setFieldRow(r, f); });
-                settingsControlHeader.Text = "Field " + f?.Name + ":";
+                settingsControlHeader.Text = "Field [" + f?.Name + "]:";
             }
             finally
             {

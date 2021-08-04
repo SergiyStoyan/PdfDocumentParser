@@ -201,8 +201,6 @@ namespace Cliver.PdfDocumentParser
                             if (ShowFieldTextLineSeparators.Checked)
                             {
                                 RectangleF tableAR = (RectangleF)fai.TableFieldActualInfo.ActualRectangle;
-                                //List<Ocr.Line> lines = Ocr.GetLines(Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateOcrCharBoxs, tableAR), pages.ActiveTemplate.TextAutoInsertSpace).ToList();
-                                //List<Ocr.Line> lines = Ocr.GetLines(Ocr.This.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateBitmap, tableAR, pages.ActiveTemplate.TesseractPageSegMode), pages.ActiveTemplate.TextAutoInsertSpace).ToList();
                                 List<Page.Line<Ocr.CharBox>> ols = Page.GetLinesWithAdjacentBorders((List<Ocr.CharBox>)fai.TableFieldActualInfo.GetValue(Template.Field.Types.OcrCharBoxs), tableAR);
                                 if (ols.Count > 0)
                                     ols.RemoveAt(0);
@@ -216,14 +214,21 @@ namespace Cliver.PdfDocumentParser
                         {
                             if (ShowFieldTextLineSeparators.Checked)
                             {
-                                //List<Ocr.Line> lines = Ocr.GetLines(Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateOcrCharBoxs, r), pages.ActiveTemplate.TextAutoInsertSpace).ToList();
-                                List<Page.Line<Ocr.CharBox>> ols = Page.GetLinesWithAdjacentBorders(Ocr.This.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateBitmap, r, field.GetTesseractPageSegMode(pages.ActiveTemplate)), r);
-                                if (ols.Count > 0)
-                                    ols.RemoveAt(0);
-                                List<RectangleF> lineBoxes = new List<RectangleF>();
-                                foreach (Page.Line<Ocr.CharBox> l in ols)
-                                    lineBoxes.Add(new RectangleF { X = r.X, Y = l.Top, Width = r.Width, Height = 0 });
-                                drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.TextLineSeparatorWidth, lineBoxes);
+                                List<Ocr.CharBox> cbs;
+                                if (field.GetOcrMode(pages.ActiveTemplate).HasFlag(Template.Field.OcrModes.SingleFieldFromFieldImage))
+                                    cbs = Ocr.This.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateBitmap, r, field.GetTesseractPageSegMode(pages.ActiveTemplate));
+                                else
+                                    cbs = Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateOcrCharBoxs, r);
+                                if (cbs != null)
+                                {
+                                    List<Page.Line<Ocr.CharBox>> ols = Page.GetLinesWithAdjacentBorders(cbs, r);
+                                    if (ols.Count > 0)
+                                        ols.RemoveAt(0);
+                                    List<RectangleF> lineBoxes = new List<RectangleF>();
+                                    foreach (Page.Line<Ocr.CharBox> l in ols)
+                                        lineBoxes.Add(new RectangleF { X = r.X, Y = l.Top, Width = r.Width, Height = 0 });
+                                    drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.TextLineSeparatorWidth, lineBoxes);
+                                }
                             }
                         }
                         drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<RectangleF> { r });
