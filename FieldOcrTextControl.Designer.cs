@@ -62,6 +62,7 @@
             this.Value.Size = new System.Drawing.Size(267, 193);
             this.Value.TabIndex = 2;
             this.Value.Text = "";
+            this.Value.WordWrap = false;
             // 
             // label1
             // 

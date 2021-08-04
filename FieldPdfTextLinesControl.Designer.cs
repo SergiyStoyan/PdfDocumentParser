@@ -53,6 +53,7 @@
             this.Value.Size = new System.Drawing.Size(247, 190);
             this.Value.TabIndex = 2;
             this.Value.Text = "";
+            this.Value.WordWrap = false;
             // 
             // SpecialTextAutoInsertSpace
             // 
