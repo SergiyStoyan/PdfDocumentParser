@@ -218,7 +218,7 @@ namespace Cliver
         /// </summary>
         /// <param name="typeVersion">new __TypeVersion</param>
         /// <param name="s">serialized Settings field</param>
-        public void UpdateTypeVersionInStorageFileString(int typeVersion, ref string s)
+        public void UpdateTypeVersionInStorageFileString(uint typeVersion, ref string s)
         {
             s = Regex.Replace(s, @"(?<=\""__TypeVersion\""\:\s*)\d+", typeVersion.ToString(), RegexOptions.Singleline);
         }
