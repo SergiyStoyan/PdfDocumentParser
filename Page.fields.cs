@@ -241,13 +241,14 @@ namespace Cliver.PdfDocumentParser
                 if (ActualRectangle == null)
                     return null;
                 RectangleF ar = (RectangleF)ActualRectangle;
+                TextAutoInsertSpace textAutoInsertSpace = ActualField.GetTextAutoInsertSpace(page.PageCollection.ActiveTemplate);
 
                 if (ActualField.ColumnOfTable == null)
-                    return Pdf.GetTextLinesSurroundedByRectangle(page.PdfCharBoxs, ar, ActualField.GetTextAutoInsertSpace(page.PageCollection.ActiveTemplate));
+                    return Pdf.GetTextLinesSurroundedByRectangle(page.PdfCharBoxs, ar, textAutoInsertSpace);
 
                 List<string> ls = new List<string>();
                 List<Pdf.CharBox> cbs = (List<Pdf.CharBox>)TableFieldActualInfo.GetValue(Template.Field.Types.PdfCharBoxs);
-                foreach (Line<Pdf.CharBox> l in GetLines(cbs, ActualField.GetTextAutoInsertSpace(page.PageCollection.ActiveTemplate)))
+                foreach (Line<Pdf.CharBox> l in GetLines(cbs, textAutoInsertSpace))
                 {
                     StringBuilder sb = new StringBuilder();
                     foreach (Pdf.CharBox cb in l.CharBoxs)

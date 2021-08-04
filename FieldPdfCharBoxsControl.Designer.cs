@@ -141,6 +141,11 @@
             0,
             65536});
             this.textAutoInsertSpaceThreshold.Location = new System.Drawing.Point(14, 37);
+            this.textAutoInsertSpaceThreshold.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
             this.textAutoInsertSpaceThreshold.Name = "textAutoInsertSpaceThreshold";
             this.textAutoInsertSpaceThreshold.Size = new System.Drawing.Size(52, 20);
             this.textAutoInsertSpaceThreshold.TabIndex = 68;

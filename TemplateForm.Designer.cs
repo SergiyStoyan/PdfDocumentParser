@@ -32,6 +32,7 @@
             this.conditions = new System.Windows.Forms.DataGridView();
             this.Value2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.splitContainer4 = new System.Windows.Forms.SplitContainer();
+            this.settingsControlHeader = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.ExtractFieldsAutomaticallyWhenPageChanged = new System.Windows.Forms.CheckBox();
             this.ShowFieldTextLineSeparators = new System.Windows.Forms.CheckBox();
@@ -99,7 +100,6 @@
             this.bSave = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.settingsControlHeader = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).BeginInit();
             this.flowLayoutPanel5.SuspendLayout();
             this.flowLayoutPanel7.SuspendLayout();
@@ -142,6 +142,11 @@
             65536});
             this.textAutoInsertSpaceThreshold.Location = new System.Drawing.Point(158, 3);
             this.textAutoInsertSpaceThreshold.Margin = new System.Windows.Forms.Padding(3, 3, 6, 3);
+            this.textAutoInsertSpaceThreshold.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
             this.textAutoInsertSpaceThreshold.Name = "textAutoInsertSpaceThreshold";
             this.textAutoInsertSpaceThreshold.Size = new System.Drawing.Size(51, 20);
             this.textAutoInsertSpaceThreshold.TabIndex = 64;
@@ -328,6 +333,17 @@
             this.splitContainer4.Size = new System.Drawing.Size(232, 580);
             this.splitContainer4.SplitterDistance = 152;
             this.splitContainer4.TabIndex = 33;
+            // 
+            // settingsControlHeader
+            // 
+            this.settingsControlHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.settingsControlHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.settingsControlHeader.Location = new System.Drawing.Point(0, 0);
+            this.settingsControlHeader.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.settingsControlHeader.Name = "settingsControlHeader";
+            this.settingsControlHeader.Size = new System.Drawing.Size(232, 13);
+            this.settingsControlHeader.TabIndex = 50;
+            this.settingsControlHeader.Text = "...";
             // 
             // label1
             // 
@@ -1114,17 +1130,6 @@
             this.splitContainer1.Size = new System.Drawing.Size(1124, 700);
             this.splitContainer1.SplitterDistance = 584;
             this.splitContainer1.TabIndex = 1;
-            // 
-            // settingsControlHeader
-            // 
-            this.settingsControlHeader.Dock = System.Windows.Forms.DockStyle.Top;
-            this.settingsControlHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.settingsControlHeader.Location = new System.Drawing.Point(0, 0);
-            this.settingsControlHeader.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.settingsControlHeader.Name = "settingsControlHeader";
-            this.settingsControlHeader.Size = new System.Drawing.Size(232, 13);
-            this.settingsControlHeader.TabIndex = 50;
-            this.settingsControlHeader.Text = "...";
             // 
             // TemplateForm
             // 
