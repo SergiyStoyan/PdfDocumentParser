@@ -89,7 +89,7 @@
             this.flowLayoutPanel8 = new System.Windows.Forms.FlowLayoutPanel();
             this.label5 = new System.Windows.Forms.Label();
             this.SingleFieldFromFieldImage = new System.Windows.Forms.CheckBox();
-            this.ColumnFieldFromFieldImage = new System.Windows.Forms.CheckBox();
+            this.ColumnCellFromCellImage = new System.Windows.Forms.CheckBox();
             this.flowLayoutPanel9 = new System.Windows.Forms.FlowLayoutPanel();
             this.IgnoreSourceSpaces = new System.Windows.Forms.CheckBox();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -942,7 +942,7 @@
             // 
             this.flowLayoutPanel8.Controls.Add(this.label5);
             this.flowLayoutPanel8.Controls.Add(this.SingleFieldFromFieldImage);
-            this.flowLayoutPanel8.Controls.Add(this.ColumnFieldFromFieldImage);
+            this.flowLayoutPanel8.Controls.Add(this.ColumnCellFromCellImage);
             this.flowLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel8.Location = new System.Drawing.Point(0, 43);
             this.flowLayoutPanel8.Name = "flowLayoutPanel8";
@@ -970,15 +970,15 @@
             this.SingleFieldFromFieldImage.Text = "Single Field By Its Image";
             this.SingleFieldFromFieldImage.UseVisualStyleBackColor = true;
             // 
-            // ColumnFieldFromFieldImage
+            // ColumnCellFromCellImage
             // 
-            this.ColumnFieldFromFieldImage.AutoSize = true;
-            this.ColumnFieldFromFieldImage.Location = new System.Drawing.Point(189, 3);
-            this.ColumnFieldFromFieldImage.Name = "ColumnFieldFromFieldImage";
-            this.ColumnFieldFromFieldImage.Size = new System.Drawing.Size(147, 17);
-            this.ColumnFieldFromFieldImage.TabIndex = 104;
-            this.ColumnFieldFromFieldImage.Text = "Column Field By Its Image";
-            this.ColumnFieldFromFieldImage.UseVisualStyleBackColor = true;
+            this.ColumnCellFromCellImage.AutoSize = true;
+            this.ColumnCellFromCellImage.Location = new System.Drawing.Point(189, 3);
+            this.ColumnCellFromCellImage.Name = "ColumnCellFromCellImage";
+            this.ColumnCellFromCellImage.Size = new System.Drawing.Size(147, 17);
+            this.ColumnCellFromCellImage.TabIndex = 104;
+            this.ColumnCellFromCellImage.Text = "Column Cell By Its Image";
+            this.ColumnCellFromCellImage.UseVisualStyleBackColor = true;
             // 
             // flowLayoutPanel9
             // 
@@ -1250,7 +1250,7 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel8;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.CheckBox SingleFieldFromFieldImage;
-        private System.Windows.Forms.CheckBox ColumnFieldFromFieldImage;
+        private System.Windows.Forms.CheckBox ColumnCellFromCellImage;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel9;
         private System.Windows.Forms.CheckBox IgnoreSourceSpaces;
         private System.Windows.Forms.SplitContainer splitContainer2;

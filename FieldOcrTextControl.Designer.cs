@@ -35,7 +35,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.label19 = new System.Windows.Forms.Label();
             this.SingleFieldFromFieldImage = new System.Windows.Forms.CheckBox();
-            this.ColumnFieldFromFieldImage = new System.Windows.Forms.CheckBox();
+            this.ColumnCellFromCellImage = new System.Windows.Forms.CheckBox();
             this.gOcr = new System.Windows.Forms.GroupBox();
             this.TesseractPageSegMode = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
@@ -115,21 +115,21 @@
             this.SingleFieldFromFieldImage.Text = "Single Field By Its Image";
             this.SingleFieldFromFieldImage.UseVisualStyleBackColor = true;
             // 
-            // ColumnFieldFromFieldImage
+            // ColumnCellFromCellImage
             // 
-            this.ColumnFieldFromFieldImage.AutoSize = true;
-            this.ColumnFieldFromFieldImage.Location = new System.Drawing.Point(130, 36);
-            this.ColumnFieldFromFieldImage.Name = "ColumnFieldFromFieldImage";
-            this.ColumnFieldFromFieldImage.Size = new System.Drawing.Size(147, 17);
-            this.ColumnFieldFromFieldImage.TabIndex = 106;
-            this.ColumnFieldFromFieldImage.Text = "Column Field By Its Image";
-            this.ColumnFieldFromFieldImage.UseVisualStyleBackColor = true;
+            this.ColumnCellFromCellImage.AutoSize = true;
+            this.ColumnCellFromCellImage.Location = new System.Drawing.Point(130, 36);
+            this.ColumnCellFromCellImage.Name = "ColumnCellFromCellImage";
+            this.ColumnCellFromCellImage.Size = new System.Drawing.Size(147, 17);
+            this.ColumnCellFromCellImage.TabIndex = 106;
+            this.ColumnCellFromCellImage.Text = "Column Cell By Its Image";
+            this.ColumnCellFromCellImage.UseVisualStyleBackColor = true;
             // 
             // gOcr
             // 
             this.gOcr.Controls.Add(this.TesseractPageSegMode);
             this.gOcr.Controls.Add(this.label19);
-            this.gOcr.Controls.Add(this.ColumnFieldFromFieldImage);
+            this.gOcr.Controls.Add(this.ColumnCellFromCellImage);
             this.gOcr.Controls.Add(this.SingleFieldFromFieldImage);
             this.gOcr.Dock = System.Windows.Forms.DockStyle.Top;
             this.gOcr.Location = new System.Drawing.Point(0, 29);
@@ -175,7 +175,7 @@
         private System.Windows.Forms.CheckBox SpecialOcrSettings;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.CheckBox SingleFieldFromFieldImage;
-        private System.Windows.Forms.CheckBox ColumnFieldFromFieldImage;
+        private System.Windows.Forms.CheckBox ColumnCellFromCellImage;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.GroupBox gOcr;
         private System.Windows.Forms.ComboBox TesseractPageSegMode;

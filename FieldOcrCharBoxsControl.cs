@@ -28,7 +28,7 @@ namespace Cliver.PdfDocumentParser
             TesseractPageSegMode.DataSource = Enum.GetValues(typeof(Tesseract.PageSegMode));
             TesseractPageSegMode.SelectedItem = ocrSettings.TesseractPageSegMode;
             SingleFieldFromFieldImage.Checked = ocrSettings.SingleFieldFromFieldImage;
-            ColumnFieldFromFieldImage.Checked = ocrSettings.ColumnFieldFromFieldImage;
+            ColumnCellFromCellImage.Checked = ocrSettings.ColumnCellFromCellImage;
 
             this.textAutoInsertSpace = textAutoInsertSpace;
         }
@@ -38,7 +38,7 @@ namespace Cliver.PdfDocumentParser
         {
             gOcr.Visible = SpecialOcrSettings.Checked;
             SingleFieldFromFieldImage.Enabled = ColumnOfTable.SelectedIndex < 0;
-            ColumnFieldFromFieldImage.Enabled = !SingleFieldFromFieldImage.Enabled;
+            ColumnCellFromCellImage.Enabled = !SingleFieldFromFieldImage.Enabled;
         }
 
         override protected object getObject()
@@ -51,7 +51,7 @@ namespace Cliver.PdfDocumentParser
                 if (field.OcrSettings == null)
                     field.OcrSettings = new Template.Field.OcrSettings();
                 field.OcrSettings.SingleFieldFromFieldImage = SingleFieldFromFieldImage.Checked;
-                field.OcrSettings.ColumnFieldFromFieldImage = ColumnFieldFromFieldImage.Checked;
+                field.OcrSettings.ColumnCellFromCellImage = ColumnCellFromCellImage.Checked;
                 field.OcrSettings.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
             }
             else
@@ -76,7 +76,7 @@ namespace Cliver.PdfDocumentParser
             if (field.OcrSettings != null)
             {
                 SingleFieldFromFieldImage.Checked = field.OcrSettings.SingleFieldFromFieldImage;
-                ColumnFieldFromFieldImage.Checked = field.OcrSettings.ColumnFieldFromFieldImage;
+                ColumnCellFromCellImage.Checked = field.OcrSettings.ColumnCellFromCellImage;
                 TesseractPageSegMode.SelectedItem = field.OcrSettings.TesseractPageSegMode;
             }
 

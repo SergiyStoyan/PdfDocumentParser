@@ -197,13 +197,13 @@ namespace Cliver.PdfDocumentParser
                         else Mode &= ~OcrModes.SingleFieldFromFieldImage;
                     }
                 }
-                internal bool ColumnFieldFromFieldImage
+                internal bool ColumnCellFromCellImage
                 {
-                    get { return Mode.HasFlag(OcrModes.ColumnFieldFromFieldImage); }
+                    get { return Mode.HasFlag(OcrModes.ColumnCellFromCellImage); }
                     set
                     {
-                        if (value) Mode |= OcrModes.ColumnFieldFromFieldImage;
-                        else Mode &= ~OcrModes.ColumnFieldFromFieldImage;
+                        if (value) Mode |= OcrModes.ColumnCellFromCellImage;
+                        else Mode &= ~OcrModes.ColumnCellFromCellImage;
                     }
                 }
             }
@@ -215,7 +215,7 @@ namespace Cliver.PdfDocumentParser
                 //TableFieldFromPageCharBoxs = 0b00100,//default
                 //TableFieldFromFieldImage = 0b0001000,
                 ColumnFieldFromTableCharBoxs = 0b0010000,//default
-                ColumnFieldFromFieldImage = 0b0100000,
+                ColumnCellFromCellImage = 0b0100000,
             }
 
             public class OcrText : Ocr, Text

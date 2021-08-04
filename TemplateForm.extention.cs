@@ -78,7 +78,7 @@ namespace Cliver.PdfDocumentParser
                 TesseractPageSegMode.SelectedItem = t.TesseractPageSegMode;
 
                 SingleFieldFromFieldImage.Checked = t.FieldOcrMode.HasFlag(Template.Field.OcrModes.SingleFieldFromFieldImage);
-                ColumnFieldFromFieldImage.Checked = t.FieldOcrMode.HasFlag(Template.Field.OcrModes.ColumnFieldFromFieldImage);
+                ColumnCellFromCellImage.Checked = t.FieldOcrMode.HasFlag(Template.Field.OcrModes.ColumnCellFromCellImage);
 
                 bitmapPreparationForm.SetUI(t, false);
                 highlightScanSettings(t);
@@ -263,10 +263,10 @@ namespace Cliver.PdfDocumentParser
                 t.FieldOcrMode |= Template.Field.OcrModes.SingleFieldFromFieldImage;
             else
                 t.FieldOcrMode &= ~Template.Field.OcrModes.SingleFieldFromFieldImage;
-            if (ColumnFieldFromFieldImage.Checked)
-                t.FieldOcrMode |= Template.Field.OcrModes.ColumnFieldFromFieldImage;
+            if (ColumnCellFromCellImage.Checked)
+                t.FieldOcrMode |= Template.Field.OcrModes.ColumnCellFromCellImage;
             else
-                t.FieldOcrMode &= ~Template.Field.OcrModes.ColumnFieldFromFieldImage;
+                t.FieldOcrMode &= ~Template.Field.OcrModes.ColumnCellFromCellImage;
 
             bitmapPreparationForm.SetTemplate(t);
 
