@@ -26,7 +26,7 @@ namespace Cliver.PdfDocumentParser
 
             public override string ToString()
             {
-                return Char + "," + R.ToString();
+                return "{" + Char + "}" + ", " + R.ToString();
             }
         }
 
@@ -46,7 +46,7 @@ namespace Cliver.PdfDocumentParser
                         Line<CharBoxT> l = new Line<CharBoxT> { Top = cb.R.Top, Bottom = cb.R.Bottom };
                         l.CharBoxs.Add(cb);
                         lines.Insert(i, l);
-                        goto CONTINUE;
+                        goto NEXT_CHAR;
                     }
                     float yM = cb.R.Bottom - cb.R.Height / 2;
                     float d1 = yM - lines[i].Bottom;
@@ -70,7 +70,7 @@ namespace Cliver.PdfDocumentParser
                             lines[i].Top = cb.R.Top;
                         if (lines[i].Bottom < cb.R.Bottom)
                             lines[i].Bottom = cb.R.Bottom;
-                        goto CONTINUE;
+                        goto NEXT_CHAR;
                     }
                 }
                 {
@@ -78,7 +78,7 @@ namespace Cliver.PdfDocumentParser
                     l.CharBoxs.Add(cb);
                     lines.Add(l);
                 }
-            CONTINUE:;
+            NEXT_CHAR:;
             }
             return lines;
         }
@@ -102,7 +102,7 @@ namespace Cliver.PdfDocumentParser
                 StringBuilder sb = new StringBuilder();
                 foreach (CharBox cb in CharBoxs)
                     sb.Append(cb.Char);
-                return sb.ToString() + ",Left=" + Left + ",Right=" + Right + ",Top=" + Top + ",Bottom=" + Bottom + ",Height=" + (Bottom - Top);
+                return "{" + sb.ToString() + "}" + ", {Left=" + Left + ",Right=" + Right + ",Top=" + Top + ",Bottom=" + Bottom + ",Height=" + (Bottom - Top) + "}";
             }
         }
 
