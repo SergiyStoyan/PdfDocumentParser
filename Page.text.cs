@@ -24,18 +24,107 @@ namespace Cliver.PdfDocumentParser
             /// </summary>
             public RectangleF R;
 
+            /// <summary>
+            /// !!!Used for debugging tips only
+            /// </summary>
+            /// <returns></returns>
             public override string ToString()
             {
                 return "{" + Char + "}" + ", " + R.ToString();
             }
         }
 
+        /// <summary>
+        /// Splits the chars onto non-intesecting lines.
+        /// </summary>
+        /// <typeparam name="CharBoxT"></typeparam>
+        /// <param name="cbs"></param>
+        /// <param name="textAutoInsertSpace"></param>
+        /// <returns></returns>
         public static List<Line<CharBoxT>> GetLines<CharBoxT>(IEnumerable<CharBoxT> cbs, TextAutoInsertSpace textAutoInsertSpace) where CharBoxT : CharBox, new()
-        {
+        {//!!!no line must intersect with an other!!!
             bool spaceAutoInsert = textAutoInsertSpace?.Threshold > 0;
             if (textAutoInsertSpace?.IgnoreSourceSpaces == true)
                 cbs = cbs.Where(a => a.Char != " ");
-            cbs = cbs.OrderBy(a => a.R.X).ToList();
+            List<Line<CharBoxT>> lines = new List<Line<CharBoxT>>();
+            foreach (CharBoxT cb in cbs)
+            {
+                for (int i = 0; i < lines.Count; i++)
+                {
+                    float mY = cb.R.Bottom - cb.R.Height / 2;
+                    if (mY < lines[i].Top)
+                    {
+                        Line<CharBoxT> l = new Line<CharBoxT> { Top = cb.R.Top, Bottom = cb.R.Bottom };
+                        l.CharBoxs.Add(cb);
+                        lines.Insert(i, l);
+                        goto NEXT_CHAR;
+                    }
+                    if (mY <= lines[i].Bottom)//the char's center is in the line
+                    {
+                        //if (i + 1 < lines.Count && mY >= lines[i + 1].Top)//the char's center is also in the next line
+                        //{
+                        //    lines[i].CharBoxs.AddRange(lines[i + 1].CharBoxs);
+                        //    if (lines[i].Top > lines[i + 1].Top)
+                        //        lines[i].Top = lines[i + 1].Top;
+                        //    if (lines[i].Bottom < lines[i + 1].Bottom)
+                        //        lines[i].Bottom = lines[i + 1].Bottom;
+                        //    lines.RemoveAt(i + 1);
+                        //}
+                        lines[i].CharBoxs.Add(cb);
+                        if (lines[i].Top > cb.R.Top)
+                            lines[i].Top = cb.R.Top;
+                        if (lines[i].Bottom < cb.R.Bottom)
+                            lines[i].Bottom = cb.R.Bottom;
+                        goto NEXT_CHAR;
+                    }
+                }
+                {
+                    Line<CharBoxT> l = new Line<CharBoxT> { Top = cb.R.Top, Bottom = cb.R.Bottom };
+                    l.CharBoxs.Add(cb);
+                    lines.Add(l);
+                }
+            NEXT_CHAR:;
+            }
+
+            for (int i = 1; i < lines.Count; i++)
+            {
+                float intersetionH2 = (lines[i - 1].Bottom - lines[i].Top) * 2;
+                if (intersetionH2 > lines[i - 1].Height || intersetionH2 > lines[i].Height)
+                {
+                    lines[i - 1].CharBoxs.AddRange(lines[i].CharBoxs);
+                    if (lines[i - 1].Top > lines[i].Top)
+                        lines[i - 1].Top = lines[i].Top;
+                    if (lines[i - 1].Bottom < lines[i].Bottom)
+                        lines[i - 1].Bottom = lines[i].Bottom;
+                    lines.RemoveAt(i);
+                    i--;
+                }
+            }
+
+            lines.ForEach(a => a.CharBoxs = a.CharBoxs.OrderBy(b => b.R.X).ToList());
+
+            if (spaceAutoInsert)
+                foreach (Line<CharBoxT> l in lines)
+                    for (int i = 1; i < l.CharBoxs.Count; i++)
+                    {
+                        CharBox cb0 = l.CharBoxs[i - 1];
+                        CharBox cb = l.CharBoxs[i];
+                        if (/*cb0.Char != " " && */cb.R.Left - cb0.R.Right > (/*cb0.R.Width*/0.8 / cb0.R.Height + /*cb.R.Width*/0.8 / cb.R.Height) * textAutoInsertSpace.Threshold)
+                        {
+                            float spaceWidth = (cb0.R.Width + cb.R.Width) / 2;
+                            int spaceNumber = (int)Math.Ceiling((cb.R.Left - cb0.R.Right) / spaceWidth);
+                            for (int j = 0; j < spaceNumber; j++)
+                                l.CharBoxs.Insert(i, new CharBoxT { Char = textAutoInsertSpace.Representative, R = new RectangleF(cb0.R.Right + spaceWidth * j, cb0.R.Y, spaceWidth, cb.R.Height) });
+                            i += spaceNumber;
+                        }
+                    }
+            return lines;
+        }
+        public static List<Line<CharBoxT>> GetLines2<CharBoxT>(IEnumerable<CharBoxT> cbs, TextAutoInsertSpace textAutoInsertSpace) where CharBoxT : CharBox, new()
+        {//!!!no line must intersect with an other!!!
+            bool spaceAutoInsert = textAutoInsertSpace?.Threshold > 0;
+            if (textAutoInsertSpace?.IgnoreSourceSpaces == true)
+                cbs = cbs.Where(a => a.Char != " ");
             List<Line<CharBoxT>> lines = new List<Line<CharBoxT>>();
             foreach (CharBoxT cb in cbs)
             {
@@ -48,22 +137,16 @@ namespace Cliver.PdfDocumentParser
                         lines.Insert(i, l);
                         goto NEXT_CHAR;
                     }
-                    float yM = cb.R.Bottom - cb.R.Height / 2;
-                    float d1 = yM - lines[i].Bottom;
-                    if (d1 <= 0)
+                    if (cb.R.Top <= lines[i].Bottom)//the char is in the line
                     {
-                        if (i + 1 < lines.Count && d1 > lines[i + 1].Top - yM)
-                            continue;
-                        if (spaceAutoInsert && /*cb.Char != " " &&*/ lines[i].CharBoxs.Count > 0)
+                        if (i + 1 < lines.Count && cb.R.Bottom >= lines[i + 1].Top)//the char is also in the next line
                         {
-                            CharBox cb0 = lines[i].CharBoxs[lines[i].CharBoxs.Count - 1];
-                            if (/*cb0.Char != " " && */cb.R.Left - cb0.R.Right > (/*cb0.R.Width*/0.8 / cb0.R.Height + /*cb.R.Width*/0.8 / cb.R.Height) * textAutoInsertSpace.Threshold)
-                            {
-                                float spaceWidth = (cb0.R.Width + cb.R.Width) / 2;
-                                int spaceNumber = (int)Math.Ceiling((cb.R.Left - cb0.R.Right) / spaceWidth);
-                                for (int j = 0; j < spaceNumber; j++)
-                                    lines[i].CharBoxs.Add(new CharBoxT { Char = textAutoInsertSpace.Representative, R = new RectangleF(cb0.R.Right + spaceWidth * j, cb0.R.Y, spaceWidth, cb.R.Height) });
-                            }
+                            lines[i].CharBoxs.AddRange(lines[i + 1].CharBoxs);
+                            if (lines[i].Top > lines[i + 1].Top)
+                                lines[i].Top = lines[i + 1].Top;
+                            if (lines[i].Bottom < lines[i + 1].Bottom)
+                                lines[i].Bottom = lines[i + 1].Bottom;
+                            lines.RemoveAt(i + 1);
                         }
                         lines[i].CharBoxs.Add(cb);
                         if (lines[i].Top > cb.R.Top)
@@ -80,29 +163,76 @@ namespace Cliver.PdfDocumentParser
                 }
             NEXT_CHAR:;
             }
+
+            for (int i = 1; i < lines.Count; i++)
+            {
+                float intersetionH2 = (lines[i - 1].Bottom - lines[i].Top) * 2;
+                if (intersetionH2 > lines[i - 1].Height || intersetionH2 > lines[i].Height)
+                {
+                    lines[i - 1].CharBoxs.AddRange(lines[i].CharBoxs);
+                    if (lines[i - 1].Top > lines[i].Top)
+                        lines[i - 1].Top = lines[i].Top;
+                    if (lines[i - 1].Bottom < lines[i].Bottom)
+                        lines[i - 1].Bottom = lines[i].Bottom;
+                    lines.RemoveAt(i);
+                    i--;
+                }
+            }
+
+            lines.ForEach(a => a.CharBoxs = a.CharBoxs.OrderBy(b => b.R.X).ToList());
+
+            if (spaceAutoInsert)
+                foreach (Line<CharBoxT> l in lines)
+                    for (int i = 1; i < l.CharBoxs.Count; i++)
+                    {
+                        CharBox cb0 = l.CharBoxs[i - 1];
+                        CharBox cb = l.CharBoxs[i];
+                        if (/*cb0.Char != " " && */cb.R.Left - cb0.R.Right > (/*cb0.R.Width*/0.8 / cb0.R.Height + /*cb.R.Width*/0.8 / cb.R.Height) * textAutoInsertSpace.Threshold)
+                        {
+                            float spaceWidth = (cb0.R.Width + cb.R.Width) / 2;
+                            int spaceNumber = (int)Math.Ceiling((cb.R.Left - cb0.R.Right) / spaceWidth);
+                            for (int j = 0; j < spaceNumber; j++)
+                                l.CharBoxs.Insert(i, new CharBoxT { Char = textAutoInsertSpace.Representative, R = new RectangleF(cb0.R.Right + spaceWidth * j, cb0.R.Y, spaceWidth, cb.R.Height) });
+                            i += spaceNumber;
+                        }
+                    }
             return lines;
         }
 
         public class Line<T> where T : CharBox
         {
-            public float Left { get { return CharBoxs[0].R.Left; } }
-            public float Right { get { return CharBoxs[CharBoxs.Count - 1].R.Right; } }
+            public float Left { get { return CharBoxs.Count > 0 ? CharBoxs[0].R.Left : -1; } }
+            public float Right { get { return CharBoxs.Count > 0 ? CharBoxs[CharBoxs.Count - 1].R.Right : -1; } }
             public float Top;
             public float Bottom;
+            public float Height { get { return Bottom - Top; } }
             public List<T> CharBoxs = new List<T>();
 
             public void Calculate()
             {
                 Top = CharBoxs.Min(a => a.R.Top);
                 Bottom = CharBoxs.Max(a => a.R.Bottom);
+                //Height = Bottom - Top;
             }
 
+            /// <summary>
+            /// !!!Used for debugging tips only
+            /// </summary>
+            /// <returns></returns>
             public override string ToString()
             {
                 StringBuilder sb = new StringBuilder();
                 foreach (CharBox cb in CharBoxs)
                     sb.Append(cb.Char);
-                return "{" + sb.ToString() + "}" + ", {Left=" + Left + ",Right=" + Right + ",Top=" + Top + ",Bottom=" + Bottom + ",Height=" + (Bottom - Top) + "}";
+                return "{" + sb.ToString() + "}" + ", {Left=" + Left + ",Right=" + Right + ",Top=" + Top + ",Bottom=" + Bottom + ",Height=" + Height + "}";
+            }
+
+            public string GetString()
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (CharBox cb in CharBoxs)
+                    sb.Append(cb.Char);
+                return sb.ToString();
             }
         }
 

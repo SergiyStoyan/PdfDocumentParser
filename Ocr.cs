@@ -302,7 +302,7 @@ namespace Cliver.PdfDocumentParser
             cbs = GetCharBoxsSurroundedByRectangle(cbs, r);
             List<string> ls = new List<string>();
             foreach (Page.Line<CharBox> l in Page.GetLines(cbs, textAutoInsertSpace))
-                ls.Add(l.ToString());
+                ls.Add(l.GetString());
             return ls;
         }
 
