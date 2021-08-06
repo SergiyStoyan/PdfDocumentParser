@@ -22,7 +22,7 @@ namespace Cliver.PdfDocumentParser
             conditions.DataError += delegate (object sender, DataGridViewDataErrorEventArgs e)
             {
                 DataGridViewRow r = anchors.Rows[e.RowIndex];
-                Message.Error("Condition[" + r.Index + "] has unacceptable value of " + conditions.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message, this);
+                Message.Error("Condition[row=" + r.Index + "] has unacceptable value of " + conditions.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message, this);
             };
 
             conditions.UserDeletingRow += delegate (object sender, DataGridViewRowCancelEventArgs e)

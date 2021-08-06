@@ -161,7 +161,15 @@ namespace Cliver.PdfDocumentParser
             }
             return fais;
         }
-        HandyDictionary<string, List<FieldActualInfo>> fieldNames2fieldActualInfos = new HandyDictionary<string, List<FieldActualInfo>>();
+        HandyDictionary<string, List<FieldActualInfo>> fieldNames2fieldActualInfos = new HandyDictionary<string, List<FieldActualInfo>>(
+            disposeValue: (List<FieldActualInfo> v) =>
+            {
+                if (v == null)
+                    return;
+                foreach (FieldActualInfo fai in v)
+                    fai.Dispose();
+            }
+        );
 
         internal class FieldActualInfo : IDisposable
         {
@@ -172,12 +180,7 @@ namespace Cliver.PdfDocumentParser
 
             public void Dispose()
             {
-                if (types2cachedValue.Count < 1)
-                    return;
-                foreach (object o in types2cachedValue.Values)
-                    if (o is IDisposable)
-                        ((IDisposable)o).Dispose();
-                types2cachedValue.Clear();
+                types2cachedValue.Dispose();
             }
 
             readonly internal Template.Field ActualField;
@@ -201,7 +204,18 @@ namespace Cliver.PdfDocumentParser
                 }
                 return o;
             }
-            Dictionary<Template.Field.Types, object> types2cachedValue = new Dictionary<Template.Field.Types, object>();//!!!cache Table field values for internal reuse only!!! 
+            HandyDictionary<Template.Field.Types, object> types2cachedValue = new HandyDictionary<Template.Field.Types, object>(
+               disposeValue: (object v) =>
+                {
+                    if (v == null)
+                        return;
+                    if (v is Bitmap)
+                        ((Bitmap)v).Dispose();
+                    else if (v is List<Bitmap>)
+                        foreach (Bitmap b in (List<Bitmap>)v)
+                            b.Dispose();
+                }
+            );//!!!cache Table field values for internal reuse only!!! 
             object getValue_(Template.Field.Types type)
             {
                 if (ActualRectangle == null || TableFieldActualInfo?.Found == false)
@@ -300,7 +314,8 @@ namespace Cliver.PdfDocumentParser
                 List<string> ls = new List<string>();
                 if (ActualField.GetOcrMode(page.PageCollection.ActiveTemplate).HasFlag(Template.Field.OcrModes.ColumnCellFromCellImage))
                 {
-                    List<Line<Ocr.CharBox>> ols = GetLinesWithAdjacentBorders(cbs, TableFieldActualInfo.ActualRectangle.Value);
+                    //List<Line<Ocr.CharBox>> ols = GetLinesWithAdjacentBorders(cbs, TableFieldActualInfo.ActualRectangle.Value);
+                    List<Line<Ocr.CharBox>> ols = GetLines(cbs, null);
                     Tesseract.PageSegMode tesseractPageSegMode = ActualField.GetTesseractPageSegMode(page.PageCollection.ActiveTemplate);
                     foreach (Line<Ocr.CharBox> l in ols)
                     {
@@ -412,7 +427,8 @@ namespace Cliver.PdfDocumentParser
                 else
                     cbs = Ocr.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, ar);
                 List<Bitmap> ls = new List<Bitmap>();
-                List<Line<Ocr.CharBox>> ols = GetLinesWithAdjacentBorders(cbs, TableFieldActualInfo == null ? ar : TableFieldActualInfo.ActualRectangle.Value);
+                //List<Line<Ocr.CharBox>> ols = GetLinesWithAdjacentBorders(cbs, TableFieldActualInfo == null ? ar : TableFieldActualInfo.ActualRectangle.Value);
+                List<Line<Ocr.CharBox>> ols = GetLines(cbs, null);
                 foreach (Line<Ocr.CharBox> l in ols)
                 {
                     RectangleF r = new RectangleF(ar.X, l.Top, ar.Width, l.Bottom - l.Top);

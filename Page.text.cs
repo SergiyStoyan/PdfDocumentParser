@@ -34,15 +34,8 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        /// <summary>
-        /// Splits the chars onto non-intesecting lines.
-        /// </summary>
-        /// <typeparam name="CharBoxT"></typeparam>
-        /// <param name="cbs"></param>
-        /// <param name="textAutoInsertSpace"></param>
-        /// <returns></returns>
         public static List<Line<CharBoxT>> GetLines<CharBoxT>(IEnumerable<CharBoxT> cbs, TextAutoInsertSpace textAutoInsertSpace) where CharBoxT : CharBox, new()
-        {//!!!no line must intersect with an other!!!
+        {
             bool spaceAutoInsert = textAutoInsertSpace?.Threshold > 0;
             if (textAutoInsertSpace?.IgnoreSourceSpaces == true)
                 cbs = cbs.Where(a => a.Char != " ");
@@ -88,8 +81,8 @@ namespace Cliver.PdfDocumentParser
 
             for (int i = 1; i < lines.Count; i++)
             {
-                float intersetionH2 = (lines[i - 1].Bottom - lines[i].Top) * 2;
-                if (intersetionH2 > lines[i - 1].Height || intersetionH2 > lines[i].Height)
+                float intersectionH2 = (lines[i - 1].Bottom - lines[i].Top) * 2;
+                if (intersectionH2 > lines[i - 1].Height || intersectionH2 > lines[i].Height)
                 {
                     lines[i - 1].CharBoxs.AddRange(lines[i].CharBoxs);
                     if (lines[i - 1].Top > lines[i].Top)
@@ -120,11 +113,20 @@ namespace Cliver.PdfDocumentParser
                     }
             return lines;
         }
+
+        /// <summary>
+        /// Splits the chars onto non-intesecting lines.
+        /// </summary>
+        /// <typeparam name="CharBoxT"></typeparam>
+        /// <param name="cbs"></param>
+        /// <param name="textAutoInsertSpace"></param>
+        /// <returns></returns>
         public static List<Line<CharBoxT>> GetLines2<CharBoxT>(IEnumerable<CharBoxT> cbs, TextAutoInsertSpace textAutoInsertSpace) where CharBoxT : CharBox, new()
         {//!!!no line must intersect with an other!!!
             bool spaceAutoInsert = textAutoInsertSpace?.Threshold > 0;
             if (textAutoInsertSpace?.IgnoreSourceSpaces == true)
                 cbs = cbs.Where(a => a.Char != " ");
+
             List<Line<CharBoxT>> lines = new List<Line<CharBoxT>>();
             foreach (CharBoxT cb in cbs)
             {
@@ -137,9 +139,9 @@ namespace Cliver.PdfDocumentParser
                         lines.Insert(i, l);
                         goto NEXT_CHAR;
                     }
-                    if (cb.R.Top <= lines[i].Bottom)//the char is in the line
+                    if (cb.R.Top <= lines[i].Bottom)//the char is on the line
                     {
-                        if (i + 1 < lines.Count && cb.R.Bottom >= lines[i + 1].Top)//the char is also in the next line
+                        if (i + 1 < lines.Count && cb.R.Bottom >= lines[i + 1].Top)//the char is also on the next line
                         {
                             lines[i].CharBoxs.AddRange(lines[i + 1].CharBoxs);
                             if (lines[i].Top > lines[i + 1].Top)

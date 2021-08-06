@@ -37,7 +37,7 @@ namespace Cliver.PdfDocumentParser
 
             Type.ValueType = typeof(Template.Field.Types);
             Type.DataSource = Enum.GetValues(typeof(Template.Field.Types));
-           
+
             Value.DefaultCellStyle.NullValue = null;//to avoid error when changing cell type to image
 
             fields.EnableHeadersVisualStyles = false;//needed to set row headers
@@ -45,7 +45,7 @@ namespace Cliver.PdfDocumentParser
             fields.DataError += delegate (object sender, DataGridViewDataErrorEventArgs e)
             {
                 DataGridViewRow r = fields.Rows[e.RowIndex];
-                Message.Error("fields[" + r.Index + "] has unacceptable value of " + fields.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message, this);
+                Message.Error("Field[row=" + r.Index + "] has unacceptable value of " + fields.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message, this);
             };
 
             fields.UserDeletingRow += delegate (object sender, DataGridViewRowCancelEventArgs e)
@@ -678,15 +678,15 @@ namespace Cliver.PdfDocumentParser
                         currentFieldControl = new FieldOcrCharBoxsControl(getTextAutoInsertSpace(), getOcrSettings());
                         break;
                     case Template.Field.Types.OcrTextLineImages:
-                        currentFieldControl = new FieldOcrTextLineImagesControl();
+                        currentFieldControl = new FieldOcrTextLineImagesControl((float)pictureScale.Value);
                         break;
                     case Template.Field.Types.Image:
-                        currentFieldControl = new FieldImageControl();
+                        currentFieldControl = new FieldImageControl((float)pictureScale.Value);
                         break;
                     default:
                         throw new Exception("Unknown option: " + t);
                 }
-                currentFieldControl.Initialize(row, v, fs, this, (DataGridViewRow r) => { setFieldRow(r, f); });
+                currentFieldControl.Initialize(row, v, fs, (DataGridViewRow r) => { setFieldRow(r, f); });
                 settingsControlHeader.Text = "Field [" + f?.Name + "]:";
             }
             finally
@@ -759,20 +759,38 @@ namespace Cliver.PdfDocumentParser
                         valueCell.Value = Page.NormalizeText(Serialization.Json.Serialize(v));
                         break;
                     case Template.Field.Types.Image:
-                        Bitmap b = (Bitmap)v;
-                        Size s = valueCell.Size;
-                        if (s.Height < b.Height * pictureScale.Value)
                         {
-                            s.Width = int.MaxValue;
-                            Win.ImageRoutines.Scale(ref b, s);
+                            Bitmap b = (Bitmap)v;
+                            Size s = valueCell.Size;
+                            if (s.Height < b.Height * pictureScale.Value)
+                            {
+                                s.Width = int.MaxValue;
+                                b = Win.ImageRoutines.GetScaled(b, s);
+                            }
+                            else if (pictureScale.Value != 1)
+                                b = Win.ImageRoutines.GetScaled(b, (float)pictureScale.Value);
+                            valueCell.Value = b;
+                            break;
                         }
-                        else if (pictureScale.Value != 1)
-                            Win.ImageRoutines.Scale(ref b, (float)pictureScale.Value);
-                        valueCell.Value = v;
-                        break;
+                    case Template.Field.Types.OcrTextLineImages:
+                        {
+                            List<Bitmap> bs = (List<Bitmap>)v;
+                            if (bs.Count < 1)
+                                break;
+                            Bitmap b = bs[0];
+                            Size s = valueCell.Size;
+                            if (s.Height < b.Height * pictureScale.Value)
+                            {
+                                s.Width = int.MaxValue;
+                                b = Win.ImageRoutines.GetScaled(b, s);
+                            }
+                            else if (pictureScale.Value != 1)
+                                b = Win.ImageRoutines.GetScaled(b, (float)pictureScale.Value);
+                            valueCell.Value = b;
+                            break;
+                        }
                     default:
-                        valueCell.Value = v;
-                        break;
+                        throw new Exception("Unknown option: " + f.Type);
                 }
             else
                 valueCell.Value = v;

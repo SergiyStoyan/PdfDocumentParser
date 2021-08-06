@@ -69,6 +69,11 @@ namespace Cliver.Win
             return GetScaled(image, max_size, out _);
         }
 
+        /// <summary>
+        /// !!!CAUTION: it disposes the passed image!
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <param name="max_size"></param>
         public static void Scale(ref Bitmap bitmap, Size max_size)
         {
             Bitmap b = GetScaled(bitmap, max_size, out _);
@@ -81,6 +86,11 @@ namespace Cliver.Win
             return GetResized(image, (int)Math.Round(image.Width * ratio, 0), (int)Math.Round(image.Height * ratio, 0));
         }
 
+        /// <summary>
+        /// !!!CAUTION: it disposes the passed image!
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <param name="ratio"></param>
         public static void Scale(ref Bitmap bitmap, float ratio)
         {
             Bitmap b = GetScaled(bitmap, ratio);

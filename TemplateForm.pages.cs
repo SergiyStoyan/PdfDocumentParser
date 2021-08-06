@@ -200,8 +200,9 @@ namespace Cliver.PdfDocumentParser
                             drawBoxes(Settings.Appearance.TableBoxColor, Settings.Appearance.TableBoxBorderWidth, new List<RectangleF> { (RectangleF)fai.TableFieldActualInfo.ActualRectangle });
                             if (ShowFieldTextLineSeparators.Checked)
                             {
-                                RectangleF tableAR = (RectangleF)fai.TableFieldActualInfo.ActualRectangle;
-                                List<Page.Line<Ocr.CharBox>> ols = Page.GetLinesWithAdjacentBorders((List<Ocr.CharBox>)fai.TableFieldActualInfo.GetValue(Template.Field.Types.OcrCharBoxs), tableAR);
+                                //RectangleF tableAR = (RectangleF)fai.TableFieldActualInfo.ActualRectangle;
+                                //List<Page.Line<Ocr.CharBox>> ols = Page.GetLinesWithAdjacentBorders((List<Ocr.CharBox>)fai.TableFieldActualInfo.GetValue(Template.Field.Types.OcrCharBoxs), tableAR);
+                                List<Page.Line<Ocr.CharBox>> ols = Page.GetLines((List<Ocr.CharBox>)fai.TableFieldActualInfo.GetValue(Template.Field.Types.OcrCharBoxs), null);
                                 if (ols.Count > 0)
                                     ols.RemoveAt(0);
                                 List<RectangleF> lineBoxes = new List<RectangleF>();
@@ -221,7 +222,8 @@ namespace Cliver.PdfDocumentParser
                                     cbs = Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateOcrCharBoxs, r);
                                 if (cbs != null)
                                 {
-                                    List<Page.Line<Ocr.CharBox>> ols = Page.GetLinesWithAdjacentBorders(cbs, r);
+                                    //List<Page.Line<Ocr.CharBox>> ols = Page.GetLinesWithAdjacentBorders(cbs, r);
+                                    List<Page.Line<Ocr.CharBox>> ols = Page.GetLines(cbs, null);
                                     if (ols.Count > 0)
                                         ols.RemoveAt(0);
                                     List<RectangleF> lineBoxes = new List<RectangleF>();

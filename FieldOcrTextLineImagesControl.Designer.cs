@@ -29,10 +29,8 @@
         private void InitializeComponent()
         {
             this.ColumnOfTable = new System.Windows.Forms.ComboBox();
-            this.Value = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.Rectangle = new System.Windows.Forms.TextBox();
+            this.images = new System.Windows.Forms.FlowLayoutPanel();
             this.SuspendLayout();
             // 
             // ColumnOfTable
@@ -43,19 +41,8 @@
             this.ColumnOfTable.FormattingEnabled = true;
             this.ColumnOfTable.Location = new System.Drawing.Point(123, 3);
             this.ColumnOfTable.Name = "ColumnOfTable";
-            this.ColumnOfTable.Size = new System.Drawing.Size(52, 21);
+            this.ColumnOfTable.Size = new System.Drawing.Size(123, 21);
             this.ColumnOfTable.TabIndex = 0;
-            // 
-            // Value
-            // 
-            this.Value.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Value.Location = new System.Drawing.Point(3, 56);
-            this.Value.Name = "Value";
-            this.Value.Size = new System.Drawing.Size(172, 124);
-            this.Value.TabIndex = 2;
-            this.Value.Text = "";
             // 
             // label1
             // 
@@ -66,35 +53,30 @@
             this.label1.TabIndex = 3;
             this.label1.Text = "Column Of Table Field:";
             // 
-            // label2
+            // images
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 33);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(59, 13);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Rectangle:";
-            // 
-            // Rectangle
-            // 
-            this.Rectangle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.images.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Rectangle.Location = new System.Drawing.Point(68, 30);
-            this.Rectangle.Name = "Rectangle";
-            this.Rectangle.Size = new System.Drawing.Size(107, 20);
-            this.Rectangle.TabIndex = 5;
+            this.images.AutoSize = true;
+            this.images.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.images.Location = new System.Drawing.Point(2, 28);
+            this.images.Margin = new System.Windows.Forms.Padding(1);
+            this.images.Name = "images";
+            this.images.Size = new System.Drawing.Size(244, 174);
+            this.images.TabIndex = 6;
             // 
-            // FieldGeneralControl
+            // FieldOcrTextLineImagesControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.Rectangle);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.images);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.Value);
             this.Controls.Add(this.ColumnOfTable);
-            this.Name = "FieldGeneralControl";
-            this.Size = new System.Drawing.Size(178, 180);
+            this.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.MinimumSize = new System.Drawing.Size(80, 72);
+            this.Name = "FieldOcrTextLineImagesControl";
+            this.Size = new System.Drawing.Size(249, 203);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -103,9 +85,7 @@
         #endregion
 
         private System.Windows.Forms.ComboBox ColumnOfTable;
-        private System.Windows.Forms.RichTextBox Value;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox Rectangle;
+        private System.Windows.Forms.FlowLayoutPanel images;
     }
 }
