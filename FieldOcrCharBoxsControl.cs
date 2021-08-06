@@ -87,7 +87,7 @@ namespace Cliver.PdfDocumentParser
 
             if (value != null)
             {
-                List<Page.Line<Ocr.CharBox>> cbss = Page.GetLines((List<Ocr.CharBox>)value, textAutoInsertSpace, (field.OcrSettings == null ? ocrSettings : field.OcrSettings).IgnoreCharsBiggerThan);
+                List<Page.Line<Ocr.CharBox>> cbss = Page.GetLines((List<Ocr.CharBox>)value, textAutoInsertSpace, (field.OcrSettings == null ? ocrSettings : field.OcrSettings).CharFilter);
                 List<string> ls = new List<string>();
                 foreach (var cbs in cbss)
                     ls.Add(Serialization.Json.Serialize(cbs.CharBoxs));

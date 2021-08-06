@@ -88,9 +88,9 @@
             this.copy2ClipboardField = new System.Windows.Forms.LinkLabel();
             this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
             this.label3 = new System.Windows.Forms.Label();
-            this.IgnoreCharsBiggerThanWidth = new System.Windows.Forms.NumericUpDown();
+            this.CharSizeFilterMinWidth = new System.Windows.Forms.NumericUpDown();
             this.label13 = new System.Windows.Forms.Label();
-            this.IgnoreCharsBiggerThanHeight = new System.Windows.Forms.NumericUpDown();
+            this.CharSizeFilterMinHeight = new System.Windows.Forms.NumericUpDown();
             this.label15 = new System.Windows.Forms.Label();
             this.flowLayoutPanel8 = new System.Windows.Forms.FlowLayoutPanel();
             this.label5 = new System.Windows.Forms.Label();
@@ -107,6 +107,10 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.label16 = new System.Windows.Forms.Label();
+            this.CharSizeFilterMaxWidth = new System.Windows.Forms.NumericUpDown();
+            this.CharSizeFilterMaxHeight = new System.Windows.Forms.NumericUpDown();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).BeginInit();
             this.flowLayoutPanel5.SuspendLayout();
             this.flowLayoutPanel7.SuspendLayout();
@@ -126,8 +130,8 @@
             this.splitContainer3.SuspendLayout();
             this.flowLayoutPanel6.SuspendLayout();
             this.flowLayoutPanel4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.IgnoreCharsBiggerThanWidth)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.IgnoreCharsBiggerThanHeight)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CharSizeFilterMinWidth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CharSizeFilterMinHeight)).BeginInit();
             this.flowLayoutPanel8.SuspendLayout();
             this.flowLayoutPanel9.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
@@ -140,6 +144,8 @@
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.CharSizeFilterMaxWidth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CharSizeFilterMaxHeight)).BeginInit();
             this.SuspendLayout();
             // 
             // textAutoInsertSpaceThreshold
@@ -953,9 +959,13 @@
             // 
             this.flowLayoutPanel4.Controls.Add(this.label16);
             this.flowLayoutPanel4.Controls.Add(this.label3);
-            this.flowLayoutPanel4.Controls.Add(this.IgnoreCharsBiggerThanWidth);
+            this.flowLayoutPanel4.Controls.Add(this.CharSizeFilterMinWidth);
+            this.flowLayoutPanel4.Controls.Add(this.label18);
+            this.flowLayoutPanel4.Controls.Add(this.CharSizeFilterMaxWidth);
             this.flowLayoutPanel4.Controls.Add(this.label13);
-            this.flowLayoutPanel4.Controls.Add(this.IgnoreCharsBiggerThanHeight);
+            this.flowLayoutPanel4.Controls.Add(this.CharSizeFilterMinHeight);
+            this.flowLayoutPanel4.Controls.Add(this.label17);
+            this.flowLayoutPanel4.Controls.Add(this.CharSizeFilterMaxHeight);
             this.flowLayoutPanel4.Controls.Add(this.label15);
             this.flowLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel4.Location = new System.Drawing.Point(0, 66);
@@ -968,74 +978,74 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(36, 3);
-            this.label3.Margin = new System.Windows.Forms.Padding(0, 3, 6, 0);
+            this.label3.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(128, 13);
+            this.label3.Size = new System.Drawing.Size(57, 13);
             this.label3.TabIndex = 111;
-            this.label3.Text = "Ignore Chars Bigger Than";
+            this.label3.Text = "Char Filter:";
             // 
-            // IgnoreCharsBiggerThanWidth
+            // CharSizeFilterMinWidth
             // 
-            this.IgnoreCharsBiggerThanWidth.DecimalPlaces = 2;
-            this.IgnoreCharsBiggerThanWidth.Increment = new decimal(new int[] {
+            this.CharSizeFilterMinWidth.DecimalPlaces = 2;
+            this.CharSizeFilterMinWidth.Increment = new decimal(new int[] {
             1,
             0,
             0,
             65536});
-            this.IgnoreCharsBiggerThanWidth.Location = new System.Drawing.Point(170, 3);
-            this.IgnoreCharsBiggerThanWidth.Margin = new System.Windows.Forms.Padding(0, 3, 6, 0);
-            this.IgnoreCharsBiggerThanWidth.Maximum = new decimal(new int[] {
+            this.CharSizeFilterMinWidth.Location = new System.Drawing.Point(93, 3);
+            this.CharSizeFilterMinWidth.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
+            this.CharSizeFilterMinWidth.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
-            this.IgnoreCharsBiggerThanWidth.Minimum = new decimal(new int[] {
+            this.CharSizeFilterMinWidth.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             -2147483648});
-            this.IgnoreCharsBiggerThanWidth.Name = "IgnoreCharsBiggerThanWidth";
-            this.IgnoreCharsBiggerThanWidth.Size = new System.Drawing.Size(51, 20);
-            this.IgnoreCharsBiggerThanWidth.TabIndex = 112;
+            this.CharSizeFilterMinWidth.Name = "CharSizeFilterMinWidth";
+            this.CharSizeFilterMinWidth.Size = new System.Drawing.Size(51, 20);
+            this.CharSizeFilterMinWidth.TabIndex = 112;
             // 
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(227, 3);
-            this.label13.Margin = new System.Windows.Forms.Padding(0, 3, 6, 0);
+            this.label13.Location = new System.Drawing.Point(205, 3);
+            this.label13.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(38, 13);
             this.label13.TabIndex = 113;
             this.label13.Text = "(width)";
             // 
-            // IgnoreCharsBiggerThanHeight
+            // CharSizeFilterMinHeight
             // 
-            this.IgnoreCharsBiggerThanHeight.DecimalPlaces = 2;
-            this.IgnoreCharsBiggerThanHeight.Increment = new decimal(new int[] {
+            this.CharSizeFilterMinHeight.DecimalPlaces = 2;
+            this.CharSizeFilterMinHeight.Increment = new decimal(new int[] {
             1,
             0,
             0,
             65536});
-            this.IgnoreCharsBiggerThanHeight.Location = new System.Drawing.Point(271, 3);
-            this.IgnoreCharsBiggerThanHeight.Margin = new System.Windows.Forms.Padding(0, 3, 6, 0);
-            this.IgnoreCharsBiggerThanHeight.Maximum = new decimal(new int[] {
+            this.CharSizeFilterMinHeight.Location = new System.Drawing.Point(243, 3);
+            this.CharSizeFilterMinHeight.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
+            this.CharSizeFilterMinHeight.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
-            this.IgnoreCharsBiggerThanHeight.Minimum = new decimal(new int[] {
+            this.CharSizeFilterMinHeight.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             -2147483648});
-            this.IgnoreCharsBiggerThanHeight.Name = "IgnoreCharsBiggerThanHeight";
-            this.IgnoreCharsBiggerThanHeight.Size = new System.Drawing.Size(51, 20);
-            this.IgnoreCharsBiggerThanHeight.TabIndex = 115;
+            this.CharSizeFilterMinHeight.Name = "CharSizeFilterMinHeight";
+            this.CharSizeFilterMinHeight.Size = new System.Drawing.Size(51, 20);
+            this.CharSizeFilterMinHeight.TabIndex = 115;
             // 
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(328, 3);
+            this.label15.Location = new System.Drawing.Point(355, 3);
             this.label15.Margin = new System.Windows.Forms.Padding(0, 3, 6, 0);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(42, 13);
@@ -1247,6 +1257,74 @@
             this.label16.TabIndex = 116;
             this.label16.Text = "OCR:";
             // 
+            // CharSizeFilterMaxWidth
+            // 
+            this.CharSizeFilterMaxWidth.DecimalPlaces = 2;
+            this.CharSizeFilterMaxWidth.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.CharSizeFilterMaxWidth.Location = new System.Drawing.Point(154, 3);
+            this.CharSizeFilterMaxWidth.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
+            this.CharSizeFilterMaxWidth.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.CharSizeFilterMaxWidth.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.CharSizeFilterMaxWidth.Name = "CharSizeFilterMaxWidth";
+            this.CharSizeFilterMaxWidth.Size = new System.Drawing.Size(51, 20);
+            this.CharSizeFilterMaxWidth.TabIndex = 117;
+            // 
+            // CharSizeFilterMaxHeight
+            // 
+            this.CharSizeFilterMaxHeight.DecimalPlaces = 2;
+            this.CharSizeFilterMaxHeight.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.CharSizeFilterMaxHeight.Location = new System.Drawing.Point(304, 3);
+            this.CharSizeFilterMaxHeight.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
+            this.CharSizeFilterMaxHeight.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.CharSizeFilterMaxHeight.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.CharSizeFilterMaxHeight.Name = "CharSizeFilterMaxHeight";
+            this.CharSizeFilterMaxHeight.Size = new System.Drawing.Size(51, 20);
+            this.CharSizeFilterMaxHeight.TabIndex = 118;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(294, 3);
+            this.label17.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(10, 13);
+            this.label17.TabIndex = 119;
+            this.label17.Text = "-";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(144, 3);
+            this.label18.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(10, 13);
+            this.label18.TabIndex = 120;
+            this.label18.Text = "-";
+            // 
             // TemplateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1279,8 +1357,8 @@
             this.flowLayoutPanel6.PerformLayout();
             this.flowLayoutPanel4.ResumeLayout(false);
             this.flowLayoutPanel4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.IgnoreCharsBiggerThanWidth)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.IgnoreCharsBiggerThanHeight)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CharSizeFilterMinWidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CharSizeFilterMinHeight)).EndInit();
             this.flowLayoutPanel8.ResumeLayout(false);
             this.flowLayoutPanel8.PerformLayout();
             this.flowLayoutPanel9.ResumeLayout(false);
@@ -1298,6 +1376,8 @@
             this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.CharSizeFilterMaxWidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CharSizeFilterMaxHeight)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1391,9 +1471,13 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.NumericUpDown IgnoreCharsBiggerThanWidth;
+        private System.Windows.Forms.NumericUpDown CharSizeFilterMinWidth;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.NumericUpDown IgnoreCharsBiggerThanHeight;
+        private System.Windows.Forms.NumericUpDown CharSizeFilterMinHeight;
         private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.NumericUpDown CharSizeFilterMaxWidth;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.NumericUpDown CharSizeFilterMaxHeight;
     }
 }

@@ -34,18 +34,18 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public static List<Line<CharBoxT>> GetLines<CharBoxT>(IEnumerable<CharBoxT> cbs, TextAutoInsertSpace textAutoInsertSpace, Template.SizeF ignoreCharsBiggerThan) where CharBoxT : CharBox, new()
+        public static List<Line<CharBoxT>> GetLines<CharBoxT>(IEnumerable<CharBoxT> cbs, TextAutoInsertSpace textAutoInsertSpace, Template.CharFilter charFilter) where CharBoxT : CharBox, new()
         {
             if (textAutoInsertSpace?.IgnoreSourceSpaces == true)
                 cbs = cbs.Where(a => a.Char != " ");
-            if (ignoreCharsBiggerThan != null)//to filter out wrong OCR chars like borders etc which brakes lines
+            if (charFilter != null)//to filter out wrong OCR chars like borders etc which brakes lines
             {
                 //SizeF s=new SizeF(ignoreCharsBiggerThan.Width*Settings.Constants.Image2PdfResolutionRatio)
-                if (ignoreCharsBiggerThan.Width <= 0)
-                    ignoreCharsBiggerThan.Width = float.MaxValue;
-                if (ignoreCharsBiggerThan.Height <= 0)
-                    ignoreCharsBiggerThan.Height = float.MaxValue;
-                cbs = cbs.Where(a => a.R.Width <= ignoreCharsBiggerThan.Width && a.R.Height <= ignoreCharsBiggerThan.Height);
+                if (charFilter.MaxWidth <= 0)
+                    charFilter.MaxWidth = float.MaxValue;
+                if (charFilter.MaxHeight <= 0)
+                    charFilter.MaxHeight = float.MaxValue;
+                cbs = cbs.Where(a => a.R.Width >= charFilter.MinWidth && a.R.Width <= charFilter.MaxWidth && a.R.Height >= charFilter.MinHeight && a.R.Height <= charFilter.MaxHeight);
             }
             List<Line<CharBoxT>> lines = new List<Line<CharBoxT>>();
             foreach (CharBoxT cb in cbs)
@@ -237,10 +237,10 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public static List<string> GetTextLines<CharBoxT>(IEnumerable<CharBoxT> cbs, TextAutoInsertSpace textAutoInsertSpace, Template.SizeF ignoreCharsBiggerThan) where CharBoxT : CharBox, new()
+        public static List<string> GetTextLines<CharBoxT>(IEnumerable<CharBoxT> cbs, TextAutoInsertSpace textAutoInsertSpace, Template.CharFilter charFilter) where CharBoxT : CharBox, new()
         {
             List<string> ls = new List<string>();
-            foreach (Line<CharBoxT> l in GetLines(cbs, textAutoInsertSpace, ignoreCharsBiggerThan))
+            foreach (Line<CharBoxT> l in GetLines(cbs, textAutoInsertSpace, charFilter))
             {
                 StringBuilder sb = new StringBuilder();
                 foreach (CharBox cb in l.CharBoxs)
@@ -250,9 +250,9 @@ namespace Cliver.PdfDocumentParser
             return ls;
         }
 
-        public static string GetText(IEnumerable<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace, Template.SizeF ignoreCharsBiggerThan)
+        public static string GetText(IEnumerable<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace, Template.CharFilter charFilter)
         {
-            return string.Join("\r\n", GetTextLines(cbs, textAutoInsertSpace, ignoreCharsBiggerThan));
+            return string.Join("\r\n", GetTextLines(cbs, textAutoInsertSpace, charFilter));
         }
 
         //internal static List<Line<CharBoxT>> GetLinesWithAdjacentBorders<CharBoxT>(IEnumerable<CharBoxT> cbs, RectangleF ar, Template.SizeF ignoreCharsBiggerThan) where CharBoxT : CharBox, new()

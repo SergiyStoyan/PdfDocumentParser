@@ -19,7 +19,7 @@ namespace Cliver.PdfDocumentParser
         {
             Mode = Field.OcrModes.SingleFieldFromFieldImage | Field.OcrModes.ColumnFieldFromTableCharBoxs,
             TesseractPageSegMode = Tesseract.PageSegMode.SingleBlock,
-            IgnoreCharsBiggerThan = null
+             CharFilter = null
         };
 
         public PageRotations PageRotation = PageRotations.NONE;

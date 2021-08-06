@@ -180,7 +180,8 @@ namespace Cliver.PdfDocumentParser
             {
                 public OcrModes Mode;
                 public Tesseract.PageSegMode TesseractPageSegMode = Tesseract.PageSegMode.SingleBlock;
-                public SizeF IgnoreCharsBiggerThan;
+                //public SizeF IgnoreCharsBiggerThan;
+                public CharFilter CharFilter;
 
                 internal bool SingleFieldFromFieldImage
                 {

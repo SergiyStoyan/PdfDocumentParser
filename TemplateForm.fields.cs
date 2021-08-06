@@ -659,7 +659,7 @@ namespace Cliver.PdfDocumentParser
                         TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem,
                         SingleFieldFromFieldImage = SingleFieldFromFieldImage.Checked,
                         ColumnCellFromCellImage = ColumnCellFromCellImage.Checked,
-                        IgnoreCharsBiggerThan = new Template.SizeF { Width = (float)IgnoreCharsBiggerThanWidth.Value, Height = (float)IgnoreCharsBiggerThanHeight.Value }
+                        CharFilter = new Template.CharFilter { MinWidth = (float)CharSizeFilterMinWidth.Value, MaxWidth = (float)CharSizeFilterMaxWidth.Value, MinHeight = (float)CharSizeFilterMinHeight.Value, MaxHeight = (float)CharSizeFilterMaxHeight.Value }
                     };
                 }
                 Template.Field.Types t = ((Template.Field)row.Tag).Type;

@@ -78,10 +78,12 @@ namespace Cliver.PdfDocumentParser
                 TesseractPageSegMode.SelectedItem = t.OcrSettings.TesseractPageSegMode;
                 SingleFieldFromFieldImage.Checked = t.OcrSettings.SingleFieldFromFieldImage;
                 ColumnCellFromCellImage.Checked = t.OcrSettings.ColumnCellFromCellImage;
-                if (t.OcrSettings.IgnoreCharsBiggerThan != null)
+                if (t.OcrSettings.CharFilter != null)
                 {
-                    IgnoreCharsBiggerThanWidth.Value = (decimal)t.OcrSettings.IgnoreCharsBiggerThan.Width;
-                    IgnoreCharsBiggerThanHeight.Value = (decimal)t.OcrSettings.IgnoreCharsBiggerThan.Height;
+                    CharSizeFilterMinWidth.Value = (decimal)t.OcrSettings.CharFilter.MinWidth;
+                    CharSizeFilterMaxWidth.Value = (decimal)t.OcrSettings.CharFilter.MaxWidth;
+                    CharSizeFilterMinHeight.Value = (decimal)t.OcrSettings.CharFilter.MinHeight;
+                    CharSizeFilterMaxHeight.Value = (decimal)t.OcrSettings.CharFilter.MaxHeight;
                 }
 
                 bitmapPreparationForm.SetUI(t, false);
@@ -183,7 +185,7 @@ namespace Cliver.PdfDocumentParser
             string t = Page.GetText(
                 pages[currentPageI].PdfCharBoxs,
                 new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, IgnoreSourceSpaces = IgnoreSourceSpaces.Checked /*, Representative//default*/},
-                new Template.SizeF { Width = (float)IgnoreCharsBiggerThanWidth.Value, Height = (float)IgnoreCharsBiggerThanHeight.Value }
+                new Template.CharFilter { MinWidth = (float)CharSizeFilterMinWidth.Value, MaxWidth = (float)CharSizeFilterMaxWidth.Value, MinHeight = (float)CharSizeFilterMinHeight.Value, MaxHeight = (float)CharSizeFilterMaxHeight.Value }
             );
             TextForm tf = new TextForm("Pdf Entity Text", t, false);
             tf.ShowDialog();
@@ -197,7 +199,7 @@ namespace Cliver.PdfDocumentParser
             List<string> ls = Page.GetTextLines(
                 pages[currentPageI].ActiveTemplateOcrCharBoxs,
                 new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, IgnoreSourceSpaces = IgnoreSourceSpaces.Checked/*, Representative//default*/ },
-                new Template.SizeF { Width = (float)IgnoreCharsBiggerThanWidth.Value, Height = (float)IgnoreCharsBiggerThanHeight.Value }
+                new Template.CharFilter { MinWidth = (float)CharSizeFilterMinWidth.Value, MaxWidth = (float)CharSizeFilterMaxWidth.Value, MinHeight = (float)CharSizeFilterMinHeight.Value, MaxHeight = (float)CharSizeFilterMaxHeight.Value }
             );
             TextForm tf = new TextForm("OCR Text", string.Join("\r\n", ls), false);
             tf.ShowDialog();
@@ -273,8 +275,8 @@ namespace Cliver.PdfDocumentParser
             t.OcrSettings.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
             t.OcrSettings.SingleFieldFromFieldImage = SingleFieldFromFieldImage.Checked;
             t.OcrSettings.ColumnCellFromCellImage = ColumnCellFromCellImage.Checked;
-            if (IgnoreCharsBiggerThanWidth.Value > 0 || IgnoreCharsBiggerThanHeight.Value > 0)
-                t.OcrSettings.IgnoreCharsBiggerThan = new Template.SizeF { Width = (float)IgnoreCharsBiggerThanWidth.Value, Height = (float)IgnoreCharsBiggerThanHeight.Value };
+            if (CharSizeFilterMinWidth.Value > 0 || CharSizeFilterMaxWidth.Value > 0 || CharSizeFilterMinHeight.Value > 0 || CharSizeFilterMaxHeight.Value > 0)
+                t.OcrSettings.CharFilter = new Template.CharFilter { MinWidth = (float)CharSizeFilterMinWidth.Value, MaxWidth = (float)CharSizeFilterMaxWidth.Value, MinHeight = (float)CharSizeFilterMinHeight.Value, MaxHeight = (float)CharSizeFilterMaxHeight.Value };
 
             bitmapPreparationForm.SetTemplate(t);
 
