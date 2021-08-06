@@ -167,7 +167,7 @@ namespace Cliver.PdfDocumentParser
                 if (v == null)
                     return;
                 foreach (FieldActualInfo fai in v)
-                    fai.Dispose();
+                    fai?.Dispose();
             }
         );
 
@@ -213,7 +213,7 @@ namespace Cliver.PdfDocumentParser
                         ((Bitmap)v).Dispose();
                     else if (v is List<Bitmap>)
                         foreach (Bitmap b in (List<Bitmap>)v)
-                            b.Dispose();
+                            b?.Dispose();
                 }
             );//!!!cache Table field values for internal reuse only!!! 
             object getValue_(Template.Field.Types type)

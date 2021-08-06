@@ -15,7 +15,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.textAutoInsertSpaceThreshold = new System.Windows.Forms.NumericUpDown();
             this.TesseractPageSegMode = new System.Windows.Forms.ComboBox();
             this.label19 = new System.Windows.Forms.Label();
@@ -86,6 +86,12 @@
             this.moveUpField = new System.Windows.Forms.LinkLabel();
             this.deleteField = new System.Windows.Forms.LinkLabel();
             this.copy2ClipboardField = new System.Windows.Forms.LinkLabel();
+            this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
+            this.label3 = new System.Windows.Forms.Label();
+            this.IgnoreCharsBiggerThanWidth = new System.Windows.Forms.NumericUpDown();
+            this.label13 = new System.Windows.Forms.Label();
+            this.IgnoreCharsBiggerThanHeight = new System.Windows.Forms.NumericUpDown();
+            this.label15 = new System.Windows.Forms.Label();
             this.flowLayoutPanel8 = new System.Windows.Forms.FlowLayoutPanel();
             this.label5 = new System.Windows.Forms.Label();
             this.SingleFieldFromFieldImage = new System.Windows.Forms.CheckBox();
@@ -100,12 +106,7 @@
             this.bSave = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.IgnoreCharsBiggerThanWidth = new System.Windows.Forms.NumericUpDown();
-            this.label15 = new System.Windows.Forms.Label();
-            this.IgnoreCharsBiggerThanHeight = new System.Windows.Forms.NumericUpDown();
+            this.label16 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).BeginInit();
             this.flowLayoutPanel5.SuspendLayout();
             this.flowLayoutPanel7.SuspendLayout();
@@ -124,6 +125,9 @@
             this.splitContainer3.Panel2.SuspendLayout();
             this.splitContainer3.SuspendLayout();
             this.flowLayoutPanel6.SuspendLayout();
+            this.flowLayoutPanel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.IgnoreCharsBiggerThanWidth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.IgnoreCharsBiggerThanHeight)).BeginInit();
             this.flowLayoutPanel8.SuspendLayout();
             this.flowLayoutPanel9.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
@@ -136,9 +140,6 @@
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.flowLayoutPanel4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.IgnoreCharsBiggerThanWidth)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.IgnoreCharsBiggerThanHeight)).BeginInit();
             this.SuspendLayout();
             // 
             // textAutoInsertSpaceThreshold
@@ -793,8 +794,8 @@
             // 
             // SearchRectangleMargin
             // 
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            this.SearchRectangleMargin.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            this.SearchRectangleMargin.DefaultCellStyle = dataGridViewCellStyle1;
             this.SearchRectangleMargin.HeaderText = "Margin";
             this.SearchRectangleMargin.Name = "SearchRectangleMargin";
             this.SearchRectangleMargin.Width = 50;
@@ -947,6 +948,99 @@
             this.copy2ClipboardField.TabStop = true;
             this.copy2ClipboardField.Text = "Value To Clipboard";
             this.copy2ClipboardField.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // flowLayoutPanel4
+            // 
+            this.flowLayoutPanel4.Controls.Add(this.label16);
+            this.flowLayoutPanel4.Controls.Add(this.label3);
+            this.flowLayoutPanel4.Controls.Add(this.IgnoreCharsBiggerThanWidth);
+            this.flowLayoutPanel4.Controls.Add(this.label13);
+            this.flowLayoutPanel4.Controls.Add(this.IgnoreCharsBiggerThanHeight);
+            this.flowLayoutPanel4.Controls.Add(this.label15);
+            this.flowLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.flowLayoutPanel4.Location = new System.Drawing.Point(0, 66);
+            this.flowLayoutPanel4.Name = "flowLayoutPanel4";
+            this.flowLayoutPanel4.Size = new System.Drawing.Size(336, 23);
+            this.flowLayoutPanel4.TabIndex = 112;
+            this.flowLayoutPanel4.WrapContents = false;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(36, 3);
+            this.label3.Margin = new System.Windows.Forms.Padding(0, 3, 6, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(128, 13);
+            this.label3.TabIndex = 111;
+            this.label3.Text = "Ignore Chars Bigger Than";
+            // 
+            // IgnoreCharsBiggerThanWidth
+            // 
+            this.IgnoreCharsBiggerThanWidth.DecimalPlaces = 2;
+            this.IgnoreCharsBiggerThanWidth.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.IgnoreCharsBiggerThanWidth.Location = new System.Drawing.Point(170, 3);
+            this.IgnoreCharsBiggerThanWidth.Margin = new System.Windows.Forms.Padding(0, 3, 6, 0);
+            this.IgnoreCharsBiggerThanWidth.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.IgnoreCharsBiggerThanWidth.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.IgnoreCharsBiggerThanWidth.Name = "IgnoreCharsBiggerThanWidth";
+            this.IgnoreCharsBiggerThanWidth.Size = new System.Drawing.Size(51, 20);
+            this.IgnoreCharsBiggerThanWidth.TabIndex = 112;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(227, 3);
+            this.label13.Margin = new System.Windows.Forms.Padding(0, 3, 6, 0);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(38, 13);
+            this.label13.TabIndex = 113;
+            this.label13.Text = "(width)";
+            // 
+            // IgnoreCharsBiggerThanHeight
+            // 
+            this.IgnoreCharsBiggerThanHeight.DecimalPlaces = 2;
+            this.IgnoreCharsBiggerThanHeight.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.IgnoreCharsBiggerThanHeight.Location = new System.Drawing.Point(271, 3);
+            this.IgnoreCharsBiggerThanHeight.Margin = new System.Windows.Forms.Padding(0, 3, 6, 0);
+            this.IgnoreCharsBiggerThanHeight.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.IgnoreCharsBiggerThanHeight.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.IgnoreCharsBiggerThanHeight.Name = "IgnoreCharsBiggerThanHeight";
+            this.IgnoreCharsBiggerThanHeight.Size = new System.Drawing.Size(51, 20);
+            this.IgnoreCharsBiggerThanHeight.TabIndex = 115;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(328, 3);
+            this.label15.Margin = new System.Windows.Forms.Padding(0, 3, 6, 0);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(42, 13);
+            this.label15.TabIndex = 114;
+            this.label15.Text = "(height)";
             // 
             // flowLayoutPanel8
             // 
@@ -1143,97 +1237,15 @@
             this.splitContainer1.SplitterDistance = 584;
             this.splitContainer1.TabIndex = 1;
             // 
-            // flowLayoutPanel4
+            // label16
             // 
-            this.flowLayoutPanel4.Controls.Add(this.label3);
-            this.flowLayoutPanel4.Controls.Add(this.IgnoreCharsBiggerThanWidth);
-            this.flowLayoutPanel4.Controls.Add(this.label13);
-            this.flowLayoutPanel4.Controls.Add(this.IgnoreCharsBiggerThanHeight);
-            this.flowLayoutPanel4.Controls.Add(this.label15);
-            this.flowLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.flowLayoutPanel4.Location = new System.Drawing.Point(0, 66);
-            this.flowLayoutPanel4.Name = "flowLayoutPanel4";
-            this.flowLayoutPanel4.Size = new System.Drawing.Size(336, 23);
-            this.flowLayoutPanel4.TabIndex = 112;
-            this.flowLayoutPanel4.WrapContents = false;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(0, 3);
-            this.label3.Margin = new System.Windows.Forms.Padding(0, 3, 6, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(131, 13);
-            this.label3.TabIndex = 111;
-            this.label3.Text = "Ignore Chars Bigger Than:";
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(194, 3);
-            this.label13.Margin = new System.Windows.Forms.Padding(0, 3, 6, 0);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(38, 13);
-            this.label13.TabIndex = 113;
-            this.label13.Text = "(width)";
-            // 
-            // IgnoreCharsBiggerThanWidth
-            // 
-            this.IgnoreCharsBiggerThanWidth.DecimalPlaces = 2;
-            this.IgnoreCharsBiggerThanWidth.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.IgnoreCharsBiggerThanWidth.Location = new System.Drawing.Point(137, 3);
-            this.IgnoreCharsBiggerThanWidth.Margin = new System.Windows.Forms.Padding(0, 3, 6, 0);
-            this.IgnoreCharsBiggerThanWidth.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.IgnoreCharsBiggerThanWidth.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            -2147483648});
-            this.IgnoreCharsBiggerThanWidth.Name = "IgnoreCharsBiggerThanWidth";
-            this.IgnoreCharsBiggerThanWidth.Size = new System.Drawing.Size(51, 20);
-            this.IgnoreCharsBiggerThanWidth.TabIndex = 112;
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(295, 3);
-            this.label15.Margin = new System.Windows.Forms.Padding(0, 3, 6, 0);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(42, 13);
-            this.label15.TabIndex = 114;
-            this.label15.Text = "(height)";
-            // 
-            // IgnoreCharsBiggerThanHeight
-            // 
-            this.IgnoreCharsBiggerThanHeight.DecimalPlaces = 2;
-            this.IgnoreCharsBiggerThanHeight.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.IgnoreCharsBiggerThanHeight.Location = new System.Drawing.Point(238, 3);
-            this.IgnoreCharsBiggerThanHeight.Margin = new System.Windows.Forms.Padding(0, 3, 6, 0);
-            this.IgnoreCharsBiggerThanHeight.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.IgnoreCharsBiggerThanHeight.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            -2147483648});
-            this.IgnoreCharsBiggerThanHeight.Name = "IgnoreCharsBiggerThanHeight";
-            this.IgnoreCharsBiggerThanHeight.Size = new System.Drawing.Size(51, 20);
-            this.IgnoreCharsBiggerThanHeight.TabIndex = 115;
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(3, 3);
+            this.label16.Margin = new System.Windows.Forms.Padding(3, 3, 0, 0);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(33, 13);
+            this.label16.TabIndex = 116;
+            this.label16.Text = "OCR:";
             // 
             // TemplateForm
             // 
@@ -1265,6 +1277,10 @@
             this.splitContainer3.ResumeLayout(false);
             this.flowLayoutPanel6.ResumeLayout(false);
             this.flowLayoutPanel6.PerformLayout();
+            this.flowLayoutPanel4.ResumeLayout(false);
+            this.flowLayoutPanel4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.IgnoreCharsBiggerThanWidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.IgnoreCharsBiggerThanHeight)).EndInit();
             this.flowLayoutPanel8.ResumeLayout(false);
             this.flowLayoutPanel8.PerformLayout();
             this.flowLayoutPanel9.ResumeLayout(false);
@@ -1282,10 +1298,6 @@
             this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            this.flowLayoutPanel4.ResumeLayout(false);
-            this.flowLayoutPanel4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.IgnoreCharsBiggerThanWidth)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.IgnoreCharsBiggerThanHeight)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1382,5 +1394,6 @@
         private System.Windows.Forms.NumericUpDown IgnoreCharsBiggerThanWidth;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.NumericUpDown IgnoreCharsBiggerThanHeight;
+        private System.Windows.Forms.Label label16;
     }
 }
