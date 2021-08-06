@@ -75,10 +75,14 @@ namespace Cliver.PdfDocumentParser
                     t.TextAutoInsertSpace = new TextAutoInsertSpace();
                 textAutoInsertSpaceThreshold.Value = (decimal)t.TextAutoInsertSpace.Threshold;
 
-                TesseractPageSegMode.SelectedItem = t.TesseractPageSegMode;
-
-                SingleFieldFromFieldImage.Checked = t.FieldOcrMode.HasFlag(Template.Field.OcrModes.SingleFieldFromFieldImage);
-                ColumnCellFromCellImage.Checked = t.FieldOcrMode.HasFlag(Template.Field.OcrModes.ColumnCellFromCellImage);
+                TesseractPageSegMode.SelectedItem = t.OcrSettings.TesseractPageSegMode;
+                SingleFieldFromFieldImage.Checked = t.OcrSettings.SingleFieldFromFieldImage;
+                ColumnCellFromCellImage.Checked = t.OcrSettings.ColumnCellFromCellImage;
+                if (t.OcrSettings.IgnoreCharsBiggerThan != null)
+                {
+                    IgnoreCharsBiggerThanWidth.Value = (decimal)t.OcrSettings.IgnoreCharsBiggerThan.Width;
+                    IgnoreCharsBiggerThanHeight.Value = (decimal)t.OcrSettings.IgnoreCharsBiggerThan.Height;
+                }
 
                 bitmapPreparationForm.SetUI(t, false);
                 highlightScanSettings(t);
@@ -176,7 +180,12 @@ namespace Cliver.PdfDocumentParser
             if (pages == null)
                 return;
             //TextForm tf = new TextForm("Pdf Entity Text", PdfTextExtractor.GetTextFromPage(pages.PdfReader, currentPageI), false);
-            TextForm tf = new TextForm("Pdf Entity Text", Page.GetText(pages[currentPageI].PdfCharBoxs, new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, IgnoreSourceSpaces = IgnoreSourceSpaces.Checked /*, Representative//default*/}), false);
+            string t = Page.GetText(
+                pages[currentPageI].PdfCharBoxs,
+                new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, IgnoreSourceSpaces = IgnoreSourceSpaces.Checked /*, Representative//default*/},
+                new Template.SizeF { Width = (float)IgnoreCharsBiggerThanWidth.Value, Height = (float)IgnoreCharsBiggerThanHeight.Value }
+            );
+            TextForm tf = new TextForm("Pdf Entity Text", t, false);
             tf.ShowDialog();
         }
 
@@ -185,7 +194,11 @@ namespace Cliver.PdfDocumentParser
             if (pages == null)
                 return;
             pages.ActiveTemplate = GetTemplateFromUI(false);
-            List<string> ls = Page.GetTextLines(pages[currentPageI].ActiveTemplateOcrCharBoxs, new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, IgnoreSourceSpaces = IgnoreSourceSpaces.Checked/*, Representative//default*/ });
+            List<string> ls = Page.GetTextLines(
+                pages[currentPageI].ActiveTemplateOcrCharBoxs,
+                new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, IgnoreSourceSpaces = IgnoreSourceSpaces.Checked/*, Representative//default*/ },
+                new Template.SizeF { Width = (float)IgnoreCharsBiggerThanWidth.Value, Height = (float)IgnoreCharsBiggerThanHeight.Value }
+            );
             TextForm tf = new TextForm("OCR Text", string.Join("\r\n", ls), false);
             tf.ShowDialog();
         }
@@ -257,16 +270,11 @@ namespace Cliver.PdfDocumentParser
                 //Representative//default
             };
 
-            t.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
-
-            if (SingleFieldFromFieldImage.Checked)
-                t.FieldOcrMode |= Template.Field.OcrModes.SingleFieldFromFieldImage;
-            else
-                t.FieldOcrMode &= ~Template.Field.OcrModes.SingleFieldFromFieldImage;
-            if (ColumnCellFromCellImage.Checked)
-                t.FieldOcrMode |= Template.Field.OcrModes.ColumnCellFromCellImage;
-            else
-                t.FieldOcrMode &= ~Template.Field.OcrModes.ColumnCellFromCellImage;
+            t.OcrSettings.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
+            t.OcrSettings.SingleFieldFromFieldImage = SingleFieldFromFieldImage.Checked;
+            t.OcrSettings.ColumnCellFromCellImage = ColumnCellFromCellImage.Checked;
+            if (IgnoreCharsBiggerThanWidth.Value > 0 || IgnoreCharsBiggerThanHeight.Value > 0)
+                t.OcrSettings.IgnoreCharsBiggerThan = new Template.SizeF { Width = (float)IgnoreCharsBiggerThanWidth.Value, Height = (float)IgnoreCharsBiggerThanHeight.Value };
 
             bitmapPreparationForm.SetTemplate(t);
 

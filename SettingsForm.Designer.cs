@@ -57,11 +57,11 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.OcrConfig = new System.Windows.Forms.RichTextBox();
+            this.label11 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.InitialSearchRectangleMargin = new System.Windows.Forms.NumericUpDown();
             this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.OcrConfig = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.PdfPageImageResolution)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TextLineSeparatorWidth)).BeginInit();
@@ -449,7 +449,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(338, 260);
+            this.tabPage1.Size = new System.Drawing.Size(341, 260);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Appearance";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -470,6 +470,27 @@
             this.tabPage2.Text = "Image Processing";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // OcrConfig
+            // 
+            this.OcrConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.OcrConfig.Location = new System.Drawing.Point(27, 100);
+            this.OcrConfig.Name = "OcrConfig";
+            this.OcrConfig.ReadOnly = true;
+            this.OcrConfig.Size = new System.Drawing.Size(287, 139);
+            this.OcrConfig.TabIndex = 58;
+            this.OcrConfig.Text = "";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(24, 82);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(149, 13);
+            this.label11.TabIndex = 57;
+            this.label11.Text = "Tesseract Config Set By Host:";
+            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.InitialSearchRectangleMargin);
@@ -477,7 +498,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(338, 260);
+            this.tabPage3.Size = new System.Drawing.Size(341, 260);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Anchors";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -507,26 +528,6 @@
             this.label10.Size = new System.Drawing.Size(158, 13);
             this.label10.TabIndex = 59;
             this.label10.Text = "Initial Search Rectangle Margin:";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(24, 82);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(90, 13);
-            this.label11.TabIndex = 57;
-            this.label11.Text = "Tesseract Config:";
-            // 
-            // OcrConfig
-            // 
-            this.OcrConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.OcrConfig.Location = new System.Drawing.Point(27, 100);
-            this.OcrConfig.Name = "OcrConfig";
-            this.OcrConfig.Size = new System.Drawing.Size(287, 139);
-            this.OcrConfig.TabIndex = 58;
-            this.OcrConfig.Text = "";
             // 
             // SettingsForm
             // 

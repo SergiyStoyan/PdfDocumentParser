@@ -24,7 +24,8 @@ namespace Cliver.PdfDocumentParser
 
             public int InitialSearchRectangleMargin = 100;
 
-            public Ocr.Config OcrConfig;
+            [Newtonsoft.Json.JsonIgnore]
+            public Ocr.Config OcrConfig;//set by the host
 
             [Newtonsoft.Json.JsonIgnore]
             public float Image2PdfResolutionRatio { get; private set; }

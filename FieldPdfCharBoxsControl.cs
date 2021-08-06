@@ -73,8 +73,9 @@ namespace Cliver.PdfDocumentParser
             if (value != null)
             {
                 List<Page.Line<Pdf.CharBox>> cbss = Page.GetLines((List<Pdf.CharBox>)value,
-                   SpecialTextAutoInsertSpace.Checked ? new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, IgnoreSourceSpaces = textAutoInsertSpaceIgnoreSourceSpaces.Checked, Representative = textAutoInsertSpaceRepresentative.Text } : textAutoInsertSpace
-                   );
+                   SpecialTextAutoInsertSpace.Checked ? new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, IgnoreSourceSpaces = textAutoInsertSpaceIgnoreSourceSpaces.Checked, Representative = textAutoInsertSpaceRepresentative.Text } : textAutoInsertSpace,
+                   null
+                );
                 List<string> ls = new List<string>();
                 foreach (var cbs in cbss)
                     ls.Add(Serialization.Json.Serialize(cbs.CharBoxs));

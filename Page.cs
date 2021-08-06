@@ -107,7 +107,7 @@ namespace Cliver.PdfDocumentParser
                 _activeTemplateCvImage?.Dispose();
                 _activeTemplateCvImage = null;
             }
-            else if (newTemplate.TesseractPageSegMode != PageCollection.ActiveTemplate.TesseractPageSegMode
+            else if (newTemplate.OcrSettings.TesseractPageSegMode != PageCollection.ActiveTemplate.OcrSettings.TesseractPageSegMode
                 || !Serialization.Json.IsEqual(
                     newTemplate.Fields.Where(a => a is Template.Field.Ocr).Select(a => ((Template.Field.Ocr)a).OcrSettings?.TesseractPageSegMode).ToList(),
                     PageCollection.ActiveTemplate.Fields.Where(a => a is Template.Field.Ocr).Select(a => ((Template.Field.Ocr)a).OcrSettings?.TesseractPageSegMode).ToList()
@@ -323,7 +323,7 @@ namespace Cliver.PdfDocumentParser
             {
                 if (_activeTemplateOcrCharBoxs == null)
                 {
-                    _activeTemplateOcrCharBoxs = Ocr.This.GetCharBoxs(ActiveTemplateBitmap, PageCollection.ActiveTemplate.TesseractPageSegMode);
+                    _activeTemplateOcrCharBoxs = Ocr.This.GetCharBoxs(ActiveTemplateBitmap, PageCollection.ActiveTemplate.OcrSettings.TesseractPageSegMode);
                 }
                 return _activeTemplateOcrCharBoxs;
             }

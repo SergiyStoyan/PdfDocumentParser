@@ -393,7 +393,7 @@ namespace Cliver.PdfDocumentParser
         //}
     }
 
-    public class Contour
+    internal class Contour
     {
         public Contour(Array hierarchy, int i, VectorOfPoint points)
         {

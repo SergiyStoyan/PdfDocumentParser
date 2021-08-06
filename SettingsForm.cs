@@ -59,7 +59,7 @@ namespace Cliver.PdfDocumentParser
 
                 Settings.Constants.PdfPageImageResolution = (int)PdfPageImageResolution.Value;
                 Settings.Constants.CoordinateDeviationMargin = (float)CoordinateDeviationMargin.Value;
-                Settings.Constants.OcrConfig = Serialization.Json.Deserialize<Ocr.Config>(OcrConfig.Text);
+                //Settings.Constants.OcrConfig = Serialization.Json.Deserialize<Ocr.Config>(OcrConfig.Text);
 
                 Settings.Constants.InitialSearchRectangleMargin = (int)InitialSearchRectangleMargin.Value;
 

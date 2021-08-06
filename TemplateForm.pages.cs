@@ -164,7 +164,7 @@ namespace Cliver.PdfDocumentParser
                             if (ShowFieldTextLineSeparators.Checked)
                             {
                                 RectangleF tableAR = (RectangleF)fai.TableFieldActualInfo.ActualRectangle;
-                                List<Page.Line<Pdf.CharBox>> lines = Page.GetLines(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, tableAR), null).ToList();
+                                List<Page.Line<Pdf.CharBox>> lines = Page.GetLines(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, tableAR), null, null).ToList();
                                 List<RectangleF> lineBoxes = new List<RectangleF>();
                                 for (int i = 1; i < lines.Count; i++)
                                 {
@@ -181,7 +181,7 @@ namespace Cliver.PdfDocumentParser
                         {
                             if (ShowFieldTextLineSeparators.Checked)
                             {
-                                List<Page.Line<Pdf.CharBox>> lines = Page.GetLines(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, r), null).ToList();
+                                List<Page.Line<Pdf.CharBox>> lines = Page.GetLines(Pdf.GetCharBoxsSurroundedByRectangle(pages[currentPageI].PdfCharBoxs, r), null, null).ToList();
                                 List<RectangleF> lineBoxes = new List<RectangleF>();
                                 for (int i = 1; i < lines.Count; i++)
                                     lineBoxes.Add(new RectangleF { X = r.X, Y = lines[i].Top, Width = r.Width, Height = 0 });
@@ -200,9 +200,8 @@ namespace Cliver.PdfDocumentParser
                             drawBoxes(Settings.Appearance.TableBoxColor, Settings.Appearance.TableBoxBorderWidth, new List<RectangleF> { (RectangleF)fai.TableFieldActualInfo.ActualRectangle });
                             if (ShowFieldTextLineSeparators.Checked)
                             {
-                                //RectangleF tableAR = (RectangleF)fai.TableFieldActualInfo.ActualRectangle;
-                                //List<Page.Line<Ocr.CharBox>> ols = Page.GetLinesWithAdjacentBorders((List<Ocr.CharBox>)fai.TableFieldActualInfo.GetValue(Template.Field.Types.OcrCharBoxs), tableAR);
-                                List<Page.Line<Ocr.CharBox>> ols = Page.GetLines((List<Ocr.CharBox>)fai.TableFieldActualInfo.GetValue(Template.Field.Types.OcrCharBoxs), null);
+                                Template.Field.OcrSettings ocrSettings = field.GetOcrSettings(pages.ActiveTemplate);
+                                List<Page.Line<Ocr.CharBox>> ols = Page.GetLines((List<Ocr.CharBox>)fai.TableFieldActualInfo.GetValue(Template.Field.Types.OcrCharBoxs), null, ocrSettings.IgnoreCharsBiggerThan);
                                 if (ols.Count > 0)
                                     ols.RemoveAt(0);
                                 List<RectangleF> lineBoxes = new List<RectangleF>();
@@ -215,15 +214,16 @@ namespace Cliver.PdfDocumentParser
                         {
                             if (ShowFieldTextLineSeparators.Checked)
                             {
+                                Template.Field.OcrSettings ocrSettings = field.GetOcrSettings(pages.ActiveTemplate);
                                 List<Ocr.CharBox> cbs;
-                                if (field.GetOcrMode(pages.ActiveTemplate).HasFlag(Template.Field.OcrModes.SingleFieldFromFieldImage))
-                                    cbs = Ocr.This.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateBitmap, r, field.GetTesseractPageSegMode(pages.ActiveTemplate));
+                                if (ocrSettings.SingleFieldFromFieldImage)
+                                    cbs = Ocr.This.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateBitmap, r, ocrSettings.TesseractPageSegMode);
                                 else
                                     cbs = Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateOcrCharBoxs, r);
                                 if (cbs != null)
                                 {
                                     //List<Page.Line<Ocr.CharBox>> ols = Page.GetLinesWithAdjacentBorders(cbs, r);
-                                    List<Page.Line<Ocr.CharBox>> ols = Page.GetLines(cbs, null);
+                                    List<Page.Line<Ocr.CharBox>> ols = Page.GetLines(cbs, null, ocrSettings.IgnoreCharsBiggerThan);
                                     if (ols.Count > 0)
                                         ols.RemoveAt(0);
                                     List<RectangleF> lineBoxes = new List<RectangleF>();

@@ -34,11 +34,19 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public static List<Line<CharBoxT>> GetLines<CharBoxT>(IEnumerable<CharBoxT> cbs, TextAutoInsertSpace textAutoInsertSpace) where CharBoxT : CharBox, new()
+        public static List<Line<CharBoxT>> GetLines<CharBoxT>(IEnumerable<CharBoxT> cbs, TextAutoInsertSpace textAutoInsertSpace, Template.SizeF ignoreCharsBiggerThan) where CharBoxT : CharBox, new()
         {
-            bool spaceAutoInsert = textAutoInsertSpace?.Threshold > 0;
             if (textAutoInsertSpace?.IgnoreSourceSpaces == true)
                 cbs = cbs.Where(a => a.Char != " ");
+            if (ignoreCharsBiggerThan != null)//to filter out wrong OCR chars like borders etc which brakes lines
+            {
+                //SizeF s=new SizeF(ignoreCharsBiggerThan.Width*Settings.Constants.Image2PdfResolutionRatio)
+                if (ignoreCharsBiggerThan.Width <= 0)
+                    ignoreCharsBiggerThan.Width = float.MaxValue;
+                if (ignoreCharsBiggerThan.Height <= 0)
+                    ignoreCharsBiggerThan.Height = float.MaxValue;
+                cbs = cbs.Where(a => a.R.Width <= ignoreCharsBiggerThan.Width && a.R.Height <= ignoreCharsBiggerThan.Height);
+            }
             List<Line<CharBoxT>> lines = new List<Line<CharBoxT>>();
             foreach (CharBoxT cb in cbs)
             {
@@ -54,15 +62,6 @@ namespace Cliver.PdfDocumentParser
                     }
                     if (mY <= lines[i].Bottom)//the char's center is in the line
                     {
-                        //if (i + 1 < lines.Count && mY >= lines[i + 1].Top)//the char's center is also in the next line
-                        //{
-                        //    lines[i].CharBoxs.AddRange(lines[i + 1].CharBoxs);
-                        //    if (lines[i].Top > lines[i + 1].Top)
-                        //        lines[i].Top = lines[i + 1].Top;
-                        //    if (lines[i].Bottom < lines[i + 1].Bottom)
-                        //        lines[i].Bottom = lines[i + 1].Bottom;
-                        //    lines.RemoveAt(i + 1);
-                        //}
                         lines[i].CharBoxs.Add(cb);
                         if (lines[i].Top > cb.R.Top)
                             lines[i].Top = cb.R.Top;
@@ -96,7 +95,7 @@ namespace Cliver.PdfDocumentParser
 
             lines.ForEach(a => a.CharBoxs = a.CharBoxs.OrderBy(b => b.R.X).ToList());
 
-            if (spaceAutoInsert)
+            if (textAutoInsertSpace?.Threshold > 0)
                 foreach (Line<CharBoxT> l in lines)
                     for (int i = 1; i < l.CharBoxs.Count; i++)
                     {
@@ -238,10 +237,10 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public static List<string> GetTextLines<CharBoxT>(IEnumerable<CharBoxT> cbs, TextAutoInsertSpace textAutoInsertSpace) where CharBoxT : CharBox, new()
+        public static List<string> GetTextLines<CharBoxT>(IEnumerable<CharBoxT> cbs, TextAutoInsertSpace textAutoInsertSpace, Template.SizeF ignoreCharsBiggerThan) where CharBoxT : CharBox, new()
         {
             List<string> ls = new List<string>();
-            foreach (Line<CharBoxT> l in GetLines(cbs, textAutoInsertSpace))
+            foreach (Line<CharBoxT> l in GetLines(cbs, textAutoInsertSpace, ignoreCharsBiggerThan))
             {
                 StringBuilder sb = new StringBuilder();
                 foreach (CharBox cb in l.CharBoxs)
@@ -251,33 +250,33 @@ namespace Cliver.PdfDocumentParser
             return ls;
         }
 
-        public static string GetText(IEnumerable<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace)
+        public static string GetText(IEnumerable<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace, Template.SizeF ignoreCharsBiggerThan)
         {
-            return string.Join("\r\n", GetTextLines(cbs, textAutoInsertSpace));
+            return string.Join("\r\n", GetTextLines(cbs, textAutoInsertSpace, ignoreCharsBiggerThan));
         }
 
-        internal static List<Line<CharBoxT>> GetLinesWithAdjacentBorders<CharBoxT>(IEnumerable<CharBoxT> cbs, RectangleF ar) where CharBoxT : CharBox, new()
-        {
-            List<Line<CharBoxT>> ls = GetLines(cbs, null);
-            for (int i = 0; i < ls.Count; i++)
-            {
-                Line<CharBoxT> l = ls[i];
-                if (ar.Top > l.Top)
-                    continue;
-                if (ar.Bottom < l.Bottom)
-                    continue;
-                if (i == 0)
-                    l.Top = (l.Bottom - l.Top) < (l.Top - ar.Top) ? (l.Bottom + l.Top) / 2 : ar.Top;
-                if (i < ls.Count - 1)
-                {
-                    l.Bottom = (ls[i + 1].Top + l.Bottom) / 2;
-                    ls[i + 1].Top = l.Bottom;
-                }
-                else
-                    l.Bottom = (l.Bottom - l.Top) < (ar.Bottom - l.Bottom) ? l.Bottom : ar.Bottom;
-            }
-            return ls;
-        }
+        //internal static List<Line<CharBoxT>> GetLinesWithAdjacentBorders<CharBoxT>(IEnumerable<CharBoxT> cbs, RectangleF ar, Template.SizeF ignoreCharsBiggerThan) where CharBoxT : CharBox, new()
+        //{
+        //    List<Line<CharBoxT>> ls = GetLines(cbs, null, ignoreCharsBiggerThan);
+        //    for (int i = 0; i < ls.Count; i++)
+        //    {
+        //        Line<CharBoxT> l = ls[i];
+        //        if (ar.Top > l.Top)
+        //            continue;
+        //        if (ar.Bottom < l.Bottom)
+        //            continue;
+        //        if (i == 0)
+        //            l.Top = (l.Bottom - l.Top) < (l.Top - ar.Top) ? (l.Bottom + l.Top) / 2 : ar.Top;
+        //        if (i < ls.Count - 1)
+        //        {
+        //            l.Bottom = (ls[i + 1].Top + l.Bottom) / 2;
+        //            ls[i + 1].Top = l.Bottom;
+        //        }
+        //        else
+        //            l.Bottom = (l.Bottom - l.Top) < (ar.Bottom - l.Bottom) ? l.Bottom : ar.Bottom;
+        //    }
+        //    return ls;
+        //}
 
         /// <summary>
         /// Auxiliary method which can be applied to a string during post-processing

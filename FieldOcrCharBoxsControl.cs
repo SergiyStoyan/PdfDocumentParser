@@ -29,10 +29,13 @@ namespace Cliver.PdfDocumentParser
             TesseractPageSegMode.SelectedItem = ocrSettings.TesseractPageSegMode;
             SingleFieldFromFieldImage.Checked = ocrSettings.SingleFieldFromFieldImage;
             ColumnCellFromCellImage.Checked = ocrSettings.ColumnCellFromCellImage;
+            //=ocrSettings.IgnoreCharsBiggerThan;
 
             this.textAutoInsertSpace = textAutoInsertSpace;
+            this.ocrSettings = ocrSettings;
         }
         TextAutoInsertSpace textAutoInsertSpace;
+        Template.Field.OcrSettings ocrSettings;
 
         void synchronizeControls()
         {
@@ -53,6 +56,7 @@ namespace Cliver.PdfDocumentParser
                 field.OcrSettings.SingleFieldFromFieldImage = SingleFieldFromFieldImage.Checked;
                 field.OcrSettings.ColumnCellFromCellImage = ColumnCellFromCellImage.Checked;
                 field.OcrSettings.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
+                //field.OcrSettings.IgnoreCharsBiggerThan = 
             }
             else
                 field.OcrSettings = null;
@@ -78,11 +82,12 @@ namespace Cliver.PdfDocumentParser
                 SingleFieldFromFieldImage.Checked = field.OcrSettings.SingleFieldFromFieldImage;
                 ColumnCellFromCellImage.Checked = field.OcrSettings.ColumnCellFromCellImage;
                 TesseractPageSegMode.SelectedItem = field.OcrSettings.TesseractPageSegMode;
+                //=field.OcrSettings.IgnoreCharsBiggerThan;
             }
 
             if (value != null)
             {
-                List<Page.Line<Ocr.CharBox>> cbss = Page.GetLines((List<Ocr.CharBox>)value, textAutoInsertSpace);
+                List<Page.Line<Ocr.CharBox>> cbss = Page.GetLines((List<Ocr.CharBox>)value, textAutoInsertSpace, (field.OcrSettings == null ? ocrSettings : field.OcrSettings).IgnoreCharsBiggerThan);
                 List<string> ls = new List<string>();
                 foreach (var cbs in cbss)
                     ls.Add(Serialization.Json.Serialize(cbs.CharBoxs));

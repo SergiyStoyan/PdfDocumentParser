@@ -654,7 +654,13 @@ namespace Cliver.PdfDocumentParser
                 Template.Field.OcrSettings getOcrSettings()
                 {
                     Template.Field.Ocr of = f as Template.Field.Ocr;
-                    return of?.OcrSettings != null ? of.OcrSettings : new Template.Field.OcrSettings { TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem, SingleFieldFromFieldImage = SingleFieldFromFieldImage.Checked, ColumnCellFromCellImage = ColumnCellFromCellImage.Checked };
+                    return of?.OcrSettings != null ? of.OcrSettings : new Template.Field.OcrSettings 
+                    {
+                        TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem,
+                        SingleFieldFromFieldImage = SingleFieldFromFieldImage.Checked,
+                        ColumnCellFromCellImage = ColumnCellFromCellImage.Checked,
+                        IgnoreCharsBiggerThan = new Template.SizeF { Width = (float)IgnoreCharsBiggerThanWidth.Value, Height = (float)IgnoreCharsBiggerThanHeight.Value }
+                    };
                 }
                 Template.Field.Types t = ((Template.Field)row.Tag).Type;
                 switch (t)

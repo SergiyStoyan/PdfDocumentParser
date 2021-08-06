@@ -262,7 +262,7 @@ namespace Cliver.PdfDocumentParser
 
                 List<string> ls = new List<string>();
                 List<Pdf.CharBox> cbs = (List<Pdf.CharBox>)TableFieldActualInfo.GetValue(Template.Field.Types.PdfCharBoxs);
-                foreach (Line<Pdf.CharBox> l in GetLines(cbs, textAutoInsertSpace))
+                foreach (Line<Pdf.CharBox> l in GetLines(cbs, textAutoInsertSpace, null))
                 {
                     StringBuilder sb = new StringBuilder();
                     foreach (Pdf.CharBox cb in l.CharBoxs)
@@ -294,29 +294,29 @@ namespace Cliver.PdfDocumentParser
                     return null;
                 RectangleF ar = (RectangleF)ActualRectangle;
                 TextAutoInsertSpace textAutoInsertSpace = ActualField.GetTextAutoInsertSpace(page.PageCollection.ActiveTemplate);
+                Template.Field.OcrSettings ocrSettings = ActualField.GetOcrSettings(page.PageCollection.ActiveTemplate);
 
                 if (ActualField.ColumnOfTable == null)
                 {
-                    if (ActualField.GetOcrMode(page.PageCollection.ActiveTemplate).HasFlag(Template.Field.OcrModes.SingleFieldFromFieldImage))
+                    if (ocrSettings.SingleFieldFromFieldImage)
                     {
-                        List<Ocr.CharBox> cs = Ocr.This.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateBitmap, ar, ActualField.GetTesseractPageSegMode(page.PageCollection.ActiveTemplate));
+                        List<Ocr.CharBox> cs = Ocr.This.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateBitmap, ar, ocrSettings.TesseractPageSegMode);
                         if (cs == null)
                             return null;
-                        return GetTextLines(cs, textAutoInsertSpace);
+                        return GetTextLines(cs, textAutoInsertSpace, ocrSettings.IgnoreCharsBiggerThan);
                     }
                     else
-                        return Ocr.GetTextLinesSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, ar, textAutoInsertSpace);
+                        return Ocr.GetTextLinesSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, ar, textAutoInsertSpace, ocrSettings.IgnoreCharsBiggerThan);
                 }
 
                 if (!TableFieldActualInfo.Found)
                     return null;
                 List<Ocr.CharBox> cbs = (List<Ocr.CharBox>)TableFieldActualInfo.GetValue(Template.Field.Types.OcrCharBoxs);
                 List<string> ls = new List<string>();
-                if (ActualField.GetOcrMode(page.PageCollection.ActiveTemplate).HasFlag(Template.Field.OcrModes.ColumnCellFromCellImage))
+                if (ocrSettings .ColumnCellFromCellImage)
                 {
                     //List<Line<Ocr.CharBox>> ols = GetLinesWithAdjacentBorders(cbs, TableFieldActualInfo.ActualRectangle.Value);
-                    List<Line<Ocr.CharBox>> ols = GetLines(cbs, null);
-                    Tesseract.PageSegMode tesseractPageSegMode = ActualField.GetTesseractPageSegMode(page.PageCollection.ActiveTemplate);
+                    List<Line<Ocr.CharBox>> ols = GetLines(cbs, null, ocrSettings.IgnoreCharsBiggerThan);
                     foreach (Line<Ocr.CharBox> l in ols)
                     {
                         float x = ar.X > TableFieldActualInfo.ActualRectangle.Value.X ? ar.X : TableFieldActualInfo.ActualRectangle.Value.X;
@@ -326,13 +326,13 @@ namespace Cliver.PdfDocumentParser
                            (ar.Right < TableFieldActualInfo.ActualRectangle.Value.Right ? ar.Right : TableFieldActualInfo.ActualRectangle.Value.Right) - x,
                            l.Bottom - l.Top
                             );
-                        List<Ocr.CharBox> cs = Ocr.This.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateBitmap, r, tesseractPageSegMode);
-                        ls.Add(cs != null ? string.Join("", GetTextLines(cs, textAutoInsertSpace)) : "");
+                        List<Ocr.CharBox> cs = Ocr.This.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateBitmap, r, ocrSettings.TesseractPageSegMode);
+                        ls.Add(cs != null ? string.Join("", GetTextLines(cs, textAutoInsertSpace, ocrSettings.IgnoreCharsBiggerThan)) : "");
                     }
                 }
                 else
                 {
-                    foreach (Line<Ocr.CharBox> l in GetLines(cbs, textAutoInsertSpace))
+                    foreach (Line<Ocr.CharBox> l in GetLines(cbs, textAutoInsertSpace, ocrSettings.IgnoreCharsBiggerThan))
                     {
                         StringBuilder sb = new StringBuilder();
                         foreach (Ocr.CharBox cb in l.CharBoxs)
@@ -349,18 +349,19 @@ namespace Cliver.PdfDocumentParser
                 if (ActualRectangle == null)
                     return null;
                 RectangleF ar = (RectangleF)ActualRectangle;
+                Template.Field.OcrSettings ocrSettings = ActualField.GetOcrSettings(page.PageCollection.ActiveTemplate);
 
                 if (ActualField.ColumnOfTable == null)
                 {
-                    if (ActualField.GetOcrMode(page.PageCollection.ActiveTemplate).HasFlag(Template.Field.OcrModes.SingleFieldFromFieldImage))
-                        return Ocr.This.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateBitmap, ar, ActualField.GetTesseractPageSegMode(page.PageCollection.ActiveTemplate));
+                    if (ocrSettings.SingleFieldFromFieldImage)
+                        return Ocr.This.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateBitmap, ar, ocrSettings.TesseractPageSegMode);
                     else
                         return Ocr.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, ar);
                 }
 
                 if (!TableFieldActualInfo.Found)
                     return null;
-                if (ActualField.GetOcrMode(page.PageCollection.ActiveTemplate).HasFlag(Template.Field.OcrModes.ColumnCellFromCellImage))
+                if (ocrSettings.ColumnCellFromCellImage)
                 {
                     float x = ar.X > TableFieldActualInfo.ActualRectangle.Value.X ? ar.X : TableFieldActualInfo.ActualRectangle.Value.X;
                     float y = ar.Top > TableFieldActualInfo.ActualRectangle.Value.Top ? ar.Top : TableFieldActualInfo.ActualRectangle.Value.Top;
@@ -370,7 +371,7 @@ namespace Cliver.PdfDocumentParser
                        (ar.Right < TableFieldActualInfo.ActualRectangle.Value.Right ? ar.Right : TableFieldActualInfo.ActualRectangle.Value.Right) - x,
                        (ar.Bottom < TableFieldActualInfo.ActualRectangle.Value.Bottom ? ar.Bottom : TableFieldActualInfo.ActualRectangle.Value.Bottom) - y
                         );
-                    return Ocr.This.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateBitmap, ar, ActualField.GetTesseractPageSegMode(page.PageCollection.ActiveTemplate));
+                    return Ocr.This.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateBitmap, ar, ocrSettings.TesseractPageSegMode);
                 }
                 else
                 {
@@ -428,7 +429,8 @@ namespace Cliver.PdfDocumentParser
                     cbs = Ocr.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, ar);
                 List<Bitmap> ls = new List<Bitmap>();
                 //List<Line<Ocr.CharBox>> ols = GetLinesWithAdjacentBorders(cbs, TableFieldActualInfo == null ? ar : TableFieldActualInfo.ActualRectangle.Value);
-                List<Line<Ocr.CharBox>> ols = GetLines(cbs, null);
+                Template.Field.OcrSettings ocrSettings = ActualField.GetOcrSettings(page.PageCollection.ActiveTemplate);
+                List<Line<Ocr.CharBox>> ols = GetLines(cbs, null, ocrSettings.IgnoreCharsBiggerThan);
                 foreach (Line<Ocr.CharBox> l in ols)
                 {
                     RectangleF r = new RectangleF(ar.X, l.Top, ar.Width, l.Bottom - l.Top);

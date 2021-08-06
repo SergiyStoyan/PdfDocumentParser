@@ -15,10 +15,12 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class Template
     {
-        public Field.OcrModes FieldOcrMode = Field.OcrModes.SingleFieldFromFieldImage | Field.OcrModes.ColumnFieldFromTableCharBoxs;
-
-
-        public Tesseract.PageSegMode TesseractPageSegMode = Tesseract.PageSegMode.SingleBlock;
+        public Field.OcrSettings OcrSettings = new Field.OcrSettings
+        {
+            Mode = Field.OcrModes.SingleFieldFromFieldImage | Field.OcrModes.ColumnFieldFromTableCharBoxs,
+            TesseractPageSegMode = Tesseract.PageSegMode.SingleBlock,
+            IgnoreCharsBiggerThan = null
+        };
 
         public PageRotations PageRotation = PageRotations.NONE;
         public enum PageRotations

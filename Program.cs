@@ -70,9 +70,14 @@ namespace Cliver.PdfDocumentParser
             //Config.Reload();//must be called from the entry projects
         }
 
-        public static void Initialize()
-        {//trigger Program()
-
+        /// <summary>
+        /// Must be called before any use of the PdfDocumentParser. 
+        /// (!)No re-initialization is possible.
+        /// </summary>
+        /// <param name="ocrConfig"></param>
+        public static void Initialize(Ocr.Config ocrConfig)//trigger Program()
+        {
+            Settings.Constants.OcrConfig = ocrConfig;
         }
 
         public static readonly Version Version;
