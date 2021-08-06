@@ -139,10 +139,7 @@ namespace Cliver.PdfDocumentParser
         public static List<string> GetTextLinesSurroundedByRectangle(IEnumerable<CharBox> cbs, System.Drawing.RectangleF r, TextAutoInsertSpace textAutoInsertSpace)
         {
             cbs = GetCharBoxsSurroundedByRectangle(cbs, r);
-            List<string> ls = new List<string>();
-            foreach (Page.Line<CharBox> l in Page.GetLines(cbs, textAutoInsertSpace, null))
-                ls.Add(l.GetString());
-            return ls;
+            return Page.GetLines(cbs, textAutoInsertSpace, null).Select(a => a.GetString()).ToList();
         }
 
         public static List<CharBox> GetCharBoxsSurroundedByRectangle(IEnumerable<CharBox> cbs, System.Drawing.RectangleF r, bool excludeInvisibleCharacters = false)
@@ -150,7 +147,7 @@ namespace Cliver.PdfDocumentParser
             //cbs = RemoveDuplicates(cbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)));
             cbs = cbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/));
             if (excludeInvisibleCharacters)
-                cbs = cbs.Where(a => !InvisibleCharacters.Contains(a.Char)).ToList();
+                return cbs.Where(a => !InvisibleCharacters.Contains(a.Char)).ToList();
             return cbs.ToList();
         }
 

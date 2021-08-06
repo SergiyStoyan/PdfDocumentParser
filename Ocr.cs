@@ -28,6 +28,12 @@ namespace Cliver.PdfDocumentParser
         }
         static Ocr _This = null;
 
+        public static void DisposeThis()
+        {
+            _This?.Dispose();
+            _This = null;
+        }
+
         //public static Ocr Get(Config config)
         //{
         //    if (!ocrConfigKeys2ocr.TryGetValue(config.Key, out Ocr ocr))
@@ -286,24 +292,21 @@ namespace Cliver.PdfDocumentParser
             //public bool AutoInserted = false;
         }
 
-        //public static string GetTextByTopLeftCoordinates(List<CharBox> orderedCbs, RectangleF r)
+        //public static string GetTextSurroundedByRectangle(List<CharBox> cbs, RectangleF r, TextAutoInsertSpace textAutoInsertSpace, Template.CharFilter charFilter)
         //{
-        //    orderedCbs = orderedCbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)).ToList();
-        //    return orderedCbs.Aggregate(new StringBuilder(), (sb, n) => sb.Append(n)).ToString();
+        //    return string.Join("\r\n", GetTextLinesSurroundedByRectangle(cbs, r, textAutoInsertSpace, charFilter));
         //}
 
-        public static string GetTextSurroundedByRectangle(List<CharBox> cbs, RectangleF r, TextAutoInsertSpace textAutoInsertSpace, Template.CharFilter charFilter)
+        public static List<Page.Line<CharBox>> GetLinesSurroundedByRectangle(List<CharBox> cbs, RectangleF r, TextAutoInsertSpace textAutoInsertSpace, Template.CharFilter charFilter)
         {
-            return string.Join("\r\n", GetTextLinesSurroundedByRectangle(cbs, r, textAutoInsertSpace, charFilter));
+            cbs = GetCharBoxsSurroundedByRectangle(cbs, r);
+            return Page.GetLines(cbs, textAutoInsertSpace, null);
         }
 
         public static List<string> GetTextLinesSurroundedByRectangle(List<CharBox> cbs, RectangleF r, TextAutoInsertSpace textAutoInsertSpace, Template.CharFilter charFilter)
         {
             cbs = GetCharBoxsSurroundedByRectangle(cbs, r);
-            List<string> ls = new List<string>();
-            foreach (Page.Line<CharBox> l in Page.GetLines(cbs, textAutoInsertSpace, charFilter))
-                ls.Add(l.GetString());
-            return ls;
+            return Page.GetLines(cbs, textAutoInsertSpace, null).Select(a => a.GetString()).ToList();
         }
 
         public static List<CharBox> GetCharBoxsSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r)
@@ -311,18 +314,11 @@ namespace Cliver.PdfDocumentParser
             return cbs.Where(a => /*selectedR.IntersectsWith(a.R) || */r.Contains(a.R)).ToList();
         }
 
-        public static List<CharBox> GetOrdered(List<CharBox> orderedContainerCbs, List<CharBox> cbs)
-        {
-            List<CharBox> orderedCbs = new List<CharBox>();
-            foreach (CharBox cb in orderedContainerCbs)
-            {
-                if (orderedCbs.Count == cbs.Count)
-                    break;
-                if (cbs.Contains(cb))
-                    orderedCbs.Add(cb);
-            }
-            return orderedCbs;
-        }
+        //public static string GetTextByTopLeftCoordinates(List<CharBox> orderedCbs, RectangleF r)
+        //{
+        //    orderedCbs = orderedCbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)).ToList();
+        //    return orderedCbs.Aggregate(new StringBuilder(), (sb, n) => sb.Append(n)).ToString();
+        //}
 
         //public Bitmap CardinalDeskew(Bitmap b)//!!!debug
         //{

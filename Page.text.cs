@@ -110,6 +110,9 @@ namespace Cliver.PdfDocumentParser
                             i += spaceNumber;
                         }
                     }
+
+            lines.ForEach(a => a.Uncrop());
+
             return lines;
         }
 
@@ -209,10 +212,13 @@ namespace Cliver.PdfDocumentParser
             public float Height { get { return Bottom - Top; } }
             public List<T> CharBoxs = new List<T>();
 
-            public void Calculate()
+            /// <summary>
+            /// to avoid cropping text
+            /// </summary>
+            internal void Uncrop()
             {
-                Top = CharBoxs.Min(a => a.R.Top);
-                Bottom = CharBoxs.Max(a => a.R.Bottom);
+                Top = CharBoxs.Min(a => a.R.Top) - 1;
+                Bottom = CharBoxs.Max(a => a.R.Bottom) + 1;
                 //Height = Bottom - Top;
             }
 
@@ -239,21 +245,13 @@ namespace Cliver.PdfDocumentParser
 
         public static List<string> GetTextLines<CharBoxT>(IEnumerable<CharBoxT> cbs, TextAutoInsertSpace textAutoInsertSpace, Template.CharFilter charFilter) where CharBoxT : CharBox, new()
         {
-            List<string> ls = new List<string>();
-            foreach (Line<CharBoxT> l in GetLines(cbs, textAutoInsertSpace, charFilter))
-            {
-                StringBuilder sb = new StringBuilder();
-                foreach (CharBox cb in l.CharBoxs)
-                    sb.Append(cb.Char);
-                ls.Add(sb.ToString());
-            }
-            return ls;
+            return GetLines(cbs, textAutoInsertSpace, charFilter).Select(a => a.GetString()).ToList();
         }
 
         public static string GetText(IEnumerable<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace, Template.CharFilter charFilter)
         {
             return string.Join("\r\n", GetTextLines(cbs, textAutoInsertSpace, charFilter));
-        }
+        }  
 
         //internal static List<Line<CharBoxT>> GetLinesWithAdjacentBorders<CharBoxT>(IEnumerable<CharBoxT> cbs, RectangleF ar, Template.SizeF ignoreCharsBiggerThan) where CharBoxT : CharBox, new()
         //{

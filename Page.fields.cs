@@ -313,7 +313,7 @@ namespace Cliver.PdfDocumentParser
                     return null;
                 List<Ocr.CharBox> cbs = (List<Ocr.CharBox>)TableFieldActualInfo.GetValue(Template.Field.Types.OcrCharBoxs);
                 List<string> ls = new List<string>();
-                if (ocrSettings .ColumnCellFromCellImage)
+                if (ocrSettings.ColumnCellFromCellImage)
                 {
                     //List<Line<Ocr.CharBox>> ols = GetLinesWithAdjacentBorders(cbs, TableFieldActualInfo.ActualRectangle.Value);
                     List<Line<Ocr.CharBox>> ols = GetLines(cbs, null, ocrSettings.CharFilter);
@@ -416,24 +416,44 @@ namespace Cliver.PdfDocumentParser
             {
                 if (ActualRectangle == null)
                     return null;
-                RectangleF ar = ActualRectangle.Value;
+                RectangleF ar = (RectangleF)ActualRectangle;
+                Template.Field.OcrSettings ocrSettings = ActualField.GetOcrSettings(page.PageCollection.ActiveTemplate);
 
-                List<Ocr.CharBox> cbs;
-                if (ActualField.ColumnOfTable != null)
+                List<Line<Ocr.CharBox>> ols;
+                float left, width;
+                if (ActualField.ColumnOfTable == null)
+                {
+                    if (ocrSettings.SingleFieldFromFieldImage)
+                    {
+                        List<Ocr.CharBox> cs = Ocr.This.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateBitmap, ar, ocrSettings.TesseractPageSegMode);
+                        if (cs == null)
+                            return null;
+                        //List<Line<Ocr.CharBox>> ols = GetLinesWithAdjacentBorders(cbs, TableFieldActualInfo.ActualRectangle.Value);
+                        ols = GetLines(cs, null, ocrSettings.CharFilter);
+                    }
+                    else
+                        ols = Ocr.GetLinesSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, ar, null, ocrSettings.CharFilter);
+                    left = ar.Left;
+                    width = ar.Width;
+                }
+                else
                 {
                     if (!TableFieldActualInfo.Found)
                         return null;
-                    cbs = (List<Ocr.CharBox>)TableFieldActualInfo.GetValue(Template.Field.Types.OcrCharBoxs);
+                    List<Ocr.CharBox> cbs = (List<Ocr.CharBox>)TableFieldActualInfo.GetValue(Template.Field.Types.OcrCharBoxs);
+                    if (ocrSettings.ColumnCellFromCellImage)
+                        //List<Line<Ocr.CharBox>> ols = GetLinesWithAdjacentBorders(cbs, TableFieldActualInfo.ActualRectangle.Value);
+                        ols = GetLines(cbs, null, ocrSettings.CharFilter);
+                    else
+                        ols = GetLines(cbs, null, ocrSettings.CharFilter);
+                    left = ar.X > TableFieldActualInfo.ActualRectangle.Value.X ? ar.X : TableFieldActualInfo.ActualRectangle.Value.X;
+                    width = (ar.Right < TableFieldActualInfo.ActualRectangle.Value.Right ? ar.Right : TableFieldActualInfo.ActualRectangle.Value.Right) - left;
                 }
-                else
-                    cbs = Ocr.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, ar);
+
                 List<Bitmap> ls = new List<Bitmap>();
-                //List<Line<Ocr.CharBox>> ols = GetLinesWithAdjacentBorders(cbs, TableFieldActualInfo == null ? ar : TableFieldActualInfo.ActualRectangle.Value);
-                Template.Field.OcrSettings ocrSettings = ActualField.GetOcrSettings(page.PageCollection.ActiveTemplate);
-                List<Line<Ocr.CharBox>> ols = GetLines(cbs, null, ocrSettings.CharFilter);
                 foreach (Line<Ocr.CharBox> l in ols)
                 {
-                    RectangleF r = new RectangleF(ar.X, l.Top, ar.Width, l.Bottom - l.Top);
+                    RectangleF r = new RectangleF(left, l.Top, width, l.Bottom - l.Top);
                     using (Bitmap b = page.GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
                     {
                         ls.Add(b == null ? b : GetImageScaled2Pdf(b));
