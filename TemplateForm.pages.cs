@@ -202,6 +202,8 @@ namespace Cliver.PdfDocumentParser
                             {
                                 Template.Field.OcrSettings ocrSettings = field.GetOcrSettings(pages.ActiveTemplate);
                                 List<Page.Line<Ocr.CharBox>> ols = Page.GetLines((List<Ocr.CharBox>)fai.TableFieldActualInfo.GetValue(Template.Field.Types.OcrCharBoxs), null, ocrSettings.CharFilter);
+                                if (ocrSettings.AdjustColumnCellBorders)
+                                    Page.AdjustBorders(ols, fai.TableFieldActualInfo.ActualRectangle.Value);
                                 if (ols.Count > 0)
                                     ols.RemoveAt(0);
                                 List<RectangleF> lineBoxes = new List<RectangleF>();
@@ -222,8 +224,9 @@ namespace Cliver.PdfDocumentParser
                                     cbs = Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateOcrCharBoxs, r);
                                 if (cbs != null)
                                 {
-                                    //List<Page.Line<Ocr.CharBox>> ols = Page.GetLinesWithAdjacentBorders(cbs, r);
                                     List<Page.Line<Ocr.CharBox>> ols = Page.GetLines(cbs, null, ocrSettings.CharFilter);
+                                    if (ocrSettings.AdjustColumnCellBorders)
+                                        Page.AdjustBorders(ols, r);
                                     if (ols.Count > 0)
                                         ols.RemoveAt(0);
                                     List<RectangleF> lineBoxes = new List<RectangleF>();

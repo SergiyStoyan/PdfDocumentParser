@@ -52,11 +52,10 @@ namespace Cliver.PdfDocumentParser
             if (SpecialOcrSettings.Checked)
             {
                 if (field.OcrSettings == null)
-                    field.OcrSettings = new Template.Field.OcrSettings();
+                    field.OcrSettings = ocrSettings.CreateCloneByJson();
                 field.OcrSettings.SingleFieldFromFieldImage = SingleFieldFromFieldImage.Checked;
                 field.OcrSettings.ColumnCellFromCellImage = ColumnCellFromCellImage.Checked;
                 field.OcrSettings.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
-                //field.OcrSettings.IgnoreCharsBiggerThan = 
             }
             else
                 field.OcrSettings = null;

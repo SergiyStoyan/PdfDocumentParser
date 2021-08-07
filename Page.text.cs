@@ -251,30 +251,30 @@ namespace Cliver.PdfDocumentParser
         public static string GetText(IEnumerable<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace, Template.CharFilter charFilter)
         {
             return string.Join("\r\n", GetTextLines(cbs, textAutoInsertSpace, charFilter));
-        }  
+        }
 
-        //internal static List<Line<CharBoxT>> GetLinesWithAdjacentBorders<CharBoxT>(IEnumerable<CharBoxT> cbs, RectangleF ar, Template.SizeF ignoreCharsBiggerThan) where CharBoxT : CharBox, new()
-        //{
-        //    List<Line<CharBoxT>> ls = GetLines(cbs, null, ignoreCharsBiggerThan);
-        //    for (int i = 0; i < ls.Count; i++)
-        //    {
-        //        Line<CharBoxT> l = ls[i];
-        //        if (ar.Top > l.Top)
-        //            continue;
-        //        if (ar.Bottom < l.Bottom)
-        //            continue;
-        //        if (i == 0)
-        //            l.Top = (l.Bottom - l.Top) < (l.Top - ar.Top) ? (l.Bottom + l.Top) / 2 : ar.Top;
-        //        if (i < ls.Count - 1)
-        //        {
-        //            l.Bottom = (ls[i + 1].Top + l.Bottom) / 2;
-        //            ls[i + 1].Top = l.Bottom;
-        //        }
-        //        else
-        //            l.Bottom = (l.Bottom - l.Top) < (ar.Bottom - l.Bottom) ? l.Bottom : ar.Bottom;
-        //    }
-        //    return ls;
-        //}
+        internal static void AdjustBorders<CharBoxT>(List<Line<CharBoxT>> ls, RectangleF ar) where CharBoxT : CharBox, new()
+        {
+            for (int i = 0; i < ls.Count; i++)
+            {
+                Line<CharBoxT> l = ls[i];
+                if (ar.Top > l.Top)
+                    continue;
+                if (ar.Bottom < l.Bottom)
+                    continue;
+                if (i == 0)
+                    l.Top = (l.Bottom - l.Top) < (l.Top - ar.Top) ? (l.Bottom + l.Top) / 2 : ar.Top;
+                if (i < ls.Count - 1)
+                {
+                    if (l.Bottom >= ls[i + 1].Top)
+                        continue;
+                    l.Bottom = (ls[i + 1].Top + l.Bottom) / 2;
+                    ls[i + 1].Top = l.Bottom;
+                }
+                else
+                    l.Bottom = (l.Bottom - l.Top) < (ar.Bottom - l.Bottom) ? l.Bottom : ar.Bottom;
+            }
+        }
 
         /// <summary>
         /// Auxiliary method which can be applied to a string during post-processing

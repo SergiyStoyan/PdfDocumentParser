@@ -76,6 +76,7 @@ namespace Cliver.PdfDocumentParser
                 textAutoInsertSpaceThreshold.Value = (decimal)t.TextAutoInsertSpace.Threshold;
 
                 TesseractPageSegMode.SelectedItem = t.OcrSettings.TesseractPageSegMode;
+                AdjustColumnCellBorders.Checked = t.OcrSettings.AdjustColumnCellBorders;
                 SingleFieldFromFieldImage.Checked = t.OcrSettings.SingleFieldFromFieldImage;
                 ColumnCellFromCellImage.Checked = t.OcrSettings.ColumnCellFromCellImage;
                 if (t.OcrSettings.CharFilter != null)
@@ -273,6 +274,7 @@ namespace Cliver.PdfDocumentParser
             };
 
             t.OcrSettings.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
+            t.OcrSettings.AdjustColumnCellBorders = AdjustColumnCellBorders.Checked;
             t.OcrSettings.SingleFieldFromFieldImage = SingleFieldFromFieldImage.Checked;
             t.OcrSettings.ColumnCellFromCellImage = ColumnCellFromCellImage.Checked;
             if (CharSizeFilterMinWidth.Value > 0 || CharSizeFilterMaxWidth.Value > 0 || CharSizeFilterMinHeight.Value > 0 || CharSizeFilterMaxHeight.Value > 0)

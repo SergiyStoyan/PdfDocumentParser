@@ -657,6 +657,7 @@ namespace Cliver.PdfDocumentParser
                     return of?.OcrSettings != null ? of.OcrSettings : new Template.Field.OcrSettings 
                     {
                         TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem,
+                        AdjustColumnCellBorders = AdjustColumnCellBorders.Checked,
                         SingleFieldFromFieldImage = SingleFieldFromFieldImage.Checked,
                         ColumnCellFromCellImage = ColumnCellFromCellImage.Checked,
                         CharFilter = new Template.CharFilter { MinWidth = (float)CharSizeFilterMinWidth.Value, MaxWidth = (float)CharSizeFilterMaxWidth.Value, MinHeight = (float)CharSizeFilterMinHeight.Value, MaxHeight = (float)CharSizeFilterMaxHeight.Value }

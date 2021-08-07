@@ -180,9 +180,17 @@ namespace Cliver.PdfDocumentParser
             {
                 public OcrModes Mode;
                 public Tesseract.PageSegMode TesseractPageSegMode = Tesseract.PageSegMode.SingleBlock;
-                //public SizeF IgnoreCharsBiggerThan;
                 public CharFilter CharFilter;
 
+                internal bool AdjustColumnCellBorders
+                {
+                    get { return Mode.HasFlag(OcrModes.AdjustColumnCellBorders); }
+                    set
+                    {
+                        if (value) Mode |= OcrModes.AdjustColumnCellBorders;
+                        else Mode &= ~OcrModes.AdjustColumnCellBorders;
+                    }
+                }
                 internal bool SingleFieldFromFieldImage
                 {
                     get { return Mode.HasFlag(OcrModes.SingleFieldFromFieldImage); }
@@ -205,11 +213,12 @@ namespace Cliver.PdfDocumentParser
 
             public enum OcrModes
             {
-                SingleFieldFromPageCharBoxs = 0b0000001,//default
+                AdjustColumnCellBorders = 0b0000001,
+                //SingleFieldFromPageCharBoxs = 0b0000001,//default
                 SingleFieldFromFieldImage = 0b0000010,
                 //TableFieldFromPageCharBoxs = 0b00100,//default
                 //TableFieldFromFieldImage = 0b0001000,
-                ColumnFieldFromTableCharBoxs = 0b0010000,//default
+                //ColumnCellFromTableCharBoxs = 0b0010000,//default
                 ColumnCellFromCellImage = 0b0100000,
             }
 

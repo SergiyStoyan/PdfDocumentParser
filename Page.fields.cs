@@ -315,8 +315,9 @@ namespace Cliver.PdfDocumentParser
                 List<string> ls = new List<string>();
                 if (ocrSettings.ColumnCellFromCellImage)
                 {
-                    //List<Line<Ocr.CharBox>> ols = GetLinesWithAdjacentBorders(cbs, TableFieldActualInfo.ActualRectangle.Value);
                     List<Line<Ocr.CharBox>> ols = GetLines(cbs, null, ocrSettings.CharFilter);
+                    if (ocrSettings.AdjustColumnCellBorders)
+                        AdjustBorders(ols, TableFieldActualInfo.ActualRectangle.Value);
                     foreach (Line<Ocr.CharBox> l in ols)
                     {
                         float x = ar.X > TableFieldActualInfo.ActualRectangle.Value.X ? ar.X : TableFieldActualInfo.ActualRectangle.Value.X;
@@ -428,7 +429,6 @@ namespace Cliver.PdfDocumentParser
                         List<Ocr.CharBox> cs = Ocr.This.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateBitmap, ar, ocrSettings.TesseractPageSegMode);
                         if (cs == null)
                             return null;
-                        //List<Line<Ocr.CharBox>> ols = GetLinesWithAdjacentBorders(cbs, TableFieldActualInfo.ActualRectangle.Value);
                         ols = GetLines(cs, null, ocrSettings.CharFilter);
                     }
                     else
@@ -442,7 +442,6 @@ namespace Cliver.PdfDocumentParser
                         return null;
                     List<Ocr.CharBox> cbs = (List<Ocr.CharBox>)TableFieldActualInfo.GetValue(Template.Field.Types.OcrCharBoxs);
                     if (ocrSettings.ColumnCellFromCellImage)
-                        //List<Line<Ocr.CharBox>> ols = GetLinesWithAdjacentBorders(cbs, TableFieldActualInfo.ActualRectangle.Value);
                         ols = GetLines(cbs, null, ocrSettings.CharFilter);
                     else
                         ols = GetLines(cbs, null, ocrSettings.CharFilter);
@@ -450,6 +449,8 @@ namespace Cliver.PdfDocumentParser
                     width = (ar.Right < TableFieldActualInfo.ActualRectangle.Value.Right ? ar.Right : TableFieldActualInfo.ActualRectangle.Value.Right) - left;
                 }
 
+                if (ocrSettings.AdjustColumnCellBorders)
+                    AdjustBorders(ols, ar);
                 List<Bitmap> ls = new List<Bitmap>();
                 foreach (Line<Ocr.CharBox> l in ols)
                 {

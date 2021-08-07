@@ -29,7 +29,10 @@ namespace Cliver.PdfDocumentParser
             TesseractPageSegMode.SelectedItem = ocrSettings.TesseractPageSegMode;
             SingleFieldFromFieldImage.Checked = ocrSettings.SingleFieldFromFieldImage;
             ColumnCellFromCellImage.Checked = ocrSettings.ColumnCellFromCellImage;
+
+            this.ocrSettings = ocrSettings;
         }
+        Template.Field.OcrSettings ocrSettings;
 
         void synchronizeControls()
         {
@@ -46,7 +49,7 @@ namespace Cliver.PdfDocumentParser
             if (SpecialOcrSettings.Checked)
             {
                 if (field.OcrSettings == null)
-                    field.OcrSettings = new Template.Field.OcrSettings();
+                    field.OcrSettings = ocrSettings.CreateCloneByJson();
                 field.OcrSettings.SingleFieldFromFieldImage = SingleFieldFromFieldImage.Checked;
                 field.OcrSettings.ColumnCellFromCellImage = ColumnCellFromCellImage.Checked;
                 field.OcrSettings.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
@@ -72,6 +75,7 @@ namespace Cliver.PdfDocumentParser
             SpecialOcrSettings.Checked = field.OcrSettings != null;
             if (field.OcrSettings != null)
             {
+                // AdjustColumnCellBorders.Checked = field.OcrSettings.AdjustColumnCellBorders;
                 SingleFieldFromFieldImage.Checked = field.OcrSettings.SingleFieldFromFieldImage;
                 ColumnCellFromCellImage.Checked = field.OcrSettings.ColumnCellFromCellImage;
                 TesseractPageSegMode.SelectedItem = field.OcrSettings.TesseractPageSegMode;
