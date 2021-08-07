@@ -277,7 +277,7 @@ namespace Cliver.PdfDocumentParser
         }
 
         /// <summary>
-        /// Auxiliary method which can be applied to a string during post-processing
+        /// Auxiliary method which can be applied to a string during post-processing.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -291,6 +291,10 @@ namespace Cliver.PdfDocumentParser
             return value;
         }
 
+        /// <summary>
+        /// Auxiliary method which can be applied to a string collection during post-processing.
+        /// </summary>
+        /// <param name="values"></param>
         public static void NormalizeText(List<string> values)
         {
             for (int i = 0; i < values.Count; i++)
