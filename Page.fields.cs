@@ -433,6 +433,8 @@ namespace Cliver.PdfDocumentParser
                     }
                     else
                         ols = Ocr.GetLinesSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, ar, null, ocrSettings.CharFilter);
+                    if (ocrSettings.AdjustColumnCellBorders)
+                        AdjustBorders(ols, ar);
                     left = ar.Left;
                     width = ar.Width;
                 }
@@ -445,12 +447,12 @@ namespace Cliver.PdfDocumentParser
                         ols = GetLines(cbs, null, ocrSettings.CharFilter);
                     else
                         ols = GetLines(cbs, null, ocrSettings.CharFilter);
+                    if (ocrSettings.AdjustColumnCellBorders)
+                        AdjustBorders(ols, TableFieldActualInfo.ActualRectangle.Value);
                     left = ar.X > TableFieldActualInfo.ActualRectangle.Value.X ? ar.X : TableFieldActualInfo.ActualRectangle.Value.X;
                     width = (ar.Right < TableFieldActualInfo.ActualRectangle.Value.Right ? ar.Right : TableFieldActualInfo.ActualRectangle.Value.Right) - left;
                 }
 
-                if (ocrSettings.AdjustColumnCellBorders)
-                    AdjustBorders(ols, ar);
                 List<Bitmap> ls = new List<Bitmap>();
                 foreach (Line<Ocr.CharBox> l in ols)
                 {
