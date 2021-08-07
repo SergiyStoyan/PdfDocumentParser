@@ -1,18 +1,14 @@
-﻿//********************************************************************************************
-//Author: Sergey Stoyan
-//        sergey.stoyan@gmail.com
-//        sergey.stoyan@hotmail.com
-//        http://www.cliversoft.com
-//********************************************************************************************
-
-
-//!!! requires installing NUGET package 'TaskScheduler' and adding the respective reference
-
-
+﻿////********************************************************************************************
+////Author: Sergey Stoyan
+////        sergey.stoyan@gmail.com
+////        sergey.stoyan@hotmail.com
+////        http://www.cliversoft.com
+////********************************************************************************************
+//!!!requires installing NUGET package 'TaskScheduler' and adding the respective reference
 //using System;
 //using System.Linq;
 //using System.Collections.Generic;
-//using Microsoft.Win32.TaskScheduler;//requires installing NUGET package 'TaskScheduler' and adding the respective reference
+//using Microsoft.Win32.TaskScheduler;//!!!requires installing NUGET package 'TaskScheduler' and adding the respective reference
 
 //namespace Cliver
 //{
@@ -149,5 +145,10 @@
 //        //        throw new Exception("Error while getting status of a scheduled task '" + taskName + "'.", e);
 //        //    }
 //        //}
+
+//        public static void OpenScheduler()
+//        {
+//            System.Diagnostics.Process.Start("taskschd.msc");
+//        }
 //    }
 //}
