@@ -16,7 +16,6 @@ TBD:
 for scan processing:
 - invoices still have hand marks on them which hinder OCR. Solution: filter out colors control;
 - line filtering (when text overlaps a line);
-- each field has its own tesseract config;
 - OcrColumnLines - provide cropping by anchors;
 - to preserve normal lines, provide column removal from table;
 
