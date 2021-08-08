@@ -75,17 +75,20 @@ namespace Cliver.PdfDocumentParser
                     t.TextAutoInsertSpace = new TextAutoInsertSpace();
                 textAutoInsertSpaceThreshold.Value = (decimal)t.TextAutoInsertSpace.Threshold;
 
-                TesseractPageSegMode.SelectedItem = t.OcrSettings.TesseractPageSegMode;
-                AdjustColumnCellBorders.Checked = t.OcrSettings.AdjustColumnCellBorders;
-                SingleFieldFromFieldImage.Checked = t.OcrSettings.SingleFieldFromFieldImage;
-                ColumnCellFromCellImage.Checked = t.OcrSettings.ColumnCellFromCellImage;
-                if (t.OcrSettings.CharFilter != null)
+                TesseractPageSegMode.SelectedItem = t.TesseractPageSegMode;
+                AdjustLineBorders.Checked = t.AdjustLineBorders;
+                SingleFieldFromFieldImage.Checked = t.SingleFieldFromFieldImage;
+                ColumnCellFromCellImage.Checked = t.ColumnCellFromCellImage;
+                if (t.CharFilter != null)
                 {
-                    CharSizeFilterMinWidth.Value = (decimal)t.OcrSettings.CharFilter.MinWidth;
-                    CharSizeFilterMaxWidth.Value = (decimal)t.OcrSettings.CharFilter.MaxWidth;
-                    CharSizeFilterMinHeight.Value = (decimal)t.OcrSettings.CharFilter.MinHeight;
-                    CharSizeFilterMaxHeight.Value = (decimal)t.OcrSettings.CharFilter.MaxHeight;
+                    CharSizeFilterMinWidth.Value = (decimal)t.CharFilter.MinWidth;
+                    CharSizeFilterMaxWidth.Value = (decimal)t.CharFilter.MaxWidth;
+                    CharSizeFilterMinHeight.Value = (decimal)t.CharFilter.MinHeight;
+                    CharSizeFilterMaxHeight.Value = (decimal)t.CharFilter.MaxHeight;
                 }
+                cOcr.Checked = t.CharFilter != null;
+                cOcr_CheckedChanged(null, null);
+                ColumnCellPaddingY.Value = t.ColumnCellPaddingY;
 
                 bitmapPreparationForm.SetUI(t, false);
                 highlightScanSettings(t);
@@ -186,7 +189,7 @@ namespace Cliver.PdfDocumentParser
             string t = Page.GetText(
                 pages[currentPageI].PdfCharBoxs,
                 new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, IgnoreSourceSpaces = IgnoreSourceSpaces.Checked /*, Representative//default*/},
-                new Template.CharFilter { MinWidth = (float)CharSizeFilterMinWidth.Value, MaxWidth = (float)CharSizeFilterMaxWidth.Value, MinHeight = (float)CharSizeFilterMinHeight.Value, MaxHeight = (float)CharSizeFilterMaxHeight.Value }
+                new CharFilter { MinWidth = (float)CharSizeFilterMinWidth.Value, MaxWidth = (float)CharSizeFilterMaxWidth.Value, MinHeight = (float)CharSizeFilterMinHeight.Value, MaxHeight = (float)CharSizeFilterMaxHeight.Value }
             );
             TextForm tf = new TextForm("Pdf Entity Text", t, false);
             tf.ShowDialog();
@@ -200,7 +203,7 @@ namespace Cliver.PdfDocumentParser
             List<string> ls = Page.GetTextLines(
                 pages[currentPageI].ActiveTemplateOcrCharBoxs,
                 new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, IgnoreSourceSpaces = IgnoreSourceSpaces.Checked/*, Representative//default*/ },
-                new Template.CharFilter { MinWidth = (float)CharSizeFilterMinWidth.Value, MaxWidth = (float)CharSizeFilterMaxWidth.Value, MinHeight = (float)CharSizeFilterMinHeight.Value, MaxHeight = (float)CharSizeFilterMaxHeight.Value }
+                new CharFilter { MinWidth = (float)CharSizeFilterMinWidth.Value, MaxWidth = (float)CharSizeFilterMaxWidth.Value, MinHeight = (float)CharSizeFilterMinHeight.Value, MaxHeight = (float)CharSizeFilterMaxHeight.Value }
             );
             TextForm tf = new TextForm("OCR Text", string.Join("\r\n", ls), false);
             tf.ShowDialog();
@@ -273,12 +276,14 @@ namespace Cliver.PdfDocumentParser
                 //Representative//default
             };
 
-            t.OcrSettings.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
-            t.OcrSettings.AdjustColumnCellBorders = AdjustColumnCellBorders.Checked;
-            t.OcrSettings.SingleFieldFromFieldImage = SingleFieldFromFieldImage.Checked;
-            t.OcrSettings.ColumnCellFromCellImage = ColumnCellFromCellImage.Checked;
+            t.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
+            t.AdjustLineBorders = AdjustLineBorders.Checked;
+            t.SingleFieldFromFieldImage = SingleFieldFromFieldImage.Checked;
+            t.ColumnCellFromCellImage = ColumnCellFromCellImage.Checked;
             if (CharSizeFilterMinWidth.Value > 0 || CharSizeFilterMaxWidth.Value > 0 || CharSizeFilterMinHeight.Value > 0 || CharSizeFilterMaxHeight.Value > 0)
-                t.OcrSettings.CharFilter = new Template.CharFilter { MinWidth = (float)CharSizeFilterMinWidth.Value, MaxWidth = (float)CharSizeFilterMaxWidth.Value, MinHeight = (float)CharSizeFilterMinHeight.Value, MaxHeight = (float)CharSizeFilterMaxHeight.Value };
+                t.CharFilter = new CharFilter { MinWidth = (float)CharSizeFilterMinWidth.Value, MaxWidth = (float)CharSizeFilterMaxWidth.Value, MinHeight = (float)CharSizeFilterMinHeight.Value, MaxHeight = (float)CharSizeFilterMaxHeight.Value };
+            if (ColumnCellPaddingY.Value > 0)
+                t.ColumnCellPaddingY = (int)ColumnCellPaddingY.Value;
 
             bitmapPreparationForm.SetTemplate(t);
 

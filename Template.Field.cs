@@ -129,6 +129,71 @@ namespace Cliver.PdfDocumentParser
             //    return null;
             //}
 
+            public OcrModes? OcrMode = null;
+            public Tesseract.PageSegMode? TesseractPageSegMode = null;
+            public CharFilter CharFilter = null;
+            public int? ColumnCellPaddingY = null;
+            public TextAutoInsertSpace TextAutoInsertSpace = null;
+
+            internal bool? AdjustLineBorders
+            {
+                get { return OcrMode != null ? OcrMode.Value.HasFlag(OcrModes.AdjustLineBorders) : (bool?)null; }
+                set
+                {
+                    if (value == null)
+                    {
+                        OcrMode = null;
+                        return;
+                    }
+                    if (OcrMode == null)
+                        OcrMode = 0;
+                    OcrMode = value.Value ? OcrMode.Value | OcrModes.AdjustLineBorders : OcrMode.Value & ~OcrModes.AdjustLineBorders;
+                }
+            }
+            internal bool? SingleFieldFromFieldImage
+            {
+                get { return OcrMode != null ? OcrMode.Value.HasFlag(OcrModes.SingleFieldFromFieldImage) : (bool?)null; }
+                set
+                {
+                    if (value == null)
+                    {
+                        OcrMode = null;
+                        return;
+                    }
+                    if (OcrMode == null)
+                        OcrMode = 0;
+                    OcrMode = value.Value ? OcrMode.Value | OcrModes.SingleFieldFromFieldImage : OcrMode.Value & ~OcrModes.SingleFieldFromFieldImage;
+                }
+            }
+            internal bool? ColumnCellFromCellImage
+            {
+                get { return OcrMode != null ? OcrMode.Value.HasFlag(OcrModes.ColumnCellFromCellImage) : (bool?)null; }
+                set
+                {
+                    if (value == null)
+                    {
+                        OcrMode = null;
+                        return;
+                    }
+                    if (OcrMode == null)
+                        OcrMode = 0;
+                    OcrMode = value.Value ? OcrMode.Value | OcrModes.ColumnCellFromCellImage : OcrMode.Value & ~OcrModes.ColumnCellFromCellImage;
+                }
+            }
+
+            //internal bool Has(OcrModes flag, Template t)
+            //{
+            //    return OcrMode != null ? OcrMode.Value.HasFlag(flag) : t.OcrMode.HasFlag(flag);
+            //}
+            //static internal OcrModes Set(OcrModes? mode, OcrModes flag)
+            //{
+            //    return mode == null ? flag : mode.Value | flag;
+            //}
+            //static internal OcrModes? Unset(OcrModes? mode, OcrModes flag)
+            //{
+            //    return mode == null ? (OcrModes?)null : mode.Value & ~flag;
+            //}
+
             public interface Text
             {
             }
@@ -143,13 +208,11 @@ namespace Cliver.PdfDocumentParser
 
             abstract public class Pdf : Field
             {
-                public TextAutoInsertSpace TextAutoInsertSpace;
             }
 
             internal TextAutoInsertSpace GetTextAutoInsertSpace(Template t)
             {
-                Field.Pdf f = this as Template.Field.Pdf;
-                return f?.TextAutoInsertSpace != null ? f.TextAutoInsertSpace : t.TextAutoInsertSpace;
+                return TextAutoInsertSpace != null ? TextAutoInsertSpace : t.TextAutoInsertSpace;
             }
 
             public class PdfText : Pdf, Text
@@ -166,54 +229,11 @@ namespace Cliver.PdfDocumentParser
 
             abstract public class Ocr : Field
             {
-                public OcrSettings OcrSettings;
-                //public TextAutoInsertSpace TextAutoInsertSpace;
-            }
-
-            internal OcrSettings GetOcrSettings(Template t)
-            {
-                Field.Ocr f = this as Template.Field.Ocr;
-                return f?.OcrSettings != null ? f.OcrSettings : t.OcrSettings;
-            }
-
-            public class OcrSettings
-            {
-                public OcrModes Mode;
-                public Tesseract.PageSegMode TesseractPageSegMode = Tesseract.PageSegMode.SingleBlock;
-                public CharFilter CharFilter;
-
-                internal bool AdjustColumnCellBorders
-                {
-                    get { return Mode.HasFlag(OcrModes.AdjustColumnCellBorders); }
-                    set
-                    {
-                        if (value) Mode |= OcrModes.AdjustColumnCellBorders;
-                        else Mode &= ~OcrModes.AdjustColumnCellBorders;
-                    }
-                }
-                internal bool SingleFieldFromFieldImage
-                {
-                    get { return Mode.HasFlag(OcrModes.SingleFieldFromFieldImage); }
-                    set
-                    {
-                        if (value) Mode |= OcrModes.SingleFieldFromFieldImage;
-                        else Mode &= ~OcrModes.SingleFieldFromFieldImage;
-                    }
-                }
-                internal bool ColumnCellFromCellImage
-                {
-                    get { return Mode.HasFlag(OcrModes.ColumnCellFromCellImage); }
-                    set
-                    {
-                        if (value) Mode |= OcrModes.ColumnCellFromCellImage;
-                        else Mode &= ~OcrModes.ColumnCellFromCellImage;
-                    }
-                }
             }
 
             public enum OcrModes
             {
-                AdjustColumnCellBorders = 0b0000001,
+                AdjustLineBorders = 0b0000001,
                 //SingleFieldFromPageCharBoxs = 0b0000001,//default
                 SingleFieldFromFieldImage = 0b0000010,
                 //TableFieldFromPageCharBoxs = 0b00100,//default

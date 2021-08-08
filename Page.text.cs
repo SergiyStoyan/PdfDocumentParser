@@ -34,7 +34,7 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public static List<Line<CharBoxT>> GetLines<CharBoxT>(IEnumerable<CharBoxT> cbs, TextAutoInsertSpace textAutoInsertSpace, Template.CharFilter charFilter) where CharBoxT : CharBox, new()
+        public static List<Line<CharBoxT>> GetLines<CharBoxT>(IEnumerable<CharBoxT> cbs, TextAutoInsertSpace textAutoInsertSpace, CharFilter charFilter) where CharBoxT : CharBox, new()
         {
             if (textAutoInsertSpace?.IgnoreSourceSpaces == true)
                 cbs = cbs.Where(a => a.Char != " ");
@@ -110,8 +110,6 @@ namespace Cliver.PdfDocumentParser
                             i += spaceNumber;
                         }
                     }
-
-            lines.ForEach(a => a.Uncrop());
 
             return lines;
         }
@@ -215,10 +213,10 @@ namespace Cliver.PdfDocumentParser
             /// <summary>
             /// to avoid cropping text
             /// </summary>
-            internal void Uncrop()
+            internal void Pad(int linePaddingY)
             {
-                Top = CharBoxs.Min(a => a.R.Top) - 1;
-                Bottom = CharBoxs.Max(a => a.R.Bottom) + 1;
+                Top = CharBoxs.Min(a => a.R.Top) - linePaddingY;
+                Bottom = CharBoxs.Max(a => a.R.Bottom) + linePaddingY;
                 //Height = Bottom - Top;
             }
 
@@ -243,12 +241,12 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public static List<string> GetTextLines<CharBoxT>(IEnumerable<CharBoxT> cbs, TextAutoInsertSpace textAutoInsertSpace, Template.CharFilter charFilter) where CharBoxT : CharBox, new()
+        public static List<string> GetTextLines<CharBoxT>(IEnumerable<CharBoxT> cbs, TextAutoInsertSpace textAutoInsertSpace, CharFilter charFilter) where CharBoxT : CharBox, new()
         {
             return GetLines(cbs, textAutoInsertSpace, charFilter).Select(a => a.GetString()).ToList();
         }
 
-        public static string GetText(IEnumerable<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace, Template.CharFilter charFilter)
+        public static string GetText(IEnumerable<CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace, CharFilter charFilter)
         {
             return string.Join("\r\n", GetTextLines(cbs, textAutoInsertSpace, charFilter));
         }
@@ -274,6 +272,12 @@ namespace Cliver.PdfDocumentParser
                 else
                     l.Bottom = (l.Bottom - l.Top) < (ar.Bottom - l.Bottom) ? l.Bottom : ar.Bottom;
             }
+        }
+
+        public static void PadLines<CharBoxT>(List<Line<CharBoxT>> ls, int linePaddingY) where CharBoxT : CharBox, new()
+        {
+            if (linePaddingY > 0)
+                ls.ForEach(a => a.Pad(linePaddingY));
         }
 
         /// <summary>

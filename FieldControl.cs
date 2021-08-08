@@ -21,10 +21,11 @@ namespace Cliver.PdfDocumentParser
             };
         }
 
-        public void Initialize(DataGridViewRow row, object value, IEnumerable<Template.Field> fields/*, TemplateForm templateForm*/, Action<DataGridViewRow> onLeft)
+        public void Initialize(DataGridViewRow row, object value, Template template/*, IEnumerable<Template.Field> fields*//*, TemplateForm templateForm*/, Action<DataGridViewRow> onLeft)
         {
             Row = row;
-            this.fields = fields;
+            this.template = template;
+            //this.fields = fields;
             //this.templateForm = templateForm;
             this.onLeft = onLeft;
             initialize(row, value);
@@ -32,7 +33,8 @@ namespace Cliver.PdfDocumentParser
         public DataGridViewRow Row;
         //protected TemplateForm templateForm;
         protected Action<DataGridViewRow> onLeft = null;
-        protected IEnumerable<Template.Field> fields = null;
+        //protected IEnumerable<Template.Field> fields = null;
+        protected Template template;
 
         virtual protected void initialize(DataGridViewRow row, object value/*, TemplateForm templateForm*/)
         {

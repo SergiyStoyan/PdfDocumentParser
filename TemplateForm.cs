@@ -249,7 +249,7 @@ namespace Cliver.PdfDocumentParser
                                                     {
                                                         if (b == null)
                                                             throw new Exception("Selected image is empty.");
-                                                        foreach (Ocr.CharBox cb in Ocr.This.GetCharBoxs(b, pages.ActiveTemplate.OcrSettings.TesseractPageSegMode))
+                                                        foreach (Ocr.CharBox cb in Ocr.This.GetCharBoxs(b, pages.ActiveTemplate.TesseractPageSegMode))
                                                         {
                                                             cb.R.X += r.X;
                                                             cb.R.Y += r.Y;
@@ -540,6 +540,11 @@ namespace Cliver.PdfDocumentParser
             bitmapPreparationForm.Activate();
         }
         readonly ScanTemplateForm bitmapPreparationForm;
+
+        private void cOcr_CheckedChanged(object sender, EventArgs e)
+        {
+            fOcr.WrapContents = cOcr.Checked;
+        }
 
         readonly Dictionary<object, ResizebleBox> owners2resizebleBox = new Dictionary<object, ResizebleBox>();
         internal class ResizebleBox

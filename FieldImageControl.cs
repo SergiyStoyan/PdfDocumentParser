@@ -62,7 +62,7 @@ namespace Cliver.PdfDocumentParser
             if (field == null)
                 field = new Template.Field.Image();
 
-            List<string> fieldNames = fields.Where(a => a.ColumnOfTable == null).Select(a => a.Name).Distinct().ToList();
+            List<string> fieldNames =template.Fields.Where(a => a.ColumnOfTable == null).Select(a => a.Name).Distinct().ToList();
             fieldNames.Remove(field.Name);
             fieldNames.Insert(0, "");
             ColumnOfTable.DataSource = fieldNames;

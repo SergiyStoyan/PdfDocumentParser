@@ -297,16 +297,16 @@ namespace Cliver.PdfDocumentParser
         //    return string.Join("\r\n", GetTextLinesSurroundedByRectangle(cbs, r, textAutoInsertSpace, charFilter));
         //}
 
-        public static List<Page.Line<CharBox>> GetLinesSurroundedByRectangle(List<CharBox> cbs, RectangleF r, TextAutoInsertSpace textAutoInsertSpace, Template.CharFilter charFilter)
+        public static List<Page.Line<CharBox>> GetLinesSurroundedByRectangle(List<CharBox> cbs, RectangleF r, TextAutoInsertSpace textAutoInsertSpace, CharFilter charFilter)
         {
             cbs = GetCharBoxsSurroundedByRectangle(cbs, r);
-            return Page.GetLines(cbs, textAutoInsertSpace, null);
+            return Page.GetLines(cbs, textAutoInsertSpace, charFilter);
         }
 
-        public static List<string> GetTextLinesSurroundedByRectangle(List<CharBox> cbs, RectangleF r, TextAutoInsertSpace textAutoInsertSpace, Template.CharFilter charFilter)
+        public static List<string> GetTextLinesSurroundedByRectangle(List<CharBox> cbs, RectangleF r, TextAutoInsertSpace textAutoInsertSpace, CharFilter charFilter)
         {
             cbs = GetCharBoxsSurroundedByRectangle(cbs, r);
-            return Page.GetLines(cbs, textAutoInsertSpace, null).Select(a => a.GetString()).ToList();
+            return Page.GetLines(cbs, textAutoInsertSpace, charFilter).Select(a => a.GetString()).ToList();
         }
 
         public static List<CharBox> GetCharBoxsSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r)

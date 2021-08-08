@@ -15,12 +15,40 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class Template
     {
-        public Field.OcrSettings OcrSettings = new Field.OcrSettings
+        public Tesseract.PageSegMode TesseractPageSegMode = Tesseract.PageSegMode.SingleBlock;
+
+        public CharFilter CharFilter;
+
+        public Field.OcrModes OcrMode = Field.OcrModes.SingleFieldFromFieldImage | Field.OcrModes.AdjustLineBorders;
+        internal bool AdjustLineBorders
         {
-            Mode = Field.OcrModes.SingleFieldFromFieldImage | Field.OcrModes.AdjustColumnCellBorders,
-            TesseractPageSegMode = Tesseract.PageSegMode.SingleBlock,
-            CharFilter = null
-        };
+            get { return OcrMode.HasFlag(Field.OcrModes.AdjustLineBorders); }
+            set
+            {
+                if (value) OcrMode |= Field.OcrModes.AdjustLineBorders;
+                else OcrMode &= ~Field.OcrModes.AdjustLineBorders;
+            }
+        }
+        internal bool SingleFieldFromFieldImage
+        {
+            get { return OcrMode.HasFlag(Field.OcrModes.SingleFieldFromFieldImage); }
+            set
+            {
+                if (value) OcrMode |= Field.OcrModes.SingleFieldFromFieldImage;
+                else OcrMode &= ~Field.OcrModes.SingleFieldFromFieldImage;
+            }
+        }
+        internal bool ColumnCellFromCellImage
+        {
+            get { return OcrMode.HasFlag(Field.OcrModes.ColumnCellFromCellImage); }
+            set
+            {
+                if (value) OcrMode |= Field.OcrModes.ColumnCellFromCellImage;
+                else OcrMode &= ~Field.OcrModes.ColumnCellFromCellImage;
+            }
+        }
+
+        public int ColumnCellPaddingY = 1;
 
         public PageRotations PageRotation = PageRotations.NONE;
         public enum PageRotations

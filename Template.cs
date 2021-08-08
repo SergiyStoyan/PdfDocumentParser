@@ -78,6 +78,12 @@ namespace Cliver.PdfDocumentParser
             public float Height;
         }
 
+        public class Size
+        {
+            public int Width;
+            public int Height;
+        }
+
         public class Condition
         {
             public string Name;
@@ -88,6 +94,7 @@ namespace Cliver.PdfDocumentParser
                 return !string.IsNullOrWhiteSpace(Name) && !string.IsNullOrWhiteSpace(Value);
             }
         }
+    }
 
         public class CharFilter
         {
@@ -121,7 +128,6 @@ namespace Cliver.PdfDocumentParser
                 return this.ToStringByJson();
             }
         }
-    }
 
     public class TextAutoInsertSpace
     {

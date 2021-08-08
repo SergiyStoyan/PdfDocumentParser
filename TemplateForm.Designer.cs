@@ -86,21 +86,23 @@
             this.moveUpField = new System.Windows.Forms.LinkLabel();
             this.deleteField = new System.Windows.Forms.LinkLabel();
             this.copy2ClipboardField = new System.Windows.Forms.LinkLabel();
-            this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
-            this.label16 = new System.Windows.Forms.Label();
+            this.fOcr = new System.Windows.Forms.FlowLayoutPanel();
+            this.cOcr = new System.Windows.Forms.CheckBox();
+            this.SingleFieldFromFieldImage = new System.Windows.Forms.CheckBox();
+            this.ColumnCellFromCellImage = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.CharSizeFilterMinWidth = new System.Windows.Forms.NumericUpDown();
-            this.label18 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
             this.CharSizeFilterMaxWidth = new System.Windows.Forms.NumericUpDown();
             this.label13 = new System.Windows.Forms.Label();
             this.CharSizeFilterMinHeight = new System.Windows.Forms.NumericUpDown();
-            this.label17 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
             this.CharSizeFilterMaxHeight = new System.Windows.Forms.NumericUpDown();
             this.label15 = new System.Windows.Forms.Label();
-            this.flowLayoutPanel8 = new System.Windows.Forms.FlowLayoutPanel();
-            this.label5 = new System.Windows.Forms.Label();
-            this.SingleFieldFromFieldImage = new System.Windows.Forms.CheckBox();
-            this.ColumnCellFromCellImage = new System.Windows.Forms.CheckBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.ColumnCellPaddingY = new System.Windows.Forms.NumericUpDown();
+            this.label21 = new System.Windows.Forms.Label();
+            this.AdjustLineBorders = new System.Windows.Forms.CheckBox();
             this.flowLayoutPanel9 = new System.Windows.Forms.FlowLayoutPanel();
             this.IgnoreSourceSpaces = new System.Windows.Forms.CheckBox();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -111,7 +113,6 @@
             this.bSave = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.AdjustColumnCellBorders = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).BeginInit();
             this.flowLayoutPanel5.SuspendLayout();
             this.flowLayoutPanel7.SuspendLayout();
@@ -130,12 +131,12 @@
             this.splitContainer3.Panel2.SuspendLayout();
             this.splitContainer3.SuspendLayout();
             this.flowLayoutPanel6.SuspendLayout();
-            this.flowLayoutPanel4.SuspendLayout();
+            this.fOcr.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CharSizeFilterMinWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CharSizeFilterMaxWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CharSizeFilterMinHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CharSizeFilterMaxHeight)).BeginInit();
-            this.flowLayoutPanel8.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ColumnCellPaddingY)).BeginInit();
             this.flowLayoutPanel9.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
@@ -666,12 +667,12 @@
             this.Value,
             this.Rectangle});
             this.fields.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fields.Location = new System.Drawing.Point(0, 77);
+            this.fields.Location = new System.Drawing.Point(0, 103);
             this.fields.MultiSelect = false;
             this.fields.Name = "fields";
             this.fields.RowHeadersWidth = 30;
             this.fields.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.fields.Size = new System.Drawing.Size(336, 244);
+            this.fields.Size = new System.Drawing.Size(336, 218);
             this.fields.TabIndex = 30;
             // 
             // Name_
@@ -855,8 +856,7 @@
             // 
             this.splitContainer3.Panel2.Controls.Add(this.flowLayoutPanel6);
             this.splitContainer3.Panel2.Controls.Add(this.fields);
-            this.splitContainer3.Panel2.Controls.Add(this.flowLayoutPanel4);
-            this.splitContainer3.Panel2.Controls.Add(this.flowLayoutPanel8);
+            this.splitContainer3.Panel2.Controls.Add(this.fOcr);
             this.splitContainer3.Panel2.Controls.Add(this.flowLayoutPanel9);
             this.splitContainer3.Panel2.Controls.Add(this.flowLayoutPanel2);
             this.splitContainer3.Size = new System.Drawing.Size(336, 580);
@@ -883,7 +883,7 @@
             this.flowLayoutPanel6.Controls.Add(this.deleteField);
             this.flowLayoutPanel6.Controls.Add(this.copy2ClipboardField);
             this.flowLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Top;
-            this.flowLayoutPanel6.Location = new System.Drawing.Point(0, 77);
+            this.flowLayoutPanel6.Location = new System.Drawing.Point(0, 103);
             this.flowLayoutPanel6.Name = "flowLayoutPanel6";
             this.flowLayoutPanel6.Size = new System.Drawing.Size(336, 16);
             this.flowLayoutPanel6.TabIndex = 53;
@@ -956,40 +956,70 @@
             this.copy2ClipboardField.Text = "Value To Clipboard";
             this.copy2ClipboardField.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // flowLayoutPanel4
+            // fOcr
             // 
-            this.flowLayoutPanel4.AutoSize = true;
-            this.flowLayoutPanel4.Controls.Add(this.label16);
-            this.flowLayoutPanel4.Controls.Add(this.label3);
-            this.flowLayoutPanel4.Controls.Add(this.CharSizeFilterMinWidth);
-            this.flowLayoutPanel4.Controls.Add(this.label18);
-            this.flowLayoutPanel4.Controls.Add(this.CharSizeFilterMaxWidth);
-            this.flowLayoutPanel4.Controls.Add(this.label13);
-            this.flowLayoutPanel4.Controls.Add(this.CharSizeFilterMinHeight);
-            this.flowLayoutPanel4.Controls.Add(this.label17);
-            this.flowLayoutPanel4.Controls.Add(this.CharSizeFilterMaxHeight);
-            this.flowLayoutPanel4.Controls.Add(this.label15);
-            this.flowLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.flowLayoutPanel4.Location = new System.Drawing.Point(0, 57);
-            this.flowLayoutPanel4.Name = "flowLayoutPanel4";
-            this.flowLayoutPanel4.Size = new System.Drawing.Size(336, 20);
-            this.flowLayoutPanel4.TabIndex = 112;
-            this.flowLayoutPanel4.WrapContents = false;
+            this.fOcr.AutoSize = true;
+            this.fOcr.Controls.Add(this.cOcr);
+            this.fOcr.Controls.Add(this.SingleFieldFromFieldImage);
+            this.fOcr.Controls.Add(this.ColumnCellFromCellImage);
+            this.fOcr.Controls.Add(this.label3);
+            this.fOcr.Controls.Add(this.CharSizeFilterMinWidth);
+            this.fOcr.Controls.Add(this.label17);
+            this.fOcr.Controls.Add(this.CharSizeFilterMaxWidth);
+            this.fOcr.Controls.Add(this.label13);
+            this.fOcr.Controls.Add(this.CharSizeFilterMinHeight);
+            this.fOcr.Controls.Add(this.label18);
+            this.fOcr.Controls.Add(this.CharSizeFilterMaxHeight);
+            this.fOcr.Controls.Add(this.label15);
+            this.fOcr.Controls.Add(this.label20);
+            this.fOcr.Controls.Add(this.ColumnCellPaddingY);
+            this.fOcr.Controls.Add(this.label21);
+            this.fOcr.Controls.Add(this.AdjustLineBorders);
+            this.fOcr.Dock = System.Windows.Forms.DockStyle.Top;
+            this.fOcr.Location = new System.Drawing.Point(0, 40);
+            this.fOcr.Name = "fOcr";
+            this.fOcr.Size = new System.Drawing.Size(336, 63);
+            this.fOcr.TabIndex = 55;
             // 
-            // label16
+            // cOcr
             // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(0, 0);
-            this.label16.Margin = new System.Windows.Forms.Padding(0);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(33, 13);
-            this.label16.TabIndex = 116;
-            this.label16.Text = "OCR:";
+            this.cOcr.Appearance = System.Windows.Forms.Appearance.Button;
+            this.cOcr.AutoSize = true;
+            this.cOcr.Location = new System.Drawing.Point(0, 0);
+            this.cOcr.Margin = new System.Windows.Forms.Padding(0);
+            this.cOcr.Name = "cOcr";
+            this.cOcr.Size = new System.Drawing.Size(43, 23);
+            this.cOcr.TabIndex = 2;
+            this.cOcr.Text = "OCR:";
+            this.cOcr.UseVisualStyleBackColor = true;
+            this.cOcr.CheckedChanged += new System.EventHandler(this.cOcr_CheckedChanged);
+            // 
+            // SingleFieldFromFieldImage
+            // 
+            this.SingleFieldFromFieldImage.AutoSize = true;
+            this.SingleFieldFromFieldImage.Location = new System.Drawing.Point(43, 0);
+            this.SingleFieldFromFieldImage.Margin = new System.Windows.Forms.Padding(0);
+            this.SingleFieldFromFieldImage.Name = "SingleFieldFromFieldImage";
+            this.SingleFieldFromFieldImage.Size = new System.Drawing.Size(141, 17);
+            this.SingleFieldFromFieldImage.TabIndex = 100;
+            this.SingleFieldFromFieldImage.Text = "Single Field By Its Image";
+            this.SingleFieldFromFieldImage.UseVisualStyleBackColor = true;
+            // 
+            // ColumnCellFromCellImage
+            // 
+            this.ColumnCellFromCellImage.AutoSize = true;
+            this.ColumnCellFromCellImage.Location = new System.Drawing.Point(184, 0);
+            this.ColumnCellFromCellImage.Margin = new System.Windows.Forms.Padding(0);
+            this.ColumnCellFromCellImage.Name = "ColumnCellFromCellImage";
+            this.ColumnCellFromCellImage.Size = new System.Drawing.Size(142, 17);
+            this.ColumnCellFromCellImage.TabIndex = 104;
+            this.ColumnCellFromCellImage.Text = "Column Cell By Its Image";
+            this.ColumnCellFromCellImage.UseVisualStyleBackColor = true;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(33, 0);
+            this.label3.Location = new System.Drawing.Point(0, 23);
             this.label3.Margin = new System.Windows.Forms.Padding(0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(57, 13);
@@ -1004,7 +1034,7 @@
             0,
             0,
             65536});
-            this.CharSizeFilterMinWidth.Location = new System.Drawing.Point(90, 0);
+            this.CharSizeFilterMinWidth.Location = new System.Drawing.Point(57, 23);
             this.CharSizeFilterMinWidth.Margin = new System.Windows.Forms.Padding(0);
             this.CharSizeFilterMinWidth.Maximum = new decimal(new int[] {
             1000,
@@ -1017,18 +1047,18 @@
             0,
             -2147483648});
             this.CharSizeFilterMinWidth.Name = "CharSizeFilterMinWidth";
-            this.CharSizeFilterMinWidth.Size = new System.Drawing.Size(51, 20);
+            this.CharSizeFilterMinWidth.Size = new System.Drawing.Size(45, 20);
             this.CharSizeFilterMinWidth.TabIndex = 112;
             // 
-            // label18
+            // label17
             // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(141, 0);
-            this.label18.Margin = new System.Windows.Forms.Padding(0);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(10, 13);
-            this.label18.TabIndex = 120;
-            this.label18.Text = "-";
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(102, 23);
+            this.label17.Margin = new System.Windows.Forms.Padding(0);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(10, 13);
+            this.label17.TabIndex = 119;
+            this.label17.Text = "-";
             // 
             // CharSizeFilterMaxWidth
             // 
@@ -1038,7 +1068,7 @@
             0,
             0,
             65536});
-            this.CharSizeFilterMaxWidth.Location = new System.Drawing.Point(151, 0);
+            this.CharSizeFilterMaxWidth.Location = new System.Drawing.Point(112, 23);
             this.CharSizeFilterMaxWidth.Margin = new System.Windows.Forms.Padding(0);
             this.CharSizeFilterMaxWidth.Maximum = new decimal(new int[] {
             1000,
@@ -1051,18 +1081,18 @@
             0,
             -2147483648});
             this.CharSizeFilterMaxWidth.Name = "CharSizeFilterMaxWidth";
-            this.CharSizeFilterMaxWidth.Size = new System.Drawing.Size(51, 20);
+            this.CharSizeFilterMaxWidth.Size = new System.Drawing.Size(45, 20);
             this.CharSizeFilterMaxWidth.TabIndex = 117;
             // 
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(202, 0);
+            this.label13.Location = new System.Drawing.Point(157, 23);
             this.label13.Margin = new System.Windows.Forms.Padding(0);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(38, 13);
+            this.label13.Size = new System.Drawing.Size(24, 13);
             this.label13.TabIndex = 113;
-            this.label13.Text = "(width)";
+            this.label13.Text = "(W)";
             // 
             // CharSizeFilterMinHeight
             // 
@@ -1072,7 +1102,7 @@
             0,
             0,
             65536});
-            this.CharSizeFilterMinHeight.Location = new System.Drawing.Point(240, 0);
+            this.CharSizeFilterMinHeight.Location = new System.Drawing.Point(181, 23);
             this.CharSizeFilterMinHeight.Margin = new System.Windows.Forms.Padding(0);
             this.CharSizeFilterMinHeight.Maximum = new decimal(new int[] {
             1000,
@@ -1085,18 +1115,18 @@
             0,
             -2147483648});
             this.CharSizeFilterMinHeight.Name = "CharSizeFilterMinHeight";
-            this.CharSizeFilterMinHeight.Size = new System.Drawing.Size(51, 20);
+            this.CharSizeFilterMinHeight.Size = new System.Drawing.Size(45, 20);
             this.CharSizeFilterMinHeight.TabIndex = 115;
             // 
-            // label17
+            // label18
             // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(291, 0);
-            this.label17.Margin = new System.Windows.Forms.Padding(0);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(10, 13);
-            this.label17.TabIndex = 119;
-            this.label17.Text = "-";
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(226, 23);
+            this.label18.Margin = new System.Windows.Forms.Padding(0);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(10, 13);
+            this.label18.TabIndex = 120;
+            this.label18.Text = "-";
             // 
             // CharSizeFilterMaxHeight
             // 
@@ -1106,7 +1136,7 @@
             0,
             0,
             65536});
-            this.CharSizeFilterMaxHeight.Location = new System.Drawing.Point(301, 0);
+            this.CharSizeFilterMaxHeight.Location = new System.Drawing.Point(236, 23);
             this.CharSizeFilterMaxHeight.Margin = new System.Windows.Forms.Padding(0);
             this.CharSizeFilterMaxHeight.Maximum = new decimal(new int[] {
             1000,
@@ -1119,64 +1149,57 @@
             0,
             -2147483648});
             this.CharSizeFilterMaxHeight.Name = "CharSizeFilterMaxHeight";
-            this.CharSizeFilterMaxHeight.Size = new System.Drawing.Size(51, 20);
+            this.CharSizeFilterMaxHeight.Size = new System.Drawing.Size(45, 20);
             this.CharSizeFilterMaxHeight.TabIndex = 118;
             // 
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(352, 3);
-            this.label15.Margin = new System.Windows.Forms.Padding(0, 3, 6, 0);
+            this.label15.Location = new System.Drawing.Point(281, 23);
+            this.label15.Margin = new System.Windows.Forms.Padding(0);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(42, 13);
+            this.label15.Size = new System.Drawing.Size(21, 13);
             this.label15.TabIndex = 114;
-            this.label15.Text = "(height)";
+            this.label15.Text = "(H)";
             // 
-            // flowLayoutPanel8
+            // label20
             // 
-            this.flowLayoutPanel8.AutoSize = true;
-            this.flowLayoutPanel8.Controls.Add(this.label5);
-            this.flowLayoutPanel8.Controls.Add(this.SingleFieldFromFieldImage);
-            this.flowLayoutPanel8.Controls.Add(this.ColumnCellFromCellImage);
-            this.flowLayoutPanel8.Controls.Add(this.AdjustColumnCellBorders);
-            this.flowLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Top;
-            this.flowLayoutPanel8.Location = new System.Drawing.Point(0, 40);
-            this.flowLayoutPanel8.Name = "flowLayoutPanel8";
-            this.flowLayoutPanel8.Size = new System.Drawing.Size(336, 17);
-            this.flowLayoutPanel8.TabIndex = 55;
-            this.flowLayoutPanel8.WrapContents = false;
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(0, 43);
+            this.label20.Margin = new System.Windows.Forms.Padding(0);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(69, 13);
+            this.label20.TabIndex = 121;
+            this.label20.Text = "Cell Padding:";
             // 
-            // label5
+            // ColumnCellPaddingY
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(0, 0);
-            this.label5.Margin = new System.Windows.Forms.Padding(0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(33, 13);
-            this.label5.TabIndex = 105;
-            this.label5.Text = "OCR:";
+            this.ColumnCellPaddingY.Location = new System.Drawing.Point(69, 43);
+            this.ColumnCellPaddingY.Margin = new System.Windows.Forms.Padding(0);
+            this.ColumnCellPaddingY.Name = "ColumnCellPaddingY";
+            this.ColumnCellPaddingY.Size = new System.Drawing.Size(34, 20);
+            this.ColumnCellPaddingY.TabIndex = 122;
             // 
-            // SingleFieldFromFieldImage
+            // label21
             // 
-            this.SingleFieldFromFieldImage.AutoSize = true;
-            this.SingleFieldFromFieldImage.Location = new System.Drawing.Point(33, 0);
-            this.SingleFieldFromFieldImage.Margin = new System.Windows.Forms.Padding(0);
-            this.SingleFieldFromFieldImage.Name = "SingleFieldFromFieldImage";
-            this.SingleFieldFromFieldImage.Size = new System.Drawing.Size(141, 17);
-            this.SingleFieldFromFieldImage.TabIndex = 100;
-            this.SingleFieldFromFieldImage.Text = "Single Field By Its Image";
-            this.SingleFieldFromFieldImage.UseVisualStyleBackColor = true;
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(103, 43);
+            this.label21.Margin = new System.Windows.Forms.Padding(0);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(21, 13);
+            this.label21.TabIndex = 123;
+            this.label21.Text = "(H)";
             // 
-            // ColumnCellFromCellImage
+            // AdjustLineBorders
             // 
-            this.ColumnCellFromCellImage.AutoSize = true;
-            this.ColumnCellFromCellImage.Location = new System.Drawing.Point(174, 0);
-            this.ColumnCellFromCellImage.Margin = new System.Windows.Forms.Padding(0);
-            this.ColumnCellFromCellImage.Name = "ColumnCellFromCellImage";
-            this.ColumnCellFromCellImage.Size = new System.Drawing.Size(142, 17);
-            this.ColumnCellFromCellImage.TabIndex = 104;
-            this.ColumnCellFromCellImage.Text = "Column Cell By Its Image";
-            this.ColumnCellFromCellImage.UseVisualStyleBackColor = true;
+            this.AdjustLineBorders.AutoSize = true;
+            this.AdjustLineBorders.Location = new System.Drawing.Point(124, 43);
+            this.AdjustLineBorders.Margin = new System.Windows.Forms.Padding(0);
+            this.AdjustLineBorders.Name = "AdjustLineBorders";
+            this.AdjustLineBorders.Size = new System.Drawing.Size(117, 17);
+            this.AdjustLineBorders.TabIndex = 106;
+            this.AdjustLineBorders.Text = "Adjust Line Borders";
+            this.AdjustLineBorders.UseVisualStyleBackColor = true;
             // 
             // flowLayoutPanel9
             // 
@@ -1331,17 +1354,6 @@
             this.splitContainer1.SplitterDistance = 584;
             this.splitContainer1.TabIndex = 1;
             // 
-            // AdjustColumnCellBorders
-            // 
-            this.AdjustColumnCellBorders.AutoSize = true;
-            this.AdjustColumnCellBorders.Location = new System.Drawing.Point(316, 0);
-            this.AdjustColumnCellBorders.Margin = new System.Windows.Forms.Padding(0);
-            this.AdjustColumnCellBorders.Name = "AdjustColumnCellBorders";
-            this.AdjustColumnCellBorders.Size = new System.Drawing.Size(152, 17);
-            this.AdjustColumnCellBorders.TabIndex = 106;
-            this.AdjustColumnCellBorders.Text = "Adjust Column Cell Borders";
-            this.AdjustColumnCellBorders.UseVisualStyleBackColor = true;
-            // 
             // TemplateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1373,14 +1385,13 @@
             this.splitContainer3.ResumeLayout(false);
             this.flowLayoutPanel6.ResumeLayout(false);
             this.flowLayoutPanel6.PerformLayout();
-            this.flowLayoutPanel4.ResumeLayout(false);
-            this.flowLayoutPanel4.PerformLayout();
+            this.fOcr.ResumeLayout(false);
+            this.fOcr.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CharSizeFilterMinWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.CharSizeFilterMaxWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.CharSizeFilterMinHeight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.CharSizeFilterMaxHeight)).EndInit();
-            this.flowLayoutPanel8.ResumeLayout(false);
-            this.flowLayoutPanel8.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ColumnCellPaddingY)).EndInit();
             this.flowLayoutPanel9.ResumeLayout(false);
             this.flowLayoutPanel9.PerformLayout();
             this.splitContainer2.Panel1.ResumeLayout(false);
@@ -1465,8 +1476,7 @@
         private System.Windows.Forms.LinkLabel moveUpField;
         private System.Windows.Forms.LinkLabel duplicateField;
         private System.Windows.Forms.LinkLabel newField;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel8;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.FlowLayoutPanel fOcr;
         private System.Windows.Forms.CheckBox SingleFieldFromFieldImage;
         private System.Windows.Forms.CheckBox ColumnCellFromCellImage;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel9;
@@ -1486,17 +1496,19 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn SearchRectangleMargin;
         private System.Windows.Forms.DataGridViewTextBoxColumn Position3;
         private System.Windows.Forms.Label settingsControlHeader;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.NumericUpDown CharSizeFilterMinWidth;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.NumericUpDown CharSizeFilterMinHeight;
-        private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.NumericUpDown CharSizeFilterMaxWidth;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.NumericUpDown CharSizeFilterMaxHeight;
-        private System.Windows.Forms.CheckBox AdjustColumnCellBorders;
+        private System.Windows.Forms.CheckBox AdjustLineBorders;
+        private System.Windows.Forms.CheckBox cOcr;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.NumericUpDown ColumnCellPaddingY;
+        private System.Windows.Forms.Label label21;
     }
 }

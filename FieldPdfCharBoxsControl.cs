@@ -18,19 +18,13 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class FieldPdfCharBoxsControl : FieldControl
     {
-        public FieldPdfCharBoxsControl(TextAutoInsertSpace textAutoInsertSpace)
+        public FieldPdfCharBoxsControl()
         {
             InitializeComponent();
 
             SpecialTextAutoInsertSpace.CheckedChanged += delegate { synchronizeControls(); };
             synchronizeControls();
-
-            this.textAutoInsertSpace = textAutoInsertSpace;
-            textAutoInsertSpaceThreshold.Value = (decimal)textAutoInsertSpace.Threshold;
-            textAutoInsertSpaceRepresentative.Text = textAutoInsertSpace.Representative;
-            textAutoInsertSpaceIgnoreSourceSpaces.Checked = textAutoInsertSpace.IgnoreSourceSpaces;
         }
-        TextAutoInsertSpace textAutoInsertSpace;
 
         void synchronizeControls()
         {
@@ -55,7 +49,7 @@ namespace Cliver.PdfDocumentParser
             if (field == null)
                 field = new Template.Field.PdfCharBoxs();
 
-            List<string> fieldNames = fields.Where(a => a.ColumnOfTable == null).Select(a => a.Name).Distinct().ToList();
+            List<string> fieldNames = template.Fields.Where(a => a.ColumnOfTable == null).Select(a => a.Name).Distinct().ToList();
             fieldNames.Remove(field.Name);
             fieldNames.Insert(0, "");
             ColumnOfTable.DataSource = fieldNames;
@@ -69,11 +63,17 @@ namespace Cliver.PdfDocumentParser
                 textAutoInsertSpaceRepresentative.Text = Regex.Escape(field.TextAutoInsertSpace.Representative);
                 textAutoInsertSpaceIgnoreSourceSpaces.Checked = field.TextAutoInsertSpace.IgnoreSourceSpaces;
             }
+            else
+            {
+                textAutoInsertSpaceThreshold.Value = (decimal)template.TextAutoInsertSpace.Threshold;
+                textAutoInsertSpaceRepresentative.Text = template.TextAutoInsertSpace.Representative;
+                textAutoInsertSpaceIgnoreSourceSpaces.Checked = template.TextAutoInsertSpace.IgnoreSourceSpaces;
+            }
 
             if (value != null)
             {
                 List<Page.Line<Pdf.CharBox>> cbss = Page.GetLines((List<Pdf.CharBox>)value,
-                   SpecialTextAutoInsertSpace.Checked ? new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, IgnoreSourceSpaces = textAutoInsertSpaceIgnoreSourceSpaces.Checked, Representative = textAutoInsertSpaceRepresentative.Text } : textAutoInsertSpace,
+                   SpecialTextAutoInsertSpace.Checked ? new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, IgnoreSourceSpaces = textAutoInsertSpaceIgnoreSourceSpaces.Checked, Representative = textAutoInsertSpaceRepresentative.Text } : template.TextAutoInsertSpace,
                    null
                 );
                 List<string> ls = new List<string>();

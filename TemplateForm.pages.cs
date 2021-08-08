@@ -200,10 +200,11 @@ namespace Cliver.PdfDocumentParser
                             drawBoxes(Settings.Appearance.TableBoxColor, Settings.Appearance.TableBoxBorderWidth, new List<RectangleF> { (RectangleF)fai.TableFieldActualInfo.ActualRectangle });
                             if (ShowFieldTextLineSeparators.Checked)
                             {
-                                Template.Field.OcrSettings ocrSettings = field.GetOcrSettings(pages.ActiveTemplate);
-                                List<Page.Line<Ocr.CharBox>> ols = Page.GetLines((List<Ocr.CharBox>)fai.TableFieldActualInfo.GetValue(Template.Field.Types.OcrCharBoxs), null, ocrSettings.CharFilter);
-                                if (ocrSettings.AdjustColumnCellBorders)
+                                List<Page.Line<Ocr.CharBox>> ols = Page.GetLines((List<Ocr.CharBox>)fai.TableFieldActualInfo.GetValue(Template.Field.Types.OcrCharBoxs), null, field.CharFilter ?? pages.ActiveTemplate.CharFilter);
+                                if (field.AdjustLineBorders ?? pages.ActiveTemplate.AdjustLineBorders)
                                     Page.AdjustBorders(ols, fai.TableFieldActualInfo.ActualRectangle.Value);
+                                else
+                                    Page.PadLines(ols, field.ColumnCellPaddingY ?? pages.ActiveTemplate.ColumnCellPaddingY);
                                 if (ols.Count > 0)
                                     ols.RemoveAt(0);
                                 List<RectangleF> lineBoxes = new List<RectangleF>();
@@ -216,17 +217,18 @@ namespace Cliver.PdfDocumentParser
                         {
                             if (ShowFieldTextLineSeparators.Checked)
                             {
-                                Template.Field.OcrSettings ocrSettings = field.GetOcrSettings(pages.ActiveTemplate);
                                 List<Ocr.CharBox> cbs;
-                                if (ocrSettings.SingleFieldFromFieldImage)
-                                    cbs = Ocr.This.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateBitmap, r, ocrSettings.TesseractPageSegMode);
+                                if (field.SingleFieldFromFieldImage ?? pages.ActiveTemplate.SingleFieldFromFieldImage)
+                                    cbs = Ocr.This.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateBitmap, r, field.TesseractPageSegMode ?? pages.ActiveTemplate.TesseractPageSegMode);
                                 else
                                     cbs = Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateOcrCharBoxs, r);
                                 if (cbs != null)
                                 {
-                                    List<Page.Line<Ocr.CharBox>> ols = Page.GetLines(cbs, null, ocrSettings.CharFilter);
-                                    if (ocrSettings.AdjustColumnCellBorders)
+                                    List<Page.Line<Ocr.CharBox>> ols = Page.GetLines(cbs, null, field.CharFilter ?? pages.ActiveTemplate.CharFilter);
+                                    if (field.AdjustLineBorders ?? pages.ActiveTemplate.AdjustLineBorders)
                                         Page.AdjustBorders(ols, r);
+                                    else
+                                        Page.PadLines(ols, field.ColumnCellPaddingY ?? pages.ActiveTemplate.ColumnCellPaddingY);
                                     if (ols.Count > 0)
                                         ols.RemoveAt(0);
                                     List<RectangleF> lineBoxes = new List<RectangleF>();

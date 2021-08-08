@@ -256,7 +256,7 @@ namespace Cliver.PdfDocumentParser
                             {
                                 if (b == null)
                                     return false;
-                                searchRectangleOcrCharBoxs = Ocr.This.GetCharBoxs(b, PageCollection.ActiveTemplate.OcrSettings.TesseractPageSegMode);
+                                searchRectangleOcrCharBoxs = Ocr.This.GetCharBoxs(b, PageCollection.ActiveTemplate.TesseractPageSegMode);
                             }
                             PointF searchRectanglePosition = new PointF(searchRectangle.X < 0 ? 0 : searchRectangle.X, searchRectangle.Y < 0 ? 0 : searchRectangle.Y);
                             searchRectangleOcrCharBoxs.ForEach(x => { x.R.X += searchRectanglePosition.X; x.R.Y += searchRectanglePosition.Y; });

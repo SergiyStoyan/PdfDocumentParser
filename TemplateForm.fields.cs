@@ -638,51 +638,34 @@ namespace Cliver.PdfDocumentParser
                 object v = setFieldRowValue(row, false);
                 Template.Field f = (Template.Field)row.Tag;
 
-                List<Template.Field> fs = new List<Template.Field>();
-                foreach (DataGridViewRow r in fields.Rows)
-                {
-                    if (r.Tag == null)
-                        continue;
-                    fs.Add((Template.Field)r.Tag);
-                }
+                //List<Template.Field> fs = new List<Template.Field>();
+                //foreach (DataGridViewRow r in fields.Rows)
+                //{
+                //    if (r.Tag == null)
+                //        continue;
+                //    fs.Add((Template.Field)r.Tag);
+                //}
 
-                TextAutoInsertSpace getTextAutoInsertSpace()
-                {
-                    Template.Field.Pdf pf = f as Template.Field.Pdf;
-                    return pf?.TextAutoInsertSpace != null ? pf.TextAutoInsertSpace : new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, IgnoreSourceSpaces = IgnoreSourceSpaces.Checked/*, Representative//default*/ };
-                }
-                Template.Field.OcrSettings getOcrSettings()
-                {
-                    Template.Field.Ocr of = f as Template.Field.Ocr;
-                    return of?.OcrSettings != null ? of.OcrSettings : new Template.Field.OcrSettings 
-                    {
-                        TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem,
-                        AdjustColumnCellBorders = AdjustColumnCellBorders.Checked,
-                        SingleFieldFromFieldImage = SingleFieldFromFieldImage.Checked,
-                        ColumnCellFromCellImage = ColumnCellFromCellImage.Checked,
-                        CharFilter = new Template.CharFilter { MinWidth = (float)CharSizeFilterMinWidth.Value, MaxWidth = (float)CharSizeFilterMaxWidth.Value, MinHeight = (float)CharSizeFilterMinHeight.Value, MaxHeight = (float)CharSizeFilterMaxHeight.Value }
-                    };
-                }
                 Template.Field.Types t = ((Template.Field)row.Tag).Type;
                 switch (t)
                 {
                     case Template.Field.Types.PdfText:
-                        currentFieldControl = new FieldPdfTextControl(getTextAutoInsertSpace());
+                        currentFieldControl = new FieldPdfTextControl();
                         break;
                     case Template.Field.Types.PdfTextLines:
-                        currentFieldControl = new FieldPdfTextLinesControl(getTextAutoInsertSpace());
+                        currentFieldControl = new FieldPdfTextLinesControl();
                         break;
                     case Template.Field.Types.PdfCharBoxs:
-                        currentFieldControl = new FieldPdfCharBoxsControl(getTextAutoInsertSpace());
+                        currentFieldControl = new FieldPdfCharBoxsControl();
                         break;
                     case Template.Field.Types.OcrText:
-                        currentFieldControl = new FieldOcrTextControl(getOcrSettings());
+                        currentFieldControl = new FieldOcrTextControl();
                         break;
                     case Template.Field.Types.OcrTextLines:
-                        currentFieldControl = new FieldOcrTextLinesControl(getOcrSettings());
+                        currentFieldControl = new FieldOcrTextLinesControl();
                         break;
                     case Template.Field.Types.OcrCharBoxs:
-                        currentFieldControl = new FieldOcrCharBoxsControl(getTextAutoInsertSpace(), getOcrSettings());
+                        currentFieldControl = new FieldOcrCharBoxsControl();
                         break;
                     case Template.Field.Types.OcrTextLineImages:
                         currentFieldControl = new FieldOcrTextLineImagesControl((float)pictureScale.Value);
@@ -693,7 +676,7 @@ namespace Cliver.PdfDocumentParser
                     default:
                         throw new Exception("Unknown option: " + t);
                 }
-                currentFieldControl.Initialize(row, v, fs, (DataGridViewRow r) => { setFieldRow(r, f); });
+                currentFieldControl.Initialize(row, v, GetTemplateFromUI(false), (DataGridViewRow r) => { setFieldRow(r, f); });
                 settingsControlHeader.Text = "Field [" + f?.Name + "]:";
             }
             finally

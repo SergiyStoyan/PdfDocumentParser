@@ -18,16 +18,12 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class FieldPdfTextLinesControl : FieldControl
     {
-        public FieldPdfTextLinesControl(TextAutoInsertSpace textAutoInsertSpace)
+        public FieldPdfTextLinesControl()
         {
             InitializeComponent();
 
             SpecialTextAutoInsertSpace.CheckedChanged += delegate { synchronizeControls(); };
             synchronizeControls();
-
-            textAutoInsertSpaceThreshold.Value = (decimal)textAutoInsertSpace.Threshold;
-            textAutoInsertSpaceRepresentative.Text = textAutoInsertSpace.Representative;
-            textAutoInsertSpaceIgnoreSourceSpaces.Checked = textAutoInsertSpace.IgnoreSourceSpaces;
         }
 
         void synchronizeControls()
@@ -53,7 +49,7 @@ namespace Cliver.PdfDocumentParser
             if (field == null)
                 field = new Template.Field.PdfTextLines();
 
-            List<string> fieldNames = fields.Where(a => a.ColumnOfTable == null).Select(a => a.Name).Distinct().ToList();
+            List<string> fieldNames = template.Fields.Where(a => a.ColumnOfTable == null).Select(a => a.Name).Distinct().ToList();
             fieldNames.Remove(field.Name);
             fieldNames.Insert(0, "");
             ColumnOfTable.DataSource = fieldNames;
@@ -66,6 +62,12 @@ namespace Cliver.PdfDocumentParser
                 textAutoInsertSpaceThreshold.Value = (decimal)field.TextAutoInsertSpace.Threshold;
                 textAutoInsertSpaceRepresentative.Text = Regex.Escape(field.TextAutoInsertSpace.Representative);
                 textAutoInsertSpaceIgnoreSourceSpaces.Checked = field.TextAutoInsertSpace.IgnoreSourceSpaces;
+            }
+            else
+            {
+                textAutoInsertSpaceThreshold.Value = (decimal)template.TextAutoInsertSpace.Threshold;
+                textAutoInsertSpaceRepresentative.Text = template.TextAutoInsertSpace.Representative;
+                textAutoInsertSpaceIgnoreSourceSpaces.Checked = template.TextAutoInsertSpace.IgnoreSourceSpaces;
             }
 
             if (value != null)
