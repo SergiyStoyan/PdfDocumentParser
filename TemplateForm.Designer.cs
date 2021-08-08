@@ -152,7 +152,7 @@
             // 
             // textAutoInsertSpaceThreshold
             // 
-            this.textAutoInsertSpaceThreshold.DecimalPlaces = 2;
+            this.textAutoInsertSpaceThreshold.DecimalPlaces = 1;
             this.textAutoInsertSpaceThreshold.Increment = new decimal(new int[] {
             1,
             0,
@@ -1028,7 +1028,7 @@
             // 
             // CharSizeFilterMinWidth
             // 
-            this.CharSizeFilterMinWidth.DecimalPlaces = 2;
+            this.CharSizeFilterMinWidth.DecimalPlaces = 1;
             this.CharSizeFilterMinWidth.Increment = new decimal(new int[] {
             1,
             0,
@@ -1062,7 +1062,7 @@
             // 
             // CharSizeFilterMaxWidth
             // 
-            this.CharSizeFilterMaxWidth.DecimalPlaces = 2;
+            this.CharSizeFilterMaxWidth.DecimalPlaces = 1;
             this.CharSizeFilterMaxWidth.Increment = new decimal(new int[] {
             1,
             0,
@@ -1096,7 +1096,7 @@
             // 
             // CharSizeFilterMinHeight
             // 
-            this.CharSizeFilterMinHeight.DecimalPlaces = 2;
+            this.CharSizeFilterMinHeight.DecimalPlaces = 1;
             this.CharSizeFilterMinHeight.Increment = new decimal(new int[] {
             1,
             0,
@@ -1130,7 +1130,7 @@
             // 
             // CharSizeFilterMaxHeight
             // 
-            this.CharSizeFilterMaxHeight.DecimalPlaces = 2;
+            this.CharSizeFilterMaxHeight.DecimalPlaces = 1;
             this.CharSizeFilterMaxHeight.Increment = new decimal(new int[] {
             1,
             0,

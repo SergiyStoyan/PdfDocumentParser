@@ -135,7 +135,7 @@
             // 
             // textAutoInsertSpaceThreshold
             // 
-            this.textAutoInsertSpaceThreshold.DecimalPlaces = 2;
+            this.textAutoInsertSpaceThreshold.DecimalPlaces = 1;
             this.textAutoInsertSpaceThreshold.Increment = new decimal(new int[] {
             1,
             0,
