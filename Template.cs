@@ -95,38 +95,38 @@ namespace Cliver.PdfDocumentParser
         }
     }
 
-        public class CharFilter
-        {
-            public float MinWidth;
-            //{
-            //    get { return minWidth; }
-            //    set { minWidth = value > 0 ? value : 0; }
-            //}
-            //float minWidth;
-            public float MaxWidth;
-            //{
-            //    get { return maxWidth; }
-            //    set { maxWidth = value > 0 ? value : 0; }
-            //}
-            //float maxWidth;
-            public float MinHeight;
-            //{
-            //    get { return minHeight; }
-            //    set { minHeight = value > 0 ? value : 0; }
-            //}
-            //float minHeight;
-            public float MaxHeight;
-            //{
-            //    get { return maxHeight; }
-            //    set { maxHeight = value > 0 ? value : 0; }
-            //}
-            //float maxHeight;
+    public class CharFilter
+    {
+        public float MinWidth;
+        //{
+        //    get { return minWidth; }
+        //    set { minWidth = value > 0 ? value : 0; }
+        //}
+        //float minWidth;
+        public float MaxWidth;
+        //{
+        //    get { return maxWidth; }
+        //    set { maxWidth = value > 0 ? value : 0; }
+        //}
+        //float maxWidth;
+        public float MinHeight;
+        //{
+        //    get { return minHeight; }
+        //    set { minHeight = value > 0 ? value : 0; }
+        //}
+        //float minHeight;
+        public float MaxHeight;
+        //{
+        //    get { return maxHeight; }
+        //    set { maxHeight = value > 0 ? value : 0; }
+        //}
+        //float maxHeight;
 
-            public override string ToString()//used only by debugging tips
-            {
-                return this.ToStringByJson();
-            }
+        public override string ToString()//used only by debugging tips
+        {
+            return this.ToStringByJson();
         }
+    }
 
     public class TextAutoInsertSpace
     {

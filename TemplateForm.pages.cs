@@ -193,6 +193,7 @@ namespace Cliver.PdfDocumentParser
                     case Template.Field.Types.OcrText:
                     case Template.Field.Types.OcrTextLines:
                     case Template.Field.Types.OcrCharBoxs:
+                        Template.Field.Ocr of = field as Template.Field.Ocr;
                         if (field.ColumnOfTable != null)
                         {
                             if (!fai.TableFieldActualInfo.Found)
@@ -201,7 +202,7 @@ namespace Cliver.PdfDocumentParser
                             if (ShowFieldTextLineSeparators.Checked)
                             {
                                 List<Page.Line<Ocr.CharBox>> ols = Page.GetLines((List<Ocr.CharBox>)fai.TableFieldActualInfo.GetValue(Template.Field.Types.OcrCharBoxs), null, field.CharFilter ?? pages.ActiveTemplate.CharFilter);
-                                if (field.AdjustLineBorders ?? pages.ActiveTemplate.AdjustLineBorders)
+                                if (of.AdjustLineBorders ?? pages.ActiveTemplate.AdjustLineBorders)
                                     Page.AdjustBorders(ols, fai.TableFieldActualInfo.ActualRectangle.Value);
                                 else
                                     Page.PadLines(ols, field.LinePaddingY ?? pages.ActiveTemplate.LinePaddingY);
@@ -218,14 +219,14 @@ namespace Cliver.PdfDocumentParser
                             if (ShowFieldTextLineSeparators.Checked)
                             {
                                 List<Ocr.CharBox> cbs;
-                                if (field.SingleFieldFromFieldImage ?? pages.ActiveTemplate.SingleFieldFromFieldImage)
-                                    cbs = Ocr.This.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateBitmap, r, field.TesseractPageSegMode ?? pages.ActiveTemplate.TesseractPageSegMode);
+                                if (of.SingleFieldFromFieldImage ?? pages.ActiveTemplate.SingleFieldFromFieldImage)
+                                    cbs = Ocr.This.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateBitmap, r, of.TesseractPageSegMode ?? pages.ActiveTemplate.TesseractPageSegMode);
                                 else
                                     cbs = Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateOcrCharBoxs, r);
                                 if (cbs != null)
                                 {
                                     List<Page.Line<Ocr.CharBox>> ols = Page.GetLines(cbs, null, field.CharFilter ?? pages.ActiveTemplate.CharFilter);
-                                    if (field.AdjustLineBorders ?? pages.ActiveTemplate.AdjustLineBorders)
+                                    if (of.AdjustLineBorders ?? pages.ActiveTemplate.AdjustLineBorders)
                                         Page.AdjustBorders(ols, r);
                                     else
                                         Page.PadLines(ols, field.LinePaddingY ?? pages.ActiveTemplate.LinePaddingY);

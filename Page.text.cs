@@ -41,11 +41,9 @@ namespace Cliver.PdfDocumentParser
             if (charFilter != null)//to filter out wrong OCR chars like borders etc which brakes lines
             {
                 //SizeF s=new SizeF(ignoreCharsBiggerThan.Width*Settings.Constants.Image2PdfResolutionRatio)
-                if (charFilter.MaxWidth <= 0)
-                    charFilter.MaxWidth = float.MaxValue;
-                if (charFilter.MaxHeight <= 0)
-                    charFilter.MaxHeight = float.MaxValue;
-                cbs = cbs.Where(a => a.R.Width >= charFilter.MinWidth && a.R.Width <= charFilter.MaxWidth && a.R.Height >= charFilter.MinHeight && a.R.Height <= charFilter.MaxHeight);
+                float maxWidth = charFilter.MaxWidth <= 0 ? float.MaxValue : 0;
+                float maxHeight = charFilter.MaxHeight <= 0 ? float.MaxValue : 0;
+                cbs = cbs.Where(a => a.R.Width >= charFilter.MinWidth && a.R.Width <= maxWidth && a.R.Height >= charFilter.MinHeight && a.R.Height <= maxHeight);
             }
             List<Line<CharBoxT>> lines = new List<Line<CharBoxT>>();
             foreach (CharBoxT cb in cbs)

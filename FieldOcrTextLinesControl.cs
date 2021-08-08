@@ -71,20 +71,10 @@ namespace Cliver.PdfDocumentParser
             ColumnOfTable.SelectedItem = field.ColumnOfTable;
 
             SpecialOcrSettings.Checked = field.AdjustLineBorders != null || field.SingleFieldFromFieldImage != null || field.ColumnCellFromCellImage != null || field.TesseractPageSegMode != null;
-            if (SpecialOcrSettings.Checked)
-            {
-                AdjustLineBorders.Checked = field.AdjustLineBorders.Value;
-                SingleFieldFromFieldImage.Checked = field.SingleFieldFromFieldImage.Value;
-                ColumnCellFromCellImage.Checked = field.ColumnCellFromCellImage.Value;
-                TesseractPageSegMode.SelectedItem = field.TesseractPageSegMode;
-            }
-            else
-            {
-                AdjustLineBorders.Checked = template.AdjustLineBorders;
-                TesseractPageSegMode.SelectedItem = template.TesseractPageSegMode;
-                SingleFieldFromFieldImage.Checked = template.SingleFieldFromFieldImage;
-                ColumnCellFromCellImage.Checked = template.ColumnCellFromCellImage;
-            }
+            AdjustLineBorders.Checked = field.AdjustLineBorders ?? template.AdjustLineBorders;
+            SingleFieldFromFieldImage.Checked = field.SingleFieldFromFieldImage ?? template.SingleFieldFromFieldImage;
+            ColumnCellFromCellImage.Checked = field.ColumnCellFromCellImage ?? template.ColumnCellFromCellImage;
+            TesseractPageSegMode.SelectedItem = field.TesseractPageSegMode ?? template.TesseractPageSegMode;
 
             if (value != null)
             {

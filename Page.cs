@@ -109,8 +109,8 @@ namespace Cliver.PdfDocumentParser
             }
             else if (newTemplate.TesseractPageSegMode != PageCollection.ActiveTemplate.TesseractPageSegMode
                 || !Serialization.Json.IsEqual(
-                    newTemplate.Fields.Select(a => a.TesseractPageSegMode).ToList(),
-                    PageCollection.ActiveTemplate.Fields.Select(a => a.TesseractPageSegMode).ToList()
+                    newTemplate.Fields.Where(a => a is Template.Field.Ocr).Select(a => ((Template.Field.Ocr)a).TesseractPageSegMode).ToList(),
+                    PageCollection.ActiveTemplate.Fields.Where(a => a is Template.Field.Ocr).Select(a => ((Template.Field.Ocr)a).TesseractPageSegMode).ToList()
                     )
                 )
             {
