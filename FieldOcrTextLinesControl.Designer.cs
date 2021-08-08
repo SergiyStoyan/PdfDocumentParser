@@ -33,11 +33,12 @@
             this.label1 = new System.Windows.Forms.Label();
             this.SpecialOcrSettings = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label19 = new System.Windows.Forms.Label();
-            this.SingleFieldFromFieldImage = new System.Windows.Forms.CheckBox();
-            this.ColumnCellFromCellImage = new System.Windows.Forms.CheckBox();
             this.gOcr = new System.Windows.Forms.GroupBox();
+            this.AdjustLineBorders = new System.Windows.Forms.CheckBox();
             this.TesseractPageSegMode = new System.Windows.Forms.ComboBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.ColumnCellFromCellImage = new System.Windows.Forms.CheckBox();
+            this.SingleFieldFromFieldImage = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.gOcr.SuspendLayout();
             this.SuspendLayout();
@@ -96,37 +97,9 @@
             this.panel1.Size = new System.Drawing.Size(267, 29);
             this.panel1.TabIndex = 8;
             // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(13, 17);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(87, 13);
-            this.label19.TabIndex = 108;
-            this.label19.Text = "Tesseract Mode:";
-            // 
-            // SingleFieldFromFieldImage
-            // 
-            this.SingleFieldFromFieldImage.AutoSize = true;
-            this.SingleFieldFromFieldImage.Location = new System.Drawing.Point(129, 16);
-            this.SingleFieldFromFieldImage.Name = "SingleFieldFromFieldImage";
-            this.SingleFieldFromFieldImage.Size = new System.Drawing.Size(141, 17);
-            this.SingleFieldFromFieldImage.TabIndex = 105;
-            this.SingleFieldFromFieldImage.Text = "Single Field By Its Image";
-            this.SingleFieldFromFieldImage.UseVisualStyleBackColor = true;
-            // 
-            // ColumnCellFromCellImage
-            // 
-            this.ColumnCellFromCellImage.AutoSize = true;
-            this.ColumnCellFromCellImage.Location = new System.Drawing.Point(129, 36);
-            this.ColumnCellFromCellImage.Name = "ColumnCellFromCellImage";
-            this.ColumnCellFromCellImage.Size = new System.Drawing.Size(147, 17);
-            this.ColumnCellFromCellImage.TabIndex = 106;
-            this.ColumnCellFromCellImage.Text = "Column Cell By Its Image";
-            this.ColumnCellFromCellImage.UseVisualStyleBackColor = true;
-            // 
             // gOcr
             // 
+            this.gOcr.Controls.Add(this.AdjustLineBorders);
             this.gOcr.Controls.Add(this.TesseractPageSegMode);
             this.gOcr.Controls.Add(this.label19);
             this.gOcr.Controls.Add(this.ColumnCellFromCellImage);
@@ -135,19 +108,59 @@
             this.gOcr.Location = new System.Drawing.Point(0, 29);
             this.gOcr.Name = "gOcr";
             this.gOcr.Size = new System.Drawing.Size(267, 59);
-            this.gOcr.TabIndex = 10;
+            this.gOcr.TabIndex = 11;
             this.gOcr.TabStop = false;
             this.gOcr.Text = "OCR";
+            // 
+            // AdjustLineBorders
+            // 
+            this.AdjustLineBorders.AutoSize = true;
+            this.AdjustLineBorders.Location = new System.Drawing.Point(122, 41);
+            this.AdjustLineBorders.Margin = new System.Windows.Forms.Padding(0);
+            this.AdjustLineBorders.Name = "AdjustLineBorders";
+            this.AdjustLineBorders.Size = new System.Drawing.Size(117, 17);
+            this.AdjustLineBorders.TabIndex = 143;
+            this.AdjustLineBorders.Text = "Adjust Line Borders";
+            this.AdjustLineBorders.UseVisualStyleBackColor = true;
             // 
             // TesseractPageSegMode
             // 
             this.TesseractPageSegMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.TesseractPageSegMode.DropDownWidth = 120;
             this.TesseractPageSegMode.FormattingEnabled = true;
-            this.TesseractPageSegMode.Location = new System.Drawing.Point(16, 32);
+            this.TesseractPageSegMode.Location = new System.Drawing.Point(6, 32);
             this.TesseractPageSegMode.Name = "TesseractPageSegMode";
             this.TesseractPageSegMode.Size = new System.Drawing.Size(103, 21);
-            this.TesseractPageSegMode.TabIndex = 143;
+            this.TesseractPageSegMode.TabIndex = 142;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(3, 17);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(87, 13);
+            this.label19.TabIndex = 108;
+            this.label19.Text = "Tesseract Mode:";
+            // 
+            // ColumnCellFromCellImage
+            // 
+            this.ColumnCellFromCellImage.AutoSize = true;
+            this.ColumnCellFromCellImage.Location = new System.Drawing.Point(122, 25);
+            this.ColumnCellFromCellImage.Name = "ColumnCellFromCellImage";
+            this.ColumnCellFromCellImage.Size = new System.Drawing.Size(142, 17);
+            this.ColumnCellFromCellImage.TabIndex = 106;
+            this.ColumnCellFromCellImage.Text = "Column Cell By Its Image";
+            this.ColumnCellFromCellImage.UseVisualStyleBackColor = true;
+            // 
+            // SingleFieldFromFieldImage
+            // 
+            this.SingleFieldFromFieldImage.AutoSize = true;
+            this.SingleFieldFromFieldImage.Location = new System.Drawing.Point(122, 9);
+            this.SingleFieldFromFieldImage.Name = "SingleFieldFromFieldImage";
+            this.SingleFieldFromFieldImage.Size = new System.Drawing.Size(141, 17);
+            this.SingleFieldFromFieldImage.TabIndex = 105;
+            this.SingleFieldFromFieldImage.Text = "Single Field By Its Image";
+            this.SingleFieldFromFieldImage.UseVisualStyleBackColor = true;
             // 
             // FieldOcrTextLinesControl
             // 
@@ -174,10 +187,11 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox SpecialOcrSettings;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.CheckBox SingleFieldFromFieldImage;
-        private System.Windows.Forms.CheckBox ColumnCellFromCellImage;
-        private System.Windows.Forms.Label label19;
         private System.Windows.Forms.GroupBox gOcr;
+        private System.Windows.Forms.CheckBox AdjustLineBorders;
         private System.Windows.Forms.ComboBox TesseractPageSegMode;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.CheckBox ColumnCellFromCellImage;
+        private System.Windows.Forms.CheckBox SingleFieldFromFieldImage;
     }
 }

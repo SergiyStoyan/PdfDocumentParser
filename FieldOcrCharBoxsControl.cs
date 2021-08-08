@@ -42,12 +42,14 @@ namespace Cliver.PdfDocumentParser
             field.ColumnOfTable = (string)ColumnOfTable.SelectedItem;
             if (SpecialOcrSettings.Checked)
             {
+                field.AdjustLineBorders = AdjustLineBorders.Checked;
                 field.SingleFieldFromFieldImage = SingleFieldFromFieldImage.Checked;
                 field.ColumnCellFromCellImage = ColumnCellFromCellImage.Checked;
                 field.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
             }
             else
             {
+                field.AdjustLineBorders = null;
                 field.SingleFieldFromFieldImage = null;
                 field.ColumnCellFromCellImage = null;
                 field.TesseractPageSegMode = null;
@@ -68,15 +70,17 @@ namespace Cliver.PdfDocumentParser
 
             ColumnOfTable.SelectedItem = field.ColumnOfTable;
 
-            SpecialOcrSettings.Checked = field.SingleFieldFromFieldImage != null || field.ColumnCellFromCellImage != null || field.TesseractPageSegMode != null;
+            SpecialOcrSettings.Checked = field.AdjustLineBorders != null || field.SingleFieldFromFieldImage != null || field.ColumnCellFromCellImage != null || field.TesseractPageSegMode != null;
             if (SpecialOcrSettings.Checked)
             {
+                AdjustLineBorders.Checked = field.AdjustLineBorders.Value;
                 SingleFieldFromFieldImage.Checked = field.SingleFieldFromFieldImage.Value;
                 ColumnCellFromCellImage.Checked = field.ColumnCellFromCellImage.Value;
                 TesseractPageSegMode.SelectedItem = field.TesseractPageSegMode;
             }
             else
             {
+                AdjustLineBorders.Checked = template.AdjustLineBorders;
                 TesseractPageSegMode.SelectedItem = template.TesseractPageSegMode;
                 SingleFieldFromFieldImage.Checked = template.SingleFieldFromFieldImage;
                 ColumnCellFromCellImage.Checked = template.ColumnCellFromCellImage;
