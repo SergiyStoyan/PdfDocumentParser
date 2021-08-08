@@ -15,7 +15,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.textAutoInsertSpaceThreshold = new System.Windows.Forms.NumericUpDown();
             this.TesseractPageSegMode = new System.Windows.Forms.ComboBox();
             this.label19 = new System.Windows.Forms.Label();
@@ -100,7 +100,7 @@
             this.CharSizeFilterMaxHeight = new System.Windows.Forms.NumericUpDown();
             this.label15 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
-            this.ColumnCellPaddingY = new System.Windows.Forms.NumericUpDown();
+            this.LinePaddingY = new System.Windows.Forms.NumericUpDown();
             this.label21 = new System.Windows.Forms.Label();
             this.AdjustLineBorders = new System.Windows.Forms.CheckBox();
             this.flowLayoutPanel9 = new System.Windows.Forms.FlowLayoutPanel();
@@ -136,7 +136,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.CharSizeFilterMaxWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CharSizeFilterMinHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CharSizeFilterMaxHeight)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ColumnCellPaddingY)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LinePaddingY)).BeginInit();
             this.flowLayoutPanel9.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
@@ -166,7 +166,7 @@
             0,
             -2147483648});
             this.textAutoInsertSpaceThreshold.Name = "textAutoInsertSpaceThreshold";
-            this.textAutoInsertSpaceThreshold.Size = new System.Drawing.Size(51, 20);
+            this.textAutoInsertSpaceThreshold.Size = new System.Drawing.Size(44, 20);
             this.textAutoInsertSpaceThreshold.TabIndex = 64;
             this.textAutoInsertSpaceThreshold.Value = new decimal(new int[] {
             6,
@@ -391,9 +391,9 @@
             this.ShowFieldTextLineSeparators.Location = new System.Drawing.Point(212, 3);
             this.ShowFieldTextLineSeparators.Margin = new System.Windows.Forms.Padding(0);
             this.ShowFieldTextLineSeparators.Name = "ShowFieldTextLineSeparators";
-            this.ShowFieldTextLineSeparators.Size = new System.Drawing.Size(111, 17);
+            this.ShowFieldTextLineSeparators.Size = new System.Drawing.Size(81, 17);
             this.ShowFieldTextLineSeparators.TabIndex = 60;
-            this.ShowFieldTextLineSeparators.Text = "Show Table Lines";
+            this.ShowFieldTextLineSeparators.Text = "Show Lines";
             this.ShowFieldTextLineSeparators.UseVisualStyleBackColor = true;
             // 
             // label14
@@ -802,8 +802,8 @@
             // 
             // SearchRectangleMargin
             // 
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            this.SearchRectangleMargin.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            this.SearchRectangleMargin.DefaultCellStyle = dataGridViewCellStyle2;
             this.SearchRectangleMargin.HeaderText = "Margin";
             this.SearchRectangleMargin.Name = "SearchRectangleMargin";
             this.SearchRectangleMargin.Width = 50;
@@ -972,7 +972,7 @@
             this.fOcr.Controls.Add(this.CharSizeFilterMaxHeight);
             this.fOcr.Controls.Add(this.label15);
             this.fOcr.Controls.Add(this.label20);
-            this.fOcr.Controls.Add(this.ColumnCellPaddingY);
+            this.fOcr.Controls.Add(this.LinePaddingY);
             this.fOcr.Controls.Add(this.label21);
             this.fOcr.Controls.Add(this.AdjustLineBorders);
             this.fOcr.Dock = System.Windows.Forms.DockStyle.Top;
@@ -1168,22 +1168,22 @@
             this.label20.Location = new System.Drawing.Point(0, 43);
             this.label20.Margin = new System.Windows.Forms.Padding(0);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(69, 13);
+            this.label20.Size = new System.Drawing.Size(72, 13);
             this.label20.TabIndex = 121;
-            this.label20.Text = "Cell Padding:";
+            this.label20.Text = "Line Padding:";
             // 
-            // ColumnCellPaddingY
+            // LinePaddingY
             // 
-            this.ColumnCellPaddingY.Location = new System.Drawing.Point(69, 43);
-            this.ColumnCellPaddingY.Margin = new System.Windows.Forms.Padding(0);
-            this.ColumnCellPaddingY.Name = "ColumnCellPaddingY";
-            this.ColumnCellPaddingY.Size = new System.Drawing.Size(34, 20);
-            this.ColumnCellPaddingY.TabIndex = 122;
+            this.LinePaddingY.Location = new System.Drawing.Point(72, 43);
+            this.LinePaddingY.Margin = new System.Windows.Forms.Padding(0);
+            this.LinePaddingY.Name = "LinePaddingY";
+            this.LinePaddingY.Size = new System.Drawing.Size(34, 20);
+            this.LinePaddingY.TabIndex = 122;
             // 
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(103, 43);
+            this.label21.Location = new System.Drawing.Point(106, 43);
             this.label21.Margin = new System.Windows.Forms.Padding(0);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(21, 13);
@@ -1193,7 +1193,7 @@
             // AdjustLineBorders
             // 
             this.AdjustLineBorders.AutoSize = true;
-            this.AdjustLineBorders.Location = new System.Drawing.Point(124, 43);
+            this.AdjustLineBorders.Location = new System.Drawing.Point(127, 43);
             this.AdjustLineBorders.Margin = new System.Windows.Forms.Padding(0);
             this.AdjustLineBorders.Name = "AdjustLineBorders";
             this.AdjustLineBorders.Size = new System.Drawing.Size(117, 17);
@@ -1218,7 +1218,7 @@
             // IgnoreSourceSpaces
             // 
             this.IgnoreSourceSpaces.AutoSize = true;
-            this.IgnoreSourceSpaces.Location = new System.Drawing.Point(203, 0);
+            this.IgnoreSourceSpaces.Location = new System.Drawing.Point(196, 0);
             this.IgnoreSourceSpaces.Margin = new System.Windows.Forms.Padding(0);
             this.IgnoreSourceSpaces.Name = "IgnoreSourceSpaces";
             this.IgnoreSourceSpaces.Size = new System.Drawing.Size(132, 17);
@@ -1391,7 +1391,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.CharSizeFilterMaxWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.CharSizeFilterMinHeight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.CharSizeFilterMaxHeight)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ColumnCellPaddingY)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LinePaddingY)).EndInit();
             this.flowLayoutPanel9.ResumeLayout(false);
             this.flowLayoutPanel9.PerformLayout();
             this.splitContainer2.Panel1.ResumeLayout(false);
@@ -1508,7 +1508,7 @@
         private System.Windows.Forms.CheckBox AdjustLineBorders;
         private System.Windows.Forms.CheckBox cOcr;
         private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.NumericUpDown ColumnCellPaddingY;
+        private System.Windows.Forms.NumericUpDown LinePaddingY;
         private System.Windows.Forms.Label label21;
     }
 }

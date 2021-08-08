@@ -204,7 +204,7 @@ namespace Cliver.PdfDocumentParser
                                 if (field.AdjustLineBorders ?? pages.ActiveTemplate.AdjustLineBorders)
                                     Page.AdjustBorders(ols, fai.TableFieldActualInfo.ActualRectangle.Value);
                                 else
-                                    Page.PadLines(ols, field.ColumnCellPaddingY ?? pages.ActiveTemplate.ColumnCellPaddingY);
+                                    Page.PadLines(ols, field.LinePaddingY ?? pages.ActiveTemplate.LinePaddingY);
                                 if (ols.Count > 0)
                                     ols.RemoveAt(0);
                                 List<RectangleF> lineBoxes = new List<RectangleF>();
@@ -228,7 +228,7 @@ namespace Cliver.PdfDocumentParser
                                     if (field.AdjustLineBorders ?? pages.ActiveTemplate.AdjustLineBorders)
                                         Page.AdjustBorders(ols, r);
                                     else
-                                        Page.PadLines(ols, field.ColumnCellPaddingY ?? pages.ActiveTemplate.ColumnCellPaddingY);
+                                        Page.PadLines(ols, field.LinePaddingY ?? pages.ActiveTemplate.LinePaddingY);
                                     if (ols.Count > 0)
                                         ols.RemoveAt(0);
                                     List<RectangleF> lineBoxes = new List<RectangleF>();

@@ -48,7 +48,7 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public int ColumnCellPaddingY = 1;
+        public int LinePaddingY = 1;
 
         public PageRotations PageRotation = PageRotations.NONE;
         public enum PageRotations

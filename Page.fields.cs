@@ -318,7 +318,7 @@ namespace Cliver.PdfDocumentParser
                     if (ActualField.AdjustLineBorders ?? page.PageCollection.ActiveTemplate.AdjustLineBorders)
                         AdjustBorders(ols, TableFieldActualInfo.ActualRectangle.Value);
                     else
-                        PadLines(ols, ActualField.ColumnCellPaddingY ?? page.PageCollection.ActiveTemplate.ColumnCellPaddingY);
+                        PadLines(ols, ActualField.LinePaddingY ?? page.PageCollection.ActiveTemplate.LinePaddingY);
                     foreach (Line<Ocr.CharBox> l in ols)
                     {
                         float x = ar.X > TableFieldActualInfo.ActualRectangle.Value.X ? ar.X : TableFieldActualInfo.ActualRectangle.Value.X;
@@ -435,7 +435,7 @@ namespace Cliver.PdfDocumentParser
                     if (ActualField.AdjustLineBorders ?? page.PageCollection.ActiveTemplate.AdjustLineBorders)
                         AdjustBorders(ols, ar);
                     else
-                        PadLines(ols, ActualField.ColumnCellPaddingY ?? page.PageCollection.ActiveTemplate.ColumnCellPaddingY);
+                        PadLines(ols, ActualField.LinePaddingY ?? page.PageCollection.ActiveTemplate.LinePaddingY);
                     left = ar.Left;
                     width = ar.Width;
                 }
@@ -451,7 +451,7 @@ namespace Cliver.PdfDocumentParser
                     if (ActualField.AdjustLineBorders ?? page.PageCollection.ActiveTemplate.AdjustLineBorders)
                         AdjustBorders(ols, TableFieldActualInfo.ActualRectangle.Value);
                     else
-                        PadLines(ols, ActualField.ColumnCellPaddingY ?? page.PageCollection.ActiveTemplate.ColumnCellPaddingY);
+                        PadLines(ols, ActualField.LinePaddingY ?? page.PageCollection.ActiveTemplate.LinePaddingY);
                     left = ar.X > TableFieldActualInfo.ActualRectangle.Value.X ? ar.X : TableFieldActualInfo.ActualRectangle.Value.X;
                     width = (ar.Right < TableFieldActualInfo.ActualRectangle.Value.Right ? ar.Right : TableFieldActualInfo.ActualRectangle.Value.Right) - left;
                 }

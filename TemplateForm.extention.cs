@@ -88,7 +88,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 cOcr.Checked = t.CharFilter != null;
                 cOcr_CheckedChanged(null, null);
-                ColumnCellPaddingY.Value = t.ColumnCellPaddingY;
+                LinePaddingY.Value = t.LinePaddingY;
 
                 bitmapPreparationForm.SetUI(t, false);
                 highlightScanSettings(t);
@@ -282,8 +282,8 @@ namespace Cliver.PdfDocumentParser
             t.ColumnCellFromCellImage = ColumnCellFromCellImage.Checked;
             if (CharSizeFilterMinWidth.Value > 0 || CharSizeFilterMaxWidth.Value > 0 || CharSizeFilterMinHeight.Value > 0 || CharSizeFilterMaxHeight.Value > 0)
                 t.CharFilter = new CharFilter { MinWidth = (float)CharSizeFilterMinWidth.Value, MaxWidth = (float)CharSizeFilterMaxWidth.Value, MinHeight = (float)CharSizeFilterMinHeight.Value, MaxHeight = (float)CharSizeFilterMaxHeight.Value };
-            if (ColumnCellPaddingY.Value > 0)
-                t.ColumnCellPaddingY = (int)ColumnCellPaddingY.Value;
+            if (LinePaddingY.Value > 0)
+                t.LinePaddingY = (int)LinePaddingY.Value;
 
             bitmapPreparationForm.SetTemplate(t);
 

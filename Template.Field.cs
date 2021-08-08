@@ -132,7 +132,7 @@ namespace Cliver.PdfDocumentParser
             public OcrModes? OcrMode = null;
             public Tesseract.PageSegMode? TesseractPageSegMode = null;
             public CharFilter CharFilter = null;
-            public int? ColumnCellPaddingY = null;
+            public int? LinePaddingY = null;
             public TextAutoInsertSpace TextAutoInsertSpace = null;
 
             internal bool? AdjustLineBorders
