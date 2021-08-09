@@ -31,18 +31,18 @@ namespace Cliver.Win
         static public Tuple<string, string> Win32_OperatingSystem_SerialNumber = new Tuple<string, string>("Win32_OperatingSystem", "SerialNumber");
         static public Tuple<string, string> Win32_OperatingSystem_PlusProductID = new Tuple<string, string>("Win32_OperatingSystem", "PlusProductID");
 
-        public static IEnumerable<string> GetProperty(Tuple<string, string> wmiRequest)
+        public static IEnumerable<string> GetProperty((string wmiClass, string wmiProperty) wmiRequest)
         {
             return GetProperty(wmiRequest.Item1, wmiRequest.Item2);
         }
 
         public static IEnumerable<string> GetProperty(string wmiClass, string wmiProperty)
         {
-            ManagementClass mc = new ManagementClass(wmiClass);
+            ManagementClass mc = new ManagementClass(wmiClass);// { Scope = new ManagementScope { Options = new ConnectionOptions { Impersonation = ImpersonationLevel.Impersonate } } };
             foreach (ManagementObject mo in mc.GetInstances())
             {
                 var v = mo[wmiProperty];
-                if(v != null)
+                if (v != null)
                     yield return v.ToString().Trim();
             }
         }
