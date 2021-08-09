@@ -28,11 +28,15 @@ namespace Cliver.PdfDocumentParser
             public Ocr.Config OcrConfig;//set by the host
 
             [Newtonsoft.Json.JsonIgnore]
-            public float Image2PdfResolutionRatio { get; private set; }
+            public float Pdf2ImageResolutionRatio { get; private set; }
+
+            //[Newtonsoft.Json.JsonIgnore]
+            //public float Image2PdfResolutionRatio { get; private set; }
 
             protected override void Loaded()
             {
-                Image2PdfResolutionRatio = (float)PdfResolution / PdfPageImageResolution;
+                Pdf2ImageResolutionRatio = (float)PdfResolution / PdfPageImageResolution;
+                //Image2PdfResolutionRatio = (float)PdfPageImageResolution / PdfResolution;
 
                 if (OcrConfig == null)
                     OcrConfig = new Ocr.Config

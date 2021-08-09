@@ -245,7 +245,7 @@ namespace Cliver.PdfDocumentParser
                                                     selectedOcrCharBoxs.AddRange(Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateOcrCharBoxs, r.GetSystemRectangleF()));
                                                 else
                                                 {
-                                                    using (Bitmap b = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
+                                                    using (Bitmap b = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Pdf2ImageResolutionRatio, r.Y / Settings.Constants.Pdf2ImageResolutionRatio, r.Width / Settings.Constants.Pdf2ImageResolutionRatio, r.Height / Settings.Constants.Pdf2ImageResolutionRatio))
                                                     {
                                                         if (b == null)
                                                             throw new Exception("Selected image is empty.");
@@ -269,7 +269,7 @@ namespace Cliver.PdfDocumentParser
                                         case Template.Anchor.Types.ImageData:
                                             {
                                                 Template.Anchor.ImageData id = (Template.Anchor.ImageData)a;
-                                                using (Bitmap b = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
+                                                using (Bitmap b = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Pdf2ImageResolutionRatio, r.Y / Settings.Constants.Pdf2ImageResolutionRatio, r.Width / Settings.Constants.Pdf2ImageResolutionRatio, r.Height / Settings.Constants.Pdf2ImageResolutionRatio))
                                                 {
                                                     if (b == null)
                                                         throw new Exception("Selected image is empty.");
@@ -280,7 +280,7 @@ namespace Cliver.PdfDocumentParser
                                         case Template.Anchor.Types.CvImage:
                                             {
                                                 Template.Anchor.CvImage ci = (Template.Anchor.CvImage)a;
-                                                using (Bitmap b = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
+                                                using (Bitmap b = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Pdf2ImageResolutionRatio, r.Y / Settings.Constants.Pdf2ImageResolutionRatio, r.Width / Settings.Constants.Pdf2ImageResolutionRatio, r.Height / Settings.Constants.Pdf2ImageResolutionRatio))
                                                 {
                                                     if (b == null)
                                                         throw new Exception("Selected image is empty.");

@@ -179,7 +179,7 @@ namespace Cliver.PdfDocumentParser
         }
         bool getScaled(Bitmap b, ref RectangleF r)
         {
-            r = new RectangleF(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio);
+            r = new RectangleF(r.X / Settings.Constants.Pdf2ImageResolutionRatio, r.Y / Settings.Constants.Pdf2ImageResolutionRatio, r.Width / Settings.Constants.Pdf2ImageResolutionRatio, r.Height / Settings.Constants.Pdf2ImageResolutionRatio);
             r.Intersect(new Rectangle(0, 0, b.Width, b.Height));
             if (Math.Abs(r.Width) < Settings.Constants.CoordinateDeviationMargin || Math.Abs(r.Height) < Settings.Constants.CoordinateDeviationMargin)
                 return false;
@@ -253,7 +253,7 @@ namespace Cliver.PdfDocumentParser
                         //    {
                         //        Char = "\r\n",
                         //        AutoInserted = true,
-                        //        R = new RectangleF(r.X1 * Settings.Constants.Image2PdfResolutionRatio - Settings.Constants.CoordinateDeviationMargin * 2, r.Y1 * Settings.Constants.Image2PdfResolutionRatio, r.Width * Settings.Constants.Image2PdfResolutionRatio, r.Height * Settings.Constants.Image2PdfResolutionRatio)
+                        //        R = new RectangleF(r.X1 * Settings.Constants.Pdf2ImageResolutionRatio - Settings.Constants.CoordinateDeviationMargin * 2, r.Y1 * Settings.Constants.Pdf2ImageResolutionRatio, r.Width * Settings.Constants.Pdf2ImageResolutionRatio, r.Height * Settings.Constants.Pdf2ImageResolutionRatio)
                         //    });
                         //}//seems to work not well
 
@@ -261,13 +261,13 @@ namespace Cliver.PdfDocumentParser
                         //{
                         //    Char = " ",
                         //    AutoInserted = true,
-                        //    R = new RectangleF(r.X1 * Settings.Constants.Image2PdfResolutionRatio - Settings.Constants.CoordinateDeviationMargin * 2, r.Y1 * Settings.Constants.Image2PdfResolutionRatio, r.Width * Settings.Constants.Image2PdfResolutionRatio, r.Height * Settings.Constants.Image2PdfResolutionRatio)
+                        //    R = new RectangleF(r.X1 * Settings.Constants.Pdf2ImageResolutionRatio - Settings.Constants.CoordinateDeviationMargin * 2, r.Y1 * Settings.Constants.Pdf2ImageResolutionRatio, r.Width * Settings.Constants.Pdf2ImageResolutionRatio, r.Height * Settings.Constants.Pdf2ImageResolutionRatio)
                         //});
                         //}
                         cbs.Add(new CharBox
                         {
                             Char = i.GetText(PageIteratorLevel.Symbol),
-                            R = new RectangleF(r.X1 * Settings.Constants.Image2PdfResolutionRatio, r.Y1 * Settings.Constants.Image2PdfResolutionRatio, r.Width * Settings.Constants.Image2PdfResolutionRatio, r.Height * Settings.Constants.Image2PdfResolutionRatio)
+                            R = new RectangleF(r.X1 * Settings.Constants.Pdf2ImageResolutionRatio, r.Y1 * Settings.Constants.Pdf2ImageResolutionRatio, r.Width * Settings.Constants.Pdf2ImageResolutionRatio, r.Height * Settings.Constants.Pdf2ImageResolutionRatio)
                         });
                     }
                 } while (i.Next(PageIteratorLevel.Symbol));

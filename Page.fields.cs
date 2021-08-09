@@ -407,7 +407,7 @@ namespace Cliver.PdfDocumentParser
                 else
                     r = ar;
 
-                using (Bitmap b = page.GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
+                using (Bitmap b = page.GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Pdf2ImageResolutionRatio, r.Y / Settings.Constants.Pdf2ImageResolutionRatio, r.Width / Settings.Constants.Pdf2ImageResolutionRatio, r.Height / Settings.Constants.Pdf2ImageResolutionRatio))
                 {
                     if (b == null)
                         return null;
@@ -463,7 +463,7 @@ namespace Cliver.PdfDocumentParser
                 foreach (Line<Ocr.CharBox> l in ols)
                 {
                     RectangleF r = new RectangleF(left, l.Top, width, l.Bottom - l.Top);
-                    using (Bitmap b = page.GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
+                    using (Bitmap b = page.GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Pdf2ImageResolutionRatio, r.Y / Settings.Constants.Pdf2ImageResolutionRatio, r.Width / Settings.Constants.Pdf2ImageResolutionRatio, r.Height / Settings.Constants.Pdf2ImageResolutionRatio))
                     {
                         ls.Add(b == null ? b : GetImageScaled2Pdf(b));
                     }
@@ -528,8 +528,8 @@ namespace Cliver.PdfDocumentParser
 
         internal static Bitmap GetImageScaled2Pdf(Image image)
         {
-            int w = (int)Math.Round(image.Width * Settings.Constants.Image2PdfResolutionRatio, 0);
-            int h = (int)Math.Round(image.Height * Settings.Constants.Image2PdfResolutionRatio, 0);
+            int w = (int)Math.Round(image.Width * Settings.Constants.Pdf2ImageResolutionRatio, 0);
+            int h = (int)Math.Round(image.Height * Settings.Constants.Pdf2ImageResolutionRatio, 0);
             if (w == 0)
                 w = 1;
             if (h == 0)

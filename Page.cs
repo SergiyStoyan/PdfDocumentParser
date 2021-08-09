@@ -239,8 +239,8 @@ namespace Cliver.PdfDocumentParser
                     //            if (m == null)
                     //                continue;
                     //            Rectangle r = m.Rectangle;
-                    //            for (int x = (int)(r.X / Settings.Constants.Image2PdfResolutionRatio); x < r.Right / Settings.Constants.Image2PdfResolutionRatio; x++)
-                    //                for (int y = (int)(r.Y / Settings.Constants.Image2PdfResolutionRatio); y < r.Bottom / Settings.Constants.Image2PdfResolutionRatio; y++)
+                    //            for (int x = (int)(r.X / Settings.Constants.Pdf2ImageResolutionRatio); x < r.Right / Settings.Constants.Pdf2ImageResolutionRatio; x++)
+                    //                for (int y = (int)(r.Y / Settings.Constants.Pdf2ImageResolutionRatio); y < r.Bottom / Settings.Constants.Pdf2ImageResolutionRatio; y++)
                     //                    b.SetPixel(x, y, Color.White);
                     //        }
                     //    }
@@ -337,7 +337,7 @@ namespace Cliver.PdfDocumentParser
             if (sda.SearchRectangleMargin >= 0)
             {
                 RectangleF sr = getSearchRectangle(sda.Rectangle(), sda.SearchRectangleMargin);
-                using (Bitmap b = GetRectangleFromActiveTemplateBitmap(sr.X / Settings.Constants.Image2PdfResolutionRatio, sr.Y / Settings.Constants.Image2PdfResolutionRatio, sr.Width / Settings.Constants.Image2PdfResolutionRatio, sr.Height / Settings.Constants.Image2PdfResolutionRatio))
+                using (Bitmap b = GetRectangleFromActiveTemplateBitmap(sr.X / Settings.Constants.Pdf2ImageResolutionRatio, sr.Y / Settings.Constants.Pdf2ImageResolutionRatio, sr.Width / Settings.Constants.Pdf2ImageResolutionRatio, sr.Height / Settings.Constants.Pdf2ImageResolutionRatio))
                 {
                     if (b == null)
                         throw new Exception("The scaling anchor's rectangle is null.");
@@ -354,7 +354,7 @@ namespace Cliver.PdfDocumentParser
 
         public Color GetColor(float x, float y)
         {
-            return ActiveTemplateBitmap.GetPixel((int)Math.Round(x / Settings.Constants.Image2PdfResolutionRatio), (int)Math.Round(y / Settings.Constants.Image2PdfResolutionRatio));
+            return ActiveTemplateBitmap.GetPixel((int)Math.Round(x / Settings.Constants.Pdf2ImageResolutionRatio), (int)Math.Round(y / Settings.Constants.Pdf2ImageResolutionRatio));
         }
     }
 }
