@@ -19,7 +19,7 @@ namespace Cliver.PdfDocumentParser
 
         public CharFilter CharFilter;
 
-        public Field.OcrModes OcrMode = Field.OcrModes.SingleFieldFromFieldImage | Field.OcrModes.AdjustLineBorders;
+        public Field.OcrModes OcrMode = Field.OcrModes.SingleFieldFromFieldImage;
         internal bool AdjustLineBorders
         {
             get { return OcrMode.HasFlag(Field.OcrModes.AdjustLineBorders); }
