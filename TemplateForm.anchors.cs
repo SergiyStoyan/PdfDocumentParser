@@ -157,16 +157,11 @@ namespace Cliver.PdfDocumentParser
                     DataGridViewCell c = anchors[e.ColumnIndex, e.RowIndex];
                     switch (anchors.Columns[e.ColumnIndex].Name)
                     {
-                        //case "Id3":
-                        //    {
-                        //        int? anchorId = (int?)row.Cells["Id3"].Value;
-                        //        if (anchorId == null)
-                        //            break;
-                        //        Template.Anchor a = (Template.Anchor)row.Tag;
-                        //        a.Id = (int)anchorId;
-                        //        setAnchorRow(row, a);
-                        //        break;
-                        //    }
+                        case "ParentAnchorId3":
+                            {
+                                a.ParentAnchorId = (int?)row.Cells["ParentAnchorId3"].Value;
+                                break;
+                            }
                         case "Pattern":
                             return;
                         case "Type3":

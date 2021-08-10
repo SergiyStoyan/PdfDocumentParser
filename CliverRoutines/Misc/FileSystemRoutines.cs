@@ -70,22 +70,30 @@ namespace Cliver
             return di.FullName;
         }
 
-        public static void ClearDirectory(string directory, bool recursive = true)
+        public static void ClearDirectory(string directory, bool recursive = true, bool throwException = true)
         {
-            if (!Directory.Exists(directory))
+            try
             {
-                Directory.CreateDirectory(directory);
-                return;
-            }
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                    return;
+                }
 
-            foreach (string file in Directory.GetFiles(directory))
-            {
-                File.SetAttributes(file, FileAttributes.Normal);
-                File.Delete(file);
+                foreach (string file in Directory.GetFiles(directory))
+                {
+                    File.SetAttributes(file, FileAttributes.Normal);
+                    File.Delete(file);
+                }
+                if (recursive)
+                    foreach (string d in Directory.GetDirectories(directory))
+                        DeleteDirectory(d, recursive);
             }
-            if (recursive)
-                foreach (string d in Directory.GetDirectories(directory))
-                    DeleteDirectory(d, recursive);
+            catch(Exception e)
+            {
+                if (throwException)
+                    throw e;
+            }
         }
 
         public static void DeleteDirectory(string directory, bool recursive = true)
