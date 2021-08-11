@@ -14,6 +14,7 @@ namespace Cliver
     {
         protected override WebResponse GetWebResponse(WebRequest request, IAsyncResult asyncResult)
         {
+            Exception = null;
             WebResponse response;
             try
             {
@@ -21,6 +22,7 @@ namespace Cliver
             }
             catch (WebException e)
             {
+                Exception = e;
                 response = e.Response;
             }
             Response = response as HttpWebResponse;
@@ -28,6 +30,7 @@ namespace Cliver
         }
         protected override WebResponse GetWebResponse(WebRequest request)
         {
+            Exception = null;
             WebResponse response;
             try
             {
@@ -35,21 +38,24 @@ namespace Cliver
             }
             catch (WebException e)
             {
+                Exception = e;
                 response = e.Response;
             }
             Response = response as HttpWebResponse;
             return response;
         }
         public HttpWebResponse Response { get; private set; } = null;
+        public WebException Exception { get; private set; } = null;
 
         protected override WebRequest GetWebRequest(Uri address)
         {
             WebRequest request = base.GetWebRequest(address);
             Request = request as HttpWebRequest;
-            Request.CookieContainer = cookieContainer;
+            Request.CookieContainer = CookieContainer;
             return request;
         }
-        private readonly CookieContainer cookieContainer = new CookieContainer();
         public HttpWebRequest Request { get; private set; } = null;
+
+        public readonly CookieContainer CookieContainer = new CookieContainer();
     }
 }
