@@ -22,7 +22,7 @@ namespace Cliver
         /// This info identifies a certain Settings field/property in the application to which this object belongs. 
         /// All __Info instances are paired one-to-one with all Settings fields in the application. 
         /// Cloned Settings objects share the same __Info instance which means that while multiple Settings objects can reference the same Settings field, the field can reference only one of them (which is called as 'attached object').
-        /// For some rare needs (for instance when a Settings object was created by deserialization/cloning and so has empty __Info), setting __Info from an application is allowed (with caution!).
+        /// For some rare needs (for instance when a Settings object was created by deserialization/cloning and therefore has empty __Info), setting __Info from an application's code is allowed (with caution!).
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         public SettingsFieldInfo __Info
@@ -188,7 +188,7 @@ namespace Cliver
             {
                 if (__Info == null)//was created outside Config
                     throw new Exception("This method cannot be performed on this Settings object because its __Info is not set.");
-                Settings settings = create(__Info, false/*, false*/);
+                Settings settings = create(__Info, false);
                 return !Serialization.Json.IsEqual(this, settings);
             }
         }
