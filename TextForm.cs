@@ -1,4 +1,10 @@
-﻿using System.Windows.Forms;
+﻿//********************************************************************************************
+//Author: Sergey Stoyan
+//        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
+//        http://www.cliversoft.com
+//********************************************************************************************
+using System.Windows.Forms;
 
 namespace Cliver.PdfDocumentParser
 {
