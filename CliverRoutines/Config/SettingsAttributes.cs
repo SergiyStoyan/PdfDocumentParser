@@ -101,11 +101,23 @@ namespace Cliver
                     if (string.IsNullOrWhiteSpace(stringEndecGetterName))
                         throw new Exception("stringEndecGetterName cannot be empty.");
                     System.Reflection.PropertyInfo pi = stringEndecGetterHostingType.GetProperty(stringEndecGetterName, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
-                    if (pi == null)
-                        throw new Exception(stringEndecGetterHostingType.FullName + " class does not expose property '" + stringEndecGetterName + "'");
-                    if (!pi.PropertyType.IsSubclassOf(typeof(StringEndec)))
-                        throw new Exception("Type of the property " + stringEndecGetterHostingType.FullName + "." + stringEndecGetterName + " is not " + typeof(StringEndec).FullName);
-                    Endec = pi.GetValue(null) as StringEndec;
+                    if (pi != null)
+                    {
+                        //if (!pi.PropertyType.IsSubclassOf(typeof(StringEndec)))//!!!does not work
+                        if (!typeof(StringEndec).IsAssignableFrom(pi.PropertyType))
+                            throw new Exception("Type of the property " + stringEndecGetterHostingType.FullName + "." + stringEndecGetterName + " is not " + typeof(StringEndec).FullName);
+                        Endec = pi.GetValue(null) as StringEndec;
+                    }
+                    else
+                    {
+                        System.Reflection.FieldInfo fi = stringEndecGetterHostingType.GetField(stringEndecGetterName, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+                        if (fi == null)
+                            throw new Exception(stringEndecGetterHostingType.FullName + " class does not expose the property/field '" + stringEndecGetterName + "'");
+                        //if (!fi.FieldType.IsSubclassOf(typeof(StringEndec)))//!!!does not work
+                        if (!typeof(StringEndec).IsAssignableFrom(fi.FieldType))
+                            throw new Exception("Type of the field " + stringEndecGetterHostingType.FullName + "." + stringEndecGetterName + " is not " + typeof(StringEndec).FullName);
+                        Endec = fi.GetValue(null) as StringEndec;
+                    }
                     if (Endec == null)
                         throw new Exception("Property " + stringEndecGetterHostingType.FullName + "." + stringEndecGetterName + " is NULL.");
                 }

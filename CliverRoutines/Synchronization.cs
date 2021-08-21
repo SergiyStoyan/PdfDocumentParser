@@ -1,6 +1,7 @@
 //********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
@@ -13,7 +14,7 @@ using System.Linq;
 namespace Cliver
 {
     /// <summary>
-    /// Template for syncronizing Settings storage files and application setup files through a cloud service. (The local system is required to have the service's synchronizing app running.)  
+    /// Template for syncronizing Settings storage files and application setup files through a cloud service. (The local system is required to have the service synchronizing app running.)  
     /// </summary>
     abstract public class Synchronization
     {

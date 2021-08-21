@@ -67,9 +67,9 @@ namespace Cliver
         public static string FileExtension = "log";
 
         /// <summary>
-        /// Suffix to the Dir folder name.
+        /// Suffix to the RootDir folder name.
         /// </summary>
-        public static string DirNameSuffix = @"_Logs";
+        public static string RootDirNameSuffix = @"_Logs";
 
         /// <summary>
         /// Log configuration.
@@ -238,7 +238,7 @@ namespace Cliver
                 foreach (string baseDir in baseDirs)
                 {
                     BaseDir = baseDir;
-                    rootDir = BaseDir + Path.DirectorySeparatorChar + Log.ProcessName + DirNameSuffix;
+                    rootDir = BaseDir + Path.DirectorySeparatorChar + Log.ProcessName + RootDirNameSuffix;
                     if (create)
                         try
                         {

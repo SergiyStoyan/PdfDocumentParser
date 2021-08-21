@@ -1,3 +1,9 @@
+//********************************************************************************************
+//Author: Sergey Stoyan
+//        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
+//        http://www.cliversoft.com
+//********************************************************************************************
 using System;
 using System.Security;
 using System.Security.Permissions;

@@ -152,7 +152,6 @@
     <Compile Include="Config\Encrypted.cs" />
     <Compile Include="Microsoft\Win32\NativeMethods.cs" />
     <Compile Include="Microsoft\Win32\SafeFileMappingHandle.cs" />
-    <Compile Include="TaskScheduler.cs" />
     <Compile Include="WinApi\Handles.cs" />
     <Compile Include="Microsoft\Win32\SafeLocalMemHandle.cs" />
     <Compile Include="Microsoft\Win32\SafeNativeMethods.cs" />

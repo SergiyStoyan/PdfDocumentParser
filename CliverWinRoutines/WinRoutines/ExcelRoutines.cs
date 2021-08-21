@@ -1,3 +1,9 @@
+//********************************************************************************************
+//Author: Sergey Stoyan
+//        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
+//        http://www.cliversoft.com
+//********************************************************************************************
 //using System;
 //using System.Collections.Generic;
 //using System.Text;
@@ -75,7 +81,7 @@
 //            while (System.Runtime.InteropServices.Marshal.ReleaseComObject(cells[key]) > 0) ;
 //            cells.Remove(key);
 //        }
-        
+
 //        public void Dispose()
 //        {
 //            if (excel == null)

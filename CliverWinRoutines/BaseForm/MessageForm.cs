@@ -1,11 +1,10 @@
 //********************************************************************************************
-//Author: Sergey Stoyan, CliverSoft.com
-//        http://cliversoft.com
-//        stoyan@cliversoft.com
+//Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
-//        03 January 2008
-//Copyright: (C) 2008, Sergey Stoyan
+//        sergey.stoyan@hotmail.com
+//        http://www.cliversoft.com
 //********************************************************************************************
+
 
 using System;
 using System.Drawing;
