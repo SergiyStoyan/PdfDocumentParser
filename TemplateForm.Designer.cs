@@ -159,7 +159,7 @@
             0,
             65536});
             this.textAutoInsertSpaceThreshold.Location = new System.Drawing.Point(152, 0);
-            this.textAutoInsertSpaceThreshold.Margin = new System.Windows.Forms.Padding(0);
+            this.textAutoInsertSpaceThreshold.Margin = new System.Windows.Forms.Padding(0, 0, 5, 0);
             this.textAutoInsertSpaceThreshold.Minimum = new decimal(new int[] {
             1,
             0,
@@ -986,7 +986,7 @@
             this.cOcr.Appearance = System.Windows.Forms.Appearance.Button;
             this.cOcr.AutoSize = true;
             this.cOcr.Location = new System.Drawing.Point(0, 0);
-            this.cOcr.Margin = new System.Windows.Forms.Padding(0);
+            this.cOcr.Margin = new System.Windows.Forms.Padding(0, 0, 5, 0);
             this.cOcr.Name = "cOcr";
             this.cOcr.Size = new System.Drawing.Size(43, 23);
             this.cOcr.TabIndex = 2;
@@ -997,7 +997,7 @@
             // SingleFieldFromFieldImage
             // 
             this.SingleFieldFromFieldImage.AutoSize = true;
-            this.SingleFieldFromFieldImage.Location = new System.Drawing.Point(43, 0);
+            this.SingleFieldFromFieldImage.Location = new System.Drawing.Point(48, 0);
             this.SingleFieldFromFieldImage.Margin = new System.Windows.Forms.Padding(0);
             this.SingleFieldFromFieldImage.Name = "SingleFieldFromFieldImage";
             this.SingleFieldFromFieldImage.Size = new System.Drawing.Size(141, 17);
@@ -1008,7 +1008,7 @@
             // ColumnCellFromCellImage
             // 
             this.ColumnCellFromCellImage.AutoSize = true;
-            this.ColumnCellFromCellImage.Location = new System.Drawing.Point(184, 0);
+            this.ColumnCellFromCellImage.Location = new System.Drawing.Point(189, 0);
             this.ColumnCellFromCellImage.Margin = new System.Windows.Forms.Padding(0);
             this.ColumnCellFromCellImage.Name = "ColumnCellFromCellImage";
             this.ColumnCellFromCellImage.Size = new System.Drawing.Size(142, 17);
@@ -1218,7 +1218,7 @@
             // IgnoreSourceSpaces
             // 
             this.IgnoreSourceSpaces.AutoSize = true;
-            this.IgnoreSourceSpaces.Location = new System.Drawing.Point(196, 0);
+            this.IgnoreSourceSpaces.Location = new System.Drawing.Point(201, 0);
             this.IgnoreSourceSpaces.Margin = new System.Windows.Forms.Padding(0);
             this.IgnoreSourceSpaces.Name = "IgnoreSourceSpaces";
             this.IgnoreSourceSpaces.Size = new System.Drawing.Size(132, 17);
