@@ -70,6 +70,7 @@
             this.Help = new System.Windows.Forms.LinkLabel();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.label10 = new System.Windows.Forms.Label();
+            this.fields = new System.Windows.Forms.DataGridView();
             this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
             this.newField = new System.Windows.Forms.LinkLabel();
             this.duplicateField = new System.Windows.Forms.LinkLabel();
@@ -104,7 +105,6 @@
             this.bSave = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.fields = new System.Windows.Forms.DataGridView();
             this.Name_ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.LeftAnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.TopAnchorId = new System.Windows.Forms.DataGridViewComboBoxColumn();
@@ -129,6 +129,7 @@
             this.splitContainer3.Panel1.SuspendLayout();
             this.splitContainer3.Panel2.SuspendLayout();
             this.splitContainer3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fields)).BeginInit();
             this.flowLayoutPanel6.SuspendLayout();
             this.fOcr.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CharSizeFilterMinWidth)).BeginInit();
@@ -147,7 +148,6 @@
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fields)).BeginInit();
             this.SuspendLayout();
             // 
             // textAutoInsertSpace_Threshold
@@ -779,6 +779,29 @@
             this.label10.TabIndex = 49;
             this.label10.Text = "Anchors:";
             // 
+            // fields
+            // 
+            this.fields.AllowUserToAddRows = false;
+            this.fields.AllowUserToDeleteRows = false;
+            this.fields.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.fields.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Name_,
+            this.LeftAnchorId,
+            this.TopAnchorId,
+            this.RightAnchorId,
+            this.BottomAnchorId,
+            this.Type,
+            this.Value,
+            this.Rectangle});
+            this.fields.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fields.Location = new System.Drawing.Point(0, 119);
+            this.fields.MultiSelect = false;
+            this.fields.Name = "fields";
+            this.fields.RowHeadersWidth = 30;
+            this.fields.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.fields.Size = new System.Drawing.Size(336, 202);
+            this.fields.TabIndex = 57;
+            // 
             // flowLayoutPanel6
             // 
             this.flowLayoutPanel6.Controls.Add(this.newField);
@@ -1259,29 +1282,6 @@
             this.splitContainer1.SplitterDistance = 584;
             this.splitContainer1.TabIndex = 1;
             // 
-            // fields
-            // 
-            this.fields.AllowUserToAddRows = false;
-            this.fields.AllowUserToDeleteRows = false;
-            this.fields.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.fields.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Name_,
-            this.LeftAnchorId,
-            this.TopAnchorId,
-            this.RightAnchorId,
-            this.BottomAnchorId,
-            this.Type,
-            this.Value,
-            this.Rectangle});
-            this.fields.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fields.Location = new System.Drawing.Point(0, 119);
-            this.fields.MultiSelect = false;
-            this.fields.Name = "fields";
-            this.fields.RowHeadersWidth = 30;
-            this.fields.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.fields.Size = new System.Drawing.Size(336, 202);
-            this.fields.TabIndex = 57;
-            // 
             // Name_
             // 
             this.Name_.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
@@ -1339,20 +1339,22 @@
             // 
             // Value
             // 
-            this.Value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.Value.FillWeight = 1000F;
             this.Value.HeaderText = "Value";
             this.Value.MinimumWidth = 120;
             this.Value.Name = "Value";
             this.Value.ReadOnly = true;
+            this.Value.Width = 120;
             // 
             // Rectangle
             // 
-            this.Rectangle.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Rectangle.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.Rectangle.HeaderText = "Rectangle";
-            this.Rectangle.MinimumWidth = 12;
+            this.Rectangle.MinimumWidth = 120;
             this.Rectangle.Name = "Rectangle";
             this.Rectangle.ReadOnly = true;
+            this.Rectangle.Width = 120;
             // 
             // TemplateForm
             // 
@@ -1382,6 +1384,7 @@
             this.splitContainer3.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
             this.splitContainer3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.fields)).EndInit();
             this.flowLayoutPanel6.ResumeLayout(false);
             this.flowLayoutPanel6.PerformLayout();
             this.fOcr.ResumeLayout(false);
@@ -1406,7 +1409,6 @@
             this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.fields)).EndInit();
             this.ResumeLayout(false);
 
         }
