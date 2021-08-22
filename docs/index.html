@@ -11,7 +11,7 @@
 <body>
     <script src="prism.js"></script>
     <div class='header'>
-        <div class='mainHeader'>Pdf Document Parser 6.6</div>
+        <div class='mainHeader'>Pdf Document Parser 7.*</div>
     </div>
 
     <div class='content'>
@@ -368,6 +368,11 @@ setLicense();
         <p>
             How to set fields, see in <a href='#tutorialField'>the tutorial</a>.
 
+            <h4><a name='fieldSettings'>Default settings</a></h4>
+            While each field can be configured independently, there are default field settings that are applied when a field does not have explicit configuration.
+			<p>These are: Spacing settings and OCR settings.
+			
+
 
 
 
@@ -388,12 +393,16 @@ setLicense();
             <table>
                 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
                 <tr>
-                    <td class='title_column'><a name='Representative'>TextAutoInsertSpace.Representative</a></td>
-                    <td>Character which is inserted into output as an auto-detected space.</td>
+                    <td class='title_column'><a name='Threshold'>TextAutoInsertSpace.Threshold</a></td>
+                    <td>Space detection can be tuned by this parameter. When needed, it should be tuned experimentally.</td>
                 </tr>
                 <tr>
-                    <td class='title_column'><a name='Threshold'>TextAutoInsertSpace.Threshold</a></td>
-                    <td>Space detection can be tuned by this parameter. When needed, it should be tuned experimentally. </td>
+                    <td class='title_column'><a name='IgnoreSourceSpaces'>TextAutoInsertSpace.IgnoreSourceSpaces</a></td>
+                    <td>Whether text spaces that explicitly exist as PDF entities or are recognized by the OCR engine, are to be ignored. When TRUE, all such spaces are eliminated from the parsing results.</td>
+                </tr>
+                <tr>
+                    <td class='title_column'><a name='Representative'>TextAutoInsertSpace.Representative</a></td>
+                    <td>Character which is inserted into output as an auto-detected space.</td>
                 </tr>
             </table>
 
@@ -430,7 +439,7 @@ setLicense();
                 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
                 <tr>
                     <td class='title_column'><a name='CvImageScalePyramidStep'>CvImageScalePyramidStep</a></td>
-                    <td>It is the scale pyramid step set in pixels of the PDF resolution (which is by default 72dpi). The bigger step, the faster perfomance... and the higher chance to overlook the match.</td>
+                    <td>It is the scale pyramid step set in pixels of the PDF resolution (which is by default 72dpi). The bigger step, the faster perfomance... and the higher chance to overlook the match. Usually the default value is OK.</td>
                 </tr>
             </table>
 
@@ -482,9 +491,25 @@ setLicense();
                     <td>Get Cliver.PdfDocumentParser.Page object from the PDF file.</td>
                 </tr>
                 <tr>
-                    <td class='title_column' rowspan='2'><code>Cliver.PdfDocumentParser.Page</code></td>
+                    <td class='title_column' rowspan='6'><code>Cliver.PdfDocumentParser.Page</code></td>
                     <td class='title_column'><a name='IsCondition'><code>IsCondition(string conditionName)</code></a></td>
                     <td>Check if a condition is met on the page.</td>
+                </tr>
+                <tr>
+                    <td class='title_column'><a name='GetText'><code>GetText(string fieldName)</code></a></td>
+                    <td>Extract a field as a string from the page.</td>
+                </tr>
+                <tr>
+                    <td class='title_column'><a name='GetTextLines'><code>GetTextLines(string fieldName)</code></a></td>
+                    <td>Extract a field as an array of strings that correspond to lines on the page.</td>
+                </tr>
+                <tr>
+                    <td class='title_column'><a name='GetCharBoxes'><code>GetCharBoxes(string fieldName)</code></a></td>
+                    <td>Extract a field as an array of char info's from the page.</td>
+                </tr>
+                <tr>
+                    <td class='title_column'><a name='GetImage'><code>GetImage(string fieldName)</code></a></td>
+                    <td>Extract a field as an Bitmap from the page.</td>
                 </tr>
                 <tr>
                     <td class='title_column'><a name='GetValue'><code>GetValue(string fieldName, ValueTypes valueType)</code></a></td>
