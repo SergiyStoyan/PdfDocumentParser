@@ -305,12 +305,12 @@ setLicense();
             <h2><a name="field">Field</a></h2>
         <p>A field defines certain text or image that is to be extracted from a PDF page. It is retrieved by method <a href='#GetValue'><code>GetValue()</code></a>.
         <p>
-            Fields are identified by their names. The field collection is dictated by logic of the application.
+            Fields are identified by their names. The field collection is dictated by needs of the application.
 
             <h3>Anchoring</h3>
         <p>
             Every side of a field's rectangular can be linked to an anchor.
-            When a field has no anchor, it retains the initial position and size which were set during creation.
+            When a field has no anchor, it retains the initial position and size that were set during creation.
             When some side of a field is linked to an anchor, it becomes bonded to the anchor's actual position so that if the anchor shifts on a page, the linked side shifts together with it. This means, that the field can change its location and/or size according to its anchors. When all the sides of a field are linked to the same anchor then the field is simply shifts.
         <p>When some anchor of a field is not found then the field itself is set not found.
         <p>When it is definitely known about a field that it appears on every page and always keeps the same position and size then there is no need to anchor it.
