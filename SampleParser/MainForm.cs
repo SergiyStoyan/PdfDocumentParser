@@ -244,7 +244,6 @@ namespace Cliver.SampleParser
                             return;
                         Template2 t2 = Serialization.Json.Deserialize<Template2>(Serialization.Json.Serialize(t));
                         t2.Template.Name = "";
-                        t2.Template.Editor.TestFile = null;
                         int i = template2s.Rows.Add(new DataGridViewRow());
                         DataGridViewRow r2 = template2s.Rows[i];
                         r2.Tag = t2;
@@ -504,7 +503,7 @@ namespace Cliver.SampleParser
 
         private void bLog_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(Log.WorkDir);
+            System.Diagnostics.Process.Start(Log.RootDir);
         }
 
         private void bSettings_Click(object sender, EventArgs e)

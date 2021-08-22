@@ -65,7 +65,7 @@ namespace Cliver.SampleParser
         {
             try
             {
-                Settings.GeneralSettings g2 = Settings.General.CreateClone();
+                GeneralSettings g2 = Settings.General.CreateClone();
 
                 g2.InputFolder = InputFolder.Text;
                 if (string.IsNullOrWhiteSpace(g2.InputFolder))

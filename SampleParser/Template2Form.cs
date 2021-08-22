@@ -41,8 +41,7 @@ namespace Cliver.SampleParser
         {
             try
             {
-                string d = string.IsNullOrWhiteSpace(template2.Template.Editor.TestFile) ? Settings.General.InputFolder : PathRoutines.GetFileDir(template2.Template.Editor.TestFile);
-                FileFilterForm f = new FileFilterForm(d, Serialization.Json.Deserialize<Regex>(FileFilterRegex.Text));
+                FileFilterForm f = new FileFilterForm(Settings.General.InputFolder, Serialization.Json.Deserialize<Regex>(FileFilterRegex.Text));
                 f.ShowDialog();
             }
             catch (Exception ex)
