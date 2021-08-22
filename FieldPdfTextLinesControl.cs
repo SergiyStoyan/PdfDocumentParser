@@ -38,7 +38,7 @@ namespace Cliver.PdfDocumentParser
                 field = new Template.Field.PdfTextLines();
             field.ColumnOfTable = (string)ColumnOfTable.SelectedItem;
             if (SpecialTextAutoInsertSpace.Checked)
-                field.TextAutoInsertSpace = new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text), IgnoreSourceSpaces = textAutoInsertSpaceIgnoreSourceSpaces.Checked };
+                field.TextAutoInsertSpace = new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpace_Threshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text), IgnoreSourceSpaces = textAutoInsertSpaceIgnoreSourceSpaces.Checked };
             else
                 field.TextAutoInsertSpace = null;
             return field;
@@ -60,13 +60,13 @@ namespace Cliver.PdfDocumentParser
             SpecialTextAutoInsertSpace.Checked = field.TextAutoInsertSpace != null;
             if (field.TextAutoInsertSpace != null)
             {
-                textAutoInsertSpaceThreshold.Value = (decimal)field.TextAutoInsertSpace.Threshold;
+                textAutoInsertSpace_Threshold.Value = (decimal)field.TextAutoInsertSpace.Threshold;
                 textAutoInsertSpaceRepresentative.Text = Regex.Escape(field.TextAutoInsertSpace.Representative);
                 textAutoInsertSpaceIgnoreSourceSpaces.Checked = field.TextAutoInsertSpace.IgnoreSourceSpaces;
             }
             else
             {
-                textAutoInsertSpaceThreshold.Value = (decimal)template.TextAutoInsertSpace.Threshold;
+                textAutoInsertSpace_Threshold.Value = (decimal)template.TextAutoInsertSpace.Threshold;
                 textAutoInsertSpaceRepresentative.Text = template.TextAutoInsertSpace.Representative;
                 textAutoInsertSpaceIgnoreSourceSpaces.Checked = template.TextAutoInsertSpace.IgnoreSourceSpaces;
             }

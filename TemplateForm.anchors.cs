@@ -316,12 +316,12 @@ namespace Cliver.PdfDocumentParser
                 {
                     case Template.Anchor.Types.PdfText:
                         {
-                            currentAnchorControl = new AnchorPdfTextControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, IgnoreSourceSpaces = IgnoreSourceSpaces.Checked/*, Representative//default*/ });
+                            currentAnchorControl = new AnchorPdfTextControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpace_Threshold.Value, IgnoreSourceSpaces = textAutoInsertSpace_IgnoreSourceSpaces.Checked/*, Representative//default*/ });
                         }
                         break;
                     case Template.Anchor.Types.OcrText:
                         {
-                            currentAnchorControl = new AnchorOcrTextControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, IgnoreSourceSpaces = IgnoreSourceSpaces.Checked/*, Representative//default*/ });
+                            currentAnchorControl = new AnchorOcrTextControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpace_Threshold.Value, IgnoreSourceSpaces = textAutoInsertSpace_IgnoreSourceSpaces.Checked/*, Representative//default*/ });
                         }
                         break;
                     case Template.Anchor.Types.ImageData:
@@ -423,7 +423,7 @@ namespace Cliver.PdfDocumentParser
                             break;
                         }
                         StringBuilder sb = new StringBuilder();
-                        foreach (var l in Page.GetLines(pt.CharBoxs.Select(x => new Pdf.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() }), new TextAutoInsertSpace { IgnoreSourceSpaces = IgnoreSourceSpaces.Checked, Threshold = (float)textAutoInsertSpaceThreshold.Value/*, Representative*/}, null))
+                        foreach (var l in Page.GetLines(pt.CharBoxs.Select(x => new Pdf.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() }), new TextAutoInsertSpace { IgnoreSourceSpaces = textAutoInsertSpace_IgnoreSourceSpaces.Checked, Threshold = (float)textAutoInsertSpace_Threshold.Value/*, Representative*/}, null))
                         {
                             foreach (var cb in l.CharBoxs)
                                 sb.Append(cb.Char);
@@ -441,7 +441,7 @@ namespace Cliver.PdfDocumentParser
                             break;
                         }
                         StringBuilder sb = new StringBuilder();
-                        foreach (var l in Page.GetLines(ot.CharBoxs.Select(x => new Ocr.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() }), new TextAutoInsertSpace { IgnoreSourceSpaces = IgnoreSourceSpaces.Checked, Threshold = (float)textAutoInsertSpaceThreshold.Value/*, Representative*/}, null))
+                        foreach (var l in Page.GetLines(ot.CharBoxs.Select(x => new Ocr.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() }), new TextAutoInsertSpace { IgnoreSourceSpaces = textAutoInsertSpace_IgnoreSourceSpaces.Checked, Threshold = (float)textAutoInsertSpace_Threshold.Value/*, Representative*/}, null))
                         {
                             foreach (var cb in l.CharBoxs)
                                 sb.Append(cb.Char);

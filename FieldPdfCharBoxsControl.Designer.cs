@@ -37,11 +37,11 @@
             this.textAutoInsertSpaceIgnoreSourceSpaces = new System.Windows.Forms.CheckBox();
             this.textAutoInsertSpaceRepresentative = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
-            this.textAutoInsertSpaceThreshold = new System.Windows.Forms.NumericUpDown();
+            this.textAutoInsertSpace_Threshold = new System.Windows.Forms.NumericUpDown();
             this.label12 = new System.Windows.Forms.Label();
             this.gSpacing = new System.Windows.Forms.GroupBox();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpace_Threshold)).BeginInit();
             this.gSpacing.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -133,19 +133,19 @@
             this.label15.TabIndex = 70;
             this.label15.Text = "Substitute:";
             // 
-            // textAutoInsertSpaceThreshold
+            // textAutoInsertSpace_Threshold
             // 
-            this.textAutoInsertSpaceThreshold.DecimalPlaces = 1;
-            this.textAutoInsertSpaceThreshold.Increment = new decimal(new int[] {
+            this.textAutoInsertSpace_Threshold.DecimalPlaces = 1;
+            this.textAutoInsertSpace_Threshold.Increment = new decimal(new int[] {
             1,
             0,
             0,
             65536});
-            this.textAutoInsertSpaceThreshold.Location = new System.Drawing.Point(14, 37);
-            this.textAutoInsertSpaceThreshold.Name = "textAutoInsertSpaceThreshold";
-            this.textAutoInsertSpaceThreshold.Size = new System.Drawing.Size(52, 20);
-            this.textAutoInsertSpaceThreshold.TabIndex = 68;
-            this.textAutoInsertSpaceThreshold.Value = new decimal(new int[] {
+            this.textAutoInsertSpace_Threshold.Location = new System.Drawing.Point(14, 37);
+            this.textAutoInsertSpace_Threshold.Name = "textAutoInsertSpace_Threshold";
+            this.textAutoInsertSpace_Threshold.Size = new System.Drawing.Size(52, 20);
+            this.textAutoInsertSpace_Threshold.TabIndex = 68;
+            this.textAutoInsertSpace_Threshold.Value = new decimal(new int[] {
             6,
             0,
             0,
@@ -162,7 +162,7 @@
             // 
             // gSpacing
             // 
-            this.gSpacing.Controls.Add(this.textAutoInsertSpaceThreshold);
+            this.gSpacing.Controls.Add(this.textAutoInsertSpace_Threshold);
             this.gSpacing.Controls.Add(this.label4);
             this.gSpacing.Controls.Add(this.label12);
             this.gSpacing.Controls.Add(this.textAutoInsertSpaceIgnoreSourceSpaces);
@@ -188,7 +188,7 @@
             this.Size = new System.Drawing.Size(247, 281);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpace_Threshold)).EndInit();
             this.gSpacing.ResumeLayout(false);
             this.gSpacing.PerformLayout();
             this.ResumeLayout(false);
@@ -203,7 +203,7 @@
         private System.Windows.Forms.CheckBox textAutoInsertSpaceIgnoreSourceSpaces;
         private System.Windows.Forms.TextBox textAutoInsertSpaceRepresentative;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.NumericUpDown textAutoInsertSpaceThreshold;
+        private System.Windows.Forms.NumericUpDown textAutoInsertSpace_Threshold;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.ComboBox ColumnOfTable;
         private System.Windows.Forms.Label label1;

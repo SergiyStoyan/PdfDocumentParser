@@ -16,7 +16,7 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.textAutoInsertSpaceThreshold = new System.Windows.Forms.NumericUpDown();
+            this.textAutoInsertSpace_Threshold = new System.Windows.Forms.NumericUpDown();
             this.TesseractPageSegMode = new System.Windows.Forms.ComboBox();
             this.label19 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
@@ -104,7 +104,7 @@
             this.label21 = new System.Windows.Forms.Label();
             this.AdjustLineBorders = new System.Windows.Forms.CheckBox();
             this.flowLayoutPanel9 = new System.Windows.Forms.FlowLayoutPanel();
-            this.IgnoreSourceSpaces = new System.Windows.Forms.CheckBox();
+            this.textAutoInsertSpace_IgnoreSourceSpaces = new System.Windows.Forms.CheckBox();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
             this.About = new System.Windows.Forms.LinkLabel();
@@ -113,7 +113,7 @@
             this.bSave = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpace_Threshold)).BeginInit();
             this.flowLayoutPanel5.SuspendLayout();
             this.flowLayoutPanel7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.conditions)).BeginInit();
@@ -150,25 +150,25 @@
             this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // textAutoInsertSpaceThreshold
+            // textAutoInsertSpace_Threshold
             // 
-            this.textAutoInsertSpaceThreshold.DecimalPlaces = 1;
-            this.textAutoInsertSpaceThreshold.Increment = new decimal(new int[] {
+            this.textAutoInsertSpace_Threshold.DecimalPlaces = 1;
+            this.textAutoInsertSpace_Threshold.Increment = new decimal(new int[] {
             1,
             0,
             0,
             65536});
-            this.textAutoInsertSpaceThreshold.Location = new System.Drawing.Point(152, 0);
-            this.textAutoInsertSpaceThreshold.Margin = new System.Windows.Forms.Padding(0, 0, 5, 0);
-            this.textAutoInsertSpaceThreshold.Minimum = new decimal(new int[] {
+            this.textAutoInsertSpace_Threshold.Location = new System.Drawing.Point(152, 0);
+            this.textAutoInsertSpace_Threshold.Margin = new System.Windows.Forms.Padding(0, 0, 5, 0);
+            this.textAutoInsertSpace_Threshold.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             -2147483648});
-            this.textAutoInsertSpaceThreshold.Name = "textAutoInsertSpaceThreshold";
-            this.textAutoInsertSpaceThreshold.Size = new System.Drawing.Size(44, 20);
-            this.textAutoInsertSpaceThreshold.TabIndex = 64;
-            this.textAutoInsertSpaceThreshold.Value = new decimal(new int[] {
+            this.textAutoInsertSpace_Threshold.Name = "textAutoInsertSpace_Threshold";
+            this.textAutoInsertSpace_Threshold.Size = new System.Drawing.Size(44, 20);
+            this.textAutoInsertSpace_Threshold.TabIndex = 64;
+            this.textAutoInsertSpace_Threshold.Value = new decimal(new int[] {
             6,
             0,
             0,
@@ -1206,8 +1206,8 @@
             this.flowLayoutPanel9.AutoSize = true;
             this.flowLayoutPanel9.Controls.Add(this.label14);
             this.flowLayoutPanel9.Controls.Add(this.label12);
-            this.flowLayoutPanel9.Controls.Add(this.textAutoInsertSpaceThreshold);
-            this.flowLayoutPanel9.Controls.Add(this.IgnoreSourceSpaces);
+            this.flowLayoutPanel9.Controls.Add(this.textAutoInsertSpace_Threshold);
+            this.flowLayoutPanel9.Controls.Add(this.textAutoInsertSpace_IgnoreSourceSpaces);
             this.flowLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel9.Location = new System.Drawing.Point(0, 20);
             this.flowLayoutPanel9.Name = "flowLayoutPanel9";
@@ -1217,14 +1217,14 @@
             // 
             // IgnoreSourceSpaces
             // 
-            this.IgnoreSourceSpaces.AutoSize = true;
-            this.IgnoreSourceSpaces.Location = new System.Drawing.Point(201, 0);
-            this.IgnoreSourceSpaces.Margin = new System.Windows.Forms.Padding(0);
-            this.IgnoreSourceSpaces.Name = "IgnoreSourceSpaces";
-            this.IgnoreSourceSpaces.Size = new System.Drawing.Size(132, 17);
-            this.IgnoreSourceSpaces.TabIndex = 101;
-            this.IgnoreSourceSpaces.Text = "Ignore Source Spaces";
-            this.IgnoreSourceSpaces.UseVisualStyleBackColor = true;
+            this.textAutoInsertSpace_IgnoreSourceSpaces.AutoSize = true;
+            this.textAutoInsertSpace_IgnoreSourceSpaces.Location = new System.Drawing.Point(201, 0);
+            this.textAutoInsertSpace_IgnoreSourceSpaces.Margin = new System.Windows.Forms.Padding(0);
+            this.textAutoInsertSpace_IgnoreSourceSpaces.Name = "IgnoreSourceSpaces";
+            this.textAutoInsertSpace_IgnoreSourceSpaces.Size = new System.Drawing.Size(132, 17);
+            this.textAutoInsertSpace_IgnoreSourceSpaces.TabIndex = 101;
+            this.textAutoInsertSpace_IgnoreSourceSpaces.Text = "Ignore Source Spaces";
+            this.textAutoInsertSpace_IgnoreSourceSpaces.UseVisualStyleBackColor = true;
             // 
             // splitContainer2
             // 
@@ -1362,7 +1362,7 @@
             this.Controls.Add(this.splitContainer1);
             this.Name = "TemplateForm";
             this.Text = "TemplateForm";
-            ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpaceThreshold)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textAutoInsertSpace_Threshold)).EndInit();
             this.flowLayoutPanel5.ResumeLayout(false);
             this.flowLayoutPanel5.PerformLayout();
             this.flowLayoutPanel7.ResumeLayout(false);
@@ -1413,7 +1413,7 @@
 
         #endregion
 
-        private System.Windows.Forms.NumericUpDown textAutoInsertSpaceThreshold;
+        private System.Windows.Forms.NumericUpDown textAutoInsertSpace_Threshold;
         private System.Windows.Forms.ComboBox TesseractPageSegMode;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Label label11;
@@ -1480,7 +1480,7 @@
         private System.Windows.Forms.CheckBox SingleFieldFromFieldImage;
         private System.Windows.Forms.CheckBox ColumnCellFromCellImage;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel9;
-        private System.Windows.Forms.CheckBox IgnoreSourceSpaces;
+        private System.Windows.Forms.CheckBox textAutoInsertSpace_IgnoreSourceSpaces;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
         private System.Windows.Forms.LinkLabel About;

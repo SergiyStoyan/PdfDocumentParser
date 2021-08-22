@@ -74,7 +74,8 @@ namespace Cliver.PdfDocumentParser
 
                 if (t.TextAutoInsertSpace == null)
                     t.TextAutoInsertSpace = new TextAutoInsertSpace();
-                textAutoInsertSpaceThreshold.Value = (decimal)t.TextAutoInsertSpace.Threshold;
+                textAutoInsertSpace_Threshold.Value = (decimal)t.TextAutoInsertSpace.Threshold;
+                textAutoInsertSpace_IgnoreSourceSpaces.Checked =  t.TextAutoInsertSpace.IgnoreSourceSpaces;
 
                 TesseractPageSegMode.SelectedItem = t.TesseractPageSegMode;
                 AdjustLineBorders.Checked = t.AdjustLineBorders;
@@ -189,7 +190,7 @@ namespace Cliver.PdfDocumentParser
             //TextForm tf = new TextForm("Pdf Entity Text", PdfTextExtractor.GetTextFromPage(pages.PdfReader, currentPageI), false);
             string t = Page.GetText(
                 pages[currentPageI].PdfCharBoxs,
-                new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, IgnoreSourceSpaces = IgnoreSourceSpaces.Checked /*, Representative//default*/},
+                new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpace_Threshold.Value, IgnoreSourceSpaces = textAutoInsertSpace_IgnoreSourceSpaces.Checked /*, Representative//default*/},
                 new CharFilter { MinWidth = (float)CharSizeFilterMinWidth.Value, MaxWidth = (float)CharSizeFilterMaxWidth.Value, MinHeight = (float)CharSizeFilterMinHeight.Value, MaxHeight = (float)CharSizeFilterMaxHeight.Value }
             );
             TextForm tf = new TextForm("Pdf Entity Text", t, false);
@@ -203,7 +204,7 @@ namespace Cliver.PdfDocumentParser
             pages.ActiveTemplate = GetTemplateFromUI(false);
             List<string> ls = Page.GetTextLines(
                 pages[currentPageI].ActiveTemplateOcrCharBoxs,
-                new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, IgnoreSourceSpaces = IgnoreSourceSpaces.Checked/*, Representative//default*/ },
+                new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpace_Threshold.Value, IgnoreSourceSpaces = textAutoInsertSpace_IgnoreSourceSpaces.Checked/*, Representative//default*/ },
                 new CharFilter { MinWidth = (float)CharSizeFilterMinWidth.Value, MaxWidth = (float)CharSizeFilterMaxWidth.Value, MinHeight = (float)CharSizeFilterMinHeight.Value, MaxHeight = (float)CharSizeFilterMaxHeight.Value }
             );
             TextForm tf = new TextForm("OCR Text", string.Join("\r\n", ls), false);
@@ -272,8 +273,8 @@ namespace Cliver.PdfDocumentParser
 
             t.TextAutoInsertSpace = new TextAutoInsertSpace
             {
-                Threshold = (float)textAutoInsertSpaceThreshold.Value,
-                IgnoreSourceSpaces = IgnoreSourceSpaces.Checked,
+                Threshold = (float)textAutoInsertSpace_Threshold.Value,
+                IgnoreSourceSpaces = textAutoInsertSpace_IgnoreSourceSpaces.Checked,
                 //Representative//default
             };
 
