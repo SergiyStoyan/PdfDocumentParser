@@ -32,12 +32,26 @@
 //        public Template Template { get; internal set; }
 
 //        //example field
-//        public List<string> TableLines
+//        public Template.Field TableLines;
+
+//        public string Get(Template.Field.Text f)
 //        {
-//            get
-//            {
-//                return Page.GetTextLines("TableLines");
-//            }
+//            return Page.GetText("TableLines");
+//        }
+
+//        public List<string> Get(Template.Field.TextLines f)
+//        {
+//            return Page.GetTextLines("TableLines");
+//        }
+
+//        public List<Page.CharBox> Get(Template.Field.CharBoxs f)
+//        {
+//            return Page.GetCharBoxes("TableLines");
+//        }
+
+//        public System.Drawing.Bitmap GetImage(Template.Field f)
+//        {
+//            return Page.GetImage("TableLines");
 //        }
 //    }
 //}
