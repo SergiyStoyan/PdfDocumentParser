@@ -218,6 +218,7 @@
     <Compile Include="PageCollection.cs" />
     <Compile Include="Page.cs" />
     <Compile Include="Pdf.iText7.cs" />
+    <Compile Include="Template.parser.cs" />
     <Compile Include="Template.scan.cs" />
     <Compile Include="Template.Anchor.cs" />
     <Compile Include="Template.Field.cs" />
