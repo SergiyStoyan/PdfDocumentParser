@@ -27,6 +27,9 @@ namespace Cliver
         //}
 
         abstract protected string synchronizedFileDownloadFolder { get; }// = UserSettings.StorageDir;
+        /// <summary>
+        /// (!)It will download only those files that already exist in the synchronizedFileDownloadFolder.
+        /// </summary>
         abstract protected Regex synchronizedFileNameFilter { get; }// = new Regex(@"\.fltr$", RegexOptions.IgnoreCase);
 
         abstract protected void onNewerFile(string file);
@@ -121,8 +124,13 @@ namespace Cliver
                     //    }
                     //}
 
-                    pollUploadFiles();
-                    pollDownloadFiles();
+                    foreach (string file in Directory.GetFiles(synchronizedFileDownloadFolder))
+                    {
+                        if (!synchronizedFileNameFilter.IsMatch(PathRoutines.GetFileName(file)))
+                            continue;
+                        pollUploadFile(file);
+                        pollDownloadFile(file);
+                    }
 
                     string appSetupFile = null;
                     foreach (string file in Directory.GetFiles(appSetupFolder))
@@ -198,47 +206,41 @@ namespace Cliver
             }
         }
 
-        void pollUploadFiles()
+        void pollUploadFile(string file)
         {
-            foreach (string file in Directory.GetFiles(synchronizedFileDownloadFolder))
-                try
-                {
-                    if (!synchronizedFileNameFilter.IsMatch(PathRoutines.GetFileName(file)))
-                        continue;
-                    DateTime uploadLWT = File.GetLastWriteTime(file);
-                    if (uploadLWT.AddSeconds(10) > DateTime.Now)//it is being written
-                        continue;
-                    string file2 = PathRoutines.GetPathMirroredInDir(file, synchronizedFileDownloadFolder, uploadFolder);
-                    if (File.Exists(file2) && uploadLWT <= File.GetLastWriteTime(file2))
-                        continue;
-                    copy(file, file2);
-                }
-                catch (Exception e)
-                {
-                    ErrorHandler(e);
-                }
+            try
+            {
+                DateTime uploadLWT = File.GetLastWriteTime(file);
+                if (uploadLWT.AddSeconds(10) > DateTime.Now)//it is being written
+                    return;
+                string file2 = uploadFolder + "\\" + PathRoutines.GetFileName(file);
+                if (File.Exists(file2) && uploadLWT <= File.GetLastWriteTime(file2))
+                    return;
+                copy(file, file2);
+            }
+            catch (Exception e)
+            {
+                ErrorHandler(e);
+            }
         }
 
-        void pollDownloadFiles()
+        void pollDownloadFile(string file)
         {
-            foreach (string file in Directory.GetFiles(uploadFolder))
-                try
-                {
-                    if (!synchronizedFileNameFilter.IsMatch(PathRoutines.GetFileName(file)))
-                        continue;
-                    DateTime downloadLWT = File.GetLastWriteTime(file);
-                    if (downloadLWT.AddSeconds(100) > DateTime.Now)//it is being written
-                        continue;
-                    string file2 = PathRoutines.GetPathMirroredInDir(file, uploadFolder, synchronizedFileDownloadFolder);
-                    if (File.Exists(file2) && downloadLWT <= File.GetLastWriteTime(file2))
-                        continue;
-                    copy(file, file2);
-                    onNewerFile(file);
-                }
-                catch (Exception e)
-                {
-                    ErrorHandler(e);
-                }
+            try
+            {
+                DateTime downloadLWT = File.GetLastWriteTime(file);
+                if (downloadLWT.AddSeconds(100) > DateTime.Now)//it is being written
+                    return;
+                string file2 = synchronizedFileDownloadFolder + "\\" + PathRoutines.GetFileName(file);
+                if (File.Exists(file2) && downloadLWT <= File.GetLastWriteTime(file2))
+                    return;
+                copy(file, file2);
+                onNewerFile(file);
+            }
+            catch (Exception e)
+            {
+                ErrorHandler(e);
+            }
         }
 
         static void copy(string file, string file2)
