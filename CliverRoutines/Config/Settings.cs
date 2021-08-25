@@ -52,6 +52,7 @@ namespace Cliver
             Settings settings = create(settingsFieldInfo, reset);
             settings.__Info = settingsFieldInfo;
             settings.Loaded();
+            settings.loading = false;
             return settings;
         }
         static Settings create(SettingsFieldInfo settingsFieldInfo, bool reset)
@@ -86,23 +87,11 @@ namespace Cliver
             if (exception != null || settingsFieldInfo.TypeVersion != settings.__TypeVersion)
             {
                 settings.__Info = settingsFieldInfo;
-                UnsupportedFormatHandlerCommand mode = settings.UnsupportedFormatHandler(exception);
-                switch (mode)
-                {
-                    case UnsupportedFormatHandlerCommand.Reload:
-                        settings = create(settingsFieldInfo, false);
-                        break;
-                    case UnsupportedFormatHandlerCommand.Reset:
-                        settings = create(settingsFieldInfo, true);
-                        break;
-                    case UnsupportedFormatHandlerCommand.Proceed:
-                        break;
-                    default:
-                        throw new Exception("Unknown option: " + mode);
-                }
+                settings.UnsupportedFormatHandler(exception);
             }
             return settings;
         }
+        bool loading = true;
 
         /// <summary>
         /// Indicates whether this Settings object is the value of the Settings field defined by __Info.
@@ -159,7 +148,7 @@ namespace Cliver
         /// </summary>
         public void Reset(/*bool ignoreInitFile = false*/)
         {
-            if (!IsAttached())//while technically it is possible, it could lead to a confusion: called on one object it might replace an other one!
+            if (!loading && !IsAttached())//while technically it is possible, it could lead to a confusion: called on one object it might replace an other one!
                 throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info?.FullName + ").");
             __Info.ResetObject();
         }
@@ -173,7 +162,7 @@ namespace Cliver
         /// </summary>
         public void Reload()
         {
-            if (!IsAttached())//while technically it is possible, it could lead to a confusion: called on one object it might replace an other one!
+            if (!loading && !IsAttached())//while technically it is possible, it could lead to a confusion: called on one object it might replace an other one!
                 throw new Exception("This method cannot be performed on this Settings object because it is not attached to its Settings field (" + __Info?.FullName + ").");
             __Info.ReloadObject();
         }
@@ -208,26 +197,11 @@ namespace Cliver
         /// - the storage/init file could not be deserialized;
         /// Here is your chance to amend the data to migrate to the current version.
         /// </summary>
-        virtual protected UnsupportedFormatHandlerCommand UnsupportedFormatHandler(Exception deserializingException)
+        virtual protected void UnsupportedFormatHandler(Exception deserializingException)
         {
             if (deserializingException != null)
                 throw new Exception("Error while deserializing settings " + settingsFieldInfo.FullName + " from file " + settingsFieldInfo.InitFile, deserializingException);
             throw new Exception("Unsupported type version of " + __Info.FullName + ": " + __TypeVersion + "\r\nin the file: " + __Info.File);
-        }
-        public enum UnsupportedFormatHandlerCommand
-        {
-            /// <summary>
-            /// Read the storage file if it exists, otherwise reads the initial file if it exists, otherwise creates a default instance.
-            /// </summary>
-            Reload,
-            /// <summary>
-            /// Read the initial file if it exists, otherwise creates a default instance.
-            /// </summary>
-            Reset,
-            /// <summary>
-            /// The application proceeds with the cussrent instance as is.
-            /// </summary>
-            Proceed
         }
 
         #endregion

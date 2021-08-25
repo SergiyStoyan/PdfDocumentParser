@@ -70,6 +70,16 @@ namespace Cliver
             return di.FullName;
         }
 
+        public static void CopyDirectory(string directory1, string directory2, bool overwrite = false)
+        {
+            if (!Directory.Exists(directory2))
+                Directory.CreateDirectory(directory2);
+            foreach (string file in Directory.GetFiles(directory1))
+                File.Copy(file, directory2 + Path.DirectorySeparatorChar + PathRoutines.GetFileName(file), overwrite);
+            foreach (string d in Directory.GetDirectories(directory1))
+                CopyDirectory(d, directory2 + Path.DirectorySeparatorChar + PathRoutines.GetDirName(d), overwrite);
+        }
+
         public static void ClearDirectory(string directory, bool recursive = true, bool throwException = true)
         {
             try
@@ -89,7 +99,7 @@ namespace Cliver
                     foreach (string d in Directory.GetDirectories(directory))
                         DeleteDirectory(d, recursive);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 if (throwException)
                     throw e;
@@ -171,7 +181,6 @@ namespace Cliver
         //            string d2 = PathRoutines.GetPathMirroredInDir(d, path1, path2);
         //            Copy(d, d2, overwrite);
         //        }
-        //        CreateDirectory(PathRoutines.GetDirFromPath(path2), false);
         //    }
         //    else
         //    {
