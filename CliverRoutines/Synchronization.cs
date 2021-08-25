@@ -26,6 +26,14 @@ namespace Cliver
             throw new Exception("TBD: A newer settings " + settings.__Info.FullName + " have been downloaded from the remote storage. Upon closing this message they will be updated in the application.");
         }
 
+        abstract protected string synchronizedFileDownloadFolder { get; }// = UserSettings.StorageDir;
+        abstract protected Regex synchronizedFileNameFilter { get; }// = new Regex(@"(\.fltr)[^\\\/]*$", RegexOptions.IgnoreCase);
+
+        virtual protected void onNewerFile(string file)
+        {
+            throw new Exception("TBD: A newer file " + file + " has been downloaded from the remote storage. Upon closing this message it will be updated in the application.");
+        }
+
         abstract protected Regex appSetupFileFilter { get; }// = new Regex(System.Diagnostics.Process.GetCurrentProcess().ProcessName + @"\.Setup\-(\d+\.\d+\.\d+)", RegexOptions.IgnoreCase);
 
         abstract protected Version programVersion { get; }// = Program.Version;
@@ -113,6 +121,9 @@ namespace Cliver
                     //    }
                     //}
 
+                    pollUploadFiles();
+                    pollDownloadFiles();
+
                     string appSetupFile = null;
                     foreach (string file in Directory.GetFiles(appSetupFolder))
                     {
@@ -185,6 +196,49 @@ namespace Cliver
             {
                 ErrorHandler(e);
             }
+        }
+
+        void pollUploadFiles()
+        {
+            foreach (string file in Directory.GetFiles(synchronizedFileDownloadFolder))
+                try
+                {
+                    if (!synchronizedFileNameFilter.IsMatch(file))
+                        continue;
+                    DateTime uploadLWT = File.GetLastWriteTime(file);
+                    if (uploadLWT.AddSeconds(10) > DateTime.Now)//it is being written
+                        continue;
+                    string file2 = PathRoutines.GetPathMirroredInDir(file, synchronizedFileDownloadFolder, uploadFolder);
+                    if (File.Exists(file2) && uploadLWT <= File.GetLastWriteTime(file2))
+                        continue;
+                    copy(file, file2);
+                }
+                catch (Exception e)
+                {
+                    ErrorHandler(e);
+                }
+        }
+
+        void pollDownloadFiles()
+        {
+            foreach (string file in Directory.GetFiles(uploadFolder))
+                try
+                {
+                    if (!synchronizedFileNameFilter.IsMatch(file))
+                        continue;
+                    DateTime downloadLWT = File.GetLastWriteTime(file);
+                    if (downloadLWT.AddSeconds(100) > DateTime.Now)//it is being written
+                        continue;
+                    string file2 = PathRoutines.GetPathMirroredInDir(file, uploadFolder, synchronizedFileDownloadFolder);
+                    if (File.Exists(file2) && downloadLWT <= File.GetLastWriteTime(file2))
+                        continue;
+                    copy(file, file2);
+                    onNewerFile(file);
+                }
+                catch (Exception e)
+                {
+                    ErrorHandler(e);
+                }
         }
 
         static void copy(string file, string file2)
