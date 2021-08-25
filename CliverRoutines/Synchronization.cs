@@ -14,34 +14,34 @@ using System.Linq;
 namespace Cliver
 {
     /// <summary>
-    /// Template for syncronizing Settings storage files and application setup files through a cloud service. (The local system is required to have the service synchronizing app running.)  
+    /// Template for synchronizing Settings storage files, any files and application setup files through a cloud service. (The local system is required to have the service synchronizing app running.)  
     /// </summary>
     abstract public class Synchronization
     {
         abstract protected List<string> synchronizedSettingsFieldFullNames { get; }
         //abstract protected List<Type> synchronizedSettingsTypes { get; }
 
-        virtual protected void onNewerSettingsFile(Settings settings)
-        {
-            throw new Exception("TBD: A newer settings " + settings.__Info.FullName + " have been downloaded from the remote storage. Upon closing this message they will be updated in the application.");
-        }
+        abstract protected void onNewerSettingsFile(Settings settings);
+        //{
+        //    throw new Exception("TBD: A newer settings " + settings.__Info.FullName + " have been downloaded from the remote storage. Upon closing this message they will be updated in the application.");
+        //}
 
         abstract protected string synchronizedFileDownloadFolder { get; }// = UserSettings.StorageDir;
-        abstract protected Regex synchronizedFileNameFilter { get; }// = new Regex(@"(\.fltr)[^\\\/]*$", RegexOptions.IgnoreCase);
+        abstract protected Regex synchronizedFileNameFilter { get; }// = new Regex(@"\.fltr$", RegexOptions.IgnoreCase);
 
-        virtual protected void onNewerFile(string file)
-        {
-            throw new Exception("TBD: A newer file " + file + " has been downloaded from the remote storage. Upon closing this message it will be updated in the application.");
-        }
+        abstract protected void onNewerFile(string file);
+        //{
+        //    throw new Exception("TBD: A newer file " + file + " has been downloaded from the remote storage. Upon closing this message it will be updated in the application.");
+        //}
 
         abstract protected Regex appSetupFileFilter { get; }// = new Regex(System.Diagnostics.Process.GetCurrentProcess().ProcessName + @"\.Setup\-(\d+\.\d+\.\d+)", RegexOptions.IgnoreCase);
 
         abstract protected Version programVersion { get; }// = Program.Version;
 
-        virtual protected void onNewerAppVersion(string appSetupFile)
-        {
-            throw new Exception("TBD: A newer app version has been downloaded: " + appSetupFile + "\r\nWould you like to install it now?");
-        }
+        abstract protected void onNewerAppVersion(string appSetupFile);
+        //{
+        //    throw new Exception("TBD: A newer app version has been downloaded: " + appSetupFile + "\r\nWould you like to install it now?");
+        //}
 
         abstract protected void ErrorHandler(Exception e);
 
@@ -203,7 +203,7 @@ namespace Cliver
             foreach (string file in Directory.GetFiles(synchronizedFileDownloadFolder))
                 try
                 {
-                    if (!synchronizedFileNameFilter.IsMatch(file))
+                    if (!synchronizedFileNameFilter.IsMatch(PathRoutines.GetFileName(file)))
                         continue;
                     DateTime uploadLWT = File.GetLastWriteTime(file);
                     if (uploadLWT.AddSeconds(10) > DateTime.Now)//it is being written
@@ -224,7 +224,7 @@ namespace Cliver
             foreach (string file in Directory.GetFiles(uploadFolder))
                 try
                 {
-                    if (!synchronizedFileNameFilter.IsMatch(file))
+                    if (!synchronizedFileNameFilter.IsMatch(PathRoutines.GetFileName(file)))
                         continue;
                     DateTime downloadLWT = File.GetLastWriteTime(file);
                     if (downloadLWT.AddSeconds(100) > DateTime.Now)//it is being written
