@@ -124,13 +124,14 @@ namespace Cliver
                     //    }
                     //}
 
-                    foreach (string file in Directory.GetFiles(synchronizedFileDownloadFolder))
-                    {
-                        if (!synchronizedFileNameFilter.IsMatch(PathRoutines.GetFileName(file)))
-                            continue;
-                        pollUploadFile(file);
-                        pollDownloadFile(file);
-                    }
+                    if (synchronizedFileDownloadFolder != null && Directory.Exists(synchronizedFileDownloadFolder))
+                        foreach (string file in Directory.GetFiles(synchronizedFileDownloadFolder))
+                        {
+                            if (!synchronizedFileNameFilter.IsMatch(PathRoutines.GetFileName(file)))
+                                continue;
+                            pollUploadFile(file);
+                            pollDownloadFile(file);
+                        }
 
                     string appSetupFile = null;
                     foreach (string file in Directory.GetFiles(appSetupFolder))
