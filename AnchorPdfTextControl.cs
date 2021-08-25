@@ -25,8 +25,6 @@ namespace Cliver.PdfDocumentParser
                 if (SearchRectangleMargin.Value >= 0)
                     return;
                 SearchRectangleMargin.Value = cSearchRectangleMargin.Checked ? ((anchor == null || anchor.ParentAnchorId != null) ? (decimal)Settings.Constants.CoordinateDeviationMargin : 100) : -1;
-
-                IgnoreOtherCharsInRectangle.Enabled = SearchRectangleMargin.Enabled;
             };
         }
         TextAutoInsertSpace textAutoInsertSpace;
@@ -70,7 +68,6 @@ namespace Cliver.PdfDocumentParser
 
             IgnoreOtherCharsInRectangle.Checked = anchor.IgnoreOtherCharsInRectangle;
             IgnoreInvisibleChars.Checked = anchor.IgnoreInvisibleChars;
-            IgnoreOtherCharsInRectangle.Enabled = SearchRectangleMargin.Enabled;
         }
 
         Template.Anchor.PdfText anchor;
