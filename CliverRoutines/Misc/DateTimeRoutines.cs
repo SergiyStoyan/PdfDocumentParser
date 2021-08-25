@@ -490,8 +490,8 @@ namespace Cliver
                     return true;
                 }
 
-                //look for mm-dd-yy
-                m = Regex.Match(str, @"(?<=^|[^\d])(?'month'\d{1,2})\s*(?'separator'[\-])\s*(?'day'\d{1,2})\s*\'separator'+\s*(?'year'\d{2})(?=$|[^\d])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                //look for mm-dd-yy[yy]
+                m = Regex.Match(str, @"(?<=^|[^\d])(?'month'\d{1,2})\s*(?'separator'[\-])\s*(?'day'\d{1,2})\s*\'separator'+\s*(?'year'\d{2}|\d{4})(?=$|[^\d])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
                 if (m.Success)
                 {
                     if (!convert_to_date(int.Parse(m.Groups["year"].Value), int.Parse(m.Groups["month"].Value), int.Parse(m.Groups["day"].Value), out DateTime date))

@@ -72,14 +72,14 @@ namespace Cliver
 
         virtual public void Dispose()
         {
-            lock (this)
-            {
-                if (keys2value != null)
-                {
-                    Clear();
-                    keys2value = null;
-                }
-            }
+            //lock (this)
+            //{
+            //    if (keys2value != null)
+            //    {
+            Clear();
+            //        keys2value = null;
+            //    }
+            //}
         }
 
         /// <summary>

@@ -62,6 +62,7 @@ namespace Cliver.PdfDocumentParser
                 {
                     _activeTemplateOcrCharBoxs = null;
                 }
+                fieldNames2fieldActualInfos.Clear();
             }
         }
 

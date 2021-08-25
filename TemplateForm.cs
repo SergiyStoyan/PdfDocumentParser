@@ -385,7 +385,7 @@ namespace Cliver.PdfDocumentParser
                         return;
                     }
 
-                    pages = new PageCollection(testFile.Text);
+                    pages = new PageCollection(testFile.Text, true);
                     totalPageNumber = pages.TotalCount;
                     lTotalPages.Text = " / " + totalPageNumber;
                     showPage(1);

@@ -27,7 +27,7 @@ namespace Example
         public List<Template> Templates = new List<Template> { new Template { Name = "test", Words = new List<string> { "apple", "box" } } };
 
         //Here is your chance to upgrade the data to the current format.
-        override protected UnsupportedFormatHandlerCommand UnsupportedFormatHandler(Exception deserializingException)
+        override protected void UnsupportedFormatHandler(Exception deserializingException)
         {//successive upgrading from version to version using different approaches:
 
             //upgrading to version 200601
@@ -40,7 +40,8 @@ namespace Example
                 o["__TypeVersion"] = 200601;
                 //save
                 __Info.WriteStorageFileAsJObject(o);
-                return UnsupportedFormatHandlerCommand.Reload;//this method will be called again because __TypeVersion is still obsolete
+                Reload();//the method will be called again because __TypeVersion is still obsolete
+                return;
             }
 
             //upgrading to version 210301
@@ -53,7 +54,8 @@ namespace Example
                 __Info.UpdateTypeVersionInStorageFileString(210301, ref s);//s = Regex.Replace(s, @"(?<=\""__TypeVersion\""\:\s*)\d+", "210301", RegexOptions.Singleline);
                 //save
                 __Info.WriteStorageFileAsString(s);
-                return UnsupportedFormatHandlerCommand.Reload;//this method will be called again because __TypeVersion is still obsolete
+                Reload();//the method will be called again because __TypeVersion is still obsolete
+                return;
             }
 
             //upgrading to the last version
@@ -65,7 +67,7 @@ namespace Example
                 //...
                 //save
                 Save();//(!)when saving, the current type version is set
-                return UnsupportedFormatHandlerCommand.Proceed;
+                return;
             }
 
             if (deserializingException != null)
@@ -76,7 +78,7 @@ namespace Example
                 Console.WriteLine("The expected version: " + __Info.TypeVersion);
                 Console.WriteLine("Consider upgrading the application.");
             }
-            while (true)
+            for (; ; )
             {
                 Console.WriteLine("\r\nPlease choose an option:\r\nExit - [E]\r\nReset the settings to default - [R]\r\nProceed as is - [P]");
                 ConsoleKey k = Console.ReadKey().Key;
@@ -86,9 +88,10 @@ namespace Example
                         Log.Exit("Settings " + __Info.FullName + " could not be loaded.");
                         break;
                     case ConsoleKey.R:
-                        return UnsupportedFormatHandlerCommand.Reset;
+                        Reset();
+                        return;
                     case ConsoleKey.P:
-                        return UnsupportedFormatHandlerCommand.Proceed;
+                        return;
                     default:
                         continue;
                 }

@@ -191,32 +191,14 @@ namespace Cliver.PdfDocumentParser
 
             internal object GetValue(Template.Field.Types type)
             {
-                //    return getValue(type, true);//test; if works, remove
-                //}
-
-                //object getValue(Template.Field.Types type, bool cached)
-                //{
-                //    if (!cached)
-                //        return getValue_(type);
                 if (!types2cachedValue.TryGetValue(type, out object o))
-                {//!!!to cache Table field values to re-use them internally only!!!
+                {
                     o = getValue_(type);
                     types2cachedValue[type] = o;
                 }
                 return o;
             }
-            HandyDictionary<Template.Field.Types, object> types2cachedValue = new HandyDictionary<Template.Field.Types, object>(
-               disposeValue: (object v) =>
-                {
-                    if (v == null)
-                        return;
-                    if (v is Bitmap)
-                        ((Bitmap)v).Dispose();
-                    else if (v is List<Bitmap>)
-                        foreach (Bitmap b in (List<Bitmap>)v)
-                            b?.Dispose();
-                }
-            );//!!!cache Table field values for internal reuse only!!! 
+            HandyDictionary<Template.Field.Types, object> types2cachedValue;
             object getValue_(Template.Field.Types type)
             {
                 if (ActualRectangle == null || TableFieldActualInfo?.Found == false)
@@ -479,6 +461,20 @@ namespace Cliver.PdfDocumentParser
                 ActualRectangle = actualRectangle;
                 TableFieldActualInfo = tableFieldActualInfo;
                 Found = ActualRectangle != null;
+                types2cachedValue = new HandyDictionary<Template.Field.Types, object>(
+                    disposeValue: (object v) =>
+                    {
+                        if (!page.PageCollection.DisposeCachedFieldValues)
+                            return;
+                        if (v == null)
+                            return;
+                        if (v is Bitmap)
+                            ((Bitmap)v).Dispose();
+                        else if (v is List<Bitmap>)
+                            foreach (Bitmap b in (List<Bitmap>)v)
+                                b?.Dispose();
+                    }
+                );
             }
         }
 

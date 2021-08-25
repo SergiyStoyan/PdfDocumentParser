@@ -14,15 +14,21 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public class PageCollection : HandyDictionary<int, Page>
     {
-        public PageCollection(string pdfFile) : base()
+        public PageCollection(string pdfFile, bool disposeCachedFieldValues = true) : base()
         {
             PdfFile = pdfFile;
+            DisposeCachedFieldValues = disposeCachedFieldValues;
             PdfReader.unethicalreading = true;
             PdfReader = new PdfReader(pdfFile);
             TotalCount = PdfReader.NumberOfPages;
             getValue = (int pageI) => { return new Page(this, pageI); };
         }
 
+        /// <summary>
+        /// (!)If TRUE then the disposables like Bitmaps will be disposed. 
+        /// So, either set it FALSE and dispose the values in your code or set it TRUE and clone the disposable values.
+        /// </summary>
+        public readonly bool DisposeCachedFieldValues = true;
         public readonly string PdfFile;
         public readonly PdfReader PdfReader;
         public readonly int TotalCount;
