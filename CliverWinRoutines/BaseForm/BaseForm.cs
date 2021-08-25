@@ -76,13 +76,13 @@ namespace Cliver
             c.BeginInvoke(code);
         }
 
-        public static void BeginInvoke2(this Control c, MethodInvoker code)
-        {
-            if (c.InvokeRequired)
-                c.BeginInvoke(code);
-            else
-                code.BeginInvoke(null, null);
-        }
+        //public static void BeginInvoke2(this Control c, MethodInvoker code)
+        //{
+        //    if (c.InvokeRequired)
+        //        c.BeginInvoke(code);
+        //    else
+        //        code.BeginInvoke(null, null);//!!!it is deceiving as it is not in the supposed thread
+        //}
 
         public static object InvokeFromUiThread(Delegate d)
         {
