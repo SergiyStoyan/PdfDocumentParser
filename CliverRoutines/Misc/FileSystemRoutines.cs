@@ -102,7 +102,7 @@ namespace Cliver
             catch (Exception e)
             {
                 if (throwException)
-                    throw e;
+                    throw;
             }
         }
 

@@ -6,18 +6,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Data.Linq;
 using System.Linq;
-using System.Drawing;
-using System.Collections.Specialized;
 using Cliver.PdfDocumentParser;
-using System.Net;
 
 namespace Cliver.SampleParser
 {
     public partial class Settings
     {
-        public static readonly Template2sSettings3 Template2s;
+        public static Template2sSettings3 Template2s;
     }
 
     [SettingsAttributes.Config(Indented = false)]
@@ -26,7 +22,7 @@ namespace Cliver.SampleParser
     {
         public List<Template2> Template2s = new List<Template2>();
 
-        protected override UnsupportedFormatHandlerCommand UnsupportedFormatHandler(Exception deserializingException)
+        protected override void UnsupportedFormatHandler(Exception deserializingException)
         {
             try
             {
@@ -72,7 +68,8 @@ namespace Cliver.SampleParser
                         }
                     o["__TypeVersion"] = 210701;
                     __Info.WriteStorageFileAsJObject(o, false);
-                    return UnsupportedFormatHandlerCommand.Reload;
+                    Reload();
+                    return;
                 }
                 if (__TypeVersion < 210720)
                 {
@@ -80,21 +77,24 @@ namespace Cliver.SampleParser
                     s = Regex.Replace(s, Regex.Escape("Cliver.HawkeyeQuoteParser.DocumentParsers"), "Cliver.HawkeyeQuoteParser.Pdf.DocumentParsers", RegexOptions.Singleline);
                     __Info.UpdateTypeVersionInStorageFileString(210720, ref s);
                     __Info.WriteStorageFileAsString(s);
-                    return UnsupportedFormatHandlerCommand.Reload;
+                    Reload();
+                    return;
                 }
                 if (__TypeVersion < 210820)//added new fields
                 {
                     string s = __Info.ReadStorageFileAsString();
                     __Info.UpdateTypeVersionInStorageFileString(210820, ref s);
                     __Info.WriteStorageFileAsString(s);
-                    return UnsupportedFormatHandlerCommand.Reload;
+                    Reload();
+                    return;
                 }
                 if (__TypeVersion < 210824)//migration of fields
                 {
                     if (!Message.YesNo("There is no complete conversion from the type version " + __TypeVersion + ". Some data may be lost. Would you like to convert to the current format?", null, Message.Icons.Exclamation))
                         throw new Exception("There is no default conversion from the given type version.");
                     Save();
-                    return UnsupportedFormatHandlerCommand.Reload;
+                    Reload();
+                    return;
                 }
                 if (__TypeVersion < 210825)//renamed fields
                 {
@@ -106,7 +106,8 @@ namespace Cliver.SampleParser
                         }
                     o["__TypeVersion"] = 210825;
                     __Info.WriteStorageFileAsJObject(o, false);
-                    return UnsupportedFormatHandlerCommand.Reload;
+                    Reload();
+                    return;
                 }
 
                 throw new Exception("Unsupported version of " + GetType().FullName + ": " + __TypeVersion + ". Accepted version: " + __Info.TypeVersion, deserializingException);
@@ -118,7 +119,6 @@ namespace Cliver.SampleParser
                     + "\r\nThe application will exit.\r\n\r\n(To run the application, remove the file or, to preserve it, move it to a safe location. Upon restart, the application will reset the file's data to their default state.)";
                 Message.Error2(m, e);
                 Log.Exit2(m);
-                return UnsupportedFormatHandlerCommand.Proceed;
             }
         }
 

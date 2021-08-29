@@ -476,7 +476,7 @@ namespace Cliver.SampleParser
                     }
                     finally
                     {
-                        bRun.BeginInvoke2(() => { bRun.Enabled = true; });
+                        bRun.BeginInvoke(() => { bRun.Enabled = true; });
                     }
                 }
                 );

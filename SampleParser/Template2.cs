@@ -4,14 +4,8 @@
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Data.Linq;
-using System.Linq;
-using System.Drawing;
-using System.Collections.Specialized;
 using Cliver.PdfDocumentParser;
-using System.Net;
 
 namespace Cliver.SampleParser
 {

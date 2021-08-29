@@ -244,7 +244,8 @@
     <PostBuildEvent>xcopy /Y /S "$(ProjectDir)config" "$(TargetDir)"
 xcopy /Y /S "$(ProjectDir)..\externals" "$(TargetDir)"
 xcopy /Y /S "$(ProjectDir)..\config" "$(TargetDir)"
-xcopy /Y /S "$(ProjectDir)..\docs" "$(TargetDir)docs\"</PostBuildEvent>
+xcopy /Y /S "$(ProjectDir)..\docs" "$(TargetDir)PdfDocumentParserDocs\"
+</PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

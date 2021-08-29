@@ -424,7 +424,7 @@
       <Version>5.5.13.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp">
-      <Version>4.0.0-2.final</Version>
+      <Version>4.0.0-3.final</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.1</Version>

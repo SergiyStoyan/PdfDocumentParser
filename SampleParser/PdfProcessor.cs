@@ -4,7 +4,6 @@
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
-using System.Data.Linq;
 using System.Linq;
 using System.Text;
 using System.Collections.Generic;
