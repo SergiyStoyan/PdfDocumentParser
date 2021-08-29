@@ -17,6 +17,10 @@ namespace Cliver
 {
     public static partial class ProcessRoutines
     {
+        /// <summary>
+        /// Opens a file in editor/veiwer determined by the file's extension.
+        /// </summary>
+        /// <param name="file"></param>
         public static void Open(string file)
         {
             Process.Start(new ProcessStartInfo(file) { UseShellExecute = true });
