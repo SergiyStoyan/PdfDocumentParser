@@ -45,14 +45,13 @@ namespace Cliver.Win
         public static void RunMeInSingleProcessOnly(Action<string> exitingMessage)
         {
             string appName = ProgramRoutines.GetAppName();
-            bool createdNew;
-            MutexSecurity mutexSecurity = new MutexSecurity();
-            mutexSecurity.AddAccessRule(new MutexAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), MutexRights.Synchronize | MutexRights.Modify, AccessControlType.Allow));
+            //MutexSecurity mutexSecurity = new MutexSecurity();
+            //mutexSecurity.AddAccessRule(new MutexAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), MutexRights.Synchronize | MutexRights.Modify, AccessControlType.Allow));
             for (int i = 0; i < 2; i++)
             {
                 try
                 {
-                    GLOBAL_SINGLE_PROCESS_MUTEX = new Mutex(false, @"Global\CLIVERSOFT_" + appName + @"_SINGLE_PROCESS", out createdNew, mutexSecurity);
+                    GLOBAL_SINGLE_PROCESS_MUTEX = new Mutex(false, @"Global\CLIVERSOFT_" + appName + @"_SINGLE_PROCESS", out _/*, mutexSecurity*/);
                     break;
                 }
                 catch (Exception e)

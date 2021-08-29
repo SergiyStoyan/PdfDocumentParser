@@ -49,21 +49,9 @@ namespace Cliver
             return clps;
         }
 
-        public static bool IsWebContext
-        {
-            get
-            {
-                return HttpRuntime.AppDomainAppId != null;
-            }
-        }
-
         static public string GetAppPath()
         {
-            string p;
-            if (ProgramRoutines.IsWebContext)
-                p = System.Web.Compilation.BuildManager.GetGlobalAsaxType().BaseType.Assembly.GetName(false).CodeBase;
-            else
-                p = Regex.Replace(System.Reflection.Assembly.GetEntryAssembly().GetName(false).CodeBase, @"file:///", "");
+            string p = Regex.Replace(System.Reflection.Assembly.GetEntryAssembly().GetName(false).CodeBase, @"file:///", "");
             return Path.GetFullPath(p);
         }
 
@@ -82,10 +70,7 @@ namespace Cliver
             string an = Application.ProductName;
             if (!string.IsNullOrWhiteSpace(an))
                 return an;
-            if (IsWebContext)
-                return System.Web.Compilation.BuildManager.GetGlobalAsaxType().BaseType.Assembly.GetName(false).Name;
-            else
-                return System.Reflection.Assembly.GetEntryAssembly().GetName(false).Name;
+            return System.Reflection.Assembly.GetEntryAssembly().GetName(false).Name;
         }
     }
 }

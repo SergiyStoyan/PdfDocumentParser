@@ -19,11 +19,6 @@ namespace Cliver.Win
 
         static LogMessage()
         {
-            if (ProgramRoutines.IsWebContext)
-            {
-                DisableStumblingDialogs = true;
-                Output2Console = false;
-            }
         }
 
         /// <summary>

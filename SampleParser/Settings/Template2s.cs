@@ -13,7 +13,7 @@ namespace Cliver.SampleParser
 {
     public partial class Settings
     {
-        public static readonly Template2sSettings3 Template2s;
+        public static Template2sSettings3 Template2s;
     }
 
     [SettingsAttributes.Config(Indented = false)]
