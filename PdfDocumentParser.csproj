@@ -1,446 +1,288 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
-  <PropertyGroup>
-    <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B1D7BA69-35AA-45BD-B1D0-D84FD2BC47A0}</ProjectGuid>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ApplicationIcon>
-    </ApplicationIcon>
-    <AssemblyKeyContainerName>
-    </AssemblyKeyContainerName>
-    <AssemblyName>PdfDocumentParser</AssemblyName>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
-    <DefaultClientScript>JScript</DefaultClientScript>
-    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
-    <DefaultTargetSchema>IE50</DefaultTargetSchema>
-    <DelaySign>false</DelaySign>
-    <OutputType>Library</OutputType>
-    <RootNamespace>Cliver.PdfDocumentParser</RootNamespace>
-    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <StartupObject>
-    </StartupObject>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>bin\Debug\</OutputPath>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <BaseAddress>285212672</BaseAddress>
-    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
-    <ConfigurationOverrideFile>
-    </ConfigurationOverrideFile>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DocumentationFile>
-    </DocumentationFile>
-    <DebugSymbols>true</DebugSymbols>
-    <FileAlignment>4096</FileAlignment>
-    <NoStdLib>false</NoStdLib>
-    <NoWarn>
-    </NoWarn>
-    <Optimize>false</Optimize>
-    <RegisterForComInterop>false</RegisterForComInterop>
-    <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningLevel>4</WarningLevel>
-    <DebugType>full</DebugType>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>bin\Release\</OutputPath>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <BaseAddress>285212672</BaseAddress>
-    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
-    <ConfigurationOverrideFile>
-    </ConfigurationOverrideFile>
-    <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>
-    </DocumentationFile>
-    <DebugSymbols>false</DebugSymbols>
-    <FileAlignment>4096</FileAlignment>
-    <NoStdLib>false</NoStdLib>
-    <NoWarn>
-    </NoWarn>
-    <Optimize>true</Optimize>
-    <RegisterForComInterop>false</RegisterForComInterop>
-    <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningLevel>4</WarningLevel>
-    <DebugType>none</DebugType>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System">
-      <Name>System</Name>
-    </Reference>
-    <Reference Include="System.configuration" />
-    <Reference Include="System.Data">
-      <Name>System.Data</Name>
-    </Reference>
-    <Reference Include="System.Data.Linq" />
-    <Reference Include="System.Drawing">
-      <Name>System.Drawing</Name>
-    </Reference>
-    <Reference Include="System.Security" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.XML">
-      <Name>System.XML</Name>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AnchorCvImageControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="AnchorCvImageControl.Designer.cs">
-      <DependentUpon>AnchorCvImageControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AnchorImageDataControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="AnchorImageDataControl.Designer.cs">
-      <DependentUpon>AnchorImageDataControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AnchorOcrTextControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="AnchorOcrTextControl.Designer.cs">
-      <DependentUpon>AnchorOcrTextControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AnchorPdfTextControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="AnchorPdfTextControl.Designer.cs">
-      <DependentUpon>AnchorPdfTextControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AnchorControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="AnchorControl.Designer.cs">
-      <DependentUpon>AnchorControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="BooleanEngine.cs" />
-    <Compile Include="Compiler.cs" />
-    <Compile Include="CvImage.cs" />
-    <Compile Include="BitmapPreprocessor.cs" />
-    <Compile Include="Deskewer.cs" />
-    <Compile Include="FieldPdfTextControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FieldPdfTextControl.Designer.cs">
-      <DependentUpon>FieldPdfTextControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FieldPdfTextLinesControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FieldPdfTextLinesControl.Designer.cs">
-      <DependentUpon>FieldPdfTextLinesControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FieldPdfCharBoxsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FieldPdfCharBoxsControl.Designer.cs">
-      <DependentUpon>FieldPdfCharBoxsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FieldOcrTextControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FieldOcrTextControl.Designer.cs">
-      <DependentUpon>FieldOcrTextControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FieldOcrCharBoxsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FieldOcrCharBoxsControl.Designer.cs">
-      <DependentUpon>FieldOcrCharBoxsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FieldImageControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FieldImageControl.Designer.cs">
-      <DependentUpon>FieldImageControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FieldOcrTextLineImagesControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FieldOcrTextLineImagesControl.Designer.cs">
-      <DependentUpon>FieldOcrTextLineImagesControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FieldOcrTextLinesControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FieldOcrTextLinesControl.Designer.cs">
-      <DependentUpon>FieldOcrTextLinesControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Page.conditions.cs" />
-    <Compile Include="Page.anchors.cs" />
-    <Compile Include="Page.text.cs" />
-    <Compile Include="Page.fields.cs" />
-    <Compile Include="PageCollection.cs" />
-    <Compile Include="Page.cs" />
-    <Compile Include="Pdf.iText7.cs" />
-    <Compile Include="Template.parser.cs" />
-    <Compile Include="Template.scan.cs" />
-    <Compile Include="Template.Anchor.cs" />
-    <Compile Include="Template.Field.cs" />
-    <Compile Include="ScanTemplateForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ScanTemplateForm.Designer.cs">
-      <DependentUpon>ScanTemplateForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="TemplateForm.TemplateManager.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="SettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SettingsForm.Designer.cs">
-      <DependentUpon>SettingsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Settings\Constants.cs" />
-    <Compile Include="Settings\Appearance.cs" />
-    <Compile Include="ImageData.cs" />
-    <Compile Include="FieldControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FieldControl.Designer.cs">
-      <DependentUpon>FieldControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Template.cs" />
-    <Compile Include="TemplateForm.conditions.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TemplateForm.anchors.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TemplateForm.fields.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TemplateForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TemplateForm.Designer.cs">
-      <DependentUpon>TemplateForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Ocr.cs" />
-    <Compile Include="TemplateForm.pages.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TemplateForm.extention.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TextForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TextForm.Designer.cs">
-      <DependentUpon>TextForm.cs</DependentUpon>
-    </Compile>
-    <Content Include="3RINGS~1.ICO" />
-    <Compile Include="AboutBox.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AboutBox.Designer.cs">
-      <DependentUpon>AboutBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Pdf.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Content Include="computers308.ico" />
-    <Content Include="docs\copyright.js" />
-    <Content Include="docs\img\sampleparser.png" />
-    <Content Include="docs\img\tutorial0.png" />
-    <Content Include="docs\img\tutorial1.png" />
-    <Content Include="docs\img\tutorial10.png" />
-    <Content Include="docs\img\tutorial2.png" />
-    <Content Include="docs\img\tutorial3.png" />
-    <Content Include="docs\img\tutorial4.png" />
-    <Content Include="docs\img\tutorial5.png" />
-    <Content Include="docs\img\tutorial6.png" />
-    <Content Include="docs\img\tutorial7.png" />
-    <Content Include="docs\img\tutorial8.png" />
-    <Content Include="docs\img\tutorial9.png" />
-    <Content Include="docs\index.html" />
-    <Content Include="docs\main.css" />
-    <Content Include="docs\menu_generator.css" />
-    <Content Include="docs\menu_generator.js" />
-    <Content Include="docs\prism.css" />
-    <Content Include="docs\prism.js" />
-    <Content Include="docs\testLinks.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 3.1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="app.manifest">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="AboutBox.resx">
-      <DependentUpon>AboutBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AnchorCvImageControl.resx">
-      <DependentUpon>AnchorCvImageControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AnchorImageDataControl.resx">
-      <DependentUpon>AnchorImageDataControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AnchorOcrTextControl.resx">
-      <DependentUpon>AnchorOcrTextControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AnchorPdfTextControl.resx">
-      <DependentUpon>AnchorPdfTextControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FieldPdfTextControl.resx">
-      <DependentUpon>FieldPdfTextControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FieldPdfTextLinesControl.resx">
-      <DependentUpon>FieldPdfTextLinesControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FieldPdfCharBoxsControl.resx">
-      <DependentUpon>FieldPdfCharBoxsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FieldOcrTextControl.resx">
-      <DependentUpon>FieldOcrTextControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FieldOcrCharBoxsControl.resx">
-      <DependentUpon>FieldOcrCharBoxsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FieldImageControl.resx">
-      <DependentUpon>FieldImageControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FieldOcrTextLineImagesControl.resx">
-      <DependentUpon>FieldOcrTextLineImagesControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FieldOcrTextLinesControl.resx">
-      <DependentUpon>FieldOcrTextLinesControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SettingsForm.resx">
-      <DependentUpon>SettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FieldControl.resx">
-      <DependentUpon>FieldControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ScanTemplateForm.resx">
-      <DependentUpon>ScanTemplateForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TemplateForm.resx">
-      <DependentUpon>TemplateForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TextForm.resx">
-      <DependentUpon>TextForm.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="CliverRoutines\CliverRoutines.csproj">
-      <Project>{e88444ba-1b07-40e6-96d1-922d27965f91}</Project>
-      <Name>CliverRoutines</Name>
-    </ProjectReference>
-    <ProjectReference Include="CliverWinRoutines\CliverWinRoutines.csproj">
-      <Project>{51f2df13-41f1-4f22-890f-c3b50c813909}</Project>
-      <Name>CliverWinRoutines</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Emgu.CV">
-      <Version>4.3.0.3890</Version>
-    </PackageReference>
-    <PackageReference Include="Emgu.CV.runtime.windows">
-      <Version>4.3.0.3890</Version>
-    </PackageReference>
-    <PackageReference Include="ICSharpCode.TextEditor.Extended">
-      <Version>4.2.4</Version>
-    </PackageReference>
-    <PackageReference Include="iTextSharp">
-      <Version>5.5.13.2</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp">
-      <Version>4.0.0-2.final</Version>
-    </PackageReference>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>13.0.1</Version>
-    </PackageReference>
-    <PackageReference Include="Tesseract">
-      <Version>4.1.1</Version>
-    </PackageReference>
-    <PackageReference Include="ZedGraph">
-      <Version>6.0.0-alpha0001</Version>
-    </PackageReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net5.0-windows</TargetFramework>
+		<UseWindowsForms>true</UseWindowsForms>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<RootNamespace>Cliver.PdfDocumentParser</RootNamespace>
+		<AssemblyName>PdfDocumentParser</AssemblyName>
+		<Deterministic>false</Deterministic>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="CliverRoutines\**" />
+		<Compile Remove="CliverWinRoutines\**" />
+		<Compile Remove="docs\**" />
+		<Compile Remove="docs_files\**" />
+		<Compile Remove="externals\**" />
+		<Compile Remove="packages\**" />
+		<Compile Remove="SampleParser\**" />
+		<EmbeddedResource Remove="CliverRoutines\**" />
+		<EmbeddedResource Remove="CliverWinRoutines\**" />
+		<EmbeddedResource Remove="docs\**" />
+		<EmbeddedResource Remove="docs_files\**" />
+		<EmbeddedResource Remove="externals\**" />
+		<EmbeddedResource Remove="packages\**" />
+		<EmbeddedResource Remove="SampleParser\**" />
+		<None Remove="CliverRoutines\**" />
+		<None Remove="CliverWinRoutines\**" />
+		<None Remove="docs\**" />
+		<None Remove="docs_files\**" />
+		<None Remove="externals\**" />
+		<None Remove="packages\**" />
+		<None Remove="SampleParser\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Remove=".gitattributes" />
+		<None Remove=".gitignore" />
+		<None Remove="3RINGS~1.ICO" />
+		<None Remove="LICENSE" />
+		<None Remove="README.md" />
+		<None Remove="_config.yml" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="CliverRoutines\CliverRoutines.csproj">		</ProjectReference>
+		<ProjectReference Include="CliverWinRoutines\CliverWinRoutines.csproj">		</ProjectReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Emgu.CV">
+			<Version>4.5.3.4721</Version>
+		</PackageReference>
+		<PackageReference Include="Emgu.CV.Bitmap" Version="4.5.3.4721" />
+		<PackageReference Include="Emgu.CV.runtime.windows">
+			<Version>4.5.3.4721</Version>
+		</PackageReference>
+		<PackageReference Include="ICSharpCode.TextEditor.Extended">
+			<Version>4.2.4</Version>
+		</PackageReference>
+		<PackageReference Include="iTextSharp">
+			<Version>5.5.13.2</Version>
+		</PackageReference>
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp">
+			<Version>4.0.0-3.final</Version>
+		</PackageReference>
+		<PackageReference Include="Newtonsoft.Json">
+			<Version>13.0.1</Version>
+		</PackageReference>
+		<PackageReference Include="Tesseract">
+			<Version>4.1.1</Version>
+		</PackageReference>
+		<PackageReference Include="Tesseract.Drawing" Version="4.1.1" />
+		<PackageReference Include="ZedGraph">
+			<Version>6.0.0-alpha0001</Version>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Update="AboutBox.resx">
+			<DependentUpon>AboutBox.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="AnchorCvImageControl.resx">
+			<DependentUpon>AnchorCvImageControl.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="AnchorImageDataControl.resx">
+			<DependentUpon>AnchorImageDataControl.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="AnchorOcrTextControl.resx">
+			<DependentUpon>AnchorOcrTextControl.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="AnchorPdfTextControl.resx">
+			<DependentUpon>AnchorPdfTextControl.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="FieldPdfTextControl.resx">
+			<DependentUpon>FieldPdfTextControl.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="FieldPdfTextLinesControl.resx">
+			<DependentUpon>FieldPdfTextLinesControl.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="FieldPdfCharBoxsControl.resx">
+			<DependentUpon>FieldPdfCharBoxsControl.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="FieldOcrTextControl.resx">
+			<DependentUpon>FieldOcrTextControl.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="FieldOcrCharBoxsControl.resx">
+			<DependentUpon>FieldOcrCharBoxsControl.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="FieldImageControl.resx">
+			<DependentUpon>FieldImageControl.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="FieldOcrTextLineImagesControl.resx">
+			<DependentUpon>FieldOcrTextLineImagesControl.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="FieldOcrTextLinesControl.resx">
+			<DependentUpon>FieldOcrTextLinesControl.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Properties\Resources.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+		<EmbeddedResource Update="SettingsForm.resx">
+			<DependentUpon>SettingsForm.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="FieldControl.resx">
+			<DependentUpon>FieldControl.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="ScanTemplateForm.resx">
+			<DependentUpon>ScanTemplateForm.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="TemplateForm.resx">
+			<DependentUpon>TemplateForm.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="TextForm.resx">
+			<DependentUpon>TextForm.cs</DependentUpon>
+		</EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="AnchorCvImageControl.cs">
+		</Compile>
+		<Compile Update="AnchorCvImageControl.Designer.cs">
+			<DependentUpon>AnchorCvImageControl.cs</DependentUpon>
+		</Compile>
+		<Compile Update="AnchorImageDataControl.cs">
+		</Compile>
+		<Compile Update="AnchorImageDataControl.Designer.cs">
+			<DependentUpon>AnchorImageDataControl.cs</DependentUpon>
+		</Compile>
+		<Compile Update="AnchorOcrTextControl.cs">
+		</Compile>
+		<Compile Update="AnchorOcrTextControl.Designer.cs">
+			<DependentUpon>AnchorOcrTextControl.cs</DependentUpon>
+		</Compile>
+		<Compile Update="AnchorPdfTextControl.cs">
+		</Compile>
+		<Compile Update="AnchorPdfTextControl.Designer.cs">
+			<DependentUpon>AnchorPdfTextControl.cs</DependentUpon>
+		</Compile>
+		<Compile Update="AnchorControl.cs">
+		</Compile>
+		<Compile Update="AnchorControl.Designer.cs">
+			<DependentUpon>AnchorControl.cs</DependentUpon>
+		</Compile>
+		<Compile Update="BooleanEngine.cs" />
+		<Compile Update="Compiler.cs" />
+		<Compile Update="CvImage.cs" />
+		<Compile Update="BitmapPreprocessor.cs" />
+		<Compile Update="Deskewer.cs" />
+		<Compile Update="FieldPdfTextControl.cs">
+
+		</Compile>
+		<Compile Update="FieldPdfTextControl.Designer.cs">
+			<DependentUpon>FieldPdfTextControl.cs</DependentUpon>
+		</Compile>
+		<Compile Update="FieldPdfTextLinesControl.cs">
+
+		</Compile>
+		<Compile Update="FieldPdfTextLinesControl.Designer.cs">
+			<DependentUpon>FieldPdfTextLinesControl.cs</DependentUpon>
+		</Compile>
+		<Compile Update="FieldPdfCharBoxsControl.cs">
+
+		</Compile>
+		<Compile Update="FieldPdfCharBoxsControl.Designer.cs">
+			<DependentUpon>FieldPdfCharBoxsControl.cs</DependentUpon>
+		</Compile>
+		<Compile Update="FieldOcrTextControl.cs">
+
+		</Compile>
+		<Compile Update="FieldOcrTextControl.Designer.cs">
+			<DependentUpon>FieldOcrTextControl.cs</DependentUpon>
+		</Compile>
+		<Compile Update="FieldOcrCharBoxsControl.cs">
+
+		</Compile>
+		<Compile Update="FieldOcrCharBoxsControl.Designer.cs">
+			<DependentUpon>FieldOcrCharBoxsControl.cs</DependentUpon>
+		</Compile>
+		<Compile Update="FieldImageControl.cs">
+
+		</Compile>
+		<Compile Update="FieldImageControl.Designer.cs">
+			<DependentUpon>FieldImageControl.cs</DependentUpon>
+		</Compile>
+		<Compile Update="FieldOcrTextLineImagesControl.cs">
+
+		</Compile>
+		<Compile Update="FieldOcrTextLineImagesControl.Designer.cs">
+			<DependentUpon>FieldOcrTextLineImagesControl.cs</DependentUpon>
+		</Compile>
+		<Compile Update="FieldOcrTextLinesControl.cs">
+
+		</Compile>
+		<Compile Update="FieldOcrTextLinesControl.Designer.cs">
+			<DependentUpon>FieldOcrTextLinesControl.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Page.conditions.cs" />
+		<Compile Update="Page.anchors.cs" />
+		<Compile Update="Page.text.cs" />
+		<Compile Update="Page.fields.cs" />
+		<Compile Update="PageCollection.cs" />
+		<Compile Update="Page.cs" />
+		<Compile Update="Pdf.iText7.cs" />
+		<Compile Update="Template.parser.cs" />
+		<Compile Update="Template.scan.cs" />
+		<Compile Update="Template.Anchor.cs" />
+		<Compile Update="Template.Field.cs" />
+		<Compile Update="ScanTemplateForm.cs">
+		</Compile>
+		<Compile Update="ScanTemplateForm.Designer.cs">
+			<DependentUpon>ScanTemplateForm.cs</DependentUpon>
+		</Compile>
+		<Compile Update="TemplateForm.TemplateManager.cs">
+		</Compile>
+		<Compile Update="Program.cs" />
+		<Compile Update="Properties\Resources.Designer.cs">
+			<AutoGen>True</AutoGen>
+			<DesignTime>True</DesignTime>
+			<DependentUpon>Resources.resx</DependentUpon>
+		</Compile>
+		<Compile Update="SettingsForm.cs">
+		</Compile>
+		<Compile Update="SettingsForm.Designer.cs">
+			<DependentUpon>SettingsForm.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Settings\Constants.cs" />
+		<Compile Update="Settings\Appearance.cs" />
+		<Compile Update="ImageData.cs" />
+		<Compile Update="FieldControl.cs">
+		</Compile>
+		<Compile Update="FieldControl.Designer.cs">
+			<DependentUpon>FieldControl.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Template.cs" />
+		<Compile Update="TemplateForm.conditions.cs">
+		</Compile>
+		<Compile Update="TemplateForm.anchors.cs">
+		</Compile>
+		<Compile Update="TemplateForm.fields.cs">
+		</Compile>
+		<Compile Update="TemplateForm.cs">
+		</Compile>
+		<Compile Update="TemplateForm.Designer.cs">
+			<DependentUpon>TemplateForm.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Ocr.cs" />
+		<Compile Update="TemplateForm.pages.cs">
+		</Compile>
+		<Compile Update="TemplateForm.extention.cs">
+		</Compile>
+		<Compile Update="TextForm.cs">
+		</Compile>
+		<Compile Update="TextForm.Designer.cs">
+			<DependentUpon>TextForm.cs</DependentUpon>
+		</Compile>
+		<Compile Update="AboutBox.cs">
+		</Compile>
+		<Compile Update="AboutBox.Designer.cs">
+			<DependentUpon>AboutBox.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Pdf.cs" />
+		<Compile Update="Properties\AssemblyInfo.cs">
+		</Compile>
+	</ItemGroup>
+
 </Project>
