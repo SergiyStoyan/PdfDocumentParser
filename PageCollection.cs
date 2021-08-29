@@ -10,7 +10,7 @@ using iTextSharp.text.pdf;
 namespace Cliver.PdfDocumentParser
 {
     /// <summary>
-    /// page collection manager of a single pdf file 
+    /// Page collection manager of a pdf file.
     /// </summary>
     public class PageCollection : HandyDictionary<int, Page>
     {
@@ -25,8 +25,8 @@ namespace Cliver.PdfDocumentParser
         }
 
         /// <summary>
-        /// (!)If TRUE then the disposables like Bitmaps are chached and will be (!) automatically disposed. 
-        /// To make sure that the disposables are not disposed, set FALSE and dispose the values by your code.
+        /// (!)If TRUE then the disposables like Bitmaps are cached and (!) automatically disposed when ActiveTemplate is changed. 
+        /// To make sure that the disposables are not disposed, set FALSE and dispose them by your own code.
         /// </summary>
         public readonly bool CacheDisposableFieldValues = false;
         public readonly string PdfFile;
