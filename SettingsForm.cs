@@ -48,23 +48,25 @@ namespace Cliver.PdfDocumentParser
         {
             try
             {
-                Settings.AppearanceSettings appearance = Settings.Appearance.CreateClone();
-                Settings.Appearance.AnchorBoxColor = AnchorBoxColor.ForeColor;
-                Settings.Appearance.AscendantAnchorBoxColor = AscendantAnchorBoxColor.ForeColor;
-                Settings.Appearance.SelectionBoxColor = SelectionBoxColor.ForeColor;
-                Settings.Appearance.TableBoxColor = TableBoxColor.ForeColor;
-                Settings.Appearance.SelectionBoxBorderWidth = (float)SelectionBoxBorderWidth.Value;
-                Settings.Appearance.AnchorBoxBorderWidth = (float)AnchorBoxBorderWidth.Value;
-                Settings.Appearance.AscendantAnchorBoxBorderWidth = (float)AscendantAnchorBoxBorderWidth.Value;
-                Settings.Appearance.TableBoxBorderWidth = (float)TableBoxBorderWidth.Value;
+                AppearanceSettings appearance = Settings.Appearance.CreateClone();
+                appearance.AnchorBoxColor = AnchorBoxColor.ForeColor;
+                appearance.AscendantAnchorBoxColor = AscendantAnchorBoxColor.ForeColor;
+                appearance.SelectionBoxColor = SelectionBoxColor.ForeColor;
+                appearance.TableBoxColor = TableBoxColor.ForeColor;
+                appearance.SelectionBoxBorderWidth = (float)SelectionBoxBorderWidth.Value;
+                appearance.AnchorBoxBorderWidth = (float)AnchorBoxBorderWidth.Value;
+                appearance.AscendantAnchorBoxBorderWidth = (float)AscendantAnchorBoxBorderWidth.Value;
+                appearance.TableBoxBorderWidth = (float)TableBoxBorderWidth.Value;
 
-                Settings.Constants.PdfPageImageResolution = (int)PdfPageImageResolution.Value;
-                Settings.Constants.CoordinateDeviationMargin = (float)CoordinateDeviationMargin.Value;
-                //Settings.Constants.OcrConfig = Serialization.Json.Deserialize<Ocr.Config>(OcrConfig.Text);
+                ConstantsSettings constants = Settings.Constants.CreateClone();
+                constants.PdfPageImageResolution = (int)PdfPageImageResolution.Value;
+                constants.CoordinateDeviationMargin = (float)CoordinateDeviationMargin.Value;
+                //constants.OcrConfig = Serialization.Json.Deserialize<Ocr.Config>(OcrConfig.Text);
+                constants.InitialSearchRectangleMargin = (int)InitialSearchRectangleMargin.Value;
 
-                Settings.Constants.InitialSearchRectangleMargin = (int)InitialSearchRectangleMargin.Value;
-
+                Settings.Appearance = appearance;
                 Settings.Appearance.Save();
+                Settings.Constants = constants;
                 Settings.Constants.Save();
                 Message.Warning("Some settings may require restarting the application in order to come into effect.", this);
                 Close();
@@ -72,8 +74,6 @@ namespace Cliver.PdfDocumentParser
             catch (Exception ex)
             {
                 Message.Error2(ex, this);
-                Settings.Appearance.Reload();
-                Settings.Constants.Reload();
             }
         }
 

@@ -21,7 +21,7 @@ namespace Cliver.PdfDocumentParser
             {
                 try
                 {
-                    System.Diagnostics.Process.Start(Settings.Constants.HelpFile);
+                    ProcessRoutines.Open(Settings.Constants.HelpFile);
                 }
                 catch (Exception ex)
                 {
