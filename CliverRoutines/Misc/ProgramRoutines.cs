@@ -6,11 +6,9 @@
         http://www.cliversoft.com
 ********************************************************************************************/
 using System;
-using System.Windows.Forms;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
-using System.Web;
 
 
 namespace Cliver
@@ -67,9 +65,6 @@ namespace Cliver
 
         static public string GetAppName()
         {
-            string an = Application.ProductName;
-            if (!string.IsNullOrWhiteSpace(an))
-                return an;
             return System.Reflection.Assembly.GetEntryAssembly().GetName(false).Name;
         }
     }

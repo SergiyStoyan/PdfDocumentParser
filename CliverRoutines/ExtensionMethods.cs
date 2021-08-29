@@ -21,7 +21,7 @@ namespace Cliver
         /// </summary>
         /// <param name="delegate"></param>
         /// <param name="ps"></param>
-        public static void BeginInvoke(this Delegate @delegate, params object[] ps) 
+        public static void BeginInvoke(this Delegate @delegate, params object[] ps)
         {
             ThreadRoutines.Start(() => { @delegate.DynamicInvoke(ps); });
         }
