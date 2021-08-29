@@ -7,6 +7,8 @@
 		<RootNamespace>Cliver.PdfDocumentParser</RootNamespace>
 		<AssemblyName>PdfDocumentParser</AssemblyName>
 		<Deterministic>false</Deterministic>
+		<PackageProjectUrl>https://github.com/sergeystoyan/PdfDocumentParser</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/sergeystoyan/PdfDocumentParser</RepositoryUrl>
 	</PropertyGroup>
 
 	<ItemGroup>
