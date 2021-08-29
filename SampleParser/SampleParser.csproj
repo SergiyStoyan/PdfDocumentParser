@@ -97,4 +97,8 @@
 		</Compile>
 	</ItemGroup>
 
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	  <Exec Command="xcopy /Y /S &quot;$(ProjectDir)config&quot; &quot;$(TargetDir)&quot;&#xD;&#xA;xcopy /Y /S &quot;$(ProjectDir)..\externals&quot; &quot;$(TargetDir)&quot;&#xD;&#xA;xcopy /Y /S &quot;$(ProjectDir)..\config&quot; &quot;$(TargetDir)&quot;&#xD;&#xA;xcopy /Y /S &quot;$(ProjectDir)..\docs&quot; &quot;$(TargetDir)docs\&quot;" />
+	</Target>
+
 </Project>
