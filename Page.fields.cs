@@ -191,7 +191,7 @@ namespace Cliver.PdfDocumentParser
 
             internal object GetValue(Template.Field.Types type)
             {
-                if (!page.PageCollection.CacheDisposableFieldValues && type == Template.Field.Types.Image || type == Template.Field.Types.OcrTextLineImages)
+                if (!page.PageCollection.CacheDisposableFieldValues && (type == Template.Field.Types.Image || type == Template.Field.Types.OcrTextLineImages))
                     return getValue(type);
                 if (!types2cachedValue.TryGetValue(type, out object o))
                 {
