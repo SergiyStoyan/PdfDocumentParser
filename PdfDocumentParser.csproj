@@ -37,6 +37,8 @@
 		<None Remove=".gitattributes" />
 		<None Remove=".gitignore" />
 		<None Remove="3RINGS~1.ICO" />
+		<None Remove="app.config" />
+		<None Remove="app.manifest" />
 		<None Remove="LICENSE" />
 		<None Remove="README.md" />
 		<None Remove="_config.yml" />

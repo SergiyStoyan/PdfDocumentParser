@@ -21,6 +21,9 @@
 
 	<ItemGroup>
 	  <None Remove="3RINGS~1.ICO" />
+	  <None Remove="app.config" />
+	  <None Remove="app.manifest" />
+	  <None Remove="computers308.ico" />
 	  <None Remove="install.iss" />
 	</ItemGroup>
 
