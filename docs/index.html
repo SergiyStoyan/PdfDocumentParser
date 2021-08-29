@@ -40,7 +40,7 @@
             Also, PdfDocumentParser allows to check custom <a href='#condition'>conditions</a> on a PDF page to decide which actions should be taken on it.
 
 
-            <h2><a name='customApplication'>Developing application</a></h2>
+            <h2><a name='customApplication'>Developing an application</a></h2>
         <p>
             An application based on PdfDocumentParser has to care about the following main aspects:
             <ul>
@@ -62,11 +62,17 @@
                 <li>create your project;</li>
                 <li>add PdfDocumentParser project to the solution;</li>
                 <li>reference PdfDocumentParser in your project;</li>
+                <li>add post-build copying of PdfDocumentParser's dependencies to your output folder (see <a href='#sampleParser'>SampleParser</a>);</li>
                 <li>update nuget packages for the solution;</li>
                 <li>start developing your parser using PdfDocumentParser API;</li>
             </ul>
 
 
+            <h3>Warnings</a></h3>
+               <p>(!) Due to Emgu restriction, PdfDocumentParser built in Any CPU configuration throws an exception during execution. (https://www.emgu.com/wiki/index.php/Download_And_Installation#Targeting_.Net_Framework)
+			   
+			   <p>(!) Being a WinForm application, PdfDocumentParser TemplateEditor can be displayed deteriorated on a high resolution monitor. To fix it, use the DPI scaling options for executables provided by Windows.
+			   
 
             <h2><a name='licensing'>Licensing</a></h2>
 			
