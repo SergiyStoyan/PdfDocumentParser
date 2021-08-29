@@ -8,6 +8,8 @@
 		<AssemblyName>CliverWinRoutines</AssemblyName>
 		<Deterministic>false</Deterministic>
 		<UseWPF>true</UseWPF>
+		<RepositoryUrl>https://github.com/sergeystoyan/CliverWinRoutines</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/sergeystoyan/CliverWinRoutines</PackageProjectUrl>
 	</PropertyGroup>
 
 	<ItemGroup>

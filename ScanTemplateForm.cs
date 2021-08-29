@@ -179,7 +179,7 @@ namespace Cliver.PdfDocumentParser
                         tm.ToolTip = ce.Message;
                         bitmapPreprocessorClassDefinition.Document.MarkerStrategy.AddMarker(tm);
                     }
-                    throw ex;
+                    throw;
                 }
         }
 
