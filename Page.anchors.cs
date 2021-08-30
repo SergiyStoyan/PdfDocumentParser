@@ -61,7 +61,7 @@ namespace Cliver.PdfDocumentParser
 
         internal class AnchorActualInfo
         {
-            readonly public Template.Anchor Anchor;
+            readonly internal Template.Anchor Anchor;
             public PointF Position
             {
                 get
@@ -77,9 +77,9 @@ namespace Cliver.PdfDocumentParser
                 }
             }
             PointF position = new PointF(-1, -1);
-            public bool Found;
-            public SizeF Shift { get; private set; }
-            public AnchorActualInfo ParentAnchorActualInfo { get; private set; }
+            internal bool Found;
+            internal SizeF Shift { get; private set; }
+            internal AnchorActualInfo ParentAnchorActualInfo { get; private set; }
 
             internal AnchorActualInfo(Template.Anchor anchor, Page page)
             {

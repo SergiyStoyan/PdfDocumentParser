@@ -20,84 +20,6 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class Page
     {
-        public string GetText(string fieldName)
-        {
-            FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
-            if (!fai.Found)
-                return null;
-            if (fai.ActualField is Template.Field.Pdf)
-                return (string)fai.GetValue(Template.Field.Types.PdfText);
-            return (string)fai.GetValue(Template.Field.Types.OcrText);
-        }
-
-        public List<string> GetTextLines(string fieldName)
-        {
-            FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
-            if (!fai.Found)
-                return null;
-            if (fai.ActualField is Template.Field.Pdf)
-                return (List<string>)fai.GetValue(Template.Field.Types.PdfTextLines);
-            return (List<string>)fai.GetValue(Template.Field.Types.OcrTextLines);
-        }
-
-        public List<CharBox> GetCharBoxes(string fieldName)
-        {
-            FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
-            if (!fai.Found)
-                return null;
-            if (fai.ActualField is Template.Field.Pdf)
-                return (List<CharBox>)fai.GetValue(Template.Field.Types.PdfCharBoxs);
-            return (List<CharBox>)fai.GetValue(Template.Field.Types.OcrCharBoxs);
-        }
-
-        public Bitmap GetImage(string fieldName)
-        {
-            FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
-            if (!fai.Found)
-                return null;
-            return (Bitmap)fai.GetValue(Template.Field.Types.Image);
-        }
-
-        //public List<Image> GetTextLineImages(string fieldName)
-        //{
-        //    FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
-        //    if (!fai.Found)
-        //        return null;
-        //    if (fai.ActualField.DefaultValueType.ToString().StartsWith("Pdf"))
-        //        return (List<string>)fai.GetValue(Template.Field.Types.PdfTextLines);
-        //    return (List<Image>)fai.GetValue(Template.Field.Types.OcrTextLineImages);
-        //}
-
-        /// <summary>
-        /// Tries field definitions of the given name in turn until some is found on the page.
-        /// </summary>
-        /// <param name="fieldName">field is referenced by name because there may be several field-definitions for the same name</param>
-        /// <param name="type">if not set then DefaultValueType is used</param>
-        /// <returns></returns>
-        public object GetValue(string fieldName, Template.Field.Types? type = null)
-        {
-            return GetValue(fieldName, out _, type);
-        }
-
-        /// <summary>
-        /// Tries field definitions of the given name in turn until some is found on the page.
-        /// </summary>
-        /// <param name="fieldName">field is referenced by name because there may be several field-definitions for the same name</param>
-        /// <param name="actualField">actual field definition which was found on the page</param>
-        /// <param name="type">if not set then DefaultValueType is used</param>
-        /// <returns></returns>
-        public object GetValue(string fieldName, out Template.Field actualField, Template.Field.Types? type = null)
-        {
-            FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
-            if (!fai.Found)
-            {
-                actualField = null;
-                return null;
-            }
-            actualField = fai.ActualField;
-            return fai.GetValue(type == null ? fai.ActualField.Type : (Template.Field.Types)type);
-        }
-
         /// <summary>
         /// It is helpful when a field has more than 1 definition and its image is required.
         /// !!!Only must be used for the field returned by GetValue(string fieldName, out Template.Field actualField, Template.Field.Types? type = null)
@@ -487,7 +409,7 @@ namespace Cliver.PdfDocumentParser
             RectangleF r = field.Rectangle.GetSystemRectangleF();
             if (field.LeftAnchor != null)
             {
-                Page.AnchorActualInfo aai = GetAnchorActualInfo(field.LeftAnchor.Id);
+                AnchorActualInfo aai = GetAnchorActualInfo(field.LeftAnchor.Id);
                 if (!aai.Found)
                     return null;
                 float right = r.Right;
@@ -496,7 +418,7 @@ namespace Cliver.PdfDocumentParser
             }
             if (field.TopAnchor != null)
             {
-                Page.AnchorActualInfo aai = GetAnchorActualInfo(field.TopAnchor.Id);
+                AnchorActualInfo aai = GetAnchorActualInfo(field.TopAnchor.Id);
                 if (!aai.Found)
                     return null;
                 float bottom = r.Bottom;
@@ -505,7 +427,7 @@ namespace Cliver.PdfDocumentParser
             }
             if (field.RightAnchor != null)
             {
-                Page.AnchorActualInfo aai = GetAnchorActualInfo(field.RightAnchor.Id);
+                AnchorActualInfo aai = GetAnchorActualInfo(field.RightAnchor.Id);
                 if (!aai.Found)
                     return null;
                 r.Width += aai.Shift.Width - field.RightAnchor.Shift;
