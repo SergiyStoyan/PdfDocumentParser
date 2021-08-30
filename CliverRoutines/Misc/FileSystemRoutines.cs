@@ -148,10 +148,16 @@ namespace Cliver
             return !error;
         }
 
+        /// <summary>
+        /// (!)It throws an exception when the destination file exists and !overwrite.
+        /// </summary>
+        /// <param name="file1"></param>
+        /// <param name="file2"></param>
+        /// <param name="overwrite"></param>
         public static void CopyFile(string file1, string file2, bool overwrite = false)
         {
             CreateDirectory(PathRoutines.GetFileDir(file2), false);
-            File.Copy(file1, file2, overwrite);
+            File.Copy(file1, file2, overwrite);//(!)it throws an exception when the destination file exists and !overwrite
         }
 
         public static void MoveFile(string file1, string file2, bool overwrite = true)

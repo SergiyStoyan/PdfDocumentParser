@@ -104,26 +104,35 @@ namespace Cliver
             {
                 return Serialize(a, false, true) == Serialize(b, false, true);
             }
-        }
 
-        public static O CreateCloneByJson<O>(this O o)
-        {
-            return Json.Clone<O>(o);
-        }
+            /// <summary>
+            /// Usage: [Newtonsoft.Json.JsonConverter(typeof(Serialization.Json.NoIndentConverter))]
+            /// !!!Issue: does not work on types
+            /// </summary>
+            public class NoIndentConverter : JsonConverter
+            {
+                public override bool CanConvert(Type objectType)
+                {
+                    return true;
+                }
 
-        public static object CreateCloneByJson(this object o, Type type)
-        {
-            return Json.Clone(type, o);
-        }
+                public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+                {
+                    //if (reader.TokenType == JsonToken.Null)
+                    //    return existingValue;
+                    //var jObject = Newtonsoft.Json.Linq.JObject.Load(reader);
+                    //return jObject.ToObject(objectType);
+                    object o = serializer.Deserialize(reader, objectType);
+                    if (o == null)
+                        return existingValue;
+                    return o;
+                }
 
-        public static bool IsEqualByJson(this object a, object b)
-        {
-            return Json.IsEqual(a, b);
-        }
-
-        public static string ToStringByJson(this object o, bool indented = true, bool polymorphic = false, bool ignoreNullValues = true, bool ignoreDefaultValues = false)
-        {
-            return Json.Serialize(o, indented, polymorphic, ignoreNullValues, ignoreDefaultValues);
+                public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+                {
+                    writer.WriteRawValue(JsonConvert.SerializeObject(value, Formatting.None));
+                }
+            }
         }
     }
 }

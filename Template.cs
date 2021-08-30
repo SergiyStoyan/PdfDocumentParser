@@ -25,6 +25,7 @@ namespace Cliver.PdfDocumentParser
 
         public string Name;
 
+        [Newtonsoft.Json.JsonConverter(typeof(Serialization.Json.NoIndentConverter))]
         public TextAutoInsertSpace TextAutoInsertSpace = new TextAutoInsertSpace();
 
         //public bool IgnoreDuplicatedPdfChars = true;//used but not edited
