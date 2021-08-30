@@ -3,15 +3,15 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>6.4.0.0</AssemblyVersion>
+    <AssemblyVersion>6.7.0.0</AssemblyVersion>
     <RepositoryUrl>https://github.com/sergeystoyan/CliverRoutines.git</RepositoryUrl>
-    <FileVersion>6.4.0.0</FileVersion>
+    <FileVersion>6.7.0.0</FileVersion>
     <!--PackageLicenseFile>LICENSE</PackageLicenseFile-->
 	<PackageLicenseExpression></PackageLicenseExpression>
     <Copyright>Sergey Stoyan</Copyright>
     <Authors>Sergey Stoyan</Authors>
     <Company>CliverSoft</Company>
-    <Version>6.4.0</Version>
+    <Version>6.7.0</Version>
     <PackageProjectUrl>https://github.com/sergeystoyan/CliverRoutines</PackageProjectUrl>
     <Description>Cross-platform routines needed in the most applications:
 - settings manager that supersedes .NET ConfigurationManager;
@@ -22,9 +22,20 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <DefineConstants>TRACE;THREAD_LOG_IS_DEFAULT1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <DefineConstants>TRACE;THREAD_LOG_IS_DEFAULT1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <DefineConstants>TRACE;THREAD_LOG_IS_DEFAULT1</DefineConstants>
   </PropertyGroup>
