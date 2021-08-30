@@ -26,19 +26,28 @@ namespace Cliver.PdfDocumentParser
 
             //public List<Definition> Definitions = new List<Definition>();
 
+            [Newtonsoft.Json.JsonConverter(typeof(Serialization.Json.NoIndentConverter))]
             public RectangleF Rectangle;
+
+            [Newtonsoft.Json.JsonConverter(typeof(Serialization.Json.NoIndentConverter))]
             /// <summary>
             /// when set, Left shifts as the anchor shifts
             /// </summary>
             public SideAnchor LeftAnchor;
+
+            [Newtonsoft.Json.JsonConverter(typeof(Serialization.Json.NoIndentConverter))]
             /// <summary>
             /// when set, Top shifts as the anchor shifts
             /// </summary>
             public SideAnchor TopAnchor;
+
+            [Newtonsoft.Json.JsonConverter(typeof(Serialization.Json.NoIndentConverter))]
             /// <summary>
             /// when set, Right shifts as the anchor shifts
             /// </summary>
             public SideAnchor RightAnchor;
+
+            [Newtonsoft.Json.JsonConverter(typeof(Serialization.Json.NoIndentConverter))]
             /// <summary>
             /// when set, Bottom shifts as the anchor shifts
             /// </summary>
@@ -130,8 +139,12 @@ namespace Cliver.PdfDocumentParser
             //    return null;
             //}
 
+            [Newtonsoft.Json.JsonConverter(typeof(Serialization.Json.NoIndentConverter))]
             public CharFilter CharFilter = null;
+
             public int? LinePaddingY = null;
+
+            [Newtonsoft.Json.JsonConverter(typeof(Serialization.Json.NoIndentConverter))]
             public TextAutoInsertSpace TextAutoInsertSpace = null;
 
             public interface Text
