@@ -259,6 +259,7 @@
     </Compile>
     <Compile Include="Page.conditions.cs" />
     <Compile Include="Page.anchors.cs" />
+    <Compile Include="Page.fields.api.cs" />
     <Compile Include="Page.text.cs" />
     <Compile Include="Page.fields.cs" />
     <Compile Include="PageCollection.cs" />

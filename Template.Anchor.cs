@@ -17,7 +17,10 @@ namespace Cliver.PdfDocumentParser
         public abstract class Anchor
         {
             public int Id;
+
+            [Newtonsoft.Json.JsonConverter(typeof(Serialization.Json.NoIndentConverter))]
             public PointF Position;
+
             public int SearchRectangleMargin = -1;//px
             virtual public int? ParentAnchorId { get; set; } = null;
 
@@ -49,13 +52,21 @@ namespace Cliver.PdfDocumentParser
 
             public class PdfText : Anchor
             {
+                [Newtonsoft.Json.JsonConverter(typeof(Serialization.Json.NoIndentConverter))]
                 public List<CharBox> CharBoxs = new List<CharBox>();
+
+                //[Newtonsoft.Json.JsonConverter(typeof(Serialization.Json.NoIndentConverter))]
                 public class CharBox
                 {
                     public string Char;
+
+                    [Newtonsoft.Json.JsonConverter(typeof(Serialization.Json.NoIndentConverter))]
                     public RectangleF Rectangle;
                 }
+
+                [Newtonsoft.Json.JsonConverter(typeof(Serialization.Json.NoIndentConverter))]
                 public SizeF Size;
+
                 public float PositionDeviation = 1f;
                 public bool PositionDeviationIsAbsolute = false;
                 public bool IgnoreInvisibleChars = true;
@@ -75,13 +86,21 @@ namespace Cliver.PdfDocumentParser
             public class OcrText : Anchor
             {
                 public bool OcrEntirePage = false;//Tesseract recongnition of a big fragment and a small one gives different results!
+
+                [Newtonsoft.Json.JsonConverter(typeof(Serialization.Json.NoIndentConverter))]
                 public List<CharBox> CharBoxs = new List<CharBox>();
+
                 public class CharBox
                 {
                     public string Char;
+
+                    [Newtonsoft.Json.JsonConverter(typeof(Serialization.Json.NoIndentConverter))]
                     public RectangleF Rectangle;
                 }
+
+                [Newtonsoft.Json.JsonConverter(typeof(Serialization.Json.NoIndentConverter))]
                 public SizeF Size;
+
                 public float PositionDeviation = 1f;
                 public bool PositionDeviationIsAbsolute = false;
                 new public OcrSettings OcrSettings;//TBI

@@ -75,7 +75,7 @@ namespace Cliver.PdfDocumentParser
                 if (t.TextAutoInsertSpace == null)
                     t.TextAutoInsertSpace = new TextAutoInsertSpace();
                 textAutoInsertSpace_Threshold.Value = (decimal)t.TextAutoInsertSpace.Threshold;
-                textAutoInsertSpace_IgnoreSourceSpaces.Checked =  t.TextAutoInsertSpace.IgnoreSourceSpaces;
+                textAutoInsertSpace_IgnoreSourceSpaces.Checked = t.TextAutoInsertSpace.IgnoreSourceSpaces;
 
                 TesseractPageSegMode.SelectedItem = t.TesseractPageSegMode;
                 AdjustLineBorders.Checked = t.AdjustLineBorders;
@@ -186,7 +186,10 @@ namespace Cliver.PdfDocumentParser
         private void ShowPdfText_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             if (pages == null)
+            {
+                Message.Exclaim("No file is open.");
                 return;
+            }
             //TextForm tf = new TextForm("Pdf Entity Text", PdfTextExtractor.GetTextFromPage(pages.PdfReader, currentPageI), false);
             string t = Page.GetText(
                 pages[currentPageI].PdfCharBoxs,
@@ -200,7 +203,10 @@ namespace Cliver.PdfDocumentParser
         private void ShowOcrText_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             if (pages == null)
+            {
+                Message.Exclaim("No file is open.");
                 return;
+            }
             pages.ActiveTemplate = GetTemplateFromUI(false);
             List<string> ls = Page.GetTextLines(
                 pages[currentPageI].ActiveTemplateOcrCharBoxs,
@@ -399,7 +405,7 @@ namespace Cliver.PdfDocumentParser
                 if (t.Fields.Count < 1)
                     throw new Exception("Fields is empty!");
 
-                var fs = t.Fields.GroupBy(x => x.Name).Where(x => x.GroupBy(a => a.Type).Count() > 1).FirstOrDefault();
+                var fs = t.Fields.GroupBy(x => x.Name).Where(x => x.GroupBy(a => a.GetType()).Count() > 1).FirstOrDefault();
                 if (fs != null)
                     throw new Exception("Definitions of the field '" + fs.First().Name + "' are not of the same type!");
             }

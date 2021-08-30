@@ -16,6 +16,8 @@ TBD:
 
 - ?migrate to NET5 (!!!while it works, the forms were displayed deteriorated despite DPI settings. Also VS winform designer under NET5 is buggy!)
 
+- multiple anchor matches. In a field: set multiple anchor. In API: GetMultipleField();
+
 for scan processing:
 - invoices still have hand marks on them which hinder OCR. Solution: filter out colors control;
 - line filtering (when text overlaps a line);

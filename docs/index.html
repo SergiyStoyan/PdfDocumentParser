@@ -274,7 +274,7 @@ setLicense();
         <p>A condition is defined by a boolean expression that depends on anchors. It is intended to be used in a custom application for deciding which actions should be performed on a PDF page. It is checked by method <a href='#IsCondition'><code>IsCondition(<condition name>)</code></a>.
         <p>Conditions are identified by their names.
         <p>
-            The condition collection is dictated by logic of the application.
+            The conditions are dictated by the application's logic and can be added/modified/deleted in <a href="#templateEditor">Template Editor</a>.
 
 
             <h3>Boolean expression</h3>
@@ -309,9 +309,9 @@ setLicense();
 
 
             <h2><a name="field">Field</a></h2>
-        <p>A field defines certain text or image that is to be extracted from a PDF page. It is retrieved by method <a href='#GetValue'><code>GetValue()</code></a>.
+        <p>A field defines rules to extract text or image from a PDF page. It is retrieved by methods like <a href='#GetValue'><code>GetValue()</code></a>.
         <p>
-            Fields are identified by their names. The field collection is dictated by needs of the application.
+            Fields are identified by their names. Fields are dictated by the application and can be added/modified/deleted in <a href="#templateEditor">Template Editor</a>.
 
             <h3>Anchoring</h3>
         <p>
@@ -328,30 +328,30 @@ setLicense();
             <h3><a name='fieldTypes'>Field types</a></h3>
 
             <h4><a name='fieldPdfText'>PdfText</a></h4>
-            Its value is text surrounded by the field's rectangle and obtained from native PDF entities.
+            Its value is text obtained from native PDF entities and surrounded by the field's rectangle.
         <p>
             It is the preferable type for extracting text. However, it does not work with text presented by image.
 
             <h4><a name='fieldPdfTextLines'>PdfTextLines</a></h4>
-            It is the same as PdfText excepting it is an array of text lines rather than a plain text.
+            It is the same as PdfText except it is an array of text lines rather than a plain text.
 
             <h4><a name='fieldPdfCharBoxs'>PdfCharBoxs</a></h4>
             Instead of text it gives an array of captured chars and their coordinates.
 
             <h4>OcrText</h4>
-            Its value is text surrounded by the field's rectangle and recognized by OCR engine.
+            Its value is text recognized by the OCR engine and surrounded by the field's rectangle.
         <p>For native PDF documents, this type should never be used. But for scanned documents, it is the only way to get text in the digital form which can be indexed, searched and so on.
         <p>
             In contrast to PdfText, OcrText type does not ensure 100% accuracy and can acceptably work only with images of resolution not less than 300dpi (see <a href='#PdfPageImageResolution'>PdfPageImageResolution</a> parameter).
 
             <h4><a name='fieldOcrTextLines'>OcrTextLines</a></h4>
-            It is the same as OcrText excepting it is an array of text lines rather than a plain text.
+            It is the same as OcrText except it is an array of text lines rather than a plain text.
 
             <h4><a name='fieldOcrCharBoxs'>OcrCharBoxs</a></h4>
             Instead of text it gives an array of captured chars and their coordinates.
 
             <h4>Image</h4>
-            Its value is a <code>System.Drawing.Bitmap</code> object that contains a fragment of page surrounded by the field's rectangle.
+            Its value is a <code>System.Drawing.Bitmap</code> object that presents the page fragment surrounded by the field's rectangle.
 <p>
             It is used when image is required rather than text or when OcrText type is not reliable enough.
 
@@ -365,7 +365,7 @@ setLicense();
 
             <h3>Column field</h3>
         <p>
-            Column fields are used for parsing tables. They are defined as such when designing the application and have <code>ColumnOfTable</code> property not empty. See <a href='#tutorialParsingTables'>tutorial</a>.
+            Column fields are used for parsing tables. They have <code>ColumnOfTable</code> property set to a field which represents table. Any field can be declared as a column in <a href="#templateEditor">Template Editor</a> or by code. See <a href='#tutorialParsingTables'>tutorial</a>.
 
 
 
@@ -533,7 +533,7 @@ setLicense();
             <h2><a name='pseudoCode'>Pseudo-code samples</a></h2>
             The main idea of using PdfDocumentParser in an application is that custom operations are performed depending on custom <a href='#condition'>conditions</a>.
         <p>
-            Since the collection of <a href='#condition'>conditions</a> is introduced by the application, it is impossible to outline the most general algorithm of processing a PDF file. Still, some basic algorithms are considered below.
+            Since the collection of <a href='#condition'>conditions</a> is dictated by the application's logic, it is impossible to outline the most general algorithm of processing a PDF file. Still, some basic algorithms are considered below.
 
             <h3><a name='pseudoCode2'>Single-page documents</a></h3>
             An algorithm of parsing a PDF file where pages has no logical relation between each other and so every page requires choosing a template:
