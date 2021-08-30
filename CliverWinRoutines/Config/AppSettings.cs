@@ -20,7 +20,7 @@ namespace Cliver.Win
     {
         /// <summary>
         /// By default Environment.SpecialFolder.CommonApplicationData does not have writting permission.
-        /// Use this method to set it up.
+        /// Use this method to set it up. It must be called under elevated privileges.
         /// </summary>
         /// <param name="userIdentityName"></param>
         public static void AllowReadWriteConfigDir(string userIdentityName = null)
@@ -33,7 +33,7 @@ namespace Cliver.Win
 
         /// <summary>
         /// By default Environment.SpecialFolder.CommonApplicationData does not have writting permission.
-        /// Use this method to set it up.
+        /// Use this method to set it up. It must be called under elevated privileges.
         /// </summary>
         public static void AllowReadWriteConfigDirToEveryone()
         {
@@ -43,6 +43,8 @@ namespace Cliver.Win
         static void allowReadWriteConfigDir(SecurityIdentifier securityIdentifier)
         {
             DirectoryInfo di = new DirectoryInfo(AppSettings.StorageDir);
+            if (!di.Exists)
+                di.Create();
             DirectorySecurity ds = di.GetAccessControl();
             ds.AddAccessRule(new FileSystemAccessRule(
                     securityIdentifier,

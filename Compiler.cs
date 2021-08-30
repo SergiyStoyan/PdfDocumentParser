@@ -1,6 +1,7 @@
 //********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
@@ -83,11 +84,11 @@ namespace Cliver.PdfDocumentParser
         //    var y = references;
         //    sw3.Stop();
         //}
-        static public List<MetadataReference> GetAllReferences(Assembly startAssembly)
+        static public List<MetadataReference> GetAllReferences(Assembly rootAssembly)
         {
             List<MetadataReference> references = new List<MetadataReference>();
             Dictionary<string, Assembly> assemblNames2assemby = new Dictionary<string, Assembly>();
-            getAllAssemblies(assemblNames2assemby, startAssembly);
+            getAllAssemblies(assemblNames2assemby, rootAssembly);
             foreach (Assembly a in assemblNames2assemby.Values)
                 references.Add(MetadataReference.CreateFromFile(a.Location));
             return references;
@@ -98,8 +99,14 @@ namespace Cliver.PdfDocumentParser
             foreach (AssemblyName an in assembly.GetReferencedAssemblies())
                 if (!assemblNames2assemby.ContainsKey(an.FullName))
                 {
-                    Assembly a = Assembly.Load(an);
-                    getAllAssemblies(assemblNames2assemby, a);
+                    try
+                    {
+                        Assembly a = Assembly.Load(an);
+                        getAllAssemblies(assemblNames2assemby, a);
+                    }
+                    catch (System.IO.FileNotFoundException)//some assemblies could not be loaded but they seem to be non needed
+                    {
+                    }
                 }
         }
 
@@ -108,19 +115,29 @@ namespace Cliver.PdfDocumentParser
         /// </summary>
         /// <param name="typeDefinition"></param>
         /// <param name="references"></param>
+        /// <param name="dllFile"></param>
         /// <returns></returns>
-        public static Type[] Compile(string typesDefinition, IEnumerable<MetadataReference> references = null)
+        public static Type[] Compile(string typesDefinition, Assembly rootAssembly, string dllFile = null)
+        {
+            return compile(typesDefinition, null, rootAssembly, dllFile);
+        }
+
+        public static Type[] Compile(string typesDefinition, IEnumerable<MetadataReference> references, string dllFile = null)
+        {
+            return compile(typesDefinition, references, null, dllFile);
+        }
+
+        static Type[] compile(string typesDefinition, IEnumerable<MetadataReference> references = null, Assembly rootAssembly = null, string dllFile = null)
         {
             SyntaxTree st = SyntaxFactory.ParseSyntaxTree(typesDefinition);
             CSharpCompilation compilation = CSharpCompilation.Create("emitted.dll",//no file seems to be really created
                 syntaxTrees: new SyntaxTree[] { st },
-                references: references != null ? references : GetAllReferences(Assembly.GetCallingAssembly()),
+                references: references != null ? references : GetAllReferences(rootAssembly),
                 options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
                 );
             Assembly assembly;
-            using (var ms = new MemoryStream())
+            void checkEmitResult(Microsoft.CodeAnalysis.Emit.EmitResult result)
             {
-                var result = compilation.Emit(ms);
                 if (!result.Success)
                 {
                     List<Error> compilationErrors = new List<Error>();
@@ -129,12 +146,23 @@ namespace Cliver.PdfDocumentParser
                         compilationErrors.Add(new Error { Message = diagnostic.GetMessage(), P1 = diagnostic.Location.SourceSpan.Start, P2 = diagnostic.Location.SourceSpan.End });
                     throw new Exception(compilationErrors);
                 }
-                ms.Seek(0, SeekOrigin.Begin);
-                assembly = Assembly.Load(ms.ToArray());
+            }
+            if (dllFile == null)
+                using (var ms = new MemoryStream())
+                {
+                    Microsoft.CodeAnalysis.Emit.EmitResult result = compilation.Emit(ms);
+                    checkEmitResult(result);
+                    ms.Seek(0, SeekOrigin.Begin);
+                    assembly = Assembly.Load(ms.ToArray());
+                }
+            else
+            {
+                Microsoft.CodeAnalysis.Emit.EmitResult result = compilation.Emit(dllFile);
+                checkEmitResult(result);
+                assembly = Assembly.Load(dllFile);
             }
             return assembly.GetTypes();
         }
-        //static Dictionary<string, Type[]> compiledTypesDefinitions2Types = new Dictionary<string, Type[]>();
 
         public static IEnumerable<Type> FindSubTypes(string baseTypeName, Type[] types)
         {

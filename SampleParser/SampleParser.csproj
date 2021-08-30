@@ -109,8 +109,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -176,6 +176,7 @@
     <Compile Include="Program.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Template2.cs" />
     <Content Include="3RINGS~1.ICO" />
     <Content Include="computers308.ico" />
   </ItemGroup>
@@ -243,7 +244,8 @@
     <PostBuildEvent>xcopy /Y /S "$(ProjectDir)config" "$(TargetDir)"
 xcopy /Y /S "$(ProjectDir)..\externals" "$(TargetDir)"
 xcopy /Y /S "$(ProjectDir)..\config" "$(TargetDir)"
-xcopy /Y /S "$(ProjectDir)..\docs" "$(TargetDir)docs\"</PostBuildEvent>
+xcopy /Y /S "$(ProjectDir)..\docs" "$(TargetDir)PdfDocumentParserDocs\"
+</PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

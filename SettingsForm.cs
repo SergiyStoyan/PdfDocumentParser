@@ -1,6 +1,7 @@
 ﻿//********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
@@ -26,7 +27,6 @@ namespace Cliver.PdfDocumentParser
             AscendantAnchorBoxColor.ForeColor = Settings.Appearance.AscendantAnchorBoxColor;
             SelectionBoxColor.ForeColor = Settings.Appearance.SelectionBoxColor;
             TableBoxColor.ForeColor = Settings.Appearance.TableBoxColor;
-
             SelectionBoxBorderWidth.Value = (decimal)Settings.Appearance.SelectionBoxBorderWidth;
             AnchorBoxBorderWidth.Value = (decimal)Settings.Appearance.AnchorBoxBorderWidth;
             AscendantAnchorBoxBorderWidth.Value = (decimal)Settings.Appearance.SelectionBoxBorderWidth;
@@ -34,6 +34,9 @@ namespace Cliver.PdfDocumentParser
 
             PdfPageImageResolution.Value = Settings.Constants.PdfPageImageResolution;
             CoordinateDeviationMargin.Value = (decimal)Settings.Constants.CoordinateDeviationMargin;
+            OcrConfig.Text = Settings.Constants.OcrConfig.ToStringByJson();
+
+            InitialSearchRectangleMargin.Value = (decimal)Settings.Constants.InitialSearchRectangleMargin;
         }
 
         private void bCancel_Click(object sender, EventArgs e)
@@ -45,31 +48,33 @@ namespace Cliver.PdfDocumentParser
         {
             try
             {
-                Settings.Appearance.AnchorBoxColor = AnchorBoxColor.ForeColor;
-                Settings.Appearance.AscendantAnchorBoxColor = AscendantAnchorBoxColor.ForeColor;
-                Settings.Appearance.SelectionBoxColor = SelectionBoxColor.ForeColor;
-                Settings.Appearance.TableBoxColor = TableBoxColor.ForeColor;
+                AppearanceSettings appearance = Settings.Appearance.CreateClone();
+                appearance.AnchorBoxColor = AnchorBoxColor.ForeColor;
+                appearance.AscendantAnchorBoxColor = AscendantAnchorBoxColor.ForeColor;
+                appearance.SelectionBoxColor = SelectionBoxColor.ForeColor;
+                appearance.TableBoxColor = TableBoxColor.ForeColor;
+                appearance.SelectionBoxBorderWidth = (float)SelectionBoxBorderWidth.Value;
+                appearance.AnchorBoxBorderWidth = (float)AnchorBoxBorderWidth.Value;
+                appearance.AscendantAnchorBoxBorderWidth = (float)AscendantAnchorBoxBorderWidth.Value;
+                appearance.TableBoxBorderWidth = (float)TableBoxBorderWidth.Value;
 
-                Settings.Appearance.SelectionBoxBorderWidth = (float)SelectionBoxBorderWidth.Value;
-                Settings.Appearance.AnchorBoxBorderWidth = (float)AnchorBoxBorderWidth.Value;
-                Settings.Appearance.AscendantAnchorBoxBorderWidth = (float)AscendantAnchorBoxBorderWidth.Value;
-                Settings.Appearance.TableBoxBorderWidth = (float)TableBoxBorderWidth.Value;
+                ConstantsSettings constants = Settings.Constants.CreateClone();
+                constants.PdfPageImageResolution = (int)PdfPageImageResolution.Value;
+                constants.CoordinateDeviationMargin = (float)CoordinateDeviationMargin.Value;
+                //constants.OcrConfig = Serialization.Json.Deserialize<Ocr.Config>(OcrConfig.Text);
+                constants.InitialSearchRectangleMargin = (int)InitialSearchRectangleMargin.Value;
 
+                Settings.Appearance = appearance;
                 Settings.Appearance.Save();
-
-                Settings.Constants.PdfPageImageResolution = (int)PdfPageImageResolution.Value;
-                Settings.Constants.CoordinateDeviationMargin = (float)CoordinateDeviationMargin.Value;
-
+                Settings.Constants = constants;
                 Settings.Constants.Save();
-
+                Message.Warning("Some settings may require restarting the application in order to come into effect.", this);
                 Close();
             }
             catch (Exception ex)
             {
-                Message.Error2(ex);
+                Message.Error2(ex, this);
             }
-            Settings.Appearance.Reload();
-            Settings.Constants.Reload();
         }
 
         private void bReset_Click(object sender, EventArgs e)
@@ -84,7 +89,7 @@ namespace Cliver.PdfDocumentParser
             AboutBox ab = new AboutBox();
             ab.ShowDialog();
         }
-        
+
         private void SelectionBoxColor_Click(object sender, EventArgs e)
         {
             ColorDialog cd = new ColorDialog();

@@ -60,7 +60,7 @@ namespace Cliver.SampleParser
         {
             try
             {
-                PdfDocumentParser.Program.Initialize();
+                PdfDocumentParser.Program.Initialize(null);
 
                 Application.Run(MainForm.This);
             }

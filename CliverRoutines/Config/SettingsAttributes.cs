@@ -17,13 +17,13 @@ namespace Cliver
         public class ConfigAttribute : Attribute
         {
             /// <summary>
-            /// Whether a Settings field/type be initiated by Config implicitly.
+            /// Whether a Settings field/type be initiated by Config implicitly. Used to save the loading time/memory.
             /// An optional field, when needed, must be initiated explicitly by Config.Reload(string settingsFieldFullName)
             /// </summary>
             public bool Optional = false;
 
             /// <summary>
-            /// Whether a Settings field/type be serialized with indention.
+            /// Whether a Settings field/type be serialized with indention. Used to make the storage file smaller.
             /// </summary>
             public bool Indented = true;
 
@@ -32,7 +32,7 @@ namespace Cliver
             /// </summary>
             public bool NullSerialized = false;
 
-            //!!!it never must be used as brings to losing changes
+            //!!!it never must be used as it leads to losing changes
             //public bool IgnoreDefaultValues;
         }
 
@@ -83,7 +83,7 @@ namespace Cliver
         public class EncryptedAttribute : System.Attribute
         {
             /// <summary>
-            /// Encrypt/decrypt engine.
+            /// Encryption/decryption engine.
             /// </summary>
             readonly public StringEndec Endec;
 
@@ -91,7 +91,7 @@ namespace Cliver
             /// Settings field attribute that is used for encrypting.
             /// </summary>
             /// <param name="stringEndecGetterHostingType">Class that exposes the StringEndec getter.</param>
-            /// <param name="stringEndecGetterName">Name of the StringEndec getter. The getter must be public static.</param>
+            /// <param name="stringEndecGetterName">Name of the StringEndec getter. The getter must be static.</param>
             public EncryptedAttribute(Type stringEndecGetterHostingType, string stringEndecGetterName)
             {
                 try
@@ -100,14 +100,30 @@ namespace Cliver
                         throw new Exception("stringEndecGetterHostingType cannot be NULL.");
                     if (string.IsNullOrWhiteSpace(stringEndecGetterName))
                         throw new Exception("stringEndecGetterName cannot be empty.");
-                    System.Reflection.PropertyInfo pi = stringEndecGetterHostingType.GetProperty(stringEndecGetterName, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
-                    if (pi == null)
-                        throw new Exception(stringEndecGetterHostingType.FullName + " class does not expose property '" + stringEndecGetterName + "'");
-                    Endec = (StringEndec)pi.GetValue(null);
+                    System.Reflection.PropertyInfo pi = stringEndecGetterHostingType.GetProperty(stringEndecGetterName, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+                    if (pi != null)
+                    {
+                        //if (!pi.PropertyType.IsSubclassOf(typeof(StringEndec)))//!!!does not work
+                        if (!typeof(StringEndec).IsAssignableFrom(pi.PropertyType))
+                            throw new Exception("Type of the property " + stringEndecGetterHostingType.FullName + "." + stringEndecGetterName + " is not " + typeof(StringEndec).FullName);
+                        Endec = pi.GetValue(null) as StringEndec;
+                    }
+                    else
+                    {
+                        System.Reflection.FieldInfo fi = stringEndecGetterHostingType.GetField(stringEndecGetterName, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+                        if (fi == null)
+                            throw new Exception(stringEndecGetterHostingType.FullName + " class does not expose the property/field '" + stringEndecGetterName + "'");
+                        //if (!fi.FieldType.IsSubclassOf(typeof(StringEndec)))//!!!does not work
+                        if (!typeof(StringEndec).IsAssignableFrom(fi.FieldType))
+                            throw new Exception("Type of the field " + stringEndecGetterHostingType.FullName + "." + stringEndecGetterName + " is not " + typeof(StringEndec).FullName);
+                        Endec = fi.GetValue(null) as StringEndec;
+                    }
+                    if (Endec == null)
+                        throw new Exception("Property " + stringEndecGetterHostingType.FullName + "." + stringEndecGetterName + " is NULL.");
                 }
                 catch (Exception e)
                 {
-                    throw new Exception("Wrong parameters of the attribute " + GetType().FullName, e);
+                    throw new Exception("Error in the attribute " + GetType().FullName, e);
                 }
             }
         }

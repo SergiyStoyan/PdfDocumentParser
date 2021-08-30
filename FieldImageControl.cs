@@ -1,6 +1,7 @@
 ﻿//********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
@@ -17,10 +18,13 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class FieldImageControl : FieldControl
     {
-        public FieldImageControl()
+        public FieldImageControl(float pictureScale)
         {
             InitializeComponent();
+
+            this.pictureScale = pictureScale;
         }
+        float pictureScale;
 
         override protected object getObject()
         {
@@ -59,7 +63,7 @@ namespace Cliver.PdfDocumentParser
             if (field == null)
                 field = new Template.Field.Image();
 
-            List<string> fieldNames = fields.Where(a => a.ColumnOfTable == null).Select(a => a.Name).Distinct().ToList();
+            List<string> fieldNames =template.Fields.Where(a => a.ColumnOfTable == null).Select(a => a.Name).Distinct().ToList();
             fieldNames.Remove(field.Name);
             fieldNames.Insert(0, "");
             ColumnOfTable.DataSource = fieldNames;
@@ -69,7 +73,12 @@ namespace Cliver.PdfDocumentParser
             Rectangle.Text = Serialization.Json.Serialize(field.Rectangle);
 
             if (value != null)
-                Value.Image = (Bitmap)value;
+            {
+                Bitmap b = (Bitmap)value;
+                if (pictureScale != 1)
+                    b = Win.ImageRoutines.GetScaled(b, pictureScale);
+                Value.Image = b;
+            }
         }
 
         Template.Field.Image field;

@@ -1,11 +1,10 @@
 ﻿//********************************************************************************************
-//Author: Sergey Stoyan, CliverSoft.com
-//        http://cliversoft.com
-//        stoyan@cliversoft.com
+//Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
-//        27 February 2007
-//Copyright: (C) 2013, Sergey Stoyan
+//        sergey.stoyan@hotmail.com
+//        http://www.cliversoft.com
 //********************************************************************************************
+
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -77,13 +76,13 @@ namespace Cliver
             c.BeginInvoke(code);
         }
 
-        public static void BeginInvoke2(this Control c, MethodInvoker code)
-        {
-            if (c.InvokeRequired)
-                c.BeginInvoke(code);
-            else
-                code.BeginInvoke(null, null);
-        }
+        //public static void BeginInvoke2(this Control c, MethodInvoker code)
+        //{
+        //    if (c.InvokeRequired)
+        //        c.BeginInvoke(code);
+        //    else
+        //        code.BeginInvoke(null, null);//!!!it is deceiving as it is not in the supposed thread
+        //}
 
         public static object InvokeFromUiThread(Delegate d)
         {

@@ -1,6 +1,7 @@
 //********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 //using iTextSharp.text;
@@ -9,19 +10,25 @@ using iTextSharp.text.pdf;
 namespace Cliver.PdfDocumentParser
 {
     /// <summary>
-    /// page collection manager of a single pdf file 
+    /// Page collection manager of a pdf file.
     /// </summary>
     public class PageCollection : HandyDictionary<int, Page>
     {
-        public PageCollection(string pdfFile) : base()
+        public PageCollection(string pdfFile, bool cacheDisposableFieldValues = false) : base()
         {
             PdfFile = pdfFile;
-            //PdfReader.unethicalreading = true;
+            CacheDisposableFieldValues = cacheDisposableFieldValues;
+            PdfReader.unethicalreading = true;
             PdfReader = new PdfReader(pdfFile);
             TotalCount = PdfReader.NumberOfPages;
             getValue = (int pageI) => { return new Page(this, pageI); };
         }
 
+        /// <summary>
+        /// (!)If TRUE then the disposables like Bitmaps are cached and (!) automatically disposed when ActiveTemplate is changed. 
+        /// To make sure that the disposables are not disposed, set FALSE and dispose them by your own code.
+        /// </summary>
+        public readonly bool CacheDisposableFieldValues = false;
         public readonly string PdfFile;
         public readonly PdfReader PdfReader;
         public readonly int TotalCount;
@@ -30,8 +37,7 @@ namespace Cliver.PdfDocumentParser
         {
             lock (this)
             {
-                if (PdfReader != null)
-                    PdfReader.Dispose();
+                PdfReader?.Dispose();
                 base.Dispose();
             }
         }

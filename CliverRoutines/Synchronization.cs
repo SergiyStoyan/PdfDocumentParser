@@ -1,6 +1,7 @@
 //********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
@@ -13,26 +14,37 @@ using System.Linq;
 namespace Cliver
 {
     /// <summary>
-    /// Template for syncronizing Settings storage files and application setup files through a cloud service. (The local system is required to have the service synchronizing app running.)  
+    /// Template for synchronizing Settings storage files, any files and application setup files through a cloud service. (The local system is required to have the service synchronizing app running.)  
     /// </summary>
     abstract public class Synchronization
     {
         abstract protected List<string> synchronizedSettingsFieldFullNames { get; }
         //abstract protected List<Type> synchronizedSettingsTypes { get; }
 
-        virtual protected void onNewerSettingsFile(Settings settings)
-        {
-            throw new Exception("TBD: A newer settings " + settings.__Info.FullName + " have been downloaded from the remote storage. Upon closing this message they will be updated in the application.");
-        }
+        abstract protected void onNewerSettingsFile(Settings settings);
+        //{
+        //    throw new Exception("TBD: A newer settings " + settings.__Info.FullName + " have been downloaded from the remote storage. Upon closing this message they will be updated in the application.");
+        //}
+
+        abstract protected string synchronizedFileDownloadFolder { get; }// = UserSettings.StorageDir;
+        /// <summary>
+        /// (!)It will download only those files that already exist in the synchronizedFileDownloadFolder.
+        /// </summary>
+        abstract protected Regex synchronizedFileNameFilter { get; }// = new Regex(@"\.fltr$", RegexOptions.IgnoreCase);
+
+        abstract protected void onNewerFile(string file);
+        //{
+        //    throw new Exception("TBD: A newer file " + file + " has been downloaded from the remote storage. Upon closing this message it will be updated in the application.");
+        //}
 
         abstract protected Regex appSetupFileFilter { get; }// = new Regex(System.Diagnostics.Process.GetCurrentProcess().ProcessName + @"\.Setup\-(\d+\.\d+\.\d+)", RegexOptions.IgnoreCase);
 
         abstract protected Version programVersion { get; }// = Program.Version;
 
-        virtual protected void onNewerAppVersion(string appSetupFile)
-        {
-            throw new Exception("TBD: A newer app version has been downloaded: " + appSetupFile + "\r\nWould you like to install it now?");
-        }
+        abstract protected void onNewerAppVersion(string appSetupFile);
+        //{
+        //    throw new Exception("TBD: A newer app version has been downloaded: " + appSetupFile + "\r\nWould you like to install it now?");
+        //}
 
         abstract protected void ErrorHandler(Exception e);
 
@@ -112,6 +124,15 @@ namespace Cliver
                     //    }
                     //}
 
+                    if (synchronizedFileDownloadFolder != null && Directory.Exists(synchronizedFileDownloadFolder))
+                        foreach (string file in Directory.GetFiles(synchronizedFileDownloadFolder))
+                        {
+                            if (!synchronizedFileNameFilter.IsMatch(PathRoutines.GetFileName(file)))
+                                continue;
+                            pollUploadFile(file);
+                            pollDownloadFile(file);
+                        }
+
                     string appSetupFile = null;
                     foreach (string file in Directory.GetFiles(appSetupFolder))
                     {
@@ -179,6 +200,43 @@ namespace Cliver
                     return;
                 copy(file, settings.__Info.File);
                 onNewerSettingsFile(settings);
+            }
+            catch (Exception e)
+            {
+                ErrorHandler(e);
+            }
+        }
+
+        void pollUploadFile(string file)
+        {
+            try
+            {
+                DateTime uploadLWT = File.GetLastWriteTime(file);
+                if (uploadLWT.AddSeconds(10) > DateTime.Now)//it is being written
+                    return;
+                string file2 = uploadFolder + "\\" + PathRoutines.GetFileName(file);
+                if (File.Exists(file2) && uploadLWT <= File.GetLastWriteTime(file2))
+                    return;
+                copy(file, file2);
+            }
+            catch (Exception e)
+            {
+                ErrorHandler(e);
+            }
+        }
+
+        void pollDownloadFile(string file)
+        {
+            try
+            {
+                DateTime downloadLWT = File.GetLastWriteTime(file);
+                if (downloadLWT.AddSeconds(100) > DateTime.Now)//it is being written
+                    return;
+                string file2 = synchronizedFileDownloadFolder + "\\" + PathRoutines.GetFileName(file);
+                if (File.Exists(file2) && downloadLWT <= File.GetLastWriteTime(file2))
+                    return;
+                copy(file, file2);
+                onNewerFile(file);
             }
             catch (Exception e)
             {

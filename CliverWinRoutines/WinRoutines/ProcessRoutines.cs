@@ -261,7 +261,7 @@ namespace Cliver.Win
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
             finally
             {

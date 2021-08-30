@@ -1,6 +1,7 @@
 ﻿//********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
@@ -48,7 +49,7 @@ namespace Cliver.PdfDocumentParser
             pictureBox.Image = null;
             if (anchor.Image != null)
             {
-                System.Drawing.Image i = anchor.Image.GetImage();
+                System.Drawing.Image i = anchor.Image.GetBitmap();
                 pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
                 pictureBox.Width = (int)(i.Width * imageScale);
                 pictureBox.Height = (int)(i.Height * imageScale);

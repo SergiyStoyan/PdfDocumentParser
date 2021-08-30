@@ -16,7 +16,7 @@
 
     <div class='content'>
         <h1><a name='overview'>Overview</a></h1>
-        <p> CliverRoutines is a cross-platform C# lib which contains:
+        <p> CliverRoutines is a cross-platform C# lib which includes:
 
  <ul>
                 <li> <a href="#config">application settings manager</a> superseding .NET <code>ConfigurationManager</code>;</li>
@@ -155,7 +155,7 @@ Hence, you can apply attributes provided by Newtonsoft.Json to <a href='#seriali
 <br> - property <code>__Info</code> which links an instance of <a href='#settings_class'>a settings type</a> to a certain <a href='#settings_field'>settings field</a>;
 <br> - serialization methods;
 <br> - auxiliary methods. Some of them can be redefined in your <a href='#settings_class'>settings class</a> if needed;
-<br>See the API for more info.
+<br>See the API for the complete info.
 
         <p>			Usually you will not inherit <a href='#cliver_settings'><code>Cliver.Settings</code></a> directly but rather use one of its derivatives provided by CliverRoutines: <a href="#cliver_usersettings"><code>Cliver.UserSettings</code></a> and <a href="#cliver_appsettings"><code>Cliver.AppSettings</code></a>.
 			<br>If your <a href='#settings_class'>settings class</a> inherits <a href='#cliver_settings'><code>Cliver.Settings</code></a> directly then you have to define the serialization directory in it.
@@ -185,13 +185,14 @@ Hence, you can apply attributes provided by Newtonsoft.Json to <a href='#seriali
 
 <p>A <a href='#settings_field'>settings field</a> is a field or property declared in any class of your app, that satisfies the following:
 <br> - its type is a <a href='#settings_class'>settings type</a>;
-<br> - it is <code>static</code> (<code>public</code> modifier is optional);
+<br> - it is <code>static</code>;
 
-<br>Also, if the used .NET version supports setting readonly variables through reflection which not all the versions do, it can be declared as <code>readonly</code>.
+<br>A <a href='#settings_field'>settings field</a> can have any access modifier.
+<br>Also, depending on .NET version, it can be declared as <code>readonly</code> (check if the used .NET version allows setting readonly variables through reflection).
 
 			
 <p><a href='#settings_field'>Settings fields</a> are automatically detected and initialized by <a href='#config'><code>Cliver.Config</code></a>.
-<p>Behavior of a <a href='#settings_field'>settings field</a> can be influenced by <a href='#config_Attributes'>attributes</a> applied to it. 
+<p>Behavior of a <a href='#settings_field'>settings field</a> can be influenced by <a href='#config_Attributes'>the attributes</a> applied to it or its <a href='#settings_class'>type</a>. 
 
 <p>There can be any number of <a href='#settings_field'>settings fields</a> in your code.
 <br> Usually you need to have only one <a href='#settings_field'>settings field</a> per <a href='#settings_class'>settings type</a>, but there is no problem to declare any number of <a href='#settings_field'>settings fields</a> of the same <a href='#settings_class'>settings type</a>.
@@ -200,14 +201,21 @@ Hence, you can apply attributes provided by Newtonsoft.Json to <a href='#seriali
 <script type="text/plain" class="language-csharp">public partial class Archive
 {
 	//settings field
-	//it can be a field or a property
-	//depending on .NET version, it can be readonly
-	public static GeneralSettings General; 
+	public static HistorySettings History;//it can be either field or property
 }
 
 //settings type
-public class GeneralSettings : Cliver.UserSettings 
+public class HistorySettings : Cliver.UserSettings 
 {   	
+	...
+}</script>
+
+<p>Example of a <a href='#settings_field'>settings field</a> being a member of its own <a href='#settings_class'>type</a>:
+<script type="text/plain" class="language-csharp">//settings type
+public class HistorySettings : Cliver.UserSettings 
+{   	
+	//settings field
+	public static HistorySettings This;//it will be ignored by the serialization engine because it is static
 	...
 }</script>
 
@@ -217,22 +225,24 @@ public class GeneralSettings : Cliver.UserSettings
 
 		
 <h3>Initialization</h3>
-        <br> Detection and initialization of <a href='#settings_field'>settings field</a>s must be triggered from your code. It can be preceded by optional configuration of <a href='#config'><code>Cliver.Config</code></a> (example: <a href='#config_Load_order'>load order</a>. For the complete options refer to the API).
+<br> Detection and initialization of <a href='#settings_field'>settings field</a>s must be triggered from your code. It is done by calling either <code>Config.Reload()</code> or <code>Config.Reset()</code> method at the beginning of the application. 
+
+<p>The initialization can be preceded by optional configuration of the <a href='#config'><code>Cliver.Config</code></a> engine (examples: <a href='#config_Assembly_scope'>assembly scope</a>, <a href='#config_Load_order'>load order</a>. For the complete options, refer to the API).
 <script type="text/plain" class="language-csharp">//optional configuration
 ...
 //detect and initialize settings fields. 
-Cliver.Config.Reload();//mandatory</script>			   
+Cliver.Config.Reload();//mandatory;</script>			   
+
+<p>If needed, the initialization can be preformed more than once.
 				
 				
-				
-				
-<h3>Assembly scope</h3>
+<h3><a name='config_Assembly_scope'>Assembly scope</a></h3>
         <br>(!)When looking for <a href='#settings_field'>settings fields</a> in an application, <a href='#config'><code>Cliver.Config</code></a> searches within the following assemblies by default:
 <br> - the assembly that calls one of <a href='#config'><code>Cliver.Config</code></a>'s initializing methods;
 <br> - assemblies that are referenced by the calling assembly;
-<br>The search scope is limited this way in order not to load more assemblies which inevitably takes place when enumerating through them. 
+<br>The search scope is limited this way in order not to load more assemblies which inevitably takes place while enumerating through them. 
  
-<p>If needed, the assembly scope can be assigned from your code explicitly by setting <code>Cliver.Config.ExplicitlyTrackedAssemblies</code> before initializing <a href='#config'><code>Cliver.Config</code></a> engine:
+<p>If needed, the assembly scope can be configured explicitly in your code by setting <code>Cliver.Config.ExplicitlyTrackedAssemblies</code> before initializing <a href='#config'><code>Cliver.Config</code></a> engine:
 <script type="text/plain" class="language-csharp">Cliver.Config.ExplicitlyTrackedAssemblies = new List<System.Reflection.Assembly> { Assembly.GetExecutingAssembly() };
 Cliver.Config.Reload();</script>		
 			
@@ -295,19 +305,19 @@ The <a href='#storage_file'>storage file</a> path of <a href='#settings_field'>s
 			
 			
 <h3><a name='initial_file'>Initial file</a></h3>
-			<p>An <a href='#initial_file'>initial file</a> keeps data that is to override the initial values hard-coded in a <a href='#settings_class'>settings type</a>'s definition. Each <a href='#settings_field'>settings field</a> can have its own <a href='#initial_file'>initial file</a> and thus, can have its own initial value set. 
+			<p>An <a href='#initial_file'>initial file</a> keeps the data that is to override the values hard-coded in a <a href='#settings_class'>settings type</a>'s definition. Each <a href='#settings_field'>settings field</a> can have its own <a href='#initial_file'>initial file</a> and thus can have its own initial value set distinct from the hard-coded one. 
 			
 			<p>It is optional and has the same format as a <a href='#storage_file'>storage file</a>.
 			
 		<p>An <a href='#initial_file'>initial file</a> is (re)read by <code>Reset()</code> method or, when no <a href='#storage_file'>storage file</a> exists, also by <code>Reload()</code> method.
 			
-			<p>It is supplied in the same directory as the application's main module.
+			<p>It is supplied in the same directory as the application's entry assembly.
 		 
 			
-			<p>It is helpful when:
+			<p><a href='#initial_file'>Initial file</a> is used when:
 			<br> - initial settings data are too big to be kept in code;
-			<br> - initial settings data are managed better in file than in code;
-			<br> - the application has several <a href='#settings_field'>settings fields</a> of the same <a href='#settings_class'>settings type</a> and each of them must be initiated by its own value set;
+			<br> - initial settings data are managed better in a file than in code;
+			<br> - the application has several <a href='#settings_field'>settings fields</a> of the same <a href='#settings_class'>type</a> and each of them must be initiated by its own value set;
 						
 			
 			
@@ -415,7 +425,7 @@ connect(Settings.General.ClientPort, server.Host, server.Port);</script>
 		   <p>A <a href='#settings_class'>settings type</a> instance keeps information about its <a href='#settings_field'>settings field</a> in <code>__Info</code> object which is created only by <a href='#config'><code>Cliver.Config</code></a>. Therefore, an instance that is created by your code has <code>__Info</code> empty until you set it with the <code>__Info</code> taken from the respective instance generated by <a href='#config'><code>Cliver.Config</code></a>.		   
 		   
 <p>If an instance of a <a href='#settings_class'>settings type</a> is the value of the <a href='#settings_field'>settings field</a> pointed by its <code>__Info</code>, it is called <i>attached</i>, otherwise, <i>detached</i>. 
-		   <br>This distinction is important because deattached <a href='#settings_class'>settings type</a> instances have a restricted functionality because otherwise it would lead to a confusion. So, when replacing the value of a <a href='#settings_field'>settings field</a> with a new instance, make sure that the latter has <code>__Info</code> pointing to this <a href='#settings_field'>settings field</a>. 
+		   <br>This distinction is important because detached <a href='#settings_class'>settings type</a> instances have a restricted functionality because otherwise it would lead to a confusion. So, when replacing the value of a <a href='#settings_field'>settings field</a> with a new instance, make sure that the latter has <code>__Info</code> pointing to this <a href='#settings_field'>settings field</a>. 
 		   <br>  See <a href='#passing_to_process'>the passing example</a>.
 
 
@@ -483,7 +493,7 @@ class GeneralSettings : Cliver.UserSettings//UserSettings based class is seriali
 GeneralSettings general2 = Settings.General.CreateClone();//!!!property __Info is not cloned here but references the same object.
 
 //modify
-general2.ClientPort = 123;//general2 is detached because it is not refernced by any settings field
+general2.ClientPort = 123;//general2 is detached because it is not referenced by any settings field
 
 if(userOk())
 {
@@ -506,7 +516,7 @@ Settings.General.Save();</script>
 
 
             <h3><a name=''>Polymorphism</a></h3>
-Being ordinary C# classes, <a href='#settings_class'>settings types</a> support polymorphism. That is, you can build many <a href='#settings_class'>settings types</a> inheriting the same parent and easily switch between them depending on the application logic. See the example.
+Being ordinary C# classes, <a href='#settings_class'>settings types</a> allow polymorphism. That is, you can build many <a href='#settings_class'>settings types</a> inheriting from the same parent and easily switch between them depending on the application logic. See the example.
 
 <p>Define a base <a href='#settings_class'>settings type</a> and its derivatives:
 <script type="text/plain" class="language-csharp">//base settings class which you will reference in your code
@@ -514,8 +524,9 @@ abstract public class Settings : Cliver.UserSettings
 {
 	virtual public string Uri { get; set; }
 
-	//it is ignored by the serialization engine because ScopeSettings is abstract class
-	public static Settings This { get; internal set; }//a settings field can be nested in its own settings type
+	//a settings field which is nested in its own settings type
+	//it is ignored by the serialization engine because it is static
+	public static Settings This { get; internal set; }
 }
 
 //derivative1 implementing certain logic
@@ -523,7 +534,9 @@ public class Settings1 : Settings
 {
 	override public string Uri { get; set; } = "http://www.help.com/doc1.html";
 
-	public static Settings1 This;//a settings field can be nested in its own settings type
+	//a settings field which is nested in its own settings type
+	//it is ignored by the serialization engine because it is static
+	public static Settings1 This;
 }
 
 //derivative2 implementing certain logic
@@ -531,7 +544,9 @@ public class Settings2 : Settings
 {
 	override public string Uri { get; set; } = "http://www.help.com/doc2.html";
 
-	public static Settings2 This;//a settings field can be nested in its own settings type
+	//a settings field which is nested in its own settings type
+	//it is ignored by the serialization engine because it is static
+	public static Settings2 This;
 }</script>
 
 <p>Now, without regard to the actual derivative, you can use <code>Settings.This</code> uniformly:
@@ -556,8 +571,8 @@ Settings.This.Save();</script>
 <h3><a name='configEncrypting'>Encrypting</a></h3>
 
             <h4><a name=''>Settings field/type</a></h4>
-A whole <a href='#settings_field'>settings field</a> can be serialized as an encrypted string by adding the attribute <code>Encrypted</code> either to the <a href='#settings_field'>settings field</a> or to its <a href='#settings_class'>settings type</a> declaration:
-<script type="text/plain" class="language-csharp">//An example of encryption of a Settings type/field
+A whole <a href='#settings_field'>settings field</a> can be serialized as an encrypted string by adding the attribute <code>Encrypted</code> either to the <a href='#settings_field'>settings field</a> or to its <a href='#settings_class'>type</a> definition:
+<script type="text/plain" class="language-csharp">//An example of encrypting a Settings type/field
 partial class Settings
 {
 	//Alternatively, the Encrypted attribute can be added directly to the field: 
@@ -566,13 +581,13 @@ partial class Settings
 	internal static CredentialsSettings Credentials;
 
 	//A StringEndec object passed into SettingsFieldAttribute.EncryptedAttribute
-	public static StringEndec.Rijndael Endec { get; } = new StringEndec.Rijndael("111");
+	internal static StringEndec.Rijndael Endec { get; } = new StringEndec.Rijndael("111");
 	//An alternative by CliverWinRoutines which does not require a key:
-	//public static Cliver.Win.StringEndec Endec { get; } = new Cliver.Win.StringEndec();   
+	//internal static Cliver.Win.StringEndec Endec { get; } = new Cliver.Win.StringEndec();   
 }
 
+//This attribute can be applied to either a Settings type or a Settings field. Being applied to a type, it causes any field of the type to be encrypted.
 //Specify the class and the property that expose a StringEndec object to be used for encryption.
-//This attribute can be applied to either a Settings type or a Settings field. Being applied to the type, it causes any field of this type to be encrypted.
 [SettingsAttributes.Encrypted(stringEndecGetterHostingType: typeof(Settings), stringEndecGetterName: nameof(Settings.Endec))]
 class CredentialsSettings : Cliver.UserSettings
 {
@@ -670,15 +685,21 @@ Sometimes, when you upgrade an application, a <a href='#settings_class'>settings
 <br>- the <a href='#settings_field'>settings field</a> was deserialized but its type version is still not acceptable meaning that some restored data may be deteriorated and need amending. This can be the case only if attribute <code>TypeVersion</code> is specified;
 
 <p><b>TypeVersion attribute</b>
-<br>By adding the attribute <code>TypeVersion</code> to a certain <a href='#settings_class'>settings type</a> you assign a version to its declaration in the code. When the application serializes an instance of this <a href='#settings_class'>settings type</a>, its version is stored in the <a href='#storage_file'>storage file</a> as <code>__TypeVersion</code> property. Each time when you alter the <a href='#settings_class'>settings type</a>'s decalration, you should also alter its version specified by the attribute. Thus, when a newer application reads an older <a href='#storage_file'>storage file</a> or vice versa, an older application reads a newer <a href='#storage_file'>storage file</a>, the type version in the <a href='#storage_file'>storage file</a> does not correspond to the version set by the attribute and therefore <a href='#config'><code>Cliver.Config</code></a> engine will call <code>UnsupportedFormatHandler()</code>.
+<br>By adding the attribute <code>TypeVersion</code> to a certain <a href='#settings_class'>settings type</a> you assign a version to its definition in the code. When the application serializes an instance of this <a href='#settings_class'>settings type</a>, its version is stored in the <a href='#storage_file'>storage file</a> as <code>__TypeVersion</code> property. Each time when you alter the <a href='#settings_class'>settings type</a>'s definition, you should also alter its version specified by the attribute. Thus, when a newer application reads an older <a href='#storage_file'>storage file</a> or vice versa, an older application reads a newer <a href='#storage_file'>storage file</a>, the type version in the <a href='#storage_file'>storage file</a> does not correspond to the version set by the attribute and therefore <a href='#config'><code>Cliver.Config</code></a> engine will call <code>UnsupportedFormatHandler()</code>.
 
-<p>No matter why <code>UnsupportedFormatHandler()</code> was called, within it you can provide a smooth migration of the old data to the new format. See the example below:
+<p>No matter why <code>UnsupportedFormatHandler()</code> was called, within it you can provide a smooth migration of old data to the new format. See the example below:
 
 <p>
 <script type="text/plain" class="language-csharp">//An example of upgrading a Settings type 
 partial class Settings
 {
 	internal static TemplatesSettings Templates;
+}
+
+public class Template
+{
+	public string Name;
+	public List<string> Words = new List<string>();
 }
 
 //Example how to check the type version and migrate to the current type if needed.
@@ -689,79 +710,64 @@ class TemplatesSettings : Cliver.UserSettings//UserSettings based class is seria
 	public List<Template> Templates = new List<Template> { new Template { Name = "test", Words = new List<string> { "apple", "box" } } };
 
 	//Here is your chance to upgrade the data to the current format.
-	override protected UnsupportedFormatHandlerCommand UnsupportedFormatHandler(Exception deserializingException)
-	{//successive upgrading from version to version using different approaches:
-
-		//upgrading to version 200601
-		if (deserializingException?.Message.Contains("Could not create an instance of type Example.Template+Field") == true || __TypeVersion < 200601)
-		{//remove property Field which does not exist anymore
-			Newtonsoft.Json.Linq.JObject o = __Info.ReadStorageFileAsJObject();
-			for (int i = o["Templates"].Count() - 1; i >= 0; i--)
-				o["Templates"][i]["Field"]?.Remove();
-			//set the respective version
-			o["__TypeVersion"] = 200601;
-			//save
-			__Info.WriteStorageFileAsJObject(o);
-			return UnsupportedFormatHandlerCommand.Reload;//this method will be called again because __TypeVersion is still obsolete
-		}
-
-		//upgrading to version 210301
-		if (deserializingException == null && __TypeVersion < 210301)//the object was deserialized but its __TypeVersion is not acceptable
+	override protected void UnsupportedFormatHandler(Exception deserializingException)
+	{
+		try
 		{
-			string s = __Info.ReadStorageFileAsString();
-			//edit the old data as a serialized string. Altering the raw data.
-			//...
-			//set the respective version
-			s = Regex.Replace(s, @"(?<=\""__TypeVersion\""\:\s*)\d+", "210301", RegexOptions.Singleline);
-			//save
-			__Info.WriteStorageFileAsString(s);
-			return UnsupportedFormatHandlerCommand.Reload;//this method will be called again because __TypeVersion is still obsolete
-		}
+			if (deserializingException != null)
+				throw deserializingException;
 
-		//upgrading to the last version
-		if (deserializingException == null && __TypeVersion < __Info.TypeVersion)//the object was deserialized but its __TypeVersion is not acceptable
-		{
-			//alter the data in the object itself
-			foreach (Template t in Templates)
-				t.Name = Regex.Replace(t.Name, @"^test", "_TEST_");
-			//...
-			//save
-			Save();//(!)when saving, the current type version is set
-			return UnsupportedFormatHandlerCommand.Proceed;
-		}
-
-		if (deserializingException != null)
-			Console.WriteLine("UNHANDLED EXCEPTION while deserializing " + __Info.File + ":\r\n" + Log.GetExceptionMessage(deserializingException));
-		else //__TypeVersion > __Info.TypeVersion.Value     
-		{
-			Console.WriteLine("WARNING: The application might not support properly the newer type version " + __TypeVersion + " data stored in " + __Info.File);
-			Console.WriteLine("The expected version: " + __Info.TypeVersion);
-			Console.WriteLine("Consider upgrading the application.");
-		}
-		while (true)
-		{
-			Console.WriteLine("\r\nPlease choose an option:\r\nExit - [E]\r\nReset the settings to default - [R]\r\nProceed as is - [P]");
-			ConsoleKey k = Console.ReadKey().Key;
-			switch (k)
-			{
-				case ConsoleKey.E:
-					Log.Exit("Settings " + __Info.FullName + " could not be loaded.");
-					break;
-				case ConsoleKey.R:
-					return UnsupportedFormatHandlerCommand.Reset;
-				case ConsoleKey.P:
-					return UnsupportedFormatHandlerCommand.Proceed;
-				default:
-					continue;
+			//the object was deserialized but its __TypeVersion is not acceptable
+			//successive upgrading from version to version using different approaches:
+			if (__TypeVersion < 200601)
+			{//editing the data as JSON object
+				//remove property Field which does not exist anymore
+				Newtonsoft.Json.Linq.JObject o = __Info.ReadStorageFileAsJObject();
+				for (int i = o["Templates"].Count() - 1; i >= 0; i--)
+					o["Templates"][i]["Field"]?.Remove();
+				//set the respective version
+				o["__TypeVersion"] = 200601;
+				//save
+				__Info.WriteStorageFileAsJObject(o);
+				Reload();//UnsupportedFormatHandler() will be called again because __TypeVersion is still obsolete
+				return;
 			}
+			if (__TypeVersion < 210301)
+			{//editing the data as string
+				string s = __Info.ReadStorageFileAsString();
+				//edit the old data as a serialized string. It is the most low-level option of data altering.
+				//...
+				//set the respective version                
+				__Info.UpdateTypeVersionInStorageFileString(210301, ref s);
+				//save
+				__Info.WriteStorageFileAsString(s);
+				Reload();//UnsupportedFormatHandler() will be called again because __TypeVersion is still obsolete
+				return;
+			}
+			if (__TypeVersion < __Info.TypeVersion)
+			{//altering this object itself
+				foreach (Template t in Templates)
+					t.Name = Regex.Replace(t.Name, @"^test", "_TEST_");
+				//...
+				//save
+				Save();//(!)when saving, the current type version is set
+				return;
+			}
+
+			//the type version in the file is newer than supported by this method
+			throw new Exception("Unsupported version of " + GetType().FullName + ": " + __TypeVersion + ". Accepted version: " + __Info.TypeVersion, deserializingException);
+		}
+		catch (Exception e)
+		{
+			Log.Error(e);
+			Console.WriteLine("Error while loading " + __Info.File);
+			Console.WriteLine("The application will exit now. If you still want to run it, remove the file or, to preserve it, move it to a safe location."
+				+ "The file's data will be reset by this application to their default state.");
+			Console.WriteLine("Press a key...");
+			Console.ReadKey();
+			Log.Exit("Settings " + __Info.FullName + " could not be loaded.");
 		}
 	}
-}
-
-public class Template
-{
-	public string Name;
-	public List<string> Words = new List<string>();
 }</script>
 
 
@@ -901,7 +907,7 @@ Log.Initialize(Log.Mode.FOLDER_PER_SESSION, new List<string> { Log.AppCompanyCom
 
 			
  <p>   Writing to a named log of <a href='#log_default_session'>the default session</a>:
-<script type="text/plain" class="language-csharp">//writig to the log "Inform" of the default session
+<script type="text/plain" class="language-csharp">//writing to the log "Inform" of the default session
 Log.Session.NamedWriter informLog = Log.Head["Inform"];
 Log.Session.NamedWriter errorLog = Log.Head["Error"];
 try

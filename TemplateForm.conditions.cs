@@ -1,6 +1,7 @@
 ﻿//********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
@@ -22,7 +23,7 @@ namespace Cliver.PdfDocumentParser
             conditions.DataError += delegate (object sender, DataGridViewDataErrorEventArgs e)
             {
                 DataGridViewRow r = anchors.Rows[e.RowIndex];
-                Message.Error("Condition[" + r.Index + "] has unacceptable value of " + conditions.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message);
+                Message.Error("Condition[row=" + r.Index + "] has unacceptable value of " + conditions.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message, this);
             };
 
             conditions.UserDeletingRow += delegate (object sender, DataGridViewRowCancelEventArgs e)
@@ -84,7 +85,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 catch (Exception ex)
                 {
-                    Message.Error2(ex);
+                    Message.Error2(ex, this);
                 }
             };
 
@@ -119,13 +120,14 @@ namespace Cliver.PdfDocumentParser
                 if (r0.Tag == null)
                     return;
                 Template.Condition c0 = (Template.Condition)r0.Tag;
-                if (!Message.YesNo("Proceed with removing condition '" + c0.Name + "'?"))
+                if (!Message.YesNo("Proceed with removing condition '" + c0.Name + "'?", this))
                     return;
                 conditions.Rows.Remove(r0);
             }
             catch (Exception e)
             {
-                Win.LogMessage.Error(e);
+                Log.Error(e);
+                Message.Error(e, this);
             }
             finally
             {
@@ -151,7 +153,8 @@ namespace Cliver.PdfDocumentParser
             }
             catch (Exception e)
             {
-                Win.LogMessage.Error(e);
+                Log.Error(e);
+                Message.Error(e, this);
             }
             finally
             {
@@ -177,7 +180,8 @@ namespace Cliver.PdfDocumentParser
             }
             catch (Exception e)
             {
-                Win.LogMessage.Error(e);
+                Log.Error(e);
+                Message.Error(e, this);
             }
             finally
             {
@@ -211,7 +215,8 @@ namespace Cliver.PdfDocumentParser
                     return;
                 }
 
-                conditions.CurrentCell = conditions[0, row.Index];
+                if (conditions.CurrentCell?.RowIndex != row.Index)
+                    conditions.CurrentCell = conditions[0, row.Index];
 
                 Template.Condition c = (Template.Condition)row.Tag;
                 bool firstAnchor = true;

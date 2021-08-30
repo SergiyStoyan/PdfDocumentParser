@@ -1,11 +1,10 @@
 //********************************************************************************************
-//Author: Sergey Stoyan, CliverSoft.com
-//        http://cliversoft.com
-//        stoyan@cliversoft.com
+//Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
-//        03 January 2008
-//Copyright: (C) 2008, Sergey Stoyan
+//        sergey.stoyan@hotmail.com
+//        http://www.cliversoft.com
 //********************************************************************************************
+
 
 using System;
 using System.Drawing;
@@ -63,42 +62,42 @@ namespace Cliver
 
         public static void Inform(string message, Form owner = null)
         {
-            ShowDialog(AppName, SystemIcons.Information, message, new string[1] { "OK" }, 0, owner);
+            ShowDialog(AppName, getIcon(Icons.Information), message, new string[1] { "OK" }, 0, owner);
         }
 
         public static void Exclaim(string message, Form owner = null)
         {
-            ShowDialog(AppName, SystemIcons.Exclamation, message, new string[1] { "OK" }, 0, owner);
+            ShowDialog(AppName, getIcon(Icons.Exclamation), message, new string[1] { "OK" }, 0, owner);
         }
 
         public static void Exclaim0(Exception e, Form owner = null)
         {
-            ShowDialog(AppName, SystemIcons.Exclamation, /*GetExceptionDetails(e)*/Log.GetExceptionMessage(e, !(e is Exception2)), new string[1] { "OK" }, 0, owner);
+            ShowDialog(AppName, getIcon(Icons.Exclamation), /*GetExceptionDetails(e)*/Log.GetExceptionMessage(e, !(e is Exception2)), new string[1] { "OK" }, 0, owner);
         }
 
         public static void Exclaim(Exception e, Form owner = null)
         {
-            ShowDialog(AppName, SystemIcons.Exclamation, e.Message, new string[1] { "OK" }, 0, owner);
+            ShowDialog(AppName, getIcon(Icons.Exclamation), e.Message, new string[1] { "OK" }, 0, owner);
         }
 
         public static void Warning(string message, Form owner = null)
         {
-            ShowDialog(AppName, SystemIcons.Warning, message, new string[1] { "OK" }, 0, owner);
+            ShowDialog(AppName, getIcon(Icons.Warning), message, new string[1] { "OK" }, 0, owner);
         }
 
         public static void Warning(Exception e, Form owner = null)
         {
-            ShowDialog(AppName, SystemIcons.Warning, /*GetExceptionDetails(e)*/Log.GetExceptionMessage(e, !(e is Exception2)), new string[1] { "OK" }, 0, owner);
+            ShowDialog(AppName, getIcon(Icons.Warning), /*GetExceptionDetails(e)*/Log.GetExceptionMessage(e, !(e is Exception2)), new string[1] { "OK" }, 0, owner);
         }
 
         public static void Warning2(Exception e, Form owner = null)
         {
-            ShowDialog(AppName, SystemIcons.Warning, e.Message, new string[1] { "OK" }, 0, owner);
+            ShowDialog(AppName, getIcon(Icons.Warning), e.Message, new string[1] { "OK" }, 0, owner);
         }
 
         public static void Error(Exception e, Form owner = null)
         {
-            ShowDialog(AppName, SystemIcons.Error, /*GetExceptionDetails(e)*/Log.GetExceptionMessage(e, !(e is Exception2)), new string[1] { "OK" }, 0, owner);
+            ShowDialog(AppName, getIcon(Icons.Error), /*GetExceptionDetails(e)*/Log.GetExceptionMessage(e, !(e is Exception2)), new string[1] { "OK" }, 0, owner);
         }
 
         public static void Error2(Exception e, Form owner = null)
@@ -135,12 +134,12 @@ namespace Cliver
 
         public static void Error(string message, Form owner = null)
         {
-            ShowDialog(AppName, SystemIcons.Error, message, new string[1] { "OK" }, 0, owner);
+            ShowDialog(AppName, getIcon(Icons.Error), message, new string[1] { "OK" }, 0, owner);
         }
 
         public static bool YesNo(string question, Form owner = null, Icons icon = Icons.Question, bool default_yes = true)
         {
-            return ShowDialog(AppName, get_icon(icon), question, new string[2] { "Yes", "No" }, default_yes ? 0 : 1, owner) == 0;
+            return ShowDialog(AppName, getIcon(icon), question, new string[2] { "Yes", "No" }, default_yes ? 0 : 1, owner) == 0;
         }
 
         public static int ShowDialog(string title, Icon icon, string message, string[] buttons, int default_button, Form owner, bool? button_autosize = null, bool? no_duplicate = null, bool? topmost = null)
@@ -223,22 +222,49 @@ namespace Cliver
             Question,
             Exclamation,
         }
-        static Icon get_icon(Icons icon)
+        //static Icon get_icon(Icons icon)
+        //{
+        //    switch (icon)
+        //    {
+        //        case Icons.Information:
+        //            return SystemIcons.Information;
+        //        case Icons.Warning:
+        //            return SystemIcons.Warning;
+        //        case Icons.Error:
+        //            return SystemIcons.Error;
+        //        case Icons.Question:
+        //            return SystemIcons.Question;
+        //        case Icons.Exclamation:
+        //            return SystemIcons.Exclamation;
+        //        default: throw new Exception("No option: " + icon);
+        //    }
+        //}
+        static Icon getIcon(Icons icon)
         {
+            WinApi.Shell32.SHSTOCKICONID iId;
             switch (icon)
             {
                 case Icons.Information:
-                    return SystemIcons.Information;
+                    iId = WinApi.Shell32.SHSTOCKICONID.SIID_INFO;
+                    break;
                 case Icons.Warning:
-                    return SystemIcons.Warning;
+                    iId = WinApi.Shell32.SHSTOCKICONID.SIID_WARNING;
+                    break;
                 case Icons.Error:
-                    return SystemIcons.Error;
+                    iId = WinApi.Shell32.SHSTOCKICONID.SIID_ERROR;
+                    break;
                 case Icons.Question:
-                    return SystemIcons.Question;
+                    iId = WinApi.Shell32.SHSTOCKICONID.SIID_HELP;
+                    break;
                 case Icons.Exclamation:
-                    return SystemIcons.Exclamation;
+                    iId = WinApi.Shell32.SHSTOCKICONID.SIID_WARNING;
+                    break;
                 default: throw new Exception("No option: " + icon);
             }
+            var sii = new WinApi.Shell32.SHSTOCKICONINFO();
+            sii.cbSize = (UInt32)System.Runtime.InteropServices.Marshal.SizeOf(typeof(WinApi.Shell32.SHSTOCKICONINFO));
+            WinApi.Shell32.SHGetStockIconInfo(iId, WinApi.Shell32.SHGSI.SHGSI_ICON, ref sii);
+            return Icon.FromHandle(sii.hIcon);
         }
     }
 }

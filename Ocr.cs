@@ -1,6 +1,7 @@
 ﻿//********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
@@ -22,69 +23,76 @@ namespace Cliver.PdfDocumentParser
             get
             {
                 if (_This == null)
-                    _This = new Ocr();
+                    _This = new Ocr(Settings.Constants.OcrConfig);
                 return _This;
             }
         }
         static Ocr _This = null;
 
-        Ocr()
+        public static void DisposeThis()
         {
-            engine = new TesseractEngine(@"./tessdata", config.language, config.engineMode);
-            if (config.variables != null)
+            _This?.Dispose();
+            _This = null;
+        }
+
+        //public static Ocr Get(Config config)
+        //{
+        //    if (!ocrConfigKeys2ocr.TryGetValue(config.Key, out Ocr ocr))
+        //    {
+        //        ocr = new Ocr(config);
+        //        ocrConfigKeys2ocr[config.Key] = ocr;
+        //    }
+        //    return ocr;
+        //}
+        //static HandyDictionary<string, Ocr> ocrConfigKeys2ocr = new HandyDictionary<string, Ocr>();
+
+        Ocr(Config config)
+        {
+            engine = new TesseractEngine(@"./tessdata", config.Language, config.EngineMode);
+            if (config.VariableNames2value != null)
             {
                 string m1 = "Could not set Tesseract variable: ";
-                foreach (var v in config.variables)
-                    if (v.value is string)
+                foreach (var v in config.VariableNames2value)
+                    if (v.Value is string)
                     {
-                        if (!engine.SetVariable(v.name, (string)v.value))
+                        if (!engine.SetVariable(v.Key, (string)v.Value))
                             throw new Exception(m1 + v.ToString());
                     }
-                    else if (v.value is int)
+                    else if (v.Value is int)
                     {
-                        if (!engine.SetVariable(v.name, (int)v.value))
+                        if (!engine.SetVariable(v.Key, (int)v.Value))
                             throw new Exception(m1 + v.ToString());
                     }
-                    else if (v.value is double)
+                    else if (v.Value is double)
                     {
-                        if (!engine.SetVariable(v.name, (double)v.value))
+                        if (!engine.SetVariable(v.Key, (double)v.Value))
                             throw new Exception(m1 + v.ToString());
                     }
-                    else if (v.value is bool)
+                    else if (v.Value is bool)
                     {
-                        if (!engine.SetVariable(v.name, (bool)v.value))
+                        if (!engine.SetVariable(v.Key, (bool)v.Value))
                             throw new Exception(m1 + v.ToString());
                     }
                     else
                         throw new Exception(m1 + v.ToString() + " Not supported type.");
             }
         }
-        static Config config = //new Config();
-        new Config
-        {
-            language = "eng",
-            engineMode = EngineMode.TesseractOnly,
-            variables = new List<(string name, object value)> {
-                        (name: "load_system_dawg", value: false),
-                        (name: "load_freq_dawg", value: false),
-                        //(name: "tessedit_char_whitelist", "0123456789.,"),
-                    }
-        };
         public class Config
         {
-            public string language = "eng";
-            public EngineMode engineMode = EngineMode.Default;
-            public List<(string name, object value)> variables = null;
-        }
+            public string Language = "eng";
+            public EngineMode EngineMode = EngineMode.Default;
+            public Dictionary<string, object> VariableNames2value = null;
 
-        static void Initialize(string language = "eng", EngineMode engineMode = EngineMode.Default, List<(string name, object value)> variables = null)
-        {
-            Config newConfig = new Config { language = language, engineMode = engineMode, variables = variables };
-            if (newConfig.IsEqualByJson(config))
-                return;
-            config = newConfig;
-            _This?.Dispose();
-            _This = null;
+            internal string Key
+            {
+                get
+                {
+                    if (key == null)
+                        key = this.ToStringByJson(false);
+                    return key;
+                }
+            }
+            string key = null;
         }
 
         TesseractEngine engine = null;
@@ -148,31 +156,18 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        //public float DetectDeskewAngle(Bitmap b)
+        //!!!abandoned for GetCharBoxsSurroundedByRectangle() because:
+        //- it does not give good end lines;
+        //- it does not accept expilicitly TextAutoInsertSpace
+        //public string GetTextSurroundedByRectangle(Bitmap b, RectangleF r, PageSegMode pageSegMode)
         //{
-        //    using (Tesseract.Page page = engine.Process(b, PageSegMode.OsdOnly))
+        //    if (!getScaled(b, ref r))
+        //        return string.Empty;
+        //    using (Tesseract.Page page = engine.Process(b, new Rect((int)r.X, (int)r.Y, (int)r.Width, (int)r.Height), pageSegMode))
         //    {
-        //        return page.AnalyseLayout().GetProperties().DeskewAngle;
+        //        return page.GetText();
         //    }
         //}
-
-        public string GetTextSurroundedByRectangle(Bitmap b, RectangleF r, PageSegMode pageSegMode)
-        {
-            if (!getScaled(b, ref r))
-                return string.Empty;
-            using (Tesseract.Page page = engine.Process(b, new Rect((int)r.X, (int)r.Y, (int)r.Width, (int)r.Height), pageSegMode))
-            {
-                return page.GetText();
-            }
-        }
-        bool getScaled(Bitmap b, ref RectangleF r)
-        {
-            r = new RectangleF(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio);
-            r.Intersect(new Rectangle(0, 0, b.Width, b.Height));
-            if (Math.Abs(r.Width) < Settings.Constants.CoordinateDeviationMargin || Math.Abs(r.Height) < Settings.Constants.CoordinateDeviationMargin)
-                return false;
-            return true;
-        }
 
         public List<CharBox> GetCharBoxsSurroundedByRectangle(Bitmap b, RectangleF r, PageSegMode pageSegMode)
         {
@@ -182,6 +177,14 @@ namespace Cliver.PdfDocumentParser
             {
                 return getCharBoxs(page);
             }
+        }
+        bool getScaled(Bitmap b, ref RectangleF r)
+        {
+            r = new RectangleF(r.X / Settings.Constants.Pdf2ImageResolutionRatio, r.Y / Settings.Constants.Pdf2ImageResolutionRatio, r.Width / Settings.Constants.Pdf2ImageResolutionRatio, r.Height / Settings.Constants.Pdf2ImageResolutionRatio);
+            r.Intersect(new Rectangle(0, 0, b.Width, b.Height));
+            if (Math.Abs(r.Width) < Settings.Constants.CoordinateDeviationMargin || Math.Abs(r.Height) < Settings.Constants.CoordinateDeviationMargin)
+                return false;
+            return true;
         }
 
         public List<CharBox> GetCharBoxs(Bitmap b, PageSegMode pageSegMode)
@@ -251,7 +254,7 @@ namespace Cliver.PdfDocumentParser
                         //    {
                         //        Char = "\r\n",
                         //        AutoInserted = true,
-                        //        R = new RectangleF(r.X1 * Settings.Constants.Image2PdfResolutionRatio - Settings.Constants.CoordinateDeviationMargin * 2, r.Y1 * Settings.Constants.Image2PdfResolutionRatio, r.Width * Settings.Constants.Image2PdfResolutionRatio, r.Height * Settings.Constants.Image2PdfResolutionRatio)
+                        //        R = new RectangleF(r.X1 * Settings.Constants.Pdf2ImageResolutionRatio - Settings.Constants.CoordinateDeviationMargin * 2, r.Y1 * Settings.Constants.Pdf2ImageResolutionRatio, r.Width * Settings.Constants.Pdf2ImageResolutionRatio, r.Height * Settings.Constants.Pdf2ImageResolutionRatio)
                         //    });
                         //}//seems to work not well
 
@@ -259,13 +262,13 @@ namespace Cliver.PdfDocumentParser
                         //{
                         //    Char = " ",
                         //    AutoInserted = true,
-                        //    R = new RectangleF(r.X1 * Settings.Constants.Image2PdfResolutionRatio - Settings.Constants.CoordinateDeviationMargin * 2, r.Y1 * Settings.Constants.Image2PdfResolutionRatio, r.Width * Settings.Constants.Image2PdfResolutionRatio, r.Height * Settings.Constants.Image2PdfResolutionRatio)
+                        //    R = new RectangleF(r.X1 * Settings.Constants.Pdf2ImageResolutionRatio - Settings.Constants.CoordinateDeviationMargin * 2, r.Y1 * Settings.Constants.Pdf2ImageResolutionRatio, r.Width * Settings.Constants.Pdf2ImageResolutionRatio, r.Height * Settings.Constants.Pdf2ImageResolutionRatio)
                         //});
                         //}
                         cbs.Add(new CharBox
                         {
                             Char = i.GetText(PageIteratorLevel.Symbol),
-                            R = new RectangleF(r.X1 * Settings.Constants.Image2PdfResolutionRatio, r.Y1 * Settings.Constants.Image2PdfResolutionRatio, r.Width * Settings.Constants.Image2PdfResolutionRatio, r.Height * Settings.Constants.Image2PdfResolutionRatio)
+                            R = new RectangleF(r.X1 * Settings.Constants.Pdf2ImageResolutionRatio, r.Y1 * Settings.Constants.Pdf2ImageResolutionRatio, r.Width * Settings.Constants.Pdf2ImageResolutionRatio, r.Height * Settings.Constants.Pdf2ImageResolutionRatio)
                         });
                     }
                 } while (i.Next(PageIteratorLevel.Symbol));
@@ -290,24 +293,21 @@ namespace Cliver.PdfDocumentParser
             //public bool AutoInserted = false;
         }
 
-        //public static string GetTextByTopLeftCoordinates(List<CharBox> orderedCbs, RectangleF r)
+        //public static string GetTextSurroundedByRectangle(List<CharBox> cbs, RectangleF r, TextAutoInsertSpace textAutoInsertSpace, Template.CharFilter charFilter)
         //{
-        //    orderedCbs = orderedCbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)).ToList();
-        //    return orderedCbs.Aggregate(new StringBuilder(), (sb, n) => sb.Append(n)).ToString();
+        //    return string.Join("\r\n", GetTextLinesSurroundedByRectangle(cbs, r, textAutoInsertSpace, charFilter));
         //}
 
-        public static string GetTextSurroundedByRectangle(List<CharBox> cbs, RectangleF r, TextAutoInsertSpace textAutoInsertSpace)
-        {
-            return string.Join("\r\n", GetTextLinesSurroundedByRectangle(cbs, r, textAutoInsertSpace));
-        }
-
-        public static List<string> GetTextLinesSurroundedByRectangle(List<CharBox> cbs, RectangleF r, TextAutoInsertSpace textAutoInsertSpace)
+        public static List<Page.Line<CharBox>> GetLinesSurroundedByRectangle(List<CharBox> cbs, RectangleF r, TextAutoInsertSpace textAutoInsertSpace, CharFilter charFilter)
         {
             cbs = GetCharBoxsSurroundedByRectangle(cbs, r);
-            List<string> ls = new List<string>();
-            foreach (Page.Line<CharBox> l in Page.GetLines(cbs, textAutoInsertSpace))
-                ls.Add(l.ToString());
-            return ls;
+            return Page.GetLines(cbs, textAutoInsertSpace, charFilter);
+        }
+
+        public static List<string> GetTextLinesSurroundedByRectangle(List<CharBox> cbs, RectangleF r, TextAutoInsertSpace textAutoInsertSpace, CharFilter charFilter)
+        {
+            cbs = GetCharBoxsSurroundedByRectangle(cbs, r);
+            return Page.GetLines(cbs, textAutoInsertSpace, charFilter).Select(a => a.GetString()).ToList();
         }
 
         public static List<CharBox> GetCharBoxsSurroundedByRectangle(List<CharBox> cbs, System.Drawing.RectangleF r)
@@ -315,18 +315,11 @@ namespace Cliver.PdfDocumentParser
             return cbs.Where(a => /*selectedR.IntersectsWith(a.R) || */r.Contains(a.R)).ToList();
         }
 
-        public static List<CharBox> GetOrdered(List<CharBox> orderedContainerCbs, List<CharBox> cbs)
-        {
-            List<CharBox> orderedCbs = new List<CharBox>();
-            foreach (CharBox cb in orderedContainerCbs)
-            {
-                if (orderedCbs.Count == cbs.Count)
-                    break;
-                if (cbs.Contains(cb))
-                    orderedCbs.Add(cb);
-            }
-            return orderedCbs;
-        }
+        //public static string GetTextByTopLeftCoordinates(List<CharBox> orderedCbs, RectangleF r)
+        //{
+        //    orderedCbs = orderedCbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)).ToList();
+        //    return orderedCbs.Aggregate(new StringBuilder(), (sb, n) => sb.Append(n)).ToString();
+        //}
 
         //public Bitmap CardinalDeskew(Bitmap b)//!!!debug
         //{

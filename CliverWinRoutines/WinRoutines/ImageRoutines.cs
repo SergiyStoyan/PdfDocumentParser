@@ -54,6 +54,7 @@ namespace Cliver.Win
                 g.CompositingQuality = CompositingQuality.HighQuality;
                 g.DrawImage(image, 0, 0, b.Width, b.Height);
             }
+            b.SetResolution(image.HorizontalResolution, image.VerticalResolution);
             return b;
         }
 
@@ -65,13 +66,36 @@ namespace Cliver.Win
 
         public static Bitmap GetScaled(Image image, Size max_size)
         {
-            float ratio;
-            return GetScaled(image, max_size, out ratio);
+            return GetScaled(image, max_size, out _);
+        }
+
+        /// <summary>
+        /// !!!CAUTION: it disposes the passed image!
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <param name="max_size"></param>
+        public static void Scale(ref Bitmap bitmap, Size max_size)
+        {
+            Bitmap b = GetScaled(bitmap, max_size, out _);
+            bitmap.Dispose();
+            bitmap = b;
         }
 
         public static Bitmap GetScaled(Image image, float ratio)
         {
             return GetResized(image, (int)Math.Round(image.Width * ratio, 0), (int)Math.Round(image.Height * ratio, 0));
+        }
+
+        /// <summary>
+        /// !!!CAUTION: it disposes the passed image!
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <param name="ratio"></param>
+        public static void Scale(ref Bitmap bitmap, float ratio)
+        {
+            Bitmap b = GetScaled(bitmap, ratio);
+            bitmap.Dispose();
+            bitmap = b;
         }
 
         public static Bitmap GetCroppedByColor(Image image, Color color)

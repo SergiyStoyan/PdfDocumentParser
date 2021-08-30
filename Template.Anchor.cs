@@ -1,6 +1,7 @@
 //********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
@@ -57,6 +58,8 @@ namespace Cliver.PdfDocumentParser
                 public SizeF Size;
                 public float PositionDeviation = 1f;
                 public bool PositionDeviationIsAbsolute = false;
+                public bool IgnoreInvisibleChars = true;
+                public bool IgnoreOtherCharsInRectangle = true;
 
                 override public bool IsSet()
                 {
@@ -81,6 +84,7 @@ namespace Cliver.PdfDocumentParser
                 public SizeF Size;
                 public float PositionDeviation = 1f;
                 public bool PositionDeviationIsAbsolute = false;
+                new public OcrSettings OcrSettings;//TBI
 
                 override public bool IsSet()
                 {
@@ -91,6 +95,11 @@ namespace Cliver.PdfDocumentParser
                 {
                     return new System.Drawing.RectangleF(Position.X, Position.Y, Size.Width, Size.Height);
                 }
+            }
+
+            public class OcrSettings
+            {
+                public Tesseract.PageSegMode TesseractPageSegMode = Tesseract.PageSegMode.SingleBlock;
             }
 
             public class CvImage : Anchor

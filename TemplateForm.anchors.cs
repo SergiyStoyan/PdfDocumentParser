@@ -1,6 +1,7 @@
 ﻿//********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
@@ -9,6 +10,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Text;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -27,6 +29,8 @@ namespace Cliver.PdfDocumentParser
             ParentAnchorId3.ValueType = typeof(int);
             ParentAnchorId3.ValueMember = "Id";
             ParentAnchorId3.DisplayMember = "Name";
+
+            Pattern.DefaultCellStyle.NullValue = null;//to avoid error when changing cell type to image
 
             anchors.EnableHeadersVisualStyles = false;//needed to set row headers
 
@@ -65,9 +69,19 @@ namespace Cliver.PdfDocumentParser
 
             anchors.CellBeginEdit += delegate (object sender, DataGridViewCellCancelEventArgs e)
             {
-                if (anchors.Columns[e.ColumnIndex].Name != "ParentAnchorId3")
+                string cn = anchors.Columns[e.ColumnIndex].Name;
+                if (cn == "SearchRectangleMargin")
+                {
+                    DataGridViewCell c = anchors[e.ColumnIndex, e.RowIndex];
+                    if (string.IsNullOrWhiteSpace((string)c.Value) || !int.TryParse((string)c.Value, out int searchRectangleMargin))
+                        c.Value = Settings.Constants.InitialSearchRectangleMargin.ToString();
                     return;
-                setAnchorParentAnchorIdList(anchors.Rows[e.RowIndex]);
+                }
+                if (cn == "ParentAnchorId3")
+                {
+                    setAnchorParentAnchorIdList(anchors.Rows[e.RowIndex]);
+                    return;
+                }
             };
 
             anchors.RowsAdded += delegate (object sender, DataGridViewRowsAddedEventArgs e)
@@ -77,7 +91,7 @@ namespace Cliver.PdfDocumentParser
             anchors.DataError += delegate (object sender, DataGridViewDataErrorEventArgs e)
             {
                 DataGridViewRow r = anchors.Rows[e.RowIndex];
-                Message.Error("Anchor[Id=" + r.Cells["Id3"].Value + "] has unacceptable value of " + anchors.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message);
+                Message.Error("Anchor[Id=" + r.Cells["Id3"].Value + "] has unacceptable value of " + anchors.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message, this);
             };
 
             anchors.UserDeletedRow += delegate (object sender, DataGridViewRowEventArgs e)
@@ -91,71 +105,112 @@ namespace Cliver.PdfDocumentParser
                     anchors.SelectedRows[0].Selected = false;//to avoid auto-creating row
             };
 
-            anchors.CurrentCellDirtyStateChanged += delegate
+            //anchors.CellFormatting += delegate (object sender, DataGridViewCellFormattingEventArgs e)
+            //  {
+            //      if (anchors.Columns[e.ColumnIndex].Name == "Pattern")
+            //          e.FormattingApplied = false;
+            //  };
+
+            anchors.CurrentCellDirtyStateChanged += delegate (object sender, EventArgs e)
             {
                 if (anchors.IsCurrentCellDirty)
+                {
+                    //string cn = anchors.Columns[anchors.CurrentCell.ColumnIndex].Name;
+                    //if (cn == "SearchRectangleMargin")
+                    //    return;
                     anchors.CommitEdit(DataGridViewDataErrorContexts.Commit);
+                }
             };
 
+            anchors.RowValidating += delegate (object sender, DataGridViewCellCancelEventArgs e)
+            {
+                //if (loadingTemplate)
+                //    return;
+                //DataGridViewRow r = anchors.Rows[e.RowIndex];
+                //try
+                //{
+                //    if (r.Tag != null)
+                //    {
+                //        //if (!string.IsNullOrWhiteSpace((string)r.Cells["SearchRectangleMargin"].Value) && !int.TryParse((string)r.Cells["SearchRectangleMargin"].Value, out int searchRectangleMargin))
+                //        //    throw new Exception("SearchRectangleMargin must be a non-negative integer.");
+                //    }
+                //}
+                //catch (Exception ex)
+                //{
+                //    Message.Error2(ex, this);
+                //    e.Cancel = true;
+                //}
+            };
+
+            bool isWithinCellValueChanged = false;
             anchors.CellValueChanged += delegate (object sender, DataGridViewCellEventArgs e)
             {
-                if (loadingTemplate)
+                if (loadingTemplate || isWithinCellValueChanged)
                     return;
-                if (e.ColumnIndex < 0)//row's header
-                    return;
-                var row = anchors.Rows[e.RowIndex];
-                Template.Anchor a = (Template.Anchor)row.Tag;
-                switch (anchors.Columns[e.ColumnIndex].Name)
+                try
                 {
-                    //case "Id3":
-                    //    {
-                    //        int? anchorId = (int?)row.Cells["Id3"].Value;
-                    //        if (anchorId == null)
-                    //            break;
-                    //        Template.Anchor a = (Template.Anchor)row.Tag;
-                    //        a.Id = (int)anchorId;
-                    //        setAnchorRow(row, a);
-                    //        break;
-                    //    }
-                    case "Type3":
-                        {
-                            Template.Anchor.Types t2 = (Template.Anchor.Types)row.Cells["Type3"].Value;
-                            if (t2 == a.Type)
-                                break;
-                            Template.Anchor a2;
-                            switch (t2)
+                    isWithinCellValueChanged = true;
+
+                    if (e.ColumnIndex < 0)//row's header
+                        return;
+                    var row = anchors.Rows[e.RowIndex];
+                    Template.Anchor a = (Template.Anchor)row.Tag;
+                    DataGridViewCell c = anchors[e.ColumnIndex, e.RowIndex];
+                    switch (anchors.Columns[e.ColumnIndex].Name)
+                    {
+                        case "ParentAnchorId3":
                             {
-                                case Template.Anchor.Types.PdfText:
-                                    a2 = new Template.Anchor.PdfText();
-                                    break;
-                                case Template.Anchor.Types.OcrText:
-                                    a2 = new Template.Anchor.OcrText();
-                                    break;
-                                case Template.Anchor.Types.ImageData:
-                                    a2 = new Template.Anchor.ImageData();
-                                    break;
-                                case Template.Anchor.Types.CvImage:
-                                    a2 = new Template.Anchor.CvImage();
-                                    break;
-                                //case Template.Anchor.Types.Script:
-                                //    a2 = new Template.Anchor.Script();
-                                //    break;
-                                default:
-                                    throw new Exception("Unknown option: " + t2);
+                                a.ParentAnchorId = (int?)row.Cells["ParentAnchorId3"].Value;
+                                break;
                             }
-                            a2.Id = a.Id;
-                            a = a2;
-                            break;
-                        }
-                    case "ParentAnchorId3":
-                        {
-                            a.ParentAnchorId = (int?)row.Cells["ParentAnchorId3"].Value;
-                            break;
-                        }
+                        case "Pattern":
+                            return;
+                        case "Type3":
+                            {
+                                Template.Anchor.Types t2 = (Template.Anchor.Types)c.Value;
+                                if (t2 == a.Type)
+                                    break;
+                                Template.Anchor a2;
+                                switch (t2)
+                                {
+                                    case Template.Anchor.Types.PdfText:
+                                        a2 = new Template.Anchor.PdfText();
+                                        break;
+                                    case Template.Anchor.Types.OcrText:
+                                        a2 = new Template.Anchor.OcrText();
+                                        break;
+                                    case Template.Anchor.Types.ImageData:
+                                        a2 = new Template.Anchor.ImageData();
+                                        break;
+                                    case Template.Anchor.Types.CvImage:
+                                        a2 = new Template.Anchor.CvImage();
+                                        break;
+                                    default:
+                                        throw new Exception("Unknown option: " + t2);
+                                }
+                                a2.Id = a.Id;
+                                a = a2;
+                                break;
+                            }
+                        case "SearchRectangleMargin":
+                            {
+                                if (string.IsNullOrWhiteSpace((string)c.Value) || !int.TryParse((string)c.Value, out int searchRectangleMargin))
+                                {
+                                    a.SearchRectangleMargin = -1;
+                                    break;
+                                }
+                                a.SearchRectangleMargin = searchRectangleMargin < 0 ? -1 : searchRectangleMargin;
+                                break;
+                            }
+                    }
+                    setAnchorRow(row, a);
+                    clearImageFromBoxes();
+                    findAndDrawAnchor(a.Id);
                 }
-                setAnchorRow(row, a);
-                clearImageFromBoxes();
-                findAndDrawAnchor(a.Id);
+                finally
+                {
+                    isWithinCellValueChanged = false;
+                }
             };
 
             anchors.SelectionChanged += delegate (object sender, EventArgs e)
@@ -192,7 +247,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 catch (Exception ex)
                 {
-                    Message.Error2(ex);
+                    Message.Error2(ex, this);
                 }
             };
         }
@@ -245,7 +300,8 @@ namespace Cliver.PdfDocumentParser
                 Template.Anchor a = getAnchor(anchorId, out DataGridViewRow row);
                 if (row == null || a == null)
                     throw new Exception("Anchor[Id=" + anchorId + "] does not exist.");
-                anchors.CurrentCell = anchors[0, row.Index];
+                if (anchors.CurrentCell?.RowIndex != row.Index)
+                    anchors.CurrentCell = anchors[0, row.Index];
 
                 if (clearSelection)
                     anchors.ClearSelection();
@@ -260,12 +316,12 @@ namespace Cliver.PdfDocumentParser
                 {
                     case Template.Anchor.Types.PdfText:
                         {
-                            currentAnchorControl = new AnchorPdfTextControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) });
+                            currentAnchorControl = new AnchorPdfTextControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpace_Threshold.Value, IgnoreSourceSpaces = textAutoInsertSpace_IgnoreSourceSpaces.Checked/*, Representative//default*/ });
                         }
                         break;
                     case Template.Anchor.Types.OcrText:
                         {
-                            currentAnchorControl = new AnchorOcrTextControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) });
+                            currentAnchorControl = new AnchorOcrTextControl(new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpace_Threshold.Value, IgnoreSourceSpaces = textAutoInsertSpace_IgnoreSourceSpaces.Checked/*, Representative//default*/ });
                         }
                         break;
                     case Template.Anchor.Types.ImageData:
@@ -278,16 +334,11 @@ namespace Cliver.PdfDocumentParser
                             currentAnchorControl = new AnchorCvImageControl((float)pictureScale.Value);
                         }
                         break;
-                    //case Template.Anchor.Types.Script:
-                    //    {
-                    //        if (currentAnchorControl == null || !(currentAnchorControl is AnchorScriptControl))
-                    //            currentAnchorControl = new AnchorScriptControl();
-                    //    }
-                    //    break;
                     default:
                         throw new Exception("Unknown option: " + t);
                 }
                 currentAnchorControl.Initialize(row, (DataGridViewRow r) => { setAnchorRow(r, a); });
+                settingsControlHeader.Text = "Anchor [" + a?.Id + "]:";
             }
             finally
             {
@@ -300,16 +351,24 @@ namespace Cliver.PdfDocumentParser
         {
             get
             {
-                if (splitContainer3.Panel1.Controls.Count < 1)
-                    return null;
-                return (AnchorControl)splitContainer3.Panel1.Controls[0];
+                foreach (Control c in splitContainer4.Panel2.Controls)
+                    if (c is AnchorControl)
+                        return c as AnchorControl;
+                return null;
             }
             set
             {
-                splitContainer3.Panel1.Controls.Clear();
+                foreach (Control c in splitContainer4.Panel2.Controls)
+                {
+                    if (c == settingsControlHeader)
+                        continue;
+                    splitContainer4.Panel2.Controls.Remove(c);
+                    c.Dispose();
+                }
                 if (value == null)
                     return;
-                splitContainer3.Panel1.Controls.Add(value);
+                splitContainer4.Panel2.Controls.Add(value);
+                value.BringToFront();
                 value.Dock = DockStyle.Fill;
             }
         }
@@ -329,38 +388,111 @@ namespace Cliver.PdfDocumentParser
             row.Cells["Id3"].Value = a.Id;
             row.Cells["Type3"].Value = a.Type;
             row.Cells["ParentAnchorId3"].Value = a.ParentAnchorId;
+            row.Cells["SearchRectangleMargin"].Value = a.SearchRectangleMargin < 0 ? "-" : a.SearchRectangleMargin.ToString();
+
+            DataGridViewCell patternCell = row.Cells["Pattern"];
+            if (patternCell.Value != null && patternCell.Value is IDisposable)
+                ((IDisposable)patternCell.Value).Dispose();
+            if (a is Template.Anchor.CvImage || a is Template.Anchor.ImageData)
+            {
+                if (!(patternCell is DataGridViewImageCell))
+                {
+                    patternCell.Dispose();
+                    patternCell = new DataGridViewImageCell { ImageLayout = DataGridViewImageCellLayout.NotSet };
+                    row.Cells["Pattern"] = patternCell;
+                }
+            }
+            else
+            {
+                if (patternCell is DataGridViewImageCell)
+                {
+                    patternCell.Dispose();
+                    patternCell = new DataGridViewTextBoxCell { };
+                    row.Cells["Pattern"] = patternCell;
+                }
+            }
+            row.Cells["Pattern"].ReadOnly = true;
+            switch (a.Type)
+            {
+                case Template.Anchor.Types.PdfText:
+                    {
+                        Template.Anchor.PdfText pt = (Template.Anchor.PdfText)a;
+                        if (pt.CharBoxs == null)
+                        {
+                            patternCell.Value = null;
+                            break;
+                        }
+                        StringBuilder sb = new StringBuilder();
+                        foreach (var l in Page.GetLines(pt.CharBoxs.Select(x => new Pdf.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() }), new TextAutoInsertSpace { IgnoreSourceSpaces = textAutoInsertSpace_IgnoreSourceSpaces.Checked, Threshold = (float)textAutoInsertSpace_Threshold.Value/*, Representative*/}, null))
+                        {
+                            foreach (var cb in l.CharBoxs)
+                                sb.Append(cb.Char);
+                            sb.Append("\r\n");
+                        }
+                        patternCell.Value = sb.ToString();
+                    }
+                    break;
+                case Template.Anchor.Types.OcrText:
+                    {
+                        Template.Anchor.OcrText ot = (Template.Anchor.OcrText)a;
+                        if (ot.CharBoxs == null)
+                        {
+                            patternCell.Value = null;
+                            break;
+                        }
+                        StringBuilder sb = new StringBuilder();
+                        foreach (var l in Page.GetLines(ot.CharBoxs.Select(x => new Ocr.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() }), new TextAutoInsertSpace { IgnoreSourceSpaces = textAutoInsertSpace_IgnoreSourceSpaces.Checked, Threshold = (float)textAutoInsertSpace_Threshold.Value/*, Representative*/}, null))
+                        {
+                            foreach (var cb in l.CharBoxs)
+                                sb.Append(cb.Char);
+                            sb.Append("\r\n");
+                        }
+                        patternCell.Value = sb.ToString();
+                    }
+                    break;
+                case Template.Anchor.Types.ImageData:
+                    {
+                        Template.Anchor.ImageData id = (Template.Anchor.ImageData)a;
+                        Bitmap b = null;
+                        if (id.Image != null)
+                        {
+                            b = id.Image.GetBitmap();
+                            Size s = patternCell.Size;
+                            if (s.Height < b.Height * pictureScale.Value)
+                            {
+                                s.Width = int.MaxValue;
+                                Win.ImageRoutines.Scale(ref b, s);
+                            }
+                            else if (pictureScale.Value != 1)
+                                Win.ImageRoutines.Scale(ref b, (float)pictureScale.Value);
+                        }
+                        patternCell.Value = b;
+                    }
+                    break;
+                case Template.Anchor.Types.CvImage:
+                    {
+                        Template.Anchor.CvImage ci = (Template.Anchor.CvImage)a;
+                        Bitmap b = null;
+                        if (ci.Image != null)
+                        {
+                            b = ci.Image.GetBitmap();
+                            Size s = patternCell.Size;
+                            if (s.Height < b.Height * pictureScale.Value)
+                            {
+                                s.Width = int.MaxValue;
+                                Win.ImageRoutines.Scale(ref b, s);
+                            }
+                            else if (pictureScale.Value != 1)
+                                Win.ImageRoutines.Scale(ref b, (float)pictureScale.Value);
+                        }
+                        patternCell.Value = b;
+                    }
+                    break;
+                default:
+                    throw new Exception("Unknown option: " + a.Type);
+            }
 
             Template.PointF p = a.Position;
-            //switch (a.Type)
-            //{
-            //    case Template.Anchor.Types.PdfText:
-            //        {
-            //            Template.Anchor.PdfText pt = (Template.Anchor.PdfText)a;
-            //        }
-            //        break;
-            //    case Template.Anchor.Types.OcrText:
-            //        {
-            //            Template.Anchor.OcrText ot = (Template.Anchor.OcrText)a;
-            //        }
-            //        break;
-            //    case Template.Anchor.Types.ImageData:
-            //        {
-            //            Template.Anchor.ImageData id = (Template.Anchor.ImageData)a;
-            //        }
-            //        break;
-            //    case Template.Anchor.Types.CvImage:
-            //        {
-            //            Template.Anchor.CvImage ci = (Template.Anchor.CvImage)a;
-            //        }
-            //        break;
-            //    //case Template.Anchor.Types.Script:
-            //    //    {
-            //    //        Template.Anchor.Script s = (Template.Anchor.Script)a;
-            //    //    }
-            //    //    break;
-            //    default:
-            //        throw new Exception("Unknown option: " + a.Type);
-            //}
             if (p != null)
                 row.Cells["Position3"].Value = Serialization.Json.Serialize(p);
 
@@ -369,12 +501,6 @@ namespace Cliver.PdfDocumentParser
 
             if (currentAnchorControl != null && row == currentAnchorControl.Row)
                 setCurrentAnchorRow(a.Id, false);
-
-            //if (a.Id == GetTemplateFromUI(false).ScalingAnchorId)
-            //{
-            //    ReloadPageActiveTemplateBitmap();
-            //    return;
-            //}
 
             setConditionsStatus();
         }

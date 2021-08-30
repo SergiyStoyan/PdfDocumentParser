@@ -1,6 +1,7 @@
 //********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
@@ -62,8 +63,15 @@ namespace Cliver.PdfDocumentParser
                     Directory.CreateDirectory(bufferFileDir);
                     string bufferFile = bufferFileDir + "\\buffer.png";
                     p.StartInfo.Arguments = "-dNOPROMPT -r" + resolution + " -dDownScaleFactor=" + dDownScaleFactor + " -dBATCH -dFirstPage=" + pageI + " -dLastPage=" + pageI + " -sDEVICE=png16m -dNOPAUSE -sOutputFile=\"" + bufferFile + "\" -q \"" + pdfFile + "\"";
+                    p.StartInfo.RedirectStandardError = true;
+                    p.StartInfo.UseShellExecute = false;
                     p.Start();
                     p.WaitForExit();
+                    string stderr = p.StandardError.ReadToEnd();
+                    if (!string.IsNullOrWhiteSpace(stderr))
+                        Log.Error(stderr);
+                    if (!File.Exists(bufferFile))
+                        throw new Exception("Could not create bufferFile " + bufferFile);
                     System.Drawing.Bitmap b;// = (System.Drawing.Bitmap)System.Drawing.Image.FromFile(bufferFile);
                     using (var bt = new System.Drawing.Bitmap(bufferFile))//to free the file
                     {
@@ -99,6 +107,9 @@ namespace Cliver.PdfDocumentParser
             {
                 base.RenderText(renderInfo);
 
+                //GraphicsState gs = (GraphicsState)gsField.GetValue(renderInfo);//expensive???
+                //Font font = new Font { Name = string.Join(", ", gs.Font.FullFontName[0]), Size = gs.FontSize };
+
                 List<CharBox> cbs = new List<CharBox>();
                 IList<TextRenderInfo> cris = renderInfo.GetCharacterRenderInfos();
                 foreach (TextRenderInfo cri in cris)
@@ -117,22 +128,19 @@ namespace Cliver.PdfDocumentParser
                             Width = topRight[Vector.I1] - x,
                             Height = y - baseLeft[Vector.I2],
                         },
-                        //Font = font,
-                        //FontSize = fontSize
+                        //Font = font
                     };
                     cbs.Add(cb);
                 }
                 CharBoxs.AddRange(cbs);
             }
+            static System.Reflection.FieldInfo gsField = typeof(TextRenderInfo).GetField("gs", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         }
 
         public static List<string> GetTextLinesSurroundedByRectangle(IEnumerable<CharBox> cbs, System.Drawing.RectangleF r, TextAutoInsertSpace textAutoInsertSpace)
         {
             cbs = GetCharBoxsSurroundedByRectangle(cbs, r);
-            List<string> ls = new List<string>();
-            foreach (Page.Line<CharBox> l in Page.GetLines(cbs, textAutoInsertSpace))
-                ls.Add(l.ToString());
-            return ls;
+            return Page.GetLines(cbs, textAutoInsertSpace, null).Select(a => a.GetString()).ToList();
         }
 
         public static List<CharBox> GetCharBoxsSurroundedByRectangle(IEnumerable<CharBox> cbs, System.Drawing.RectangleF r, bool excludeInvisibleCharacters = false)
@@ -140,7 +148,7 @@ namespace Cliver.PdfDocumentParser
             //cbs = RemoveDuplicates(cbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/)));
             cbs = cbs.Where(a => (r.Contains(a.R) /*|| d.IntersectsWith(a.R)*/));
             if (excludeInvisibleCharacters)
-                cbs = cbs.Where(a => !InvisibleCharacters.Contains(a.Char)).ToList();
+                return cbs.Where(a => !InvisibleCharacters.Contains(a.Char)).ToList();
             return cbs.ToList();
         }
 
@@ -170,9 +178,12 @@ namespace Cliver.PdfDocumentParser
         public class CharBox : Page.CharBox
         {
             //public bool AutoInserted = false;
-
-            public PdfFont Font;
-            public float FontSize;
+            public Font Font;
+        }
+        public class Font
+        {
+            public string Name;
+            public float Size;
         }
     }
 }

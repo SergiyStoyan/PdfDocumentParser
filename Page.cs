@@ -1,6 +1,7 @@
 //********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 using Emgu.CV;
@@ -43,6 +44,11 @@ namespace Cliver.PdfDocumentParser
                     _activeTemplateBitmap.Dispose();
                     _activeTemplateBitmap = null;
                 }
+                if (_activeTemplateCvImage != null)
+                {
+                    _activeTemplateCvImage.Dispose();
+                    _activeTemplateCvImage = null;
+                }
                 if (_activeTemplateImageData != null)
                 {
                     //_activeTemplateImageData.Dispose();
@@ -56,6 +62,7 @@ namespace Cliver.PdfDocumentParser
                 {
                     _activeTemplateOcrCharBoxs = null;
                 }
+                fieldNames2fieldActualInfos.Clear();
             }
         }
 
@@ -102,7 +109,12 @@ namespace Cliver.PdfDocumentParser
                 _activeTemplateCvImage?.Dispose();
                 _activeTemplateCvImage = null;
             }
-            else if (newTemplate.TesseractPageSegMode != PageCollection.ActiveTemplate.TesseractPageSegMode)
+            else if (newTemplate.TesseractPageSegMode != PageCollection.ActiveTemplate.TesseractPageSegMode
+                || !Serialization.Json.IsEqual(
+                    newTemplate.Fields.Where(a => a is Template.Field.Ocr).Select(a => ((Template.Field.Ocr)a).TesseractPageSegMode).ToList(),
+                    PageCollection.ActiveTemplate.Fields.Where(a => a is Template.Field.Ocr).Select(a => ((Template.Field.Ocr)a).TesseractPageSegMode).ToList()
+                    )
+                )
             {
                 _activeTemplateOcrCharBoxs = null;
             }
@@ -229,8 +241,8 @@ namespace Cliver.PdfDocumentParser
                     //            if (m == null)
                     //                continue;
                     //            Rectangle r = m.Rectangle;
-                    //            for (int x = (int)(r.X / Settings.Constants.Image2PdfResolutionRatio); x < r.Right / Settings.Constants.Image2PdfResolutionRatio; x++)
-                    //                for (int y = (int)(r.Y / Settings.Constants.Image2PdfResolutionRatio); y < r.Bottom / Settings.Constants.Image2PdfResolutionRatio; y++)
+                    //            for (int x = (int)(r.X / Settings.Constants.Pdf2ImageResolutionRatio); x < r.Right / Settings.Constants.Pdf2ImageResolutionRatio; x++)
+                    //                for (int y = (int)(r.Y / Settings.Constants.Pdf2ImageResolutionRatio); y < r.Bottom / Settings.Constants.Pdf2ImageResolutionRatio; y++)
                     //                    b.SetPixel(x, y, Color.White);
                     //        }
                     //    }
@@ -257,9 +269,9 @@ namespace Cliver.PdfDocumentParser
                 return _activeTemplateBitmap;
             }
         }
-        public float DetectedImageScale { get; private set; } = -1;
-
         Bitmap _activeTemplateBitmap = null;
+
+        public float DetectedImageScale { get; private set; } = -1;
 
         internal ImageData ActiveTemplateImageData
         {
@@ -294,6 +306,8 @@ namespace Cliver.PdfDocumentParser
         }
         List<Pdf.CharBox> _pdfCharBoxs;
 
+        public bool IsScan { get { return PdfCharBoxs.Count < 1; } }
+
         internal Size Size
         {
             get
@@ -325,10 +339,12 @@ namespace Cliver.PdfDocumentParser
             if (sda.SearchRectangleMargin >= 0)
             {
                 RectangleF sr = getSearchRectangle(sda.Rectangle(), sda.SearchRectangleMargin);
-                Bitmap b = GetRectangleFromActiveTemplateBitmap(sr.X / Settings.Constants.Image2PdfResolutionRatio, sr.Y / Settings.Constants.Image2PdfResolutionRatio, sr.Width / Settings.Constants.Image2PdfResolutionRatio, sr.Height / Settings.Constants.Image2PdfResolutionRatio);
-                if (b == null)
-                    throw new Exception("The scaling anchor's rectangle is null.");
-                searchRectangleCI = new CvImage(b);
+                using (Bitmap b = GetRectangleFromActiveTemplateBitmap(sr.X / Settings.Constants.Pdf2ImageResolutionRatio, sr.Y / Settings.Constants.Pdf2ImageResolutionRatio, sr.Width / Settings.Constants.Pdf2ImageResolutionRatio, sr.Height / Settings.Constants.Pdf2ImageResolutionRatio))
+                {
+                    if (b == null)
+                        throw new Exception("The scaling anchor's rectangle is null.");
+                    searchRectangleCI = new CvImage(b);
+                }
             }
             else
                 searchRectangleCI = ActiveTemplateCvImage;
@@ -340,7 +356,7 @@ namespace Cliver.PdfDocumentParser
 
         public Color GetColor(float x, float y)
         {
-            return ActiveTemplateBitmap.GetPixel((int)Math.Round(x / Settings.Constants.Image2PdfResolutionRatio), (int)Math.Round(y / Settings.Constants.Image2PdfResolutionRatio));
+            return ActiveTemplateBitmap.GetPixel((int)Math.Round(x / Settings.Constants.Pdf2ImageResolutionRatio), (int)Math.Round(y / Settings.Constants.Pdf2ImageResolutionRatio));
         }
     }
 }

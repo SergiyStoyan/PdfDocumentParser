@@ -4,7 +4,6 @@
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
-using System.Data.Linq;
 using System.Linq;
 using System.Text;
 using System.Collections.Generic;
@@ -104,8 +103,8 @@ namespace Cliver.SampleParser
                     continue;
                 }
 
-                List<string> names = (List<string>)Pages[pageI].GetValue(Template2.FieldNames.ProductNames, Template.Field.ValueTypes.PdfTextLines);
-                List<string> costs = (List<string>)Pages[pageI].GetValue(Template2.FieldNames.ProductCosts, Template.Field.ValueTypes.PdfTextLines);
+                List<string> names = Pages[pageI].GetTextLines(Template2.FieldNames.ProductNames);
+                List<string> costs = Pages[pageI].GetTextLines(Template2.FieldNames.ProductCosts);
                 if (names != null)
                     for (int i = 0; i < names.Count; i++)
                         if (!string.IsNullOrWhiteSpace(names[i]))

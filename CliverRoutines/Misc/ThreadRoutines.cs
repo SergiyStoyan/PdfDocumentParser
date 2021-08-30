@@ -45,7 +45,7 @@ namespace Cliver
                         try
                         {
                             if (onError == null)
-                                throw e;
+                                throw;
                             onError.Invoke(e);
                         }
                         catch (ThreadAbortException)

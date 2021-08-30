@@ -1,6 +1,7 @@
 //********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 
@@ -95,8 +96,7 @@ namespace Cliver.PdfDocumentParser
                 else if (this is OcrTextLineImages)
                     Type = Types.OcrTextLineImages;
                 else
-                    Type = Types.PdfText;
-                //throw new Exception("Unknown option: " + this.GetType());
+                    throw new Exception("Unknown option: " + this.GetType());
             }
 
             [Newtonsoft.Json.JsonIgnore]
@@ -113,21 +113,6 @@ namespace Cliver.PdfDocumentParser
                 OcrTextLineImages,
             }
 
-            //!!!remove when old templates converted
-            //public ValueTypes DefaultValueType = ValueTypes.PdfText;
-            ////!!!remove when old templates converted
-            //public enum ValueTypes
-            //{
-            //    PdfText = 0,
-            //    PdfTextLines = 1,
-            //    PdfCharBoxs = 2,
-            //    OcrText = 3,
-            //    OcrTextLines = 4,
-            //    OcrCharBoxs = 5,
-            //    Image = 6,
-            //    OcrTextLineImages = 7,
-            //}
-
             public bool IsSet()
             {
                 return Rectangle != null && Rectangle.Width > 0 && Rectangle.Height > 0;
@@ -140,73 +125,124 @@ namespace Cliver.PdfDocumentParser
             /// </summary>
             public string ColumnOfTable = null;
 
-            virtual internal object GetValue()
+            //virtual internal object GetValue()
+            //{
+            //    return null;
+            //}
+
+            public CharFilter CharFilter = null;
+            public int? LinePaddingY = null;
+            public TextAutoInsertSpace TextAutoInsertSpace = null;
+
+            public interface Text
             {
-                return null;
             }
 
-            public class PdfText : Field
+            public interface TextLines
             {
-                internal override object GetValue()
+            }
+
+            public interface CharBoxs
+            {
+            }
+
+            abstract public class Pdf : Field
+            {
+            }
+
+            public class PdfText : Pdf, Text
+            {
+            }
+
+            public class PdfTextLines : Pdf, TextLines
+            {
+            }
+
+            public class PdfCharBoxs : Pdf, CharBoxs
+            {
+            }
+
+            abstract public class Ocr : Field
+            {
+                public Tesseract.PageSegMode? TesseractPageSegMode = null;
+                public OcrModes? Mode = null;
+
+                internal bool? AdjustLineBorders
                 {
-                    throw new System.NotImplementedException();
+                    get { return Mode != null ? Mode.Value.HasFlag(OcrModes.AdjustLineBorders) : (bool?)null; }
+                    set
+                    {
+                        if (value == null)
+                        {
+                            Mode = null;
+                            return;
+                        }
+                        if (Mode == null)
+                            Mode = 0;
+                        Mode = value.Value ? Mode.Value | OcrModes.AdjustLineBorders : Mode.Value & ~OcrModes.AdjustLineBorders;
+                    }
+                }
+                internal bool? SingleFieldFromFieldImage
+                {
+                    get { return Mode != null ? Mode.Value.HasFlag(OcrModes.SingleFieldFromFieldImage) : (bool?)null; }
+                    set
+                    {
+                        if (value == null)
+                        {
+                            Mode = null;
+                            return;
+                        }
+                        if (Mode == null)
+                            Mode = 0;
+                        Mode = value.Value ? Mode.Value | OcrModes.SingleFieldFromFieldImage : Mode.Value & ~OcrModes.SingleFieldFromFieldImage;
+                    }
+                }
+                internal bool? ColumnCellFromCellImage
+                {
+                    get { return Mode != null ? Mode.Value.HasFlag(OcrModes.ColumnCellFromCellImage) : (bool?)null; }
+                    set
+                    {
+                        if (value == null)
+                        {
+                            Mode = null;
+                            return;
+                        }
+                        if (Mode == null)
+                            Mode = 0;
+                        Mode = value.Value ? Mode.Value | OcrModes.ColumnCellFromCellImage : Mode.Value & ~OcrModes.ColumnCellFromCellImage;
+                    }
                 }
             }
 
-            public class PdfTextLines : Field
+            public enum OcrModes
             {
-                internal override object GetValue()
-                {
-                    throw new System.NotImplementedException();
-                }
+                AdjustLineBorders = 0b0000001,
+                //SingleFieldFromPageCharBoxs = 0b0000001,//default
+                SingleFieldFromFieldImage = 0b0000010,
+                //TableFieldFromPageCharBoxs = 0b00100,//default
+                //TableFieldFromFieldImage = 0b0001000,
+                //ColumnCellFromTableCharBoxs = 0b0010000,//default
+                ColumnCellFromCellImage = 0b0100000,
             }
 
-            public class PdfCharBoxs : Field
+            public class OcrText : Ocr, Text
             {
-                internal override object GetValue()
-                {
-                    throw new System.NotImplementedException();
-                }
             }
 
-            public class OcrText : Field
+            public class OcrTextLines : Ocr, TextLines
             {
-                internal override object GetValue()
-                {
-                    throw new System.NotImplementedException();
-                }
             }
 
-            public class OcrTextLines : Field
+            public class OcrCharBoxs : Ocr, CharBoxs
             {
-                internal override object GetValue()
-                {
-                    throw new System.NotImplementedException();
-                }
-            }
-
-            public class OcrCharBoxs : Field
-            {
-                internal override object GetValue()
-                {
-                    throw new System.NotImplementedException();
-                }
             }
 
             public class Image : Field
             {
-                internal override object GetValue()
-                {
-                    throw new System.NotImplementedException();
-                }
             }
 
             public class OcrTextLineImages : Field
             {
-                internal override object GetValue()
-                {
-                    throw new System.NotImplementedException();
-                }
             }
         }
     }

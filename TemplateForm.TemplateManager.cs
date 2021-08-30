@@ -1,6 +1,7 @@
 //********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
@@ -15,19 +16,21 @@ namespace Cliver.PdfDocumentParser
         public abstract class TemplateManager
         {
             abstract public void Save();
-            
+
             virtual public void HelpRequest()
             {
                 try
                 {
-                    System.Diagnostics.Process.Start(Settings.Constants.HelpFile);
+                    ProcessRoutines.Open(Settings.Constants.HelpFile);
                 }
                 catch (Exception ex)
                 {
                     Log.Error(ex);
-                    Message.Error(ex);
+                    Message.Error(ex, TemplateForm);
                 }
             }
+
+            internal TemplateForm TemplateForm;
 
             virtual public Template.Anchor CreateDefaultAnchor()
             {
@@ -47,17 +50,27 @@ namespace Cliver.PdfDocumentParser
             /// <summary>
             /// 
             /// </summary>
-            /// <param name="template">!!!Attention: it can be changed unpredictably, so it should not be a reference to an outside object that will be used later.</param>
+            /// <param name="template"></param>
             /// <param name="testFileDefaultFolder"></param>
-            public TemplateManager(Template template, string lastTestFile, string testFileDefaultFolder)
+            public TemplateManager(Template template0, string lastTestFile, string testFileDefaultFolder)
             {
-                if (template.Editor == null)
-                    template.Editor = new Template.EditorSettings { };
+                Template0 = template0;
+                Template = template0.CreateCloneByJson();
 
-                Template = template;
+                if (Template.Editor == null)
+                    Template.Editor = new Template.EditorSettings { };
+
+                Template = Template;
                 LastTestFile = lastTestFile;
                 TestFileDefaultFolder = testFileDefaultFolder;
             }
+            /// <summary>
+            /// The original template that is never altered.
+            /// </summary>
+            public readonly Template Template0;
+            /// <summary>
+            /// It is the resulting template. (!)It might be changed in unpredictable manner during editing so it must be used only if Save()
+            /// </summary>
             public Template Template { get; internal set; }
             public string LastTestFile { get; internal set; }
             internal string TestFileDefaultFolder;

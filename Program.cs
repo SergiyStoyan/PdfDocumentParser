@@ -1,6 +1,7 @@
 //********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
@@ -12,12 +13,12 @@ using System.Runtime.InteropServices;
 
 /*
 TBD: 
-- each field has its own config control (just as anchors);
+
+- ?migrate to NET5 (!!!while it works, the forms were displayed deteriorated despite DPI settings. Also VS winform designer under NET5 is buggy!)
 
 for scan processing:
 - invoices still have hand marks on them which hinder OCR. Solution: filter out colors control;
 - line filtering (when text overlaps a line);
-- each field has its own tesseract config;
 - OcrColumnLines - provide cropping by anchors;
 - to preserve normal lines, provide column removal from table;
 
@@ -52,7 +53,8 @@ namespace Cliver.PdfDocumentParser
             AppDomain.CurrentDomain.UnhandledException += delegate (object sender, UnhandledExceptionEventArgs args)
             {
                 Exception e = (Exception)args.ExceptionObject;
-                Win.LogMessage.Error(e);
+                Log.Error(e);
+                Message.Error(e);
                 Environment.Exit(0);
             };
 
@@ -68,13 +70,17 @@ namespace Cliver.PdfDocumentParser
             //Log.ShowDeleteOldLogsDialog = false;//must be called from the entry projects
             //Message.TopMost = true;//must be called from the entry projects
             //Config.Reload();//must be called from the entry projects
-            //Win.LogMessage.DisableStumblingDialogs = false;//must be called from the entry projects
-            //Win.LogMessage.ShowDialog = ((string title, Icon icon, string message, string[] buttons, int default_button, Form owner) => { return Message.ShowDialog(title, icon, message, buttons, default_button, owner); });
         }
 
-        public static void Initialize()
-        {//trigger Program()
-
+        /// <summary>
+        /// First it must be called before any use of the PdfDocumentParser. 
+        /// Then it can be called to re-initialize.
+        /// </summary>
+        /// <param name="ocrConfig"></param>
+        public static void Initialize(Ocr.Config ocrConfig)//trigger Program()
+        {
+            Ocr.DisposeThis();
+            Settings.Constants.OcrConfig = ocrConfig;
         }
 
         public static readonly Version Version;

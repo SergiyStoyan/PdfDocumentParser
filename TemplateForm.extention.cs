@@ -1,6 +1,7 @@
 ﻿//********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
@@ -52,17 +53,13 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        class conditionComparer : IEqualityComparer<Template.Condition>
+        void highlightScanSettings(Template t)
         {
-            bool IEqualityComparer<Template.Condition>.Equals(Template.Condition x, Template.Condition y)
-            {
-                return x.Name == y.Name;
-            }
-
-            int IEqualityComparer<Template.Condition>.GetHashCode(Template.Condition obj)
-            {
-                throw new NotImplementedException();
-            }
+            if (t.Deskew != null)
+                bScannedDocumentSettings.BackColor = Color.Beige;
+            else
+                bScannedDocumentSettings.UseVisualStyleBackColor = true;
+            detectedImageScale.Enabled = t.ScalingAnchorId > 0;
         }
 
         void setUIFromTemplate(Template t)
@@ -73,20 +70,30 @@ namespace Cliver.PdfDocumentParser
 
                 name.Text = t.Name;
 
-                //imageResolution.Value = template.ImageResolution;
+                pictureScale.Value = t.Editor.TestPictureScale > 0 ? t.Editor.TestPictureScale : 1;
 
                 if (t.TextAutoInsertSpace == null)
                     t.TextAutoInsertSpace = new TextAutoInsertSpace();
-                textAutoInsertSpaceThreshold.Value = (decimal)t.TextAutoInsertSpace.Threshold;
-                textAutoInsertSpaceRepresentative.Text = Regex.Escape(t.TextAutoInsertSpace.Representative);
+                textAutoInsertSpace_Threshold.Value = (decimal)t.TextAutoInsertSpace.Threshold;
+                textAutoInsertSpace_IgnoreSourceSpaces.Checked =  t.TextAutoInsertSpace.IgnoreSourceSpaces;
 
-                CvImageScalePyramidStep.Value = t.CvImageScalePyramidStep;
                 TesseractPageSegMode.SelectedItem = t.TesseractPageSegMode;
-
-                SingleFieldFromFieldImage.Checked = t.FieldOcrMode.HasFlag(Template.FieldOcrModes.SingleFieldFromFieldImage);
-                ColumnFieldFromFieldImage.Checked = t.FieldOcrMode.HasFlag(Template.FieldOcrModes.ColumnFieldFromFieldImage);
+                AdjustLineBorders.Checked = t.AdjustLineBorders;
+                SingleFieldFromFieldImage.Checked = t.SingleFieldFromFieldImage;
+                ColumnCellFromCellImage.Checked = t.ColumnCellFromCellImage;
+                if (t.CharFilter != null)
+                {
+                    CharSizeFilterMinWidth.Value = (decimal)t.CharFilter.MinWidth;
+                    CharSizeFilterMaxWidth.Value = (decimal)t.CharFilter.MaxWidth;
+                    CharSizeFilterMinHeight.Value = (decimal)t.CharFilter.MinHeight;
+                    CharSizeFilterMaxHeight.Value = (decimal)t.CharFilter.MaxHeight;
+                }
+                cOcr.Checked = t.CharFilter != null;
+                cOcr_CheckedChanged(null, null);
+                LinePaddingY.Value = t.LinePaddingY;
 
                 bitmapPreparationForm.SetUI(t, false);
+                highlightScanSettings(t);
 
                 anchors.Rows.Clear();
                 if (t.Anchors != null)
@@ -139,19 +146,17 @@ namespace Cliver.PdfDocumentParser
                     }
                 }
 
-                pictureScale.Value = t.Editor.TestPictureScale > 0 ? t.Editor.TestPictureScale : 1;
-
                 ExtractFieldsAutomaticallyWhenPageChanged.Checked = t.Editor.ExtractFieldsAutomaticallyWhenPageChanged;
                 ShowFieldTextLineSeparators.Checked = t.Editor.ShowFieldTextLineSeparators;
                 CheckConditionsAutomaticallyWhenPageChanged.Checked = t.Editor.CheckConditionsAutomaticallyWhenPageChanged;
 
-                if (t.Editor.TestFile != null && File.Exists(t.Editor.TestFile))
-                    testFile.Text = t.Editor.TestFile;
-                else
-                {
-                    if (templateManager.LastTestFile != null && File.Exists(templateManager.LastTestFile))
-                        testFile.Text = templateManager.LastTestFile;
-                }
+                //if (t.Editor.TestFile != null && File.Exists(t.Editor.TestFile))
+                //    testFile.Text = t.Editor.TestFile;
+                //else
+                //{
+                if (templateManager.LastTestFile != null && File.Exists(templateManager.LastTestFile))
+                    testFile.Text = templateManager.LastTestFile;
+                //}
             }
             finally
             {
@@ -183,7 +188,12 @@ namespace Cliver.PdfDocumentParser
             if (pages == null)
                 return;
             //TextForm tf = new TextForm("Pdf Entity Text", PdfTextExtractor.GetTextFromPage(pages.PdfReader, currentPageI), false);
-            TextForm tf = new TextForm("Pdf Entity Text", Page.GetText(pages[currentPageI].PdfCharBoxs, new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) }), false);
+            string t = Page.GetText(
+                pages[currentPageI].PdfCharBoxs,
+                new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpace_Threshold.Value, IgnoreSourceSpaces = textAutoInsertSpace_IgnoreSourceSpaces.Checked /*, Representative//default*/},
+                new CharFilter { MinWidth = (float)CharSizeFilterMinWidth.Value, MaxWidth = (float)CharSizeFilterMaxWidth.Value, MinHeight = (float)CharSizeFilterMinHeight.Value, MaxHeight = (float)CharSizeFilterMaxHeight.Value }
+            );
+            TextForm tf = new TextForm("Pdf Entity Text", t, false);
             tf.ShowDialog();
         }
 
@@ -191,7 +201,12 @@ namespace Cliver.PdfDocumentParser
         {
             if (pages == null)
                 return;
-            List<string> ls = Page.GetTextLines(pages[currentPageI].ActiveTemplateOcrCharBoxs, new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpaceThreshold.Value, Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text) });
+            pages.ActiveTemplate = GetTemplateFromUI(false);
+            List<string> ls = Page.GetTextLines(
+                pages[currentPageI].ActiveTemplateOcrCharBoxs,
+                new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpace_Threshold.Value, IgnoreSourceSpaces = textAutoInsertSpace_IgnoreSourceSpaces.Checked/*, Representative//default*/ },
+                new CharFilter { MinWidth = (float)CharSizeFilterMinWidth.Value, MaxWidth = (float)CharSizeFilterMaxWidth.Value, MinHeight = (float)CharSizeFilterMinHeight.Value, MaxHeight = (float)CharSizeFilterMaxHeight.Value }
+            );
             TextForm tf = new TextForm("OCR Text", string.Join("\r\n", ls), false);
             tf.ShowDialog();
         }
@@ -210,7 +225,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 catch (Exception ex)
                 {
-                    Message.Error2("Updating template:", ex);
+                    Message.Error2("Updating template:", ex, this);
                 }
         }
 
@@ -230,7 +245,7 @@ namespace Cliver.PdfDocumentParser
             }
             catch (Exception ex)
             {
-                Message.Error2(ex);
+                Message.Error2(ex, this);
             }
         }
 
@@ -243,7 +258,7 @@ namespace Cliver.PdfDocumentParser
             }
             catch (Exception ex)
             {
-                Message.Error2(ex);
+                Message.Error2(ex, this);
             }
         }
 
@@ -258,21 +273,19 @@ namespace Cliver.PdfDocumentParser
 
             t.TextAutoInsertSpace = new TextAutoInsertSpace
             {
-                Threshold = (float)textAutoInsertSpaceThreshold.Value,
-                Representative = Regex.Unescape(textAutoInsertSpaceRepresentative.Text),
+                Threshold = (float)textAutoInsertSpace_Threshold.Value,
+                IgnoreSourceSpaces = textAutoInsertSpace_IgnoreSourceSpaces.Checked,
+                //Representative//default
             };
 
-            t.CvImageScalePyramidStep = (int)CvImageScalePyramidStep.Value;
             t.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
-
-            if (SingleFieldFromFieldImage.Checked)
-                t.FieldOcrMode |= Template.FieldOcrModes.SingleFieldFromFieldImage;
-            else
-                t.FieldOcrMode &= ~Template.FieldOcrModes.SingleFieldFromFieldImage;
-            if (ColumnFieldFromFieldImage.Checked)
-                t.FieldOcrMode |= Template.FieldOcrModes.ColumnFieldFromFieldImage;
-            else
-                t.FieldOcrMode &= ~Template.FieldOcrModes.ColumnFieldFromFieldImage;
+            t.AdjustLineBorders = AdjustLineBorders.Checked;
+            t.SingleFieldFromFieldImage = SingleFieldFromFieldImage.Checked;
+            t.ColumnCellFromCellImage = ColumnCellFromCellImage.Checked;
+            if (CharSizeFilterMinWidth.Value > 0 || CharSizeFilterMaxWidth.Value > 0 || CharSizeFilterMinHeight.Value > 0 || CharSizeFilterMaxHeight.Value > 0)
+                t.CharFilter = new CharFilter { MinWidth = (float)CharSizeFilterMinWidth.Value, MaxWidth = (float)CharSizeFilterMaxWidth.Value, MinHeight = (float)CharSizeFilterMinHeight.Value, MaxHeight = (float)CharSizeFilterMaxHeight.Value };
+            if (LinePaddingY.Value > 0)
+                t.LinePaddingY = (int)LinePaddingY.Value;
 
             bitmapPreparationForm.SetTemplate(t);
 
@@ -331,7 +344,7 @@ namespace Cliver.PdfDocumentParser
                                 if (a.Id != t.ScalingAnchorId)
                                 {
                                     if (removeNotLinkedAnchors == null)
-                                        removeNotLinkedAnchors = Message.YesNo("The template contains not linked anchor[s]. Remove them?");
+                                        removeNotLinkedAnchors = Message.YesNo("The template contains not linked anchor[s]. Remove them?", this);
                                     if (removeNotLinkedAnchors == true)
                                         continue;
                                 }
@@ -385,48 +398,17 @@ namespace Cliver.PdfDocumentParser
             {
                 if (t.Fields.Count < 1)
                     throw new Exception("Fields is empty!");
-                //var dfs = t.Fields.GroupBy(x => x.Name).Where(x => x.Count() > 1).FirstOrDefault();
-                //if (dfs != null)
-                //    throw new Exception("Field '" + dfs.First().Name + "' is duplicated!");
 
-                //foreach (string columnOfTable in t.Fields.Where(x => x is Template.Field.PdfText).Select(x => (Template.Field.PdfText)x).Where(x => x.ColumnOfTable != null).Select(x => x.ColumnOfTable))
-                //{
-                //    Dictionary<string, List<Template.Field>> fieldName2orderedFields = new Dictionary<string, List<Template.Field>>();
-                //    foreach (Template.Field.PdfText pt in t.Fields.Where(x => x is Template.Field.PdfText).Select(x => (Template.Field.PdfText)x).Where(x => x.ColumnOfTable == columnOfTable))
-                //    {
-                //        List<Template.Field> fs;
-                //        if (!fieldName2orderedFields.TryGetValue(pt.Name, out fs))
-                //        {
-                //            fs = new List<Template.Field>();
-                //            fieldName2orderedFields[pt.Name] = fs;
-                //        }
-                //        fs.Add(pt);
-                //    }
-                //    int definitionCount = fieldName2orderedFields.Max(x => x.Value.Count());
-                //    foreach (string fn in fieldName2orderedFields.Keys)
-                //        if (definitionCount > fieldName2orderedFields[fn].Count)
-                //            throw new Exception("Field '" + fn + "' is column of table " + columnOfTable + " and so it must have the same number of definitions as the rest column fields!");
-                //}
-
-                //foreach (Template.Field f0 in t.Fields)
-                //{
-                //    int tableDefinitionsCount = t.Fields.Where(x => x.Name == f0.Name).Count();
-                //    string fn = t.Fields.Where(x => x.ColumnOfTable == f0.Name).GroupBy(x => x.Name).Where(x => x.Count() > tableDefinitionsCount).FirstOrDefault()?.First().Name;
-                //    if (fn != null)
-                //        throw new Exception("Field '" + fn + "' is a column of table field " + f0.Name + " so " + f0.Name + " must have number of definitions not less then that of " + fn + ".");
-                //}
-
-                //it is done only to avoid unneeded OCR
-                //string fn = t.Fields.Where(x => x.ColumnOfTable != null && (x.DefaultValueType != Template.Field.ValueTypes.PdfText && x.DefaultValueType != Template.Field.ValueTypes.PdfTextLines)).FirstOrDefault()?.Name;
-                //if (fn != null)
-                //    throw new Exception("Field '" + fn + "' is a column of a table field. Its default value type can be either " + Template.Field.ValueTypes.PdfText + " or " + Template.Field.ValueTypes.PdfTextLines);
+                var fs = t.Fields.GroupBy(x => x.Name).Where(x => x.GroupBy(a => a.Type).Count() > 1).FirstOrDefault();
+                if (fs != null)
+                    throw new Exception("Definitions of the field '" + fs.First().Name + "' are not of the same type!");
             }
 
             if (saving)
             {
                 t.Editor = new Template.EditorSettings
                 {
-                    TestFile = testFile.Text,
+                    //TestFile = testFile.Text,
                     TestPictureScale = pictureScale.Value,
                     ExtractFieldsAutomaticallyWhenPageChanged = ExtractFieldsAutomaticallyWhenPageChanged.Checked,
                     ShowFieldTextLineSeparators = ShowFieldTextLineSeparators.Checked,

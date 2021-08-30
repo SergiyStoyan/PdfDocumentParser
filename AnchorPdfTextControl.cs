@@ -1,6 +1,7 @@
 ﻿//********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
@@ -35,8 +36,9 @@ namespace Cliver.PdfDocumentParser
             anchor.PositionDeviationIsAbsolute = PositionDeviationIsAbsolute.Checked;
             anchor.PositionDeviation = (float)PositionDeviation.Value;
             anchor.SearchRectangleMargin = SearchRectangleMargin.Enabled ? (int)SearchRectangleMargin.Value : -1;
+            anchor.IgnoreOtherCharsInRectangle = IgnoreOtherCharsInRectangle.Checked;
+            anchor.IgnoreInvisibleChars = IgnoreInvisibleChars.Checked;
             return anchor;
-
         }
 
         protected override void initialize(DataGridViewRow row)
@@ -45,7 +47,7 @@ namespace Cliver.PdfDocumentParser
             if (anchor == null)
                 anchor = new Template.Anchor.PdfText();
             StringBuilder sb = new StringBuilder();
-            foreach (var l in Page.GetLines(anchor.CharBoxs.Select(x => new Pdf.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() }), textAutoInsertSpace))
+            foreach (var l in Page.GetLines(anchor.CharBoxs.Select(x => new Pdf.CharBox { Char = x.Char, R = x.Rectangle.GetSystemRectangleF() }), textAutoInsertSpace, null))
             {
                 foreach (var cb in l.CharBoxs)
                     sb.Append(cb.Char);
@@ -63,6 +65,9 @@ namespace Cliver.PdfDocumentParser
             SearchRectangleMargin.Value = anchor.SearchRectangleMargin;
             SearchRectangleMargin.Enabled = cSearchRectangleMargin.Checked;
             cSearchRectangleMargin.Checked = SearchRectangleMargin.Value >= 0;
+
+            IgnoreOtherCharsInRectangle.Checked = anchor.IgnoreOtherCharsInRectangle;
+            IgnoreInvisibleChars.Checked = anchor.IgnoreInvisibleChars;
         }
 
         Template.Anchor.PdfText anchor;

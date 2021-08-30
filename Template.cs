@@ -1,6 +1,7 @@
 //********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
@@ -18,28 +19,15 @@ namespace Cliver.PdfDocumentParser
             public bool ExtractFieldsAutomaticallyWhenPageChanged = true;
             public bool ShowFieldTextLineSeparators = true;
             public bool CheckConditionsAutomaticallyWhenPageChanged = true;
-            public string TestFile;
             public decimal TestPictureScale = 1.2m;
         }
         public EditorSettings Editor;
 
         public string Name;
 
-        public TextAutoInsertSpace TextAutoInsertSpace = new TextAutoInsertSpace { Representative = " " };
+        public TextAutoInsertSpace TextAutoInsertSpace = new TextAutoInsertSpace();
 
-        public bool IgnoreInvisiblePdfChars = true;//used but not edited
-        public bool IgnoreDuplicatedPdfChars = true;//used but not edited
-
-        public enum FieldOcrModes
-        {
-            SingleFieldFromPageCharBoxs = 0b0000001,//default
-            SingleFieldFromFieldImage = 0b0000010,
-            //TableFieldFromPageCharBoxs = 0b00100,//default
-            //TableFieldFromFieldImage = 0b0001000,
-            ColumnFieldFromTableCharBoxs = 0b0010000,//default
-            ColumnFieldFromFieldImage = 0b0100000,
-        }
-        public FieldOcrModes FieldOcrMode = FieldOcrModes.SingleFieldFromFieldImage | FieldOcrModes.ColumnFieldFromTableCharBoxs;
+        //public bool IgnoreDuplicatedPdfChars = true;//used but not edited
 
         public List<Anchor> Anchors;
 
@@ -90,6 +78,12 @@ namespace Cliver.PdfDocumentParser
             public float Height;
         }
 
+        public class Size
+        {
+            public int Width;
+            public int Height;
+        }
+
         public class Condition
         {
             public string Name;
@@ -102,10 +96,44 @@ namespace Cliver.PdfDocumentParser
         }
     }
 
+    public class CharFilter
+    {
+        public float MinWidth;
+        //{
+        //    get { return minWidth; }
+        //    set { minWidth = value > 0 ? value : 0; }
+        //}
+        //float minWidth;
+        public float MaxWidth;
+        //{
+        //    get { return maxWidth; }
+        //    set { maxWidth = value > 0 ? value : 0; }
+        //}
+        //float maxWidth;
+        public float MinHeight;
+        //{
+        //    get { return minHeight; }
+        //    set { minHeight = value > 0 ? value : 0; }
+        //}
+        //float minHeight;
+        public float MaxHeight;
+        //{
+        //    get { return maxHeight; }
+        //    set { maxHeight = value > 0 ? value : 0; }
+        //}
+        //float maxHeight;
+
+        public override string ToString()//used only by debugging tips
+        {
+            return this.ToStringByJson();
+        }
+    }
+
     public class TextAutoInsertSpace
     {
         public float Threshold = 6;
-        public string Representative = "\t";
+        public string Representative = " ";
         //public string Substitute = " ";
+        public bool IgnoreSourceSpaces = false;
     }
 }

@@ -9,7 +9,7 @@ using System;
 using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
-using System.DirectoryServices.AccountManagement;
+//using System.DirectoryServices.AccountManagement;
 
 namespace Cliver.Win
 {
@@ -68,10 +68,10 @@ namespace Cliver.Win
             return Regex.Replace(WindowsIdentity.GetCurrent().Name, @".*\\", "");
         }
 
-        static public string GetCurrentUserName4()
-        {
-            return UserPrincipal.Current.DisplayName;//runs unacceptably long time
-        }
+        //static public string GetCurrentUserName4()
+        //{
+        //    return UserPrincipal.Current.DisplayName;//runs unacceptably long time
+        //}
 
         public static bool CurrentUserHasElevatedPrivileges()
         {

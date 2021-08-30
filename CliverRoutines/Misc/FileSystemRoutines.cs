@@ -70,22 +70,40 @@ namespace Cliver
             return di.FullName;
         }
 
-        public static void ClearDirectory(string directory, bool recursive = true)
+        public static void CopyDirectory(string directory1, string directory2, bool overwrite = false)
         {
-            if (!Directory.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
-                return;
-            }
+            if (!Directory.Exists(directory2))
+                Directory.CreateDirectory(directory2);
+            foreach (string file in Directory.GetFiles(directory1))
+                File.Copy(file, directory2 + Path.DirectorySeparatorChar + PathRoutines.GetFileName(file), overwrite);
+            foreach (string d in Directory.GetDirectories(directory1))
+                CopyDirectory(d, directory2 + Path.DirectorySeparatorChar + PathRoutines.GetDirName(d), overwrite);
+        }
 
-            foreach (string file in Directory.GetFiles(directory))
+        public static void ClearDirectory(string directory, bool recursive = true, bool throwException = true)
+        {
+            try
             {
-                File.SetAttributes(file, FileAttributes.Normal);
-                File.Delete(file);
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                    return;
+                }
+
+                foreach (string file in Directory.GetFiles(directory))
+                {
+                    File.SetAttributes(file, FileAttributes.Normal);
+                    File.Delete(file);
+                }
+                if (recursive)
+                    foreach (string d in Directory.GetDirectories(directory))
+                        DeleteDirectory(d, recursive);
             }
-            if (recursive)
-                foreach (string d in Directory.GetDirectories(directory))
-                    DeleteDirectory(d, recursive);
+            catch (Exception e)
+            {
+                if (throwException)
+                    throw;
+            }
         }
 
         public static void DeleteDirectory(string directory, bool recursive = true)
@@ -163,7 +181,6 @@ namespace Cliver
         //            string d2 = PathRoutines.GetPathMirroredInDir(d, path1, path2);
         //            Copy(d, d2, overwrite);
         //        }
-        //        CreateDirectory(PathRoutines.GetDirFromPath(path2), false);
         //    }
         //    else
         //    {

@@ -1,6 +1,7 @@
 //********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
@@ -321,7 +322,7 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        public Image GetImage()
+        public Bitmap GetBitmap()
         {
             return image.ToBitmap();
         }

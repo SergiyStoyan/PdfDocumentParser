@@ -1,6 +1,7 @@
 ﻿//********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
@@ -17,44 +18,45 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class FieldOcrCharBoxsControl : FieldControl
     {
-        public FieldOcrCharBoxsControl(TextAutoInsertSpace textAutoInsertSpace)
+        public FieldOcrCharBoxsControl()
         {
             InitializeComponent();
 
-            this.textAutoInsertSpace = textAutoInsertSpace;
+            SpecialOcrSettings.CheckedChanged += delegate { synchronizeControls(); };
+            ColumnOfTable.SelectedIndexChanged += delegate { synchronizeControls(); };
+            synchronizeControls();
+
+            TesseractPageSegMode.DataSource = Enum.GetValues(typeof(Tesseract.PageSegMode));
         }
-        TextAutoInsertSpace textAutoInsertSpace;
+
+        void synchronizeControls()
+        {
+            gOcr.Visible = SpecialOcrSettings.Checked;
+            SingleFieldFromFieldImage.Enabled = ColumnOfTable.SelectedIndex < 0;
+            ColumnCellFromCellImage.Enabled = !SingleFieldFromFieldImage.Enabled;
+        }
 
         override protected object getObject()
         {
             if (field == null)
                 field = new Template.Field.OcrCharBoxs();
             field.ColumnOfTable = (string)ColumnOfTable.SelectedItem;
+            if (SpecialOcrSettings.Checked)
+            {
+                field.AdjustLineBorders = AdjustLineBorders.Checked;
+                field.SingleFieldFromFieldImage = SingleFieldFromFieldImage.Checked;
+                field.ColumnCellFromCellImage = ColumnCellFromCellImage.Checked;
+                field.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
+            }
+            else
+            {
+                field.AdjustLineBorders = null;
+                field.SingleFieldFromFieldImage = null;
+                field.ColumnCellFromCellImage = null;
+                field.TesseractPageSegMode = null;
+            }
             return field;
         }
-
-        //virtual public void SetValue(object value)
-        //{
-        //    switch (field.DefaultValueType)
-        //    {
-        //        case Template.Field.ValueTypes.PdfText:
-        //        case Template.Field.ValueTypes.PdfTextLines:
-        //        case Template.Field.ValueTypes.PdfCharBoxs:
-        //            Value.Text = (string)value;
-        //            break;
-        //        case Template.Field.ValueTypes.OcrText:
-        //        case Template.Field.ValueTypes.OcrTextLines:
-        //        case Template.Field.ValueTypes.OcrCharBoxs:
-        //            Value.Text = (string)value;
-        //            break;
-        //        case Template.Field.ValueTypes.Image:
-        //            break;
-        //        case Template.Field.ValueTypes.OcrTextLineImages:
-        //            break;
-        //        default:
-        //            throw new Exception("Unknown option: " + field.DefaultValueType);
-        //    }
-        //}
 
         protected override void initialize(DataGridViewRow row, object value)
         {
@@ -62,18 +64,22 @@ namespace Cliver.PdfDocumentParser
             if (field == null)
                 field = new Template.Field.OcrCharBoxs();
 
-            List<string> fieldNames = fields.Where(a => a.ColumnOfTable == null).Select(a => a.Name).Distinct().ToList();
+            List<string> fieldNames = template.Fields.Where(a => a.ColumnOfTable == null).Select(a => a.Name).Distinct().ToList();
             fieldNames.Remove(field.Name);
             fieldNames.Insert(0, "");
             ColumnOfTable.DataSource = fieldNames;
 
             ColumnOfTable.SelectedItem = field.ColumnOfTable;
 
-            Rectangle.Text = Serialization.Json.Serialize(field.Rectangle);
+            SpecialOcrSettings.Checked = field.AdjustLineBorders != null || field.SingleFieldFromFieldImage != null || field.ColumnCellFromCellImage != null || field.TesseractPageSegMode != null;
+            AdjustLineBorders.Checked = field.AdjustLineBorders ?? template.AdjustLineBorders;
+            SingleFieldFromFieldImage.Checked = field.SingleFieldFromFieldImage ?? template.SingleFieldFromFieldImage;
+            ColumnCellFromCellImage.Checked = field.ColumnCellFromCellImage ?? template.ColumnCellFromCellImage;
+            TesseractPageSegMode.SelectedItem = field.TesseractPageSegMode ?? template.TesseractPageSegMode;
 
             if (value != null)
             {
-                List<Page.Line<Ocr.CharBox>> cbss = Page.GetLines((List<Ocr.CharBox>)value, textAutoInsertSpace);
+                List<Page.Line<Ocr.CharBox>> cbss = Page.GetLines((List<Ocr.CharBox>)value, template.TextAutoInsertSpace, field.CharFilter == null ? template.CharFilter : field.CharFilter);
                 List<string> ls = new List<string>();
                 foreach (var cbs in cbss)
                     ls.Add(Serialization.Json.Serialize(cbs.CharBoxs));

@@ -20,63 +20,63 @@ namespace Cliver.SampleParser
 {
     public partial class Settings
     {
-        public static readonly TemplateLocalInfoSettings TemplateLocalInfo;
+        public static TemplateLocalInfoSettings TemplateLocalInfo;
+    }
 
-        public class TemplateLocalInfoSettings : Cliver.UserSettings
+    public class TemplateLocalInfoSettings : Cliver.UserSettings
+    {
+        public Dictionary<string, Info> TemplateNames2Info;
+
+        public class Info
         {
-            public Dictionary<string, Info> TemplateNames2Info;
+            public string LastTestFile;
+            public DateTime UsedTime;
 
-            public class Info
+            public string GetUsedTimeAsString()
             {
-                public string LastTestFile;
-                public DateTime UsedTime;
-
-                public string GetUsedTimeAsString()
-                {
-                    return UsedTime.ToString("yy-MM-dd HH:mm:ss");
-                }
+                return UsedTime.ToString("yy-MM-dd HH:mm:ss");
             }
+        }
 
-            public void SetLastTestFile(string templateName, string lastTestFile)
+        public void SetLastTestFile(string templateName, string lastTestFile)
+        {
+            GetInfo(templateName).LastTestFile = lastTestFile;
+        }
+
+        public void SetUsedTime(string templateName)
+        {
+            GetInfo(templateName).UsedTime = DateTime.Now;
+        }
+
+        public Info GetInfo(string templateName)
+        {
+            //if (templateName == null)
+            //    return null;
+            Info tai;
+            if (!TemplateNames2Info.TryGetValue(templateName, out tai))
             {
-                GetInfo(templateName).LastTestFile = lastTestFile;
+                tai = new Info();
+                TemplateNames2Info[templateName] = tai;
             }
+            return tai;
+        }
 
-            public void SetUsedTime(string templateName)
-            {
-                GetInfo(templateName).UsedTime = DateTime.Now;
-            }
+        public void Clear_Save()
+        {
+            var deletedTNs = TemplateNames2Info.Keys.Where(n => Settings.Template2s.Template2s.Where(a => a.Template.Name == n).FirstOrDefault() == null).ToList();
+            foreach (string n in deletedTNs)
+                TemplateNames2Info.Remove(n);
+            Save();
+        }
 
-            public Info GetInfo(string templateName)
-            {
-                //if (templateName == null)
-                //    return null;
-                Info tai;
-                if (!TemplateNames2Info.TryGetValue(templateName, out tai))
-                {
-                    tai = new Info();
-                    TemplateNames2Info[templateName] = tai;
-                }
-                return tai;
-            }
+        protected override void Loaded()
+        {
+            if (TemplateNames2Info == null)
+                TemplateNames2Info = new Dictionary<string, Info>();
+        }
 
-            public void Clear_Save()
-            {
-                var deletedTNs = TemplateNames2Info.Keys.Where(n => Template2s.Template2s.Where(a => a.Template.Name == n).FirstOrDefault() == null).ToList();
-                foreach (string n in deletedTNs)
-                    TemplateNames2Info.Remove(n);
-                Save();
-            }
-
-            protected override void Loaded()
-            {
-                if (TemplateNames2Info == null)
-                    TemplateNames2Info = new Dictionary<string, Info>();
-            }
-
-            protected override void Saving()
-            {
-            }
+        protected override void Saving()
+        {
         }
     }
 }

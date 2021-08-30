@@ -1,6 +1,7 @@
 //********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
@@ -40,9 +41,9 @@ namespace Cliver.PdfDocumentParser
 
         static public void Deskew(ref Bitmap bitmap, Config config)
         {
-            int blockMaxLength = (int)(config.BlockMaxLength / Settings.Constants.Image2PdfResolutionRatio);
-            int blockMinGap = (int)(config.BlockMinGap / Settings.Constants.Image2PdfResolutionRatio);
-            Size structuringElementSize = new Size((int)(config.StructuringElementSize.Width / Settings.Constants.Image2PdfResolutionRatio), (int)(config.StructuringElementSize.Height / Settings.Constants.Image2PdfResolutionRatio));
+            int blockMaxLength = (int)(config.BlockMaxLength / Settings.Constants.Pdf2ImageResolutionRatio);
+            int blockMinGap = (int)(config.BlockMinGap / Settings.Constants.Pdf2ImageResolutionRatio);
+            Size structuringElementSize = new Size((int)(config.StructuringElementSize.Width / Settings.Constants.Pdf2ImageResolutionRatio), (int)(config.StructuringElementSize.Height / Settings.Constants.Pdf2ImageResolutionRatio));
             switch (config.Mode)
             {
                 case Modes.SingleBlock:
@@ -79,14 +80,14 @@ namespace Cliver.PdfDocumentParser
         static public Size BlockMargin = new Size(5, 5);
         static Size getScaledBlockMargin()
         {
-            return new Size((int)(BlockMargin.Width / Settings.Constants.Image2PdfResolutionRatio), (int)(BlockMargin.Height / Settings.Constants.Image2PdfResolutionRatio));
+            return new Size((int)(BlockMargin.Width / Settings.Constants.Pdf2ImageResolutionRatio), (int)(BlockMargin.Height / Settings.Constants.Pdf2ImageResolutionRatio));
         }
 
         static Image<Rgb, byte> deskew(Image<Rgb, byte> image, Size structuringElementSize, int contourMaxCount, double angleMaxDeviation, Size margin, Rgb marginRgb)//good
         {//https://becominghuman.ai/how-to-automatically-deskew-straighten-a-text-image-using-opencv-a0c30aed83df
             Image<Gray, byte> image2 = image.Convert<Gray, byte>();
             CvInvoke.BitwiseNot(image2, image2);//to negative
-            //CvInvoke.GaussianBlur(image2, image2, new Size((int)(9f / Settings.Constants.Image2PdfResolutionRatio), (int)(9f / Settings.Constants.Image2PdfResolutionRatio)), 0);//remove small spots
+            //CvInvoke.GaussianBlur(image2, image2, new Size((int)(9f / Settings.Constants.Pdf2ImageResolutionRatio), (int)(9f / Settings.Constants.Pdf2ImageResolutionRatio)), 0);//remove small spots
             CvInvoke.Threshold(image2, image2, 125, 255, ThresholdType.Otsu | ThresholdType.Binary);
             Mat se = CvInvoke.GetStructuringElement(ElementShape.Rectangle, structuringElementSize, new Point(-1, -1));
             CvInvoke.Dilate(image2, image2, se, new Point(-1, -1), 1, BorderType.Constant, CvInvoke.MorphologyDefaultBorderValue);
@@ -393,7 +394,7 @@ namespace Cliver.PdfDocumentParser
         //}
     }
 
-    public class Contour
+    internal class Contour
     {
         public Contour(Array hierarchy, int i, VectorOfPoint points)
         {

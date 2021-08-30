@@ -1,6 +1,7 @@
 //********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
@@ -333,7 +334,7 @@ namespace Cliver.PdfDocumentParser
         //}
         //#endregion
 
-        public Image GetImage()
+        public Bitmap GetBitmap()
         {
             Bitmap b = new Bitmap(Width, Height);
             for (int x = 0; x < Width; x++)

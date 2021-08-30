@@ -1,6 +1,7 @@
 //********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
@@ -11,7 +12,7 @@ namespace Cliver.PdfDocumentParser
     /// <summary>
     /// pdf page parsing API
     /// </summary>
-    public partial class Page : IDisposable
+    public partial class Page
     {
         public bool IsCondition(string conditionName)
         {

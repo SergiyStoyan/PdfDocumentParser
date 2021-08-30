@@ -11,7 +11,7 @@
 <body>
     <script src="prism.js"></script>
     <div class='header'>
-        <div class='mainHeader'>Pdf Document Parser 6.6</div>
+        <div class='mainHeader'>Pdf Document Parser 7.*</div>
     </div>
 
     <div class='content'>
@@ -40,7 +40,7 @@
             Also, PdfDocumentParser allows to check custom <a href='#condition'>conditions</a> on a PDF page to decide which actions should be taken on it.
 
 
-            <h2><a name='customApplication'>Developing application</a></h2>
+            <h2><a name='customApplication'>Developing an application</a></h2>
         <p>
             An application based on PdfDocumentParser has to care about the following main aspects:
             <ul>
@@ -62,11 +62,17 @@
                 <li>create your project;</li>
                 <li>add PdfDocumentParser project to the solution;</li>
                 <li>reference PdfDocumentParser in your project;</li>
+                <li>add post-build copying of PdfDocumentParser's dependencies to your output folder (see <a href='#sampleParser'>SampleParser</a>);</li>
                 <li>update nuget packages for the solution;</li>
                 <li>start developing your parser using PdfDocumentParser API;</li>
             </ul>
 
 
+            <h3>Warnings</a></h3>
+               <p>(!) Due to Emgu restriction, PdfDocumentParser built in Any CPU configuration throws an exception during execution. So you have to choose either 64 or 32 (<a href='https://www.emgu.com/wiki/index.php/Download_And_Installation#Targeting_.Net_Framework'>Emgu doc</a>).
+			   
+			   <p>(!) Being a WinForm application, PdfDocumentParser TemplateEditor can be displayed deteriorated on a high resolution monitor. To fix it, use the DPI scaling options for executables provided by Windows.
+			   
 
             <h2><a name='licensing'>Licensing</a></h2>
 			
@@ -305,12 +311,12 @@ setLicense();
             <h2><a name="field">Field</a></h2>
         <p>A field defines certain text or image that is to be extracted from a PDF page. It is retrieved by method <a href='#GetValue'><code>GetValue()</code></a>.
         <p>
-            Fields are identified by their names. The field collection is dictated by logic of the application.
+            Fields are identified by their names. The field collection is dictated by needs of the application.
 
             <h3>Anchoring</h3>
         <p>
             Every side of a field's rectangular can be linked to an anchor.
-            When a field has no anchor, it retains the initial position and size which were set during creation.
+            When a field has no anchor, it retains the initial position and size that were set during creation.
             When some side of a field is linked to an anchor, it becomes bonded to the anchor's actual position so that if the anchor shifts on a page, the linked side shifts together with it. This means, that the field can change its location and/or size according to its anchors. When all the sides of a field are linked to the same anchor then the field is simply shifts.
         <p>When some anchor of a field is not found then the field itself is set not found.
         <p>When it is definitely known about a field that it appears on every page and always keeps the same position and size then there is no need to anchor it.
@@ -368,6 +374,11 @@ setLicense();
         <p>
             How to set fields, see in <a href='#tutorialField'>the tutorial</a>.
 
+            <h4><a name='fieldSettings'>Default settings</a></h4>
+            While each field can be configured independently, there are default field settings that are applied when a field does not have certain setting configured explicitly.
+			<p>Those are: Spacing settings and OCR settings.
+			
+
 
 
 
@@ -388,12 +399,16 @@ setLicense();
             <table>
                 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
                 <tr>
-                    <td class='title_column'><a name='Representative'>TextAutoInsertSpace.Representative</a></td>
-                    <td>Character which is inserted into output as an auto-detected space.</td>
+                    <td class='title_column'><a name='Threshold'>TextAutoInsertSpace.Threshold</a></td>
+                    <td>Space detection can be tuned by this parameter. When needed, it should be tuned experimentally.</td>
                 </tr>
                 <tr>
-                    <td class='title_column'><a name='Threshold'>TextAutoInsertSpace.Threshold</a></td>
-                    <td>Space detection can be tuned by this parameter. When needed, it should be tuned experimentally. </td>
+                    <td class='title_column'><a name='IgnoreSourceSpaces'>TextAutoInsertSpace.IgnoreSourceSpaces</a></td>
+                    <td>Whether text spaces that explicitly exist as PDF entities or are recognized by the OCR engine, are to be ignored. When TRUE, all such spaces are eliminated from the parsing results.</td>
+                </tr>
+                <tr>
+                    <td class='title_column'><a name='Representative'>TextAutoInsertSpace.Representative</a></td>
+                    <td>Character which is inserted into output as an auto-detected space.</td>
                 </tr>
             </table>
 
@@ -430,7 +445,7 @@ setLicense();
                 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
                 <tr>
                     <td class='title_column'><a name='CvImageScalePyramidStep'>CvImageScalePyramidStep</a></td>
-                    <td>It is the scale pyramid step set in pixels of the PDF resolution (which is by default 72dpi). The bigger step, the faster perfomance... and the higher chance to overlook the match.</td>
+                    <td>It is the scale pyramid step set in pixels of the PDF resolution (which is by default 72dpi). The bigger step, the faster perfomance... and the higher chance to overlook the match. Usually the default value is OK.</td>
                 </tr>
             </table>
 
@@ -482,9 +497,25 @@ setLicense();
                     <td>Get Cliver.PdfDocumentParser.Page object from the PDF file.</td>
                 </tr>
                 <tr>
-                    <td class='title_column' rowspan='2'><code>Cliver.PdfDocumentParser.Page</code></td>
+                    <td class='title_column' rowspan='6'><code>Cliver.PdfDocumentParser.Page</code></td>
                     <td class='title_column'><a name='IsCondition'><code>IsCondition(string conditionName)</code></a></td>
                     <td>Check if a condition is met on the page.</td>
+                </tr>
+                <tr>
+                    <td class='title_column'><a name='GetText'><code>GetText(string fieldName)</code></a></td>
+                    <td>Extract a field as a string from the page.</td>
+                </tr>
+                <tr>
+                    <td class='title_column'><a name='GetTextLines'><code>GetTextLines(string fieldName)</code></a></td>
+                    <td>Extract a field as an array of strings that correspond to lines on the page.</td>
+                </tr>
+                <tr>
+                    <td class='title_column'><a name='GetCharBoxes'><code>GetCharBoxes(string fieldName)</code></a></td>
+                    <td>Extract a field as an array of char info's from the page.</td>
+                </tr>
+                <tr>
+                    <td class='title_column'><a name='GetImage'><code>GetImage(string fieldName)</code></a></td>
+                    <td>Extract a field as an Bitmap from the page.</td>
                 </tr>
                 <tr>
                     <td class='title_column'><a name='GetValue'><code>GetValue(string fieldName, ValueTypes valueType)</code></a></td>

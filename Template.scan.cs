@@ -1,6 +1,7 @@
 //********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
@@ -17,6 +18,39 @@ namespace Cliver.PdfDocumentParser
     {
         public Tesseract.PageSegMode TesseractPageSegMode = Tesseract.PageSegMode.SingleBlock;
 
+        public CharFilter CharFilter;
+
+        public Field.OcrModes OcrMode = Field.OcrModes.SingleFieldFromFieldImage;
+        internal bool AdjustLineBorders
+        {
+            get { return OcrMode.HasFlag(Field.OcrModes.AdjustLineBorders); }
+            set
+            {
+                if (value) OcrMode |= Field.OcrModes.AdjustLineBorders;
+                else OcrMode &= ~Field.OcrModes.AdjustLineBorders;
+            }
+        }
+        internal bool SingleFieldFromFieldImage
+        {
+            get { return OcrMode.HasFlag(Field.OcrModes.SingleFieldFromFieldImage); }
+            set
+            {
+                if (value) OcrMode |= Field.OcrModes.SingleFieldFromFieldImage;
+                else OcrMode &= ~Field.OcrModes.SingleFieldFromFieldImage;
+            }
+        }
+        internal bool ColumnCellFromCellImage
+        {
+            get { return OcrMode.HasFlag(Field.OcrModes.ColumnCellFromCellImage); }
+            set
+            {
+                if (value) OcrMode |= Field.OcrModes.ColumnCellFromCellImage;
+                else OcrMode &= ~Field.OcrModes.ColumnCellFromCellImage;
+            }
+        }
+
+        public int LinePaddingY = 1;
+
         public PageRotations PageRotation = PageRotations.NONE;
         public enum PageRotations
         {
@@ -30,6 +64,7 @@ namespace Cliver.PdfDocumentParser
         public Deskewer.Config Deskew = null;
 
         public int CvImageScalePyramidStep = 2;
+
         public int ScalingAnchorId = -1;
 
         public Anchor.CvImage GetScalingAnchor()

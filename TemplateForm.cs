@@ -1,6 +1,7 @@
 ﻿//********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
@@ -16,6 +17,37 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class TemplateForm : Form
     {
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                components?.Dispose();//auto-added
+                dispose(true);
+            }
+
+            base.Dispose(disposing);
+        }
+
+        void dispose(bool formClosed)
+        {
+            picture.Image?.Dispose();
+            picture.Image = null;
+            scaledCurrentPageBitmap?.Dispose();
+            scaledCurrentPageBitmap = null;
+            pages?.Dispose();
+            pages = null;
+            if (formClosed)
+            {
+                bitmapPreparationForm?.Dispose();
+                //currentAnchorControl?.Dispose();//auto-cleaned among the other components
+                //currentAnchorControl = null;
+            }
+        }
+
         public TemplateForm(TemplateManager templateManager)
         {
             InitializeComponent();
@@ -23,6 +55,7 @@ namespace Cliver.PdfDocumentParser
             Icon = Win.AssemblyRoutines.GetAppIcon();
             Text = Program.FullName + " - Template Editor";
 
+            templateManager.TemplateForm = this;
             this.templateManager = templateManager;
 
             this.bitmapPreparationForm = new ScanTemplateForm(this);
@@ -31,23 +64,7 @@ namespace Cliver.PdfDocumentParser
             initializeConditionsTable();
             initializeFieldsTable();
 
-            TesseractPageSegMode.Items.AddRange(new object[] {
-                Tesseract.PageSegMode.Auto,
-                Tesseract.PageSegMode.AutoOnly,
-                Tesseract.PageSegMode.AutoOsd,
-                Tesseract.PageSegMode.CircleWord,
-                Tesseract.PageSegMode.Count,
-                Tesseract.PageSegMode.OsdOnly,
-                Tesseract.PageSegMode.RawLine,
-                Tesseract.PageSegMode.SingleBlock,
-                Tesseract.PageSegMode.SingleBlockVertText,
-                Tesseract.PageSegMode.SingleChar,
-                Tesseract.PageSegMode.SingleColumn,
-                Tesseract.PageSegMode.SingleLine,
-                Tesseract.PageSegMode.SingleWord,
-                Tesseract.PageSegMode.SparseText,
-                Tesseract.PageSegMode.SparseTextOsd
-            });
+            TesseractPageSegMode.DataSource = Enum.GetValues(typeof(Tesseract.PageSegMode));
 
             picture.MouseDown += delegate (object sender, MouseEventArgs e)
             {
@@ -82,7 +99,7 @@ namespace Cliver.PdfDocumentParser
                         selectionBoxPoint2 = p;
                     }
                 }
-                selectionCoordinates.Text = selectionBoxPoint1.ToString();
+                showSelectionCoordinates(selectionBoxPoint1);
             };
 
             picture.MouseWheel += delegate (object sender, MouseEventArgs e)
@@ -121,7 +138,7 @@ namespace Cliver.PdfDocumentParser
             switch (drawingMode)
             {
                 case DrawingModes.NULL:
-                    selectionCoordinates.Text = p.ToString();
+                    showSelectionCoordinates(p);
 
                     if (findResizebleBox(p, out ResizebleBoxSides resizebleBoxSide) != null)
                         Cursor.Current = resizebleBoxSide == ResizebleBoxSides.Left || resizebleBoxSide == ResizebleBoxSides.Right ? Cursors.VSplit : Cursors.HSplit;
@@ -163,7 +180,7 @@ namespace Cliver.PdfDocumentParser
                         selectionBoxPoint1.Y = p.Y;
                     break;
             }
-            selectionCoordinates.Text = selectionBoxPoint1.ToString() + ":" + selectionBoxPoint2.ToString();
+            showSelectionCoordinates(selectionBoxPoint1, selectionBoxPoint2);
             RectangleF r = new RectangleF(selectionBoxPoint1.X, selectionBoxPoint1.Y, selectionBoxPoint2.X - selectionBoxPoint1.X, selectionBoxPoint2.Y - selectionBoxPoint1.Y);
             clearImageFromBoxes();
             drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<System.Drawing.RectangleF> { r });
@@ -198,7 +215,7 @@ namespace Cliver.PdfDocumentParser
 
                                 if (pages[currentPageI].DetectedImageScale >= 0 && pages[currentPageI].DetectedImageScale < 1 && a.Id == GetTemplateFromUI(false).ScalingAnchorId)
                                 {
-                                    Message.Exclaim("When the detected image scale is not 1, changing coordinates of the scaling anchor must not be done. Either switch off scaling by anchor and reload the page or open a page where the detected image scale is 1.");
+                                    Message.Exclaim("When the detected image scale is not 1, changing coordinates of the scaling anchor must not be done. Either switch off scaling by anchor and reload the page or open a page where the detected image scale is 1.", this);
                                     break;
                                 }
 
@@ -229,14 +246,16 @@ namespace Cliver.PdfDocumentParser
                                                     selectedOcrCharBoxs.AddRange(Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateOcrCharBoxs, r.GetSystemRectangleF()));
                                                 else
                                                 {
-                                                    Bitmap b = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio);
-                                                    if (b == null)
-                                                        throw new Exception("Selected image is empty.");
-                                                    foreach (Ocr.CharBox cb in Ocr.This.GetCharBoxs(b, pages.ActiveTemplate.TesseractPageSegMode))
+                                                    using (Bitmap b = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Pdf2ImageResolutionRatio, r.Y / Settings.Constants.Pdf2ImageResolutionRatio, r.Width / Settings.Constants.Pdf2ImageResolutionRatio, r.Height / Settings.Constants.Pdf2ImageResolutionRatio))
                                                     {
-                                                        cb.R.X += r.X;
-                                                        cb.R.Y += r.Y;
-                                                        selectedOcrCharBoxs.Add(cb);
+                                                        if (b == null)
+                                                            throw new Exception("Selected image is empty.");
+                                                        foreach (Ocr.CharBox cb in Ocr.This.GetCharBoxs(b, pages.ActiveTemplate.TesseractPageSegMode))
+                                                        {
+                                                            cb.R.X += r.X;
+                                                            cb.R.Y += r.Y;
+                                                            selectedOcrCharBoxs.Add(cb);
+                                                        }
                                                     }
                                                 }
                                                 foreach (Ocr.CharBox cb in selectedOcrCharBoxs)
@@ -251,7 +270,7 @@ namespace Cliver.PdfDocumentParser
                                         case Template.Anchor.Types.ImageData:
                                             {
                                                 Template.Anchor.ImageData id = (Template.Anchor.ImageData)a;
-                                                using (Bitmap b = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
+                                                using (Bitmap b = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Pdf2ImageResolutionRatio, r.Y / Settings.Constants.Pdf2ImageResolutionRatio, r.Width / Settings.Constants.Pdf2ImageResolutionRatio, r.Height / Settings.Constants.Pdf2ImageResolutionRatio))
                                                 {
                                                     if (b == null)
                                                         throw new Exception("Selected image is empty.");
@@ -262,7 +281,7 @@ namespace Cliver.PdfDocumentParser
                                         case Template.Anchor.Types.CvImage:
                                             {
                                                 Template.Anchor.CvImage ci = (Template.Anchor.CvImage)a;
-                                                using (Bitmap b = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Image2PdfResolutionRatio, r.Y / Settings.Constants.Image2PdfResolutionRatio, r.Width / Settings.Constants.Image2PdfResolutionRatio, r.Height / Settings.Constants.Image2PdfResolutionRatio))
+                                                using (Bitmap b = pages[currentPageI].GetRectangleFromActiveTemplateBitmap(r.X / Settings.Constants.Pdf2ImageResolutionRatio, r.Y / Settings.Constants.Pdf2ImageResolutionRatio, r.Width / Settings.Constants.Pdf2ImageResolutionRatio, r.Height / Settings.Constants.Pdf2ImageResolutionRatio))
                                                 {
                                                     if (b == null)
                                                         throw new Exception("Selected image is empty.");
@@ -313,8 +332,6 @@ namespace Cliver.PdfDocumentParser
                                 }
 
                                 setFieldRow(row, f);
-                                extractFieldAndDrawSelectionBox(f);
-                                //owners2resizebleBox[f] = new ResizebleBox(f, f.Rectangle.GetSystemRectangleF(), Settings.Appearance.SelectionBoxBorderWidth);
                             }
                             break;
                         case SettingModes.NULL:
@@ -325,7 +342,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 catch (Exception ex)
                 {
-                    Message.Error2(ex);
+                    Message.Error2(ex, this);
                 }
             };
 
@@ -333,22 +350,6 @@ namespace Cliver.PdfDocumentParser
             {
                 Application.DoEvents();//make form be drawn completely
                 setUIFromTemplate(templateManager.Template);
-            };
-
-            FormClosed += delegate
-            {
-                if (scaledCurrentPageBitmap != null)
-                {
-                    scaledCurrentPageBitmap.Dispose();
-                    scaledCurrentPageBitmap = null;
-                }
-                if (pages != null)
-                {
-                    pages.Dispose();
-                    pages = null;
-                }
-
-                templateManager.LastTestFile = testFile.Text;
             };
 
             this.EnumControls((Control c) =>
@@ -366,42 +367,33 @@ namespace Cliver.PdfDocumentParser
             {
                 try
                 {
-                    if (picture.Image != null)
-                    {
-                        picture.Image.Dispose();
-                        picture.Image = null;
-                    }
-                    if (scaledCurrentPageBitmap != null)
-                    {
-                        scaledCurrentPageBitmap.Dispose();
-                        scaledCurrentPageBitmap = null;
-                    }
-                    if (pages != null)
-                    {
-                        pages.Dispose();
-                        pages = null;
-                    }
+                    dispose(false);
 
                     if (string.IsNullOrWhiteSpace(testFile.Text))
                         return;
+
+                    templateManager.LastTestFile = testFile.Text;
 
                     testFile.SelectionStart = testFile.Text.Length;
                     testFile.ScrollToCaret();
 
                     if (!File.Exists(testFile.Text))
                     {
-                        Win.LogMessage.Error("File '" + testFile.Text + "' does not exist!");
+                        string m = "File '" + testFile.Text + "' does not exist!";
+                        Log.Error(m);
+                        Message.Error(m, this);
                         return;
                     }
 
-                    pages = new PageCollection(testFile.Text);
+                    pages = new PageCollection(testFile.Text, true);
                     totalPageNumber = pages.TotalCount;
                     lTotalPages.Text = " / " + totalPageNumber;
                     showPage(1);
                 }
                 catch (Exception ex)
                 {
-                    Win.LogMessage.Error(ex);
+                    Log.Error(ex);
+                    Message.Error(ex, this);
                 }
             };
 
@@ -463,6 +455,11 @@ namespace Cliver.PdfDocumentParser
         Point selectionBoxPoint0, selectionBoxPoint1, selectionBoxPoint2;
         Point screenMousePosition0;
         Point imageScrollPostion0;
+
+        void showSelectionCoordinates(Point p, Point? p2 = null)
+        {
+            selectionCoordinates.Text = "{" + p.X + "," + p.Y + "}" + (p2 != null ? ":{" + p2.Value.X + "," + p2.Value.Y + "}" : null);
+        }
 
         enum DrawingModes
         {
@@ -538,12 +535,17 @@ namespace Cliver.PdfDocumentParser
             }
             catch (Exception ex)
             {
-                Message.Error(ex);
+                Message.Error(ex, this);
             }
             bitmapPreparationForm.Show();
             bitmapPreparationForm.Activate();
         }
         readonly ScanTemplateForm bitmapPreparationForm;
+
+        private void cOcr_CheckedChanged(object sender, EventArgs e)
+        {
+            fOcr.WrapContents = cOcr.Checked;
+        }
 
         readonly Dictionary<object, ResizebleBox> owners2resizebleBox = new Dictionary<object, ResizebleBox>();
         internal class ResizebleBox

@@ -1,6 +1,7 @@
 ﻿//********************************************************************************************
 //Author: Sergey Stoyan
 //        sergey.stoyan@gmail.com
+//        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;
@@ -17,10 +18,13 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class FieldOcrTextLineImagesControl : FieldControl
     {
-        public FieldOcrTextLineImagesControl()
+        public FieldOcrTextLineImagesControl(float pictureScale)
         {
             InitializeComponent();
+
+            this.pictureScale = pictureScale;
         }
+        float pictureScale;
 
         override protected object getObject()
         {
@@ -59,16 +63,24 @@ namespace Cliver.PdfDocumentParser
             if (field == null)
                 field = new Template.Field.OcrTextLineImages();
 
-            List<string> fieldNames = fields.Where(a => a.ColumnOfTable == null).Select(a => a.Name).Distinct().ToList();
+            List<string> fieldNames = template.Fields.Where(a => a.ColumnOfTable == null).Select(a => a.Name).Distinct().ToList();
             fieldNames.Remove(field.Name);
             fieldNames.Insert(0, "");
             ColumnOfTable.DataSource = fieldNames;
 
             ColumnOfTable.SelectedItem = field.ColumnOfTable;
 
-            Rectangle.Text = Serialization.Json.Serialize(field.Rectangle);
-
-            //if (value != null)                
+            if (value != null)
+            {
+                List<Bitmap> bs = (List<Bitmap>)value;
+                for (int i = 0; i < bs.Count; i++)
+                {
+                    Bitmap b = bs[i];
+                    if (pictureScale != 1)
+                        b = Win.ImageRoutines.GetScaled(b, pictureScale);
+                    images.Controls.Add(new PictureBox { Image = b, SizeMode = PictureBoxSizeMode.AutoSize });
+                }
+            }
         }
 
         Template.Field.OcrTextLineImages field;

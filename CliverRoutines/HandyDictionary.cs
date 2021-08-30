@@ -26,29 +26,43 @@ namespace Cliver
         /// Create HandyDictionary with auto-generating value function.
         /// </summary>
         /// <param name="getValue">method creating an object for a key</param>
-        public HandyDictionary(GetValue getValue)
+        public HandyDictionary(GetValue getValue, DisposeValue disposeValue = null)
         {
             this.getValue = getValue;
+            if (disposeValue != null)
+                this.disposeValue = disposeValue;
         }
+
         public delegate VT GetValue(KT key);
         protected GetValue getValue;
+
+        public delegate void DisposeValue(VT value);
+        protected DisposeValue disposeValue = delegate (VT value)
+        {
+            if (value != null && value is IDisposable)
+                ((IDisposable)value).Dispose();
+        };
 
         /// <summary>
         /// Create HandyDictionary without auto-generating value function.
         /// </summary>
         /// <param name="defaultValue">the default value returned for an unset key</param>
-        public HandyDictionary(VT defaultValue)
+        public HandyDictionary(VT defaultValue, DisposeValue disposeValue = null)
         {
             this.defaultValue = defaultValue;
+            if (disposeValue != null)
+                this.disposeValue = disposeValue;
         }
         protected VT defaultValue;
 
         /// <summary>
         /// Create HandyDictionary without auto-generating value function.
         /// </summary>
-        public HandyDictionary()
+        public HandyDictionary(DisposeValue disposeValue = null)
         {
             defaultValue = default;
+            if (disposeValue != null)
+                this.disposeValue = disposeValue;
         }
 
         ~HandyDictionary()
@@ -58,26 +72,25 @@ namespace Cliver
 
         virtual public void Dispose()
         {
-            lock (this)
-            {
-                if (keys2value != null)
-                {
-                    Clear();
-                    keys2value = null;
-                }
-            }
+            //lock (this)
+            //{
+            //    if (keys2value != null)
+            //    {
+            Clear();
+            //        keys2value = null;
+            //    }
+            //}
         }
 
         /// <summary>
         /// Clear the dictionary and dispose disposable elements.
         /// </summary>
-        virtual public void Clear()
+        public void Clear()
         {
             lock (this)
             {
                 foreach (VT v in keys2value.Values)
-                    if (v != null && v is IDisposable)
-                        ((IDisposable)v).Dispose();
+                    disposeValue(v);
                 keys2value.Clear();
             }
         }
@@ -90,12 +103,12 @@ namespace Cliver
             lock (this)
             {
                 if (keys2value.TryGetValue(key, out VT v))
-                    dispose(v);
+                    disposeIfUnique(v);
                 keys2value.Remove(key);
             }
         }
 
-        void dispose(VT value)
+        void disposeIfUnique(VT value)
         {
             lock (this)
             {
@@ -104,7 +117,7 @@ namespace Cliver
                 int vKeyCount = 0;
                 keys2value.Values.Where(a => a.Equals(value)).TakeWhile(a => ++vKeyCount < 2);
                 if (vKeyCount < 2)//make sure it is the only inclusion of the object
-                    ((IDisposable)value).Dispose();
+                    disposeValue(value);
             }
         }
 
@@ -129,12 +142,7 @@ namespace Cliver
                 lock (this)
                 {
                     if (keys2value.TryGetValue(key, out VT v) && v != null && !v.Equals(value))
-                    {
-                        int vKeyCount = 0;
-                        keys2value.Values.Where(a => a.Equals(v)).TakeWhile(a => ++vKeyCount < 2);
-                        if (vKeyCount < 2)//make sure it is the only inclusion of the object
-                            dispose(v);
-                    }
+                        disposeIfUnique(v);
                     keys2value[key] = value;
                 }
             }
@@ -188,7 +196,7 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Attention: the count can be implicitly changed due to auto-generating value function
+        /// (!)Attention: the count can be implicitly changed by the auto-generating value function
         /// </summary>
         public int Count
         {
