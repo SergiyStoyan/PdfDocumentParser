@@ -20,110 +20,37 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class Page
     {
-        //#region new API (!!!TBD)
-        //public void Get(Template.Field.Text field, FieldTextMatch fieldTextMatch)
-        //{
-        //    throw new Exception("TBD");
-        //}
-        //public delegate bool FieldTextMatch(string v);
-
-        //public List<string> GetAll(Template.Field.Text field)
-        //{
-        //    List<string> vs = new List<string>();
-        //    Get(field, (string v) => { vs.Add(v); return true; });
-        //    return vs;
-        //}
-
-        //public string Get(Template.Field.Text field)
-        //{
-        //    string v0 = null;
-        //    Get(field, (string v) => { v0 = v; return false; });
-        //    return v0;
-        //}
-
-        //public void Get(Template.Field.TextLines field, FieldTextLinesMatch fieldTextLinesMatch)
-        //{
-        //    throw new Exception("TBD");
-        //}
-        //public delegate bool FieldTextLinesMatch(List<string> v);
-
-        //public List<List<string>> GetAll(Template.Field.TextLines field)
-        //{
-        //    List<List<string>> vs = new List<List<string>>();
-        //    Get(field, (List<string> v) => { vs.Add(v); return true; });
-        //    return vs;
-        //}
-
-        //public List<string> Get(Template.Field.TextLines field)
-        //{
-        //    List<string> v0 = null;
-        //    Get(field, (List<string> v) => { v0 = v; return false; });
-        //    return v0;
-        //}
-
-        //public void Get(Template.Field.CharBoxs field, FieldCharBoxsMatch fieldCharBoxsMatch)
-        //{
-        //    throw new Exception("TBD");
-        //}
-        //public delegate bool FieldCharBoxsMatch(List<CharBox> v);
-
-        //public List<List<CharBox>> GetAll(Template.Field.CharBoxs field)
-        //{
-        //    List<List<CharBox>> vs = new List<List<CharBox>>();
-        //    Get(field, (List<CharBox> v) => { vs.Add(v); return true; });
-        //    return vs;
-        //}
-
-        //public List<CharBox> Get(Template.Field.CharBoxs field)
-        //{
-        //    List<CharBox> v0 = null;
-        //    Get(field, (List<CharBox> v) => { v0 = v; return false; });
-        //    return v0;
-        //}
-
-        //public void Get(Template.Field.Image field, FieldImageMatch fieldImageMatch)
-        //{
-        //    throw new Exception("TBD");
-        //}
-        //public delegate bool FieldImageMatch(Bitmap v);
-
-        //public List<Bitmap> GetAll(Template.Field.Image field)
-        //{
-        //    List<Bitmap> vs = new List<Bitmap>();
-        //    Get(field, (Bitmap v) => { vs.Add(v); return true; });
-        //    return vs;
-        //}
-
-        //public Bitmap Get(Template.Field.Image field)
-        //{
-        //    Bitmap v0 = null;
-        //    Get(field, (Bitmap v) => { v0 = v; return false; });
-        //    return v0;
-        //}
-
-        //public void Get(Template.Field.OcrTextLineImages field, FieldOcrTextLineImagesMatch fieldOcrTextLineImagesMatch)
-        //{
-        //    throw new Exception("TBD");
-        //}
-        //public delegate bool FieldOcrTextLineImagesMatch(List<Bitmap> v);
-
-        //public List<List<Bitmap>> GetAll(Template.Field.OcrTextLineImages field)
-        //{
-        //    List<List<Bitmap>> vs = new List<List<Bitmap>>();
-        //    Get(field, (List<Bitmap> v) => { vs.Add(v); return true; });
-        //    return vs;
-        //}
-
-        //public List<Bitmap> Get(Template.Field.OcrTextLineImages field)
-        //{
-        //    List<Bitmap> v0 = null;
-        //    Get(field, (List<Bitmap> v) => { v0 = v; return false; });
-        //    return v0;
-        //}
-
-        //#endregion
-
         #region old API
+
+        /// <summary>
+        /// Tries field definitions of the given name in turn until some is found on the page.
+        /// </summary>
+        /// <param name="fieldName">field is referenced by name because there may be several field-definitions for the same name</param>
+        /// <param name="type">if not set then DefaultValueType is used</param>
+        /// <returns></returns>
+        public object GetValue(string fieldName, Template.Field.Types? type = null)
+        {
+            return GetValue(fieldName, out _, type);
+        }
+
+        /// <summary>
+        /// Tries field definitions of the given name in turn until some is found on the page.
+        /// </summary>
+        /// <param name="fieldName">field is referenced by name because there may be several field-definitions for the same name</param>
+        /// <param name="actualField">actual field definition which was found on the page</param>
+        /// <param name="type">if not set then DefaultValueType is used</param>
+        /// <returns></returns>
+        public object GetValue(string fieldName, out Template.Field actualField, Template.Field.Types? type = null)
+        {
+            FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
+            if (!fai.Found)
+            {
+                actualField = null;
+                return null;
+            }
+            actualField = fai.ActualField;
+            return fai.GetValue(type == null ? fai.ActualField.Type : (Template.Field.Types)type);
+        }
 
         public string GetText(string fieldName)
         {
@@ -163,7 +90,7 @@ namespace Cliver.PdfDocumentParser
             return (Bitmap)fai.GetValue(Template.Field.Types.Image);
         }
 
-        public List<Bitmap> GetTextLineImages(string fieldName)
+        public List<Bitmap> GetOcrTextLineImages(string fieldName)
         {
             FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
             if (!fai.Found)
@@ -172,5 +99,72 @@ namespace Cliver.PdfDocumentParser
         }
 
         #endregion
+
+        //    #region new API for multiple matches (!!!TBD)
+
+        //    public IEnumerable<object> GetValueAll(string fieldName, out Template.Field actualField, Template.Field.Types? type = null)
+        //    {
+        //        throw new Exception("TBD");
+        //        //FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
+        //        //if (!fai.Found)
+        //        //{
+        //        //    actualField = null;
+        //        //    return null;
+        //        //}
+        //        //actualField = fai.ActualField;
+        //        //return fai.GetValues(type == null ? fai.ActualField.Type : (Template.Field.Types)type);
+        //    }
+
+        //    public IEnumerable<string> GetTextAll(string fieldName)
+        //    {
+        //        return GetValueAll(fieldName, out _).Cast<string>();
+        //    }
+
+        //    public string GetText1(string fieldName)
+        //    {
+        //        return GetTextAll(fieldName).FirstOrDefault();
+        //    }
+
+        //    public IEnumerable<List<string>> GetTextLinesAll(string fieldName)
+        //    {
+        //        return GetValueAll(fieldName, out _).Cast<List<string>>();
+        //    }
+
+        //    public List<string> GetTextLines1(string fieldName)
+        //    {
+        //        return GetTextLinesAll(fieldName).FirstOrDefault();
+        //    }
+
+        //    public IEnumerable<List<CharBox>> GetCharBoxsAll(string fieldName)
+        //    {
+        //        return GetValueAll(fieldName, out _).Cast<List<CharBox>>();
+        //    }
+
+        //    public List<CharBox> GetCharBoxes1(string fieldName)
+        //    {
+        //        return GetCharBoxsAll(fieldName).FirstOrDefault();
+        //    }
+
+        //    public IEnumerable<Bitmap> GetImageAll(string fieldName)
+        //    {
+        //        return GetValueAll(fieldName, out _).Cast<Bitmap>();
+        //    }
+
+        //    public Bitmap GetImage1(string fieldName)
+        //    {
+        //        return GetImageAll(fieldName).FirstOrDefault();
+        //    }
+
+        //    public IEnumerable<List<Bitmap>> GetTextLineImagesAll(string fieldName)
+        //    {
+        //        return GetValueAll(fieldName, out _).Cast<List<Bitmap>>();
+        //    }
+
+        //    public List<Bitmap> GetTextLineImages1(string fieldName)
+        //    {
+        //        return GetTextLineImagesAll(fieldName).FirstOrDefault();
+        //    }
+
+        //    #endregion
     }
 }

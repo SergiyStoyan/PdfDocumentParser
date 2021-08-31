@@ -320,7 +320,7 @@ namespace Cliver.PdfDocumentParser
                         Clipboard.SetData(DataFormats.Bitmap, pages[currentPageI].GetImage(f.Name));
                         break;
                     case Type _ when f is Template.Field.OcrTextLineImages:
-                        Clipboard.SetData(typeof(List<Bitmap>).ToString(), (List<Bitmap>)pages[currentPageI].GetValue(f.Name));
+                        Clipboard.SetData(typeof(List<Bitmap>).ToString(), pages[currentPageI].GetOcrTextLineImages(f.Name));
                         break;
                     default:
                         throw new Exception("Unknown option: " + f.Type);
