@@ -20,7 +20,7 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class Page
     {
-        //#region new API (!!!TBD)
+        //#region new API with strong types(!!!TBD)
         //public void Get(Template.Field.Text field, FieldTextMatch fieldTextMatch)
         //{
         //    throw new Exception("TBD");
@@ -172,5 +172,109 @@ namespace Cliver.PdfDocumentParser
         }
 
         #endregion
+
+        #region new API for multiple matches (!!!TBD)
+        public void GetText(string fieldName, FieldTextMatch fieldTextMatch)
+        {
+            throw new Exception("TBD");
+        }
+        public delegate bool FieldTextMatch(string v);
+
+        public List<string> GetTextAll(string fieldName)
+        {
+            List<string> vs = new List<string>();
+            GetText(fieldName, (string v) => { vs.Add(v); return true; });
+            return vs;
+        }
+
+        public string GetText1(string fieldName)
+        {
+            string v0 = null;
+            GetText(fieldName, (string v) => { v0 = v; return false; });
+            return v0;
+        }
+
+        public void GetTextLines(string fieldName, FieldTextLinesMatch fieldTextLinesMatch)
+        {
+            throw new Exception("TBD");
+        }
+        public delegate bool FieldTextLinesMatch(List<string> v);
+
+        public List<List<string>> GetTextLinesAll(string fieldName)
+        {
+            List<List<string>> vs = new List<List<string>>();
+            GetTextLines(fieldName, (List<string> v) => { vs.Add(v); return true; });
+            return vs;
+        }
+
+        public List<string> GetTextLines1(string fieldName)
+        {
+            List<string> v0 = null;
+            GetTextLines(fieldName, (List<string> v) => { v0 = v; return false; });
+            return v0;
+        }
+
+        public void GetCharBoxes(string fieldName, FieldCharBoxsMatch fieldCharBoxsMatch)
+        {
+            throw new Exception("TBD");
+        }
+        public delegate bool FieldCharBoxsMatch(List<CharBox> v);
+
+        public List<List<CharBox>> GetCharBoxsAll(string fieldName)
+        {
+            List<List<CharBox>> vs = new List<List<CharBox>>();
+            GetCharBoxes(fieldName, (List<CharBox> v) => { vs.Add(v); return true; });
+            return vs;
+        }
+
+        public List<CharBox> GetCharBoxes1(string fieldName)
+        {
+            List<CharBox> v0 = null;
+            GetCharBoxes(fieldName, (List<CharBox> v) => { v0 = v; return false; });
+            return v0;
+        }
+
+        public void GetImage(string fieldName, FieldImageMatch fieldImageMatch)
+        {
+            throw new Exception("TBD");
+        }
+        public delegate bool FieldImageMatch(Bitmap v);
+
+        public List<Bitmap> GetImageAll(string fieldName)
+        {
+            List<Bitmap> vs = new List<Bitmap>();
+            GetImage(fieldName, (Bitmap v) => { vs.Add(v); return true; });
+            return vs;
+        }
+
+        public Bitmap GetImage1(string fieldName)
+        {
+            Bitmap v0 = null;
+            GetImage(fieldName, (Bitmap v) => { v0 = v; return false; });
+            return v0;
+        }
+
+        public void GetTextLineImages(string fieldName, FieldTextLineImagesMatch fieldTextLineImagesMatch)
+        {
+            throw new Exception("TBD");
+        }
+        public delegate bool FieldTextLineImagesMatch(List<Bitmap> v);
+
+        public List<List<Bitmap>> GetTextLineImagesAll(string fieldName)
+        {
+            List<List<Bitmap>> vs = new List<List<Bitmap>>();
+            GetTextLineImages(fieldName, (List<Bitmap> v) => { vs.Add(v); return true; });
+            return vs;
+        }
+
+        public List<Bitmap> GetTextLineImages1(string fieldName)
+        {
+            List<Bitmap> v0 = null;
+            GetTextLineImages(fieldName, (List<Bitmap> v) => { v0 = v; return false; });
+            return v0;
+        }
+
+        #endregion
+
     }
 }
