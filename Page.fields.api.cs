@@ -124,7 +124,6 @@ namespace Cliver.PdfDocumentParser
         //#endregion
 
         #region old API
-
         public string GetText(string fieldName)
         {
             FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
@@ -170,7 +169,6 @@ namespace Cliver.PdfDocumentParser
                 return null;
             return (List<Bitmap>)fai.GetValue(Template.Field.Types.OcrTextLineImages);
         }
-
         #endregion
 
         #region new API for multiple matches (!!!TBD)
@@ -178,19 +176,19 @@ namespace Cliver.PdfDocumentParser
         {
             throw new Exception("TBD");
         }
-        public delegate bool FieldTextMatch(string v);
+        public delegate bool FieldTextMatch(string v, Point p);
 
         public List<string> GetTextAll(string fieldName)
         {
             List<string> vs = new List<string>();
-            GetText(fieldName, (string v) => { vs.Add(v); return true; });
+            GetText(fieldName, (string v, Point p) => { vs.Add(v); return true; });
             return vs;
         }
 
         public string GetText1(string fieldName)
         {
             string v0 = null;
-            GetText(fieldName, (string v) => { v0 = v; return false; });
+            GetText(fieldName, (string v, Point p) => { v0 = v; return false; });
             return v0;
         }
 
@@ -198,19 +196,19 @@ namespace Cliver.PdfDocumentParser
         {
             throw new Exception("TBD");
         }
-        public delegate bool FieldTextLinesMatch(List<string> v);
+        public delegate bool FieldTextLinesMatch(List<string> v, Point p);
 
         public List<List<string>> GetTextLinesAll(string fieldName)
         {
             List<List<string>> vs = new List<List<string>>();
-            GetTextLines(fieldName, (List<string> v) => { vs.Add(v); return true; });
+            GetTextLines(fieldName, (List<string> v, Point p) => { vs.Add(v); return true; });
             return vs;
         }
 
         public List<string> GetTextLines1(string fieldName)
         {
             List<string> v0 = null;
-            GetTextLines(fieldName, (List<string> v) => { v0 = v; return false; });
+            GetTextLines(fieldName, (List<string> v, Point p) => { v0 = v; return false; });
             return v0;
         }
 
@@ -218,19 +216,19 @@ namespace Cliver.PdfDocumentParser
         {
             throw new Exception("TBD");
         }
-        public delegate bool FieldCharBoxsMatch(List<CharBox> v);
+        public delegate bool FieldCharBoxsMatch(List<CharBox> v, Point p);
 
         public List<List<CharBox>> GetCharBoxsAll(string fieldName)
         {
             List<List<CharBox>> vs = new List<List<CharBox>>();
-            GetCharBoxes(fieldName, (List<CharBox> v) => { vs.Add(v); return true; });
+            GetCharBoxes(fieldName, (List<CharBox> v, Point p) => { vs.Add(v); return true; });
             return vs;
         }
 
         public List<CharBox> GetCharBoxes1(string fieldName)
         {
             List<CharBox> v0 = null;
-            GetCharBoxes(fieldName, (List<CharBox> v) => { v0 = v; return false; });
+            GetCharBoxes(fieldName, (List<CharBox> v, Point p) => { v0 = v; return false; });
             return v0;
         }
 
@@ -238,19 +236,19 @@ namespace Cliver.PdfDocumentParser
         {
             throw new Exception("TBD");
         }
-        public delegate bool FieldImageMatch(Bitmap v);
+        public delegate bool FieldImageMatch(Bitmap v, Point p);
 
         public List<Bitmap> GetImageAll(string fieldName)
         {
             List<Bitmap> vs = new List<Bitmap>();
-            GetImage(fieldName, (Bitmap v) => { vs.Add(v); return true; });
+            GetImage(fieldName, (Bitmap v, Point p) => { vs.Add(v); return true; });
             return vs;
         }
 
         public Bitmap GetImage1(string fieldName)
         {
             Bitmap v0 = null;
-            GetImage(fieldName, (Bitmap v) => { v0 = v; return false; });
+            GetImage(fieldName, (Bitmap v, Point p) => { v0 = v; return false; });
             return v0;
         }
 
@@ -258,23 +256,21 @@ namespace Cliver.PdfDocumentParser
         {
             throw new Exception("TBD");
         }
-        public delegate bool FieldTextLineImagesMatch(List<Bitmap> v);
+        public delegate bool FieldTextLineImagesMatch(List<Bitmap> v, Point p);
 
         public List<List<Bitmap>> GetTextLineImagesAll(string fieldName)
         {
             List<List<Bitmap>> vs = new List<List<Bitmap>>();
-            GetTextLineImages(fieldName, (List<Bitmap> v) => { vs.Add(v); return true; });
+            GetTextLineImages(fieldName, (List<Bitmap> v, Point p) => { vs.Add(v); return true; });
             return vs;
         }
 
         public List<Bitmap> GetTextLineImages1(string fieldName)
         {
             List<Bitmap> v0 = null;
-            GetTextLineImages(fieldName, (List<Bitmap> v) => { v0 = v; return false; });
+            GetTextLineImages(fieldName, (List<Bitmap> v, Point p) => { v0 = v; return false; });
             return v0;
         }
-
         #endregion
-
     }
 }
