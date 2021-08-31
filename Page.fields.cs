@@ -20,54 +20,6 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class Page
     {
-        public string GetText(string fieldName)
-        {
-            FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
-            if (!fai.Found)
-                return null;
-            if (fai.ActualField is Template.Field.Pdf)
-                return (string)fai.GetValue(Template.Field.Types.PdfText);
-            return (string)fai.GetValue(Template.Field.Types.OcrText);
-        }
-
-        public List<string> GetTextLines(string fieldName)
-        {
-            FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
-            if (!fai.Found)
-                return null;
-            if (fai.ActualField is Template.Field.Pdf)
-                return (List<string>)fai.GetValue(Template.Field.Types.PdfTextLines);
-            return (List<string>)fai.GetValue(Template.Field.Types.OcrTextLines);
-        }
-
-        public List<CharBox> GetCharBoxes(string fieldName)
-        {
-            FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
-            if (!fai.Found)
-                return null;
-            if (fai.ActualField is Template.Field.Pdf)
-                return (List<CharBox>)fai.GetValue(Template.Field.Types.PdfCharBoxs);
-            return (List<CharBox>)fai.GetValue(Template.Field.Types.OcrCharBoxs);
-        }
-
-        public Bitmap GetImage(string fieldName)
-        {
-            FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
-            if (!fai.Found)
-                return null;
-            return (Bitmap)fai.GetValue(Template.Field.Types.Image);
-        }
-
-        //public List<Image> GetTextLineImages(string fieldName)
-        //{
-        //    FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
-        //    if (!fai.Found)
-        //        return null;
-        //    if (fai.ActualField.DefaultValueType.ToString().StartsWith("Pdf"))
-        //        return (List<string>)fai.GetValue(Template.Field.Types.PdfTextLines);
-        //    return (List<Image>)fai.GetValue(Template.Field.Types.OcrTextLineImages);
-        //}
-
         /// <summary>
         /// Tries field definitions of the given name in turn until some is found on the page.
         /// </summary>
