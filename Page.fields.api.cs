@@ -16,114 +16,114 @@ using System.Drawing.Drawing2D;
 namespace Cliver.PdfDocumentParser
 {
     /// <summary>
-    /// Pdf page parsing API (!!! - to be implemented)
+    /// Pdf page parsing API (!!! to be implemented)
     /// </summary>
     public partial class Page
     {
-        #region new API (!!!TBD)
-        public void Get(Template.Field.Text field, FieldTextMatch fieldTextMatch)
-        {
-            throw new Exception("TBD");
-        }
-        public delegate bool FieldTextMatch(string v);
+        //#region new API (!!!TBD)
+        //public void Get(Template.Field.Text field, FieldTextMatch fieldTextMatch)
+        //{
+        //    throw new Exception("TBD");
+        //}
+        //public delegate bool FieldTextMatch(string v);
 
-        public List<string> GetAll(Template.Field.Text field)
-        {
-            List<string> vs = new List<string>();
-            Get(field, (string v) => { vs.Add(v); return true; });
-            return vs;
-        }
+        //public List<string> GetAll(Template.Field.Text field)
+        //{
+        //    List<string> vs = new List<string>();
+        //    Get(field, (string v) => { vs.Add(v); return true; });
+        //    return vs;
+        //}
 
-        public string Get(Template.Field.Text field)
-        {
-            string v0 = null;
-            Get(field, (string v) => { v0 = v; return false; });
-            return v0;
-        }
+        //public string Get(Template.Field.Text field)
+        //{
+        //    string v0 = null;
+        //    Get(field, (string v) => { v0 = v; return false; });
+        //    return v0;
+        //}
 
-        public void Get(Template.Field.TextLines field, FieldTextLinesMatch fieldTextLinesMatch)
-        {
-            throw new Exception("TBD");
-        }
-        public delegate bool FieldTextLinesMatch(List<string> v);
+        //public void Get(Template.Field.TextLines field, FieldTextLinesMatch fieldTextLinesMatch)
+        //{
+        //    throw new Exception("TBD");
+        //}
+        //public delegate bool FieldTextLinesMatch(List<string> v);
 
-        public List<List<string>> GetAll(Template.Field.TextLines field)
-        {
-            List<List<string>> vs = new List<List<string>>();
-            Get(field, (List<string> v) => { vs.Add(v); return true; });
-            return vs;
-        }
+        //public List<List<string>> GetAll(Template.Field.TextLines field)
+        //{
+        //    List<List<string>> vs = new List<List<string>>();
+        //    Get(field, (List<string> v) => { vs.Add(v); return true; });
+        //    return vs;
+        //}
 
-        public List<string> Get(Template.Field.TextLines field)
-        {
-            List<string> v0 = null;
-            Get(field, (List<string> v) => { v0 = v; return false; });
-            return v0;
-        }
+        //public List<string> Get(Template.Field.TextLines field)
+        //{
+        //    List<string> v0 = null;
+        //    Get(field, (List<string> v) => { v0 = v; return false; });
+        //    return v0;
+        //}
 
-        public void Get(Template.Field.CharBoxs field, FieldCharBoxsMatch fieldCharBoxsMatch)
-        {
-            throw new Exception("TBD");
-        }
-        public delegate bool FieldCharBoxsMatch(List<CharBox> v);
+        //public void Get(Template.Field.CharBoxs field, FieldCharBoxsMatch fieldCharBoxsMatch)
+        //{
+        //    throw new Exception("TBD");
+        //}
+        //public delegate bool FieldCharBoxsMatch(List<CharBox> v);
 
-        public List<List<CharBox>> GetAll(Template.Field.CharBoxs field)
-        {
-            List<List<CharBox>> vs = new List<List<CharBox>>();
-            Get(field, (List<CharBox> v) => { vs.Add(v); return true; });
-            return vs;
-        }
+        //public List<List<CharBox>> GetAll(Template.Field.CharBoxs field)
+        //{
+        //    List<List<CharBox>> vs = new List<List<CharBox>>();
+        //    Get(field, (List<CharBox> v) => { vs.Add(v); return true; });
+        //    return vs;
+        //}
 
-        public List<CharBox> Get(Template.Field.CharBoxs field)
-        {
-            List<CharBox> v0 = null;
-            Get(field, (List<CharBox> v) => { v0 = v; return false; });
-            return v0;
-        }
+        //public List<CharBox> Get(Template.Field.CharBoxs field)
+        //{
+        //    List<CharBox> v0 = null;
+        //    Get(field, (List<CharBox> v) => { v0 = v; return false; });
+        //    return v0;
+        //}
 
-        public void Get(Template.Field.Image field, FieldImageMatch fieldImageMatch)
-        {
-            throw new Exception("TBD");
-        }
-        public delegate bool FieldImageMatch(Bitmap v);
+        //public void Get(Template.Field.Image field, FieldImageMatch fieldImageMatch)
+        //{
+        //    throw new Exception("TBD");
+        //}
+        //public delegate bool FieldImageMatch(Bitmap v);
 
-        public List<Bitmap> GetAll(Template.Field.Image field)
-        {
-            List<Bitmap> vs = new List<Bitmap>();
-            Get(field, (Bitmap v) => { vs.Add(v); return true; });
-            return vs;
-        }
+        //public List<Bitmap> GetAll(Template.Field.Image field)
+        //{
+        //    List<Bitmap> vs = new List<Bitmap>();
+        //    Get(field, (Bitmap v) => { vs.Add(v); return true; });
+        //    return vs;
+        //}
 
-        public Bitmap Get(Template.Field.Image field)
-        {
-            Bitmap v0 = null;
-            Get(field, (Bitmap v) => { v0 = v; return false; });
-            return v0;
-        }
+        //public Bitmap Get(Template.Field.Image field)
+        //{
+        //    Bitmap v0 = null;
+        //    Get(field, (Bitmap v) => { v0 = v; return false; });
+        //    return v0;
+        //}
 
-        public void Get(Template.Field.OcrTextLineImages field, FieldOcrTextLineImagesMatch fieldOcrTextLineImagesMatch)
-        {
-            throw new Exception("TBD");
-        }
-        public delegate bool FieldOcrTextLineImagesMatch(List<Bitmap> v);
+        //public void Get(Template.Field.OcrTextLineImages field, FieldOcrTextLineImagesMatch fieldOcrTextLineImagesMatch)
+        //{
+        //    throw new Exception("TBD");
+        //}
+        //public delegate bool FieldOcrTextLineImagesMatch(List<Bitmap> v);
 
-        public List<List<Bitmap>> GetAll(Template.Field.OcrTextLineImages field)
-        {
-            List<List<Bitmap>> vs = new List<List<Bitmap>>();
-            Get(field, (List<Bitmap> v) => { vs.Add(v); return true; });
-            return vs;
-        }
+        //public List<List<Bitmap>> GetAll(Template.Field.OcrTextLineImages field)
+        //{
+        //    List<List<Bitmap>> vs = new List<List<Bitmap>>();
+        //    Get(field, (List<Bitmap> v) => { vs.Add(v); return true; });
+        //    return vs;
+        //}
 
-        public List<Bitmap> Get(Template.Field.OcrTextLineImages field)
-        {
-            List<Bitmap> v0 = null;
-            Get(field, (List<Bitmap> v) => { v0 = v; return false; });
-            return v0;
-        }
+        //public List<Bitmap> Get(Template.Field.OcrTextLineImages field)
+        //{
+        //    List<Bitmap> v0 = null;
+        //    Get(field, (List<Bitmap> v) => { v0 = v; return false; });
+        //    return v0;
+        //}
 
-        #endregion
+        //#endregion
 
-        #region Old API
+        #region old API
 
         public string GetText(string fieldName)
         {
@@ -168,8 +168,6 @@ namespace Cliver.PdfDocumentParser
             FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
             if (!fai.Found)
                 return null;
-            if (fai.ActualField.Type.ToString().StartsWith("Pdf"))
-                throw new Exception("The method is not implemented for this field type.");
             return (List<Bitmap>)fai.GetValue(Template.Field.Types.OcrTextLineImages);
         }
 
