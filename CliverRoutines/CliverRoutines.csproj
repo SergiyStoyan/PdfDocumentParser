@@ -44,12 +44,15 @@
     <Compile Remove="CliverRoutinesExample\**" />
     <Compile Remove="CliverRoutinesTests\**" />
     <Compile Remove="Example\**" />
+    <Compile Remove="Properties\**" />
     <EmbeddedResource Remove="CliverRoutinesExample\**" />
     <EmbeddedResource Remove="CliverRoutinesTests\**" />
     <EmbeddedResource Remove="Example\**" />
+    <EmbeddedResource Remove="Properties\**" />
     <None Remove="CliverRoutinesExample\**" />
     <None Remove="CliverRoutinesTests\**" />
     <None Remove="Example\**" />
+    <None Remove="Properties\**" />
     <None Include="LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
@@ -59,10 +62,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
 
 </Project>
