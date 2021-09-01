@@ -14,6 +14,7 @@ namespace Cliver.PdfDocumentParser
 {
     public class ImageData
     {
+        [Newtonsoft.Json.JsonConverter(typeof(Serialization.Json.NoIndentConverter))]
         public byte[,] Hash;
         public int Width;
         public int Height;

@@ -38,15 +38,15 @@ namespace Cliver.PdfDocumentParser
         /// <param name="actualField">actual field definition which was found on the page</param>
         /// <param name="type">if not set then DefaultValueType is used</param>
         /// <returns></returns>
-        public object GetValue(string fieldName, out Template.Field actualField, Template.Field.Types? type = null)
+        public object GetValue(string fieldName, out Template.Field actualFieldDefinition, Template.Field.Types? type = null)
         {
             FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
             if (!fai.Found)
             {
-                actualField = null;
+                actualFieldDefinition = null;
                 return null;
             }
-            actualField = fai.ActualField;
+            actualFieldDefinition = fai.ActualField;
             return fai.GetValue(type == null ? fai.ActualField.Type : (Template.Field.Types)type);
         }
 
