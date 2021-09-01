@@ -439,7 +439,7 @@ namespace Cliver.PdfDocumentParser
             RectangleF r = field.Rectangle.GetSystemRectangleF();
             if (field.LeftAnchor != null)
             {
-                Page.AnchorActualInfo aai = GetAnchorActualInfo(field.LeftAnchor.Id);
+                AnchorActualInfo aai = GetAnchorActualInfo(field.LeftAnchor.Id);
                 if (!aai.Found)
                     return null;
                 float right = r.Right;
@@ -448,7 +448,7 @@ namespace Cliver.PdfDocumentParser
             }
             if (field.TopAnchor != null)
             {
-                Page.AnchorActualInfo aai = GetAnchorActualInfo(field.TopAnchor.Id);
+                AnchorActualInfo aai = GetAnchorActualInfo(field.TopAnchor.Id);
                 if (!aai.Found)
                     return null;
                 float bottom = r.Bottom;
@@ -457,7 +457,7 @@ namespace Cliver.PdfDocumentParser
             }
             if (field.RightAnchor != null)
             {
-                Page.AnchorActualInfo aai = GetAnchorActualInfo(field.RightAnchor.Id);
+                AnchorActualInfo aai = GetAnchorActualInfo(field.RightAnchor.Id);
                 if (!aai.Found)
                     return null;
                 r.Width += aai.Shift.Width - field.RightAnchor.Shift;
