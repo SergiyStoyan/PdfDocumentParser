@@ -405,7 +405,7 @@ namespace Cliver.PdfDocumentParser
                 if (t.Fields.Count < 1)
                     throw new Exception("Fields is empty!");
 
-                var fs = t.Fields.GroupBy(x => x.Name).Where(x => x.GroupBy(a => a.Type).Count() > 1).FirstOrDefault();
+                var fs = t.Fields.GroupBy(x => x.Name).Where(x => x.GroupBy(a => a.GetType()).Count() > 1).FirstOrDefault();
                 if (fs != null)
                     throw new Exception("Definitions of the field '" + fs.First().Name + "' are not of the same type!");
             }

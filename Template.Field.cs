@@ -15,16 +15,9 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class Template
     {
-        //public IEnumerable<Field> GetFieldDefinitions(string fieldName)
-        //{
-        //    return Fields.Where(x => x.Name == fieldName);
-        //}
-
         abstract public class Field
         {
             public string Name;
-
-            //public List<Definition> Definitions = new List<Definition>();
 
             [Newtonsoft.Json.JsonConverter(typeof(Serialization.Json.NoIndentConverter))]
             public RectangleF Rectangle;
@@ -59,33 +52,6 @@ namespace Cliver.PdfDocumentParser
                 public float Shift;// { get { return 0; } set { } }
             }
 
-            //public class Definition
-            //{
-            //    public RectangleF Rectangle;
-            //    /// <summary>
-            //    /// when set, Left shifts as the anchor shifts
-            //    /// </summary>
-            //    public SideAnchor LeftAnchor;
-            //    /// <summary>
-            //    /// when set, Top shifts as the anchor shifts
-            //    /// </summary>
-            //    public SideAnchor TopAnchor;
-            //    /// <summary>
-            //    /// when set, Right shifts as the anchor shifts
-            //    /// </summary>
-            //    public SideAnchor RightAnchor;
-            //    /// <summary>
-            //    /// when set, Bottom shifts as the anchor shifts
-            //    /// </summary>
-            //    public SideAnchor BottomAnchor;
-
-            //    public class SideAnchor
-            //    {
-            //        public int Id;
-            //        public float Shift;// { get { return 0; } set { } }
-            //    }
-            //}
-
             public Field()
             {
                 if (this is PdfText)
@@ -108,8 +74,13 @@ namespace Cliver.PdfDocumentParser
                     throw new Exception("Unknown option: " + this.GetType());
             }
 
+            /// <summary>
+            /// The idea is that it must possible to get value of any type independently on the field's type.
+            /// 1)it is necessary due to internal needs (at least value type must be independent on the field's type);
+            /// 2)it is allowed for custom code;
+            /// </summary>
             [Newtonsoft.Json.JsonIgnore]
-            public readonly Types Type;
+            public readonly Types Type;//can be replaced with ValueType. It was declined because it will narrow possibilites while neither adding advantages nor simplifying the code.
             public enum Types
             {
                 PdfText,

@@ -21,36 +21,6 @@ namespace Cliver.PdfDocumentParser
     public partial class Page
     {
         /// <summary>
-        /// Tries field definitions of the given name in turn until some is found on the page.
-        /// </summary>
-        /// <param name="fieldName">field is referenced by name because there may be several field-definitions for the same name</param>
-        /// <param name="type">if not set then DefaultValueType is used</param>
-        /// <returns></returns>
-        public object GetValue(string fieldName, Template.Field.Types? type = null)
-        {
-            return GetValue(fieldName, out _, type);
-        }
-
-        /// <summary>
-        /// Tries field definitions of the given name in turn until some is found on the page.
-        /// </summary>
-        /// <param name="fieldName">field is referenced by name because there may be several field-definitions for the same name</param>
-        /// <param name="actualField">actual field definition which was found on the page</param>
-        /// <param name="type">if not set then DefaultValueType is used</param>
-        /// <returns></returns>
-        public object GetValue(string fieldName, out Template.Field actualFieldDefinition, Template.Field.Types? type = null)
-        {
-            FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
-            if (!fai.Found)
-            {
-                actualFieldDefinition = null;
-                return null;
-            }
-            actualFieldDefinition = fai.ActualField;
-            return fai.GetValue(type == null ? fai.ActualField.Type : (Template.Field.Types)type);
-        }
-
-        /// <summary>
         /// It is helpful when a field has more than 1 definition and its image is required.
         /// !!!Only must be used for the field returned by GetValue(string fieldName, out Template.Field actualField, Template.Field.Types? type = null)
         /// ATTENTION: using Template.Field as a parameter may be deceitful for these reasons:
