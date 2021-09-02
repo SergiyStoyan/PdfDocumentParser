@@ -104,15 +104,49 @@ namespace Cliver.PdfDocumentParser
 
         public IEnumerable<object> GetValueAll(string fieldName, out Template.Field actualField, Template.Field.Types? type = null)
         {
-            throw new Exception("TBD");
-            //FieldActualInfo fai = getFoundFieldActualInfo(fieldName);
-            //if (!fai.Found)
-            //{
-            //    actualField = null;
-            //    return null;
-            //}
-            //actualField = fai.ActualField;
-            //return fai.GetValues(type == null ? fai.ActualField.Type : (Template.Field.Types)type);
+            FieldMatchEnumerator fm = getFieldMatchEnumerator(fieldName, type);
+            actualField = fm?.ActualField;
+            return fm?.GetValues();
+        }
+
+        FieldMatchEnumerator getFieldMatchEnumerator(string fieldName, Template.Field.Types? type)
+        {
+            if (!fieldNames2fieldMatchEnumerator.TryGetValue(fieldName, out FieldMatchEnumerator fme))
+            {
+                IEnumerable<Template.Field> fs = PageCollection.ActiveTemplate.Fields.Where(x => x.Name == fieldName);
+                if (!fs.Any())
+                    throw new Exception("Field[name=" + fieldName + "] does not exist.");
+
+                foreach (Template.Field f in fs)
+                {
+                    fme = new FieldMatchEnumerator(this, f, type);
+                    if (fme.GetValues().Any())
+                    {
+                        fieldNames2fieldMatchEnumerator[fieldName] = fme;
+                        break;
+                    }
+                }
+            }
+            return fme;
+        }
+        HandyDictionary<string, FieldMatchEnumerator> fieldNames2fieldMatchEnumerator = new HandyDictionary<string, FieldMatchEnumerator>();
+
+        internal class FieldMatchEnumerator
+        {
+            internal FieldMatchEnumerator(Page page, Template.Field field, Template.Field.Types? type)
+            {
+                if (type == null)
+                    type = field.Type;
+                this.type = type.Value;
+            }
+            Template.Field.Types type;
+            internal Template.Field ActualField;
+
+            internal IEnumerable<object> GetValues()
+            {
+                //foreach (RectangleF ar in getFieldMatchRectangles(f))
+                throw new Exception("TBD");
+            }
         }
 
         public IEnumerable<string> GetTextAll(string fieldName)
