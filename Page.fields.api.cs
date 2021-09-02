@@ -135,14 +135,80 @@ namespace Cliver.PdfDocumentParser
         {
             internal FieldMatchEnumerator(Page page, Template.Field field, Template.Field.Types? type)
             {
+                this.page = page;
+                this.field = field;
                 if (type == null)
                     type = field.Type;
                 this.type = type.Value;
             }
+            Page page;
+            Template.Field field;
             Template.Field.Types type;
             internal Template.Field ActualField;
 
             internal IEnumerable<object> GetValues()
+            {
+                foreach (RectangleF ar in page.getFieldMatchRectangles(field))
+                {
+                    throw new Exception("TBD");
+                    yield return null;
+                }
+            }
+        }
+
+        IEnumerable<RectangleF> getFieldMatchRectangles(Template.Field field)
+        {
+            if (!field.IsSet())
+                throw new Exception("Field is not set.");
+            if (field.Rectangle.Width <= Settings.Constants.CoordinateDeviationMargin || field.Rectangle.Height <= Settings.Constants.CoordinateDeviationMargin)
+                throw new Exception("Rectangle is malformed.");
+            RectangleF r = field.Rectangle.GetSystemRectangleF();
+            IEnumerator<Size> leftAnchors = field.LeftAnchor != null ? getAnchorMatchShifts(field.LeftAnchor.Id).GetEnumerator() : null;
+            IEnumerator<Size> topAnchors = field.TopAnchor != null ? getAnchorMatchShifts(field.TopAnchor.Id).GetEnumerator() : null;
+            IEnumerator<Size> rightAnchors = field.RightAnchor != null ? getAnchorMatchShifts(field.RightAnchor.Id).GetEnumerator() : null;
+            IEnumerator<Size> bottomAnchors = field.BottomAnchor != null ? getAnchorMatchShifts(field.BottomAnchor.Id).GetEnumerator() : null;
+            while (leftAnchors?.Current != null || topAnchors?.Current != null || rightAnchors?.Current != null || bottomAnchors?.Current != null)
+            {
+                if (leftAnchors?.MoveNext() == true)
+                {
+                    float right = r.Right;
+                    r.X += leftAnchors.Current.Width - field.LeftAnchor.Shift;
+                    r.Width = right - r.X;
+                }
+                if (topAnchors?.MoveNext() == true)
+                {
+                    float bottom = r.Bottom;
+                    r.Y += topAnchors.Current.Height - field.TopAnchor.Shift;
+                    r.Height = bottom - r.Y;
+                }
+                if (rightAnchors?.MoveNext() == true)
+                {
+                    r.Width += rightAnchors.Current.Width - field.RightAnchor.Shift;
+                }
+                if (bottomAnchors?.MoveNext() == true)
+                {
+                    r.Height += bottomAnchors.Current.Height - field.BottomAnchor.Shift;
+                }
+                //!!!???when all the anchors found then not null even if it is collapsed
+                //if (r.Width <= 0 || r.Height <= 0)
+                //    return null;
+                yield return r;
+            }
+        }
+
+        IEnumerable<Size> getAnchorMatchShifts(int anchorId)
+        {
+            throw new Exception("TBD");
+        }
+
+        internal class AnchorMatchEnumerator
+        {
+            internal AnchorMatchEnumerator(Page page, Template.Anchor anchor)
+            {
+            }
+            Template.Field.Types type;
+
+            internal IEnumerable<RectangleF> GetValues()
             {
                 //foreach (RectangleF ar in getFieldMatchRectangles(f))
                 throw new Exception("TBD");
