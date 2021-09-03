@@ -106,7 +106,7 @@ namespace Cliver.PdfDocumentParser
         {
             FieldMatchEnumerator fm = getFieldMatchEnumerator(fieldName, type);
             actualField = fm?.Field;
-            return fm?.GetMatchs();
+            return fm?.GetMatches();
         }
 
         public IEnumerable<string> GetTextAll(string fieldName)

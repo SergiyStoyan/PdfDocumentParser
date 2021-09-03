@@ -28,7 +28,7 @@ namespace Cliver.PdfDocumentParser
                 foreach (Template.Field f in fs)
                 {
                     fme = new FieldMatchEnumerator(this, f, type);
-                    if (fme.GetMatchs().Any())
+                    if (fme.GetMatches().Any())
                     {
                         fieldNames2fieldMatchEnumerator[fieldName] = fme;
                         break;
@@ -53,7 +53,7 @@ namespace Cliver.PdfDocumentParser
            internal readonly Template.Field Field;
             Template.Field.Types type;
 
-            internal IEnumerable<object> GetMatchs()
+            internal IEnumerable<object> GetMatches()
             {
                 foreach (RectangleF ar in page.getFieldMatchRectangles(Field))
                 {
@@ -70,31 +70,31 @@ namespace Cliver.PdfDocumentParser
             if (field.Rectangle.Width <= Settings.Constants.CoordinateDeviationMargin || field.Rectangle.Height <= Settings.Constants.CoordinateDeviationMargin)
                 throw new Exception("Rectangle is malformed.");
             RectangleF r = field.Rectangle.GetSystemRectangleF();
-            IEnumerator<SizeF> leftAnchors = field.LeftAnchor != null ? getAnchorMatchEnumerator(field.LeftAnchor.Id).GetMatchs().Select(b => b.Shift).GetEnumerator() : null;
-            IEnumerator<SizeF> topAnchors = field.TopAnchor != null ? getAnchorMatchEnumerator(field.TopAnchor.Id).GetMatchs().Select(b => b.Shift).GetEnumerator() : null;
-            IEnumerator<SizeF> rightAnchors = field.RightAnchor != null ? getAnchorMatchEnumerator(field.RightAnchor.Id).GetMatchs().Select(b => b.Shift).GetEnumerator() : null;
-            IEnumerator<SizeF> bottomAnchors = field.BottomAnchor != null ? getAnchorMatchEnumerator(field.BottomAnchor.Id).GetMatchs().Select(b => b.Shift).GetEnumerator() : null;
-            while (leftAnchors?.Current != null || topAnchors?.Current != null || rightAnchors?.Current != null || bottomAnchors?.Current != null)
+            IEnumerator<SizeF> leftAnchorShifts = field.LeftAnchor != null ? getAnchorMatchEnumerator(field.LeftAnchor.Id).GetShifts().GetEnumerator() : null;
+            IEnumerator<SizeF> topAnchorShifts = field.TopAnchor != null ? getAnchorMatchEnumerator(field.TopAnchor.Id).GetShifts().GetEnumerator() : null;
+            IEnumerator<SizeF> rightAnchorShifts = field.RightAnchor != null ? getAnchorMatchEnumerator(field.RightAnchor.Id).GetShifts().GetEnumerator() : null;
+            IEnumerator<SizeF> bottomAnchorShifts = field.BottomAnchor != null ? getAnchorMatchEnumerator(field.BottomAnchor.Id).GetShifts().GetEnumerator() : null;
+            while (leftAnchorShifts?.Current != null || topAnchorShifts?.Current != null || rightAnchorShifts?.Current != null || bottomAnchorShifts?.Current != null)
             {
-                if (leftAnchors?.MoveNext() == true)
+                if (leftAnchorShifts?.MoveNext() == true)
                 {
                     float right = r.Right;
-                    r.X += leftAnchors.Current.Width - field.LeftAnchor.Shift;
+                    r.X += leftAnchorShifts.Current.Width - field.LeftAnchor.Shift;
                     r.Width = right - r.X;
                 }
-                if (topAnchors?.MoveNext() == true)
+                if (topAnchorShifts?.MoveNext() == true)
                 {
                     float bottom = r.Bottom;
-                    r.Y += topAnchors.Current.Height - field.TopAnchor.Shift;
+                    r.Y += topAnchorShifts.Current.Height - field.TopAnchor.Shift;
                     r.Height = bottom - r.Y;
                 }
-                if (rightAnchors?.MoveNext() == true)
+                if (rightAnchorShifts?.MoveNext() == true)
                 {
-                    r.Width += rightAnchors.Current.Width - field.RightAnchor.Shift;
+                    r.Width += rightAnchorShifts.Current.Width - field.RightAnchor.Shift;
                 }
-                if (bottomAnchors?.MoveNext() == true)
+                if (bottomAnchorShifts?.MoveNext() == true)
                 {
-                    r.Height += bottomAnchors.Current.Height - field.BottomAnchor.Shift;
+                    r.Height += bottomAnchorShifts.Current.Height - field.BottomAnchor.Shift;
                 }
                 //!!!???when all the anchors found then not null even if it is collapsed
                 //if (r.Width <= 0 || r.Height <= 0)

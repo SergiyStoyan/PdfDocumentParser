@@ -38,80 +38,63 @@ namespace Cliver.PdfDocumentParser
         {
             internal AnchorMatchEnumerator(Page page, Template.Anchor anchor)
             {
+                Page = page;
                 Anchor = anchor;
             }
             readonly internal Template.Anchor Anchor;
+            readonly internal Page Page;
 
-            internal IEnumerable<AnchorActualInfo1> GetMatchs()
+            internal IEnumerable<SizeF> GetShifts()
             {
-                //foreach (RectangleF ar in getFieldMatchRectangles(f))
-                throw new Exception("TBD");
-            }
-        }
-
-        internal class AnchorActualInfo1
-        {
-            readonly internal Template.Anchor Anchor;
-            public PointF Position
-            {
-                get
+                for (int? id = Anchor.ParentAnchorId; id != null;)
                 {
-                    return position;
-                }
-                private set
-                {
-                    position = value;
-                    Shift = new SizeF(Position.X - Anchor.Position.X, Position.Y - Anchor.Position.Y);
-                }
-            }
-            PointF position = new PointF(-1, -1);
-            internal SizeF Shift { get; private set; }
-            internal AnchorActualInfo1 ParentAnchorActualInfo { get; private set; }
-
-            internal AnchorActualInfo1(Template.Anchor anchor, Page page)
-            {
-                Anchor = anchor;
-
-                for (int? id = anchor.ParentAnchorId; id != null;)
-                {
-                    Template.Anchor pa = page.PageCollection.ActiveTemplate.Anchors.Find(x => x.Id == id);
-                    if (anchor == pa)
-                        throw new Exception("Reference loop: anchor[Id=" + anchor.Id + "] is linked by an ancestor anchor.");
+                    Template.Anchor pa = Page.PageCollection.ActiveTemplate.Anchors.Find(x => x.Id == id);
+                    if (Anchor == pa)
+                        throw new Exception("Reference loop: anchor[Id=" + Anchor.Id + "] is linked by an ancestor anchor.");
                     id = pa.ParentAnchorId;
                 }
 
-                findAnchor(page, (PointF p) =>
+                PointF position = new PointF();
+
+                Page.findAnchor(Anchor, (PointF p) =>
                 {
-                    Position = p;
+                    position = p;
                     return false;
                 });
-            }
 
-            void findAnchor(Page page, Func<PointF, bool> findNext)
+                yield return new SizeF(position.X - Anchor.Position.X, position.Y - Anchor.Position.Y);
+
+                //return IObservable<SizeF>.Create<SizeF>(o =>
+                //{
+                //    // Schedule this onto another thread, otherwise it will block:
+                //    Scheduler.Later.Schedule(() =>
+                //    {
+                //        functionReceivingCallback(o.OnNext);
+                //        o.OnCompleted();
+                //    });
+
+                //    return () => { };
+                //}).ToEnumerable();
+            }
+        }
+
+        void findAnchor(Template.Anchor anchor, Func<PointF, bool> findNext)
+        {
+            if (anchor.ParentAnchorId != null)
             {
-                if (Anchor.ParentAnchorId != null)
+                Template.Anchor pa = PageCollection.ActiveTemplate.Anchors.Find(x => x.Id == anchor.ParentAnchorId);
+                findAnchor(pa, (PointF p) =>
                 {
-                    Template.Anchor pa = page.PageCollection.ActiveTemplate.Anchors.Find(x => x.Id == Anchor.ParentAnchorId);
-                    AnchorActualInfo1 paai = new AnchorActualInfo1(pa);
-                    paai.findAnchor(page, (PointF p) =>
+                    bool found = findAnchor(pa, p, findNext);
+                    if (found)
                     {
-                        bool found = page.findAnchor(Anchor, p, findNext);
-                        if (found)
-                        {
-                            paai.Position = p;
-                            ParentAnchorActualInfo = paai;
+                            // paai.Position = p;
                         }
-                        return !found;
-                    });
-                }
-                else
-                    page.findAnchor(Anchor, new PointF(), findNext);
+                    return !found;
+                });
             }
-
-            AnchorActualInfo1(Template.Anchor anchor)
-            {
-                Anchor = anchor;
-            }
+            else
+                findAnchor(anchor, new PointF(), findNext);
         }
     }
 }
