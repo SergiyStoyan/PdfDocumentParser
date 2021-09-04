@@ -12,6 +12,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
+using System.Threading;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -32,10 +33,20 @@ namespace Cliver.PdfDocumentParser
             }
             return anchorMatchEnumerator;
         }
-        Dictionary<int, AnchorMatchEnumerator> anchorIds2anchorMatchEnumerator = new Dictionary<int, AnchorMatchEnumerator>();
+        HandyDictionary<int, AnchorMatchEnumerator> anchorIds2anchorMatchEnumerator = new HandyDictionary<int, AnchorMatchEnumerator>();
 
-        internal class AnchorMatchEnumerator
+        internal class AnchorMatchEnumerator : IDisposable
         {
+            ~AnchorMatchEnumerator()
+            {
+                Dispose();
+            }
+
+            public void Dispose()
+            {
+                StopGetShifts();
+            }
+
             internal AnchorMatchEnumerator(Page page, Template.Anchor anchor)
             {
                 Page = page;
@@ -44,37 +55,71 @@ namespace Cliver.PdfDocumentParser
             readonly internal Template.Anchor Anchor;
             readonly internal Page Page;
 
+            List<SizeF> shifts = null;
+            bool foundAll = false;
+
             internal IEnumerable<SizeF> GetShifts()
             {
-                for (int? id = Anchor.ParentAnchorId; id != null;)
+                StopGetShifts();
+
+                if (shifts == null)
                 {
-                    Template.Anchor pa = Page.PageCollection.ActiveTemplate.Anchors.Find(x => x.Id == id);
-                    if (Anchor == pa)
-                        throw new Exception("Reference loop: anchor[Id=" + Anchor.Id + "] is linked by an ancestor anchor.");
-                    id = pa.ParentAnchorId;
+                    for (int? id = Anchor.ParentAnchorId; id != null;)
+                    {
+                        Template.Anchor pa = Page.PageCollection.ActiveTemplate.Anchors.Find(x => x.Id == id);
+                        if (Anchor == pa)
+                            throw new Exception("Reference loop: anchor[Id=" + Anchor.Id + "] is linked by an ancestor anchor.");
+                        id = pa.ParentAnchorId;
+                    }
+                    shifts = new List<SizeF>();
+                }
+                else
+                {
+                    foreach (SizeF shift in shifts)
+                        yield return shift;
+                    if (foundAll)
+                        yield break;
                 }
 
-                PointF position = new PointF();
-
-                Page.findAnchor(Anchor, (PointF p) =>
+                ManualResetEvent m = new ManualResetEvent(true);
+                bool getNext = true;
+                int i = 0;
+                SizeF currentShift = new SizeF();
+                t = ThreadRoutines.Start(() =>//!!!how to stop the thread???
                 {
-                    position = p;
-                    return false;
+                    m.Reset();
+                    Page.findAnchor(Anchor, (PointF p) =>
+                    {
+                        if (i++ < shifts.Count)
+                            return true;
+                        m.WaitOne();
+                        currentShift = new SizeF(p.X - Anchor.Position.X, p.Y - Anchor.Position.Y);
+                        m.Set();
+                        return t == null;
+                    });
+                    t = null;
+                    m.Set();
                 });
+                foundAll = getNext;
 
-                yield return new SizeF(position.X - Anchor.Position.X, position.Y - Anchor.Position.Y);
+                while (t?.IsAlive == true)
+                {
+                    m.WaitOne();
+                    if (t == null)
+                        break;
+                    yield return currentShift;
+                    m.Set();
+                }
+            }
+            Thread t;
 
-                //return IObservable<SizeF>.Create<SizeF>(o =>
-                //{
-                //    // Schedule this onto another thread, otherwise it will block:
-                //    Scheduler.Later.Schedule(() =>
-                //    {
-                //        functionReceivingCallback(o.OnNext);
-                //        o.OnCompleted();
-                //    });
-
-                //    return () => { };
-                //}).ToEnumerable();
+            internal void StopGetShifts()
+            {
+                if (t != null)
+                {
+                    t.Abort();
+                    t = null;
+                }
             }
         }
 
@@ -88,8 +133,8 @@ namespace Cliver.PdfDocumentParser
                     bool found = findAnchor(pa, p, findNext);
                     if (found)
                     {
-                            // paai.Position = p;
-                        }
+                        // paai.Position = p;
+                    }
                     return !found;
                 });
             }
