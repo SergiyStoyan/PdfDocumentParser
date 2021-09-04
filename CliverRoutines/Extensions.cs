@@ -16,6 +16,24 @@ namespace Cliver
 {
     public static class Extensions
     {
+        public static byte GetNumberOfDigits(this long n)
+        {
+            byte c = 0;
+            n = Math.Abs(n);
+            do
+            {
+                n = n / 10;
+                c++;
+            }
+            while (Math.Abs(n) >= 1);
+            return c;
+        }
+
+        public static byte GetNumberOfDigits(this int n)
+        {
+            return GetNumberOfDigits((long)n);
+        }
+
         /// <summary>
         /// Replacement for BeginInvoke() which is not supported in .NET5
         /// </summary>
