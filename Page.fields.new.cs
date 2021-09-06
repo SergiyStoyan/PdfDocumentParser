@@ -50,7 +50,7 @@ namespace Cliver.PdfDocumentParser
                 this.type = type.Value;
             }
             Page page;
-           internal readonly Template.Field Field;
+            internal readonly Template.Field Field;
             Template.Field.Types type;
 
             internal IEnumerable<object> GetMatches()
@@ -70,32 +70,24 @@ namespace Cliver.PdfDocumentParser
             if (field.Rectangle.Width <= Settings.Constants.CoordinateDeviationMargin || field.Rectangle.Height <= Settings.Constants.CoordinateDeviationMargin)
                 throw new Exception("Rectangle is malformed.");
             RectangleF r = field.Rectangle.GetSystemRectangleF();
-            IEnumerator<SizeF> leftAnchorShifts = field.LeftAnchor != null ? getAnchorMatchEnumerator(field.LeftAnchor.Id).GetShifts().GetEnumerator() : null;
-            IEnumerator<SizeF> topAnchorShifts = field.TopAnchor != null ? getAnchorMatchEnumerator(field.TopAnchor.Id).GetShifts().GetEnumerator() : null;
-            IEnumerator<SizeF> rightAnchorShifts = field.RightAnchor != null ? getAnchorMatchEnumerator(field.RightAnchor.Id).GetShifts().GetEnumerator() : null;
-            IEnumerator<SizeF> bottomAnchorShifts = field.BottomAnchor != null ? getAnchorMatchEnumerator(field.BottomAnchor.Id).GetShifts().GetEnumerator() : null;
+            IEnumerator<SizeF> leftAnchorShifts = field.LeftAnchor != null ? getAnchorMatchEnumerator(field.LeftAnchor.Id).GetShifts() : null;
+            IEnumerator<SizeF> topAnchorShifts = field.TopAnchor != null ? getAnchorMatchEnumerator(field.TopAnchor.Id).GetShifts() : null;
+            IEnumerator<SizeF> rightAnchorShifts = field.RightAnchor != null ? getAnchorMatchEnumerator(field.RightAnchor.Id).GetShifts() : null;
+            IEnumerator<SizeF> bottomAnchorShifts = field.BottomAnchor != null ? getAnchorMatchEnumerator(field.BottomAnchor.Id).GetShifts() : null;
             while (leftAnchorShifts?.Current != null || topAnchorShifts?.Current != null || rightAnchorShifts?.Current != null || bottomAnchorShifts?.Current != null)
             {
-                if (leftAnchorShifts?.MoveNext() == true)
-                {
-                    float right = r.Right;
-                    r.X += leftAnchorShifts.Current.Width - field.LeftAnchor.Shift;
-                    r.Width = right - r.X;
-                }
-                if (topAnchorShifts?.MoveNext() == true)
-                {
-                    float bottom = r.Bottom;
-                    r.Y += topAnchorShifts.Current.Height - field.TopAnchor.Shift;
-                    r.Height = bottom - r.Y;
-                }
-                if (rightAnchorShifts?.MoveNext() == true)
-                {
-                    r.Width += rightAnchorShifts.Current.Width - field.RightAnchor.Shift;
-                }
-                if (bottomAnchorShifts?.MoveNext() == true)
-                {
-                    r.Height += bottomAnchorShifts.Current.Height - field.BottomAnchor.Shift;
-                }
+                leftAnchorShifts?.MoveNext();
+                float right = r.Right;
+                r.X += leftAnchorShifts.Current.Width - field.LeftAnchor.Shift;
+                r.Width = right - r.X;
+                topAnchorShifts?.MoveNext();
+                float bottom = r.Bottom;
+                r.Y += topAnchorShifts.Current.Height - field.TopAnchor.Shift;
+                r.Height = bottom - r.Y;
+                rightAnchorShifts?.MoveNext();
+                r.Width += rightAnchorShifts.Current.Width - field.RightAnchor.Shift;
+                bottomAnchorShifts?.MoveNext();
+                r.Height += bottomAnchorShifts.Current.Height - field.BottomAnchor.Shift;
                 //!!!???when all the anchors found then not null even if it is collapsed
                 //if (r.Width <= 0 || r.Height <= 0)
                 //    return null;

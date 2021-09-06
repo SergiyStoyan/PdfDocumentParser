@@ -4,14 +4,10 @@
 //        sergey.stoyan@hotmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
-using System;
+
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Drawing.Imaging;
-using System.Drawing.Drawing2D;
 
 namespace Cliver.PdfDocumentParser
 {

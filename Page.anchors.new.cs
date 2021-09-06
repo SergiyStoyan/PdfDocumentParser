@@ -7,11 +7,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Drawing.Imaging;
-using System.Drawing.Drawing2D;
 using System.Threading;
 
 namespace Cliver.PdfDocumentParser
@@ -58,7 +53,7 @@ namespace Cliver.PdfDocumentParser
             List<SizeF> shifts = null;
             bool foundAll = false;
 
-            internal IEnumerable<SizeF> GetShifts()
+            internal IEnumerator<SizeF> GetShifts()
             {
                 StopGetShifts();
 
@@ -81,65 +76,74 @@ namespace Cliver.PdfDocumentParser
                         yield break;
                 }
 
-                ManualResetEvent m = new ManualResetEvent(true);
-                bool getNext = true;
+                stop = false;
+                AutoResetEvent m = new AutoResetEvent(false);
                 int i = 0;
-                SizeF currentShift = new SizeF();
-                t = ThreadRoutines.Start(() =>//!!!how to stop the thread???
-                {
-                    m.Reset();
-                    Page.findAnchor(Anchor, (PointF p) =>
+                SizeF? currentShift = null;
+                t = ThreadRoutines.StartTry(//!!!how to stop the thread???
+                    () =>
                     {
-                        if (i++ < shifts.Count)
-                            return true;
-                        m.WaitOne();
-                        currentShift = new SizeF(p.X - Anchor.Position.X, p.Y - Anchor.Position.Y);
+                        m.Reset();
+                        findAnchor(Anchor, (PointF p) =>
+                        {
+                            if (i++ < shifts.Count)
+                                return true;
+                            m.WaitOne();
+                            currentShift = new SizeF(p.X - Anchor.Position.X, p.Y - Anchor.Position.Y);
+                            m.Set();
+                            return t == null;
+                        });
+                        if (!stop)
+                            foundAll = true;
+                    },
+                    (Exception e) =>
+                    {
+                        if (e is ThreadAbortException)
+                            return;
+                        throw e;
+                    },
+                    () =>
+                    {
+                        currentShift = null;
                         m.Set();
-                        return t == null;
-                    });
-                    t = null;
-                    m.Set();
-                });
-                foundAll = getNext;
+                    }
+                );
 
                 while (t?.IsAlive == true)
                 {
                     m.WaitOne();
-                    if (t == null)
-                        break;
-                    yield return currentShift;
+                    if (currentShift != null)
+                        yield return currentShift.Value;
                     m.Set();
                 }
             }
             Thread t;
+            bool stop = false;
 
             internal void StopGetShifts()
             {
-                if (t != null)
+                if (t?.IsAlive == true)
                 {
+                    stop = true;
                     t.Abort();
-                    t = null;
                 }
             }
-        }
 
-        void findAnchor(Template.Anchor anchor, Func<PointF, bool> findNext)
-        {
-            if (anchor.ParentAnchorId != null)
+            void findAnchor(Template.Anchor anchor, Func<PointF, bool> findNext)
             {
-                Template.Anchor pa = PageCollection.ActiveTemplate.Anchors.Find(x => x.Id == anchor.ParentAnchorId);
-                findAnchor(pa, (PointF p) =>
+                if (stop)
+                    return;
+                if (anchor.ParentAnchorId != null)
                 {
-                    bool found = findAnchor(pa, p, findNext);
-                    if (found)
+                    Template.Anchor pa = Page.PageCollection.ActiveTemplate.Anchors.Find(x => x.Id == anchor.ParentAnchorId);
+                    findAnchor(pa, (PointF p) =>
                     {
-                        // paai.Position = p;
-                    }
-                    return !found;
-                });
+                        return !Page.findAnchor(pa, p, findNext);
+                    });
+                }
+                else
+                    Page.findAnchor(anchor, new PointF(), findNext);
             }
-            else
-                findAnchor(anchor, new PointF(), findNext);
         }
     }
 }
