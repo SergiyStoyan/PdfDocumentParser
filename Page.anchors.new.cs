@@ -30,17 +30,17 @@ namespace Cliver.PdfDocumentParser
         }
         HandyDictionary<int, AnchorMatchEnumerator> anchorIds2anchorMatchEnumerator = new HandyDictionary<int, AnchorMatchEnumerator>();
 
-        internal class AnchorMatchEnumerator : IDisposable
+        internal class AnchorMatchEnumerator //: IDisposable
         {
-            ~AnchorMatchEnumerator()
-            {
-                Dispose();
-            }
+            //~AnchorMatchEnumerator()
+            //{
+            //    Dispose();
+            //}
 
-            public void Dispose()
-            {
-                StopGetShifts();
-            }
+            //public void Dispose()
+            //{
+            //    StopGetShifts();
+            //}
 
             internal AnchorMatchEnumerator(Page page, Template.Anchor anchor)
             {
@@ -55,8 +55,6 @@ namespace Cliver.PdfDocumentParser
 
             internal IEnumerator<SizeF> GetShifts()
             {
-                StopGetShifts();
-
                 if (shifts == null)
                 {
                     for (int? id = Anchor.ParentAnchorId; id != null;)
@@ -80,7 +78,7 @@ namespace Cliver.PdfDocumentParser
                 AutoResetEvent m = new AutoResetEvent(false);
                 int i = 0;
                 SizeF? currentShift = null;
-                t = ThreadRoutines.StartTry(//!!!how to stop the thread???
+                Thread t = ThreadRoutines.StartTry(
                     () =>
                     {
                         m.Reset();
@@ -91,7 +89,7 @@ namespace Cliver.PdfDocumentParser
                             m.WaitOne();
                             currentShift = new SizeF(p.X - Anchor.Position.X, p.Y - Anchor.Position.Y);
                             m.Set();
-                            return t == null;
+                            return !stop;
                         });
                         if (!stop)
                             foundAll = true;
@@ -109,25 +107,24 @@ namespace Cliver.PdfDocumentParser
                     }
                 );
 
-                while (t?.IsAlive == true)
+                try
                 {
-                    m.WaitOne();
-                    if (currentShift != null)
-                        yield return currentShift.Value;
+                    while (t?.IsAlive == true)
+                    {
+                        m.WaitOne();
+                        if (currentShift != null)
+                            yield return currentShift.Value;
+                        m.Set();
+                    }
+                }
+                finally
+                {
+                    stop = true;
+                    t?.Abort();
                     m.Set();
                 }
             }
-            Thread t;
-            bool stop = false;
-
-            internal void StopGetShifts()
-            {
-                if (t?.IsAlive == true)
-                {
-                    stop = true;
-                    t.Abort();
-                }
-            }
+            bool stop;
 
             void findAnchor(Template.Anchor anchor, Func<PointF, bool> findNext)
             {
