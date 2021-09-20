@@ -27,7 +27,7 @@ namespace Cliver.PdfDocumentParser
 
                 foreach (Template.Field f in fs)
                 {
-                    fme = new FieldMatchEnumerator(this, f, type, f.ColumnOfTable != null ? getFieldMatchEnumerator(f.ColumnOfTable, null) : null);
+                    fme = new FieldMatchEnumerator(this, f, type);
                     if (fme.GetMatches().Any())
                     {
                         fieldNames2fieldMatchEnumerator[fieldName] = fme;
@@ -41,14 +41,14 @@ namespace Cliver.PdfDocumentParser
 
         internal class FieldMatchEnumerator
         {
-            internal FieldMatchEnumerator(Page page, Template.Field field, Template.Field.Types? type, FieldMatchEnumerator tableFieldMatchEnumerator)
+            internal FieldMatchEnumerator(Page page, Template.Field field, Template.Field.Types? type)
             {
                 this.page = page;
                 this.Field = field;
                 if (type == null)
                     type = field.Type;
                 this.type = type.Value;
-                TableFieldMatchEnumerator = tableFieldMatchEnumerator;
+                TableFieldMatchEnumerator = field.ColumnOfTable != null ? page.getFieldMatchEnumerator(field.ColumnOfTable, ) : null;
             }
             readonly Page page;
             internal readonly Template.Field Field;
@@ -104,7 +104,7 @@ namespace Cliver.PdfDocumentParser
                     return Pdf.GetTextLinesSurroundedByRectangle(page.PdfCharBoxs, ar, textAutoInsertSpace);
 
                 List<string> ls = new List<string>();
-                List<Pdf.CharBox> cbs = (List<Pdf.CharBox>)TableFieldActualInfo.GetValue(Template.Field.Types.PdfCharBoxs);
+                List<Pdf.CharBox> cbs = (List<Pdf.CharBox>)TableFieldMatchEnumerator.GetMatches(Template.Field.Types.PdfCharBoxs);
                 foreach (Line<Pdf.CharBox> l in GetLines(cbs, textAutoInsertSpace, null))
                 {
                     StringBuilder sb = new StringBuilder();
