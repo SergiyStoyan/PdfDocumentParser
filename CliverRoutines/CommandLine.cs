@@ -124,7 +124,7 @@ namespace Cliver
         public static string ToString(params (string name, string value)[] parameters)
         {
             if (parameters.Length < 1)
-                return Regex.Replace(Environment.CommandLine, @"(\"".*?\""\s*|.*?\s*)$", "");
+                return Regex.Replace(Environment.CommandLine, @"^\s*(\"".*?\""\s+|.*?\s+|.*)", "");
 
             List<(string name, string value)> ps = new List<(string name, string value)>();
             foreach ((string name, string value) p0 in parameters)

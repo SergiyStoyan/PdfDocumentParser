@@ -126,11 +126,13 @@ namespace Cliver
         //    return GetProcess(process.Id) != null;
         //}
 
-        public static Process GetProcess(int processId)
+        public static Process GetProcess(int? processId = null)
         {
             try
             {
-                return Process.GetProcessById(processId);
+                if (processId != null)
+                    return Process.GetProcessById(processId.Value);
+                return Process.GetCurrentProcess();
             }
             catch (System.ArgumentException e)//throws an exception if the process exited
             {
