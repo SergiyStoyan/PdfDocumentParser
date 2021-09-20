@@ -27,7 +27,7 @@ namespace Cliver.PdfDocumentParser
 
                 foreach (Template.Field f in fs)
                 {
-                    fme = new FieldMatchEnumerator(this, f, type);
+                    fme = new FieldMatchEnumerator(this, f, type, f.ColumnOfTable != null ? getFieldMatchEnumerator(f.ColumnOfTable, null) : null);
                     if (fme.GetMatches().Any())
                     {
                         fieldNames2fieldMatchEnumerator[fieldName] = fme;
@@ -41,17 +41,19 @@ namespace Cliver.PdfDocumentParser
 
         internal class FieldMatchEnumerator
         {
-            internal FieldMatchEnumerator(Page page, Template.Field field, Template.Field.Types? type)
+            internal FieldMatchEnumerator(Page page, Template.Field field, Template.Field.Types? type, FieldMatchEnumerator tableFieldMatchEnumerator)
             {
                 this.page = page;
                 this.Field = field;
                 if (type == null)
                     type = field.Type;
                 this.type = type.Value;
+                TableFieldMatchEnumerator = tableFieldMatchEnumerator;
             }
-           readonly Page page;
+            readonly Page page;
             internal readonly Template.Field Field;
             Template.Field.Types type;
+            internal readonly FieldMatchEnumerator TableFieldMatchEnumerator;
 
             internal IEnumerable<object> GetMatches()
             {
