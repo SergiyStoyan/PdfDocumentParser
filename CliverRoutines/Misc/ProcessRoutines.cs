@@ -17,6 +17,18 @@ namespace Cliver
 {
     public static partial class ProcessRoutines
     {
+        static public string GetFile(Process p = null)
+        {
+            if (p == null)
+                p = Process.GetCurrentProcess();
+            return p.MainModule.FileName;
+        }
+
+        static public string GetNameWithExtension(Process p = null)
+        {
+            return PathRoutines.GetFileName(GetFile(p));
+        }
+
         /// <summary>
         /// Opens a file in editor/veiwer determined by the file's extension.
         /// </summary>

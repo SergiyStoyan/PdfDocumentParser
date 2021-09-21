@@ -67,16 +67,5 @@ namespace Cliver
         {
             return System.Reflection.Assembly.GetEntryAssembly().GetName(false).Name;
         }
-
-        /// <summary>
-        /// With extension
-        /// </summary>
-        /// <returns></returns>
-        static public string GetProgramName(System.Diagnostics.Process p = null)
-        {
-            if (p == null)
-                p = System.Diagnostics.Process.GetCurrentProcess();
-            return PathRoutines.GetFileName(p.MainModule.FileName);
-        }
     }
 }

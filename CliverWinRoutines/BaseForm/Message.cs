@@ -58,7 +58,19 @@ namespace Cliver
         /// </summary>
         public static bool NoDuplicate = true;
 
-        public readonly static string AppName = ProgramRoutines.GetAppName();
+        public readonly static string AppName = getAppName();
+        static string getAppName()
+        {
+            AssemblyRoutines.AssemblyInfo ai = new AssemblyRoutines.AssemblyInfo(System.Reflection.Assembly.GetEntryAssembly());
+            string n = ai.Product;
+            if (n != null)
+                return n;
+            n = ai.Title;
+            if (n != null)
+                return n;
+            n = ProgramRoutines.GetAppName();
+            return n;
+        }
 
         public static void Inform(string message, Form owner = null)
         {
