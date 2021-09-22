@@ -98,16 +98,16 @@ namespace Cliver.PdfDocumentParser
 
         #region new API for multiple matches (!!!TBD)
 
-        public IEnumerable<object> GetValueAll(string fieldName, out Template.Field actualField, Template.Field.Types? type = null)
+        public IEnumerable<T> GetValueAll<T>(string fieldName, out Template.Field actualField, Template.Field.Types? type = null)
         {
             FieldMatchEnumerator fm = getFieldMatchEnumerator(fieldName, type);
             actualField = fm?.Field;
-            return fm?.GetMatches();
+            return fm?.GetMatches<T>(type);
         }
 
         public IEnumerable<string> GetTextAll(string fieldName)
         {
-            return GetValueAll(fieldName, out _).Cast<string>();
+            return GetValueAll<string>(fieldName, out _);
         }
 
         public string GetText1(string fieldName)
@@ -117,7 +117,7 @@ namespace Cliver.PdfDocumentParser
 
         public IEnumerable<List<string>> GetTextLinesAll(string fieldName)
         {
-            return GetValueAll(fieldName, out _).Cast<List<string>>();
+            return GetValueAll<List<string>>(fieldName, out _);
         }
 
         public List<string> GetTextLines1(string fieldName)
@@ -127,7 +127,7 @@ namespace Cliver.PdfDocumentParser
 
         public IEnumerable<List<CharBox>> GetCharBoxsAll(string fieldName)
         {
-            return GetValueAll(fieldName, out _).Cast<List<CharBox>>();
+            return GetValueAll<List<CharBox>>(fieldName, out _);
         }
 
         public List<CharBox> GetCharBoxes1(string fieldName)
@@ -137,7 +137,7 @@ namespace Cliver.PdfDocumentParser
 
         public IEnumerable<Bitmap> GetImageAll(string fieldName)
         {
-            return GetValueAll(fieldName, out _).Cast<Bitmap>();
+            return GetValueAll<Bitmap>(fieldName, out _);
         }
 
         public Bitmap GetImage1(string fieldName)
@@ -147,7 +147,7 @@ namespace Cliver.PdfDocumentParser
 
         public IEnumerable<List<Bitmap>> GetTextLineImagesAll(string fieldName)
         {
-            return GetValueAll(fieldName, out _).Cast<List<Bitmap>>();
+            return GetValueAll<List<Bitmap>>(fieldName, out _);
         }
 
         public List<Bitmap> GetTextLineImages1(string fieldName)

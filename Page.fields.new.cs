@@ -27,8 +27,8 @@ namespace Cliver.PdfDocumentParser
 
                 foreach (Template.Field f in fs)
                 {
-                    fme = new FieldMatchEnumerator(this, f, type);
-                    if (fme.GetMatches().Any())
+                    fme = new FieldMatchEnumerator(this, f);
+                    if (fme.GetMatches<object>(type).Any())
                     {
                         fieldNames2fieldMatchEnumerator[fieldName] = fme;
                         break;
@@ -41,32 +41,39 @@ namespace Cliver.PdfDocumentParser
 
         internal class FieldMatchEnumerator
         {
-            internal FieldMatchEnumerator(Page page, Template.Field field, Template.Field.Types? type)
+            internal FieldMatchEnumerator(Page page, Template.Field field)
             {
                 this.page = page;
                 this.Field = field;
-                if (type == null)
-                    type = field.Type;
-                this.type = type.Value;
-                TableFieldMatchEnumerator = field.ColumnOfTable != null ? page.getFieldMatchEnumerator(field.ColumnOfTable, ) : null;
+                TableFieldMatchEnumerator = field.ColumnOfTable != null ? page.getFieldMatchEnumerator(field.ColumnOfTable, Template.Field.Types.PdfCharBoxs) : null;
             }
             readonly Page page;
             internal readonly Template.Field Field;
-            Template.Field.Types type;
+            //Template.Field.Types type;
             internal readonly FieldMatchEnumerator TableFieldMatchEnumerator;
 
-            internal IEnumerable<object> GetMatches()
+            internal IEnumerable<T> GetMatches<T>(Template.Field.Types? type) 
             {
+                if (type == null)
+                    type = Field.Type;
                 foreach (RectangleF ar in page.getFieldMatchRectangles(Field))
                 {
-                    yield return getValue(ar);
+                    yield return (T)getValue(ar, type.Value);
                 }
             }
 
-            object getValue(RectangleF ar)
+            internal IEnumerable<(T value, RectangleF rectangle)> GetMatches2<T>(Template.Field.Types? type) where T : new()
             {
-                if (ar == null || TableFieldActualInfo?.Found == false)
-                    return null;
+                if (type == null)
+                    type = Field.Type;
+                foreach (RectangleF ar in page.getFieldMatchRectangles(Field))
+                {
+                    yield return ((T)getValue(ar, type.Value), ar);
+                }
+            }
+
+            object getValue(RectangleF ar, Template.Field.Types type)
+            {
                 switch (type)
                 {
                     case Template.Field.Types.PdfText:
@@ -104,7 +111,9 @@ namespace Cliver.PdfDocumentParser
                     return Pdf.GetTextLinesSurroundedByRectangle(page.PdfCharBoxs, ar, textAutoInsertSpace);
 
                 List<string> ls = new List<string>();
-                List<Pdf.CharBox> cbs = (List<Pdf.CharBox>)TableFieldMatchEnumerator.GetMatches(Template.Field.Types.PdfCharBoxs);
+                List<Pdf.CharBox> cbs = TableFieldMatchEnumerator.GetMatches<List<Pdf.CharBox>>(Template.Field.Types.PdfCharBoxs).FirstOrDefault();
+                if (cbs == null)
+                    return null;
                 foreach (Line<Pdf.CharBox> l in GetLines(cbs, textAutoInsertSpace, null))
                 {
                     StringBuilder sb = new StringBuilder();
@@ -121,9 +130,9 @@ namespace Cliver.PdfDocumentParser
                 if (Field.ColumnOfTable == null)
                     return Pdf.GetCharBoxsSurroundedByRectangle(page.PdfCharBoxs, ar);
 
-                if (!TableFieldActualInfo.Found)
+                List<Pdf.CharBox> cbs = TableFieldMatchEnumerator.GetMatches<List<Pdf.CharBox>>(Template.Field.Types.PdfCharBoxs).FirstOrDefault();
+                if (cbs == null)
                     return null;
-                List<Pdf.CharBox> cbs = (List<Pdf.CharBox>)TableFieldActualInfo.GetValue(Template.Field.Types.PdfCharBoxs);
                 return cbs.Where(a => a.R.Left >= ar.Left && a.R.Right <= ar.Right && a.R.Top >= ar.Top && a.R.Bottom <= ar.Bottom).ToList();
             }
 
@@ -145,24 +154,24 @@ namespace Cliver.PdfDocumentParser
                         return Ocr.GetTextLinesSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, ar, textAutoInsertSpace, Field.CharFilter ?? page.PageCollection.ActiveTemplate.CharFilter);
                 }
 
-                if (!TableFieldActualInfo.Found)
+                (List<Ocr.CharBox> cbs,  RectangleF tableRectangle) = TableFieldMatchEnumerator.GetMatches2<List<Ocr.CharBox>>(Template.Field.Types.OcrCharBoxs).FirstOrDefault();
+                if (cbs == null)
                     return null;
-                List<Ocr.CharBox> cbs = (List<Ocr.CharBox>)TableFieldActualInfo.GetValue(Template.Field.Types.OcrCharBoxs);
                 List<string> ls = new List<string>();
                 if (aof?.ColumnCellFromCellImage ?? page.PageCollection.ActiveTemplate.ColumnCellFromCellImage)
                 {
                     List<Line<Ocr.CharBox>> ols = GetLines(cbs, null, Field.CharFilter ?? page.PageCollection.ActiveTemplate.CharFilter);
                     if (aof?.AdjustLineBorders ?? page.PageCollection.ActiveTemplate.AdjustLineBorders)
-                        AdjustBorders(ols, TableFieldActualInfo.actualRectangle.Value);
+                        AdjustBorders(ols, tableRectangle);
                     else
                         PadLines(ols, Field.LinePaddingY ?? page.PageCollection.ActiveTemplate.LinePaddingY);
                     foreach (Line<Ocr.CharBox> l in ols)
                     {
-                        float x = ar.X > TableFieldActualInfo.actualRectangle.Value.X ? ar.X : TableFieldActualInfo.actualRectangle.Value.X;
+                        float x = ar.X > tableRectangle.X ? ar.X : tableRectangle.X;
                         RectangleF r = new RectangleF(
                             x,
                             l.Top,
-                           (ar.Right < TableFieldActualInfo.actualRectangle.Value.Right ? ar.Right : TableFieldActualInfo.actualRectangle.Value.Right) - x,
+                           (ar.Right < tableRectangle.Right ? ar.Right : tableRectangle.Right) - x,
                            l.Bottom - l.Top
                             );
                         List<Ocr.CharBox> cs = Ocr.This.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateBitmap, r, aof?.TesseractPageSegMode ?? page.PageCollection.ActiveTemplate.TesseractPageSegMode);
@@ -195,23 +204,23 @@ namespace Cliver.PdfDocumentParser
                         return Ocr.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateOcrCharBoxs, ar);
                 }
 
-                if (!TableFieldActualInfo.Found)
+                (List<Ocr.CharBox> cbs, RectangleF tableRectangle) = TableFieldMatchEnumerator.GetMatches2<List<Ocr.CharBox>>(Template.Field.Types.OcrCharBoxs).FirstOrDefault();
+                if (cbs == null)
                     return null;
                 if (aof?.ColumnCellFromCellImage ?? page.PageCollection.ActiveTemplate.ColumnCellFromCellImage)
                 {
-                    float x = ar.X > TableFieldActualInfo.actualRectangle.Value.X ? ar.X : TableFieldActualInfo.actualRectangle.Value.X;
-                    float y = ar.Top > TableFieldActualInfo.actualRectangle.Value.Top ? ar.Top : TableFieldActualInfo.actualRectangle.Value.Top;
+                    float x = ar.X > tableRectangle.X ? ar.X : tableRectangle.X;
+                    float y = ar.Top > tableRectangle.Top ? ar.Top : tableRectangle.Top;
                     RectangleF r = new RectangleF(
                         x,
                         y,
-                       (ar.Right < TableFieldActualInfo.actualRectangle.Value.Right ? ar.Right : TableFieldActualInfo.actualRectangle.Value.Right) - x,
-                       (ar.Bottom < TableFieldActualInfo.actualRectangle.Value.Bottom ? ar.Bottom : TableFieldActualInfo.actualRectangle.Value.Bottom) - y
+                       (ar.Right < tableRectangle.Right ? ar.Right : tableRectangle.Right) - x,
+                       (ar.Bottom < tableRectangle.Bottom ? ar.Bottom : tableRectangle.Bottom) - y
                         );
                     return Ocr.This.GetCharBoxsSurroundedByRectangle(page.ActiveTemplateBitmap, ar, aof?.TesseractPageSegMode ?? page.PageCollection.ActiveTemplate.TesseractPageSegMode);
                 }
                 else
                 {
-                    List<Ocr.CharBox> cbs = (List<Ocr.CharBox>)TableFieldActualInfo.GetValue(Template.Field.Types.OcrCharBoxs);
                     return cbs.Where(a => /*!check: ar.Contains(a.R)*/ a.R.Left >= ar.Left && a.R.Right <= ar.Right && a.R.Top >= ar.Top && a.R.Bottom <= ar.Bottom).ToList();
                 }
             }
@@ -222,16 +231,16 @@ namespace Cliver.PdfDocumentParser
 
                 if (Field.ColumnOfTable != null)
                 {
-                    if (!TableFieldActualInfo.Found)
+                    (List<Pdf.CharBox> cbs, RectangleF tableRectangle) = TableFieldMatchEnumerator.GetMatches2<List<Pdf.CharBox>>(Template.Field.Types.PdfCharBoxs).FirstOrDefault();
+                    if (cbs == null)
                         return null;
-
-                    float x = ar.X > TableFieldActualInfo.actualRectangle.Value.X ? ar.X : TableFieldActualInfo.actualRectangle.Value.X;
-                    float y = ar.Top > TableFieldActualInfo.actualRectangle.Value.Top ? ar.Top : TableFieldActualInfo.actualRectangle.Value.Top;
+                    float x = ar.X > tableRectangle.X ? ar.X : tableRectangle.X;
+                    float y = ar.Top > tableRectangle.Top ? ar.Top : tableRectangle.Top;
                     r = new RectangleF(
                         x,
                         y,
-                       (ar.Right < TableFieldActualInfo.actualRectangle.Value.Right ? ar.Right : TableFieldActualInfo.actualRectangle.Value.Right) - x,
-                       (ar.Bottom < TableFieldActualInfo.actualRectangle.Value.Bottom ? ar.Bottom : TableFieldActualInfo.actualRectangle.Value.Bottom) - y
+                       (ar.Right < tableRectangle.Right ? ar.Right : tableRectangle.Right) - x,
+                       (ar.Bottom < tableRectangle.Bottom ? ar.Bottom : tableRectangle.Bottom) - y
                         );
                 }
                 else
@@ -271,19 +280,19 @@ namespace Cliver.PdfDocumentParser
                 }
                 else
                 {
-                    if (!TableFieldActualInfo.Found)
+                    (List<Ocr.CharBox> cbs, RectangleF tableRectangle) = TableFieldMatchEnumerator.GetMatches2<List<Ocr.CharBox>>(Template.Field.Types.OcrCharBoxs).FirstOrDefault();
+                    if (cbs == null)
                         return null;
-                    List<Ocr.CharBox> cbs = (List<Ocr.CharBox>)TableFieldActualInfo.GetValue(Template.Field.Types.OcrCharBoxs);
                     if (aof?.ColumnCellFromCellImage ?? page.PageCollection.ActiveTemplate.ColumnCellFromCellImage)
                         ols = GetLines(cbs, null, Field.CharFilter ?? page.PageCollection.ActiveTemplate.CharFilter);
                     else
                         ols = GetLines(cbs, null, Field.CharFilter ?? page.PageCollection.ActiveTemplate.CharFilter);
                     if (aof?.AdjustLineBorders ?? page.PageCollection.ActiveTemplate.AdjustLineBorders)
-                        AdjustBorders(ols, TableFieldActualInfo.actualRectangle.Value);
+                        AdjustBorders(ols, tableRectangle);
                     else
                         PadLines(ols, Field.LinePaddingY ?? page.PageCollection.ActiveTemplate.LinePaddingY);
-                    left = ar.X > TableFieldActualInfo.actualRectangle.Value.X ? ar.X : TableFieldActualInfo.actualRectangle.Value.X;
-                    width = (ar.Right < TableFieldActualInfo.actualRectangle.Value.Right ? ar.Right : TableFieldActualInfo.actualRectangle.Value.Right) - left;
+                    left = ar.X > tableRectangle.X ? ar.X : tableRectangle.X;
+                    width = (ar.Right < tableRectangle.Right ? ar.Right : tableRectangle.Right) - left;
                 }
 
                 List<Bitmap> ls = new List<Bitmap>();
