@@ -122,6 +122,7 @@ namespace Cliver.PdfDocumentParser
                     stop = true;
                     t?.Abort();
                     m.Set();
+                    t.Join();
                 }
             }
             bool stop;
