@@ -149,6 +149,7 @@ namespace Cliver
         }
 
         /// <summary>
+        /// Creates the dir if it is missing.
         /// (!)It throws an exception when the destination file exists and !overwrite.
         /// </summary>
         /// <param name="file1"></param>

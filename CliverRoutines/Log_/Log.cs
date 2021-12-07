@@ -238,7 +238,7 @@ namespace Cliver
                 foreach (string baseDir in baseDirs)
                 {
                     BaseDir = baseDir;
-                    rootDir = BaseDir + Path.DirectorySeparatorChar + Log.ProcessName + RootDirNameSuffix;
+                    rootDir = BaseDir + Path.DirectorySeparatorChar + Log.ProgramName + RootDirNameSuffix;
                     if (create)
                         try
                         {
@@ -263,7 +263,7 @@ namespace Cliver
         }
 
         /// <summary>
-        ///Actual base directory for logging.
+        ///Actual base directory where RootDir is created.
         /// </summary>
         public static string BaseDir { get; private set; }
 

@@ -24,7 +24,13 @@ namespace Cliver
         new public static string __StorageDir { get; private set; } = Log.AppCompanyCommonDataDir + Path.DirectorySeparatorChar + Config.CONFIG_FOLDER_NAME; 
         */
 
+        /// <summary>
+        /// Storage folder for this Settings located in CommonApplicationData.
+        /// </summary>
         sealed public override string __StorageDir { get; protected set; } = StorageDir;
+        /// <summary>
+        /// Storage folder for this Settings located in CommonApplicationData.
+        /// </summary>
         public static readonly string StorageDir = Log.AppCompanyCommonDataDir + Path.DirectorySeparatorChar + Config.CONFIG_FOLDER_NAME;
     }
 
@@ -40,7 +46,13 @@ namespace Cliver
         new public static string __StorageDir { get; private set; } = Log.AppCompanyUserDataDir + Path.DirectorySeparatorChar + Config.CONFIG_FOLDER_NAME;
         */
 
+        /// <summary>
+        /// Storage folder for this Settings located in LocalApplicationData.
+        /// </summary>
         sealed public override string __StorageDir { get; protected set; } = StorageDir;
+        /// <summary>
+        /// Storage folder for this Settings located in LocalApplicationData.
+        /// </summary>
         public static readonly string StorageDir = Log.AppCompanyUserDataDir + Path.DirectorySeparatorChar + Config.CONFIG_FOLDER_NAME;
     }
 }

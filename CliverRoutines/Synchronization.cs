@@ -18,45 +18,99 @@ namespace Cliver
     /// </summary>
     abstract public class Synchronization
     {
+        /// <summary>
+        /// 
+        /// </summary>
         abstract protected List<string> synchronizedSettingsFieldFullNames { get; }
         //abstract protected List<Type> synchronizedSettingsTypes { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="settings"></param>
         abstract protected void onNewerSettingsFile(Settings settings);
         //{
         //    throw new Exception("TBD: A newer settings " + settings.__Info.FullName + " have been downloaded from the remote storage. Upon closing this message they will be updated in the application.");
         //}
 
+        /// <summary>
+        /// 
+        /// </summary>
         abstract protected string synchronizedFileDownloadFolder { get; }// = UserSettings.StorageDir;
         /// <summary>
         /// (!)It will download only those files that already exist in the synchronizedFileDownloadFolder.
         /// </summary>
         abstract protected Regex synchronizedFileNameFilter { get; }// = new Regex(@"\.fltr$", RegexOptions.IgnoreCase);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="file"></param>
         abstract protected void onNewerFile(string file);
         //{
         //    throw new Exception("TBD: A newer file " + file + " has been downloaded from the remote storage. Upon closing this message it will be updated in the application.");
         //}
 
+        /// <summary>
+        /// 
+        /// </summary>
         abstract protected Regex appSetupFileFilter { get; }// = new Regex(System.Diagnostics.Process.GetCurrentProcess().ProcessName + @"\.Setup\-(\d+\.\d+\.\d+)", RegexOptions.IgnoreCase);
 
+        /// <summary>
+        /// 
+        /// </summary>
         abstract protected Version programVersion { get; }// = Program.Version;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="appSetupFile"></param>
         abstract protected void onNewerAppVersion(string appSetupFile);
         //{
         //    throw new Exception("TBD: A newer app version has been downloaded: " + appSetupFile + "\r\nWould you like to install it now?");
         //}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
         abstract protected void ErrorHandler(Exception e);
 
+        /// <summary>
+        /// 
+        /// </summary>
         public class Parameters
         {
+            /// <summary>
+            /// 
+            /// </summary>
             public string SynchronizationFolder = null;
+
+            /// <summary>
+            /// 
+            /// </summary>
             public readonly string DownloadFolderName = "_download";
+
+            /// <summary>
+            /// 
+            /// </summary>
             public readonly string UploadFolderName = "_upload";
+
+            /// <summary>
+            /// 
+            /// </summary>
             public bool Synchronize = false;
+
+            /// <summary>
+            /// 
+            /// </summary>
             public int PollingPeriodMss = 60000;
         }
 
+        /// <summary>
+        /// Actualize new parameters.
+        /// </summary>
+        /// <param name="parameters"></param>
         virtual public void Switch(Parameters parameters)
         {
             try

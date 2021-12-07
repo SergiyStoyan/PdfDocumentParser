@@ -3,15 +3,16 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>6.8.0.0</AssemblyVersion>
+    <!--AssemblyVersion>6.10.1.0</AssemblyVersion-->
     <RepositoryUrl>https://github.com/sergeystoyan/CliverRoutines.git</RepositoryUrl>
-    <FileVersion>6.8.0.0</FileVersion>
+    <!--FileVersion>6.10.1.0</FileVersion-->
     <!--PackageLicenseFile>LICENSE</PackageLicenseFile-->
 	<PackageLicenseExpression></PackageLicenseExpression>
     <Copyright>Sergey Stoyan</Copyright>
     <Authors>Sergey Stoyan</Authors>
     <Company>CliverSoft</Company>
-    <Version>6.8.0</Version>
+    <Version>6.12.0</Version>
+    <Title>Cross-platform routines needed in the most applications.</Title>
     <PackageProjectUrl>https://github.com/sergeystoyan/CliverRoutines</PackageProjectUrl>
     <Description>Cross-platform routines needed in the most applications:
 - settings manager that supersedes .NET ConfigurationManager;
@@ -40,6 +41,14 @@
     <DefineConstants>TRACE;THREAD_LOG_IS_DEFAULT1</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>c:\Users\serge\Documents\_PROJECTS\CliverRoutines\CliverRoutines.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="CliverRoutinesExample\**" />
     <Compile Remove="CliverRoutinesTests\**" />
@@ -61,7 +70,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
 </Project>

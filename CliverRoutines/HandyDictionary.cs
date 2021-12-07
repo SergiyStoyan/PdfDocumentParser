@@ -25,7 +25,8 @@ namespace Cliver
         /// <summary>
         /// Create HandyDictionary with auto-generating value function.
         /// </summary>
-        /// <param name="getValue">method creating an object for a key</param>
+        /// <param name="getValue">method of creating an object for a key</param>
+        /// <param name="disposeValue">method of disposing a value</param>
         public HandyDictionary(GetValue getValue, DisposeValue disposeValue = null)
         {
             this.getValue = getValue;
@@ -33,10 +34,22 @@ namespace Cliver
                 this.disposeValue = disposeValue;
         }
 
+        /// <summary>
+        /// Method of creating an object for a key.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public delegate VT GetValue(KT key);
         protected GetValue getValue;
 
+        /// <summary>
+        /// Method of disposing a value.
+        /// </summary>
+        /// <param name="value"></param>
         public delegate void DisposeValue(VT value);
+        /// <summary>
+        /// Method of disposing a value.
+        /// </summary>
         protected DisposeValue disposeValue = delegate (VT value)
         {
             if (value != null && value is IDisposable)
@@ -47,6 +60,7 @@ namespace Cliver
         /// Create HandyDictionary without auto-generating value function.
         /// </summary>
         /// <param name="defaultValue">the default value returned for an unset key</param>
+        /// <param name="disposeValue">method of disposing a value</param>
         public HandyDictionary(VT defaultValue, DisposeValue disposeValue = null)
         {
             this.defaultValue = defaultValue;
@@ -58,6 +72,7 @@ namespace Cliver
         /// <summary>
         /// Create HandyDictionary without auto-generating value function.
         /// </summary>
+        /// <param name="disposeValue">method of disposing a value</param>
         public HandyDictionary(DisposeValue disposeValue = null)
         {
             defaultValue = default;
@@ -65,11 +80,17 @@ namespace Cliver
                 this.disposeValue = disposeValue;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         ~HandyDictionary()
         {
             Dispose();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         virtual public void Dispose()
         {
             //lock (this)
@@ -94,10 +115,10 @@ namespace Cliver
                 keys2value.Clear();
             }
         }
-
         /// <summary>
         /// Remove the element by the key and dispose it if disposable.
         /// </summary>
+        /// <param name="key"></param>
         public void Remove(KT key)
         {
             lock (this)
@@ -149,6 +170,10 @@ namespace Cliver
         }
         Dictionary<KT, VT> keys2value = new Dictionary<KT, VT>();
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public IEnumerator<KeyValuePair<KT, VT>> GetEnumerator()
         {
             return keys2value.GetEnumerator();
@@ -159,6 +184,9 @@ namespace Cliver
             return this.GetEnumerator();
         }
 
+        /// <summary>
+        /// Actual key collection.
+        /// </summary>
         public Dictionary<KT, VT>.KeyCollection Keys
         {
             get
@@ -167,6 +195,9 @@ namespace Cliver
             }
         }
 
+        /// <summary>
+        /// Actual value collection.
+        /// </summary>
         public Dictionary<KT, VT>.ValueCollection Values
         {
             get
@@ -175,6 +206,12 @@ namespace Cliver
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public bool TryGetValue(KT key, out VT value)
         {
             if (!keys2value.TryGetValue(key, out value))
@@ -190,13 +227,18 @@ namespace Cliver
             return true;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
         public void Add(KT key, VT value)
         {
             this[key] = value;
         }
 
         /// <summary>
-        /// (!)Attention: the count can be implicitly changed by the auto-generating value function
+        /// (!)The count can be implicitly changed by the auto-generating value function.
         /// </summary>
         public int Count
         {

@@ -45,6 +45,9 @@ namespace Cliver
     //    //public string EscapedValue { get; internal set; }
     //}
 
+    /// <summary>
+    /// A helper class to process command line parameters.
+    /// </summary>
     public class CommandLine
     {
         //static public bool IsParameterSet(ICommandLineParameter parameter)
@@ -52,6 +55,12 @@ namespace Cliver
         //    return Regex.IsMatch(Environment.CommandLine, @"\s" + Regex.Escape(parameter.Name) + @"([^\w]|$)", RegexOptions.IgnoreCase);
         //}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <param name="commandLine"></param>
+        /// <returns></returns>
         static public bool IsParameterSet(string parameter, string commandLine = null)
         {
             if (commandLine == null)
@@ -59,6 +68,14 @@ namespace Cliver
             return Regex.IsMatch(commandLine, @"\s" + Regex.Escape(parameter) + @"([^\w]|$)", RegexOptions.IgnoreCase);
         }
 
+        /// <summary>
+        /// Get a command line paramter from the command line.
+        /// It must be formed as space separated pairs 'parameter name'='parameter value'
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <param name="defaultValue"></param>
+        /// <param name="commandLine"></param>
+        /// <returns></returns>
         public static string ParseParameter(string parameter, string defaultValue = "__EXCEPTION__", string commandLine = null)
         {
             if (commandLine == null)
@@ -95,12 +112,12 @@ namespace Cliver
 
         //}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="parameters">values are expected to be unescaped</param>
-        /// <returns></returns>
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="parameters">values are expected to be unescaped</param>
+        ///// <returns></returns>
         //public static string GetCommandLine(params ICommandLineParameter[] parameters)
         //{
         //    for (int i = 0; i < parameters.Length; i++)
@@ -118,11 +135,13 @@ namespace Cliver
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="parameters">values are expected to be unescaped</param>
         /// <returns></returns>
         public static string ToString(params (string name, string value)[] parameters)
         {
+            if (parameters.Length < 1)
+                return Regex.Replace(Environment.CommandLine, @"^\s*(\"".*?\""\s+|.*?\s+|.*)", "");
+
             List<(string name, string value)> ps = new List<(string name, string value)>();
             foreach ((string name, string value) p0 in parameters)
             {

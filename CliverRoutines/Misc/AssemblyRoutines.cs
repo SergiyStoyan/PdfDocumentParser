@@ -36,8 +36,8 @@ namespace Cliver
 
         public static string GetAppCompilationVersion()
         {
-            DateTime dt = AssemblyRoutines.GetAssemblyCompiledTime(Assembly.GetEntryAssembly());
-            DateTime dt2 = AssemblyRoutines.GetAssemblyCompiledTime(Assembly.GetCallingAssembly());
+            DateTime dt = GetAssemblyCompiledTime(Assembly.GetEntryAssembly());
+            DateTime dt2 = GetAssemblyCompiledTime(Assembly.GetCallingAssembly());
             dt = dt > dt2 ? dt : dt2;
             return dt.ToString("yy-MM-dd-HH-mm-ss");
         }
@@ -53,16 +53,6 @@ namespace Cliver
             AssemblyInfo ai = new AssemblyInfo(Assembly.GetCallingAssembly());
             return ai.Name;
         }
-
-        //public static System.Drawing.Icon GetAppIcon(Assembly assembly = null)
-        //{
-        //    return System.Drawing.Icon.ExtractAssociatedIcon((assembly != null ? assembly : Assembly.GetEntryAssembly()).Location);
-        //}
-
-        //public static System.Windows.Media.ImageSource GetAppIconImageSource()
-        //{
-        //    return GetAppIcon().ToImageSource();
-        //}
 
         public class AssemblyInfo
         {

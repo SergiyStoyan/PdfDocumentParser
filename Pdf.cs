@@ -59,7 +59,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 else//some pdf's require this because gs puts errors to stdout
                 {
-                    string bufferFileDir = System.IO.Path.GetTempPath() + Log.ProcessName;
+                    string bufferFileDir = System.IO.Path.GetTempPath() + Log.ProgramName;
                     Directory.CreateDirectory(bufferFileDir);
                     string bufferFile = bufferFileDir + "\\buffer.png";
                     p.StartInfo.Arguments = "-dNOPROMPT -r" + resolution + " -dDownScaleFactor=" + dDownScaleFactor + " -dBATCH -dFirstPage=" + pageI + " -dLastPage=" + pageI + " -sDEVICE=png16m -dNOPAUSE -sOutputFile=\"" + bufferFile + "\" -q \"" + pdfFile + "\"";

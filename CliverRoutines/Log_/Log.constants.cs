@@ -20,42 +20,53 @@ namespace Cliver
     /// </summary>
     public static partial class Log
     {
-
         static Log()
         {
-            /*if (ProgramRoutines.IsWebContext) - !!!crashes on Xamarin!!!
-                throw new Exception("Log is disabled in web context.");
+            {//this block works on Windows desktop, XamarinMAC, NT service, Android
+                Assembly headAssembly = Assembly.GetEntryAssembly();
+                //!!!when using WCF or Android, GetEntryAssembly() == NULL 
+                if (headAssembly == null)
+                    headAssembly = Assembly.GetCallingAssembly();
+                ProgramName = headAssembly.GetName(false).Name;
 
-            if (ProgramRoutines.IsWebContext)
-                ProcessName = System.Web.Compilation.BuildManager.GetGlobalAsaxType().BaseType.Assembly.GetName(false).Name;
-            else*/
-            /*
-            {//this block works on Windows desktop, XamarinMAC, NT service
-                Assembly entryAssembly = Assembly.GetEntryAssembly();
-                //!!!when using WCF, GetEntryAssembly() is NULL 
-                if (entryAssembly == null)
-                    entryAssembly = Assembly.GetCallingAssembly();
-                ProcessName = entryAssembly.GetName(false).Name;
-
-                AssemblyRoutines.AssemblyInfo ai = new AssemblyRoutines.AssemblyInfo(entryAssembly);
-                CompanyName = string.IsNullOrWhiteSpace(ai.Company) ? "CliverSoft" : ai.Company;
-                ProductName = ai.Product;
-
-                AppDir = AppDomain.CurrentDomain.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar);
-            }
-            */
-            {//this block works on Windows desktop, NT service. 
-                //!!!Needs testing on XamarinMAC
-                Process p = Process.GetCurrentProcess();
-                ProcessName = p.ProcessName;
-                AppDir = PathRoutines.GetFileDir(p.MainModule.FileName);
-                FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(p.MainModule.FileName);
-                if (fvi != null)
+                //AppDir = AppDomain.CurrentDomain.BaseDirectory?.TrimEnd(Path.DirectorySeparatorChar);!!!gives not an app's dir on WCF or Android
+                if (headAssembly.Location != null)
+                    AppDir = PathRoutines.GetFileDir(headAssembly.Location);
+                else//just in case. It hardly can come here
                 {
-                    CompanyName = fvi.CompanyName;
-                    //ProductName = fvi.ProductName;
+                    Uri u = new Uri(headAssembly.CodeBase);
+                    AppDir = PathRoutines.GetFileDir(u.LocalPath);
                 }
-            }            
+
+                AssemblyRoutines.AssemblyInfo ai = new AssemblyRoutines.AssemblyInfo(headAssembly);
+                CompanyName = ai.Company;
+            }
+
+            //{
+            //    HashSet<Assembly> assemblies = new HashSet<Assembly>();
+            //    Assembly a = null;
+            //    StackTrace stackTrace = new StackTrace();
+            //    foreach (StackFrame st in stackTrace.GetFrames())
+            //    {
+            //        Assembly b = st.GetMethod().DeclaringType.Assembly;
+            //        if (b == null)
+            //            break;
+            //        a = b;
+            //        assemblies.Add(a);
+            //    }
+            //    if (a == null)
+            //        a = Assembly.GetEntryAssembly();
+
+            //    AssemblyName = a.FullName;
+            //    Process p = Process.GetCurrentProcess();
+            //    AppDir = PathRoutines.GetFileDir(p.MainModule.FileName);
+            //    FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(p.MainModule.FileName);
+            //    if (fvi != null)
+            //    {
+            //        CompanyName = fvi.CompanyName;
+            //        //ProductName = fvi.ProductName;
+            //    }
+            //}
 
             //!!!No write permission on macOS
             //CompanyCommonDataDir = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + Path.DirectorySeparatorChar + CompanyName;
@@ -66,9 +77,9 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Name of this process.
+        /// Name of the assembly considered first in the program.
         /// </summary>
-        public static readonly string ProcessName;
+        public static readonly string ProgramName;
 
         /// <summary>
         /// Product name of the executing file.
@@ -106,7 +117,7 @@ namespace Cliver
             {
                 if (appCompanyCommonDataDir == null)
                     //!!!No write permission on macOS
-                    appCompanyCommonDataDir = CompanyCommonDataDir + Path.DirectorySeparatorChar + ProcessName;
+                    appCompanyCommonDataDir = CompanyCommonDataDir + Path.DirectorySeparatorChar + ProgramName;
                 return appCompanyCommonDataDir;
             }
         }
@@ -120,7 +131,12 @@ namespace Cliver
             get
             {
                 if (companyUserDataDir == null)
-                    companyUserDataDir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + Path.DirectorySeparatorChar + CompanyName;
+                {
+                    if (Assembly.GetEntryAssembly() == null)//on Android, macOS
+                        companyUserDataDir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);//it contains the app's name already so company name is a redundant
+                    else
+                        companyUserDataDir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + Path.DirectorySeparatorChar + CompanyName;
+                }
                 return companyUserDataDir;
             }
         }
@@ -134,7 +150,12 @@ namespace Cliver
             get
             {
                 if (appCompanyUserDataDir == null)
-                    appCompanyUserDataDir = CompanyUserDataDir + Path.DirectorySeparatorChar + ProcessName;
+                {
+                    if (Assembly.GetEntryAssembly() == null)//on Android, macOS
+                        appCompanyUserDataDir = CompanyUserDataDir;//it contains the app's name already
+                    else
+                        appCompanyUserDataDir = CompanyUserDataDir + Path.DirectorySeparatorChar + ProgramName;
+                }
                 return appCompanyUserDataDir;
             }
         }

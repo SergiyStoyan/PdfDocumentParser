@@ -10,11 +10,20 @@
 using System;
 using Newtonsoft.Json;
 using System.IO;
+using Newtonsoft.Json.Linq;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Cliver
 {
+    /// <summary>
+    /// Serialization helpers.
+    /// </summary>
     public static partial class Serialization
     {
+        /// <summary>
+        /// Serialization to JSON.
+        /// </summary>
         public static class Json
         {
             //public enum Mode
@@ -103,6 +112,12 @@ namespace Cliver
             public static bool IsEqual(object a, object b)
             {
                 return Serialize(a, false, true) == Serialize(b, false, true);
+            }
+
+            public static IEnumerable<string> GetMemberNames(object o)
+            {
+                JObject jo = (JObject)JToken.FromObject(o);
+                return jo.Properties().Select(x => x.Name);
             }
 
             /// <summary>

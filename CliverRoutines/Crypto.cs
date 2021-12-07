@@ -149,7 +149,7 @@ namespace Cliver
             }
 
             /// <summary>
-            /// EnCrypt <-> DeCrypt
+            /// EnCrypt to/from DeCrypt
             /// </summary>
             /// <param name="str"></param>
             /// <returns></returns>

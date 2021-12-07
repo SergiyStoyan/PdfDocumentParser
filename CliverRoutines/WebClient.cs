@@ -10,8 +10,17 @@ using System.Net;
 
 namespace Cliver
 {
+    /// <summary>
+    /// Enhanced System.Net.WebClient
+    /// </summary>
     public class WebClient : System.Net.WebClient
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="asyncResult"></param>
+        /// <returns></returns>
         protected override WebResponse GetWebResponse(WebRequest request, IAsyncResult asyncResult)
         {
             Exception = null;
@@ -28,6 +37,12 @@ namespace Cliver
             Response = response as HttpWebResponse;
             return response;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         protected override WebResponse GetWebResponse(WebRequest request)
         {
             Exception = null;
@@ -44,9 +59,20 @@ namespace Cliver
             Response = response as HttpWebResponse;
             return response;
         }
+        /// <summary>
+        /// 
+        /// </summary>
         public HttpWebResponse Response { get; private set; } = null;
+        /// <summary>
+        /// 
+        /// </summary>
         public WebException Exception { get; private set; } = null;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns></returns>
         protected override WebRequest GetWebRequest(Uri address)
         {
             WebRequest request = base.GetWebRequest(address);
@@ -54,8 +80,14 @@ namespace Cliver
             Request.CookieContainer = CookieContainer;
             return request;
         }
+        /// <summary>
+        /// 
+        /// </summary>
         public HttpWebRequest Request { get; private set; } = null;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public readonly CookieContainer CookieContainer = new CookieContainer();
     }
 }

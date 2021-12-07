@@ -13,6 +13,10 @@ using System.Reflection;
 
 namespace Cliver
 {
+    /// <summary>
+    /// Base class for Enum implementation.
+    /// </summary>
+    /// <typeparam name="V">value type</typeparam>
     public class Enum<V>
     {
         public override string ToString()
@@ -20,23 +24,47 @@ namespace Cliver
             return Value?.ToString();
         }
 
+        /// <summary>
+        /// Create a Enum from a value.
+        /// </summary>
+        /// <param name="value"></param>
         protected Enum(V value)
         {
             Value = value;
         }
 
+        /// <summary>
+        /// Value of this Enum.
+        /// </summary>
         public V Value { get; protected set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="E"></typeparam>
+        /// <returns></returns>
         static public Dictionary<string, E> ToDictionary<E>() where E : Enum<V>
         {
             return typeof(E).GetFields(BindingFlags.Public | BindingFlags.Static).Where(x => x.FieldType.IsSubclassOf(typeof(Enum<V>))).ToDictionary(x => x.Name, x => ((E)x.GetValue(null)));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="E"></typeparam>
+        /// <returns></returns>
         static public List<E> ToList<E>() where E : Enum<V>
         {
             return typeof(E).GetFields(BindingFlags.Public | BindingFlags.Static).Where(x => x.FieldType.IsSubclassOf(typeof(Enum<V>))).Select(x => ((E)x.GetValue(null))).ToList();
         }
 
+        /// <summary>
+        /// Convert a value string into a Enum.
+        /// </summary>
+        /// <typeparam name="E"></typeparam>
+        /// <param name="valueStr"></param>
+        /// <param name="ignoreCase"></param>
+        /// <returns></returns>
         static public E Parse<E>(string valueStr, bool ignoreCase = true) where E : Enum<V>
         {
             if (valueStr != null)
@@ -57,7 +85,24 @@ namespace Cliver
             return null;
         }
 
+        /// <summary>
+        /// Check if this Enum is included in a given collection.
+        /// </summary>
+        /// <typeparam name="E"></typeparam>
+        /// <param name="objects"></param>
+        /// <returns></returns>
         public bool IsAmong<E>(params E[] objects) where E : Enum<V>
+        {
+            return IsAmong(objects);
+        }
+
+        /// <summary>
+        /// Check if this Enum is included in a given collection.
+        /// </summary>
+        /// <typeparam name="E"></typeparam>
+        /// <param name="objects"></param>
+        /// <returns></returns>
+        public bool IsAmong<E>(IEnumerable< E> objects) where E : Enum<V>
         {
             return objects.FirstOrDefault(a => a == (E)this) != null;
         }

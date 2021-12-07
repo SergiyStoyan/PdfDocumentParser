@@ -21,10 +21,15 @@ namespace Cliver
     abstract public class SettingsFieldInfo
     {
         /// <summary>
-        /// Settings' full name is the string that is used in code to refer to this field/property. 
+        /// Settings field's full name is the string that is used in code to refer to this field/property. 
         /// It defines exactly the Settings field/property in code but has nothing to do with the one's type. 
         /// </summary>
         public readonly string FullName;
+
+        /// <summary>
+        /// Settings field's name. 
+        /// </summary>
+        public readonly string Name;
 
         /// <summary>
         /// Path of the storage file. It consists of a directory which defined by the Settings based type and the file name which is the field's full name in the code.
@@ -67,7 +72,11 @@ namespace Cliver
         /// </summary>
         public readonly bool NullSerialized = false;
 
-        internal Settings GetObject()
+        /// <summary>
+        /// Get the object to which this SettingsFieldInfo is attached to.
+        /// </summary>
+        /// <returns>The Settings object linked with this SettingsFieldInfo</returns>
+        public Settings GetObject()
         {
             lock (this)
             {
@@ -99,7 +108,8 @@ namespace Cliver
             this.setObject = setObject;
 #endif
             Type = settingsType;
-            FullName = settingsTypeMemberInfo.DeclaringType.FullName + "." + settingsTypeMemberInfo.Name;
+            Name = settingsTypeMemberInfo.Name;
+            FullName = settingsTypeMemberInfo.DeclaringType.FullName + "." + Name;
             /*//version with static __StorageDir
             string storageDir;
             for (; ; )

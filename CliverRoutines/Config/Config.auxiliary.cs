@@ -139,8 +139,19 @@ namespace Cliver
             Reload(settingsFieldHostingType.FullName + "." + settingsFieldName);
         }
 
-        ///// <summary>
+        /// <summary>
+        /// Allows to get the Settings field's properties before its value has been created (i.e. before the Settings field has been initialized).
+        /// </summary>
+        /// <param name="settingsFieldHostingType">full type name of the class hosting the Settings field</param>
+        /// <param name="settingsFieldName">name of the Settings field</param>
+        /// <returns>Settings field's properties</returns>
+        public static SettingsFieldInfo GetSettingsFieldInfo(Type settingsFieldHostingType, string settingsFieldName)
+        {
+            return GetSettingsFieldInfo(settingsFieldHostingType.FullName + "." + settingsFieldName);
+        }
+
         //// ???what would it be needed for?
+        ///// <summary>
         ///// Returns the Settings object which is set to the field identified by the field's full name.
         ///// </summary>
         ///// <param name="settingsFieldFullName">full name of Settings field; it equals to the name of its file without extention</param>
@@ -149,11 +160,11 @@ namespace Cliver
         //{
         //    SettingsFieldInfo sf = GetSettingsFieldInfo(settingsFieldFullName);
         //    return sf.GetObject();
-        //}
+        //}  
 
-        //!!!non-linked SettingsFieldInfo's must not be allowed in the custom code
         ///// <summary>
         ///// Get SettingsFieldInfos for the Settings type.
+        ///// ATTENTION: potentially a SettingsFieldInfo object can become out of game so be careful operating with it.
         ///// </summary>
         ///// <param name="settingsType">Settings type</param>
         ///// <param name="fresh">if TRUE then the app is re-parsed looking up for the required Settings type</param>
@@ -161,11 +172,24 @@ namespace Cliver
         //public static List<SettingsFieldInfo> GetSettingsFieldInfos(Type settingsType, bool fresh = false)
         //{
         //    if (fresh)
-        //        return EnumSettingsFieldInfos().Where(a => a.Type == settingsType).ToList();
+        //        return getSettingsFieldInfos().Where(a => a.Type == settingsType).ToList();
         //    lock (settingsFieldFullNames2SettingsFieldInfo)
         //    {
         //        return settingsFieldFullNames2SettingsFieldInfo.Values.Where(a => a.Type == settingsType).ToList();
         //    }
         //}
+
+        /// <summary>
+        /// Get all the SettingsFieldInfo's in the app.
+        /// ATTENTION: potentially, SettingsFieldInfo objects may become out of game so be careful while operating with them.
+        /// </summary>
+        /// <returns>SettingsFieldInfo ennumerator</returns>
+        static public IEnumerable<SettingsFieldInfo> GetSettingsFieldInfos()
+        {
+            lock (settingsFieldFullNames2SettingsFieldInfo)
+            {
+                return settingsFieldFullNames2SettingsFieldInfo.Values;
+            }
+        }
     }
 }

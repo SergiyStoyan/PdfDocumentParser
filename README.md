@@ -6,12 +6,13 @@ PdfDocumentParser does all the tricky job of building parsing templates, searc
 
 PdfDocumentParser is a .NET DLL.
 
-For a sample of using PdfDocumentParser or a framework refer to SampleParser project in the repository.
+For a usage example / framework refer to SampleParser project in the repository.
 
 ### Known issues
 - because it is WinForm, GUI may appear mangled in UHD display (or otherwise in FHD, depending on version). Don't be afraid: you can open it in VS and tune for your resolution. WPF version is in freezing developement...
 
-### [Documentation](https://sergeystoyan.github.io/PdfDocumentParser/#1)
+### Documentation
+[Here](https://sergeystoyan.github.io/PdfDocumentParser/#1)
 
 ### Support
 Contact me if you want me to enhance PdfDocumentParser. Also, you can hire me for solving a parsing task of any complexity or for general development.

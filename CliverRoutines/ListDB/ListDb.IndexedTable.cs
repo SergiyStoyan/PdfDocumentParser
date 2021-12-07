@@ -109,6 +109,7 @@ namespace Cliver
             /// <summary>
             /// Table works as an ordered HashSet
             /// </summary>
+            /// <param name="index"></param>
             /// <param name="document"></param>
             override public Results Insert(int index, DocumentType document)
             {

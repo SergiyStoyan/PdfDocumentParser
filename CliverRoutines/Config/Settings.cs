@@ -206,10 +206,19 @@ namespace Cliver
 
         #endregion
 
+        /// <summary>
+        /// 
+        /// </summary>
         virtual protected void Loaded() { }
 
+        /// <summary>
+        /// 
+        /// </summary>
         virtual protected void Saving() { }
 
+        /// <summary>
+        /// 
+        /// </summary>
         virtual protected void Saved() { }
 
         /*//version with static __StorageDir
