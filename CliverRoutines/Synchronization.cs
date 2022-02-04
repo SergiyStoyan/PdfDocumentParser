@@ -21,8 +21,8 @@ namespace Cliver
         /// <summary>
         /// 
         /// </summary>
-        abstract protected List<string> synchronizedSettingsFieldFullNames { get; }
-        //abstract protected List<Type> synchronizedSettingsTypes { get; }
+        abstract protected HashSet<string> synchronizedSettingsFieldFullNames { get; }
+        //abstract protected HashSet<Type> synchronizedSettingsTypes { get; }
 
         /// <summary>
         /// 
@@ -36,11 +36,21 @@ namespace Cliver
         /// <summary>
         /// 
         /// </summary>
-        abstract protected string synchronizedFileDownloadFolder { get; }// = UserSettings.StorageDir;
-        /// <summary>
-        /// (!)It will download only those files that already exist in the synchronizedFileDownloadFolder.
-        /// </summary>
-        abstract protected Regex synchronizedFileNameFilter { get; }// = new Regex(@"\.fltr$", RegexOptions.IgnoreCase);
+        abstract protected HashSet<SynchronizedFolder> synchronizedFolders { get; }
+
+        public struct SynchronizedFolder
+        {
+            readonly public string Folder;
+            readonly public string SynchronizationFolderName;
+            readonly public Regex FileNameFilter;
+
+            public SynchronizedFolder(string folder, Regex fileNameFilter = null, string synchronizationFolderName = null)
+            {
+                Folder = folder;
+                FileNameFilter = fileNameFilter;
+                SynchronizationFolderName = synchronizationFolderName;
+            }
+        }
 
         /// <summary>
         /// 
@@ -124,8 +134,9 @@ namespace Cliver
                     //if (string.IsNullOrWhiteSpace(parameters.DownloadFolderName))
                     //    throw new Exception("DownloadFolderName is not set.");
                     this.parameters = parameters;
-                    downloadFolder = FileSystemRoutines.CreateDirectory(parameters.SynchronizationFolder + "\\" + parameters.DownloadFolderName);
-                    uploadFolder = FileSystemRoutines.CreateDirectory(parameters.SynchronizationFolder + "\\" + parameters.UploadFolderName);
+                    //synchronizedSettingsFieldFullNames= synchronizedSettingsFieldFullNames.Distinct().ToList();
+                    downloadFolder = FileSystemRoutines.CreateDirectory(parameters.SynchronizationFolder + Path.DirectorySeparatorChar + parameters.DownloadFolderName);
+                    uploadFolder = FileSystemRoutines.CreateDirectory(parameters.SynchronizationFolder + Path.DirectorySeparatorChar + parameters.UploadFolderName);
                     //if (PathRoutines.IsDirWithinDir(downloadFolder, uploadFolder))
                     //    throw new Exception("DownloadFolder cannot be within UploadFolder: \r\n" + downloadFolder + "\r\n" + uploadFolder);
                     //if (PathRoutines.IsDirWithinDir(downloadFolder, uploadFolder))
@@ -160,8 +171,8 @@ namespace Cliver
                         Settings settings = sfi.GetObject();
                         if (settings == null)
                             continue;
-                        pollUploadSettingsFile(settings);
                         pollDownloadSettingsFile(settings);
+                        pollUploadSettingsFile(settings);
                     }
                     //foreach (Type sst in synchronizedSettingsTypes)
                     //{
@@ -178,13 +189,50 @@ namespace Cliver
                     //    }
                     //}
 
-                    if (synchronizedFileDownloadFolder != null && Directory.Exists(synchronizedFileDownloadFolder))
-                        foreach (string file in Directory.GetFiles(synchronizedFileDownloadFolder))
+                    if (synchronizedFolders != null)
+                        foreach (SynchronizedFolder sf in synchronizedFolders)
                         {
-                            if (!synchronizedFileNameFilter.IsMatch(PathRoutines.GetFileName(file)))
-                                continue;
-                            pollUploadFile(file);
-                            pollDownloadFile(file);
+                            string synchronizationFolder = downloadFolder + Path.DirectorySeparatorChar + sf.SynchronizationFolderName;
+                            if (Directory.Exists(synchronizationFolder))
+                                foreach (string file in Directory.GetFiles(synchronizationFolder))
+                                {
+                                    if (sf.FileNameFilter.IsMatch(PathRoutines.GetFileName(file)) == false)
+                                        continue;
+                                    try
+                                    {
+                                        DateTime downloadLWT = File.GetLastWriteTime(file);
+                                        if (downloadLWT.AddSeconds(100) > DateTime.Now)//it is being written
+                                            return;
+                                        string file2 = sf.Folder + Path.DirectorySeparatorChar + PathRoutines.GetFileName(file);
+                                        if (File.Exists(file2) && downloadLWT <= File.GetLastWriteTime(file2))
+                                            return;
+                                        copy(file, file2);
+                                        onNewerFile(file);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        ErrorHandler(e);
+                                    }
+                                }
+                            foreach (string file in Directory.GetFiles(sf.Folder))
+                            {
+                                if (sf.FileNameFilter.IsMatch(PathRoutines.GetFileName(file)) == false)
+                                    continue;
+                                try
+                                {
+                                    DateTime uploadLWT = File.GetLastWriteTime(file);
+                                    if (uploadLWT.AddSeconds(10) > DateTime.Now)//it is being written
+                                        return;
+                                    string file2 = FileSystemRoutines.CreateDirectory(uploadFolder + Path.DirectorySeparatorChar + sf.SynchronizationFolderName) + Path.DirectorySeparatorChar + PathRoutines.GetFileName(file);
+                                    if (File.Exists(file2) && uploadLWT <= File.GetLastWriteTime(file2))
+                                        return;
+                                    copy(file, file2);
+                                }
+                                catch (Exception e)
+                                {
+                                    ErrorHandler(e);
+                                }
+                            }
                         }
 
                     string appSetupFile = null;
@@ -229,7 +277,7 @@ namespace Cliver
                 DateTime uploadLWT = File.GetLastWriteTime(settings.__Info.File);
                 if (uploadLWT.AddSeconds(10) > DateTime.Now)//it is being written
                     return;
-                string file2 = uploadFolder + "\\" + PathRoutines.GetFileName(settings.__Info.File);
+                string file2 = uploadFolder + Path.DirectorySeparatorChar + PathRoutines.GetFileName(settings.__Info.File);
                 if (File.Exists(file2) && uploadLWT <= File.GetLastWriteTime(file2))
                     return;
                 copy(settings.__Info.File, file2);
@@ -244,7 +292,7 @@ namespace Cliver
         {
             try
             {
-                string file = downloadFolder + "\\" + PathRoutines.GetFileName(settings.__Info.File);
+                string file = downloadFolder + Path.DirectorySeparatorChar + PathRoutines.GetFileName(settings.__Info.File);
                 if (!File.Exists(file))
                     return;
                 DateTime downloadLWT = File.GetLastWriteTime(file);
@@ -254,43 +302,6 @@ namespace Cliver
                     return;
                 copy(file, settings.__Info.File);
                 onNewerSettingsFile(settings);
-            }
-            catch (Exception e)
-            {
-                ErrorHandler(e);
-            }
-        }
-
-        void pollUploadFile(string file)
-        {
-            try
-            {
-                DateTime uploadLWT = File.GetLastWriteTime(file);
-                if (uploadLWT.AddSeconds(10) > DateTime.Now)//it is being written
-                    return;
-                string file2 = uploadFolder + "\\" + PathRoutines.GetFileName(file);
-                if (File.Exists(file2) && uploadLWT <= File.GetLastWriteTime(file2))
-                    return;
-                copy(file, file2);
-            }
-            catch (Exception e)
-            {
-                ErrorHandler(e);
-            }
-        }
-
-        void pollDownloadFile(string file)
-        {
-            try
-            {
-                DateTime downloadLWT = File.GetLastWriteTime(file);
-                if (downloadLWT.AddSeconds(100) > DateTime.Now)//it is being written
-                    return;
-                string file2 = synchronizedFileDownloadFolder + "\\" + PathRoutines.GetFileName(file);
-                if (File.Exists(file2) && downloadLWT <= File.GetLastWriteTime(file2))
-                    return;
-                copy(file, file2);
-                onNewerFile(file);
             }
             catch (Exception e)
             {

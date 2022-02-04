@@ -25,7 +25,8 @@ namespace Cliver
         /// <param name="mode">log configuration</param>
         /// <param name="baseDirs">directories for logging, ordered by preference. When NULL, the built-in directory list is used.</param>
         /// <param name="deleteLogsOlderThanDays">old logs that are older than the number of days will be deleted. When negative, no clean-up is performed.</param>
-        public static void Initialize(Mode? mode = null, List<string> baseDirs = null, int deleteLogsOlderThanDays = 10)
+        /// <param name="rootDirName">RootDir folder name</param>
+        public static void Initialize(Mode? mode = null, List<string> baseDirs = null, int deleteLogsOlderThanDays = 10, string rootDirName = null)
         {
             lock (lockObject)
             {
@@ -34,11 +35,13 @@ namespace Cliver
                     Log.mode = (Mode)mode;
                 Log.baseDirs = baseDirs;
                 Log.deleteLogsOlderThanDays = deleteLogsOlderThanDays;
+                Log.rootDirName = rootDirName != null ? rootDirName : Log.ProgramName;
             }
         }
         static List<string> baseDirs = null;
         static int deleteLogsOlderThanDays = 10;
         static Mode mode = Mode.ONE_FOLDER | Mode.DEFAULT_NAMED_LOG;
+        static string rootDirName;// { get; private set; }
 
         /// <summary>
         /// Log level which is passed to each log as default.
@@ -202,7 +205,7 @@ namespace Cliver
         /// <summary>
         ///Directory where logs and log sessions are written.
         /// </summary>
-        public static string RootDir 
+        public static string RootDir
         {
             get
             {
@@ -238,7 +241,7 @@ namespace Cliver
                 foreach (string baseDir in baseDirs)
                 {
                     BaseDir = baseDir;
-                    rootDir = BaseDir + Path.DirectorySeparatorChar + Log.ProgramName + RootDirNameSuffix;
+                    rootDir = BaseDir + Path.DirectorySeparatorChar + rootDirName + RootDirNameSuffix;
                     if (create)
                         try
                         {
@@ -257,7 +260,7 @@ namespace Cliver
                 if (rootDir == null)
                     throw new Exception("Could not access any log directory.");
                 rootDir = PathRoutines.GetNormalizedPath(rootDir, false);
-                if (Directory.Exists(rootDir) && deleteLogsOlderThanDays >= 0)
+                if (Directory.Exists(rootDir) && deleteLogsOlderThanDays >= 0 && deletingOldLogsThread?.IsAlive != true)
                     deletingOldLogsThread = ThreadRoutines.Start(() => { Log.DeleteOldLogs(deleteLogsOlderThanDays, DeleteOldLogsDialog); });//to avoid a concurrent loop while accessing the log file from the same thread 
             }
         }

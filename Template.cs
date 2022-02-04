@@ -36,6 +36,11 @@ namespace Cliver.PdfDocumentParser
 
         public List<Field> Fields;
 
+        public bool IsField(string fieldName)
+        {
+            return null != Fields.Find(a => a.Name == fieldName);
+        }
+
         public class RectangleF
         {
             public float X;

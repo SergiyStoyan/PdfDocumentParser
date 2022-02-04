@@ -145,6 +145,7 @@ namespace Cliver
         /// Tries to load it from the initial file located in the app's directory. 
         /// If this file does not exist, it creates an object with the hardcoded values.
         /// (!)Calling this method on a detached Settings object throws an exception because otherwise it could lead to a confusing effect. 
+        /// Nevertheless, it can be called from Loaded() method.
         /// </summary>
         public void Reset(/*bool ignoreInitFile = false*/)
         {
@@ -159,6 +160,7 @@ namespace Cliver
         /// If this file does not exist, it tries to load it from the initial file located in the app's directory. 
         /// If this file does not exist, it creates an object with the hardcoded values.
         /// (!)Calling this method on a detached Settings object throws an exception because otherwise it could lead to a confusing effect. 
+        /// Nevertheless, it can be called from Loaded() method.
         /// </summary>
         public void Reload()
         {

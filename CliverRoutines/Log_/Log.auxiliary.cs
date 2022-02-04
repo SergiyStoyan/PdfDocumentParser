@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Cliver
 {
@@ -31,8 +32,8 @@ namespace Cliver
                 try
                 {
                     if (deleteLogsOlderDays < 0)
-                        return; 
-                        DateTime firstLogTime = DateTime.Now.AddDays(-deleteLogsOlderDays);
+                        return;
+                    DateTime firstLogTime = DateTime.Now.AddDays(-deleteLogsOlderDays);
                     //!!!sometimes no session is created yet by this moment or this function is called without log at all, so the session list can be empty
                     DateTime currentLogTime = Session.GetAll().Select(a => a.CreatedTime).DefaultIfEmpty(DateTime.Now.AddHours(-1)).Min();
                     if (firstLogTime > currentLogTime)
@@ -216,6 +217,33 @@ namespace Cliver
         static public string GetThisMethodName([System.Runtime.CompilerServices.CallerMemberName] string name = "undefined")
         {
             return name;
+        }
+
+        static public string GetThisMethodInfo(params object[] parameters)
+        {
+            MethodBase method = new StackFrame(1, false).GetMethod();
+            string s = method.DeclaringType.FullName + "::" + method.Name;
+            if (parameters.Length > 0)
+            {
+                List<string> ps = new List<string>();
+                foreach (object p in parameters)
+                    ps.Add(p.ToStringByJson());
+                s += "(\r\n" + string.Join(",\r\n", ps) + "\r\n)";
+            }
+            return s;
+        }
+
+        static public string GetAssembliesInfo(IEnumerable<string> namespaces)
+        {
+            StackTrace stackTrace = new StackTrace();
+            Assembly logAssembly = Assembly.GetExecutingAssembly();
+            Assembly callingAssembly = stackTrace.GetFrames().Select(f => f.GetMethod().DeclaringType.Assembly).Where(a => a != logAssembly).FirstOrDefault();
+            if (callingAssembly == null)
+                callingAssembly = Assembly.GetEntryAssembly();
+            return string.Join("\r\n",
+                AssemblyRoutines.GetAssemblyBranchByNamespace(callingAssembly, new Regex(string.Join("|", namespaces.Select(a => Regex.Escape(a)))))
+                    .Select(a => a.GetName()).Select(a => a.Name + " - " + a.Version)
+                );
         }
     }
 }

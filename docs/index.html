@@ -69,9 +69,9 @@
 
 
             <h3>Warnings</a></h3>
-               <p>(!) Due to Emgu restriction, PdfDocumentParser built in Any CPU configuration throws an exception during execution. So you have to choose either 64 or 32 (<a href='https://www.emgu.com/wiki/index.php/Download_And_Installation#Targeting_.Net_Framework'>Emgu doc</a>).
+               <p><span class='attention'>(!)</span>Due to Emgu restriction, PdfDocumentParser built in Any CPU configuration throws an exception during execution. So you have to choose either 64 or 32 (<a href='https://www.emgu.com/wiki/index.php/Download_And_Installation#Targeting_.Net_Framework'>Emgu doc</a>).
 			   
-			   <p>(!) Being a WinForm application, PdfDocumentParser TemplateEditor can be displayed deteriorated on a high resolution monitor. To fix it, use the DPI scaling options for executables provided by Windows.
+			   <p><span class='attention'>(!)</span>Being a WinForm based, PdfDocumentParser's TemplateEditor can be displayed deteriorated on a high resolution monitor. To fix it, use the DPI scaling options for executables provided by Windows.
 			   
 
             <h2><a name='licensing'>Licensing</a></h2>
@@ -160,7 +160,7 @@ setLicense();
                     <td>
                         It allows to loose bonds between character boxes in the anchor when for some reason they can shift relatively to each other. It is measured in pixels and must be a positive float number, non-zero even for identical documents because of discrepancy reasoned by internal image re-scaling.
                         <br>It makes no sense, obviously, when the anchor consists of only 1 character.
-						<br><span class='attention'>NOTE: </span>Increasing this parameter might bring to failing to detect the existing anchor because PdfDocumentParser looks for matches with rectangular that contain exactly the anchor's chars and does not contain any more chars (excluding invisible ones which can be ignored). That is, if there are several same chars located on a page close to each other within the deviation distance then the engine can catch one of them while the other one(s) can appear within the match rectangular making thus the match invalid. 						
+						<br><span class='attention'>(!)</span>Increasing this parameter might bring to failing to detect the existing anchor because PdfDocumentParser looks for matches with rectangular that contain exactly the anchor's chars and does not contain any more chars (excluding invisible ones which can be ignored). That is, if there are several same chars located on a page close to each other within the deviation distance then the engine can catch one of them while the other one(s) can appear within the match rectangular making thus the match invalid. 						
                     </td>
                 </tr>
                 <tr>
@@ -191,7 +191,7 @@ setLicense();
                 <tr>
                     <td class='title_column'>OCR entire page</td>
                     <td>
-                        <span class='attention'>NOTE: </span>This switch can completely change parsing. It is because OCR by Tesseract of a larger and a smaller fragments can give different recognition of the same text.
+                        <span class='attention'>(!)</span>This switch can completely change parsing. It is because OCR by Tesseract of a larger and a smaller fragments can give different recognition of the same text.
                         <br>Which is better? OCR of entire page gives sometimes more correct results, sometimes otherwise. But it always takes considerably longer time than OCR of a smaller fragment which is defined by Search rectangle margin.
                         <br>This switch makes sense only if Search rectangle margin is on, otherwise the entire page is OCR'ed anyway.
                     </td>
@@ -200,7 +200,7 @@ setLicense();
 
             <h4><a name="CvImage">CvImage</a></h4>
         <p>This type is an image that represents the area selected on PDF page while creating anchor. It can be used on any visible part of either native or scanned PDF page.
-        <p>For native PDF documents whose appearance has no discrepancy in quality, CvImage type works quite well.
+        <p>For native PDF documents, as their appearance has no discrepancy in quality and size, CvImage type works quite well.
         <p>CvImage is based on the OpenCV image template matching.
         <p>
             When anchoring to a text which is presented by image as happens in scanned or mixed documents, there is a choice between CvImage and OcrText types. Which one to choose? If a target image does not change much from document to document and looks the same (no matter how poor its quality is), CvImage is more reliable and fast. However, if a target image has an essential discrepancy in size, contrast, brightness, orientation etc. in documents, OcrText may work better.
@@ -220,11 +220,11 @@ setLicense();
             </table>
 
             <h4>ImageData</h4>
-        <p><span class='attention'>NOTE: </span> this type is obsolete and <a href="#CvImage">CvImage</a> should be used instead. Remains for backward compatibility.
+        <p><span class='attention'>(!)</span>This type is obsolete and <a href="#CvImage">CvImage</a> should be used instead. Remains for backward compatibility.
         <p>This type is an image that represents the area selected on PDF page while creating anchor. It can be used on any visible part of either native or scanned PDF page.
 
         <p>
-            <span class='attention'>NOTE: </span> even when an image fragment is searched within the same page where it was extracted from, it cannot be found without a non-zero tolerance. It happens because search hashes of a whole page and of a fragment are produced after downsizing them, and then, when restoring images from the hashes, pixel interpolation gives slight deviations from the original images. Those deviations have to be overcome with some tolerance.
+            <span class='attention'>(!)</span>Even when an image fragment is searched within the same page where it was extracted from, it cannot be found without a non-zero tolerance. It happens because search hashes of a whole page and of a fragment are produced after downsizing them, and then, when restoring images from the hashes, pixel interpolation gives slight deviations from the original images. Those deviations have to be overcome with some tolerance.
 
             <table>
                 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
@@ -255,13 +255,13 @@ setLicense();
             A linked anchor is named 'child' of the linking one which is named 'parent'. When an anchor is linked to another anchor, its search area (when it is set to not entire page) becomes related to its parent anchor's position. That means that a parent anchor is searched not until its first match found as done for a stand-alone anchor, but until a match found that satisfies to the child anchor as well.
             <br>More specifically, when a child anchor has <a href='#anchorPdfText'>Search Rectangle Margin</a> set to not entire page, position of its parent anchor, while searching as parent, can differ from position of the very same anchor, while searching stand-alone.
             <br>The same consideration is true for child anchors too: an anchor, whose search area is set to not entire page, can change its position after linking to another anchor.
-            <br>Therefore, <span class='attention'>NOTE: </span>An anchor acting stand-alone and the same anchor acting as a part of a compound anchor should be considered different anchors because they can have different positions on a page.
+            <br>Hence, <span class='attention'>(!)</span>an anchor acting stand-alone and that same anchor acting as a part of a compound anchor should be viewed as different anchors because they can have different positions on a page.
         <p>
             Number of anchors in a compound anchor can be any. Though, it should be taken to account that processing time of recursive search performed for a compound anchor exponentially grows with the chain length.
 
 
             <h3>Creating anchor</h3>
-            <span class='attention'>NOTE: </span> In a compound anchor, if some child anchor's position depends on its parent's position, those anchors should be set on the same page. Otherwise, anchor's position can be calculated incorrectly. So, when tuning a compound anchor on a page which is not the page where it was set initially, it is recommended to reset it completely from scratch.
+            <span class='attention'>(!)</span>In a compound anchor, if some child anchor's position depends on its parent's position, those anchors should be set on the same page. Otherwise, anchor's position can be calculated incorrectly. So, when tuning a compound anchor on a page which is not the page where it was set initially, it is recommended to reset it completely from scratch.
         <p>
             How to create anchors, see in <a href='#tutorialAnchor'>tutorial</a>.
 
@@ -279,7 +279,7 @@ setLicense();
 
             <h3>Boolean expression</h3>
             Condition expressions are composed of the following symbols: &lt;anchor id&gt;, '!', '&', '|', '(', ')', 'T', 'F'. When an anchor referenced by &lt;anchor id&gt; is found then it is treated as True, otherwise False. The meaning of condition is the boolean result of its expression and is a function of pair [PDF page, template].
-        <p><span class='attention'>NOTE: </span>Operands '&' and '|' are processed successively, thus, for instance, "1 | 2 & 3" and "2 & 3 | 1" are not equivalent. Parentheses must be used to manage precedence of operations.
+        <p><span class='attention'>(!)</span>Operands '&' and '|' are processed successively, thus, for instance, "1 | 2 & 3" and "2 & 3 | 1" are not equivalent. Parentheses must be used to manage precedence of operations.
         <p>
             Sample expressions:
             <table>
@@ -290,7 +290,7 @@ setLicense();
                 </tr>
                 <tr>
                     <td class='title_column_center'>(1 | 7 | 8) & 2</td>
-                    <td>This kind of expression is useful for instance when a company uses different logos for documents of the same structure. In such a case, instead of creating several separate templates, a single template can be set to accept more than 1 logo image. Respectively anchors #1,7 and 8 are targeted to the possible logos.</td>
+                    <td>An expression like this can be useful when a company uses different logos for documents of the same structure. In such a case, instead of creating several separate templates, a single template can be set to accept more than 1 logo image. Respectively anchors #1,7 and 8 are targeted to the possible logos.</td>
                 </tr>
                 <td class='title_column_center'>!2 | (2 & 3)</td>
                 <td>Such an expression could be used for instance in decision whether a certain field must be parsed or passed off.</td></tr>
@@ -370,7 +370,7 @@ setLicense();
 
 
             <h3>Setting field</h3>
-            <span class='attention'>NOTE: </span> A field should be completely set on the same page. Anchors which are linked by a field, can be created on any page before, but should be assigned on the same page together with the field's rectangle. Otherwise, field's shift or size can be calculated incorrectly on some page during parsing. So, when tuning a field on a page which is not the page where it was set initially, it is recommended to reset it completely from scratch.
+            <span class='attention'>(!)</span>A field should be completely set on the same page. Anchors which are linked by a field, can be created on any page before, but should be assigned on the same page together with the field's rectangle. Otherwise, field's shift or size can be calculated incorrectly on some page during parsing. So, when tuning a field on a page which is not the page where it was set initially, it is recommended to reset it completely from scratch.
         <p>
             How to set fields, see in <a href='#tutorialField'>the tutorial</a>.
 
@@ -429,7 +429,7 @@ setLicense();
                 </tr>
                 <tr>
                     <td class='title_column'><a name='ScaleByAnchor'>ScalingAnchorId</a></td>
-                    <td>When scans for the same template can differ by their scale then they must be resized to conform to the scale expected by the template. It is done automatically by an image anchor: create a CvImage anchor and select an image that is common for all the scans. (!)A larger image provides a precisier scaling. Then select this anchor in the Scale By Anchor dropdown. Now, PdfDocumentParser engine will rescale scans respectively if their scaling anchor is bigger or smaller then the initial one.</td>
+                    <td>When scans for the same template can differ by their scale then they must be resized to conform to the scale expected by the template. It is done automatically by an image anchor: create a CvImage anchor and select an image that is common for all the scans. <span class='attention'>(!)</span>A larger image provides a precisier scaling. Then select this anchor in the Scale By Anchor dropdown. Now, PdfDocumentParser engine will rescale scans respectively if their scaling anchor is bigger or smaller then the initial one.</td>
                 </tr>
                 <tr>
                     <td class='title_column'><a name='PreprocesingCode'>BitmapPreprocessorClassDefinition</a></td>
@@ -769,7 +769,7 @@ foreach(page in pageCollection)
         <p>Anchors for the fields will be created later.
 
         <p>
-            <span class='attention'>NOTE: </span>when you select a row in either table: anchors, conditions or fields, its status is updated in the head cell and the captured place is displayed in the page viewer.
+            <span class='attention'>(!)</span>When you select a row in either table: anchors, conditions or fields, its status is updated in the head cell and the captured place is displayed in the page viewer.
 
             <h3><a name='tutorialCondition'>Specify conditions</a></h3>
             We already have created anchors #1 and #2 that are needed to specify FirstPageOfDocument's expression. It must be True only when the anchors are found together on a page.
@@ -822,7 +822,7 @@ foreach(page in pageCollection)
             <br>It is the main method designed for correctly-structured tables.
             <br>There must be a field that captures the whole table. Then, there must be fields that capture table's columns. The column fields must have <code>ColumnOfTable</code> property set to the name of their table field.
             <br>When this is done, <code>GetValue([column field], ValueTypes.TextLines)</code> returns an array of strings that correspond to the rows of the table. That means that the size of the output array will be the same for all the column fields. Thus, if a column has some rows empty then they will be presented in the output array as empty strings.
-            <br><span class='attention'>NOTE: </span>Only content of the intersection of a column field and its table field goes to the output.
+            <br><span class='attention'>(!)</span>Only content of the intersection of a column field and its table field goes to the output.
 
         <p>Sometimes tables can not be clearly separated onto columns because they include sub-headers that break the structure or because their fields have unpredictable length etc. In such a case, parsing with column fields may not work well and the following ways have to be used instead or additionally:
 
@@ -859,7 +859,7 @@ foreach(page in pageCollection)
             <img src='img/tutorial10.png' />
 
         <p>Now the fields are captured successfully with the new definition of ProductTable and there is no need to change anything in the parsing code.
-        <p><span class='attention'>NOTE: </span>It is important to create ProductTable definitions in the right order: they must start with the most conditioned one and end with the less conditioned one. If defintion #2 of ProductTable was #1 then it would work on the page #1 before the right definition which would bring to a wrong capture.
+        <p><span class='attention'>(!)</span>It is important to create ProductTable definitions in the right order: they must start with the most conditioned one and end with the less conditioned one. If defintion #2 of ProductTable was #1 then it would work on the page #1 before the right definition which would bring to a wrong capture.
 
         <p>
             The last page of test102.pdf requires one more definition of ProductTable which can be added in the same way.
@@ -928,11 +928,10 @@ foreach(page in pageCollection)
 
             <h2>Considerations</h2>
 <p>
-            Processing time depends on the custom algorithm and templates. However, it is possible to drastically reduce the processing time by the following ways:
+            Processing time generally depends on algorithm and templates. However, sometimes the processing time can be drastically reduced by the following ways:
             <ul>
-                <li> specify file filters for templates. If it can be done then the other tips are not needed;
-                <li> specify template orders so that templates that require a longer time for recognition have a higher order. E.g. templates that use auto-deskew should be checked in the last place;
-                <li> keep templates that are known as not corresponding to the files to be processed right now, inactive;
+                <li> use template filtering according to pdf file names;
+                <li> order templates in such a way that templates that take a shorter time to apply are tried first while those that require a longer time are tried last. E.g. templates using only native PDF entities should go first and those using OCR and/or auto-deskew should go last;
             </ul>
 
 
@@ -963,7 +962,7 @@ foreach(page in pageCollection)
 
     <div class='footer'>
         <script src='copyright.js'></script>
-        &nbsp;2018 - 2021&nbsp;&nbsp;<a href="javascript:window.location.href = '&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#115;&#101;&#114;&#103;&#101;&#121;&#46;&#115;&#116;&#111;&#121;&#97;&#110;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;'" target="_top">Sergey Stoyan</a>
+        &nbsp;2018 - 2022&nbsp;&nbsp;<a href="javascript:window.location.href = '&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#115;&#101;&#114;&#103;&#101;&#121;&#46;&#115;&#116;&#111;&#121;&#97;&#110;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;'" target="_top">Sergey Stoyan</a>
       
     </div>
 

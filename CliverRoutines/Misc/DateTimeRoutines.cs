@@ -20,15 +20,13 @@ namespace Cliver
         /// <summary>
         /// Amount of seconds elapsed between 1970-01-01 00:00:00 and the date-time.
         /// </summary>
-        /// <param name="date_time">date-time</param>
+        /// <param name="dateTime">date-time</param>
         /// <returns>seconds</returns>
-        public static uint GetSecondsSinceUnixEpoch(this DateTime date_time)
+        public static uint GetSecondsSinceUnixEpoch(this DateTime dateTime)
         {
-            TimeSpan t = date_time - new DateTime(1970, 1, 1);
-            int ss = (int)t.TotalSeconds;
-            if (ss < 0)
-                return 0;
-            return (uint)ss;
+            //if (dateTime.Kind == DateTimeKind.Local)
+            //    dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
+            return (uint)new DateTimeOffset(dateTime).ToUnixTimeSeconds();
         }
 
         #endregion
@@ -565,7 +563,7 @@ namespace Cliver
                             m = Regex.Match(str, @"(?:^|[^\d\w])(?'month'Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[uarychilestmbro]*\s+(?'day'\d{1,2})(?:-?st|-?th|-?rd|-?nd)?(?:\s*,?\s*(?'year'\d{4}))?(?=$|[^\d\w])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
                     }
                 }
-            } 
+            }
             if (m.Success)
             {
                 int month = -1;

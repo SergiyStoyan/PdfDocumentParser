@@ -16,6 +16,15 @@ namespace Cliver
 {
     public static class ReflectionRoutines
     {
+        public static object GetDefault(this Type type)
+        {
+            return typeof(ReflectionRoutines).GetRuntimeMethod(nameof(getDefaultGeneric), new Type[] { }).MakeGenericMethod(type).Invoke(null, null);
+        }
+        static T getDefaultGeneric<T>()
+        {
+            return default(T);
+        }
+
         static public bool IsSubclassOfRawGeneric(Type type, Type genericType)
         {
             for (; type != null && type != typeof(object); type = type.BaseType)
@@ -24,11 +33,19 @@ namespace Cliver
             return false;
         }
 
-        public static Dictionary<string, FieldInfo> GetFields(object o, BindingFlags bindingFlags = BindingFlags.Public)
+        public static Dictionary<string, FieldInfo> GetFieldInfos(object o, BindingFlags bindingFlags)
         {
             Dictionary<string, FieldInfo> ns2fi = new Dictionary<string, FieldInfo>();
             foreach (FieldInfo fi in o.GetType().GetFields(bindingFlags))
                 ns2fi[fi.Name] = fi;
+            return ns2fi;
+        }
+
+        public static Dictionary<string, object> GetFieldValues(object o, BindingFlags bindingFlags)
+        {
+            Dictionary<string, object> ns2fi = new Dictionary<string, object>();
+            foreach (FieldInfo fi in o.GetType().GetFields(bindingFlags))
+                ns2fi[fi.Name] = fi.GetValue(o);
             return ns2fi;
         }
 
