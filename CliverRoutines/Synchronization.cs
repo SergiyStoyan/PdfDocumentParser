@@ -202,10 +202,10 @@ namespace Cliver
                                     {
                                         DateTime downloadLWT = File.GetLastWriteTime(file);
                                         if (downloadLWT.AddSeconds(100) > DateTime.Now)//it is being written
-                                            return;
+                                            continue;
                                         string file2 = sf.Folder + Path.DirectorySeparatorChar + PathRoutines.GetFileName(file);
                                         if (File.Exists(file2) && downloadLWT <= File.GetLastWriteTime(file2))
-                                            return;
+                                            continue;
                                         copy(file, file2);
                                         onNewerFile(file);
                                     }
@@ -222,10 +222,10 @@ namespace Cliver
                                 {
                                     DateTime uploadLWT = File.GetLastWriteTime(file);
                                     if (uploadLWT.AddSeconds(10) > DateTime.Now)//it is being written
-                                        return;
+                                        continue;
                                     string file2 = FileSystemRoutines.CreateDirectory(uploadFolder + Path.DirectorySeparatorChar + sf.SynchronizationFolderName) + Path.DirectorySeparatorChar + PathRoutines.GetFileName(file);
                                     if (File.Exists(file2) && uploadLWT <= File.GetLastWriteTime(file2))
-                                        return;
+                                        continue;
                                     copy(file, file2);
                                 }
                                 catch (Exception e)
@@ -253,7 +253,7 @@ namespace Cliver
                     {
                         AppNewSetupFile = appSetupFile;
                         onNewerAppVersion(appSetupFile);
-                        return;
+                        continue;
                     }
 
                     Thread.Sleep(parameters.PollingPeriodMss);

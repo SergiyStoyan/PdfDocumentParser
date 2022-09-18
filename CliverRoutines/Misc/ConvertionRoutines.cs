@@ -13,6 +13,11 @@ namespace Cliver
 {
     static public class ConvertionRoutines
     {
+        public static char ToChar(int @char)
+        {
+            return (char)(@char + '0');
+        }
+
         /// <summary>
         /// (Credit to stackoverflow people)
         /// Makes the decimal lose the right trailing zero's

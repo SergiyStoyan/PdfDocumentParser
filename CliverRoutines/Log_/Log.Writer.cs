@@ -88,27 +88,8 @@ namespace Cliver
                 {
                     Writing?.Invoke(Name, messageType, message, details);
 
-                    switch (Level)
-                    {
-                        case Level.NONE:
-                            return;
-                        case Level.ERROR:
-                            if (messageType < MessageType.ERROR)
-                                return;
-                            break;
-                        case Level.WARNING:
-                            if (messageType < MessageType.WARNING)
-                                return;
-                            break;
-                        case Level.INFORM:
-                            if (messageType < MessageType.INFORM)
-                                return;
-                            break;
-                        case Level.ALL:
-                            break;
-                        default:
-                            throw new Exception("Unknown option: " + Level);
-                    }
+                    if (!Is2BeLogged(messageType))
+                        return;
 
                     if (MaxFileSize > 0)
                     {
@@ -132,6 +113,32 @@ namespace Cliver
                 }
             }
             protected TextWriter logWriter = null;
+
+            public bool Is2BeLogged(Log.MessageType messageType)
+            {
+                switch (Level)
+                {
+                    case Level.NONE:
+                        return false;
+                    case Level.ERROR:
+                        if (messageType < MessageType.ERROR)
+                            return false;
+                        break;
+                    case Level.WARNING:
+                        if (messageType < MessageType.WARNING)
+                            return false;
+                        break;
+                    case Level.INFORM:
+                        if (messageType < MessageType.INFORM)
+                            return false;
+                        break;
+                    case Level.ALL:
+                        break;
+                    default:
+                        throw new Exception("Unknown option: " + Level);
+                }
+                return true;
+            }
 
             /// <summary>
             /// Called for Writing. 

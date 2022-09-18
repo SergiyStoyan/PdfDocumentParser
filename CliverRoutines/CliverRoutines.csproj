@@ -11,7 +11,7 @@
     <Copyright>Sergey Stoyan</Copyright>
     <Authors>Sergey Stoyan</Authors>
     <Company>CliverSoft</Company>
-    <Version>6.17.1</Version>
+    <Version>6.19.1</Version>
     <Title>Cross-platform routines needed in the most applications.</Title>
     <PackageProjectUrl>https://github.com/sergeystoyan/CliverRoutines</PackageProjectUrl>
     <Description>Cross-platform routines needed in the most applications:
@@ -52,16 +52,26 @@
   <ItemGroup>
     <Compile Remove="CliverRoutinesExample\**" />
     <Compile Remove="CliverRoutinesTests\**" />
+    <Compile Remove="DB\MsSql\**" />
+    <Compile Remove="DB\MySql\**" />
     <Compile Remove="Example\**" />
     <Compile Remove="Properties\**" />
     <EmbeddedResource Remove="CliverRoutinesExample\**" />
     <EmbeddedResource Remove="CliverRoutinesTests\**" />
+    <EmbeddedResource Remove="DB\MsSql\**" />
+    <EmbeddedResource Remove="DB\MySql\**" />
     <EmbeddedResource Remove="Example\**" />
     <EmbeddedResource Remove="Properties\**" />
     <None Remove="CliverRoutinesExample\**" />
     <None Remove="CliverRoutinesTests\**" />
+    <None Remove="DB\MsSql\**" />
+    <None Remove="DB\MySql\**" />
     <None Remove="Example\**" />
     <None Remove="Properties\**" />
+    <Compile Remove="DB\MsSqlCommand.cs" />
+    <Compile Remove="DB\MsSqlConnection.cs" />
+    <Compile Remove="DB\MySqlCommand.cs" />
+    <Compile Remove="DB\MySqlConnection.cs" />
     <None Include="LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
