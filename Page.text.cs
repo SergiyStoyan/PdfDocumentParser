@@ -100,7 +100,9 @@ namespace Cliver.PdfDocumentParser
                     {
                         CharBox cb0 = l.CharBoxs[i - 1];
                         CharBox cb = l.CharBoxs[i];
-                        if (/*cb0.Char != " " && */cb.R.Left - cb0.R.Right > (/*cb0.R.Width*/0.8 / cb0.R.Height + /*cb.R.Width*/0.8 / cb.R.Height) * textAutoInsertSpace.Threshold)
+                        if (/*cb0.Char != " " && */cb.R.Left - cb0.R.Right > (/*cb0.R.Width*/0.8 / cb0.R.Height + /*cb.R.Width*/0.8 / cb.R.Height) * textAutoInsertSpace.Threshold
+                            && cb0.R.Width > Settings.Constants.CoordinateDeviationMargin && cb.R.Width > Settings.Constants.CoordinateDeviationMargin//(!)otherwise it can be tiny and thus make spaceNumber a huge number.
+                            )
                         {
                             float spaceWidth = (cb0.R.Width + cb.R.Width) / 2;
                             int spaceNumber = (int)Math.Ceiling((cb.R.Left - cb0.R.Right) / spaceWidth);
