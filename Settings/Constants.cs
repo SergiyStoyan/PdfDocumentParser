@@ -17,7 +17,7 @@ namespace Cliver.PdfDocumentParser
     public class ConstantsSettings : Cliver.UserSettings
     {
         [Newtonsoft.Json.JsonIgnore]
-        public readonly string HelpFile = @"docs\index.html";
+        public string HelpFile = @"docs\index.html";//set by the host
 
         public int PdfPageImageResolution = 300;//tesseract requires at least 300
         public float CoordinateDeviationMargin = 1f;

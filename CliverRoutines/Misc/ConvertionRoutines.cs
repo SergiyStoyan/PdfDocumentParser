@@ -13,9 +13,20 @@ namespace Cliver
 {
     static public class ConvertionRoutines
     {
-        public static char ToChar(int @char)
+        public static object Convert(this object value, Type type)
         {
-            return (char)(@char + '0');
+            if (value == null)
+                return type.GetDefault();
+            type = Nullable.GetUnderlyingType(type) ?? type;
+            return System.Convert.ChangeType(value, type);
+        }
+
+        public static T Convert<T>(this object value)
+        {
+            if (value == null)
+                return default(T);
+            Type type = Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T);
+            return (T)System.Convert.ChangeType(value, type);
         }
 
         /// <summary>

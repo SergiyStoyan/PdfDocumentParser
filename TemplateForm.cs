@@ -345,7 +345,7 @@ namespace Cliver.PdfDocumentParser
                     Message.Error2(ex, this);
                 }
             };
-
+            
             Shown += delegate
             {
                 Application.DoEvents();//make form be drawn completely

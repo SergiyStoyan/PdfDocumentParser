@@ -109,10 +109,10 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Get stack information for the caller.
+        /// Returns stack information for the caller.
         /// </summary>
         /// <param name="startFrame">frame to start with</param>
-        /// <param name="frameCount">number of frames to take</param>
+        /// <param name="frameCount">number of frames to take. If negative then retrieve all frames</param>
         /// <param name="endOnEmptyFile">if true, stop when going out of the app</param>
         /// <returns>stack info</returns>
         public static string GetStackString(int startFrame = 0, int frameCount = 1, bool endOnEmptyFile = true)
@@ -148,7 +148,7 @@ namespace Cliver
         static List<Type> TypesExcludedFromStack = null;
 
         /// <summary>
-        /// Get exception message without stack info.
+        /// Returns exception message without stack info.
         /// </summary>
         /// <param name="e">exception</param>
         /// <returns>exception message chain</returns>
@@ -158,7 +158,7 @@ namespace Cliver
         }
 
         /// <summary>
-        /// Get the exception message chain.
+        /// Returns the exception message chain.
         /// </summary>
         /// <param name="e">exception</param>
         /// <param name="withDetails">add stack info</param>
@@ -219,6 +219,11 @@ namespace Cliver
             return name;
         }
 
+        /// <summary>
+        /// Return the full name of the calling method together with the passed parameters.
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         static public string GetThisMethodInfo(params object[] parameters)
         {
             MethodBase method = new StackFrame(1, false).GetMethod();

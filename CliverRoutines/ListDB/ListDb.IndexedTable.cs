@@ -19,30 +19,14 @@ namespace Cliver
             public long ID;
         }
 
-        public static IndexedTable<DocumentType> GetIndexedTable<DocumentType>(string directory = null) where DocumentType : IndexedDocument, new()
+        public class IndexedTable<DocumentT> : Table<DocumentT>, IDisposable where DocumentT : IndexedDocument, new()
         {
-            return IndexedTable<DocumentType>.Get(directory);
-        }
-
-        public class IndexedTable<DocumentType> : Table<DocumentType>, IDisposable where DocumentType : IndexedDocument, new()
-        {
-            new public static IndexedTable<DocumentType> Get(string directory = null)
+            new public static IndexedTable<DocumentT> Get(string directory, Modes? mode = null)
             {
-                directory = getNormalizedDirectory(directory);
-                WeakReference wr;
-                string key = directory + System.IO.Path.DirectorySeparatorChar + typeof(DocumentType).Name;
-                if (!tableKeys2table.TryGetValue(key, out wr)
-                    || !wr.IsAlive
-                    )
-                {
-                    IndexedTable<DocumentType> t = new IndexedTable<DocumentType>(directory, key);
-                    wr = new WeakReference(t);
-                    tableKeys2table[key] = wr;
-                }
-                return (IndexedTable<DocumentType>)wr.Target;
+                return (IndexedTable<DocumentT>)get(directory, (string file) => { return new IndexedTable<DocumentT>(file, mode); });
             }
 
-            IndexedTable(string directory, string key) : base(directory, key)
+            IndexedTable(string file, Modes? mode = null) : base(file, mode)
             {
             }
 
@@ -51,58 +35,72 @@ namespace Cliver
             /// </summary>
             /// <param name="document"></param>
             /// <returns></returns>
-            override public Results Save(DocumentType document)
+            override public Result Save(DocumentT document)
             {
-                int i = ((List<DocumentType>)this).IndexOf(document);
-                if (i >= 0)
+                lock (this)
                 {
-                    fileWriter.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
-                    logWriter.WriteLine("replaced: " + i);
-                    return Results.UPDATED;
-                }
-                else
-                {
-                    setNewId(document);
-                    fileWriter.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
-                    ((List<DocumentType>)this).Add(document);
-                    logWriter.WriteLine("added: " + (base.Count - 1));
-                    return Results.ADDED;
+                    int i = documents.IndexOf(document);
+                    if (i >= 0)
+                    {
+                        writeOperation(Action.replaced, i, document);
+                        //documents.Find(d=>d.ID==);
+                        invokeSaved(document, false);
+                        return Result.UPDATED;
+                    }
+                    else
+                    {
+                        setNewId(document);
+                        writeAdded(document);
+                        documents.Add(document);
+                        invokeSaved(document, true);
+                        return Result.ADDED;
+                    }
                 }
             }
 
-            void setNewId(DocumentType document)
+            void setNewId(DocumentT document)
             {
-                System.Reflection.PropertyInfo pi = typeof(DocumentType).GetProperty("ID");
-                pi.SetValue(document, DateTime.Now.Ticks);
+                lock (this)
+                {
+                    System.Reflection.PropertyInfo pi = typeof(DocumentT).GetProperty("ID");
+                    pi.SetValue(document, DateTime.Now.Ticks);
+                }
             }
 
-            public DocumentType GetById(int document_id)
+            public DocumentT GetById(int documentId)
             {
-                return this.Where(x => x.ID == document_id).FirstOrDefault();
+                lock (this)
+                {
+                    return documents.Where(x => x.ID == documentId).FirstOrDefault();
+                }
             }
 
             /// <summary>
             /// Table works as an ordered HashSet
             /// </summary>
             /// <param name="document"></param>
-            override public Results Add(DocumentType document)
+            override public Result Add(DocumentT document)
             {
-                int i = base.IndexOf(document);
-                if (i >= 0)
+                lock (this)
                 {
-                    fileWriter.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
-                    ((List<DocumentType>)this).RemoveAt(i);
-                    ((List<DocumentType>)this).Add(document);
-                    logWriter.WriteLine("deleted: " + i + "\r\nadded: " + (base.Count - 1));
-                    return Results.MOVED2TOP;
-                }
-                else
-                {
-                    setNewId(document);
-                    fileWriter.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
-                    ((List<DocumentType>)this).Add(document);
-                    logWriter.WriteLine("added: " + (base.Count - 1));
-                    return Results.ADDED;
+                    int i = documents.IndexOf(document);
+                    if (i >= 0)
+                    {
+                        documents.RemoveAt(i);
+                        documents.Add(document);
+                        writeDeleted(i);
+                        writeAdded(document);
+                        invokeSaved(document, false);
+                        return Result.MOVED2TOP;
+                    }
+                    else
+                    {
+                        setNewId(document);
+                        documents.Add(document);
+                        writeAdded(document);
+                        invokeSaved(document, true);
+                        return Result.ADDED;
+                    }
                 }
             }
 
@@ -111,24 +109,27 @@ namespace Cliver
             /// </summary>
             /// <param name="index"></param>
             /// <param name="document"></param>
-            override public Results Insert(int index, DocumentType document)
+            override public Result Insert(int index, DocumentT document)
             {
-                int i = base.IndexOf(document);
-                if (i >= 0)
+                lock (this)
                 {
-                    fileWriter.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
-                    ((List<DocumentType>)this).RemoveAt(i);
-                    ((List<DocumentType>)this).Insert(index, document);
-                    logWriter.WriteLine("replaced: " + i);
-                    return Results.MOVED;
-                }
-                else
-                {
-                    setNewId(document);
-                    fileWriter.WriteLine(JsonConvert.SerializeObject(document, Formatting.None));
-                    ((List<DocumentType>)this).Insert(index, document);
-                    logWriter.WriteLine("inserted: " + index);
-                    return Results.INSERTED;
+                    int i = documents.IndexOf(document);
+                    if (i >= 0)
+                    {
+                        documents.RemoveAt(i);
+                        documents.Insert(index, document);
+                        writeOperation(Action.replaced, i, document);
+                        invokeSaved(document, false);
+                        return Result.MOVED;
+                    }
+                    else
+                    {
+                        setNewId(document);
+                        documents.Insert(index, document);
+                        writeOperation(Action.inserted, index, document);
+                        invokeSaved(document, true);
+                        return Result.INSERTED;
+                    }
                 }
             }
         }

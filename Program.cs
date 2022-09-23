@@ -79,10 +79,11 @@ namespace Cliver.PdfDocumentParser
         /// Then it can be called to re-initialize.
         /// </summary>
         /// <param name="ocrConfig"></param>
-        public static void Initialize(Ocr.Config ocrConfig)//trigger Program()
+        public static void Initialize(Ocr.Config ocrConfig, string helpFile)//trigger Program()
         {
             Ocr.DisposeThis();
             Settings.Constants.OcrConfig = ocrConfig;
+            Settings.Constants.HelpFile = helpFile;
         }
 
         public static readonly Version Version;

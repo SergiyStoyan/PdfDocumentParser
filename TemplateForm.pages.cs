@@ -308,6 +308,9 @@ namespace Cliver.PdfDocumentParser
         {
             try
             {
+                //UseWaitCursor = true;
+                Cursor.Current = Cursors.WaitCursor;
+
                 currentAnchorControl = null;
                 currentFieldControl = null;
 
@@ -376,11 +379,18 @@ namespace Cliver.PdfDocumentParser
                 else
                     foreach (DataGridViewRow row in conditions.Rows)
                         setRowStatus(statuses.NEUTRAL, row, "");
+
+                tCurrentPage.BackColor = pages[currentPageI].IsScan ? Color.Beige : SystemColors.Window;
             }
             catch (Exception e)
             {
                 Log.Error(e);
                 Message.Error(e, this);
+            }
+            finally
+            {
+                //UseWaitCursor = false;
+                Cursor.Current = Cursors.Default;
             }
         }
         int currentPageI;

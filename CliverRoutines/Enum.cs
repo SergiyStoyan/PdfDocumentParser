@@ -47,6 +47,10 @@ namespace Cliver
         {
             return typeof(E).GetFields(BindingFlags.Public | BindingFlags.Static).Where(x => x.FieldType.IsSubclassOf(typeof(Enum<V>))).ToDictionary(x => x.Name, x => ((E)x.GetValue(null)));
         }
+        //static public Dictionary<string, V> ToDictionary<V>()
+        //{
+        //    return typeof(V).GetFields(BindingFlags.Public | BindingFlags.Static).Where(x => x.FieldType.IsSubclassOf(typeof(Enum<V>))).ToDictionary(x => x.Name, x => (V)x.GetValue(null));
+        //}
 
         /// <summary>
         /// 
@@ -56,6 +60,11 @@ namespace Cliver
         static public List<E> ToList<E>() where E : Enum<V>
         {
             return typeof(E).GetFields(BindingFlags.Public | BindingFlags.Static).Where(x => x.FieldType.IsSubclassOf(typeof(Enum<V>))).Select(x => ((E)x.GetValue(null))).ToList();
+        }
+
+        static public List<V> GetValues<V>()
+        {
+            return typeof(V).GetFields(BindingFlags.Public | BindingFlags.Static).Where(x => x.FieldType.IsSubclassOf(typeof(Enum<V>))).Select(x => (V)x.GetValue(null)).ToList();
         }
 
         /// <summary>
