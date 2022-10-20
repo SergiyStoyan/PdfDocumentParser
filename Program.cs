@@ -75,7 +75,7 @@ namespace Cliver.PdfDocumentParser
         }
 
         /// <summary>
-        /// First it must be called before any use of the PdfDocumentParser. 
+        /// First it must be called before using the PdfDocumentParser. 
         /// Then it can be called to re-initialize.
         /// </summary>
         /// <param name="ocrConfig"></param>
