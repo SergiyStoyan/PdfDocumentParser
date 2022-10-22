@@ -35,7 +35,7 @@
 
             <h2><a name='licensing'>Licensing</a></h2>
 			
-			 See <a href='https://raw.githubusercontent.com/sergeystoyan/CliverRoutines/master/LICENSE' target='_blank'>the license source</a>.
+			 See <a href='https://raw.githubusercontent.com/sergiystoyan/CliverRoutines/master/LICENSE' target='_blank'>the license source</a>.
 			<br><br>
 			<textarea id="license" rows="30" cols="100">
            
@@ -43,7 +43,7 @@
 <script>
 function setLicense() {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'https://raw.githubusercontent.com/sergeystoyan/CliverRoutines/master/LICENSE');
+    xhr.open('GET', 'https://raw.githubusercontent.com/sergiystoyan/CliverRoutines/master/LICENSE');
     xhr.send(null);
 
     xhr.onreadystatechange = function () {
@@ -65,7 +65,7 @@ setLicense();
         <p>*Notice that CliverRoutines may use third-party software as command line tools or linked libraries which should be licensed independently.
 
             <h2><a name='licensing'>Source code</a></h2>
-            Open <a href='https://github.com/sergeystoyan/CliverRoutines' target='_blank'>repository</a>.
+            Open <a href='https://github.com/sergiystoyan/CliverRoutines' target='_blank'>repository</a>.
         <p>
             Do not download the latest code from a branch because it may be under development. Instead, use the latest (pre-)release code.
 
@@ -576,7 +576,7 @@ A whole <a href='#settings_field'>settings field</a> can be serialized as an enc
 partial class Settings
 {
 	//Alternatively, the Encrypted attribute can be added directly to the field: 
-	//[SettingsAttributes.Encrypted(stringEndecGetterHostingType: typeof(Settings), stringEndecGetterName: nameof(Settings.Endec))]
+	//[SettingsAttributes.Encrypted(endecGetterHostingType: typeof(Settings), endecGetterName: nameof(Settings.Endec))]
 	//This object will be serialized as encrypted string
 	internal static CredentialsSettings Credentials;
 
@@ -588,7 +588,7 @@ partial class Settings
 
 //This attribute can be applied to either a Settings type or a Settings field. Being applied to a type, it causes any field of the type to be encrypted.
 //Specify the class and the property that expose a StringEndec object to be used for encryption.
-[SettingsAttributes.Encrypted(stringEndecGetterHostingType: typeof(Settings), stringEndecGetterName: nameof(Settings.Endec))]
+[SettingsAttributes.Encrypted(endecGetterHostingType: typeof(Settings), endecGetterName: nameof(Settings.Endec))]
 class CredentialsSettings : Cliver.UserSettings
 {
 	public string Key = "test";
@@ -1040,7 +1040,7 @@ Log.Initialize(Log.Mode.FOLDER_PER_SESSION); //this call is not mandatory if you
 
     <div class='footer'>
         <script src='copyright.js'></script>
-        &nbsp;2006 - 2021&nbsp;&nbsp;<a href="javascript:window.location.href = '&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#115;&#101;&#114;&#103;&#101;&#121;&#46;&#115;&#116;&#111;&#121;&#97;&#110;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;'" target="_top">Sergey Stoyan</a>
+        &nbsp;2006 - 2021&nbsp;&nbsp;<a href="javascript:window.location.href = '&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#115;&#101;&#114;&#103;&#101;&#121;&#46;&#115;&#116;&#111;&#121;&#97;&#110;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;'" target="_top">Sergiy Stoyan</a>
        
     </div>
 

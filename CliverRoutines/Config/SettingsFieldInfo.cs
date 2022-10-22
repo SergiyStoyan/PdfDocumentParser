@@ -1,7 +1,7 @@
 //********************************************************************************************
-//Author: Sergey Stoyan
-//        sergey.stoyan@gmail.com
-//        sergey.stoyan@hotmail.com
+//Author: Sergiy Stoyan
+//        systoyan@gmail.com
+//        sergiy.stoyan@outlook.com
 //        stoyan@cliversoft.com
 //        http://www.cliversoft.com
 //********************************************************************************************
@@ -54,7 +54,7 @@ namespace Cliver
         /// <summary>
         /// Encryption/decryption engine.
         /// </summary>
-        public readonly StringEndec Endec = null;
+        public readonly Endec2String<string> Endec = null;
 
         /// <summary>
         /// When TRUE, the Settings field is not initialized by default and needs an explicit initializing. 

@@ -10,7 +10,7 @@
 
 <p>CliverRoutines has been developed in .NET Standard 2.0 and supposed to run on any platform adopting C# including&nbsp;.NET, Xamarin,&nbsp;Mono.</p>
 
-<p>This article is a brief&nbsp;overview. For details refer to <a href="https://sergeystoyan.github.io/CliverRoutines/#1">the documentation</a>&nbsp;and <a href="https://github.com/sergeystoyan/CliverRoutines/">the source code</a>.</p>
+<p>This article is a brief&nbsp;overview. For details refer to <a href="https://sergiystoyan.github.io/CliverRoutines/#1">the documentation</a>&nbsp;and <a href="https://github.com/sergiystoyan/CliverRoutines/">the source code</a>.</p>
 
 <h2>Background</h2>
 

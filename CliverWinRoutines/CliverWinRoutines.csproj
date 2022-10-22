@@ -209,6 +209,7 @@
     <Compile Include="Microsoft\Win32\UnsafeNativeMethods.cs" />
     <Compile Include="WinApi\WinApi.cs" />
     <Compile Include="WinRoutines\ConsoleRoutines.cs" />
+    <Compile Include="WinRoutines\Endec.cs" />
     <Compile Include="WinRoutines\Crypto.cs" />
     <Compile Include="WinRoutines\ProcessRoutines2.CreateProcess.cs" />
     <Compile Include="WinRoutines\ImageRoutines.cs" />
@@ -221,8 +222,6 @@
     </Compile>
     <Compile Include="BaseService.cs" />
     <Compile Include="BaseForm\LogMessage.cs" />
-    <Compile Include="Db\DbCommand.cs" />
-    <Compile Include="Db\DbConnection.cs" />
     <Compile Include="InternetDateTime.cs" />
     <Compile Include="WinRoutines\AssemblyRoutines.cs" />
     <Compile Include="WinRoutines\SessionRoutines.cs" />

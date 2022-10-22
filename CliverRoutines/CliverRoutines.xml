@@ -369,8 +369,8 @@
             <summary>
             Settings field attribute that is used for encrypting.
             </summary>
-            <param name="stringEndecGetterHostingType">Class that exposes the StringEndec getter.</param>
-            <param name="stringEndecGetterName">Name of the StringEndec getter. The getter must be static.</param>
+            <param name="endecGetterHostingType">Class that exposes the StringEndec getter.</param>
+            <param name="endecGetterName">Name of the StringEndec getter. The getter must be static.</param>
         </member>
         <member name="T:Cliver.SettingsFieldInfo">
             <summary>

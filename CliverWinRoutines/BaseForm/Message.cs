@@ -1,7 +1,7 @@
 //********************************************************************************************
-//Author: Sergey Stoyan
-//        sergey.stoyan@gmail.com
-//        sergey.stoyan@hotmail.com
+//Author: Sergiy Stoyan
+//        systoyan@gmail.com
+//        sergiy.stoyan@outlook.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 
@@ -149,29 +149,36 @@ namespace Cliver
             ShowDialog(AppName, getIcon(Icons.Error), message, new string[1] { "OK" }, 0, owner);
         }
 
-        public static bool YesNo(string question, Form owner = null, Icons icon = Icons.Question, bool default_yes = true)
+        public static bool YesNo(string question, Form owner = null, Icons icon = Icons.Question, bool defaultIsYes = true)
         {
-            return ShowDialog(AppName, getIcon(icon), question, new string[2] { "Yes", "No" }, default_yes ? 0 : 1, owner) == 0;
+            return ShowDialog(AppName, getIcon(icon), question, new string[2] { "Yes", "No" }, defaultIsYes ? 0 : 1, owner) == 0;
         }
 
-        public static int ShowDialog(string title, Icon icon, string message, string[] buttons, int default_button, Form owner, bool? button_autosize = null, bool? no_duplicate = null, bool? topmost = null)
+        public static int ShowDialog(string title, Icons icon, string message, string[] buttons, int defaultButton, Form owner = null, bool? buttonAutosize = null, bool? noDuplicate = null, bool? topmost = null)
         {
+            return ShowDialog(title, getIcon(icon), message, buttons, defaultButton, owner, buttonAutosize, noDuplicate, topmost);
+        }
+
+        public static int ShowDialog(string title, Icon icon, string message, string[] buttons, int defaultButton, Form owner, bool? buttonAutosize = null, bool? noDuplicate = null, bool? topmost = null)
+        {
+            if (title == null)
+                title = AppName;
             owner = owner ?? Owner;
             if (owner != null && !owner.Visible)
                 owner = null;
             if (owner == null || !owner.InvokeRequired)
-                return show_dialog(title, icon, message, buttons, default_button, owner, button_autosize, no_duplicate, topmost);
+                return show_dialog(title, icon, message, buttons, defaultButton, owner, buttonAutosize, noDuplicate, topmost);
 
             return (int)owner.Invoke(() =>
-           {
-               return show_dialog(title, icon, message, buttons, default_button, owner, button_autosize, no_duplicate, topmost);
-           });
+            {
+                return show_dialog(title, icon, message, buttons, defaultButton, owner, buttonAutosize, noDuplicate, topmost);
+            });
         }
 
-        static int show_dialog(string title, Icon icon, string message, string[] buttons, int default_button, Form owner, bool? button_autosize = null, bool? no_duplicate = null, bool? top_most = null)
+        static int show_dialog(string title, Icon icon, string message, string[] buttons, int defaultButton, Form owner, bool? buttonAutosize = null, bool? noDuplicate = null, bool? top_most = null)
         {
             string caller = null;
-            if (no_duplicate ?? NoDuplicate)
+            if (noDuplicate ?? NoDuplicate)
             {
                 StackTrace st = new StackTrace(true);
                 StackFrame sf = null;
@@ -192,12 +199,12 @@ namespace Cliver
                 }
             }
 
-            MessageForm mf = new MessageForm(title, icon, message, buttons, default_button, owner, button_autosize ?? ButtonAutosize);
+            MessageForm mf = new MessageForm(title, icon, message, buttons, defaultButton, owner, buttonAutosize ?? ButtonAutosize);
             mf.ShowInTaskbar = ShowInTaskbar;
             mf.TopMost = top_most ?? TopMost;
             int result = mf.ShowDialog();
 
-            if (no_duplicate ?? NoDuplicate)
+            if (noDuplicate ?? NoDuplicate)
                 lock (callers2message)
                 {
                     callers2message.Remove(caller);
@@ -251,7 +258,7 @@ namespace Cliver
         //        default: throw new Exception("No option: " + icon);
         //    }
         //}
-        static Icon getIcon(Icons icon)
+        static public Icon getIcon(Icons icon)
         {
             WinApi.Shell32.SHSTOCKICONID iId;
             switch (icon)
@@ -274,7 +281,7 @@ namespace Cliver
                 default: throw new Exception("No option: " + icon);
             }
             var sii = new WinApi.Shell32.SHSTOCKICONINFO();
-            sii.cbSize = (UInt32)System.Runtime.InteropServices.Marshal.SizeOf(typeof(WinApi.Shell32.SHSTOCKICONINFO));
+            sii.cbSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(WinApi.Shell32.SHSTOCKICONINFO));
             WinApi.Shell32.SHGetStockIconInfo(iId, WinApi.Shell32.SHGSI.SHGSI_ICON, ref sii);
             return Icon.FromHandle(sii.hIcon);
         }

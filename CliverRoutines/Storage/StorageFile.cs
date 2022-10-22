@@ -1,6 +1,6 @@
 //********************************************************************************************
-//Author: Sergey Stoyan
-//        sergey.stoyan@gmail.com
+//Author: Sergiy Stoyan
+//        systoyan@gmail.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 using System;

@@ -1,7 +1,7 @@
 //********************************************************************************************
-//Author: Sergey Stoyan
-//        sergey.stoyan@gmail.com
-//        sergey.stoyan@hotmail.com
+//Author: Sergiy Stoyan
+//        systoyan@gmail.com
+//        sergiy.stoyan@outlook.com
 //        stoyan@cliversoft.com
 //        http://www.cliversoft.com
 //********************************************************************************************
@@ -32,13 +32,13 @@ namespace Cliver
                     return null;
                 return JsonConvert.SerializeObject(o,
                     indented ? Newtonsoft.Json.Formatting.Indented : Newtonsoft.Json.Formatting.None,
-                   new JsonSerializerSettings
-                   {
-                       TypeNameHandling = polymorphic ? TypeNameHandling.Auto : TypeNameHandling.None,
-                       NullValueHandling = ignoreNullValues ? NullValueHandling.Ignore : NullValueHandling.Include,
-                       DefaultValueHandling = ignoreDefaultValues ? DefaultValueHandling.Ignore : DefaultValueHandling.Include
-                   }
-                    );
+                    new JsonSerializerSettings
+                    {
+                        TypeNameHandling = polymorphic ? TypeNameHandling.Auto : TypeNameHandling.None,
+                        NullValueHandling = ignoreNullValues ? NullValueHandling.Ignore : NullValueHandling.Include,
+                        DefaultValueHandling = ignoreDefaultValues ? DefaultValueHandling.Ignore : DefaultValueHandling.Include
+                    }
+                );
             }
 
             public static string Serialize(object o, JsonSerializerSettings jsonSerializerSettings, bool indented = true)

@@ -1,7 +1,7 @@
 //********************************************************************************************
-//Author: Sergey Stoyan
-//        sergey.stoyan@gmail.com
-//        sergey.stoyan@hotmail.com
+//Author: Sergiy Stoyan
+//        systoyan@gmail.com
+//        sergiy.stoyan@outlook.com
 //        stoyan@cliversoft.com
 //        http://www.cliversoft.com
 //********************************************************************************************
@@ -19,28 +19,9 @@ namespace Cliver.Win
     {
         static Encrypted()
         {
-            InitializeDefault(new StringEndec());
+            InitializeDefault(new Endec2String(new Endec.ProtectedData()));
         }
 
         public Encrypted(T value = null) : base(value) { }
-    }
-
-    public class StringEndec : Cliver.StringEndec
-    {
-        public StringEndec()
-        {
-            crypto = new Win.Crypto.ProtectedData();
-        }
-        Win.Crypto.ProtectedData crypto;
-
-        override public string Encrypt(string s)
-        {
-            return crypto.Encrypt(s);
-        }
-
-        override public string Decrypt(string s)
-        {
-            return crypto.Decrypt(s);
-        }
     }
 }

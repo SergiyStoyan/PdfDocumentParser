@@ -1,7 +1,7 @@
 ////********************************************************************************************
-////Author: Sergey Stoyan
-////        sergey.stoyan@gmail.com
-//        sergey.stoyan@hotmail.com
+////Author: Sergiy Stoyan
+////        systoyan@gmail.com
+//        sergiy.stoyan@outlook.com
 ////        http://www.cliversoft.com
 ////********************************************************************************************
 //using System;

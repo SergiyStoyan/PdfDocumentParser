@@ -1,7 +1,7 @@
 //********************************************************************************************
-//Author: Sergey Stoyan
-//        sergey.stoyan@gmail.com
-//        sergey.stoyan@hotmail.com
+//Author: Sergiy Stoyan
+//        systoyan@gmail.com
+//        sergiy.stoyan@outlook.com
 //        stoyan@cliversoft.com
 //        http://www.cliversoft.com
 //********************************************************************************************
@@ -163,51 +163,46 @@ namespace Cliver
         /// <param name="e">exception</param>
         /// <param name="withDetails">add stack info</param>
         /// <returns>exception message chain</returns>
+        //static public string GetExceptionMessage(Exception e, bool withDetails = true)
+        //{
+        //    Exception lastInterestingE = null;
+        //    bool passedOutOfApp = false;
+        //    List<string> messages = new List<string>();
+        //    for (; e != null; e = e.InnerException)
+        //    {
+        //        string m = e.Message + (withDetails ? " [" + e.GetType().FullName + "]" : "");
+        //        AggregateException ae = e as AggregateException;
+        //        if (ae != null && ae.InnerExceptions.Count > 1)
+        //            messages.Add("More than 1 exception aggregated! Show only [0]:" + m);
+        //        else
+        //            messages.Add(m);
+        //        if (!passedOutOfApp)
+        //        {
+        //            if (lastInterestingE != null && (e.StackTrace == null || e.TargetSite == null))//it seems to be passing out of the application
+        //                passedOutOfApp = true;
+        //            else
+        //                lastInterestingE = e;
+        //        }
+        //    }
+        //    StringBuilder sb = new StringBuilder(string.Join("\r\n<= ", messages));
+        //    if (withDetails)
+        //        sb.Append("\r\n\r\nModule: " + lastInterestingE?.TargetSite?.Module + " \r\n\r\nStack:" + lastInterestingE?.StackTrace);
+        //    return sb.ToString();
+        //}
         static public string GetExceptionMessage(Exception e, bool withDetails = true)
         {
-            Exception lastInterestingE = null;
-            bool passedOutOfApp = false;
             List<string> messages = new List<string>();
             for (; e != null; e = e.InnerException)
             {
-                string m = e.Message + (withDetails ? " [" + e.GetType().FullName + "]" : "");
-                AggregateException ae = e as AggregateException;
-                if (ae != null && ae.InnerExceptions.Count > 1)
+                string m = e.Message + (withDetails ? " [" + e.GetType().FullName + "]\r\n\r\nModule: " + e.TargetSite?.Module + " \r\n\r\nStack:" + e.StackTrace : "");
+                if ((e as AggregateException)?.InnerExceptions.Count > 1)
                     messages.Add("More than 1 exception aggregated! Show only [0]:" + m);
                 else
                     messages.Add(m);
-                if (!passedOutOfApp)
-                {
-                    if (lastInterestingE != null && (e.StackTrace == null || e.TargetSite == null))//it seems to be passing out of the application
-                        passedOutOfApp = true;
-                    else
-                        lastInterestingE = e;
-                }
             }
-            StringBuilder sb = new StringBuilder(string.Join("\r\n<= ", messages));
-            if (withDetails)
-                sb.Append("\r\n\r\nModule: " + lastInterestingE?.TargetSite?.Module + " \r\n\r\nStack:" + lastInterestingE?.StackTrace);
+            StringBuilder sb = new StringBuilder(string.Join("\r\n\r\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n", messages));
             return sb.ToString();
         }
-        //static void getExceptionMessage(Exception e, ref string message, ref string details)
-        //{
-        //    for (; e != null; e = e.InnerException)
-        //    {
-        //        message += "\r\n<= " + e.Message;
-
-        //        AggregateException ae = e as AggregateException;
-        //        if (ae != null && ae.InnerExceptions.Count > 1)
-        //        {
-        //            foreach (Exception ex in ae.InnerExceptions)
-        //            {
-        //                message += "\r\n ---\r\n ";
-        //                getExceptionMessage(ex, ref message, ref details);
-        //            }
-        //            return;
-        //        }
-        //    }    
-        //    details += "\r\n\r\nModule:" + e.TargetSite?.Module + " \r\n\r\nStack:" + e.StackTrace;
-        //}
 
         /// <summary>
         /// Return name of the method which called this function

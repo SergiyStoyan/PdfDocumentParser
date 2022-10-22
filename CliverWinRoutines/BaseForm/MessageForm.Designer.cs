@@ -1,10 +1,10 @@
 //********************************************************************************************
-//Author: Sergey Stoyan, CliverSoft.com
+//Author: Sergiy Stoyan, CliverSoft.com
 //        http://cliversoft.com
 //        stoyan@cliversoft.com
-//        sergey.stoyan@gmail.com
+//        systoyan@gmail.com
 //        03 January 2007
-//Copyright: (C) 2007, Sergey Stoyan
+//Copyright: (C) 2007, Sergiy Stoyan
 //********************************************************************************************
 
 

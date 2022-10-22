@@ -8,4 +8,4 @@ CliverRoutines is a cross-platform C# lib providing what is needed in the most a
 
 It has been developed on .NET Standard 2.0 and supposed to run on any platform. 
 
-## [Documentation](https://sergeystoyan.github.io/CliverRoutines/#1)
+## [Documentation](https://sergiystoyan.github.io/CliverRoutines/#1)

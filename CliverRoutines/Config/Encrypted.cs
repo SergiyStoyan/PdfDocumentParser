@@ -1,13 +1,14 @@
 //********************************************************************************************
-//Author: Sergey Stoyan
-//        sergey.stoyan@gmail.com
-//        sergey.stoyan@hotmail.com
+//Author: Sergiy Stoyan
+//        systoyan@gmail.com
+//        sergiy.stoyan@outlook.com
 //        stoyan@cliversoft.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 
 using System;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace Cliver
 {
@@ -15,8 +16,7 @@ namespace Cliver
     /// A field/property of this type is implicitly encrypted when it is a member of a Settings class.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    //[JsonConverter(typeof(EncryptedConverter))]
-    public class Encrypted<T> /*: EncryptedBase*/ where T : class
+    public class Encrypted<T> where T : class
     {
         public Encrypted()
         {
@@ -45,10 +45,7 @@ namespace Cliver
                     return null;
                 try
                 {
-                    string s = endec.Decrypt(_Value);
-                    if (typeof(T) == typeof(string))
-                        return s as T;
-                    return Serialization.Json.Deserialize<T>(s);
+                    return endec.Decrypt<T>(_Value);
                 }
                 catch (Exception e)
                 {
@@ -61,126 +58,73 @@ namespace Cliver
                 if (value == null)
                     _Value = null;
                 else
-                {
-                    if (typeof(T) == typeof(string))
-                        _Value = endec.Encrypt(value as string);
-                    else
-                        _Value = endec.Encrypt(Serialization.Json.Serialize(value, false));
-                }
+                    _Value = endec.Encrypt(Value);
             }
         }
 
-        public void Initialize(StringEndec endec)
+        public void Initialize(Endec2String endec)
         {
             if (endec != null)
-                throw new Exception("StringEndec instance is already set and cannot be re-set.");
+                throw new Exception("Endec instance is already set and cannot be re-set.");
             _endec = endec;
         }
-        StringEndec endec
+        Endec2String endec
         {
             get
             {
-                StringEndec c = _endec != null ? _endec : defaultEndec;
-                if (c == null)
-                    throw new Exception("StringEndec instance is not set. It can be done by either Initialize() or InitializeDefault() of Cliver.Encrypted class.");
-                return c;
+                if (_endec != null)
+                    return _endec;
+                if (defaultEndec != null)
+                {
+                    _endec = defaultEndec;
+                    return _endec;
+                }
+                throw new Exception("Endec instance is not set. It can be done by either Initialize() or InitializeDefault() of Cliver.Encrypted class.");
             }
         }
-        StringEndec _endec;
+        Endec2String _endec;
 
-        static public void InitializeDefault(StringEndec endec)
+        static public void InitializeDefault(Endec2String endec)
         {
             if (defaultEndec != null)
-                throw new Exception("Default StringEndec instance is already set and cannot be re-set.");
+                throw new Exception("Default Endec instance is already set and cannot be re-set.");
             defaultEndec = endec;
         }
-        static StringEndec defaultEndec;
+        static Endec2String defaultEndec;
     }
-    /*public abstract class EncryptedBase
-    {
-        internal string _Value { get; set; } = null;
-    }
-    public class EncryptedConverter : JsonConverter
-    {
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            EncryptedBase e = (EncryptedBase)value;
-            writer.WriteValue(e._Value);
-        }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            object e = existingValue != null ? existingValue : Activator.CreateInstance(objectType);
-            ((EncryptedBase)e)._Value = (string)reader.Value;
-            return existingValue;
-        }
+    ///// <summary>
+    ///// (!)Only intended for use in Encrypted<T>.
+    ///// Provides a simplified syntax where Endec2String class is the general way to go.
+    ///// </summary>
+    //public abstract class ObjectEndec : Endec2String
+    //{
+    //    protected ObjectEndec(Endec endec) : base(endec)
+    //    {
+    //    }
 
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(Encrypted<>);
-        }
-    }*/
+    //    public class Rijndael : ObjectEndec
+    //    {
+    //        public Rijndael(string key) : base(new Endec.Rijndael(key))
+    //        {
+    //        }
+    //    }
+    //}
 
     /// <summary>
-    /// Abstract string encrypting/decrypting class
+    /// (!)Only intended for use in Settings.EncryptedAttribute.
+    /// Exists for backward compatibility. Provides a simplified syntax where EndecString2String class is the general way to go.
     /// </summary>
-    public abstract class StringEndec
+    public abstract class StringEndec : Endec2String<string>
     {
-        public abstract string Encrypt(string s);
-        public abstract string Decrypt(string s);
+        protected StringEndec(Endec endec) : base(endec)
+        {
+        }
 
         public class Rijndael : StringEndec
         {
-            public Rijndael(string key)
+            public Rijndael(string key) : base(new Endec.Rijndael(key))
             {
-                endec = new Cliver.Crypto.Rijndael(key);
-            }
-            Crypto.Rijndael endec;
-
-            override public string Encrypt(string s)
-            {
-                return endec.Encrypt(s);
-            }
-
-            override public string Decrypt(string s)
-            {
-                return endec.Decrypt(s);
-            }
-        }
-    }
-
-    /// <summary>
-    /// Abstract encrypting/decrypting class
-    /// </summary>
-    public abstract class Endec<T> 
-    {
-        public abstract string Encrypt(T o);
-        public abstract T Decrypt(string s);
-
-        public class Rijndael : Endec<T>
-        {
-            public Rijndael(string key)
-            {
-                endec = new Crypto.Rijndael(key);
-            }
-            Crypto.Rijndael endec;
-
-            override public string Encrypt(T o)
-            {
-                string s;
-                if (o is string)
-                    s = o.ToString();
-                else
-                    s = o.ToStringByJson(false, true);
-                return endec.Encrypt(s);
-            }
-
-            override public T Decrypt(string s)
-            {
-                string es = endec.Decrypt(s);
-                if (typeof(T) == typeof(string))
-                    return (T)Convert.ChangeType(es, typeof(T));
-                return Serialization.Json.Deserialize<T>(es);
             }
         }
     }

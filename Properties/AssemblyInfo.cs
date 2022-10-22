@@ -11,7 +11,7 @@ using System.Reflection;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CliverSoft")]
 [assembly: AssemblyProduct("Pdf Document Parser")]
-[assembly: AssemblyCopyright("developed by Sergey Stoyan, sergey.stoyan@gmail.com")]
+[assembly: AssemblyCopyright("developed by Sergiy Stoyan, systoyan@gmail.com")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

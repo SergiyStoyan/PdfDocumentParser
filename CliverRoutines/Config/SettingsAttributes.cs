@@ -1,7 +1,7 @@
 //********************************************************************************************
-//Author: Sergey Stoyan
-//        sergey.stoyan@gmail.com
-//        sergey.stoyan@hotmail.com
+//Author: Sergiy Stoyan
+//        systoyan@gmail.com
+//        sergiy.stoyan@outlook.com
 //        stoyan@cliversoft.com
 //        http://www.cliversoft.com
 //********************************************************************************************
@@ -85,41 +85,41 @@ namespace Cliver
             /// <summary>
             /// Encryption/decryption engine.
             /// </summary>
-            readonly public StringEndec Endec;
+            readonly public Endec2String<string> Endec;
 
             /// <summary>
             /// Settings field attribute that is used for encrypting.
             /// </summary>
-            /// <param name="stringEndecGetterHostingType">Class that exposes the StringEndec getter.</param>
-            /// <param name="stringEndecGetterName">Name of the StringEndec getter. The getter must be static.</param>
-            public EncryptedAttribute(Type stringEndecGetterHostingType, string stringEndecGetterName)
+            /// <param name="endecGetterHostingType">Class that exposes the EndecString2String getter.</param>
+            /// <param name="endecGetterName">Name of the EndecString2String getter. The getter must be static.</param>
+            public EncryptedAttribute(Type endecGetterHostingType, string endecGetterName)
             {
                 try
                 {
-                    if (stringEndecGetterHostingType == null)
-                        throw new Exception("stringEndecGetterHostingType cannot be NULL.");
-                    if (string.IsNullOrWhiteSpace(stringEndecGetterName))
-                        throw new Exception("stringEndecGetterName cannot be empty.");
-                    System.Reflection.PropertyInfo pi = stringEndecGetterHostingType.GetProperty(stringEndecGetterName, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+                    if (endecGetterHostingType == null)
+                        throw new Exception("endecGetterHostingType cannot be NULL.");
+                    if (string.IsNullOrWhiteSpace(endecGetterName))
+                        throw new Exception("endecGetterName cannot be empty.");
+                    System.Reflection.PropertyInfo pi = endecGetterHostingType.GetProperty(endecGetterName, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
                     if (pi != null)
                     {
-                        //if (!pi.PropertyType.IsSubclassOf(typeof(StringEndec)))//!!!does not work
-                        if (!typeof(StringEndec).IsAssignableFrom(pi.PropertyType))
-                            throw new Exception("Type of the property " + stringEndecGetterHostingType.FullName + "." + stringEndecGetterName + " is not " + typeof(StringEndec).FullName);
-                        Endec = pi.GetValue(null) as StringEndec;
+                        //if (!pi.PropertyType.IsSubclassOf(typeof(EndecString2String)))//!!!does not work
+                        if (!typeof(Endec2String<string>).IsAssignableFrom(pi.PropertyType))
+                            throw new Exception("Type of the property " + endecGetterHostingType.FullName + "." + endecGetterName + " is not " + typeof(Endec2String<string>).FullName);
+                        Endec = pi.GetValue(null) as Endec2String<string>;
                     }
                     else
                     {
-                        System.Reflection.FieldInfo fi = stringEndecGetterHostingType.GetField(stringEndecGetterName, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+                        System.Reflection.FieldInfo fi = endecGetterHostingType.GetField(endecGetterName, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
                         if (fi == null)
-                            throw new Exception(stringEndecGetterHostingType.FullName + " class does not expose the property/field '" + stringEndecGetterName + "'");
-                        //if (!fi.FieldType.IsSubclassOf(typeof(StringEndec)))//!!!does not work
-                        if (!typeof(StringEndec).IsAssignableFrom(fi.FieldType))
-                            throw new Exception("Type of the field " + stringEndecGetterHostingType.FullName + "." + stringEndecGetterName + " is not " + typeof(StringEndec).FullName);
-                        Endec = fi.GetValue(null) as StringEndec;
+                            throw new Exception(endecGetterHostingType.FullName + " class does not expose the property/field '" + endecGetterName + "'");
+                        //if (!fi.FieldType.IsSubclassOf(typeof(EndecString2String)))//!!!does not work
+                        if (!typeof(Endec2String<string>).IsAssignableFrom(fi.FieldType))
+                            throw new Exception("Type of the field " + endecGetterHostingType.FullName + "." + endecGetterName + " is not " + typeof(Endec2String<string>).FullName);
+                        Endec = fi.GetValue(null) as Endec2String<string>;
                     }
                     if (Endec == null)
-                        throw new Exception("Property " + stringEndecGetterHostingType.FullName + "." + stringEndecGetterName + " is NULL.");
+                        throw new Exception("Property " + endecGetterHostingType.FullName + "." + endecGetterName + " is NULL.");
                 }
                 catch (Exception e)
                 {

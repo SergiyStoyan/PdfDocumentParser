@@ -15,10 +15,7 @@ using System.Linq;
 
 namespace Cliver.Win
 {
-    /// <summary>
-    /// (!)Deprecated. Replaced with Endec class.
-    /// </summary>
-    public class Crypto
+    abstract public class Endec : Cliver.Endec
     {
         public static string GetKeyFromComputerSystemInfo()
         {
@@ -37,23 +34,22 @@ namespace Cliver.Win
             throw new Exception("Could not create the default key");
         }
 
-        public class ProtectedData
+        public class ProtectedData : Endec
         {
-            public static DataProtectionScope DataProtectionScope = DataProtectionScope.CurrentUser;
-            readonly byte[] key = null;
+            //static public DataProtectionScope DefaultDataProtectionScope = DataProtectionScope.CurrentUser;
 
-            public ProtectedData(byte[] key)
+            public ProtectedData(byte[] key, DataProtectionScope dataProtectionScope = DataProtectionScope.CurrentUser)
             {
                 if (key == null)
                     throw new ArgumentNullException("key");
                 this.key = key;
+                this.dataProtectionScope = dataProtectionScope;
             }
+            readonly byte[] key = null;
+            readonly DataProtectionScope dataProtectionScope;
 
-            public ProtectedData(string key)
+            public ProtectedData(string key, DataProtectionScope dataProtectionScope = DataProtectionScope.CurrentUser) : this(Encoding.UTF8.GetBytes(key), dataProtectionScope)
             {
-                if (key == null)
-                    throw new ArgumentNullException("key");
-                this.key = Encoding.UTF8.GetBytes(key);
             }
 
             /// <summary>
@@ -64,22 +60,18 @@ namespace Cliver.Win
                 key = Encoding.UTF8.GetBytes(GetKeyFromComputerSystemInfo());
             }
 
-            public string Encrypt(string str)
+            override public byte[] Encrypt(byte[] bytes)
             {
-                if (str == null)
-                    throw new ArgumentNullException("str");
-                var data = Encoding.Unicode.GetBytes(str);
-                byte[] encrypted = System.Security.Cryptography.ProtectedData.Protect(data, key, DataProtectionScope);
-                return Convert.ToBase64String(encrypted);
+                if (bytes == null)
+                    throw new ArgumentNullException("bytes");
+                return System.Security.Cryptography.ProtectedData.Protect(bytes, key, dataProtectionScope);
             }
 
-            public string Decrypt(string str)
+            override public byte[] Decrypt(byte[] bytes)
             {
-                if (str == null)
-                    throw new ArgumentNullException("str");
-                byte[] data = Convert.FromBase64String(str);
-                byte[] decrypted = System.Security.Cryptography.ProtectedData.Unprotect(data, key, DataProtectionScope);
-                return Encoding.Unicode.GetString(decrypted);
+                if (bytes == null)
+                    throw new ArgumentNullException("bytes");
+                return System.Security.Cryptography.ProtectedData.Unprotect(bytes, key, dataProtectionScope);
             }
         }
     }

@@ -4,16 +4,16 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <!--AssemblyVersion>6.10.1.0</AssemblyVersion-->
-    <RepositoryUrl>https://github.com/sergeystoyan/CliverRoutines.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/sergiystoyan/CliverRoutines.git</RepositoryUrl>
     <!--FileVersion>6.10.1.0</FileVersion-->
     <!--PackageLicenseFile>LICENSE</PackageLicenseFile-->
 	<PackageLicenseExpression></PackageLicenseExpression>
-    <Copyright>Sergey Stoyan</Copyright>
-    <Authors>Sergey Stoyan</Authors>
+    <Copyright>Sergiy Stoyan</Copyright>
+    <Authors>Sergiy Stoyan</Authors>
     <Company>CliverSoft</Company>
-    <Version>6.21.2</Version>
+    <Version>6.22.2</Version>
     <Title>Cross-platform routines needed in the most applications.</Title>
-    <PackageProjectUrl>https://github.com/sergeystoyan/CliverRoutines</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/sergiystoyan/CliverRoutines</PackageProjectUrl>
     <Description>Cross-platform routines needed in the most applications:
 - settings manager that supersedes .NET ConfigurationManager;
 - logger with multi-threading and session support;
