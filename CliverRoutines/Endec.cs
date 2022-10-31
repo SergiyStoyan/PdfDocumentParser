@@ -122,15 +122,11 @@ namespace Cliver
             if (o == null)
                 return null;
 
-            byte[] bytes;
-            if (typeof(T) == typeof(byte[]))
-                bytes = o as byte[];
-            else
+            byte[] bytes = o as byte[];
+            if (bytes == null)
             {
-                string s;
-                if (typeof(T) == typeof(string))
-                    s = o as string;
-                else
+                string s = o as string;
+                if (s == null)
                     s = Serialization.Json.Serialize(o, false, true);
                 bytes = Encoding.Unicode.GetBytes(s);
             }
@@ -147,8 +143,9 @@ namespace Cliver
             bytes = endec.Decrypt(bytes);
             if (typeof(T) == typeof(byte[]))
                 return bytes as T;
+            s = Encoding.Unicode.GetString(bytes);
             if (typeof(T) == typeof(string))
-                return Encoding.Unicode.GetString(bytes) as T;
+                return s as T;
             return Serialization.Json.Deserialize<T>(s);
         }
 
@@ -160,27 +157,27 @@ namespace Cliver
         }
     }
 
-    public class Endec2String<T> : Endec2String where T : class
-    {
-        public Endec2String(Endec endec) : base(endec) { }
+    //public class Endec2String<T> : Endec2String where T : class
+    //{
+    //    public Endec2String(Endec endec) : base(endec) { }
 
-        virtual public string Encrypt(T o)
-        {
-            return Encrypt<T>(o);
-        }
+    //    virtual public string Encrypt(T o)
+    //    {
+    //        return Encrypt<T>(o);
+    //    }
 
-        virtual public T Decrypt(string s)
-        {
-            return Decrypt<T>(s);
-        }
+    //    virtual public T Decrypt(string s)
+    //    {
+    //        return Decrypt<T>(s);
+    //    }
 
-        public class Rijndael : Endec2String<T>
-        {
-            public Rijndael(string key) : base(new Endec.Rijndael(key))
-            {
-            }
-        }
-    }
+    //    public class Rijndael : Endec2String<T>
+    //    {
+    //        public Rijndael(string key) : base(new Endec.Rijndael(key))
+    //        {
+    //        }
+    //    }
+    //}
 
     //public class EndecBytes2String : Endec2String
     //{

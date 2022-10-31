@@ -75,4 +75,28 @@ namespace Cliver.Win
             }
         }
     }
+
+    public class Endec2String : Cliver.Endec2String
+    {
+        public Endec2String(Endec endec) : base(endec) { }
+
+        public class ProtectedData : Endec2String
+        {
+            public ProtectedData() : base(new Endec.ProtectedData())
+            {
+            }
+        }
+    }
+
+    //public class Endec2String<T> : Cliver.Endec2String<T> where T : class
+    //{
+    //    public Endec2String(Endec endec) : base(endec) { }
+
+    //    public class ProtectedData : Endec2String<T>
+    //    {
+    //        public ProtectedData() : base(new Endec.ProtectedData())
+    //        {
+    //        }
+    //    }
+    //}
 }

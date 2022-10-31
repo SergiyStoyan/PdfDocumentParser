@@ -54,7 +54,7 @@ namespace Cliver
         /// <summary>
         /// Encryption/decryption engine.
         /// </summary>
-        public readonly Endec2String<string> Endec = null;
+        public readonly Endec2String Endec = null;
 
         /// <summary>
         /// When TRUE, the Settings field is not initialized by default and needs an explicit initializing. 
@@ -168,7 +168,7 @@ namespace Cliver
                     return null;
                 string s = System.IO.File.ReadAllText(file);
                 if (Endec != null)
-                    s = Endec.Decrypt(s);
+                    s = Endec.Decrypt<string>(s);
                 return Newtonsoft.Json.Linq.JObject.Parse(s);
             }
         }
@@ -186,7 +186,7 @@ namespace Cliver
                     indented = Indented;
                 string s = o.ToString(indented.Value ? Newtonsoft.Json.Formatting.Indented : Newtonsoft.Json.Formatting.None);
                 if (Endec != null)
-                    s = Endec.Decrypt(s);
+                    s = Endec.Decrypt<string>(s);
                 System.IO.File.WriteAllText(File, s);
             }
         }
@@ -206,7 +206,7 @@ namespace Cliver
                     return null;
                 string s = System.IO.File.ReadAllText(file);
                 if (Endec != null)
-                    s = Endec.Decrypt(s);
+                    s = Endec.Decrypt<string>(s);
                 return s;
             }
         }
@@ -220,7 +220,7 @@ namespace Cliver
             lock (this)
             {
                 if (Endec != null)
-                    s = Endec.Decrypt(s);
+                    s = Endec.Decrypt<string>(s);
                 System.IO.File.WriteAllText(File, s);
             }
         }

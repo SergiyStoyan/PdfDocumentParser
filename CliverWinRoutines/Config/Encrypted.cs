@@ -24,4 +24,18 @@ namespace Cliver.Win
 
         public Encrypted(T value = null) : base(value) { }
     }
+
+    /// <summary>
+    /// (!)Deprecated. Exists for backward compatibility. Only intended for use in Settings.EncryptedAttribute.
+    /// </summary>
+    public class StringEndec : Endec2String
+    {
+        protected StringEndec(Endec endec) : base(endec)
+        {
+        }
+
+        public StringEndec() : base(new Endec.ProtectedData())
+        {
+        }
+    }
 }

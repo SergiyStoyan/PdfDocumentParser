@@ -113,9 +113,8 @@ namespace Cliver
 
     /// <summary>
     /// (!)Deprecated. Exists for backward compatibility. Only intended for use in Settings.EncryptedAttribute.
-    /// Provides a simplified syntax where EndecString2String class is the general way to go.
     /// </summary>
-    public abstract class StringEndec : Endec2String<string>
+    public abstract class StringEndec : Endec2String/*<string>*/
     {
         protected StringEndec(Endec endec) : base(endec)
         {

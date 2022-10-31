@@ -72,7 +72,7 @@ namespace Cliver
         {
             string s = File.ReadAllText(settingsFieldInfo.File);
             if (settingsFieldInfo.Endec != null)
-                s = settingsFieldInfo.Endec.Decrypt(s);
+                s = settingsFieldInfo.Endec.Decrypt<string>(s);
             Settings settings;
             Exception exception = null;
             try

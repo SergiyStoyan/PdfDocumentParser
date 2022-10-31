@@ -85,7 +85,7 @@ namespace Cliver
             /// <summary>
             /// Encryption/decryption engine.
             /// </summary>
-            readonly public Endec2String<string> Endec;
+            readonly public Endec2String Endec;
 
             /// <summary>
             /// Settings field attribute that is used for encrypting.
@@ -104,9 +104,9 @@ namespace Cliver
                     if (pi != null)
                     {
                         //if (!pi.PropertyType.IsSubclassOf(typeof(EndecString2String)))//!!!does not work
-                        if (!typeof(Endec2String<string>).IsAssignableFrom(pi.PropertyType))
-                            throw new Exception("Type of the property " + endecGetterHostingType.FullName + "." + endecGetterName + " is not " + typeof(Endec2String<string>).FullName);
-                        Endec = pi.GetValue(null) as Endec2String<string>;
+                        if (!typeof(Endec2String).IsAssignableFrom(pi.PropertyType))
+                            throw new Exception("Type of the property " + endecGetterHostingType.FullName + "." + endecGetterName + " is not " + typeof(Endec2String).FullName);
+                        Endec = pi.GetValue(null) as Endec2String;
                     }
                     else
                     {
@@ -114,9 +114,9 @@ namespace Cliver
                         if (fi == null)
                             throw new Exception(endecGetterHostingType.FullName + " class does not expose the property/field '" + endecGetterName + "'");
                         //if (!fi.FieldType.IsSubclassOf(typeof(EndecString2String)))//!!!does not work
-                        if (!typeof(Endec2String<string>).IsAssignableFrom(fi.FieldType))
-                            throw new Exception("Type of the field " + endecGetterHostingType.FullName + "." + endecGetterName + " is not " + typeof(Endec2String<string>).FullName);
-                        Endec = fi.GetValue(null) as Endec2String<string>;
+                        if (!typeof(Endec2String).IsAssignableFrom(fi.FieldType))
+                            throw new Exception("Type of the field " + endecGetterHostingType.FullName + "." + endecGetterName + " is not " + typeof(Endec2String).FullName);
+                        Endec = fi.GetValue(null) as Endec2String;
                     }
                     if (Endec == null)
                         throw new Exception("Property " + endecGetterHostingType.FullName + "." + endecGetterName + " is NULL.");
