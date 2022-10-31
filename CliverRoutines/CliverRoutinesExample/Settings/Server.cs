@@ -16,7 +16,7 @@ namespace Example
         static ServerSettings()
         {
             //if you are not on Windows and cannot use CliverWinRoutines, you have to initialize Encrypted<> explicitly with a key
-            Cliver.Encrypted<string>.InitializeDefault(new Cliver.ObjectEndec.Rijndael("123"));//recommended way
+            Cliver.Encrypted<string>.InitializeDefault(new Cliver.Endec2String.Rijndael("123"));//recommended way
             //Alternatives:
             //Cliver.Encrypted<string>.InitializeDefault(new Cliver.Endec2String<string>(new Endec.Rijndael("123")));//general way
             //Cliver.Encrypted<string>.InitializeDefault(new Cliver.StringEndec.Rijndael("123"));//(!)deprecated!
