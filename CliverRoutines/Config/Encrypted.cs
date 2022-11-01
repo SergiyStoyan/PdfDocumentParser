@@ -112,7 +112,7 @@ namespace Cliver
     //}
 
     /// <summary>
-    /// (!)Deprecated. Exists for backward compatibility. Only intended for use in Settings.EncryptedAttribute.
+    /// (!)Deprecated. Exists for backward compatibility. Only intended for use in Settings.
     /// </summary>
     public abstract class StringEndec : Endec2String/*<string>*/
     {

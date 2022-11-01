@@ -77,50 +77,46 @@ namespace Cliver
 
         private class ExclusiveSynchronizationContext : SynchronizationContext
         {
-            private bool done;
+            private bool run;
             public Exception InnerException { get; set; }
             readonly AutoResetEvent workItemsWaiting = new AutoResetEvent(false);
-            readonly Queue<Tuple<SendOrPostCallback, object>> items =
-                new Queue<Tuple<SendOrPostCallback, object>>();
+            readonly Queue<(SendOrPostCallback sendOrPostCallback, object state)> items = new Queue<(SendOrPostCallback sendOrPostCallback, object state)>();
 
             public override void Send(SendOrPostCallback d, object state)
             {
                 throw new NotSupportedException("We cannot send to our same thread");
             }
 
-            public override void Post(SendOrPostCallback d, object state)
+            public override void Post(SendOrPostCallback sendOrPostCallback, object state)
             {
                 lock (items)
                 {
-                    items.Enqueue(Tuple.Create(d, state));
+                    items.Enqueue((sendOrPostCallback, state));
                 }
                 workItemsWaiting.Set();
             }
 
             public void EndMessageLoop()
             {
-                Post(_ => done = true, null);
+                Post(_ => run = false, null);
             }
 
             public void BeginMessageLoop()
             {
-                while (!done)
+                run = true;
+                while (run)
                 {
-                    Tuple<SendOrPostCallback, object> task = null;
+                    (SendOrPostCallback sendOrPostCallback, object state) task = (sendOrPostCallback: null, state: null);
                     lock (items)
                     {
                         if (items.Count > 0)
-                        {
                             task = items.Dequeue();
-                        }
                     }
-                    if (task != null)
+                    if (task.sendOrPostCallback != null)
                     {
-                        task.Item1(task.Item2);
-                        if (InnerException != null) // the method threw an exeption
-                        {
-                            throw new AggregateException("AsyncHelpers.Run method threw an exception.", InnerException);
-                        }
+                        task.sendOrPostCallback(task.state);
+                        if (InnerException != null)
+                            throw new Exception(nameof(TaskRoutines.RunSynchronously) + " method threw an exception.", InnerException);
                     }
                     else
                     {

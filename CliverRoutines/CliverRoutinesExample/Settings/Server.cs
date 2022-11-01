@@ -18,15 +18,15 @@ namespace Example
             //if you are not on Windows and cannot use CliverWinRoutines, you have to initialize Encrypted<> explicitly with a key
             Cliver.Encrypted<string>.InitializeDefault(new Cliver.Endec2String.Rijndael("123"));//recommended way
             //Alternatives:
-            //Cliver.Encrypted<string>.InitializeDefault(new Cliver.Endec2String<string>(new Endec.Rijndael("123")));//general way
+            //Cliver.Encrypted<string>.InitializeDefault(new Cliver.Endec2String(new Endec.Rijndael("123")));//general way
             //Cliver.Encrypted<string>.InitializeDefault(new Cliver.StringEndec.Rijndael("123"));//(!)deprecated!
         }
 
         public string Host = "";
         public int Port = 123;
         //This field is encrypted. It decrypts its value only when explicitly called.
-        public Cliver.Encrypted<string> Password = new Encrypted<string>();
+        public Cliver.Encrypted<string> Password = new Cliver.Encrypted<string>();
         //Windows alternative provided by CliverWinRoutines:
-        //public Cliver.Win.Encrypted<string> Password = new Cliver.Win.Encrypted<string>();  
+        //public Cliver.Encrypted<string> Password = new Cliver.Win.Encrypted<string>();  
     }
 }

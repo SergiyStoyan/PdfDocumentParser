@@ -26,9 +26,9 @@ namespace Cliver.Win
     }
 
     /// <summary>
-    /// (!)Deprecated. Exists for backward compatibility. Only intended for use in Settings.EncryptedAttribute.
+    /// (!)Deprecated. Exists for backward compatibility. Only intended for use in Settings.
     /// </summary>
-    public class StringEndec : Endec2String
+    public class StringEndec : Cliver.StringEndec
     {
         protected StringEndec(Endec endec) : base(endec)
         {
