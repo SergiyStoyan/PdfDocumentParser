@@ -580,19 +580,17 @@ partial class Settings
 	//This object will be serialized as encrypted string
 	internal static CredentialsSettings Credentials;
 
-	//A Endec2String object passed into SettingsFieldAttribute.EncryptedAttribute
-	internal static Endec2String Endec { get; } = new Endec2String.Rijndael("111"); //recommended way
+	//A StringEndec object passed into SettingsFieldAttribute.EncryptedAttribute
+	internal static StringEndec Endec { get; } = new StringEndec.Rijndael("111"); //recommended way
 	//Alternatives:
-	//internal static Endec2String Endec { get; } = new Endec2String(new Endec.Rijndael("111"));//general way
-	//internal static StringEndec Endec { get; } = new StringEndec.Rijndael("111");//(!)deprecated!
+	//internal static StringEndec Endec { get; } = new StringEndec(new Endec.Rijndael("111"));//general way
 	//An alternative by CliverWinRoutines that does not require a key:
-	//internal static Endec2String Endec { get; } = new Cliver.Win.Endec2String.ProtectedData();//recommended way
-	//internal static Endec2String Endec { get; } = new Endec2String(new Cliver.Win.Endec.ProtectedData());//general way
-	//internal static Cliver.StringEndec Endec { get; } = new Cliver.Win.StringEndec();//(!)deprecated!
+	//internal static StringEndec Endec { get; } = new Cliver.Win.StringEndec();//recommended way
+	//internal static StringEndec Endec { get; } = new StringEndec(new Cliver.Win.Endec.ProtectedData());//general way
 }
 
 //This attribute can be applied to either a Settings type or a Settings field. Being applied to a type, it causes any field of the type to be encrypted.
-//Specify the class and the property that expose a Endec2String object to be used for encryption.
+//Specify the class and the property that expose a StringEndec object to be used for encryption.
 [SettingsAttributes.Encrypted(endecGetterHostingType: typeof(Settings), endecGetterName: nameof(Settings.Endec))]
 class CredentialsSettings : Cliver.UserSettings
 {
@@ -611,28 +609,31 @@ class CredentialsSettings : Cliver.UserSettings
 
             <h4><a name=''>Serializable field</a></h4>
 Also, it is possible to encrypt a <a href='#settings_field'>settings field</a> not as a whole but only its certain member(s) (i.e. <a href='#serializable_field'>serializable fields</a>). How it is done:
-<script type="text/plain" class="language-csharp">partial class Settings
+<script type="text/plain" class="language-csharp">
+partial class Settings
 {
 	public static ServerSettings Server { get; set; }
 }
 
 class ServerSettings : Cliver.UserSettings//UserSettings based class is serialized in the user directory
 {
+	//optional static initialization
 	static ServerSettings()
 	{
-		//if you are not on Windows and cannot use CliverWinRoutines, you have to initialize Encrypted<> explicitly with a key
-		Cliver.Encrypted<string>.InitializeDefault(new Cliver.Endec2String.Rijndael("123"));//recommended way
+		//if you are not on Windows and cannot use CliverWinRoutines, you have to initialize Encrypted<T> explicitly with a key
+		//which can be done by the static way.
+		//(!)Otheriwse Endec must be set directly in the instance before the first calling Value.
+		Cliver.Encrypted<string>.InitializeDefault(new Cliver.StringEndec.Rijndael("123"));//recommended way
 		//Alternatives:
-		//Cliver.Encrypted<string>.InitializeDefault(new Cliver.Endec2String(new Endec.Rijndael("123")));//general way
-		//Cliver.Encrypted<string>.InitializeDefault(new Cliver.StringEndec.Rijndael("123"));//(!)deprecated!
+		//Cliver.Encrypted<string>.InitializeDefault(new Cliver.StringEndec(new Endec.Rijndael("123")));//general way
 	}
 
 	public string Host = "";
 	public int Port = 123;
-	//This field is encrypted. It decrypts its value only when explicitly called.
-	public Cliver.Encrypted<string> Password = new Cliver.Encrypted<string>();
-	//Windows alternative provided by CliverWinRoutines:
-	//public Cliver.Encrypted<string> Password = new Cliver.Win.Encrypted<string>();
+	//This field is encrypted. It decrypts its value only when it is explicitly called.
+	public Cliver.Encrypted<string> Password = new Cliver.Encrypted<string>("test");
+	//Windows alternative provided by CliverWinRoutines that does not require a key:
+	//public Cliver.Encrypted<string> Password = new Cliver.Win.Encrypted<string>("test");
 }</script>
 
 <p>Now you can use it like this:

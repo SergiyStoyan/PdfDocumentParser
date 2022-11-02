@@ -76,11 +76,13 @@ namespace Cliver.Win
         }
     }
 
-    public class Endec2String : Cliver.Endec2String
+    public class StringEndec : Cliver.StringEndec
     {
-        public Endec2String(Endec endec) : base(endec) { }
+        //public StringEndec() : base(new Endec.ProtectedData()) { }
 
-        public class ProtectedData : Endec2String
+        public StringEndec(Endec endec) : base(endec) { }
+
+        public class ProtectedData : Cliver.StringEndec
         {
             public ProtectedData() : base(new Endec.ProtectedData())
             {

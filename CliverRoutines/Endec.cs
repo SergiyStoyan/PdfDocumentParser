@@ -109,9 +109,9 @@ namespace Cliver
         }
     }
 
-    public class Endec2String
+    public class StringEndec
     {
-        public Endec2String(Endec endec)
+        public StringEndec(Endec endec)
         {
             this.endec = endec;
         }
@@ -149,7 +149,7 @@ namespace Cliver
             return Serialization.Json.Deserialize<T>(s);
         }
 
-        public class Rijndael : Endec2String
+        public class Rijndael : StringEndec
         {
             public Rijndael(string key) : base(new Endec.Rijndael(key))
             {
@@ -157,9 +157,9 @@ namespace Cliver
         }
     }
 
-    //public class Endec2String<T> : Endec2String where T : class
+    //public class StringEndec<T> : StringEndec where T : class
     //{
-    //    public Endec2String(Endec endec) : base(endec) { }
+    //    public StringEndec(Endec endec) : base(endec) { }
 
     //    virtual public string Encrypt(T o)
     //    {
@@ -171,7 +171,7 @@ namespace Cliver
     //        return Decrypt<T>(s);
     //    }
 
-    //    public class Rijndael : Endec2String<T>
+    //    public class Rijndael : StringEndec<T>
     //    {
     //        public Rijndael(string key) : base(new Endec.Rijndael(key))
     //        {
@@ -179,7 +179,7 @@ namespace Cliver
     //    }
     //}
 
-    //public class EndecBytes2String : Endec2String
+    //public class EndecBytes2String : StringEndec
     //{
     //    public EndecBytes2String(Endec endec) : base(endec)
     //    { }
@@ -196,7 +196,7 @@ namespace Cliver
     //    }
     //}
 
-    //public class EndecString2String : Endec2String
+    //public class EndecString2String : StringEndec
     //{
     //    public EndecString2String(Endec endec) : base(endec)
     //    { }
@@ -215,7 +215,7 @@ namespace Cliver
     //    }
     //}
 
-    //public class EndecObject2String<T>: Endec2String where T : class
+    //public class EndecObject2String<T>: StringEndec where T : class
     //{
     //    public EndecObject2String(Endec endec) : base(endec)
     //    { }

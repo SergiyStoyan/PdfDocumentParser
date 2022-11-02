@@ -19,23 +19,14 @@ namespace Cliver.Win
     {
         static Encrypted()
         {
-            InitializeDefault(new Endec2String(new Endec.ProtectedData()));
+            InitializeDefault(new StringEndec.ProtectedData());
         }
 
-        public Encrypted(T value = null) : base(value) { }
-    }
+        /// <summary>
+        /// (!)The default constructor is used by the deserializer.
+        /// </summary>
+        public Encrypted() : base() { }
 
-    /// <summary>
-    /// (!)Deprecated. Exists for backward compatibility. Only intended for use in Settings.
-    /// </summary>
-    public class StringEndec : Cliver.StringEndec
-    {
-        protected StringEndec(Endec endec) : base(endec)
-        {
-        }
-
-        public StringEndec() : base(new Endec.ProtectedData())
-        {
-        }
+        public Encrypted(T value) : base(value) { }
     }
 }

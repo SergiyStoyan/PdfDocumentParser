@@ -54,7 +54,7 @@ namespace Cliver
         /// <summary>
         /// Encryption/decryption engine.
         /// </summary>
-        public readonly Endec2String Endec = null;
+        public readonly StringEndec Endec = null;
 
         /// <summary>
         /// When TRUE, the Settings field is not initialized by default and needs an explicit initializing. 

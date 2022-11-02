@@ -18,6 +18,9 @@ namespace Cliver
     /// <typeparam name="T"></typeparam>
     public class Encrypted<T> where T : class
     {
+        /// <summary>
+        /// (!)The default constructor is used by the deserializer.
+        /// </summary>
         public Encrypted()
         {
         }
@@ -43,33 +46,36 @@ namespace Cliver
             {
                 if (_Value == null)
                     return null;
-                try
-                {
-                    return endec.Decrypt<T>(_Value);
-                }
-                catch (Exception e)
-                {
-                    Log.Error("Could not decrypt _Value.", e);
-                    return null;
-                }
+                //try
+                //{
+                return Endec.Decrypt<T>(_Value);
+                //}
+                //catch (Exception e)
+                //{
+                //    Log.Error("Could not decrypt _Value.", e);
+                //    return null;
+                //}
             }
             set
             {
                 if (value == null)
                     _Value = null;
                 else
-                    _Value = endec.Encrypt(Value);
+                    _Value = Endec.Encrypt(Value);
             }
         }
 
-        public void Initialize(Endec2String endec)
+        /// <summary>
+        /// (!)It must be set before the first Value use (if InitializeDefault() was not called before).
+        /// </summary>
+        public StringEndec Endec//as a public, it can be used to initialize new Endec instances
         {
-            if (endec != null)
-                throw new Exception("Endec instance is already set and cannot be re-set.");
-            _endec = endec;
-        }
-        Endec2String endec
-        {
+            set
+            {
+                if (_endec != null)
+                    throw new Exception("Endec instance is already set and cannot be re-set.");
+                _endec = value;
+            }
             get
             {
                 if (_endec != null)
@@ -82,49 +88,19 @@ namespace Cliver
                 throw new Exception("Endec instance is not set. It can be done by either Initialize() or InitializeDefault() of Cliver.Encrypted class.");
             }
         }
-        Endec2String _endec;
+        StringEndec _endec;
 
-        static public void InitializeDefault(Endec2String endec)
+        /// <summary>
+        /// Defines Endec for the whole type.
+        /// </summary>
+        /// <param name="endec"></param>
+        /// <exception cref="Exception"></exception>
+        static public void InitializeDefault(StringEndec endec)
         {
             if (defaultEndec != null)
                 throw new Exception("Default Endec instance is already set and cannot be re-set.");
             defaultEndec = endec;
         }
-        static Endec2String defaultEndec;
-    }
-
-    ///// <summary>
-    ///// (!)Only intended for use in Encrypted<T>.
-    ///// Provides a simplified syntax where Endec2String class is the general way to go.
-    ///// </summary>
-    //public abstract class ObjectEndec : Endec2String
-    //{
-    //    protected ObjectEndec(Endec endec) : base(endec)
-    //    {
-    //    }
-
-    //    public class Rijndael : ObjectEndec
-    //    {
-    //        public Rijndael(string key) : base(new Endec.Rijndael(key))
-    //        {
-    //        }
-    //    }
-    //}
-
-    /// <summary>
-    /// (!)Deprecated. Exists for backward compatibility. Only intended for use in Settings.
-    /// </summary>
-    public abstract class StringEndec : Endec2String/*<string>*/
-    {
-        protected StringEndec(Endec endec) : base(endec)
-        {
-        }
-
-        public class Rijndael : StringEndec
-        {
-            public Rijndael(string key) : base(new Endec.Rijndael(key))
-            {
-            }
-        }
+        static StringEndec defaultEndec;
     }
 }
