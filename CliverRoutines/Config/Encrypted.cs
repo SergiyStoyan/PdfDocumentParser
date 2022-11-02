@@ -72,6 +72,8 @@ namespace Cliver
         {
             set
             {
+                if (value == null)
+                    throw new Exception("Endec is NULL which cannot be set.");
                 if (_endec != null)
                     throw new Exception("Endec instance is already set and cannot be re-set.");
                 _endec = value;
@@ -91,12 +93,24 @@ namespace Cliver
         StringEndec _endec;
 
         /// <summary>
+        /// It must be called before the first Value use (if InitializeDefault() was not called before).
+        /// </summary>
+        /// <param name="endec"></param>
+        /// <exception cref="Exception"></exception>
+        public void Initialize(StringEndec endec)
+        {
+            Endec = endec;
+        }
+
+        /// <summary>
         /// Defines Endec for the whole type.
         /// </summary>
         /// <param name="endec"></param>
         /// <exception cref="Exception"></exception>
         static public void InitializeDefault(StringEndec endec)
         {
+            if (endec == null)
+                throw new Exception("Endec is NULL which cannot be set.");
             if (defaultEndec != null)
                 throw new Exception("Default Endec instance is already set and cannot be re-set.");
             defaultEndec = endec;

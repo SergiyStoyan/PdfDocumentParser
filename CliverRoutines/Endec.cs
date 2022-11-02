@@ -146,7 +146,7 @@ namespace Cliver
             s = Encoding.Unicode.GetString(bytes);
             if (typeof(T) == typeof(string))
                 return s as T;
-            return Serialization.Json.Deserialize<T>(s);
+            return Serialization.Json.Deserialize<T>(s, true);
         }
 
         public class Rijndael : StringEndec
