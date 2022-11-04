@@ -1,8 +1,6 @@
 //********************************************************************************************
 //Author: Sergiy Stoyan
-//        s.y.stoyan@gmail.com
-//        sergiy.stoyan@outlook.com
-//        stoyan@cliversoft.com
+//        s.y.stoyan@gmail.com, sergiy.stoyan@outlook.com, stoyan@cliversoft.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 
@@ -29,6 +27,12 @@ namespace Cliver
         {
             Value = value;
         }
+
+        //public Encrypted(StringEndec endec, T value)
+        //{
+        //    Value = value;
+        //    Initialize(endec);
+        //}
 
         /// <summary>
         /// Encypted value. It must not be called from the custom code.
@@ -65,19 +69,16 @@ namespace Cliver
             }
         }
 
-        /// <summary>
-        /// (!)It must be set before the first Value use (if InitializeDefault() was not called before).
-        /// </summary>
         public StringEndec Endec//as a public, it can be used to initialize new Endec instances
         {
-            set
-            {
-                if (value == null)
-                    throw new Exception("Endec is NULL which cannot be set.");
-                if (_endec != null)
-                    throw new Exception("Endec instance is already set and cannot be re-set.");
-                _endec = value;
-            }
+            //private set
+            //{
+            //    if (value == null)
+            //        throw new Exception("Endec is NULL which cannot be set.");
+            //    if (_endec != null)
+            //        throw new Exception("Endec instance is already set and cannot be re-set.");
+            //    _endec = value;
+            //}
             get
             {
                 if (_endec != null)
@@ -99,7 +100,11 @@ namespace Cliver
         /// <exception cref="Exception"></exception>
         public void Initialize(StringEndec endec)
         {
-            Endec = endec;
+            if (endec == null)
+                throw new Exception("Endec is NULL which cannot be set.");
+            if (_endec != null)
+                throw new Exception("Endec instance is already set and cannot be re-set.");
+            _endec = endec;
         }
 
         /// <summary>

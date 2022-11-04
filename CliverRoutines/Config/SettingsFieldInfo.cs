@@ -1,8 +1,6 @@
 //********************************************************************************************
 //Author: Sergiy Stoyan
-//        s.y.stoyan@gmail.com
-//        sergiy.stoyan@outlook.com
-//        stoyan@cliversoft.com
+//        s.y.stoyan@gmail.com, sergiy.stoyan@outlook.com, stoyan@cliversoft.com
 //        http://www.cliversoft.com
 //********************************************************************************************
 #define COMPILE_GetObject_SetObject1 //!!!Stopwatch shows that compiling is not faster. Probably the reflection was improved.

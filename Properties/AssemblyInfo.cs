@@ -11,7 +11,7 @@ using System.Reflection;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CliverSoft")]
 [assembly: AssemblyProduct("Pdf Document Parser")]
-[assembly: AssemblyCopyright("developed by Sergiy Stoyan, s.y.stoyan@gmail.com")]
+[assembly: AssemblyCopyright("developed by Sergiy Stoyan, s.y.stoyan@gmail.com, sergiy.stoyan@outlook.com, stoyan@cliversoft.com")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -26,7 +26,7 @@ using System.Reflection;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("7.22.2.*")]
+[assembly: AssemblyVersion("7.22.3.*")]
 
 //
 // In order to sign your assembly you must specify a key to use. Refer to the 
