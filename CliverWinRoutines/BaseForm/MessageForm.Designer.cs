@@ -2,7 +2,7 @@
 //Author: Sergiy Stoyan, CliverSoft.com
 //        http://cliversoft.com
 //        stoyan@cliversoft.com
-//        systoyan@gmail.com
+//        s.y.stoyan@gmail.com
 //        03 January 2007
 //Copyright: (C) 2007, Sergiy Stoyan
 //********************************************************************************************
