@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("CliverWinRoutines")]
-[assembly: AssemblyDescription("Common C# Windows Routines Lib")]
+[assembly: AssemblyDescription("Windows-specific routines which are helpful in a desktop Windows application. Based on .NET Framework 4.8")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CliverSoft")]
-[assembly: AssemblyProduct("Common C# Windows Routines Lib")]
-[assembly: AssemblyCopyright("Copyright © 2006-2021, CliverSoft")]
+[assembly: AssemblyProduct("C# Windows Routines Lib")]
+[assembly: AssemblyCopyright("Copyright © 2006-2022, CliverSoft")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -28,5 +28,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("2.3.2.*")]
+[assembly: AssemblyVersion("2.3.3.*")]
 //[assembly: AssemblyFileVersion("1.0.0.0")]
