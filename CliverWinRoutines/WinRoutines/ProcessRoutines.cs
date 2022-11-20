@@ -23,8 +23,8 @@ namespace Cliver.Win
     {
         public static IEnumerable<Process> GetProcesses(string exeFile)
         {
-            string exeFileDir = PathRoutines.GetFileDir(exeFile).ToLower();
-            return Process.GetProcessesByName(PathRoutines.GetFileNameWithoutExtention(exeFile)).Where(p =>
+            string exeFileDir = Cliver.PathRoutines.GetFileDir(exeFile).ToLower();
+            return Process.GetProcessesByName(Cliver.PathRoutines.GetFileNameWithoutExtention(exeFile)).Where(p =>
             {
                 ProcessModule pm;
                 try

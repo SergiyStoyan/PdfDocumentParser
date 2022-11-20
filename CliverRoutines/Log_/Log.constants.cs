@@ -36,8 +36,7 @@ namespace Cliver
                     AppDir = PathRoutines.GetFileDir(u.LocalPath);
                 }
 
-                AssemblyRoutines.AssemblyInfo ai = new AssemblyRoutines.AssemblyInfo(headAssembly);
-                CompanyName = ai.Company;
+                CompanyName = headAssembly.GetCompany();
             }
 
             //{

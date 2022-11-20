@@ -20,7 +20,7 @@ namespace Cliver
             return stackTrace.GetFrames().Select(f => f.GetMethod().DeclaringType.Assembly).Where(a => a != thisAssembly).FirstOrDefault();
         }
 
-        public static DateTime GetAssemblyCompiledTime(Assembly assembly)
+        public static DateTime GetAssemblyCompiledTime(this Assembly assembly)
         {
             byte[] bs = new byte[2048];
             System.IO.Stream s = new System.IO.FileStream(assembly.Location, System.IO.FileMode.Open, System.IO.FileAccess.Read);
@@ -43,16 +43,15 @@ namespace Cliver
 
         public static Version GetExecutingAssemblyVersion()
         {
-            AssemblyInfo ai = new AssemblyInfo(Assembly.GetCallingAssembly());
-            return ai.Version;
+            return Assembly.GetCallingAssembly().GetVersion();
         }
 
         public static string GetExecutingAssemblyName()
         {
-            AssemblyInfo ai = new AssemblyInfo(Assembly.GetCallingAssembly());
-            return ai.Name;
+            return Assembly.GetCallingAssembly().GetSimpleName();
         }
 
+        [Obsolete("It's better to use the Assembly extensions", false)]
         public class AssemblyInfo
         {
             public AssemblyInfo(string file)
@@ -219,6 +218,82 @@ namespace Cliver
             foreach (AssemblyName an in assembly.GetReferencedAssemblies())
                 foreach (Assembly a in getAssemblyBranchByNamespace(an, assemblyNamespaceFilter, assemblyFuleNames))
                     yield return a;
+        }
+
+        public static string GetPath(this Assembly assembly)
+        {
+            Uri u = new Uri(assembly.CodeBase);
+            return u.LocalPath;
+        }
+
+        public static string GetCompilationVersion(this Assembly assembly)
+        {
+            DateTime dt = GetAssemblyCompiledTime(assembly);
+            return dt.ToString("yy-MM-dd-HH-mm-ss");
+        }
+
+        public static string GetTitle(this Assembly assembly)
+        {
+            object[] attributes = assembly.GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
+            if (attributes.Length < 1)
+                return null;
+            return ((AssemblyTitleAttribute)attributes[0]).Title;
+        }
+
+        //public string AssemblyVersion//does not give auto build part
+        //{
+        //    get
+        //    {
+        //        return a.GetName().Version.ToString();
+        //    }
+        //}
+
+        public static Version GetVersion(this Assembly assembly)
+        {
+            return assembly.GetName().Version;
+        }
+
+        public static Version GetFileVersion(this Assembly assembly)
+        {
+            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+            return new Version(fvi.ProductVersion);
+        }
+
+        public static string GetDescription(this Assembly assembly)
+        {
+            object[] attributes = assembly.GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
+            if (attributes.Length < 1)
+                return null;
+            return ((AssemblyDescriptionAttribute)attributes[0]).Description;
+        }
+
+        public static string GetProduct(this Assembly assembly)
+        {
+            object[] attributes = assembly.GetCustomAttributes(typeof(AssemblyProductAttribute), false);
+            if (attributes.Length < 1)
+                return null;
+            return ((AssemblyProductAttribute)attributes[0]).Product;
+        }
+
+        public static string GetCopyright(this Assembly assembly)
+        {
+            object[] attributes = assembly.GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
+            if (attributes.Length < 1)
+                return null;
+            return ((AssemblyCopyrightAttribute)attributes[0]).Copyright;
+        }
+
+        public static string GetCompany(this Assembly assembly)
+        {
+            object[] attributes = assembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
+            if (attributes.Length < 1)
+                return null;
+            return ((AssemblyCompanyAttribute)attributes[0]).Company;
+        }
+
+        public static string GetSimpleName(this Assembly assembly)
+        {
+            return assembly.GetName().Name;
         }
     }
 }

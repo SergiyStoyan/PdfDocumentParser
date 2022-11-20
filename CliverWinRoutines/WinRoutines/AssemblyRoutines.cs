@@ -16,7 +16,19 @@ namespace Cliver.Win
 
         public static System.Drawing.Icon GetAppIcon(Assembly assembly = null)
         {
-            return System.Drawing.Icon.ExtractAssociatedIcon((assembly != null ? assembly : Assembly.GetEntryAssembly()).Location);
+            if (assembly == null)
+                assembly = Assembly.GetEntryAssembly();
+            string p = assembly.Location;
+            if (p.StartsWith(@"\\"))
+                try
+                {
+                    p = PathRoutines.GetLocalPathForUncPath(p);
+                }
+                catch (System.UnauthorizedAccessException)
+                {
+                    return null;
+                }
+            return System.Drawing.Icon.ExtractAssociatedIcon(p);
         }
     }
 }

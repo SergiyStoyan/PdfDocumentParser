@@ -46,7 +46,7 @@ namespace Cliver.Win
                 if (s.Primary)
                     f = file;
                 else
-                    f = PathRoutines.InsertSuffixBeforeFileExtension(file, "_" + PathRoutines.GetLegalizedFileName(s.DeviceName));
+                    f = Cliver.PathRoutines.InsertSuffixBeforeFileExtension(file, "_" + Cliver.PathRoutines.GetLegalizedFileName(s.DeviceName));
                 System.Drawing.Rectangle bounds = s.Bounds;
                 using (System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(bounds.Width, bounds.Height))
                 {

@@ -44,6 +44,11 @@ namespace Cliver
         //            v = values[i];
         //    return v;
         //}
+
+        //public static T Ceiling<T>(T value) 
+        //{           
+        //    return v;
+        //}
     }
 }
 

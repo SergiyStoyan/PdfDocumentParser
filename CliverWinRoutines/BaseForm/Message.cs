@@ -60,11 +60,11 @@ namespace Cliver
         public readonly static string AppName = getAppName();
         static string getAppName()
         {
-            AssemblyRoutines.AssemblyInfo ai = new AssemblyRoutines.AssemblyInfo(System.Reflection.Assembly.GetEntryAssembly());
-            string n = ai.Product;
+            System.Reflection.Assembly a = System.Reflection.Assembly.GetEntryAssembly();
+            string n = a.GetProduct();
             if (n != null)
                 return n;
-            n = ai.Title;
+            n = a.GetTitle();
             if (n != null)
                 return n;
             n = ProgramRoutines.GetAppName();
