@@ -5,6 +5,7 @@
 //********************************************************************************************
 
 using System;
+using System.Linq;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Text;
@@ -14,6 +15,38 @@ namespace Cliver
 {
     public static class Extensions
     {
+        /// <summary>
+        /// Copy the list of ranges into an output array. A range can be reversed.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ps"></param>
+        /// <param name="ranges"></param>
+        /// <returns></returns>
+        public static T[] CopyRanges<T>(this T[] ps, params (int I1, int I2)[] ranges)
+        {
+            T[] ps2 = new T[ranges.Sum(a => Math.Abs(a.I1 - a.I2) + 1)];
+            int i2 = -1;
+            foreach ((int I1, int I2) r in ranges)
+            {
+                int i = r.I1;
+                for (i2++; i2 < ps2.Length; i2++)
+                {
+                    ps2[i2] = ps[i];
+                    if (r.I1 <= r.I2)
+                    {
+                        if (++i > r.I2)
+                            break;
+                    }
+                    else
+                    {
+                        if (--i < r.I2)
+                            break;
+                    }
+                }
+            }
+            return ps2;
+        }
+
         //public static object Convert(this object value, Type type)
         //{
         //    if (value == null)

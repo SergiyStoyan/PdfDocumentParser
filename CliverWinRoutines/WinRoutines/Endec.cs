@@ -86,6 +86,13 @@ namespace Cliver.Win
             {
             }
         }
+
+        public class AppProtectedData : Cliver.StringEndec
+        {
+            public AppProtectedData() : base(new Endec.ProtectedData(Endec.GetKeyFromComputerSystemInfo() + Log.ProgramName))
+            {
+            }
+        }
     }
 
     //public class Endec2String<T> : Cliver.Endec2String<T> where T : class
