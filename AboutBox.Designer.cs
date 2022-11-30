@@ -127,6 +127,8 @@
             this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
+            this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(434, 358);
             this.Controls.Add(this.logoPictureBox);
             this.Controls.Add(this.labelProductName);
@@ -135,7 +137,6 @@
             this.Controls.Add(this.labelCopyright);
             this.Controls.Add(this.textBoxDescription);
             this.Controls.Add(this.labelCompanyName);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "AboutBox";

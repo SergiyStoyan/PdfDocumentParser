@@ -31,6 +31,16 @@ namespace Cliver
             return false;
         }
 
+        static public bool IsOverridden(MethodInfo methodInfo)
+        {
+            return methodInfo.GetBaseDefinition().DeclaringType != methodInfo.DeclaringType;
+        }
+
+        static public bool IsOverridden(Type classType, string methodName)
+        {
+            return IsOverridden(classType.GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance));
+        }
+
         public static Dictionary<string, FieldInfo> GetFieldInfos(object o, BindingFlags bindingFlags)
         {
             Dictionary<string, FieldInfo> ns2fi = new Dictionary<string, FieldInfo>();

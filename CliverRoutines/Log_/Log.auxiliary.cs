@@ -241,6 +241,7 @@ namespace Cliver
             return string.Join("\r\n",
                 AssemblyRoutines.GetAssemblyBranchByNamespace(callingAssembly, new Regex(string.Join("|", namespaces.Select(a => Regex.Escape(a)))))
                     .Select(a => a.GetName()).Select(a => a.Name + " - " + a.Version)
+                    .Distinct()
                 );
         }
     }
