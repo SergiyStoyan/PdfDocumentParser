@@ -65,7 +65,7 @@ namespace Cliver
                 if (value == null)
                     _Value = null;
                 else
-                    _Value = Endec.Encrypt(Value);
+                    _Value = Endec.Encrypt(value);
             }
         }
 

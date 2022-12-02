@@ -26,6 +26,7 @@ namespace Cliver
                 if (headAssembly == null)
                     headAssembly = Assembly.GetCallingAssembly();
                 ProgramName = headAssembly.GetName(false).Name;
+                rootDirName = ProgramName;
 
                 //AppDir = AppDomain.CurrentDomain.BaseDirectory?.TrimEnd(Path.DirectorySeparatorChar);!!!gives not an app's dir on WCF or Android
                 if (headAssembly.Location != null)
