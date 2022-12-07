@@ -17,7 +17,7 @@ namespace Cliver
     /// <summary>
     /// Show MessageForm with predefined features
     /// </summary>
-    public static class Message
+    public static partial class Message
     {
         /// <summary>
         /// Whether the message box must be displayed in the Windows taskbar.
@@ -189,10 +189,9 @@ namespace Cliver
                         break;
                 }
                 caller = sf.GetMethod().Name + "," + sf.GetNativeOffset().ToString();
-                string m = null;
                 lock (callers2message)
                 {
-                    if (callers2message.TryGetValue(caller, out m) && m == message)
+                    if (callers2message.TryGetValue(caller, out string m) && m == message)
                         return -1;
                     callers2message[caller] = message;
                 }

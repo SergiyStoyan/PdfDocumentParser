@@ -52,17 +52,25 @@ namespace Cliver
                 c.Text = m;
         }
 
+        //public static object Invoke(this Control c, Func<object> function)
+        //{
+        //    return c.Invoke(function);
+        //}
+
+        //public static object Invoke(this Control c, MethodInvoker code)
+        //{
+        //    return c.Invoke(code);
+        //}
+
         public static object Invoke(this Control c, Func<object> function)
         {
-            return c.Invoke(function);
+            if (c.InvokeRequired)
+                return c.Invoke(function);
+            else
+                return function();
         }
 
         public static void Invoke(this Control c, MethodInvoker code)
-        {
-            c.Invoke(code);
-        }
-
-        public static void Invoke2(this Control c, MethodInvoker code)
         {
             if (c.InvokeRequired)
                 c.Invoke(code);
@@ -70,9 +78,15 @@ namespace Cliver
                 code();
         }
 
-        public static void BeginInvoke(this Control c, MethodInvoker code)
+        public static IAsyncResult BeginInvoke(this Control c, MethodInvoker code)
         {
-            c.BeginInvoke(code);
+            Form f = c.FindForm();
+            if (f == null)
+                throw new Exception("The control does not belong to a Form.");
+            IntPtr h;
+            if (!f.IsHandleCreated)//to avoid: Invoke or BeginInvoke cannot be called on a control until the window handle has been created.
+                h = f.Handle;
+            return c.BeginInvoke(code);
         }
 
         //public static void BeginInvoke2(this Control c, MethodInvoker code)
@@ -125,7 +139,7 @@ namespace Cliver
                                 finished?.Invoke();
                             });
                     }
-                    catch(Exception e)//control disposed
+                    catch (Exception e)//control disposed
                     {
                     }
                 });
