@@ -228,5 +228,24 @@ namespace Cliver
         {
             Head.Write(messageType, message, details);
         }
+
+        /// <summary>
+        /// Write an Exception while treating MessageException types particularly.
+        /// </summary>
+        /// <param name="e"></param>
+        static public void Write(Exception e)
+        {
+            Head.Write(e);
+        }
+
+        /// <summary>
+        /// Write a message with Exception while especially treating MessageException. 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="e"></param>
+        //static public void Write(string message, Exception e)
+        //{
+        //    Head.Write(message, e);
+        //}
     }
 }

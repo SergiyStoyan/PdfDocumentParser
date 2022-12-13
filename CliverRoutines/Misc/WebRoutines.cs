@@ -17,6 +17,11 @@ namespace Cliver
         {
             return string.Join("&", names2value.Select(n2v => WebUtility.UrlEncode(n2v.Key) + "=" + WebUtility.UrlEncode(n2v.Value)));
         }
+
+        static public string GetUrlEncoded(string value)
+        {
+            return WebUtility.UrlEncode(value);
+        }
     }
 }
 

@@ -122,6 +122,75 @@ namespace Cliver
             {
                 Write(MessageType.LOG, message);
             }
+
+            public void Write(Exception e)
+            {
+                MessageException me = e as MessageException;
+                if (me != null)
+                {
+                    switch (me.MessageType)
+                    {
+                        case MessageType.INFORM:
+                            if (me.PrintDetails)
+                                Inform0(e.Message);
+                            else
+                                Inform(e.Message);
+                            break;
+                        case MessageType.WARNING:
+                            if (me.PrintDetails)
+                                Warning(e.Message);
+                            else
+                                Warning2(e.Message);
+                            break;
+                        case MessageType.ERROR:
+                            if (me.PrintDetails)
+                                Error(e.Message);
+                            else
+                                Error2(e.Message);
+                            break;
+                        default:
+                            throw new Exception("Unexpected MessageType in the exception: " + me.MessageType);
+                    }
+                }
+                else
+                    Error(e);
+            }
+
+            //public void Write(string message, Exception e)
+            //{
+            //    MessageException me = e as MessageException;
+            //    if (me != null)
+            //    {
+            //        if (!string.IsNullOrEmpty(message))
+            //            message += "\r\n";
+            //        message += e.Message;
+            //        switch (me.MessageType)
+            //        {
+            //            case MessageType.INFORM:
+            //                if (me.PrintDetails)
+            //                    Inform0(message);
+            //                else
+            //                    Inform(message);
+            //                break;
+            //            case MessageType.WARNING:
+            //                if (me.PrintDetails)
+            //                    Warning(message);
+            //                else
+            //                    Warning2(message);
+            //                break;
+            //            case MessageType.ERROR:
+            //                if (me.PrintDetails)
+            //                    Error(message);
+            //                else
+            //                    Error2(message);
+            //                break;
+            //            default:
+            //                throw new Exception("Unexpected MessageType in the exception: " + me.MessageType);
+            //        }
+            //    }
+            //    else
+            //        Error(message, e);
+            //}
         }
     }
 }

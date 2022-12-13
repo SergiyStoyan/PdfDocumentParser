@@ -130,6 +130,16 @@ namespace Cliver
             {
                 Default.Debug0(message);
             }
+
+            public void Write(Exception e)
+            {
+                Default.Write(e);
+            }
+
+            //public void Write(string message, Exception e)
+            //{
+            //    Default.Write(message, e);
+            //}
         }
     }
 }
