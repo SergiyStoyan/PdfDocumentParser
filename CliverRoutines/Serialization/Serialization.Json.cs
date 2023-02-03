@@ -51,6 +51,7 @@ namespace Cliver
 
             public static T Deserialize<T>(string json, bool polymorphic = true, bool createNewObjects = true)
             {
+                //System.Runtime.Serialization.FormatterServices.GetUninitializedObject();
                 return JsonConvert.DeserializeObject<T>(json,
                     new JsonSerializerSettings { TypeNameHandling = polymorphic ? TypeNameHandling.Auto : TypeNameHandling.None, ObjectCreationHandling = createNewObjects ? ObjectCreationHandling.Replace : ObjectCreationHandling.Auto }
                     );

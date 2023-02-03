@@ -101,6 +101,19 @@ namespace Cliver
             return null;
         }
 
+        public static void CopyFields<T>(T o1, T o2, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public)
+        {
+            foreach (FieldInfo fi in o1.GetType().GetFields(bindingFlags))
+                fi.SetValue(o2, fi.GetValue(o1));
+            foreach (PropertyInfo fi in o1.GetType().GetProperties(bindingFlags | BindingFlags.SetProperty))
+                try
+                {
+                    fi.SetValue(o2, fi.GetValue(o1));
+                }
+                catch (System.ArgumentException e)//no set method found
+                { }
+        }
+
         //public static MethodInfo GetCallingStackMethodInfo(Regex namespaceRegex)
         //{
         //    Type myType = typeof(MyClass);

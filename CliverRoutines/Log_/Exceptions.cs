@@ -73,5 +73,21 @@ namespace Cliver
     {
         public WarningException2(string message) : base(Log.MessageType.WARNING, false, message) { }
     }
+
+    /// <summary>
+    /// Used to intercept informative messages in checking scopes. Logged with trace details.
+    /// </summary>
+    public class ErrorException : MessageException
+    {
+        public ErrorException(string message) : base(Log.MessageType.ERROR, true, message) { }
+    }
+
+    /// <summary>
+    /// Used to intercept informative messages in checking scopes. Logged without trace details.
+    /// </summary>
+    public class ErrorException2 : MessageException
+    {
+        public ErrorException2(string message) : base(Log.MessageType.ERROR, false, message) { }
+    }
 }
 

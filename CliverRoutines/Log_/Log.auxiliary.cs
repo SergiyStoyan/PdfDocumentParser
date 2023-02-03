@@ -231,7 +231,7 @@ namespace Cliver
             return s;
         }
 
-        static public string GetAssembliesInfo(IEnumerable<string> namespaces)
+        static public string GetAssembliesInfo(params string[] namespaces)
         {
             StackTrace stackTrace = new StackTrace();
             Assembly logAssembly = Assembly.GetExecutingAssembly();

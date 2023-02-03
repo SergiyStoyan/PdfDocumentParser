@@ -10,11 +10,37 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Security.Cryptography;
+using System.Collections.Generic;
 
 namespace Cliver
 {
     public static class Extensions
     {
+        /// <summary>
+        /// Works for multiple values too, unlike the built-in ToString()
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="e"></param>
+        /// <param name="separator"></param>
+        /// <returns></returns>
+        public static string ToString2<T>(this T e, string separator) where T : Enum
+        {
+            return string.Join(separator, e.GetValues().Select(a => a.ToString()));
+        }
+
+        public static IEnumerable<T> GetValues<T>(this T e) where T : Enum
+        {
+            foreach (T v in Enum.GetValues(typeof(T)))
+                if (e.HasFlag(v))
+                    yield return v;
+        }
+
+        public static void ForEach<T>(this IEnumerable<T> enumeration, Action<T> action)
+        {
+            foreach (T item in enumeration)
+                action(item);
+        }
+
         /// <summary>
         /// Copy the list of ranges into an output array. A range can be reversed.
         /// </summary>

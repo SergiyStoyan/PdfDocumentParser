@@ -49,6 +49,13 @@ namespace Cliver
         //{           
         //    return v;
         //}
+
+        public static T Truncate<T>(T value, T maximum) where T : IComparable
+        {
+            if (value.CompareTo(maximum) > 0)
+                return maximum;
+            return value;
+        }
     }
 }
 

@@ -31,22 +31,24 @@ namespace Cliver
         {
             get
             {
-                if (isCaseSensitive == null)
-                {
-                    var tmp = Path.GetTempPath();
-                    isCaseSensitive = !Directory.Exists(tmp.ToUpper()) || !Directory.Exists(tmp.ToLower());
-                }
-                return (bool)isCaseSensitive;
+                if (_isCaseSensitive == null)
+                    _isCaseSensitive = isCaseSensitive();
+                return (bool)_isCaseSensitive;
             }
         }
-        static bool? isCaseSensitive = null;
-
-        static public List<string> GetFiles(string directory, bool include_subfolders = true)
+        static bool? _isCaseSensitive = null;
+        static bool isCaseSensitive()
         {
-            List<string> fs = Directory.EnumerateFiles(directory).ToList();
-            if (include_subfolders)
+            var tmp = Path.GetTempPath();
+            return !Directory.Exists(tmp.ToUpper()) || !Directory.Exists(tmp.ToLower());
+        }
+
+        static public IEnumerable<string> GetFiles(string directory, bool includeSubfolders = true)
+        {
+            var fs = Directory.EnumerateFiles(directory);
+            if (includeSubfolders)
                 foreach (string d in Directory.EnumerateDirectories(directory))
-                    fs.AddRange(GetFiles(d));
+                    fs.Concat(GetFiles(d));
             return fs;
         }
 
