@@ -16,7 +16,7 @@
 
     <div class='content'>
         <h1><a name='overview'>Overview</a></h1>
-        <p>PdfDocumentParser is a .NET tool designed for parsing PDF documents that conform to predictable graphical layouts - such as reports, forms, tickets, invoices and the like. PdfDocumentParser was formed as DLL to be incorporated into desktop applications, thus, drastically reducing efforts in building PDF parsers.
+        <p>PdfDocumentParser is a .NET tool designed for parsing PDF documents that conform to predictable graphical layouts - such as reports, forms, tickets, invoices and the like. PdfDocumentParser was formed as a DLL to be incorporated into desktop applications, thus drastically reducing efforts in building PDF parsers.
 
         <p>
             PdfDocumentParser provides the following facilities:
@@ -37,7 +37,7 @@
             For more details see <a href='#anchorTypes'>anchor types</a> and <a href='#fieldTypes'>field types</a>.
 
         <p>
-            Also, PdfDocumentParser allows to check custom <a href='#condition'>conditions</a> on a PDF page to decide which actions must be taken on it.
+            Also, PdfDocumentParser allows checking custom <a href='#condition'>conditions</a> on a PDF page to decide which actions must be taken on it.
 
 
             <h2><a name='customApplication'>Developing an application</a></h2>
@@ -54,7 +54,7 @@
                     </ul>
                 </li>
             </ul>
-            For more details see <a href='#pseudoCode'>pseudo-code</a>, <a href='#tutorial'>tutorial</a> and <a href='#sampleParser'>SampleParser</a>.
+            For more details see <a href='#pseudoCode'>pseudo-code</a>, <a href='#tutorial'>the tutorial</a> and <a href='#sampleParser'>SampleParser</a>.
 
             <h3><a name='creatingSolution'>Visual Studio</a></h3>
             In Visual Studio:
@@ -116,15 +116,14 @@ setLicense();
 
 
             <h2><a name='gettingStarted'>Getting started</a></h2>
-            To get the idea of what can be done with PdfDocumentParser and how it is used, review <a href='#tutorial'>tutorial</a>.
+            To get the idea of what can be done with PdfDocumentParser and how it is used, review <a href='#tutorial'>the tutorial</a>.
 
 
             <h1><a name="template">Template</a></h1>
         <p>A template is intended for parsing documents that comply with the same layout (e.g. reports issued by the same company). It contains information on what data must be extracted, where and how.
-        <p>Obviously, applying a template to documents with layouts different from that it was designed for, brings to incorrect parsing.
+        <p>Obviously, applying a template to documents having layouts different from that it was designed for, gives wrong parsing.
         <p>
-            Creating and modifying templates is preformed with <a href='#templateEditor'>
-                Template Editor<a />
+            Creating and modifying templates is performed with <a href='#templateEditor'>Template Editor<a />
 
 
 
@@ -140,13 +139,13 @@ setLicense();
 
         <p>Anchors are identified by their numbers assigned automatically.
         <p>
-            Only the first match on the page is used to locate the anchor. No further match is searched.
+            Only the first match on the page is used to locate the anchor. No further matches are searched.
 
 
 
             <h3><a name='anchorTypes'>Anchor types</a></h3>
         <p>
-            Each type is processed by its own very different way, therefore choosing the right type is crucial in successful and robust parsing.
+            Each type is processed in its own very different way, therefore choosing the right type is crucial in successful and robust parsing.
 
 
             <h4><a name='anchorPdfText'>PdfText</a></h4>
@@ -158,17 +157,17 @@ setLicense();
                 <tr>
                     <td class='title_column'>Position deviation</td>
                     <td>
-                        It allows to loose bonds between character boxes in the anchor when for some reason they can shift relatively to each other. It is measured in pixels and must be a positive float number, non-zero even for identical documents because of discrepancy reasoned by internal image re-scaling.
-                        <br>It makes no sense, obviously, when the anchor consists of only 1 character.
-						<br><span class='attention'>(!)</span>Increasing this parameter might bring to failing to detect the existing anchor because PdfDocumentParser looks for matches with rectangular that contain exactly the anchor's chars and does not contain any more chars (excluding invisible ones which can be ignored). That is, if there are several same chars located on a page close to each other within the deviation distance then the engine can catch one of them while the other one(s) can appear within the match rectangular making thus the match invalid. 						
+                        It allows loosing bonds between character boxes in the anchor when for some reason they can shift relatively to each other. It is measured in pixels and must be a positive float number, non-zero even for identical documents because of discrepancy caused by internal image re-scaling.
+                        <br>It does not matter, when the anchor consists of only 1 character.
+						<br><span class='attention'>(!)</span>Increasing this parameter might cause failing to detect the existing anchor because PdfDocumentParser looks for matches with rectangles that contain exactly the anchor's chars and do not contain any more chars (excluding invisible ones which can be ignored). That is, if there are several same chars located on a page close to each other within the deviation distance then the engine can catch one of them while the other one(s) can appear within the match rectangular making thus the match invalid. 						
                     </td>
                 </tr>
                 <tr>
                     <td class='title_column'>Position deviation is absolute</td>
-                    <td>If True, position deviation of every character box is measured relatively to the position of the anchor's first character box, otherwise, to position of the previous character box. The latter is looser than the former because in the letter case, deviation can accumulate.</td>
+                    <td>If True, position deviation of every character box is measured relative to the position of the anchor's first character box, otherwise, to position of the previous character box. The latter is looser than the former because in the letter case, deviation can accumulate.</td>
                 </tr>
                 <td class='title_column'>Search rectangle margin</td>
-                <td>When set, the area where the anchor is searched is restricted by Search rectangle margin that specifies a rectangular area around the anchor's initial rectangle which is the rectangle where the anchor was located on page while creating. Otherwise, the search area is the entire page. It is measured in pixels. It should be used only when it is known definitely that the anchor is always located in a certain part of page. It helps to avoid undesired matching and speed up processing.</td></tr>
+                <td>When set, the area where the anchor is searched is restricted by Search rectangle margin that specifies a rectangular area around the anchor's initial rectangle which is the rectangle where the anchor was located on page while creating. Otherwise, the search area is the entire page. It is measured in pixels. It should be used only when it is definitely known that the anchor is always located in a certain part of page. It helps to avoid undesired matching and speed up processing.</td></tr>
             </table>
 
             <h4>OcrText</h4>
@@ -263,7 +262,7 @@ setLicense();
             <h3>Creating anchor</h3>
             <span class='attention'>(!)</span>In a compound anchor, if some child anchor's position depends on its parent's position, those anchors should be set on the same page. Otherwise, anchor's position can be calculated incorrectly. So, when tuning a compound anchor on a page which is not the page where it was set initially, it is recommended to reset it completely from scratch.
         <p>
-            How to create anchors, see in <a href='#tutorialAnchor'>tutorial</a>.
+            How to create anchors, see in <a href='#tutorialAnchor'>the tutorial</a>.
 
 
 
@@ -299,12 +298,12 @@ setLicense();
                 <td>In order to keep the processing code unified, the outcome of a condition can be predefined in some templates.</td></tr>
             </table>
 
-            For more details refer to <a href='#tutorialCondition'>tutorial</a>.
+            For more details refer to <a href='#tutorialCondition'>the tutorial</a>.
 
 
             <h3>Setting condition</h3>
         <p><p>
-            How to set conditions, see in <a href='#tutorialCondition'>tutorial</a>.
+            How to set conditions, see in <a href='#tutorialCondition'>the tutorial</a>.
 
 
 
@@ -315,7 +314,7 @@ setLicense();
 
             <h3>Anchoring</h3>
         <p>
-            Every side of a field's rectangular can be linked to an anchor.
+            Every side of a field's rectangle can be linked to an anchor.
             When a field has no anchor, it retains the initial position and size that were set during creation.
             When some side of a field is linked to an anchor, it becomes bonded to the anchor's actual position so that if the anchor shifts on a page, the linked side shifts together with it. This means, that the field can change its location and/or size according to its anchors. When all the sides of a field are linked to the same anchor then the field is simply shifts.
         <p>When some anchor of a field is not found then the field itself is set not found.
@@ -357,7 +356,7 @@ setLicense();
 
 
             <h3>Multiply defined field</h3>
-            A field can have multiple definitions. In Template Editor they are shown as separate fields but have the same name. If a field has multiple definitions, while calling <a href='#GetValue'><code>GetValue()</code></a>, the definitions are tried by PdfDocumentParser consecutively from first to last until some is captured on the page. So, precedence of field's definitions is important.
+            A field can have multiple definitions. In Template Editor they are shown as separate fields while having the same name. If a field has multiple definitions then, when <a href='#GetValue'><code>GetValue()</code></a> is called on it, its definitions are tried by PdfDocumentParser consecutively from first to last until some is captured on the page. So, <span class='attention'>(!)</span>the order of a field's definitions matters.
         <p>
             Multiple definitions help to keep the custom parsing code simple and unified.
 
@@ -365,7 +364,7 @@ setLicense();
 
             <h3>Column field</h3>
         <p>
-            Column fields are used for parsing tables. They have <code>ColumnOfTable</code> property set to a field which represents table. Any field can be declared as a column in <a href="#templateEditor">Template Editor</a> or by code. See <a href='#tutorialParsingTables'>tutorial</a>.
+            Column fields are used for parsing tables. They have <code>ColumnOfTable</code> property set to a field which represents table. Any field can be declared as a column in <a href="#templateEditor">Template Editor</a> or by code. See <a href='#tutorialParsingTables'>the tutorial</a>.
 
 
 
@@ -429,7 +428,7 @@ setLicense();
                 </tr>
                 <tr>
                     <td class='title_column'><a name='ScaleByAnchor'>ScalingAnchorId</a></td>
-                    <td>When scans for the same template can differ by their scale then they must be resized to conform to the scale expected by the template. It is done automatically by an image anchor: create a CvImage anchor and select an image that is common for all the scans. <span class='attention'>(!)</span>A larger image provides a precisier scaling. Then select this anchor in the Scale By Anchor dropdown. Now, PdfDocumentParser engine will rescale scans respectively if their scaling anchor is bigger or smaller then the initial one.</td>
+                    <td>When scans for the same template can differ by their scale then they must be resized to conform to the scale expected by the template. It is done automatically by an image anchor: create a CvImage anchor and select an image that is common for all the scans. <span class='attention'>(!)</span>A larger image provides a more precise scaling. Then select this anchor in the Scale By Anchor dropdown. Now, PdfDocumentParser engine will rescale scans respectively if their scaling anchor is bigger or smaller then the initial one.</td>
                 </tr>
                 <tr>
                     <td class='title_column'><a name='PreprocesingCode'>BitmapPreprocessorClassDefinition</a></td>
@@ -445,7 +444,7 @@ setLicense();
                 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
                 <tr>
                     <td class='title_column'><a name='CvImageScalePyramidStep'>CvImageScalePyramidStep</a></td>
-                    <td>It is the scale pyramid step set in pixels of the PDF resolution (which is by default 72dpi). The bigger step, the faster perfomance... and the higher chance to overlook the match. Usually the default value is OK.</td>
+                    <td>It is the scale pyramid step set in pixels of the PDF resolution (which is by default 72dpi). The bigger step, the faster performance... and the higher chance to overlook the match. Usually the default value is OK.</td>
                 </tr>
             </table>
 
@@ -630,7 +629,7 @@ foreach(page in pageCollection)
             Template Editor is a GUI object that is called from the application whenever configuring <a href="#template">template</a> is required.
 
         <p>
-            How to configure a template, see in <a href='#tutorial'>tutorial</a>.
+            How to configure a template, see in <a href='#tutorial'>the tutorial</a>.
 
             <h2><a name='templateEditorApi'>API</a></h2>
             <table>
@@ -859,7 +858,7 @@ foreach(page in pageCollection)
             <img src='img/tutorial10.png' />
 
         <p>Now the fields are captured successfully with the new definition of ProductTable and there is no need to change anything in the parsing code.
-        <p><span class='attention'>(!)</span>It is important to create ProductTable definitions in the right order: they must start with the most conditioned one and end with the less conditioned one. If defintion #2 of ProductTable was #1 then it would work on the page #1 before the right definition which would bring to a wrong capture.
+        <p><span class='attention'>(!)</span>It is crucial to create/set ProductTable definitions in the right order: they must start with the most conditioned one and end with the least conditioned one. If definition #2 of ProductTable was #1 then it would work on the page #1 before the right definition which would bring to a wrong capture.
 
         <p>
             The last page of test102.pdf requires one more definition of ProductTable which can be added in the same way.
@@ -900,7 +899,7 @@ foreach(page in pageCollection)
                 <li>processes PDF files in a custom manner;</li>
             </ul>
 
-            More details on SampleParser can be found in <a href='#tutorial'>tutorial</a>.
+            More details on SampleParser can be found in <a href='#tutorial'>the tutorial</a>.
 
             <img src='img/sampleparser.png' />
 
