@@ -11,10 +11,10 @@
     <Copyright>Sergiy Stoyan</Copyright>
     <Authors>Sergiy Stoyan</Authors>
     <Company>CliverSoft</Company>
-    <Version>6.33.1</Version>
+    <Version>6.33.2</Version>
     <Title>Cross-platform routines needed in the most applications.</Title>
     <PackageProjectUrl>https://github.com/sergiystoyan/CliverRoutines</PackageProjectUrl>
-    <Description>Cross-platform routines needed in the most applications:
+    <Description>Cross-platform routines needed in most desktop applications and not only them:
 - settings manager that supersedes .NET ConfigurationManager;
 - logger with multi-threading and session support;
 - auxiliary routines;</Description>

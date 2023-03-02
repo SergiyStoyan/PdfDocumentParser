@@ -57,7 +57,8 @@ h6:before{content: '\002D\0020\002D\0020\002D\0020\002D\0020\002D';  margin:0 10
     justify-content:center;
 }
 
-.attention{font-style:italic;font-weight:bold;color1:#503;}
+.attention1{font-style:italic;font-weight:bold;color1:#503;}
+.attention{font-style1:italic;font-weight:bold;color:#a00;}
 .screenshot_title{}
 .title_column{white-space: nowrap;font-weight:bold;}
 .title_column_center{white-space: nowrap;font-weight:bold;text-align:center;}
