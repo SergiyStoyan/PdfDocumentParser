@@ -157,7 +157,7 @@ setLicense();
                 <tr>
                     <td class='title_column'>Position deviation</td>
                     <td>
-                        It allows loosing bonds between character boxes in the anchor when for some reason they can shift relatively to each other. It is measured in pixels and must be a positive float number, non-zero even for identical documents because of discrepancy caused by internal image re-scaling.
+                        It allows loosening bonds between character boxes in the anchor when for some reason they can shift relatively to each other. It is measured in pixels and must be a positive float number, non-zero even for identical documents because of discrepancy caused by internal image re-scaling.
                         <br>It does not matter, when the anchor consists of only 1 character.
 						<br><span class='attention'>(!)</span>Increasing this parameter might cause failing to detect the existing anchor because PdfDocumentParser looks for matches with rectangles that contain exactly the anchor's chars and do not contain any more chars (excluding invisible ones which can be ignored). That is, if there are several same chars located on a page close to each other within the deviation distance then the engine can catch one of them while the other one(s) can appear within the match rectangular making thus the match invalid. 						
                     </td>
@@ -167,12 +167,12 @@ setLicense();
                     <td>If True, position deviation of every character box is measured relative to the position of the anchor's first character box, otherwise, to position of the previous character box. The latter is looser than the former because in the letter case, deviation can accumulate.</td>
                 </tr>
                 <td class='title_column'>Search rectangle margin</td>
-                <td>When set, the area where the anchor is searched is restricted by Search rectangle margin that specifies a rectangular area around the anchor's initial rectangle which is the rectangle where the anchor was located on page while creating. Otherwise, the search area is the entire page. It is measured in pixels. It should be used only when it is definitely known that the anchor is always located in a certain part of page. It helps to avoid undesired matching and speed up processing.</td></tr>
+                <td>When set, the area where the anchor is searched is restricted by <a href='#anchorPdfText'>Search Rectangle Margin</a> that specifies a rectangular area around the anchor's initial rectangle which is the rectangle where the anchor was located on page while creating. Otherwise, the search area is the entire page. It is measured in pixels. It should be used only when it is definitely known that the anchor is always located in a certain part of the page. It helps to avoid undesired matching and speed up processing.</td></tr>
             </table>
 
             <h4>OcrText</h4>
-        <p>This type is used to anchor to OCR'ed text. It should be used only when PdfText does not work which happens on scanned or mixed documents.
-        <p>It works similarly to <a href='#anchorPdfText'>PdfText</a> with that difference that character boxes are provided by OCR engine instead of native PDF entities.
+        <p>This type is used to anchor to OCR'ed text. It should be used only when PdfText does not work, which happens on scanned or mixed documents.
+        <p>It works similarly to <a href='#anchorPdfText'>PdfText</a> with the difference that character boxes are provided by OCR engine instead of native PDF entities.
         <p>
             In contrast to PdfText, OcrText type does not ensure 100% accuracy and can acceptably work only with images of resolution not less than 300dpi (see <a href='#PdfPageImageResolution'>PdfPageImageResolution</a> parameter).
             <table>
@@ -190,15 +190,15 @@ setLicense();
                 <tr>
                     <td class='title_column'>OCR entire page</td>
                     <td>
-                        <span class='attention'>(!)</span>This switch can completely change parsing. It is because OCR by Tesseract of a larger and a smaller fragments can give different recognition of the same text.
-                        <br>Which is better? OCR of entire page gives sometimes more correct results, sometimes otherwise. But it always takes considerably longer time than OCR of a smaller fragment which is defined by Search rectangle margin.
-                        <br>This switch makes sense only if Search rectangle margin is on, otherwise the entire page is OCR'ed anyway.
+                        <span class='attention'>(!)</span>This switch can completely change parsing. It is because OCR of a larger fragment and a smaller fragment of an image can give different recognition of the same text.
+                        <br>Which is better? OCR of an entire page gives sometimes more correct results, sometimes otherwise. But it always takes considerably longer than OCR of a smaller fragment which is defined by <a href='#anchorPdfText'>Search Rectangle Margin</a>.
+                        <br>This switch makes sense only if <a href='#anchorPdfText'>Search Rectangle Margin</a> is on, otherwise the entire page is OCR'ed anyway.
                     </td>
                 </tr>
             </table>
 
             <h4><a name="CvImage">CvImage</a></h4>
-        <p>This type is an image that represents the area selected on PDF page while creating anchor. It can be used on any visible part of either native or scanned PDF page.
+        <p>This type is an image that represents the area selected on a PDF page while creating an anchor. It can be used on any visible part of either native or scanned PDF page.
         <p>For native PDF documents, as their appearance has no discrepancy in quality and size, CvImage type works quite well.
         <p>CvImage is based on the OpenCV image template matching.
         <p>
@@ -208,11 +208,11 @@ setLicense();
                 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
                 <tr>
                     <td class='title_column'>Threshold</td>
-                    <td>It filteres out CV image matches which are most likely incorrect. Recommended value is 0.7 or higher.</td>
+                    <td>It filters out CV image matches which are most likely incorrect. Recommended value is 0.7 or higher.</td>
                 </tr>
                 <tr>
                     <td class='title_column'>Scale deviation</td>
-                    <td>Scanned images usually can deviate in their scaling so that the searched image can appear in different size and so might not be found. To deal with this the pyramid image search is performed. CvImage engine starts from scale 1 and then moves along the scaling pyramid with the <a href="#CvImageScalePyramidStep">Scale Pyramid Step</a> down and up. Scale deviation value defines the minimum and maximum scaling factors to be applied to the template image. E.g. 0.05 means that the template is to be scaled from (1-0.05) to (1+0.05).</td>
+                    <td>Scanned images usually deviate in their scaling, so a searched image can be of non matching size and hence may be not found. To deal with this the pyramid image search is performed. CvImage engine starts from scale 1 and then moves along the scaling pyramid with the <a href="#CvImageScalePyramidStep">Scale Pyramid Step</a> down and up. Scale deviation value defines the minimum and maximum scaling factors to be applied to the template image. E.g. 0.05 means that the template is to be scaled from (1-0.05) to (1+0.05).</td>
                 </tr>
                 <td class='title_column'>Search rectangle margin</td>
                 <td>See <a href='#anchorPdfText'>PdfText</a>.</td></tr>
@@ -220,7 +220,7 @@ setLicense();
 
             <h4>ImageData</h4>
         <p><span class='attention'>(!)</span>This type is obsolete and <a href="#CvImage">CvImage</a> should be used instead. Remains for backward compatibility.
-        <p>This type is an image that represents the area selected on PDF page while creating anchor. It can be used on any visible part of either native or scanned PDF page.
+        <p>This type is an image that represents the area selected on a PDF page while creating an anchor. It can be used on any visible part of either native or scanned PDF page.
 
         <p>
             <span class='attention'>(!)</span>Even when an image fragment is searched within the same page where it was extracted from, it cannot be found without a non-zero tolerance. It happens because search hashes of a whole page and of a fragment are produced after downsizing them, and then, when restoring images from the hashes, pixel interpolation gives slight deviations from the original images. Those deviations have to be overcome with some tolerance.
@@ -233,11 +233,11 @@ setLicense();
                 </tr>
                 <tr>
                     <td class='title_column'>Brightness tolerance</td>
-                    <td>While for native PDF documents it can be 0.1 - 0.2, scanned documents which have brightness discrepancy, may need it higher. A higher tolerance gives a less accuracy.</td>
+                    <td>While for native PDF documents it can be 0.1 - 0.2, scanned documents which have brightness discrepancy, may need it higher. A higher tolerance gives less accuracy.</td>
                 </tr>
                 <tr>
                     <td class='title_column'>Different pixel number tolerance</td>
-                    <td>While for native PDF documents it can be 0.1 - 0.2, scanned documents which have brightness discrepancy, may need it higher. A higher tolerance gives a less accuracy.</td>
+                    <td>While for native PDF documents it can be 0.1 - 0.2, scanned documents which have brightness discrepancy, may need it higher. A higher tolerance gives less accuracy.</td>
                 </tr>
                 <tr>
                     <td class='title_column'>Find best match</td>
@@ -249,18 +249,18 @@ setLicense();
             <h3>Compound anchor</h3>
         <p>A compound anchor is a chain of successively linked anchors. It is represented by the last anchor in the chain which gives one's position to it. It is used just like a simple anchor.
         <p>Compound anchors are used when more conditioned search is required.
-        <p>A compound anchor is not found when some of its anchors is not found.
+        <p>A compound anchor is not found when one of its anchors is not found.
         <p>
-            A linked anchor is named 'child' of the linking one which is named 'parent'. When an anchor is linked to another anchor, its search area (when it is set to not entire page) becomes related to its parent anchor's position. That means that a parent anchor is searched not until its first match found as done for a stand-alone anchor, but until a match found that satisfies to the child anchor as well.
-            <br>More specifically, when a child anchor has <a href='#anchorPdfText'>Search Rectangle Margin</a> set to not entire page, position of its parent anchor, while searching as parent, can differ from position of the very same anchor, while searching stand-alone.
-            <br>The same consideration is true for child anchors too: an anchor, whose search area is set to not entire page, can change its position after linking to another anchor.
+            A linked anchor is named 'child' of the linking one which is named 'parent'. When an anchor is linked to another anchor, its search area (when it is set to not the entire page) becomes related to its parent anchor's position. That means that a parent anchor is searched not until its first match is found as it is for a stand-alone anchor, but until a match is found that satisfies the child anchor as well.
+            <br>More specifically, when a child anchor has <a href='#anchorPdfText'>Search Rectangle Margin</a> set to not the entire page, the position of its parent anchor, while searching as a parent, can differ from the position of the very same anchor, while searching as stand-alone.
+            <br>The same consideration is true for child anchors too: an anchor, whose search area is set to not the entire page, can change its position after linking to another anchor.
             <br>Hence, <span class='attention'>(!)</span>an anchor acting stand-alone and that same anchor acting as a part of a compound anchor should be viewed as different anchors because they can have different positions on a page.
         <p>
-            Number of anchors in a compound anchor can be any. Though, it should be taken to account that processing time of recursive search performed for a compound anchor exponentially grows with the chain length.
+            Number of anchors in a compound anchor can be any. Though, it should be taken into account that the processing time of recursive search performed for a compound anchor exponentially grows with the chain length.
 
 
             <h3>Creating anchor</h3>
-            <span class='attention'>(!)</span>In a compound anchor, if some child anchor's position depends on its parent's position, those anchors should be set on the same page. Otherwise, anchor's position can be calculated incorrectly. So, when tuning a compound anchor on a page which is not the page where it was set initially, it is recommended to reset it completely from scratch.
+            <span class='attention'>(!)</span>In a compound anchor, if some child anchor's position depends on its parent's position, those anchors should be set on the same page. Otherwise, the anchor's position can be calculated incorrectly. So, when tuning a compound anchor on a page which is not the page where it was set initially, it is recommended to reset it completely from scratch.
         <p>
             How to create anchors, see in <a href='#tutorialAnchor'>the tutorial</a>.
 
@@ -292,7 +292,7 @@ setLicense();
                     <td>An expression like this can be useful when a company uses different logos for documents of the same structure. In such a case, instead of creating several separate templates, a single template can be set to accept more than 1 logo image. Respectively anchors #1,7 and 8 are targeted to the possible logos.</td>
                 </tr>
                 <td class='title_column_center'>!2 | (2 & 3)</td>
-                <td>Such an expression could be used for instance in decision whether a certain field must be parsed or passed off.</td></tr>
+                <td>Such an expression could be used, for instance, in deciding whether a certain field must be parsed or passed off.</td></tr>
                 </tr>
                 <td class='title_column_center'>T</td>
                 <td>In order to keep the processing code unified, the outcome of a condition can be predefined in some templates.</td></tr>
@@ -314,14 +314,12 @@ setLicense();
 
             <h3>Anchoring</h3>
         <p>
-            Every side of a field's rectangle can be linked to an anchor.
-            When a field has no anchor, it retains the initial position and size that were set during creation.
-            When some side of a field is linked to an anchor, it becomes bonded to the anchor's actual position so that if the anchor shifts on a page, the linked side shifts together with it. This means, that the field can change its location and/or size according to its anchors. When all the sides of a field are linked to the same anchor then the field is simply shifts.
-        <p>When some anchor of a field is not found then the field itself is set not found.
+		Every side of a field's rectangle can be linked to an anchor. When a field has no anchor, it retains the initial position and size that were set during creation. When a side of a field is linked to an anchor, it becomes bonded to the anchor's actual position so that if the anchor shifts on a page, the linked side shifts together with it. Which means that the field can change its location and/or size according to its anchors. When all the sides of a field are linked to the same anchor then the field simply shifts entirely.
+        <p>When one of a field's anchors is not found then the field itself is not found.
         <p>When it is definitely known about a field that it appears on every page and always keeps the same position and size then there is no need to anchor it.
         <p>In scanned documents whose margins vary, fields cannot retain constant positions and so always should be processed with anchors.
         <p>
-            It is advisable always to anchor fields thus minimizing probability of mistaken parsing.
+            It is advisable always to anchor fields thus minimizing the probability of mistaken parsing.
 
 
             <h3><a name='fieldTypes'>Field types</a></h3>
@@ -356,7 +354,7 @@ setLicense();
 
 
             <h3>Multiply defined field</h3>
-            A field can have multiple definitions. In Template Editor they are shown as separate fields while having the same name. If a field has multiple definitions then, when <a href='#GetValue'><code>GetValue()</code></a> is called on it, its definitions are tried by PdfDocumentParser consecutively from first to last until some is captured on the page. So, <span class='attention'>(!)</span>the order of a field's definitions matters.
+            A field can have multiple definitions. In <a href="#templateEditor">Template Editor</a> they are shown as separate fields while having the same name. If a field has multiple definitions then, when <a href='#GetValue'><code>GetValue()</code></a> is called on it, its definitions are tried by PdfDocumentParser consecutively from first to last until some is captured on the page. So, <span class='attention'>(!)</span>the order of a field's definitions matters.
         <p>
             Multiple definitions help to keep the custom parsing code simple and unified.
 
@@ -364,17 +362,17 @@ setLicense();
 
             <h3>Column field</h3>
         <p>
-            Column fields are used for parsing tables. They have <code>ColumnOfTable</code> property set to a field which represents table. Any field can be declared as a column in <a href="#templateEditor">Template Editor</a> or by code. See <a href='#tutorialParsingTables'>the tutorial</a>.
+            Column fields are used for parsing tables. They have their <code>ColumnOfTable</code> property set to a field that represents a table. Any field can be declared as a column in <a href="#templateEditor">Template Editor</a> or by code. See <a href='#tutorialParsingTables'>the tutorial</a>.
 
 
 
             <h3>Setting field</h3>
-            <span class='attention'>(!)</span>A field should be completely set on the same page. Anchors which are linked by a field, can be created on any page before, but should be assigned on the same page together with the field's rectangle. Otherwise, field's shift or size can be calculated incorrectly on some page during parsing. So, when tuning a field on a page which is not the page where it was set initially, it is recommended to reset it completely from scratch.
+            <span class='attention'>(!)</span>A field should be completely set on the same page. Anchors that are linked by a field, can be created on any page before, but should be assigned on the same page together with the field's rectangle. Otherwise, when parsing, the field's shift or size can be calculated incorrectly on some pages. So, when tuning a field on a page which is not the page where it was set initially, it is recommended to reset it completely from scratch.
         <p>
             How to set fields, see in <a href='#tutorialField'>the tutorial</a>.
 
             <h4><a name='fieldSettings'>Default settings</a></h4>
-            While each field can be configured independently, there are default field settings that are applied when a field does not have certain setting configured explicitly.
+            While each field can be configured independently, there are default field settings that are applied when a field does not have settings configured explicitly.
 			<p>Those are: Spacing settings and OCR settings.
 			
 
@@ -394,7 +392,7 @@ setLicense();
 
             <h3>Space auto-detection</h3>
         <p>
-            When extracting text, PdfDocumentParser automatically detects spaces between words. This influences the output of PdfText and OcrText fields and also, displaying PdfText anchor's patterns in Template Editor.
+            When extracting text, PdfDocumentParser automatically detects spaces between words. This influences the output of PdfText and OcrText fields and also, displaying PdfText anchor's patterns in <a href="#templateEditor">Template Editor</a>.
             <table>
                 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
                 <tr>
@@ -428,7 +426,7 @@ setLicense();
                 </tr>
                 <tr>
                     <td class='title_column'><a name='ScaleByAnchor'>ScalingAnchorId</a></td>
-                    <td>When scans for the same template can differ by their scale then they must be resized to conform to the scale expected by the template. It is done automatically by an image anchor: create a CvImage anchor and select an image that is common for all the scans. <span class='attention'>(!)</span>A larger image provides a more precise scaling. Then select this anchor in the Scale By Anchor dropdown. Now, PdfDocumentParser engine will rescale scans respectively if their scaling anchor is bigger or smaller then the initial one.</td>
+                    <td>When scans for the same template can differ by their scale then they must be resized to conform to the scale expected by the template. It is done automatically by an image anchor: create a CvImage anchor and select an image that is common for all the scans. <span class='attention'>(!)</span>A larger image provides a more precise scaling. Then select this anchor in the Scale By Anchor dropdown. Now, PdfDocumentParser engine will rescale scans respectively if their scaling anchor is bigger or smaller than the initial one.</td>
                 </tr>
                 <tr>
                     <td class='title_column'><a name='PreprocesingCode'>BitmapPreprocessorClassDefinition</a></td>
@@ -457,7 +455,7 @@ setLicense();
                 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
                 <tr>
                     <td class='title_column'><a name='IgnoreInvisiblePdfChars'>IgnoreInvisiblePdfChars</a></td>
-                    <td>This parameter affects only PdfText anchors: invisible characters like '\t' if any are ignored when searching an anchor. However, those characters still present in anchor patterns and fields.</td>
+                    <td>This parameter affects only PdfText anchors: invisible characters like '\t' if any are ignored when searching an anchor. However, those characters are still present in anchor patterns and fields.</td>
                 </tr>
                 <tr>
                     <td class='title_column'><a name='IgnoreDuplicatedPdfChars'>IgnoreDuplicatedPdfChars</a></td>
@@ -489,7 +487,7 @@ setLicense();
                 <tr>
                     <td class='title_column' rowspan='2'><code>Cliver.PdfDocumentParser.PageCollection</code></td>
                     <td class='title_column'><code>ActiveTemplate</code></td>
-                    <td>Set active template for the PDF file.</td>
+                    <td>Set an active template for the PDF file.</td>
                 </tr>
                 <tr>
                     <td class='title_column'><code>[int pageNumber]</code></td>
@@ -510,11 +508,11 @@ setLicense();
                 </tr>
                 <tr>
                     <td class='title_column'><a name='GetCharBoxes'><code>GetCharBoxes(string fieldName)</code></a></td>
-                    <td>Extract a field as an array of char info's from the page.</td>
+                    <td>Extract a field as an array of char info-s from the page.</td>
                 </tr>
                 <tr>
                     <td class='title_column'><a name='GetImage'><code>GetImage(string fieldName)</code></a></td>
-                    <td>Extract a field as an Bitmap from the page.</td>
+                    <td>Extract a field as a Bitmap from the page.</td>
                 </tr>
                 <tr>
                     <td class='title_column'><a name='GetValue'><code>GetValue(string fieldName, ValueTypes valueType)</code></a></td>
@@ -573,7 +571,7 @@ foreach(page in pageCollection)
             <h3><a name='pseudoCode2'>Multi-page documents</a></h3>
             Here is a more advanced algorithm designed for parsing a PDF file that contains multi-page documents.
         <p>
-            Notice that term 'document' is used here for a range of pages that are to be processed with the same single template. However, generally speaking, there is no problem to process a document with many templates.
+            Notice that the term 'document' is used here for a range of pages that are to be processed with the same single template. However, generally speaking, there is no problem to process a document with many templates.
 <script type="text/plain" class="language-csharp">//pseudo-code: processing a PDF file that contains multi-page documents.
 //Note: the classes and methods are not real and serve for simplicity and clarity only.
 
@@ -626,7 +624,7 @@ foreach(page in pageCollection)
 
 
             <h1><a name="templateEditor">Template Editor</a></h1>
-            Template Editor is a GUI object that is called from the application whenever configuring <a href="#template">template</a> is required.
+            <a href="#templateEditor">Template Editor</a> is a GUI object that is called from the application whenever configuring a <a href="#template">template</a> is required.
 
         <p>
             How to configure a template, see in <a href='#tutorial'>the tutorial</a>.
@@ -651,13 +649,13 @@ foreach(page in pageCollection)
 
 
             <h1><a name='generalSettings'>Global settings</a></h1>
-            PdfDocumentParser has parameters that are the same within the application's scope and can be modified in the configuration dialog invoked from Template Editor.
+            PdfDocumentParser has parameters that are the same within the application's scope and can be modified in the configuration dialog invoked from <a href="#templateEditor">Template Editor</a>.
             <table>
                 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
                 <tr>
                     <td class='title_column'><a name='PdfPageImageResolution'>PdfPageImageResolution</a></td>
-                    <td>It is the resolution with which PdfDocumentParser converts PDF pages into images. It influences the quality of PDF view in Template Editor.
-        <p>What is more important, it also impacts on work of OctText anchors and fields. It should be not less than 300dpi (even if the resolution of input documents is lower), otherwise OCR will not work properly. The higher the resolution, the better quality of OCR is. On the other hand, increasing the resolution increases processing time.
+                    <td>It is the resolution with which PdfDocumentParser converts PDF pages into images. It influences the quality of PDF representation  in <a href="#templateEditor">Template Editor</a>.
+        <p>What is more important, it also impacts the work of OctText anchors and fields. It should be not less than 300dpi (even if the resolution of input documents is lower), otherwise OCR will not work properly. The higher the resolution, the better the quality of OCR is. On the other hand, increasing the resolution increases processing time.
         <p>
             Usually there is no need to touch it.</td></tr>
             <tr>
@@ -677,7 +675,7 @@ foreach(page in pageCollection)
 
             <h2>Sample task</h2>
         <p>The task to be solved is as follows:
-        <p>there are PDF files that contain invoices issued by different companies. Values InvoiceId and TotalAmount must be parsed from every invoice. (Below, to keep the task more abstract, term 'document' is used instead of 'invoice'.)
+        <p>There are PDF files that contain invoices issued by different companies. Values InvoiceId and TotalAmount must be parsed from every invoice. (Below, to keep the task more abstract, the term 'document' is used instead of 'invoice'.)
         <p>
             It is known that the PDF files to be parsed comply with the following:
             <br>- a file can contain more than one document;
@@ -689,12 +687,12 @@ foreach(page in pageCollection)
             The application developed for this task is <a href='#sampleParser'>SampleParser</a>. It can be referred to during this tutorial.
 
             <h2>Planning application</h2>
-        <p>Since the documents are issued by different companies, they have different layouts. Every layout will require its own parsing template. So, SampleParser will have to manage many templates where every template processes a whole document. One-to-one correspondence between document types and templates is the common way.
-        <p>As is obvious, every template will have the following <a href='#field'>fields</a> InvoiceId and TotalAmount.
-        <p>Next, let's decide which <a href='#condition'>conditions</a> are needed. SampleParser should be able to <b>A)</b> detect the first page of every document in a file and <b>B)</b> choose the right template for the detected document. (A) and (B) can be joined into one <a href='#condition'>condition</a> named 'FirstPageOfDocument'.
+        <p>Since the documents are issued by different companies, they have different layouts. Every layout will require its own parsing template. So, <a href='#sampleParser'>SampleParser</a> will have to manage many templates where every template processes a whole document. One-to-one correspondence between document types and templates is the common way.
+        <p>As is obvious, each template will have the <a href='#field'>fields</a> InvoiceId and TotalAmount.
+        <p>Next, let's decide which <a href='#condition'>conditions</a> are needed. <a href='#sampleParser'>SampleParser</a> should be able to <b>A)</b> detect the first page of every document in a file and <b>B)</b> choose the right template for the detected document. (A) and (B) can be joined into one <a href='#condition'>condition</a> named 'FirstPageOfDocument'.
         <p>Also, one more <a href='#condition'>condition</a> is required to detect the end of a document. Let's name it 'LastPageOfDocument'.
         <p>
-            These conditions will work in the following manner: when a template has FirstPageOfDocument satisfied on a PDF page then it is to be chosen for processing of this page and the next ones until LastPageOfDocument is met. When it happens, the previously captured fields must be processed and emptied and next page must be examined by FirstPageOfDocument condition of every template until the right template is detected.
+            These conditions will work in the following manner: when a template has FirstPageOfDocument satisfied on a PDF page then it is to be chosen for processing of this page and the next ones until LastPageOfDocument is met. When it happens, the previously captured fields must be processed and emptied and the next page must be examined by FirstPageOfDocument condition of every template until the right template is detected.
 
 
             <h2>Algorithm</h2>
@@ -740,27 +738,27 @@ foreach(page in pageCollection)
 
 
             <h2>Creating template</h2>
-            Now, having the parser code elaborated, let's learn how to create templates with Template Editor.
+            Now, having the parser code elaborated, let's learn how to create templates with <a href="#templateEditor">Template Editor</a>.
 
 
             <h3>Open Template Editor</h3>
         <p>
-            The way of opening Template Editor depends on the application. In <a href='#sampleParser'>SampleParser</a> a <a href="#template">template</a> can be created from scratch or copied from an existing one and then modified as needed.
+            The way of opening <a href="#templateEditor">Template Editor</a> depends on the application. In <a href='#sampleParser'>SampleParser</a> a <a href="#template">template</a> can be created from scratch or copied from an existing one and then modified as needed.
 
             <!--p>This tutorial shows creating a template for a PDF file by repository path. A template created for this file is supplied in SampleParser under name 'test'. The template created below should be identical with it.<-->
-        <p>Let's start with a blank template: click the blank row in the table in the main window of SampleParser and then click button Edit.
+        <p>Let's start with a blank template: click the blank row in the table in the main window of <a href='#sampleParser'>SampleParser</a> and then click the Edit button.
         <p class='screenshot_title'>
-            In Template Editor open the test PDF file PdfDocumentParser\SampleParser\test_files\102.pdf:
+            In <a href="#templateEditor">Template Editor</a> open the test PDF file PdfDocumentParser\SampleParser\test_files\102.pdf:
             <img src='img/tutorial0.png' />
 
             <h3><a name='tutorialAnchor'>Create anchors</a></h3>
-        <p>As was defined, templates in SampleParser have 2 conditions and 2 fields.
+        <p>As was defined, templates in <a href='#sampleParser'>SampleParser</a> have 2 conditions and 2 fields.
         <p>Let's first create anchors needed for the conditions. As FirstPageOfDocument must identify documents that correspond to the template, it needs an anchor targeted to such a fragment of the document that is distinctive for its type. Obviously, such a fragment must identify the document type with a high confidence. In the case of invoices, the company's logo can serve well this goal.
         <p class='screenshot_title'>
             Create an anchor that captures the logo and thus detects if the template corresponds to the page:
             <img src='img/tutorial1.png' />
 
-        <p>In addition, as FirstPageOfDocument must be capable to detect the beginning page of a document, it needs an anchor that will do it.
+        <p>In addition, as FirstPageOfDocument must be capable of detecting the beginning page of a document, it needs an anchor that will do it.
         <p class='screenshot_title'>
             Create an anchor that checks if a page is the first page of a document:
             <img src='img/tutorial2.png' />
@@ -771,13 +769,13 @@ foreach(page in pageCollection)
             <span class='attention'>(!)</span>When you select a row in either table: anchors, conditions or fields, its status is updated in the head cell and the captured place is displayed in the page viewer.
 
             <h3><a name='tutorialCondition'>Specify conditions</a></h3>
-            We already have created anchors #1 and #2 that are needed to specify FirstPageOfDocument's expression. It must be True only when the anchors are found together on a page.
+            We already have created anchors #1 and #2 that are needed to specify the FirstPageOfDocument expression. It must be True only when the anchors are found together on a page.
 
         <p class='screenshot_title'>
             Set condition FirstPageOfDocument with boolean expression "1 & 2":
             <img src='img/tutorial3.png' />
 
-        <p>While in this sample FirstPageOfDocument is quite good with 2 anchors, yet sometimes more anchors can be needed: for instance when the same company issues documents of different types and thus company's logo is not sufficient to detect the type.
+        <p>While in this sample FirstPageOfDocument is quite good with 2 anchors, yet sometimes more anchors can be needed: for instance when the same company issues documents of different types and thus the company's logo is not sufficient to detect the type.
 
         <p>
             Condition LastPageOfDocument will be set later.
@@ -794,7 +792,7 @@ foreach(page in pageCollection)
 
 
         <p class='screenshot_title'>
-            And now it's time to set condition LastPageOfDocument. Assume that the total amount is always showed only on the last page of a document:
+            And now it's time to set the condition LastPageOfDocument. Assume that the total amount is always showed only on the last page of a document:
             <img src='img/tutorial6.png' />
 
 
@@ -813,25 +811,25 @@ foreach(page in pageCollection)
 
 
             <h2><a name='tutorialParsingTables'>Parsing tables</a></h2>
-            Let's consider an additional requirement to the tutorial task: for every invoice, extract the product/services and their prices listed in table and provide them as array of objects.
+            Let's consider an additional requirement to the tutorial task: for every invoice, extract the product/services and their prices listed in the table and provide them as an array of objects.
         <p>Such a task cannot be solved the way considered above because: A) tables can have unpredictable size and column width and B) table's content must be split on columns preserving table's rows. Because of that tables need special treatment. Depending on the case, the following ways can be used:
 
         <p>
             <b>Use table and column fields:</b>
             <br>It is the main method designed for correctly-structured tables.
-            <br>There must be a field that captures the whole table. Then, there must be fields that capture table's columns. The column fields must have <code>ColumnOfTable</code> property set to the name of their table field.
+            <br>There must be a field that captures the whole table. Then, there must be fields that capture the table's columns. The column fields must have their <code>ColumnOfTable</code> property set to the name of their table field.
             <br>When this is done, <code>GetValue([column field], ValueTypes.TextLines)</code> returns an array of strings that correspond to the rows of the table. That means that the size of the output array will be the same for all the column fields. Thus, if a column has some rows empty then they will be presented in the output array as empty strings.
-            <br><span class='attention'>(!)</span>Only content of the intersection of a column field and its table field goes to the output.
+            <br><span class='attention'>(!)</span>Only the content of the intersection of a column field and its table field goes to the output.
 
-        <p>Sometimes tables can not be clearly separated onto columns because they include sub-headers that break the structure or because their fields have unpredictable length etc. In such a case, parsing with column fields may not work well and the following ways have to be used instead or additionally:
+        <p>Sometimes tables can not be clearly separated into columns because they include sub-headers that break the structure or because their fields have unpredictable length etc. In such a case, parsing with column fields may not work well and the following ways have to be used instead or additionally:
 
         <p>
             <b>Extract the whole table as text:</b>
-            <br>If the table data is still logically structured, the whole table should be extracted as a single field and then parsed by regexes or another means.
+            <br>If the table data is still logically structured, the whole table should be extracted as a single field and then parsed by regexes or other means.
 
         <p>
-            <b>Use auto-inserted spaces to split the table text onto columns:</b>
-            <br>It is a variation of the previous way. If empty spans between columns are long enough so that PdfDocumentParser will automatically insert spaces between column values, then those spaces can be configured to be substituted with some uncommon character e.g. "|". Then, the whole table text can be be split onto lines by new line symbol and every line split onto column values by "|".
+            <b>Use auto-inserted spaces to split the table text into columns:</b>
+            <br>It is a variation of the previous way. If empty spans between columns are long enough so that PdfDocumentParser will automatically insert spaces between column values, then those spaces can be configured to be substituted with some uncommon character e.g. "|". Then, the whole table text can be be split into lines by new line symbol and every line split into column values by "|".
             <br>Generally this way should be considered as unreliable but in some cases it may work well.
 
         <p>
@@ -842,23 +840,23 @@ foreach(page in pageCollection)
 
             <h3>Setting table and column fields</h3>
             Let's see how to use table and column fields for parsing products in our sample task.
-        <p>The following fields were added to SampleParser: ProductTable that catches the entire table and ProductNames and ProductCosts that catch the respective columns. ProductNames and ProductCosts have <code>ColumnOfTable</code> property set to "ProductTable".
+        <p>The following fields were added to <a href='#sampleParser'>SampleParser</a>: ProductTable that catches the entire table and ProductNames and ProductCosts that catch the respective columns. ProductNames and ProductCosts have their <code>ColumnOfTable</code> property set to "ProductTable".
 
         <p>
-            In Template Editor, open template 'test' which was created previously for test102.pdf, and set the table and column fields. Because the table in the test file can have different location and height, the top and bottom of ProductTable should be linked to the proper anchors.
+            In <a href="#templateEditor">Template Editor</a>, open template 'test' which was created previously for test102.pdf, and set the table and column fields. Because the table in the test file can have different location and height, the top and bottom of ProductTable should be linked to the proper anchors.
             <img src='img/tutorial9.png' />
         <p>
-            It make sense to make selection boxes of ProductNames and ProductCosts as high as possible because such defintions can work on the rest pages as well.
-
+            It is a good idea to make the selection boxes of ProductNames and ProductCosts as high as possible because such their definitions would be valid to the rest of the pages, too.
+			
 
             <h3>Duplicating field definitions</h3>
 
         <p>
-            It appears that the fields are not captured on the next page because the bottom anchor does not exists on the page. To fix it, a new definition of ProductTable is to be created.
+            It appears that the fields are not captured on the next page because the bottom anchor does not exist on the page. To fix it, a new definition of ProductTable is to be created.
             <img src='img/tutorial10.png' />
 
         <p>Now the fields are captured successfully with the new definition of ProductTable and there is no need to change anything in the parsing code.
-        <p><span class='attention'>(!)</span>It is crucial to create/set ProductTable definitions in the right order: they must start with the most conditioned one and end with the least conditioned one. If definition #2 of ProductTable was #1 then it would work on the page #1 before the right definition which would bring to a wrong capture.
+        <p><span class='attention'>(!)</span>It is crucial to create/set ProductTable definitions in the right order: they must start with the most conditioned one and end with the least conditioned one. If definition #2 of ProductTable was #1 then it would work on the page #1 before the right definition which would lead to a wrong capture.
 
         <p>
             The last page of test102.pdf requires one more definition of ProductTable which can be added in the same way.
@@ -872,7 +870,7 @@ foreach(page in pageCollection)
 
 
             <h2>Parsing scanned PDF file</h2>
-            When PDF page is a scanned image, the template designed for it, most likely will need to perform preprocessing which includes auto-deskew and rotation. Then OcrText or CvImage anchors and OcrText fields can be applied to the page.
+            When a PDF page is a scanned image, the template designed for it, most likely will need to perform preprocessing which includes auto-deskew and rotation. Then OcrText or CvImage anchors and OcrText fields can be applied to the page.
         <p>
             Except the said above, the parsing routine is the same for either scanned or native PDF's.
 
@@ -888,7 +886,7 @@ foreach(page in pageCollection)
 
 
             <h1><a name='sampleParser'>SampleParser</a></h1>
-            SampleParser is a custom desktop application based on <a href='#overview'>PdfDocumentParser</a>. It gives a complete example of using PdfDocumentParser and can be used as a demo or framework.
+            <a href='#sampleParser'>SampleParser</a> is a custom desktop application based on <a href='#overview'>PdfDocumentParser</a>. It gives a complete example of using PdfDocumentParser and can be used as a demo or framework.
         <p>
             It does the following:
             <ul>
@@ -899,13 +897,13 @@ foreach(page in pageCollection)
                 <li>processes PDF files in a custom manner;</li>
             </ul>
 
-            More details on SampleParser can be found in <a href='#tutorial'>the tutorial</a>.
+            More details on <a href='#sampleParser'>SampleParser</a> can be found in <a href='#tutorial'>the tutorial</a>.
 
             <img src='img/sampleparser.png' />
 
 
             <h2>Source code</h2>
-            Download PdfDocumentParser <a href='#repository'>source code</a>. Open PdfDocumentParser.sln in Visual Studio and find SampleParser project.
+            Download <a href='#repository'> PdfDocumentParsersource code</a>. Open PdfDocumentParser.sln in Visual Studio and find the <a href='#sampleParser'>SampleParser</a> project.
 
 
             <h2>Enhanced template parameters</h2>
@@ -917,17 +915,17 @@ foreach(page in pageCollection)
                 </tr>
                 <tr>
                     <td class='title_column'>Order</td>
-                    <td>A weight indicating template's order in check line. Templates with the less order are tried first. It is intended to reduce processing time.</td>
+                    <td>A weight indicating the template's place in the check line. Templates with less order are tried first. It is aimed at reducing the processing time.</td>
                 </tr>
                 <tr>
                     <td class='title_column'>Filter</td>
-                    <td>A Regex applied to PDF file path to recognize the proper template. Optional. It is intended to reduce processing time.</td>
+                    <td>A Regex applied to the PDF file path to recognize the proper template. Optional. It is aimed at reducing the processing time.</td>
                 </tr>
             </table>
 
             <h2>Considerations</h2>
 <p>
-            Processing time generally depends on algorithm and templates. However, sometimes the processing time can be drastically reduced by the following ways:
+            The processing time generally depends on the algorithm and templates. However, sometimes the processing time can be drastically reduced in the following ways:
             <ul>
                 <li> use template filtering according to pdf file names;
                 <li> order templates in such a way that templates that take a shorter time to apply are tried first while those that require a longer time are tried last. E.g. templates using only native PDF entities should go first and those using OCR and/or auto-deskew should go last;
