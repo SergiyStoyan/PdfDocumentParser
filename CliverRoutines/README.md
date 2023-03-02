@@ -1,6 +1,6 @@
 # CliverRoutines
 
-CliverRoutines is a cross-platform C# lib providing what is needed in the most applications:
+CliverRoutines is a cross-platform C# lib providing what is needed in most desktop applications and not only them:
 
 - settings manager that supersedes .NET ConfigurationManager;
 - logger with multi-threading and session support;

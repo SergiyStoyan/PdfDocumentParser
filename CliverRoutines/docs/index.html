@@ -26,7 +26,7 @@
 			
 <p><b>Compatibility</b>
 <br>CliverRoutines has been developed in .NET Standard 2.0 and supposed to run on any platform that adopts C# including .NET, Xamarin, Mono.			
-<br>A possible concern about certain platform might arise due to peculiarities of its file system.
+<br>A concern on a certain platform might arise due to peculiarities of its file system.
 
 			<p>CliverRoutines has been used on:
 <br> - Windows 7, 10 in C# projects including windows services;
@@ -233,12 +233,12 @@ public class HistorySettings : Cliver.UserSettings
 //detect and initialize settings fields. 
 Cliver.Config.Reload();//mandatory;</script>			   
 
-<p>If needed, the initialization can be preformed more than once.
+<p>If needed, the initialization can be performed more than once.
 				
 				
 <h3><a name='config_Assembly_scope'>Assembly scope</a></h3>
         <br>(!)When looking for <a href='#settings_field'>settings fields</a> in an application, <a href='#config'><code>Cliver.Config</code></a> searches within the following assemblies by default:
-<br> - the assembly that calls one of <a href='#config'><code>Cliver.Config</code></a>'s initializing methods;
+<br> - the assembly that calls one of <a href='#config'><code>Cliver.Config</code></a>'s initialization methods;
 <br> - assemblies that are referenced by the calling assembly;
 <br>The search scope is limited this way in order not to load more assemblies which inevitably takes place while enumerating through them. 
  
@@ -998,7 +998,7 @@ static void Main(string[] args)
 
 
     <h2><a name='log_Sessionless_log'>Sessionless log</a></h2>
-    <p>A <a href='#log_Sessionless_log'>sessionless log</a> is a named log that is created within the <a href="log_root_directory">root directory</a> and does not belongs to a <a href='#log_session'>session</a> so that it is continued with the next launch of the application.
+    <p>A <a href='#log_Sessionless_log'>sessionless log</a> is a named log that is created within the <a href="log_root_directory">root directory</a> and does not belong to a <a href='#log_session'>session</a> so that it is continued with the next launch of the application.
 	
 	<p>Example:
 <script type="text/plain" class="language-csharp">Log.Writer historyLog = Log.Get("history");//create or retrieve the log
@@ -1050,7 +1050,7 @@ Log.Initialize(Log.Mode.FOLDER_PER_SESSION); //this call is not mandatory if you
 
     <div class='footer'>
         <script src='copyright.js'></script>
-        &nbsp;2006 - 2021&nbsp;&nbsp;<a href="javascript:window.location.href = '&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#115;&#101;&#114;&#103;&#101;&#121;&#46;&#115;&#116;&#111;&#121;&#97;&#110;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;'" target="_top">Sergiy Stoyan</a>
+        &nbsp;2006 - 2023&nbsp;&nbsp;<a href="javascript:window.location.href = '&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#115;&#101;&#114;&#103;&#101;&#121;&#46;&#115;&#116;&#111;&#121;&#97;&#110;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;'" target="_top">Sergiy Stoyan</a>
        
     </div>
 
