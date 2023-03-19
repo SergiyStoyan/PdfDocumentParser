@@ -137,12 +137,12 @@ setLicense();
 			
 
 <h3><a name='serializable_field'>Serializable fields</a></h3>
-<a href='#serializable_field'>Serializable fields</a> are fields or properties of a <a href='#settings_class'>settings class</a> that are (!)<code>public</code> and non-static. 
+<a href='#serializable_field'>Serializable fields</a> are fields or properties of a <a href='#settings_class'>settings class</a> that are <span class='attention'>(!)</span><code>public</code> and non-static. 
 
 <p>Serialization/deserialization is performed by <a href='https://www.newtonsoft.com/json' target='_blank'>Newtonsoft.Json</a> engine.			
-Hence, you can apply attributes provided by Newtonsoft.Json to <a href='#serializable_field'>serializable fields</a> to alter their serialization behavior. To do so, you have to reference Newtonsoft.Json in your project. (!)To avoid compilation problems, make sure that it is the same version that is referenced by CliverRoutines. For more info refer to <a href='https://www.newtonsoft.com/json' target='_blank'>Newtonsoft.Json</a> documentation. 			
+Hence, you can apply attributes provided by Newtonsoft.Json to <a href='#serializable_field'>serializable fields</a> to alter their serialization behavior. To do so, you have to reference Newtonsoft.Json in your project. <span class='attention'>(!)</span>To avoid compilation problems, make sure that it is the same version that is referenced by CliverRoutines. For more info refer to <a href='https://www.newtonsoft.com/json' target='_blank'>Newtonsoft.Json</a> documentation. 			
 			
-<p>(!)While a <a href='#settings_class'>settings class</a> can implement any logic and members, remember that nevertheless there are restrictions for what and how can be serialized. For instance, data which depend on the current application state like <code>events, FieldInfo</code> types will be lost through serialization.
+<p><span class='attention'>(!)</span>While a <a href='#settings_class'>settings class</a> can implement any logic and members, remember that nevertheless there are restrictions for what and how can be serialized. For instance, data which depend on the current application state like <code>events, FieldInfo</code> types will be lost through serialization.
 
 
 
@@ -170,7 +170,7 @@ Hence, you can apply attributes provided by Newtonsoft.Json to <a href='#seriali
 
             <h4><a name="cliver_appsettings">Cliver.AppSettings</a></h4>
 <a href="#cliver_appsettings"><code>Cliver.AppSettings</code></a> is a <a href='#cliver_settings'><code>Cliver.Settings</code></a> derivative which performs serialization to the common (user-irrelevant) application data directory. 
-<p>(!)Writing to this directory on Windows may require additional permissions which is solved by <code>Cliver.Win.AppSettings</code> in CliverWinRoutines package.
+<p><span class='attention'>(!)</span>Writing to this directory on Windows may require additional permissions which is solved by <code>Cliver.Win.AppSettings</code> in CliverWinRoutines package.
 
 				    
 				   
@@ -181,14 +181,14 @@ Hence, you can apply attributes provided by Newtonsoft.Json to <a href='#seriali
 
 			
 <h2><a name='settings_field'>Settings field</a></h2>
-<p>(!)Do not confuse <a href='#settings_field'>settings fields</a> with <a href='#serializable_field'>serializable fields</a>.
+<p><span class='attention'>(!)</span>Do not confuse <a href='#settings_field'>settings fields</a> with <a href='#serializable_field'>serializable fields</a>.
 
 <p>A <a href='#settings_field'>settings field</a> is a field or property declared in any class of your app, that satisfies the following:
 <br> - its type is a <a href='#settings_class'>settings type</a>;
 <br> - it is <code>static</code>;
 
 <br>A <a href='#settings_field'>settings field</a> can have any access modifier.
-<br>Also, depending on .NET version, it can be declared as <code>readonly</code> (check if the used .NET version allows setting readonly variables through reflection).
+<br>Also, depending on the .NET version, it can be declared as <code>readonly</code> (check if the used .NET version allows setting readonly variables through reflection).
 
 			
 <p><a href='#settings_field'>Settings fields</a> are automatically detected and initialized by <a href='#config'><code>Cliver.Config</code></a>.
@@ -237,7 +237,7 @@ Cliver.Config.Reload();//mandatory;</script>
 				
 				
 <h3><a name='config_Assembly_scope'>Assembly scope</a></h3>
-        <br>(!)When looking for <a href='#settings_field'>settings fields</a> in an application, <a href='#config'><code>Cliver.Config</code></a> searches within the following assemblies by default:
+        <br><span class='attention'>(!)</span>When looking for <a href='#settings_field'>settings fields</a> in an application, <a href='#config'><code>Cliver.Config</code></a> searches within the following assemblies by default:
 <br> - the assembly that calls one of <a href='#config'><code>Cliver.Config</code></a>'s initialization methods;
 <br> - assemblies that are referenced by the calling assembly;
 <br>The search scope is limited this way in order not to load more assemblies which inevitably takes place while enumerating through them. 
@@ -455,7 +455,7 @@ class GeneralSettings : Cliver.UserSettings//UserSettings based class is seriali
 		 
             <h2><a name='config_Tips'>Tips</a></h2>
 
-            <h3><a name='restoring_predefined_collections'>(!)Predefined collections</a></h3>
+            <h3><a name='restoring_predefined_collections'><span class='attention'>(!)</span>Predefined collections</a></h3>
 			
 			Pay attention that when you predefine a collection of values in your code, it will be doubled every time when it is saved/restored. It is how <code>Newtonsoft.Json</code> works by default.
 			<br>To alter this behavior, add the attribute as in the example below:
@@ -622,7 +622,7 @@ class ServerSettings : Cliver.UserSettings//UserSettings based class is serializ
 	{
 		//if you are not on Windows and cannot use CliverWinRoutines, you have to initialize Encrypted<T> explicitly with a key
 		//which can be done by the static way.
-		//(!)Otheriwse Endec must be set directly in the instance before the first calling Value.
+		//<span class='attention'>(!)</span>Otheriwse Endec must be set directly in the instance before the first calling Value.
 		Cliver.Encrypted<string>.InitializeDefault(new Cliver.StringEndec.Rijndael("123"));//recommended way
 		//Alternatives:
 		//Cliver.Encrypted<string>.InitializeDefault(new Cliver.StringEndec(new Endec.Rijndael("123")));//general way
@@ -760,7 +760,7 @@ class TemplatesSettings : Cliver.UserSettings//UserSettings based class is seria
 					t.Name = Regex.Replace(t.Name, @"^test", "_TEST_");
 				//...
 				//save
-				Save();//(!)when saving, the current type version is set
+				Save();//<span class='attention'>(!)</span>when saving, the current type version is set
 				return;
 			}
 
@@ -829,7 +829,7 @@ You can pass a <a href='#settings_field'>settings field</a> to another process. 
 <br> - auto-cleanup of old logs;
 <br> - diagnostic output;
 
-<p>To grasp how to use it for logging sufficient in the most applications, refer directly to <a href='#log_usage'>the usage</a>.		
+<p>To grasp how to use it for logging sufficient in most applications, refer directly to <a href='#log_usage'>the usage</a>.		
 
 
 
