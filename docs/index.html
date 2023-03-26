@@ -202,7 +202,7 @@ setLicense();
         <p>For native PDF documents, as their appearance has no discrepancy in quality and size, CvImage type works quite well.
         <p>CvImage is based on the OpenCV image template matching.
         <p>
-            When anchoring to a text which is presented by image as happens in scanned or mixed documents, there is a choice between CvImage and OcrText types. Which one to choose? If a target image does not change much from document to document and looks the same (no matter how poor its quality is), CvImage is more reliable and fast. However, if a target image has an essential discrepancy in size, contrast, brightness, orientation etc. in documents, OcrText may work better.
+            When anchoring to a text which is presented by image as happens in scanned or mixed documents, there is a choice between CvImage and OcrText types. Which one to choose? If the target image does not change much from document to document and looks the same (no matter how poor its quality is), CvImage is more reliable and fast. However, if the target image has an essential discrepancy in size, contrast, brightness, orientation etc., OcrText may work better.
 
             <table>
                 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
@@ -254,9 +254,9 @@ setLicense();
             A linked anchor is named 'child' of the linking one which is named 'parent'. When an anchor is linked to another anchor, its search area (when it is set to not the entire page) becomes related to its parent anchor's position. That means that a parent anchor is searched not until its first match is found as it is for a stand-alone anchor, but until a match is found that satisfies the child anchor as well.
             <br>More specifically, when a child anchor has <a href='#anchorPdfText'>Search Rectangle Margin</a> set to not the entire page, the position of its parent anchor, while searching as a parent, can differ from the position of the very same anchor, while searching as stand-alone.
             <br>The same consideration is true for child anchors too: an anchor, whose search area is set to not the entire page, can change its position after linking to another anchor.
-            <br>Hence, <span class='attention'>(!)</span>an anchor acting stand-alone and that same anchor acting as a part of a compound anchor should be viewed as different anchors because they can have different positions on a page.
+            <br>Hence, <span class='attention'>(!)</span>an anchor acting stand-alone and that same anchor acting as a part of a compound anchor should be viewed as different anchors because they can have different positions on the page.
         <p>
-            Number of anchors in a compound anchor can be any. Though, it should be taken into account that the processing time of recursive search performed for a compound anchor exponentially grows with the chain length.
+            The number of anchors in a compound anchor can be any. Though, it should be taken into account that the processing time of the recursive search performed for a compound anchor exponentially grows with the chain length.
 
 
             <h3>Creating anchor</h3>
@@ -270,14 +270,14 @@ setLicense();
 
 
             <h2><a name="condition">Condition</a></h2>
-        <p>A condition is defined by a boolean expression that depends on anchors. It is intended to be used in a custom application for deciding which actions must be performed on a PDF page. It is checked by method <a href='#IsCondition'><code>IsCondition(<condition name>)</code></a>.
-        <p>Conditions are identified by their names.
+        <p>A condition is defined by a boolean expression that depends on anchors. It is intended to be used in a custom application for deciding which actions must be performed on the PDF page. It is checked by method <a href='#IsCondition'><code>IsCondition(<condition name>)</code></a>.
+        <p>Conditions are identified by their names given arbitrarily.
         <p>
-            The conditions are dictated by the application's logic and can be added/modified/deleted in <a href="#templateEditor">Template Editor</a>.
+            Conditions are dictated by the application's logic and can be added/modified/deleted in <a href="#templateEditor">Template Editor</a>.
 
 
             <h3>Boolean expression</h3>
-            Condition expressions are composed of the following symbols: &lt;anchor id&gt;, '!', '&', '|', '(', ')', 'T', 'F'. When an anchor referenced by &lt;anchor id&gt; is found then it is treated as True, otherwise False. The meaning of condition is the boolean result of its expression and is a function of pair [PDF page, template].
+            Condition expressions are composed of the following symbols: &lt;anchor id&gt;, '!', '&', '|', '(', ')', 'T', 'F'. When an anchor referenced by &lt;anchor id&gt; is found then it is treated as <code>True</code>, otherwise <code>False</code>. The meaning of condition is the boolean result of its expression and is a function of pair [PDF page, template].
         <p><span class='attention'>(!)</span>Operands '&' and '|' are processed successively, thus, for instance, "1 | 2 & 3" and "2 & 3 | 1" are not equivalent. Parentheses must be used to manage precedence of operations.
         <p>
             Sample expressions:
