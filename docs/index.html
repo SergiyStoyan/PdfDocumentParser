@@ -139,13 +139,13 @@ setLicense();
 
         <p>Anchors are identified by their numbers assigned automatically.
         <p>
-            Only the first match on the page is used to locate the anchor. No further matches are searched.
+            Only the first match on the page is used to locate an anchor. No further matches are searched.
 
 
 
             <h3><a name='anchorTypes'>Anchor types</a></h3>
         <p>
-            Each type is processed in its own very different way, therefore choosing the right type is crucial in successful and robust parsing.
+            Each type operates in its own way, therefore choosing the right type is crucial in successful and robust parsing.
 
 
             <h4><a name='anchorPdfText'>PdfText</a></h4>
@@ -417,20 +417,20 @@ setLicense();
                 <tr><th class='title_column'>Option</th><th>Description</th></tr>
                 <tr>
                     <td class='title_column'><a name='Deskew'>Deskew</a></td>
-                    <td>It is always advisable to keep it active in templates targeted to scanned documents. If deskew results are not good, tune the parameters. 
-					<br>When the scanned images are long like POS printouts and have altering skew, toggle to Column Of Blocks - it will deskew the image by blocks arranged vertically.</td>
+                    <td>It is always advisable to keep it active in templates targeting scanned documents. If deskew results are not good, tune the parameters. 
+					<br>When scanned images are very high (as POS printouts can be) and have altering skew, toggle on Column Of Blocks - it deskews an image by blocks arranged vertically.</td>
                 </tr>
                 <tr>
                     <td class='title_column'><a name='PageRotation'>PageRotation</a></td>
-                    <td>It is intended mostly for scanned documents. A page must be correctly oriented to get OCR working properly on it.</td>
+                    <td>It is intended mostly for scanned documents. A page must be correctly oriented to allow OCR working properly.</td>
                 </tr>
                 <tr>
                     <td class='title_column'><a name='ScaleByAnchor'>ScalingAnchorId</a></td>
-                    <td>When scans for the same template can differ by their scale then they must be resized to conform to the scale expected by the template. It is done automatically by an image anchor: create a CvImage anchor and select an image that is common for all the scans. <span class='attention'>(!)</span>A larger image provides a more precise scaling. Then select this anchor in the Scale By Anchor dropdown. Now, PdfDocumentParser engine will rescale scans respectively if their scaling anchor is bigger or smaller than the initial one.</td>
+                    <td>When scans targeted by the same template can differ by their scale, they need to be resized to meet the scale expected by the template. It can be done automatically by an image anchor: create a CvImage anchor and select an image that is common for all the scans. <span class='attention'>(!)</span>A larger image provides a more precise scaling. Then select this anchor in the Scale By Anchor dropdown. As a result, PdfDocumentParser engine will rescale scans respectively if their scaling anchor's image differs in size from the initial one.</td>
                 </tr>
                 <tr>
                     <td class='title_column'><a name='PreprocesingCode'>BitmapPreprocessorClassDefinition</a></td>
-                    <td>A template can have its own custom image preprocessing code. An example using Emgu.CV is provided by default.</td>
+                    <td>A template can have a custom image-preprocessing code. An example using Emgu.CV is provided by default.</td>
                 </tr>
             </table>
 
@@ -459,10 +459,10 @@ setLicense();
                 </tr>
                 <tr>
                     <td class='title_column'><a name='IgnoreDuplicatedPdfChars'>IgnoreDuplicatedPdfChars</a></td>
-                    <td>Sometimes text entities in a PDF page can be duplicated meaning that they have (almost) the same location. Such duplications do not make a difference in the text itself (while maybe changing its look) but hinder search of PdfText anchors. For this reason, PDF pages are stripped from such duplicates. </td>
+                    <td>Sometimes text entities in a PDF page can be duplicated meaning that they have (almost) the same location. Such duplications do not make a difference in the text itself (while maybe changing its appearance) but hinder search of PdfText anchors. For this reason, PDF pages are stripped from such duplicates. </td>
                 </tr>
             </table>
-            These parameters by default are <code>True</code> and switching them off is highly unrecommended. For this reason, they can only be edited directly in the template data, not from GUI.
+            These parameters by default are <code>True</code> and switching them off is highly unrecommended. For this reason, they can only be edited directly in the template data, not through the GUI.
 
 
 
@@ -655,12 +655,12 @@ foreach(page in pageCollection)
                 <tr>
                     <td class='title_column'><a name='PdfPageImageResolution'>PdfPageImageResolution</a></td>
                     <td>It is the resolution with which PdfDocumentParser converts PDF pages into images. It influences the quality of PDF representation  in <a href="#templateEditor">Template Editor</a>.
-        <p>What is more important, it also impacts the work of OctText anchors and fields. It should be not less than 300dpi (even if the resolution of input documents is lower), otherwise OCR will not work properly. The higher the resolution, the better the quality of OCR is. On the other hand, increasing the resolution increases processing time.
+        <p>What is more important, it also impacts the work of OctText anchors and fields. <span class='attention'>(!)</span>It should be not less than 300dpi (even if the resolution of input documents is lower), otherwise OCR will not work properly. The higher the resolution, the better the quality of OCR is. On the other hand, increasing the resolution increases processing time.
         <p>
             Usually there is no need to touch it.</td></tr>
             <tr>
                 <td class='title_column'><a name='CoordinateDeviationMargin'>CoordinateDeviationMargin</a></td>
-                <td>It is a zero value threshold while comparing pixel coordinates which may have slight discrepancy because of conversions.
+                <td>It is a zero-value-threshold when comparing pixel coordinates which may have slight discrepancy because of conversions.
         <p>
             Usually there is no need to touch it.</td></tr>
             </table>
@@ -870,9 +870,9 @@ foreach(page in pageCollection)
 
 
             <h2>Parsing scanned PDF file</h2>
-            When a PDF page is a scanned image, the template designed for it, most likely will need to perform preprocessing which includes auto-deskew and rotation. Then OcrText or CvImage anchors and OcrText fields can be applied to the page.
+            When a PDF page is a scanned image, the template designed for it, most likely will need to perform a preprocessing which includes auto-deskew and rotation. Then OcrText or CvImage anchors and OcrText fields can be applied to the page.
         <p>
-            Except the said above, the parsing routine is the same for either scanned or native PDF's.
+            Except for the said above, the parsing routine is the same for either scanned or native PDF's.
 
 
 
