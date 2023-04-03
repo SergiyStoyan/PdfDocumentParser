@@ -108,82 +108,82 @@ namespace Cliver.PdfDocumentParser
             };
 
             picture.MouseMove += delegate (object sender, MouseEventArgs e)
-        {
-            if (pages == null)
-                return;
-
-            Point p;
-
-            if (drawingMode == DrawingModes.movingImage)
             {
-                p = Control.MousePosition;
-                int h = imageScrollPostion0.X + screenMousePosition0.X - p.X;
-                if (h < splitContainer1.Panel2.HorizontalScroll.Minimum)
-                    h = splitContainer1.Panel2.HorizontalScroll.Minimum;
-                else if (h > splitContainer1.Panel2.HorizontalScroll.Maximum)
-                    h = splitContainer1.Panel2.HorizontalScroll.Maximum;
-                splitContainer1.Panel2.HorizontalScroll.Value = h;
-                int v = imageScrollPostion0.Y + screenMousePosition0.Y - p.Y;
-                if (v < splitContainer1.Panel2.VerticalScroll.Minimum)
-                    v = splitContainer1.Panel2.VerticalScroll.Minimum;
-                else if (v > splitContainer1.Panel2.VerticalScroll.Maximum)
-                    v = splitContainer1.Panel2.VerticalScroll.Maximum;
-                splitContainer1.Panel2.VerticalScroll.Value = v;
-                return;
-            }
-
-            p = new Point((int)(e.X / (float)pictureScale.Value), (int)(e.Y / (float)pictureScale.Value));
-
-            switch (drawingMode)
-            {
-                case DrawingModes.NULL:
-                    showSelectionCoordinates(p);
-
-                    if (findResizebleBox(p, out ResizebleBoxSides resizebleBoxSide) != null)
-                        Cursor.Current = resizebleBoxSide == ResizebleBoxSides.Left || resizebleBoxSide == ResizebleBoxSides.Right ? Cursors.VSplit : Cursors.HSplit;
-                    else
-                        Cursor.Current = Cursors.Default;
+                if (pages == null)
                     return;
-                case DrawingModes.drawingSelectionBox:
-                    if (selectionBoxPoint0.X < p.X)
-                    {
-                        selectionBoxPoint1.X = selectionBoxPoint0.X;
-                        selectionBoxPoint2.X = p.X;
-                    }
-                    else
-                    {
-                        selectionBoxPoint1.X = p.X;
-                        selectionBoxPoint2.X = selectionBoxPoint0.X;
-                    }
-                    if (selectionBoxPoint0.Y < p.Y)
-                    {
-                        selectionBoxPoint1.Y = selectionBoxPoint0.Y;
-                        selectionBoxPoint2.Y = p.Y;
-                    }
-                    else
-                    {
-                        selectionBoxPoint1.Y = p.Y;
-                        selectionBoxPoint2.Y = selectionBoxPoint0.Y;
-                    }
-                    break;
-                case DrawingModes.resizingSelectionBoxV:
-                    if (Math.Abs(selectionBoxPoint2.X - p.X) < Math.Abs(p.X - selectionBoxPoint1.X))
-                        selectionBoxPoint2.X = p.X;
-                    else
-                        selectionBoxPoint1.X = p.X;
-                    break;
-                case DrawingModes.resizingSelectionBoxH:
-                    if (Math.Abs(selectionBoxPoint2.Y - p.Y) < Math.Abs(p.Y - selectionBoxPoint1.Y))
-                        selectionBoxPoint2.Y = p.Y;
-                    else
-                        selectionBoxPoint1.Y = p.Y;
-                    break;
-            }
-            showSelectionCoordinates(selectionBoxPoint1, selectionBoxPoint2);
-            RectangleF r = new RectangleF(selectionBoxPoint1.X, selectionBoxPoint1.Y, selectionBoxPoint2.X - selectionBoxPoint1.X, selectionBoxPoint2.Y - selectionBoxPoint1.Y);
-            clearImageFromBoxes();
-            drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<System.Drawing.RectangleF> { r });
-        };
+
+                Point p;
+
+                if (drawingMode == DrawingModes.movingImage)
+                {
+                    p = Control.MousePosition;
+                    int h = imageScrollPostion0.X + screenMousePosition0.X - p.X;
+                    if (h < splitContainer1.Panel2.HorizontalScroll.Minimum)
+                        h = splitContainer1.Panel2.HorizontalScroll.Minimum;
+                    else if (h > splitContainer1.Panel2.HorizontalScroll.Maximum)
+                        h = splitContainer1.Panel2.HorizontalScroll.Maximum;
+                    splitContainer1.Panel2.HorizontalScroll.Value = h;
+                    int v = imageScrollPostion0.Y + screenMousePosition0.Y - p.Y;
+                    if (v < splitContainer1.Panel2.VerticalScroll.Minimum)
+                        v = splitContainer1.Panel2.VerticalScroll.Minimum;
+                    else if (v > splitContainer1.Panel2.VerticalScroll.Maximum)
+                        v = splitContainer1.Panel2.VerticalScroll.Maximum;
+                    splitContainer1.Panel2.VerticalScroll.Value = v;
+                    return;
+                }
+
+                p = new Point((int)(e.X / (float)pictureScale.Value), (int)(e.Y / (float)pictureScale.Value));
+
+                switch (drawingMode)
+                {
+                    case DrawingModes.NULL:
+                        showSelectionCoordinates(p);
+
+                        if (findResizebleBox(p, out ResizebleBoxSides resizebleBoxSide) != null)
+                            Cursor.Current = resizebleBoxSide == ResizebleBoxSides.Left || resizebleBoxSide == ResizebleBoxSides.Right ? Cursors.VSplit : Cursors.HSplit;
+                        else
+                            Cursor.Current = Cursors.Default;
+                        return;
+                    case DrawingModes.drawingSelectionBox:
+                        if (selectionBoxPoint0.X < p.X)
+                        {
+                            selectionBoxPoint1.X = selectionBoxPoint0.X;
+                            selectionBoxPoint2.X = p.X;
+                        }
+                        else
+                        {
+                            selectionBoxPoint1.X = p.X;
+                            selectionBoxPoint2.X = selectionBoxPoint0.X;
+                        }
+                        if (selectionBoxPoint0.Y < p.Y)
+                        {
+                            selectionBoxPoint1.Y = selectionBoxPoint0.Y;
+                            selectionBoxPoint2.Y = p.Y;
+                        }
+                        else
+                        {
+                            selectionBoxPoint1.Y = p.Y;
+                            selectionBoxPoint2.Y = selectionBoxPoint0.Y;
+                        }
+                        break;
+                    case DrawingModes.resizingSelectionBoxV:
+                        if (Math.Abs(selectionBoxPoint2.X - p.X) < Math.Abs(p.X - selectionBoxPoint1.X))
+                            selectionBoxPoint2.X = p.X;
+                        else
+                            selectionBoxPoint1.X = p.X;
+                        break;
+                    case DrawingModes.resizingSelectionBoxH:
+                        if (Math.Abs(selectionBoxPoint2.Y - p.Y) < Math.Abs(p.Y - selectionBoxPoint1.Y))
+                            selectionBoxPoint2.Y = p.Y;
+                        else
+                            selectionBoxPoint1.Y = p.Y;
+                        break;
+                }
+                showSelectionCoordinates(selectionBoxPoint1, selectionBoxPoint2);
+                RectangleF r = new RectangleF(selectionBoxPoint1.X, selectionBoxPoint1.Y, selectionBoxPoint2.X - selectionBoxPoint1.X, selectionBoxPoint2.Y - selectionBoxPoint1.Y);
+                clearImageFromBoxes();
+                drawBoxes(Settings.Appearance.SelectionBoxColor, Settings.Appearance.SelectionBoxBorderWidth, new List<System.Drawing.RectangleF> { r });
+            };
 
             picture.MouseUp += delegate (object sender, MouseEventArgs e)
             {
@@ -344,7 +344,7 @@ namespace Cliver.PdfDocumentParser
                     Message.Error2(ex, this);
                 }
             };
-            
+
             Shown += delegate
             {
                 Application.DoEvents();//make form be drawn completely
@@ -441,14 +441,14 @@ namespace Cliver.PdfDocumentParser
             ShowAsJson.LinkClicked += showAsJson_LinkClicked;
 
             tCurrentPage.Leave += delegate
-             {
-                 changeCurrentPage();
-             };
+            {
+                changeCurrentPage();
+            };
             tCurrentPage.KeyDown += delegate (object sender, KeyEventArgs e)
-              {
-                  if (e.KeyCode == Keys.Enter)
-                      changeCurrentPage();
-              };
+            {
+                if (e.KeyCode == Keys.Enter)
+                    changeCurrentPage();
+            };
         }
         TemplateManager templateManager;
         Point selectionBoxPoint0, selectionBoxPoint1, selectionBoxPoint2;

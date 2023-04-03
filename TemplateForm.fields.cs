@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Emgu.CV.DepthAI;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -96,6 +97,15 @@ namespace Cliver.PdfDocumentParser
                     DataGridViewRow row = fields.Rows[e.RowIndex];
                     var cs = row.Cells;
                     Template.Field f = (Template.Field)row.Tag;
+                    void anchorAllSidesOnShift(Template.Field.SideAnchor a)
+                    {
+                        if (!ModifierKeys.HasFlag(Keys.Shift))
+                            return;
+                        f.LeftAnchor = a;
+                        f.TopAnchor = a;
+                        f.RightAnchor = a;
+                        f.BottomAnchor = a;
+                    };
                     switch (fields.Columns[e.ColumnIndex].Name)
                     {
                         case "Type":
@@ -154,6 +164,7 @@ namespace Cliver.PdfDocumentParser
                                         Shift = aai.Shift.Width,
                                     };
                                 }
+                                anchorAllSidesOnShift(f.LeftAnchor);
                                 setFieldRow(row, f);
                             }
                             break;
@@ -171,6 +182,7 @@ namespace Cliver.PdfDocumentParser
                                         Shift = aai.Shift.Height,
                                     };
                                 }
+                                anchorAllSidesOnShift(f.TopAnchor);
                                 setFieldRow(row, f);
                             }
                             break;
@@ -188,6 +200,7 @@ namespace Cliver.PdfDocumentParser
                                         Shift = aai.Shift.Width,
                                     };
                                 }
+                                anchorAllSidesOnShift(f.RightAnchor);
                                 setFieldRow(row, f);
                             }
                             break;
@@ -205,6 +218,7 @@ namespace Cliver.PdfDocumentParser
                                         Shift = aai.Shift.Height,
                                     };
                                 }
+                                anchorAllSidesOnShift(f.BottomAnchor);
                                 setFieldRow(row, f);
                             }
                             break;
