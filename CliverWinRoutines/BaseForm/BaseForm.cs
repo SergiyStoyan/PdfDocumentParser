@@ -89,6 +89,14 @@ namespace Cliver
             return c.BeginInvoke(code);
         }
 
+        public static void BeginInvokeIfRequired(this Control c, MethodInvoker code)
+        {
+            if (c.InvokeRequired)
+                c.BeginInvoke(code);
+            else
+                code();
+        }
+
         //public static void BeginInvoke2(this Control c, MethodInvoker code)
         //{
         //    if (c.InvokeRequired)

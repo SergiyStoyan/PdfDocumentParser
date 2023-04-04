@@ -123,6 +123,11 @@ namespace Cliver
                 Write(MessageType.LOG, message);
             }
 
+            /// <summary>
+            /// Base writting exception method which treats the message depending on the exception's type.
+            /// </summary>
+            /// <param name="e"></param>
+            /// <exception cref="Exception"></exception>
             public void Write(Exception e)
             {
                 MessageException me = e as MessageException;
