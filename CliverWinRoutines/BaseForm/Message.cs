@@ -88,7 +88,7 @@ namespace Cliver
 
         public static void Exclaim(Exception e, Form owner = null)
         {
-            ShowDialog(AppName, getIcon(Icons.Exclamation), e.Message, new string[1] { "OK" }, 0, owner);
+            ShowDialog(AppName, getIcon(Icons.Exclamation), Log.GetExceptionMessage2(e), new string[1] { "OK" }, 0, owner);
         }
 
         public static void Warning(string message, Form owner = null)
@@ -103,7 +103,7 @@ namespace Cliver
 
         public static void Warning2(Exception e, Form owner = null)
         {
-            ShowDialog(AppName, getIcon(Icons.Warning), e.Message, new string[1] { "OK" }, 0, owner);
+            ShowDialog(AppName, getIcon(Icons.Warning), Log.GetExceptionMessage2(e), new string[1] { "OK" }, 0, owner);
         }
 
         public static void Error(Exception e, Form owner = null)
@@ -113,7 +113,7 @@ namespace Cliver
 
         public static void Error2(Exception e, Form owner = null)
         {
-            Error(e.Message, owner);
+            Error(Log.GetExceptionMessage2(e), owner);
         }
 
         //public static string GetExceptionDetails(Exception e)
@@ -140,7 +140,7 @@ namespace Cliver
 
         public static void Error2(string subtitle, Exception e, Form owner = null)
         {
-            Error(subtitle + "\r\n\r\n" + e.Message, owner);
+            Error(subtitle + "\r\n\r\n" + Log.GetExceptionMessage2(e), owner);
         }
 
         public static void Error(string message, Form owner = null)

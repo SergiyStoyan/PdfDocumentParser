@@ -174,9 +174,9 @@ namespace Cliver.Win
             catch (Exception e)
             {
                 if (silently)
-                    Cliver.Log.Main.Error("Validation failed.\n\n" + e.Message);
+                    Cliver.Log.Main.Error("Validation failed.\n\n" + Log.GetExceptionMessage2(e));
                 else
-                    LogMessage.Exit("Test period validation failed.\n\n" + e.Message);
+                    LogMessage.Exit("Test period validation failed.\n\n" + Log.GetExceptionMessage2(e));
                 //Environment.Exit(0);
             }
 

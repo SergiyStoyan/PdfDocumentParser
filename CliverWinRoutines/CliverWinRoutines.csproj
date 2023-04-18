@@ -198,6 +198,7 @@
     <Compile Include="BaseForm\BaseForm.designer.cs">
       <DependentUpon>BaseForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="BaseForm\Message.async.cs" />
     <Compile Include="Config\AppSettings.cs" />
     <Compile Include="Config\Encrypted.cs" />
     <Compile Include="Microsoft\Win32\NativeMethods.cs" />

@@ -201,7 +201,7 @@ namespace Cliver.Win
 
         public static void Inform(Exception e, Form owner = null)
         {
-            Inform(e.Message, owner);
+            Inform(Log.GetExceptionMessage2(e), owner);
         }
 
         public static void Warning(string message, Form owner = null)
@@ -246,7 +246,7 @@ namespace Cliver.Win
 
         public static void Warning(Exception e, Form owner = null)
         {
-            Warning(e.Message, owner);
+            Warning(Log.GetExceptionMessage2(e), owner);
         }
 
         public static void Write(string message, Form owner = null)
