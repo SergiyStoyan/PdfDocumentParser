@@ -54,8 +54,8 @@ namespace Cliver.PdfDocumentParser
             AppDomain.CurrentDomain.UnhandledException += delegate (object sender, UnhandledExceptionEventArgs args)
             {
                 Exception e = (Exception)args.ExceptionObject;
-                Log.Error(e);
-                Message.Error(e);
+                Log.Error("Unhandled exception!", e);
+                Message.Error("Unhandled exception!", e);
                 Environment.Exit(0);
             };
 
