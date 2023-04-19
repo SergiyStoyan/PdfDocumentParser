@@ -61,10 +61,9 @@ namespace Cliver.PdfDocumentParser
 
             //SetProcessDpiAwareness((int)DpiAwareness.PerMonitorAware);
 
-            AssemblyRoutines.AssemblyInfo ai = new AssemblyRoutines.AssemblyInfo();
-            Version = ai.Version;
-            Name = ai.Product;
-
+            Assembly a = Assembly.GetExecutingAssembly();
+            Name = a.GetProduct();
+            Version = a.GetVersion();
             FullName = Name + " " + Version.ToString(3);
 
             //Log.Initialize(Log.Mode.ONLY_LOG, Log.CompanyCommonDataDir, true);//must be called from the entry projects
