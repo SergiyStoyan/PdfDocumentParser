@@ -96,24 +96,44 @@ namespace Cliver
                 return Deserialize(type, File.ReadAllText(file), polymorphic, createNewObjects);
             }
 
-            public static O Clone<O>(O o)
+            public static O Clone<O>(O o, JsonSerializerSettings jsonSerializerSettings = null)
             {
-                return Deserialize<O>(Serialize(o, false, true));
+                if (jsonSerializerSettings == null)
+                    jsonSerializerSettings = new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.Auto,
+                    };
+                return Deserialize<O>(Serialize(o, jsonSerializerSettings, false));
             }
 
-            public static object Clone(Type type, object o)
+            public static object Clone(Type type, object o, JsonSerializerSettings jsonSerializerSettings = null)
             {
-                return Deserialize(type, Serialize(o, false, true));
+                if (jsonSerializerSettings == null)
+                    jsonSerializerSettings = new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.Auto,
+                    };
+                return Deserialize(type, Serialize(o, jsonSerializerSettings, false));
             }
 
-            public static object Clone2(object o)
+            public static object Clone2(object o, JsonSerializerSettings jsonSerializerSettings = null)
             {
-                return Deserialize(o.GetType(), Serialize(o, false, true));
+                if (jsonSerializerSettings == null)
+                    jsonSerializerSettings = new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.Auto,
+                    };
+                return Deserialize(o.GetType(), Serialize(o, jsonSerializerSettings, false));
             }
 
-            public static bool IsEqual(object a, object b)
+            public static bool IsEqual(object a, object b, JsonSerializerSettings jsonSerializerSettings = null)
             {
-                return Serialize(a, false, true) == Serialize(b, false, true);
+                if (jsonSerializerSettings == null)
+                    jsonSerializerSettings = new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.Auto,
+                    };
+                return Serialize(a, jsonSerializerSettings, false) == Serialize(b, jsonSerializerSettings, false);
             }
 
             public static IEnumerable<string> GetMemberNames(object o)
