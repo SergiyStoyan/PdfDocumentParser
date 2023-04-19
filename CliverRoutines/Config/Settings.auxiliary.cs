@@ -24,5 +24,13 @@ namespace Cliver
         //    FieldInfo fi = GetType().GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public).FirstOrDefault(a => a.Name == fieldName);
         //    return fi?.GetValue(this);
         //}
+
+        //public S CreateClone<S>(Newtonsoft.Json.JsonSerializerSettings jsonSerializerSettings = null) where S : Settings, new()
+        //{
+        //    S s = (S)Serialization.Json.Clone(this.GetType(), this, jsonSerializerSettings);
+        //    if (this.__Info != null)
+        //        s.__Info = this.__Info;
+        //    return s;
+        //}
     }
 }

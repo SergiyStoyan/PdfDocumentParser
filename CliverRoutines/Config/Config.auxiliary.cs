@@ -8,6 +8,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Cliver
 {
@@ -52,10 +53,11 @@ namespace Cliver
         /// </summary>
         /// <typeparam name="S"></typeparam>
         /// <param name="settings"></param>
+        /// <param name="jsonSerializerSettings">allows to customize cloning</param>
         /// <returns></returns>
-        public static S CreateClone<S>(this S settings) where S : Settings, new()
+        public static S CreateClone<S>(this S settings, JsonSerializerSettings jsonSerializerSettings = null) where S : Settings, new()
         {
-            S s = Serialization.Json.Clone(settings);
+            S s = Serialization.Json.Clone(settings, jsonSerializerSettings);
             if (settings.__Info != null)
                 s.__Info = settings.__Info;
             return s;
