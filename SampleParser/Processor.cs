@@ -49,9 +49,9 @@ namespace Cliver.SampleParser
 
             List<string> headers = new List<string> { "File", "Template", "First Page", "Last Page", "Invoice", "Total", "Product Name", "Product Cost" };
 
-            tw.WriteLine(FieldPreparation.GetCsvHeaderLine(headers, FieldPreparation.FieldSeparator.COMMA));
+            tw.WriteLine(FieldPreparation.Csv.GetHeaderLine(headers));
 
-            List<string> files = FileSystemRoutines.GetFiles(Settings.General.InputFolder, false);
+            List<string> files = FileSystemRoutines.GetFiles(Settings.General.InputFolder, false).ToList();
             files.Remove(output_records_file);
             files = files.Select(f => new FileInfo(f)).Where(fi => !fi.Attributes.HasFlag(FileAttributes.Hidden)).Select(fi => fi.FullName).ToList();
 
@@ -67,12 +67,12 @@ namespace Cliver.SampleParser
                     {
                         {
                             List<string> values = new List<string>() { PathRoutines.GetFileName(f), templateName, firstPageI.ToString(), lastPageI.ToString(), document.Invoice, document.Total, "", "" };
-                            tw.WriteLine(FieldPreparation.GetCsvLine(values, FieldPreparation.FieldSeparator.COMMA));
+                            tw.WriteLine(FieldPreparation.Csv.GetLine(values));
                         }
                         foreach (PdfProcessor.Document.Product p in document.Products)
                         {
                             List<string> values = new List<string>() { "", "", "", "", "", "", p.Name, p.Cost };
-                            tw.WriteLine(FieldPreparation.GetCsvLine(values, FieldPreparation.FieldSeparator.COMMA));
+                            tw.WriteLine(FieldPreparation.Csv.GetLine(values));
                         }
                     });
 
