@@ -448,24 +448,20 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="CliverRoutines\CliverRoutines.csproj">
-      <Project>{e88444ba-1b07-40e6-96d1-922d27965f91}</Project>
-      <Name>CliverRoutines</Name>
-    </ProjectReference>
-    <ProjectReference Include="CliverWinRoutines\CliverWinRoutines.csproj">
-      <Project>{51f2df13-41f1-4f22-890f-c3b50c813909}</Project>
-      <Name>CliverWinRoutines</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
+    <PackageReference Include="CliverRoutines">
+      <Version>6.34.2</Version>
+    </PackageReference>
+    <PackageReference Include="CliverWinRoutines">
+      <Version>2.3.3.40379</Version>
+    </PackageReference>
     <PackageReference Include="Emgu.CV">
-      <Version>4.6.0.5131</Version>
+      <Version>4.7.0.5276</Version>
     </PackageReference>
     <PackageReference Include="Emgu.CV.Bitmap">
-      <Version>4.6.0.5131</Version>
+      <Version>4.7.0.5276</Version>
     </PackageReference>
     <PackageReference Include="Emgu.CV.runtime.windows">
-      <Version>4.6.0.5131</Version>
+      <Version>4.7.0.5276</Version>
     </PackageReference>
     <PackageReference Include="ICSharpCode.TextEditor.Extended">
       <Version>4.2.4</Version>
@@ -475,9 +471,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp">
       <Version>4.6.0-1.final</Version>
-    </PackageReference>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>13.0.3</Version>
     </PackageReference>
     <PackageReference Include="Tesseract">
       <Version>5.2.0</Version>

@@ -9,7 +9,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Emgu.CV.DepthAI;
 
 namespace Cliver.PdfDocumentParser
 {
