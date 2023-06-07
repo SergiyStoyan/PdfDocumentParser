@@ -124,6 +124,8 @@ setLicense();
         <p>Obviously, applying a template to documents having layouts different from that it was designed for, gives wrong parsing.
         <p>
             Creating and modifying templates is performed with <a href='#templateEditor'>Template Editor<a />
+			
+			<p>The base template class is <code>Cliver.PdfDocumentParser.Template</code> which can be inherited or hosted by a custom template class defined in your app (see an example of it in <a href='#sampleParser'>SampleParser</a>).
 
 
 
@@ -259,7 +261,7 @@ setLicense();
             The number of anchors in a compound anchor can be any. Though, it should be taken into account that the processing time of the recursive search performed for a compound anchor exponentially grows with the chain length.
 
 
-            <h3>Creating anchor</h3>
+            <h3>Creating an anchor</h3>
             <span class='attention'>(!)</span>In a compound anchor, if some child anchor's position depends on its parent's position, those anchors should be set on the same page. Otherwise, the anchor's position can be calculated incorrectly. So, when tuning a compound anchor on a page which is not the page where it was set initially, it is recommended to reset it completely from scratch.
         <p>
             How to create anchors, see in <a href='#tutorialAnchor'>the tutorial</a>.
@@ -301,7 +303,7 @@ setLicense();
             For more details refer to <a href='#tutorialCondition'>the tutorial</a>.
 
 
-            <h3>Setting condition</h3>
+            <h3>Setting a condition</h3>
         <p><p>
             How to set conditions, see in <a href='#tutorialCondition'>the tutorial</a>.
 
@@ -310,7 +312,7 @@ setLicense();
             <h2><a name="field">Field</a></h2>
         <p>A field defines rules to extract text or image from a PDF page. It is retrieved by methods like <a href='#GetValue'><code>GetValue()</code></a>.
         <p>
-            Fields are identified by their names. Fields are dictated by the application and can be added/modified/deleted in <a href="#templateEditor">Template Editor</a>.
+            Fields are identified by their names. Fields are dictated by the application's logic and can be added/modified/deleted in <a href="#templateEditor">Template Editor</a>.
 
             <h3>Anchoring</h3>
         <p>
@@ -366,7 +368,7 @@ setLicense();
 
 
 
-            <h3>Setting field</h3>
+            <h3>Setting a field</h3>
             <span class='attention'>(!)</span>A field should be completely set on the same page. Anchors that are linked by a field, can be created on any page before, but should be assigned on the same page together with the field's rectangle. Otherwise, when parsing, the field's shift or size can be calculated incorrectly on some pages. So, when tuning a field on a page which is not the page where it was set initially, it is recommended to reset it completely from scratch.
         <p>
             How to set fields, see in <a href='#tutorialField'>the tutorial</a>.
@@ -491,7 +493,7 @@ setLicense();
                 </tr>
                 <tr>
                     <td class='title_column'><code>[int pageNumber]</code></td>
-                    <td>Get Cliver.PdfDocumentParser.Page object from the PDF file.</td>
+                    <td>Get <code>Cliver.PdfDocumentParser.Page</code> object from the PDF file.</td>
                 </tr>
                 <tr>
                     <td class='title_column' rowspan='6'><code>Cliver.PdfDocumentParser.Page</code></td>
@@ -512,7 +514,7 @@ setLicense();
                 </tr>
                 <tr>
                     <td class='title_column'><a name='GetImage'><code>GetImage(string fieldName)</code></a></td>
-                    <td>Extract a field as a Bitmap from the page.</td>
+                    <td>Extract a field as a <code>System.Drawing.Bitmap</code> from the page.</td>
                 </tr>
                 <tr>
                     <td class='title_column'><a name='GetValue'><code>GetValue(string fieldName, ValueTypes valueType)</code></a></td>
@@ -623,6 +625,8 @@ foreach(page in pageCollection)
 
 
 
+
+
             <h1><a name="templateEditor">Template Editor</a></h1>
             <a href="#templateEditor">Template Editor</a> is a GUI object that is called from the application whenever configuring a <a href="#template">template</a> is required.
 
@@ -634,7 +638,7 @@ foreach(page in pageCollection)
                 <tr><th class='title_column'>Object</th><th>Description</th></tr>
                 <tr>
                     <td class='title_column'><code>Cliver.PdfDocumentParser.TemplateForm</code></td>
-                    <td>.NET Windows Form that provides abilities of editing/debugging a template. Create <code>TemplateForm</code> with a <code>TemplateManager</code> instance as a parameter and call <code>Show()</code> or <code>ShowDialog()</code> on it.</td>
+                    <td>.NET Windows Form that facilitates editing/debugging a template. Create <code>TemplateForm</code> with a <code>TemplateManager</code> instance as a parameter and call <code>Show()</code> or <code>ShowDialog()</code> on it.</td>
                 </tr>
                 <tr>
                     <td class='title_column'><code>Cliver.PdfDocumentParser.TemplateManager</code></td>
@@ -649,7 +653,7 @@ foreach(page in pageCollection)
 
 
             <h1><a name='generalSettings'>Global settings</a></h1>
-            PdfDocumentParser has parameters that are the same within the application's scope and can be modified in the configuration dialog invoked from <a href="#templateEditor">Template Editor</a>.
+            PdfDocumentParser has parameters that are global within the application's scope. They can be modified in the configuration dialog invoked from <a href="#templateEditor">Template Editor</a>.
             <table>
                 <tr><th class='title_column'>Parameter</th><th>Description</th></tr>
                 <tr>
@@ -686,7 +690,7 @@ foreach(page in pageCollection)
         <p>
             The application developed for this task is <a href='#sampleParser'>SampleParser</a>. It can be referred to during this tutorial.
 
-            <h2>Planning application</h2>
+            <h2>Planning the application</h2>
         <p>Since the documents are issued by different companies, they have different layouts. Every layout will require its own parsing template. So, <a href='#sampleParser'>SampleParser</a> will have to manage many templates where every template processes a whole document. One-to-one correspondence between document types and templates is the common way.
         <p>As is obvious, each template will have the <a href='#field'>fields</a> InvoiceId and TotalAmount.
         <p>Next, let's decide which <a href='#condition'>conditions</a> are needed. <a href='#sampleParser'>SampleParser</a> should be able to <b>A)</b> detect the first page of every document in a file and <b>B)</b> choose the right template for the detected document. (A) and (B) can be joined into one <a href='#condition'>condition</a> named 'FirstPageOfDocument'.
@@ -737,8 +741,8 @@ foreach(page in pageCollection)
 
 
 
-            <h2>Creating template</h2>
-            Now, having the parser code elaborated, let's learn how to create templates with <a href="#templateEditor">Template Editor</a>.
+            <h2>Creating a template</h2>
+            Now, having the parser code elaborated, let's learn how to create a template with <a href="#templateEditor">Template Editor</a>.
 
 
             <h3>Open Template Editor</h3>
@@ -798,7 +802,7 @@ foreach(page in pageCollection)
             <img src='img/tutorial6.png' />
 
 
-            <h3>Check template</h3>
+            <h3>Check the template</h3>
         <p>When all the conditions and fields are set, it's time to walk through the file and see how the template works on every page.
         <p class='screenshot_title'>
             Page #2 begins a new document:
@@ -871,7 +875,7 @@ foreach(page in pageCollection)
 
 
 
-            <h2>Parsing scanned PDF file</h2>
+            <h2>Parsing a scanned PDF</h2>
             When a PDF page is a scanned image, the template designed for it, most likely will need to perform a preprocessing which includes auto-deskew and rotation. Then OcrText or CvImage anchors and OcrText fields can be applied to the page.
         <p>
             Except for the said above, the parsing routine is the same for either scanned or native PDF's.
@@ -888,7 +892,7 @@ foreach(page in pageCollection)
 
 
             <h1><a name='sampleParser'>SampleParser</a></h1>
-            <a href='#sampleParser'>SampleParser</a> is a custom desktop application based on <a href='#overview'>PdfDocumentParser</a>. It gives a complete example of using PdfDocumentParser and can be used as a demo or framework.
+            <a href='#sampleParser'>SampleParser</a> is a custom desktop application based on <a href='#overview'>PdfDocumentParser</a>. It gives an example of operating with PdfDocumentParser and can be used as a demo or framework.
         <p>
             It does the following:
             <ul>
@@ -905,7 +909,7 @@ foreach(page in pageCollection)
 
 
             <h2>Source code</h2>
-            Download <a href='#repository'> PdfDocumentParsersource code</a>. Open PdfDocumentParser.sln in Visual Studio and find the <a href='#sampleParser'>SampleParser</a> project.
+            Download <a href='#repository'>PdfDocumentParser source code</a>. Open PdfDocumentParser.sln in Visual Studio and find the <a href='#sampleParser'>SampleParser</a> project.
 
 
             <h2>Enhanced template parameters</h2>
@@ -925,13 +929,99 @@ foreach(page in pageCollection)
                 </tr>
             </table>
 
-            <h2>Considerations</h2>
+            <h1>Considerations</h1>
+			
+            <h2>Reducing the parsing time</h2>
 <p>
-            The processing time generally depends on the algorithm and templates. However, sometimes the processing time can be drastically reduced in the following ways:
+            To reduce the parsing time, consider the following ways:
             <ul>
-                <li> use template filtering according to pdf file names;
+                <li> filter templates according to the name of pdf file to be parsed;
                 <li> order templates in such a way that templates that take a shorter time to apply are tried first while those that require a longer time are tried last. E.g. templates using only native PDF entities should go first and those using OCR and/or auto-deskew should go last;
             </ul>
+
+
+            <h2><a name='compiler'>C# code stored in templates</a></h2>
+			<span class='attention'>(!)</span>This option is worth consideration only when building a parser with prolonged life-time and big number of templates because it requires significant development effort in the beginning. 
+         <p>PdfDocumentParser exposes <code>Cliver.PdfDocumentParser.Compiler</code> which allows compiling custom C# code stored in a template. 
+		 Such a custom code can be needed when parsing complex fields, for instance non-trivial tables. Of course, custom code can be added directly to your app and it is the way to go in simple applications. However when the app manages many templates, it would soon become cumbersome due to custom code required by individual templates. In that case, custom parsers should be kept directly in templates and be compiled and used when required.
+        <p>Using <code>Cliver.PdfDocumentParser.Compiler</code> implies the following steps:	
+			<br>- provide GUI facility for adding/editing custom C# code stored in templates;
+            <br>- define a default parser class that abstracts all the parsing actions needed for your task in general. When a template requires custom parsing, the default parser would be overloaded by a custom parser stored in the template;
+            <br>- define a custom template class that either inherits or hosts <code>Cliver.PdfDocumentParser.Template</code> class. It must have the following fields: a)parser instance, b)string containing custom parser class code if any. Also, this custom template class must be equipped with a storage facility;
+			<br>- in the app's work-flow, when first accessing a template, check if it has a custom parser code. Depending on existence of the custom parser, set the template's parser field with either the default parser or the custom parser which you compile by <code>Cliver.PdfDocumentParser.Compiler</code>;
+			<br>- anytime after, during the process life, refer to the template's parser to do the parsing job and get results;
+			
+			<!--p>(All these steps are eased by a WinForm project <a href='https://github.com/SergiyStoyan/ParserTemplateList'>ParserTemplateList</a>. It can be used for reference)</p-->
+			
+			<p>Example of using <code>Cliver.PdfDocumentParser.Compiler</code>:
+			<script type="text/plain" class="language-csharp">public Type CompileSingleType(string documentParserClassDefinition)
+{
+	Type[] ts = Compiler.Compile(documentParserClassDefinition, Assembly.GetEntryAssembly());
+	if (ts.Length < 1)//to allow commented code string
+		return null;
+	Type t = Compiler.FindSubTypes(typeof(DocumentParser/*the base parser*/), ts).FirstOrDefault();
+	if (t == null)
+		throw new Exception("No sub-type of '" + typeof(DocumentParser).Name + "' was found in the hot-compiled type definition.");
+	return t;
+}
+
+public DocumentParser CreateDocumentParser()
+{
+	Type documentParserType = typeof(DocumentParser/*the default parser. It can be overloaded with a custom parser.*/);
+    if (!string.IsNullOrWhiteSpace(DocumentParserClassDefinitionBox.Text/*custom parser class code stored in a template*/))
+	{
+		DocumentParserClassDefinitionBox.Document.MarkerStrategy.RemoveAll(marker => true);//GUI specific code which depends on the C# editor control
+		try
+		{
+			documentParserType = CompileSingleType(DocumentParserClassDefinitionBox.Text);
+		}
+		catch (PdfDocumentParser.Compiler.Exception ex)
+		{
+			foreach (PdfDocumentParser.Compiler.Error ce in ex.Data.Values)//display compilation errors
+			{//GUI specific code which depends on the C# editor control
+				ICSharpCode.TextEditor.Document.TextMarker tm = new ICSharpCode.TextEditor.Document.TextMarker(ce.P1, ce.P2 - ce.P1, ICSharpCode.TextEditor.Document.TextMarkerType.WaveLine, System.Drawing.Color.Red);
+				tm.ToolTip = ce.Message;
+				DocumentParserClassDefinitionBox.Document.MarkerStrategy.AddMarker(tm);
+			}
+		}
+	}
+    return (DocumentParser)Activator.CreateInstance(DocumentParserType);
+}</script>
+
+
+<p>Example of <code>DocumentParserClassDefinition</code> stored in a template as a string:
+<script type="text/plain" class="language-csharp">using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.IO;
+using System.Reflection;
+using Cliver.PdfDocumentParser;
+using System.Text.RegularExpressions;
+
+namespace Cliver.DocumentParsers
+{
+    public class TestParser : DocumentParser
+    {
+        protected override void parsePage(Page p, ParsedDocument parsedDocument)
+        {
+            parseInvoiceId(p, parsedDocument);
+            parsePoId(p, parsedDocument);
+            if (parsedDocument.PoId != null)
+            {
+                Match m = Regex.Match(parsedDocument.PoId, @"([^\s]*)\s(.*)");
+                if (m.Success)
+                {
+                    parsedDocument.JobId = m.Groups[2].Value;
+                    parsedDocument.PoId = m.Groups[1].Value;
+                }
+            }
+            parseTax(p, parsedDocument);
+            parseCost(p, parsedDocument);
+            parseDate(p, parsedDocument);
+        }
+    }
+}
+</script>
 
 
 
