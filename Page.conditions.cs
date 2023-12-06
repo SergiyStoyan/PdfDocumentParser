@@ -13,15 +13,41 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class Page
     {
-        public bool IsCondition(string conditionName)
+        public bool IsCondition(string conditionName, bool exceptionIfNotDefined = true)
         {
             if (string.IsNullOrWhiteSpace(conditionName))
                 throw new Exception("Condition name is not specified.");
             var c = PageCollection.ActiveTemplate.Conditions.FirstOrDefault(a => a.Name == conditionName);
             if (c == null)
-                throw new Exception("Template does not contain condition '" + conditionName + "'.");
+            {
+                if (exceptionIfNotDefined)
+                    throw new Exception("Condition '" + conditionName + "' does not exist.");
+                return false;
+            }
             if (string.IsNullOrWhiteSpace(c.Value))
-                throw new Exception("Condition '" + conditionName + "' is not set.");
+            {
+                if (exceptionIfNotDefined)
+                    throw new Exception("Condition '" + conditionName + "' is not set.");
+                return false;
+            }
+            return BooleanEngine.Parse(c.Value, this);
+        }
+
+        /// <summary>
+        /// To be used when condition is optional.
+        /// </summary>
+        /// <param name="conditionName"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public bool? IsCondition2(string conditionName)
+        {
+            if (string.IsNullOrWhiteSpace(conditionName))
+                throw new Exception("Condition name is not specified.");
+            var c = PageCollection.ActiveTemplate.Conditions.FirstOrDefault(a => a.Name == conditionName);
+            if (c == null)
+                return null;
+            if (string.IsNullOrWhiteSpace(c.Value))
+                return null;
             return BooleanEngine.Parse(c.Value, this);
         }
     }
