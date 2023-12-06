@@ -38,13 +38,7 @@ var copyright = {
     },
 
     dec2hex: function(d) {
-        var hD = "0123456789ABCDEF";
-        var h = hD.substr(d & 15, 1);
-        while(d > 15) {
-            d >>= 4;
-            h = hD.substr(d & 15, 1) + h;
-        }
-        return h;
+        return d.toString(16).toUpperCase().padStart(2, 0);
     },
 
     random_color: function(red_min, red_max, green_min, green_max, blue_min, blue_max){
