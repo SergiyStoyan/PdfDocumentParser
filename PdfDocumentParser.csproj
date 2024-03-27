@@ -452,7 +452,7 @@
       <Version>6.44.1</Version>
     </PackageReference>
     <PackageReference Include="CliverWinRoutines">
-      <Version>2.6.0.38153</Version>
+      <Version>2.7.1.21348</Version>
     </PackageReference>
     <PackageReference Include="Emgu.CV">
       <Version>4.7.0.5276</Version>
