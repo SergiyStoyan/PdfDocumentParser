@@ -89,7 +89,7 @@ namespace Cliver.PdfDocumentParser
                     Template.Anchor pa = page.PageCollection.ActiveTemplate.Anchors.Find(x => x.Id == id);
                     if (anchor == pa)
                         throw new Exception("Reference loop: anchor[Id=" + anchor.Id + "] is linked by an ancestor anchor.");
-                    id = pa.ParentAnchorId;
+                    id = pa?.ParentAnchorId;
                 }
 
                 findAnchor(page, (PointF p) =>
