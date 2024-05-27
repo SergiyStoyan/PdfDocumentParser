@@ -106,24 +106,22 @@ namespace Cliver.PdfDocumentParser
             {
                 base.RenderText(renderInfo);
 
-                var f = renderInfo.GetFont();
-                Font font = new Font { Name = f.PostscriptFontName, };
+                string fontName = renderInfo.GetFont().PostscriptFontName;
 
                 List<CharBox> cbs = new List<CharBox>();
                 IList<TextRenderInfo> cris = renderInfo.GetCharacterRenderInfos();
                 foreach (TextRenderInfo cri in cris)
                 {
+                    Vector baseEnd = renderInfo.GetBaseline().GetEndPoint();
                     Vector baseLeft = cri.GetBaseline().GetStartPoint();//(!)basic positioning point is char's baseLine, not ascentLine
                     Vector topRight = cri.GetAscentLine().GetEndPoint();
 
-                    var r = cri.GetDescentLine().GetBoundingRectange();
-                    var r1 = cri.GetBaseline().GetBoundingRectange();
-                    var r2 = cri.GetAscentLine().GetBoundingRectange();
-                    float x = MathRoutines.Min(r.X, r1.X, r2.X);
+                    //var r = cri.GetDescentLine().GetBoundingRectange();
+                    //var r1 = cri.GetBaseline().GetBoundingRectange();
+                    //var r2 = cri.GetAscentLine().GetBoundingRectange();
+                    //float x = MathRoutines.Min(r.X, r1.X, r2.X);
 
-
-
-                    //float x = baseLeft[Vector.I1];
+                    float x = MathRoutines.Min(baseLeft[Vector.I1], baseLeft[Vector.I2], baseEnd[Vector.I1], baseEnd[Vector.I2]);
                     float y = topRight[Vector.I2];
                     CharBox cb = new CharBox
                     {
@@ -135,7 +133,7 @@ namespace Cliver.PdfDocumentParser
                             Width = topRight[Vector.I1] - x,
                             Height = y - baseLeft[Vector.I2],
                         },
-                        Font = font,
+                        FontName = fontName,
                     };
                     cbs.Add(cb);
                 }
@@ -184,12 +182,7 @@ namespace Cliver.PdfDocumentParser
         public class CharBox : Page.CharBox
         {
             //public bool AutoInserted = false;
-            public Font Font;
-        }
-        public class Font
-        {
-            public string Name;
-            public float Size;
+            public string FontName;
         }
     }
 }

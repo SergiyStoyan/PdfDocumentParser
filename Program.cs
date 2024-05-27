@@ -13,6 +13,8 @@ using System.Runtime.InteropServices;
 /*
 TBD: 
 
+- !!!coordinates of chars are wrong in ReprintInvoice_D3576801_05142024_013135.pdf
+
 - ?migrate to NET5 (!!!while it works, the forms were displayed deteriorated despite DPI settings. Also VS winform designer under NET5 is buggy!)
 
 - multiple anchor matches. In a field: set multiple anchor. In API: GetMultipleField();
