@@ -106,13 +106,13 @@ namespace Cliver.PdfDocumentParser
             {
                 base.RenderText(renderInfo);
 
-                //GraphicsState gs = (GraphicsState)gsField.GetValue(renderInfo);//expensive???
-                //Font font = new Font { Name = string.Join(", ", gs.Font.FullFontName[0]), Size = gs.FontSize };
+                string fontName = renderInfo.GetFont().PostscriptFontName;
 
-                List<CharBox> cbs = new List<CharBox>();
                 IList<TextRenderInfo> cris = renderInfo.GetCharacterRenderInfos();
                 foreach (TextRenderInfo cri in cris)
                 {
+                    //if(cris.Count>1)
+                    //    thr
                     Vector baseLeft = cri.GetBaseline().GetStartPoint();
                     Vector topRight = cri.GetAscentLine().GetEndPoint();
                     float x = baseLeft[Vector.I1];
@@ -127,13 +127,29 @@ namespace Cliver.PdfDocumentParser
                             Width = topRight[Vector.I1] - x,
                             Height = y - baseLeft[Vector.I2],
                         },
-                        //Font = font
+                        FontName = fontName,
                     };
-                    cbs.Add(cb);
+                    CharBoxs.Add(cb);
                 }
-                CharBoxs.AddRange(cbs);
+
+                //Vector baseLeft = renderInfo.GetBaseline().GetStartPoint();
+                //Vector topRight = renderInfo.GetAscentLine().GetEndPoint();
+                //float x = baseLeft[Vector.I1];
+                //float y = topRight[Vector.I2];
+                //CharBox cb = new CharBox
+                //{
+                //    Char = renderInfo.GetText(),
+                //    R = new System.Drawing.RectangleF
+                //    {
+                //        X = x - pageSize.X,
+                //        Y = pageSize.Height + pageSize.Y - y,//(!)basic positioning point is char's baseLine, not ascentLine
+                //        Width = topRight[Vector.I1] - x,
+                //        Height = y - baseLeft[Vector.I2],
+                //    },
+                //    FontName = fontName,
+                //};
+                //CharBoxs.Add(cb);
             }
-            static System.Reflection.FieldInfo gsField = typeof(TextRenderInfo).GetField("gs", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         }
 
         public static List<string> GetTextLinesSurroundedByRectangle(IEnumerable<CharBox> cbs, System.Drawing.RectangleF r, TextAutoInsertSpace textAutoInsertSpace)
@@ -177,12 +193,7 @@ namespace Cliver.PdfDocumentParser
         public class CharBox : Page.CharBox
         {
             //public bool AutoInserted = false;
-            public Font Font;
-        }
-        public class Font
-        {
-            public string Name;
-            public float Size;
+            public string FontName;
         }
     }
 }
