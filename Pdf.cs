@@ -106,16 +106,24 @@ namespace Cliver.PdfDocumentParser
             {
                 base.RenderText(renderInfo);
 
-                //GraphicsState gs = (GraphicsState)gsField.GetValue(renderInfo);//expensive???
-                //Font font = new Font { Name = string.Join(", ", gs.Font.FullFontName[0]), Size = gs.FontSize };
+                var f = renderInfo.GetFont();
+                Font font = new Font { Name = f.PostscriptFontName, };
 
                 List<CharBox> cbs = new List<CharBox>();
                 IList<TextRenderInfo> cris = renderInfo.GetCharacterRenderInfos();
                 foreach (TextRenderInfo cri in cris)
                 {
-                    Vector baseLeft = cri.GetBaseline().GetStartPoint();
+                    Vector baseLeft = cri.GetBaseline().GetStartPoint();//(!)basic positioning point is char's baseLine, not ascentLine
                     Vector topRight = cri.GetAscentLine().GetEndPoint();
-                    float x = baseLeft[Vector.I1];
+
+                    var r = cri.GetDescentLine().GetBoundingRectange();
+                    var r1 = cri.GetBaseline().GetBoundingRectange();
+                    var r2 = cri.GetAscentLine().GetBoundingRectange();
+                    float x = MathRoutines.Min(r.X, r1.X, r2.X);
+
+
+
+                    //float x = baseLeft[Vector.I1];
                     float y = topRight[Vector.I2];
                     CharBox cb = new CharBox
                     {
@@ -123,17 +131,16 @@ namespace Cliver.PdfDocumentParser
                         R = new System.Drawing.RectangleF
                         {
                             X = x - pageSize.X,
-                            Y = pageSize.Height + pageSize.Y - y,//(!)basic positioning point is char's baseLine, not ascentLine
+                            Y = pageSize.Height + pageSize.Y - y,
                             Width = topRight[Vector.I1] - x,
                             Height = y - baseLeft[Vector.I2],
                         },
-                        //Font = font
+                        Font = font,
                     };
                     cbs.Add(cb);
                 }
                 CharBoxs.AddRange(cbs);
             }
-            static System.Reflection.FieldInfo gsField = typeof(TextRenderInfo).GetField("gs", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         }
 
         public static List<string> GetTextLinesSurroundedByRectangle(IEnumerable<CharBox> cbs, System.Drawing.RectangleF r, TextAutoInsertSpace textAutoInsertSpace)
