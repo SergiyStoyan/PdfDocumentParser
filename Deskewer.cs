@@ -88,7 +88,7 @@ namespace Cliver.PdfDocumentParser
             CvInvoke.BitwiseNot(image2, image2);//to negative
             //CvInvoke.GaussianBlur(image2, image2, new Size((int)(9f / Settings.Constants.Pdf2ImageResolutionRatio), (int)(9f / Settings.Constants.Pdf2ImageResolutionRatio)), 0);//remove small spots
             CvInvoke.Threshold(image2, image2, 125, 255, ThresholdType.Otsu | ThresholdType.Binary);
-            Mat se = CvInvoke.GetStructuringElement(ElementShape.Rectangle, structuringElementSize, new Point(-1, -1));
+            Mat se = CvInvoke.GetStructuringElement(MorphShapes.Rectangle, structuringElementSize, new Point(-1, -1));
             CvInvoke.Dilate(image2, image2, se, new Point(-1, -1), 1, BorderType.Constant, CvInvoke.MorphologyDefaultBorderValue);
             //Emgu.CV.CvInvoke.Erode(image, image, null, new Point(-1, -1), 1, BorderType.Constant, CvInvoke.MorphologyDefaultBorderValue);
 
@@ -170,7 +170,7 @@ namespace Cliver.PdfDocumentParser
                 //CvInvoke.Blur(image2, image2, new Size(3, 3), new Point(0, 0));
                 CvInvoke.GaussianBlur(image2, image2, new Size(25, 25), 5);//remove small spots
                 CvInvoke.Threshold(image2, image2, 125, 255, ThresholdType.Otsu | ThresholdType.Binary);
-                Mat se = CvInvoke.GetStructuringElement(ElementShape.Rectangle, new Size(5, 5), new Point(-1, -1));
+                Mat se = CvInvoke.GetStructuringElement(MorphShapes.Rectangle, new Size(5, 5), new Point(-1, -1));
                 CvInvoke.Dilate(image2, image2, se, new Point(-1, -1), 1, BorderType.Constant, CvInvoke.MorphologyDefaultBorderValue);
                 //CvInvoke.Erode(image2, image2, se, new Point(-1, -1), 5, BorderType.Constant, CvInvoke.MorphologyDefaultBorderValue);
 
