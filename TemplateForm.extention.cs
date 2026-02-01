@@ -189,13 +189,19 @@ namespace Cliver.PdfDocumentParser
                 Message.Exclaim("No file is open.");
                 return;
             }
-            //TextForm tf = new TextForm("Pdf Entity Text", PdfTextExtractor.GetTextFromPage(pages.PdfReader, currentPageI), false);
-            string t = Page.GetText(
+            //string t = Page.GetText(
+            //    pages[currentPageI].PdfCharBoxs,
+            //    new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpace_Threshold.Value, IgnoreSourceSpaces = textAutoInsertSpace_IgnoreSourceSpaces.Checked /*, Representative//default*/},
+            //    new CharFilter { MinWidth = (float)CharSizeFilterMinWidth.Value, MaxWidth = (float)CharSizeFilterMaxWidth.Value, MinHeight = (float)CharSizeFilterMinHeight.Value, MaxHeight = (float)CharSizeFilterMaxHeight.Value }
+            //);
+            //TextForm tf = new TextForm("Pdf Entity Text", t, false);
+            string t = Page.GetText2(
                 pages[currentPageI].PdfCharBoxs,
                 new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpace_Threshold.Value, IgnoreSourceSpaces = textAutoInsertSpace_IgnoreSourceSpaces.Checked /*, Representative//default*/},
-                new CharFilter { MinWidth = (float)CharSizeFilterMinWidth.Value, MaxWidth = (float)CharSizeFilterMaxWidth.Value, MinHeight = (float)CharSizeFilterMinHeight.Value, MaxHeight = (float)CharSizeFilterMaxHeight.Value }
+                new CharFilter { MinWidth = (float)CharSizeFilterMinWidth.Value, MaxWidth = (float)CharSizeFilterMaxWidth.Value, MinHeight = (float)CharSizeFilterMinHeight.Value, MaxHeight = (float)CharSizeFilterMaxHeight.Value },
+                out List<(int start, int length, iTextSharp.text.pdf.DocumentFont font)> fonts
             );
-            TextForm tf = new TextForm("Pdf Entity Text", t, false);
+            TextForm tf = new TextForm("Pdf Entity Text", t, false, fonts);
             tf.ShowDialog();
         }
 

@@ -106,18 +106,17 @@ namespace Cliver.PdfDocumentParser
             {
                 base.RenderText(renderInfo);
 
-                string fontName = renderInfo.GetFont().PostscriptFontName;
-
+                //CharBoxs.Add(newCharBox(renderInfo));
                 IList<TextRenderInfo> cris = renderInfo.GetCharacterRenderInfos();
                 foreach (TextRenderInfo cri in cris)
+                    CharBoxs.Add(newCharBox(cri));
+                CharBox newCharBox(TextRenderInfo cri)
                 {
-                    //if(cris.Count>1)
-                    //    thr
                     Vector baseLeft = cri.GetBaseline().GetStartPoint();
                     Vector topRight = cri.GetAscentLine().GetEndPoint();
                     float x = baseLeft[Vector.I1];
                     float y = topRight[Vector.I2];
-                    CharBox cb = new CharBox
+                    return new CharBox
                     {
                         Char = cri.GetText(),
                         R = new System.Drawing.RectangleF
@@ -127,28 +126,9 @@ namespace Cliver.PdfDocumentParser
                             Width = topRight[Vector.I1] - x,
                             Height = y - baseLeft[Vector.I2],
                         },
-                        FontName = fontName,
+                        Font = cri.GetFont()
                     };
-                    CharBoxs.Add(cb);
                 }
-
-                //Vector baseLeft = renderInfo.GetBaseline().GetStartPoint();
-                //Vector topRight = renderInfo.GetAscentLine().GetEndPoint();
-                //float x = baseLeft[Vector.I1];
-                //float y = topRight[Vector.I2];
-                //CharBox cb = new CharBox
-                //{
-                //    Char = renderInfo.GetText(),
-                //    R = new System.Drawing.RectangleF
-                //    {
-                //        X = x - pageSize.X,
-                //        Y = pageSize.Height + pageSize.Y - y,//(!)basic positioning point is char's baseLine, not ascentLine
-                //        Width = topRight[Vector.I1] - x,
-                //        Height = y - baseLeft[Vector.I2],
-                //    },
-                //    FontName = fontName,
-                //};
-                //CharBoxs.Add(cb);
             }
         }
 
@@ -193,7 +173,8 @@ namespace Cliver.PdfDocumentParser
         public class CharBox : Page.CharBox
         {
             //public bool AutoInserted = false;
-            public string FontName;
+            //public string FontName;
+            public DocumentFont Font;
         }
     }
 }
