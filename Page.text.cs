@@ -251,6 +251,51 @@ namespace Cliver.PdfDocumentParser
             return string.Join("\r\n", GetTextLines(cbs, textAutoInsertSpace, charFilter));
         }
 
+        public static List<(string Text, iTextSharp.text.pdf.DocumentFont Font)> GetTextLines2(IEnumerable<Pdf.CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace, CharFilter charFilter)
+        {
+            List<(string Text, iTextSharp.text.pdf.DocumentFont Font)> ls = new List<(string Text, iTextSharp.text.pdf.DocumentFont Font)>();
+            (string Text, iTextSharp.text.pdf.DocumentFont Font) l = (string.Empty, null);
+            foreach (var r in GetLines(cbs, textAutoInsertSpace, charFilter))
+                foreach (var cb in r.CharBoxs)
+                {
+                    if (l.Font != cb.Font)
+                    {
+                        ls.Add(l);
+                        l = (string.Empty, cb.Font);
+                    }
+                    l.Text += cb.Char;
+                }
+            ls.Add(l);
+            return ls;
+        }
+
+        public static string GetText2(IEnumerable<Pdf.CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace, CharFilter charFilter, out List<(int start, int length, iTextSharp.text.pdf.DocumentFont font)> fonts)
+        {
+            StringBuilder sb = new StringBuilder();
+            StringBuilder ssb = new StringBuilder();
+            fonts = new List<(int start, int length, iTextSharp.text.pdf.DocumentFont font)>();
+            iTextSharp.text.pdf.DocumentFont font = null;
+            foreach (var r in GetLines(cbs, textAutoInsertSpace, charFilter))
+            {
+                foreach (var cb in r.CharBoxs)
+                {
+                    if (font != cb.Font)
+                    {
+                        fonts.Add((sb.Length, ssb.Length, font));
+                        sb.Append(ssb);
+                        ssb.Clear();
+                        font = cb.Font;
+                    }
+                    ssb.Append(cb.Char);
+                }
+                ssb.Append("\r\n");
+            }
+            fonts.Add((sb.Length, ssb.Length, font));
+            sb.Append(ssb);
+            fonts.RemoveAll(a => a.font == null);
+            return sb.ToString();
+        }
+
         internal static void AdjustBorders<CharBoxT>(List<Line<CharBoxT>> ls, RectangleF ar) where CharBoxT : CharBox, new()
         {
             for (int i = 0; i < ls.Count; i++)

@@ -467,7 +467,7 @@
       <Version>4.2.4</Version>
     </PackageReference>
     <PackageReference Include="iTextSharp">
-      <Version>5.5.13.4</Version>
+      <Version>5.5.13.5</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp">
       <Version>4.10.0-2.final</Version>
