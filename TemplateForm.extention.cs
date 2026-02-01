@@ -199,7 +199,7 @@ namespace Cliver.PdfDocumentParser
                 pages[currentPageI].PdfCharBoxs,
                 new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpace_Threshold.Value, IgnoreSourceSpaces = textAutoInsertSpace_IgnoreSourceSpaces.Checked /*, Representative//default*/},
                 new CharFilter { MinWidth = (float)CharSizeFilterMinWidth.Value, MaxWidth = (float)CharSizeFilterMaxWidth.Value, MinHeight = (float)CharSizeFilterMinHeight.Value, MaxHeight = (float)CharSizeFilterMaxHeight.Value },
-                out List<(int start, int length, iTextSharp.text.pdf.DocumentFont font)> fonts
+                out List<(int start, int length, iText.Kernel.Font.PdfFont font)> fonts
             );
             TextForm tf = new TextForm("Pdf Entity Text", t, false, fonts);
             tf.ShowDialog();

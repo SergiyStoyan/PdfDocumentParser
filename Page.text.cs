@@ -251,10 +251,10 @@ namespace Cliver.PdfDocumentParser
             return string.Join("\r\n", GetTextLines(cbs, textAutoInsertSpace, charFilter));
         }
 
-        public static List<(string Text, iTextSharp.text.pdf.DocumentFont Font)> GetTextLines2(IEnumerable<Pdf.CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace, CharFilter charFilter)
+        public static List<(string Text, iText.Kernel.Font.PdfFont Font)> GetTextLines2(IEnumerable<Pdf.CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace, CharFilter charFilter)
         {
-            List<(string Text, iTextSharp.text.pdf.DocumentFont Font)> ls = new List<(string Text, iTextSharp.text.pdf.DocumentFont Font)>();
-            (string Text, iTextSharp.text.pdf.DocumentFont Font) l = (string.Empty, null);
+            List<(string Text, iText.Kernel.Font.PdfFont Font)> ls = new List<(string Text, iText.Kernel.Font.PdfFont Font)>();
+            (string Text, iText.Kernel.Font.PdfFont Font) l = (string.Empty, null);
             foreach (var r in GetLines(cbs, textAutoInsertSpace, charFilter))
                 foreach (var cb in r.CharBoxs)
                 {
@@ -269,12 +269,12 @@ namespace Cliver.PdfDocumentParser
             return ls;
         }
 
-        public static string GetText2(IEnumerable<Pdf.CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace, CharFilter charFilter, out List<(int start, int length, iTextSharp.text.pdf.DocumentFont font)> fonts)
+        public static string GetText2(IEnumerable<Pdf.CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace, CharFilter charFilter, out List<(int start, int length, iText.Kernel.Font.PdfFont font)> fonts)
         {
             StringBuilder sb = new StringBuilder();
             StringBuilder ssb = new StringBuilder();
-            fonts = new List<(int start, int length, iTextSharp.text.pdf.DocumentFont font)>();
-            iTextSharp.text.pdf.DocumentFont font = null;
+            fonts = new List<(int start, int length, iText.Kernel.Font.PdfFont font)>();
+            iText.Kernel.Font.PdfFont font = null;
             foreach (var r in GetLines(cbs, textAutoInsertSpace, charFilter))
             {
                 foreach (var cb in r.CharBoxs)

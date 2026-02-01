@@ -13,7 +13,7 @@ namespace Cliver.PdfDocumentParser
 {
     public partial class TextForm : Form
     {
-        public TextForm(string caption, string t, bool edit, List<(int start, int length, iTextSharp.text.pdf.DocumentFont font)> fonts = null)
+        public TextForm(string caption, string t, bool edit, List<(int start, int length, iText.Kernel.Font.PdfFont font)> fonts = null)
         {
             InitializeComponent();
             Icon = Win.AssemblyRoutines.GetAppIcon();
@@ -34,7 +34,7 @@ namespace Cliver.PdfDocumentParser
                 var ms = Regex.Matches(t, "\r"); //textBox eats \r's so we need to adjust positions
                 int rCounter = 0;
                 int i = 0;
-                foreach ((int start, int length, iTextSharp.text.pdf.DocumentFont font) in fonts)
+                foreach ((int start, int length, iText.Kernel.Font.PdfFont font) in fonts)
                 {
                     int start1 = start - rCounter;
                     int length1 = length;
@@ -56,7 +56,7 @@ namespace Cliver.PdfDocumentParser
                             break;
                     }
 
-                    var fsn = Regex.Replace(font.PostscriptFontName, @".*\+|\,.*", "");
+                    var fsn = Regex.Replace(font.GetFontProgram().GetFontNames().GetFontName(), @".*\+|\,.*", "");
                     if (!fsns2fn.TryGetValue(fsn, out string fn))
                     {
                         errors.Add("Font " + fsn + " is not found.");
@@ -75,7 +75,7 @@ namespace Cliver.PdfDocumentParser
         }
 
 
-        //public TextForm(string caption, List<(string Text, iTextSharp.text.pdf.DocumentFont Font)> t, bool edit)
+        //public TextForm(string caption, List<(string Text, iText.Kernel.Font.PdfFont Font)> t, bool edit)
         //{
         //    InitializeComponent();
         //    Icon = Win.AssemblyRoutines.GetAppIcon();
@@ -85,7 +85,7 @@ namespace Cliver.PdfDocumentParser
         //    panel.Visible = edit;
         //    textBox.Text = t;
 
-        //        foreach ((string Text, iTextSharp.text.pdf.DocumentFont Font) in t)
+        //        foreach ((string Text, iText.Kernel.Font.PdfFont Font) in t)
         //        {
         //            textBox.Select(start, end - start);
         //            textBox.SelectionFont = new System.Drawing.Font(f.Familyname, textBox.Font.Size);
