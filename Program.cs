@@ -35,6 +35,8 @@ namespace Cliver.PdfDocumentParser
 {
     public class Program
     {
+        public static MessageBoxOnTop MessageOnTop = new MessageBoxOnTop();
+
         [DllImport("Shcore.dll")]
         static extern int SetProcessDpiAwareness(int PROCESS_DPI_AWARENESS);
 
@@ -55,7 +57,7 @@ namespace Cliver.PdfDocumentParser
             {
                 Exception e = (Exception)args.ExceptionObject;
                 Log.Error("Unhandled exception!", e);
-                Message.Error("Unhandled exception!", e);
+                MessageOnTop.Error("Unhandled exception!", e);
                 Environment.Exit(0);
             };
 
@@ -68,7 +70,6 @@ namespace Cliver.PdfDocumentParser
 
             //Log.Initialize(Log.Mode.ONLY_LOG, Log.CompanyCommonDataDir, true);//must be called from the entry projects
             //Log.ShowDeleteOldLogsDialog = false;//must be called from the entry projects
-            //Message.TopMost = true;//must be called from the entry projects
             //Config.Reload();//must be called from the entry projects
         }
 

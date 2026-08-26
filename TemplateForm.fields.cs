@@ -45,7 +45,7 @@ namespace Cliver.PdfDocumentParser
             fields.DataError += delegate (object sender, DataGridViewDataErrorEventArgs e)
             {
                 DataGridViewRow r = fields.Rows[e.RowIndex];
-                Message.Error("Field[row=" + r.Index + "] has unacceptable value of " + fields.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message, this);
+                this.Error("Field[row=" + r.Index + "] has unacceptable value of " + fields.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message);
             };
 
             fields.UserDeletingRow += delegate (object sender, DataGridViewRowCancelEventArgs e)
@@ -228,7 +228,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 catch (Exception ex)
                 {
-                    Message.Error2(ex, this);
+                    this.Error2(ex);
                 }
             };
 
@@ -261,7 +261,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 catch (Exception ex)
                 {
-                    Message.Error2(ex, this);
+                    this.Error2(ex);
                     e.Cancel = true;
                 }
             };
@@ -302,7 +302,7 @@ namespace Cliver.PdfDocumentParser
                 catch (Exception ex)
                 {
                     Log.Error(ex);
-                    Message.Error(ex, this);
+                    this.Error(ex);
                 }
             };
 
@@ -473,7 +473,7 @@ namespace Cliver.PdfDocumentParser
                 //    if ((r.Tag as Template.Field.PdfText)?.ColumnOfTable == f0.Name)
                 //        cloningFieldRows.Add(r);
                 if (f0.ColumnOfTable != null
-                    && Message.YesNo("This field is a column of table " + f0.ColumnOfTable + ".\r\nWould you like new definions to be created for all the column fields of the table?", this)
+                    && this.YesNo("This field is a column of table " + f0.ColumnOfTable + ".\r\nWould you like new definions to be created for all the column fields of the table?")
                     )
                 {
                     foreach (DataGridViewRow r in fields.Rows)
@@ -502,7 +502,7 @@ namespace Cliver.PdfDocumentParser
             catch (Exception e)
             {
                 Log.Error(e);
-                Message.Error(e, this);
+                this.Error(e);
             }
             finally
             {
@@ -527,7 +527,7 @@ namespace Cliver.PdfDocumentParser
                         unique = false;
                         break;
                     }
-                if (unique && !Message.YesNo("This field '" + f0.Name + "' will be removed completely because it is the last definition for it.\r\nProceed?", this, Message.Icons.Exclamation))
+                if (unique && !this.YesNo("This field '" + f0.Name + "' will be removed completely because it is the last definition for it.\r\nProceed?", Message.Icons.Exclamation))
                 {
                     //Message.Inform("This field definition cannot be deleted because it is the last of the field.");
                     return;
@@ -537,7 +537,7 @@ namespace Cliver.PdfDocumentParser
             catch (Exception e)
             {
                 Log.Error(e);
-                Message.Error(e, this);
+                this.Error(e);
             }
             finally
             {
@@ -570,7 +570,7 @@ namespace Cliver.PdfDocumentParser
             catch (Exception e)
             {
                 Log.Error(e);
-                Message.Error(e, this);
+                this.Error(e);
             }
             finally
             {
@@ -603,7 +603,7 @@ namespace Cliver.PdfDocumentParser
             catch (Exception e)
             {
                 Log.Error(e);
-                Message.Error(e, this);
+                this.Error(e);
             }
             finally
             {

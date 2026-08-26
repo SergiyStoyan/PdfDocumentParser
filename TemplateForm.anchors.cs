@@ -90,7 +90,7 @@ namespace Cliver.PdfDocumentParser
             anchors.DataError += delegate (object sender, DataGridViewDataErrorEventArgs e)
             {
                 DataGridViewRow r = anchors.Rows[e.RowIndex];
-                Message.Error("Anchor[Id=" + r.Cells["Id3"].Value + "] has unacceptable value of " + anchors.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message, this);
+                this.Error("Anchor[Id=" + r.Cells["Id3"].Value + "] has unacceptable value of " + anchors.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message);
             };
 
             anchors.UserDeletedRow += delegate (object sender, DataGridViewRowEventArgs e)
@@ -246,7 +246,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 catch (Exception ex)
                 {
-                    Message.Error2(ex, this);
+                    this.Error2(ex);
                 }
             };
         }

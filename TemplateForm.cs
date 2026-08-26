@@ -214,7 +214,7 @@ namespace Cliver.PdfDocumentParser
 
                                 if (pages[currentPageI].DetectedImageScale >= 0 && pages[currentPageI].DetectedImageScale < 1 && a.Id == GetTemplateFromUI(false).ScalingAnchorId)
                                 {
-                                    Message.Exclaim("When the detected image scale is not 1, changing coordinates of the scaling anchor must not be done. Either switch off scaling by anchor and reload the page or open a page where the detected image scale is 1.", this);
+                                    this.Exclaim("When the detected image scale is not 1, changing coordinates of the scaling anchor must not be done. Either switch off scaling by anchor and reload the page or open a page where the detected image scale is 1.");
                                     break;
                                 }
 
@@ -341,7 +341,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 catch (Exception ex)
                 {
-                    Message.Error2(ex, this);
+                    this.Error2(ex);
                 }
             };
 
@@ -380,7 +380,7 @@ namespace Cliver.PdfDocumentParser
                     {
                         string m = "File '" + testFile.Text + "' does not exist!";
                         Log.Error(m);
-                        Message.Error(m, this);
+                        this.Error(m);
                         return;
                     }
 
@@ -392,7 +392,7 @@ namespace Cliver.PdfDocumentParser
                 catch (Exception ex)
                 {
                     Log.Error(ex);
-                    Message.Error(ex, this);
+                    this.Error(ex);
                 }
             };
 
@@ -534,7 +534,7 @@ namespace Cliver.PdfDocumentParser
             }
             catch (Exception ex)
             {
-                Message.Error(ex, this);
+                this.Error(ex);
             }
             bitmapPreparationForm.Show();
             bitmapPreparationForm.Activate();

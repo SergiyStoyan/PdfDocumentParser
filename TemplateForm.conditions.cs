@@ -22,7 +22,7 @@ namespace Cliver.PdfDocumentParser
             conditions.DataError += delegate (object sender, DataGridViewDataErrorEventArgs e)
             {
                 DataGridViewRow r = anchors.Rows[e.RowIndex];
-                Message.Error("Condition[row=" + r.Index + "] has unacceptable value of " + conditions.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message, this);
+                this.Error("Condition[row=" + r.Index + "] has unacceptable value of " + conditions.Columns[e.ColumnIndex].HeaderText + ":\r\n" + e.Exception.Message);
             };
 
             conditions.UserDeletingRow += delegate (object sender, DataGridViewRowCancelEventArgs e)
@@ -84,7 +84,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 catch (Exception ex)
                 {
-                    Message.Error2(ex, this);
+                    this.Error2(ex);
                 }
             };
 
@@ -119,14 +119,14 @@ namespace Cliver.PdfDocumentParser
                 if (r0.Tag == null)
                     return;
                 Template.Condition c0 = (Template.Condition)r0.Tag;
-                if (!Message.YesNo("Proceed with removing condition '" + c0.Name + "'?", this))
+                if (!this.YesNo("Proceed with removing condition '" + c0.Name + "'?"))
                     return;
                 conditions.Rows.Remove(r0);
             }
             catch (Exception e)
             {
                 Log.Error(e);
-                Message.Error(e, this);
+                this.Error(e);
             }
             finally
             {
@@ -153,7 +153,7 @@ namespace Cliver.PdfDocumentParser
             catch (Exception e)
             {
                 Log.Error(e);
-                Message.Error(e, this);
+                this.Error(e);
             }
             finally
             {
@@ -180,7 +180,7 @@ namespace Cliver.PdfDocumentParser
             catch (Exception e)
             {
                 Log.Error(e);
-                Message.Error(e, this);
+                this.Error(e);
             }
             finally
             {

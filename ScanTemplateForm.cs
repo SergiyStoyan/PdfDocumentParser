@@ -196,7 +196,7 @@ namespace Cliver.PdfDocumentParser
             }
             catch (Exception ex)
             {
-                Message.Error2(ex, this);
+                this.Error2(ex);
                 return false;
             }
         }

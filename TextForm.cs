@@ -70,7 +70,7 @@ namespace Cliver.PdfDocumentParser
             Load += (s, e) =>
             {
                 if (errors.Count > 0)
-                    Message.Error(string.Join("\r\n", errors), this);
+                    this.Error(string.Join("\r\n", errors));
             };
         }
 

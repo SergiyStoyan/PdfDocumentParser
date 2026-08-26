@@ -186,7 +186,7 @@ namespace Cliver.PdfDocumentParser
         {
             if (pages == null)
             {
-                Message.Exclaim("No file is open.");
+                this.Exclaim("No file is open.");
                 return;
             }
             //string t = Page.GetText(
@@ -209,7 +209,7 @@ namespace Cliver.PdfDocumentParser
         {
             if (pages == null)
             {
-                Message.Exclaim("No file is open.");
+                this.Exclaim("No file is open.");
                 return;
             }
             pages.ActiveTemplate = GetTemplateFromUI(false);
@@ -236,7 +236,7 @@ namespace Cliver.PdfDocumentParser
                 }
                 catch (Exception ex)
                 {
-                    Message.Error2("Updating template:", ex, this);
+                    this.Error2("Updating template:", ex);
                 }
         }
 
@@ -256,7 +256,7 @@ namespace Cliver.PdfDocumentParser
             }
             catch (Exception ex)
             {
-                Message.Error2(ex, this);
+                this.Error2(ex);
             }
         }
 
@@ -269,7 +269,7 @@ namespace Cliver.PdfDocumentParser
             }
             catch (Exception ex)
             {
-                Message.Error2(ex, this);
+                this.Error2(ex);
             }
         }
 
@@ -355,7 +355,7 @@ namespace Cliver.PdfDocumentParser
                                 if (a.Id != t.ScalingAnchorId)
                                 {
                                     if (removeNotLinkedAnchors == null)
-                                        removeNotLinkedAnchors = Message.YesNo("The template contains not linked anchor[s]. Remove them?", this);
+                                        removeNotLinkedAnchors = this.YesNo("The template contains not linked anchor[s]. Remove them?");
                                     if (removeNotLinkedAnchors == true)
                                         continue;
                                 }

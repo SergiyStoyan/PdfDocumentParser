@@ -254,7 +254,7 @@ namespace Cliver.PdfDocumentParser
             catch (Exception ex)
             {
                 Log.Error(ex);
-                Message.Error(ex, this);
+                this.Error(ex);
             }
             return null;
         }
@@ -384,7 +384,7 @@ namespace Cliver.PdfDocumentParser
             catch (Exception e)
             {
                 Log.Error(e);
-                Message.Error(e, this);
+                this.Error(e);
             }
             finally
             {
@@ -420,7 +420,7 @@ namespace Cliver.PdfDocumentParser
             }
             else
             {
-                Message.Error("Page must be a number.", this);
+                this.Error("Page must be a number.");
                 tCurrentPage.Text = currentPageI.ToString();
             }
         }

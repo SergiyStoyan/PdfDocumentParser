@@ -67,12 +67,12 @@ namespace Cliver.PdfDocumentParser
                 Settings.Appearance.Save();
                 Settings.Constants = constants;
                 Settings.Constants.Save();
-                Message.Warning("Some settings may require restarting the application in order to come into effect.", this);
+                this.Warning("Some settings may require restarting the application in order to come into effect.");
                 Close();
             }
             catch (Exception ex)
             {
-                Message.Error2(ex, this);
+                this.Error2(ex);
             }
         }
 
