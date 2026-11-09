@@ -449,7 +449,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CliverRoutines">
-      <Version>6.62.0.9376</Version>
+      <Version>6.63.0.10518</Version>
     </PackageReference>
     <PackageReference Include="CliverWinRoutines">
       <Version>3.0.1.594</Version>
