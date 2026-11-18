@@ -18,7 +18,7 @@ namespace Cliver.PdfDocumentParser
     /// <summary>
     /// Tool for hot-compiling assembly from C# code string
     /// </summary>
-    public class Compiler
+    static public class Compiler
     {
         [Serializable]
         public class Error
