@@ -45,9 +45,10 @@ namespace Cliver.SampleParser
                 f.ShowDialog();
             }
             catch (Exception ex)
-            {
-                Win.LogMessage.Error(ex);
-            }
+			{
+				Log.Error(ex);
+				Message.Error(ex);
+			}
         }
 
         private void bOK_Click(object sender, EventArgs e)

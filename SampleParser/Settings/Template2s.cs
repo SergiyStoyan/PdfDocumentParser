@@ -22,7 +22,7 @@ namespace Cliver.SampleParser
     {
         public List<Template2> Template2s = new List<Template2>();
 
-        protected override void UnsupportedFormatHandler(Exception deserializingException)
+        protected override void __UnsupportedFormatHandler(Exception deserializingException)
         {
             try
             {
@@ -68,7 +68,7 @@ namespace Cliver.SampleParser
                         }
                     o["__TypeVersion"] = 210701;
                     __Info.WriteStorageFileAsJObject(o, false);
-                    Reload();
+                    __Reload();
                     return;
                 }
                 if (__TypeVersion < 210720)
@@ -77,7 +77,7 @@ namespace Cliver.SampleParser
                     s = Regex.Replace(s, Regex.Escape("Cliver.HawkeyeQuoteParser.DocumentParsers"), "Cliver.HawkeyeQuoteParser.Pdf.DocumentParsers", RegexOptions.Singleline);
                     __Info.UpdateTypeVersionInStorageFileString(210720, ref s);
                     __Info.WriteStorageFileAsString(s);
-                    Reload();
+                    __Reload();
                     return;
                 }
                 if (__TypeVersion < 210820)//added new fields
@@ -85,15 +85,15 @@ namespace Cliver.SampleParser
                     string s = __Info.ReadStorageFileAsString();
                     __Info.UpdateTypeVersionInStorageFileString(210820, ref s);
                     __Info.WriteStorageFileAsString(s);
-                    Reload();
+                    __Reload();
                     return;
                 }
                 if (__TypeVersion < 210824)//migration of fields
                 {
                     if (!Message.YesNo("There is no complete conversion from the type version " + __TypeVersion + ". Some data may be lost. Would you like to convert to the current format?", null, Message.Icons.Exclamation))
                         throw new Exception("There is no default conversion from the given type version.");
-                    Save();
-                    Reload();
+                    __Save();
+                    __Reload();
                     return;
                 }
                 if (__TypeVersion < 210825)//renamed fields
@@ -106,7 +106,7 @@ namespace Cliver.SampleParser
                         }
                     o["__TypeVersion"] = 210825;
                     __Info.WriteStorageFileAsJObject(o, false);
-                    Reload();
+                    __Reload();
                     return;
                 }
 
@@ -122,11 +122,11 @@ namespace Cliver.SampleParser
             }
         }
 
-        protected override void Loaded()
+        protected override void __Loaded()
         {
         }
 
-        protected override void Saving()
+        protected override void __Saving()
         {
             Template2s.RemoveAll(x => string.IsNullOrWhiteSpace(x.Template.Name));
         }
@@ -151,7 +151,7 @@ namespace Cliver.SampleParser
         public delegate void OnTouchedChanged();
         public event OnTouchedChanged TouchedChanged;
 
-        protected override void Saved()
+        protected override void __Saved()
         {
             touched = false;
             TouchedChanged?.BeginInvoke(null, null);

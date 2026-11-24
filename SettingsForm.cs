@@ -64,9 +64,9 @@ namespace Cliver.PdfDocumentParser
                 constants.InitialSearchRectangleMargin = (int)InitialSearchRectangleMargin.Value;
 
                 Settings.Appearance = appearance;
-                Settings.Appearance.Save();
+                Settings.Appearance.__Save();
                 Settings.Constants = constants;
-                Settings.Constants.Save();
+                Settings.Constants.__Save();
                 this.Warning("Some settings may require restarting the application in order to come into effect.");
                 Close();
             }
@@ -78,8 +78,8 @@ namespace Cliver.PdfDocumentParser
 
         private void bReset_Click(object sender, EventArgs e)
         {
-            Settings.Appearance.Reset();
-            Settings.Constants.Reset();
+            Settings.Appearance.__Reset();
+            Settings.Constants.__Reset();
             load_settings();
         }
 
