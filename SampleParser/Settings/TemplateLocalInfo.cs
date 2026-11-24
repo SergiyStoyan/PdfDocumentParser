@@ -66,16 +66,16 @@ namespace Cliver.SampleParser
             var deletedTNs = TemplateNames2Info.Keys.Where(n => Settings.Template2s.Template2s.Where(a => a.Template.Name == n).FirstOrDefault() == null).ToList();
             foreach (string n in deletedTNs)
                 TemplateNames2Info.Remove(n);
-            Save();
+            __Save();
         }
 
-        protected override void Loaded()
+        protected override void __Loaded()
         {
             if (TemplateNames2Info == null)
                 TemplateNames2Info = new Dictionary<string, Info>();
         }
 
-        protected override void Saving()
+        protected override void __Saving()
         {
         }
     }

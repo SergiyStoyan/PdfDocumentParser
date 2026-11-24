@@ -76,7 +76,7 @@ namespace Cliver.SampleParser
                 g2.OutputFolder = OutputFolder.Text;
 
                 Settings.General = g2;
-                Settings.General.Save();
+                Settings.General.__Save();
 
                 Close();
             }
@@ -88,7 +88,7 @@ namespace Cliver.SampleParser
 
         private void bReset_Click(object sender, EventArgs e)
         {
-            Settings.General.Reset();
+            Settings.General.__Reset();
             load_settings();
         }
 

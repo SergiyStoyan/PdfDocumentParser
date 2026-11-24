@@ -23,12 +23,12 @@ namespace Cliver.SampleParser
             progress(0, 0);
             if (string.IsNullOrWhiteSpace(Settings.General.InputFolder))
             {
-                Win.LogMessage.Error("Input Folder is not specified.");
+               Message.Error("Input Folder is not specified.");
                 return;
             }
             if (!Directory.Exists(Settings.General.InputFolder))
             {
-                Win.LogMessage.Error("Input folder '" + Settings.General.InputFolder + "' does not exist.");
+                Message.Error("Input folder '" + Settings.General.InputFolder + "' does not exist.");
                 return;
             }
 
@@ -43,7 +43,7 @@ namespace Cliver.SampleParser
             }).ToList();
             if (active_templates.Count < 1)
             {
-                Win.LogMessage.Error("There is no active template!");
+                Message.Error("There is no active template!");
                 return;
             }
 

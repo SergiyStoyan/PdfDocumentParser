@@ -180,8 +180,8 @@ namespace Cliver.SampleParser
                     }
                 }
                 catch (Exception ex)
-                {
-                    Win.LogMessage.Error(ex);
+                {Log.Error(ex);
+                    Message.Error(ex);
                 }
             };
 
@@ -384,12 +384,13 @@ namespace Cliver.SampleParser
                         throw new Exception("Template name '" + t.Template.Name + "' is duplicated!");
                     Settings.Template2s.Template2s.Add(t);
                 }
-                Settings.Template2s.Save();
+                Settings.Template2s.__Save();
                 return true;
             }
             catch (Exception e)
             {
-                Win.LogMessage.Error(e);
+                Log.Error(e);
+                Message.Error(e);
                 return false;
             }
         }
@@ -419,7 +420,8 @@ namespace Cliver.SampleParser
             }
             catch (Exception ex)
             {
-                Win.LogMessage.Error(ex);
+                Log.Error(ex);
+                Message.Error(ex);
             }
         }
 
@@ -427,7 +429,7 @@ namespace Cliver.SampleParser
         {
             if (processorThread != null && processorThread.IsAlive)
             {
-                if (!Win.LogMessage.AskYesNo("Processing is running. Would you like to abort it and restart?", true))
+                if (!Message.YesNo("Processing is running. Would you like to abort it and restart?"))
                     return;
                 while (processorThread.IsAlive)
                 {
@@ -472,7 +474,8 @@ namespace Cliver.SampleParser
                     }
                     catch (Exception ex)
                     {
-                        Win.LogMessage.Error(ex);
+                        Log.Error(ex);
+                        Message.Error(ex);
                     }
                     finally
                     {
@@ -494,7 +497,7 @@ namespace Cliver.SampleParser
         {
             if (processorThread != null && processorThread.IsAlive)
             {
-                if (!Win.LogMessage.AskYesNo("Processing is running. Would you like to abort it?", true))
+                if (!Message.YesNo("Processing is running. Would you like to abort it?"))
                     return;
             }
             Close();
