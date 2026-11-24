@@ -33,7 +33,7 @@ namespace Cliver.PdfDocumentParser
         //[Newtonsoft.Json.JsonIgnore]
         //public float Image2PdfResolutionRatio { get; private set; }
 
-        protected override void Loaded()
+        protected override void __Loaded()
         {
             Pdf2ImageResolutionRatio = (float)PdfResolution / PdfPageImageResolution;
             //Image2PdfResolutionRatio = (float)PdfPageImageResolution / PdfResolution;
@@ -52,7 +52,7 @@ namespace Cliver.PdfDocumentParser
                 };
         }
 
-        protected override void Saving()
+        protected override void __Saving()
         {
         }
     }
