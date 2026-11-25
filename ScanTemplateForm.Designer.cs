@@ -33,7 +33,7 @@
             this.bApply = new System.Windows.Forms.Button();
             this.defaultBitmapPreprocessorClassDefinitions = new System.Windows.Forms.ComboBox();
             this.bAddClassDefinition = new System.Windows.Forms.Button();
-            this.bitmapPreprocessorClassDefinition = new ICSharpCode.TextEditor.TextEditorControl();
+            this.bitmapPreprocessorClassDefinition = new ICSharpCode.TextEditor.TextEditorControlEx();
             this.DeskewBlockMaxHeight = new System.Windows.Forms.NumericUpDown();
             this.PageRotation = new System.Windows.Forms.ComboBox();
             this.label14 = new System.Windows.Forms.Label();
@@ -136,9 +136,9 @@
             // 
             // bitmapPreprocessorClassDefinition
             // 
-            this.bitmapPreprocessorClassDefinition.AutoHideScrollbars = false;
+            //this.bitmapPreprocessorClassDefinition.AutoHideScrollbars = false;
             this.bitmapPreprocessorClassDefinition.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bitmapPreprocessorClassDefinition.Highlighting = null;
+            this.bitmapPreprocessorClassDefinition.SyntaxHighlighting = "C#";
             this.bitmapPreprocessorClassDefinition.Location = new System.Drawing.Point(0, 108);
             this.bitmapPreprocessorClassDefinition.Margin = new System.Windows.Forms.Padding(1);
             this.bitmapPreprocessorClassDefinition.Name = "bitmapPreprocessorClassDefinition";
@@ -579,7 +579,7 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button bApply;
-        private ICSharpCode.TextEditor.TextEditorControl bitmapPreprocessorClassDefinition;
+        private ICSharpCode.TextEditor.TextEditorControlEx bitmapPreprocessorClassDefinition;
         private System.Windows.Forms.NumericUpDown DeskewBlockMaxHeight;
         private System.Windows.Forms.ComboBox PageRotation;
         private System.Windows.Forms.Button bAddClassDefinition;

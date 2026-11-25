@@ -28,298 +28,298 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.bAbout = new System.Windows.Forms.Button();
-            this.bExit = new System.Windows.Forms.Button();
-            this.bRun = new System.Windows.Forms.Button();
-            this.progress = new System.Windows.Forms.ProgressBar();
-            this.template2s = new System.Windows.Forms.DataGridView();
-            this.Selected = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.Edit = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.Copy = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.Edit2 = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.Active = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.Name_ = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.OrderWeight = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.UsedTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Comment = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ModifiedTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FileFilterRegex = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.bLog = new System.Windows.Forms.Button();
-            this.bSettings = new System.Windows.Forms.Button();
-            this.lProgress = new System.Windows.Forms.Label();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-            this.saveTemplates = new System.Windows.Forms.Button();
-            this.bInput = new System.Windows.Forms.Button();
-            this.bOutput = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.template2s)).BeginInit();
-            this.flowLayoutPanel1.SuspendLayout();
-            this.flowLayoutPanel2.SuspendLayout();
-            this.SuspendLayout();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            bAbout = new Button();
+            bExit = new Button();
+            bRun = new Button();
+            progress = new ProgressBar();
+            template2s = new DataGridView();
+            bLog = new Button();
+            bSettings = new Button();
+            lProgress = new Label();
+            flowLayoutPanel1 = new FlowLayoutPanel();
+            bInput = new Button();
+            bOutput = new Button();
+            flowLayoutPanel2 = new FlowLayoutPanel();
+            saveTemplates = new Button();
+            Selected = new DataGridViewCheckBoxColumn();
+            Edit = new DataGridViewButtonColumn();
+            Copy = new DataGridViewButtonColumn();
+            Edit2 = new DataGridViewButtonColumn();
+            Active = new DataGridViewCheckBoxColumn();
+            Name_ = new DataGridViewTextBoxColumn();
+            OrderWeight = new DataGridViewTextBoxColumn();
+            UsedTime = new DataGridViewTextBoxColumn();
+            Comment = new DataGridViewTextBoxColumn();
+            ModifiedTime = new DataGridViewTextBoxColumn();
+            FileFilterRegex = new DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)template2s).BeginInit();
+            flowLayoutPanel1.SuspendLayout();
+            flowLayoutPanel2.SuspendLayout();
+            SuspendLayout();
             // 
             // bAbout
             // 
-            this.bAbout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bAbout.Location = new System.Drawing.Point(3, 3);
-            this.bAbout.Name = "bAbout";
-            this.bAbout.Size = new System.Drawing.Size(75, 23);
-            this.bAbout.TabIndex = 0;
-            this.bAbout.Text = "About";
-            this.bAbout.UseVisualStyleBackColor = true;
-            this.bAbout.Click += new System.EventHandler(this.bAbout_Click);
+            bAbout.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            bAbout.Location = new Point(4, 3);
+            bAbout.Margin = new Padding(4, 3, 4, 3);
+            bAbout.Name = "bAbout";
+            bAbout.Size = new Size(88, 27);
+            bAbout.TabIndex = 0;
+            bAbout.Text = "About";
+            bAbout.UseVisualStyleBackColor = true;
+            bAbout.Click += bAbout_Click;
             // 
             // bExit
             // 
-            this.bExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bExit.Location = new System.Drawing.Point(178, 3);
-            this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(75, 23);
-            this.bExit.TabIndex = 1;
-            this.bExit.Text = "Exit";
-            this.bExit.UseVisualStyleBackColor = true;
-            this.bExit.Click += new System.EventHandler(this.bExit_Click);
+            bExit.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            bExit.Location = new Point(207, 3);
+            bExit.Margin = new Padding(4, 3, 4, 3);
+            bExit.Name = "bExit";
+            bExit.Size = new Size(88, 27);
+            bExit.TabIndex = 1;
+            bExit.Text = "Exit";
+            bExit.UseVisualStyleBackColor = true;
+            bExit.Click += bExit_Click;
             // 
             // bRun
             // 
-            this.bRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bRun.Location = new System.Drawing.Point(97, 3);
-            this.bRun.Name = "bRun";
-            this.bRun.Size = new System.Drawing.Size(75, 23);
-            this.bRun.TabIndex = 0;
-            this.bRun.Text = "Run";
-            this.bRun.UseVisualStyleBackColor = true;
-            this.bRun.Click += new System.EventHandler(this.bRun_Click);
+            bRun.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            bRun.Location = new Point(111, 3);
+            bRun.Margin = new Padding(4, 3, 4, 3);
+            bRun.Name = "bRun";
+            bRun.Size = new Size(88, 27);
+            bRun.TabIndex = 0;
+            bRun.Text = "Run";
+            bRun.UseVisualStyleBackColor = true;
+            bRun.Click += bRun_Click;
             // 
             // progress
             // 
-            this.progress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.progress.Location = new System.Drawing.Point(12, 507);
-            this.progress.Name = "progress";
-            this.progress.Size = new System.Drawing.Size(783, 12);
-            this.progress.TabIndex = 7;
+            progress.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            progress.Location = new Point(14, 585);
+            progress.Margin = new Padding(4, 3, 4, 3);
+            progress.Name = "progress";
+            progress.Size = new Size(913, 14);
+            progress.TabIndex = 7;
             // 
             // template2s
             // 
-            this.template2s.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.template2s.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.template2s.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Selected,
-            this.Edit,
-            this.Copy,
-            this.Edit2,
-            this.Active,
-            this.Name_,
-            this.OrderWeight,
-            this.UsedTime,
-            this.Comment,
-            this.ModifiedTime,
-            this.FileFilterRegex});
-            this.template2s.Location = new System.Drawing.Point(15, 12);
-            this.template2s.MultiSelect = false;
-            this.template2s.Name = "template2s";
-            this.template2s.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.template2s.Size = new System.Drawing.Size(777, 465);
-            this.template2s.TabIndex = 4;
-            // 
-            // Selected
-            // 
-            this.Selected.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Selected.HeaderText = "";
-            this.Selected.Name = "Selected";
-            this.Selected.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.Selected.Width = 21;
-            // 
-            // Edit
-            // 
-            this.Edit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Edit.HeaderText = "";
-            this.Edit.Name = "Edit";
-            this.Edit.Text = "Edit";
-            this.Edit.UseColumnTextForButtonValue = true;
-            this.Edit.Width = 21;
-            // 
-            // Copy
-            // 
-            this.Copy.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Copy.HeaderText = "";
-            this.Copy.Name = "Copy";
-            this.Copy.Text = "Copy";
-            this.Copy.UseColumnTextForButtonValue = true;
-            this.Copy.Width = 21;
-            // 
-            // Edit2
-            // 
-            this.Edit2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Edit2.HeaderText = "";
-            this.Edit2.Name = "Edit2";
-            this.Edit2.Text = "Edit2";
-            this.Edit2.UseColumnTextForButtonValue = true;
-            this.Edit2.Width = 21;
-            // 
-            // Active
-            // 
-            this.Active.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Active.HeaderText = "Active";
-            this.Active.Name = "Active";
-            this.Active.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.Active.Width = 62;
-            // 
-            // Name_
-            // 
-            this.Name_.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            this.Name_.DefaultCellStyle = dataGridViewCellStyle2;
-            this.Name_.HeaderText = "Name";
-            this.Name_.Name = "Name_";
-            this.Name_.Width = 60;
-            // 
-            // OrderWeight
-            // 
-            this.OrderWeight.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.OrderWeight.HeaderText = "Order";
-            this.OrderWeight.MaxInputLength = 10;
-            this.OrderWeight.Name = "OrderWeight";
-            this.OrderWeight.Width = 58;
-            // 
-            // UsedTime
-            // 
-            this.UsedTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            this.UsedTime.HeaderText = "Used";
-            this.UsedTime.Name = "UsedTime";
-            this.UsedTime.ReadOnly = true;
-            this.UsedTime.Width = 57;
-            // 
-            // Comment
-            // 
-            this.Comment.HeaderText = "Comment";
-            this.Comment.Name = "Comment";
-            // 
-            // ModifiedTime
-            // 
-            this.ModifiedTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            this.ModifiedTime.HeaderText = "Modified";
-            this.ModifiedTime.Name = "ModifiedTime";
-            this.ModifiedTime.ReadOnly = true;
-            this.ModifiedTime.Width = 72;
-            // 
-            // FileFilterRegex
-            // 
-            this.FileFilterRegex.HeaderText = "Filter";
-            this.FileFilterRegex.Name = "FileFilterRegex";
-            this.FileFilterRegex.ReadOnly = true;
-            this.FileFilterRegex.Width = 50;
+            template2s.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            template2s.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            template2s.Columns.AddRange(new DataGridViewColumn[] { Selected, Edit, Copy, Edit2, Active, Name_, OrderWeight, UsedTime, Comment, ModifiedTime, FileFilterRegex });
+            template2s.Location = new Point(18, 14);
+            template2s.Margin = new Padding(4, 3, 4, 3);
+            template2s.MultiSelect = false;
+            template2s.Name = "template2s";
+            template2s.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            template2s.Size = new Size(906, 537);
+            template2s.TabIndex = 4;
             // 
             // bLog
             // 
-            this.bLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bLog.Location = new System.Drawing.Point(165, 3);
-            this.bLog.Name = "bLog";
-            this.bLog.Size = new System.Drawing.Size(75, 23);
-            this.bLog.TabIndex = 4;
-            this.bLog.Text = "Log";
-            this.bLog.UseVisualStyleBackColor = true;
-            this.bLog.Click += new System.EventHandler(this.bLog_Click);
+            bLog.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            bLog.Location = new Point(196, 3);
+            bLog.Margin = new Padding(4, 3, 4, 3);
+            bLog.Name = "bLog";
+            bLog.Size = new Size(88, 27);
+            bLog.TabIndex = 4;
+            bLog.Text = "Log";
+            bLog.UseVisualStyleBackColor = true;
+            bLog.Click += bLog_Click;
             // 
             // bSettings
             // 
-            this.bSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bSettings.Location = new System.Drawing.Point(84, 3);
-            this.bSettings.Name = "bSettings";
-            this.bSettings.Size = new System.Drawing.Size(75, 23);
-            this.bSettings.TabIndex = 3;
-            this.bSettings.Text = "Settings";
-            this.bSettings.UseVisualStyleBackColor = true;
-            this.bSettings.Click += new System.EventHandler(this.bSettings_Click);
+            bSettings.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            bSettings.Location = new Point(100, 3);
+            bSettings.Margin = new Padding(4, 3, 4, 3);
+            bSettings.Name = "bSettings";
+            bSettings.Size = new Size(88, 27);
+            bSettings.TabIndex = 3;
+            bSettings.Text = "Settings";
+            bSettings.UseVisualStyleBackColor = true;
+            bSettings.Click += bSettings_Click;
             // 
             // lProgress
             // 
-            this.lProgress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lProgress.AutoSize = true;
-            this.lProgress.Location = new System.Drawing.Point(12, 489);
-            this.lProgress.Name = "lProgress";
-            this.lProgress.Size = new System.Drawing.Size(22, 13);
-            this.lProgress.TabIndex = 15;
-            this.lProgress.Text = "     ";
+            lProgress.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lProgress.AutoSize = true;
+            lProgress.Location = new Point(14, 564);
+            lProgress.Margin = new Padding(4, 0, 4, 0);
+            lProgress.Name = "lProgress";
+            lProgress.Size = new Size(22, 15);
+            lProgress.TabIndex = 15;
+            lProgress.Text = "     ";
             // 
             // flowLayoutPanel1
             // 
-            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.flowLayoutPanel1.Controls.Add(this.bAbout);
-            this.flowLayoutPanel1.Controls.Add(this.bSettings);
-            this.flowLayoutPanel1.Controls.Add(this.bLog);
-            this.flowLayoutPanel1.Controls.Add(this.bInput);
-            this.flowLayoutPanel1.Controls.Add(this.bOutput);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 527);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(505, 30);
-            this.flowLayoutPanel1.TabIndex = 17;
-            // 
-            // flowLayoutPanel2
-            // 
-            this.flowLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.flowLayoutPanel2.Controls.Add(this.bExit);
-            this.flowLayoutPanel2.Controls.Add(this.bRun);
-            this.flowLayoutPanel2.Controls.Add(this.saveTemplates);
-            this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(539, 527);
-            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(256, 31);
-            this.flowLayoutPanel2.TabIndex = 18;
-            // 
-            // saveTemplates
-            // 
-            this.saveTemplates.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.saveTemplates.Location = new System.Drawing.Point(16, 3);
-            this.saveTemplates.Name = "saveTemplates";
-            this.saveTemplates.Size = new System.Drawing.Size(75, 23);
-            this.saveTemplates.TabIndex = 33;
-            this.saveTemplates.Text = "Save";
-            this.saveTemplates.UseVisualStyleBackColor = true;
+            flowLayoutPanel1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            flowLayoutPanel1.Controls.Add(bAbout);
+            flowLayoutPanel1.Controls.Add(bSettings);
+            flowLayoutPanel1.Controls.Add(bLog);
+            flowLayoutPanel1.Controls.Add(bInput);
+            flowLayoutPanel1.Controls.Add(bOutput);
+            flowLayoutPanel1.Location = new Point(14, 608);
+            flowLayoutPanel1.Margin = new Padding(4, 3, 4, 3);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(589, 35);
+            flowLayoutPanel1.TabIndex = 17;
             // 
             // bInput
             // 
-            this.bInput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bInput.Location = new System.Drawing.Point(246, 3);
-            this.bInput.Name = "bInput";
-            this.bInput.Size = new System.Drawing.Size(75, 23);
-            this.bInput.TabIndex = 5;
-            this.bInput.Text = "Input";
-            this.bInput.UseVisualStyleBackColor = true;
-            this.bInput.Click += new System.EventHandler(this.bInput_Click);
+            bInput.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            bInput.Location = new Point(292, 3);
+            bInput.Margin = new Padding(4, 3, 4, 3);
+            bInput.Name = "bInput";
+            bInput.Size = new Size(88, 27);
+            bInput.TabIndex = 5;
+            bInput.Text = "Input";
+            bInput.UseVisualStyleBackColor = true;
+            bInput.Click += bInput_Click;
             // 
             // bOutput
             // 
-            this.bOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bOutput.Location = new System.Drawing.Point(327, 3);
-            this.bOutput.Name = "bOutput";
-            this.bOutput.Size = new System.Drawing.Size(75, 23);
-            this.bOutput.TabIndex = 6;
-            this.bOutput.Text = "Output";
-            this.bOutput.UseVisualStyleBackColor = true;
-            this.bOutput.Click += new System.EventHandler(this.bOutput_Click);
+            bOutput.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            bOutput.Location = new Point(388, 3);
+            bOutput.Margin = new Padding(4, 3, 4, 3);
+            bOutput.Name = "bOutput";
+            bOutput.Size = new Size(88, 27);
+            bOutput.TabIndex = 6;
+            bOutput.Text = "Output";
+            bOutput.UseVisualStyleBackColor = true;
+            bOutput.Click += bOutput_Click;
+            // 
+            // flowLayoutPanel2
+            // 
+            flowLayoutPanel2.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            flowLayoutPanel2.Controls.Add(bExit);
+            flowLayoutPanel2.Controls.Add(bRun);
+            flowLayoutPanel2.Controls.Add(saveTemplates);
+            flowLayoutPanel2.FlowDirection = FlowDirection.RightToLeft;
+            flowLayoutPanel2.Location = new Point(629, 608);
+            flowLayoutPanel2.Margin = new Padding(4, 3, 4, 3);
+            flowLayoutPanel2.Name = "flowLayoutPanel2";
+            flowLayoutPanel2.Size = new Size(299, 36);
+            flowLayoutPanel2.TabIndex = 18;
+            // 
+            // saveTemplates
+            // 
+            saveTemplates.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            saveTemplates.Location = new Point(15, 3);
+            saveTemplates.Margin = new Padding(4, 3, 4, 3);
+            saveTemplates.Name = "saveTemplates";
+            saveTemplates.Size = new Size(88, 27);
+            saveTemplates.TabIndex = 33;
+            saveTemplates.Text = "Save";
+            saveTemplates.UseVisualStyleBackColor = true;
+            // 
+            // Selected
+            // 
+            Selected.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            Selected.HeaderText = "";
+            Selected.Name = "Selected";
+            Selected.SortMode = DataGridViewColumnSortMode.Automatic;
+            Selected.Width = 21;
+            // 
+            // Edit
+            // 
+            Edit.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            Edit.HeaderText = "";
+            Edit.Name = "Edit";
+            Edit.Text = "Edit";
+            Edit.UseColumnTextForButtonValue = true;
+            Edit.Width = 21;
+            // 
+            // Copy
+            // 
+            Copy.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            Copy.HeaderText = "";
+            Copy.Name = "Copy";
+            Copy.Text = "Copy";
+            Copy.UseColumnTextForButtonValue = true;
+            Copy.Width = 21;
+            // 
+            // Edit2
+            // 
+            Edit2.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            Edit2.HeaderText = "";
+            Edit2.Name = "Edit2";
+            Edit2.Text = "Edit2";
+            Edit2.UseColumnTextForButtonValue = true;
+            Edit2.Width = 21;
+            // 
+            // Active
+            // 
+            Active.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            Active.HeaderText = "Active";
+            Active.Name = "Active";
+            Active.SortMode = DataGridViewColumnSortMode.Automatic;
+            Active.Width = 65;
+            // 
+            // Name_
+            // 
+            Name_.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.TopLeft;
+            Name_.DefaultCellStyle = dataGridViewCellStyle1;
+            Name_.HeaderText = "Name";
+            Name_.Name = "Name_";
+            Name_.Width = 64;
+            // 
+            // OrderWeight
+            // 
+            OrderWeight.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            OrderWeight.HeaderText = "Order";
+            OrderWeight.MaxInputLength = 10;
+            OrderWeight.Name = "OrderWeight";
+            OrderWeight.Width = 62;
+            // 
+            // UsedTime
+            // 
+            UsedTime.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            UsedTime.HeaderText = "Used";
+            UsedTime.Name = "UsedTime";
+            UsedTime.ReadOnly = true;
+            UsedTime.Width = 58;
+            // 
+            // Comment
+            // 
+            Comment.HeaderText = "Comment";
+            Comment.Name = "Comment";
+            // 
+            // ModifiedTime
+            // 
+            ModifiedTime.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            ModifiedTime.HeaderText = "Modified";
+            ModifiedTime.Name = "ModifiedTime";
+            ModifiedTime.ReadOnly = true;
+            ModifiedTime.Width = 80;
+            // 
+            // FileFilterRegex
+            // 
+            FileFilterRegex.HeaderText = "Filter";
+            FileFilterRegex.Name = "FileFilterRegex";
+            FileFilterRegex.ReadOnly = true;
+            FileFilterRegex.Width = 50;
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(807, 572);
-            this.Controls.Add(this.flowLayoutPanel2);
-            this.Controls.Add(this.flowLayoutPanel1);
-            this.Controls.Add(this.lProgress);
-            this.Controls.Add(this.template2s);
-            this.Controls.Add(this.progress);
-            this.MinimumSize = new System.Drawing.Size(785, 567);
-            this.Name = "MainForm";
-            this.Text = "MainForm";
-            ((System.ComponentModel.ISupportInitialize)(this.template2s)).EndInit();
-            this.flowLayoutPanel1.ResumeLayout(false);
-            this.flowLayoutPanel2.ResumeLayout(false);
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(941, 660);
+            Controls.Add(flowLayoutPanel2);
+            Controls.Add(flowLayoutPanel1);
+            Controls.Add(lProgress);
+            Controls.Add(template2s);
+            Controls.Add(progress);
+            Margin = new Padding(4, 3, 4, 3);
+            MinimumSize = new Size(913, 648);
+            Name = "MainForm";
+            Text = "MainForm";
+            ((System.ComponentModel.ISupportInitialize)template2s).EndInit();
+            flowLayoutPanel1.ResumeLayout(false);
+            flowLayoutPanel2.ResumeLayout(false);
+            ResumeLayout(false);
+            PerformLayout();
 
         }
 
@@ -336,18 +336,18 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
         private System.Windows.Forms.Button saveTemplates;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn Selected;
-        private System.Windows.Forms.DataGridViewButtonColumn Edit;
-        private System.Windows.Forms.DataGridViewButtonColumn Copy;
-        private System.Windows.Forms.DataGridViewButtonColumn Edit2;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn Active;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Name_;
-        private System.Windows.Forms.DataGridViewTextBoxColumn OrderWeight;
-        private System.Windows.Forms.DataGridViewTextBoxColumn UsedTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Comment;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ModifiedTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn FileFilterRegex;
         private System.Windows.Forms.Button bInput;
         private System.Windows.Forms.Button bOutput;
+        private DataGridViewCheckBoxColumn Selected;
+        private DataGridViewButtonColumn Edit;
+        private DataGridViewButtonColumn Copy;
+        private DataGridViewButtonColumn Edit2;
+        private DataGridViewCheckBoxColumn Active;
+        private DataGridViewTextBoxColumn Name_;
+        private DataGridViewTextBoxColumn OrderWeight;
+        private DataGridViewTextBoxColumn UsedTime;
+        private DataGridViewTextBoxColumn Comment;
+        private DataGridViewTextBoxColumn ModifiedTime;
+        private DataGridViewTextBoxColumn FileFilterRegex;
     }
 }

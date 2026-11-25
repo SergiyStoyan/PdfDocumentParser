@@ -85,7 +85,7 @@ namespace Cliver.PdfDocumentParser
 
         static public List<CharBox> GetCharBoxsFromPage(PdfReader pdfReader, int pageI, bool removeDuplicates)
         {
-            Rectangle r = pdfReader.GetPageSize(pageI);
+            var r = pdfReader.GetPageSize(pageI);
             CharBoxExtractionStrategy s = new CharBoxExtractionStrategy(new System.Drawing.RectangleF(r.Left, r.Bottom, r.Width, r.Height));
             PdfTextExtractor.GetTextFromPage(pdfReader, pageI, s);
             if (removeDuplicates)

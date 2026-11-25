@@ -140,20 +140,22 @@ namespace Cliver.PdfDocumentParser
 
         public int DetectOrientationAngle(Bitmap b, out float confidence)
         {
-            using (Tesseract.Page page = engine.Process(b, PageSegMode.OsdOnly))
-            {
-                page.DetectBestOrientation(out int o, out confidence);
-                return o;
-            }
+            //using (Tesseract.Page page = engine.Process(b, PageSegMode.OsdOnly))
+            //{
+            //    page.DetectBestOrientation(out int o, out confidence);
+            //    return o;
+            //}
+            confidence = 1;
+            return 0;
         }
 
-        public Orientation DetectOrientation(Bitmap b)
-        {
-            using (Tesseract.Page page = engine.Process(b, PageSegMode.OsdOnly))
-            {
-                return page.AnalyseLayout().GetProperties().Orientation;
-            }
-        }
+        //public Orientation DetectOrientation(Bitmap b)
+        //{
+        //    using (Tesseract.Page page = engine.Process(b, PageSegMode.OsdOnly))
+        //    {
+        //        return page.AnalyseLayout().GetProperties().Orientation;
+        //    }
+        //}
 
         //!!!abandoned for GetCharBoxsSurroundedByRectangle() because:
         //- it does not give good end lines;
@@ -172,10 +174,11 @@ namespace Cliver.PdfDocumentParser
         {
             if (!getScaled(b, ref r))
                 return null;
-            using (Tesseract.Page page = engine.Process(b, new Rect((int)r.X, (int)r.Y, (int)r.Width, (int)r.Height), pageSegMode))
-            {
-                return getCharBoxs(page);
-            }
+            //using (Tesseract.Page page = engine.Process(b, new Rect((int)r.X, (int)r.Y, (int)r.Width, (int)r.Height), pageSegMode))
+            //{
+            //    return getCharBoxs(page);
+            //}
+            return new List<CharBox> { };
         }
         bool getScaled(Bitmap b, ref RectangleF r)
         {
@@ -188,10 +191,11 @@ namespace Cliver.PdfDocumentParser
 
         public List<CharBox> GetCharBoxs(Bitmap b, PageSegMode pageSegMode)
         {
-            using (Tesseract.Page page = engine.Process(b, pageSegMode))
-            {
-                return getCharBoxs(page);
-            }
+            //using (Tesseract.Page page = engine.Process(b, pageSegMode))
+            //{
+            //    return getCharBoxs(page);
+            //}
+            return new List<CharBox> { };
         }
         List<CharBox> getCharBoxs(Tesseract.Page page)
         {
@@ -279,13 +283,13 @@ namespace Cliver.PdfDocumentParser
             return cbs;
         }
 
-        public string GetHtml(Bitmap b, PageSegMode pageSegMode)
-        {
-            using (Tesseract.Page page = engine.Process(b, pageSegMode))
-            {
-                return page.GetHOCRText(0, false);
-            }
-        }
+        //public string GetHtml(Bitmap b, PageSegMode pageSegMode)
+        //{
+        //    using (Tesseract.Page page = engine.Process(b, pageSegMode))
+        //    {
+        //        return page.GetHOCRText(0, false);
+        //    }
+        //}
 
         public class CharBox : Page.CharBox
         {
