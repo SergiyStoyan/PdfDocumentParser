@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
-using Tesseract;
+using PaddleOCRSharp;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -17,6 +17,35 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public class Ocr : IDisposable
     {
+        public void Dispose()
+        {
+            lock (this)
+            {
+                if (engine != null)
+                {
+                    //if (cachedPage != null)
+                    //{
+                    //    try
+                    //    {
+                    //        cachedPage.Dispose();
+                    //    }
+                    //    catch (Exception e)//for some reason: Attempted to read or write protected memory. This is often an indication that other memory is corrupt.
+                    //    {
+                    //    }
+                    //    cachedPageBitmap = null;
+                    //    cachedPage = null;
+                    //}
+                    engine.Dispose();
+                    engine = null;
+                }
+            }
+        }
+
+        ~Ocr()
+        {
+            Dispose();
+        }
+
         public static Ocr This
         {
             get
@@ -47,115 +76,49 @@ namespace Cliver.PdfDocumentParser
 
         Ocr(Config config)
         {
-            engine = new TesseractEngine(@"./tessdata", config.Language, config.EngineMode);
-            if (config.VariableNames2value != null)
-            {
-                string m1 = "Could not set Tesseract variable: ";
-                foreach (var v in config.VariableNames2value)
-                    if (v.Value is string)
-                    {
-                        if (!engine.SetVariable(v.Key, (string)v.Value))
-                            throw new Exception(m1 + v.ToString());
-                    }
-                    else if (v.Value is int)
-                    {
-                        if (!engine.SetVariable(v.Key, (int)v.Value))
-                            throw new Exception(m1 + v.ToString());
-                    }
-                    else if (v.Value is double)
-                    {
-                        if (!engine.SetVariable(v.Key, (double)v.Value))
-                            throw new Exception(m1 + v.ToString());
-                    }
-                    else if (v.Value is bool)
-                    {
-                        if (!engine.SetVariable(v.Key, (bool)v.Value))
-                            throw new Exception(m1 + v.ToString());
-                    }
-                    else
-                        throw new Exception(m1 + v.ToString() + " Not supported type.");
-            }
+            engine = new PaddleOCREngine(config.OCRModelConfig, config.OCRParameter);
         }
+
         public class Config
         {
-            public string Language = "eng";
-            public EngineMode EngineMode = EngineMode.Default;
-            public Dictionary<string, object> VariableNames2value = null;
-
-            internal string Key
+            public OCRModelConfig OCRModelConfig = null; // Uses default embedded models
+            public OCRParameter OCRParameter = new OCRParameter
             {
-                get
-                {
-                    if (key == null)
-                        key = this.ToStringByJson(false);
-                    return key;
-                }
-            }
-            string key = null;
+                use_angle_cls = true,  // Enables text-line orientation classification (0°/180°)
+                cls = true,            // Runs the classifier during inference
+                enable_mkldnn = true
+            };
         }
 
-        TesseractEngine engine = null;
+        PaddleOCREngine engine = null;
 
-        ~Ocr()
+        public int DetectOrientationAngle(Bitmap b/*, out float confidence*/)
         {
-            Dispose();
-        }
+            OCRResult result = engine.DetectText(b);
+            if (result.TextBlocks.Count < 1)
+                return 0;
 
-        public void Dispose()
-        {
-            lock (this)
+            // Measure the vector from top-left (BoxPoints[0]) to top-right (BoxPoints[1])
+            var angles = result.TextBlocks.Select(block =>
             {
-                if (engine != null)
-                {
-                    //if (cachedPage != null)
-                    //{
-                    //    try
-                    //    {
-                    //        cachedPage.Dispose();
-                    //    }
-                    //    catch (Exception e)//for some reason: Attempted to read or write protected memory. This is often an indication that other memory is corrupt.
-                    //    {
-                    //    }
-                    //    cachedPageBitmap = null;
-                    //    cachedPage = null;
-                    //}
-                    engine.Dispose();
-                    engine = null;
-                }
-            }
+                var p0 = block.BoxPoints[0];
+                var p1 = block.BoxPoints[1];
+                double radians = Math.Atan2(p1.Y - p0.Y, p1.X - p0.X);
+                double degrees = radians * (180.0 / Math.PI);
+
+                // Normalize to 0, 90, 180, or 270
+                int snapped = (int)(Math.Round(degrees / 90.0) * 90);
+                return (snapped + 360) % 360;
+            });
+
+            // Find the most common orientation across all detected text lines
+            int pageAngle = angles
+                .GroupBy(a => a)
+                .OrderByDescending(g => g.Count())
+                .First().Key;
+
+            return pageAngle;
         }
-
-        //Tesseract.Page getPage(Bitmap b)
-        //{
-        //    if (cachedPageBitmap != b)
-        //    {
-        //        cachedPage?.Dispose();
-        //        cachedPage = engine.Process(b, PageSegMode.SparseTextOsd);
-        //        cachedPageBitmap = b;
-        //    }
-        //    return cachedPage;
-        //}
-        //Bitmap cachedPageBitmap = null;
-        //Tesseract.Page cachedPage = null;
-
-        public int DetectOrientationAngle(Bitmap b, out float confidence)
-        {
-            //using (Tesseract.Page page = engine.Process(b, PageSegMode.OsdOnly))
-            //{
-            //    page.DetectBestOrientation(out int o, out confidence);
-            //    return o;
-            //}
-            confidence = 1;
-            return 0;
-        }
-
-        //public Orientation DetectOrientation(Bitmap b)
-        //{
-        //    using (Tesseract.Page page = engine.Process(b, PageSegMode.OsdOnly))
-        //    {
-        //        return page.AnalyseLayout().GetProperties().Orientation;
-        //    }
-        //}
 
         //!!!abandoned for GetCharBoxsSurroundedByRectangle() because:
         //- it does not give good end lines;
