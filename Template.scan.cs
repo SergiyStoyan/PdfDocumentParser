@@ -15,7 +15,7 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class Template
     {
-        public Tesseract.PageSegMode TesseractPageSegMode = Tesseract.PageSegMode.SingleBlock;
+        //public Tesseract.PageSegMode TesseractPageSegMode = Tesseract.PageSegMode.SingleBlock;
 
         public CharFilter CharFilter;
 

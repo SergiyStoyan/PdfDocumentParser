@@ -8,7 +8,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
-using Tesseract;
+using Sdcb.SimdPaddleOCR;
+using Sdcb.SimdPaddleOCR.Models.ChineseV6Medium;
+using System.Drawing.Imaging;
+using Sdcb.SimdPaddleOCR.ModelProvider;
+using System.Runtime.InteropServices;
+using System.IO;
+
 
 namespace Cliver.PdfDocumentParser
 {
@@ -17,6 +23,36 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public class Ocr : IDisposable
     {
+        public void Dispose()
+        {
+            lock (this)
+            {
+                //if (cachedPage != null)
+                //{
+                //    try
+                //    {
+                //        cachedPage.Dispose();
+                //    }
+                //    catch (Exception e)//for some reason: Attempted to read or write protected memory. This is often an indication that other memory is corrupt.
+                //    {
+                //    }
+                //    cachedPageBitmap = null;
+                //    cachedPage = null;
+                //}
+
+                engine?.Dispose();
+                engine = null;
+                detector?.Dispose();
+                detector = null;
+                //detectorStream?.Dispose();
+                //detectorStream = null;
+            }
+        }
+        ~Ocr()
+        {
+            Dispose();
+        }
+
         public static Ocr This
         {
             get
@@ -45,115 +81,157 @@ namespace Cliver.PdfDocumentParser
         //}
         //static HandyDictionary<string, Ocr> ocrConfigKeys2ocr = new HandyDictionary<string, Ocr>();
 
+        public string RecognizeImage(Bitmap bitmap)
+        {
+            // Ensure bitmap is 24-bit BGR format (SimdPaddleOCR's native default)
+            using (Bitmap bgrBitmap = bitmap.PixelFormat == PixelFormat.Format24bppRgb
+                ? (Bitmap)bitmap.Clone()
+                : bitmap.Clone(new Rectangle(0, 0, bitmap.Width, bitmap.Height), PixelFormat.Format24bppRgb))
+            {
+                var rect = new Rectangle(0, 0, bgrBitmap.Width, bgrBitmap.Height);
+                BitmapData bmpData = bgrBitmap.LockBits(rect, ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
+
+                try
+                {
+                    // Copy locked pixel buffer into a managed byte array
+                    int byteCount = Math.Abs(bmpData.Stride) * bgrBitmap.Height;
+                    byte[] pixels = new byte[byteCount];
+                    System.Runtime.InteropServices.Marshal.Copy(bmpData.Scan0, pixels, 0, byteCount);
+
+                    // Run OCR passing width, height, and row stride
+                    PaddleOcrResult result = engine.Run(
+                        pixels,
+                        bgrBitmap.Width,
+                        bgrBitmap.Height,
+                        bmpData.Stride,
+                        ImagePixelFormat.Bgr24);
+
+                    return result.Text;
+                }
+                finally
+                {
+                    bgrBitmap.UnlockBits(bmpData);
+                }
+            }
+        }
+
+        ///// <summary>
+        ///// (!!!)After use, call UnlockBits() and Dispose() on bgrBitmap
+        ///// </summary>
+        ///// <param name="bitmap"></param>
+        ///// <returns></returns>
+        //(byte[] pixels, Bitmap bgrBitmap, BitmapData bmpData) getImageBytes(Bitmap bitmap)
+        //{
+        //    var bgrBitmap = bitmap.PixelFormat == PixelFormat.Format24bppRgb
+        //         ? (Bitmap)bitmap.Clone()
+        //         : bitmap.Clone(new Rectangle(0, 0, bitmap.Width, bitmap.Height), PixelFormat.Format24bppRgb);
+        //    var rect = new Rectangle(0, 0, bgrBitmap.Width, bgrBitmap.Height);
+        //    var bmpData = bgrBitmap.LockBits(rect, ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
+        //    // Copy locked pixel buffer into a managed byte array
+        //    int byteCount = Math.Abs(bmpData.Stride) * bgrBitmap.Height;
+        //    byte[] pixels = new byte[byteCount];
+        //    System.Runtime.InteropServices.Marshal.Copy(bmpData.Scan0, pixels, 0, byteCount);
+        //    return (pixels, bgrBitmap, bmpData);
+        //}
+        //void ungetImageBytes((byte[] pixels, Bitmap bgrBitmap, BitmapData bmpData) imageBytes)
+        //{
+        //    imageBytes.bgrBitmap.UnlockBits(imageBytes.bmpData);
+        //    imageBytes.bgrBitmap.Dispose();
+        //}
+
         Ocr(Config config)
         {
-            engine = new TesseractEngine(@"./tessdata", config.Language, config.EngineMode);
-            if (config.VariableNames2value != null)
-            {
-                string m1 = "Could not set Tesseract variable: ";
-                foreach (var v in config.VariableNames2value)
-                    if (v.Value is string)
-                    {
-                        if (!engine.SetVariable(v.Key, (string)v.Value))
-                            throw new Exception(m1 + v.ToString());
-                    }
-                    else if (v.Value is int)
-                    {
-                        if (!engine.SetVariable(v.Key, (int)v.Value))
-                            throw new Exception(m1 + v.ToString());
-                    }
-                    else if (v.Value is double)
-                    {
-                        if (!engine.SetVariable(v.Key, (double)v.Value))
-                            throw new Exception(m1 + v.ToString());
-                    }
-                    else if (v.Value is bool)
-                    {
-                        if (!engine.SetVariable(v.Key, (bool)v.Value))
-                            throw new Exception(m1 + v.ToString());
-                    }
-                    else
-                        throw new Exception(m1 + v.ToString() + " Not supported type.");
-            }
+            //// Omit the Classification model so upside-down (180°) text is not auto-flipped
+            //// and scores noticeably lower than upright text
+            //var noFlipBundle = new PaddleOcrModelBundle(
+            //    config.PaddleOcrModelBundle.Name,
+            //    config.PaddleOcrModelBundle.LanguageCode,
+            //    config.PaddleOcrModelBundle.Detection,
+            //    config.PaddleOcrModelBundle.Recognition,
+            //    config.PaddleOcrModelBundle.Dictionary
+            //    );
+            engine = PaddleOcrAll.Load(config.PaddleOcrModelBundle);
+            detector = new PaddleOcrDetector(config.PaddleOcrModelBundle.Detection.OpenRead());
         }
         public class Config
         {
-            public string Language = "eng";
-            public EngineMode EngineMode = EngineMode.Default;
-            public Dictionary<string, object> VariableNames2value = null;
+            public PaddleOcrModelBundle PaddleOcrModelBundle = ChineseV6MediumModels.Default;
+        }
 
-            internal string Key
+        PaddleOcrAll engine = null;
+        PaddleOcrDetector detector = null;
+        //Stream detectorStream = null;
+
+        private static byte[] extractBgraPixels(Bitmap bitmap, out int stride, Rectangle? region = null)
+        {
+            Rectangle r = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+            if (region != null)
             {
-                get
-                {
-                    if (key == null)
-                        key = this.ToStringByJson(false);
-                    return key;
-                }
+                r = Rectangle.Intersect(r, region.Value);
+                if (r.Width <= 0 || r.Height <= 0)
+                    throw new ArgumentOutOfRangeException(nameof(region), "Region does not overlap the bitmap.");
             }
-            string key = null;
-        }
-
-        TesseractEngine engine = null;
-
-        ~Ocr()
-        {
-            Dispose();
-        }
-
-        public void Dispose()
-        {
-            lock (this)
+            BitmapData data = bitmap.LockBits(r, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            try
             {
-                if (engine != null)
-                {
-                    //if (cachedPage != null)
-                    //{
-                    //    try
-                    //    {
-                    //        cachedPage.Dispose();
-                    //    }
-                    //    catch (Exception e)//for some reason: Attempted to read or write protected memory. This is often an indication that other memory is corrupt.
-                    //    {
-                    //    }
-                    //    cachedPageBitmap = null;
-                    //    cachedPage = null;
-                    //}
-                    engine.Dispose();
-                    engine = null;
-                }
+                stride = data.Stride;
+                byte[] buffer = new byte[stride * r.Height];
+                Marshal.Copy(data.Scan0, buffer, 0, buffer.Length);
+                return buffer;
+            }
+            finally
+            {
+                bitmap.UnlockBits(data);
             }
         }
 
-        //Tesseract.Page getPage(Bitmap b)
+        public int DetectOrientationAngle(Bitmap bitmap/*, out float confidence*/)
+        {
+            // 1. Detect boxes to check if the page is horizontal (0°/180°) or sideways (90°/270°)
+            byte[] pixels = extractBgraPixels(bitmap, out int stride);
+            PaddleOcrDetectionResult detection = detector.Detect(pixels, bitmap.Width, bitmap.Height, stride, ImagePixelFormat.Bgra32);
+
+            var boxes = detection?.Boxes;
+            if (boxes == null || boxes.Length == 0)
+                return 0;
+
+            int baseAngle = 0;
+            int verticalCount = boxes.Count(b => b.Height > b.Width * 1.2f);
+            if (verticalCount > boxes.Length / 2)
+            {
+                bitmap.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                baseAngle = 90;
+                pixels = extractBgraPixels(bitmap, out stride);
+            }
+
+            // 2. Score at baseAngle (0° or 90°) using RecognitionScore
+            PaddleOcrResult firstPass = engine.Run(pixels, bitmap.Width, bitmap.Height, stride, ImagePixelFormat.Bgra32);
+            float firstScore = firstPass.Lines.Length > 0 ? firstPass.Lines.Average(l => l.RecognitionScore) : 0f;
+
+            // 3. Rotate 180° and score again to check if the page was upside-down
+            bitmap.RotateFlip(RotateFlipType.Rotate180FlipNone);
+            pixels = extractBgraPixels(bitmap, out stride);
+            PaddleOcrResult secondPass = engine.Run(pixels, bitmap.Width, bitmap.Height, stride, ImagePixelFormat.Bgra32);
+            float secondScore = secondPass.Lines.Length > 0 ? secondPass.Lines.Average(l => l.RecognitionScore) : 0f;
+
+            if (secondScore > firstScore)
+            {
+                // Keep the 180°-rotated bitmap; total rotation was (baseAngle + 180) % 360
+                return (baseAngle + 180) % 360;
+            }
+
+            // First angle was better — rotate back 180°
+            bitmap.RotateFlip(RotateFlipType.Rotate180FlipNone);
+            return baseAngle;
+        }
+
+        //public Orientation DetectOrientation(Bitmap b)
         //{
-        //    if (cachedPageBitmap != b)
+        //    using (Tesseract.Page page = engine.Process(b, PageSegMode.OsdOnly))
         //    {
-        //        cachedPage?.Dispose();
-        //        cachedPage = engine.Process(b, PageSegMode.SparseTextOsd);
-        //        cachedPageBitmap = b;
+        //        return page.AnalyseLayout().GetProperties().Orientation;
         //    }
-        //    return cachedPage;
         //}
-        //Bitmap cachedPageBitmap = null;
-        //Tesseract.Page cachedPage = null;
-
-        public int DetectOrientationAngle(Bitmap b, out float confidence)
-        {
-            using (Tesseract.Page page = engine.Process(b, PageSegMode.OsdOnly))
-            {
-                page.DetectBestOrientation(out int o, out confidence);
-                return o;
-            }
-        }
-
-        public Orientation DetectOrientation(Bitmap b)
-        {
-            using (Tesseract.Page page = engine.Process(b, PageSegMode.OsdOnly))
-            {
-                return page.AnalyseLayout().GetProperties().Orientation;
-            }
-        }
 
         //!!!abandoned for GetCharBoxsSurroundedByRectangle() because:
         //- it does not give good end lines;
@@ -168,14 +246,13 @@ namespace Cliver.PdfDocumentParser
         //    }
         //}
 
-        public List<CharBox> GetCharBoxsSurroundedByRectangle(Bitmap b, RectangleF r, PageSegMode pageSegMode)
+        public List<CharBox> GetCharBoxsSurroundedByRectangle(Bitmap bitmap, RectangleF r/*, PageSegMode pageSegMode*/)
         {
-            if (!getScaled(b, ref r))
+            if (!getScaled(bitmap, ref r))
                 return null;
-            using (Tesseract.Page page = engine.Process(b, new Rect((int)r.X, (int)r.Y, (int)r.Width, (int)r.Height), pageSegMode))
-            {
-                return getCharBoxs(page);
-            }
+            byte[] pixels = extractBgraPixels(bitmap, out int stride, new Rectangle((int)r.X, (int)r.Y, (int)r.Width, (int)r.Height));
+            PaddleOcrResult por = engine.Run(pixels, (int)r.Width, (int)r.Height, stride, ImagePixelFormat.Bgra32);
+            return getCharBoxs(por);
         }
         bool getScaled(Bitmap b, ref RectangleF r)
         {
@@ -186,106 +263,40 @@ namespace Cliver.PdfDocumentParser
             return true;
         }
 
-        public List<CharBox> GetCharBoxs(Bitmap b, PageSegMode pageSegMode)
+        public List<CharBox> GetCharBoxs(Bitmap bitmap/*, PageSegMode pageSegMode*/)
         {
-            using (Tesseract.Page page = engine.Process(b, pageSegMode))
-            {
-                return getCharBoxs(page);
-            }
+            byte[] pixels = extractBgraPixels(bitmap, out int stride);
+            PaddleOcrResult por = engine.Run(pixels, bitmap.Width, bitmap.Height, stride, ImagePixelFormat.Bgra32);
+            return getCharBoxs(por);
         }
-        List<CharBox> getCharBoxs(Tesseract.Page page)
-        {
-            List<CharBox> cbs = new List<CharBox>();
-            //string t = page.GetHOCRText(1, true);
-            //var dfg = page.GetThresholdedImage();                        
-            //Tesseract.Orientation o;
-            //float c;
-            // page.DetectBestOrientation(out o, out c);
-            //  var l = page.AnalyseLayout();
-            //var ti =   l.GetBinaryImage(Tesseract.PageIteratorLevel.Para);
-            //Tesseract.Rect r;
-            // l.TryGetBoundingBox(Tesseract.PageIteratorLevel.Block, out r);
-            using (var i = page.GetIterator())
-            {
-                //int j = 0;
-                //i.Begin();
-                //do
-                //{
-                //    bool g = i.IsAtBeginningOf(Tesseract.PageIteratorLevel.Block);
-                //    bool v = i.TryGetBoundingBox(Tesseract.PageIteratorLevel.Block, out r);
-                //    var bt = i.BlockType;
-                //    //if (Regex.IsMatch(bt.ToString(), @"image", RegexOptions.IgnoreCase))
-                //    //{
-                //    //    //i.TryGetBoundingBox(Tesseract.PageIteratorLevel.Block,out r);
-                //    //    Tesseract.Pix p = i.GetBinaryImage(Tesseract.PageIteratorLevel.Block);
-                //    //    Bitmap b = Tesseract.PixConverter.ToBitmap(p);
-                //    //    b.Save(Log.AppDir + "\\test" + (j++) + ".png", System.Drawing.Imaging.ImageFormat.Png);
-                //    //}
-                //} while (i.Next(Tesseract.PageIteratorLevel.Block));
-                //do
-                //{
-                //    do
-                //    {
-                //        do
-                //        {
-                //            do
-                //        {
-                do
-                {
-                    //if (i.IsAtBeginningOf(PageIteratorLevel.Block))
-                    //{
-                    //}
-                    //if (i.IsAtBeginningOf(PageIteratorLevel.Para))
-                    //{
-                    //}
-                    //if (i.IsAtBeginningOf(PageIteratorLevel.TextLine))
-                    //{
-                    //}
 
-                    Rect r;
-                    if (i.TryGetBoundingBox(PageIteratorLevel.Symbol, out r))
+        List<CharBox> getCharBoxs(PaddleOcrResult por)
+        {
+            var charBoxes = new List<CharBox>();
+
+            if (por?.Lines == null)
+                return charBoxes;
+
+            foreach (var line in por.Lines)
+            {
+                foreach (var c in line.EstimateCharacterBoxes())
+                    charBoxes.Add(new CharBox
                     {
-                        //if (i.IsAtBeginningOf(PageIteratorLevel.Word))
-                        //{
-                        //if (i.IsAtBeginningOf(PageIteratorLevel.Para))
-                        //{
-                        //    cbs.Add(new CharBox
-                        //    {
-                        //        Char = "\r\n",
-                        //        AutoInserted = true,
-                        //        R = new RectangleF(r.X1 * Settings.Constants.Pdf2ImageResolutionRatio - Settings.Constants.CoordinateDeviationMargin * 2, r.Y1 * Settings.Constants.Pdf2ImageResolutionRatio, r.Width * Settings.Constants.Pdf2ImageResolutionRatio, r.Height * Settings.Constants.Pdf2ImageResolutionRatio)
-                        //    });
-                        //}//seems to work not well
-
-                        //cbs.Add(new CharBox//worked well before autoinsert was moved
-                        //{
-                        //    Char = " ",
-                        //    AutoInserted = true,
-                        //    R = new RectangleF(r.X1 * Settings.Constants.Pdf2ImageResolutionRatio - Settings.Constants.CoordinateDeviationMargin * 2, r.Y1 * Settings.Constants.Pdf2ImageResolutionRatio, r.Width * Settings.Constants.Pdf2ImageResolutionRatio, r.Height * Settings.Constants.Pdf2ImageResolutionRatio)
-                        //});
-                        //}
-                        cbs.Add(new CharBox
-                        {
-                            Char = i.GetText(PageIteratorLevel.Symbol),
-                            R = new RectangleF(r.X1 * Settings.Constants.Pdf2ImageResolutionRatio, r.Y1 * Settings.Constants.Pdf2ImageResolutionRatio, r.Width * Settings.Constants.Pdf2ImageResolutionRatio, r.Height * Settings.Constants.Pdf2ImageResolutionRatio)
-                        });
-                    }
-                } while (i.Next(PageIteratorLevel.Symbol));
-                //            } while (i.Next(PageIteratorLevel.Word, PageIteratorLevel.Symbol));
-                //        } while (i.Next(PageIteratorLevel.TextLine, PageIteratorLevel.Word));
-                //    } while (i.Next(PageIteratorLevel.Para, PageIteratorLevel.TextLine));
-                //} while (i.Next(PageIteratorLevel.Block, PageIteratorLevel.Para));
+                        Char = c.Text,
+                        R = new RectangleF(c.X1, c.Y1, c.X2 - c.X1, c.Y2 - c.Y1)
+                    });
             }
-            return cbs;
+            return charBoxes;
         }
 
-        public string GetHtml(Bitmap b, PageSegMode pageSegMode)
-        {
-            using (Tesseract.Page page = engine.Process(b, pageSegMode))
-            {
-                return page.GetHOCRText(0, false);
-            }
-        }
+
+        //public string GetHtml(Bitmap b, PageSegMode pageSegMode)
+        //{
+        //    using (Tesseract.Page page = engine.Process(b, pageSegMode))
+        //    {
+        //        return page.GetHOCRText(0, false);
+        //    }
+        //}
 
         public class CharBox : Page.CharBox
         {

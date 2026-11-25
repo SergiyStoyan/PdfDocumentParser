@@ -35,7 +35,7 @@ namespace Cliver.SampleParser
             AppDomain.CurrentDomain.UnhandledException += delegate (object sender, UnhandledExceptionEventArgs args)
             {
                 Exception e = (Exception)args.ExceptionObject;
-                Win.LogMessage.Error(e);
+                Message.Error(e);
                 Environment.Exit(0);
             };
 
@@ -48,7 +48,6 @@ namespace Cliver.SampleParser
             Message.TopMost = true;
 
             Config.Reload();
-            Win.LogMessage.DisableStumblingDialogs = false;
             Log.DeleteOldLogsDialog = null;
             Log.Initialize(Log.Mode.ONE_FOLDER, new System.Collections.Generic.List<string> { Log.CompanyUserDataDir });
         }

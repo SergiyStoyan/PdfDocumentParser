@@ -46,7 +46,7 @@ namespace Cliver.SampleParser
             }
             catch (Exception ex)
             {
-                Win.LogMessage.Error(ex);
+                Message.Error(ex);
             }
         }
 

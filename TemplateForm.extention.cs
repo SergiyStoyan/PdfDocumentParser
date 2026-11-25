@@ -76,7 +76,7 @@ namespace Cliver.PdfDocumentParser
                 textAutoInsertSpace_Threshold.Value = (decimal)t.TextAutoInsertSpace.Threshold;
                 textAutoInsertSpace_IgnoreSourceSpaces.Checked = t.TextAutoInsertSpace.IgnoreSourceSpaces;
 
-                TesseractPageSegMode.SelectedItem = t.TesseractPageSegMode;
+                //TesseractPageSegMode.SelectedItem = t.TesseractPageSegMode;
                 AdjustLineBorders.Checked = t.AdjustLineBorders;
                 SingleFieldFromFieldImage.Checked = t.SingleFieldFromFieldImage;
                 ColumnCellFromCellImage.Checked = t.ColumnCellFromCellImage;
@@ -289,7 +289,7 @@ namespace Cliver.PdfDocumentParser
                 //Representative//default
             };
 
-            t.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
+            //t.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
             t.AdjustLineBorders = AdjustLineBorders.Checked;
             t.SingleFieldFromFieldImage = SingleFieldFromFieldImage.Checked;
             t.ColumnCellFromCellImage = ColumnCellFromCellImage.Checked;

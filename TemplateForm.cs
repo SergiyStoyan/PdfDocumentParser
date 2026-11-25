@@ -63,7 +63,7 @@ namespace Cliver.PdfDocumentParser
             initializeConditionsTable();
             initializeFieldsTable();
 
-            TesseractPageSegMode.DataSource = Enum.GetValues(typeof(Tesseract.PageSegMode));
+            //TesseractPageSegMode.DataSource = Enum.GetValues(typeof(Tesseract.PageSegMode));
 
             picture.MouseDown += delegate (object sender, MouseEventArgs e)
             {
@@ -249,7 +249,7 @@ namespace Cliver.PdfDocumentParser
                                                     {
                                                         if (b == null)
                                                             throw new Exception("Selected image is empty.");
-                                                        foreach (Ocr.CharBox cb in Ocr.This.GetCharBoxs(b, pages.ActiveTemplate.TesseractPageSegMode))
+                                                        foreach (Ocr.CharBox cb in Ocr.This.GetCharBoxs(b))
                                                         {
                                                             cb.R.X += r.X;
                                                             cb.R.Y += r.Y;

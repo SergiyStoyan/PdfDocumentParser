@@ -39,17 +39,7 @@ namespace Cliver.PdfDocumentParser
             //Image2PdfResolutionRatio = (float)PdfPageImageResolution / PdfResolution;
 
             if (OcrConfig == null)
-                OcrConfig = new Ocr.Config
-                {
-                    Language = "eng",
-                    EngineMode = Tesseract.EngineMode.Default,
-                    VariableNames2value = new Dictionary<string, object>
-                        {
-                            { "load_system_dawg", false },//don't load dictionary
-                            { "load_freq_dawg", false },//don't load dictionary
-                            //(name: "tessedit_char_whitelist", "0123456789.,"),
-                        }
-                };
+                OcrConfig = new Ocr.Config();
         }
 
         protected override void __Saving()

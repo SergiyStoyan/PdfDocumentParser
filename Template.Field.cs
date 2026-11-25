@@ -147,7 +147,7 @@ namespace Cliver.PdfDocumentParser
 
             abstract public class Ocr : Field
             {
-                public Tesseract.PageSegMode? TesseractPageSegMode = null;
+                //public Tesseract.PageSegMode? TesseractPageSegMode = null;
                 public OcrModes? Mode = null;
 
                 internal bool? AdjustLineBorders

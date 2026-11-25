@@ -108,15 +108,15 @@ namespace Cliver.PdfDocumentParser
                 _activeTemplateCvImage?.Dispose();
                 _activeTemplateCvImage = null;
             }
-            else if (newTemplate.TesseractPageSegMode != PageCollection.ActiveTemplate.TesseractPageSegMode
-                || !Serialization.Json.IsEqual(
-                    newTemplate.Fields.Where(a => a is Template.Field.Ocr).Select(a => ((Template.Field.Ocr)a).TesseractPageSegMode).ToList(),
-                    PageCollection.ActiveTemplate.Fields.Where(a => a is Template.Field.Ocr).Select(a => ((Template.Field.Ocr)a).TesseractPageSegMode).ToList()
-                    )
-                )
-            {
-                _activeTemplateOcrCharBoxs = null;
-            }
+            //else if (newTemplate.TesseractPageSegMode != PageCollection.ActiveTemplate.TesseractPageSegMode
+            //    || !Serialization.Json.IsEqual(
+            //        newTemplate.Fields.Where(a => a is Template.Field.Ocr).Select(a => ((Template.Field.Ocr)a).TesseractPageSegMode).ToList(),
+            //        PageCollection.ActiveTemplate.Fields.Where(a => a is Template.Field.Ocr).Select(a => ((Template.Field.Ocr)a).TesseractPageSegMode).ToList()
+            //        )
+            //    )
+            //{
+            //    _activeTemplateOcrCharBoxs = null;
+            //}
 
             if (!Serialization.Json.IsEqual(PageCollection.ActiveTemplate, newTemplate))
             {
@@ -169,9 +169,9 @@ namespace Cliver.PdfDocumentParser
                             int o = 0;
                             try
                             {
-                                o = Ocr.This.DetectOrientationAngle(b, out float confidence);
+                                o = Ocr.This.DetectOrientationAngle(b);
                             }
-                            catch (Tesseract.TesseractException e)//on page with no text
+                            catch (Exception e)//on page with no text
                             {
                                 Log.Warning2(e);
                             }
@@ -324,7 +324,7 @@ namespace Cliver.PdfDocumentParser
             {
                 if (_activeTemplateOcrCharBoxs == null)
                 {
-                    _activeTemplateOcrCharBoxs = Ocr.This.GetCharBoxs(ActiveTemplateBitmap, PageCollection.ActiveTemplate.TesseractPageSegMode);
+                    _activeTemplateOcrCharBoxs = Ocr.This.GetCharBoxs(ActiveTemplateBitmap/*, PageCollection.ActiveTemplate.TesseractPageSegMode*/);
                 }
                 return _activeTemplateOcrCharBoxs;
             }

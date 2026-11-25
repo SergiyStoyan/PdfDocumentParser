@@ -117,7 +117,7 @@ namespace Cliver.PdfDocumentParser
 
             public class OcrSettings
             {
-                public Tesseract.PageSegMode TesseractPageSegMode = Tesseract.PageSegMode.SingleBlock;
+                //public Tesseract.PageSegMode TesseractPageSegMode = Tesseract.PageSegMode.SingleBlock;
             }
 
             public class CvImage : Anchor

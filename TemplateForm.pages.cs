@@ -220,7 +220,7 @@ namespace Cliver.PdfDocumentParser
                             {
                                 List<Ocr.CharBox> cbs;
                                 if (of.SingleFieldFromFieldImage ?? pages.ActiveTemplate.SingleFieldFromFieldImage)
-                                    cbs = Ocr.This.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateBitmap, r, of.TesseractPageSegMode ?? pages.ActiveTemplate.TesseractPageSegMode);
+                                    cbs = Ocr.This.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateBitmap, r/*, of.TesseractPageSegMode ?? pages.ActiveTemplate.TesseractPageSegMode*/);
                                 else
                                     cbs = Ocr.GetCharBoxsSurroundedByRectangle(pages[currentPageI].ActiveTemplateOcrCharBoxs, r);
                                 if (cbs != null)

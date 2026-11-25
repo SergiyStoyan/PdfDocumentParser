@@ -81,7 +81,7 @@ namespace Cliver.PdfDocumentParser
         public static void Initialize(Ocr.Config ocrConfig, string helpFile)//trigger Program()
         {
             Ocr.DisposeThis();
-            Settings.Constants.OcrConfig = ocrConfig;
+            Settings.Constants.OcrConfig = ocrConfig ?? new Ocr.Config();
             Settings.Constants.HelpFile = helpFile;
         }
 

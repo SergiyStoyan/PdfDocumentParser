@@ -16,7 +16,7 @@ namespace Cliver.SampleParser
         public string InputFolder;
         public string OutputFolder;
 
-        protected override void Loaded()
+        protected override void __Loaded()
         {
             if (string.IsNullOrWhiteSpace(InputFolder))
                 InputFolder = ProgramRoutines.GetAppDirectory();
@@ -24,7 +24,7 @@ namespace Cliver.SampleParser
                 OutputFolder = ProgramRoutines.GetAppDirectory();
         }
 
-        protected override void Saving()
+        protected override void __Saving()
         {
         }
     }

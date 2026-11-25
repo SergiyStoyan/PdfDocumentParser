@@ -25,7 +25,7 @@ namespace Cliver.PdfDocumentParser
             ColumnOfTable.SelectedIndexChanged += delegate { synchronizeControls(); };
             synchronizeControls();
 
-            TesseractPageSegMode.DataSource = Enum.GetValues(typeof(Tesseract.PageSegMode));
+            //TesseractPageSegMode.DataSource = Enum.GetValues(typeof(Tesseract.PageSegMode));
         }
 
         void synchronizeControls()
@@ -45,14 +45,14 @@ namespace Cliver.PdfDocumentParser
                 field.AdjustLineBorders = AdjustLineBorders.Checked;
                 field.SingleFieldFromFieldImage = SingleFieldFromFieldImage.Checked;
                 field.ColumnCellFromCellImage = ColumnCellFromCellImage.Checked;
-                field.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
+                //field.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
             }
             else
             {
                 field.AdjustLineBorders = null;
                 field.SingleFieldFromFieldImage = null;
                 field.ColumnCellFromCellImage = null;
-                field.TesseractPageSegMode = null;
+                //field.TesseractPageSegMode = null;
             }
             return field;
         }
@@ -70,11 +70,11 @@ namespace Cliver.PdfDocumentParser
 
             ColumnOfTable.SelectedItem = field.ColumnOfTable;
 
-            SpecialOcrSettings.Checked = field.AdjustLineBorders != null || field.SingleFieldFromFieldImage != null || field.ColumnCellFromCellImage != null || field.TesseractPageSegMode != null;
+            SpecialOcrSettings.Checked = field.AdjustLineBorders != null || field.SingleFieldFromFieldImage != null || field.ColumnCellFromCellImage != null /*|| field.TesseractPageSegMode != null*/;
             AdjustLineBorders.Checked = field.AdjustLineBorders ?? template.AdjustLineBorders;
             SingleFieldFromFieldImage.Checked = field.SingleFieldFromFieldImage ?? template.SingleFieldFromFieldImage;
             ColumnCellFromCellImage.Checked = field.ColumnCellFromCellImage ?? template.ColumnCellFromCellImage;
-            TesseractPageSegMode.SelectedItem = field.TesseractPageSegMode ?? template.TesseractPageSegMode;
+            //TesseractPageSegMode.SelectedItem = field.TesseractPageSegMode ?? template.TesseractPageSegMode;
 
             if (value != null)
                 Value.Text = Page.NormalizeText((string)value);
