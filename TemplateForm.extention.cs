@@ -289,7 +289,7 @@ namespace Cliver.PdfDocumentParser
                 //Representative//default
             };
 
-            t.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
+            t.TesseractPageSegMode = (TesseractOCR.Enums.PageSegMode)TesseractPageSegMode.SelectedItem;
             t.AdjustLineBorders = AdjustLineBorders.Checked;
             t.SingleFieldFromFieldImage = SingleFieldFromFieldImage.Checked;
             t.ColumnCellFromCellImage = ColumnCellFromCellImage.Checked;

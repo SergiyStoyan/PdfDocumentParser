@@ -60,7 +60,14 @@ namespace Cliver.SampleParser
         {
             try
             {
-                PdfDocumentParser.Program.Initialize(null, null);
+                PdfDocumentParser.Program.Initialize(
+                    new PdfDocumentParser.Ocr.Config
+                    {
+                        EngineMode = TesseractOCR.Enums.EngineMode.Default,
+                        Language = TesseractOCR.Enums.Language.English,
+                        VariableNames2value = new Dictionary<string, object> { }
+                    },
+                    null);
 
                 Application.Run(MainForm.This);
             }

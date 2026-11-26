@@ -25,7 +25,7 @@ namespace Cliver.PdfDocumentParser
             ColumnOfTable.SelectedIndexChanged += delegate { synchronizeControls(); };
             synchronizeControls();
 
-            TesseractPageSegMode.DataSource = Enum.GetValues(typeof(Tesseract.PageSegMode));
+            TesseractPageSegMode.DataSource = Enum.GetValues(typeof(TesseractOCR.Enums.PageSegMode));
         }
 
         void synchronizeControls()
@@ -45,7 +45,7 @@ namespace Cliver.PdfDocumentParser
                 field.AdjustLineBorders = AdjustLineBorders.Checked;
                 field.SingleFieldFromFieldImage = SingleFieldFromFieldImage.Checked;
                 field.ColumnCellFromCellImage = ColumnCellFromCellImage.Checked;
-                field.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
+                field.TesseractPageSegMode = (TesseractOCR.Enums.PageSegMode)TesseractPageSegMode.SelectedItem;
             }
             else
             {

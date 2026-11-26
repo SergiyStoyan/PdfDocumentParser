@@ -80,6 +80,9 @@ namespace Cliver.PdfDocumentParser
         /// <param name="ocrConfig"></param>
         public static void Initialize(Ocr.Config ocrConfig, string helpFile)//trigger Program()
         {
+            if (ocrConfig == null)
+                throw new Exception($"{nameof(ocrConfig)} is not set!");
+
             Ocr.DisposeThis();
             Settings.Constants.OcrConfig = ocrConfig;
             Settings.Constants.HelpFile = helpFile;

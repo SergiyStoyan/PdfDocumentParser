@@ -63,7 +63,7 @@ namespace Cliver.PdfDocumentParser
             initializeConditionsTable();
             initializeFieldsTable();
 
-            TesseractPageSegMode.DataSource = Enum.GetValues(typeof(Tesseract.PageSegMode));
+            TesseractPageSegMode.DataSource = Enum.GetValues(typeof(TesseractOCR.Enums.PageSegMode));
 
             picture.MouseDown += delegate (object sender, MouseEventArgs e)
             {
@@ -249,7 +249,7 @@ namespace Cliver.PdfDocumentParser
                                                     {
                                                         if (b == null)
                                                             throw new Exception("Selected image is empty.");
-                                                        foreach (Ocr.CharBox cb in Ocr.This.GetCharBoxs(b, pages.ActiveTemplate.TesseractPageSegMode))
+                                                        foreach (Ocr.CharBox cb in Ocr.This.GetCharBoxs(Ocr.GetTesseractImage(b), pages.ActiveTemplate.TesseractPageSegMode))
                                                         {
                                                             cb.R.X += r.X;
                                                             cb.R.Y += r.Y;
@@ -426,8 +426,8 @@ namespace Cliver.PdfDocumentParser
              if (!string.IsNullOrWhiteSpace(testFile.Text))
                  d.InitialDirectory = PathRoutines.GetFileDir(testFile.Text);
              else
-                if (!string.IsNullOrWhiteSpace(templateManager.TestFileDefaultFolder))
-                 d.InitialDirectory = templateManager.TestFileDefaultFolder;
+                 if (!string.IsNullOrWhiteSpace(templateManager.TestFileDefaultFolder))
+                     d.InitialDirectory = templateManager.TestFileDefaultFolder;
 
              d.Filter = "PDF|*.pdf|"
                 + "All files (*.*)|*.*";
