@@ -17,6 +17,8 @@
 		<RootNamespace>Cliver.PdfDocumentParser</RootNamespace>
 		<Platforms>AnyCPU;x64</Platforms>
 		<ApplicationIcon>computers308.ico</ApplicationIcon>
+		<Title>Pdf Document Parser</Title>
+		<Description>PdfDocumentParser is a toolkit for parsing native and scanned PDF files.</Description>
 
 	</PropertyGroup>
 
@@ -48,6 +50,7 @@
 		<PackageReference Include="ICSharpCode.TextEditorEx" Version="1.4.0" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.12.0" />
 		<PackageReference Include="PdfPig" Version="0.1.16" />
+		<PackageReference Include="PDFtoImage" Version="5.4.0" />
 		<PackageReference Include="TesseractOCR" Version="5.5.4" />
 	</ItemGroup>
 

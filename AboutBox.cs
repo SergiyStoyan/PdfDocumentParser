@@ -20,7 +20,11 @@ namespace Cliver.PdfDocumentParser
             this.labelVersion.Text = "Version: " + Program.Version;// AssemblyRoutines.GetAssemblyCompiledTime(Assembly.GetEntryAssembly()).ToString("yyMMdd-HHmmss"); //String.Format("Version {0}", AssemblyVersion);
             this.labelCopyright.Text = AssemblyCopyright;
             this.labelCompanyName.Text = AssemblyCompany;
-            this.textBoxDescription.Text = AssemblyDescription;
+            
+            Load += async delegate
+            {
+                this.textBoxDescription.Text = await Task.Run(() => AssemblyDescription + "\r\n" + Log.GetAssembliesInfo(AssemblyRoutines.TypeLoadMode.IgnoreAssemblyFileNotFound, nameof(Cliver)));
+            };
         }
 
         #region Assembly Attribute Accessors
@@ -38,7 +42,7 @@ namespace Cliver.PdfDocumentParser
                         return titleAttribute.Title;
                     }
                 }
-                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
+                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().Location);
             }
         }
 

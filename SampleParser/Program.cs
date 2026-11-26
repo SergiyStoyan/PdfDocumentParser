@@ -42,9 +42,11 @@ namespace Cliver.SampleParser
 
             //SetProcessDpiAwareness((int)DpiAwareness.PerMonitorAware);
 
-            AssemblyRoutines.AssemblyInfo ai = new AssemblyRoutines.AssemblyInfo();
-            Version = ai.Version;
-            Name = ai.Product;
+            Assembly a = Assembly.GetCallingAssembly();
+            Name = a.GetProduct();
+            Version = a.GetVersion();
+            //FullVersion = Version.ToString(3) + " [" + PdfDocumentParser.Program.FullName + "]";
+            //FullName = Name + " " + FullVersion;
 
             Message.OnShowing = Message.SetOnTop;
 

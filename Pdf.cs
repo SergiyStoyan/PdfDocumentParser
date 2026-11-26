@@ -11,6 +11,8 @@ using System.IO;
 using System.Diagnostics;
 using UglyToad.PdfPig;
 using UglyToad.PdfPig.Content;
+using PDFtoImage;
+using SkiaSharp;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -27,59 +29,18 @@ namespace Cliver.PdfDocumentParser
 
         static public System.Drawing.Bitmap RenderBitmap(string pdfFile, int pageI, int resolution, bool byFile = false)
         {
-            using (Process p = new Process())
+            var options = new RenderOptions(Dpi: resolution)
             {
-                p.StartInfo.FileName = Log.AppDir + "\\gswin32c.exe";
-                int dDownScaleFactor = 1;
-                p.StartInfo.CreateNoWindow = true;
-                p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                p.StartInfo.UseShellExecute = false;
-
-                if (!byFile)
-                {
-                    p.StartInfo.RedirectStandardOutput = true;
-                    p.StartInfo.RedirectStandardError = true;
-                    p.StartInfo.Arguments = "-dNOPROMPT -r" + resolution + " -dDownScaleFactor=" + dDownScaleFactor + " -dBATCH -dFirstPage=" + pageI + " -dLastPage=" + pageI + " -sDEVICE=png16m -dNOPAUSE -sOutputFile=%stdout -q \"" + pdfFile + "\"";
-                    p.Start();
-                    using (MemoryStream ms = new MemoryStream())
-                    {
-                        p.StandardOutput.BaseStream.CopyTo(ms);
-                        p.WaitForExit();
-                        try
-                        {
-                            return new System.Drawing.Bitmap(ms);
-                        }
-                        catch (Exception e)
-                        {
-                            return RenderBitmap(pdfFile, pageI, resolution, true);
-                        }
-                    }
-                }
-                else//some pdf's require this because gs puts errors to stdout
-                {
-                    string bufferFileDir = System.IO.Path.GetTempPath() + Log.ProgramName;
-                    Directory.CreateDirectory(bufferFileDir);
-                    string bufferFile = bufferFileDir + "\\buffer.png";
-                    p.StartInfo.Arguments = "-dNOPROMPT -r" + resolution + " -dDownScaleFactor=" + dDownScaleFactor + " -dBATCH -dFirstPage=" + pageI + " -dLastPage=" + pageI + " -sDEVICE=png16m -dNOPAUSE -sOutputFile=\"" + bufferFile + "\" -q \"" + pdfFile + "\"";
-                    p.StartInfo.RedirectStandardError = true;
-                    p.StartInfo.UseShellExecute = false;
-                    p.Start();
-                    p.WaitForExit();
-                    string stderr = p.StandardError.ReadToEnd();
-                    if (!string.IsNullOrWhiteSpace(stderr))
-                        Log.Error(stderr);
-                    if (!File.Exists(bufferFile))
-                        throw new Exception("Could not create bufferFile " + bufferFile);
-                    System.Drawing.Bitmap b;// = (System.Drawing.Bitmap)System.Drawing.Image.FromFile(bufferFile);
-                    using (var bt = new System.Drawing.Bitmap(bufferFile))//to free the file
-                    {
-                        b = new System.Drawing.Bitmap(bt);//!!!sets 96dpi
-                        b.SetResolution(bt.HorizontalResolution, bt.VerticalResolution);
-                    }
-                    Directory.Delete(bufferFileDir, true);
-                    return b;
-                }
-            }
+                BackgroundColor = SKColors.White, // Ensures transparent pages render on white instead of black
+                WithAnnotations = true
+            };
+            using var pdfStream = File.OpenRead(pdfFile);
+            using SKBitmap skBitmap = Conversion.ToImage(pdfStream, page: pageI - 1/*0-based*/, options: options);
+            using var imageStream = new MemoryStream();
+            skBitmap.Encode(imageStream, SKEncodedImageFormat.Png, 100);
+            imageStream.Position = 0;
+            using var tempBitmap = new Bitmap(imageStream);
+            return new Bitmap(tempBitmap);
         }
 
         static public List<CharBox> GetCharBoxsFromPage(PdfDocument pdfDocument, int pageI, bool removeDuplicates)
