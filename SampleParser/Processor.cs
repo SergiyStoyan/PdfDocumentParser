@@ -15,12 +15,14 @@ using Cliver.PdfDocumentParser;
 
 namespace Cliver.SampleParser
 {
-    class Processor
+    class Processor:Operation2
     {
-        static public void Run(Action<int, int> progress)
+        public Action<int, int> OnProgress;
+
+        override protected void Do()
         {
             Log.Main.Inform("STARTED");
-            progress(0, 0);
+            OnProgress?.Invoke(0, 0);
             if (string.IsNullOrWhiteSpace(Settings.General.InputFolder))
             {
                Message.Error("Input Folder is not specified.");
@@ -52,13 +54,16 @@ namespace Cliver.SampleParser
             tw.WriteLine(FieldPreparation.Csv.GetHeaderLine(headers));
 
             List<string> files = FileSystemRoutines.GetFiles(Settings.General.InputFolder, false).ToList();
+
+            OperationController.AddAbortingActions(() => { files = null; tw?.Close(); tw = null; });
+
             files.Remove(output_records_file);
             files = files.Select(f => new FileInfo(f)).Where(fi => !fi.Attributes.HasFlag(FileAttributes.Hidden)).Select(fi => fi.FullName).ToList();
 
             int processed_files = 0;
             int total_files = files.Count;
             List<string> failed_files = new List<string>();
-            progress(processed_files, total_files);
+            OnProgress?.Invoke(processed_files, total_files);
             foreach (string f in files)
             {
                 try
@@ -84,7 +89,7 @@ namespace Cliver.SampleParser
                     Log.Main.Error("Processing file '" + f + "'", e);
                     failed_files.Add(f);
                 }
-                progress(++processed_files, total_files);
+                OnProgress?.Invoke(++processed_files, total_files);
             }
             tw.Close();
 

@@ -19,6 +19,7 @@ namespace Cliver.PdfDocumentParser
         public class CharBox
         {
             public string Char;
+
             /// <summary>
             /// (!)Y is the distance from the page's top to the char's top. But it is actually culculated from the char's baseline which is its bottom. It is because the baseline is considred most reliable position given by iText, while ascentLine or descentLine are not.
             /// </summary>
@@ -251,40 +252,40 @@ namespace Cliver.PdfDocumentParser
             return string.Join("\r\n", GetTextLines(cbs, textAutoInsertSpace, charFilter));
         }
 
-        public static List<(string Text, iTextSharp.text.pdf.DocumentFont Font)> GetTextLines2(IEnumerable<Pdf.CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace, CharFilter charFilter)
-        {
-            List<(string Text, iTextSharp.text.pdf.DocumentFont Font)> ls = new List<(string Text, iTextSharp.text.pdf.DocumentFont Font)>();
-            (string Text, iTextSharp.text.pdf.DocumentFont Font) l = (string.Empty, null);
-            foreach (var r in GetLines(cbs, textAutoInsertSpace, charFilter))
-                foreach (var cb in r.CharBoxs)
-                {
-                    if (l.Font != cb.Font)
-                    {
-                        ls.Add(l);
-                        l = (string.Empty, cb.Font);
-                    }
-                    l.Text += cb.Char;
-                }
-            ls.Add(l);
-            return ls;
-        }
+        //public static List<(string Text, iTextSharp.text.pdf.DocumentFont Font)> GetTextLines2(IEnumerable<Pdf.CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace, CharFilter charFilter)
+        //{
+        //    List<(string Text, iTextSharp.text.pdf.DocumentFont Font)> ls = new List<(string Text, iTextSharp.text.pdf.DocumentFont Font)>();
+        //    (string Text, iTextSharp.text.pdf.DocumentFont Font) l = (string.Empty, null);
+        //    foreach (var r in GetLines(cbs, textAutoInsertSpace, charFilter))
+        //        foreach (var cb in r.CharBoxs)
+        //        {
+        //            if (l.Font != cb.Font)
+        //            {
+        //                ls.Add(l);
+        //                l = (string.Empty, cb.Font);
+        //            }
+        //            l.Text += cb.Char;
+        //        }
+        //    ls.Add(l);
+        //    return ls;
+        //}
 
-        public static string GetText2(IEnumerable<Pdf.CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace, CharFilter charFilter, out List<(int start, int length, iTextSharp.text.pdf.DocumentFont font)> fonts)
+        public static string GetText2(IEnumerable<Pdf.CharBox> cbs, TextAutoInsertSpace textAutoInsertSpace, CharFilter charFilter, out List<(int start, int length, UglyToad.PdfPig.PdfFonts.FontDetails font)> fonts)
         {
             StringBuilder sb = new StringBuilder();
             StringBuilder ssb = new StringBuilder();
-            fonts = new List<(int start, int length, iTextSharp.text.pdf.DocumentFont font)>();
-            iTextSharp.text.pdf.DocumentFont font = null;
+            fonts = new List<(int start, int length, UglyToad.PdfPig.PdfFonts.FontDetails font)>();
+            UglyToad.PdfPig.PdfFonts.FontDetails font = null;
             foreach (var r in GetLines(cbs, textAutoInsertSpace, charFilter))
             {
                 foreach (var cb in r.CharBoxs)
                 {
-                    if (font != cb.Font)
+                    if (font != cb.Letter.FontDetails)
                     {
                         fonts.Add((sb.Length, ssb.Length, font));
                         sb.Append(ssb);
                         ssb.Clear();
-                        font = cb.Font;
+                        font = cb.Letter.FontDetails;
                     }
                     ssb.Append(cb.Char);
                 }

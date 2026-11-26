@@ -182,7 +182,7 @@ namespace Cliver.PdfDocumentParser
                 }
         }
 
-        private bool applyTemplate()
+        private async Task<bool> applyTemplateAsync()
         {
             try
             {
@@ -190,7 +190,7 @@ namespace Cliver.PdfDocumentParser
                 {
                     validate();
                     changed = false;
-                    templateForm.ReloadPageActiveTemplateBitmap();
+                    await templateForm.ReloadPageActiveTemplateBitmapAsync();
                 }
                 return true;
             }
@@ -206,9 +206,9 @@ namespace Cliver.PdfDocumentParser
             Close();
         }
 
-        private void bApply_Click(object sender, EventArgs e)
+        private async void bApply_Click(object sender, EventArgs e)
         {
-            if (applyTemplate())
+            if (await applyTemplateAsync())
                 Close();
         }
 

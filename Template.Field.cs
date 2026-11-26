@@ -59,6 +59,10 @@ namespace Cliver.PdfDocumentParser
                     Type = Types.PdfTextLines;
                 else if (this is PdfCharBoxs)
                     Type = Types.PdfCharBoxs;
+                else if (this is OcrText2)
+                    Type = Types.OcrText2;
+                else if (this is OcrTextLines2)
+                    Type = Types.OcrTextLines2;
                 else if (this is OcrText)
                     Type = Types.OcrText;
                 else if (this is OcrTextLines)
@@ -85,8 +89,25 @@ namespace Cliver.PdfDocumentParser
                 PdfText,
                 PdfTextLines,
                 PdfCharBoxs,
+                /// <summary>
+                /// PaddleOCRSharp-based
+                /// </summary>
+                OcrText2,
+                /// <summary>
+                /// PaddleOCRSharp-based
+                /// </summary>
+                OcrTextLines2,
+                /// <summary>
+                /// TesseractOCR-based
+                /// </summary>
                 OcrText,
+                /// <summary>
+                /// TesseractOCR-based
+                /// </summary>
                 OcrTextLines,
+                /// <summary>
+                /// TesseractOCR-based
+                /// </summary>
                 OcrCharBoxs,
                 Image,
                 OcrTextLineImages,
@@ -145,9 +166,35 @@ namespace Cliver.PdfDocumentParser
             {
             }
 
+            public enum OcrModes
+            {
+                AdjustLineBorders = 0b0000001,
+                //SingleFieldFromPageCharBoxs = 0b0000001,//default
+                SingleFieldFromFieldImage = 0b0000010,
+                //TableFieldFromPageCharBoxs = 0b00100,//default
+                //TableFieldFromFieldImage = 0b0001000,
+                //ColumnCellFromTableCharBoxs = 0b0010000,//default
+                ColumnCellFromCellImage = 0b0100000,
+            }
+
+            public class OcrText : Ocr, Text
+            {
+            }
+
+            public class OcrTextLines : Ocr, TextLines
+            {
+            }
+
+            public class OcrCharBoxs : Ocr, CharBoxs
+            {
+            }
+
+            /// <summary>
+            /// TesseractOCR
+            /// </summary>
             abstract public class Ocr : Field
             {
-                public Tesseract.PageSegMode? TesseractPageSegMode = null;
+                public TesseractOCR.Enums.PageSegMode? TesseractPageSegMode = null;
                 public OcrModes? Mode = null;
 
                 internal bool? AdjustLineBorders
@@ -197,27 +244,67 @@ namespace Cliver.PdfDocumentParser
                 }
             }
 
-            public enum OcrModes
-            {
-                AdjustLineBorders = 0b0000001,
-                //SingleFieldFromPageCharBoxs = 0b0000001,//default
-                SingleFieldFromFieldImage = 0b0000010,
-                //TableFieldFromPageCharBoxs = 0b00100,//default
-                //TableFieldFromFieldImage = 0b0001000,
-                //ColumnCellFromTableCharBoxs = 0b0010000,//default
-                ColumnCellFromCellImage = 0b0100000,
-            }
-
-            public class OcrText : Ocr, Text
+            public class OcrText2 : Ocr2, Text
             {
             }
 
-            public class OcrTextLines : Ocr, TextLines
+            public class OcrTextLines2 : Ocr2, TextLines
             {
             }
 
-            public class OcrCharBoxs : Ocr, CharBoxs
+            /// <summary>
+            /// PaddleOCRSharp
+            /// </summary>
+            abstract public class Ocr2 : Field
             {
+                public int? CropPadding = null;
+                public OcrModes? Mode = null;
+
+                internal bool? AdjustLineBorders
+                {
+                    get { return Mode != null ? Mode.Value.HasFlag(OcrModes.AdjustLineBorders) : (bool?)null; }
+                    set
+                    {
+                        if (value == null)
+                        {
+                            Mode = null;
+                            return;
+                        }
+                        if (Mode == null)
+                            Mode = 0;
+                        Mode = value.Value ? Mode.Value | OcrModes.AdjustLineBorders : Mode.Value & ~OcrModes.AdjustLineBorders;
+                    }
+                }
+                //internal bool? SingleFieldFromFieldImage
+                //{
+                //    get { return Mode != null ? Mode.Value.HasFlag(OcrModes.SingleFieldFromFieldImage) : (bool?)null; }
+                //    set
+                //    {
+                //        if (value == null)
+                //        {
+                //            Mode = null;
+                //            return;
+                //        }
+                //        if (Mode == null)
+                //            Mode = 0;
+                //        Mode = value.Value ? Mode.Value | OcrModes.SingleFieldFromFieldImage : Mode.Value & ~OcrModes.SingleFieldFromFieldImage;
+                //    }
+                //}
+                //internal bool? ColumnCellFromCellImage
+                //{
+                //    get { return Mode != null ? Mode.Value.HasFlag(OcrModes.ColumnCellFromCellImage) : (bool?)null; }
+                //    set
+                //    {
+                //        if (value == null)
+                //        {
+                //            Mode = null;
+                //            return;
+                //        }
+                //        if (Mode == null)
+                //            Mode = 0;
+                //        Mode = value.Value ? Mode.Value | OcrModes.ColumnCellFromCellImage : Mode.Value & ~OcrModes.ColumnCellFromCellImage;
+                //    }
+                //}
             }
 
             public class Image : Field

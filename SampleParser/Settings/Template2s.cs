@@ -141,7 +141,8 @@ namespace Cliver.SampleParser
         public void Touch()
         {
             touched = true;
-            TouchedChanged?.BeginInvoke(null, null);
+            if (TouchedChanged != null)
+                Task.Run(() => TouchedChanged());
         }
         bool touched = false;
         public bool IsTouched()
@@ -154,7 +155,8 @@ namespace Cliver.SampleParser
         protected override void __Saved()
         {
             touched = false;
-            TouchedChanged?.BeginInvoke(null, null);
+            if (TouchedChanged != null)
+                Task.Run(() => TouchedChanged());
         }
 
         public Template2 CreateInitialTemplate()

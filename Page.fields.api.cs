@@ -58,7 +58,9 @@ namespace Cliver.PdfDocumentParser
                 return null;
             if (fai.ActualField is Template.Field.Pdf)
                 return (string)fai.GetValue(Template.Field.Types.PdfText);
-            return (string)fai.GetValue(Template.Field.Types.OcrText);
+            if (fai.ActualField is Template.Field.Ocr)
+                return (string)fai.GetValue(Template.Field.Types.OcrText);
+            return (string)fai.GetValue(Template.Field.Types.OcrText2);
         }
 
         public List<string> GetTextLines(string fieldName)
@@ -68,7 +70,9 @@ namespace Cliver.PdfDocumentParser
                 return null;
             if (fai.ActualField is Template.Field.Pdf)
                 return (List<string>)fai.GetValue(Template.Field.Types.PdfTextLines);
-            return (List<string>)fai.GetValue(Template.Field.Types.OcrTextLines);
+            if (fai.ActualField is Template.Field.Ocr)
+                return (List<string>)fai.GetValue(Template.Field.Types.OcrTextLines);
+            return (List<string>)fai.GetValue(Template.Field.Types.OcrTextLines2);
         }
 
         public List<CharBox> GetCharBoxes(string fieldName)

@@ -10,13 +10,16 @@
 		<!-- Optional: Keeps legacy default font (Microsoft Sans Serif 8.25pt) instead of Segoe UI 9pt -->
 		<!--ApplicationDefaultFont>Microsoft Sans Serif, 8.25pt</ApplicationDefaultFont-->
 
-		<Version>8.0.0</Version>
+		<Version>8.1.0
+.$([MSBuild]::Divide($([MSBuild]::Subtract($([System.DateTimeOffset]::UtcNow.ToUnixTimeSeconds()), 1787830000)), 600))</Version>
 		<Authors>Sergiy Stoyan</Authors>
 		<Company>CliverSoft</Company>
 		<Copyright>Sergiy Stoyan</Copyright>
 		<RootNamespace>Cliver.PdfDocumentParser</RootNamespace>
 		<Platforms>AnyCPU;x64</Platforms>
 		<ApplicationIcon>computers308.ico</ApplicationIcon>
+		<Title>Pdf Document Parser</Title>
+		<Description>PdfDocumentParser is a toolkit for parsing native and scanned PDF files.</Description>
 
 	</PropertyGroup>
 
@@ -46,9 +49,12 @@
 		<PackageReference Include="Emgu.CV.Bitmap" Version="4.12.0.5764" />
 		<PackageReference Include="Emgu.CV.runtime.windows" Version="4.12.0.5764" />
 		<PackageReference Include="ICSharpCode.TextEditorEx" Version="1.4.0" />
-		<PackageReference Include="iTextSharp" Version="5.5.13.7" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.12.0" />
-		<PackageReference Include="Tesseract" Version="5.2.0" />
+		<PackageReference Include="Paddle.Runtime.win_x64" Version="3.4.0" />
+		<PackageReference Include="PaddleOCRSharp" Version="6.2.0" />
+		<PackageReference Include="PdfPig" Version="0.1.16" />
+		<PackageReference Include="PDFtoImage" Version="5.4.0" />
+		<PackageReference Include="TesseractOCR" Version="5.5.4" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -95,6 +101,15 @@
 
 	<ItemGroup>
 	  <None Remove="C:\Users\serge\.nuget\packages\tesseract\5.2.0\build\\..\x64\tesseract50.dll" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="FieldOcrTextControl2.cs">
+	    <SubType>UserControl</SubType>
+	  </Compile>
+	  <Compile Update="FieldOcrTextLinesControl2.cs">
+	    <SubType>UserControl</SubType>
+	  </Compile>
 	</ItemGroup>
 
 

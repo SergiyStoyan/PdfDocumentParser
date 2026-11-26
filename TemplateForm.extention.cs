@@ -18,7 +18,7 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class TemplateForm : Form
     {
-        enum statuses
+        enum Statuses
         {
             SUCCESS,
             NEUTRAL,
@@ -27,24 +27,24 @@ namespace Cliver.PdfDocumentParser
             WRONG
         }
 
-        void setRowStatus(statuses s, DataGridViewRow r, string m)
+        void setRowStatus(Statuses s, DataGridViewRow r, string m)
         {
             r.HeaderCell.Value = m;
             switch (s)
             {
-                case statuses.SUCCESS:
+                case Statuses.SUCCESS:
                     r.HeaderCell.Style.BackColor = Color.LightGreen;
                     break;
-                case statuses.ERROR:
+                case Statuses.ERROR:
                     r.HeaderCell.Style.BackColor = Color.Pink;
                     break;
-                case statuses.WRONG:
+                case Statuses.WRONG:
                     r.HeaderCell.Style.BackColor = Color.Red;
                     break;
-                case statuses.WARNING:
+                case Statuses.WARNING:
                     r.HeaderCell.Style.BackColor = Color.Yellow;
                     break;
-                case statuses.NEUTRAL:
+                case Statuses.NEUTRAL:
                     r.HeaderCell.Style.BackColor = SystemColors.Control;
                     break;
                 default:
@@ -199,7 +199,7 @@ namespace Cliver.PdfDocumentParser
                 pages[currentPageI].PdfCharBoxs,
                 new TextAutoInsertSpace { Threshold = (float)textAutoInsertSpace_Threshold.Value, IgnoreSourceSpaces = textAutoInsertSpace_IgnoreSourceSpaces.Checked /*, Representative//default*/},
                 new CharFilter { MinWidth = (float)CharSizeFilterMinWidth.Value, MaxWidth = (float)CharSizeFilterMaxWidth.Value, MinHeight = (float)CharSizeFilterMinHeight.Value, MaxHeight = (float)CharSizeFilterMaxHeight.Value },
-                out List<(int start, int length, iTextSharp.text.pdf.DocumentFont font)> fonts
+                out List<(int start, int length, UglyToad.PdfPig.PdfFonts.FontDetails font)> fonts
             );
             TextForm tf = new TextForm("Pdf Entity Text", t, false, fonts);
             tf.ShowDialog();
@@ -289,7 +289,7 @@ namespace Cliver.PdfDocumentParser
                 //Representative//default
             };
 
-            t.TesseractPageSegMode = (Tesseract.PageSegMode)TesseractPageSegMode.SelectedItem;
+            t.TesseractPageSegMode = (TesseractOCR.Enums.PageSegMode)TesseractPageSegMode.SelectedItem;
             t.AdjustLineBorders = AdjustLineBorders.Checked;
             t.SingleFieldFromFieldImage = SingleFieldFromFieldImage.Checked;
             t.ColumnCellFromCellImage = ColumnCellFromCellImage.Checked;

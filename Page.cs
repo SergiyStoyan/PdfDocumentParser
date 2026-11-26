@@ -43,6 +43,11 @@ namespace Cliver.PdfDocumentParser
                     _activeTemplateBitmap.Dispose();
                     _activeTemplateBitmap = null;
                 }
+                if (ActiveTemplateImage != null)
+                {
+                    ActiveTemplateImage?.Dispose();
+                    ActiveTemplateImage = null;
+                }
                 if (_activeTemplateCvImage != null)
                 {
                     _activeTemplateCvImage.Dispose();
@@ -104,6 +109,8 @@ namespace Cliver.PdfDocumentParser
                 _activeTemplateImageData = null;
                 _activeTemplateBitmap?.Dispose();
                 _activeTemplateBitmap = null;
+                ActiveTemplateImage?.Dispose();
+                ActiveTemplateImage = null;
                 _activeTemplateOcrCharBoxs = null;
                 _activeTemplateCvImage?.Dispose();
                 _activeTemplateCvImage = null;
@@ -169,9 +176,10 @@ namespace Cliver.PdfDocumentParser
                             int o = 0;
                             try
                             {
-                                o = Ocr.This.DetectOrientationAngle(b, out float confidence);
+                                using var image = Ocr.GetTesseractImage(b);
+                                o = Ocr.This.DetectOrientationAngle(image, out float confidence);
                             }
-                            catch (Tesseract.TesseractException e)//on page with no text
+                            catch (TesseractOCR.Exceptions.TesseractException e)//on page with no text
                             {
                                 Log.Warning2(e);
                             }
@@ -182,23 +190,6 @@ namespace Cliver.PdfDocumentParser
                                 b.RotateFlip(RotateFlipType.Rotate180FlipNone);
                             else if (o <= 315)
                                 b.RotateFlip(RotateFlipType.Rotate90FlipNone);
-                            //Tesseract.Orientation o = Ocr.This.DetectOrientation(b);
-                            //switch (o)
-                            //{
-                            //    case Tesseract.Orientation.PageLeft:
-                            //        b.RotateFlip(RotateFlipType.Rotate90FlipNone);
-                            //        break;
-                            //    case Tesseract.Orientation.PageDown:
-                            //        b.RotateFlip(RotateFlipType.Rotate180FlipNone);
-                            //        break;
-                            //    case Tesseract.Orientation.PageRight:
-                            //        b.RotateFlip(RotateFlipType.Rotate270FlipNone);
-                            //        break;
-                            //    case Tesseract.Orientation.PageUp:
-                            //        break;
-                            //    default:
-                            //        throw new Exception("Unknown option: " + o);
-                            //}
                             break;
                         default:
                             throw new Exception("Unknown option: " + PageCollection.ActiveTemplate.PageRotation);
@@ -264,11 +255,15 @@ namespace Cliver.PdfDocumentParser
                     }
                     else
                         DetectedImageScale = -1;
+
+                    ActiveTemplateImage = Ocr.GetTesseractImage(_activeTemplateBitmap);
                 }
                 return _activeTemplateBitmap;
             }
         }
         Bitmap _activeTemplateBitmap = null;
+
+        internal TesseractOCR.Pix.Image ActiveTemplateImage { get; private set; } = null;
 
         public float DetectedImageScale { get; private set; } = -1;
 
@@ -299,7 +294,7 @@ namespace Cliver.PdfDocumentParser
             get
             {
                 if (_pdfCharBoxs == null)
-                    _pdfCharBoxs = Pdf.GetCharBoxsFromPage(PageCollection.PdfReader, Number, true);
+                    _pdfCharBoxs = Pdf.GetCharBoxsFromPage(PageCollection.PdfDocument, Number, true);
                 return _pdfCharBoxs;
             }
         }
@@ -312,7 +307,7 @@ namespace Cliver.PdfDocumentParser
             get
             {
                 if (_size == Size.Empty)
-                    _size = Pdf.GetPageSize(PageCollection.PdfReader, Number);
+                    _size = Pdf.GetPageSize(PageCollection.PdfDocument, Number);
                 return _size;
             }
         }
@@ -324,7 +319,7 @@ namespace Cliver.PdfDocumentParser
             {
                 if (_activeTemplateOcrCharBoxs == null)
                 {
-                    _activeTemplateOcrCharBoxs = Ocr.This.GetCharBoxs(ActiveTemplateBitmap, PageCollection.ActiveTemplate.TesseractPageSegMode);
+                    _activeTemplateOcrCharBoxs = Ocr.This.GetCharBoxs(ActiveTemplateImage, PageCollection.ActiveTemplate.TesseractPageSegMode);
                 }
                 return _activeTemplateOcrCharBoxs;
             }

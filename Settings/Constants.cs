@@ -41,8 +41,8 @@ namespace Cliver.PdfDocumentParser
             if (OcrConfig == null)
                 OcrConfig = new Ocr.Config
                 {
-                    Language = "eng",
-                    EngineMode = Tesseract.EngineMode.Default,
+                    Language = TesseractOCR.Enums.Language.English,
+                    EngineMode = TesseractOCR.Enums.EngineMode.Default,
                     VariableNames2value = new Dictionary<string, object>
                         {
                             { "load_system_dawg", false },//don't load dictionary

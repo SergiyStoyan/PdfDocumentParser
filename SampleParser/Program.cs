@@ -42,9 +42,11 @@ namespace Cliver.SampleParser
 
             //SetProcessDpiAwareness((int)DpiAwareness.PerMonitorAware);
 
-            AssemblyRoutines.AssemblyInfo ai = new AssemblyRoutines.AssemblyInfo();
-            Version = ai.Version;
-            Name = ai.Product;
+            Assembly a = Assembly.GetCallingAssembly();
+            Name = a.GetProduct();
+            Version = a.GetVersion();
+            //FullVersion = Version.ToString(3) + " [" + PdfDocumentParser.Program.FullName + "]";
+            //FullName = Name + " " + FullVersion;
 
             Message.OnShowing = Message.SetOnTop;
 
@@ -60,7 +62,14 @@ namespace Cliver.SampleParser
         {
             try
             {
-                PdfDocumentParser.Program.Initialize(null, null);
+                PdfDocumentParser.Program.Initialize(
+                    new PdfDocumentParser.Ocr.Config
+                    {
+                        EngineMode = TesseractOCR.Enums.EngineMode.Default,
+                        Language = TesseractOCR.Enums.Language.English,
+                        VariableNames2value = new Dictionary<string, object> { }
+                    },
+                    null);
 
                 Application.Run(MainForm.This);
             }

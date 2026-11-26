@@ -8,10 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Collections.Generic;
 using System.IO;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using iTextSharp.text.pdf.parser;
 using System.Diagnostics;
+using UglyToad.PdfPig;
+using UglyToad.PdfPig.Content;
+using PDFtoImage;
+using SkiaSharp;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -20,116 +21,52 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public static partial class Pdf
     {
-        public static System.Drawing.Size GetPageSize(PdfReader pdfReader, int pageI)
+        public static System.Drawing.Size GetPageSize(PdfDocument pdfDocument, int pageI)
         {
-            iTextSharp.text.Rectangle r = pdfReader.GetPageSize(pageI);
+            var r = pdfDocument.GetPage(pageI);
             return new System.Drawing.Size((int)r.Width, (int)r.Height);
         }
 
         static public System.Drawing.Bitmap RenderBitmap(string pdfFile, int pageI, int resolution, bool byFile = false)
         {
-            using (Process p = new Process())
+            var options = new RenderOptions(Dpi: resolution)
             {
-                p.StartInfo.FileName = Log.AppDir + "\\gswin32c.exe";
-                int dDownScaleFactor = 1;
-                p.StartInfo.CreateNoWindow = true;
-                p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                p.StartInfo.UseShellExecute = false;
-
-                if (!byFile)
-                {
-                    p.StartInfo.RedirectStandardOutput = true;
-                    p.StartInfo.RedirectStandardError = true;
-                    p.StartInfo.Arguments = "-dNOPROMPT -r" + resolution + " -dDownScaleFactor=" + dDownScaleFactor + " -dBATCH -dFirstPage=" + pageI + " -dLastPage=" + pageI + " -sDEVICE=png16m -dNOPAUSE -sOutputFile=%stdout -q \"" + pdfFile + "\"";
-                    p.Start();
-                    using (MemoryStream ms = new MemoryStream())
-                    {
-                        p.StandardOutput.BaseStream.CopyTo(ms);
-                        p.WaitForExit();
-                        try
-                        {
-                            return new System.Drawing.Bitmap(ms);
-                        }
-                        catch (Exception e)
-                        {
-                            return RenderBitmap(pdfFile, pageI, resolution, true);
-                        }
-                    }
-                }
-                else//some pdf's require this because gs puts errors to stdout
-                {
-                    string bufferFileDir = System.IO.Path.GetTempPath() + Log.ProgramName;
-                    Directory.CreateDirectory(bufferFileDir);
-                    string bufferFile = bufferFileDir + "\\buffer.png";
-                    p.StartInfo.Arguments = "-dNOPROMPT -r" + resolution + " -dDownScaleFactor=" + dDownScaleFactor + " -dBATCH -dFirstPage=" + pageI + " -dLastPage=" + pageI + " -sDEVICE=png16m -dNOPAUSE -sOutputFile=\"" + bufferFile + "\" -q \"" + pdfFile + "\"";
-                    p.StartInfo.RedirectStandardError = true;
-                    p.StartInfo.UseShellExecute = false;
-                    p.Start();
-                    p.WaitForExit();
-                    string stderr = p.StandardError.ReadToEnd();
-                    if (!string.IsNullOrWhiteSpace(stderr))
-                        Log.Error(stderr);
-                    if (!File.Exists(bufferFile))
-                        throw new Exception("Could not create bufferFile " + bufferFile);
-                    System.Drawing.Bitmap b;// = (System.Drawing.Bitmap)System.Drawing.Image.FromFile(bufferFile);
-                    using (var bt = new System.Drawing.Bitmap(bufferFile))//to free the file
-                    {
-                        b = new System.Drawing.Bitmap(bt);//!!!sets 96dpi
-                        b.SetResolution(bt.HorizontalResolution, bt.VerticalResolution);
-                    }
-                    Directory.Delete(bufferFileDir, true);
-                    return b;
-                }
-            }
+                BackgroundColor = SKColors.White, // Ensures transparent pages render on white instead of black
+                WithAnnotations = true
+            };
+            using var pdfStream = File.OpenRead(pdfFile);
+            using SKBitmap skBitmap = Conversion.ToImage(pdfStream, page: pageI - 1/*0-based*/, options: options);
+            using var imageStream = new MemoryStream();
+            skBitmap.Encode(imageStream, SKEncodedImageFormat.Png, 100);
+            imageStream.Position = 0;
+            using var tempBitmap = new Bitmap(imageStream);
+            return new Bitmap(tempBitmap);
         }
 
-        static public List<CharBox> GetCharBoxsFromPage(PdfReader pdfReader, int pageI, bool removeDuplicates)
+        static public List<CharBox> GetCharBoxsFromPage(PdfDocument pdfDocument, int pageI, bool removeDuplicates)
         {
-            var r = pdfReader.GetPageSize(pageI);
-            CharBoxExtractionStrategy s = new CharBoxExtractionStrategy(new System.Drawing.RectangleF(r.Left, r.Bottom, r.Width, r.Height));
-            PdfTextExtractor.GetTextFromPage(pdfReader, pageI, s);
+            var p = GetPageSize(pdfDocument, pageI);
+            List<CharBox> cbs = new List<CharBox>();
+            var page = pdfDocument.GetPage(pageI);
+            foreach (Letter c in page.Letters)
+            {
+                var r = c.BoundingBox;
+                cbs.Add(new CharBox
+                {
+                    Char = c.Value,
+                    R = new System.Drawing.RectangleF
+                    {
+                        X = (float)r.Left,
+                        Y = (float)(p.Height - r.Top),
+                        Width = (float)r.Width,
+                        Height = (float)r.Height,
+                    },
+                    Letter = c
+                });
+            }
             if (removeDuplicates)
-                s.CharBoxs = RemoveDuplicates(s.CharBoxs);
-            return s.CharBoxs;
-        }
-        public class CharBoxExtractionStrategy : LocationTextExtractionStrategy
-        {
-            public CharBoxExtractionStrategy(System.Drawing.RectangleF pageSize) : base()
-            {
-                this.pageSize = pageSize;
-            }
-            System.Drawing.RectangleF pageSize;
-
-            public List<CharBox> CharBoxs = new List<CharBox>();
-
-            public override void RenderText(TextRenderInfo renderInfo)
-            {
-                base.RenderText(renderInfo);
-
-                //CharBoxs.Add(newCharBox(renderInfo));
-                IList<TextRenderInfo> cris = renderInfo.GetCharacterRenderInfos();
-                foreach (TextRenderInfo cri in cris)
-                    CharBoxs.Add(newCharBox(cri));
-                CharBox newCharBox(TextRenderInfo cri)
-                {
-                    Vector baseLeft = cri.GetBaseline().GetStartPoint();
-                    Vector topRight = cri.GetAscentLine().GetEndPoint();
-                    float x = baseLeft[Vector.I1];
-                    float y = topRight[Vector.I2];
-                    return new CharBox
-                    {
-                        Char = cri.GetText(),
-                        R = new System.Drawing.RectangleF
-                        {
-                            X = x - pageSize.X,
-                            Y = pageSize.Height + pageSize.Y - y,//(!)basic positioning point is char's baseLine, not ascentLine
-                            Width = topRight[Vector.I1] - x,
-                            Height = y - baseLeft[Vector.I2],
-                        },
-                        Font = cri.GetFont()
-                    };
-                }
-            }
+                cbs = RemoveDuplicates(cbs);
+            return cbs;
         }
 
         public static List<string> GetTextLinesSurroundedByRectangle(IEnumerable<CharBox> cbs, System.Drawing.RectangleF r, TextAutoInsertSpace textAutoInsertSpace)
@@ -172,9 +109,7 @@ namespace Cliver.PdfDocumentParser
 
         public class CharBox : Page.CharBox
         {
-            //public bool AutoInserted = false;
-            //public string FontName;
-            public DocumentFont Font;
+            public Letter Letter;
         }
     }
 }

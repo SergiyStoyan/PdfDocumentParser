@@ -124,6 +124,12 @@ namespace Cliver.PdfDocumentParser
                                     case Template.Field.Types.PdfCharBoxs:
                                         f = Serialization.Json.Deserialize<Template.Field.PdfCharBoxs>(s);
                                         break;
+                                    case Template.Field.Types.OcrText2:
+                                        f = Serialization.Json.Deserialize<Template.Field.OcrText2>(s);
+                                        break;
+                                    case Template.Field.Types.OcrTextLines2:
+                                        f = Serialization.Json.Deserialize<Template.Field.OcrTextLines2>(s);
+                                        break;
                                     case Template.Field.Types.OcrText:
                                         f = Serialization.Json.Deserialize<Template.Field.OcrText>(s);
                                         break;
@@ -671,6 +677,12 @@ namespace Cliver.PdfDocumentParser
                     case Template.Field.Types.PdfCharBoxs:
                         currentFieldControl = new FieldPdfCharBoxsControl();
                         break;
+                    case Template.Field.Types.OcrText2:
+                        currentFieldControl = new FieldOcrTextControl2();
+                        break;
+                    case Template.Field.Types.OcrTextLines2:
+                        currentFieldControl = new FieldOcrTextLinesControl2();
+                        break;
                     case Template.Field.Types.OcrText:
                         currentFieldControl = new FieldOcrTextControl();
                         break;
@@ -707,7 +719,7 @@ namespace Cliver.PdfDocumentParser
                 return null;
             if (!f.IsSet())
             {
-                setRowStatus(statuses.WARNING, row, "Not set");
+                setRowStatus(Statuses.WARNING, row, "Not set");
                 return null;
             }
             DataGridViewCell valueCell = row.Cells["Value"];
@@ -734,7 +746,7 @@ namespace Cliver.PdfDocumentParser
             if (setEmpty)
             {
                 valueCell.Value = null;
-                setRowStatus(statuses.NEUTRAL, row, "");
+                setRowStatus(Statuses.NEUTRAL, row, "");
                 return null;
             }
             clearImageFromBoxes();
@@ -751,6 +763,12 @@ namespace Cliver.PdfDocumentParser
                         break;
                     case Template.Field.Types.PdfCharBoxs:
                         valueCell.Value = Page.NormalizeText(Serialization.Json.Serialize(v));
+                        break;
+                    case Template.Field.Types.OcrText2:
+                        valueCell.Value = Page.NormalizeText((string)v);
+                        break;
+                    case Template.Field.Types.OcrTextLines2:
+                        valueCell.Value = Page.NormalizeText(string.Join("\r\n", (List<string>)v));
                         break;
                     case Template.Field.Types.OcrText:
                         valueCell.Value = Page.NormalizeText((string)v);
@@ -799,9 +817,9 @@ namespace Cliver.PdfDocumentParser
                 valueCell.Value = v;
 
             if (valueCell.Value != null)
-                setRowStatus(statuses.SUCCESS, row, "Found");
+                setRowStatus(Statuses.SUCCESS, row, "Found");
             else
-                setRowStatus(statuses.ERROR, row, "Not found");
+                setRowStatus(Statuses.ERROR, row, "Not found");
 
             return v;
         }

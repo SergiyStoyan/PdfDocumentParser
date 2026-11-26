@@ -15,7 +15,7 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public partial class Template
     {
-        public Tesseract.PageSegMode TesseractPageSegMode = Tesseract.PageSegMode.SingleBlock;
+        public TesseractOCR.Enums.PageSegMode TesseractPageSegMode = TesseractOCR.Enums.PageSegMode.SingleBlock;
 
         public CharFilter CharFilter;
 
@@ -104,5 +104,10 @@ namespace Cliver.PdfDocumentParser
                 return bitmap;
             }
         }
+
+        /// <summary>
+        /// by PaddleOCRSharp
+        /// </summary>
+        public int CropPadding = 10;
     }
 }

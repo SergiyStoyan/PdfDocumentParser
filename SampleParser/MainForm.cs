@@ -180,7 +180,8 @@ namespace Cliver.SampleParser
                     }
                 }
                 catch (Exception ex)
-                {Log.Error(ex);
+                {
+                    Log.Error(ex);
                     Message.Error(ex);
                 }
             };
@@ -425,16 +426,16 @@ namespace Cliver.SampleParser
             }
         }
 
-        private void bRun_Click(object sender, EventArgs e)
+        private async void bRun_Click(object sender, EventArgs e)
         {
-            if (processorThread != null && processorThread.IsAlive)
+            if (processor != null && processor.OperationController.Status == OperationController.OperationStatus.Running)
             {
                 if (!Message.YesNo("Processing is running. Would you like to abort it and restart?"))
                     return;
-                while (processorThread.IsAlive)
+                if (!await processor.OperationController.AbortAsync(60000))
                 {
-                    processorThread.Abort();
-                    Thread.Sleep(100);
+                    Message.Error("Could not stop operation. Restart the app.");
+                    return;
                 }
             }
 
@@ -442,50 +443,39 @@ namespace Cliver.SampleParser
                 return;
 
             bRun.Enabled = false;
-            processorThread = Cliver.ThreadRoutines.Start(
-                () =>
+
+            processor = new Processor
+            {
+                OnProgress = (processedN, totalN) =>
+            {
+                if (totalN > 0)
                 {
-                    try
-                    {
-                        Processor.Run((processedN, totalN) =>
+                    if (processedN == totalN)
+                        progress.Invoke(() =>
                         {
-                            if (totalN > 0)
-                            {
-                                if (processedN == totalN)
-                                    progress.Invoke(() =>
-                                    {
-                                        progress.Value = (int)(progress.Maximum * ((float)processedN / totalN));
-                                        lProgress.Text = "Completed";
-                                    });
-                                else
-                                    progress.Invoke(() =>
-                                    {
-                                        progress.Value = (int)(progress.Maximum * ((float)processedN / totalN));
-                                        lProgress.Text = "Processed " + processedN + " files of " + totalN;
-                                    });
-                            }
-                            else
-                                progress.Invoke(() =>
-                                {
-                                    progress.Value = 0;
-                                    lProgress.Text = "";
-                                });
+                            progress.Value = (int)(progress.Maximum * ((float)processedN / totalN));
+                            lProgress.Text = "Completed";
                         });
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(ex);
-                        Message.Error(ex);
-                    }
-                    finally
-                    {
-                        bRun.BeginInvoke(() => { bRun.Enabled = true; });
-                    }
+                    else
+                        progress.Invoke(() =>
+                        {
+                            progress.Value = (int)(progress.Maximum * ((float)processedN / totalN));
+                            lProgress.Text = "Processed " + processedN + " files of " + totalN;
+                        });
                 }
-                );
+                else
+                    progress.Invoke(() =>
+                    {
+                        progress.Value = 0;
+                        lProgress.Text = "";
+                    });
+            }
+            };
+
+            processor.OperationController.PerformAsync();
         }
 
-        Thread processorThread = null;
+        Processor processor = null;
 
         private void bAbout_Click(object sender, EventArgs e)
         {
@@ -495,7 +485,7 @@ namespace Cliver.SampleParser
 
         private void bExit_Click(object sender, EventArgs e)
         {
-            if (processorThread != null && processorThread.IsAlive)
+            if (processor != null && processor.OperationController.Status == OperationController.OperationStatus.Running)
             {
                 if (!Message.YesNo("Processing is running. Would you like to abort it?"))
                     return;

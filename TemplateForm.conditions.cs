@@ -303,16 +303,16 @@ namespace Cliver.PdfDocumentParser
                 {
                     set = false;
                     getAnchor(a_.Id, out DataGridViewRow r_);
-                    setRowStatus(statuses.WARNING, r_, "Not set");
+                    setRowStatus(Statuses.WARNING, r_, "Not set");
                 }
             if (!set)
                 return;
             Page.AnchorActualInfo aai = pages[currentPageI].GetAnchorActualInfo(a.Id);
             getAnchor(a.Id, out DataGridViewRow r);
             if (!aai.Found)
-                setRowStatus(statuses.ERROR, r, "Not found");
+                setRowStatus(Statuses.ERROR, r, "Not found");
             else
-                setRowStatus(statuses.SUCCESS, r, "Found");
+                setRowStatus(Statuses.SUCCESS, r, "Found");
         }
 
         void setConditionStatus(DataGridViewRow r)
@@ -324,20 +324,20 @@ namespace Cliver.PdfDocumentParser
                 return;
             if (!c.IsSet())
             {
-                setRowStatus(statuses.NEUTRAL, r, "");
+                setRowStatus(Statuses.NEUTRAL, r, "");
                 return;
             }
             try
             {
                 pages.ActiveTemplate = GetTemplateFromUI(false);
                 if (pages[currentPageI].IsCondition(c.Name))
-                    setRowStatus(statuses.SUCCESS, r, "True");
+                    setRowStatus(Statuses.SUCCESS, r, "True");
                 else
-                    setRowStatus(statuses.ERROR, r, "False");
+                    setRowStatus(Statuses.ERROR, r, "False");
             }
             catch (Exception e)
             {
-                setRowStatus(statuses.WRONG, r, e.Message);
+                setRowStatus(Statuses.WRONG, r, e.Message);
             }
         }
     }
