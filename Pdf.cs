@@ -8,10 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Collections.Generic;
 using System.IO;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using iTextSharp.text.pdf.parser;
 using System.Diagnostics;
+using UglyToad.PdfPig;
+using UglyToad.PdfPig.Content;
 
 namespace Cliver.PdfDocumentParser
 {
@@ -20,9 +19,9 @@ namespace Cliver.PdfDocumentParser
     /// </summary>
     public static partial class Pdf
     {
-        public static System.Drawing.Size GetPageSize(PdfReader pdfReader, int pageI)
+        public static System.Drawing.Size GetPageSize(PdfDocument pdfDocument, int pageI)
         {
-            iTextSharp.text.Rectangle r = pdfReader.GetPageSize(pageI);
+            var r = pdfDocument.GetPage(pageI);
             return new System.Drawing.Size((int)r.Width, (int)r.Height);
         }
 
@@ -83,53 +82,33 @@ namespace Cliver.PdfDocumentParser
             }
         }
 
-        static public List<CharBox> GetCharBoxsFromPage(PdfReader pdfReader, int pageI, bool removeDuplicates)
+        static public List<CharBox> GetCharBoxsFromPage(PdfDocument pdfDocument, int pageI, bool removeDuplicates)
         {
-            var r = pdfReader.GetPageSize(pageI);
-            CharBoxExtractionStrategy s = new CharBoxExtractionStrategy(new System.Drawing.RectangleF(r.Left, r.Bottom, r.Width, r.Height));
-            PdfTextExtractor.GetTextFromPage(pdfReader, pageI, s);
-            if (removeDuplicates)
-                s.CharBoxs = RemoveDuplicates(s.CharBoxs);
-            return s.CharBoxs;
-        }
-        public class CharBoxExtractionStrategy : LocationTextExtractionStrategy
-        {
-            public CharBoxExtractionStrategy(System.Drawing.RectangleF pageSize) : base()
+            //var r = GetPageSize( pdfDocument,pageI);
+            //CharBoxExtractionStrategy s = new CharBoxExtractionStrategy(new System.Drawing.RectangleF(0, 0, r.Width, r.Height));
+            //PdfTextExtractor.GetTextFromPage(pdfReader, pageI, s);
+
+            List<CharBox> cbs = new List<CharBox>();
+            var page = pdfDocument.GetPage(pageI);
+            foreach (Letter c in page.Letters)
             {
-                this.pageSize = pageSize;
-            }
-            System.Drawing.RectangleF pageSize;
-
-            public List<CharBox> CharBoxs = new List<CharBox>();
-
-            public override void RenderText(TextRenderInfo renderInfo)
-            {
-                base.RenderText(renderInfo);
-
-                //CharBoxs.Add(newCharBox(renderInfo));
-                IList<TextRenderInfo> cris = renderInfo.GetCharacterRenderInfos();
-                foreach (TextRenderInfo cri in cris)
-                    CharBoxs.Add(newCharBox(cri));
-                CharBox newCharBox(TextRenderInfo cri)
+                var r = c.BoundingBox;
+                cbs.Add(new CharBox
                 {
-                    Vector baseLeft = cri.GetBaseline().GetStartPoint();
-                    Vector topRight = cri.GetAscentLine().GetEndPoint();
-                    float x = baseLeft[Vector.I1];
-                    float y = topRight[Vector.I2];
-                    return new CharBox
+                    Char = c.Value,
+                    R = new System.Drawing.RectangleF
                     {
-                        Char = cri.GetText(),
-                        R = new System.Drawing.RectangleF
-                        {
-                            X = x - pageSize.X,
-                            Y = pageSize.Height + pageSize.Y - y,//(!)basic positioning point is char's baseLine, not ascentLine
-                            Width = topRight[Vector.I1] - x,
-                            Height = y - baseLeft[Vector.I2],
-                        },
-                        Font = cri.GetFont()
-                    };
-                }
+                        X = (float)r.Left,
+                        Y = (float)r.Bottom,
+                        Width = (float)r.Width,
+                        Height = (float)r.Height,
+                    },
+                    Letter = c
+                });
             }
+            if (removeDuplicates)
+                cbs = RemoveDuplicates(cbs);
+            return cbs;
         }
 
         public static List<string> GetTextLinesSurroundedByRectangle(IEnumerable<CharBox> cbs, System.Drawing.RectangleF r, TextAutoInsertSpace textAutoInsertSpace)
@@ -172,9 +151,7 @@ namespace Cliver.PdfDocumentParser
 
         public class CharBox : Page.CharBox
         {
-            //public bool AutoInserted = false;
-            //public string FontName;
-            public DocumentFont Font;
+          public  Letter Letter;
         }
     }
 }

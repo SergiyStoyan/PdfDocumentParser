@@ -46,8 +46,8 @@
 		<PackageReference Include="Emgu.CV.Bitmap" Version="4.12.0.5764" />
 		<PackageReference Include="Emgu.CV.runtime.windows" Version="4.12.0.5764" />
 		<PackageReference Include="ICSharpCode.TextEditorEx" Version="1.4.0" />
-		<PackageReference Include="iTextSharp" Version="5.5.13.7" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.12.0" />
+		<PackageReference Include="PdfPig" Version="0.1.16" />
 		<PackageReference Include="TesseractOCR" Version="5.5.4" />
 	</ItemGroup>
 
