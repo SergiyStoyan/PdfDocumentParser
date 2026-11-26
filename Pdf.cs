@@ -84,10 +84,7 @@ namespace Cliver.PdfDocumentParser
 
         static public List<CharBox> GetCharBoxsFromPage(PdfDocument pdfDocument, int pageI, bool removeDuplicates)
         {
-            //var r = GetPageSize( pdfDocument,pageI);
-            //CharBoxExtractionStrategy s = new CharBoxExtractionStrategy(new System.Drawing.RectangleF(0, 0, r.Width, r.Height));
-            //PdfTextExtractor.GetTextFromPage(pdfReader, pageI, s);
-
+            var p = GetPageSize(pdfDocument, pageI);
             List<CharBox> cbs = new List<CharBox>();
             var page = pdfDocument.GetPage(pageI);
             foreach (Letter c in page.Letters)
@@ -99,7 +96,7 @@ namespace Cliver.PdfDocumentParser
                     R = new System.Drawing.RectangleF
                     {
                         X = (float)r.Left,
-                        Y = (float)r.Bottom,
+                        Y = (float)(p.Height - r.Top),
                         Width = (float)r.Width,
                         Height = (float)r.Height,
                     },
@@ -151,7 +148,7 @@ namespace Cliver.PdfDocumentParser
 
         public class CharBox : Page.CharBox
         {
-          public  Letter Letter;
+            public Letter Letter;
         }
     }
 }
